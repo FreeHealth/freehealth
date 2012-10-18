@@ -142,15 +142,17 @@ void FormManagerPlugin::postCoreInitialization()
 
     // Check FirstRun Default Form
     const QString &uid = settings()->defaultForm();
+//    qWarning() << uid;
     if (!uid.isEmpty()) {
         episodeBase()->setGenericPatientFormFile(uid);
         formManager().readPmhxCategories(uid);
+        formManager().loadPatientFile();
         settings()->setDefaultForm("");
+    } else {
+        // reload patient file just to emit patientFormsLoaded
+        formManager().readPmhxCategories("");
+        formManager().loadPatientFile();
     }
-
-    // reload patient file just to emit patientFormsLoaded
-    formManager().readPmhxCategories("");
-    formManager().loadPatientFile();
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()
