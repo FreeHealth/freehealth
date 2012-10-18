@@ -335,7 +335,7 @@ public:
 
     bool readPmhxCategories(const QString &formUuidOrAbsPath)
     {
-        qWarning() << "readPmhxCategories";
+//        qWarning() << "readPmhxCategories";
         Q_UNUSED(formUuidOrAbsPath);
         // TODO: code here why don't we use the \e formUuidOrAbsPath param?
         // get all form readers (IFormIO)
