@@ -62,7 +62,7 @@ void HourRangeWidget::paintEvent(QPaintEvent *)
     titlePainter.setPen(Qt::NoPen);
     QBrush brush = titlePainter.brush();
     brush.setStyle(Qt::SolidPattern);
-    QColor baseColor = model()->data(model()->getItemByUid(uid()), AbstractCalendarModel::Status, Qt::BackgroundRole).value<QColor>();;
+    QColor baseColor = model()->data(model()->getItemByUid(uid()), AbstractCalendarModel::Status, Qt::BackgroundRole).value<QColor>();
     m_inMotion ? baseColor.setAlpha(200) : baseColor.setAlpha(255);
     brush.setColor(baseColor);
     titlePainter.setBrush(brush);
