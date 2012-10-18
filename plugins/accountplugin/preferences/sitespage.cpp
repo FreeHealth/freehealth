@@ -215,6 +215,8 @@ void SitesWidget::saveModel()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+
+    // FIXME: here you should have to check all cols isDirty state of the row
     if (m_Model->isDirty(m_Model->index(m_Mapper->currentIndex(),0))) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into the sites table.\n"
@@ -249,6 +251,12 @@ void SitesWidget::saveToSettings(Core::ISettings *sets)
                                  tr("An error occured during sites saving. Data are corrupted."));
     }
     update();
+}
+
+void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
+{
+    // ALWAYS IMPLEMENT SLOTS OTHERWISE COMPILATION WILL FAIL ON MAC AND WIN32
+    Q_UNUSED(index);
 }
 
 void SitesWidget::writeDefaultSettings(Core::ISettings *s)
