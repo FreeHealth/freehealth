@@ -13,6 +13,7 @@ DEFINES += WEBCAM_LIBRARY
 
 include(../fmf_plugins.pri)
 include(webcam_dependencies.pri)
+include($${SOURCES_BUILDSPECS_PATH}/config_opencv.pri)
 
 HEADERS = \
     webcamplugin.h \
