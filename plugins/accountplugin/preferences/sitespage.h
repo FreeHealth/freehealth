@@ -78,11 +78,10 @@ public:
 
     static void writeDefaultSettings( Core::ISettings *s );
 
-    void on_addRemoveCombo_currentIndexChanged(int index);
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    void on_wpComboBox_currentIndexChanged(int index);
+    void on_addRemoveCombo_currentIndexChanged(int index);
 
 private Q_SLOTS:
     void updateUi();
