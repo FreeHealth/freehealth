@@ -32,9 +32,9 @@ with-webcam {
         }
 
         # Add include path and libs path
-        INCLUDEPATH *= $${CONTRIBPATH}/opencv/include/ \
-            $${CONTRIBPATH}/build/include
-        LIBS *= -L$${OPENCV_PATH}
+        INCLUDEPATH += $${CONTRIBPATH}/opencv/include/ \
+            $${CONTRIBPATH}/opencv/build/include
+        LIBS += -L$${OPENCV_PATH}
     }
 
     # // TODO: add mac opencv configuration
