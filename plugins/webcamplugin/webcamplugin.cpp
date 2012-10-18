@@ -208,7 +208,7 @@ void WebcamPlugin::detectDevices()
             }
         }
     }
-    LOG(QString(("Found %1 webcam device").arg(nbDevice)));
+    LOG(QString("Found %1 webcam device").arg(nbDevice));
 }
 
 void WebcamPlugin::coreAboutToClose()
