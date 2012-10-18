@@ -75,6 +75,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void on_selectIconButton_clicked();
+    void on_durationCombo_currentIndexChanged(int index);
     void changeDuration(const int comboIndex);
 
 protected:
