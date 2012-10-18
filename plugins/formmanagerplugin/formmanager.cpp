@@ -230,6 +230,7 @@ public:
             return false;
         }
 
+        LOG_FOR(q, "Loading patient form: " + absDirPath);
         // load central root forms, create cache and duplicates
         if (!loadFormCollection(absDirPath, CompleteForms)) {
             LOG_ERROR_FOR(q, "Unable to load main form: " + absDirPath);
@@ -246,6 +247,7 @@ public:
             main.emptyRootForms().at(0)->reader()->loadPmhCategories(absDirPath);
             return true;
         }
+        LOG_FOR(q, "Patient form loaded : " + absDirPath);
         return false;
     }
 

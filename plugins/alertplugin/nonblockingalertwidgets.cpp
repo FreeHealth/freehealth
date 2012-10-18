@@ -109,7 +109,6 @@ NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
     aRemindLater->setIcon(theme()->icon(Core::Constants::ICONREMINDER));
 
     _menu->addAction(aCategory);
-    _menu->addSeparator();
     _menu->addAction(aLabel);
     _menu->addSeparator();
     _menu->addAction(aEdit);
@@ -140,12 +139,12 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     refreshStyleSheet();
 
     if (aLabel)
-        aLabel->setText(item.label());
+        aLabel->setText(tr("Label: ") + item.label());
     if (aCategory) {
         if (item.category().isEmpty())
             aCategory->setText(tr("No category"));
         else
-            aCategory->setText(item.category());
+            aCategory->setText(tr("Category: ") + item.category());
     }
 
     if (!item.isRemindLaterAllowed())
@@ -297,11 +296,11 @@ void NonBlockingAlertToolButton::retranslateUi()
     aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
     aOverride->setText(tkTr(Trans::Constants::OVERRIDE));
     aRemindLater->setText(tkTr(Trans::Constants::REMIND_LATER));
-    aLabel->setText(_item.label());
+    aLabel->setText(tr("Label: ") + _item.label());
     if (_item.category().isEmpty())
         aCategory->setText(tr("No category"));
     else
-        aCategory->setText(_item.category());
+        aCategory->setText(tr("Category: ") + _item.category());
 }
 
 void NonBlockingAlertToolButton::changeEvent(QEvent *event)
