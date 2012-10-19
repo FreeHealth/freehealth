@@ -262,7 +262,7 @@ PatientSearchEdit::PatientSearchEdit(QWidget *parent) :
     setCompleter(m_Completer);
     setValidator(m_Completer->validator());
 
-    connect(this, SIGNAL(onTextChanged(QString)), this, SLOT(onTextChanged(QString)));
+    connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
     connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 }
 
