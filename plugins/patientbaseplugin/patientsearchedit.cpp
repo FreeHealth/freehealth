@@ -157,6 +157,8 @@ public:
         m_LastString = string;
         // Filter the model with the string
         // split using various separators
+
+        //FIXME: what if string contains " " AND ":" ?? priority -> order!
         QString separator;
         if (string.contains("/"))
             separator = "/";
