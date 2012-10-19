@@ -35,8 +35,8 @@
 class QSqlTableModel;
 
 /**
- * \file patientlineeditcompletersearch.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file patientsearchedit.h
+ * \author Eric MAEKER
  * \version 0.6.0
  * \date 05 Jul 2011
 */
