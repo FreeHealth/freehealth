@@ -193,15 +193,18 @@ private:
     PatientCompleterModel *m_Model;
     mutable QString m_LastString;
 };
-}
 
+}  // namespace Anonymous
 
 namespace Patients {
 namespace Internal {
 class PatientBaseCompleterPrivate
 {
 public:
-    PatientBaseCompleterPrivate() : m_Model(0), m_Validator(0) {}
+    PatientBaseCompleterPrivate() :
+        m_Model(0), m_Validator(0)
+    {}
+
     ~PatientBaseCompleterPrivate()
     {
         if (m_Model) {
@@ -225,6 +228,7 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
     QCompleter(parent),
     d(new Internal::PatientBaseCompleterPrivate)
 {
+    qWarning() << "COMPLETER" << this;
     d->m_Model = new PatientCompleterModel(this);
     d->m_Validator = new PatientBaseValidator(this);
     d->m_Validator->setModelToFilter(d->m_Model);
@@ -237,7 +241,9 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
 
 PatientBaseCompleter::~PatientBaseCompleter()
 {
-    if (d) delete d;
+    qWarning() << "~COMPLETER";
+    if (d)
+        delete d;
     d = 0;
 }
 
@@ -246,6 +252,9 @@ QValidator *PatientBaseCompleter::validator() const
     return static_cast<QValidator*>(d->m_Validator);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////   LINEEDIT   /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 PatientSearchEdit::PatientSearchEdit(QWidget *parent) :
     Utils::QButtonLineEdit(parent),
     m_Completer(0)
@@ -255,7 +264,6 @@ PatientSearchEdit::PatientSearchEdit(QWidget *parent) :
     cancel->setIcon(theme()->icon(Core::Constants::ICONCLEARLINEEDIT));
     cancel->setToolTip(tkTr(Trans::Constants::CLEAR));
     setRightButton(cancel);
-    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelSearch()));
 
     // Add the completer
     m_Completer = new PatientBaseCompleter;
@@ -264,6 +272,7 @@ PatientSearchEdit::PatientSearchEdit(QWidget *parent) :
 
     connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
     connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelSearch()));
 }
 
 PatientSearchEdit::~PatientSearchEdit()
@@ -285,7 +294,7 @@ void PatientSearchEdit::onTextChanged(const QString &newText)
 
 void PatientSearchEdit::cancelSearch()
 {
-    setText(m_LastSearch);
+    clear();
     QRect cr = rect();
     m_Completer->complete(cr); // popup it up!
 }
@@ -294,6 +303,13 @@ void PatientSearchEdit::onPatientSelected(const QModelIndex &index)
 {
     QString uid = m_Completer->model()->index(index.row(), PatientBaseCompleter::Uid, index.parent()).data().toString();
     Q_EMIT patientSelected(index.data().toString(), uid);
+}
+
+// Work through bug: http://code.google.com/p/freemedforms/issues/detail?id=197
+void PatientSearchEdit::focusInEvent(QFocusEvent *event)
+{
+    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+    Utils::QButtonLineEdit::focusInEvent(event);
 }
 
 //void PatientLineEditCompleterSearch::keyPressEvent(QKeyEvent *event)
