@@ -25,8 +25,9 @@
  ***************************************************************************/
 
 /**
-  \class Patients::PatientLineEditCompleterSearch
-  LineEdit with a QCompleter that allow to select existing patients
+ * \class Patients::PatientLineEditCompleterSearch
+ * LineEdit with a QCompleter that allow to select existing patients using the
+ * Patient database content.
 */
 
 #include "patientsearchedit.h"
