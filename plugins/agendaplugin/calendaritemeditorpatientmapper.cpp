@@ -155,8 +155,8 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     aUseCurrentPatient->setText(tr("Add current patient"));
     aUseCurrentPatient->setToolTip(tr("Add current patient"));
 
-    if (!patient()->uuid().isEmpty())
-        ui->createPatientToolButton->addAction(aUseCurrentPatient);
+    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+    aUseCurrentPatient->setEnabled(!patient()->uuid().isEmpty());
 
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     if (cmd) {
@@ -173,7 +173,7 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 
-    connect(ui->searchPatient, SIGNAL(patientSelected(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
+    connect(ui->patientSearchEdit, SIGNAL(patientSelected(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
     connect(aUseCurrentPatient, SIGNAL(triggered()), this, SLOT(addCurrentPatient()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
@@ -201,7 +201,7 @@ void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::Cale
 void CalendarItemEditorPatientMapperWidget::clear()
 {
     m_PeopleModel->clear();
-    ui->searchPatient->clear();
+    ui->patientSearchEdit->clear();
     m_Selected.clear();
 }
 
@@ -242,7 +242,7 @@ void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &nam
         addPatientRow(name, uid);
         m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
     }
-    ui->searchPatient->clear();
+    ui->patientSearchEdit->clear();
 }
 
 void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
@@ -250,13 +250,13 @@ void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
     QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
     addPatientRow(name.value(uid), uid);
     m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
-    ui->searchPatient->clear();
+    ui->patientSearchEdit->clear();
 }
 
 void CalendarItemEditorPatientMapperWidget::onCurrentPatientChanged()
 {
     disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+    aUseCurrentPatient->setEnabled(true);
 }
 
 
