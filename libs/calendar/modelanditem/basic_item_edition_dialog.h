@@ -67,7 +67,7 @@ protected:
     void done(int r);
 
 private Q_SLOTS:
-    void showMoreTriggered();
+    void onShowMoreTriggered();
 
 private:
     AbstractCalendarModel *m_Model;

@@ -81,7 +81,7 @@ BasicItemEditorDialog::BasicItemEditorDialog(AbstractCalendarModel *model, QWidg
     Q_ASSERT(model);
     ui->setupUi(this);
     m_moreInfo = ui->buttonBox->addButton(tkTr(Trans::Constants::MORE_INFORMATION), QDialogButtonBox::HelpRole);
-    connect(m_moreInfo, SIGNAL(clicked()), this, SLOT(showMoreTriggered()));
+    connect(m_moreInfo, SIGNAL(clicked()), this, SLOT(onShowMoreTriggered()));
 
     ui->viewer->setModel(model);
 
@@ -128,7 +128,7 @@ void BasicItemEditorDialog::init(const CalendarItem &item)
     ui->viewer->setCalendarItem(item);
 }
 
-void BasicItemEditorDialog::showMoreTriggered()
+void BasicItemEditorDialog::onShowMoreTriggered()
 {
     ui->viewer->toogleExtraInformation();
     if (ui->viewer->isShowingExtraInformation())

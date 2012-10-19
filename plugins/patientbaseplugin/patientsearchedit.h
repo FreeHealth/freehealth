@@ -79,7 +79,8 @@ private Q_SLOTS:
     void cancelSearch();
     void onPatientSelected(const QModelIndex &index);
 
-//private:
+private:
+    void focusInEvent(QFocusEvent *event);
 //    void keyPressEvent(QKeyEvent *event);
 
 private:
