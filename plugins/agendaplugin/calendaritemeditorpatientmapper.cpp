@@ -207,7 +207,7 @@ void CalendarItemEditorPatientMapperWidget::clear()
 
 void CalendarItemEditorPatientMapperWidget::addCurrentPatient()
 {
-    onPatientSelected(patient()->data(Core::IPatient::FullName).toString() ,patient()->uuid());
+    onPatientSelected(patient()->data(Core::IPatient::FullName).toString(), patient()->uuid());
 }
 
 void CalendarItemEditorPatientMapperWidget::addPatientRow(const QString &name, const QString &uid)
