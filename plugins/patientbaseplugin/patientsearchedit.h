@@ -64,12 +64,12 @@ private:
 };
 }  // End namespace Internal
 
-class PATIENT_EXPORT PatientLineEditCompleterSearch : public Utils::QButtonLineEdit
+class PATIENT_EXPORT PatientSearchEdit : public Utils::QButtonLineEdit
 {
     Q_OBJECT
 public:
-    explicit PatientLineEditCompleterSearch(QWidget *parent = 0);
-    ~PatientLineEditCompleterSearch();
+    explicit PatientSearchEdit(QWidget *parent = 0);
+    ~PatientSearchEdit();
 
 Q_SIGNALS:
     void patientSelected(const QString &uid, const QString &fullName);

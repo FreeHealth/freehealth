@@ -29,7 +29,7 @@
   LineEdit with a QCompleter that allow to select existing patients
 */
 
-#include "patientlineeditcompletersearch.h"
+#include "patientsearchedit.h"
 #include "patientbase.h"
 #include "constants_db.h"
 
@@ -245,7 +245,7 @@ QValidator *PatientBaseCompleter::validator() const
     return static_cast<QValidator*>(d->m_Validator);
 }
 
-PatientLineEditCompleterSearch::PatientLineEditCompleterSearch(QWidget *parent) :
+PatientSearchEdit::PatientSearchEdit(QWidget *parent) :
     Utils::QButtonLineEdit(parent),
     m_Completer(0)
 {
@@ -265,11 +265,11 @@ PatientLineEditCompleterSearch::PatientLineEditCompleterSearch(QWidget *parent) 
     connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 }
 
-PatientLineEditCompleterSearch::~PatientLineEditCompleterSearch()
+PatientSearchEdit::~PatientSearchEdit()
 {
 }
 
-void PatientLineEditCompleterSearch::onTextChanged(const QString &newText)
+void PatientSearchEdit::onTextChanged(const QString &newText)
 {
     int diff = newText.size() - m_LastSearch.size();
     if (diff > 1 || diff < -1) {
@@ -282,14 +282,14 @@ void PatientLineEditCompleterSearch::onTextChanged(const QString &newText)
     m_Completer->setCompletionPrefix(m_LastSearch);
 }
 
-void PatientLineEditCompleterSearch::cancelSearch()
+void PatientSearchEdit::cancelSearch()
 {
     setText(m_LastSearch);
     QRect cr = rect();
     m_Completer->complete(cr); // popup it up!
 }
 
-void PatientLineEditCompleterSearch::onPatientSelected(const QModelIndex &index)
+void PatientSearchEdit::onPatientSelected(const QModelIndex &index)
 {
     QString uid = m_Completer->model()->index(index.row(), PatientBaseCompleter::Uid, index.parent()).data().toString();
     Q_EMIT patientSelected(index.data().toString(), uid);

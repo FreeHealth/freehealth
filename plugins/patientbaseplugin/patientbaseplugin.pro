@@ -23,13 +23,13 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    patientlineeditcompletersearch.h \
     pixmapbutton.h \
     identityviewerwidget.h \
     patientmodelwrapper.h \
     filephotoprovider.h \
     urlphotoprovider.h \
-    urlphotodialog.h
+    urlphotodialog.h \
+    patientsearchedit.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -41,13 +41,13 @@ SOURCES = patientbaseplugin.cpp \
     patientbasepreferencespage.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
-    patientlineeditcompletersearch.cpp \
     pixmapbutton.cpp \
     identityviewerwidget.cpp \
     patientmodelwrapper.cpp \
     filephotoprovider.cpp \
     urlphotoprovider.cpp \
-    urlphotodialog.cpp
+    urlphotodialog.cpp \
+    patientsearchedit.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \
