@@ -310,7 +310,8 @@ void PatientSearchEdit::onPatientSelected(const QModelIndex &index)
 // Work through bug: http://code.google.com/p/freemedforms/issues/detail?id=197
 void PatientSearchEdit::focusInEvent(QFocusEvent *event)
 {
-    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+    // connect with Qt::UniqueConnection: if connection exists already, don't connect another time
+    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)), Qt::UniqueConnection);
     Utils::QButtonLineEdit::focusInEvent(event);
 }
 
