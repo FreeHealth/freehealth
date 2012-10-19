@@ -69,7 +69,7 @@ public:
 
 public Q_SLOTS:
     void addCurrentPatient();
-    QList<Calendar::People> selected() const {return m_Selected;}
+//    QList<Calendar::People> selected() const {return m_Selected;}
     bool submitToItem(const Calendar::CalendarItem &item);
 
 private:
@@ -88,7 +88,7 @@ protected:
 
 private:
     Internal::Ui::CalendarItemEditorPatientMapper *ui;
-    QList<Calendar::People> m_Selected;
+//    QList<Calendar::People> m_Selected;
     Patients::PatientBaseCompleter *m_Completer;
     Calendar::CalendarPeopleModel *m_PeopleModel;
     Calendar::AbstractCalendarModel *m_ItemModel;

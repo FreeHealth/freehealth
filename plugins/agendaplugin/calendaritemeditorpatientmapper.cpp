@@ -202,7 +202,7 @@ void CalendarItemEditorPatientMapperWidget::clear()
 {
     m_PeopleModel->clear();
     ui->patientSearchEdit->clear();
-    m_Selected.clear();
+//    m_Selected.clear();
 }
 
 void CalendarItemEditorPatientMapperWidget::addCurrentPatient()
@@ -237,10 +237,10 @@ void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &nam
     if (name.isEmpty()) {
         QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
         addPatientRow(name.value(uid), uid);
-        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
+//        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
     } else {
         addPatientRow(name, uid);
-        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
+//        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
     }
     ui->patientSearchEdit->clear();
 }
@@ -249,7 +249,7 @@ void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
 {
     QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
     addPatientRow(name.value(uid), uid);
-    m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
+//    m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
     ui->patientSearchEdit->clear();
 }
 
