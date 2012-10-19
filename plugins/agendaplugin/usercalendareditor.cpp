@@ -96,13 +96,13 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
         m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
         m_Mapper->setModel(m_UserCalendarModel);
         m_Mapper->addMapping(ui->calendarLabel, UserCalendarModel::Label);
-        m_Mapper->addMapping(ui->defaultLocation, UserCalendarModel::LocationUid);
+        m_Mapper->addMapping(ui->defaultLocationEdit, UserCalendarModel::LocationUid);
         m_Mapper->addMapping(ui->description, UserCalendarModel::Description);
         m_Mapper->addMapping(ui->defaultDuration, UserCalendarModel::DefaultDuration);
         // TODO: wrong mapping with QCheckBoxes
         m_Mapper->addMapping(ui->isDefaultCheck, UserCalendarModel::IsDefault, "checked");
         m_Mapper->addMapping(ui->isPrivateCheck, UserCalendarModel::IsPrivate, "checked");
-        m_Mapper->addMapping(ui->password, UserCalendarModel::Password);
+        m_Mapper->addMapping(ui->passwordEdit, UserCalendarModel::Password);
     }
     m_Mapper->setCurrentIndex(index.row());
 
