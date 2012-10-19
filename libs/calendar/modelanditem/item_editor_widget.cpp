@@ -289,6 +289,16 @@ void ItemEditorWidget::submit()
 void ItemEditorWidget::on_selectIconButton_clicked()
 {}
 
+void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
+{
+    if (index == -1)
+        return;
+
+    const int durationMinutes = index * 5;
+    QTime endTime = d->ui->startTime->time().addSecs(durationMinutes * 60);
+    d->ui->endTime->setTime(endTime);
+}
+
 void ItemEditorWidget::changeDuration(const int comboIndex)
 {
     QTime end = d->ui->startTime->time();

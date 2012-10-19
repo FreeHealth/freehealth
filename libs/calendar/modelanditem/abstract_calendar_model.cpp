@@ -131,7 +131,7 @@
 using namespace Calendar;
 
 AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
-	QObject(parent), m_propagateEvents(true) {
+    QObject(parent), m_propagateEvents(true) {
 }
 
 
@@ -185,30 +185,30 @@ QList<Calendar::People> AbstractCalendarModel::peopleList(const Calendar::Calend
 
 
 void AbstractCalendarModel::beginInsertItem() {
-	// does nothing for now (maybe emit a signal in the future)
+    // does nothing for now (maybe emit a signal in the future)
 }
 
 void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
-	if (m_propagateEvents)
-                Q_EMIT itemInserted(newItem);
+    if (m_propagateEvents)
+        Q_EMIT itemInserted(newItem);
 }
 
 void AbstractCalendarModel::beginModifyItem() {
-	// does nothing for now (maybe emit a signal in the future)
+    // does nothing for now (maybe emit a signal in the future)
 }
 
 void AbstractCalendarModel::endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem) {
-	if (m_propagateEvents)
-                Q_EMIT itemModified(oldItem, newItem);
+    if (m_propagateEvents)
+        Q_EMIT itemModified(oldItem, newItem);
 }
 
 void AbstractCalendarModel::beginRemoveItem() {
-	// does nothing for now (maybe emit a signal in the future)
+    // does nothing for now (maybe emit a signal in the future)
 }
 
 void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
-	if (m_propagateEvents)
-                Q_EMIT itemRemoved(removedItem);
+    if (m_propagateEvents)
+        Q_EMIT itemRemoved(removedItem);
 }
 
 void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) const {
@@ -222,11 +222,11 @@ void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) const {
 //void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}
 
 void AbstractCalendarModel::stopEvents() {
-	m_propagateEvents = false;
+    m_propagateEvents = false;
 }
 
 void AbstractCalendarModel::resumeEvents() {
-	m_propagateEvents = true;
-        Q_EMIT reset();
+    m_propagateEvents = true;
+    Q_EMIT reset();
 }
 

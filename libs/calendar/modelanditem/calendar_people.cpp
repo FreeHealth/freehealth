@@ -275,6 +275,11 @@ QList<Calendar::People> CalendarPeopleModel::peopleList() const
     return m_People;
 }
 
+bool CalendarPeopleModel::contains(People &person) const
+{
+    return m_People.contains(person);
+}
+
 QString CalendarPeopleModel::typeToString(const int type) const
 {
     switch (type) {

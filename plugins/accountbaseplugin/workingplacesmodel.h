@@ -44,7 +44,7 @@ class WorkingPlacesModelPrivate;
 
 class ACCOUNTBASE_EXPORT WorkingPlacesModel : public QSqlTableModel
 {
-  
+
 public:
     WorkingPlacesModel(QObject *parent);
     ~WorkingPlacesModel();
