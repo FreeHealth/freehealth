@@ -220,6 +220,7 @@ void CalendarItemEditorPatientMapperWidget::removePatient(QAction *action)
     m_PeopleModel->removePeople(action->data().toString());
 }
 
+/** Submit the edited people list to the calendaritem */
 bool CalendarItemEditorPatientMapperWidget::submitToItem(const Calendar::CalendarItem &item)
 {
     if (m_ItemModel) {
@@ -259,7 +260,7 @@ void CalendarItemEditorPatientMapperWidget::onCurrentPatientChanged()
     aUseCurrentPatient->setEnabled(true);
 }
 
-
+// Slot used by the itemdelegate
 void CalendarItemEditorPatientMapperWidget::handlePressed(const QModelIndex &index)
 {
     if (index.column() == Calendar::CalendarPeopleModel::EmptyColumn) {
@@ -269,11 +270,13 @@ void CalendarItemEditorPatientMapperWidget::handlePressed(const QModelIndex &ind
     }
 }
 
+// Slot used by the itemdelegate
 void CalendarItemEditorPatientMapperWidget::handleClicked(const QModelIndex &index)
 {
     if (index.column() == Calendar::CalendarPeopleModel::EmptyColumn) { // the funky button
-        // remove the string from the model
+        // remove from the people model
         ui->selectedPatientView->model()->removeRow(index.row());
+
         // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
         QPoint cursorPos = QCursor::pos();
         QWidget *vp = ui->selectedPatientView->viewport();
@@ -292,6 +295,9 @@ void CalendarItemEditorPatientMapperWidget::changeEvent(QEvent *e)
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////   MAPPER   /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 CalendarItemEditorPatientMapper::CalendarItemEditorPatientMapper(QObject *parent) :
     Calendar::ICalendarItemDataWidget(parent),
     m_ItemModel(0)
