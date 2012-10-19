@@ -48,7 +48,7 @@
          </widget>
         </item>
         <item>
-         <widget class="Patients::PatientLineEditCompleterSearch" name="patientSearchEdit">
+         <widget class="Patients::PatientSearchEdit" name="patientSearchEdit">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -101,9 +101,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Patients::PatientLineEditCompleterSearch</class>
+   <class>Patients::PatientSearchEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">patientbaseplugin/patientlineeditcompletersearch.h</header>
+   <header location="global">patientbaseplugin/patientsearchedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
