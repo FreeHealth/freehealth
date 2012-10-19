@@ -228,7 +228,6 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
     QCompleter(parent),
     d(new Internal::PatientBaseCompleterPrivate)
 {
-    qWarning() << "COMPLETER" << this;
     d->m_Model = new PatientCompleterModel(this);
     d->m_Validator = new PatientBaseValidator(this);
     d->m_Validator->setModelToFilter(d->m_Model);
@@ -241,7 +240,6 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
 
 PatientBaseCompleter::~PatientBaseCompleter()
 {
-    qWarning() << "~COMPLETER";
     if (d)
         delete d;
     d = 0;
