@@ -92,10 +92,10 @@ namespace Internal {
             int durationInMinutes = start.secsTo(end) / 60;
             ui->durationCombo->setCurrentIndex(durationInMinutes / durationDivider);
             ui->location->setText(m_Item.data(CalendarItem::Location).toString());
-            ui->startDate->setDate(start.date());
-            ui->endDate->setDate(end.date());
-            ui->startTime->setTime(start.time());
-            ui->endTime->setTime(end.time());
+            ui->startDateEdit->setDate(start.date());
+            ui->endDateEdit->setDate(end.date());
+            ui->startTimeEdit->setTime(start.time());
+            ui->endTimeEdit->setTime(end.time());
             ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
             ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
             ui->password->setText(m_Item.data(CalendarItem::Password).toString());
@@ -116,8 +116,8 @@ namespace Internal {
         {
             if (m_Item.isNull())
                 return;
-            m_Item.setData(CalendarItem::DateStart, QDateTime(ui->startDate->date(), ui->startTime->time()));
-            m_Item.setData(CalendarItem::DateEnd, QDateTime(ui->endDate->date(), ui->endTime->time()));
+            m_Item.setData(CalendarItem::DateStart, QDateTime(ui->startDateEdit->date(), ui->startTimeEdit->time()));
+            m_Item.setData(CalendarItem::DateEnd, QDateTime(ui->endDateEdit->date(), ui->endTimeEdit->time()));
             m_Item.setData(CalendarItem::Location, ui->location->text());
             m_Item.setData(CalendarItem::IsBusy, ui->busyCheck->isChecked());
             m_Item.setData(CalendarItem::IsPrivate, ui->privateCheck->isChecked());
@@ -149,8 +149,8 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d(new Internal::ItemEditorWidgetPrivate(this))
 {
     d->ui->setupUi(this);
-    d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-    d->ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    d->ui->startDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    d->ui->endDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     d->ui->tabWidget->setCurrentIndex(0);
 
     d->populateDurationCombo();
@@ -173,10 +173,10 @@ void ItemEditorWidget::clear()
 {
     d->ui->typeCombo->setCurrentIndex(-1);
     d->ui->location->clear();
-    d->ui->startDate->setDate(QDate::currentDate());
-    d->ui->endDate->setDate(QDate::currentDate());
-    d->ui->startTime->setTime(QTime::currentTime());
-    d->ui->endTime->setTime(QTime::currentTime());
+    d->ui->startDateEdit->setDate(QDate::currentDate());
+    d->ui->endDateEdit->setDate(QDate::currentDate());
+    d->ui->startTimeEdit->setTime(QTime::currentTime());
+    d->ui->endTimeEdit->setTime(QTime::currentTime());
     d->ui->durationCombo->setCurrentIndex(-1);
     d->ui->busyCheck->setChecked(false);
     d->ui->privateCheck->setChecked(false);
@@ -295,15 +295,15 @@ void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
         return;
 
     const int durationMinutes = index * 5;
-    QTime endTime = d->ui->startTime->time().addSecs(durationMinutes * 60);
-    d->ui->endTime->setTime(endTime);
+    QTime endTime = d->ui->startTimeEdit->time().addSecs(durationMinutes * 60);
+    d->ui->endTimeEdit->setTime(endTime);
 }
 
 void ItemEditorWidget::changeDuration(const int comboIndex)
 {
-    QTime end = d->ui->startTime->time();
+    QTime end = d->ui->startTimeEdit->time();
     end = end.addSecs(comboIndex * durationDivider * 60);
-    d->ui->endTime->setTime(end);
+    d->ui->endTimeEdit->setTime(end);
 }
 
 void ItemEditorWidget::changeEvent(QEvent *e)

@@ -223,14 +223,14 @@
        <widget class="QComboBox" name="statusCombo"/>
       </item>
       <item row="2" column="3">
-       <widget class="QTimeEdit" name="startTime">
+       <widget class="QTimeEdit" name="startTimeEdit">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="QDateEdit" name="startDate">
+       <widget class="QDateEdit" name="startDateEdit">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -263,7 +263,7 @@
        <widget class="QComboBox" name="durationCombo"/>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="endLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -321,10 +321,10 @@
        </layout>
       </item>
       <item row="3" column="3">
-       <widget class="QTimeEdit" name="endTime"/>
+       <widget class="QTimeEdit" name="endTimeEdit"/>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="startLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -337,14 +337,14 @@
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="QDateEdit" name="endDate">
+       <widget class="QDateEdit" name="endDateEdit">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="2" column="4">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="durationLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -376,7 +376,7 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="statusLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -395,11 +395,11 @@
  </widget>
  <tabstops>
   <tabstop>eventLabel</tabstop>
-  <tabstop>startDate</tabstop>
-  <tabstop>startTime</tabstop>
+  <tabstop>startDateEdit</tabstop>
+  <tabstop>startTimeEdit</tabstop>
   <tabstop>durationCombo</tabstop>
-  <tabstop>endDate</tabstop>
-  <tabstop>endTime</tabstop>
+  <tabstop>endDateEdit</tabstop>
+  <tabstop>endTimeEdit</tabstop>
   <tabstop>busyCheck</tabstop>
   <tabstop>statusCombo</tabstop>
   <tabstop>privateCheck</tabstop>
