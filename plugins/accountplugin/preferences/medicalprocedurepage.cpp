@@ -144,8 +144,8 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 
     //fill alphabet combo
     QStringList listOfAlphabet;
-    //QString alphabet = tr("abcdefghijklmnopqrstuvwxyz");
-    QString alphabet = tr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    //QString alphabet = "abcdefghijklmnopqrstuvwxyz";
+    QString alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (int i = 0; i < alphabet.size(); i += 1)
     {
         QString letter = alphabet.mid(i,1);
@@ -390,7 +390,7 @@ void MedicalProcedureWidget::save(){
     }
     if (test) {
          QSqlQuery qInsert(m_db);
-         const QString medicalProcedure = tr("medical_procedure");
+         const QString medicalProcedure = "medical_procedure";
          const QString abstractUpdate = QString("ABSTRACT = '%1'").arg(abstractEdit->text());
          const QString typeUpdate = QString("TYPE = '%1'").arg(type->text());
          const QString amountSpinUpdate = QString("AMOUNT = '%1'").arg(QString::number(amountSpin->value()));

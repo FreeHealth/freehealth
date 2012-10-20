@@ -5,31 +5,31 @@
     <name>Account</name>
     <message>
         <source>Account</source>
-        <translation type="unfinished">Abrechnung</translation>
+        <translation >Abrechnung</translation>
     </message>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Rezepte</translation>
+        <translation >Rezepte</translation>
     </message>
     <message>
         <source>Add receipts</source>
-        <translation type="unfinished">Rezept hinzufügen</translation>
+        <translation >Rezept hinzufügen</translation>
     </message>
     <message>
         <source>Account book</source>
-        <translation type="unfinished">Abrechnungsbuch</translation>
+        <translation >Abrechnungsbuch</translation>
     </message>
     <message>
         <source>Revenues</source>
-        <translation type="unfinished">Einnahmen</translation>
+        <translation >Einnahmen</translation>
     </message>
     <message>
         <source>Expenses</source>
-        <translation type="unfinished">Ausgaben</translation>
+        <translation >Ausgaben</translation>
     </message>
     <message>
         <source>Movements</source>
-        <translation type="unfinished">Bewegungen</translation>
+        <translation >Bewegungen</translation>
     </message>
     <message>
         <source>Ledger</source>
@@ -48,38 +48,38 @@
     <name>Account::AccountPlugin</name>
     <message>
         <source>Initializing accountancy plugin...</source>
-        <translation type="unfinished">Buchhaltungs-Plugin wird initialisiert...</translation>
+        <translation >Buchhaltungs-Plugin wird initialisiert...</translation>
     </message>
 </context>
 <context>
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation >Kommentar</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
+        <translation >Bar</translation>
     </message>
     <message>
         <source>Check</source>
-        <translation type="unfinished">Scheck</translation>
+        <translation >Scheck</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
+        <translation >Sonstiges</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
+        <translation >Schulden</translation>
     </message>
     <message>
         <source>Sum</source>
@@ -118,48 +118,48 @@
     <name>Account::Internal::AccountDatabaseDefautsWidget</name>
     <message>
         <source>Available defaults</source>
-        <translation type="unfinished">Verfügbare Defaults</translation>
+        <translation >Verfügbare Defaults</translation>
     </message>
     <message>
         <source>Medical procedure</source>
-        <translation type="unfinished">Medizinische Prozedur</translation>
+        <translation >Medizinische Prozedur</translation>
     </message>
     <message>
         <source>Available Movements</source>
-        <translation type="unfinished">Verfügbare Bewegungen</translation>
+        <translation >Verfügbare Bewegungen</translation>
     </message>
     <message>
         <source>Distance rules</source>
-        <translation type="unfinished">Regeln für Distanzen (Visite)</translation>
+        <translation >Regeln für Distanzen (Visite)</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation type="unfinished">Versicherung</translation>
+        <translation >Versicherung</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished">Sonstiges</translation>
+        <translation >Sonstiges</translation>
     </message>
     <message>
         <source>Create defaults</source>
-        <translation type="unfinished">Defaults erzeugen</translation>
+        <translation >Defaults erzeugen</translation>
     </message>
     <message>
         <source>Load datapack</source>
-        <translation type="unfinished">Datenpaket laden</translation>
+        <translation >Datenpaket laden</translation>
     </message>
     <message>
         <source>Medical procedure defaults can not be included.</source>
-        <translation type="unfinished">Medizinische Prozeduren-Default kann nicht eingebunden werden.</translation>
+        <translation >Medizinische Prozeduren-Default kann nicht eingebunden werden.</translation>
     </message>
     <message>
         <source>Only few medical procedures are included.
 You have to complete them yourself.</source>
-        <translation type="unfinished">Nur wenige Medizinische Prozeduren sind inkludiert. Sie müssen die restlichen selbst vervollständigen.</translation>
+        <translation >Nur wenige Medizinische Prozeduren sind inkludiert. Sie müssen die restlichen selbst vervollständigen.</translation>
     </message>
     <message>
         <source>Minimal defaults.</source>
-        <translation type="unfinished">Minimale Defaults</translation>
+        <translation >Minimale Defaults</translation>
     </message>
     <message>
         <source>Form</source>
@@ -241,11 +241,11 @@ Then parametrize your user, sites, bank and so on.</source>
     <name>Account::Internal::AssetsRatesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Form</source>
@@ -324,11 +324,11 @@ Do you want to save them?</source>
     <name>Account::Internal::AvailableMovementWidget</name>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation >Kommentar</translation>
     </message>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Rezepte</translation>
+        <translation >Rezepte</translation>
     </message>
     <message>
         <source>Form</source>
@@ -484,7 +484,7 @@ Do you want to save them?</source>
     <name>Account::Internal::DistanceRulesWidget</name>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Form</source>
@@ -554,7 +554,7 @@ no = 0</source>
     <name>Account::Internal::InsuranceWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Form</source>
@@ -630,15 +630,15 @@ Do you want to save them?</source>
     <name>Account::Internal::MedicalProcedureWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation type="unfinished">Versicherung</translation>
+        <translation >Versicherung</translation>
     </message>
     <message>
         <source>Form</source>
@@ -701,7 +701,7 @@ Do you want to save them?</source>
     <name>Account::Internal::PercentagesWidget</name>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Form</source>
@@ -721,16 +721,6 @@ Do you want to save them?</source>
     </message>
     <message>
         <source>User UUID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;If you have different parts of reimbursement of acts, you can define percentages in the following way:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;type &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;value&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -754,19 +744,25 @@ Do you want to save them?</source>
         <source>An error occured during percentages saving. Data are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;If you have different parts of reimbursement of acts, you can define percentages in the following way:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;type &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;value&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Account::Internal::SitesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Working places</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -823,11 +819,15 @@ Do you want to save them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can not submit sites to your personnal database.</source>
+        <source>An error occured during sites saving. Data are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured during sites saving. Data are corrupted.</source>
+        <source>&amp;Working places:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot submit sites to your personal database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -894,67 +894,67 @@ This feature is useful for testers and should not be used by normal users.</sour
     <name>AccountViewWidget</name>
     <message>
         <source>Filter</source>
-        <translation type="unfinished">Filter</translation>
+        <translation >Filter</translation>
     </message>
     <message>
         <source>End date</source>
-        <translation type="unfinished">Enddatum</translation>
+        <translation >Enddatum</translation>
     </message>
     <message>
         <source>Show all accounts</source>
-        <translation type="unfinished">Alle Konten anzeigen</translation>
+        <translation >Alle Konten anzeigen</translation>
     </message>
     <message>
         <source>Today&apos;s accounts</source>
-        <translation type="unfinished">Heutige Konten</translation>
+        <translation >Heutige Konten</translation>
     </message>
     <message>
         <source>Yesterday&apos;s accounts</source>
-        <translation type="unfinished">Gestrige Konten</translation>
+        <translation >Gestrige Konten</translation>
     </message>
     <message>
         <source>This week accounts</source>
-        <translation type="unfinished">Konten dieser Woche</translation>
+        <translation >Konten dieser Woche</translation>
     </message>
     <message>
         <source>This month accounts</source>
-        <translation type="unfinished">Konten dieses Monats</translation>
+        <translation >Konten dieses Monats</translation>
     </message>
     <message>
         <source>This year accounts</source>
-        <translation type="unfinished">Konten dieses Jahres</translation>
+        <translation >Konten dieses Jahres</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished">Zusammenfassung</translation>
+        <translation >Zusammenfassung</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
+        <translation >Bar</translation>
     </message>
     <message>
         <source>Cheque</source>
-        <translation type="unfinished">Scheck</translation>
+        <translation >Scheck</translation>
     </message>
     <message>
         <source>Visa</source>
-        <translation type="unfinished">Visa</translation>
+        <translation >Visa</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
+        <translation >Schulden</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation type="unfinished">Versicherung</translation>
+        <translation >Versicherung</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
+        <translation >Sonstiges</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Löschen</translation>
+        <translation >&amp;Löschen</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1017,19 +1017,19 @@ Otherwise result will be wrong !</source>
     <name>AssetsViewer</name>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation type="unfinished">Modus</translation>
+        <translation >Modus</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation >Kommentar</translation>
     </message>
     <message>
         <source>Account id</source>
@@ -1104,56 +1104,56 @@ Otherwise result will be wrong !</source>
     <name>AssetsViewerWidget</name>
     <message>
         <source>Inputs</source>
-        <translation type="unfinished">Eingaben</translation>
+        <translation >Eingaben</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Duration in years</source>
-        <translation type="unfinished">Dauer in Jahren</translation>
+        <translation >Dauer in Jahren</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Details</translation>
+        <translation >Details</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation type="unfinished">Modus</translation>
+        <translation >Modus</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Comments</source>
-        <translation type="unfinished">Kommentare</translation>
+        <translation >Kommentare</translation>
     </message>
     <message>
         <source>Bank</source>
-        <translation type="unfinished">Bank</translation>
+        <translation >Bank</translation>
     </message>
     <message>
         <source>Year</source>
-        <translation type="unfinished">Jahr</translation>
+        <translation >Jahr</translation>
     </message>
     <message>
         <source>Value to declare</source>
-        <translation type="unfinished">Zu deklarierender Wert</translation>
+        <translation >Zu deklarierender Wert</translation>
     </message>
     <message>
         <source>&amp;Record</source>
         <translatorcomment>Maybe bad translation</translatorcomment>
-        <translation type="unfinished">&amp;Aufnehmen</translation>
+        <translation >&amp;Aufnehmen</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Löschen</translation>
+        <translation >&amp;Löschen</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation type="unfinished">&amp;Beenden</translation>
+        <translation >&amp;Beenden</translation>
     </message>
     <message>
         <source>Assets</source>
@@ -1195,23 +1195,23 @@ Otherwise result will be wrong !</source>
     <name>ChoiceDialog</name>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
+        <translation >Bar</translation>
     </message>
     <message>
         <source>Check</source>
-        <translation type="unfinished">Scheck</translation>
+        <translation >Scheck</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
+        <translation >Sonstiges</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
+        <translation >Schulden</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Choose type of payment</source>
@@ -1314,14 +1314,117 @@ Otherwise result will be wrong !</source>
     </message>
 </context>
 <context>
+    <name>ControlReceipts</name>
+    <message>
+        <source>Euros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cash</source>
+        <translation >Bar</translation>
+    </message>
+    <message>
+        <source>Chq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Banking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation >Sonstiges</translation>
+    </message>
+    <message>
+        <source>Dues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation >Datum</translation>
+    </message>
+    <message>
+        <source>Acts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment</source>
+        <translation >Kommentar</translation>
+    </message>
+    <message>
+        <source>Checks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insurance</source>
+        <translation >Versicherung</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation >Sonstiges</translation>
+    </message>
+    <message>
+        <source>Due</source>
+        <translation >Schulden</translation>
+    </message>
+    <message>
+        <source>by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check</source>
+        <translation >Scheck</translation>
+    </message>
+    <message>
+        <source>Due by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract of receipts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit Cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TOTAL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ControlReceiptsWidget</name>
     <message>
         <source>Filter</source>
-        <translation type="unfinished">Filter</translation>
+        <translation >Filter</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Löschen</translation>
+        <translation >&amp;Löschen</translation>
     </message>
     <message>
         <source>Look at and control receipts</source>
@@ -1375,7 +1478,7 @@ Otherwise result will be wrong !</source>
     <name>LedgerEditWidget</name>
     <message>
         <source>Year</source>
-        <translation type="unfinished">Jahr</translation>
+        <translation >Jahr</translation>
     </message>
     <message>
         <source>Edit ledger</source>
@@ -1500,7 +1603,7 @@ Otherwise result will be wrong !</source>
     <name>LedgerViewerWidget</name>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Rezepte</translation>
+        <translation >Rezepte</translation>
     </message>
     <message>
         <source>Ledger</source>
@@ -1539,11 +1642,11 @@ Please create defaults in Configuration &gt; Preferences.</source>
     <name>MovementsViewer</name>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Details</translation>
+        <translation >Details</translation>
     </message>
     <message>
         <source>Unable to show movements correctly.</source>
@@ -1611,23 +1714,23 @@ Do it in assets.</source>
     <name>MovementsViewerWidget</name>
     <message>
         <source>Movements</source>
-        <translation type="unfinished">Bewegungen</translation>
+        <translation >Bewegungen</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation >Wert</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation >Datum</translation>
     </message>
     <message>
         <source>Year</source>
-        <translation type="unfinished">Jahr</translation>
+        <translation >Jahr</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Details</translation>
+        <translation >Details</translation>
     </message>
     <message>
         <source>Quit</source>
@@ -1702,15 +1805,15 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>ProduceDoc</name>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
+        <translation >Bar</translation>
     </message>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Rezepte</translation>
+        <translation >Rezepte</translation>
     </message>
     <message>
         <source>Movements</source>
-        <translation type="unfinished">Bewegungen</translation>
+        <translation >Bewegungen</translation>
     </message>
     <message>
         <source>Ledger</source>
@@ -1825,11 +1928,11 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>QObject</name>
     <message>
         <source>Distance rules</source>
-        <translation type="unfinished">Regeln für Distanzen (Visite)</translation>
+        <translation >Regeln für Distanzen (Visite)</translation>
     </message>
     <message>
         <source>Bank</source>
-        <translation type="unfinished">Bank</translation>
+        <translation >Bank</translation>
     </message>
     <message>
         <source>&amp;Program</source>
@@ -1873,31 +1976,31 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>ReceiptViewer</name>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
+        <translation >Sonstiges</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation type="unfinished">&amp;Beenden</translation>
+        <translation >&amp;Beenden</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
+        <translation >Bar</translation>
     </message>
     <message>
         <source>Check</source>
-        <translation type="unfinished">Scheck</translation>
+        <translation >Scheck</translation>
     </message>
     <message>
         <source>Visa</source>
-        <translation type="unfinished">Visa</translation>
+        <translation >Visa</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
+        <translation >Schulden</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2023,7 +2126,7 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
     <name>findValueDialog</name>
     <message>
         <source>Filter</source>
-        <translation type="unfinished">Filter</translation>
+        <translation >Filter</translation>
     </message>
     <message>
         <source>Find your redefined values</source>
@@ -2150,15 +2253,15 @@ and choose it as preferred.</source>
     <name>xmlCategoriesParser</name>
     <message>
         <source>%1 does not exist.</source>
-        <translation type="unfinished">%1 existiert nicht.</translation>
+        <translation >%1 existiert nicht.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml not found.</source>
-        <translation type="unfinished">xmlEchangeFile.xml nicht gefunden.</translation>
+        <translation >xmlEchangeFile.xml nicht gefunden.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml cannot be parsed.</source>
-        <translation type="unfinished">xmlExchangeFile.xml kann nicht analysiert werden.</translation>
+        <translation >xmlExchangeFile.xml kann nicht analysiert werden.</translation>
     </message>
 </context>
 </TS>

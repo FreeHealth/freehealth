@@ -302,5 +302,13 @@ It is sometimes necessary to clarify your arguments.</source>
         <source>Override comment</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Label: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Category: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

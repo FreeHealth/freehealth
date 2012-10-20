@@ -5,53 +5,53 @@
     <name>Category::CategoryDialog</name>
     <message>
         <source>Category manager</source>
-        <translation type="unfinished">Gestionnaire de catégories</translation>
+        <translation>Gestionnaire de catégories</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
         <source>Please contact dev team.</source>
-        <translation type="unfinished">Veuillez contacter l&apos;équipe de développement.</translation>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryDialog</name>
     <message>
         <source>Category manager</source>
-        <translation type="unfinished">Gestionnaire de catégories</translation>
+        <translation>Gestionnaire de catégories</translation>
     </message>
     <message>
         <source>Categories</source>
-        <translation type="unfinished">Catégories</translation>
+        <translation>Catégories</translation>
     </message>
     <message>
         <source>Labels</source>
-        <translation type="unfinished">Libellés</translation>
+        <translation>Libellés</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation type="unfinished">Extras</translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Protect with a &amp;password</source>
-        <translation type="unfinished"></translation>
+        <translation>Protéger avec un mot de &amp;passe</translation>
     </message>
     <message>
         <source>Pass&amp;word</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mot de passe</translation>
     </message>
     <message>
         <source>&amp;Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Confirmer</translation>
     </message>
     <message>
         <source>Themed &amp;icon</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Icône du thème</translation>
     </message>
 </context>
 </TS>

@@ -55,7 +55,7 @@
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Sum</source>
@@ -241,15 +241,15 @@ Then parametrize your user, sites, bank and so on.</source>
     <name>Account::Internal::AssetsRatesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Period</source>
-        <translation type="unfinished">Periodo</translation>
+        <translation >Periodo</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -324,7 +324,7 @@ Do you want to save them?</source>
     <name>Account::Internal::AvailableMovementWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -396,7 +396,7 @@ Do you want to save them?</source>
     <name>Account::Internal::BankDetailsWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -484,7 +484,7 @@ Do you want to save them?</source>
     <name>Account::Internal::DistanceRulesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -554,11 +554,11 @@ no = 0</source>
     <name>Account::Internal::InsuranceWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -630,7 +630,7 @@ Do you want to save them?</source>
     <name>Account::Internal::MedicalProcedureWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -701,7 +701,7 @@ Do you want to save them?</source>
     <name>Account::Internal::PercentagesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -728,16 +728,6 @@ Do you want to save them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;If you have different parts of reimbursement of acts, you can define percentages in the following way:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;type &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;value&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You make changes into the percentages table.
 Do you want to save them?</source>
         <translation type="unfinished"></translation>
@@ -754,23 +744,29 @@ Do you want to save them?</source>
         <source>An error occured during percentages saving. Data are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;If you have different parts of reimbursement of acts, you can define percentages in the following way:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;type &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;value&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Account::Internal::SitesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Working places</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -823,11 +819,15 @@ Do you want to save them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can not submit sites to your personnal database.</source>
+        <source>An error occured during sites saving. Data are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured during sites saving. Data are corrupted.</source>
+        <source>&amp;Working places:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot submit sites to your personal database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1309,6 +1309,109 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <source>Clear all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ControlReceipts</name>
+    <message>
+        <source>Euros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Banking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Checks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insurance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Due</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Due by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extract of receipts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit Cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TOTAL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1872,7 +1975,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>ReceiptViewer</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2149,7 +2252,7 @@ and choose it as preferred.</source>
     <name>xmlCategoriesParser</name>
     <message>
         <source>%1 does not exist.</source>
-        <translation type="unfinished">%1 no existe.</translation>
+        <translation >%1 no existe.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml not found.</source>

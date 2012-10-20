@@ -5,37 +5,37 @@
     <name>Category::CategoryDialog</name>
     <message>
         <source>Category manager</source>
-        <translation type="unfinished">Kategorien-Verwaltung</translation>
+        <translation >Kategorien-Verwaltung</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
         <source>Please contact dev team.</source>
-        <translation type="unfinished">Bitte kontaktieren Sie das Entwicklerteam.</translation>
+        <translation >Bitte kontaktieren Sie das Entwicklerteam.</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryDialog</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation >Formular</translation>
     </message>
     <message>
         <source>Category manager</source>
-        <translation type="unfinished">Kategorien-Verwaltung</translation>
+        <translation >Kategorien-Verwaltung</translation>
     </message>
     <message>
         <source>Categories</source>
-        <translation type="unfinished">Kategorien</translation>
+        <translation >Kategorien</translation>
     </message>
     <message>
         <source>Labels</source>
-        <translation type="unfinished">Bezeichnungen</translation>
+        <translation >Bezeichnungen</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation type="unfinished">Extras</translation>
+        <translation >Extras</translation>
     </message>
     <message>
         <source>Protect with a &amp;password</source>
