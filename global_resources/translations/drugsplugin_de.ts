@@ -20,11 +20,11 @@
     <name>DosageCreatorDialog</name>
     <message>
         <source>Dosage is not valid.</source>
-        <translation type="unfinished">Dosis ist nicht zulässig.</translation>
+        <translation >Dosis ist nicht zulässig.</translation>
     </message>
     <message>
         <source>Drug Dosage Creator</source>
-        <translation type="unfinished">Medikamenten Dosis Creator</translation>
+        <translation >Medikamenten Dosis Creator</translation>
     </message>
     <message>
         <source>Dosage successfully saved to base</source>
@@ -46,7 +46,7 @@
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation >Dialog</translation>
     </message>
     <message>
         <source>Drug interaction alert</source>
@@ -69,11 +69,11 @@
     <name>DrugsWidget::InteractionSynthesisDialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation >Dialog</translation>
     </message>
     <message>
         <source>Synthetic interactions</source>
-        <translation type="unfinished">Künstliche Interaktionen</translation>
+        <translation >Künstliche Interaktionen</translation>
     </message>
     <message>
         <source>Information</source>
@@ -174,15 +174,15 @@
     <name>DrugsWidget::Internal::DosageCreatorDialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation >Dialog</translation>
     </message>
     <message>
         <source>DrugName</source>
-        <translation type="unfinished">Medikamenten Name</translation>
+        <translation >Medikamenten Name</translation>
     </message>
     <message>
         <source>Drug Dosage Creator</source>
-        <translation type="unfinished">Medikamenten Dosis Creator</translation>
+        <translation >Medikamenten Dosis Creator</translation>
     </message>
     <message>
         <source>Show interaction synthesis dialog</source>
@@ -221,7 +221,7 @@
     <name>DrugsWidget::Internal::DosageDialog</name>
     <message>
         <source>PushButton</source>
-        <translation type="unfinished">DrückeKnopf</translation>
+        <translation >DrückeKnopf</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -229,7 +229,7 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation >&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -252,115 +252,115 @@ p, li { white-space: pre-wrap; }
     <name>DrugsWidget::Internal::DosageViewer</name>
     <message>
         <source>Basics</source>
-        <translation type="unfinished">Basis</translation>
+        <translation >Basis</translation>
     </message>
     <message>
         <source>Intakes</source>
-        <translation type="unfinished">Einnahmen</translation>
+        <translation >Einnahmen</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished">Zu</translation>
+        <translation >Zu</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished">Spanne</translation>
+        <translation >Spanne</translation>
     </message>
     <message>
         <source>Used for INN prescription</source>
-        <translation type="unfinished">Benutzt für INN Rezepte</translation>
+        <translation >Benutzt für INN Rezepte</translation>
     </message>
     <message>
         <source>100%</source>
-        <translation type="unfinished">100%</translation>
+        <translation >100%</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished">Schemata</translation>
+        <translation >Schemata</translation>
     </message>
     <message>
         <source>Min interval between intakes</source>
-        <translation type="unfinished">Min intervall zwischen den Einnahmen</translation>
+        <translation >Min intervall zwischen den Einnahmen</translation>
     </message>
     <message>
         <source>Meal time relation</source>
-        <translation type="unfinished">Mahlzeit</translation>
+        <translation >Mahlzeit</translation>
     </message>
     <message>
         <source>Weight / Age / Sex Limited</source>
-        <translation type="unfinished">Gewicht / Alter / Geschlecht</translation>
+        <translation >Gewicht / Alter / Geschlecht</translation>
     </message>
     <message>
         <source>Man only</source>
-        <translation type="unfinished">Nur Männer</translation>
+        <translation >Nur Männer</translation>
     </message>
     <message>
         <source>Woman only</source>
-        <translation type="unfinished">Nur Frauen</translation>
+        <translation >Nur Frauen</translation>
     </message>
     <message>
         <source>Min age</source>
-        <translation type="unfinished">Mindestalter</translation>
+        <translation >Mindestalter</translation>
     </message>
     <message>
         <source>Max age</source>
-        <translation type="unfinished">Maximal Alter</translation>
+        <translation >Maximal Alter</translation>
     </message>
     <message>
         <source>Min weight</source>
-        <translation type="unfinished">Mindestgewicht</translation>
+        <translation >Mindestgewicht</translation>
     </message>
     <message>
         <source>Renal function limits</source>
-        <translation type="unfinished">Renalfunktionslimitierung</translation>
+        <translation >Renalfunktionslimitierung</translation>
     </message>
     <message>
         <source>Pregnancy / breast feeding</source>
-        <translation type="unfinished">Schwangerschaft / Brust geben</translation>
+        <translation >Schwangerschaft / Brust geben</translation>
     </message>
     <message>
         <source>Links</source>
-        <translation type="unfinished">Verbindungen</translation>
+        <translation >Verbindungen</translation>
     </message>
     <message>
         <source>Links to CIM10 diagnosis</source>
-        <translation type="unfinished">Verbindungen zu CIM10 Diagnosen</translation>
+        <translation >Verbindungen zu CIM10 Diagnosen</translation>
     </message>
     <message>
         <source>Links to eDRC diagnosis</source>
-        <translation type="unfinished">Verbindungen zu eDRC Diagnose</translation>
+        <translation >Verbindungen zu eDRC Diagnose</translation>
     </message>
     <message>
         <source>Monitoring</source>
-        <translation type="unfinished">Überwachung</translation>
+        <translation >Überwachung</translation>
     </message>
     <message>
         <source>CIM10 Limitations</source>
-        <translation type="unfinished">CIM10 Limitierungen</translation>
+        <translation >CIM10 Limitierungen</translation>
     </message>
     <message>
         <source>Biological monitoring</source>
-        <translation type="unfinished">Biologische Überwachung</translation>
+        <translation >Biologische Überwachung</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished">Notiz</translation>
+        <translation >Notiz</translation>
     </message>
     <message>
         <source>Todos</source>
-        <translation type="unfinished">Zu Tun</translation>
+        <translation >Zu Tun</translation>
     </message>
     <message>
         <source>INN prescription</source>
-        <translation type="unfinished">INN Rezept Verschreibung</translation>
+        <translation >INN Rezept Verschreibung</translation>
     </message>
     <message>
         <source>Alternate with</source>
-        <translation type="unfinished">Austauschbar mit</translation>
+        <translation >Austauschbar mit</translation>
     </message>
     <message>
         <source>Drug Dosage Creator</source>
-        <translation type="unfinished">Medikamenten Dosis Creator</translation>
+        <translation >Medikamenten Dosis Creator</translation>
     </message>
     <message>
         <source>Show the summary of product characteristics</source>
@@ -601,35 +601,35 @@ p, li { white-space: pre-wrap; }
     <name>DrugsWidget::Internal::DrugGeneralPreferencesWidget</name>
     <message>
         <source>Font</source>
-        <translation type="unfinished">Schrift</translation>
+        <translation >Schrift</translation>
     </message>
     <message>
         <source>Font size</source>
-        <translation type="unfinished">Schriftgröße</translation>
+        <translation >Schriftgröße</translation>
     </message>
     <message>
         <source>Testers</source>
-        <translation type="unfinished">Tester</translation>
+        <translation >Tester</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation >Name</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Passwort</translation>
+        <translation >Passwort</translation>
     </message>
     <message>
         <source>Interactions warnings</source>
-        <translation type="unfinished">Wechselwirkungen Warnhinweise</translation>
+        <translation >Wechselwirkungen Warnhinweise</translation>
     </message>
     <message>
         <source>Printing</source>
-        <translation type="unfinished">Drucken</translation>
+        <translation >Drucken</translation>
     </message>
     <message>
         <source>Add a line break between drugs when printing</source>
-        <translation type="unfinished">Füge einen Zeilenunbruch zwischen den Medikamenten beim Druck hinzu</translation>
+        <translation >Füge einen Zeilenunbruch zwischen den Medikamenten beim Druck hinzu</translation>
     </message>
     <message>
         <source>Form</source>
@@ -692,67 +692,67 @@ p, li { white-space: pre-wrap; }
     <name>DrugsWidget::Internal::DrugInfo</name>
     <message>
         <source>drug name</source>
-        <translation type="unfinished">Name des Medikamentes</translation>
+        <translation >Name des Medikamentes</translation>
     </message>
     <message>
         <source>Drug information</source>
-        <translation type="unfinished">Informationen über das Medikament</translation>
+        <translation >Informationen über das Medikament</translation>
     </message>
     <message>
         <source>associated INN</source>
-        <translation type="unfinished">Verbunden mit INN</translation>
+        <translation >Verbunden mit INN</translation>
     </message>
     <message>
         <source>Testers</source>
-        <translation type="unfinished">Tester</translation>
+        <translation >Tester</translation>
     </message>
     <message>
         <source>Something is wrong</source>
-        <translation type="unfinished">Etwas ist falsch</translation>
+        <translation >Etwas ist falsch</translation>
     </message>
     <message>
         <source>Explain what is wrong</source>
-        <translation type="unfinished">Erkläre was falsch ist</translation>
+        <translation >Erkläre was falsch ist</translation>
     </message>
     <message>
         <source>Drug interaction class</source>
-        <translation type="unfinished">Medikamenten Interaktionsklasse</translation>
+        <translation >Medikamenten Interaktionsklasse</translation>
     </message>
     <message>
         <source>Found drug interactions</source>
-        <translation type="unfinished">Gefundene Medikamenten Interaktionen</translation>
+        <translation >Gefundene Medikamenten Interaktionen</translation>
     </message>
     <message>
         <source>Interactions from the list</source>
-        <translation type="unfinished">Interaktionen aus der Liste</translation>
+        <translation >Interaktionen aus der Liste</translation>
     </message>
     <message>
         <source>Nature of the risk</source>
-        <translation type="unfinished">Nebenwirkungen</translation>
+        <translation >Nebenwirkungen</translation>
     </message>
     <message>
         <source>What to do</source>
-        <translation type="unfinished">Was ist zu tun</translation>
+        <translation >Was ist zu tun</translation>
     </message>
     <message>
         <source>All interactions are found</source>
-        <translation type="unfinished">Alle Interaktionen wurden gefunden</translation>
+        <translation >Alle Interaktionen wurden gefunden</translation>
     </message>
     <message>
         <source>All interactions are exact</source>
-        <translation type="unfinished">Alle Interaktionen sind exakt</translation>
+        <translation >Alle Interaktionen sind exakt</translation>
     </message>
     <message>
         <source>All Interaction text is right</source>
-        <translation type="unfinished">Alle Interaktionstexte sind richtig</translation>
+        <translation >Alle Interaktionstexte sind richtig</translation>
     </message>
     <message>
         <source>All todos texts are right</source>
-        <translation type="unfinished">Alle todos sind richtig</translation>
+        <translation >Alle todos sind richtig</translation>
     </message>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation >Dialog</translation>
     </message>
     <message>
         <source>Known molecule</source>
@@ -847,11 +847,11 @@ Do you want to send them?</source>
     <name>DrugsWidget::Internal::DrugPosologicSentencePreferencesWidget</name>
     <message>
         <source>Prescription formatting</source>
-        <translation type="unfinished">Rezeptformatierung</translation>
+        <translation >Rezeptformatierung</translation>
     </message>
     <message>
         <source>Reset to default</source>
-        <translation type="unfinished">Zurücksetzen</translation>
+        <translation >Zurücksetzen</translation>
     </message>
     <message>
         <source>Form</source>
@@ -862,7 +862,7 @@ Do you want to send them?</source>
     <name>DrugsWidget::Internal::DrugSelector</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation >Formular</translation>
     </message>
     <message>
         <source>Selected drugs history</source>
@@ -885,7 +885,7 @@ Do you really want to change the editing mode?</source>
     <name>DrugsWidget::Internal::DrugsCentralWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulat</translation>
+        <translation >Formulat</translation>
     </message>
 </context>
 <context>
@@ -914,19 +914,19 @@ Do you really want to change the editing mode?</source>
     <name>DrugsWidget::Internal::DrugsExtraWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation >Formular</translation>
     </message>
     <message>
         <source>Hide laboratory name</source>
-        <translation type="unfinished">Verstecke den Labornamen</translation>
+        <translation >Verstecke den Labornamen</translation>
     </message>
     <message>
         <source>Text before 100% therapeutic</source>
-        <translation type="unfinished">Text vor 100% therapeutisch</translation>
+        <translation >Text vor 100% therapeutisch</translation>
     </message>
     <message>
         <source>Text after 100% therapeutic</source>
-        <translation type="unfinished">Text nach 100% therapeutisch</translation>
+        <translation >Text nach 100% therapeutisch</translation>
     </message>
 </context>
 <context>
@@ -1009,7 +1009,7 @@ Do you really want to change the editing mode?</source>
     <name>DrugsWidget::Internal::DrugsUserWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation >Formular</translation>
     </message>
 </context>
 <context>
@@ -1074,7 +1074,7 @@ Do you really want to change the editing mode?</source>
     <name>DrugsWidget::TextualPrescriptionDialog</name>
     <message>
         <source>100%</source>
-        <translation type="unfinished">100%</translation>
+        <translation >100%</translation>
     </message>
     <message>
         <source>Textual prescription</source>
@@ -1101,27 +1101,27 @@ Do you really want to change the editing mode?</source>
     <name>mfDrugsConstants</name>
     <message>
         <source>Prescription</source>
-        <translation type="unfinished">Rezept</translation>
+        <translation >Rezept</translation>
     </message>
     <message>
         <source>Search by commercial name</source>
-        <translation type="unfinished">Suchen nach kommerziellem Namen</translation>
+        <translation >Suchen nach kommerziellem Namen</translation>
     </message>
     <message>
         <source>Search by INN</source>
-        <translation type="unfinished">Suchen nach INN</translation>
+        <translation >Suchen nach INN</translation>
     </message>
     <message>
         <source>Search by molecules</source>
-        <translation type="unfinished">Suche nach  Molekül</translation>
+        <translation >Suche nach  Molekül</translation>
     </message>
     <message>
         <source>Print prescription</source>
-        <translation type="unfinished">Drucken des Rezeptes</translation>
+        <translation >Drucken des Rezeptes</translation>
     </message>
     <message>
         <source>Add long-term medications</source>
-        <translation type="unfinished">Dauermedikation hinzufügen</translation>
+        <translation >Dauermedikation hinzufügen</translation>
     </message>
     <message>
         <source>Clear prescription</source>
