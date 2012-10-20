@@ -68,7 +68,8 @@ HEADERS += global_exporter.h \
     widgets/detailswidget.h \
     widgets/detailsbutton.h \
     proxyaction.h \
-    stringutils.h
+    stringutils.h \
+    widgets/timecombobox.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -122,7 +123,8 @@ SOURCES += global.cpp \
     widgets/detailswidget.cpp \
     widgets/detailsbutton.cpp \
     proxyaction.cpp \
-    stringutils.cpp
+    stringutils.cpp \
+    widgets/timecombobox.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm

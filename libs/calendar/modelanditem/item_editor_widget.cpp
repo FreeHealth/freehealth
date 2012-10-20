@@ -41,6 +41,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
 #include <utils/log.h>
+#include <utils/widgets/timecombobox.h>
 
 #include "ui_item_editor_widget.h"
 
@@ -50,96 +51,96 @@
 
 using namespace Calendar;
 using namespace Trans::ConstantTranslations;
-
+using namespace Views;
 namespace {
-    const int durationDivider = 5; // define a duration each 5 minutes
+const int durationDivider = 5; // define a duration each 5 minutes
 }
 
 namespace Calendar {
 namespace Internal {
 
-    class ItemEditorWidgetPrivate
+class ItemEditorWidgetPrivate
+{
+public:
+    ItemEditorWidgetPrivate(ItemEditorWidget *parent) :
+        m_Model(0),
+        ui(new Internal::Ui::ItemEditorWidget),
+        m_UserCalsModel(0),
+        m_ShowingExtra(true),
+        q(parent)
     {
-    public:
-        ItemEditorWidgetPrivate(ItemEditorWidget *parent) :
-            m_Model(0),
-            ui(new Internal::Ui::ItemEditorWidget),
-            m_UserCalsModel(0),
-            m_ShowingExtra(true),
-            q(parent)
-        {
+    }
+
+    ~ItemEditorWidgetPrivate() {}
+
+    void populateDurationCombo()
+    {
+        ui->durationCombo->clear();
+        for(int i = 0; i < (120/durationDivider); ++i) {
+            ui->durationCombo->addItem(QString::number(i*5) + " " + tkTr(Trans::Constants::MINUTES));
         }
+    }
 
-        ~ItemEditorWidgetPrivate() {}
+    void populateStatusCombo()
+    {
+        ui->statusCombo->addItems(availableStatus());
+    }
 
-        void populateDurationCombo()
-        {
-            ui->durationCombo->clear();
-            for(int i = 0; i < (120/durationDivider); ++i) {
-                ui->durationCombo->addItem(QString::number(i*5) + " " + tkTr(Trans::Constants::MINUTES));
-            }
-        }
+    void setEventToUi()
+    {
+        QDateTime start = m_Item.beginning();
+        QDateTime end = m_Item.ending();
+        int durationInMinutes = start.secsTo(end) / 60;
+        ui->durationCombo->setCurrentIndex(durationInMinutes / durationDivider);
+        ui->location->setText(m_Item.data(CalendarItem::Location).toString());
+        ui->startDateEdit->setDate(start.date());
+        ui->endDateEdit->setDate(end.date());
+        ui->startTimeEdit->setTime(start.time());
+        ui->endTimeEdit->setTime(end.time());
+        ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
+        ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
+        ui->password->setText(m_Item.data(CalendarItem::Password).toString());
+        ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
+        ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
+        //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
 
-        void populateStatusCombo()
-        {
-            ui->statusCombo->addItems(availableStatus());
-        }
+        //            if (m_Item.model()) {
+        //			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
+        //            } else {
+        //                ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
+        //            }
 
-        void setEventToUi()
-        {
-            QDateTime start = m_Item.beginning();
-            QDateTime end = m_Item.ending();
-            int durationInMinutes = start.secsTo(end) / 60;
-            ui->durationCombo->setCurrentIndex(durationInMinutes / durationDivider);
-            ui->location->setText(m_Item.data(CalendarItem::Location).toString());
-            ui->startDateEdit->setDate(start.date());
-            ui->endDateEdit->setDate(end.date());
-            ui->startTimeEdit->setTime(start.time());
-            ui->endTimeEdit->setTime(end.time());
-            ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
-            ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
-            ui->password->setText(m_Item.data(CalendarItem::Password).toString());
-            ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
-            ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
-//            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
+        ui->statusCombo->setCurrentIndex(m_Item.data(CalendarItem::Status).toInt());
+    }
 
-//            if (m_Item.model()) {
-//			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
-//            } else {
-//                ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
-//            }
+    void submit()
+    {
+        if (m_Item.isNull())
+            return;
+        m_Item.setData(CalendarItem::DateStart, QDateTime(ui->startDateEdit->date(), ui->startTimeEdit->time()));
+        m_Item.setData(CalendarItem::DateEnd, QDateTime(ui->endDateEdit->date(), ui->endTimeEdit->time()));
+        m_Item.setData(CalendarItem::Location, ui->location->text());
+        m_Item.setData(CalendarItem::IsBusy, ui->busyCheck->isChecked());
+        m_Item.setData(CalendarItem::IsPrivate, ui->privateCheck->isChecked());
+        m_Item.setData(CalendarItem::Password, ui->password->text());
+        m_Item.setData(CalendarItem::Label, ui->eventLabel->text());
+        m_Item.setData(CalendarItem::Description,ui->fullInfo->toHtml());
+        m_Item.setData(CalendarItem::Status, ui->statusCombo->currentIndex());
+        //            m_Item.setData(CalendarItem::ThemedIcon, QString());
+    }
 
-            ui->statusCombo->setCurrentIndex(m_Item.data(CalendarItem::Status).toInt());
-        }
+public:
+    AbstractCalendarModel *m_Model;
+    Ui::ItemEditorWidget *ui;
+    Calendar::CalendarItem m_Item;
+    QList<UserCalendar *> m_UserCals;
+    QStandardItemModel *m_UserCalsModel;
+    QVector<ICalendarItemDataWidget *> m_AddedWidgets;
+    bool m_ShowingExtra;
 
-        void submit()
-        {
-            if (m_Item.isNull())
-                return;
-            m_Item.setData(CalendarItem::DateStart, QDateTime(ui->startDateEdit->date(), ui->startTimeEdit->time()));
-            m_Item.setData(CalendarItem::DateEnd, QDateTime(ui->endDateEdit->date(), ui->endTimeEdit->time()));
-            m_Item.setData(CalendarItem::Location, ui->location->text());
-            m_Item.setData(CalendarItem::IsBusy, ui->busyCheck->isChecked());
-            m_Item.setData(CalendarItem::IsPrivate, ui->privateCheck->isChecked());
-            m_Item.setData(CalendarItem::Password, ui->password->text());
-            m_Item.setData(CalendarItem::Label, ui->eventLabel->text());
-            m_Item.setData(CalendarItem::Description,ui->fullInfo->toHtml());
-            m_Item.setData(CalendarItem::Status, ui->statusCombo->currentIndex());
-//            m_Item.setData(CalendarItem::ThemedIcon, QString());
-        }
-
-    public:
-        AbstractCalendarModel *m_Model;
-        Ui::ItemEditorWidget *ui;
-        Calendar::CalendarItem m_Item;
-        QList<UserCalendar *> m_UserCals;
-        QStandardItemModel *m_UserCalsModel;
-        QVector<ICalendarItemDataWidget *> m_AddedWidgets;
-        bool m_ShowingExtra;
-
-    private:
-        ItemEditorWidget *q;
-    };
+private:
+    ItemEditorWidget *q;
+};
 }
 }
 
@@ -156,6 +157,11 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d->populateDurationCombo();
     d->populateStatusCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));
+
+    connect(d->ui->startDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
+    connect(d->ui->endDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
+    connect(d->ui->startTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
+    connect(d->ui->endTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
 
     // hide extra information
     toogleExtraInformation();
@@ -183,7 +189,6 @@ void ItemEditorWidget::clear()
     d->ui->password->clear();
     d->ui->eventLabel->clear();
     d->ui->fullInfo->clear();
-    d->ui->iconLabel->clear();
 
     // clear addedWidgets
     foreach(ICalendarItemDataWidget * widget, d->m_AddedWidgets) {
@@ -297,6 +302,35 @@ void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
     const int durationMinutes = index * 5;
     QTime endTime = d->ui->startTimeEdit->time().addSecs(durationMinutes * 60);
     d->ui->endTimeEdit->setTime(endTime);
+}
+
+void ItemEditorWidget::on_dateTimeEdits_dateTimeChanged(QDateTime dateTime)
+{
+    qDebug() << sender()->objectName() << dateTime ;
+    QDateTime startDateTime = QDateTime(d->ui->startDateEdit->date(), d->ui->startTimeEdit->time());
+    QDateTime endDateTime = QDateTime(d->ui->endDateEdit->date(), d->ui->endTimeEdit->time());
+
+    if (sender() == d->ui->startDateEdit || sender() == d->ui->startTimeEdit) {
+        if (startDateTime >= endDateTime) {
+            // endDateTime cannot be < startDateTime
+            // so set it to startDateTime + defaultDuration
+            endDateTime = startDateTime.addSecs(5 * 60); //TODO; caution: hardcoded = bad!
+
+            // now check where the signal came from and correct the date/time in the right edits
+
+            d->ui->endDateEdit->setDate(endDateTime.date());
+            d->ui->endTimeEdit->setTime(endDateTime.time());
+
+        }
+    } else if (sender() == d->ui->endDateEdit || sender() == d->ui->endTimeEdit) {
+
+        if (endDateTime <= startDateTime) {
+            startDateTime = endDateTime.addSecs(-5 * 60);
+
+            d->ui->startDateEdit->setDate(endDateTime.date());
+            d->ui->startTimeEdit->setTime(endDateTime.time());
+        }
+    }
 }
 
 void ItemEditorWidget::changeDuration(const int comboIndex)

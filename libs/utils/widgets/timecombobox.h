@@ -19,74 +19,60 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
- *       Guillaume Denry <guillaume.denry@gmail.com>                       *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *   Main developers: Christian A. Reiter                                  *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CALENDAR_ITEMEDITORWIDGET_H
-#define CALENDAR_ITEMEDITORWIDGET_H
+#ifndef VIEWS_DATETIMEEDIT_H
+#define VIEWS_DATETIMEEDIT_H
 
-#include <calendar/calendar_exporter.h>
-
+#include <utils/global_exporter.h>
 #include <QWidget>
-#include <QDateTime>
+#include <QComboBox>
+
+#include <QTime>
 
 /**
- * \file item_editor_widget.h
- * \author Guillaume Denry, Eric Maeker
- * \version 0.6.0
- * \date 05 Jul 2011
+ * \file timecombobox.h
+ * \author Christian A. Reiter
+ * \version 0.8.0
+ * \date 2012-10-19
 */
-
-namespace Calendar {
-class CalendarItem;
-class UserCalendar;
-class AbstractCalendarModel;
-class ICalendarItemDataWidget;
-
+namespace Views {
 namespace Internal {
-class ItemEditorWidgetPrivate;
+class TimeComboBoxPrivate;
 }
 
-class CALENDAR_EXPORT ItemEditorWidget : public QWidget
+class UTILS_EXPORT TimeComboBox : public QWidget
 {
     Q_OBJECT
-
+    Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged)
+    Q_PROPERTY(bool editable READ editable WRITE setEditable)
 public:
-    explicit ItemEditorWidget(QWidget *parent = 0);
-    ~ItemEditorWidget();
+    explicit TimeComboBox(QWidget *parent = 0);
+    explicit TimeComboBox(QTime &time, QWidget *parent = 0);
+    ~TimeComboBox();
 
-    void clear();
-    void setModel(AbstractCalendarModel *model);
+    bool initialize();
+    QTime time();
+    bool editable();
 
-    void setCalendarItem(const Calendar::CalendarItem &item);
-    Calendar::CalendarItem calendarEvent() const;
-
-    void toogleExtraInformation();
-    bool isShowingExtraInformation() const;
-
-//    void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
-
-    void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
+Q_SIGNALS:
+    void timeChanged(const QTime &time);
 
 public Q_SLOTS:
-    void submit();
-
-private Q_SLOTS:
-    void on_selectIconButton_clicked();
-    void on_durationCombo_currentIndexChanged(int index);
-    void on_dateTimeEdits_dateTimeChanged(QDateTime dateTime);
-    void changeDuration(const int comboIndex);
-
-protected:
-    void changeEvent(QEvent *e);
+    void setTime(const QTime &time);
+    void setEditable (bool editable);
+    void setInterval(int interval);
 
 private:
-    Internal::ItemEditorWidgetPrivate *d;
+    Internal::TimeComboBoxPrivate *d;
+
+private Q_SLOTS:
+    void on_combo_currentIndexChanged(const int index);
 };
 
-}  // End namespace Calendar
+} // namespace Views
 
-#endif // CALENDAR_ITEMEDITORWIDGET_H
+#endif  // VIEWS_DATETIMEEDIT_H
+
