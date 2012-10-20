@@ -390,7 +390,7 @@ void MedicalProcedureWidget::save(){
     }
     if (test) {
          QSqlQuery qInsert(m_db);
-         const QString medicalProcedure = tr("medical_procedure");
+         const QString medicalProcedure = "medical_procedure";
          const QString abstractUpdate = QString("ABSTRACT = '%1'").arg(abstractEdit->text());
          const QString typeUpdate = QString("TYPE = '%1'").arg(type->text());
          const QString amountSpinUpdate = QString("AMOUNT = '%1'").arg(QString::number(amountSpin->value()));
