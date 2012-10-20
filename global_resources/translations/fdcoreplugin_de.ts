@@ -35,7 +35,7 @@
     <name>Core</name>
     <message>
         <source>Core intialization finished...</source>
-        <translation type="unfinished">Kern Initialisierung beendet...</translation>
+        <translation >Kern Initialisierung beendet...</translation>
     </message>
     <message>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
@@ -73,7 +73,7 @@
     <name>Core::Internal::AboutDialog</name>
     <message>
         <source>Application name</source>
-        <translation type="unfinished">Anwendungsname</translation>
+        <translation >Anwendungsname</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -84,7 +84,7 @@
     <name>Core::Internal::AppAboutPage</name>
     <message>
         <source>Application</source>
-        <translation type="unfinished">Anwendung</translation>
+        <translation >Anwendung</translation>
     </message>
     <message>
         <source>General</source>
@@ -122,7 +122,7 @@
     <name>Core::Internal::BuildAboutPage</name>
     <message>
         <source>Application</source>
-        <translation type="unfinished">Anwendung</translation>
+        <translation >Anwendung</translation>
     </message>
     <message>
         <source>Current Qt version: %1</source>
@@ -137,7 +137,7 @@
     <name>Core::Internal::CommandLineAboutPage</name>
     <message>
         <source>Application</source>
-        <translation type="unfinished">Anwendung</translation>
+        <translation >Anwendung</translation>
     </message>
     <message>
         <source>Command line</source>
@@ -148,11 +148,11 @@
     <name>Core::Internal::DebugDialog</name>
     <message>
         <source>Save log</source>
-        <translation type="unfinished">Speichere Log</translation>
+        <translation >Speichere Log</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation >Abbrechen</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -191,7 +191,7 @@ Using Url: %1
     <name>Core::Internal::LicenseAboutPage</name>
     <message>
         <source>Application</source>
-        <translation type="unfinished">Anwendung</translation>
+        <translation >Anwendung</translation>
     </message>
     <message>
         <source>License</source>
@@ -209,7 +209,7 @@ Using Url: %1
     <name>Core::Internal::PageWidget</name>
     <message>
         <source>Options</source>
-        <translation type="unfinished">Optionen</translation>
+        <translation >Optionen</translation>
     </message>
     <message>
         <source>0</source>
@@ -309,7 +309,7 @@ Using Url: %1
     <name>Core::Internal::SettingsDialog</name>
     <message>
         <source>Options</source>
-        <translation type="unfinished">Optionen</translation>
+        <translation >Optionen</translation>
     </message>
 </context>
 <context>
@@ -586,7 +586,7 @@ Using Url: %1
     <name>Core::Internal::TeamAboutPage</name>
     <message>
         <source>Application</source>
-        <translation type="unfinished">Anwendung</translation>
+        <translation >Anwendung</translation>
     </message>
     <message>
         <source>Team</source>

@@ -5,51 +5,51 @@
     <name>Editor::Internal::TableDialog</name>
     <message>
         <source>Table creation</source>
-        <translation type="unfinished">Tabellen erstellung</translation>
+        <translation >Tabellen erstellung</translation>
     </message>
     <message>
         <source>Rich Text Editor Table Creator</source>
-        <translation type="unfinished">RT Editor Tabellen erstellen</translation>
+        <translation >RT Editor Tabellen erstellen</translation>
     </message>
     <message>
         <source>Size of the table</source>
-        <translation type="unfinished">Größe der Tabelle</translation>
+        <translation >Größe der Tabelle</translation>
     </message>
     <message>
         <source>Number of columns</source>
-        <translation type="unfinished">Anzahl der Spalten</translation>
+        <translation >Anzahl der Spalten</translation>
     </message>
     <message>
         <source>Number of rows</source>
-        <translation type="unfinished">Anzahl der Reihen</translation>
+        <translation >Anzahl der Reihen</translation>
     </message>
     <message>
         <source>Format of the table</source>
-        <translation type="unfinished">Format der Tabelle</translation>
+        <translation >Format der Tabelle</translation>
     </message>
     <message>
         <source>Cell spacing</source>
-        <translation type="unfinished">Zellenabstand</translation>
+        <translation >Zellenabstand</translation>
     </message>
     <message>
         <source>Cell padding</source>
-        <translation type="unfinished">Cell padding</translation>
+        <translation >Cell padding</translation>
     </message>
     <message>
         <source>Border</source>
-        <translation type="unfinished">Rahmen</translation>
+        <translation >Rahmen</translation>
     </message>
     <message>
         <source>Table headers</source>
-        <translation type="unfinished">Tabellen Kopfzeile</translation>
+        <translation >Tabellen Kopfzeile</translation>
     </message>
     <message>
         <source>You can define the first row as header. The table header row get repeated when a table is broken across a page boundary.</source>
-        <translation type="unfinished">Sie können die erste Reihe als Kopfzeile definieren. </translation>
+        <translation >Sie können die erste Reihe als Kopfzeile definieren. </translation>
     </message>
     <message>
         <source>Define the first row as header</source>
-        <translation type="unfinished">Definiere die erste Reihe als Kopfzeile</translation>
+        <translation >Definiere die erste Reihe als Kopfzeile</translation>
     </message>
 </context>
 <context>
@@ -63,15 +63,15 @@
     <name>Editor::Internal::TablePropertiesWidget</name>
     <message>
         <source>Border</source>
-        <translation type="unfinished">Rahmen</translation>
+        <translation >Rahmen</translation>
     </message>
     <message>
         <source>Cell padding</source>
-        <translation type="unfinished">Cell padding</translation>
+        <translation >Cell padding</translation>
     </message>
     <message>
         <source>Cell spacing</source>
-        <translation type="unfinished">Zellenabstand</translation>
+        <translation >Zellenabstand</translation>
     </message>
     <message>
         <source>Form</source>
