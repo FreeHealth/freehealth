@@ -144,8 +144,8 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 
     //fill alphabet combo
     QStringList listOfAlphabet;
-    //QString alphabet = tr("abcdefghijklmnopqrstuvwxyz");
-    QString alphabet = tr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    //QString alphabet = "abcdefghijklmnopqrstuvwxyz";
+    QString alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (int i = 0; i < alphabet.size(); i += 1)
     {
         QString letter = alphabet.mid(i,1);
