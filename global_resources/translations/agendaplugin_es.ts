@@ -5,44 +5,44 @@
     <name>Agenda</name>
     <message>
         <source>Print current selection</source>
-        <translation type="unfinished">Imprimir seleccion</translation>
+        <translation >Imprimir seleccion</translation>
     </message>
 </context>
 <context>
     <name>Agenda::AgendaPlugin</name>
     <message>
         <source>Initializing agenda plugin...</source>
-        <translation type="unfinished">Iniciando agenda...</translation>
+        <translation >Iniciando agenda...</translation>
     </message>
     <message>
         <source>Creating agenda base...</source>
-        <translation type="unfinished">Creando agenda...</translation>
+        <translation >Creando agenda...</translation>
     </message>
     <message>
         <source>Please wait</source>
-        <translation type="unfinished">Aguarde un instante</translation>
+        <translation >Aguarde un instante</translation>
     </message>
 </context>
 <context>
     <name>Agenda::AvailabilityCreatorDialog</name>
     <message>
         <source>Day availability creator</source>
-        <translation type="unfinished">Dias y horas de atencion</translation>
+        <translation >Dias y horas de atencion</translation>
     </message>
     <message>
         <source>Day of week</source>
         <translatorcomment>Dias de la semana</translatorcomment>
-        <translation type="unfinished">Dias de la semana</translation>
+        <translation >Dias de la semana</translation>
     </message>
     <message>
         <source>Start time</source>
         <translatorcomment>Primer turno</translatorcomment>
-        <translation type="unfinished">Hora de comienzo</translation>
+        <translation >Hora de comienzo</translation>
     </message>
     <message>
         <source>End time</source>
         <translatorcomment>Ultimo turno</translatorcomment>
-        <translation type="unfinished">Fin atencion</translation>
+        <translation >Fin atencion</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -53,21 +53,21 @@
     <name>Agenda::CalendarItemModel</name>
     <message>
         <source>Empty</source>
-        <translation type="unfinished">vacio</translation>
+        <translation >vacio</translation>
     </message>
 </context>
 <context>
     <name>Agenda::Internal::AgendaMode</name>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished">Agenda</translation>
+        <translation >Agenda</translation>
     </message>
 </context>
 <context>
     <name>Agenda::Internal::AgendaPreferencesPage</name>
     <message>
         <source>Agenda preferences</source>
-        <translation type="unfinished">Preferencias de Agenda</translation>
+        <translation >Preferencias de Agenda</translation>
     </message>
 </context>
 <context>
@@ -81,11 +81,11 @@
     <name>Agenda::Internal::CalendarItemEditorPatientMapper</name>
     <message>
         <source>Patients</source>
-        <translation type="unfinished">Pacientes</translation>
+        <translation >Pacientes</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
+        <translation >Buscar</translation>
     </message>
     <message>
         <source>Form</source>
@@ -96,7 +96,7 @@
     <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
     <message>
         <source>Add current patient</source>
-        <translation type="unfinished">Agregar paciente actual</translation>
+        <translation >Agregar paciente actual</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@
     <name>Agenda::Internal::UserCalendarDelegatesMapperWidget</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
+        <translation >Buscar</translation>
     </message>
     <message>
         <source>Form</source>
@@ -125,18 +125,18 @@
     <name>Agenda::Internal::UserCalendarPageForUserViewer</name>
     <message>
         <source>User agendas</source>
-        <translation type="unfinished">Agendas de Usuarios</translation>
+        <translation >Agendas de Usuarios</translation>
     </message>
 </context>
 <context>
     <name>Agenda::Internal::UserCalendarViewer</name>
     <message>
         <source>Search parameters</source>
-        <translation type="unfinished">Buscar parametros</translation>
+        <translation >Buscar parametros</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Descripcion</translation>
+        <translation >Descripcion</translation>
     </message>
     <message>
         <source>Form</source>
@@ -202,38 +202,38 @@
     <name>Agenda::Internal::UserCalendarWizardCreatorPage</name>
     <message>
         <source>User&apos;s agendas</source>
-        <translation type="unfinished">Agendas de Usuarios</translation>
+        <translation >Agendas de Usuarios</translation>
     </message>
 </context>
 <context>
     <name>Agenda::Internal::UserCalendarWizardCreatorWidget</name>
     <message>
         <source>Quick params</source>
-        <translation type="unfinished">Parametros rapidos</translation>
+        <translation >Parametros rapidos</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished">Etiqueta</translation>
+        <translation >Etiqueta</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Descripcion</translation>
+        <translation >Descripcion</translation>
     </message>
     <message>
         <source>minutes</source>
-        <translation type="unfinished">minutos</translation>
+        <translation >minutos</translation>
     </message>
     <message>
         <source>Default location</source>
-        <translation type="unfinished">Localizacion por defecto</translation>
+        <translation >Localizacion por defecto</translation>
     </message>
     <message>
         <source>Do you want to create an agenda for this user ?</source>
-        <translation type="unfinished">Usted desea crear una agenda para este usuario?</translation>
+        <translation >Usted desea crear una agenda para este usuario?</translation>
     </message>
     <message>
         <source>Create an agenda</source>
-        <translation type="unfinished">Crear una agenda</translation>
+        <translation >Crear una agenda</translation>
     </message>
     <message>
         <source>Form</source>
@@ -248,54 +248,54 @@
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
         <source>Please specify a label for this agenda.</source>
-        <translation type="unfinished">Por favor especifique una etiqueta para esta agenda.</translation>
+        <translation >Por favor especifique una etiqueta para esta agenda.</translation>
     </message>
     <message>
         <source>The default duration can not be null.</source>
-        <translation type="unfinished">La duracion por defecto no puede ser cero.</translation>
+        <translation >La duracion por defecto no puede ser cero.</translation>
     </message>
     <message>
         <source>Error detected</source>
-        <translation type="unfinished">Se detecto un error</translation>
+        <translation >Se detecto un error</translation>
     </message>
     <message>
         <source>Manage an agenda.</source>
-        <translation type="unfinished">Manejar una agenda.</translation>
+        <translation >Manejar una agenda.</translation>
     </message>
     <message>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
-        <translation type="unfinished">Usted puede definir una agenda para este usuario. Esta agenda sera usada por defecto.</translation>
+        <translation >Usted puede definir una agenda para este usuario. Esta agenda sera usada por defecto.</translation>
     </message>
 </context>
 <context>
     <name>Agenda::UserCalendarEditorWidget</name>
     <message>
         <source>Select</source>
-        <translation type="unfinished">Seleccionar</translation>
+        <translation >Seleccionar</translation>
     </message>
     <message>
         <source> minutes</source>
-        <translation type="unfinished">minutos</translation>
+        <translation >minutos</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation >Password</translation>
     </message>
     <message>
         <source>Agenda is private</source>
-        <translation type="unfinished">Agendar como privado</translation>
+        <translation >Agendar como privado</translation>
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished">Compartir</translation>
+        <translation >Compartir</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished">Agregar</translation>
+        <translation >Agregar</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Eliminar</translation>
+        <translation >Eliminar</translation>
     </message>
     <message>
         <source>Form</source>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Descripcion</translation>
+        <translation >Descripcion</translation>
     </message>
     <message>
         <source>Icon</source>
@@ -311,7 +311,7 @@
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished">Etiqueta</translation>
+        <translation >Etiqueta</translation>
     </message>
     <message>
         <source>General</source>
@@ -323,7 +323,7 @@
     </message>
     <message>
         <source>Default location</source>
-        <translation type="unfinished">Localizacion por defecto</translation>
+        <translation >Localizacion por defecto</translation>
     </message>
     <message>
         <source>Agenda is the default agenda</source>
@@ -358,7 +358,7 @@
     <name>Agenda::UserCalendarModelFullEditorWidget</name>
     <message>
         <source>Create a new calendar</source>
-        <translation type="unfinished">Crear un nuevo calendario</translation>
+        <translation >Crear un nuevo calendario</translation>
     </message>
     <message>
         <source>Form</source>

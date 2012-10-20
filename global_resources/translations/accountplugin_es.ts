@@ -55,7 +55,7 @@
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Sum</source>
@@ -241,15 +241,15 @@ Then parametrize your user, sites, bank and so on.</source>
     <name>Account::Internal::AssetsRatesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Period</source>
-        <translation type="unfinished">Periodo</translation>
+        <translation >Periodo</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -324,7 +324,7 @@ Do you want to save them?</source>
     <name>Account::Internal::AvailableMovementWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -396,7 +396,7 @@ Do you want to save them?</source>
     <name>Account::Internal::BankDetailsWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -484,7 +484,7 @@ Do you want to save them?</source>
     <name>Account::Internal::DistanceRulesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -554,11 +554,11 @@ no = 0</source>
     <name>Account::Internal::InsuranceWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -630,7 +630,7 @@ Do you want to save them?</source>
     <name>Account::Internal::MedicalProcedureWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -701,7 +701,7 @@ Do you want to save them?</source>
     <name>Account::Internal::PercentagesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -759,11 +759,11 @@ p, li { white-space: pre-wrap; }
     <name>Account::Internal::SitesWidget</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Guardar cambios?</translation>
+        <translation >Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1975,7 +1975,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>ReceiptViewer</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation >Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2252,7 +2252,7 @@ and choose it as preferred.</source>
     <name>xmlCategoriesParser</name>
     <message>
         <source>%1 does not exist.</source>
-        <translation type="unfinished">%1 no existe.</translation>
+        <translation >%1 no existe.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml not found.</source>
