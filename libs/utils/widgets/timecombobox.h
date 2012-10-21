@@ -54,11 +54,13 @@ public:
     ~TimeComboBox();
 
     bool initialize();
-    QTime time();
-    bool editable();
+    QTime time() const;
+    bool editable() const;
 
 Q_SIGNALS:
     void timeChanged(const QTime &time);
+    void dateTimeChanged(const QDateTime &dateTime);
+
 
 public Q_SLOTS:
     void setTime(const QTime &time);

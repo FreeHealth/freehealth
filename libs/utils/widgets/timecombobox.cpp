@@ -81,24 +81,23 @@ public:
     QTime time;
     QComboBox *combo;
     int interval;
-    int defaultDuration;
 
 private:
     TimeComboBox *q;
 };
 
-}
+} // end namespace Internal
+} // end namespace Views
 
 void TimeComboBox::setTime(const QTime &time)
 {
-    const bool emitSignal = d->time != time;
+    if (d->time == time)
+        return;
+
     d->time = time.isNull()? QTime(0, 0) : time;
-    int index = d->combo->findData(QVariant(time));
-    if (index == -1 && d->combo->count() > 0)
-        index = 0;
-    d->combo->setCurrentIndex(index);
-    if (emitSignal)
-        Q_EMIT timeChanged(time);
+    d->combo->setEditText(time.toString(QLocale::system().timeFormat(QLocale::ShortFormat)));
+    Q_EMIT timeChanged(d->time);
+    Q_EMIT dateTimeChanged(QDateTime(QDate(), d->time));
 }
 
 void TimeComboBox::setEditable(bool editable)
@@ -106,18 +105,16 @@ void TimeComboBox::setEditable(bool editable)
     d->combo->setEditable(editable);
 }
 
-QTime TimeComboBox::time()
+QTime TimeComboBox::time() const
 {
     return d->time;
 }
 
-bool TimeComboBox::editable()
+bool TimeComboBox::editable() const
 {
     return d->combo->isEditable();
 }
 
-// end namespace Internal
-} // end namespace Views
 
 /*! Constructor of the Views::DateTimeEdit class */
 TimeComboBox::TimeComboBox(QWidget *parent) :
@@ -147,10 +144,10 @@ TimeComboBox::~TimeComboBox()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool TimeComboBox::initialize()
 {
+    // Provide the combobox with a predefined list of times, e.g. 30 minutes intervals
     for(int h = 0; h < 24; ++h) {
-        //FIXME: by now fixed 30min intervals. Maybe change to more flexible approach?
-        d->combo->addItem(QTime(h, 0).toString("hh:mm"), QTime(h, 0));
-        d->combo->addItem(QTime(h, 30).toString("hh:mm"), QTime(h, 30));
+        d->combo->addItem(QTime(h, 0).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 0));
+        d->combo->addItem(QTime(h, 30).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 30));
     }
     return true;
 }
@@ -163,8 +160,10 @@ void TimeComboBox::setInterval(int interval)
 
 void TimeComboBox::on_combo_currentIndexChanged(const int index)
 {
-    if (index == -1)
+    if (index == -1) {
+        setTime(QTime(0,0));
         return;
+    }
 
     QTime time = d->combo->itemData(index).toTime();
     setTime(time);
