@@ -101,11 +101,6 @@ void TimeComboBox::setTime(const QTime &time)
     Q_EMIT dateTimeChanged(QDateTime(QDate(), d->time));
 }
 
-/*! Tries to set time with given \e timeString. If string is not convertible, set time to QTime(). */
-void TimeComboBox::setTime(const QString &timeString)
-{
-}
-
 /*! Sets the editable state of the combo box. \sa QComboBox::setEditable() */
 void TimeComboBox::setEditable(bool editable)
 {

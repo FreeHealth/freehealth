@@ -64,7 +64,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setTime(const QTime &time);
-    void setTime(const QString &timeString);
     void setEditable (bool editable);
     void setInterval(int interval);
 
