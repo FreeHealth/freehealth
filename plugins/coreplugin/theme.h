@@ -61,6 +61,7 @@ public:
     QIcon icon( const QString & fileName, IconSize size = SmallIcon );
     QString iconFullPath( const QString &fileName, IconSize size = SmallIcon );
     QPixmap splashScreenPixmap( const QString &fileName, const IconSize size = MediumIcon );
+    QPixmap defaultGenderPixmap(int gender, const IconSize size = BigIcon);
 
     void createSplashScreen(const QString &fileName);
     void messageSplashScreen(const QString &msg);
