@@ -11,5 +11,5 @@ Some parts of the code comes from other sources, such as:
 Icons and Pixmaps:
 - Bc Tango : Creative Common license: http://tango.freedesktop.org/Tango_Icon_Library
 
-Self created icons and pixmaps are released under the GPLv3 license.
+Self created icons and pixmaps are released under the public domain license.
 
