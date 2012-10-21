@@ -26,6 +26,9 @@
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
 
+# define colors for highlighting
+START_COLOR="\033[1;37m"
+END_COLOR="\033[0m"
 
 # Binary to use for the qmake step
 QMAKE_BIN="qmake"
@@ -92,6 +95,7 @@ buildFromSourcePackage()
 
 buildTranslations()
 {
+  echo $START_COLOR"*** Building translations"$END_COLOR
   cd $SOURCES_PATH
   MAKE_STEP=`lrelease ./global_resources/translations/*.ts`
   MAKE_STEP=$?
@@ -108,7 +112,7 @@ buildApp()
   #####################################
   # 1. make clean                     #
   #####################################
-  echo "*** Cleaning build path..."
+  echo $START_COLOR"*** Cleaning build path..."$END_COLOR
   cd $SOURCES_PATH
   rm -R ./bin/$PROJECT/
 
@@ -121,7 +125,7 @@ buildApp()
   # 2. Build process                  #
   #####################################
   # build app
-  echo "*** Building "$BUNDLE_NAME" "$VERSION
+  echo $START_COLOR"*** Building "$BUNDLE_NAME" "$VERSION$END_COLOR
   cd $SOURCES_PATH/$PROJECT
   if [[ "$EXTRA_PLUGINS" != "" ]]; then
       PLUG_CONFIG=""
@@ -144,7 +148,7 @@ buildApp()
      echo "   *** QMake done"
    fi
 
-   echo "   --> make -j $MAKE_JOBS"
+   echo $START_COLOR"   --> make -j $MAKE_JOBS"$END_COLOR
    MAKE_STEP=`make -j $MAKE_JOBS`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -154,7 +158,7 @@ buildApp()
      echo "   *** Make done"
    fi
 
-   echo "   --> make install"
+   echo $START_COLOR"   --> make install"$END_COLOR
    MAKE_STEP=`make install`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -168,7 +172,7 @@ buildApp()
 linkQtLibs()
 {
    # link frameworks
-   echo "*** Linking Frameworks..."
+   echo $START_COLOR"*** Linking Frameworks..."$END_COLOR
    cd $PACKAGES_PATH/mac/$BUNDLE_NAME
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -189,7 +193,7 @@ linkQtLibs()
 linkMySqlLib()
 {
    # Deploy MySql lib
-   echo "*** Linking MySQL plugin"
+   echo $START_COLOR"*** Linking MySQL plugin"$END_COLOR
    ACTUAL_PATH=`pwd`
    cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
    MYSQL_PLUGIN="./Contents/plugins/qt/sqldrivers/libqsqlmysql.dylib"
@@ -218,7 +222,7 @@ linkMySqlLib()
 linkOpenCVLib()
 {
     # Deploy OpenCV lib
-    echo "*** Linking WebCam plugin"
+    echo $START_COLOR"*** Linking WebCam plugin"$END_COLOR
     ACTUAL_PATH=`pwd`
     cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
     WEBCAM_PLUGIN="./Contents/plugins/libWebcam.dylib"
@@ -244,7 +248,7 @@ linkOpenCVLib()
 createDmg()
 {
    # clean old dmg and create new one
-   echo "*** Creating DMG archive..."
+   echo $START_COLOR"*** Creating DMG archive..."$END_COLOR
    rm *.dmg
    MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH`
    MAKE_STEP=$?
@@ -290,7 +294,7 @@ if [ ! -e $PACKAGES_PATH ] ; then
     mkdir $PACKAGES_PATH
 fi
 
-echo "*** Creating package for $BUNDLE_NAME $VERSION"
+echo $START_COLOR"*** Creating package for $BUNDLE_NAME $VERSION"$END_COLOR
 echo "      * project file $PROJECT_FILE"
 echo "      * from source path $SOURCES_PATH"
 echo "      * to package path $PACKAGES_PATH"
