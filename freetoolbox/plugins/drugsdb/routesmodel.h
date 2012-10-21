@@ -32,8 +32,9 @@
 #include <QString>
 #include <QList>
 
-namespace Core {
+namespace DrugsDB {
 namespace Internal {
+
 struct Route {
     Route() : id(-1), isHelper(false), checkState(Qt::Unchecked){}
 
@@ -44,7 +45,8 @@ struct Route {
     bool isHelper;
     Qt::CheckState checkState;
 };
-}
+
+}  // namespace Internal
 
 class RoutesModel : public QAbstractTableModel
 {
@@ -61,6 +63,8 @@ public:
 
     RoutesModel(QObject *parent = 0);
     ~RoutesModel();
+
+    static QString routeCsvAbsoluteFile();
 
     void initialize();
     void clear();
@@ -83,8 +87,8 @@ private:
     QList<int> m_CheckedIds;
 };
 
-}  // End namespace Core
+}  // End namespace DrugsDB
 
-QDebug operator<<(QDebug debug, const Core::Internal::Route &route);
+QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route);
 
 #endif // ROUTESMODEL_H

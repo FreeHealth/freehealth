@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "routesmodel.h"
-#include "globaltools.h"
+#include <drugsdb/tools.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -37,10 +37,9 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
-using namespace Core;
+using namespace DrugsDB;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace {
 const int ALL_IV_ID = 100001;
@@ -57,9 +56,9 @@ RoutesModel::RoutesModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     // Read file
-    QString content = Utils::readTextFile(routesCsvAbsFile());
+    QString content = Utils::readTextFile(routeCsvAbsoluteFile());
     if (content.isEmpty()) {
-        LOG_ERROR("Routes file does not exist.\n   " + routesCsvAbsFile());
+        LOG_ERROR("Routes file does not exist.\n   " + routeCsvAbsoluteFile());
         return;
     }
 
@@ -111,6 +110,13 @@ RoutesModel::RoutesModel(QObject *parent) :
 
 RoutesModel::~RoutesModel()
 {}
+
+/** Return the absolute path to the CSV route text file using the Core::ISettings::value() of Core::Constants::S_GITFILES_PATH. */
+QString RoutesModel::routeCsvAbsoluteFile()
+{
+    return settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
+            QString(Core::Constants::FILE_DRUGS_ROUTES);
+}
 
 void RoutesModel::initialize()
 {}
@@ -245,7 +251,7 @@ void RoutesModel::setCheckedRouteIds(const QList<QVariant> &ids)
     setCheckedRouteIds(_ids);
 }
 
-QDebug operator<<(QDebug debug, const Core::Internal::Route &route)
+QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route)
 {
     debug.nospace() << "Route(" << route.id << "," << route.trLabels << ")";
     return debug.nospace();
