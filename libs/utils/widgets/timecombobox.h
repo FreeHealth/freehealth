@@ -46,7 +46,7 @@ class TimeComboBoxPrivate;
 class UTILS_EXPORT TimeComboBox : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged)
+    Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged USER true)
     Q_PROPERTY(bool editable READ editable WRITE setEditable)
 public:
     explicit TimeComboBox(QWidget *parent = 0);
