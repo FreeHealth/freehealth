@@ -250,7 +250,7 @@ createDmg()
    # clean old dmg and create new one
    echo $START_COLOR"*** Creating DMG archive..."$END_COLOR
    rm *.dmg
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH -v $VERSION`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
      echo "*** Error: DMG creation step wrong ***"

@@ -30,7 +30,7 @@ THIS_NAME=$0
 APP_NAME=""
 BUNDLE_PATH=""
 FILES_PATH=""
-VERSION=""
+VERSION="No_Version"
 DMG_SIZE=200
 
 echoHelp()
