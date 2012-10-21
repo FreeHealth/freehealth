@@ -76,8 +76,11 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
 }
 
 DrugBaseEssentials::DrugBaseEssentials():
-    Utils::Database(), m_dbcore_initialized(false), m_isDefaultDb(false)
+    Utils::Database(),
+    m_dbcore_initialized(false),
+    m_isDefaultDb(false)
 {
+    setConnectionName(Constants::DB_DRUGS_NAME);
     using namespace Constants;
     QMultiHash<int, ftype> types;
     int i = Table_MASTER;
@@ -305,16 +308,22 @@ DrugBaseEssentials::DrugBaseEssentials():
     addIndex(Table_PIM_SOURCES, PIM_SOURCES_SID);
 }
 
+/** Force the re-initialization of the database. Call initialize() after this. */
 void DrugBaseEssentials::forceFullDatabaseRefreshing()
 {
     m_dbcore_initialized = false;
 }
 
+/**
+ * Initialize the database (create it is required). \n
+ * By default, the connection is defined to DrugsDB::Constants::DB_DRUGS_NAME.
+ * If you want your own connection name, you can set it with the
+ * setConnectionName() and you must set it \b before calling initialize().
+ */
 bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExists)
 {
     if (m_dbcore_initialized)
         return true;
-    setConnectionName(Constants::DB_DRUGS_NAME);
     setDriver(Utils::Database::SQLite);
 
     // test driver
@@ -339,21 +348,21 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
     drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
     drugConnector.setDriver(Utils::Database::SQLite);
 
-    LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_DRUGS_NAME).arg(pathToDb));
+    LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(connectionName()).arg(pathToDb));
 
     if (createIfNotExists) {
-        createConnection(Constants::DB_DRUGS_NAME, Constants::DB_DRUGS_FILENAME,
+        createConnection(connectionName(), Constants::DB_DRUGS_FILENAME,
                          drugConnector,
                          Utils::Database::CreateDatabase);
     } else {
-        createConnection(Constants::DB_DRUGS_NAME, Constants::DB_DRUGS_FILENAME,
+        createConnection(connectionName(), Constants::DB_DRUGS_FILENAME,
                          drugConnector,
                          Utils::Database::WarnOnly);
     }
 
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR_FOR("DrugBaseEssentials",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_DRUGS_NAME).arg(database().lastError().text()));
+            LOG_ERROR_FOR("DrugBaseEssentials",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(connectionName()).arg(database().lastError().text()));
         } else {
             LOG_FOR("DrugBaseEssentials",tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
         }
@@ -362,7 +371,7 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
     }
 
     if (!checkDatabaseScheme()) {
-        LOG_ERROR_FOR("DrugBaseEssentials",tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_DRUGS_NAME));
+        LOG_ERROR_FOR("DrugBaseEssentials",tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(connectionName()));
         return false;
     }
 
@@ -373,15 +382,13 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
         LOG_FOR("DrugBaseEssentials", QString("Using drug database version " + version()));
     }
 
-    setConnectionName(Constants::DB_DRUGS_NAME);
-
     m_dbcore_initialized = true;
     return true;
 }
 
 void DrugBaseEssentials::setVersion(const QString &version)
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return;
     executeSQL(prepareDeleteQuery(Constants::Table_CURRENTVERSION, QHash<int,QString>()), DB);
@@ -396,7 +403,7 @@ void DrugBaseEssentials::setVersion(const QString &version)
 
 QString DrugBaseEssentials::version() const
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString();
     QSqlQuery query(DB);
@@ -416,7 +423,7 @@ bool DrugBaseEssentials::checkDatabaseVersion() const
     return (version()==::CURRENTVERSION);
 }
 
-bool DrugBaseEssentials::createDatabase(const QString &connectionName , const QString &prefixedDbName,
+bool DrugBaseEssentials::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
                                   )
@@ -424,22 +431,22 @@ bool DrugBaseEssentials::createDatabase(const QString &connectionName , const QS
 //    WARN_FUNC << connectionName << prefixedDbName;
 //    qWarning() << connector;
 
-    if (connectionName != Constants::DB_DRUGS_NAME)
+    if (connection != connectionName())
         return false;
     if (connector.driver() != SQLite) {
         return false;
     }
     if (createOption!=Utils::Database::CreateDatabase)
         return false;
-    QString pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
+    QString pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + QString(connectionName());
     LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(prefixedDbName).arg(pathOrHostName));
 
-    setConnectionName(connectionName);
+    setConnectionName(connectionName());
     setDriver(connector.driver());
 
     // create an empty database and connect
-    if (QSqlDatabase::connectionNames().contains(connectionName)) {
-        QSqlDatabase::removeDatabase(connectionName);
+    if (QSqlDatabase::connectionNames().contains(connectionName())) {
+        QSqlDatabase::removeDatabase(connectionName());
     }
 
     if (!Utils::checkDir(pathOrHostName, true, "DrugBaseEssentials")) {
@@ -448,7 +455,7 @@ bool DrugBaseEssentials::createDatabase(const QString &connectionName , const QS
     }
 
     QSqlDatabase DB;
-    DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    DB = QSqlDatabase::addDatabase("QSQLITE", connectionName());
     DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + prefixedDbName));
     if (!DB.open())
         LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(prefixedDbName).arg(DB.lastError().text()));
