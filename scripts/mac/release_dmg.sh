@@ -30,13 +30,18 @@ THIS_NAME=$0
 APP_NAME=""
 BUNDLE_PATH=""
 FILES_PATH=""
+VERSION=""
 DMG_SIZE=200
 
 echoHelp()
 {
   echo $THISNAME" creates a dmg file for mac deployment."
   echo "Usage: "
-  echo $THIS_NAME" <options> -a "App Name for the bundle" -p /path/to/the/bundle/ -s sizeinMoOfDmg -f /path/to/standard/files"
+  echo $THIS_NAME" <options> -a "App Name for the bundle" -p /path/to/the/bundle/ -s 100 -f /path/to/standard/files"
+  echo $THIS_NAME" -p path to the application bundle to store in the DMG"
+  echo $THIS_NAME" -s size of the DMG"
+  echo $THIS_NAME" -f path to source files"
+  echo $THIS_NAME" -v packaging version"
   echo $THIS_NAME" -h shows this message"
 }
 
@@ -62,14 +67,15 @@ createDmg()
   #  echo "    *** DMG Release : Copying folder params to $TMP..."
   tar zxvf $FILES_PATH"global_resources/package_helpers/"$LOWERED_APPNAME"_dmg.tgz" -C $TMP
 
-#  echo "    *** DMG Release : Copying standard files..."
-#  cp $FILES_PATH"/COPYING" $TMP
-#  cp $FILES_PATH"/INSTALL" $TMP
-#  cp $FILES_PATH"/README" $TMP
+  echo "    *** DMG Release : Copying standard files..."
+  cp $FILES_PATH"/COPYING.txt" $TMP
+  cp $FILES_PATH"/README.txt" $TMP
+  touch $FILEPATH"/$VERSION"
 
   echo "    *** DMG Release : Cleaning dmg for undesired files..."
   find "${TMP}" | egrep "CVS" | xargs rm -rf
   find "${TMP}" | egrep ".svn" | xargs rm -rf
+  find "${TMP}" | egrep ".git" | xargs rm -rf
 
   echo "    *** DMG Release : Cleaning dmg and adding icon"
   SetFile -c icnC $TMP/.VolumeIcon.icns
@@ -110,20 +116,22 @@ createDmg()
 }
 
 # analyse command line parameters
-while getopts ":a:p:s:f:h" option
+while getopts ":a:p:s:f:v:h" option
 do
-        case $option in
-                a) APP_NAME=$OPTARG
-                ;;
-		p) BUNDLE_PATH=$OPTARG
-		;;
-		s) DMG_SIZE=$OPTARG
-		;;
-                f) FILES_PATH=$OPTARG
-                ;;
-                h) echoHelp
-                ;;
-        esac
+    case $option in
+        a) APP_NAME=$OPTARG
+        ;;
+        p) BUNDLE_PATH=$OPTARG
+        ;;
+        s) DMG_SIZE=$OPTARG
+        ;;
+        f) FILES_PATH=$OPTARG
+        ;;
+        f) VERSION=$OPTARG
+        ;;
+        h) echoHelp
+        ;;
+    esac
 done
 
 # manage command line errors
