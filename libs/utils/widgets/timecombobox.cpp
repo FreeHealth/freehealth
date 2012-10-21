@@ -89,6 +89,7 @@ private:
 } // end namespace Internal
 } // end namespace Views
 
+/*! Sets internal time to \e time. */
 void TimeComboBox::setTime(const QTime &time)
 {
     if (d->time == time)
@@ -100,23 +101,31 @@ void TimeComboBox::setTime(const QTime &time)
     Q_EMIT dateTimeChanged(QDateTime(QDate(), d->time));
 }
 
+/*! Tries to set time with given \e timeString. If string is not convertible, set time to QTime(). */
+void TimeComboBox::setTime(const QString &timeString)
+{
+}
+
+/*! Sets the editable state of the combo box. \sa QComboBox::setEditable() */
 void TimeComboBox::setEditable(bool editable)
 {
     d->combo->setEditable(editable);
 }
 
-QTime TimeComboBox::time() const
-{
-    return d->time;
-}
-
+/*! Returns the \e editable property of the combo box. \sa QComboBox::editable() */
 bool TimeComboBox::editable() const
 {
     return d->combo->isEditable();
 }
 
+/*! Returns the current time that is displayed in the widget */
+QTime TimeComboBox::time() const
+{
+    return d->time;
+}
 
-/*! Constructor of the Views::DateTimeEdit class */
+
+/*! Default constructor of the Views::DateTimeEdit class */
 TimeComboBox::TimeComboBox(QWidget *parent) :
     QWidget(parent),
     d(new Internal::TimeComboBoxPrivate(this))
@@ -125,6 +134,7 @@ TimeComboBox::TimeComboBox(QWidget *parent) :
     setTime(QTime());
 }
 
+/*! Convenience constructor that sets the given \e time after widget creation. */
 TimeComboBox::TimeComboBox(QTime &time, QWidget *parent) :
     QWidget(parent),
     d(new Internal::TimeComboBoxPrivate(this))
@@ -149,16 +159,20 @@ bool TimeComboBox::initialize()
         d->combo->addItem(QTime(h, 0).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 0));
         d->combo->addItem(QTime(h, 30).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 30));
     }
+    connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTimeFromComboSelection(int)));
+    connect(d->combo, SIGNAL(editTextChanged(QString)), this, SLOT(updateTimeFromComboEditText(QString)));
     return true;
 }
 
+/*! Sets interval of the times in the combo box. Currently this method does nothing. */
 void TimeComboBox::setInterval(int interval)
 {
     //TODO: has no function yet.
     d->interval = interval;
 }
 
-void TimeComboBox::on_combo_currentIndexChanged(const int index)
+/*! Auto slot that updates the internal time to the current selected time. */
+void TimeComboBox::updateTimeFromComboSelection(const int index)
 {
     if (index == -1) {
         setTime(QTime(0,0));
@@ -167,5 +181,14 @@ void TimeComboBox::on_combo_currentIndexChanged(const int index)
 
     QTime time = d->combo->itemData(index).toTime();
     setTime(time);
+    qDebug() << d->time;
 }
+
+/*! Auto slot that updates the internal time to the currently edited time string. */
+void TimeComboBox::updateTimeFromComboEditText(const QString &text)
+{
+    d->time = QTime::fromString(text, QLocale::system().timeFormat(QLocale::ShortFormat));
+    qDebug() << d->time;
+}
+
 

@@ -64,6 +64,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setTime(const QTime &time);
+    void setTime(const QString &timeString);
     void setEditable (bool editable);
     void setInterval(int interval);
 
@@ -71,7 +72,8 @@ private:
     Internal::TimeComboBoxPrivate *d;
 
 private Q_SLOTS:
-    void on_combo_currentIndexChanged(const int index);
+    void updateTimeFromComboSelection(const int index);
+    void updateTimeFromComboEditText(const QString &text);
 };
 
 } // namespace Views
