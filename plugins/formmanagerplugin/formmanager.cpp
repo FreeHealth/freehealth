@@ -141,7 +141,7 @@ public:
 
     const FormCollection &extractFormCollectionFrom(const QVector<FormCollection *> &collections, FormType type, const QString &uid)
     {
-        for(int i=0; i < collections.count(); ++i) {
+         for(int i=0; i < collections.count(); ++i) {
             FormCollection *coll = collections.at(i);
             if (type == CompleteForms && coll->type()==FormCollection::CompleteForm && coll->formUid() == uid) {
                 return *coll;
@@ -202,7 +202,6 @@ public:
             LOG_ERROR_FOR(q, "No IFormIO loaded...");
             return false;
         }
-
         // Load forms
         foreach(Form::IFormIO *io, list) {
             if (io->canReadForms(uid)) {
@@ -214,6 +213,9 @@ public:
                 // Create its duplicate
                 list = io->loadAllRootForms(uid);
                 createModeFormCollections(list, type, true);
+                LOG_FOR(q, QString("Form %1 loaded from reader %2")
+                        .arg(uid)
+                        .arg(io->name()));
                 return true;
             }
         }
@@ -238,7 +240,7 @@ public:
         }
         const FormCollection &main = extractFormCollectionFrom(_centralFormCollection, CompleteForms, absDirPath);
         if (main.isNull()) {
-            LOG_ERROR_FOR(q, "Unable to load main form: " + absDirPath);
+            LOG_ERROR_FOR(q, QString("Unable to load main form: %1. No collection loaded").arg(absDirPath));
             return false;
         }
 
@@ -566,7 +568,7 @@ bool FormManager::onCurrentPatientChanged()
     if (d->getMainFormCollection()) {
         LOG("Central patient file loaded");
     } else {
-        LOG_ERROR("Unable to load central patient file");
+        LOG_ERROR("PatientChanged: Unable to load central patient file");
         return false;
     }
 

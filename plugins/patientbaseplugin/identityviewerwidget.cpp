@@ -36,7 +36,6 @@
  * \sa Form::FormItemSpec::Spec_IsIdentityForm, Form::FormManager::identityRootForm(), Core::IPatient, Core::ICore::patient()
  */
 
-
 #include "identityviewerwidget.h"
 
 #include <patientbaseplugin/patientmodel.h>
@@ -62,14 +61,10 @@
 
 #include <QFormLayout>
 
-
 #include <QDebug>
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
-
-
-
 
 using namespace Patients;
 using namespace Internal;
@@ -660,31 +655,26 @@ public:
     {
         _patientModelIdentityWrapper->setCurrentPatient(row);
 
-        //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
-
-        QString genderString =  m_PatientModel->index(row, Core::IPatient::Gender).data().toString();
-//        qDebug() << "Gender:" << genderString;
-
         // photo
-        const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
-        QIcon genderIcon;
-        if (!photo.isNull())
-            viewUi->photoLabel->setPixmap(photo);
-        else {
-            //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
-            //no Photo in database, now set default gender picture
-            if (genderString == "M")
-                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon)));
-            else if (genderString == "F")
-                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon)));
-            else if (genderString == "H")
-                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon)));
-            else
-                genderIcon = QIcon();
-
-
-            viewUi->photoLabel->setPixmap(genderIcon.pixmap(QSize(64,64)));
+        // TODO: see issue #200
+        // TODO: ¿¿¿¿ install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184 ????
+        QModelIndex photoIndex = m_PatientModel->index(row, Core::IPatient::Photo_64x64);
+        QPixmap photo = m_PatientModel->data(photoIndex).value<QPixmap>();
+        if (photo.isNull()) {
+            int gender = m_PatientModel->index(row, Core::IPatient::GenderIndex).data().toInt();
+            switch (gender) {
+            case 0: // Male
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+                break;
+            case 1: // Female
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
+                break;
+            case 2: // Herma
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
+                break;
+            }
         }
+        viewUi->photoLabel->setPixmap(photo);
 
         // name / gender
         const QIcon &icon = m_PatientModel->index(row, Core::IPatient::IconizedGender).data().value<QIcon>();

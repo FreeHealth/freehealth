@@ -72,6 +72,7 @@ private Q_SLOTS:
     void on_leName_textChanged(const QString &text);
     void on_leFirstName_textChanged(const QString &text);
     void on_leLogin_textChanged(const QString &text);
+    void onNamesEditionFinished();
 
 private:
     void changeEvent(QEvent *e);

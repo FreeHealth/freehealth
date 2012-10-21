@@ -488,6 +488,9 @@ QString EpisodeBase::getGenericFormFile()
     }
     query.finish();
     DB.commit();
+    // Fix a bug introduced in 0.7.6
+    if (path.endsWith("/central.xml"))
+        path = path.remove("/central.xml");
     return path;
 }
 

@@ -64,14 +64,11 @@ enum { WarnDatabaseFilter = false };
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
-/** The PatientModelWrapper is installed in Core::ICore by MainWindow */
-
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-
 
 namespace Patients {
 namespace Internal {

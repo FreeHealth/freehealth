@@ -100,6 +100,10 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     connect(ui->lePasswordConfirm, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
     connect(ui->lePassword, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
 
+    // Auto-login
+    connect(ui->leFirstName, SIGNAL(editingFinished()), this, SLOT(onNamesEditionFinished()));
+    connect(ui->leName, SIGNAL(editingFinished()), this, SLOT(onNamesEditionFinished()));
+
     // set right stylesheets to the labels
     checkControlPassword("");
     on_leName_textChanged("");
@@ -122,7 +126,7 @@ void UserIdentityAndLoginPage::checkLogin()
         ui->lblLoginError->setText(tr("You must specify a valid login. Login must be more than 6 characters."));
     } else if (UserBase::instance()->isLoginAlreadyExists(ui->leLogin->text())) {
         ui->lblLogin->setStyleSheet("color:red;");
-        ui->lblLogin->setStyleSheet(tr("Login in use. Please select another login"));
+        ui->lblLogin->setToolTip(tr("Login in use. Please select another login"));
         ui->lblLoginError->setText(tr("Login in use. Please select another login"));
     } else {
         ui->lblLogin->setStyleSheet(QString::null);
@@ -158,17 +162,29 @@ void UserIdentityAndLoginPage::checkControlPassword(const QString &text)
 
 void UserIdentityAndLoginPage::on_leName_textChanged(const QString &text)
 {
-        ui->lblName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
+    ui->lblName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
 }
 
 void UserIdentityAndLoginPage::on_leFirstName_textChanged(const QString &text)
 {
-        ui->lblFirstName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
+    ui->lblFirstName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
 }
 
 void UserIdentityAndLoginPage::on_leLogin_textChanged(const QString &text)
 {
-        ui->lblLogin->setStyleSheet(text.length() >= 6? 0 : "color:red;");
+    ui->lblLogin->setStyleSheet(text.length() >= 6? 0 : "color:red;");
+}
+
+void UserIdentityAndLoginPage::onNamesEditionFinished()
+{
+    if (ui->leFirstName->text().isEmpty() || ui->leName->text().isEmpty())
+        return;
+    if (!ui->leLogin->text().isEmpty())
+        return;
+    ui->leLogin->setText(QString("%1.%2")
+                         .arg(ui->leFirstName->text().toLower())
+                         .arg(ui->leName->text()).toLower());
+    checkLogin();
 }
 
 void UserIdentityAndLoginPage::changeEvent(QEvent *e)
@@ -201,7 +217,7 @@ void UserIdentityAndLoginPage::retranslate()
 
 void UserIdentityAndLoginPage::toggleErrorLabels()
 {
-    WARN_FUNC << ui->lblLoginError->text();
+//    WARN_FUNC << ui->lblLoginError->text();
     if (_showErrorLabels) {
         ui->lblLoginError->setVisible(!ui->lblLoginError->text().isEmpty());
         ui->lblPasswordError->setVisible(!ui->lblPasswordError->text().isEmpty());

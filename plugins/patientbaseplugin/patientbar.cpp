@@ -42,9 +42,11 @@
 
 #include "ui_patientbar.h"
 
-#include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -61,6 +63,7 @@ using namespace Patients;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace Patients {
@@ -91,7 +94,7 @@ public:
         m_Mapper->setModel(m_Model);
         m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
         m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
-        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
+//        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
     }
 
     void clearUi()
@@ -100,6 +103,28 @@ public:
         ui->gender->clear();
         ui->names->clear();
         ui->photo->clear();
+    }
+
+    void updatePatientPhoto()
+    {
+        // TODO: see issue #200
+        QModelIndex photoIndex = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::Photo_64x64);
+        QPixmap photo = m_Model->data(photoIndex).value<QPixmap>();
+        if (photo.isNull()) {
+            int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
+            switch (gender) {
+            case 0: // Male
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+                break;
+            case 1: // Female
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
+                break;
+            case 2: // Herma
+                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
+                break;
+            }
+        }
+        ui->photo->setPixmap(photo);
     }
 
 public:
@@ -170,6 +195,7 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
     patientDataChanged(top, bottom);
     d->m_Mapper->setCurrentModelIndex(QModelIndex());
     d->m_Mapper->setCurrentModelIndex(index);
+    d->updatePatientPhoto();
 }
 
 /** Set the current patient index when patient changed */
