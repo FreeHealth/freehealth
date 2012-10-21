@@ -99,7 +99,9 @@ public:
         ui->endTimeEdit->setTime(end.time());
         ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
         ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
-        ui->password->setText(m_Item.data(CalendarItem::Password).toString());
+        const QString password = m_Item.data(CalendarItem::Password).toString();
+        ui->passwordCheck->setChecked(!password.isEmpty());
+        ui->passwordEdit->setText(password);
         ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
         ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
         //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
@@ -122,7 +124,10 @@ public:
         m_Item.setData(CalendarItem::Location, ui->location->text());
         m_Item.setData(CalendarItem::IsBusy, ui->busyCheck->isChecked());
         m_Item.setData(CalendarItem::IsPrivate, ui->privateCheck->isChecked());
-        m_Item.setData(CalendarItem::Password, ui->password->text());
+        if(ui->passwordCheck->isChecked())
+            m_Item.setData(CalendarItem::Password, ui->passwordEdit->text());
+        else
+            m_Item.setData(CalendarItem::Password, QString());
         m_Item.setData(CalendarItem::Label, ui->eventLabel->text());
         m_Item.setData(CalendarItem::Description,ui->fullInfo->toHtml());
         m_Item.setData(CalendarItem::Status, ui->statusCombo->currentIndex());
@@ -186,7 +191,8 @@ void ItemEditorWidget::clear()
     d->ui->durationCombo->setCurrentIndex(-1);
     d->ui->busyCheck->setChecked(false);
     d->ui->privateCheck->setChecked(false);
-    d->ui->password->clear();
+    d->ui->passwordEdit->clear();
+    d->ui->passwordCheck->setChecked(false);
     d->ui->eventLabel->clear();
     d->ui->fullInfo->clear();
 
