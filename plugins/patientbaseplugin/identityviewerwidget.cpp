@@ -36,7 +36,6 @@
  * \sa Form::FormItemSpec::Spec_IsIdentityForm, Form::FormManager::identityRootForm(), Core::IPatient, Core::ICore::patient()
  */
 
-
 #include "identityviewerwidget.h"
 
 #include <patientbaseplugin/patientmodel.h>
@@ -62,14 +61,10 @@
 
 #include <QFormLayout>
 
-
 #include <QDebug>
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
-
-
-
 
 using namespace Patients;
 using namespace Internal;
