@@ -28,9 +28,10 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -375,11 +376,11 @@ public:
 
     bool createDatabase()
     {
-        if (!Core::Tools::connectDatabase(DATABASE_NAME, databaseAbsPath()))
+        if (!DrugsDB::Tools::connectDatabase(DATABASE_NAME, databaseAbsPath()))
             return false;
 
         // create database structure
-        if (!Core::Tools::executeSqlFile(DATABASE_NAME, drugInfosDatabaseSqlSchema())) {
+        if (!DrugsDB::Tools::executeSqlFile(DATABASE_NAME, drugInfosDatabaseSqlSchema())) {
             LOG_ERROR_FOR("BIAM", "Can not create BIAM DB.");
             return false;
         }

@@ -31,9 +31,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -63,7 +64,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/PtRawSources/");}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
 static inline QString rawCsvAbsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/lista_infomed.csv.xls");}
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/pt_db_finalize.sql");}
@@ -234,7 +235,7 @@ bool PtDrugDatatabaseStep::createDatabase()
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
+    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
         return false;
 
     QMultiHash<QString, QVariant> labels;
@@ -242,7 +243,7 @@ bool PtDrugDatatabaseStep::createDatabase()
     labels.insert("en","Portuguese therapeutic database");
     labels.insert("de","Portugiesische Therapeutische Datenbank");
 
-    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME, labels) == -1) {
+    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the PT drugs sources");
         return false;
     }
@@ -308,7 +309,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
 
 bool PtDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
@@ -418,7 +419,7 @@ bool PtDrugDatatabaseStep::populateDatabase()
     drugs.clear();
 
     // Run SQL commands one by one
-    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
         LOG_ERROR("Can create FDA DB.");
         return false;
     }
@@ -431,11 +432,11 @@ bool PtDrugDatatabaseStep::populateDatabase()
 
 bool PtDrugDatatabaseStep::linkMolecules()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // Get SID
-    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME);
+    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME);
     if (sid==-1) {
         LOG_ERROR("NO SID DEFINED");
         return false;
@@ -460,7 +461,7 @@ bool PtDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     LOG(QString("Database processed"));
 

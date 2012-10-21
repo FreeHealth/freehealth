@@ -27,9 +27,10 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -50,7 +51,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/TgaPregDb/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/tga_preg/description.xml");}
 
@@ -207,14 +208,14 @@ bool PregnancyDatatabaseStep::prepareDatas()
 
 bool PregnancyDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
-        return false;
+//    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
+//        return false;
     return true;
 }
 
 bool PregnancyDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     Q_EMIT progressLabelChanged(tr("Reading downloaded files"));

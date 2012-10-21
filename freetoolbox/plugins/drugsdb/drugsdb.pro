@@ -10,50 +10,55 @@ INCLUDEPATH += ../
 DEPENDPATH += ../
 
 SOURCES += \
-    canadiandrugsdatabase.cpp \
-    fdadrugsdatabasecreator.cpp \
+    tools.cpp \
     frenchdrugsdatabasecreator.cpp \
+#    canadiandrugsdatabase.cpp \
+#    fdadrugsdatabasecreator.cpp \
+#    southafricandrugsdatabase.cpp \
+#    belgishdrugsdatabase.cpp \
+#    portuguesedrugsdatabase.cpp \
     extramoleculelinkermodel.cpp \
     moleculelinkerwidget.cpp \
     atcmodel.cpp \
     atcpage.cpp \
-    southafricandrugsdatabase.cpp \
-    belgishdrugsdatabase.cpp \
     drugsdbplugin.cpp \
     searchatcindatabasedialog.cpp \
     drug.cpp \
-    portuguesedrugsdatabase.cpp \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
-
+    drugdatabasedescription.cpp \
+    routesmodel.cpp \
+    drugsdbcore.cpp
 
 HEADERS  += \
-    canadiandrugsdatabase.h \
-    fdadrugsdatabasecreator.h \
+    tools.h \
     frenchdrugsdatabasecreator.h \
+#    canadiandrugsdatabase.h \
+#    fdadrugsdatabasecreator.h \
+#    southafricandrugsdatabase.h \
+#    belgishdrugsdatabase.h \
+#    portuguesedrugsdatabase.h \
     extramoleculelinkermodel.h \
     moleculelinkerwidget.h \
     atcmodel.h \
     atcpage.h \
-    southafricandrugsdatabase.h \
-    belgishdrugsdatabase.h \
     drugsdbplugin.h \
     searchatcindatabasedialog.h \
     drug.h \
-    portuguesedrugsdatabase.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h
-
-
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
+    drugdatabasedescription.h \
+    routesmodel.h \
+    drugsdbcore.h
 
 FORMS += \
-    canadiandrugsdatabasewidget.ui \
-    fdadrugsdatabasewidget.ui \
     frenchdrugsdatabasewidget.ui \
+#    canadiandrugsdatabasewidget.ui \
+#    fdadrugsdatabasewidget.ui \
+#    southafricandrugsdatabase.ui \
+#    belgishdrugsdatabase.ui \
+#    portuguesedrugsdatabase.ui \
     moleculelinkerwidget.ui \
     atcpage.ui \
-    southafricandrugsdatabase.ui \
-    belgishdrugsdatabase.ui \
-    searchatcindatabasedialog.ui \
-    portuguesedrugsdatabase.ui
+    searchatcindatabasedialog.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \

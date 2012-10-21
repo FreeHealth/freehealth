@@ -19,35 +19,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com     *
- *   Contributors:                                                         *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/ftb_constants.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
+#ifndef DRUGSDB_DRUGDATABASEDESCRIPTION_H
+#define DRUGSDB_DRUGDATABASEDESCRIPTION_H
 
-#include <drugsdb/tools.h>
+#include <utils/genericdescription.h>
+#include <drugsdb/drugsdb_exporter.h>
 
-#include <extensionsystem/pluginmanager.h>
+namespace DrugsDB {
 
-#include <QFile>
-#include <QDir>
-
-#include "genericzipcodespage.h"
-#include "genericzipcodeswidget.h"
-
-using namespace ZipCodes;
-
-GenericZipCodesPage::GenericZipCodesPage(QObject *parent) :
-        IToolPage(parent)
+class DRUGSDB_EXPORT DrugDatabaseDescription : public Utils::GenericDescription
 {
-    setObjectName("GenericZipCodesPage_IToolPage");
+public:
+    enum Data {
+        Language = Utils::GenericDescription::NonTranslatableExtraData + 1,
+        Vendor,
+        Copyright,
+        DrugUidName,
+        IsAtcValid,
+        IsDDIValid,
+        ComplementaryWebLink,
+        PackUidName,
+        DrugNameConstructor
+    };
+
+    DrugDatabaseDescription();
+};
+
 }
 
-QWidget *GenericZipCodesPage::createPage(QWidget *parent)
-{
-    return new GenericZipCodesWidget(parent);
-}
+#endif // DRUGSDB_DRUGDATABASEDESCRIPTION_H

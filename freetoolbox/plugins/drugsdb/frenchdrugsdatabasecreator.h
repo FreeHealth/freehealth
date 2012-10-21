@@ -35,7 +35,8 @@
 #include <QMultiHash>
 
 
-namespace DrugsDbCreator {
+namespace DrugsDB {
+namespace Internal {
 
 class FrenchDrugsDatabasePage : public Core::IToolPage
 {
@@ -107,7 +108,8 @@ private:
     FrDrugDatatabaseStep *m_Step;
 };
 
-}  //  End namespace DrugsDbCreator
+}  //  namespace Internal
+}  //  namespace DrugsDB
 
 
 #endif // FRENCHDRUGSDATABASECREATOR_H

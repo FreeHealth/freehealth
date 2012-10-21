@@ -45,7 +45,7 @@
 
 #include "ui_moleculelinkerwidget.h"
 
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
 
 QWidget *MoleculeLinkerPage::createPage(QWidget *parent)
 {

@@ -29,9 +29,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -212,8 +213,8 @@ bool FrenchZipCodesStep::createDatabase()
 
 bool FrenchZipCodesStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(::DB_NAME, databaseAbsPath()))
-        return false;
+//    if (!DrugsDB::Tools::connectDatabase(::DB_NAME, databaseAbsPath()))
+//        return false;
 
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
     Q_EMIT progressRangeChanged(0, 1);

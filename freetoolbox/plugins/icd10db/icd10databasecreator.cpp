@@ -26,13 +26,13 @@
  ***************************************************************************/
 #include "icd10databasecreator.h"
 
-#include <coreplugin/globaltools.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/httpdownloader.h>
 #include <utils/global.h>
@@ -142,7 +142,7 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     }
 
     // Create SQL Schema
-    if (Core::Tools::executeSqlFile(ICD10_DATABASE_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
+    if (DrugsDB::Tools::executeSqlFile(ICD10_DATABASE_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
         Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(ICD10_DATABASE_NAME));
     } else {
         Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)

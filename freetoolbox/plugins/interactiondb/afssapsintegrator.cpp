@@ -31,14 +31,13 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
+#include <drugsdb/tools.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
-
-//#include "../global_resources/class_templates/modeltest.h"
 
 #include <QDomNode>
 #include <QDomElement>
@@ -1118,7 +1117,7 @@ void AfssapsLinkerWidget::on_saveFile_clicked()
 
 void AfssapsLinkerWidget::on_findAtc_clicked()
 {
-//    if (!Core::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
+//    if (!DrugsDB::Tools::connectDatabase(Core::Constants::IAM_DATABASE_NAME, iamDatabaseAbsPath()))
 //        return;
 
 //    Utils::Log::addMessage("Tools", "Getting ATC Informations from the interactions database");
@@ -1146,7 +1145,7 @@ void AfssapsLinkerWidget::on_findAtc_clicked()
 //    // Find link between Afssaps Molecules and ATCs
 //    while (model->hasIndex(row, AfssapsLinkerModel::AfssapsName)) {
 //        QString toFind = model->index(row, AfssapsLinkerModel::AfssapsName).data().toString();
-//        toFind = Core::Tools::noAccent(toFind);
+//        toFind = DrugsDB::Tools::noAccent(toFind);
 //        int atcId = atcName_id.value(toFind);
 //        if (atcId == 0) {
 //            ++row;

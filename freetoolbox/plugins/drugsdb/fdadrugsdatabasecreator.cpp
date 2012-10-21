@@ -31,8 +31,9 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -76,9 +77,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
-static inline QString freeDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("free_fda");}
-static inline QString fullFdaDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("full_fda");}
+static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
+static inline QString freeDatabaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName("free_fda");}
+static inline QString fullFdaDatabaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName("full_fda");}
 
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/us/description.xml");}
 
@@ -298,7 +299,7 @@ bool FdaDrugDatatabaseStep::prepareDatas()
 
 bool FdaDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
+    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
         return false;
 
     QMultiHash<QString, QVariant> labels;
@@ -306,18 +307,18 @@ bool FdaDrugDatatabaseStep::createDatabase()
     labels.insert("en","USA therapeutic database");
     labels.insert("de","Therapeutische Datenbank USA");
 
-    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
+    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the FDA drugs sources");
         return false;
     }
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
 
 bool FdaDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     Q_EMIT progressLabelChanged(tr("Reading downloaded files"));
@@ -382,12 +383,12 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     drugs.clear();
 
     // Run SQL commands one by one
-//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create FDA DB.");
 //        return false;
 //    }
 
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
 
     LOG(QString("Database processed"));
     Q_EMIT progress(3);
@@ -453,11 +454,11 @@ bool FdaDrugDatatabaseStep::linkMolecules()
 
 
     // Connect to databases
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // Get SID
-    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
+    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
         LOG_ERROR("NO SID DEFINED");
         return false;
@@ -495,7 +496,7 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     LOG(QString("Database processed"));
 

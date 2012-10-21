@@ -30,11 +30,12 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <biblio/bibliocore.h>
 
@@ -576,7 +577,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorModel::ATCCodeStringList, index.parent());
     QStringList atcCodes;
     foreach(const QString &code, atcCodesIndex.data().toStringList())
-        atcCodes << code + ": " + DrugsDbCreator::AtcModel::instance()->getAtcLabel(QStringList() << code).join(";");
+        atcCodes << code + ": " + DrugsDB::AtcModel::instance()->getAtcLabel(QStringList() << code).join(";");
     d->m_AtcCodes->setStringList(atcCodes);
 
     QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorModel::PMIDStringList, index.parent());
@@ -596,7 +597,7 @@ void InteractorEditorWidget::buttonActivated(QAction *selected)
     QModelIndex idx = model->index(d->m_EditingIndex.row(), DrugInteractorModel::TrLabel, d->m_EditingIndex.parent());
     QString label = idx.data().toString();
     if (selected == d->atcSearchDialog) {
-        DrugsDbCreator::SearchAtcInDatabaseDialog dlg(this, label);
+        DrugsDB::SearchAtcInDatabaseDialog dlg(this, label);
         if (dlg.exec() == QDialog::Accepted) {
             QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ATCCodeStringList, d->m_EditingIndex.parent());
             model->setData(atc, dlg.getSelectedCodes());

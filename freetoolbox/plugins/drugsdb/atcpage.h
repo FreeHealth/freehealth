@@ -33,7 +33,7 @@
 #include <QWidget>
 
 
-namespace DrugsDbCreator {
+namespace DrugsDB {
 
 class AtcPage : public Core::IToolPage
 {

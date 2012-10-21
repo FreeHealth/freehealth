@@ -28,9 +28,10 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -46,7 +47,8 @@
 
 #include <QDebug>
 
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 
@@ -65,8 +67,8 @@ AtcModel *AtcModel::instance(QObject *parent)
     return m_Instance;
 }
 
-namespace DrugsDbCreator{
-
+namespace DrugsDB {
+namespace Internal {
 class AtcItem
 {
 public:
@@ -227,7 +229,8 @@ private:
     AtcModel *q;
 };
 
-}  // End namespace DrugsDbCreator
+}  // namespace Internal
+}  // namespace DrugsDB
 
 
 AtcModel::AtcModel(QObject * parent) :
@@ -380,7 +383,7 @@ bool AtcModel::insertAtcCodeToDatabase(const QString &connectionName)
     QString req;
     req = "DELETE FROM `ATC`"
           "WHERE ID>=0";
-    Core::Tools::executeSqlQuery(req, connectionName, __FILE__, __LINE__);
+    DrugsDB::Tools::executeSqlQuery(req, connectionName, __FILE__, __LINE__);
 
     // Import ATC codes to database
     QFile file(atcCsvFile());
@@ -395,7 +398,7 @@ bool AtcModel::insertAtcCodeToDatabase(const QString &connectionName)
         foreach(const QString &s, list) {
             req = QString("INSERT INTO `ATC`  (`ID`, `CODE`, `ENGLISH`, `FRENCH`, `DEUTSCH`) "
                           "VALUES (%1, %2) ").arg(i).arg(s);
-            Core::Tools::executeSqlQuery(req, connectionName, __FILE__, __LINE__);
+            DrugsDB::Tools::executeSqlQuery(req, connectionName, __FILE__, __LINE__);
             ++i;
             if (i%50 == 0)
                 progress.setValue(i);

@@ -30,10 +30,11 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/routesmodel.h>
+
+#include <drugsdb/tools.h>
+#include <drugsdb/routesmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -110,7 +111,7 @@ public:
 
     Utils::GoogleTranslator *googleTranslator;
 
-    Core::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
+    DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
     QStringListModel *biblioModel;
 };
 
@@ -215,12 +216,12 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
     ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
 
-    d->firstInteractorRoutes = new Core::RoutesModel(this);
+    d->firstInteractorRoutes = new DrugsDB::RoutesModel(this);
     ui->listViewFirstInteractorRoute->setModel(d->firstInteractorRoutes);
-    ui->listViewFirstInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
-    d->secondInteractorRoutes = new Core::RoutesModel(this);
+    ui->listViewFirstInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
+    d->secondInteractorRoutes = new DrugsDB::RoutesModel(this);
     ui->listViewSecondInteractorRoute->setModel(d->secondInteractorRoutes);
-    ui->listViewSecondInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
+    ui->listViewSecondInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
 
     d->biblioModel = new QStringListModel(this);
     ui->bilbioTableView->setModel(d->biblioModel);

@@ -27,14 +27,16 @@
 #include "frenchdrugsdatabasecreator.h"
 #include "extramoleculelinkermodel.h"
 #include "drug.h"
+#include "drugsdbcore.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/drugdatabasedescription.h>
+
+#include <drugsdb/drugdatabasedescription.h>
+#include <drugsdb/tools.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -63,7 +65,8 @@
 
 #include "ui_frenchdrugsdatabasewidget.h"
 
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 const char* const  FRENCH_URL                  = "http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip";
@@ -72,9 +75,10 @@ const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/fr_db_finalize.sql");}
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/description.xml");}
@@ -197,26 +201,29 @@ bool FrDrugDatatabaseStep::prepareDatas()
 
 bool FrDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
-        return false;
+//    DrugsDB::Internal::DrugBaseEssentials *db = drugsDbCore()->drugBase(::FR_DRUGS_DATABASE_NAME);
+//    if (!db)
+//        return false;
+//    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
+//        return false;
 
-    QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutique française");
-    labels.insert("en","French therapeutic database");
-    labels.insert("de","Französische Therapeutische Datenbank");
+//    QMultiHash<QString, QVariant> labels;
+//    labels.insert("fr","Base de données thérapeutique française");
+//    labels.insert("en","French therapeutic database");
+//    labels.insert("de","Französische Therapeutische Datenbank");
 
-    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME, labels) == -1) {
-        LOG_ERROR("Unable to create the French drugs sources");
-        return false;
-    }
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
-    LOG(QString("Database schema created"));
+//    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME, labels) == -1) {
+//        LOG_ERROR("Unable to create the French drugs sources");
+//        return false;
+//    }
+//    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
+//    LOG(QString("Database schema created"));
     return true;
 }
 
 bool FrDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // check files
@@ -324,12 +331,12 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create French DB.");
 //        return false;
 //    }
 
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+//    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
 
     // delete pointers
     qDeleteAll(drugs);
@@ -462,7 +469,7 @@ bool FrDrugDatatabaseStep::linkMolecules()
 
 
     // Connect to databases
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     QSqlDatabase fr = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
@@ -471,40 +478,40 @@ bool FrDrugDatatabaseStep::linkMolecules()
         return false;
     }
 
-    // Get SID
-    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME);
-    if (sid==-1) {
-        LOG_ERROR("NO SID DEFINED");
-        return false;
-    }
+//    // Get SID
+//    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME);
+//    if (sid==-1) {
+//        LOG_ERROR("NO SID DEFINED");
+//        return false;
+//    }
 
-    // Associate Mol <-> ATC for drugs with one molecule only
-    QHash<QString, QString> corrected;
+//    // Associate Mol <-> ATC for drugs with one molecule only
+//    QHash<QString, QString> corrected;
 
-    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
-    Q_EMIT progressRangeChanged(0, 2);
-    Q_EMIT progress(0);
+//    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
+//    Q_EMIT progressRangeChanged(0, 2);
+//    Q_EMIT progress(0);
 
-    // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FR_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
-    qWarning() << "unfound" << unfound.count();
+//    // Associate Mol <-> ATC for drugs with one molecule only
+//    QStringList unfound;
+//    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FR_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
+//    qWarning() << "unfound" << unfound.count();
 
-    Q_EMIT progress(1);
+//    Q_EMIT progress(1);
 
-    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
+//    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
+//    Q_EMIT progressRangeChanged(0, 1);
+//    Q_EMIT progress(0);
 
-    // Save to links to drugs database
-    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+//    // Save to links to drugs database
+//    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
-    LOG(QString("Database processed"));
+//    LOG(QString("Database processed"));
 
-    // add unfound to extralinkermodel
-    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FR_DRUGS_DATABASE_NAME, unfound);
-    ExtraMoleculeLinkerModel::instance()->saveModel();
+//    // add unfound to extralinkermodel
+//    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
+//    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FR_DRUGS_DATABASE_NAME, unfound);
+//    ExtraMoleculeLinkerModel::instance()->saveModel();
 
     return true;
 }

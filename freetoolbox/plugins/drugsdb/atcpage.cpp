@@ -32,8 +32,8 @@
 
 #include "ui_atcpage.h"
 
+using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
-using namespace DrugsDbCreator;
 
 AtcPage::AtcPage(QObject *parent) :
         IToolPage(parent)

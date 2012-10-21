@@ -27,10 +27,10 @@
 #include "southafricandrugsdatabase.h"
 #include "extramoleculelinkermodel.h"
 #include "drug.h"
+#include <drugsdb/tools.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
@@ -81,7 +81,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/description.xml");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
@@ -310,7 +310,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
 
 bool ZaDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
+    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
         return false;
 
     QMultiHash<QString, QVariant> labels;
@@ -318,11 +318,11 @@ bool ZaDrugDatatabaseStep::createDatabase()
     labels.insert("en","South African therapeutic database");
     labels.insert("de","Südafrikanische Therapeutische Datenbank");
 
-    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
+    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the French drugs sources");
         return false;
     }
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -597,7 +597,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
 
 bool ZaDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // 14 Aug 2012 : 2732 Drugs ->
@@ -680,11 +680,11 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, ZA_DRUGS_DATABASE_NAME);
     Q_EMIT progress(2);
 
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
 
     // Run SQL commands one by one
 //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
 //        LOG_ERROR("Can not create ZA DB.");
 //        return false;
 //    }
@@ -744,13 +744,13 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     //    LEFT 504
 
     // 28 July 2010
-    // Using the new dcCore::Tools::englishMoleculeLinker()
+    // Using the new dcDrugsDB::Tools::englishMoleculeLinker()
     // 1198 distinct mols
     // Hand association: 27
     // Found: 568, Left: 631
 
     // get all drugs and ATC codes
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     QHash<QString, QString> corrected;
@@ -781,7 +781,7 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     corrected.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
     corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
-    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME);
+    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
         LOG_ERROR("NO SID DEFINED");
         return false;
@@ -797,7 +797,7 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     // add unfound to extralinkermodel
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(ZA_DRUGS_DATABASE_NAME, unfound);

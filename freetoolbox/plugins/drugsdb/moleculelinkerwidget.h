@@ -34,7 +34,7 @@
 class QModelIndex;
 class QSortFilterProxyModel;
 
-namespace DrugsDbCreator {
+namespace DrugsDB {
 
 namespace Ui {
     class MoleculeLinkerWidget;

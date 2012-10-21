@@ -1,3 +1,28 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 #include "pimdatabasecreator.h"
 #include "pim_constants.h"
 #include "ui_pimdatabasecreator.h"
@@ -6,9 +31,10 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <interactiondb/afssapsintegrator.h>
 
@@ -35,7 +61,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/PIMs/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString treeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::PIMS_FILENAME);}
 
@@ -81,19 +107,19 @@ bool PimStep::process()
 {
     qWarning() << Q_FUNC_INFO;
     // connect db
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
-        return false;
+//    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
+//        return false;
 
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
 
-    Core::Tools::executeSqlQuery("DELETE FROM PIM_SOURCES;", Core::Constants::MASTER_DATABASE_NAME);
-    Core::Tools::executeSqlQuery("DELETE FROM PIM_TYPES;", Core::Constants::MASTER_DATABASE_NAME);
-    Core::Tools::executeSqlQuery("DELETE FROM PIMS;", Core::Constants::MASTER_DATABASE_NAME);
-    Core::Tools::executeSqlQuery("DELETE FROM PIMS_RELATED_ATC;", Core::Constants::MASTER_DATABASE_NAME);
-    Core::Tools::executeSqlQuery("DELETE FROM PIMS_RELATED_ICD;", Core::Constants::MASTER_DATABASE_NAME);
+    DrugsDB::Tools::executeSqlQuery("DELETE FROM PIM_SOURCES;", Core::Constants::MASTER_DATABASE_NAME);
+    DrugsDB::Tools::executeSqlQuery("DELETE FROM PIM_TYPES;", Core::Constants::MASTER_DATABASE_NAME);
+    DrugsDB::Tools::executeSqlQuery("DELETE FROM PIMS;", Core::Constants::MASTER_DATABASE_NAME);
+    DrugsDB::Tools::executeSqlQuery("DELETE FROM PIMS_RELATED_ATC;", Core::Constants::MASTER_DATABASE_NAME);
+    DrugsDB::Tools::executeSqlQuery("DELETE FROM PIMS_RELATED_ICD;", Core::Constants::MASTER_DATABASE_NAME);
 
     QSqlQuery query(db);
     QDomDocument doc;
@@ -138,7 +164,7 @@ bool PimStep::process()
         labels.insert("en", element.attribute(Constants::XML_ATTRIB_TYPE_EN).toUpper());
         labels.insert("de", element.attribute(Constants::XML_ATTRIB_TYPE_DE).toUpper());
         labels.insert("es", element.attribute(Constants::XML_ATTRIB_TYPE_ES).toUpper());
-        int masterLid = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
+        int masterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
         // create type
         QString req = QString("INSERT INTO PIM_TYPES (PIM_TID, UID, MASTER_LID) "
                               "VALUES (NULL, '%1', %2);")
@@ -173,7 +199,7 @@ bool PimStep::process()
         const QString &type = molLinkModel->index(i, IAMDb::AfssapsLinkerModel::AffapsCategory).data().toString();
 
         if (type=="class") {
-            interactingClasses << Core::Tools::noAccent(mol).toUpper();
+            interactingClasses << DrugsDB::Tools::noAccent(mol).toUpper();
             interactingClasses << molEn.toUpper();
         } else if (links.isEmpty()) {
             continue;
@@ -225,7 +251,7 @@ bool PimStep::process()
 void PimStep::savePim(const QDomElement &element, const int sourceId, const int typeId, const QMultiHash<QString, QString> &molNameToAtcCode)
 {
     // connect db
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return;
 
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
@@ -249,7 +275,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
         labels.insert(risk.attribute(Constants::XML_ATTRIB_RISK_LANG), risk.attribute(Constants::XML_ATTRIB_RISK_VALUE));
         risk = risk.nextSiblingElement(Constants::XML_TAG_RISK);
     }
-    int riskMasterLid = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
+    int riskMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
 
     // create PIM
     int level = 0;
@@ -300,20 +326,20 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
             // manage interacting classes
             if (molName.isEmpty()) {
                 QString c = mols.attribute(Constants::XML_ATTRIB_CLASSNAME);
-                c = Core::Tools::noAccent(c.toUpper());
+                c = DrugsDB::Tools::noAccent(c.toUpper());
                 if (!c.isEmpty()) {
                     // get ATC_ID from the class's name
-                    atcIds = Core::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, c);
+                    atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, c);
                 } else {
                     continue;
                 }
             } else {
                 // get ATC_ID from the molecule's name
-                atcIds = Core::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, molName.toUpper());
+                atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, molName.toUpper());
             }
         } else {
             foreach(const QString &atc, atcCodes) {
-                atcIds << Core::Tools::getAtcIdsFromCode(Core::Constants::MASTER_DATABASE_NAME, atc);
+                atcIds << DrugsDB::Tools::getAtcIdsFromCode(Core::Constants::MASTER_DATABASE_NAME, atc);
             }
         }
 

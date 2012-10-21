@@ -37,17 +37,15 @@
  * \date 29 June 2010
 */
 
-
-namespace DrugsDbCreator {
-
-
+namespace DrugsDB {
+namespace Internal {
 class AtcModelPrivate;
-
+}
 
 class AtcModel : public QAbstractItemModel
 {
     Q_OBJECT
-    friend class AtcModelPrivate;
+    friend class DrugsDB::Internal::AtcModelPrivate;
 
     AtcModel(QObject * parent = 0);
 public:
@@ -78,7 +76,7 @@ public:
 
 private:
     static AtcModel *m_Instance;
-    AtcModelPrivate *d;
+    Internal::AtcModelPrivate *d;
 };
 
 }  //  End namespace DrugsDbCreator

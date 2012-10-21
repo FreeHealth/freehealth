@@ -31,9 +31,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <utils/log.h>
 #include <utils/database.h>
@@ -61,7 +62,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CanadianRawSources")  + QDir::separator();}
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/description.xml");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/canadian_db_finalize.sql");}
@@ -188,7 +189,7 @@ bool CaDrugDatatabaseStep::prepareData()
 
 bool CaDrugDatatabaseStep::createDatabase()
 {
-    if (!Core::Tools::createMasterDrugInteractionDatabase())
+    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
         return false;
 
     QMultiHash<QString, QVariant> labels;
@@ -196,11 +197,11 @@ bool CaDrugDatatabaseStep::createDatabase()
     labels.insert("en","Canadian therapeutic database");
     labels.insert("de","Kanadische Therapeutische Datenbank");
 
-    if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME, labels) == -1) {
+    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the Canadian drugs sources");
         return false;
     }
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -254,7 +255,7 @@ QMultiHash<int, QString> CaDrugDatatabaseStep::extractUidRelatedDatas(const QStr
 
 bool CaDrugDatatabaseStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
     // import files
@@ -428,11 +429,11 @@ bool CaDrugDatatabaseStep::populateDatabase()
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsVector, CA_DRUGS_DATABASE_NAME);
     Q_EMIT progress(2);
 
-    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
 
 //    // Run SQL commands one by one
 //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create Canadian DB.");
 //        return false;
 //    }
@@ -538,7 +539,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     //  LEFT 724
 
     // 28 July 2010
-    // Using the new Core::Tools::englishMoleculeLinker()
+    // Using the new DrugsDB::Tools::englishMoleculeLinker()
     // 2243 distinct mols
     // Hand association: 1647 (drugs 7-char atc with one molecules + hand made)
     // Found: 1292, Left: 773
@@ -549,7 +550,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     // Found: 1071, Left: 327
     // Drugs with one mol and ATC (7-char): 1358
 
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
 //    QSqlDatabase ca = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
@@ -609,7 +610,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
     // Get SID
-    int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME);
+    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
         LOG_ERROR("NO SID DEFINED");
         return false;
@@ -621,7 +622,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     qWarning() << "unfound" << unfound.count();
 
     // Save to links to drugs database
-    Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
     // add unfound to extralinkermodel
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(CA_DRUGS_DATABASE_NAME, unfound);

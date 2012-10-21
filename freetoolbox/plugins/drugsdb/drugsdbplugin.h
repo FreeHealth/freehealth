@@ -36,7 +36,7 @@
 */
 
 
-namespace DrugsDbCreator {
+namespace DrugsDB {
 namespace Internal {
 
 class DrugsDbPlugin : public ExtensionSystem::IPlugin

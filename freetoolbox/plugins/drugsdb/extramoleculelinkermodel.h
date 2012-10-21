@@ -32,9 +32,10 @@
 #include <QHash>
 #include <QString>
 
-namespace DrugsDbCreator {
-
+namespace DrugsDB {
+namespace Internal {
 class ExtraMoleculeLinkerModelPrivate;
+}  // namespace Internal
 
 class ExtraMoleculeLinkerModel : public QAbstractTableModel
 {
@@ -91,7 +92,7 @@ public Q_SLOTS:
 
 private:
     static ExtraMoleculeLinkerModel *m_Instance;
-    ExtraMoleculeLinkerModelPrivate *d;
+    Internal::ExtraMoleculeLinkerModelPrivate *d;
 
 };
 

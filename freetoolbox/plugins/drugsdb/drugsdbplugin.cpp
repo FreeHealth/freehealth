@@ -25,16 +25,17 @@
  ***************************************************************************/
 #include "drugsdbplugin.h"
 #include "atcpage.h"
-#include "canadiandrugsdatabase.h"
-#include "frenchdrugsdatabasecreator.h"
-#include "fdadrugsdatabasecreator.h"
-#include "southafricandrugsdatabase.h"
-#include "belgishdrugsdatabase.h"
-#include "portuguesedrugsdatabase.h"
 #include "moleculelinkerwidget.h"
+#include "frenchdrugsdatabasecreator.h"
+
+//#include "canadiandrugsdatabase.h"
+//#include "fdadrugsdatabasecreator.h"
+//#include "southafricandrugsdatabase.h"
+//#include "belgishdrugsdatabase.h"
+//#include "portuguesedrugsdatabase.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/globaltools.h>
+#include <drugsdb/tools.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -47,7 +48,8 @@
 #include <drugsbaseplugin/drugbaseessentials.h>
 // END
 
-using namespace DrugsDbCreator::Internal;
+using namespace DrugsDB;
+using namespace Internal;
 
 DrugsDbPlugin::DrugsDbPlugin()
 {
@@ -69,10 +71,10 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-drugsdbplugin");
 
-    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
-    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
-    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
+//    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
+//    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
+//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
 //    addAutoReleasedObject(new BeDrugsDatabasePage(this));
 //    addAutoReleasedObject(new PtDrugsDatabasePage(this));
 
@@ -92,7 +94,7 @@ void DrugsDbPlugin::extensionsInitialized()
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
 
 //    DrugsDB::Internal::drugbaseessentials c;
-//    c.initialize(Core::Tools::drugsDatabaseAbsFileName(), true);
+//    c.initialize(DrugsDB::Tools::drugsDatabaseAbsFileName(), true);
 }
 
 
