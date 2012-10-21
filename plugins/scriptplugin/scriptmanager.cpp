@@ -210,6 +210,8 @@ void ScriptManager::onAllFormsLoaded()
 
 void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
 {
+    // TODO: code this: ScriptManager::onSubFormLoaded(const QString &subFormUuid)
+    Q_UNUSED(subFormUuid);
 //    // Update wrapper items
 //    forms->updateSubFormItemWrappers(subFormUuid);
 

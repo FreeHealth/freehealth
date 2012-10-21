@@ -94,6 +94,8 @@ void FormManagerScriptWrapper::recreateItemWrappers()
 
 void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
 {
+    // TODO: code this: FormManagerScriptWrapper::updateSubFormItemWrappers
+    Q_UNUSED(uuid);
 //    const QList<Form::FormMain*> &list = formManager().subFormsEmptyRoot();
 //    const QStringList &uuids = m_Items.keys();
 //    foreach(Form::FormItem *main, list) { // all subForms roots
