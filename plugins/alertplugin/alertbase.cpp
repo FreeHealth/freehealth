@@ -1405,44 +1405,45 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         qWarning() << req;
 
     database().transaction();
-    QSqlQuery query(database());
-    if (query.exec(req)) {
-        while (query.next()) {
+    QSqlQuery sqlQuery(database());
+    if (sqlQuery.exec(req)) {
+        while (sqlQuery.next()) {
             AlertItem item;
-            item.setDb(ItemId, query.value(Constants::ALERT_ID));
-            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID));
-            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID));
-            item.setDb(ScriptId, query.value(Constants::ALERT_SID));
-            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
-            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
-            item.setUuid(query.value(Constants::ALERT_UID).toString());
-            item.setPackUid(query.value(Constants::ALERT_PACKUID).toString());
-            item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
-            item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
-            item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
-            item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
-            item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
-            item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
-            item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
-            item.setMustBeRead(query.value(Constants::ALERT_MUSTBEREAD).toBool());
-            item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
-            item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
-            item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
-            item.setStyleSheet(query.value(Constants::ALERT_THEME_CSS).toString());
-            item.setExtraXml(query.value(Constants::ALERT_EXTRA_XML).toString());
+            item.setDb(ItemId, sqlQuery.value(Constants::ALERT_ID));
+            item.setDb(RelatedId, sqlQuery.value(Constants::ALERT_REL_ID));
+            item.setDb(CategoryUid, sqlQuery.value(Constants::ALERT_CATEGORY_UID));
+            item.setDb(ScriptId, sqlQuery.value(Constants::ALERT_SID));
+            item.setDb(ValidationId, sqlQuery.value(Constants::ALERT_VAL_ID));
+            item.setDb(TimingId, sqlQuery.value(Constants::ALERT_TIM_ID));
+            item.setDb(LabelLID, sqlQuery.value(Constants::ALERT_LABEL_LID));
+            item.setDb(CategoryLID, sqlQuery.value(Constants::ALERT_CATEGORY_LID));
+            item.setDb(DescrLID, sqlQuery.value(Constants::ALERT_DESCRIPTION_LID));
+            item.setDb(CommentLID, sqlQuery.value(Constants::ALERT_COMMENT_LID));
+            item.setUuid(sqlQuery.value(Constants::ALERT_UID).toString());
+            item.setPackUid(sqlQuery.value(Constants::ALERT_PACKUID).toString());
+            item.setValidity(sqlQuery.value(Constants::ALERT_ISVALID).toBool());
+            item.setRemindLaterAllowed(sqlQuery.value(Constants::ALERT_ISREMINDABLE).toBool());
+            item.setCryptedPassword(sqlQuery.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
+            item.setViewType(AlertItem::ViewType(sqlQuery.value(Constants::ALERT_VIEW_TYPE).toInt()));
+            item.setContentType(AlertItem::ContentType(sqlQuery.value(Constants::ALERT_CONTENT_TYPE).toInt()));
+            item.setPriority(AlertItem::Priority(sqlQuery.value(Constants::ALERT_PRIORITY).toInt()));
+            item.setOverrideRequiresUserComment(sqlQuery.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
+            item.setMustBeRead(sqlQuery.value(Constants::ALERT_MUSTBEREAD).toBool());
+            item.setCreationDate(sqlQuery.value(Constants::ALERT_CREATION_DATE).toDateTime());
+            item.setLastUpdate(sqlQuery.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
+            item.setThemedIcon(sqlQuery.value(Constants::ALERT_THEMED_ICON).toString());
+            item.setStyleSheet(sqlQuery.value(Constants::ALERT_THEME_CSS).toString());
+            item.setExtraXml(sqlQuery.value(Constants::ALERT_EXTRA_XML).toString());
             alerts << item;
         }
     } else {
-        LOG_QUERY_ERROR(query);
-        query.finish();
+        LOG_QUERY_ERROR(sqlQuery);
+        sqlQuery.finish();
         database().rollback();
         return alerts;
     }
-
+    sqlQuery.finish();
+    
     for(int i=0; i < alerts.count(); ++i) {
         AlertItem &item = alerts[i];
 
