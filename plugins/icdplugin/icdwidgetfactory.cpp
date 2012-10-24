@@ -167,6 +167,8 @@ void IcdFormData::clear()
 
 bool IcdFormData::isModified() const
 {
+    if (m_OriginalValue.isNull() && m_Form->m_CentralWidget->icdCollectionModel()->isEmpty())
+        return false;
     return m_OriginalValue != storableData().toString();
 }
 
