@@ -179,7 +179,7 @@ public:
         _currentEpisode = index;
 
         if (!index.isValid()) {
-            LOG_ERROR_FOR(q, "Invalid index when setting current episode. Episode not read.");
+//            LOG_ERROR_FOR(q, "Invalid index when setting current episode. Episode not read.");
             return;
         }
 
@@ -238,6 +238,8 @@ void FormDataWidgetMapper::clear()
 bool FormDataWidgetMapper::isDirty() const
 {
     if (!d->_formMain)
+        return false;
+    if (!d->_currentEpisode.isValid())
         return false;
 
     // form isModified() ?

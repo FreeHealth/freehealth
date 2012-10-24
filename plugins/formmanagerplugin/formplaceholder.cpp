@@ -239,6 +239,9 @@ public:
 
     bool saveCurrentEditingEpisode()
     {
+        if (!ui->formDataMapper->currentEditingEpisodeIndex().isValid())
+            return true;
+
         // Something to save?
         if (!ui->formDataMapper->isDirty())
             return true;
@@ -359,6 +362,7 @@ public:
 
     void selectAndActivateFirstEpisode()
     {
+        ui->formDataMapper->setCurrentEpisode(QModelIndex());
         // Assuming the _currentEditingForm is defined and the episodeView model is set
         if (ui->episodeView->selectionModel() && !ui->episodeView->selectionModel()->hasSelection()) {
             if (ui->episodeView->model()->rowCount() > 0) {
@@ -901,7 +905,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-//    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
+    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
     QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
     QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);
