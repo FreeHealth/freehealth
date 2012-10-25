@@ -5,34 +5,34 @@
     <name>Print</name>
     <message>
         <source>Made with %1.</source>
-        <translation >Erstellt mit %1.</translation>
+        <translation>Erstellt mit %1.</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrintDialog</name>
     <message>
         <source>Print</source>
-        <translation >Drucken</translation>
+        <translation>Drucken</translation>
     </message>
     <message>
         <source>First page</source>
-        <translation >Erste Seite</translation>
+        <translation>Erste Seite</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation >Vorige Seite</translation>
+        <translation>Vorige Seite</translation>
     </message>
     <message>
         <source># of ##</source>
-        <translation ># von ##</translation>
+        <translation># von ##</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation >Nächste Seite</translation>
+        <translation>Nächste Seite</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation >Letzte Seite</translation>
+        <translation>Letzte Seite</translation>
     </message>
     <message>
         <source>Printer:</source>
@@ -184,29 +184,29 @@ Refer to your operating system documentation.</source>
     <name>Print::Internal::PrinterPreviewerPrivate</name>
     <message>
         <source>Form</source>
-        <translation >Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>preview</source>
-        <translation >Vorschau</translation>
+        <translation>Vorschau</translation>
     </message>
     <message>
         <source>Show page</source>
-        <translation >Zeige Seite</translation>
+        <translation>Zeige Seite</translation>
     </message>
     <message>
         <source>Show Duplicates</source>
-        <translation >Duplikate anzeigen</translation>
+        <translation>Duplikate anzeigen</translation>
     </message>
     <message>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
-        <translation >Wenn es gecheckt wurde, wir die Vorschau alle Änderungen aktualisieren.
+        <translation>Wenn es gecheckt wurde, wir die Vorschau alle Änderungen aktualisieren.
 Dies kann eine starke CPU Belastung sein.</translation>
     </message>
     <message>
         <source>Automatic update</source>
-        <translation >Automatisches Update</translation>
+        <translation>Automatisches Update</translation>
     </message>
     <message>
         <source>Update</source>
@@ -221,35 +221,35 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <name>Print::Printer</name>
     <message>
         <source>Each Pages</source>
-        <translation >Jede Seite</translation>
+        <translation>Jede Seite</translation>
     </message>
     <message>
         <source>First page only</source>
-        <translation >Nur erste Seite</translation>
+        <translation>Nur erste Seite</translation>
     </message>
     <message>
         <source>Second page only</source>
-        <translation >Nur zweite Seite</translation>
+        <translation>Nur zweite Seite</translation>
     </message>
     <message>
         <source>Last page only</source>
-        <translation >Nur letzte Seite</translation>
+        <translation>Nur letzte Seite</translation>
     </message>
     <message>
         <source>All pages but first</source>
-        <translation >Alle Seiten außer erster</translation>
+        <translation>Alle Seiten außer erster</translation>
     </message>
     <message>
         <source>Odd pages</source>
-        <translation >Ungerade Seiten</translation>
+        <translation>Ungerade Seiten</translation>
     </message>
     <message>
         <source>Even pages</source>
-        <translation >Gerade Seiten</translation>
+        <translation>Gerade Seiten</translation>
     </message>
     <message>
         <source>Duplicates only</source>
-        <translation >Nur Duplikate</translation>
+        <translation>Nur Duplikate</translation>
     </message>
     <message>
         <source>Print document</source>
@@ -260,7 +260,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <name>tkPrinter</name>
     <message>
         <source>No content to preview (simpleDraw).</source>
-        <translation >Kein Inhalt zum vorschauen (simpleDraw)</translation>
+        <translation>Kein Inhalt zum vorschauen (simpleDraw)</translation>
     </message>
 </context>
 </TS>

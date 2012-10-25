@@ -19,7 +19,7 @@
     <name>Category::Internal::CategoryDialog</name>
     <message>
         <source>Categories</source>
-        <translation >Categorias</translation>
+        <translation>Categorias</translation>
     </message>
     <message>
         <source>Form</source>

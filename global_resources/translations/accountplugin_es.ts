@@ -55,7 +55,7 @@
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Sum</source>
@@ -241,15 +241,15 @@ Then parametrize your user, sites, bank and so on.</source>
     <name>Account::Internal::AssetsRatesWidget</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Period</source>
-        <translation >Periodo</translation>
+        <translation>Periodo</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -324,7 +324,7 @@ Do you want to save them?</source>
     <name>Account::Internal::AvailableMovementWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -396,7 +396,7 @@ Do you want to save them?</source>
     <name>Account::Internal::BankDetailsWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -484,7 +484,7 @@ Do you want to save them?</source>
     <name>Account::Internal::DistanceRulesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -554,11 +554,11 @@ no = 0</source>
     <name>Account::Internal::InsuranceWidget</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -630,7 +630,7 @@ Do you want to save them?</source>
     <name>Account::Internal::MedicalProcedureWidget</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -681,10 +681,6 @@ Do you want to save them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ABCDEFGHIJKLMNOPQRSTUVWXYZ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Insurances are created in another preference widget.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -692,16 +688,12 @@ Do you want to save them?</source>
         <source> has been deleted.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>medical_procedure</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Account::Internal::PercentagesWidget</name>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -759,11 +751,11 @@ p, li { white-space: pre-wrap; }
     <name>Account::Internal::SitesWidget</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation >Guardar cambios?</translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1309,109 +1301,6 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <source>Clear all.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ControlReceipts</name>
-    <message>
-        <source>Euros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a line.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Line deleted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Banking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dues</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Checks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insurance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Due</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Due by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract of receipts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit Cards</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TOTAL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1975,7 +1864,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <name>ReceiptViewer</name>
     <message>
         <source>Name</source>
-        <translation >Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2252,7 +2141,7 @@ and choose it as preferred.</source>
     <name>xmlCategoriesParser</name>
     <message>
         <source>%1 does not exist.</source>
-        <translation >%1 no existe.</translation>
+        <translation>%1 no existe.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml not found.</source>

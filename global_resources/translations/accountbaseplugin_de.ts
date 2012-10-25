@@ -5,97 +5,97 @@
     <name>Account</name>
     <message>
         <source>Account book</source>
-        <translation >Abrechnungsbuch</translation>
+        <translation>Abrechnungsbuch</translation>
     </message>
     <message>
         <source>Revenues</source>
-        <translation >Einnahmen</translation>
+        <translation>Einnahmen</translation>
     </message>
     <message>
         <source>Expenses</source>
-        <translation >Ausgaben</translation>
+        <translation>Ausgaben</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation >Bargeld</translation>
+        <translation>Bargeld</translation>
     </message>
     <message>
         <source>Cheques</source>
-        <translation >Scheck</translation>
+        <translation>Scheck</translation>
     </message>
     <message>
         <source>VISA</source>
-        <translation >VISA</translation>
+        <translation>VISA</translation>
     </message>
     <message>
         <source>Money</source>
-        <translation >Geld</translation>
+        <translation>Geld</translation>
     </message>
     <message>
         <source>Due</source>
         <translatorcomment>maybe bad translation maybe &quot;Abgabe&quot;?</translatorcomment>
-        <translation >Gebühr</translation>
+        <translation>Gebühr</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation >Versicherung</translation>
+        <translation>Versicherung</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation >Anderes</translation>
+        <translation>Anderes</translation>
     </message>
 </context>
 <context>
     <name>AccountDB::ActsModel</name>
     <message>
         <source>Comments</source>
-        <translation >Kommentare</translation>
+        <translation>Kommentare</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation >Datum</translation>
+        <translation>Datum</translation>
     </message>
 </context>
 <context>
     <name>AccountDB::AmountModel</name>
     <message>
         <source>Cash</source>
-        <translation >Bargeld</translation>
+        <translation>Bargeld</translation>
     </message>
     <message>
         <source>Visa</source>
-        <translation >Visa</translation>
+        <translation>Visa</translation>
     </message>
     <message>
         <source>Cheque</source>
-        <translation >Scheck</translation>
+        <translation>Scheck</translation>
     </message>
     <message>
         <source>Banking</source>
-        <translation >Überweisung</translation>
+        <translation>Überweisung</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation >Anderes</translation>
+        <translation>Anderes</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation >Gebühr</translation>
+        <translation>Gebühr</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation >Wert</translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <source>Currency</source>
-        <translation >Währung</translation>
+        <translation>Währung</translation>
     </message>
 </context>
 <context>
     <name>AccountDB::Internal::AccountBasePlugin</name>
     <message>
         <source>Initializing accountancy plugin...</source>
-        <translation >Buchhaltungs-Plugin wird initialisiert...</translation>
+        <translation>Buchhaltungs-Plugin wird initialisiert...</translation>
     </message>
 </context>
 </TS>

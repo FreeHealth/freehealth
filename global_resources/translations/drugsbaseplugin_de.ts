@@ -40,7 +40,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     <name>DrugsDB::DrugsBase</name>
     <message>
         <source>No drug database source selected</source>
-        <translation >Keine Quelle für Medikamentendatenbank ausgewählt</translation>
+        <translation>Keine Quelle für Medikamentendatenbank ausgewählt</translation>
     </message>
     <message>
         <source>Switching to the default drugs database source.</source>

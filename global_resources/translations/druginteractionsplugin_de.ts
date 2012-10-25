@@ -5,28 +5,28 @@
     <name>DrugInteractions::Internal::DrugAllergyEngine</name>
     <message>
         <source>Detects allergies and intolerances to medications</source>
-        <translation >Entdeckt Allergien und Unverträglichkeiten auf Medikamente</translation>
+        <translation>Entdeckt Allergien und Unverträglichkeiten auf Medikamente</translation>
     </message>
 </context>
 <context>
     <name>DrugInteractions::Internal::DrugDrugInteractionEngine</name>
     <message>
         <source>Detects interaction between drugs</source>
-        <translation >Entdeckt Medikamenteninteraktionen</translation>
+        <translation>Entdeckt Medikamenteninteraktionen</translation>
     </message>
 </context>
 <context>
     <name>DrugInteractions::Internal::DrugInteractionsPlugin</name>
     <message>
         <source>Initializing drugs interactions plugin...</source>
-        <translation >Medikamenteninteraktions-Plugin wird initialisiert...</translation>
+        <translation>Medikamenteninteraktions-Plugin wird initialisiert...</translation>
     </message>
 </context>
 <context>
     <name>DrugInteractions::Internal::PimEngine</name>
     <message>
         <source>(Experimental)</source>
-        <translation >(Experimental)</translation>
+        <translation>(Experimental)</translation>
     </message>
     <message>
         <source>Detects interaction between drugs and patient in elderly</source>
@@ -38,7 +38,7 @@
     <message>
         <source>FreeDiams Interactions Engine</source>
         <translatorcomment>&quot;Engine&quot; not really translatable</translatorcomment>
-        <translation >FreeDiams-Interaktions-Engine</translation>
+        <translation>FreeDiams-Interaktions-Engine</translation>
     </message>
 </context>
 </TS>

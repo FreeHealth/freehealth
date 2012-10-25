@@ -5,14 +5,14 @@
     <name>DataPackPlug</name>
     <message>
         <source>Data pack manager</source>
-        <translation >Datenpaket-Verwaltung</translation>
+        <translation>Datenpaket-Verwaltung</translation>
     </message>
 </context>
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
         <source>Initializing DataPackPlugin...</source>
-        <translation >Datenpaket-Verwaltung wird inialisiert...</translation>
+        <translation>Datenpaket-Verwaltung wird inialisiert...</translation>
     </message>
     <message>
         <source>Trying to set the default datapack servers using file %1</source>
@@ -32,7 +32,7 @@
     <message>
         <source>Form</source>
         <translatorcomment>???</translatorcomment>
-        <translation >Formular</translation>
+        <translation>Formular</translation>
     </message>
 </context>
 </TS>

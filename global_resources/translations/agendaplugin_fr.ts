@@ -275,10 +275,6 @@
         <translation>Icône</translation>
     </message>
     <message>
-        <source>Select</source>
-        <translation>Sélectionner</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>Général</translation>
     </message>

@@ -5,14 +5,14 @@
     <name>Templates::Internal::TemplatesContentEditor</name>
     <message>
         <source>Content editor</source>
-        <translation >Éditeur de contenu</translation>
+        <translation>Éditeur de contenu</translation>
     </message>
 </context>
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
         <source>Save templates .</source>
-        <translation >Sauvegarder le modèle.</translation>
+        <translation>Sauvegarder le modèle.</translation>
     </message>
     <message>
         <source>Some data are not actually saved into database.Do you want to save them?

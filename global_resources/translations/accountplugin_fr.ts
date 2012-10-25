@@ -696,14 +696,6 @@ Voulez-vous les sauvegarder ?</translation>
         <source> has been deleted.</source>
         <translation>a été effacé.</translation>
     </message>
-    <message>
-        <source>ABCDEFGHIJKLMNOPQRSTUVWXYZ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>medical_procedure</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Account::Internal::PercentagesWidget</name>
@@ -1323,109 +1315,6 @@ Autrement le résultat sera faux!</translation>
     <message>
         <source>Clear all.</source>
         <translation>Effacer tout.</translation>
-    </message>
-</context>
-<context>
-    <name>ControlReceipts</name>
-    <message>
-        <source>Euros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a line.</source>
-        <translation>Sélectionnez une ligne.</translation>
-    </message>
-    <message>
-        <source>Line deleted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Banking</source>
-        <translation>Virement</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Autres</translation>
-    </message>
-    <message>
-        <source>Dues</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Date</translation>
-    </message>
-    <message>
-        <source>Acts</source>
-        <translation>Actes</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>Commentaire</translation>
-    </message>
-    <message>
-        <source>Checks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insurance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Due</source>
-        <translation>Du</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Valid</source>
-        <translation>Valider</translation>
-    </message>
-    <message>
-        <source>Check</source>
-        <translation>Chèques</translation>
-    </message>
-    <message>
-        <source>Due by</source>
-        <translation>Du par</translation>
-    </message>
-    <message>
-        <source>Extract of receipts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit Cards</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TOTAL</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2251,11 +2140,11 @@ et la choisir comme préférée.</translation>
     </message>
     <message>
         <source>Delete value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Supprimer la valeur</translation>
     </message>
     <message>
         <source>Choose value as preferred</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sélectionnez une valeur comme préférée</translation>
     </message>
     <message>
         <source>Delete :</source>
