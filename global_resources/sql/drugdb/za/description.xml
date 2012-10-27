@@ -21,6 +21,12 @@
     <packuidname>CIP</packuidname>
     <drugnameconstructor></drugnameconstructor>
     <uuid>SAEPI_ZA</uuid>
+
+    <!-- translatable values -->
+    <label lang="xx">South African therapeutic database</label>
+    <label lang="fr">Base de données thérapeutique sud-africaine</label>
+    <label lang="de">ZA Therapeutische Datenbank</label>
+
   </description>
 
 </DrugDbDescriptor>

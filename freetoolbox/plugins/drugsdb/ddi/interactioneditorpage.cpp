@@ -119,7 +119,7 @@ public:
 
 QString InteractionEditorPage::category() const
 {
-    return tkTr(Trans::Constants::DRUGS) + "|" + tr("Interaction database");
+    return tkTr(Trans::Constants::DRUGS) + "|" + tkTr(Trans::Constants::INTERACTIONS_DATABASE);
 }
 
 QWidget *InteractionEditorPage::createPage(QWidget *parent)

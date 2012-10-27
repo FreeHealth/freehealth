@@ -32,6 +32,8 @@
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QFile>
 #include <QList>
@@ -49,6 +51,17 @@
 static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 using namespace DrugsDB;
+using namespace Trans::ConstantTranslations;
+
+QString MoleculeLinkerPage::name() const
+{
+    return tr("Molecule-ATC linker");
+}
+
+QString MoleculeLinkerPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tkTr(Trans::Constants::INTERACTIONS_DATABASE);
+}
 
 QWidget *MoleculeLinkerPage::createPage(QWidget *parent)
 {

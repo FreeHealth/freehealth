@@ -29,28 +29,52 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/ifullreleasestep.h>
+#include <drugsdb/idrugdatabasestep.h>
 
 #include <QWidget>
 
+namespace DrugsDB {
+namespace Internal {
+class FdaDrugDatatabaseStep;
 
-namespace DrugsDbCreator {
-
-class FdaDrugsDatabasePage : public Core::IToolPage
+class FreeFdaDrugsDatabasePage : public Core::IToolPage
 {
 public:
-    FdaDrugsDatabasePage(QObject *parent = 0);
+    FreeFdaDrugsDatabasePage(QObject *parent = 0);
+    ~FreeFdaDrugsDatabasePage();
 
-    virtual QString id() const {return "FdaDrugsDatabase";}
-    virtual QString name() const {return "FDA Drugs Database Creator";}
+    virtual QString id() const {return "FreeFdaDrugsDatabasePage";}
+    virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    FdaDrugDatatabaseStep *_step;
 };
 
-class FdaDrugDatatabaseStep : public Core::IFullReleaseStep
+class NonFreeFdaDrugsDatabasePage : public Core::IToolPage
+{
+public:
+    NonFreeFdaDrugsDatabasePage(QObject *parent = 0);
+    ~NonFreeFdaDrugsDatabasePage();
+
+    virtual QString id() const {return "NonFreeFdaDrugsDatabasePage";}
+    virtual QString name() const;
+    virtual QString category() const;
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    FdaDrugDatatabaseStep *_step;
+};
+
+
+class FdaDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
@@ -60,18 +84,14 @@ public:
 
     QString id() const {return "FdaDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+    void setLicenseType(LicenseType type);
 
-    bool createDir();
     bool cleanFiles();
-    bool downloadFiles(QProgressBar *bar = 0);
     bool process();
-    QString processMessage() const {return tr("USA drugs database creation");}
+    QString processMessage() const;
 
-    bool unzipFiles();
-    bool prepareDatas();
-    bool createDatabase();
+    bool prepareData();
     bool populateDatabase();
-    bool linkDrugsRoutes();
     bool linkMolecules();
 
     QStringList errors() const {return m_Errors;}
@@ -81,34 +101,8 @@ private:
     bool m_WithProgress;
 
 };
-
-
-namespace Ui {
-    class FdaDrugsDatabaseWidget;
-}
-
-class FdaDrugsDatabaseWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit FdaDrugsDatabaseWidget(QWidget *parent = 0);
-    ~FdaDrugsDatabaseWidget();
-
-protected Q_SLOTS:
-    void on_startJobs_clicked();
-    bool on_download_clicked();
-    void downloadFinished();
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::FdaDrugsDatabaseWidget *ui;
-    FdaDrugDatatabaseStep *m_Step;
-};
-
-}  //  End namespace DrugsDbCreator
+}  // namespace Internal
+}  // namespace DrugsDB
 
 
 #endif // FDADRUGSDATABASECREATOR_H

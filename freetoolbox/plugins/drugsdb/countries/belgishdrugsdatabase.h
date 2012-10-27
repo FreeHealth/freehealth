@@ -27,30 +27,55 @@
 #ifndef BELGISHDRUGSDATABASE_H
 #define BELGISHDRUGSDATABASE_H
 
-#include <coreplugin/ifullreleasestep.h>
+#include <drugsdb/idrugdatabasestep.h>
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
 
 #include <QWidget>
 
-namespace DrugsDbCreator {
+namespace DrugsDB {
+namespace Internal {
+class BeDrugDatatabaseStep;
 
-class BeDrugsDatabasePage : public Core::IToolPage
+class FreeBeDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
-    BeDrugsDatabasePage(QObject *parent = 0) : Core::IToolPage(parent) {}
+    explicit FreeBeDrugsDatabasePage(QObject *parent = 0);
+    ~FreeBeDrugsDatabasePage();
 
-    virtual QString id() const {return "BeDrugsDatabasePage";}
-    virtual QString name() const {return "Belguish Drugs Database Creator";}
+    virtual QString id() const {return "FreeBeDrugsDatabasePage";}
+    virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    BeDrugDatatabaseStep *_step;
 };
 
+class NonFreeBeDrugsDatabasePage : public Core::IToolPage
+{
+    Q_OBJECT
+public:
+    explicit NonFreeBeDrugsDatabasePage(QObject *parent = 0);
+    ~NonFreeBeDrugsDatabasePage();
 
-class BeDrugDatatabaseStep : public Core::IFullReleaseStep
+    virtual QString id() const {return "NonFreeBeDrugsDatabasePage";}
+    virtual QString name() const;
+    virtual QString category() const;
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    BeDrugDatatabaseStep *_step;
+};
+
+class BeDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
@@ -60,16 +85,16 @@ public:
 
     QString id() const {return "BeDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+    void setLicenseType(LicenseType type);
+    QString tmpDatabaseAbsPath();
 
-    bool createDir();
     bool cleanFiles();
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
-    QString processMessage() const {return tr("Belguish drugs database creation");}
+    QString processMessage() const;
 
     bool unzipFiles();
     bool prepareData();
-    bool createDatabase();
     bool populateDatabase();
     bool linkMolecules();
 
@@ -80,32 +105,7 @@ private:
     bool m_WithProgress;
 };
 
-
-namespace Ui {
-    class BelgishDrugsDatabase;
-}
-
-class BelgishDrugsDatabase : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit BelgishDrugsDatabase(QWidget *parent = 0);
-    ~BelgishDrugsDatabase();
-
-private Q_SLOTS:
-    void on_startJobs_clicked();
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::BelgishDrugsDatabase *ui;
-    BeDrugDatatabaseStep *m_Step;
-};
-
-
-}  //  End namespace DrugsDbCreator
-
+}  //  namespace Internal
+}  //  namespace DrugsDB
 
 #endif // BELGISHDRUGSDATABASE_H

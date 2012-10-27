@@ -25,15 +25,21 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "fdadrugsdatabasecreator.h"
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "drug.h"
+#include "drugsdbcore.h"
+#include "idrugdatabasestepwidget.h"
+#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
 #include <coreplugin/isettings.h>
 
+#include <drugsdb/drugdatabasedescription.h>
 #include <drugsdb/tools.h>
+
+#include <drugsbaseplugin/drugbaseessentials.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -43,6 +49,7 @@
 #include <quazip/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
+#include <translationutils/trans_countries.h>
 
 #include <QFile>
 #include <QMap>
@@ -64,113 +71,152 @@
 
 #include <QDebug>
 
-#include "ui_fdadrugsdatabasewidget.h"
-
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
 const char* const  FDA_URL                     = "http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip";
 const char* const  FDA_DRUGS_DATABASE_NAME     = "FDA_US";
+}
 
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
-static inline QString freeDatabaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName("free_fda");}
-static inline QString fullFdaDatabaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName("full_fda");}
+/**
+ * Option page for the Free FDA drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
+FreeFdaDrugsDatabasePage::FreeFdaDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent),
+    _step(0)
+{
+    setObjectName("FreeFdaDrugsDatabasePage");
+    _step = new FdaDrugDatatabaseStep(this);
+    pluginManager()->addObject(_step);
+}
 
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/us/description.xml");}
+FreeFdaDrugsDatabasePage::~FreeFdaDrugsDatabasePage()
+{
+    pluginManager()->removeObject(_step);
+}
 
+QString FreeFdaDrugsDatabasePage::name() const
+{
+    return tkTr(Trans::Constants::COUNTRY_USA);
+}
 
-FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
+QString FreeFdaDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_FREEDRUGSDATABASE;
+}
+
+QWidget *FreeFdaDrugsDatabasePage::createPage(QWidget *parent)
+{
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
+}
+
+/**
+ * Option page for the non-free FDA drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
+NonFreeFdaDrugsDatabasePage::NonFreeFdaDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
 {
-    setObjectName("FdaDrugsDatabaseCreator_IToolPage");
+    setObjectName("NonFreeFdaDrugsDatabasePage");
+    _step = new FdaDrugDatatabaseStep(this);
+    _step->setLicenseType(IDrugDatabaseStep::NonFree);
+    pluginManager()->addObject(_step);
 }
 
-QString FdaDrugsDatabasePage::category() const
+NonFreeFdaDrugsDatabasePage::~NonFreeFdaDrugsDatabasePage()
 {
-    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
+    pluginManager()->removeObject(_step);
 }
 
-QWidget *FdaDrugsDatabasePage::createPage(QWidget *parent)
+QString NonFreeFdaDrugsDatabasePage::name() const
 {
-    return new FdaDrugsDatabaseWidget(parent);
+    return tkTr(Trans::Constants::COUNTRY_USA);
+}
+
+QString NonFreeFdaDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_NONFREEDRUGSDATABASE;
+}
+
+QWidget *NonFreeFdaDrugsDatabasePage::createPage(QWidget *parent)
+{
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
 }
 
 
 FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
+    IDrugDatabaseStep(parent),
     m_WithProgress(false)
 {
     setObjectName("FdaDrugDatatabaseStep");
+    setTempPath(QString("%1/%2")
+                .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
+                .arg("/FdaRawSources/"));
+    setConnectionName("fr_fda");
+    setOutputPath(Tools::databaseOutputPath() + "/drugs/");
+//    setFinalizationScript(QString("%1/%2")
+//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+//                          .arg("/global_resources/sql/drugdb/us/fda_db_finalize.sql"));
+    setDescriptionFile(QString("%1/%2")
+                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                       .arg("/global_resources/sql/drugdb/us/description.xml"));
+    setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
+    setLicenseType(Free);
 }
 
 FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
 {
 }
 
-bool FdaDrugDatatabaseStep::createDir()
+void FdaDrugDatatabaseStep::setLicenseType(LicenseType type)
 {
-    Utils::checkDir(workingPath(), true, "FdaDrugDatatabaseStep::createDir");
-    Utils::checkDir(QFileInfo(databaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
-    Utils::checkDir(QFileInfo(freeDatabaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
-    Utils::checkDir(QFileInfo(fullFdaDatabaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
-    return true;
+    IDrugDatabaseStep::setLicenseType(type);
+    if (type==NonFree) {
+        setDisplayName(tr("Non-free FDA drugs database"));
+        setConnectionName("fda_nonfree");
+    } else {
+        setDisplayName(tr("Free FDA drugs database"));
+        setConnectionName("fda_free");
+    }
 }
 
 bool FdaDrugDatatabaseStep::cleanFiles()
 {
-    QFile(databaseAbsPath()).remove();
+    QFile(absoluteFilePath()).remove();
     return true;
 }
 
-bool FdaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
+QString FdaDrugDatatabaseStep::processMessage() const
 {
-    Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-//    dld->setMainWindow(mainwindow());
-    dld->setProgressBar(bar);
-    dld->setOutputPath(workingPath());
-    dld->setUrl(QUrl(FDA_URL));
-    dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
-    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressRange(qint64,qint64)), this, SIGNAL(progressRangeChanged(int,int)));
-    connect(dld, SIGNAL(downloadProgressRead(qint64)), this, SIGNAL(progress(int)));
-    return true;
+    if (licenseType() == NonFree)
+        return tr("Non-free French drugs database creation");
+    return tr("Free French drugs database creation");
 }
 
 bool FdaDrugDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
     Q_EMIT processFinished();
     return true;
-}
-
-bool FdaDrugDatatabaseStep::unzipFiles()
-{
-    Q_EMIT progressLabelChanged(tr("Unzipping downloaded files"));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
-
-    // check file
-    QString fileName = workingPath() + QDir::separator() + QFileInfo(FDA_URL).fileName();
-    if (!QFile(fileName).exists()) {
-        LOG_ERROR(QString("No files founded."));
-        LOG_ERROR(QString("Please download files."));
-        return false;
-    }
-
-    LOG(QString("Starting unzipping FDA file %1").arg(fileName));
-
-    // unzip files using QProcess
-    return QuaZipTools::unzipFile(fileName, workingPath());
 }
 
 class Parser {
@@ -292,33 +338,18 @@ public:
     QHash<QString, QString> mols_strength;
 };
 
-bool FdaDrugDatatabaseStep::prepareDatas()
+bool FdaDrugDatatabaseStep::prepareData()
 {
-    return true;
-}
-
-bool FdaDrugDatatabaseStep::createDatabase()
-{
-    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
-        return false;
-
-    QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutique américaine");
-    labels.insert("en","USA therapeutic database");
-    labels.insert("de","Therapeutische Datenbank USA");
-
-    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
-        LOG_ERROR("Unable to create the FDA drugs sources");
-        return false;
-    }
-    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
-    LOG(QString("Database schema created"));
     return true;
 }
 
 bool FdaDrugDatatabaseStep::populateDatabase()
 {
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
+        return false;
+
+    // check files
+    if (!prepareData())
         return false;
 
     Q_EMIT progressLabelChanged(tr("Reading downloaded files"));
@@ -332,8 +363,8 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
     // check files
     foreach(const QString &file, files) {
-        if (!QFile::exists(workingPath() + file)) {
-            LOG_ERROR(QString("Missing " + workingPath() + file + " file. prepareDatas()"));
+        if (!QFile::exists(tempPath() + file)) {
+            LOG_ERROR(QString("Missing " + tempPath() + file + " file. prepareDatas()"));
             return false;
         }
     }
@@ -341,7 +372,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     // Product file
     QVector<Drug *> drugs;
 
-    QFile file(workingPath() + "Product.txt");
+    QFile file(tempPath() + "Product.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR(QString("ERROR: Enable to open Product.txt: %1.").arg(file.errorString()));
         return false;
@@ -376,22 +407,20 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(1);
 
-    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, FDA_DRUGS_DATABASE_NAME);
+    saveDrugsIntoDatabase(drugs);
     Q_EMIT progress(2);
 
-    qDeleteAll(drugs);
-    drugs.clear();
-
     // Run SQL commands one by one
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-//        LOG_ERROR("Can create FDA DB.");
-//        return false;
-//    }
-
-    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+    if (!Tools::executeSqlFile(connectionName(), finalizationScript())) {
+        LOG_ERROR("Can create French DB.");
+        return false;
+    }
 
     LOG(QString("Database processed"));
     Q_EMIT progress(3);
+
+    qDeleteAll(drugs);
+    drugs.clear();
 
     return true;
 }
@@ -453,41 +482,34 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     // Found : 1349, Left: 612
 
 
+    if (licenseType() == Free)
+        return true;
+
     // Connect to databases
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
         return false;
-
-    // Get SID
-    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
-    if (sid==-1) {
-        LOG_ERROR("NO SID DEFINED");
-        return false;
-    }
-
-    // Associate Mol <-> ATC for drugs with one molecule only
-    QHash<QString, QString> corrected;
-    corrected.insert("IOTHALAMATE", "SODIUM IOTHALAMATE (125I)");
-    corrected.insert("IOTHALAMATE SODIUM I-125" , "SODIUM IOTHALAMATE (125I)");
-    corrected.insert("POLYMYXIN" ,"POLYMYXIN B" );
-    corrected.insert("POLYMYXIN B SULFATE" ,"POLYMYXIN B" );
-    corrected.insert("THIAMINE", "THIAMINE (VIT B1)");
-    corrected.insert("GRISEOFULVIN, ULTRAMICROCRYSTALLINE" ,"GRISEOFULVIN");
-    corrected.insert("GONADOTROPIN, CHORIONIC" ,"CHORIONIC GONADOTROPIN" );
-    corrected.insert("TYROPANOATE SODIUM" ,"TYROPANOIC ACID" );
-    corrected.insert("SODIUM NITROPRUSSIDE","NITROPRUSSIDE");
-
-    // imported from Ca db
-    corrected.insert("IOXAGLATE SODIUM" ,"IOXAGLIC ACID");
-    corrected.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
 
     Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progress(0);
 
     // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FDA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
-    qWarning() << "unfound" << unfound.count();
+    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
+    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::FDA_DRUGS_DATABASE_NAME, "fr");
+    // Associate Mol <-> ATC for drugs with one molecule only
+    data.correctedByName.insert("IOTHALAMATE", "SODIUM IOTHALAMATE (125I)");
+    data.correctedByName.insert("IOTHALAMATE SODIUM I-125" , "SODIUM IOTHALAMATE (125I)");
+    data.correctedByName.insert("POLYMYXIN" ,"POLYMYXIN B" );
+    data.correctedByName.insert("POLYMYXIN B SULFATE" ,"POLYMYXIN B" );
+    data.correctedByName.insert("THIAMINE", "THIAMINE (VIT B1)");
+    data.correctedByName.insert("GRISEOFULVIN, ULTRAMICROCRYSTALLINE" ,"GRISEOFULVIN");
+    data.correctedByName.insert("GONADOTROPIN, CHORIONIC" ,"CHORIONIC GONADOTROPIN" );
+    data.correctedByName.insert("TYROPANOATE SODIUM" ,"TYROPANOIC ACID" );
+    data.correctedByName.insert("SODIUM NITROPRUSSIDE","NITROPRUSSIDE");
+    data.correctedByName.insert("IOXAGLATE SODIUM" ,"IOXAGLIC ACID");
+    data.correctedByName.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
+    if (!model->moleculeLinker(&data))
+        return false;
 
     Q_EMIT progress(1);
 
@@ -496,97 +518,16 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
     LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FDA_DRUGS_DATABASE_NAME, unfound);
-    ExtraMoleculeLinkerModel::instance()->saveModel();
+    model->addUnreviewedMolecules(::FDA_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
+    model->saveModel();
+    Q_EMIT progress(1);
 
     return true;
-}
-
-
-
-FdaDrugsDatabaseWidget::FdaDrugsDatabaseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FdaDrugsDatabaseWidget),
-    m_Step(0)
-{
-    setObjectName("FdaDrugsDatabaseWidget");
-    ui->setupUi(this);
-    ui->progressBar->hide();
-    m_Step = new FdaDrugDatatabaseStep(this);
-    pluginManager()->addObject(m_Step);
-}
-
-FdaDrugsDatabaseWidget::~FdaDrugsDatabaseWidget()
-{
-    pluginManager()->removeObject(m_Step);
-    delete ui;
-}
-
-void FdaDrugsDatabaseWidget::on_startJobs_clicked()
-{
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Starting jobs"));
-    progressDialog.setRange(0, 1);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
-    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
-    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
-    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-    m_Step->createDir();
-    if (ui->unzip->isChecked()) {
-        if (m_Step->unzipFiles())
-            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->prepare->isChecked()) {
-        if (m_Step->prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (m_Step->createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (m_Step->populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (m_Step->linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool FdaDrugsDatabaseWidget::on_download_clicked()
-{
-    ui->progressBar->show();
-    m_Step->downloadFiles(ui->progressBar);
-    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
-    return true;
-}
-
-void FdaDrugsDatabaseWidget::downloadFinished()
-{
-    ui->progressBar->hide();
-    ui->download->setEnabled(true);
-}
-
-void FdaDrugsDatabaseWidget::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
 }
 

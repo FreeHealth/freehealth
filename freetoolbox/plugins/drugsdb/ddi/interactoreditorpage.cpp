@@ -77,7 +77,7 @@ static inline QString newInteractorsFile() {return QDir::cleanPath(settings()->v
 
 QString InteractorEditorPage::category() const
 {
-    return tkTr(Trans::Constants::DRUGS) + "|" + tr("Interaction database");
+    return tkTr(Trans::Constants::DRUGS) + "|" + tkTr(Trans::Constants::INTERACTIONS_DATABASE);
 }
 
 QWidget *InteractorEditorPage::createPage(QWidget *parent)

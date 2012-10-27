@@ -26,18 +26,15 @@
  ***************************************************************************/
 /*!
  * \class DrugsDB::DrugsDBCore
- * \brief short description of class
- *
- * Long description of class
- * \sa DrugsDB::
+ * \brief Central core singleton object for the DrugsDB plugin.
  */
 
 #include "drugsdbcore.h"
 #include "drugdatabasedescription.h"
 #include "tools.h"
 #include "routesmodel.h"
-#include "moleculelinkermodel.h"
-#include "drugdruginteractioncore.h"
+#include "countries/moleculelinkermodel.h"
+#include "ddi/drugdruginteractioncore.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>

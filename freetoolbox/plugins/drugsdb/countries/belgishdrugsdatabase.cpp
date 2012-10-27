@@ -25,16 +25,21 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "belgishdrugsdatabase.h"
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "drug.h"
+#include "drugsdbcore.h"
+#include "idrugdatabasestepwidget.h"
+#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
 
+#include <drugsdb/drugdatabasedescription.h>
 #include <drugsdb/tools.h>
+
+#include <drugsbaseplugin/drugbaseessentials.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -43,6 +48,7 @@
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
+#include <translationutils/trans_countries.h>
 
 #include <QDir>
 #include <QFile>
@@ -50,135 +56,142 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-#include "ui_belgishdrugsdatabase.h"
-
 // Download at : http://www.fagg-afmps.be/fr/items-HOME/Bases_de_donnees/index.jsp
 
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
 const char* const  BE_DRUGS_DATABASE_NAME     = "FAGG_AFMPS_BE";
+}
 
-
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/BeRawSources/");}
-static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
-static inline QString tmpDatabaseAbsPath() {return QDir::cleanPath(workingPath() + "/drugs-be.db");}
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
 
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
-
-QString BeDrugsDatabasePage::category() const
+/**
+ * Option page for the Free French drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
+FreeBeDrugsDatabasePage::FreeBeDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent),
+    _step(0)
 {
-    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
+    setObjectName("FreeBeDrugsDatabasePage");
+    _step = new BeDrugDatatabaseStep(this);
+    pluginManager()->addObject(_step);
 }
 
-QWidget *BeDrugsDatabasePage::createPage(QWidget *parent)
+FreeBeDrugsDatabasePage::~FreeBeDrugsDatabasePage()
 {
-    return new BelgishDrugsDatabase(parent);
+    pluginManager()->removeObject(_step);
 }
 
-BelgishDrugsDatabase::BelgishDrugsDatabase(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::BelgishDrugsDatabase),
-    m_Step(0)
+QString FreeBeDrugsDatabasePage::name() const
 {
-    ui->setupUi(this);
-    m_Step = new BeDrugDatatabaseStep(this);
-    m_Step->createDir();
-    pluginManager()->addObject(m_Step);
+    return tkTr(Trans::Constants::COUNTRY_BELGIUM);
 }
 
-BelgishDrugsDatabase::~BelgishDrugsDatabase()
+QString FreeBeDrugsDatabasePage::category() const
 {
-    pluginManager()->removeObject(m_Step);
-    delete ui;
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_FREEDRUGSDATABASE;
 }
 
-void BelgishDrugsDatabase::on_startJobs_clicked()
+QWidget *FreeBeDrugsDatabasePage::createPage(QWidget *parent)
 {
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Starting jobs"));
-    progressDialog.setRange(0, 1);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
-    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
-    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
-    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-
-    if (ui->unzip->isChecked()) {
-        if (m_Step->unzipFiles())
-            if (m_Step->prepareData())
-                ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (m_Step->createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (m_Step->populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (m_Step->linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-//    Utils::Log::messagesToTreeWidget(ui->messages);
-//    Utils::Log::errorsToTreeWidget(ui->errors);
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
 }
 
-void BelgishDrugsDatabase::changeEvent(QEvent *e)
+/**
+ * Option page for the non-free French drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
+NonFreeBeDrugsDatabasePage::NonFreeBeDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent),
+    _step(0)
 {
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+    setObjectName("NonFreeBeDrugsDatabasePage");
+    _step = new BeDrugDatatabaseStep(this);
+    _step->setLicenseType(IDrugDatabaseStep::NonFree);
+    pluginManager()->addObject(_step);
 }
 
+NonFreeBeDrugsDatabasePage::~NonFreeBeDrugsDatabasePage()
+{
+    pluginManager()->removeObject(_step);
+}
+
+QString NonFreeBeDrugsDatabasePage::name() const
+{
+    return tkTr(Trans::Constants::COUNTRY_BELGIUM);
+}
+
+QString NonFreeBeDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_NONFREEDRUGSDATABASE;
+}
+
+QWidget *NonFreeBeDrugsDatabasePage::createPage(QWidget *parent)
+{
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
+}
 
 
 BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
+    IDrugDatabaseStep(parent),
     m_WithProgress(false)
 {
     setObjectName("BeDrugDatatabaseStep");
+    setTempPath(QString("%1/%2")
+                .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
+                .arg("/BeRawSources/"));
+    setConnectionName("be_free");
+    setOutputPath(Tools::databaseOutputPath() + "/drugs/");
+//    setFinalizationScript(QString("%1/%2")
+//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+//                          .arg("/global_resources/sql/drugdb/fr/fr_db_finalize.sql"));
+    setDescriptionFile(QString("%1/%2")
+                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                       .arg("/global_resources/sql/drugdb/fr/description.xml"));
+    setDownloadUrl("");
+    setLicenseType(Free);
 }
 
 BeDrugDatatabaseStep::~BeDrugDatatabaseStep()
 {
 }
 
-bool BeDrugDatatabaseStep::createDir()
+void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
 {
-    if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create Be Working Path :" + workingPath());
-    else
-        LOG("Tmp dir created");
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath)) {
-            LOG_ERROR("Unable to create Be database output path :" + dbpath);
-            m_Errors << tr("Unable to create Be database output path :") + dbpath;
-        } else {
-            LOG("Drugs database (Be) output dir created");
-        }
+    IDrugDatabaseStep::setLicenseType(type);
+    if (type==NonFree) {
+        setDisplayName(tr("Non-free French drugs database"));
+        setConnectionName("fr_nonfree");
+    } else {
+        setDisplayName(tr("Free French drugs database"));
+        setConnectionName("fr_free");
     }
-    return true;
+}
+
+QString BeDrugDatatabaseStep::tmpDatabaseAbsPath()
+{
+    return QDir::cleanPath(tempPath() + "/drugs-be.db");
 }
 
 bool BeDrugDatatabaseStep::cleanFiles()
 {
-    QFile(databaseAbsPath()).remove();
+    QFile(absoluteFilePath()).remove();
     return true;
 }
 
@@ -187,6 +200,13 @@ bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
     Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
+}
+
+QString BeDrugDatatabaseStep::processMessage() const
+{
+    if (licenseType() == NonFree)
+        return tr("Non-free Belgium drugs database creation");
+    return tr("Free Belgium drugs database creation");
 }
 
 bool BeDrugDatatabaseStep::process()
@@ -219,7 +239,7 @@ bool BeDrugDatatabaseStep::unzipFiles()
     LOG(QString("Starting unzipping Belguish dump file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!QuaZipTools::unzipFile(fileName, workingPath()))
+    if (!QuaZipTools::unzipFile(fileName, tempPath()))
         return false;
 
     Q_EMIT progress(1);
@@ -231,17 +251,17 @@ bool BeDrugDatatabaseStep::prepareData()
 {
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
 
-    if (!QFile(workingPath() + "/dump.sql").exists()) {
+    if (!QFile(tempPath() + "/dump.sql").exists()) {
         Utils::warningMessageBox(tr("No dump file found"), tr("Try to execute the unzip step."));
         return false;
     }
 
     // Dump is MySQL specific --> need some adjustement to feet the SQLite requirements
-    QFile fileIn(workingPath() + "/dump.sql");
+    QFile fileIn(tempPath() + "/dump.sql");
     if (!fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
 
-    QFile fileOut(workingPath() + "/dump_sqlite.sql");
+    QFile fileOut(tempPath() + "/dump_sqlite.sql");
     if (!fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
 
@@ -292,34 +312,14 @@ bool BeDrugDatatabaseStep::prepareData()
     return true;
 }
 
-bool BeDrugDatatabaseStep::createDatabase()
-{
-    Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
-
-    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
-        return false;
-
-    QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutique belge");
-    labels.insert("en","Belgium therapeutic database");
-    labels.insert("de","Belgische Therapeutische Datenbank");
-
-    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, BE_DRUGS_DATABASE_NAME, labels) == -1) {
-        LOG_ERROR("Unable to create the BE drugs sources");
-        return false;
-    }
-
-    LOG(QString("Database schema created"));
-    Q_EMIT progress(1);
-    return true;
-}
-
 bool BeDrugDatatabaseStep::populateDatabase()
 {
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
         return false;
+
+    // check files
+//    if (!prepareData())
+//        return false;
 
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
     Q_EMIT progressRangeChanged(0, 1);
@@ -339,7 +339,7 @@ bool BeDrugDatatabaseStep::populateDatabase()
         }
     }
 
-//    if (!Utils::Database::executeSqlFile(BE_TMP_DB, workingPath() + "/dump_sqlite.sql")) {
+//    if (!Utils::Database::executeSqlFile(BE_TMP_DB, tempPath() + "/dump_sqlite.sql")) {
 //        LOG_ERROR("Can not create BE DB.");
 //        return false;
 //    }
@@ -441,17 +441,18 @@ bool BeDrugDatatabaseStep::populateDatabase()
     Q_EMIT progress(1);
 
     // Save into database
-    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, BE_DRUGS_DATABASE_NAME);
+    saveDrugsIntoDatabase(drugs);
+
     Q_EMIT progress(2);
 
     qDeleteAll(drugs);
     drugs.clear();
 
     // Run SQL commands one by one
-    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        LOG_ERROR("Can create FDA DB.");
-        return false;
-    }
+//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//        LOG_ERROR("Can create FDA DB.");
+//        return false;
+//    }
     Q_EMIT progress(3);
 
     LOG(QString("Database processed"));
@@ -491,28 +492,23 @@ bool BeDrugDatatabaseStep::linkMolecules()
     //    LEFT 782
     //    CONFIDENCE INDICE 63
 
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
-        return false;
+    if (licenseType() == Free)
+        return true;
 
-    // Get SID
-    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, BE_DRUGS_DATABASE_NAME);
-    if (sid==-1) {
-        LOG_ERROR("NO SID DEFINED");
+    // Connect to databases
+    if (!checkDatabase())
         return false;
-    }
-
-    // Associate Mol <-> ATC for drugs with one molecule only
-    QHash<QString, QString> corrected;
-    corrected.insert("HYPERICUM PERFORATUM (MILLEPERTUIS)", "MILLEPERTUIS");
 
     Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progress(0);
 
     // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(BE_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
-    qWarning() << "unfound" << unfound.count();
+    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
+    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::BE_DRUGS_DATABASE_NAME, "fr");
+    data.correctedByName.insert("HYPERICUM PERFORATUM (MILLEPERTUIS)", "MILLEPERTUIS");
+    if (!model->moleculeLinker(&data))
+        return false;
 
     Q_EMIT progress(1);
 
@@ -521,14 +517,15 @@ bool BeDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
     LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(BE_DRUGS_DATABASE_NAME, unfound);
-    ExtraMoleculeLinkerModel::instance()->saveModel();
+    model->addUnreviewedMolecules(::BE_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
+    model->saveModel();
+    Q_EMIT progress(1);
 
     return true;
 }

@@ -25,8 +25,8 @@
  ***************************************************************************/
 #include "pimdatabasecreator.h"
 #include "pim_constants.h"
-#include "afssapsintegrator.h"
 #include "tools.h"
+#include <drugsdb/ddi/afssapsintegrator.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>

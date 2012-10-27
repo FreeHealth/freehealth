@@ -47,8 +47,8 @@ public:
     MoleculeLinkerPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("MoleculeLinkerPage"); }
 
     virtual QString id() const {return "MoleculeLinkerPage";}
-    virtual QString name() const {return "Molecule linker";}
-    virtual QString category() const {return Core::Constants::CATEGORY_INTERACTIONSDATABASE;}
+    virtual QString name() const;
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

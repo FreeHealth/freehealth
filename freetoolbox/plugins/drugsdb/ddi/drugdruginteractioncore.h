@@ -30,6 +30,13 @@
 #include <QObject>
 #include <QHash>
 #include <QDomNode>
+#include <QMultiMap>
+
+namespace DrugsDB {
+namespace Internal {
+class DrugBaseEssentials;
+}
+}
 
 namespace IAMDb {
 class DrugDrugInteraction;
@@ -43,10 +50,11 @@ public:
     static DrugDrugInteractionCore *instance();
 
     int createInternalUuid() const;
-    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
-    /** \todo createInteraction() ? */
 
+    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
     QList<DrugInteractor *> getDrugInteractors() const;
+
+    bool populateDrugDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
 
 Q_SIGNALS:
     void interactorCreated(DrugInteractor *di);
@@ -59,11 +67,19 @@ public Q_SLOTS:
     DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
     void downloadAllPmids();
 
+private:
+    bool saveAtcClassification(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool saveClassDrugInteractor(DrugInteractor *interactor, const QList<DrugInteractor *> &completeList, DrugsDB::Internal::DrugBaseEssentials *database, DrugInteractor *parent);
+    bool saveDrugDrugInteractions(DrugsDB::Internal::DrugBaseEssentials *database, const QList<DrugInteractor *> &interactors, const QList<DrugDrugInteraction *> &ddis);
+    bool saveBibliographicReferences(DrugsDB::Internal::DrugBaseEssentials *database);
+
 
 private:
     static DrugDrugInteractionCore *m_Instance;
     mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
     mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
+    QMultiMap<int, QString> m_iamTreePmids; //K=IAM_ID  ;  V=PMIDs
+    QMultiMap<int, QString> m_ddiPmids;     //K=IAK_ID  ;  V=PMIDs
 };
 
 }  // End namespace IAMDb

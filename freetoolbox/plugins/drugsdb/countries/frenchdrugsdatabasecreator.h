@@ -38,14 +38,33 @@ namespace DrugsDB {
 namespace Internal {
 class FrDrugDatatabaseStep;
 
-class FrenchDrugsDatabasePage : public Core::IToolPage
+class FreeFrenchDrugsDatabasePage : public Core::IToolPage
 {
     Q_OBJECT
 public:
-    explicit FrenchDrugsDatabasePage(QObject *parent = 0);
-    ~FrenchDrugsDatabasePage();
+    explicit FreeFrenchDrugsDatabasePage(QObject *parent = 0);
+    ~FreeFrenchDrugsDatabasePage();
 
-    virtual QString id() const {return "FrenchDrugsDatabase";}
+    virtual QString id() const {return "FreeFrenchDrugsDatabasePage";}
+    virtual QString name() const;
+    virtual QString category() const;
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    FrDrugDatatabaseStep *_step;
+};
+
+class NonFreeFrenchDrugsDatabasePage : public Core::IToolPage
+{
+    Q_OBJECT
+public:
+    explicit NonFreeFrenchDrugsDatabasePage(QObject *parent = 0);
+    ~NonFreeFrenchDrugsDatabasePage();
+
+    virtual QString id() const {return "NonFreeFrenchDrugsDatabasePage";}
     virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
@@ -66,10 +85,12 @@ public:
     ~FrDrugDatatabaseStep();
 
     QString id() const {return "FrDrugDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+    void setLicenseType(LicenseType type);
 
     bool cleanFiles();
     bool process();
-    QString processMessage() const {return tr("French drugs database creation");}
+    QString processMessage() const;
 
     bool prepareData();
     bool populateDatabase();
@@ -84,6 +105,5 @@ private:
 
 }  //  namespace Internal
 }  //  namespace DrugsDB
-
 
 #endif // FRENCHDRUGSDATABASECREATOR_H

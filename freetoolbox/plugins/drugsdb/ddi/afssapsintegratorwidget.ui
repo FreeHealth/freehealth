@@ -58,13 +58,13 @@
   <customwidget>
    <class>IAMDb::AfssapsLinkerWidget</class>
    <extends>QWidget</extends>
-   <header location="global">afssapsintegrator.h</header>
+   <header location="global">drugsdb/ddi/afssapsintegrator.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>IAMDb::AfssapsTreeWidget</class>
    <extends>QWidget</extends>
-   <header location="global">afssapsintegrator.h</header>
+   <header location="global">drugsdb/ddi/afssapsintegrator.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
