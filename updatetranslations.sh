@@ -56,7 +56,7 @@ for i in $( ls freediams/plugins ); do
 done
 
 for i in $( ls libs ); do
-    if [ -f plugins/$i/*plugin.pro ]; then
+    if [ -f libs/$i/*.pro ]; then
         echo
         echo "$WHITE********* Updating translation for libs: $i$NO_COLOUR"
         echo
