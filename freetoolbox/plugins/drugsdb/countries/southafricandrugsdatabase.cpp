@@ -232,9 +232,9 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
 
     // save file
     {
-        QFile file(tempPath() + fileName);
-        if (!QDir(tempPath() + fileName).exists()) {
-            QDir().mkpath(QFileInfo(tempPath() + fileName).absolutePath());
+        QFile file(tempPath() + QDir::separator() + fileName);
+        if (!QDir(tempPath()  + QDir::separator() + fileName).exists()) {
+            QDir().mkpath(QFileInfo(tempPath()  + QDir::separator() + fileName).absolutePath());
         }
 
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -324,14 +324,14 @@ bool ZaDrugDatatabaseStep::prepareData()
     for(int i=0; i<26; ++i) {
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
-        if (!QFile::exists(tempPath() + fileName)) {
-            LOG_ERROR(QString("Missing " + tempPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
+        if (!QFile::exists(tempPath() +  + QDir::separator() + fileName)) {
+            LOG_ERROR(QString("Missing " + tempPath() + QDir::separator() + fileName + " file. ZADrugsDB::prepareDatas()"));
             continue;
         }
 
         // read file
         LOG("Processing file :" + fileName);
-        QString content = Utils::readTextFile(tempPath() + fileName);
+        QString content = Utils::readTextFile(tempPath() + QDir::separator() + fileName);
         if (content.isEmpty()) {
             LOG_ERROR("no content");
             return false;
