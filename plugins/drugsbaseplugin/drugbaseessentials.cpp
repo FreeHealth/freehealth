@@ -423,6 +423,29 @@ bool DrugBaseEssentials::checkDatabaseVersion() const
     return (version()==::CURRENTVERSION);
 }
 
+int DrugBaseEssentials::getSourceId(const QString &drugsDbUid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return -1;
+    QSqlQuery query(DB);
+    QHash<int, QString> where;
+    where.insert(Constants::SOURCES_DBUID, QString("='%1'").arg(drugsDbUid));
+    query.prepare(select(Constants::Table_SOURCES, Constants::SOURCES_SID, where));
+    if (query.exec()) {
+        if (query.next()) {
+            return query.value(0).toInt();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DrugBaseEssentials", query);
+    }
+    return -1;
+}
+
+//QStringList getAllDistinctAvailableMoleculeName(const QString &drugDbUid)
+//{
+//}
+
 bool DrugBaseEssentials::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption

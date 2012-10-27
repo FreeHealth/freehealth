@@ -51,12 +51,14 @@ public:
     QString version() const;
     bool checkDatabaseVersion() const;
 
+    int getSourceId(const QString &drugsDbUid);
+//    QStringList getAllDistinctAvailableMoleculeName(const QString &drugDbUid);
+
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
                         const Utils::DatabaseConnector &connector,
                         CreationOption createOption
                        );
-
 
 protected:
     bool m_dbcore_initialized;
