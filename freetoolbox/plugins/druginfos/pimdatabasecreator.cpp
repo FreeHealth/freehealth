@@ -164,19 +164,19 @@ bool PimStep::process()
         labels.insert("en", element.attribute(Constants::XML_ATTRIB_TYPE_EN).toUpper());
         labels.insert("de", element.attribute(Constants::XML_ATTRIB_TYPE_DE).toUpper());
         labels.insert("es", element.attribute(Constants::XML_ATTRIB_TYPE_ES).toUpper());
-        int masterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
+//        int masterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
         // create type
-        QString req = QString("INSERT INTO PIM_TYPES (PIM_TID, UID, MASTER_LID) "
-                              "VALUES (NULL, '%1', %2);")
-                .arg(element.attribute(Constants::XML_ATTRIB_TYPE_ID))
-                .arg(masterLid);
+//        QString req = QString("INSERT INTO PIM_TYPES (PIM_TID, UID, MASTER_LID) "
+//                              "VALUES (NULL, '%1', %2);")
+//                .arg(element.attribute(Constants::XML_ATTRIB_TYPE_ID))
+//                .arg(masterLid);
 
-        qWarning() << req;
+//        qWarning() << req;
 
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
+//        if (!query.exec(req)) {
+//            LOG_QUERY_ERROR(query);
+//            return false;
+//        }
         typeIds.insert(element.attribute(Constants::XML_ATTRIB_TYPE_ID), query.lastInsertId().toInt());
         element = element.nextSiblingElement(Constants::XML_TAG_TYPE);
     }
@@ -275,7 +275,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
         labels.insert(risk.attribute(Constants::XML_ATTRIB_RISK_LANG), risk.attribute(Constants::XML_ATTRIB_RISK_VALUE));
         risk = risk.nextSiblingElement(Constants::XML_TAG_RISK);
     }
-    int riskMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
+//    int riskMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, labels);
 
     // create PIM
     int level = 0;
@@ -293,112 +293,113 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
     }
 
     int id = -1;
-    QString req = QString("INSERT INTO `PIMS` (`PIM_SID`, `PIM_TID`, `LEVEL`, `RISK_MASTER_LID`) "
-                          "VALUES (%1, %2, %3, %4);")
-            .arg(sourceId)
-            .arg(typeId)
-            .arg(level)
-            .arg(riskMasterLid);
+    QString req;
+//    QString req = QString("INSERT INTO `PIMS` (`PIM_SID`, `PIM_TID`, `LEVEL`, `RISK_MASTER_LID`) "
+//                          "VALUES (%1, %2, %3, %4);")
+//            .arg(sourceId)
+//            .arg(typeId)
+//            .arg(level)
+//            .arg(riskMasterLid);
 
-//    qWarning();
-//    qWarning() << req;
+////    qWarning();
+////    qWarning() << req;
 
-    if (!query.exec(req)) {
-        LOG_QUERY_ERROR(query);
-        LOG_ERROR(QString("PIM Error line %1").arg(element.lineNumber()));
-        return;
-    } else {
-        id = query.lastInsertId().toInt();
-    }
+//    if (!query.exec(req)) {
+//        LOG_QUERY_ERROR(query);
+//        LOG_ERROR(QString("PIM Error line %1").arg(element.lineNumber()));
+//        return;
+//    } else {
+//        id = query.lastInsertId().toInt();
+//    }
     query.finish();
 
     // add related ATC
-    QDomElement mols = element.firstChildElement(Constants::XML_TAG_MOLECULES);
-    mols = mols.firstChildElement(Constants::XML_TAG_MOLECULE);
-    while (!mols.isNull()) {
-        const QString &molName = mols.attribute(Constants::XML_ATTRIB_SOURCE_NAME);
-        // get all related ATC to the molecule
-        QStringList atcCodes = molNameToAtcCode.values(molName.toUpper());
+//    QDomElement mols = element.firstChildElement(Constants::XML_TAG_MOLECULES);
+//    mols = mols.firstChildElement(Constants::XML_TAG_MOLECULE);
+//    while (!mols.isNull()) {
+//        const QString &molName = mols.attribute(Constants::XML_ATTRIB_SOURCE_NAME);
+//        // get all related ATC to the molecule
+//        QStringList atcCodes = molNameToAtcCode.values(molName.toUpper());
 
-        // get ATC_ID from the ATC codes
-        QVector<int> atcIds;
-        if (atcCodes.isEmpty()) {
-            // manage interacting classes
-            if (molName.isEmpty()) {
-                QString c = mols.attribute(Constants::XML_ATTRIB_CLASSNAME);
-                c = DrugsDB::Tools::noAccent(c.toUpper());
-                if (!c.isEmpty()) {
-                    // get ATC_ID from the class's name
-                    atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, c);
-                } else {
-                    continue;
-                }
-            } else {
-                // get ATC_ID from the molecule's name
-                atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, molName.toUpper());
-            }
-        } else {
-            foreach(const QString &atc, atcCodes) {
-                atcIds << DrugsDB::Tools::getAtcIdsFromCode(Core::Constants::MASTER_DATABASE_NAME, atc);
-            }
-        }
+//        // get ATC_ID from the ATC codes
+//        QVector<int> atcIds;
+//        if (atcCodes.isEmpty()) {
+//            // manage interacting classes
+//            if (molName.isEmpty()) {
+//                QString c = mols.attribute(Constants::XML_ATTRIB_CLASSNAME);
+//                c = DrugsDB::Tools::noAccent(c.toUpper());
+//                if (!c.isEmpty()) {
+//                    // get ATC_ID from the class's name
+//                    atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, c);
+//                } else {
+//                    continue;
+//                }
+//            } else {
+//                // get ATC_ID from the molecule's name
+//                atcIds = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, molName.toUpper());
+//            }
+//        } else {
+//            foreach(const QString &atc, atcCodes) {
+//                atcIds << DrugsDB::Tools::getAtcIdsFromCode(Core::Constants::MASTER_DATABASE_NAME, atc);
+//            }
+//        }
 
-        if (atcIds.isEmpty()) {
-            QString t = QString("    <Label references=\"FreeMedFormsPIMs\" id=\"\" atcCodes=\"\" fr=\"%1\" en=\"%1\" de=\"\" es=\"\" comments=\"\" review=\"false\" reviewer=\"\" category=\"class\" warnDuplication=\"true\" autoFound=\"\" dateofreview=\"\"/>").arg(molName.toUpper());
-            qWarning() << t ;
-        }
-//        qWarning() << "actCodes" << atcCodes << atcIds << molName;
+//        if (atcIds.isEmpty()) {
+//            QString t = QString("    <Label references=\"FreeMedFormsPIMs\" id=\"\" atcCodes=\"\" fr=\"%1\" en=\"%1\" de=\"\" es=\"\" comments=\"\" review=\"false\" reviewer=\"\" category=\"class\" warnDuplication=\"true\" autoFound=\"\" dateofreview=\"\"/>").arg(molName.toUpper());
+//            qWarning() << t ;
+//        }
+////        qWarning() << "actCodes" << atcCodes << atcIds << molName;
 
-        for(int i = 0; i < atcIds.count(); ++i) {
-            int atcid = atcIds.at(i);
-            req = QString("INSERT INTO `PIMS_RELATED_ATC` (`PIM_ID`, `ATC_ID`, `MAXDAYDOSE`, `MAXDAYDOSEUNIT`) "
-                          "VALUES (%1, %2, %3, '%4');")
-                    .arg(id)
-                    .arg(atcid)
-                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSE).toDouble())
-                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSEUNIT));
+//        for(int i = 0; i < atcIds.count(); ++i) {
+//            int atcid = atcIds.at(i);
+//            req = QString("INSERT INTO `PIMS_RELATED_ATC` (`PIM_ID`, `ATC_ID`, `MAXDAYDOSE`, `MAXDAYDOSEUNIT`) "
+//                          "VALUES (%1, %2, %3, '%4');")
+//                    .arg(id)
+//                    .arg(atcid)
+//                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSE).toDouble())
+//                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSEUNIT));
 
-            req.replace(", ''", ", NULL");
-            req.replace(", ,", ", NULL,");
+//            req.replace(", ''", ", NULL");
+//            req.replace(", ,", ", NULL,");
 
-//            qWarning() << req;
+////            qWarning() << req;
 
-            if (!query.exec(req)) {
-                LOG_QUERY_ERROR(query);
-                LOG_ERROR(QString("PIM Error line %1").arg(mols.lineNumber()));
-                return;
-            }
-        }
+//            if (!query.exec(req)) {
+//                LOG_QUERY_ERROR(query);
+//                LOG_ERROR(QString("PIM Error line %1").arg(mols.lineNumber()));
+//                return;
+//            }
+//        }
 
-        mols = mols.nextSiblingElement(Constants::XML_TAG_MOLECULE);
-    }
+//        mols = mols.nextSiblingElement(Constants::XML_TAG_MOLECULE);
+//    }
 
-    // add related ICD10
-    QDomElement icd = element.firstChildElement(Constants::XML_TAG_DISEASES);
-    icd = icd.firstChildElement(Constants::XML_TAG_DISEASE);
+//    // add related ICD10
+//    QDomElement icd = element.firstChildElement(Constants::XML_TAG_DISEASES);
+//    icd = icd.firstChildElement(Constants::XML_TAG_DISEASE);
 
-    IcdGroupLinkerModel *icdModel = IcdGroupLinkerModel::instance();
+//    IcdGroupLinkerModel *icdModel = IcdGroupLinkerModel::instance();
 
-    while (!icd.isNull()) {
-        const QString &icdGroup = icd.attribute(Constants::XML_ATTRIB_ICDGROUP);
-        // get all ICD::SIDs
-        QList<QVariant> sids = icdModel->getSidsForGroup(icdGroup);
-        foreach(const QVariant &sid, sids) {
-            req = QString("INSERT INTO `PIMS_RELATED_ICD` (PIM_RMID, PIM_ID, ICD10_ID) "
-                  "VALUES (NULL, %1, %2);")
-                    .arg(id)
-                    .arg(sid.toString());
+//    while (!icd.isNull()) {
+//        const QString &icdGroup = icd.attribute(Constants::XML_ATTRIB_ICDGROUP);
+//        // get all ICD::SIDs
+//        QList<QVariant> sids = icdModel->getSidsForGroup(icdGroup);
+//        foreach(const QVariant &sid, sids) {
+//            req = QString("INSERT INTO `PIMS_RELATED_ICD` (PIM_RMID, PIM_ID, ICD10_ID) "
+//                  "VALUES (NULL, %1, %2);")
+//                    .arg(id)
+//                    .arg(sid.toString());
 
-            if (!query.exec(req)) {
-                LOG_QUERY_ERROR(query);
-                LOG_ERROR(QString("PIM Error line %1").arg(icd.lineNumber()));
-                return;
-            }
+//            if (!query.exec(req)) {
+//                LOG_QUERY_ERROR(query);
+//                LOG_ERROR(QString("PIM Error line %1").arg(icd.lineNumber()));
+//                return;
+//            }
 
-        }
+//        }
 
-        icd = icd.nextSiblingElement(Constants::XML_TAG_DISEASE);
-    }
+//        icd = icd.nextSiblingElement(Constants::XML_TAG_DISEASE);
+//    }
 }
 
 

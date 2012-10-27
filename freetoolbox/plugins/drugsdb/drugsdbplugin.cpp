@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "drugsdbplugin.h"
+#include "drugsdbcore.h"
 #include "atcpage.h"
 #include "moleculelinkerwidget.h"
 #include "frenchdrugsdatabasecreator.h"
@@ -55,6 +56,7 @@ DrugsDbPlugin::DrugsDbPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DrugsDbPlugin";
+//    Core::ICore::instance()->translators()->addNewTranslator("drugsdbplugin");
 }
 
 DrugsDbPlugin::~DrugsDbPlugin()
@@ -69,8 +71,11 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::initialize";
 
-    //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-drugsdbplugin");
+    // create the core
+    DrugsDBCore *core = new DrugsDBCore(this);
+    core->initialize();
 
+    // add database pages
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
 //    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
 //    addAutoReleasedObject(new FdaDrugsDatabasePage(this));

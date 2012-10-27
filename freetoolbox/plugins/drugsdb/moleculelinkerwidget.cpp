@@ -25,8 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "moleculelinkerwidget.h"
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "searchatcindatabasedialog.h"
+#include "drugsdbcore.h"
 
 #include <coreplugin/ftb_constants.h>
 
@@ -45,6 +46,8 @@
 
 #include "ui_moleculelinkerwidget.h"
 
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
+
 using namespace DrugsDB;
 
 QWidget *MoleculeLinkerPage::createPage(QWidget *parent)
@@ -59,7 +62,7 @@ MoleculeLinkerWidget::MoleculeLinkerWidget(QWidget *parent) :
 {
     setObjectName("MoleculeLinkerWidget");
     ui->setupUi(this);
-    model = ExtraMoleculeLinkerModel::instance(qApp);
+    model = drugsDbCore()->moleculeLinkerModel();
     ui->availableDrugsDb->addItems(model->availableDrugsDatabases());
     if (model->availableDrugsDatabases().count())
         model->selectDatabase(model->availableDrugsDatabases().at(0));
@@ -68,7 +71,7 @@ MoleculeLinkerWidget::MoleculeLinkerWidget(QWidget *parent) :
         proxyModel = new QSortFilterProxyModel(this);
         proxyModel->setSourceModel(model);
         proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        proxyModel->setFilterKeyColumn(ExtraMoleculeLinkerModel::MoleculeName);
+        proxyModel->setFilterKeyColumn(MoleculeLinkerModel::MoleculeName);
 
         ui->tableView->setModel(proxyModel);
         ui->tableView->verticalHeader()->hide();
@@ -107,7 +110,7 @@ void MoleculeLinkerWidget::changeDatabase(const int index)
 
 void MoleculeLinkerWidget::pressed(const QModelIndex &index)
 {
-    if (index.column()==ExtraMoleculeLinkerModel::FancyButton) {
+    if (index.column()==MoleculeLinkerModel::FancyButton) {
         QMenu *menu = new QMenu(this);
         QAction *google = new QAction(tr("Search Google (copy molecule to clipboard)"), menu);
         QAction *who = new QAction(tr("Search WHO (copy molecule to clipboard)"), menu);
@@ -121,20 +124,20 @@ void MoleculeLinkerWidget::pressed(const QModelIndex &index)
         menu->addAction(copyClip);
         QAction *selected = menu->exec(QCursor::pos());
         if (selected == atcSearchDialog) {
-            SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+            SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString());
             if (dlg.exec() == QDialog::Accepted) {
-                proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
-                proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
+                proxyModel->setData(proxyModel->index(index.row(), MoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
+                proxyModel->setData(proxyModel->index(index.row(), MoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
             }
         } else if (selected == google) {
-            QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString())));
+            QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString())));
         } else if (selected == who) {
-            QDesktopServices::openUrl(QUrl(QString("http://www.whocc.no/atc_ddd_index/?name=%1").arg(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString())));
+            QDesktopServices::openUrl(QUrl(QString("http://www.whocc.no/atc_ddd_index/?name=%1").arg(proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString())));
         } else if (selected == resip) {
-            QApplication::clipboard()->setText(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+            QApplication::clipboard()->setText(proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString());
             QDesktopServices::openUrl(QUrl("http://www.portailmedicaments.resip.fr/bcb_recherche/classes.asp?cc=1"));
         } else if (selected == copyClip) {
-            QApplication::clipboard()->setText(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+            QApplication::clipboard()->setText(proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString());
         }
     }
 }
@@ -143,18 +146,18 @@ void MoleculeLinkerWidget::activated(const QModelIndex &index)
 {
     if (!proxyModel)
         return;
-    if (index.column()==ExtraMoleculeLinkerModel::MoleculeName) {
-        SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), ExtraMoleculeLinkerModel::MoleculeName).data().toString());
+    if (index.column()==MoleculeLinkerModel::MoleculeName) {
+        SearchAtcInDatabaseDialog dlg(this, proxyModel->index(index.row(), MoleculeLinkerModel::MoleculeName).data().toString());
         if (dlg.exec() == QDialog::Accepted) {
-            proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
-            proxyModel->setData(proxyModel->index(index.row(), ExtraMoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
+            proxyModel->setData(proxyModel->index(index.row(), MoleculeLinkerModel::ATC_Code), dlg.getSelectedCodes().join(","));
+            proxyModel->setData(proxyModel->index(index.row(), MoleculeLinkerModel::Review), Qt::Checked, Qt::CheckStateRole);
         }
     }
 }
 
 void MoleculeLinkerWidget::onRemoveUnreviewedRequested()
 {
-    model = ExtraMoleculeLinkerModel::instance();
+    model = drugsDbCore()->moleculeLinkerModel();
     int nb = model->removeUnreviewedMolecules();
     Utils::informativeMessageBox(tr("Removed %1 unreviewed item(s) from the model").arg(nb),"");
 }

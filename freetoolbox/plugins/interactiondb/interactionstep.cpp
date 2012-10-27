@@ -134,199 +134,199 @@ static bool setClassTreeToDatabase(const QString &iclass,
                                    QMultiHash<QString, QString> *buggyIncludes,
                                    int insertChildrenIntoClassId = -1)
 {
-    const QStringList &associatedInns = molsToAtc.uniqueKeys();
+//    const QStringList &associatedInns = molsToAtc.uniqueKeys();
 
-    if (insertChildrenIntoClassId == -1) {
-        insertChildrenIntoClassId = afssapsClass.indexOf(iclass)+200000;
-    }
+//    if (insertChildrenIntoClassId == -1) {
+//        insertChildrenIntoClassId = afssapsClass.indexOf(iclass)+200000;
+//    }
 
-    // Take all included inns
-    QString req;
-    foreach(const QString &inn, class_mols.values(iclass)) {
-        req.clear();
-        if (afssapsClass.contains(inn)) {
-            // Avoid inclusion of self class
-            if (iclass==inn) {
-                qWarning() << "error: CLASS==INN"<< iclass << inn;
-                continue;
-            }
-            qWarning() << "class within a class" << iclass << inn;
-            setClassTreeToDatabase(inn, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, buggyIncludes, insertChildrenIntoClassId);
-            qWarning() << "end class within a class";
-            continue;
-        }
-
-        // Find source for this couple class/inn
-        QVector<Source> sources;
-        foreach(const Source &s, class_sources.values(iclass)) {
-            if (s.m_Inn==inn.toUpper()) {
-                sources << s;
-            }
-        }
-
-        int bibMasterId = -1;
-        QVector<int> bib_ids;
-        if (sources.count()) {
-            // Insert all sources
-            foreach(const Source &s, sources) {
-                int lastId = DrugsDB::Tools::addBibliography(Core::Constants::MASTER_DATABASE_NAME, s.m_TypeOfLink, s.m_Link, "","");
-                if (lastId==-1)
-                    return false;
-                bib_ids << lastId;
-            }
-        }
-        QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-        db.transaction();
-        QSqlQuery query(db);
-        //        req = QString("SELECT MAX(BIB_MASTER_ID) FROM BIBLIOGRAPHY_LINKS");
-//        bibMasterId = DrugsDB::Tools::drugBase()->max(DrugsDB::Constants::Table_BIB_LINK, DrugsDB::Constants::BIB_LINK_MASTERID).toInt();
-        //        if (query.exec(req)) {
-        //            if (query.next()) {
-        //                bibMasterId = query.value(0).toInt() + 1;
-        //            }
-        //        } else {
-        //            LOG_QUERY_ERROR_FOR("InteractionStep", query);
-        //            db.rollback();
-        //            return false;
-        //        }
-        //        query.finish();
-        //        if (bibMasterId==-1) {
-        //            LOG_ERROR_FOR("InteractionStep", "NO BIB MASTER");
-        //            db.rollback();
-        //            return false;
-        //        }
-        ++bibMasterId;
-
-        foreach(int id, bib_ids) {
-            //            req = QString("INSERT INTO BIBLIOGRAPHY_LINKS (BIB_MASTER_ID, BIB_ID) VALUES (%1,%2)")
-            //                  .arg(bibMasterId)
-            //                  .arg(id);
-//            query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_BIB_LINK));
-//            query.bindValue(DrugsDB::Constants::BIB_LINK_BIBID, id);
-//            query.bindValue(DrugsDB::Constants::BIB_LINK_MASTERID, bibMasterId);
-//            if (!query.exec()) {
-//                LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                db.rollback();
-//                return false;
+//    // Take all included inns
+//    QString req;
+//    foreach(const QString &inn, class_mols.values(iclass)) {
+//        req.clear();
+//        if (afssapsClass.contains(inn)) {
+//            // Avoid inclusion of self class
+//            if (iclass==inn) {
+//                qWarning() << "error: CLASS==INN"<< iclass << inn;
+//                continue;
 //            }
-            query.finish();
-        }
+//            qWarning() << "class within a class" << iclass << inn;
+//            setClassTreeToDatabase(inn, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, buggyIncludes, insertChildrenIntoClassId);
+//            qWarning() << "end class within a class";
+//            continue;
+//        }
 
-        // Insert IAM Tree + Bib link
-        //        qWarning();
-        //        qWarning() << "xxxxxxxxxxxxxxx";
-        //        qWarning() << iclass << inn << associatedInns.contains(inn, Qt::CaseInsensitive) << molsToAtc.values(inn.toUpper());
-        //        qWarning();
+//        // Find source for this couple class/inn
+//        QVector<Source> sources;
+//        foreach(const Source &s, class_sources.values(iclass)) {
+//            if (s.m_Inn==inn.toUpper()) {
+//                sources << s;
+//            }
+//        }
 
-        req.clear();
-        if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
-            foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
-                // One code == One ID
-                //                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
-                //                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
-                //                        .arg(insertChildrenIntoClassId)
-                //                        .arg(atc)
-                //                        .arg(bibMasterId);
-                QString atcId;
-                QHash<int, QString> w;
-                w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(atc));
-//                req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
-//                if (query.exec(req)) {
-//                    if (query.next())
-//                        atcId = query.value(0).toString();
-//                } else {
-//                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                    db.rollback();
+//        int bibMasterId = -1;
+//        QVector<int> bib_ids;
+//        if (sources.count()) {
+//            // Insert all sources
+//            foreach(const Source &s, sources) {
+//                int lastId = Tools::addBibliography(Core::Constants::MASTER_DATABASE_NAME, s.m_TypeOfLink, s.m_Link, "","");
+//                if (lastId==-1)
 //                    return false;
+//                bib_ids << lastId;
+//            }
+//        }
+//        QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+//        db.transaction();
+//        QSqlQuery query(db);
+//        //        req = QString("SELECT MAX(BIB_MASTER_ID) FROM BIBLIOGRAPHY_LINKS");
+////        bibMasterId = DrugsDB::Tools::drugBase()->max(DrugsDB::Constants::Table_BIB_LINK, DrugsDB::Constants::BIB_LINK_MASTERID).toInt();
+//        //        if (query.exec(req)) {
+//        //            if (query.next()) {
+//        //                bibMasterId = query.value(0).toInt() + 1;
+//        //            }
+//        //        } else {
+//        //            LOG_QUERY_ERROR_FOR("InteractionStep", query);
+//        //            db.rollback();
+//        //            return false;
+//        //        }
+//        //        query.finish();
+//        //        if (bibMasterId==-1) {
+//        //            LOG_ERROR_FOR("InteractionStep", "NO BIB MASTER");
+//        //            db.rollback();
+//        //            return false;
+//        //        }
+//        ++bibMasterId;
+
+//        foreach(int id, bib_ids) {
+//            //            req = QString("INSERT INTO BIBLIOGRAPHY_LINKS (BIB_MASTER_ID, BIB_ID) VALUES (%1,%2)")
+//            //                  .arg(bibMasterId)
+//            //                  .arg(id);
+////            query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_BIB_LINK));
+////            query.bindValue(DrugsDB::Constants::BIB_LINK_BIBID, id);
+////            query.bindValue(DrugsDB::Constants::BIB_LINK_MASTERID, bibMasterId);
+////            if (!query.exec()) {
+////                LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                db.rollback();
+////                return false;
+////            }
+//            query.finish();
+//        }
+
+//        // Insert IAM Tree + Bib link
+//        //        qWarning();
+//        //        qWarning() << "xxxxxxxxxxxxxxx";
+//        //        qWarning() << iclass << inn << associatedInns.contains(inn, Qt::CaseInsensitive) << molsToAtc.values(inn.toUpper());
+//        //        qWarning();
+
+//        req.clear();
+//        if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
+//            foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
+//                // One code == One ID
+//                //                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+//                //                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
+//                //                        .arg(insertChildrenIntoClassId)
+//                //                        .arg(atc)
+//                //                        .arg(bibMasterId);
+//                QString atcId;
+//                QHash<int, QString> w;
+//                w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(atc));
+////                req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
+////                if (query.exec(req)) {
+////                    if (query.next())
+////                        atcId = query.value(0).toString();
+////                } else {
+////                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                    db.rollback();
+////                    return false;
+////                }
+//                query.finish();
+
+////                query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, atcId);
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
+////                if (!query.exec(req)) {
+////                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                    db.rollback();
+////                    return false;
+////                }
+//                query.finish();
+//            }
+//        } else {
+//            int id = molsWithoutAtc.indexOf(inn.toUpper());
+
+//            //            qWarning() << "id ?" << id << inn.toUpper();
+
+//            if (id==-1) {
+//                // one INN can have N codes --> get codes
+//                QVector<int> ids = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, inn);
+//                //                qWarning() << "  ids ->" <<ids;
+//                if (ids.isEmpty()) {
+//                    LOG_ERROR_FOR("InteractionStep", "No ATC ID for "+inn);
 //                }
-                query.finish();
+//                for(int zz = 0; zz < ids.count(); ++zz) {
+//                    //                    req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+//                    //                                  "(%1, %2, %3);\n")
+//                    //                            .arg(insertChildrenIntoClassId)
+//                    //                            .arg(ids.at(zz))
+//                    //                            .arg(bibMasterId);
 
-//                query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, atcId);
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
-//                if (!query.exec(req)) {
-//                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                    db.rollback();
-//                    return false;
+////                    query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
+////                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
+////                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
+////                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, ids.at(zz));
+////                    query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
+
+////                    if (!query.exec(req)) {
+////                        buggyIncludes->insertMulti(iclass, inn);
+////                        LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                        db.rollback();
+////                        return false;
+////                    }
 //                }
-                query.finish();
-            }
-        } else {
-            int id = molsWithoutAtc.indexOf(inn.toUpper());
 
-            //            qWarning() << "id ?" << id << inn.toUpper();
+//                //                qWarning();
 
-            if (id==-1) {
-                // one INN can have N codes --> get codes
-                QVector<int> ids = DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, inn);
-                //                qWarning() << "  ids ->" <<ids;
-                if (ids.isEmpty()) {
-                    LOG_ERROR_FOR("InteractionStep", "No ATC ID for "+inn);
-                }
-                for(int zz = 0; zz < ids.count(); ++zz) {
-                    //                    req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
-                    //                                  "(%1, %2, %3);\n")
-                    //                            .arg(insertChildrenIntoClassId)
-                    //                            .arg(ids.at(zz))
-                    //                            .arg(bibMasterId);
+//            } else {
+//                // One code == One ID
+//                //                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
+//                //                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
+//                //                        .arg(insertChildrenIntoClassId)
+//                //                        .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'))
+//                //                        .arg(bibMasterId);
 
-//                    query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
-//                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
-//                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
-//                    query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, ids.at(zz));
-//                    query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
+//                QString atcId;
+//                QHash<int, QString> w;
+//                w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0')));
+////                req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
+////                if (query.exec(req)) {
+////                    if (query.next())
+////                        atcId = query.value(0).toString();
+////                } else {
+////                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                    db.rollback();
+////                    return false;
+////                }
+//                query.finish();
 
-//                    if (!query.exec(req)) {
-//                        buggyIncludes->insertMulti(iclass, inn);
-//                        LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                        db.rollback();
-//                        return false;
-//                    }
-                }
+////                query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, atcId);
+////                query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
 
-                //                qWarning();
-
-            } else {
-                // One code == One ID
-                //                req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
-                //                              "(%1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"), %3);")
-                //                        .arg(insertChildrenIntoClassId)
-                //                        .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'))
-                //                        .arg(bibMasterId);
-
-                QString atcId;
-                QHash<int, QString> w;
-                w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0')));
-//                req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
-//                if (query.exec(req)) {
-//                    if (query.next())
-//                        atcId = query.value(0).toString();
-//                } else {
-//                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                    db.rollback();
-//                    return false;
-//                }
-                query.finish();
-
-//                query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, insertChildrenIntoClassId);
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, atcId);
-//                query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, bibMasterId);
-
-//                if (!query.exec(req)) {
-//                    buggyIncludes->insertMulti(iclass, inn);
-//                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
-//                    db.rollback();
-//                    return false;
-//                }
-            }
-            query.finish();
-            db.commit();
-        }
-    }
+////                if (!query.exec(req)) {
+////                    buggyIncludes->insertMulti(iclass, inn);
+////                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
+////                    db.rollback();
+////                    return false;
+////                }
+//            }
+//            query.finish();
+//            db.commit();
+//        }
+//    }
     return true;
 }
 
@@ -558,9 +558,9 @@ bool InteractionStep::saveAtcClassification(const QList<DrugInteractor *> &inter
                 labels.insert("de", en);
             else
                 labels.insert("de", de);
-            if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, values[0].remove("\""), labels)) {
-                return false;
-            }
+//            if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, values[0].remove("\""), labels)) {
+//                return false;
+//            }
         }
     }
     Q_EMIT progress(1);
@@ -591,16 +591,16 @@ bool InteractionStep::saveAtcClassification(const QList<DrugInteractor *> &inter
                 ++classId;
                 QString n = QString::number(classId-200000);
                 n = n.rightJustified(4, '0');
-                if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, classId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
-                    return false;
+//                if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, classId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
+//                    return false;
                 di->setData(CLASS_OR_MOL_ID, classId);
                 di->setData(FREEMEDFORMS_ATC_CODE, "ZXX" + n);
             } else {
                 ++molId;
                 QString n = QString::number(molId-100000);
                 n = n.rightJustified(2, '0');
-                if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, molId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
-                    return false;
+//                if (!DrugsDB::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, molId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
+//                    return false;
                 di->setData(CLASS_OR_MOL_ID, molId);
                 di->setData(FREEMEDFORMS_ATC_CODE, "Z01AA" + n);
             }
@@ -857,10 +857,10 @@ bool InteractionStep::saveDrugDrugInteractions(const QList<DrugInteractor *> &in
         QMultiHash<QString, QVariant> management;
         management.insert("fr", ddi->management("fr"));
         management.insert("en", ddi->management("en"));
-        int riskMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, risk);
-        int manMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, management);
-        if (riskMasterLid==-1 || manMasterLid==-1)
-            return false;
+//        int riskMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, risk);
+//        int manMasterLid = DrugsDB::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, management);
+//        if (riskMasterLid==-1 || manMasterLid==-1)
+//            return false;
 
         // Add IAK
         //        req = QString("INSERT INTO IAKNOWLEDGE (IAKID, TYPE, RISK_MASTER_LID, MAN_MASTER_LID) VALUES "

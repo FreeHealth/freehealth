@@ -21,6 +21,12 @@
     <packuidname>CIP</packuidname>
     <drugnameconstructor></drugnameconstructor>
     <uuid>FR_AFSSAPS</uuid>
+
+    <!-- translatable values -->
+    <label lang="xx">French therapeutic database</label>
+    <label lang="fr">Base de données thérapeutique française</label>
+    <label lang="de">Französische Therapeutische Datenbank</label>
+
   </description>
 
 </DrugDbDescriptor>

@@ -29,8 +29,10 @@
 #include <QVariant>
 
 namespace DrugsDB {
+namespace Internal {
 class ComponentPrivate;
 class DrugPrivate;
+}
 
 class Component
 {
@@ -54,7 +56,7 @@ public:
     QVariant data(const int ref, const QString &lang = QString::null) const;
 
 private:
-    ComponentPrivate *d;
+    Internal::ComponentPrivate *d;
 };
 
 class Drug
@@ -92,14 +94,12 @@ public:
     void addComponent(Component *compo);
     QVector<Component *> components() const;
 
-    bool toDatabase(const QString &dbConnection,const QHash<int, QString> &mids,const QString &lang = "xx");
+    QStringList availableLanguages() const;
 
     static bool lessThanOnNames(const Drug *s1, const Drug *s2);
 
-    static bool saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drugs, const QString &dbUid);
-
 private:
-    DrugPrivate *d;
+    Internal::DrugPrivate *d;
 };
 
 }  // namespace DrugsDB

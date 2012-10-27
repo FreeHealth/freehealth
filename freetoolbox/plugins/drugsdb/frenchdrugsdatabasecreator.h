@@ -29,7 +29,7 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/ifullreleasestep.h>
+#include <drugsdb/idrugdatabasestep.h>
 
 #include <QWidget>
 #include <QMultiHash>
@@ -53,7 +53,7 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 };
 
-class FrDrugDatatabaseStep : public Core::IFullReleaseStep
+class FrDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
@@ -62,15 +62,11 @@ public:
     ~FrDrugDatatabaseStep();
 
     QString id() const {return "FrDrugDatatabaseStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
 
-    bool createDir();
     bool cleanFiles();
-    bool downloadFiles(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const {return tr("French drugs database creation");}
 
-    bool unzipFiles();
     bool prepareDatas();
     bool createDatabase();
     bool populateDatabase();

@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EXTRAMOLECULELINKERMODEL_H
-#define EXTRAMOLECULELINKERMODEL_H
+#ifndef MOLECULELINKERMODEL_H
+#define MOLECULELINKERMODEL_H
 
 #include <QAbstractTableModel>
 #include <QMultiHash>
@@ -33,14 +33,19 @@
 #include <QString>
 
 namespace DrugsDB {
+class DrugsDBCore;
 namespace Internal {
-class ExtraMoleculeLinkerModelPrivate;
+class DrugBaseEssentials;
+class MoleculeLinkerModelPrivate;
 }  // namespace Internal
 
-class ExtraMoleculeLinkerModel : public QAbstractTableModel
+class MoleculeLinkerModel : public QAbstractTableModel
 {
     Q_OBJECT
-    explicit ExtraMoleculeLinkerModel(QObject *parent = 0);
+    friend class DrugsDB::DrugsDBCore;
+
+protected:
+    explicit MoleculeLinkerModel(QObject *parent = 0);
 
 public:
     enum DataRepresentation {
@@ -55,8 +60,8 @@ public:
         AutoFoundAtcs,
         ColumnCount
     };
-    static ExtraMoleculeLinkerModel *instance(QObject *parent = 0);
-    ~ExtraMoleculeLinkerModel();
+    ~MoleculeLinkerModel();
+    bool initialize();
 
     QStringList availableDrugsDatabases() const;
     bool selectDatabase(const QString &dbUid);
@@ -79,7 +84,8 @@ public:
     bool addUnreviewedMolecules(const QString &dbUid, const QStringList &molecules);
     bool addAutoFoundMolecules(const QMultiHash<QString, QString> &mol_atc, bool removeFromModel = false);
 
-    QMultiHash<int, int> moleculeLinker(const QString &drugsDbUid,
+    QMultiHash<int, int> moleculeLinker(Internal::DrugBaseEssentials *database,
+                                        const QString &drugsDbUid,
                                         const QString &lang,
                                         QStringList *unfoundOutput,
                                         const QHash<QString, QString> &correctedByName,
@@ -91,11 +97,11 @@ public Q_SLOTS:
     int removeUnreviewedMolecules();
 
 private:
-    static ExtraMoleculeLinkerModel *m_Instance;
-    Internal::ExtraMoleculeLinkerModelPrivate *d;
+    static MoleculeLinkerModel *m_Instance;
+    Internal::MoleculeLinkerModelPrivate *d;
 
 };
 
 }  //  End namespace DrugsDbCreator
 
-#endif // EXTRAMOLECULELINKERMODEL_H
+#endif // MOLECULELINKERMODEL_H

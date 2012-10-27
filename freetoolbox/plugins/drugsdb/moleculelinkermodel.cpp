@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class ExtraMoleculeLinkerModel
+  \class MoleculeLinkerModel
   Based on an XML formatted file to ease the SVN commit process.
   XML File format is:
   \code
@@ -37,7 +37,7 @@
  \endcode
 */
 
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "atcmodel.h"
 
 #include <coreplugin/icore.h>
@@ -72,7 +72,6 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/MolLinker/") + QDir::separator();}
 static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
-
 
 namespace DrugsDB {
 namespace Internal {
@@ -130,10 +129,10 @@ private:
     int rowNumber;
 };
 
-class ExtraMoleculeLinkerModelPrivate
+class MoleculeLinkerModelPrivate
 {
 public:
-    ExtraMoleculeLinkerModelPrivate(ExtraMoleculeLinkerModel *parent) :
+    MoleculeLinkerModelPrivate(MoleculeLinkerModel *parent) :
             m_RootItem(0), m_FetchedRows(0), q(parent)
     {
         QFile file(linkerXmlFile());
@@ -165,36 +164,32 @@ public:
     int m_FetchedRows;
 
 private:
-    ExtraMoleculeLinkerModel *q;
+    MoleculeLinkerModel *q;
 };
 
 }  // namespace Internal
 }  // namespace DrugsDB
 
-
-ExtraMoleculeLinkerModel *ExtraMoleculeLinkerModel::m_Instance = 0;
-ExtraMoleculeLinkerModel *ExtraMoleculeLinkerModel::instance(QObject *parent)
-{
-    if (!m_Instance)
-        m_Instance = new ExtraMoleculeLinkerModel(parent);
-    return m_Instance;
-}
-
-ExtraMoleculeLinkerModel::ExtraMoleculeLinkerModel(QObject *parent) :
+MoleculeLinkerModel::MoleculeLinkerModel(QObject *parent) :
     QAbstractTableModel(parent),
-    d(new Internal::ExtraMoleculeLinkerModelPrivate(this))
+    d(new Internal::MoleculeLinkerModelPrivate(this))
 {
-    setObjectName("ExtraMoleculeLinkerModel");
+    setObjectName("MoleculeLinkerModel");
 }
 
-ExtraMoleculeLinkerModel::~ExtraMoleculeLinkerModel()
+MoleculeLinkerModel::~MoleculeLinkerModel()
 {
     if (d)
         delete d;
     d = 0;
 }
 
-bool ExtraMoleculeLinkerModel::saveModel()
+bool MoleculeLinkerModel::initialize()
+{
+    return true;
+}
+
+bool MoleculeLinkerModel::saveModel()
 {
     QFile file(linkerXmlFile());
     if (file.open(QIODevice::WriteOnly | QFile::Text)) {
@@ -205,7 +200,7 @@ bool ExtraMoleculeLinkerModel::saveModel()
     return false;
 }
 
-QStringList ExtraMoleculeLinkerModel::availableDrugsDatabases() const
+QStringList MoleculeLinkerModel::availableDrugsDatabases() const
 {
     QStringList list;
     QDomElement el = d->m_RootNode.firstChildElement("Database");
@@ -218,11 +213,11 @@ QStringList ExtraMoleculeLinkerModel::availableDrugsDatabases() const
     return list;
 }
 
-bool ExtraMoleculeLinkerModel::selectDatabase(const QString &dbUid)
+bool MoleculeLinkerModel::selectDatabase(const QString &dbUid)
 {
     if (dbUid == d->actualDbUid)
         return true;
-    qWarning() << "ExtraMoleculeLinkerModel::selectDatabase" << dbUid;
+    qWarning() << "MoleculeLinkerModel::selectDatabase" << dbUid;
     QDomElement el = d->m_RootNode.firstChildElement("Database");
     while (!el.isNull()) {
         if (el.attribute("uid") == dbUid) {
@@ -239,12 +234,12 @@ bool ExtraMoleculeLinkerModel::selectDatabase(const QString &dbUid)
     return false;
 }
 
-void ExtraMoleculeLinkerModel::setActualReviewer(const QString &name)
+void MoleculeLinkerModel::setActualReviewer(const QString &name)
 {
     d->reviewer = name;
 }
 
-bool ExtraMoleculeLinkerModel::canFetchMore(const QModelIndex &parent) const
+bool MoleculeLinkerModel::canFetchMore(const QModelIndex &parent) const
 {
     int nbItemRows = 0;
     DomItem *parentItem = 0;
@@ -261,7 +256,7 @@ bool ExtraMoleculeLinkerModel::canFetchMore(const QModelIndex &parent) const
     return (d->m_FetchedRows < nbItemRows);
 }
 
-void ExtraMoleculeLinkerModel::fetchMore(const QModelIndex &parent)
+void MoleculeLinkerModel::fetchMore(const QModelIndex &parent)
 {
     int nbItemRows = 0;
     DomItem *parentItem = 0;
@@ -276,14 +271,14 @@ void ExtraMoleculeLinkerModel::fetchMore(const QModelIndex &parent)
     int remainder = nbItemRows - d->m_FetchedRows;
     int itemsToFetch = qMin(MODEL_PREFETCH, remainder);
 
-//    qWarning() << "ExtraMoleculeLinkerModel::fetchMore" << parent << d->m_FetchedRows << itemsToFetch;
+//    qWarning() << "MoleculeLinkerModel::fetchMore" << parent << d->m_FetchedRows << itemsToFetch;
 
     beginInsertRows(parent, d->m_FetchedRows, d->m_FetchedRows + itemsToFetch);
     d->m_FetchedRows += itemsToFetch;
     endInsertRows();
 }
 
-QModelIndex ExtraMoleculeLinkerModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex MoleculeLinkerModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
@@ -302,7 +297,7 @@ QModelIndex ExtraMoleculeLinkerModel::index(int row, int column, const QModelInd
         return QModelIndex();
 }
 
-QModelIndex ExtraMoleculeLinkerModel::parent(const QModelIndex &child) const
+QModelIndex MoleculeLinkerModel::parent(const QModelIndex &child) const
 {
     if (!child.isValid())
         return QModelIndex();
@@ -316,7 +311,7 @@ QModelIndex ExtraMoleculeLinkerModel::parent(const QModelIndex &child) const
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int ExtraMoleculeLinkerModel::rowCount(const QModelIndex &parent) const
+int MoleculeLinkerModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.column() > 0)
         return 0;
@@ -324,12 +319,12 @@ int ExtraMoleculeLinkerModel::rowCount(const QModelIndex &parent) const
     return d->m_FetchedRows;
 }
 
-int ExtraMoleculeLinkerModel::columnCount(const QModelIndex &) const
+int MoleculeLinkerModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }
 
-QVariant ExtraMoleculeLinkerModel::data(const QModelIndex &index, int role) const
+QVariant MoleculeLinkerModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -389,7 +384,7 @@ QVariant ExtraMoleculeLinkerModel::data(const QModelIndex &index, int role) cons
     return QVariant();
 }
 
-bool ExtraMoleculeLinkerModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool MoleculeLinkerModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid())
         return false;
@@ -438,7 +433,7 @@ bool ExtraMoleculeLinkerModel::setData(const QModelIndex &index, const QVariant 
     return false;
 }
 
-Qt::ItemFlags ExtraMoleculeLinkerModel::flags(const QModelIndex &index) const
+Qt::ItemFlags MoleculeLinkerModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -455,7 +450,7 @@ Qt::ItemFlags ExtraMoleculeLinkerModel::flags(const QModelIndex &index) const
     return f;
 }
 
-QVariant ExtraMoleculeLinkerModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant MoleculeLinkerModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
@@ -481,7 +476,7 @@ QVariant ExtraMoleculeLinkerModel::headerData(int section, Qt::Orientation orien
     return QVariant();
 }
 
-bool ExtraMoleculeLinkerModel::addUnreviewedMolecules(const QString &dbUid, const QStringList &molecules)
+bool MoleculeLinkerModel::addUnreviewedMolecules(const QString &dbUid, const QStringList &molecules)
 {
     QDomElement el = d->m_RootNode.firstChildElement("Database");
     while (!el.isNull()) {
@@ -524,7 +519,7 @@ bool ExtraMoleculeLinkerModel::addUnreviewedMolecules(const QString &dbUid, cons
     return true;
 }
 
-bool ExtraMoleculeLinkerModel::addAutoFoundMolecules(const QMultiHash<QString, QString> &mol_atc, bool removeFromModel)
+bool MoleculeLinkerModel::addAutoFoundMolecules(const QMultiHash<QString, QString> &mol_atc, bool removeFromModel)
 {
     int nb = 0;
     foreach(const QString &mol, mol_atc.keys()) {
@@ -557,265 +552,263 @@ struct MolLink {
     QString mol_form;
 };
 
-QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
-        (const QString &drugsDbUid,        // Drugs database to use
+QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
+        (Internal::DrugBaseEssentials *database,
+         const QString &drugsDbUid,        // Drugs database to use
          const QString &lang,              // Lang
          QStringList *unfoundOutput,       // Returned unfounded molecules
          const QHash<QString, QString> &correctedByName,        // Precorrected molecules
          const QMultiHash<QString, QString> &correctedByAtcCode // Key=mol, Val=ATC
          )
 {
-//    QMultiHash<int, int> mol_atc;
-//    // get all ATC ids
-//    QSqlDatabase iam = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-//    if (!iam.open()) {
-//        LOG_ERROR("Can not connect to MASTER db");
-//        return mol_atc;
-//    }
+    QMultiHash<int, int> mol_atc;
+    // get all ATC ids
+    QSqlDatabase iam = database->database();
+    if (!iam.open()) {
+        LOG_ERROR("Can not connect to MASTER db");
+        return mol_atc;
+    }
 
-//    QHash<QString, int> atc_id;
-//    QMultiHash<QString, int> atcName_id;
-//    QString req;
-//    QSqlQuery query(req, iam);
+    QHash<QString, int> atc_id;
+    QMultiHash<QString, int> atcName_id;
+    QString req;
+    QSqlQuery query(iam);
+    using namespace DrugsDB::Constants;
 
 //    DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, "omeprazole");
 
-//    // Get all ATC Code and Label
-//    LOG("Getting ATC Informations from the interactions database");
+    // Get all ATC Code and Label
+    LOG("Getting ATC Informations from the interactions database");
 //    //    req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
 //    //                  "FROM ATC "
 //    //                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
 //    //                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
 //    //                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
 //    //                  "WHERE LABELS.LANG='%1' AND length(ATC.CODE)=7;").arg(lang);
-//    Utils::FieldList get;
-//    get << Utils::Field(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID);
-//    get << Utils::Field(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_CODE);
-//    get << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LABEL);
-//    Utils::JoinList joins;
-//    joins << Utils::Join(DrugsDB::Constants::Table_ATC_LABELS, DrugsDB::Constants::ATC_LABELS_ATCID, DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID)
-//          << Utils::Join(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID, DrugsDB::Constants::Table_ATC_LABELS, DrugsDB::Constants::ATC_LABELS_MASTERLID)
-//          << Utils::Join(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LID, DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_LID);
-//    Utils::FieldList cond;
-//    cond << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LANG, QString("='%1'").arg(lang));
+    Utils::FieldList get;
+    get << Utils::Field(Table_ATC, ATC_ID);
+    get << Utils::Field(Table_ATC, ATC_CODE);
+    get << Utils::Field(Table_LABELS, LABELS_LABEL);
+    Utils::JoinList joins;
+    joins << Utils::Join(Table_ATC_LABELS, ATC_LABELS_ATCID, Table_ATC, ATC_ID)
+          << Utils::Join(Table_LABELSLINK, LABELSLINK_MASTERLID, Table_ATC_LABELS, ATC_LABELS_MASTERLID)
+          << Utils::Join(Table_LABELS, LABELS_LID, Table_LABELSLINK, LABELSLINK_LID);
+    Utils::FieldList cond;
+    cond << Utils::Field(Table_LABELS, LABELS_LANG, QString("='%1'").arg(lang));
 
-//    if (query.exec(DrugsDB::Tools::drugBase()->select(get,joins,cond))) {
-//        while (query.next()) {
-//            atc_id.insert(query.value(1).toString(), query.value(0).toInt());
-//            atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
-//        }
-//    } else {
-//        LOG_QUERY_ERROR(query);
-//    }
-//    query.finish();
-//    qWarning() << "ATC" << atc_id.count();
+    if (query.exec(database->select(get,joins,cond))) {
+        while (query.next()) {
+            atc_id.insert(query.value(1).toString(), query.value(0).toInt());
+            atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    qWarning() << "ATC" << atc_id.count();
 
-//    // Get source ID (SID)
-//    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, drugsDbUid);
-//    if (sid==-1) {
-//        LOG_ERROR("NO SID: " + drugsDbUid);
-//        return mol_atc;
-//    }
+    // Get source ID (SID)
+    int sid = database->getSourceId(drugsDbUid);
+    if (sid==-1) {
+        LOG_ERROR("NO SID: " + drugsDbUid);
+        return mol_atc;
+    }
 
-//    // Get all MOLS.MID and Label
-//    LOG("Getting Drugs Composition from " + drugsDbUid);
-//    QMultiHash<QString, int> mols;
-//    //    req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
-//    QHash<int, QString> w;
-//    w.insert(DrugsDB::Constants::MOLS_SID, QString("=%1").arg(sid));
-//    req = DrugsDB::Tools::drugBase()->selectDistinct(DrugsDB::Constants::Table_MOLS, QList<int>()
-//                                                     << DrugsDB::Constants::MOLS_MID
-//                                                     << DrugsDB::Constants::MOLS_NAME, w);
-//    if (query.exec(req)) {
-//        while (query.next()) {
-//            mols.insertMulti(query.value(1).toString(), query.value(0).toInt());
-//        }
-//    }
-//    query.finish();
-//    qWarning() << "Number of distinct molecules" << mols.uniqueKeys().count();
-//    const QStringList &knownMoleculeNames = mols.uniqueKeys();
+    // Get all MOLS.MID and Label
+    LOG("Getting Drugs Composition from " + drugsDbUid);
+    QMultiHash<QString, int> mols;
+    QHash<int, QString> w;
+    w.insert(MOLS_SID, QString("=%1").arg(sid));
+    req = database->selectDistinct(Table_MOLS, QList<int>()
+                                   << MOLS_MID
+                                   << MOLS_NAME, w);
+    if (query.exec(req)) {
+        while (query.next()) {
+            mols.insertMulti(query.value(1).toString(), query.value(0).toInt());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    qWarning() << "Number of distinct molecules" << mols.uniqueKeys().count();
+    const QStringList &knownMoleculeNames = mols.uniqueKeys();
 
-//    // manage corrected molecules
-//    {
-//        foreach(const QString &mol, correctedByName.keys()) {
-//            if (!knownMoleculeNames.contains(mol))
-//                continue;
-//            foreach(int id, atcName_id.values(correctedByName.value(mol)))
-//                mol_atc.insertMulti(mols.value(mol), id);
-//        }
-//        foreach(const QString &mol, correctedByAtcCode.uniqueKeys()) {  // Key=mol, Val=ATC
-//            if (!knownMoleculeNames.contains(mol))
-//                continue;
-//            // For all ATC codes corresponding to the molecule name
-//            foreach(const QString &atc, correctedByAtcCode.values(mol)) {
-//                // Get the ATC label and retreive all ATC_ids that have the same label --> NO
-//                //                QString atcLabel = atcName_id.key(atc_id.value(atc));
-//                //                foreach(int id, atcName_id.values(atcLabel))
-//                //                    mol_atc.insertMulti(mols.value(mol), id);
-//                // Associate molecule to the ATC_Id corresponding to the code
-//                foreach(const int molId, mols.values(mol)) {
-//                    mol_atc.insertMulti(molId, atc_id.value(atc));
-//                }
-//                qWarning() << "Corrected by ATC" << mol << atc << atcName_id.key(atc_id.value(atc));
-//            }
-//        }
-//        LOG("Hand made association: " + QString::number(mol_atc.count()));
-//    }
+    // manage corrected molecules
+    foreach(const QString &mol, correctedByName.keys()) {
+        if (!knownMoleculeNames.contains(mol))
+            continue;
+        foreach(int id, atcName_id.values(correctedByName.value(mol)))
+            mol_atc.insertMulti(mols.value(mol), id);
+    }
+    foreach(const QString &mol, correctedByAtcCode.uniqueKeys()) {  // Key=mol, Val=ATC
+        if (!knownMoleculeNames.contains(mol))
+            continue;
+        // For all ATC codes corresponding to the molecule name
+        foreach(const QString &atc, correctedByAtcCode.values(mol)) {
+            // Get the ATC label and retreive all ATC_ids that have the same label --> NO
+            //                QString atcLabel = atcName_id.key(atc_id.value(atc));
+            //                foreach(int id, atcName_id.values(atcLabel))
+            //                    mol_atc.insertMulti(mols.value(mol), id);
+            // Associate molecule to the ATC_Id corresponding to the code
+            foreach(const int molId, mols.values(mol)) {
+                mol_atc.insertMulti(molId, atc_id.value(atc));
+            }
+            qWarning() << "Corrected by ATC" << mol << atc << atcName_id.key(atc_id.value(atc));
+        }
+    }
+    LOG("Hand made association: " + QString::number(mol_atc.count()));
 
-//    // find links
-//    unfoundOutput->clear();
-//    foreach(const QString &mol, knownMoleculeNames) {
-//        if (mol.isEmpty())
-//            continue;
-//        foreach(const int codeMol, mols.values(mol)) {
-//            if (mol_atc.keys().contains(codeMol)) {
-//                continue;
-//            }
-//            // Does molecule name exact-matches an ATC label
-//            QString molName = mol.toUpper();
-//            QList<int> atcIds = atcName_id.values(molName);
-//            if (atcIds.count()==0) {
-//                // No --> Try to find the ATC label by transforming the molecule name
-//                // remove accents
-//                molName = molName.replace(QString::fromUtf8("É"), "E");
-//                molName = molName.replace(QString::fromUtf8("È"), "E");
-//                molName = molName.replace(QString::fromUtf8("À"), "A");
-//                molName = molName.replace(QString::fromUtf8("Ï"), "I");
-//                atcIds = atcName_id.values(molName);
-//                if (atcIds.count()>0) {
-//                    qWarning() << "Without accent >>>>>>>>" << molName;
-//                }
-//                // Not found try some transformations
-//                // remove '(*)'
-//                if ((atcIds.count()==0) && (molName.contains("("))) {
-//                    molName = molName.left(molName.indexOf("(")).simplified();
-//                    atcIds = atcName_id.values(molName);
-//                    if (atcIds.count()>0) {
-//                        qWarning() << "Without (*) >>>>>>>>" << molName;
-//                    }
-//                }
-//                if (atcIds.count()==0) {
-//                    // remove last word : CITRATE, DIHYDRATE, SODIUM, HYDROCHLORIDE, POLISTIREX, BROMIDE, MONOHYDRATE, CHLORIDE, CARBAMATE
-//                    //  INDANYL SODIUM, ULTRAMICROCRYSTALLINE, TROMETHAMINE
-//                    molName = molName.left(molName.lastIndexOf(" ")).simplified();
-//                    atcIds = atcName_id.values(molName);
-//                    if (atcIds.count()>0) {
-//                        qWarning() << "Without last word >>>>>>>>" << molName;
-//                    }
-//                }
-//                if (atcIds.count()==0) {
-//                    // remove first words : CHLORHYDRATE DE, ACETATE DE
-//                    QStringList toRemove;
-//                    toRemove << "CHLORHYDRATE DE" << "CHLORHYDRATE D'" << "ACETATE DE" << "ACETATE D'";
-//                    foreach(const QString &prefix, toRemove) {
-//                        if (molName.startsWith(prefix)) {
-//                            QString tmp = molName;
-//                            tmp.remove(prefix);
-//                            tmp = tmp.simplified();
-//                            atcIds = atcName_id.values(tmp);
-//                            if (atcIds.count()) {
-//                                molName = tmp;
-//                                qWarning() << "Without prefix"<< prefix << ">>>>>>>>" << tmp << atcIds;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                if (atcIds.count()==0) {
-//                    // Manage (DINITRATE D')
-//                    if (molName.contains("(DINITRATE D')")) {
-//                        QString tmp = molName;
-//                        tmp = tmp.remove("(DINITRATE D')");
-//                        tmp += "DINITRATE";
-//                        atcIds = atcName_id.values(tmp);
-//                        if (atcIds.count()) {
-//                            molName = tmp;
-//                            qWarning() << "With DINITRATE"<< molName << ">>>>>>>>" << tmp << atcIds;
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//            bool found = false;
-//            foreach(int id, atcIds) {
-//                found = true;
-//                mol_atc.insertMulti(codeMol, id);
-//                qWarning() << "Linked" << mol << atcName_id.key(id);
-//            }
-//            if (!found) {
-//                if (!unfoundOutput->contains(mol))
-//                    unfoundOutput->append(mol);
-//            }
-//        }
-//    }
+    // find links
+    unfoundOutput->clear();
+    foreach(const QString &mol, knownMoleculeNames) {
+        if (mol.isEmpty())
+            continue;
+        foreach(const int codeMol, mols.values(mol)) {
+            if (mol_atc.keys().contains(codeMol)) {
+                continue;
+            }
+            // Does molecule name exact-matches an ATC label
+            QString molName = mol.toUpper();
+            QList<int> atcIds = atcName_id.values(molName);
+            if (atcIds.count()==0) {
+                // No --> Try to find the ATC label by transforming the molecule name
+                // remove accents
+                molName = molName.replace(QString::fromUtf8("É"), "E");
+                molName = molName.replace(QString::fromUtf8("È"), "E");
+                molName = molName.replace(QString::fromUtf8("À"), "A");
+                molName = molName.replace(QString::fromUtf8("Ï"), "I");
+                atcIds = atcName_id.values(molName);
+                if (atcIds.count()>0) {
+                    qWarning() << "Without accent >>>>>>>>" << molName;
+                }
+                // Not found try some transformations
+                // remove '(*)'
+                if ((atcIds.count()==0) && (molName.contains("("))) {
+                    molName = molName.left(molName.indexOf("(")).simplified();
+                    atcIds = atcName_id.values(molName);
+                    if (atcIds.count()>0) {
+                        qWarning() << "Without (*) >>>>>>>>" << molName;
+                    }
+                }
+                if (atcIds.count()==0) {
+                    // remove last word : CITRATE, DIHYDRATE, SODIUM, HYDROCHLORIDE, POLISTIREX, BROMIDE, MONOHYDRATE, CHLORIDE, CARBAMATE
+                    //  INDANYL SODIUM, ULTRAMICROCRYSTALLINE, TROMETHAMINE
+                    molName = molName.left(molName.lastIndexOf(" ")).simplified();
+                    atcIds = atcName_id.values(molName);
+                    if (atcIds.count()>0) {
+                        qWarning() << "Without last word >>>>>>>>" << molName;
+                    }
+                }
+                if (atcIds.count()==0) {
+                    // remove first words : CHLORHYDRATE DE, ACETATE DE
+                    QStringList toRemove;
+                    toRemove << "CHLORHYDRATE DE" << "CHLORHYDRATE D'" << "ACETATE DE" << "ACETATE D'";
+                    foreach(const QString &prefix, toRemove) {
+                        if (molName.startsWith(prefix)) {
+                            QString tmp = molName;
+                            tmp.remove(prefix);
+                            tmp = tmp.simplified();
+                            atcIds = atcName_id.values(tmp);
+                            if (atcIds.count()) {
+                                molName = tmp;
+                                qWarning() << "Without prefix"<< prefix << ">>>>>>>>" << tmp << atcIds;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (atcIds.count()==0) {
+                    // Manage (DINITRATE D')
+                    if (molName.contains("(DINITRATE D')")) {
+                        QString tmp = molName;
+                        tmp = tmp.remove("(DINITRATE D')");
+                        tmp += "DINITRATE";
+                        atcIds = atcName_id.values(tmp);
+                        if (atcIds.count()) {
+                            molName = tmp;
+                            qWarning() << "With DINITRATE"<< molName << ">>>>>>>>" << tmp << atcIds;
+                            break;
+                        }
+                    }
+                }
+            }
+            bool found = false;
+            foreach(int id, atcIds) {
+                found = true;
+                mol_atc.insertMulti(codeMol, id);
+                qWarning() << "Linked" << mol << atcName_id.key(id);
+            }
+            if (!found) {
+                if (!unfoundOutput->contains(mol))
+                    unfoundOutput->append(mol);
+            }
+        }
+    }
 
-//    // Inform model of founded links
-//    QMultiHash<QString, QString> mol_atc_forModel;
-//    QHashIterator<int,int> it(mol_atc);
-//    while (it.hasNext()) {
-//        it.next();
-//        mol_atc_forModel.insertMulti(mols.key(it.key()), atc_id.key(it.value()));
-//    }
-//    ExtraMoleculeLinkerModel::instance()->addAutoFoundMolecules(mol_atc_forModel);
-//    mol_atc_forModel.clear();
+    // Inform model of founded links
+    QMultiHash<QString, QString> mol_atc_forModel;
+    QHashIterator<int,int> it(mol_atc);
+    while (it.hasNext()) {
+        it.next();
+        mol_atc_forModel.insertMulti(mols.key(it.key()), atc_id.key(it.value()));
+    }
+    addAutoFoundMolecules(mol_atc_forModel);
+    mol_atc_forModel.clear();
 
-//    // Try to find molecules in the ExtraMoleculeLinkerModel
-//    QHash<QString, QString> model_mol_atc;
-//    int modelFound = 0;
-//    int reviewedWithoutAtcLink = 0;
-//    ExtraMoleculeLinkerModel *model = ExtraMoleculeLinkerModel::instance();
-//    {
-//        model->selectDatabase(drugsDbUid);
-//        while (model->canFetchMore(QModelIndex()))
-//            model->fetchMore(QModelIndex());
+    // Try to find molecules in the MoleculeLinkerModel
+    QHash<QString, QString> model_mol_atc;
+    int modelFound = 0;
+    int reviewedWithoutAtcLink = 0;
+    selectDatabase(drugsDbUid);
+    while (canFetchMore(QModelIndex()))
+        fetchMore(QModelIndex());
 
-//        for(int i=0; i< model->rowCount(); ++i) {
-//            if (model->index(i, ExtraMoleculeLinkerModel::Review).data().toString() == "true") {
-//                model_mol_atc.insert(model->index(i, ExtraMoleculeLinkerModel::MoleculeName).data().toString(),
-//                                     model->index(i, ExtraMoleculeLinkerModel::ATC_Code).data().toString());
-//            }
-//        }
-//        qWarning() << "ExtraMoleculeLinkerModel::AvailableLinks" << model_mol_atc.count();
+    for(int i=0; i< rowCount(); ++i) {
+        if (index(i, MoleculeLinkerModel::Review).data().toString() == "true") {
+            model_mol_atc.insert(index(i, MoleculeLinkerModel::MoleculeName).data().toString(),
+                                 index(i, MoleculeLinkerModel::ATC_Code).data().toString());
+        }
+    }
+    qWarning() << "MoleculeLinkerModel::AvailableLinks" << model_mol_atc.count();
 
-//        foreach(const QString &mol, *unfoundOutput) {
-//            if (model_mol_atc.keys().contains(mol)) {
-//                int codeMol = mols.value(mol);
-//                if (!mol_atc.keys().contains(codeMol)) {
-//                    if (model_mol_atc.value(mol).trimmed().isEmpty()) {
-//                        ++reviewedWithoutAtcLink;
-//                        continue;
-//                    }
-//                    QStringList atcCodes = model_mol_atc.value(mol).split(",");
-//                    foreach(const QString &atcCode, atcCodes) {
-//                        QString atcName = atcName_id.key(atc_id.value(atcCode));
-//                        QList<int> atcIds = atcName_id.values(atcName);
-//                        foreach(int id, atcIds) {
-//                            mol_atc.insertMulti(codeMol, id);
-//                            qWarning() << "ModelLinker Found" << codeMol << mol << id << atcName_id.key(id);
-//                            unfoundOutput->removeAll(mol);
-//                        }
-//                        if (atcIds.count())
-//                            ++modelFound;
-//                    }
-//                }
-//            }
-//        }
-//    }
+    foreach(const QString &mol, *unfoundOutput) {
+        if (model_mol_atc.keys().contains(mol)) {
+            int codeMol = mols.value(mol);
+            if (!mol_atc.keys().contains(codeMol)) {
+                if (model_mol_atc.value(mol).trimmed().isEmpty()) {
+                    ++reviewedWithoutAtcLink;
+                    continue;
+                }
+                QStringList atcCodes = model_mol_atc.value(mol).split(",");
+                foreach(const QString &atcCode, atcCodes) {
+                    QString atcName = atcName_id.key(atc_id.value(atcCode));
+                    QList<int> atcIds = atcName_id.values(atcName);
+                    foreach(int id, atcIds) {
+                        mol_atc.insertMulti(codeMol, id);
+                        qWarning() << "ModelLinker Found" << codeMol << mol << id << atcName_id.key(id);
+                        unfoundOutput->removeAll(mol);
+                    }
+                    if (atcIds.count())
+                        ++modelFound;
+                }
+            }
+        }
+    }
 
 //    // Try to find new associations via the COMPOSITION.LK_NATURE field
-//    int natureLinkerNb = 0;
+    int natureLinkerNb = 0;
 //    if (drugsDbUid == "FR_AFSSAPS") {
 //        // TODO: code here */
 //        QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
 //        QMap<int, QVector<MolLink> > cis_compo;
 //        {
 //            //            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
-//            QString req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_COMPO, QList<int>()
-//                                                             << DrugsDB::Constants::COMPO_DID
-//                                                             << DrugsDB::Constants::COMPO_MID
-//                                                             << DrugsDB::Constants::COMPO_LK_NATURE
+//            QString req = DrugsDB::Tools::drugBase()->select(Table_COMPO, QList<int>()
+//                                                             << COMPO_DID
+//                                                             << COMPO_MID
+//                                                             << COMPO_LK_NATURE
 //                                                             );
-//            req += QString(" ORDER BY `%1`").arg(DrugsDB::Tools::drugBase()->fieldName(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_DID));
+//            req += QString(" ORDER BY `%1`").arg(database->fieldName(Table_COMPO, COMPO_DID));
 //            if (query.exec(req)) {
 //                while (query.next()) {
 //                    QVector<MolLink> &receiver = cis_compo[query.value(0).toInt()];
@@ -906,41 +899,41 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 //        while (nb > 0);
 //    }
 
-//    // Save completion percent in drugs database INFORMATION table
-//    int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
-//    LOG(QString("Molecule links completion: %1").arg(completion));
-//    //    DrugsDB::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
-//    //                                 .arg(completion).arg(sid),
-//    //                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
-//    QHash<int, QString> where;
-//    where.insert(DrugsDB::Constants::SOURCES_SID, QString("='%1'").arg(sid));
-//    query.prepare(DrugsDB::Tools::drugBase()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_COMPLETION, where));
-//    query.bindValue(0, completion);
-//    if (!query.exec()) {
-//        LOG_QUERY_ERROR_FOR("Tools", query);
-//        return mol_atc;
-//    }
+    // Save completion percent in drugs database INFORMATION table
+    int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
+    LOG(QString("Molecule links completion: %1").arg(completion));
+    //    DrugsDB::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
+    //                                 .arg(completion).arg(sid),
+    //                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+    QHash<int, QString> where;
+    where.insert(SOURCES_SID, QString("='%1'").arg(sid));
+    query.prepare(database->prepareUpdateQuery(Table_SOURCES, SOURCES_COMPLETION, where));
+    query.bindValue(0, completion);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+        return mol_atc;
+    }
+    query.finish();
 
-//    // Inform model of founded links
-//    ExtraMoleculeLinkerModel::instance()->addAutoFoundMolecules(mol_atc_forModel, true);
-//    mol_atc_forModel.clear();
+    // Inform model of founded links
+    addAutoFoundMolecules(mol_atc_forModel, true);
+    mol_atc_forModel.clear();
 
-//    qWarning()
-//            << "\nNUMBER OF MOLECULES" << knownMoleculeNames.count()
-//            << "\nCORRECTED BY NAME" << correctedByName.keys().count()
-//            << "\nCORRECTED BY ATC" << correctedByAtcCode.uniqueKeys().count()
-//            << "\nFOUNDED" << mol_atc.uniqueKeys().count()
-//            << QString("\nLINKERMODEL (WithATC:%1;WithoutATC:%2) %3").arg(modelFound).arg(reviewedWithoutAtcLink).arg(modelFound + reviewedWithoutAtcLink)
-//            << "\nLINKERNATURE" << natureLinkerNb
-//            << "\nLEFT" << (unfoundOutput->count() - reviewedWithoutAtcLink)
-//            << "\nCONFIDENCE INDICE" << completion
-//            << "\n\n";
+    qWarning()
+            << "\nNUMBER OF MOLECULES" << knownMoleculeNames.count()
+            << "\nCORRECTED BY NAME" << correctedByName.keys().count()
+            << "\nCORRECTED BY ATC" << correctedByAtcCode.uniqueKeys().count()
+            << "\nFOUNDED" << mol_atc.uniqueKeys().count()
+            << QString("\nLINKERMODEL (WithATC:%1;WithoutATC:%2) %3").arg(modelFound).arg(reviewedWithoutAtcLink).arg(modelFound + reviewedWithoutAtcLink)
+            << "\nLINKERNATURE" << natureLinkerNb
+            << "\nLEFT" << (unfoundOutput->count() - reviewedWithoutAtcLink)
+            << "\nCONFIDENCE INDICE" << completion
+            << "\n\n";
 
-//    return mol_atc;
-    return QMultiHash<int, int>();
+    return mol_atc;
 }
 
-int ExtraMoleculeLinkerModel::removeUnreviewedMolecules()
+int MoleculeLinkerModel::removeUnreviewedMolecules()
 {
     int nb = 0;
     int examined = 0;

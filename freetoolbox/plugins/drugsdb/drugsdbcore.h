@@ -19,78 +19,70 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ROUTESMODEL_H
-#define ROUTESMODEL_H
+#ifndef DRUGSDB_DRUGSDBCORE_H
+#define DRUGSDB_DRUGSDBCORE_H
 
-#include <QAbstractTableModel>
+#include <drugsdb/drugsdb_exporter.h>
+#include <QObject>
 #include <QMultiHash>
-#include <QString>
-#include <QList>
+
+/**
+ * \file drugsdbcore.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 21 Oct 2012
+*/
 
 namespace DrugsDB {
+class RoutesModel;
+class MoleculeLinkerModel;
+
 namespace Internal {
-
-struct Route {
-    Route() : id(-1), isHelper(false), checkState(Qt::Unchecked){}
-
-    bool operator<(const Route &second) const;
-
-    int id;
-    QMultiHash<QString, QString> trLabels;
-    bool isHelper;
-    Qt::CheckState checkState;
-};
-
+class DrugsDbPlugin;
+class DrugsDBCorePrivate;
+class DrugBaseEssentials;
 }  // namespace Internal
 
-class RoutesModel : public QAbstractTableModel
+class DRUGSDB_EXPORT DrugsDBCore : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<int> checkedRouteIds READ checkedRouteIds WRITE setCheckedRouteIds)
+    friend class DrugsDB::Internal::DrugsDbPlugin;
+
+protected:
+    explicit DrugsDBCore(QObject *parent = 0);
+    bool initialize();
 
 public:
-    enum DataRepresentation {
-        Id = 0,
-        FirstTranslatedName,
-        AllTranslatedNames,
-        ColumnCount
-    };
+    static DrugsDBCore *instance();
+    ~DrugsDBCore();
 
-    RoutesModel(QObject *parent = 0);
-    ~RoutesModel();
+    RoutesModel *routesModel() const;
+    MoleculeLinkerModel *moleculeLinkerModel() const;
 
-    static QString routeCsvAbsoluteFile();
+    // TODO:: remove me
+    DrugsDB::Internal::DrugBaseEssentials *drugBase();
+    bool createMasterDrugInteractionDatabase();
+    // END
+    DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 
-    void initialize();
-    void clear();
+    bool saveDrugDatabaseDescription(const QString &fileName, const int completion);
+    int getSourceId(const QString &connection, const QString &dbUid);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &) const {return ColumnCount;}
+    QHash<int, QString> generateMids(const QStringList &molnames, const int sid, const QString &connection);
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    QList<int> checkedRouteIds() const;
-    QList<QVariant> checkedRouteIdsInVariant() const;
-    void setCheckedRouteIds(const QList<int> &ids);
-    void setCheckedRouteIds(const QList<QVariant> &ids);
-
-    QList<int> routeId(const QStringList &routeName) const;
+    bool addInteractionData(const QString &connection);
 
 private:
-    QList<Internal::Route> m_Routes;
-    QList<int> m_CheckedIds;
+    static DrugsDBCore *_instance;
+    Internal::DrugsDBCorePrivate *d;
 };
 
-}  // End namespace DrugsDB
+} // namespace DrugsDB
 
-QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route);
+#endif  // DRUGSDB_DRUGSDBCORE_H
 
-#endif // ROUTESMODEL_H

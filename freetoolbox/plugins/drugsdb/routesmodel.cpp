@@ -251,6 +251,18 @@ void RoutesModel::setCheckedRouteIds(const QList<QVariant> &ids)
     setCheckedRouteIds(_ids);
 }
 
+QList<int> RoutesModel::routeId(const QStringList &routeName) const
+{
+    QList<int> ids;
+    foreach(const QString &rname, routeName) {
+        foreach(const Internal::Route &route, m_Routes) {
+            if (route.trLabels.values().contains(rname))
+                ids << route.id;
+        }
+    }
+    return ids;
+}
+
 QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route)
 {
     debug.nospace() << "Route(" << route.id << "," << route.trLabels << ")";

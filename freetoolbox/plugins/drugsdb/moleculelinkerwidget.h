@@ -35,6 +35,7 @@ class QModelIndex;
 class QSortFilterProxyModel;
 
 namespace DrugsDB {
+class MoleculeLinkerModel;
 
 namespace Ui {
     class MoleculeLinkerWidget;
@@ -53,8 +54,6 @@ public:
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
 };
-
-class ExtraMoleculeLinkerModel;
 
 class MoleculeLinkerWidget : public QWidget
 {
@@ -77,7 +76,7 @@ protected:
 
 private:
     Ui::MoleculeLinkerWidget *ui;
-    ExtraMoleculeLinkerModel *model;
+    MoleculeLinkerModel *model;
     QSortFilterProxyModel *proxyModel;
 };
 

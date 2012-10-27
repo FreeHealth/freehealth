@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "frenchdrugsdatabasecreator.h"
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "drug.h"
 #include "drugsdbcore.h"
 
@@ -38,12 +38,11 @@
 #include <drugsdb/drugdatabasedescription.h>
 #include <drugsdb/tools.h>
 
+#include <drugsbaseplugin/drugbaseessentials.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/database.h>
-#include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
-#include <quazip/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 
@@ -69,20 +68,12 @@ using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-const char* const  FRENCH_URL                  = "http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip";
 const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
-
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
-
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/fr_db_finalize.sql");}
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/description.xml");}
-
 
 FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
@@ -103,51 +94,31 @@ QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)
 
 
 FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
+    DrugsDB::Internal::IDrugDatabaseStep(parent),
     m_WithProgress(false)
 {
     setObjectName("FrDrugDatatabaseStep");
+    setTempPath(QString("%1/%2")
+                .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
+                .arg("/FrenchRawSources/"));
+    setConnectionName("fr_free");
+    setOutputPath(Tools::databaseOutputPath() + "/drugs/");
+    setFinalizationScript(QString("%1/%2")
+                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                          .arg("/global_resources/sql/drugdb/fr/fr_db_finalize.sql"));
+    setDescriptionFile(QString("%1/%2")
+                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                       .arg("/global_resources/sql/drugdb/fr/description.xml"));
+    setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
 }
 
 FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
 {
 }
 
-bool FrDrugDatatabaseStep::createDir()
-{
-    if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create French Working Path :" + workingPath());
-    else
-        LOG("Tmp dir created");
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath)) {
-            LOG_ERROR("Unable to create French database output path :" + dbpath);
-            m_Errors << tr("Unable to create French database output path :") + dbpath;
-        } else {
-            LOG("Drugs database output dir created");
-        }
-    }
-    return true;
-}
-
 bool FrDrugDatatabaseStep::cleanFiles()
 {
-    QFile(databaseAbsPath()).remove();
-    return true;
-}
-
-bool FrDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
-{
-    Utils::HttpDownloader *dld = new Utils::HttpDownloader;
-    dld->setProgressBar(bar);
-//    dld->setMainWindow(mainwindow());
-    dld->setOutputPath(workingPath());
-    dld->setUrl(QUrl(FRENCH_URL));
-    dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
-    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    QFile(absoluteFilePath()).remove();
     return true;
 }
 
@@ -162,90 +133,59 @@ bool FrDrugDatatabaseStep::process()
     return true;
 }
 
-bool FrDrugDatatabaseStep::unzipFiles()
-{
-    // check file
-    QString fileName = workingPath() + QDir::separator() + QFileInfo(FRENCH_URL).fileName();
-    if (!QFile(fileName).exists()) {
-        LOG_ERROR(QString("No files founded."));
-        LOG_ERROR(QString("Please download files."));
-        return false;
-    }
-
-    // unzip files using QProcess
-    LOG(QString("Starting unzipping afssaps file %1").arg(fileName));
-
-    return QuaZipTools::unzipFile(fileName, workingPath());
-}
-
 bool FrDrugDatatabaseStep::prepareDatas()
 {
     // check files
-    if (!QFile::exists(workingPath() + "CIS.txt")) {
-        LOG_ERROR(QString("Missing CIS.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
-        return false;
+    QStringList files;
+    files << "CIS.txt" << "CIS_CIP.txt" << "COMPO.txt";
+    foreach(const QString &f, files) {
+        if (!QFile::exists(tempPath() + "/" + f)) {
+            LOG_ERROR(QString("Missing %1 file. FrenchDrugsDatabaseWidget::populateDatabase()")
+                      .arg(tempPath() + "/" + f));
+            return false;
+        }
     }
-
-    if (!QFile::exists(workingPath() + "CIS_CIP.txt")) {
-        LOG_ERROR(QString("Missing CIS_CIP.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
-        return false;
-    }
-
-    if (!QFile::exists(workingPath() + "COMPO.txt")) {
-        LOG_ERROR(QString("Missing COMPO.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
-        return false;
-    }
-
     return true;
 }
 
 bool FrDrugDatatabaseStep::createDatabase()
 {
-//    DrugsDB::Internal::DrugBaseEssentials *db = drugsDbCore()->drugBase(::FR_DRUGS_DATABASE_NAME);
-//    if (!db)
-//        return false;
-//    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
-//        return false;
+    if (drugEssentialDatabase())
+        return true;
 
-//    QMultiHash<QString, QVariant> labels;
-//    labels.insert("fr","Base de données thérapeutique française");
-//    labels.insert("en","French therapeutic database");
-//    labels.insert("de","Französische Therapeutische Datenbank");
+    if (!IDrugDatabaseStep::createDatabase()) {
+        LOG_ERROR("Unable to create database");
+        return false;
+    }
+    DrugsDB::Internal::DrugBaseEssentials *db = drugEssentialDatabase();
+    if (!db)
+        return false;
 
-//    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME, labels) == -1) {
-//        LOG_ERROR("Unable to create the French drugs sources");
-//        return false;
-//    }
-//    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
-//    LOG(QString("Database schema created"));
+    saveDrugDatabaseDescription();
+    addRoutes();
+
+    if (licenseType() == NonFree) {
+        if (!drugsDbCore()->addInteractionData(connectionName()))
+            return false;
+    }
+
+    LOG(QString("Database schema created"));
     return true;
 }
 
 bool FrDrugDatatabaseStep::populateDatabase()
 {
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
         return false;
 
     // check files
-    if (!QFile::exists(workingPath() + "CIS.txt")) {
-        LOG_ERROR(QString("Missing CIS.txt file."));
+    if (!prepareDatas())
         return false;
-    }
-
-//    if (!QFile::exists(workingPath() + "CIS_CIP.txt")) {
-//        LOG_ERROR(QString("Missing CIS_CIP.txt file."));
-//        return false;
-//    }
-
-    if (!QFile::exists(workingPath() + "COMPO.txt")) {
-        LOG_ERROR(QString("Missing COMPO.txt file."));
-        return false;
-    }
 
     QHash<int, Drug *> drugs;
     QMultiHash<int, Component *> compos;
 
-    QFile file(workingPath() + "CIS.txt");
+    QFile file(tempPath() + "/CIS.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR(QString("ERROR : Enable to open CIS.txt : %1.").arg(file.errorString()));
         return false;
@@ -280,7 +220,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
     }
     file.close();
 
-    file.setFileName(workingPath() + "COMPO.txt");
+    file.setFileName(tempPath() + "/COMPO.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR(QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()));
         return false;
@@ -326,17 +266,15 @@ bool FrDrugDatatabaseStep::populateDatabase()
         drugsVector << drug;
     }
 
-    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsVector, FR_DRUGS_DATABASE_NAME);
+    saveDrugsIntoDatabase(drugsVector);
     Q_EMIT progress(2);
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-//        LOG_ERROR("Can create French DB.");
-//        return false;
-//    }
-
-//    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+    if (!Tools::executeSqlFile(connectionName(), finalizationScript())) {
+        LOG_ERROR("Can create French DB.");
+        return false;
+    }
 
     // delete pointers
     qDeleteAll(drugs);
@@ -367,7 +305,6 @@ bool FrDrugDatatabaseStep::linkMolecules()
     //    LINKERNATURE 403
     //    LEFT 1184
     //    CONFIDENCE INDICE 77
-
 
     // 18 Oct 2011
     //    NUMBER OF MOLECULES 5211
@@ -469,56 +406,56 @@ bool FrDrugDatatabaseStep::linkMolecules()
 
 
     // Connect to databases
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
         return false;
 
-    QSqlDatabase fr = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-    if (!fr.isOpen()) {
+    QSqlDatabase db = drugEssentialDatabase()->database();
+    if (!db.isOpen()) {
         LOG_ERROR("Can not connect to French db");
         return false;
     }
 
-//    // Get SID
-//    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME);
-//    if (sid==-1) {
-//        LOG_ERROR("NO SID DEFINED");
-//        return false;
-//    }
+    if (sourceId()==-1) {
+        LOG_ERROR("NO SID DEFINED");
+        return false;
+    }
 
 //    // Associate Mol <-> ATC for drugs with one molecule only
-//    QHash<QString, QString> corrected;
+    QHash<QString, QString> corrected;
+    QMultiHash<QString, QString> correctedByAtcCode;
 
-//    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
-//    Q_EMIT progressRangeChanged(0, 2);
-//    Q_EMIT progress(0);
+    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
+    Q_EMIT progressRangeChanged(0, 2);
+    Q_EMIT progress(0);
 
-//    // Associate Mol <-> ATC for drugs with one molecule only
-//    QStringList unfound;
-//    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FR_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
-//    qWarning() << "unfound" << unfound.count();
+    // Associate Mol <-> ATC for drugs with one molecule only
+    QStringList unfound;
+    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
+    QMultiHash<int, int> mol_atc = model->moleculeLinker(drugEssentialDatabase(), ::FR_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, correctedByAtcCode);
+    qWarning() << "unfound" << unfound.count();
 
-//    Q_EMIT progress(1);
+    Q_EMIT progress(1);
 
-//    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
-//    Q_EMIT progressRangeChanged(0, 1);
-//    Q_EMIT progress(0);
+    Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
 
-//    // Save to links to drugs database
-//    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
+    // Save to links to drugs database
+    Tools::addComponentAtcLinks(drugEssentialDatabase(), mol_atc, sourceId());
 
-//    LOG(QString("Database processed"));
+    LOG(QString("Database processed"));
 
-//    // add unfound to extralinkermodel
-//    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-//    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(FR_DRUGS_DATABASE_NAME, unfound);
-//    ExtraMoleculeLinkerModel::instance()->saveModel();
+    // add unfound to extralinkermodel
+    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
+    model->addUnreviewedMolecules(::FR_DRUGS_DATABASE_NAME, unfound);
+    model->saveModel();
 
     return true;
 }
 
-
-
-
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////   WIDGET   //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 FrenchDrugsDatabaseWidget::FrenchDrugsDatabaseWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FrenchDrugsDatabaseWidget),
@@ -546,7 +483,7 @@ void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
     progressDialog.setWindowModality(Qt::WindowModal);
     progressDialog.setValue(0);
     progressDialog.show();
-    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
+    connect(m_Step, SIGNAL(progressRangeChanged(qint64,qint64)), &progressDialog, SLOT(setRange(int, int)));
     connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
     connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
 

@@ -17,7 +17,7 @@ SOURCES += \
 #    southafricandrugsdatabase.cpp \
 #    belgishdrugsdatabase.cpp \
 #    portuguesedrugsdatabase.cpp \
-    extramoleculelinkermodel.cpp \
+    moleculelinkermodel.cpp \
     moleculelinkerwidget.cpp \
     atcmodel.cpp \
     atcpage.cpp \
@@ -27,7 +27,8 @@ SOURCES += \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
     drugdatabasedescription.cpp \
     routesmodel.cpp \
-    drugsdbcore.cpp
+    drugsdbcore.cpp \
+    idrugdatabasestep.cpp
 
 HEADERS  += \
     tools.h \
@@ -37,7 +38,7 @@ HEADERS  += \
 #    southafricandrugsdatabase.h \
 #    belgishdrugsdatabase.h \
 #    portuguesedrugsdatabase.h \
-    extramoleculelinkermodel.h \
+    moleculelinkermodel.h \
     moleculelinkerwidget.h \
     atcmodel.h \
     atcpage.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
     drugdatabasedescription.h \
     routesmodel.h \
-    drugsdbcore.h
+    drugsdbcore.h \
+    idrugdatabasestep.h
 
 FORMS += \
     frenchdrugsdatabasewidget.ui \
