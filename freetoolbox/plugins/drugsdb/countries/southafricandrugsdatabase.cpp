@@ -25,20 +25,28 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "southafricandrugsdatabase.h"
-#include "extramoleculelinkermodel.h"
+#include "moleculelinkermodel.h"
 #include "drug.h"
-#include <drugsdb/tools.h>
+#include "drugsdbcore.h"
+#include "idrugdatabasestepwidget.h"
+#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/isettings.h>
+
+#include <drugsdb/drugdatabasedescription.h>
+#include <drugsdb/tools.h>
+
+#include <drugsbaseplugin/drugbaseessentials.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
+#include <translationutils/trans_countries.h>
 
 #include <QApplication>
 #include <QFile>
@@ -58,9 +66,8 @@
 
 #include <QDebug>
 
-#include "ui_southafricandrugsdatabase.h"
-
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 // get drugs name
@@ -70,46 +77,111 @@ using namespace Trans::ConstantTranslations;
 // get inn/composition
 // <FONT SIZE=2 COLOR=ff0000><B>****</B>
 
-
-const char* const  ZA_URL               = "http://home.intekom.com/pharm/index/index_T_%1.shtml";
-
+namespace {
+const char* const  ZA_URL                     = "http://home.intekom.com/pharm/index/index_T_%1.shtml";
 const char* const  ZA_DRUGS_DATABASE_NAME     = "SAEPI_ZA";
+}
 
-
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return DrugsDB::Tools::drugsDatabaseAbsFileName();}
-
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/description.xml");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
 static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
 
-SouthAfricanDrugsDatabasePage::SouthAfricanDrugsDatabasePage(QObject *parent) :
-    IToolPage(parent)
+/**
+ * Option page for the Free French drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
+FreeSouthAfricanDrugsDatabasePage::FreeSouthAfricanDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent),
+    _step(0)
 {
-    setObjectName("SouthAfricanDrugsDatabasePage");
+    setObjectName("FreeSouthAfricanDrugsDatabasePage");
+    _step = new ZaDrugDatatabaseStep(this);
+    pluginManager()->addObject(_step);
 }
 
-QString SouthAfricanDrugsDatabasePage::category() const
+FreeSouthAfricanDrugsDatabasePage::~FreeSouthAfricanDrugsDatabasePage()
 {
-    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
+    pluginManager()->removeObject(_step);
 }
 
-QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
+QString FreeSouthAfricanDrugsDatabasePage::name() const
 {
-    return new SouthAfricanDrugsDatabase(parent);
+    return tkTr(Trans::Constants::COUNTRY_SOUTHAFRICA);
+}
+
+QString FreeSouthAfricanDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_FREEDRUGSDATABASE;
+}
+
+QWidget *FreeSouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
+{
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
+}
+
+/**
+     * Option page for the non-free French drugs database.
+     * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+     * register it in the plugin manager object pool.
+     */
+NonFreeSouthAfricanDrugsDatabasePage::NonFreeSouthAfricanDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent),
+    _step(0)
+{
+    setObjectName("NonFreeSouthAfricanDrugsDatabasePage");
+    _step = new ZaDrugDatatabaseStep(this);
+    _step->setLicenseType(IDrugDatabaseStep::NonFree);
+    pluginManager()->addObject(_step);
+}
+
+NonFreeSouthAfricanDrugsDatabasePage::~NonFreeSouthAfricanDrugsDatabasePage()
+{
+    pluginManager()->removeObject(_step);
+}
+
+QString NonFreeSouthAfricanDrugsDatabasePage::name() const
+{
+    return tkTr(Trans::Constants::COUNTRY_SOUTHAFRICA);
+}
+
+QString NonFreeSouthAfricanDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_NONFREEDRUGSDATABASE;
+}
+
+QWidget *NonFreeSouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
+{
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
 }
 
 static char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
+    DrugsDB::Internal::IDrugDatabaseStep(parent),
     m_Progress(0), m_WithProgress(false)
 {
     setObjectName("ZaDrugDatatabaseStep");
+    setTempPath(QString("%1/%2")
+                .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
+                .arg("/ZaRawSources/"));
+    setConnectionName("za_free");
+    setOutputPath(Tools::databaseOutputPath() + "/drugs/");
+//    setFinalizationScript(QString("%1/%2")
+//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+//                          .arg("/global_resources/sql/drugdb/fr/fr_db_finalize.sql"));
+    setDescriptionFile(QString("%1/%2")
+                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                       .arg("/global_resources/sql/drugdb/za/description.xml"));
+    setLicenseType(Free);
 }
 
 ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
@@ -118,29 +190,16 @@ ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
         delete m_Progress;
 }
 
-bool ZaDrugDatatabaseStep::createDir()
+void ZaDrugDatatabaseStep::setLicenseType(LicenseType type)
 {
-    if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create ZA Working Path :" + workingPath());
-    else
-        LOG("Tmp dir created");
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath)) {
-            LOG_ERROR("Unable to create Canadian database output path :" + dbpath);
-            m_Errors << tr("Unable to create Canadian database output path :") + dbpath;
-        } else {
-            LOG("Drugs database output dir created");
-        }
+    IDrugDatabaseStep::setLicenseType(type);
+    if (type==NonFree) {
+        setDisplayName(tr("Non-free South African drugs database"));
+        setConnectionName("za_nonfree");
+    } else {
+        setDisplayName(tr("Free South African drugs database"));
+        setConnectionName("za_free");
     }
-    return true;
-}
-
-bool ZaDrugDatatabaseStep::cleanFiles()
-{
-    QFile(databaseAbsPath()).remove();
-    return true;
 }
 
 bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
@@ -165,7 +224,7 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
 {
     static int nb = 0;
     qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
-            << reply->url();
+               << reply->url();
     QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
     fileName.remove("//home.intekom.com/pharm/index/");
@@ -173,9 +232,9 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
 
     // save file
     {
-        QFile file(workingPath() + fileName);
-        if (!QDir(workingPath() + fileName).exists()) {
-            QDir().mkpath(QFileInfo(workingPath() + fileName).absolutePath());
+        QFile file(tempPath() + fileName);
+        if (!QDir(tempPath() + fileName).exists()) {
+            QDir().mkpath(QFileInfo(tempPath() + fileName).absolutePath());
         }
 
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -223,7 +282,7 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
             qWarning() << "Downloading" << m_Drug_Link.count();
             bool downloadStarted = false;
             foreach(const QString &link, m_Drug_Link.values()) {
-                if (!QFile(workingPath() + "/home.intekom.com/" + link).exists()) {
+                if (!QFile(tempPath() + "/home.intekom.com/" + link).exists()) {
                     downloadStarted = true;
                     manager->get(QNetworkRequest(QUrl(QString("http://home.intekom.com%1").arg(link))));
                 }
@@ -237,9 +296,16 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
     }
 }
 
+QString ZaDrugDatatabaseStep::processMessage() const
+{
+    if (licenseType() == NonFree)
+        return tr("Non-free South African drugs database creation");
+    return tr("Free South African drugs database creation");
+}
+
 bool ZaDrugDatatabaseStep::process()
 {
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
@@ -247,7 +313,7 @@ bool ZaDrugDatatabaseStep::process()
     return true;
 }
 
-bool ZaDrugDatatabaseStep::prepareDatas()
+bool ZaDrugDatatabaseStep::prepareData()
 {
     m_Drug_Link.clear();
 
@@ -258,14 +324,14 @@ bool ZaDrugDatatabaseStep::prepareDatas()
     for(int i=0; i<26; ++i) {
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
-        if (!QFile::exists(workingPath() + fileName)) {
-            LOG_ERROR(QString("Missing " + workingPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
+        if (!QFile::exists(tempPath() + fileName)) {
+            LOG_ERROR(QString("Missing " + tempPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
             continue;
         }
 
         // read file
         LOG("Processing file :" + fileName);
-        QString content = Utils::readTextFile(workingPath() + fileName);
+        QString content = Utils::readTextFile(tempPath() + fileName);
         if (content.isEmpty()) {
             LOG_ERROR("no content");
             return false;
@@ -308,38 +374,19 @@ bool ZaDrugDatatabaseStep::prepareDatas()
     return true;
 }
 
-bool ZaDrugDatatabaseStep::createDatabase()
-{
-    if (!DrugsDB::Tools::createMasterDrugInteractionDatabase())
-        return false;
-
-    QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutique Sud Africaine");
-    labels.insert("en","South African therapeutic database");
-    labels.insert("de","Südafrikanische Therapeutische Datenbank");
-
-    if (DrugsDB::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
-        LOG_ERROR("Unable to create the French drugs sources");
-        return false;
-    }
-    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
-    LOG(QString("Database schema created"));
-    return true;
-}
-
 class DrugFileParser {
 public:
     DrugFileParser(const QString &drugName, const QString &fullContent) :
-            name(drugName)
+        name(drugName)
     {
-//        getFormParagraph(fullContent);
+        //        getFormParagraph(fullContent);
         getComposition(fullContent);
-//        getClassificationParagraph(fullContent);
-//        getPresentationParagraph(fullContent);
-//        getRegistrationParagraph(fullContent);
-//        if (!registrationNumberParagraph.isEmpty()) {
-//            getRegistrationNumber();
-//        }
+        //        getClassificationParagraph(fullContent);
+        //        getPresentationParagraph(fullContent);
+        //        getRegistrationParagraph(fullContent);
+        //        if (!registrationNumberParagraph.isEmpty()) {
+        //            getRegistrationNumber();
+        //        }
     }
 
     void getFormParagraph(const QString &)
@@ -352,11 +399,11 @@ public:
         static QStringList ends;
         if (starts.isEmpty()) {
             starts << "COMPOSITION" <<"COMPOSITON"<< "PROPRIETARY NAME" << "DESCRIPTION" << "ACTIVE INGREDIENTS"
-                    << "Description/Composition" << "NUTRITIONAL INFORMATION" << "Composition";
+                   << "Description/Composition" << "NUTRITIONAL INFORMATION" << "Composition";
         }
         if (ends.isEmpty()) {
             ends << "PHARMACOLOGICAL CLASSIFICATION" << "INDICATIONS" << "CLINICAL PHARMACOLOGY"
-                    << "Administration" << "DOSAGE AND DIRECTIONS FOR USE:"<< "WHAT IS CALCIUM?";
+                 << "Administration" << "DOSAGE AND DIRECTIONS FOR USE:"<< "WHAT IS CALCIUM?";
         }
         compositionParagraph = getBlock(starts, ends, fullContent, "Composition");
 
@@ -364,7 +411,7 @@ public:
         int begin = 0;
         int max = compositionParagraph.length();
         int end = 0;
-//        int nbColoredText = fullContent.count("COLOR=ff0000");
+        //        int nbColoredText = fullContent.count("COLOR=ff0000");
         while (begin < max && begin != -1) {
             begin = compositionParagraph.indexOf("<FONT SIZE=2 COLOR=ff0000><B>", begin);
             if (begin > 0) {
@@ -401,8 +448,8 @@ public:
         static QStringList ends;
         if (starts.isEmpty()) {
             starts << "REGISTRATION NUMBERS" << "REGISTRATIONS NUMBERS" << "REGISTRATION NUMBER" << "REGISTRATION NO"
-                    << "REGISTRATION HUMBER" << "APPLICATION NUMBER" << "REFERENCE NUMBERS"
-                    << "REFERENCE NUMBER" << "REFERENCE NO" << "APPLICATION NO"<< "REGISTRATION:";
+                   << "REGISTRATION HUMBER" << "APPLICATION NUMBER" << "REFERENCE NUMBERS"
+                   << "REFERENCE NUMBER" << "REFERENCE NO" << "APPLICATION NO"<< "REGISTRATION:";
         }
         if (ends.isEmpty()) {
             ends << "NAME AND BUSINESS ADDRESS" << "NAME AND ADDRESS OF" << "NAME OF APPLICANT"
@@ -432,7 +479,7 @@ public:
                 QString tmp = registrationNumberParagraph.mid(begin, max-begin);
                 tmp.replace("&nbsp;", " ");
 
-//                qWarning() << tmp << tmp.contains(drug, Qt::CaseInsensitive);
+                //                qWarning() << tmp << tmp.contains(drug, Qt::CaseInsensitive);
 
                 QString test;
                 // firstly test the entire drug name
@@ -440,7 +487,7 @@ public:
                     int b = tmp.indexOf(name, 0, Qt::CaseInsensitive) + name.length();
                     int e = tmp.indexOf("<BR>", b);
                     QString u = tmp.mid(b, e-b);
-//                    qWarning() << u;
+                    //                    qWarning() << u;
                     int z = u.indexOf("</");
                     if (z>=0) {
                         z = u.indexOf(">", z) + 1;
@@ -451,16 +498,16 @@ public:
                     } else {
                         z=0;
                     }
-//                    qWarning() << "COMPLEX" << tmp.mid(b, e-b);
+                    //                    qWarning() << "COMPLEX" << tmp.mid(b, e-b);
                 } else {
                     foreach(const QString &word, name.split(" ", QString::SkipEmptyParts)) {
                         test += " " + word;
                         test = test.trimmed();
-//                        if (tmp.count(test, Qt::CaseInsensitive) == 1) {
-//                            int b = tmp.indexOf(test) + test.length();
-//                            int e = tmp.indexOf("<BR>");
-////                            qWarning() << "COMPLEX" << tmp << tmp.mid(b, e-b).trimmed();
-//                        }
+                        //                        if (tmp.count(test, Qt::CaseInsensitive) == 1) {
+                        //                            int b = tmp.indexOf(test) + test.length();
+                        //                            int e = tmp.indexOf("<BR>");
+                        ////                            qWarning() << "COMPLEX" << tmp << tmp.mid(b, e-b).trimmed();
+                        //                        }
                     }
                 }
 
@@ -481,7 +528,7 @@ public:
         }
         if (begin==-1) {
             qWarning() << "Paragraph not found (begin)" << extraWarning << begin;
-//            qWarning() << fullContent;
+            //            qWarning() << fullContent;
             qWarning();
             qWarning();
             return QString();
@@ -497,7 +544,7 @@ public:
         }
         if (end==-1) {
             qWarning() << "Paragraph not found (end)" << extraWarning << begin << end;
-//            qWarning() << fullContent;
+            //            qWarning() << fullContent;
             qWarning();
             qWarning();
             return QString();
@@ -568,21 +615,21 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
 {
     QString content;
     content += "// /***************************************************************************\n"
-               "//  *   FreeMedicalForms                                                      *\n"
-               "//  *   (C) 2008-2012 by Eric MAEKER, MD                                      *\n"
-               "//  *   eric.maeker@gmail.com                                                 *\n"
-               "//  *   All rights reserved.                                                  *\n"
-               "//  ***************************************************************************/\n"
-               "// /***************************************************************************\n"
-               "//  *   Owner :  Eric MAEKER, MD <eric.maeker@gmail.com>                      *\n"
-               "//  ***************************************************************************/\n"
-               "// /***************************************************************************\n"
-               "//  * - Autogenerated file for the South African drugs database               *\n"
-               "//  *    This file presents all known drugs and their                         *\n"
-               "//  *    FreeDiams autogenerated UID                                          *\n"
-               "//  *    !!!! The content MUST NOT be changed by hand !!!!                    *\n"
-               "//  ***************************************************************************/\n"
-               "// \n";
+            "//  *   FreeMedicalForms                                                      *\n"
+            "//  *   (C) 2008-2012 by Eric MAEKER, MD                                      *\n"
+            "//  *   eric.maeker@gmail.com                                                 *\n"
+            "//  *   All rights reserved.                                                  *\n"
+            "//  ***************************************************************************/\n"
+            "// /***************************************************************************\n"
+            "//  *   Owner :  Eric MAEKER, MD <eric.maeker@gmail.com>                      *\n"
+            "//  ***************************************************************************/\n"
+            "// /***************************************************************************\n"
+            "//  * - Autogenerated file for the South African drugs database               *\n"
+            "//  *    This file presents all known drugs and their                         *\n"
+            "//  *    FreeDiams autogenerated UID                                          *\n"
+            "//  *    !!!! The content MUST NOT be changed by hand !!!!                    *\n"
+            "//  ***************************************************************************/\n"
+            "// \n";
     QStringList names = drugs_uids.keys();
     qSort(names);
     foreach(const QString &drug, names) {
@@ -597,10 +644,15 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
 
 bool ZaDrugDatatabaseStep::populateDatabase()
 {
-    if (!DrugsDB::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
+    if (!checkDatabase())
         return false;
 
-    // 14 Aug 2012 : 2732 Drugs ->
+    // check files
+    if (!prepareData())
+        return false;
+
+    // 27 Oct 2012 : 2723 Drugs
+    // 14 Aug 2012 : 2723 Drugs ->
     // 24 juin 2010 : 2682 drugs -> 1073 usable drugs
 
     Q_EMIT progressLabelChanged(tr("South African database creation : reading drugs uids"));
@@ -630,7 +682,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
         }
 
         // get the drugs file
-        QString fileName = workingPath() + "/home.intekom.com/" + m_Drug_Link.value(drugName);
+        QString fileName = tempPath() + "/home.intekom.com/" + m_Drug_Link.value(drugName);
         QString content = Utils::readTextFile(fileName);
 
         if (content.isEmpty())
@@ -651,17 +703,17 @@ bool ZaDrugDatatabaseStep::populateDatabase()
         drugs << drug;
 
         // test contents and create an error HTML output
-//        if (dr->registrationNumberParagraph.isEmpty()) {
-//            regError += QString("<li><a href=\"%1\">%2 - %3</a></li>")
-//                        .arg(QFileInfo(f).absoluteFilePath())
-//                        .arg(drug)
-//                        .arg("No Registration paragraph found.");
-//        }
+        //        if (dr->registrationNumberParagraph.isEmpty()) {
+        //            regError += QString("<li><a href=\"%1\">%2 - %3</a></li>")
+        //                        .arg(QFileInfo(f).absoluteFilePath())
+        //                        .arg(drug)
+        //                        .arg("No Registration paragraph found.");
+        //        }
         if (parser.compositionParagraph.isEmpty()) {
             compoError += QString("<li><a href=\"%1\">%2 - %3</a></li>")
-                        .arg(QFileInfo(fileName).absoluteFilePath())
-                        .arg(drugName)
-                        .arg("No Composition paragraph");
+                    .arg(QFileInfo(fileName).absoluteFilePath())
+                    .arg(drugName)
+                    .arg("No Composition paragraph");
         }
     }
 
@@ -673,21 +725,19 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     // save uids and error HTML output
     saveUids(drugs_uids);
     QString tmp = QString("<html><body><ol>%1</ol><p>&nbsp;</p><ol>%2</ol></body></html>")
-                  .arg(regError).arg(compoError);
-    Utils::saveStringToFile(tmp, workingPath() + "/incomplete.html");
+            .arg(regError).arg(compoError);
+    Utils::saveStringToFile(tmp, tempPath() + "/incomplete.html");
 
     // save drugs to db
-    Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, ZA_DRUGS_DATABASE_NAME);
+    saveDrugsIntoDatabase(drugs);
     Q_EMIT progress(2);
 
-    DrugsDB::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
-
     // Run SQL commands one by one
-//    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-//        LOG_ERROR("Can not create ZA DB.");
-//        return false;
-//    }
+    //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
+    //    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+    //        LOG_ERROR("Can not create ZA DB.");
+    //        return false;
+    //    }
 
     qDeleteAll(drugs);
     return true;
@@ -749,129 +799,63 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     // Hand association: 27
     // Found: 568, Left: 631
 
-    // get all drugs and ATC codes
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    // Connect to databases
+    if (!checkDatabase())
         return false;
 
-    QHash<QString, QString> corrected;
-    corrected.insert("CALCIUM (CALCIUM CARBONATE)", "CALCIUM CARBONATE");
-    corrected.insert("VITAMIN D3", "vitamine d");
-    corrected.insert("VITAMIN D3", "COLECALCIFEROL");
-    corrected.insert("VITAMIN D3 (CHOLECALCIFEROL)", "vitamine d");
-    corrected.insert("VITAMIN D3 (CHOLECALCIFEROL)", "COLECALCIFEROL");
-    corrected.insert("DIATRIZOATE SODIUM", "DIATRIZOIC ACID");
-    corrected.insert("DIATRIZOATE MEGLUMINE", "DIATRIZOIC ACID");
-    corrected.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
-    corrected.insert("IOXAGLATE SODIUM", "IOXAGLIC ACID");
-    corrected.insert("THIAMINE MONONITRATE", "THIAMINE (VIT B1)");
-    corrected.insert("ETHINYL ESTRADIOL", "ETHINYLESTRADIOL");
-    corrected.insert("NORGESTREL", "LEVONORGESTREL");
-    corrected.insert("ALUMINUM CHLOROHYDRATE", "ALUMINIUM CHLOROHYDRATE");
-    corrected.insert("VITAMIN B6 (PYRIDOXINE HYDROCHLORIDE)", "PYRIDOXINE (VIT B6)");
-    corrected.insert("VITAMIN B1 (THIAMINE HYDROCHLORIDE)", "THIAMINE (VIT B1)");
-    corrected.insert("FORMOTEROL FUMARATE DIHYDRATE", "FORMOTEROL");
-    corrected.insert("FIBRINOGEN (HUMAN)", "FIBRINOGEN, HUMAN");
-    corrected.insert("FIBRINOGEN (HUMAN)", "HUMAN FIBRINOGEN");
-    corrected.insert("FACTOR XIII", "COAGULATION FACTOR XIII");
-    corrected.insert("BETA-CAROTENE", "BETACAROTENE");
-    corrected.insert("L-ARGININE" , "ARGININE HYDROCHLORIDE" );
-    corrected.insert("L-LYSINE (L-LYSINE HYDROCHLORIDE)" ,"LYSINE" );
-    corrected.insert("L-METHIONINE" ,"METHIONINE" );
-    corrected.insert("GLUTAMIC ACID" ,"GLUTAMIC ACID HYDROCHLORIDE" );
-    corrected.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
-    corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
-
-    int sid = DrugsDB::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME);
-    if (sid==-1) {
-        LOG_ERROR("NO SID DEFINED");
-        return false;
-    }
+    Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
+    Q_EMIT progressRangeChanged(0, 2);
+    Q_EMIT progress(0);
 
     // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(ZA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
-    qWarning() << "unfound" << unfound.count();
+    MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
+    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::ZA_DRUGS_DATABASE_NAME, "fr");
+    data.correctedByName.insert("CALCIUM (CALCIUM CARBONATE)", "CALCIUM CARBONATE");
+    data.correctedByName.insert("VITAMIN D3", "vitamine d");
+    data.correctedByName.insert("VITAMIN D3", "COLECALCIFEROL");
+    data.correctedByName.insert("VITAMIN D3 (CHOLECALCIFEROL)", "vitamine d");
+    data.correctedByName.insert("VITAMIN D3 (CHOLECALCIFEROL)", "COLECALCIFEROL");
+    data.correctedByName.insert("DIATRIZOATE SODIUM", "DIATRIZOIC ACID");
+    data.correctedByName.insert("DIATRIZOATE MEGLUMINE", "DIATRIZOIC ACID");
+    data.correctedByName.insert("IOXAGLATE MEGLUMINE", "IOXAGLIC ACID");
+    data.correctedByName.insert("IOXAGLATE SODIUM", "IOXAGLIC ACID");
+    data.correctedByName.insert("THIAMINE MONONITRATE", "THIAMINE (VIT B1)");
+    data.correctedByName.insert("ETHINYL ESTRADIOL", "ETHINYLESTRADIOL");
+    data.correctedByName.insert("NORGESTREL", "LEVONORGESTREL");
+    data.correctedByName.insert("ALUMINUM CHLOROHYDRATE", "ALUMINIUM CHLOROHYDRATE");
+    data.correctedByName.insert("VITAMIN B6 (PYRIDOXINE HYDROCHLORIDE)", "PYRIDOXINE (VIT B6)");
+    data.correctedByName.insert("VITAMIN B1 (THIAMINE HYDROCHLORIDE)", "THIAMINE (VIT B1)");
+    data.correctedByName.insert("FORMOTEROL FUMARATE DIHYDRATE", "FORMOTEROL");
+    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "FIBRINOGEN, HUMAN");
+    data.correctedByName.insert("FIBRINOGEN (HUMAN)", "HUMAN FIBRINOGEN");
+    data.correctedByName.insert("FACTOR XIII", "COAGULATION FACTOR XIII");
+    data.correctedByName.insert("BETA-CAROTENE", "BETACAROTENE");
+    data.correctedByName.insert("L-ARGININE" , "ARGININE HYDROCHLORIDE" );
+    data.correctedByName.insert("L-LYSINE (L-LYSINE HYDROCHLORIDE)" ,"LYSINE" );
+    data.correctedByName.insert("L-METHIONINE" ,"METHIONINE" );
+    data.correctedByName.insert("GLUTAMIC ACID" ,"GLUTAMIC ACID HYDROCHLORIDE" );
+    data.correctedByName.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
+    data.correctedByName.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
+
+    if (!model->moleculeLinker(&data))
+        return false;
+
+    Q_EMIT progress(1);
 
     Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    DrugsDB::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
-
-    // add unfound to extralinkermodel
-    ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(ZA_DRUGS_DATABASE_NAME, unfound);
-    ExtraMoleculeLinkerModel::instance()->saveModel();
+    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
     LOG(QString("Database processed"));
 
+    // add unfound to extralinkermodel
+    Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
+    model->addUnreviewedMolecules(::ZA_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
+    model->saveModel();
+    Q_EMIT progress(1);
+
     return true;
-}
-
-SouthAfricanDrugsDatabase::SouthAfricanDrugsDatabase(QWidget *parent) :
-        QWidget(parent)
-{
-    ui = new Ui::SouthAfricanDrugsDatabase;
-    ui->setupUi(this);
-    m_Step = new ZaDrugDatatabaseStep(this);
-    m_Step->createDir();
-    pluginManager()->addObject(m_Step);
-}
-
-SouthAfricanDrugsDatabase::~SouthAfricanDrugsDatabase()
-{
-    pluginManager()->removeObject(m_Step);
-    delete ui; ui=0;
-}
-
-void SouthAfricanDrugsDatabase::on_startJobs_clicked()
-{
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Starting jobs"));
-    progressDialog.setRange(0, 1);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
-    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
-    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
-    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-
-    if (ui->prepare->isChecked()) {
-        if (m_Step->prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (m_Step->createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (m_Step->populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (m_Step->linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool SouthAfricanDrugsDatabase::on_download_clicked()
-{
-    ui->download->setEnabled(false);
-    m_Step->downloadFiles();
-    return true;
-}
-
-
-void SouthAfricanDrugsDatabase::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
 }

@@ -88,7 +88,6 @@ public:
     void setLicenseType(LicenseType type);
     QString tmpDatabaseAbsPath();
 
-    bool cleanFiles();
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const;

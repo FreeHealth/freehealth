@@ -32,7 +32,7 @@
 #include "countries/fdadrugsdatabasecreator.h"
 #include "countries/canadiandrugsdatabase.h"
 #include "countries/belgishdrugsdatabase.h"
-//#include "countries/southafricandrugsdatabase.h"
+#include "countries/southafricandrugsdatabase.h"
 //#include "countries/portuguesedrugsdatabase.h"
 
 #include "ddi/drugdruginteractioncore.h"
@@ -95,7 +95,9 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new FreeBeDrugsDatabasePage(this));
     addAutoReleasedObject(new NonFreeBeDrugsDatabasePage(this));
 
-//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
+    addAutoReleasedObject(new FreeSouthAfricanDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeSouthAfricanDrugsDatabasePage(this));
+
 //    addAutoReleasedObject(new PtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));

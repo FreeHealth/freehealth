@@ -91,6 +91,7 @@ public:
     // Core::IFullReleaseStep interface
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     bool createDir();
+    virtual bool cleanFiles();
     virtual bool downloadFiles(QProgressBar *bar = 0);
     virtual bool unzipFiles();
 

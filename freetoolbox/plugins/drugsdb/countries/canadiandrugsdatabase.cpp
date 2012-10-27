@@ -171,12 +171,6 @@ void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-bool CaDrugDatatabaseStep::cleanFiles()
-{
-    QFile(absoluteFilePath()).remove();
-    return true;
-}
-
 QString CaDrugDatatabaseStep::processMessage() const
 {
     if (licenseType() == NonFree)
