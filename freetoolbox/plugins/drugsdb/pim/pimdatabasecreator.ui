@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DrugInfos::PimDatabaseCreator</class>
- <widget class="QWidget" name="DrugInfos::PimDatabaseCreator">
+ <class>DrugsDB::Internal::PimDatabaseCreator</class>
+ <widget class="QWidget" name="DrugsDB::Internal::PimDatabaseCreator">
   <property name="geometry">
    <rect>
     <x>0</x>

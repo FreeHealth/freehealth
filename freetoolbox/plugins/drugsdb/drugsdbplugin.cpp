@@ -39,8 +39,10 @@
 #include "ddi/afssapsintegrator.h"
 #include "ddi/interactioneditorpage.h"
 #include "ddi/interactoreditorpage.h"
-
 //#include "ddi/cytochromep450interactionspage.h"
+
+#include "pim/pimdatabasecreator.h"
+#include "pim/pimintegrator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <drugsdb/tools.h>
@@ -98,11 +100,14 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new FreeSouthAfricanDrugsDatabasePage(this));
     addAutoReleasedObject(new NonFreeSouthAfricanDrugsDatabasePage(this));
 
-//    addAutoReleasedObject(new PtDrugsDatabasePage(this));
+//    addAutoReleasedObject(new FreePtDrugsDatabasePage(this));
+//    addAutoReleasedObject(new NonFreePtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));
-
 //    addAutoReleasedObject(new AtcPage(this));
+
+    addAutoReleasedObject(new PimDatabasePage(this));
+    addAutoReleasedObject(new PimsTreePage(this));
 
     // Create the core object
     IAMDb::DrugDrugInteractionCore::instance();
