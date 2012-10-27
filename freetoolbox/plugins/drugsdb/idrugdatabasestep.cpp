@@ -26,10 +26,7 @@
  ***************************************************************************/
 /*!
  * \class DrugsDB::IDrugDatabaseStep
- * \brief short description of class
- *
- * Long description of class
- * \sa DrugsDB::
+ * Default drug database creator step.
  */
 
 #include "idrugdatabasestep.h"
@@ -153,6 +150,7 @@ bool IDrugDatabaseStep::canCreateDatabase() const
 /**
  * Create the DrugDatabase pointer according to the settings of the object.
  * If you call this member many times, only one database will be created.
+ * Does not populate it with drugs but with non-free data if required.
  * \sa DrugDB::DrugsDBCore::createDrugDatabase()
  */
 bool IDrugDatabaseStep::createDatabase()
@@ -165,8 +163,10 @@ bool IDrugDatabaseStep::createDatabase()
         return false;
     }
 
-    addRoutes();
-    saveDrugDatabaseDescription();
+    if (!saveDrugDatabaseDescription())
+        return false;
+    if (!addRoutes())
+        return false;
 
     if (licenseType() == NonFree) {
         if (!dbCore()->addInteractionData(_connection)) {
@@ -225,9 +225,6 @@ bool IDrugDatabaseStep::addRoutes()
             }
         }
         // Push to database
-
-        qWarning() << "xxxxxxxxxxx" << _connection;
-
         int masterLid = Tools::addLabels(_database, -1, trLabels);
         if (masterLid == -1) {
             LOG_ERROR_FOR("Tools", "Route not integrated");

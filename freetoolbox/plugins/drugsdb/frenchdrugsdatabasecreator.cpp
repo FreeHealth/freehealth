@@ -28,6 +28,7 @@
 #include "moleculelinkermodel.h"
 #include "drug.h"
 #include "drugsdbcore.h"
+#include "idrugdatabasestepwidget.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -62,23 +63,38 @@
 
 #include <QDebug>
 
-#include "ui_frenchdrugsdatabasewidget.h"
-
 using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
 
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
+/**
+ * Option page for the French drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ */
 FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
-        IToolPage(parent)
+    IToolPage(parent),
+    _step(0)
 {
     setObjectName("FrenchDrugsDatabasePage");
+    _step = new FrDrugDatatabaseStep(this);
+    pluginManager()->addObject(_step);
+}
+
+FrenchDrugsDatabasePage::~FrenchDrugsDatabasePage()
+{
+    pluginManager()->removeObject(_step);
+}
+
+QString FrenchDrugsDatabasePage::name() const
+{
+    return tr("Free French drugs database");
 }
 
 QString FrenchDrugsDatabasePage::category() const
@@ -88,16 +104,18 @@ QString FrenchDrugsDatabasePage::category() const
 
 QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)
 {
-    return new FrenchDrugsDatabaseWidget(parent);
+    Q_ASSERT(_step);
+    IDrugDatabaseStepWidget *widget = new IDrugDatabaseStepWidget(parent);
+    widget->initialize(_step);
+    return widget;
 }
-
-
 
 FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
     DrugsDB::Internal::IDrugDatabaseStep(parent),
     m_WithProgress(false)
 {
     setObjectName("FrDrugDatatabaseStep");
+    setDisplayName(tr("Free French drugs database"));
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/FrenchRawSources/"));
@@ -125,7 +143,7 @@ bool FrDrugDatatabaseStep::cleanFiles()
 bool FrDrugDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
@@ -133,7 +151,7 @@ bool FrDrugDatatabaseStep::process()
     return true;
 }
 
-bool FrDrugDatatabaseStep::prepareDatas()
+bool FrDrugDatatabaseStep::prepareData()
 {
     // check files
     QStringList files;
@@ -148,38 +166,14 @@ bool FrDrugDatatabaseStep::prepareDatas()
     return true;
 }
 
-bool FrDrugDatatabaseStep::createDatabase()
-{
-    if (drugEssentialDatabase())
-        return true;
-
-    if (!IDrugDatabaseStep::createDatabase()) {
-        LOG_ERROR("Unable to create database");
-        return false;
-    }
-    DrugsDB::Internal::DrugBaseEssentials *db = drugEssentialDatabase();
-    if (!db)
-        return false;
-
-    saveDrugDatabaseDescription();
-    addRoutes();
-
-    if (licenseType() == NonFree) {
-        if (!drugsDbCore()->addInteractionData(connectionName()))
-            return false;
-    }
-
-    LOG(QString("Database schema created"));
-    return true;
-}
-
+/** Read the raw source files and create the drugs database (this does not include the interaction data) */
 bool FrDrugDatatabaseStep::populateDatabase()
 {
     if (!checkDatabase())
         return false;
 
     // check files
-    if (!prepareDatas())
+    if (!prepareData())
         return false;
 
     QHash<int, Drug *> drugs;
@@ -449,91 +443,7 @@ bool FrDrugDatatabaseStep::linkMolecules()
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
     model->addUnreviewedMolecules(::FR_DRUGS_DATABASE_NAME, unfound);
     model->saveModel();
+    Q_EMIT progress(1);
 
     return true;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////   WIDGET   //////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-FrenchDrugsDatabaseWidget::FrenchDrugsDatabaseWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FrenchDrugsDatabaseWidget),
-    m_Step(0)
-{
-    setObjectName("FrenchDrugsDatabaseWidget");
-    ui->setupUi(this);
-    ui->progressBar->hide();
-    m_Step = new FrDrugDatatabaseStep(this);
-    m_Step->createDir();
-    pluginManager()->addObject(m_Step);
-}
-
-FrenchDrugsDatabaseWidget::~FrenchDrugsDatabaseWidget()
-{
-    pluginManager()->removeObject(m_Step);
-    delete ui;
-}
-
-void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
-{
-    QProgressDialog progressDialog(mainwindow());
-    progressDialog.setLabelText(tr("Starting jobs"));
-    progressDialog.setRange(0, 1);
-    progressDialog.setWindowModality(Qt::WindowModal);
-    progressDialog.setValue(0);
-    progressDialog.show();
-    connect(m_Step, SIGNAL(progressRangeChanged(qint64,qint64)), &progressDialog, SLOT(setRange(int, int)));
-    connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
-    connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-
-    if (ui->unzip->isChecked()) {
-        if (m_Step->unzipFiles())
-            ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
-    }
-    if (ui->prepare->isChecked()) {
-        if (m_Step->prepareDatas())
-            ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
-    }
-    if (ui->createDb->isChecked()) {
-        if (m_Step->createDatabase())
-            ui->createDb->setText(ui->createDb->text() + " CORRECTLY DONE");
-    }
-    if (ui->populate->isChecked()) {
-        if (m_Step->populateDatabase())
-            ui->populate->setText(ui->populate->text() + " CORRECTLY DONE");
-    }
-    if (ui->linkMols->isChecked()) {
-        if (m_Step->linkMolecules())
-            ui->linkMols->setText(ui->linkMols->text() + " CORRECTLY DONE");
-    }
-    Utils::Log::messagesToTreeWidget(ui->messages);
-    Utils::Log::errorsToTreeWidget(ui->errors);
-}
-
-bool FrenchDrugsDatabaseWidget::on_download_clicked()
-{
-    ui->download->setEnabled(false);
-    ui->progressBar->show();
-    m_Step->downloadFiles(ui->progressBar);
-    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
-    return true;
-}
-
-void FrenchDrugsDatabaseWidget::downloadFinished()
-{
-    ui->progressBar->hide();
-    ui->download->setEnabled(true);
-}
-
-void FrenchDrugsDatabaseWidget::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
 }

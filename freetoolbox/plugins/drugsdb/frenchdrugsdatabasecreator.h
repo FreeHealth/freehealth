@@ -34,23 +34,27 @@
 #include <QWidget>
 #include <QMultiHash>
 
-
 namespace DrugsDB {
 namespace Internal {
+class FrDrugDatatabaseStep;
 
 class FrenchDrugsDatabasePage : public Core::IToolPage
 {
     Q_OBJECT
 public:
     explicit FrenchDrugsDatabasePage(QObject *parent = 0);
+    ~FrenchDrugsDatabasePage();
 
     virtual QString id() const {return "FrenchDrugsDatabase";}
-    virtual QString name() const {return "French Drugs Database Creator";}
+    virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    FrDrugDatatabaseStep *_step;
 };
 
 class FrDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
@@ -67,8 +71,7 @@ public:
     bool process();
     QString processMessage() const {return tr("French drugs database creation");}
 
-    bool prepareDatas();
-    bool createDatabase();
+    bool prepareData();
     bool populateDatabase();
     bool linkMolecules();
 
@@ -77,31 +80,6 @@ public:
 private:
     QStringList m_Errors;
     bool m_WithProgress;
-};
-
-namespace Ui {
-    class FrenchDrugsDatabaseWidget;
-}
-
-class FrenchDrugsDatabaseWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit FrenchDrugsDatabaseWidget(QWidget *parent = 0);
-    ~FrenchDrugsDatabaseWidget();
-
-protected Q_SLOTS:
-    void on_startJobs_clicked();
-    bool on_download_clicked();
-    void downloadFinished();
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::FrenchDrugsDatabaseWidget *ui;
-    FrDrugDatatabaseStep *m_Step;
 };
 
 }  //  namespace Internal

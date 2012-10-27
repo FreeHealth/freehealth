@@ -28,7 +28,9 @@ SOURCES += \
     drugdatabasedescription.cpp \
     routesmodel.cpp \
     drugsdbcore.cpp \
-    idrugdatabasestep.cpp
+    idrugdatabasestep.cpp \
+    moleculelinkdata.cpp \
+    idrugdatabasestepwidget.cpp
 
 HEADERS  += \
     tools.h \
@@ -49,10 +51,12 @@ HEADERS  += \
     drugdatabasedescription.h \
     routesmodel.h \
     drugsdbcore.h \
-    idrugdatabasestep.h
+    idrugdatabasestep.h \
+    moleculelinkdata.h \
+    idrugdatabasestepwidget.h
 
 FORMS += \
-    frenchdrugsdatabasewidget.ui \
+#    frenchdrugsdatabasewidget.ui \
 #    canadiandrugsdatabasewidget.ui \
 #    fdadrugsdatabasewidget.ui \
 #    southafricandrugsdatabase.ui \
@@ -60,7 +64,8 @@ FORMS += \
 #    portuguesedrugsdatabase.ui \
     moleculelinkerwidget.ui \
     atcpage.ui \
-    searchatcindatabasedialog.ui
+    searchatcindatabasedialog.ui \
+    idrugdatabasestepwidget.ui
 
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \

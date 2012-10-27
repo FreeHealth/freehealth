@@ -54,6 +54,7 @@ public:
     explicit IDrugDatabaseStep(QObject *parent = 0);
     ~IDrugDatabaseStep();
 
+    void setDisplayName(const QString &name) {_name=name;}
     void setLicenseType(LicenseType type) {_licenseType=type;}
     void setTempPath(const QString &absPath);
     void setOutputPath(const QString &absPath);
@@ -63,6 +64,7 @@ public:
     void setFinalizationScript(const QString &absPath);
     void setDescriptionFile(const QString &absPath);
 
+    QString displayName() const {return _name;}
     LicenseType licenseType() const {return _licenseType;}
     QString tempPath() const {return _tempPath;}
     QString outputPath() const {return _outputPath;}
@@ -92,9 +94,14 @@ public:
     virtual bool downloadFiles(QProgressBar *bar = 0);
     virtual bool unzipFiles();
 
+    // Adding specific interface for the UI <-> step connection
+    virtual bool prepareData() = 0;
+    virtual bool populateDatabase() = 0;
+    virtual bool linkMolecules() = 0;
+
 private:
     LicenseType _licenseType;
-    QString _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
+    QString _name, _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
     QString _finalizationScriptPath, _descriptionFilePath;
     DrugBaseEssentials *_database;
     int _sid;
