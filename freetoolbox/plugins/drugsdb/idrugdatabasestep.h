@@ -54,8 +54,8 @@ public:
     explicit IDrugDatabaseStep(QObject *parent = 0);
     ~IDrugDatabaseStep();
 
-    void setDisplayName(const QString &name) {_name=name;}
-    void setLicenseType(LicenseType type) {_licenseType=type;}
+    virtual void setDisplayName(const QString &name) {_name=name;}
+    virtual void setLicenseType(LicenseType type) {_licenseType=type;}
     void setTempPath(const QString &absPath);
     void setOutputPath(const QString &absPath);
     void setConnectionName(const QString &connection);
@@ -64,8 +64,8 @@ public:
     void setFinalizationScript(const QString &absPath);
     void setDescriptionFile(const QString &absPath);
 
-    QString displayName() const {return _name;}
-    LicenseType licenseType() const {return _licenseType;}
+    virtual QString displayName() const {return _name;}
+    virtual LicenseType licenseType() const {return _licenseType;}
     QString tempPath() const {return _tempPath;}
     QString outputPath() const {return _outputPath;}
     QString connectionName() const {return _connection;}

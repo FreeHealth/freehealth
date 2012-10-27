@@ -70,7 +70,7 @@ public:
     // END
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 
-    bool addInteractionData(const QString &connection);
+    bool addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database);
 
 private:
     static DrugsDBCore *_instance;

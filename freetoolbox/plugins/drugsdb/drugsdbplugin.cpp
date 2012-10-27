@@ -26,14 +26,21 @@
 #include "drugsdbplugin.h"
 #include "drugsdbcore.h"
 #include "atcpage.h"
-#include "moleculelinkerwidget.h"
-#include "frenchdrugsdatabasecreator.h"
+#include "countries/moleculelinkerwidget.h"
 
-//#include "canadiandrugsdatabase.h"
-//#include "fdadrugsdatabasecreator.h"
-//#include "southafricandrugsdatabase.h"
-//#include "belgishdrugsdatabase.h"
-//#include "portuguesedrugsdatabase.h"
+#include "countries/frenchdrugsdatabasecreator.h"
+#include "countries/fdadrugsdatabasecreator.h"
+#include "countries/canadiandrugsdatabase.h"
+//#include "countries/southafricandrugsdatabase.h"
+//#include "countries/belgishdrugsdatabase.h"
+//#include "countries/portuguesedrugsdatabase.h"
+
+#include "ddi/drugdruginteractioncore.h"
+#include "ddi/afssapsintegrator.h"
+#include "ddi/interactioneditorpage.h"
+#include "ddi/interactoreditorpage.h"
+
+//#include "ddi/cytochromep450interactionspage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <drugsdb/tools.h>
@@ -41,7 +48,7 @@
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include <QDebug>
 
@@ -76,9 +83,15 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     core->initialize();
 
     // add database pages
-    addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
-//    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
-//    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
+    addAutoReleasedObject(new FreeFrenchDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeFrenchDrugsDatabasePage(this));
+
+    addAutoReleasedObject(new FreeFdaDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeFdaDrugsDatabasePage(this));
+
+    addAutoReleasedObject(new FreeCanadianDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeCanadianDrugsDatabasePage(this));
+
 //    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
 //    addAutoReleasedObject(new BeDrugsDatabasePage(this));
 //    addAutoReleasedObject(new PtDrugsDatabasePage(this));
@@ -86,6 +99,15 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 //    addAutoReleasedObject(new MoleculeLinkerPage(this));
 
 //    addAutoReleasedObject(new AtcPage(this));
+
+    // Create the core object
+    IAMDb::DrugDrugInteractionCore::instance();
+
+//    addAutoReleasedObject(new AfssapsIntegratorPage(this));
+//    addAutoReleasedObject(new AfssapsClassTreePage(this));
+    addAutoReleasedObject(new IAMDb::InteractionEditorPage(this));
+    addAutoReleasedObject(new IAMDb::InteractorEditorPage(this));
+//    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -97,10 +119,6 @@ void DrugsDbPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
-
-//    DrugsDB::Internal::drugbaseessentials c;
-//    c.initialize(DrugsDB::Tools::drugsDatabaseAbsFileName(), true);
 }
-
 
 Q_EXPORT_PLUGIN(DrugsDbPlugin)

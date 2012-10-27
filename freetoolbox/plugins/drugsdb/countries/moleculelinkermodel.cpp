@@ -792,7 +792,7 @@ bool MoleculeLinkerModel::moleculeLinker(Internal::MoleculeLinkData *data)
 //        QMap<int, QVector<MolLink> > cis_compo;
 //        {
 //            //            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
-//            QString req = DrugsDB::Tools::drugBase()->select(Table_COMPO, QList<int>()
+//            QString req = database->select(Table_COMPO, QList<int>()
 //                                                             << COMPO_DID
 //                                                             << COMPO_MID
 //                                                             << COMPO_LK_NATURE

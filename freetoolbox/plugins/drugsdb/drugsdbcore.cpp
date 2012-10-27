@@ -37,6 +37,7 @@
 #include "tools.h"
 #include "routesmodel.h"
 #include "moleculelinkermodel.h"
+#include "drugdruginteractioncore.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
@@ -206,7 +207,7 @@ DrugsDB::Internal::DrugBaseEssentials *DrugsDBCore::createDrugDatabase(const QSt
  * - PIM
  * - all future devs (pregnancy compatibility...)
  */
-bool DrugsDBCore::addInteractionData(const QString &connection)
+bool DrugsDBCore::addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database)
 {
-    return true;
+    return IAMDb::DrugDrugInteractionCore::instance()->populateDrugDatabase(database);
 }

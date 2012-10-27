@@ -36,6 +36,11 @@ const char* const COUNTRY_FRANCE      = QT_TRANSLATE_NOOP( "tkConstants", "Franc
 const char* const COUNTRY_GERMANY     = QT_TRANSLATE_NOOP( "tkConstants", "Germany" );
 const char* const COUNTRY_CANADA      = QT_TRANSLATE_NOOP( "tkConstants", "Canada" );
 const char* const COUNTRY_AUSTRIA     = QT_TRANSLATE_NOOP( "tkConstants", "Austria" );
+const char* const COUNTRY_USA         = QT_TRANSLATE_NOOP( "tkConstants", "USA" );
+const char* const COUNTRY_SOUTHAFRICA = QT_TRANSLATE_NOOP( "tkConstants", "South Africa" );
+const char* const COUNTRY_BELGIUM     = QT_TRANSLATE_NOOP( "tkConstants", "Belgium" );
+const char* const COUNTRY_PORTUGAL    = QT_TRANSLATE_NOOP( "tkConstants", "Portugal" );
+const char* const COUNTRY_BRASIL      = QT_TRANSLATE_NOOP( "tkConstants", "Brasil" );
 
 } // end Constants
 } // end TranslationUtils

@@ -59,10 +59,7 @@
 
 #include <QDebug>
 
-static inline DrugsDB::Internal::DrugBaseEssentials *drugBase()  { return DrugsDB::DrugsDBCore::instance()->drugBase(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
-static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace DrugsDB {
 namespace Tools {
@@ -359,17 +356,8 @@ int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, const int masterL
     int mid = masterLid;
     if (mid == -1) {
         // get new master_lid
-//        req = "SELECT max(MASTER_LID) FROM `LABELS_LINK`;";
         mid = database->max(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID).toInt();
         ++mid;
-//        if (query.exec(req)) {
-//            if (query.next())
-//                mid = query.value(0).toInt();
-//            ++mid;
-//        } else {
-//            LOG_QUERY_ERROR_FOR("Tools", query);
-//            return -1;
-//        }
     }
 
     // insert all translated labels
@@ -393,7 +381,7 @@ int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, const int masterL
 //                            .arg(lid)
 //                            ;
 //                    if (!query.exec(req)) {
-//                        LOG_QUERY_ERROR_FRO("Drugs", query);
+//                        LOG_QUERY_ERROR_FOR("Drugs", query);
 //                        return false;
 //                    }
 //                    query.finish();
@@ -410,7 +398,7 @@ int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, const int masterL
             query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_LABELS));
             query.bindValue(DrugsDB::Constants::LABELS_LID, QVariant());
             query.bindValue(DrugsDB::Constants::LABELS_LANG, lang);
-            query.bindValue(DrugsDB::Constants::LABELS_LABEL, t.replace("'","''"));
+            query.bindValue(DrugsDB::Constants::LABELS_LABEL, t);
             if (!query.exec()) {
                 LOG_QUERY_ERROR_FOR("Tools", query);
                 return -1;

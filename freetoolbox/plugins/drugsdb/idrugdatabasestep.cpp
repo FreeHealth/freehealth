@@ -157,23 +157,33 @@ bool IDrugDatabaseStep::createDatabase()
 {
     if (_database)
         return true;
+    Q_EMIT progressLabelChanged(tr("Creating database"));
+    Q_EMIT progressRangeChanged(0, 4);
+    Q_EMIT progress(0);
     _database = dbCore()->createDrugDatabase(absoluteFilePath(), _connection);
     if (!_database) {
         LOG_ERROR("Database not created: " + _connection);
         return false;
     }
 
+    Q_EMIT progressLabelChanged(tr("Creating database: adding source description"));
+    Q_EMIT progress(1);
     if (!saveDrugDatabaseDescription())
         return false;
+    Q_EMIT progressLabelChanged(tr("Creating database: adding routes"));
+    Q_EMIT progress(2);
     if (!addRoutes())
         return false;
 
     if (licenseType() == NonFree) {
-        if (!dbCore()->addInteractionData(_connection)) {
+        Q_EMIT progressLabelChanged(tr("Creating database: preparing interaction data"));
+        Q_EMIT progress(3);
+        if (!dbCore()->addInteractionData(_database)) {
             LOG_ERROR("Unable to add interaction data");
             return false;
         }
     }
+    Q_EMIT progress(4);
     return true;
 }
 
@@ -313,8 +323,8 @@ bool IDrugDatabaseStep::saveDrugDatabaseDescription()
         query.bindValue(SOURCES_PROVIDER, descr.data(DrugDatabaseDescription::Vendor));
         query.bindValue(SOURCES_WEBLINK, descr.data(DrugDatabaseDescription::WebLink));
         query.bindValue(SOURCES_DRUGUID_NAME, descr.data(DrugDatabaseDescription::DrugUidName));
-        query.bindValue(SOURCES_ATC, descr.data(DrugDatabaseDescription::IsAtcValid));
-        query.bindValue(SOURCES_INTERACTIONS, descr.data(DrugDatabaseDescription::IsDDIValid));
+        query.bindValue(SOURCES_ATC, int(descr.data(DrugDatabaseDescription::IsAtcValid).toBool()));
+        query.bindValue(SOURCES_INTERACTIONS, int(descr.data(DrugDatabaseDescription::IsDDIValid).toBool()));
         query.bindValue(SOURCES_COMPL_WEBSITE, descr.data(DrugDatabaseDescription::ComplementaryWebLink));
         query.bindValue(SOURCES_PACKUID_NAME, descr.data(DrugDatabaseDescription::PackUidName));
         query.bindValue(SOURCES_COMPLETION, QVariant());
@@ -367,8 +377,8 @@ bool IDrugDatabaseStep::saveDrugDatabaseDescription()
         query.bindValue(++i, descr.data(DrugDatabaseDescription::Vendor));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::WebLink));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::DrugUidName));
-        query.bindValue(++i, descr.data(DrugDatabaseDescription::IsAtcValid));
-        query.bindValue(++i, descr.data(DrugDatabaseDescription::IsDDIValid));
+        query.bindValue(++i, int(descr.data(DrugDatabaseDescription::IsAtcValid).toBool()));
+        query.bindValue(++i, int(descr.data(DrugDatabaseDescription::IsDDIValid).toBool()));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::ComplementaryWebLink));
         query.bindValue(++i, descr.data(DrugDatabaseDescription::PackUidName));
         query.bindValue(++i, QVariant());
@@ -382,9 +392,10 @@ bool IDrugDatabaseStep::saveDrugDatabaseDescription()
         }
     }
     query.finish();
-
     // Save database labels
     QMultiHash<QString, QVariant> trLabels;
+    foreach(const QString &lang, descr.availableLanguages())
+        trLabels.insert(lang, descr.data(DrugDatabaseDescription::Label));
     // insert labels
     int masterLid = Tools::addLabels(_database, -1, trLabels);
     if (masterLid == -1) {
@@ -470,11 +481,13 @@ bool IDrugDatabaseStep::saveDrugsIntoDatabase(QVector<Drug *> drugs)
     db.transaction();
     QSqlQuery query(db);
     using namespace DrugsDB::Constants;
-    int n = 0;
+    int n = drugs.count();
     foreach(Drug *drug, drugs) {
         ++n;
-        if (n % 1000)
-            LOG(QString("Saved %1 drugs").arg(n));
+        if (n % 10 == 0) {
+            Q_EMIT progress(n);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        }
 
         // Authorizations && get Master_LID
         QMultiHash<QString, QVariant> multiLang;
@@ -593,6 +606,7 @@ bool IDrugDatabaseStep::saveDrugsIntoDatabase(QVector<Drug *> drugs)
             }
         }
     }
+    LOG(QString("Saved %1 drugs").arg(drugs.count()));
     query.finish();
     db.commit();
 

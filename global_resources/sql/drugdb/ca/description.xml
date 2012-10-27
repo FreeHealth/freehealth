@@ -22,5 +22,11 @@
     <packuidname>UPC</packuidname>
     <drugnameconstructor>NAME (FORM, STRENGTH)</drugnameconstructor>
     <uuid>CA_HCDPD</uuid>
+
+    <!-- translatable values -->
+    <label lang="xx">Canadian therapeutic database</label>
+    <label lang="fr">Base de données thérapeutique canadienne</label>
+    <label lang="de">Kanadische Therapeutische Datenbank</label>
+
   </description>
 </DrugDbDescriptor>
