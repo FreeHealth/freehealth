@@ -25,7 +25,8 @@
  ***************************************************************************/
 #include "pimdatabasecreator.h"
 #include "pim_constants.h"
-#include "ui_pimdatabasecreator.h"
+#include "afssapsintegrator.h"
+#include "tools.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -33,10 +34,6 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
-
-#include <drugsdb/tools.h>
-
-#include <interactiondb/afssapsintegrator.h>
 
 #include <icd10db/icdgrouplinker.h>
 
@@ -51,6 +48,8 @@
 
 #include <QDir>
 #include <QDomDocument>
+
+#include "ui_pimdatabasecreator.h"
 
 using namespace DrugInfos;
 using namespace Trans::ConstantTranslations;
