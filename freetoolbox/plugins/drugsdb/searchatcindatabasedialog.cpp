@@ -1,8 +1,33 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 #include "searchatcindatabasedialog.h"
+#include <drugsdb/tools.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
@@ -17,22 +42,21 @@
 
 #include <QDebug>
 
-
-using namespace DrugsDbCreator;
+using namespace DrugsDB;
 
 static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
 
-namespace DrugsDbCreator {
-    class SearchAtcInDatabaseDialogPrivate
-    {
-    public:
-        QSqlQueryModel *m_Model;
-        QString m_LangFilter;
-    };
+namespace DrugsDB {
+class SearchAtcInDatabaseDialogPrivate
+{
+public:
+    QSqlQueryModel *m_Model;
+    QString m_LangFilter;
+};
 }
 
 
@@ -44,7 +68,7 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->setupUi(this);
     ui->initial->setText(term);
 
-    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         Utils::Log::addError(this, "unable to connect database", __FILE__, __LINE__);
 
     d->m_Model = new QSqlQueryModel(this);

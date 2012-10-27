@@ -21,6 +21,12 @@
     <packuidname>CIP</packuidname>
     <drugnameconstructor>NAME (FORM, STRENGTH)</drugnameconstructor>
     <uuid>FAGG_AFMPS_BE</uuid>
+
+    <!-- translatable values -->
+    <label lang="xx">Belgium therapeutic database</label>
+    <label lang="fr">Base de données thérapeutique belge</label>
+    <label lang="de">Belgische Therapeutische Datenbank</label>
+
   </description>
 
 </DrugDbDescriptor>

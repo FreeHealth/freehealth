@@ -55,7 +55,8 @@ namespace Constants {
 
     const char * const  FREETOOLBOX_TR_CONTEXT = "FreeTools";
 
-    const char * const  CATEGORY_DRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs databases");
+    const char * const  CATEGORY_FREEDRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Free drugs databases");
+    const char * const  CATEGORY_NONFREEDRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Non-free drugs databases");
     const char * const  CATEGORY_INTERACTIONSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Interactions databases");
     const char * const  CATEGORY_DRUGINFOSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs infos databases");
     const char * const  CATEGORY_ATC_HELPERS = QT_TRANSLATE_NOOP("FreeTools", "ATC Helpers");

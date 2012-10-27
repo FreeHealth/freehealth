@@ -19,7 +19,7 @@ HEADERS += \
     $${PWD}/languagecombobox.h \
     $${PWD}/languagecomboboxdelegate.h \
     $${PWD}/countrycombobox.h \
-    addremovecombobox.h
+    $${PWD}/addremovecombobox.h
 
 
 SOURCES += \
@@ -35,7 +35,7 @@ SOURCES += \
     $${PWD}/languagecombobox.cpp \
     $${PWD}/languagecomboboxdelegate.cpp \
     $${PWD}/countrycombobox.cpp \
-    addremovecombobox.cpp
+    $${PWD}/addremovecombobox.cpp
 
 FORMS += \
     $${PWD}/fancytreeview.ui \

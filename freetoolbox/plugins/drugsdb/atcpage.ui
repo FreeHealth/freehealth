@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DrugsDbCreator::AtcPage</class>
- <widget class="QWidget" name="DrugsDbCreator::AtcPage">
+ <class>DrugsDB::AtcPage</class>
+ <widget class="QWidget" name="DrugsDB::AtcPage">
   <property name="geometry">
    <rect>
     <x>0</x>

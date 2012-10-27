@@ -7,6 +7,6 @@
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="ListView" version="0.0.1"/>
-        <dependency name="DataPack" version="0.0.1"/>
+        <dependency name="DataPackPlugin" version="0.0.1"/>
     </dependencyList>
 </plugin>

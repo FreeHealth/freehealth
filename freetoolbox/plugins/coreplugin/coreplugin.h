@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEICD_COREPLUGIN_H
-#define FREEICD_COREPLUGIN_H
+#ifndef FREETOOLBOX_COREPLUGIN_H
+#define FREETOOLBOX_COREPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 

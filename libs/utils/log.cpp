@@ -64,7 +64,6 @@ bool Log::m_MuteConsole = false;
 
 bool Log::warnPluginsCreation() { return false; }
 
-
 void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)
 {
     m_Messages << LogData(o,m,d,t) ;

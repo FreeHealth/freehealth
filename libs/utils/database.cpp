@@ -542,7 +542,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     // TODO: manage transactions here...
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     bool toReturn = true;
-    d_database->m_ConnectionName.clear();
+//    d_database->m_ConnectionName.clear();
     d_database->m_Driver = connector.driver();
     QString dbName = prefixedDatabaseName(d_database->m_Driver, nonPrefixedDbName);
 
@@ -660,11 +660,11 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             if ((!sqliteFileInfo.exists()) || (sqliteFileInfo.size() == 0)) {
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, sqliteFileInfo.fileName(), connector, createOption)) {
-                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
+                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase returned false"));
                         return false;
                     }
                 } else { // Warn Only
-                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
+                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase not called"));
                     return false;
                 }
                 qApp->processEvents(QEventLoop::ExcludeUserInputEvents);

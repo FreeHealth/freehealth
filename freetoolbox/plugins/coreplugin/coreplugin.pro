@@ -13,25 +13,17 @@ HEADERS += coreimpl.h \
     mainwindow.h \
     itoolpage.h \
     ftb_constants.h \
-    globaltools.h \
     pathpreferences.h \
     ifullreleasestep.h \
-    fullreleasepage.h \
-    routesmodel.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
-    drugdatabasedescription.h
+    fullreleasepage.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
     coreplugin.cpp \
     mainwindow.cpp \
-    globaltools.cpp \
     pathpreferences.cpp \
     ifullreleasestep.cpp \
-    fullreleasepage.cpp \
-    routesmodel.cpp \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
-    drugdatabasedescription.cpp
+    fullreleasepage.cpp
 
 FORMS += mainwindow.ui \
     pathpreferences.ui \

@@ -9,6 +9,8 @@ QT *= sql network xml script
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
+DEFINES += DRUGSDB_LIBRARY
+
 SOURCES += \
     druginfosplugin.cpp \
     biamextractor.cpp \

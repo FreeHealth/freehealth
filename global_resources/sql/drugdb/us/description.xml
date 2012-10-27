@@ -22,6 +22,12 @@
     <packuidname>PACKAGE</packuidname>
     <drugnameconstructor>NAME (FORM, STRENGTH)</drugnameconstructor>
     <uuid>FDA_US</uuid>
+
+    <!-- translatable values -->
+    <label lang="xx">USA therapeutic database</label>
+    <label lang="fr">Base de données thérapeutique américaine</label>
+    <label lang="de">Therapeutische Datenbank USA</label>
+
   </description>
 
 </DrugDbDescriptor>

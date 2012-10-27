@@ -26,9 +26,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+
+#include <drugsdb/tools.h>
 
 #include <extensionsystem/pluginmanager.h>
 

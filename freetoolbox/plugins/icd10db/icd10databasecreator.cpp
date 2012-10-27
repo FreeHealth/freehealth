@@ -26,27 +26,22 @@
  ***************************************************************************/
 #include "icd10databasecreator.h"
 
-#include <coreplugin/globaltools.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/httpdownloader.h>
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/database.h>
 #include <translationutils/constanttranslations.h>
-
 #include <quazip/global.h>
 
 #include <QDir>
 #include <QTextCodec>
 #include <QProgressDialog>
-
-#include <utils/log.h>
-
 #include <QFile>
 #include <QDir>
 
@@ -68,8 +63,6 @@ static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->valu
 
 static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/icd10/icd10.sql");}
 
-
-
 Icd10DatabasePage::Icd10DatabasePage(QObject *parent) :
         IToolPage(parent)
 {
@@ -81,7 +74,6 @@ QWidget *Icd10DatabasePage::createPage(QWidget *parent)
     return new Icd10DatabaseWidget(parent);
 }
 
-
 Icd10DatabaseWidget::Icd10DatabaseWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Icd10DatabaseWidget)
@@ -90,16 +82,16 @@ Icd10DatabaseWidget::Icd10DatabaseWidget(QWidget *parent) :
     ui->setupUi(this);
     m_WorkingPath = workingPath();
     if (!QDir().mkpath(m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create ICD10 Working Path :" + m_WorkingPath, __FILE__, __LINE__);
+        LOG_ERROR("Unable to create ICD10 Working Path :" + m_WorkingPath);
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create ICD10 database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create ICD10 database output path :" + dbpath);
         else
-            Utils::Log::addMessage(this, "ICD10 database output dir created");
+            LOG("ICD10 database output dir created");
     }
 }
 
@@ -113,7 +105,7 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     QString absFileName = databaseAbsPath();
     QString dbName = QFileInfo(absFileName).fileName();
     QString pathOrHostName = QFileInfo(absFileName).absolutePath();
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
                            .arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
@@ -128,7 +120,7 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     }
     DB.setDatabaseName(absFileName);
     if (!DB.open()) {
-        Utils::Log::addError(this, DB.lastError().text(), __FILE__, __LINE__);
+        LOG_ERROR(DB.lastError().text());
         return false;
     }
 
@@ -142,11 +134,11 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     }
 
     // Create SQL Schema
-    if (Core::Tools::executeSqlFile(ICD10_DATABASE_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(ICD10_DATABASE_NAME));
+    if (Utils::Database::executeSqlFile(ICD10_DATABASE_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(ICD10_DATABASE_NAME));
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                             .arg(ICD10_DATABASE_NAME).arg(DB.lastError().text()), __FILE__, __LINE__);
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                             .arg(ICD10_DATABASE_NAME).arg(DB.lastError().text()));
         return false;
     }
 
@@ -159,7 +151,7 @@ bool Icd10DatabaseWidget::downloadRawSources()
 {
     QString path = workingPath();
     if (!QDir().mkpath(path)) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED));
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED));
         return false;
     }
 
@@ -188,7 +180,7 @@ bool Icd10DatabaseWidget::downloadFinished()
     // Unzip file ?
     if (QString(ICD10_URL).endsWith(".zip", Qt::CaseInsensitive)) {
         if (!QuaZipTools::unzipAllFilesIntoDirs(QStringList() << workingPath())) {
-            Utils::Log::addError(this, tr("Unable to unzip ICD10 raw sources (%1)").arg(workingPath()), __FILE__, __LINE__);
+            LOG_ERROR(tr("Unable to unzip ICD10 raw sources (%1)").arg(workingPath()));
             return false;
         }
     }
@@ -234,8 +226,8 @@ bool Icd10DatabaseWidget::populateDatabaseWithRawSources()
 
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()), __FILE__, __LINE__);
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()));
             return false;
         }
     }
@@ -267,7 +259,7 @@ bool Icd10DatabaseWidget::populateDatabaseWithRawSources()
 
         // import files
         if (!Utils::Database::importCsvToDatabase(ICD10_DATABASE_NAME, path + file + "-utf8.txt", file.toLower(), "¦", true)) {
-            Utils::Log::addError(this, "Error", __FILE__, __LINE__);
+            LOG_ERROR("Error");
             continue;
         }
 
@@ -292,7 +284,6 @@ bool Icd10DatabaseWidget::populateDatabaseWithRawSources()
     Utils::informativeMessageBox(tr("ICD10 database created in path %1").arg(databaseAbsPath()), "");
     return true;
 }
-
 
 void Icd10DatabaseWidget::changeEvent(QEvent *e)
 {
