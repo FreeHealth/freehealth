@@ -10,6 +10,7 @@ INCLUDEPATH += ../
 DEPENDPATH += ../
 
 SOURCES += \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
     tools.cpp \
     frenchdrugsdatabasecreator.cpp \
 #    canadiandrugsdatabase.cpp \
@@ -24,7 +25,6 @@ SOURCES += \
     drugsdbplugin.cpp \
     searchatcindatabasedialog.cpp \
     drug.cpp \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
     drugdatabasedescription.cpp \
     routesmodel.cpp \
     drugsdbcore.cpp \
@@ -33,6 +33,7 @@ SOURCES += \
     idrugdatabasestepwidget.cpp
 
 HEADERS  += \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
     tools.h \
     frenchdrugsdatabasecreator.h \
 #    canadiandrugsdatabase.h \
@@ -47,7 +48,6 @@ HEADERS  += \
     drugsdbplugin.h \
     searchatcindatabasedialog.h \
     drug.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
     drugdatabasedescription.h \
     routesmodel.h \
     drugsdbcore.h \
@@ -93,6 +93,82 @@ OTHER_FILES += \
     ../global_resources/sql/drugdb/pt/licenceterms.txt \
     ../global_resources/sql/drugdb/pt/pt_uids.csv \
 
+# Interaction code
+HEADERS += \
+    interactionstep.h \
+    drugdruginteraction.h \
+    drugdruginteractionmodel.h \
+    drugdruginteractioncore.h \
+    interactioneditorpage.h \
+    formalizeditemmodel.h \
+    druginteractor.h \
+    interactoreditorpage.h \
+    afssapsintegrator.h \
+    interactionsdatabasepage.h
+
+#    cytochromep450interactionspage.h \
+
+SOURCES += \
+    interactionstep.cpp \
+    drugdruginteraction.cpp \
+    drugdruginteractionmodel.cpp \
+    drugdruginteractioncore.cpp \
+    interactioneditorpage.cpp \
+    formalizeditemmodel.cpp \
+    druginteractor.cpp \
+    interactoreditorpage.cpp \
+    afssapsintegrator.cpp \
+    interactionsdatabasepage.cpp
+#    cytochromep450interactionspage.cpp \
+
+FORMS += \
+    afssapslinkerwidget.ui \
+    afssapstreewidget.ui \
+    interactioneditorwidget.ui \
+    interactiondatabasecreator.ui \
+    interactiondatabasechecker.ui \
+    afssapsintegratorwidget.ui \
+    interactoreditorwidget.ui
+#    cytochromep450interactionspage.ui \
+
+OTHER_FILES += \
+    ../global_resources/sql/drugs_schema.sql \
+    ../global_resources/sql/iam_schema.sql \
+    ../global_resources/sql/ia/atc_utf8.csv \
+    ../global_resources/sql/ia/thesaurus_interactions.xml \
+    ../global_resources/sql/ia/afssaps_links.xml \
+    ../global_resources/sql/ia/afssaps_classtree.xml \
+    ../global_resources/sql/drugdb/newdbschema.sql \
+    ../global_resources/sql/drugdb/dbschema060_queries.sql
+
+# Drugs infos (BIAM) + PIMs
+SOURCES += \
+    biamextractor.cpp \
+    pimintegrator.cpp \
+    pimdatabasecreator.cpp \
+    pregnancyclassification.cpp
+
+HEADERS  += \
+    biamextractor.h \
+    pimintegrator.h \
+    pimdatabasecreator.h \
+    pim_constants.h \
+    pregnancyclassification.h
+
+FORMS += \
+    biamextractor.ui \
+    pimintegrator.ui \
+    pimdatabasecreator.ui \
+    pregnancyclassification.ui
+
+OTHER_FILES += \
+    ../global_resources/sql/druginfodb/druginfos_schema.sql \
+    ../global_resources/sql/ia/atc_utf8.csv \
+    ../global_resources/sql/ia/afssaps_links.xml \
+    ../global_resources/sql/ia/afssaps_classtree.xml \
+    ../global_resources/sql/pims/icdlinks.xml \
+    ../global_resources/sql/pims/pims.xml \
+    ../global_resources/sql/druginfodb/biam2/biam_importer_schema.sql
 
 OTHER_FILES += DrugsDB.pluginspec
 

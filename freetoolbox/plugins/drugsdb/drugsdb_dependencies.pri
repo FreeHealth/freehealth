@@ -1,2 +1,5 @@
 include( ../coreplugin/coreplugin.pri )
+include( ../biblio/biblio.pri )
+include( ../icd10db/icd10db.pri )
+include( $${SOURCES_PLUGINS_PATH}/listviewplugin/listviewplugin.pri )
 include( $${SOURCES_CONTRIBS_PATH}/quazip/quazip.pri )

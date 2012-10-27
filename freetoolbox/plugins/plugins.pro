@@ -3,9 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS = \
     core \
     drugsdb \
-    interactiondb \
     icd10db \
-    druginfos \
     icd \
     zip \
     listview \
@@ -18,16 +16,9 @@ core.subdir = coreplugin
 
 drugsdb.subdir   = drugsdb
 drugsdb.depends += core
-
-interactiondb.subdir = interactiondb
-interactiondb.depends += core
-interactiondb.depends += biblio
-interactiondb.depends += listview
-
-druginfos.subdir = druginfos
-druginfos.depends += core
-druginfos.depends += interactiondb
-druginfos.depends += icd10db
+drugsdb.depends += biblio
+drugsdb.depends += listview
+drugsdb.depends += icd10db
 
 icd10db.subdir = icd10db
 icd10db.depends += core
@@ -37,7 +28,6 @@ icd.subdir = icdplugin
 icd.depends += core
 icd.depends += listview
 icd.depends += datapack
-icd.depends += drugsdb
 
 zip.subdir = zipcodes
 zip.depends += core

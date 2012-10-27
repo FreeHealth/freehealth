@@ -29,6 +29,7 @@
 #include "drug.h"
 #include "drugsdbcore.h"
 #include "idrugdatabasestepwidget.h"
+#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -403,30 +404,15 @@ bool FrDrugDatatabaseStep::linkMolecules()
     if (!checkDatabase())
         return false;
 
-    QSqlDatabase db = drugEssentialDatabase()->database();
-    if (!db.isOpen()) {
-        LOG_ERROR("Can not connect to French db");
-        return false;
-    }
-
-    if (sourceId()==-1) {
-        LOG_ERROR("NO SID DEFINED");
-        return false;
-    }
-
-//    // Associate Mol <-> ATC for drugs with one molecule only
-    QHash<QString, QString> corrected;
-    QMultiHash<QString, QString> correctedByAtcCode;
-
     Q_EMIT progressLabelChanged(tr("Linking drugs components to ATC codes"));
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progress(0);
 
     // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
     MoleculeLinkerModel *model = drugsDbCore()->moleculeLinkerModel();
-    QMultiHash<int, int> mol_atc = model->moleculeLinker(drugEssentialDatabase(), ::FR_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, correctedByAtcCode);
-    qWarning() << "unfound" << unfound.count();
+    MoleculeLinkData data(drugEssentialDatabase(), sourceId(), ::FR_DRUGS_DATABASE_NAME, "fr");
+    if (!model->moleculeLinker(&data))
+        return false;
 
     Q_EMIT progress(1);
 
@@ -435,13 +421,13 @@ bool FrDrugDatatabaseStep::linkMolecules()
     Q_EMIT progress(0);
 
     // Save to links to drugs database
-    Tools::addComponentAtcLinks(drugEssentialDatabase(), mol_atc, sourceId());
+    Tools::addComponentAtcLinks(drugEssentialDatabase(), data.moleculeIdToAtcId, sourceId());
 
     LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
-    model->addUnreviewedMolecules(::FR_DRUGS_DATABASE_NAME, unfound);
+    model->addUnreviewedMolecules(::FR_DRUGS_DATABASE_NAME, data.unfoundMoleculeAssociations);
     model->saveModel();
     Q_EMIT progress(1);
 

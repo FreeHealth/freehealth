@@ -36,6 +36,7 @@ namespace DrugsDB {
 class DrugsDBCore;
 namespace Internal {
 class DrugBaseEssentials;
+class MoleculeLinkData;
 class MoleculeLinkerModelPrivate;
 }  // namespace Internal
 
@@ -84,12 +85,7 @@ public:
     bool addUnreviewedMolecules(const QString &dbUid, const QStringList &molecules);
     bool addAutoFoundMolecules(const QMultiHash<QString, QString> &mol_atc, bool removeFromModel = false);
 
-    QMultiHash<int, int> moleculeLinker(Internal::DrugBaseEssentials *database,
-                                        const QString &drugsDbUid,
-                                        const QString &lang,
-                                        QStringList *unfoundOutput,
-                                        const QHash<QString, QString> &correctedByName,
-                                        const QMultiHash<QString, QString> &correctedByAtcCode);
+    bool moleculeLinker(Internal::MoleculeLinkData *data);
 
 public Q_SLOTS:
     bool saveModel();

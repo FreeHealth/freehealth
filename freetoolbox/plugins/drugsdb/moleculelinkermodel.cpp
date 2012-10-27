@@ -39,6 +39,7 @@
 
 #include "moleculelinkermodel.h"
 #include "atcmodel.h"
+#include "moleculelinkdata.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -552,39 +553,27 @@ struct MolLink {
     QString mol_form;
 };
 
-QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
-        (Internal::DrugBaseEssentials *database,
-         const QString &drugsDbUid,        // Drugs database to use
-         const QString &lang,              // Lang
-         QStringList *unfoundOutput,       // Returned unfounded molecules
-         const QHash<QString, QString> &correctedByName,        // Precorrected molecules
-         const QMultiHash<QString, QString> &correctedByAtcCode // Key=mol, Val=ATC
-         )
+bool MoleculeLinkerModel::moleculeLinker(Internal::MoleculeLinkData *data)
 {
-    QMultiHash<int, int> mol_atc;
+    Q_ASSERT(data);
+    if (!data)
+        return false;
     // get all ATC ids
-    QSqlDatabase iam = database->database();
+    QSqlDatabase iam = data->database->database();
     if (!iam.open()) {
         LOG_ERROR("Can not connect to MASTER db");
-        return mol_atc;
+        return false;
     }
-
+    data->moleculeIdToAtcId.clear();
+    data->unfoundMoleculeAssociations.clear();
     QHash<QString, int> atc_id;
     QMultiHash<QString, int> atcName_id;
     QString req;
     QSqlQuery query(iam);
     using namespace DrugsDB::Constants;
 
-//    DrugsDB::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, "omeprazole");
-
     // Get all ATC Code and Label
     LOG("Getting ATC Informations from the interactions database");
-//    //    req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
-//    //                  "FROM ATC "
-//    //                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
-//    //                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
-//    //                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-//    //                  "WHERE LABELS.LANG='%1' AND length(ATC.CODE)=7;").arg(lang);
     Utils::FieldList get;
     get << Utils::Field(Table_ATC, ATC_ID);
     get << Utils::Field(Table_ATC, ATC_CODE);
@@ -594,9 +583,9 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
           << Utils::Join(Table_LABELSLINK, LABELSLINK_MASTERLID, Table_ATC_LABELS, ATC_LABELS_MASTERLID)
           << Utils::Join(Table_LABELS, LABELS_LID, Table_LABELSLINK, LABELSLINK_LID);
     Utils::FieldList cond;
-    cond << Utils::Field(Table_LABELS, LABELS_LANG, QString("='%1'").arg(lang));
+    cond << Utils::Field(Table_LABELS, LABELS_LANG, QString("='%1'").arg(data->lang));
 
-    if (query.exec(database->select(get,joins,cond))) {
+    if (query.exec(data->database->select(get,joins,cond))) {
         while (query.next()) {
             atc_id.insert(query.value(1).toString(), query.value(0).toInt());
             atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
@@ -608,18 +597,18 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
     qWarning() << "ATC" << atc_id.count();
 
     // Get source ID (SID)
-    int sid = database->getSourceId(drugsDbUid);
+    int sid = data->sourceId;
     if (sid==-1) {
-        LOG_ERROR("NO SID: " + drugsDbUid);
-        return mol_atc;
+        LOG_ERROR("NO SID: " + data->drugDbUid);
+        return false;
     }
 
     // Get all MOLS.MID and Label
-    LOG("Getting Drugs Composition from " + drugsDbUid);
+    LOG("Getting Drugs Composition from " + data->drugDbUid);
     QMultiHash<QString, int> mols;
     QHash<int, QString> w;
     w.insert(MOLS_SID, QString("=%1").arg(sid));
-    req = database->selectDistinct(Table_MOLS, QList<int>()
+    req = data->database->selectDistinct(Table_MOLS, QList<int>()
                                    << MOLS_MID
                                    << MOLS_NAME, w);
     if (query.exec(req)) {
@@ -634,37 +623,37 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
     const QStringList &knownMoleculeNames = mols.uniqueKeys();
 
     // manage corrected molecules
-    foreach(const QString &mol, correctedByName.keys()) {
+    foreach(const QString &mol, data->correctedByName.keys()) {
         if (!knownMoleculeNames.contains(mol))
             continue;
-        foreach(int id, atcName_id.values(correctedByName.value(mol)))
-            mol_atc.insertMulti(mols.value(mol), id);
+        foreach(int id, atcName_id.values(data->correctedByName.value(mol)))
+            data->moleculeIdToAtcId.insertMulti(mols.value(mol), id);
     }
-    foreach(const QString &mol, correctedByAtcCode.uniqueKeys()) {  // Key=mol, Val=ATC
+    foreach(const QString &mol, data->correctedByAtcCode.uniqueKeys()) {  // Key=mol, Val=ATC
         if (!knownMoleculeNames.contains(mol))
             continue;
         // For all ATC codes corresponding to the molecule name
-        foreach(const QString &atc, correctedByAtcCode.values(mol)) {
+        foreach(const QString &atc, data->correctedByAtcCode.values(mol)) {
             // Get the ATC label and retreive all ATC_ids that have the same label --> NO
             //                QString atcLabel = atcName_id.key(atc_id.value(atc));
             //                foreach(int id, atcName_id.values(atcLabel))
-            //                    mol_atc.insertMulti(mols.value(mol), id);
+            //                    data->moleculeIdToAtcId.insertMulti(mols.value(mol), id);
             // Associate molecule to the ATC_Id corresponding to the code
             foreach(const int molId, mols.values(mol)) {
-                mol_atc.insertMulti(molId, atc_id.value(atc));
+                data->moleculeIdToAtcId.insertMulti(molId, atc_id.value(atc));
             }
             qWarning() << "Corrected by ATC" << mol << atc << atcName_id.key(atc_id.value(atc));
         }
     }
-    LOG("Hand made association: " + QString::number(mol_atc.count()));
+    LOG("Hand made association: " + QString::number(data->moleculeIdToAtcId.count()));
 
     // find links
-    unfoundOutput->clear();
+    data->unfoundMoleculeAssociations.clear();
     foreach(const QString &mol, knownMoleculeNames) {
         if (mol.isEmpty())
             continue;
         foreach(const int codeMol, mols.values(mol)) {
-            if (mol_atc.keys().contains(codeMol)) {
+            if (data->moleculeIdToAtcId.keys().contains(codeMol)) {
                 continue;
             }
             // Does molecule name exact-matches an ATC label
@@ -735,19 +724,19 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
             bool found = false;
             foreach(int id, atcIds) {
                 found = true;
-                mol_atc.insertMulti(codeMol, id);
+                data->moleculeIdToAtcId.insertMulti(codeMol, id);
                 qWarning() << "Linked" << mol << atcName_id.key(id);
             }
             if (!found) {
-                if (!unfoundOutput->contains(mol))
-                    unfoundOutput->append(mol);
+                if (!data->unfoundMoleculeAssociations.contains(mol))
+                    data->unfoundMoleculeAssociations.append(mol);
             }
         }
     }
 
     // Inform model of founded links
     QMultiHash<QString, QString> mol_atc_forModel;
-    QHashIterator<int,int> it(mol_atc);
+    QHashIterator<int,int> it(data->moleculeIdToAtcId);
     while (it.hasNext()) {
         it.next();
         mol_atc_forModel.insertMulti(mols.key(it.key()), atc_id.key(it.value()));
@@ -759,7 +748,7 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
     QHash<QString, QString> model_mol_atc;
     int modelFound = 0;
     int reviewedWithoutAtcLink = 0;
-    selectDatabase(drugsDbUid);
+    selectDatabase(data->drugDbUid);
     while (canFetchMore(QModelIndex()))
         fetchMore(QModelIndex());
 
@@ -771,10 +760,10 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
     }
     qWarning() << "MoleculeLinkerModel::AvailableLinks" << model_mol_atc.count();
 
-    foreach(const QString &mol, *unfoundOutput) {
+    foreach(const QString &mol, data->unfoundMoleculeAssociations) {
         if (model_mol_atc.keys().contains(mol)) {
             int codeMol = mols.value(mol);
-            if (!mol_atc.keys().contains(codeMol)) {
+            if (!data->moleculeIdToAtcId.keys().contains(codeMol)) {
                 if (model_mol_atc.value(mol).trimmed().isEmpty()) {
                     ++reviewedWithoutAtcLink;
                     continue;
@@ -784,9 +773,9 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
                     QString atcName = atcName_id.key(atc_id.value(atcCode));
                     QList<int> atcIds = atcName_id.values(atcName);
                     foreach(int id, atcIds) {
-                        mol_atc.insertMulti(codeMol, id);
+                        data->moleculeIdToAtcId.insertMulti(codeMol, id);
                         qWarning() << "ModelLinker Found" << codeMol << mol << id << atcName_id.key(id);
-                        unfoundOutput->removeAll(mol);
+                        data->unfoundMoleculeAssociations.removeAll(mol);
                     }
                     if (atcIds.count())
                         ++modelFound;
@@ -795,7 +784,7 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
         }
     }
 
-//    // Try to find new associations via the COMPOSITION.LK_NATURE field
+    // TODO: Try to find new associations via the COMPOSITION.LK_NATURE field
     int natureLinkerNb = 0;
 //    if (drugsDbUid == "FR_AFSSAPS") {
 //        // TODO: code here */
@@ -862,31 +851,31 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
 //                        two = lk_codemol.values(lk).at(1);
 
 //                        // if both molecule_codes are known or unknown --> continue
-//                        if ((!mol_atc.keys().contains(one)) &&
-//                                (!mol_atc.keys().contains(two)))
+//                        if ((!data->moleculeIdToAtcId.keys().contains(one)) &&
+//                                (!data->moleculeIdToAtcId.keys().contains(two)))
 //                            continue;
-//                        if ((mol_atc.keys().contains(one)) &&
-//                                (mol_atc.keys().contains(two)))
+//                        if ((data->moleculeIdToAtcId.keys().contains(one)) &&
+//                                (data->moleculeIdToAtcId.keys().contains(two)))
 //                            continue;
 
 //                        // Associate unknown molecule_code with the known ATC
-//                        if (mol_atc.keys().contains(one)) {
+//                        if (data->moleculeIdToAtcId.keys().contains(one)) {
 //                            // The second molecule is unknown
-//                            const QList<int> &atcIds = mol_atc.values(one);
+//                            const QList<int> &atcIds = data->moleculeIdToAtcId.values(one);
 //                            foreach(int actId, atcIds) {
-//                                mol_atc.insertMulti(two, actId);
+//                                data->moleculeIdToAtcId.insertMulti(two, actId);
 //                                qWarning() << "LK_NATURE: Linked" << i.key() << mols.key(one) << mols.key(two) << lk << atcName_id.key(actId);
-//                                unfoundOutput->removeAll(mols.key(two));
-//                                mol_atc_forModel.insertMulti(mols.key(one), atcName_id.key(actId));
+//                                data->unfoundMoleculeAssociations.removeAll(mols.key(two));
+//                                data->moleculeIdToAtcId_forModel.insertMulti(mols.key(one), atcName_id.key(actId));
 //                            }
-//                        } else if (mol_atc.keys().contains(two)) {
+//                        } else if (data->moleculeIdToAtcId.keys().contains(two)) {
 //                            // The first is unknown
-//                            const QList<int> &atcIds = mol_atc.values(two);
+//                            const QList<int> &atcIds = data->moleculeIdToAtcId.values(two);
 //                            foreach(int actId, atcIds) {
-//                                mol_atc.insertMulti(one, actId);
+//                                data->moleculeIdToAtcId.insertMulti(one, actId);
 //                                qWarning() << "LK_NATURE: Linked" << i.key() << mols.key(one) << mols.key(two) << lk << atcName_id.key(actId);
-//                                unfoundOutput->removeAll(mols.key(one));
-//                                mol_atc_forModel.insertMulti(mols.key(one), atcName_id.key(actId));
+//                                data->unfoundMoleculeAssociations.removeAll(mols.key(one));
+//                                data->moleculeIdToAtcId_forModel.insertMulti(mols.key(one), atcName_id.key(actId));
 //                            }
 //                        }
 //                        ++nb;
@@ -900,18 +889,18 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
 //    }
 
     // Save completion percent in drugs database INFORMATION table
-    int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
-    LOG(QString("Molecule links completion: %1").arg(completion));
+    data->completionPercentage = ((double) (1.0 - ((double)(data->unfoundMoleculeAssociations.count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
+    LOG(QString("Molecule links completion: %1").arg(data->completionPercentage));
     //    DrugsDB::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
     //                                 .arg(completion).arg(sid),
     //                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
     QHash<int, QString> where;
     where.insert(SOURCES_SID, QString("='%1'").arg(sid));
-    query.prepare(database->prepareUpdateQuery(Table_SOURCES, SOURCES_COMPLETION, where));
-    query.bindValue(0, completion);
+    query.prepare(data->database->prepareUpdateQuery(Table_SOURCES, SOURCES_COMPLETION, where));
+    query.bindValue(0, data->completionPercentage);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Tools", query);
-        return mol_atc;
+        return false;
     }
     query.finish();
 
@@ -921,16 +910,16 @@ QMultiHash<int, int> MoleculeLinkerModel::moleculeLinker
 
     qWarning()
             << "\nNUMBER OF MOLECULES" << knownMoleculeNames.count()
-            << "\nCORRECTED BY NAME" << correctedByName.keys().count()
-            << "\nCORRECTED BY ATC" << correctedByAtcCode.uniqueKeys().count()
-            << "\nFOUNDED" << mol_atc.uniqueKeys().count()
+            << "\nCORRECTED BY NAME" << data->correctedByName.keys().count()
+            << "\nCORRECTED BY ATC" << data->correctedByAtcCode.uniqueKeys().count()
+            << "\nFOUNDED" << data->moleculeIdToAtcId.uniqueKeys().count()
             << QString("\nLINKERMODEL (WithATC:%1;WithoutATC:%2) %3").arg(modelFound).arg(reviewedWithoutAtcLink).arg(modelFound + reviewedWithoutAtcLink)
             << "\nLINKERNATURE" << natureLinkerNb
-            << "\nLEFT" << (unfoundOutput->count() - reviewedWithoutAtcLink)
-            << "\nCONFIDENCE INDICE" << completion
+            << "\nLEFT" << (data->unfoundMoleculeAssociations.count() - reviewedWithoutAtcLink)
+            << "\nCONFIDENCE INDICE" << data->completionPercentage
             << "\n\n";
 
-    return mol_atc;
+    return true;
 }
 
 int MoleculeLinkerModel::removeUnreviewedMolecules()

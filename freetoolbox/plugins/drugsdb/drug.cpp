@@ -90,8 +90,6 @@ bool Component::setData(const int ref, const QVariant &value, const QString &lan
         v = d->createLanguage(lang.isEmpty() ? Trans::Constants::ALL_LANGUAGE : lang);
     v->m_Content.insert(ref, value);
     return true;
-//    d->m_Content[ref].insertMulti(lang, value);
-//    return true;
 }
 
 QVariant Component::data(const int ref, const QString &lang) const
@@ -106,9 +104,6 @@ QVariant Component::data(const int ref, const QString &lang) const
         }
     }
     return v->m_Content.value(ref, QVariant());
-//    if (!d->m_Content.keys().contains(ref))
-//        return QVariant();
-//    return d->m_Content.value(ref).value(lang);
 }
 
 Drug::Drug() :
@@ -192,8 +187,6 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
     }
     v->m_Content.insert(ref, value);
     return true;
-//    d->m_Content[ref].insertMulti(lang, value);
-//    return true;
 }
 
 QVariant Drug::data(const int ref, const QString &lang) const
@@ -208,9 +201,6 @@ QVariant Drug::data(const int ref, const QString &lang) const
         }
     }
     return v->m_Content.value(ref, QVariant());
-//    if (!d->m_Content.keys().contains(ref))
-//        return QVariant();
-//    return d->m_Content.value(ref).value(lang);
 }
 
 void Drug::addComponent(Component *compo)

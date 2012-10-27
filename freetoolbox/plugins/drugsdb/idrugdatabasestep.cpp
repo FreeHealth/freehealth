@@ -599,6 +599,58 @@ bool IDrugDatabaseStep::saveDrugsIntoDatabase(QVector<Drug *> drugs)
     return true;
 }
 
+//QHash<int, QString> IDrugDatabaseStep::generateMids(const QStringList &molnames, const int sid, const QString &connection)
+//{
+//    QHash<int, QString> mids;
+//    QSqlDatabase db = QSqlDatabase::database(connection);
+//    if (!db.isOpen())
+//        return mids;
+
+//    db.transaction();
+//    QSqlQuery query(db);
+
+//    foreach(const QString &name, molnames) {
+
+//        // Ask for an existing MID
+//        //        req = QString("SELECT MID FROM MOLS WHERE NAME=\"%1\" AND SID=\"%2\";").arg(name).arg(sid);
+//        QHash<int, QString> w;
+//        w.insert(DrugsDB::Constants::MOLS_NAME, QString("=\"%1\"").arg(name));
+//        w.insert(DrugsDB::Constants::MOLS_SID, QString("='%1'").arg(sid));
+////        req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_MOLS, DrugsDB::Constants::MOLS_MID, w);
+////        if (query.exec(req)) {
+////            if (query.next()) {
+////                // is already in the table MOLS
+////                mids.insert(query.value(0).toInt(), name);
+////                continue;
+////            }
+////        } else {
+////            LOG_QUERY_ERROR_FOR("Tools", query);
+////            continue;
+////        }
+//        query.finish();
+
+//        // create a new MID
+//        //        req = QString("INSERT INTO MOLS (MID, SID, NAME) VALUES (NULL,%1,\"%2\");")
+//        //              .arg(sid)
+//        //              .arg(name);
+////        query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_MOLS));
+////        query.bindValue(DrugsDB::Constants::MOLS_MID, QVariant());
+////        query.bindValue(DrugsDB::Constants::MOLS_NAME, name);
+////        query.bindValue(DrugsDB::Constants::MOLS_SID, sid);
+////        query.bindValue(DrugsDB::Constants::MOLS_WWW, QVariant());
+////        if (query.exec()) {
+////            mids.insert(query.lastInsertId().toInt(), name);
+////            continue;
+////        } else {
+////            LOG_QUERY_ERROR_FOR("Tools", query);
+////            continue;
+////        }
+////        query.finish();
+//    }
+//    db.commit();
+//    return mids;
+//}
+
 /** Save a list of molecules and return a hash containing the MoleculeID as key and the molecule name os value */
 QHash<int, QString> IDrugDatabaseStep::saveMoleculeIds(const QStringList &molnames)
 {

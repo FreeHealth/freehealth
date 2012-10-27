@@ -70,11 +70,6 @@ public:
     // END
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 
-    bool saveDrugDatabaseDescription(const QString &fileName, const int completion);
-    int getSourceId(const QString &connection, const QString &dbUid);
-
-    QHash<int, QString> generateMids(const QStringList &molnames, const int sid, const QString &connection);
-
     bool addInteractionData(const QString &connection);
 
 private:
