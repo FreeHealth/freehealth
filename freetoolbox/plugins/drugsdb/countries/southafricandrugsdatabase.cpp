@@ -324,7 +324,7 @@ bool ZaDrugDatatabaseStep::prepareData()
     for(int i=0; i<26; ++i) {
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
-        if (!QFile::exists(tempPath() +  + QDir::separator() + fileName)) {
+        if (!QFile::exists(tempPath() + QDir::separator() + fileName)) {
             LOG_ERROR(QString("Missing " + tempPath() + QDir::separator() + fileName + " file. ZADrugsDB::prepareDatas()"));
             continue;
         }
