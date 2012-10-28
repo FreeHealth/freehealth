@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DRUGINTERACTOR_H
-#define DRUGINTERACTOR_H
+#ifndef IAMDB__DRUGINTERACTOR_H
+#define IAMDB__DRUGINTERACTOR_H
 
 #include <QMultiHash>
 #include <QVariant>
@@ -185,4 +185,4 @@ private:
 
 }  // End namespace IAMDb
 
-#endif // DRUGINTERACTOR_H
+#endif // IAMDB__DRUGINTERACTOR_H

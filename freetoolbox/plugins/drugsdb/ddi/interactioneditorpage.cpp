@@ -136,8 +136,8 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->googleTranslator = 0;
     ui->setupUi(this);
     // Some ui settings
-    ui->gridLayout_6->setMargin(0);
-    ui->gridLayout_6->setSpacing(0);
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
     ui->treeLayout->setMargin(0);
     ui->treeLayout->setSpacing(0);
     ui->tabWidget->setCurrentIndex(0);
@@ -175,7 +175,6 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
     d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
 
-    b->addAction(d->aCreateNew);
     b->addAction(d->aRemoveCurrent);
     b->addAction(d->aEdit);
     b->addAction(d->aTranslateThis);
@@ -201,9 +200,13 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
     ui->searchLine->setLeftButton(left);
     QToolButton *right = new QToolButton(this);
+    right->addAction(d->aCreateNew);
     right->addAction(d->aExpandAll);
     right->addAction(d->aCollapseAll);
-    right->setDefaultAction(d->aExpandAll);
+    right->setDefaultAction(d->aCreateNew);
+    right->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    right->setPopupMode(QToolButton::InstantPopup);
+    ui->searchLine->setRightButton(right);
 
     // Manage combos && views
     setLevelNamesToCombo(ui->comboLevel);
@@ -229,8 +232,6 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     ui->bilbioTableView->setAlternatingRowColors(true);
     ui->bilbioTableView->horizontalHeader()->hide();
     ui->bilbioTableView->verticalHeader()->hide();
-
-    ui->searchLine->setRightButton(right);
 
     // Create DDI Model && manage Mapper
     d->m_DDIModel = new DrugDrugInteractionModel(this);
@@ -317,6 +318,7 @@ void InteractionEditorWidget::setEditorsEnabled(bool state)
     ui->secondDoseToRepart->setEnabled(state);
 }
 
+/** Create a new drugdruginteraction */
 void InteractionEditorWidget::createNewDDI()
 {
     // get category
@@ -325,7 +327,8 @@ void InteractionEditorWidget::createNewDDI()
         index = index.parent();
     }
     if (!index.isValid()) {
-        return ;
+        Utils::warningMessageBox(tr("Please select an interactor first."), "");
+        return;
     }
 
     // insert row to model
@@ -683,6 +686,7 @@ void InteractionEditorWidget::splitCurrent()
 void InteractionEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
+        d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
         d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
         d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
         d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
@@ -692,6 +696,16 @@ void InteractionEditorWidget::changeEvent(QEvent *e)
         d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
         d->aCollapseAll->setText(tr("Collapse all"));
         d->aExpandAll->setText(tr("Expand all"));
+        d->aCreateNew->setToolTip(d->aCreateNew->text());
+        d->aSave->setToolTip(d->aSave->text());
+        d->aEdit->setToolTip(d->aEdit->text());
+        d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
+        d->aTranslateAll->setToolTip(d->aTranslateAll->text());
+        d->aTranslateThis->setToolTip(d->aTranslateThis->text());
+        d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
+        d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
+        d->aCollapseAll->setToolTip(d->aCollapseAll->text());
+        d->aExpandAll->setToolTip(d->aExpandAll->text());
         ui->retranslateUi(this);
         int current = ui->comboLevel->currentIndex();
         setLevelNamesToCombo(ui->comboLevel);

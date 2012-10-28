@@ -109,9 +109,6 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new PimDatabasePage(this));
     addAutoReleasedObject(new PimsTreePage(this));
 
-    // Create the core object
-    IAMDb::DrugDrugInteractionCore::instance();
-
 //    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
     addAutoReleasedObject(new IAMDb::InteractionEditorPage(this));

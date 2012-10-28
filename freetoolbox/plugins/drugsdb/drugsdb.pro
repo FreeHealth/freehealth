@@ -31,6 +31,7 @@ HEADERS  += \
     countries/moleculelinkermodel.h \
     countries/moleculelinkerwidget.h \
     countries/moleculelinkdata.h \
+    interactorcompleter.h
 
 
 SOURCES += \
@@ -55,6 +56,7 @@ SOURCES += \
     countries/moleculelinkermodel.cpp \
     countries/moleculelinkerwidget.cpp \
     countries/moleculelinkdata.cpp \
+    interactorcompleter.cpp
 
 
 FORMS += \
