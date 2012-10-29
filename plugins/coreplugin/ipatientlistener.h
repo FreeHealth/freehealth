@@ -52,7 +52,12 @@ public:
     IPatientListener(QObject *parent) : QObject(parent) {}
     virtual ~IPatientListener() {}
 
-    /*! This method is called \b before the patient is changed. The listener can now do last things like saving data. */
+    /*! This method is called in the PatientModel \b before the patient is changed.
+     *
+     * The listener can do last things here like saving data.
+     * @return bool \e true if it is safe to change patient. If returned \e false
+     * the current patient is \e not changed.
+     */
     virtual bool currentPatientAboutToChange() {return true;}
 };
 
