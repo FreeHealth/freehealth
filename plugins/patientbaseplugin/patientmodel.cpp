@@ -83,16 +83,10 @@ public:
         m_EmitCreationAtSubmit(false),
         q(parent)
     {
-        _defaultMalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-        _defaultFemalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-        _defaultHermaphrodismPhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
     }
 
     ~PatientModelPrivate ()
     {
-        delete _defaultMalePhoto;
-        delete _defaultFemalePhoto;
-        delete _defaultHermaphrodismPhoto;
         if (m_SqlPatient) {
             delete m_SqlPatient;
             m_SqlPatient = 0;
@@ -238,7 +232,6 @@ public:
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
     bool m_EmitCreationAtSubmit;
-    QPixmap *_defaultMalePhoto, *_defaultFemalePhoto, *_defaultHermaphrodismPhoto;
 
 private:
     PatientModel *q;
