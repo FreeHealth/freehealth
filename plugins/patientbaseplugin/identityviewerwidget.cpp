@@ -655,24 +655,12 @@ public:
     {
         _patientModelIdentityWrapper->setCurrentPatient(row);
 
-        // photo
-        // TODO: see issue #200
         // TODO: ¿¿¿¿ install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184 ????
-        QModelIndex photoIndex = m_PatientModel->index(row, Core::IPatient::Photo_64x64);
-        QPixmap photo = m_PatientModel->data(photoIndex).value<QPixmap>();
+
+        QPixmap photo = patient()->data(Core::IPatient::Photo_64x64).value<QPixmap>();
         if (photo.isNull()) {
-            int gender = m_PatientModel->index(row, Core::IPatient::GenderIndex).data().toInt();
-            switch (gender) {
-            case 0: // Male
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-                break;
-            case 1: // Female
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-                break;
-            case 2: // Herma
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
-                break;
-            }
+            const int gender = patient()->data(Core::IPatient::GenderIndex).toInt();
+            photo = theme()->defaultGenderPixmap(gender);
         }
         viewUi->photoLabel->setPixmap(photo);
 
