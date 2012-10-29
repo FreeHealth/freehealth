@@ -24,16 +24,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class Views::DateTimeEdit
- * \brief Combines a QDateEdit with a QComboBox that replaces a QTimeEdit
+ * \class Views::TimeComboBox
+ * \brief Combines a QTimeEdit with a QComboBox and replaces a QTimeEdit
  *
  * Normally a QDateTimeEdit consists of one long edit with separate sections
  * for date and time. In FMF the date in the calendar often needed as shorttext
  * with a calendar popup, and the time is needed as pre-selected options like
  * 10:00, 10:10, 10:20, 10:30 etc. Using a normal QTimeEdit would suffice, but
- * is very bad in UI design. So here we replaced it with a QComboBox that provides
- * sane values for times, you just have to click on them once.
- * The Widget provides more or less the same Interface (signals, slots, properties)
+ * is very unconvenient in daily use. So here we replaced it with a QComboBox that provides
+ * sane values for times, you just have to click on them once. The intervals can be
+ * set individually.
+ * The Widget provides more or less the same interface (signals, slots, properties)
  * as QDateTimeEdit.
  * \sa QDateEdit, QTimeEdit, QDateTimeEdit
  */
@@ -55,7 +56,7 @@ using namespace Trans::ConstantTranslations;
 namespace Views {
 namespace Internal {
 /*!
- * \class Views::DateTimeEditPrivate
+ * \class Views::TimeComboBoxPrivate
  * \brief Private implementation of the Views::DateTimeEdit class.
  *
  * This class implements all the details for DateTimeEdit.
@@ -95,25 +96,36 @@ void TimeComboBox::setTime(const QTime &time)
     if (d->time == time)
         return;
 
-    d->time = time.isNull()? QTime(0, 0) : time;
-    d->combo->setEditText(time.toString(QLocale::system().timeFormat(QLocale::ShortFormat)));
+    const int index = d->combo->findData(time);
+    if (index == -1) {
+        // custom time, not found in combo items
+
+        // QTime() is not the same as QTime(0,0)!!
+        d->time = time.isNull()? QTime(0, 0) : time;
+        d->combo->setEditText(time.toString(QLocale::system().timeFormat(QLocale::ShortFormat)));
+        qDebug() << "setEditText" << time;
+    } else {
+        // given time is one of the combo items
+        d->combo->setCurrentIndex(index);
+        qDebug() << "setCurrentIndex" << index << d->combo->itemData(index);
+    }
     Q_EMIT timeChanged(d->time);
     Q_EMIT dateTimeChanged(QDateTime(QDate(), d->time));
 }
 
-/*! Sets the editable state of the combo box. \sa QComboBox::setEditable() */
+/*! Sets the editable state of the combo box. \sa QComboBox::setEditable(). */
 void TimeComboBox::setEditable(bool editable)
 {
     d->combo->setEditable(editable);
 }
 
-/*! Returns the \e editable property of the combo box. \sa QComboBox::editable() */
+/*! Returns the \e editable property of the combo box. \sa QComboBox::editable(). */
 bool TimeComboBox::editable() const
 {
     return d->combo->isEditable();
 }
 
-/*! Returns the current time that is displayed in the widget */
+/*! Returns the current time that is displayed in the widget. */
 QTime TimeComboBox::time() const
 {
     return d->time;
@@ -147,23 +159,45 @@ TimeComboBox::~TimeComboBox()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool TimeComboBox::initialize()
+void TimeComboBox::initialize()
 {
-    // Provide the combobox with a predefined list of times, e.g. 30 minutes intervals
-    for(int h = 0; h < 24; ++h) {
-        d->combo->addItem(QTime(h, 0).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 0));
-        d->combo->addItem(QTime(h, 30).toString(QLocale::system().timeFormat(QLocale::ShortFormat)), QTime(h, 30));
-    }
+    setInterval(30);
+    updateComboItems();
     connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTimeFromComboSelection(int)));
     connect(d->combo, SIGNAL(editTextChanged(QString)), this, SLOT(updateTimeFromComboEditText(QString)));
-    return true;
+}
+
+/*! \brief Fills the combo box with a list of time slices, per default 30 minutes intervals.
+ *
+ * The interval can be set with setInterval(). Each time the user changes the combo value, the signal
+ * \e timeChanged() is emitted. The current selected time can be retrieved anytime with time().
+ */
+void TimeComboBox::updateComboItems()
+{
+    // save current displayed time for restoring later
+    QTime oldTime = this->time();
+
+//    d->combo->clear();
+
+    for (QTime time = QTime(0, 0); time < QTime(23, 59); time = time.addSecs(d->interval * 60)) {
+        // Each combo item is filled with the current locale's time string, and the item data is set to the QTime,
+        d->combo->addItem(time.toString(QLocale::system().timeFormat(QLocale::ShortFormat)), time);
+
+        // prevent wrapping of time to next day -> infinite loop
+        if (time.addSecs(d->interval * 60) < time)
+            break;
+    }
+    setTime(oldTime);
 }
 
 /*! Sets interval of the times in the combo box. Currently this method does nothing. */
-void TimeComboBox::setInterval(int interval)
+void TimeComboBox::setInterval(int minutes)
 {
-    //TODO: has no function yet.
-    d->interval = interval;
+    const bool changed = (d->interval != minutes);
+    if (changed) {
+        d->interval = minutes;
+        updateComboItems();
+    }
 }
 
 /*! Auto slot that updates the internal time to the current selected time. */
@@ -176,14 +210,15 @@ void TimeComboBox::updateTimeFromComboSelection(const int index)
 
     QTime time = d->combo->itemData(index).toTime();
     setTime(time);
-    qDebug() << d->time;
 }
 
 /*! Auto slot that updates the internal time to the currently edited time string. */
 void TimeComboBox::updateTimeFromComboEditText(const QString &text)
 {
     d->time = QTime::fromString(text, QLocale::system().timeFormat(QLocale::ShortFormat));
-    qDebug() << d->time;
+    if (d->time.isNull())
+        // allow "military" input method like 1200 (= 12:00), 2030 (= 20:30 or 8:30pm)
+        d->time = QTime::fromString(text, "hhmm");
 }
 
 

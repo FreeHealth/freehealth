@@ -53,7 +53,6 @@ public:
     explicit TimeComboBox(QTime &time, QWidget *parent = 0);
     ~TimeComboBox();
 
-    bool initialize();
     QTime time() const;
     bool editable() const;
 
@@ -65,10 +64,13 @@ Q_SIGNALS:
 public Q_SLOTS:
     void setTime(const QTime &time);
     void setEditable (bool editable);
-    void setInterval(int interval);
+    void setInterval(int minutes);
 
 private:
     Internal::TimeComboBoxPrivate *d;
+
+    void initialize();
+    void updateComboItems();
 
 private Q_SLOTS:
     void updateTimeFromComboSelection(const int index);

@@ -91,11 +91,14 @@ public:
         QDateTime start = m_Item.beginning();
         QDateTime end = m_Item.ending();
         int durationInMinutes = start.secsTo(end) / 60;
+//        qDebug() << "durationInMinutes" << durationInMinutes;
         ui->durationCombo->setCurrentIndex(durationInMinutes / durationDivider);
         ui->location->setText(m_Item.data(CalendarItem::Location).toString());
         ui->startDateEdit->setDate(start.date());
         ui->endDateEdit->setDate(end.date());
+        ui->startTimeEdit->setInterval(durationInMinutes);
         ui->startTimeEdit->setTime(start.time());
+        ui->endTimeEdit->setInterval(durationInMinutes);
         ui->endTimeEdit->setTime(end.time());
         ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
         ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
@@ -163,10 +166,10 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d->populateStatusCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));
 
-    connect(d->ui->startDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
-    connect(d->ui->endDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
-    connect(d->ui->startTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
-    connect(d->ui->endTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(on_dateTimeEdits_dateTimeChanged(QDateTime)));
+    connect(d->ui->startDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged(QDateTime)));
+    connect(d->ui->endDateEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged(QDateTime)));
+    connect(d->ui->startTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged(QDateTime)));
+    connect(d->ui->endTimeEdit, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged(QDateTime)));
 
     // hide extra information
     toogleExtraInformation();
@@ -310,9 +313,9 @@ void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
     d->ui->endTimeEdit->setTime(endTime);
 }
 
-void ItemEditorWidget::on_dateTimeEdits_dateTimeChanged(QDateTime dateTime)
+void ItemEditorWidget::onDateTimeChanged(QDateTime dateTime)
 {
-    qDebug() << sender()->objectName() << dateTime ;
+    qDebug() << "onDateTimeChanged: called from" << sender()->objectName() << dateTime ;
     QDateTime startDateTime = QDateTime(d->ui->startDateEdit->date(), d->ui->startTimeEdit->time());
     QDateTime endDateTime = QDateTime(d->ui->endDateEdit->date(), d->ui->endTimeEdit->time());
 

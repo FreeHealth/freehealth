@@ -389,13 +389,14 @@
   <tabstop>busyCheck</tabstop>
   <tabstop>statusCombo</tabstop>
   <tabstop>privateCheck</tabstop>
+  <tabstop>passwordCheck</tabstop>
   <tabstop>passwordEdit</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>typeCombo</tabstop>
   <tabstop>location</tabstop>
   <tabstop>calendarCombo</tabstop>
-  <tabstop>fullInfo</tabstop>
   <tabstop>selectIconButton</tabstop>
+  <tabstop>fullInfo</tabstop>
  </tabstops>
  <resources/>
  <connections>
