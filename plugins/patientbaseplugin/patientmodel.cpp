@@ -235,10 +235,10 @@ public:
 
 private:
     PatientModel *q;
-
 };
-}
-}
+
+} // end namespace Internal
+} // end namespace Patients
 
 PatientModel *PatientModel::m_ActiveModel = 0;
 
