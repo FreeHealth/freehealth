@@ -125,6 +125,11 @@ bool TimeComboBox::editable() const
     return d->combo->isEditable();
 }
 
+int TimeComboBox::interval() const
+{
+    return d->interval;
+}
+
 /*! Returns the current time that is displayed in the widget. */
 QTime TimeComboBox::time() const
 {

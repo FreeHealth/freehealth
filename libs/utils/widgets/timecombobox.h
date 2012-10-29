@@ -48,6 +48,8 @@ class UTILS_EXPORT TimeComboBox : public QWidget
     Q_OBJECT
     Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged USER true)
     Q_PROPERTY(bool editable READ editable WRITE setEditable)
+    Q_PROPERTY(int interval READ interval WRITE setInterval)
+
 public:
     explicit TimeComboBox(QWidget *parent = 0);
     explicit TimeComboBox(QTime &time, QWidget *parent = 0);
@@ -55,6 +57,7 @@ public:
 
     QTime time() const;
     bool editable() const;
+    int interval() const;
 
 Q_SIGNALS:
     void timeChanged(const QTime &time);
