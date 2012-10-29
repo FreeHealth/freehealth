@@ -111,18 +111,8 @@ public:
         QModelIndex photoIndex = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::Photo_64x64);
         QPixmap photo = m_Model->data(photoIndex).value<QPixmap>();
         if (photo.isNull()) {
-            int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
-            switch (gender) {
-            case 0: // Male
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-                break;
-            case 1: // Female
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-                break;
-            case 2: // Herma
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
-                break;
-            }
+            const int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
+            photo = theme()->defaultGenderPixmap(gender);
         }
         ui->photo->setPixmap(photo);
     }
