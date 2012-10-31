@@ -26,6 +26,7 @@
 #include "interactioneditorpage.h"
 #include "drugdruginteractionmodel.h"
 #include "drugdruginteraction.h"
+#include "interactorselectordialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -321,23 +322,75 @@ void InteractionEditorWidget::setEditorsEnabled(bool state)
 /** Create a new drugdruginteraction */
 void InteractionEditorWidget::createNewDDI()
 {
-    // get category
+    // get the first interactor
+    QString first;
     QModelIndex index = ui->treeView->currentIndex();
-    while (index.parent().isValid()) {
+    while (index.parent().isValid())
         index = index.parent();
-    }
+
+    // Can not find the first interactor -> ask user
     if (!index.isValid()) {
-        Utils::warningMessageBox(tr("Please select an interactor first."), "");
+        Internal::InteractorSelectorDialog dlg(this);
+        dlg.setTitle(tr("Select the first interactor"));
+        dlg.initialize();
+        if (dlg.exec() == QDialog::Accepted) {
+            if (dlg.selectedNames().count() == 1)
+                first = dlg.selectedNames().at(0);
+        }
+        if (first.isEmpty())
+            return;
+        // find the corresponding index in the interactor class model
+        QModelIndexList list = d->m_DDIModel->match(d->m_DDIModel->index(0,0), Qt::DisplayRole, first, 1, Qt::MatchFixedString | Qt::MatchWrap | Qt::MatchRecursive);
+        if (list.count() > 0)
+            index = list.at(0);
+    } else {
+        first = index.data().toString();
+    }
+
+    qWarning() << "first" << index << index.data() << first;
+
+    // ask for the second interactor
+    QString second;
+    Internal::InteractorSelectorDialog dlg(this);
+    dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
+    dlg.initialize();
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.selectedNames().count() == 1)
+            second = dlg.selectedNames().at(0);
+    }
+    if (second.isEmpty())
         return;
+
+    // ask for a confirmation
+    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
+                                         "- %1<br />"
+                                         "- %2 <br />").arg(first).arg(second),
+                                      "", "", tr("Drug-drug interaction creation"));
+    if (!yes)
+        return;
+
+    // no corresponding index for the first interactor -> create one
+    if (!index.isValid()) {
+        LOG("First interactor does not already have interactions. Trying to create one");
+        if (!d->m_DDIModel->insertRow(0, QModelIndex()))
+            return;
+        index = d->m_DDIModel->index(0, DrugDrugInteractionModel::GeneralLabel);
+        d->m_DDIModel->setData(index, first);
     }
 
     // insert row to model
-    d->m_DDIModel->insertRow(0, index);
-    QString interactor = Utils::askUser(tr("Drug drug interaction creation."),
-                                        tr("What is name of the interactor you want to add to %1 ?").arg(index.data().toString())
-                                        );
-    QModelIndex second = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
-    d->m_DDIModel->setData(second, interactor);
+    if (!d->m_DDIModel->insertRow(0, index))
+        return;
+    QModelIndex secondIndex = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
+    if (!d->m_DDIModel->setData(secondIndex, second))
+        return;
+
+    qWarning() << "second" << secondIndex << secondIndex.data() << second;
+
+    // select the first interactor in the view
+    ui->searchLine->setText(first);
+    filterDrugDrugInteractionModel(first);
+    LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
 }
 
 void InteractionEditorWidget::filterDrugDrugInteractionModel(const QString &filter)

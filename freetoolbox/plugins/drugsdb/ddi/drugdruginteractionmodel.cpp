@@ -974,6 +974,14 @@ bool DrugDrugInteractionModel::saveModel()
     return true;
 }
 
+//bool DrugDrugInteractionModel::addDrugDrugInteraction(const QString &first, const QString &second)
+//{
+//    if (first.isEmpty() || second.isEmpty())
+//        return false;
+
+//    return true;
+//}
+
 bool DrugDrugInteractionModel::splitMultipleLevelInteraction(const QModelIndex &index, bool splitMirrored)
 {
     DDITreeItem *itemToSplit = d->getItem(index);

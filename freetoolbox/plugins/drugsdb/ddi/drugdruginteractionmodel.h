@@ -116,6 +116,7 @@ public Q_SLOTS:
     void filterInteractionsForInteractor(const QString &interactorName);
     void setActualReviewer(const QString &name);
     bool saveModel();
+//    bool addDrugDrugInteraction(const QString &first, const QString &second);
 
 private:
     Internal::DrugDrugInteractionModelPrivate *d;
