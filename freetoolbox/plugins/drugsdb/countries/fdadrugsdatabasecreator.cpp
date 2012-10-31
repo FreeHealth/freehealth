@@ -195,12 +195,6 @@ void FdaDrugDatatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-bool FdaDrugDatatabaseStep::cleanFiles()
-{
-    QFile(absoluteFilePath()).remove();
-    return true;
-}
-
 QString FdaDrugDatatabaseStep::processMessage() const
 {
     if (licenseType() == NonFree)

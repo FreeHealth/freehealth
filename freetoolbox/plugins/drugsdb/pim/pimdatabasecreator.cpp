@@ -51,7 +51,8 @@
 
 #include "ui_pimdatabasecreator.h"
 
-using namespace DrugInfos;
+using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}

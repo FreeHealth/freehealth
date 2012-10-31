@@ -189,12 +189,6 @@ QString BeDrugDatatabaseStep::tmpDatabaseAbsPath()
     return QDir::cleanPath(tempPath() + "/drugs-be.db");
 }
 
-bool BeDrugDatatabaseStep::cleanFiles()
-{
-    QFile(absoluteFilePath()).remove();
-    return true;
-}
-
 bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);

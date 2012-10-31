@@ -33,6 +33,7 @@
 #include <QMultiMap>
 
 namespace DrugsDB {
+class DrugsDBCore;
 namespace Internal {
 class DrugBaseEssentials;
 }
@@ -41,15 +42,29 @@ class DrugBaseEssentials;
 namespace IAMDb {
 class DrugDrugInteraction;
 class DrugInteractor;
+class DrugInteractorModel;
+namespace Internal {
+class DrugDrugInteractionCorePrivate;
+}
 
 class DrugDrugInteractionCore : public QObject
 {
     Q_OBJECT
+    friend class DrugsDB::DrugsDBCore;
+
+protected:
     explicit DrugDrugInteractionCore(QObject *parent = 0);
+    bool initailize();
+
 public:
     static DrugDrugInteractionCore *instance();
+    ~DrugDrugInteractionCore();
 
     int createInternalUuid() const;
+
+    // Available models
+    DrugInteractorModel *interactingMoleculesModel() const;
+    DrugInteractorModel *interactingClassesModel() const;
 
     QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
     QList<DrugInteractor *> getDrugInteractors() const;
@@ -75,11 +90,7 @@ private:
 
 
 private:
-    static DrugDrugInteractionCore *m_Instance;
-    mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
-    mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
-    QMultiMap<int, QString> m_iamTreePmids; //K=IAM_ID  ;  V=PMIDs
-    QMultiMap<int, QString> m_ddiPmids;     //K=IAK_ID  ;  V=PMIDs
+    Internal::DrugDrugInteractionCorePrivate *d;
 };
 
 }  // End namespace IAMDb

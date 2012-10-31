@@ -32,15 +32,17 @@
 #include "countries/fdadrugsdatabasecreator.h"
 #include "countries/canadiandrugsdatabase.h"
 #include "countries/belgishdrugsdatabase.h"
-//#include "countries/southafricandrugsdatabase.h"
+#include "countries/southafricandrugsdatabase.h"
 //#include "countries/portuguesedrugsdatabase.h"
 
 #include "ddi/drugdruginteractioncore.h"
 #include "ddi/afssapsintegrator.h"
 #include "ddi/interactioneditorpage.h"
 #include "ddi/interactoreditorpage.h"
-
 //#include "ddi/cytochromep450interactionspage.h"
+
+#include "pim/pimdatabasecreator.h"
+#include "pim/pimintegrator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <drugsdb/tools.h>
@@ -95,15 +97,17 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new FreeBeDrugsDatabasePage(this));
     addAutoReleasedObject(new NonFreeBeDrugsDatabasePage(this));
 
-//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
-//    addAutoReleasedObject(new PtDrugsDatabasePage(this));
+    addAutoReleasedObject(new FreeSouthAfricanDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeSouthAfricanDrugsDatabasePage(this));
+
+//    addAutoReleasedObject(new FreePtDrugsDatabasePage(this));
+//    addAutoReleasedObject(new NonFreePtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));
-
 //    addAutoReleasedObject(new AtcPage(this));
 
-    // Create the core object
-    IAMDb::DrugDrugInteractionCore::instance();
+    addAutoReleasedObject(new PimDatabasePage(this));
+    addAutoReleasedObject(new PimsTreePage(this));
 
 //    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));

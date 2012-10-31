@@ -35,6 +35,7 @@
 #include "routesmodel.h"
 #include "countries/moleculelinkermodel.h"
 #include "ddi/drugdruginteractioncore.h"
+#include "ddi/drugdruginteractioncore.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
@@ -63,6 +64,7 @@ public:
     DrugsDBCorePrivate(DrugsDBCore *parent) :
         _routesModel(0),
         _moleculeLinkerModel(0),
+        _ddiCore(0),
         q(parent)
 
     {
@@ -85,6 +87,7 @@ public:
     QVector<DrugsDB::Internal::DrugBaseEssentials*> _drugsDatabases;
     RoutesModel *_routesModel;
     MoleculeLinkerModel *_moleculeLinkerModel;
+    IAMDb::DrugDrugInteractionCore *_ddiCore;
 
 private:
     DrugsDBCore *q;
@@ -121,6 +124,8 @@ bool DrugsDBCore::initialize()
     d->_routesModel->initialize();
     d->_moleculeLinkerModel = new MoleculeLinkerModel(this);
     d->_moleculeLinkerModel->initialize();
+    d->_ddiCore = new IAMDb::DrugDrugInteractionCore(this);
+    d->_ddiCore->initailize();
     return true;
 }
 
@@ -206,5 +211,11 @@ DrugsDB::Internal::DrugBaseEssentials *DrugsDBCore::createDrugDatabase(const QSt
  */
 bool DrugsDBCore::addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database)
 {
-    return IAMDb::DrugDrugInteractionCore::instance()->populateDrugDatabase(database);
+    return d->_ddiCore->populateDrugDatabase(database);
+}
+
+/** Return the singleton of the drug drug interaction core */
+IAMDb::DrugDrugInteractionCore *DrugsDBCore::ddiCore() const
+{
+    return d->_ddiCore;
 }

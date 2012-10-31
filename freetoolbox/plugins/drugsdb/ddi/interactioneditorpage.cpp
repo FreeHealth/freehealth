@@ -26,6 +26,7 @@
 #include "interactioneditorpage.h"
 #include "drugdruginteractionmodel.h"
 #include "drugdruginteraction.h"
+#include "interactorselectordialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -136,8 +137,8 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->googleTranslator = 0;
     ui->setupUi(this);
     // Some ui settings
-    ui->gridLayout_6->setMargin(0);
-    ui->gridLayout_6->setSpacing(0);
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
     ui->treeLayout->setMargin(0);
     ui->treeLayout->setSpacing(0);
     ui->tabWidget->setCurrentIndex(0);
@@ -175,7 +176,6 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
     d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
 
-    b->addAction(d->aCreateNew);
     b->addAction(d->aRemoveCurrent);
     b->addAction(d->aEdit);
     b->addAction(d->aTranslateThis);
@@ -201,9 +201,13 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
     ui->searchLine->setLeftButton(left);
     QToolButton *right = new QToolButton(this);
+    right->addAction(d->aCreateNew);
     right->addAction(d->aExpandAll);
     right->addAction(d->aCollapseAll);
-    right->setDefaultAction(d->aExpandAll);
+    right->setDefaultAction(d->aCreateNew);
+    right->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    right->setPopupMode(QToolButton::InstantPopup);
+    ui->searchLine->setRightButton(right);
 
     // Manage combos && views
     setLevelNamesToCombo(ui->comboLevel);
@@ -229,8 +233,6 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     ui->bilbioTableView->setAlternatingRowColors(true);
     ui->bilbioTableView->horizontalHeader()->hide();
     ui->bilbioTableView->verticalHeader()->hide();
-
-    ui->searchLine->setRightButton(right);
 
     // Create DDI Model && manage Mapper
     d->m_DDIModel = new DrugDrugInteractionModel(this);
@@ -317,24 +319,78 @@ void InteractionEditorWidget::setEditorsEnabled(bool state)
     ui->secondDoseToRepart->setEnabled(state);
 }
 
+/** Create a new drugdruginteraction */
 void InteractionEditorWidget::createNewDDI()
 {
-    // get category
+    // get the first interactor
+    QString first;
     QModelIndex index = ui->treeView->currentIndex();
-    while (index.parent().isValid()) {
+    while (index.parent().isValid())
         index = index.parent();
-    }
+
+    // Can not find the first interactor -> ask user
     if (!index.isValid()) {
-        return ;
+        Internal::InteractorSelectorDialog dlg(this);
+        dlg.setTitle(tr("Select the first interactor"));
+        dlg.initialize();
+        if (dlg.exec() == QDialog::Accepted) {
+            if (dlg.selectedNames().count() == 1)
+                first = dlg.selectedNames().at(0);
+        }
+        if (first.isEmpty())
+            return;
+        // find the corresponding index in the interactor class model
+        QModelIndexList list = d->m_DDIModel->match(d->m_DDIModel->index(0,0), Qt::DisplayRole, first, 1, Qt::MatchFixedString | Qt::MatchWrap | Qt::MatchRecursive);
+        if (list.count() > 0)
+            index = list.at(0);
+    } else {
+        first = index.data().toString();
+    }
+
+    qWarning() << "first" << index << index.data() << first;
+
+    // ask for the second interactor
+    QString second;
+    Internal::InteractorSelectorDialog dlg(this);
+    dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
+    dlg.initialize();
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.selectedNames().count() == 1)
+            second = dlg.selectedNames().at(0);
+    }
+    if (second.isEmpty())
+        return;
+
+    // ask for a confirmation
+    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
+                                         "- %1<br />"
+                                         "- %2 <br />").arg(first).arg(second),
+                                      "", "", tr("Drug-drug interaction creation"));
+    if (!yes)
+        return;
+
+    // no corresponding index for the first interactor -> create one
+    if (!index.isValid()) {
+        LOG("First interactor does not already have interactions. Trying to create one");
+        if (!d->m_DDIModel->insertRow(0, QModelIndex()))
+            return;
+        index = d->m_DDIModel->index(0, DrugDrugInteractionModel::GeneralLabel);
+        d->m_DDIModel->setData(index, first);
     }
 
     // insert row to model
-    d->m_DDIModel->insertRow(0, index);
-    QString interactor = Utils::askUser(tr("Drug drug interaction creation."),
-                                        tr("What is name of the interactor you want to add to %1 ?").arg(index.data().toString())
-                                        );
-    QModelIndex second = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
-    d->m_DDIModel->setData(second, interactor);
+    if (!d->m_DDIModel->insertRow(0, index))
+        return;
+    QModelIndex secondIndex = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
+    if (!d->m_DDIModel->setData(secondIndex, second))
+        return;
+
+    qWarning() << "second" << secondIndex << secondIndex.data() << second;
+
+    // select the first interactor in the view
+    ui->searchLine->setText(first);
+    filterDrugDrugInteractionModel(first);
+    LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
 }
 
 void InteractionEditorWidget::filterDrugDrugInteractionModel(const QString &filter)
@@ -683,6 +739,7 @@ void InteractionEditorWidget::splitCurrent()
 void InteractionEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
+        d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
         d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
         d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
         d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
@@ -692,6 +749,16 @@ void InteractionEditorWidget::changeEvent(QEvent *e)
         d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
         d->aCollapseAll->setText(tr("Collapse all"));
         d->aExpandAll->setText(tr("Expand all"));
+        d->aCreateNew->setToolTip(d->aCreateNew->text());
+        d->aSave->setToolTip(d->aSave->text());
+        d->aEdit->setToolTip(d->aEdit->text());
+        d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
+        d->aTranslateAll->setToolTip(d->aTranslateAll->text());
+        d->aTranslateThis->setToolTip(d->aTranslateThis->text());
+        d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
+        d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
+        d->aCollapseAll->setToolTip(d->aCollapseAll->text());
+        d->aExpandAll->setToolTip(d->aExpandAll->text());
         ui->retranslateUi(this);
         int current = ui->comboLevel->currentIndex();
         setLevelNamesToCombo(ui->comboLevel);

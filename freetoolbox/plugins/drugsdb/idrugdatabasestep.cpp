@@ -740,6 +740,13 @@ bool IDrugDatabaseStep::createDir()
     return true;
 }
 
+/** Automatically clean the output database */
+bool IDrugDatabaseStep::cleanFiles()
+{
+    QFile(absoluteFilePath()).remove();
+    return true;
+}
+
 /**
  * Download the URL to the tempPath().
  * \sa setDownloadUrl()

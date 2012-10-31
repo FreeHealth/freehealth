@@ -24,9 +24,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class IAMDb::DrugDrugInteractionCore
+ * This class owns all the shared part of the DDI code part.\n
+ * The single instance is create by the DrugsDB::DrugsDBCore object.
+ */
+
 #include "drugdruginteractioncore.h"
 #include "drugdruginteraction.h"
 #include "druginteractor.h"
+#include <drugsdb/drugsdbcore.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -60,6 +67,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 static inline QString ddiNewXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
 static inline QString newInteractorsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::NEW_INTERACTORS_FILENAME);}
@@ -74,31 +82,85 @@ const int CLASS_OR_MOL_ID = 65000;
 const int FREEMEDFORMS_ATC_CODE = 65001;
 }
 
-DrugDrugInteractionCore *DrugDrugInteractionCore::m_Instance = 0;
+namespace IAMDb {
+namespace Internal {
+class DrugDrugInteractionCorePrivate
+{
+public:
+    DrugDrugInteractionCorePrivate(DrugDrugInteractionCore *parent) :
+        m_InteractingClassesModel(0),
+        m_InteractorsModel(0),
+        q(parent)
+    {
+    }
+
+    ~DrugDrugInteractionCorePrivate()
+    {
+    }
+
+public:
+    QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
+    QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
+    QMultiMap<int, QString> m_iamTreePmids; //K=IAM_ID  ;  V=PMIDs
+    QMultiMap<int, QString> m_ddiPmids;     //K=IAK_ID  ;  V=PMIDs
+    DrugInteractorModel *m_InteractingClassesModel, *m_InteractorsModel;
+
+private:
+    DrugDrugInteractionCore *q;
+};
+}  // namespace Internal
+}  // namespace IAMDb
+
+/** Return the single instance of the object using the DrugsDB::DrugsDbCore instance */
 DrugDrugInteractionCore *DrugDrugInteractionCore::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new DrugDrugInteractionCore;
-    }
-    return m_Instance;
+    return drugsDbCore()->ddiCore();
 }
 
 DrugDrugInteractionCore::DrugDrugInteractionCore(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    d(new Internal::DrugDrugInteractionCorePrivate(this))
 {
     setObjectName("DrugDrugInteractionCore");
 }
 
+DrugDrugInteractionCore::~DrugDrugInteractionCore()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+bool DrugDrugInteractionCore::initailize()
+{
+    d->m_InteractorsModel = new DrugInteractorModel(DrugInteractorModel::InteractingMolecules, this);
+    d->m_InteractingClassesModel = new DrugInteractorModel(DrugInteractorModel::InteractingClasses, this);
+    d->m_InteractingClassesModel->setObjectName("DrugInteractorModel::Classes");
+    d->m_InteractorsModel->setObjectName("DrugInteractorModel::Molecules");
+    return true;
+}
+
+/** Return a uuid integer */
 int DrugDrugInteractionCore::createInternalUuid() const
 {
     static int uuid = 0;
     return ++uuid;
 }
 
+DrugInteractorModel *DrugDrugInteractionCore::interactingMoleculesModel() const
+{
+    return d->m_InteractorsModel;
+}
+
+DrugInteractorModel *DrugDrugInteractionCore::interactingClassesModel() const
+{
+    return d->m_InteractingClassesModel;
+}
+
 /** Read the DDI XML file if needed and return the list of created DDI. */
 QList<DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() const
 {
-    if (m_ddisToNode.isEmpty()) {
+    if (d->m_ddisToNode.isEmpty()) {
         QDomDocument domDocument;
         // Read the file
         QFile file(ddiNewXmlFile());
@@ -122,18 +184,18 @@ QList<DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() 
         while (!ddiNode.isNull()) {
             DrugDrugInteraction *ddi = new DrugDrugInteraction(ddiNode);
             ddi->setData(DrugDrugInteraction::InternalUuid, createInternalUuid());
-            m_ddisToNode.insert(ddi, ddiNode);
+            d->m_ddisToNode.insert(ddi, ddiNode);
             ddiNode = ddiNode.nextSiblingElement("DDI");
         }
-        LOG(tr("Getting %1 non duplicated drug-drug interactions").arg(m_ddisToNode.keys().count()));
+        LOG(tr("Getting %1 non duplicated drug-drug interactions").arg(d->m_ddisToNode.keys().count()));
     }
-    return m_ddisToNode.keys();
+    return d->m_ddisToNode.keys();
 }
 
 /** Read the DDI XML file if needed and return the list of created interactors. */
 QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
 {
-    if (m_interactorsToNode.isEmpty()) {
+    if (d->m_interactorsToNode.isEmpty()) {
         QDomDocument domDocument;
         // Read the file
         QFile file(newInteractorsFile());
@@ -158,14 +220,14 @@ QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
         while (!iNode.isNull()) {
             DrugInteractor *di = new DrugInteractor(iNode);
             di->setData(DrugInteractor::Id, createInternalUuid());
-            m_interactorsToNode.insert(di, iNode);
+            d->m_interactorsToNode.insert(di, iNode);
             initialLabelToDI.insert(di->data(DrugInteractor::InitialLabel).toString(), di);
             iNode = iNode.nextSiblingElement("I");
         }
 
         // reparent items
-        for(int i=0;i<m_interactorsToNode.count();++i) {
-            DrugInteractor *di = m_interactorsToNode.keys().at(i);
+        for(int i=0;i<d->m_interactorsToNode.count();++i) {
+            DrugInteractor *di = d->m_interactorsToNode.keys().at(i);
             const QString &parentInitialLabel = di->data(DrugInteractor::InitialLabel).toString();
 
             foreach(const QString &child, di->childrenIds()) {
@@ -176,9 +238,9 @@ QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
             }
         }
 
-        LOG(tr("Getting %1 interactors and interacting classes").arg(m_interactorsToNode.keys().count()));
+        LOG(tr("Getting %1 interactors and interacting classes").arg(d->m_interactorsToNode.keys().count()));
     }
-    return m_interactorsToNode.keys();
+    return d->m_interactorsToNode.keys();
 }
 
 /** Populate a drug database with:
@@ -387,7 +449,7 @@ bool DrugDrugInteractionCore::saveClassDrugInteractor(DrugInteractor *interactor
     // add pmids references
     if (id>=0) {
         foreach(const QString &pmid, parent->childClassificationPMIDs(interactor->data(DrugInteractor::InitialLabel).toString())) {
-            m_iamTreePmids.insertMulti(id, pmid);
+            d->m_iamTreePmids.insertMulti(id, pmid);
         }
     }
 
@@ -587,7 +649,7 @@ bool DrugDrugInteractionCore::saveDrugDrugInteractions(DrugsDB::Internal::DrugBa
             // keep trace of bibliographic references
             iak_id = query.lastInsertId().toInt();
             foreach(const QString &pmid, ddi->data(DrugDrugInteraction::PMIDsStringList).toStringList())
-                m_ddiPmids.insertMulti(iak_id, pmid);
+                d->m_ddiPmids.insertMulti(iak_id, pmid);
         } else {
             LOG_QUERY_ERROR(query);
             db.rollback();
@@ -633,8 +695,8 @@ bool DrugDrugInteractionCore::saveBibliographicReferences(DrugsDB::Internal::Dru
     // Save all pmids
     QHash<QString, int> pmidsBibliographyId;
     QStringList pmids;
-    pmids << m_iamTreePmids.values();
-    pmids << m_ddiPmids.values();
+    pmids << d->m_iamTreePmids.values();
+    pmids << d->m_ddiPmids.values();
     pmids.removeAll("");
     pmids.removeDuplicates();
     QSqlQuery query(db);
@@ -658,8 +720,8 @@ bool DrugDrugInteractionCore::saveBibliographicReferences(DrugsDB::Internal::Dru
 
     // Save all tree references
     int bibMasterId = 0;
-    foreach(int key, m_iamTreePmids.uniqueKeys()) {
-        const QStringList &pmids = m_iamTreePmids.values(key);
+    foreach(int key, d->m_iamTreePmids.uniqueKeys()) {
+        const QStringList &pmids = d->m_iamTreePmids.values(key);
         ++bibMasterId;
         QHash<int, QString> w;
         w.insert(DrugsDB::Constants::IAM_TREE_ID, QString("='%1'").arg(key));
@@ -686,8 +748,8 @@ bool DrugDrugInteractionCore::saveBibliographicReferences(DrugsDB::Internal::Dru
     }
 
     // Save DDI references
-    foreach(int key, m_ddiPmids.uniqueKeys()) {
-        const QStringList &pmids = m_ddiPmids.values(key);
+    foreach(int key, d->m_ddiPmids.uniqueKeys()) {
+        const QStringList &pmids = d->m_ddiPmids.values(key);
         ++bibMasterId;
         QHash<int, QString> w;
         w.insert(DrugsDB::Constants::IAKNOWLEDGE_IAKID, QString("='%1'").arg(key));

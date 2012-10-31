@@ -19,89 +19,63 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FDADRUGSDATABASECREATOR_H
-#define FDADRUGSDATABASECREATOR_H
+#ifndef DRUGSDB_INTERNAL_INTERACTORCOMPLETER_H
+#define DRUGSDB_INTERNAL_INTERACTORCOMPLETER_H
 
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ftb_constants.h>
-#include <drugsdb/idrugdatabasestep.h>
+#include <QCompleter>
 
-#include <QWidget>
+/**
+ * \file interactorcompleter.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 28 Oct 2012
+*/
 
 namespace DrugsDB {
 namespace Internal {
-class FdaDrugDatatabaseStep;
+class MoleculesInteractorCompleterPrivate;
 
-class FreeFdaDrugsDatabasePage : public Core::IToolPage
-{
-public:
-    FreeFdaDrugsDatabasePage(QObject *parent = 0);
-    ~FreeFdaDrugsDatabasePage();
-
-    virtual QString id() const {return "FreeFdaDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    FdaDrugDatatabaseStep *_step;
-};
-
-class NonFreeFdaDrugsDatabasePage : public Core::IToolPage
-{
-public:
-    NonFreeFdaDrugsDatabasePage(QObject *parent = 0);
-    ~NonFreeFdaDrugsDatabasePage();
-
-    virtual QString id() const {return "NonFreeFdaDrugsDatabasePage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    FdaDrugDatatabaseStep *_step;
-};
-
-
-class FdaDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
+class MoleculesInteractorCompleter : public QCompleter
 {
     Q_OBJECT
-
 public:
-    FdaDrugDatatabaseStep(QObject *parent = 0);
-    ~FdaDrugDatatabaseStep();
+    explicit MoleculesInteractorCompleter(QObject *parent = 0);
+    ~MoleculesInteractorCompleter();
+    bool initialize();
+    
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    
+private:
+    Internal::MoleculesInteractorCompleterPrivate *d;
+};
 
-    QString id() const {return "FdaDrugDatatabaseStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
-    void setLicenseType(LicenseType type);
+class ClassInteractorCompleterPrivate;
 
-    bool process();
-    QString processMessage() const;
+class ClassInteractorCompleter : public QCompleter
+{
+    Q_OBJECT
+public:
+    explicit ClassInteractorCompleter(QObject *parent = 0);
+    ~ClassInteractorCompleter();
+    bool initialize();
 
-    bool prepareData();
-    bool populateDatabase();
-    bool linkMolecules();
+Q_SIGNALS:
 
-    QStringList errors() const {return m_Errors;}
+public Q_SLOTS:
 
 private:
-    QStringList m_Errors;
-    bool m_WithProgress;
-
+    Internal::ClassInteractorCompleterPrivate *d;
 };
-}  // namespace Internal
-}  // namespace DrugsDB
 
+} // namespace Internal
+} // namespace DrugsDB
 
-#endif // FDADRUGSDATABASECREATOR_H
+#endif // DRUGSDB_INTERNAL_INTERACTORCOMPLETER_H
+

@@ -46,6 +46,10 @@
 
 #include <QDebug>
 
+using namespace DrugsDB;
+using namespace Internal;
+using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -55,13 +59,7 @@ static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->valu
 
 static inline QString treeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::PIMS_FILENAME);}
 
-using namespace DrugInfos;
-using namespace Internal;
-using namespace Constants;
-using namespace Trans::ConstantTranslations;
-
-
-namespace DrugInfos {
+namespace DrugsDB {
 namespace Internal {
 
 class PimData
