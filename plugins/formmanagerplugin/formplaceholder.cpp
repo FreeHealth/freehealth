@@ -323,7 +323,10 @@ public:
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
         QFont small;
-        small.setPointSize(small.pointSize() - 4);
+        if (Utils::isRunningOnWin())
+            small.setPointSize(small.pointSize() - 1);
+        else
+            small.setPointSize(small.pointSize() - 4);
         ui->episodeView->horizontalHeader()->setFont(small);
         ui->episodeView->horizontalHeader()->setStyleSheet("QHeaderView::section {"
 //                                                           "background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
