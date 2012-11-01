@@ -956,6 +956,23 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     return padTools()->processPlainText(tmp);
 #else
     QHash<QString, QString> tokens_value;
+    tokens_value.insert("DRUG", QString());
+    tokens_value.insert("NOTE", QString());
+    tokens_value.insert("Q_FROM", QString());
+    tokens_value.insert("Q_TO", QString());
+    tokens_value.insert("Q_SCHEME", QString());
+    tokens_value.insert("D_FROM", QString());
+    tokens_value.insert("D_TO", QString());
+    tokens_value.insert("D_SCHEME", QString());
+    tokens_value.insert("PERIOD_SCHEME", QString());
+    tokens_value.insert("PERIOD", QString());
+    tokens_value.insert("REPEATED_DAILY_SCHEME", QString());
+    tokens_value.insert("DISTRIBUTED_DAILY_SCHEME", QString());
+    tokens_value.insert("DAILY_SCHEME", QString());
+    tokens_value.insert("MIN_INTERVAL", QString());
+    tokens_value.insert("ROUTE", QString());
+    tokens_value.insert("REFILL", QString());
+
     if (!IN_RANGE_STRICT_MAX(drugRow, 0, model->drugsList().count())) {
         LOG_ERROR("row > model list count");
         return QString::null;
@@ -1026,7 +1043,6 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     } else {
         tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
     }
-
     // Meal
     tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
