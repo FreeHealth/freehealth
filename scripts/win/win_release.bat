@@ -13,7 +13,7 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
-@echo off set PATH_TO_MYSQL=E:\MySQL\bin
+@echo off set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\bin
 @echo off set PATH_TO_OPENCV=E:\opencv\bin
 @echo off set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 @echo off set WORKING_DIRECTORY=%CD%
