@@ -7,16 +7,16 @@ REM #
 REM # The script supposes that:
 REM # - the freemedforms-project source package is decompressed here
 REM # - the most recent MySQL is installed (see %PATH_TO_MYSQL%)
-REM # - the most recent OpenCV is installed (see %PATH_TO_OPENCV%)
+REM # - the most recent OpenCV must be installed in the contrib path 
 REM # - the Inno Setup 5 is installed on the machine (see %PATH_TO_INNOSETUP%)
 REM # 
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
-@echo off set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\bin
-@echo off set PATH_TO_OPENCV=E:\opencv\bin
-@echo off set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
-@echo off set WORKING_DIRECTORY=%CD%
+set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\bin
+set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
+set WORKING_DIRECTORY=%CD%
+set PATH_TO_MINGW=E:\QtSDK\mingw\bin
 
 REM # Go to source root dir
 cd ../..
@@ -30,7 +30,7 @@ REM # Go to application source tree
 cd %1
 
 REM # Compil application && install it
-qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release
+qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release CONFIG+=with-alerts CONFIG+=with-webcam
 mingw32-make.exe -w
 mingw32-make.exe install
 
@@ -38,10 +38,10 @@ REM # Copy MySQL lib into the package dir
 copy %PATH_TO_MYSQL%\libmySQL.dll ..\packages\win\%1\libmySQL.dll
 copy %PATH_TO_MYSQL%\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
 
-REM # Copy OpenCV lib into the package dir
-REM # copy %PATH_TO_OPENCV%\libopencv_core.2.4.dll ..\packages\win\%1\
-REM # copy %PATH_TO_OPENCV%\libopencv_highgui.2.4.dll ..\packages\win\%1\
-REM # copy %PATH_TO_OPENCV%\libopencv_objdetect.2.4.dll ..\packages\win\%1\
+REM # Copy MinGW lib into the package dir
+copy %PATH_TO_MINGW%\libgcc_s_dw2-1.dll ..\packages\win\%1\
+copy %PATH_TO_MINGW%\libstdc++-6.dll ..\packages\win\%1\
+copy %PATH_TO_MINGW%\mingwm10.dll ..\packages\win\%1\
 
 REM # Create the installer
 %PATH_TO_INNOSETUP% "%WORKING_DIRECTORY%/../../global_resources/package_helpers/%1.iss"
@@ -53,9 +53,9 @@ REM # Rename and move the setup.exe file
 copy packages\win\%1\%1\setup.exe %1-__version__.exe
 
 REM # Unset var
-@echo off set PATH_TO_MYSQL=
-@echo off set PATH_TO_OPENCV=
-@echo off set PATH_TO_INNOSETUP=
-@echo off set WORKING_DIRECTORY=
+set PATH_TO_MYSQL=
+set PATH_TO_OPENCV=
+set PATH_TO_INNOSETUP=
+set WORKING_DIRECTORY=
 
 cd %WORKING_DIRECTORY%
