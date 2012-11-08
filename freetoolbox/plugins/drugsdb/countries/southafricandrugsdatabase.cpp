@@ -182,6 +182,7 @@ ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
                        .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                        .arg("/global_resources/sql/drugdb/za/description.xml"));
     setLicenseType(Free);
+    setDownloadUrl("");
 }
 
 ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()

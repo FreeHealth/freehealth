@@ -76,7 +76,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-const char* const  FDA_URL                     = "http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip";
 const char* const  FDA_DRUGS_DATABASE_NAME     = "FDA_US";
 }
 
@@ -167,7 +166,7 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
                 .arg("/FdaRawSources/"));
-    setConnectionName("fr_fda");
+    setConnectionName("fda_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
 //    setFinalizationScript(QString("%1/%2")
 //                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
@@ -175,7 +174,7 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
     setDescriptionFile(QString("%1/%2")
                        .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                        .arg("/global_resources/sql/drugdb/us/description.xml"));
-    setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
+    setDownloadUrl("http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip");
     setLicenseType(Free);
 }
 
@@ -369,16 +368,20 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     QFile file(tempPath() + "Product.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR(QString("ERROR: Enable to open Product.txt: %1.").arg(file.errorString()));
+        Q_EMIT progress(1);
         return false;
     }
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     Q_EMIT progressRangeChanged(0, file.size());
     Q_EMIT progress(0);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     QTextStream in(&file);
     in.setCodec("ISO 8859-1");
     int pos = 0;
     while (!in.atEnd()) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         QString l = in.readLine();
         //ignore first line
         if (pos==0) {
@@ -398,20 +401,27 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     file.close();
 
     Q_EMIT progressLabelChanged(tr("Saving drugs into database"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(1);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     saveDrugsIntoDatabase(drugs);
+    Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(2);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Run SQL commands one by one
     if (!Tools::executeSqlFile(connectionName(), finalizationScript())) {
         LOG_ERROR("Can create French DB.");
+        Q_EMIT progress(3);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         return false;
     }
 
     LOG(QString("Database processed"));
     Q_EMIT progress(3);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     qDeleteAll(drugs);
     drugs.clear();

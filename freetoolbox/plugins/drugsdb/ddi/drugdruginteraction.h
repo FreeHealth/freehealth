@@ -31,7 +31,7 @@
 #include <QHash>
 #include <QDomElement>
 
-namespace IAMDb {
+namespace DrugsDB {
 
 //class InteractionFormalization
 //{
@@ -140,6 +140,6 @@ private:
     DrugDrugInteractionDose m_FirstDose, m_SecondDose;
 };
 
-} //  End namespace IAMDb
+} //  End namespace DrugsDB
 
 #endif // DRUGDRUGINTERACTION_H

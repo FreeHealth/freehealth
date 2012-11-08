@@ -50,7 +50,8 @@ HEADERS  += \
     pim/pim_constants.h \
     \
     preg/pregnancyclassification.h \
-    ddi/interactorselectordialog.h
+    ddi/interactorselectordialog.h \
+    ddi/drugdruginteractiondatabasepopulator.h
 
 SOURCES += \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
@@ -91,7 +92,8 @@ SOURCES += \
     pim/pimintegrator.cpp \
     pim/pimdatabasecreator.cpp \
     preg/pregnancyclassification.cpp \
-    ddi/interactorselectordialog.cpp
+    ddi/interactorselectordialog.cpp \
+    ddi/drugdruginteractiondatabasepopulator.cpp
 
 
 FORMS += \

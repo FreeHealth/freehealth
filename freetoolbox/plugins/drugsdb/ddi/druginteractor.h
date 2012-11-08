@@ -34,7 +34,7 @@
 #include <QStringList>
 #include <QDomElement>
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class DrugInteractor
 {
@@ -183,6 +183,6 @@ private:
     Internal::DrugInteractorModelPrivate *d;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // IAMDB__DRUGINTERACTOR_H

@@ -38,9 +38,9 @@
 
 #include <QDebug>
 
-using namespace IAMDb;
+using namespace DrugsDB;
 
-static inline IAMDb::DrugDrugInteractionCore *core() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *core() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 DrugInteractor::DrugInteractor()
 {
@@ -363,7 +363,7 @@ private:
 
 }
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 
 class DrugInteractorModelPrivate
@@ -532,7 +532,7 @@ private:
     DrugInteractorModel *q;
 };
 }  // End namespace Internal
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 
 DrugInteractorModel::DrugInteractorModel(ShowData show, QObject *parent) :

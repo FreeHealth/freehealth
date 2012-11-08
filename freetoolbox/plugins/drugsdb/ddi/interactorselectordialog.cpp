@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class IAMDb::Internal::InteractorSelectorDialog
+ * \class DrugsDB::Internal::InteractorSelectorDialog
  * Dialog to select an interacting molecule or class already recorded in the models.
  */
 
@@ -43,13 +43,13 @@
 
 #include "ui_interactorselectorwidget.h"
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline IAMDb::DrugDrugInteractionCore *ddiCore() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 class InteractorSelectorDialogPrivate
 {
@@ -81,7 +81,7 @@ private:
     InteractorSelectorDialog *q;
 };
 }  // namespace Internal
-} // end namespace IAMDb
+} // end namespace DrugsDB
 
 /*!
  * Constructor of the DrugsDB::Internal::InteractorSelectorDialog class. \n

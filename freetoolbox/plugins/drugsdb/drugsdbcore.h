@@ -38,7 +38,7 @@
  * \date 21 Oct 2012
 */
 
-namespace IAMDb {
+namespace DrugsDB {
 class DrugDrugInteractionCore;
 }
 
@@ -68,15 +68,10 @@ public:
     RoutesModel *routesModel() const;
     MoleculeLinkerModel *moleculeLinkerModel() const;
 
-    // TODO:: remove me
-    DrugsDB::Internal::DrugBaseEssentials *drugBase();
-    bool createMasterDrugInteractionDatabase();
-    // END
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 
-    // Interaction part
-    bool addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database);
-    IAMDb::DrugDrugInteractionCore *ddiCore() const;
+    // Interaction core
+    DrugsDB::DrugDrugInteractionCore *ddiCore() const;
 
 private:
     static DrugsDBCore *_instance;

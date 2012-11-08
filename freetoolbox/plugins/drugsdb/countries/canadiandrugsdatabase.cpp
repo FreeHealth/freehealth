@@ -57,9 +57,11 @@ using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
 const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip";
 //const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
 const char* const  CA_DRUGS_DATABASE_NAME     = "CA_HCDPD";
+}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
@@ -151,7 +153,7 @@ CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
     setDescriptionFile(QString("%1/%2")
                        .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                        .arg("/global_resources/sql/drugdb/ca/description.xml"));
-    setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
+    setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
     setLicenseType(Free);
 }
 
@@ -164,10 +166,10 @@ void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
         setDisplayName(tr("Non-free Canadian drugs database"));
-        setConnectionName("fr_nonfree");
+        setConnectionName("ca_nonfree");
     } else {
         setDisplayName(tr("Free Canadian drugs database"));
-        setConnectionName("fr_free");
+        setConnectionName("ca_free");
     }
 }
 

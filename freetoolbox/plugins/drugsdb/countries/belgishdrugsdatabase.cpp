@@ -176,11 +176,11 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
 {
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
-        setDisplayName(tr("Non-free French drugs database"));
-        setConnectionName("fr_nonfree");
+        setDisplayName(tr("Non-free Belguish drugs database"));
+        setConnectionName("be_nonfree");
     } else {
-        setDisplayName(tr("Free French drugs database"));
-        setConnectionName("fr_free");
+        setDisplayName(tr("Free Belguish drugs database"));
+        setConnectionName("be_free");
     }
 }
 

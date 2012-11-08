@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IAMDb::AfssapsIntegratorWidget</class>
- <widget class="QWidget" name="IAMDb::AfssapsIntegratorWidget">
+ <class>DrugsDB::AfssapsIntegratorWidget</class>
+ <widget class="QWidget" name="DrugsDB::AfssapsIntegratorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -48,21 +48,21 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="IAMDb::AfssapsLinkerWidget" name="linker" native="true"/>
-     <widget class="IAMDb::AfssapsTreeWidget" name="classtree" native="true"/>
+     <widget class="DrugsDB::AfssapsLinkerWidget" name="linker" native="true"/>
+     <widget class="DrugsDB::AfssapsTreeWidget" name="classtree" native="true"/>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>IAMDb::AfssapsLinkerWidget</class>
+   <class>DrugsDB::AfssapsLinkerWidget</class>
    <extends>QWidget</extends>
    <header location="global">drugsdb/ddi/afssapsintegrator.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>IAMDb::AfssapsTreeWidget</class>
+   <class>DrugsDB::AfssapsTreeWidget</class>
    <extends>QWidget</extends>
    <header location="global">drugsdb/ddi/afssapsintegrator.h</header>
    <container>1</container>

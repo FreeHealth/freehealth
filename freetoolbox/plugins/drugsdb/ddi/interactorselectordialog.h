@@ -41,7 +41,7 @@ QT_END_NAMESPACE
  * \date 27 Oct 2012
 */
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 class InteractorSelectorDialogPrivate;
 
@@ -71,7 +71,7 @@ private:
 };
 
 } // namespace Internal
-} // namespace IAMDb
+} // namespace DrugsDB
 
 #endif // DRUGSDB_INTERNAL_INTERACTORSELECTORDIALOG_H
 

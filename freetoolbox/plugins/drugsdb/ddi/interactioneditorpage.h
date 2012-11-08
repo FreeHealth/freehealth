@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class InteractionEditorPage : public Core::IToolPage
 {
@@ -94,6 +94,6 @@ private:
     InteractionEditorWidgetPrivate *d;
 };
 
-}  //  End namespace IAMDb
+}  //  End namespace DrugsDB
 
 #endif // INTERACTIONEDITORPAGE_H
