@@ -1668,15 +1668,18 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
     if (query.exec(req)) {
         if (query.next()) {
             toReturn = query.value(0);
-            DB.commit();
         } else {
             LOG_QUERY_ERROR_FOR("Database", query);
+            query.finish();
             DB.rollback();
         }
     } else {
         LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
         DB.rollback();
     }
+    query.finish();
+    DB.commit();
     return toReturn;
 }
 
