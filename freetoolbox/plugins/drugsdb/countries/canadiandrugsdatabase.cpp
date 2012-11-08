@@ -155,6 +155,7 @@ CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
                        .arg("/global_resources/sql/drugdb/ca/description.xml"));
     setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
     setLicenseType(Free);
+    createDir();
 }
 
 CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
@@ -465,7 +466,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
 //    // Run SQL commands one by one
 //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(_database, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create Canadian DB.");
 //        return false;
 //    }

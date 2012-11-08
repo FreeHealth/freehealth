@@ -176,6 +176,7 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
                        .arg("/global_resources/sql/drugdb/us/description.xml"));
     setDownloadUrl("http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip");
     setLicenseType(Free);
+    createDir();
 }
 
 FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
@@ -197,8 +198,8 @@ void FdaDrugDatatabaseStep::setLicenseType(LicenseType type)
 QString FdaDrugDatatabaseStep::processMessage() const
 {
     if (licenseType() == NonFree)
-        return tr("Non-free French drugs database creation");
-    return tr("Free French drugs database creation");
+        return tr("Non-free FDA drugs database creation");
+    return tr("Free FDA drugs database creation");
 }
 
 bool FdaDrugDatatabaseStep::process()
@@ -412,12 +413,12 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Run SQL commands one by one
-    if (!Tools::executeSqlFile(connectionName(), finalizationScript())) {
-        LOG_ERROR("Can create French DB.");
-        Q_EMIT progress(3);
-        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        return false;
-    }
+//    if (!Tools::executeSqlFile(connectionName(), finalizationScript())) {
+//        LOG_ERROR("Can create FDA DB.");
+//        Q_EMIT progress(3);
+//        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+//        return false;
+//    }
 
     LOG(QString("Database processed"));
     Q_EMIT progress(3);

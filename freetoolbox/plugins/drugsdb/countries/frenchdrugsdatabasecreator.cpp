@@ -170,6 +170,7 @@ FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
                        .arg("/global_resources/sql/drugdb/fr/description.xml"));
     setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
     setLicenseType(Free);
+    createDir();
 }
 
 FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
