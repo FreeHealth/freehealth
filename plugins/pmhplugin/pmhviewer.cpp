@@ -217,13 +217,12 @@ PmhViewer::~PmhViewer()
 void PmhViewer::setShowPatientInformation(bool show)
 {
     if (show) {
-        d->ui->patientGroup->show();
-        QString text = "<b>"+ patient()->data(Core::IPatient::FullName).toString();
-        text += ", " + patient()->data(Core::IPatient::Age).toString();
-        text += "</b>";
-        d->ui->patientInfos->setText(text);
+        QString text = tr("Past Medical History for %1, %2").arg(
+                    patient()->data(Core::IPatient::FullName).toString(),
+                    patient()->data(Core::IPatient::Age).toString());
+        d->ui->titleLabel->setText(text);
     } else {
-        d->ui->patientGroup->hide();
+        d->ui->titleLabel->setText(tkTr(Trans::Constants::PASTMEDICALHISTORY));
     }
 }
 
