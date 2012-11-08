@@ -308,6 +308,9 @@ bool PimDatabaseCreator::savePim(DrugsDB::Internal::DrugBaseEssentials *database
     mols = mols.firstChildElement(Constants::XML_TAG_MOLECULE);
     while (!mols.isNull()) {
         const QString &molName = mols.attribute(Constants::XML_ATTRIB_SOURCE_NAME);
+        if (molName.isEmpty())
+            continue;
+
         // get all related ATC to the molecule
         QStringList atcCodes = molNameToAtcCode.values(molName.toUpper());
 
@@ -333,12 +336,13 @@ bool PimDatabaseCreator::savePim(DrugsDB::Internal::DrugBaseEssentials *database
                 atcIds << DrugsDB::Tools::getAtcIdsFromCode(database, atc);
             }
         }
+        atcIds = Utils::removeDuplicates(atcIds);
 
         if (atcIds.isEmpty()) {
             LOG(QString("ATC without ID: %1").arg(molName.toUpper()));
             qWarning() << QString("    <Label references=\"FreeMedFormsPIMs\" id=\"\" atcCodes=\"\" fr=\"%1\" en=\"%1\" de=\"\" es=\"\" comments=\"\" review=\"false\" reviewer=\"\" category=\"class\" warnDuplication=\"true\" autoFound=\"\" dateofreview=\"\"/>").arg(molName.toUpper());
         }
-        qWarning() << "actCodes" << atcCodes << atcIds << molName;
+        qWarning() << "  PIM: actCodes" << atcCodes << atcIds << molName;
 
         for(int i = 0; i < atcIds.count(); ++i) {
             int atcid = atcIds.at(i);
@@ -380,7 +384,6 @@ bool PimDatabaseCreator::savePim(DrugsDB::Internal::DrugBaseEssentials *database
                 }
                 query.finish();
             }
-
             icd = icd.nextSiblingElement(Constants::XML_TAG_DISEASE);
         }
     }
