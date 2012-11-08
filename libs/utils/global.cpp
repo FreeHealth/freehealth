@@ -1783,4 +1783,28 @@ void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstrac
     QObject::connect(model1, SIGNAL(rowsRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsRemoved(QModelIndex, int , int )));
 }
 
+/** Removes duplicates from the QVector \e vector and return the resulting QVector. */
+QVector<int> removeDuplicates(const QVector<int> &vector)
+{
+    QList<int> noDuplicates;
+    foreach(int i, vector) {
+        if (noDuplicates.contains(i))
+            continue;
+        noDuplicates << i;
+    }
+    return noDuplicates.toVector();
+}
+
+/** Removes duplicates from the QList \e list and return the resulting QList. */
+QList<int> removeDuplicates(const QList<int> &list)
+{
+    QList<int> noDuplicates;
+    foreach(int i, list) {
+        if (noDuplicates.contains(i))
+            continue;
+        noDuplicates << i;
+    }
+    return noDuplicates;
+}
+
 } // End Utils
