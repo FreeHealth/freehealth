@@ -165,7 +165,7 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
     setObjectName("FdaDrugDatatabaseStep");
     setTempPath(QString("%1/%2")
                 .arg(settings()->value(Core::Constants::S_TMP_PATH).toString())
-                .arg("/FdaRawSources/"));
+                .arg("FdaRawSources"));
     setConnectionName("fda_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
 //    setFinalizationScript(QString("%1/%2")
@@ -356,8 +356,8 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
     // check files
     foreach(const QString &file, files) {
-        if (!QFile::exists(tempPath() + file)) {
-            LOG_ERROR(QString("Missing " + tempPath() + file + " file. prepareDatas()"));
+        if (!QFile::exists(tempPath() + QDir::separator() + file)) {
+            LOG_ERROR(QString("Missing " + tempPath() + QDir::separator() + file + " file. prepareDatas()"));
             return false;
         }
     }
@@ -365,7 +365,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     // Product file
     QVector<Drug *> drugs;
 
-    QFile file(tempPath() + "Product.txt");
+    QFile file(tempPath() + QDir::separator() + "Product.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR(QString("ERROR: Enable to open Product.txt: %1.").arg(file.errorString()));
         Q_EMIT progress(1);

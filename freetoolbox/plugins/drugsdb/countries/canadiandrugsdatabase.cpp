@@ -295,26 +295,26 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
     // Get routes
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (routes)"));
-    QMultiHash<int, QString> uid_routes = extractUidRelatedDatas(tempPath() + "route.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_routes = extractUidRelatedDatas(tempPath() + QDir::separator() + "route.txt", 0, 2, condition);
 
     // Get ther
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (ther)"));
-    QMultiHash<int, QString> uid_ther = extractUidRelatedDatas(tempPath() + "ther.txt", 0, 1, condition);
+    QMultiHash<int, QString> uid_ther = extractUidRelatedDatas(tempPath() + QDir::separator() + "ther.txt", 0, 1, condition);
 
     // Get forms
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (forms)"));
-    QMultiHash<int, QString> uid_forms = extractUidRelatedDatas(tempPath() + "form.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_forms = extractUidRelatedDatas(tempPath() + QDir::separator() + "form.txt", 0, 2, condition);
 
     // Get status
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (status)"));
     condition.insert(1, "Y");
-    QMultiHash<int, QString> uid_stats = extractUidRelatedDatas(tempPath() + "status.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_stats = extractUidRelatedDatas(tempPath() + QDir::separator() + "status.txt", 0, 2, condition);
 
     // Get drug names
     QHash<int, Drug *> uid_drugs;
     QMultiHash<int, Component *> uid_compos;
 
-    QFile csv(tempPath() + "drug.txt");
+    QFile csv(tempPath() + QDir::separator() + "drug.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
         LOG_ERROR("Unable to read file");
         return false;
@@ -377,7 +377,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
     csv.close();
 
     // Get components
-    csv.setFileName(tempPath() + "ingred.txt");
+    csv.setFileName(tempPath() + QDir::separator() + "ingred.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
         LOG_ERROR("Unable to read file");
         return false;
