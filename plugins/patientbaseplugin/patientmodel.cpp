@@ -372,7 +372,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
         case IPatient::GenderIndex:
             {
-            //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
+            // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
                     return 0;

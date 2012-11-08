@@ -334,7 +334,7 @@ void ItemEditorWidget::onDateTimeChanged(QDateTime dateTime)
     } else if (sender() == d->ui->endDateEdit || sender() == d->ui->endTimeEdit) {
 
         if (endDateTime <= startDateTime) {
-            startDateTime = endDateTime.addSecs(-5 * 60);
+            startDateTime = endDateTime.addSecs(d->ui->endTimeEdit->interval() * -60);
 
             d->ui->startDateEdit->setDate(endDateTime.date());
             d->ui->startTimeEdit->setTime(endDateTime.time());
@@ -345,8 +345,10 @@ void ItemEditorWidget::onDateTimeChanged(QDateTime dateTime)
 void ItemEditorWidget::changeDuration(const int comboIndex)
 {
     QTime end = d->ui->startTimeEdit->time();
+    d->ui->startTimeEdit->setInterval(comboIndex * durationDivider);
     end = end.addSecs(comboIndex * durationDivider * 60);
     d->ui->endTimeEdit->setTime(end);
+    d->ui->endTimeEdit->setInterval(comboIndex * durationDivider);
 }
 
 void ItemEditorWidget::changeEvent(QEvent *e)
