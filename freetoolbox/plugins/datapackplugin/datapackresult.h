@@ -19,76 +19,31 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-/*!
- * \class DataPackPlugin::DataPackCore
- * \brief short description of class
- *
- * Long description of class
- * \sa DataPackPlugin::
- */
+#ifndef DATAPACKPLUGIN_DATAPACKRESULT_H
+#define DATAPACKPLUGIN_DATAPACKRESULT_H
 
-#include "datapackcore.h"
+#include <datapackplugin/datapack_exporter.h>
 
-#include <translationutils/constants.h>
-
-#include <QDebug>
-
-using namespace DataPackPlugin;
-using namespace Internal;
-using namespace Trans::ConstantTranslations;
-
-DataPackCore *DataPackCore::_instance = 0;
+/**
+ * \file datapackresult.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 10 Nov 2012
+*/
 
 namespace DataPackPlugin {
-namespace Internal {
-class DataPackCorePrivate
+
+class DATAPACK_PLUGIN_EXPORT DataPackResult
 {
 public:
-    DataPackCorePrivate(DataPackCore *parent) :
-        q(parent)
-    {
-    }
-    
-    ~DataPackCorePrivate()
-    {
-    }
-    
-private:
-    DataPackCore *q;
+    DataPackResult();
 };
-}  // namespace Internal
-} // end namespace DataPackPlugin
 
-/*! Constructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::DataPackCore(QObject *parent) :
-    QObject(parent),
-    d(new DataPackCorePrivate(this))
-{
-    _instance = this;
-}
+} // namespace DataPackPlugin
 
-/*! Destructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::~DataPackCore()
-{
-    if (d)
-        delete d;
-    d = 0;
-}
-
-/*! Initializes the object with the default values. Return true if initialization was completed. */
-bool DataPackCore::initialize()
-{
-    return true;
-}
-
-/** Create a datapack structure using the DataPackPlugin::DataPackQuery */
-DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
-{
-    DataPackResult result;
-    return result;
-}
+#endif // DATAPACKPLUGIN_DATAPACKRESULT_H

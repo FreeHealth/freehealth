@@ -28,6 +28,9 @@
 #define DATAPACKPLUGIN_DATAPACKCORE_H
 
 #include <datapackplugin/datapack_exporter.h>
+#include <datapackplugin/datapackquery.h>
+#include <datapackplugin/datapackresult.h>
+
 #include <QObject>
 
 /**
@@ -56,10 +59,9 @@ public:
     static DataPackCore *instance() {return _instance;}
     ~DataPackCore();
     
-Q_SIGNALS:
-    
 public Q_SLOTS:
-    
+    DataPackResult createDataPack(const DataPackQuery &query);
+
 private:
     Internal::DataPackCorePrivate *d;
     static DataPackCore *_instance;

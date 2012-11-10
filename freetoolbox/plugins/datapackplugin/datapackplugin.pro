@@ -11,11 +11,15 @@ DEPENDPATH += ../
 
 SOURCES += \
     datapackplugin.cpp \
-    datapackcore.cpp
+    datapackcore.cpp \
+    datapackquery.cpp \
+    datapackresult.cpp
 
 
 HEADERS  += \
     datapackplugin.h \
-    datapackcore.h
+    datapackcore.h \
+    datapackquery.h \
+    datapackresult.h
 
 OTHER_FILES += DataPackPlugin.pluginspec
