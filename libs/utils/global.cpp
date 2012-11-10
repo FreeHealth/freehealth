@@ -700,6 +700,18 @@ QByteArray md5(const QString &fileName)
     return QByteArray();
 }
 
+/** \brief Returns the SHA1 checksum of a file. */
+QByteArray sha1(const QString &fileName)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileData = file.readAll();
+        QByteArray hashData = QCryptographicHash::hash(fileData, QCryptographicHash::Sha1);
+        return hashData.toHex();
+    }
+    return QByteArray();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
