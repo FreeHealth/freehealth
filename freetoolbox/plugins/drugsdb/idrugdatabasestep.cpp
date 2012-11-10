@@ -62,6 +62,8 @@ static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return dbCore()->ddiC
 /*! Constructor of the DrugsDB::IDrugDatabaseStep class */
 IDrugDatabaseStep::IDrugDatabaseStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
+    _licenseType(Free),
+    _serverOwner(Community),
     _database(0),
     _sid(-1)
 {
@@ -834,4 +836,23 @@ bool IDrugDatabaseStep::unzipFiles()
         .arg(fileName));
 
     return QuaZipTools::unzipFile(fileName, tempPath());
+}
+
+/**
+ * Automatically register the drug database to the DataPackPlugin::DataPackCore according
+ * to the DrugsDB::IDrugDatabaseStep::LicenseType and the DrugsDB::IDrugDatabaseStep::ServerOwner
+ * of the object.
+ */
+bool IDrugDatabaseStep::registerDataPack()
+{
+    if (_licenseType == Free) {
+        if (_serverOwner == Community) {
+        } if (_serverOwner == FrenchAssociation) {
+        }
+    } else {
+        if (_serverOwner == Community) {
+        } if (_serverOwner == FrenchAssociation) {
+        }
+    }
+    return true;
 }

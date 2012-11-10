@@ -46,6 +46,11 @@ class IDrugDatabaseStep : public Core::IFullReleaseStep
 {
     Q_OBJECT
 public:
+    enum ServerOwner {
+        Community = 0,
+        FrenchAssociation
+    };
+
     enum LicenseType {
         Free = 0,
         NonFree
@@ -56,6 +61,7 @@ public:
 
     virtual void setDisplayName(const QString &name) {_name=name;}
     virtual void setLicenseType(LicenseType type) {_licenseType=type;}
+    virtual void setServerOwner(ServerOwner serverOwner) {_serverOwner=serverOwner;}
     void setTempPath(const QString &absPath);
     void setOutputPath(const QString &absPath);
     void setConnectionName(const QString &connection);
@@ -66,6 +72,7 @@ public:
 
     virtual QString displayName() const {return _name;}
     virtual LicenseType licenseType() const {return _licenseType;}
+    virtual ServerOwner serverOwner() const {return _serverOwner;}
     QString tempPath() const {return _tempPath;}
     QString outputPath() const {return _outputPath;}
     QString connectionName() const {return _connection;}
@@ -99,6 +106,7 @@ public:
     virtual bool cleanFiles();
     virtual bool downloadFiles(QProgressBar *bar = 0);
     virtual bool unzipFiles();
+    virtual bool registerDataPack();
 
     // Adding specific interface for the UI <-> step connection
     virtual bool prepareData() = 0;
@@ -107,6 +115,7 @@ public:
 
 private:
     LicenseType _licenseType;
+    ServerOwner _serverOwner;
     QString _name, _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
     QString _finalizationScriptPath, _descriptionFilePath;
     DrugBaseEssentials *_database;
