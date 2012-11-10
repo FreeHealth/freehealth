@@ -26,15 +26,16 @@
  ***************************************************************************/
 /*!
  * \class DataPackPlugin::DataPackCore
- * \brief short description of class
- *
- * Long description of class
- * \sa DataPackPlugin::
  */
 
 #include "datapackcore.h"
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
+#include <datapackutils/packdescription.h>
+#include <datapackutils/serverdescription.h>
+
+#include <QFile>
 
 #include <QDebug>
 
@@ -86,9 +87,37 @@ bool DataPackCore::initialize()
     return true;
 }
 
-/** Create a datapack structure using the DataPackPlugin::DataPackQuery */
-DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
+/**
+ * Register a DataPackQuery inside a server. You can register multiple DataPackQuery for one server.
+ * All queries will be processed and added to the server.\n
+ * For the server internal uuid look at Core::Constants all SERVER_* constants.
+ */
+bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &serverUid)
 {
-    DataPackResult result;
-    return result;
+    return true;
 }
+
+
+///** Create a datapack structure using the DataPackPlugin::DataPackQuery */
+//DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
+//{
+//    DataPackResult result;
+//    if (!query.isValid())
+//        return result;
+//    QFile contentFile(query.originalContentFileAbsolutePath());
+
+//    // get and update the packdescription
+//    DataPack::PackDescription pack;
+//    pack.setSourceFileName(query.descriptionFileAbsolutePath());
+//    pack.setData(DataPack::PackDescription::AbsFileName, query.originalContentFileAbsolutePath());
+//    pack.setData(DataPack::PackDescription::Size, contentFile.size());
+//    pack.setData(DataPack::PackDescription::Md5, Utils::md5(query.originalContentFileAbsolutePath()));
+//    pack.setData(DataPack::PackDescription::Sha1, Utils::sha1(query.originalContentFileAbsolutePath()));
+//    pack.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
+//    result.setPackDescriptionXmlContent(pack.toXml());
+//    return result;
+//}
+
+//bool DataPackCore::updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath)
+//{
+//}
