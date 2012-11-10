@@ -77,6 +77,8 @@ public:
     static IcdGroupLinkerModel *instance(QObject *parent = 0);
     ~IcdGroupLinkerModel();
 
+    bool databaseAvailable();
+
     bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
     void fetchMore(const QModelIndex &parent = QModelIndex());
 

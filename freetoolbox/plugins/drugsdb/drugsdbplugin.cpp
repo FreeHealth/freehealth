@@ -106,13 +106,13 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new MoleculeLinkerPage(this));
 //    addAutoReleasedObject(new AtcPage(this));
 
-    addAutoReleasedObject(new PimDatabasePage(this));
+//    addAutoReleasedObject(new PimDatabasePage(this));
     addAutoReleasedObject(new PimsTreePage(this));
 
 //    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
-    addAutoReleasedObject(new IAMDb::InteractionEditorPage(this));
-    addAutoReleasedObject(new IAMDb::InteractorEditorPage(this));
+    addAutoReleasedObject(new DrugsDB::InteractionEditorPage(this));
+    addAutoReleasedObject(new DrugsDB::InteractorEditorPage(this));
 //    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 
     // add plugin info page
@@ -125,6 +125,21 @@ void DrugsDbPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag DrugsDbPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+
+    // Here you still have a full access to
+    //   Core::ICore::instance()
+    // And all its objects (user(), patient(), settings(), theme()...).
+
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(DrugsDbPlugin)

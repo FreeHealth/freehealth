@@ -195,6 +195,10 @@ UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QStrin
 // Models
 UTILS_EXPORT void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged);
 
+// List/Vector
+UTILS_EXPORT QVector<int> removeDuplicates(const QVector<int> &vector);
+UTILS_EXPORT QList<int> removeDuplicates(const QList<int> &list);
+
 }  // end Utils
 
 #endif  // UTILS_GLOBAL_H

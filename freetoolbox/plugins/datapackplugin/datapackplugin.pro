@@ -10,10 +10,16 @@ INCLUDEPATH += ../
 DEPENDPATH += ../
 
 SOURCES += \
-    datapackplugin.cpp
+    datapackplugin.cpp \
+    datapackcore.cpp \
+    datapackquery.cpp \
+    datapackresult.cpp
 
 
 HEADERS  += \
-    datapackplugin.h
+    datapackplugin.h \
+    datapackcore.h \
+    datapackquery.h \
+    datapackresult.h
 
 OTHER_FILES += DataPackPlugin.pluginspec

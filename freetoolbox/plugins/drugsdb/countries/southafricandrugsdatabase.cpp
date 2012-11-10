@@ -182,6 +182,8 @@ ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
                        .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                        .arg("/global_resources/sql/drugdb/za/description.xml"));
     setLicenseType(Free);
+    setDownloadUrl("");
+    createDir();
 }
 
 ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
@@ -734,7 +736,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-    //    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+    //    if (!DrugsDB::Tools::executeSqlFile(_database, databaseFinalizationScript())) {
     //        LOG_ERROR("Can not create ZA DB.");
     //        return false;
     //    }

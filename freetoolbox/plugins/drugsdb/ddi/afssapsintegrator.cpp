@@ -60,7 +60,7 @@
 #define MODEL_PREFETCH 100
 const char * const MIMETYPE = "application/freemedforms.molecule.name";
 
-using namespace IAMDb;
+using namespace DrugsDB;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -89,7 +89,7 @@ QWidget *AfssapsClassTreePage::createPage(QWidget *parent)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////    MODEL    //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
-namespace IAMDb {
+namespace DrugsDB {
 
 class DomItem
 {
@@ -186,7 +186,7 @@ private:
     AfssapsLinkerModel *q;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 AfssapsLinkerModel *AfssapsLinkerModel::m_Instance = 0;
 AfssapsLinkerModel *AfssapsLinkerModel::instance(QObject *parent)
@@ -649,7 +649,7 @@ QMimeData *AfssapsLinkerModel::mimeData(const QModelIndexList &indexes) const
 /////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////    TREEMODEL    ////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
-namespace IAMDb {
+namespace DrugsDB {
 
 class AfssapsClassTreeModelPrivate
 {
@@ -689,7 +689,7 @@ private:
     AfssapsClassTreeModel *q;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 
 AfssapsClassTreeModel *AfssapsClassTreeModel::m_Instance = 0;

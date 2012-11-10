@@ -19,73 +19,55 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "datapackplugin.h"
-#include "datapackcore.h"
+#ifndef DATAPACKPLUGIN_DATAPACKCORE_H
+#define DATAPACKPLUGIN_DATAPACKCORE_H
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <datapackplugin/datapack_exporter.h>
+#include <datapackplugin/datapackquery.h>
+#include <datapackplugin/datapackresult.h>
 
-#include <extensionsystem/pluginmanager.h>
-#include <utils/log.h>
+#include <QObject>
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
+/**
+ * \file datapackcore.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 10 Nov 2012
+*/
 
-using namespace DataPackPlugin;
-using namespace Internal;
+namespace DataPackPlugin {
+namespace Internal {
+class DataPackCorePrivate;
+class DataPackIPlugin;
+}  // namespace Internal
 
-DataPackIPlugin::DataPackIPlugin()
+class DATAPACK_PLUGIN_EXPORT DataPackCore : public QObject
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "Creating DataPackIPlugin";
+    Q_OBJECT
+    friend class DataPackPlugin::Internal::DataPackIPlugin;
 
-    //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
-}
+protected:
+    explicit DataPackCore(QObject *parent = 0);
+    bool initialize();
 
-DataPackIPlugin::~DataPackIPlugin()
-{
-    qWarning() << "DataPackIPlugin::~DataPackIPlugin()";
-}
+public:
+    static DataPackCore *instance() {return _instance;}
+    ~DataPackCore();
+    
+public Q_SLOTS:
+    DataPackResult createDataPack(const DataPackQuery &query);
 
-bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
-{
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::initialize";
+private:
+    Internal::DataPackCorePrivate *d;
+    static DataPackCore *_instance;
+};
 
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+} // namespace DataPackPlugin
 
-    // Create the core
-    DataPackCore *core = new DataPackCore(this);
-    core->initialize();
+#endif  // DATAPACKPLUGIN_DATAPACKCORE_H
 
-    return true;
-}
-
-void DataPackIPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::extensionsInitialized";
-}
-
-ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
-{
-    if (Utils::Log::warnPluginsCreation())
-        WARN_FUNC;
-    // Save settings
-    // Disconnect from signals that are not needed during shutdown
-    // Hide UI (if you add UI that is not in the main window directly)
-
-    // Here you still have a full access to
-    //   Core::ICore::instance()
-    // And all its objects (user(), patient(), settings(), theme()...).
-
-    return SynchronousShutdown;
-}
-
-Q_EXPORT_PLUGIN(DataPackIPlugin)

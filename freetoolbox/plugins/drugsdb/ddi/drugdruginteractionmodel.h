@@ -29,7 +29,7 @@
 
 #include <QAbstractItemModel>
 
-namespace IAMDb {
+namespace DrugsDB {
 class DrugDrugInteraction;
 namespace Internal {
 class DrugDrugInteractionModelPrivate;
@@ -122,6 +122,6 @@ private:
     Internal::DrugDrugInteractionModelPrivate *d;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // DRUGDRUGINTERACTIONMODEL_H

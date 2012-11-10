@@ -166,6 +166,7 @@ BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
                        .arg("/global_resources/sql/drugdb/fr/description.xml"));
     setDownloadUrl("");
     setLicenseType(Free);
+    createDir();
 }
 
 BeDrugDatatabaseStep::~BeDrugDatatabaseStep()
@@ -176,11 +177,11 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
 {
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
-        setDisplayName(tr("Non-free French drugs database"));
-        setConnectionName("fr_nonfree");
+        setDisplayName(tr("Non-free Belguish drugs database"));
+        setConnectionName("be_nonfree");
     } else {
-        setDisplayName(tr("Free French drugs database"));
-        setConnectionName("fr_free");
+        setDisplayName(tr("Free Belguish drugs database"));
+        setConnectionName("be_free");
     }
 }
 
@@ -443,8 +444,8 @@ bool BeDrugDatatabaseStep::populateDatabase()
     drugs.clear();
 
     // Run SQL commands one by one
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-//        LOG_ERROR("Can create FDA DB.");
+//    if (!DrugsDB::Tools::executeSqlFile(_database, databaseFinalizationScript())) {
+//        LOG_ERROR("Can create Belguish DB.");
 //        return false;
 //    }
     Q_EMIT progress(3);

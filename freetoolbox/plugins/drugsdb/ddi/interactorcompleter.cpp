@@ -41,7 +41,7 @@ using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline IAMDb::DrugDrugInteractionCore *ddiCore() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 namespace DrugsDB {
 namespace Internal {

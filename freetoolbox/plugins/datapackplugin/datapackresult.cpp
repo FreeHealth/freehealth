@@ -19,73 +19,17 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "datapackplugin.h"
-#include "datapackcore.h"
+#include "datapackresult.h"
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
+namespace DataPackPlugin {
 
-#include <extensionsystem/pluginmanager.h>
-#include <utils/log.h>
-
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace DataPackPlugin;
-using namespace Internal;
-
-DataPackIPlugin::DataPackIPlugin()
+DataPackResult::DataPackResult()
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "Creating DataPackIPlugin";
-
-    //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
 }
 
-DataPackIPlugin::~DataPackIPlugin()
-{
-    qWarning() << "DataPackIPlugin::~DataPackIPlugin()";
-}
-
-bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
-{
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::initialize";
-
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Create the core
-    DataPackCore *core = new DataPackCore(this);
-    core->initialize();
-
-    return true;
-}
-
-void DataPackIPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::extensionsInitialized";
-}
-
-ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
-{
-    if (Utils::Log::warnPluginsCreation())
-        WARN_FUNC;
-    // Save settings
-    // Disconnect from signals that are not needed during shutdown
-    // Hide UI (if you add UI that is not in the main window directly)
-
-    // Here you still have a full access to
-    //   Core::ICore::instance()
-    // And all its objects (user(), patient(), settings(), theme()...).
-
-    return SynchronousShutdown;
-}
-
-Q_EXPORT_PLUGIN(DataPackIPlugin)
+} // namespace DataPackPlugin

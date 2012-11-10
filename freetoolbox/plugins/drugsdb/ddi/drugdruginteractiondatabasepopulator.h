@@ -19,73 +19,59 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "datapackplugin.h"
-#include "datapackcore.h"
+#ifndef DRUGSDB_INTERNAL_DRUGDRUGINTERACTIONDATABASEPOPULATOR_H
+#define DRUGSDB_INTERNAL_DRUGDRUGINTERACTIONDATABASEPOPULATOR_H
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <QObject>
 
-#include <extensionsystem/pluginmanager.h>
-#include <utils/log.h>
+/**
+ * \file drugdruginteractiondatabasepopulator.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 07 Nov 2012
+*/
 
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace DataPackPlugin;
-using namespace Internal;
-
-DataPackIPlugin::DataPackIPlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "Creating DataPackIPlugin";
-
-    //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
+namespace DrugsDB {
+class DrugsDBCore;
+namespace Internal {
+class DrugBaseEssentials;
+}
 }
 
-DataPackIPlugin::~DataPackIPlugin()
+namespace DrugsDB {
+class DrugDrugInteraction;
+class DrugInteractor;
+class DrugDrugInteractionCore;
+namespace Internal {
+class DrugDrugInteractionDatabasePopulatorPrivate;
+
+class DrugDrugInteractionDatabasePopulator : public QObject
 {
-    qWarning() << "DataPackIPlugin::~DataPackIPlugin()";
-}
+    Q_OBJECT
+    friend class DrugsDB::DrugDrugInteractionCore;
 
-bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
-{
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorMessage);
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::initialize";
+protected:
+    explicit DrugDrugInteractionDatabasePopulator(QObject *parent = 0);
+    bool initialize();
 
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+public:
+    ~DrugDrugInteractionDatabasePopulator();
 
-    // Create the core
-    DataPackCore *core = new DataPackCore(this);
-    core->initialize();
+    bool isAtcInstalledInDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool saveAtcClassification(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool saveDrugDrugInteractions(DrugsDB::Internal::DrugBaseEssentials *database);
 
-    return true;
-}
+private:
+    Internal::DrugDrugInteractionDatabasePopulatorPrivate *d;
+};
 
-void DataPackIPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackIPlugin::extensionsInitialized";
-}
+} // namespace Internal
+} // namespace DrugsDB
 
-ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
-{
-    if (Utils::Log::warnPluginsCreation())
-        WARN_FUNC;
-    // Save settings
-    // Disconnect from signals that are not needed during shutdown
-    // Hide UI (if you add UI that is not in the main window directly)
+#endif // DRUGSDB_INTERNAL_DRUGDRUGINTERACTIONDATABASEPOPULATOR_H
 
-    // Here you still have a full access to
-    //   Core::ICore::instance()
-    // And all its objects (user(), patient(), settings(), theme()...).
-
-    return SynchronousShutdown;
-}
-
-Q_EXPORT_PLUGIN(DataPackIPlugin)

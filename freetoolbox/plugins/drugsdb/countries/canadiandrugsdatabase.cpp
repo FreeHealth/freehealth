@@ -57,9 +57,11 @@ using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
 const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip";
 //const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
 const char* const  CA_DRUGS_DATABASE_NAME     = "CA_HCDPD";
+}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
@@ -151,8 +153,9 @@ CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
     setDescriptionFile(QString("%1/%2")
                        .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                        .arg("/global_resources/sql/drugdb/ca/description.xml"));
-    setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
+    setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
     setLicenseType(Free);
+    createDir();
 }
 
 CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
@@ -164,10 +167,10 @@ void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
         setDisplayName(tr("Non-free Canadian drugs database"));
-        setConnectionName("fr_nonfree");
+        setConnectionName("ca_nonfree");
     } else {
         setDisplayName(tr("Free Canadian drugs database"));
-        setConnectionName("fr_free");
+        setConnectionName("ca_free");
     }
 }
 
@@ -293,26 +296,26 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
     // Get routes
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (routes)"));
-    QMultiHash<int, QString> uid_routes = extractUidRelatedDatas(tempPath() + "route.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_routes = extractUidRelatedDatas(tempPath() + QDir::separator() + "route.txt", 0, 2, condition);
 
     // Get ther
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (ther)"));
-    QMultiHash<int, QString> uid_ther = extractUidRelatedDatas(tempPath() + "ther.txt", 0, 1, condition);
+    QMultiHash<int, QString> uid_ther = extractUidRelatedDatas(tempPath() + QDir::separator() + "ther.txt", 0, 1, condition);
 
     // Get forms
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (forms)"));
-    QMultiHash<int, QString> uid_forms = extractUidRelatedDatas(tempPath() + "form.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_forms = extractUidRelatedDatas(tempPath() + QDir::separator() + "form.txt", 0, 2, condition);
 
     // Get status
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source (status)"));
     condition.insert(1, "Y");
-    QMultiHash<int, QString> uid_stats = extractUidRelatedDatas(tempPath() + "status.txt", 0, 2, condition);
+    QMultiHash<int, QString> uid_stats = extractUidRelatedDatas(tempPath() + QDir::separator() + "status.txt", 0, 2, condition);
 
     // Get drug names
     QHash<int, Drug *> uid_drugs;
     QMultiHash<int, Component *> uid_compos;
 
-    QFile csv(tempPath() + "drug.txt");
+    QFile csv(tempPath() + QDir::separator() + "drug.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
         LOG_ERROR("Unable to read file");
         return false;
@@ -375,7 +378,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
     csv.close();
 
     // Get components
-    csv.setFileName(tempPath() + "ingred.txt");
+    csv.setFileName(tempPath() + QDir::separator() + "ingred.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
         LOG_ERROR("Unable to read file");
         return false;
@@ -463,7 +466,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
 //    // Run SQL commands one by one
 //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-//    if (!DrugsDB::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//    if (!DrugsDB::Tools::executeSqlFile(_database, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create Canadian DB.");
 //        return false;
 //    }

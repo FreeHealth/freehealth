@@ -81,6 +81,7 @@ Component::~Component()
     delete d;
 }
 
+/** Set the component data using the language \e lang */
 bool Component::setData(const int ref, const QVariant &value, const QString &lang)
 {
     Internal::Book *v = 0;
@@ -92,6 +93,7 @@ bool Component::setData(const int ref, const QVariant &value, const QString &lan
     return true;
 }
 
+/** Return the component data using the language \e lang */
 QVariant Component::data(const int ref, const QString &lang) const
 {
     Internal::Book *v = d->getLanguage(lang.isEmpty() ? Trans::Constants::ALL_LANGUAGE : lang);
@@ -119,10 +121,9 @@ Drug::~Drug()
 }
 
 /**
-  \brief Define drugs data.
-  When setting Drug::Routes, the ids are guessed from the official routes.
-  When setting Drug::Forms, labels and link to label are automatically created.
-  For Routes and Forms, must be set as QStringList.
+ * \brief Define drugs data.
+ * When setting Drug::Forms, labels and link to label are automatically created.
+ * Routes and Forms must be defined as QStringList.
 */
 bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
 {
@@ -189,6 +190,7 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
     return true;
 }
 
+/** Get data of the drug using the language \e lang */
 QVariant Drug::data(const int ref, const QString &lang) const
 {
     Internal::Book *v = d->getLanguage(lang.isEmpty() ? Trans::Constants::ALL_LANGUAGE : lang);
@@ -203,21 +205,25 @@ QVariant Drug::data(const int ref, const QString &lang) const
     return v->m_Content.value(ref, QVariant());
 }
 
+/** Add a drug component */
 void Drug::addComponent(Component *compo)
 {
     d->m_Compo.append(compo);
 }
 
+/** Return all drug components of the drug */
 QVector<Component *> Drug::components() const
 {
     return d->m_Compo;
 }
 
+/** Return all available language used for the drug data */
 QStringList Drug::availableLanguages() const
 {
     return d->languages();
 }
 
+/** Sort help based on the drug name */
 bool Drug::lessThanOnNames(const Drug *s1, const Drug *s2)
 {
     return s1->data(Name).toString() < s2->data(Name).toString();

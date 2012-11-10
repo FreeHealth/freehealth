@@ -33,7 +33,7 @@
 #include <QAbstractTableModel>
 class QSortFilterProxyModel;
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class AfssapsIntegratorPage : public Core::IToolPage
 {
@@ -237,7 +237,7 @@ private:
 };
 
 
-} // namespace IAMDb
+} // namespace DrugsDB
 
 
 #endif // AFSSAPSINTEGRATOR_H

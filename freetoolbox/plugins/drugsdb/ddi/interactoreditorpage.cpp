@@ -62,14 +62,14 @@
 #include <QUrl>
 #include <QApplication>
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
-static inline IAMDb::DrugDrugInteractionCore *ddiCore() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 static inline QString oldMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
 static inline QString oldTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
@@ -85,7 +85,7 @@ QWidget *InteractorEditorPage::createPage(QWidget *parent)
     return new InteractorEditorWidget(parent);
 }
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 class InteractorEditorWidgetPrivate
 {
@@ -115,7 +115,7 @@ public:
     QAction *atcSearchDialog;
 };
 }  // namespace Internal
-}  // namespace IAMDb
+}  // namespace DrugsDB
 
 InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     QWidget(parent), d(new InteractorEditorWidgetPrivate)

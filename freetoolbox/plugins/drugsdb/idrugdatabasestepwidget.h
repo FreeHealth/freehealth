@@ -57,6 +57,9 @@ private Q_SLOTS:
     void changeStepProgressRange(qint64 min, qint64 max);
 
 private:
+    void showEvent(QShowEvent *event);
+
+private:
     Internal::IDrugDatabaseStepWidgetPrivate *d;
 };
 

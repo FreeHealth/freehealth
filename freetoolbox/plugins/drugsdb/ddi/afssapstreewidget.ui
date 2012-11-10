@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IAMDb::AfssapsTreeWidget</class>
- <widget class="QWidget" name="IAMDb::AfssapsTreeWidget">
+ <class>DrugsDB::AfssapsTreeWidget</class>
+ <widget class="QWidget" name="DrugsDB::AfssapsTreeWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

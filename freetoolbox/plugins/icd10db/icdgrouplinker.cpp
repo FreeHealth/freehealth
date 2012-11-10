@@ -291,6 +291,12 @@ IcdGroupLinkerModel::~IcdGroupLinkerModel()
     d = 0;
 }
 
+/** Return true is the ICD database is initialized and accessible */
+bool IcdGroupLinkerModel::databaseAvailable()
+{
+    return icdBase()->isInitialized();
+}
+
 bool IcdGroupLinkerModel::saveModel()
 {
     QFile file(icdGroupLinkerFile());

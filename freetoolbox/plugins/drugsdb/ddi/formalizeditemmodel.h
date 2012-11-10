@@ -30,7 +30,7 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class AvailableFormalizedItemNameModel : public QAbstractListModel
 {
@@ -75,6 +75,6 @@ private:
 
 //};
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // FORMALIZEDITEMMODEL_H

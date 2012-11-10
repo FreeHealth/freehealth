@@ -26,7 +26,7 @@
  ***************************************************************************/
 #include "formalizeditemmodel.h"
 
-using namespace IAMDb;
+using namespace DrugsDB;
 
 AvailableFormalizedItemNameModel::AvailableFormalizedItemNameModel(QObject *parent) :
     QAbstractListModel(parent)

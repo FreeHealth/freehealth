@@ -88,6 +88,11 @@ public:
     bool saveDrugsIntoDatabase(QVector<Drug *> drugs);
     QHash<int, QString> saveMoleculeIds(const QStringList &molnames);
 
+    bool addAtc();
+    bool addDrugDrugInteractions();
+    bool addPims();
+    bool addPregnancyCheckingData();
+
     // Core::IFullReleaseStep interface
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     bool createDir();

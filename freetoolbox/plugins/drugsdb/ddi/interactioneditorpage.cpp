@@ -54,7 +54,7 @@
 
 #include "ui_interactioneditorwidget.h"
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -89,7 +89,7 @@ static void setLevelNamesToCombo(QComboBox *box)
 }
 
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class InteractionEditorWidgetPrivate
 {
@@ -116,7 +116,7 @@ public:
     QStringListModel *biblioModel;
 };
 
-} // namespace IAMDb
+} // namespace DrugsDB
 
 QString InteractionEditorPage::category() const
 {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IAMDb::Internal::InteractorEditorWidget</class>
- <widget class="QWidget" name="IAMDb::Internal::InteractorEditorWidget">
+ <class>DrugsDB::Internal::InteractorEditorWidget</class>
+ <widget class="QWidget" name="DrugsDB::Internal::InteractorEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
