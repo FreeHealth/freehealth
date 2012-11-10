@@ -28,6 +28,7 @@
 #define DATAPACKPLUGIN_DATAPACKRESULT_H
 
 #include <datapackplugin/datapack_exporter.h>
+#include <QString>
 
 /**
  * \file datapackresult.h
@@ -42,6 +43,15 @@ class DATAPACK_PLUGIN_EXPORT DataPackResult
 {
 public:
     DataPackResult();
+
+    void setPackDescriptionXmlContent(const QString &content) {_xmlContent = content;}
+    const QString &packDescriptionXmlContent() const {return _xmlContent;}
+
+    void setContentFileServerPath(const QString &relPath) {_contentServerPath = relPath;}
+    const QString &contentFileServerPath() const {return _contentServerPath;}
+
+private:
+    QString _xmlContent, _contentServerPath;
 };
 
 } // namespace DataPackPlugin
