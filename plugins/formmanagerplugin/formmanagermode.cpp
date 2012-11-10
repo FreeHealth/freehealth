@@ -65,7 +65,7 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     m_inPluginManager(false),
     m_actionInBar(false)
 {
-    setDisplayName(tr("Patients Files"));
+    setDisplayName(tkTr(Trans::Constants::PATIENT));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_FILE);
     setId(Core::Constants::MODE_PATIENT_FILE);
@@ -92,7 +92,7 @@ FormManagerMode::~FormManagerMode()
 
 QString FormManagerMode::name() const
 {
-    return tr("Patients Files");
+    return tkTr(Trans::Constants::PATIENT);
 }
 
 /**
