@@ -203,10 +203,13 @@ void IDrugDatabaseStepWidget::showEvent(QShowEvent *event)
 {
     if (d->_step->licenseType() == IDrugDatabaseStep::Free) {
         d->ui->addAtc->setChecked(false);
+        d->ui->linkMols->setChecked(false);
         d->ui->addDDI->setChecked(false);
         d->ui->addPims->setChecked(false);
         d->ui->addPreg->setChecked(false);
+
         d->ui->addAtc->setEnabled(false);
+        d->ui->linkMols->setEnabled(false);
         d->ui->addDDI->setEnabled(false);
         d->ui->addPims->setEnabled(false);
         d->ui->addPreg->setEnabled(false);
@@ -215,9 +218,12 @@ void IDrugDatabaseStepWidget::showEvent(QShowEvent *event)
     }
     // check the possibilities of the ddiCore
     bool atc = ddiCore()->canAddAtc();
-    if (!atc)
+    if (!atc) {
         d->ui->addAtc->setChecked(false);
+        d->ui->linkMols->setChecked(false);
+    }
     d->ui->addAtc->setEnabled(atc);
+    d->ui->linkMols->setEnabled(atc);
 
     bool ddi = ddiCore()->canAddDrugDrugInteractions();
     if (!ddi)
