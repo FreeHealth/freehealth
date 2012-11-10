@@ -36,7 +36,7 @@ class QDomElement;
 class QDomDocument;
 
 /**
- * \file servercontents.h
+ * \file servercontent.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
  * \date 02 Dec 2011
