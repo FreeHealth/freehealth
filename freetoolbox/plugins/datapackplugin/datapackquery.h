@@ -51,11 +51,11 @@ public:
     void setOriginalContentFileAbsolutePath(const QString &absPath) {_absPathContentFile=absPath;}
     const QString &originalContentFileAbsolutePath() const {return _absPathContentFile;}
 
-    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
-    const QString &outputServerAbsolutePath() const {return _absPathServer;}
+//    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
+//    const QString &outputServerAbsolutePath() const {return _absPathServer;}
 
 private:
-    QString _absPathDescription, _absPathContentFile, _absPathServer;
+    QString _absPathDescription, _absPathContentFile; //, _absPathServer;
 };
 
 } // namespace DataPackPlugin

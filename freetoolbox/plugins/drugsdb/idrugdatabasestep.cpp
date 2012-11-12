@@ -40,6 +40,12 @@
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
 
+#include <coreplugin/ftb_constants.h>
+
+#include <datapackplugin/datapackcore.h>
+#include <datapackplugin/datapackquery.h>
+
+
 #include <translationutils/constants.h>
 #include <quazip/global.h>
 #include <utils/httpdownloader.h>
@@ -58,6 +64,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return dbCore()->ddiCore();}
+static inline DataPackPlugin::DataPackCore *dataPackCore() {return DataPackPlugin::DataPackCore::instance();}
 
 /*! Constructor of the DrugsDB::IDrugDatabaseStep class */
 IDrugDatabaseStep::IDrugDatabaseStep(QObject *parent) :
@@ -845,14 +852,27 @@ bool IDrugDatabaseStep::unzipFiles()
  */
 bool IDrugDatabaseStep::registerDataPack()
 {
+    QString server;
     if (_licenseType == Free) {
         if (_serverOwner == Community) {
+            server = Core::Constants::SERVER_COMMUNITY_FREE;
         } if (_serverOwner == FrenchAssociation) {
+            server = Core::Constants::SERVER_ASSO_FREE;
         }
     } else {
         if (_serverOwner == Community) {
+            server = Core::Constants::SERVER_COMMUNITY_NONFREE;
         } if (_serverOwner == FrenchAssociation) {
+            server = Core::Constants::SERVER_ASSO_NONFREE;
         }
     }
+    DataPackPlugin::DataPackQuery query;
+//    query.setDescriptionFileAbsolutePath();
+//    query.setOriginalContentFileAbsolutePath();
+    if (!dataPackCore()->registerDataPack(query, server)) {
+        LOG_ERROR("Unable to register datapack for drugs database: " + connectionName());
+        return false;
+    }
+    LOG(QString("Registered datapack for drugs database: %1; in server %2").arg(connectionName()).arg(server));
     return true;
 }
