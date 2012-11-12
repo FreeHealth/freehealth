@@ -14,7 +14,8 @@ SOURCES += \
     datapackcore.cpp \
     datapackquery.cpp \
     datapackresult.cpp \
-    datapackserverquery.cpp
+    datapackserverquery.cpp \
+    datapackpage.cpp
 
 
 HEADERS  += \
@@ -22,6 +23,7 @@ HEADERS  += \
     datapackcore.h \
     datapackquery.h \
     datapackresult.h \
-    datapackserverquery.h
+    datapackserverquery.h \
+    datapackpage.h
 
 OTHER_FILES += DataPackPlugin.pluginspec
