@@ -93,7 +93,7 @@ UserCalendarModel::~UserCalendarModel()
     d = 0;
 }
 
-int UserCalendarModel::rowCount(const QModelIndex &) const
+int UserCalendarModel::rowCount(const QModelIndex &parent) const
 {
     // prevent trees
     if (parent.isValid()) return 0;
