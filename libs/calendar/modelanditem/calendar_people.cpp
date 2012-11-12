@@ -174,8 +174,11 @@ CalendarPeopleModel::CalendarPeopleModel(QObject *parent) :
 {
 }
 
-int CalendarPeopleModel::rowCount(const QModelIndex &) const
+int CalendarPeopleModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return m_People.count();
 }
 

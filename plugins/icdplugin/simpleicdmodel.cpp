@@ -179,7 +179,9 @@ void SimpleIcdModel::setCheckable(bool state)
 
 int SimpleIcdModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_Codes.count();
 }
 

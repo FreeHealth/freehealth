@@ -86,7 +86,9 @@ PmhEpisodeModel::~PmhEpisodeModel()
 
 int PmhEpisodeModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     if (d->m_Pmh)
         return d->m_Pmh->episodes().count();
     return 0;

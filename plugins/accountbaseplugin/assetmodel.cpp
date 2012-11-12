@@ -89,6 +89,9 @@ AssetModel::~AssetModel()
 
 int AssetModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_SqlTable->rowCount(parent);
 }
 

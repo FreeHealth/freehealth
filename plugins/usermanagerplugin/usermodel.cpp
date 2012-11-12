@@ -876,6 +876,9 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
 
 int UserModel::rowCount(const QModelIndex &) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_Sql->rowCount();
 }
 

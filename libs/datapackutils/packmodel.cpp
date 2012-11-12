@@ -348,8 +348,11 @@ bool PackModel::isDirty() const
     return false;
 }
 
-int PackModel::rowCount(const QModelIndex &) const
+int PackModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     if (!d->rowToItem.isEmpty())
         return d->rowToItem.count();
     return d->m_Items.count();

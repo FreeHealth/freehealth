@@ -95,6 +95,9 @@ UserCalendarModel::~UserCalendarModel()
 
 int UserCalendarModel::rowCount(const QModelIndex &) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_UserCalendars.count();
 }
 
