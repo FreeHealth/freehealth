@@ -366,6 +366,9 @@ void EpisodeModel::onCurrentPatientChanged()
 
 int EpisodeModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->_sqlModel->rowCount(parent);
 }
 

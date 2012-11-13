@@ -141,6 +141,9 @@ void StringListModel::setCheckedItems( const QStringList & list )
 
 int StringListModel::rowCount( const QModelIndex & ) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_StringList.count();
 }
 

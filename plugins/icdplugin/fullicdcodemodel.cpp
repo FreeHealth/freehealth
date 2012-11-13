@@ -195,8 +195,11 @@ bool FullIcdCodeModel::isSelectionValid() const
     return false;
 }
 
-int FullIcdCodeModel::rowCount(const QModelIndex &) const
+int FullIcdCodeModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     // TODO: code here: check this
     return 1;
 }

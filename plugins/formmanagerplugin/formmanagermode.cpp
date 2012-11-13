@@ -48,6 +48,7 @@
 
 using namespace Form;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}

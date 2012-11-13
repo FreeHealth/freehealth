@@ -136,6 +136,9 @@ AccountModel::~AccountModel()
 
 int AccountModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     int rows = 0;
     //d->m_SqlTable->setFilter("");
     rows = d->m_SqlTable->rowCount(parent);

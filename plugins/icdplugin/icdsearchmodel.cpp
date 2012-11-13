@@ -168,6 +168,9 @@ void IcdSearchModel::setSearchMethod(SearchModes mode)
 
 int IcdSearchModel::rowCount(const QModelIndex &) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_IcdMaster->rowCount();
 }
 
