@@ -25,17 +25,23 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class DataPackPlugin::DataPackCore
+ * \class DataPackPlugin::Internal::DataPackPage
+ * \brief short description of class
+ *
+ * Long description of class
+ * \sa DataPackPlugin::
  */
 
-#include "datapackcore.h"
+#include "datapackpage.h"
 
-#include <utils/global.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <translationutils/constants.h>
-#include <datapackutils/packdescription.h>
-#include <datapackutils/serverdescription.h>
+#include <translationutils/trans_current.h>
 
-#include <QFile>
+#include <QTimer>
 
 #include <QDebug>
 
@@ -43,38 +49,37 @@ using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-DataPackCore *DataPackCore::_instance = 0;
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackCorePrivate
+class DataPackPagePrivate
 {
 public:
-    DataPackCorePrivate(DataPackCore *parent) :
+    DataPackPagePrivate(DataPackPage *parent) :
         q(parent)
     {
     }
     
-    ~DataPackCorePrivate()
+    ~DataPackPagePrivate()
     {
     }
     
 private:
-    DataPackCore *q;
+    DataPackPage *q;
 };
 }  // namespace Internal
 } // end namespace DataPackPlugin
 
-/*! Constructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::DataPackCore(QObject *parent) :
-    QObject(parent),
-    d(new DataPackCorePrivate(this))
+/*! Constructor of the DataPackPlugin::Internal::DataPackPage class */
+DataPackPage::DataPackPage(QObject *parent) :
+    Core::IToolPage(parent),
+    d(new DataPackPagePrivate(this))
 {
-    _instance = this;
 }
 
-/*! Destructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::~DataPackCore()
+/*! Destructor of the DataPackPlugin::Internal::DataPackPage class */
+DataPackPage::~DataPackPage()
 {
     if (d)
         delete d;
@@ -82,42 +87,53 @@ DataPackCore::~DataPackCore()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool DataPackCore::initialize()
+bool DataPackPage::initialize()
 {
     return true;
 }
 
-/**
- * Register a DataPackQuery inside a server. You can register multiple DataPackQuery for one server.
- * All queries will be processed and added to the server.\n
- * For the server internal uuid look at Core::Constants all SERVER_* constants.
- */
-bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &serverUid)
+QString DataPackPage::name() const
 {
+    return tkTr(Trans::Constants::DATAPACK);
+}
+
+QString DataPackPage::category() const
+{
+    return tkTr(Trans::Constants::DATAPACK);
+}
+
+QIcon DataPackPage::icon() const
+{
+    return theme()->icon(Core::Constants::ICON_PACKAGE);
+}
+
+QWidget *DataPackPage::createPage(QWidget *parent)
+{
+    return new QWidget(parent);
+}
+
+DataPackStep::DataPackStep(QObject *parent) :
+    Core::IFullReleaseStep(parent)
+{}
+
+DataPackStep::~DataPackStep()
+{}
+
+bool DataPackStep::downloadFiles(QProgressBar *bar)
+{
+    Q_UNUSED(bar);
+    QTimer::singleShot(10, this, SIGNAL(downloadFinished()));
     return true;
 }
 
+bool DataPackStep::process()
+{
+    // At this point all IFullReleaseStep must have register their datapacks to the datapackcore
+    return true;
+}
 
-///** Create a datapack structure using the DataPackPlugin::DataPackQuery */
-//DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
-//{
-//    DataPackResult result;
-//    if (!query.isValid())
-//        return result;
-//    QFile contentFile(query.originalContentFileAbsolutePath());
+QString DataPackStep::processMessage() const
+{
+    return tr("Processing datapack servers");
+}
 
-//    // get and update the packdescription
-//    DataPack::PackDescription pack;
-//    pack.setSourceFileName(query.descriptionFileAbsolutePath());
-//    pack.setData(DataPack::PackDescription::AbsFileName, query.originalContentFileAbsolutePath());
-//    pack.setData(DataPack::PackDescription::Size, contentFile.size());
-//    pack.setData(DataPack::PackDescription::Md5, Utils::md5(query.originalContentFileAbsolutePath()));
-//    pack.setData(DataPack::PackDescription::Sha1, Utils::sha1(query.originalContentFileAbsolutePath()));
-//    pack.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
-//    result.setPackDescriptionXmlContent(pack.toXml());
-//    return result;
-//}
-
-//bool DataPackCore::updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath)
-//{
-//}

@@ -60,7 +60,8 @@ public:
     ~DataPackCore();
     
 public Q_SLOTS:
-    DataPackResult createDataPack(const DataPackQuery &query);
+    bool registerDataPack(const DataPackQuery &query, const QString &serverUid);
+//    bool updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath);
 
 private:
     Internal::DataPackCorePrivate *d;

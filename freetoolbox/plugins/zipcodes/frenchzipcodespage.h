@@ -71,6 +71,8 @@ public:
     bool createDatabase();
     bool populateDatabase();
 
+    bool registerDataPack();
+
     QStringList errors() const {return m_Errors;}
 
 private:

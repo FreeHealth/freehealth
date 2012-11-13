@@ -24,28 +24,41 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "datapackquery.h"
+#ifndef DATAPACKPLUGIN_DATAPACKSERVERQUERY_H
+#define DATAPACKPLUGIN_DATAPACKSERVERQUERY_H
 
-#include <QFileInfo>
+#include <datapackplugin/datapack_exporter.h>
+#include <datapackplugin/datapackquery.h>
+#include <QList>
 
 namespace DataPackPlugin {
 
-DataPackQuery::DataPackQuery()
+class DATAPACK_PLUGIN_EXPORT DataPackServerQuery
 {
-}
+public:
+    DataPackServerQuery();
+    bool isValid() const;
 
-/**
- * Check the validity of the object:
- * - Absolute file path must be defined
- * - files must exists
- */
-bool DataPackQuery::isValid() const
-{
-    if (_absPathDescription.isEmpty() || _absPathContentFile.isEmpty())
-        return false;
-    if (!QFileInfo(_absPathDescription).exists() || !QFileInfo(_absPathContentFile).exists())
-        return false;
-    return true;
-}
+    void setOriginalDescriptionFileAbsolutePath(const QString &absPath) {_descrAbsPath = absPath;}
+    const QString &originalDescriptionFileAbsolutePath() const {return _descrAbsPath;}
+
+    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
+    const QString &outputServerAbsolutePath() const {return _absPathServer;}
+
+    void setDataPackQueries(const QList<DataPackQuery> &queries);
+    void addDataPackQueries(const QList<DataPackQuery> &queries);
+    void addDataPackQuery(const DataPackQuery &query);
+
+    const QList<DataPackQuery> &dataPackQueries() const {return _dataPackQueries;}
+
+private:
+    bool createDirs() const;
+
+private:
+    QString _descrAbsPath, _absPathServer;
+    QList<DataPackQuery> _dataPackQueries;
+};
 
 } // namespace DataPackPlugin
+
+#endif // DATAPACKPLUGIN_DATAPACKSERVERQUERY_H

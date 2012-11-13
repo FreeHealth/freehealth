@@ -79,6 +79,7 @@ public:
     bool createDatabaseScheme();
     bool startDownloadingSelectedCountryData();
     bool populateDatabase();
+    bool registerDataPack();
 
     QStringList errors() const {return m_Errors;}
 

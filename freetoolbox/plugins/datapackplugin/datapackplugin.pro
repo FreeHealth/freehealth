@@ -13,13 +13,17 @@ SOURCES += \
     datapackplugin.cpp \
     datapackcore.cpp \
     datapackquery.cpp \
-    datapackresult.cpp
+    datapackresult.cpp \
+    datapackserverquery.cpp \
+    datapackpage.cpp
 
 
 HEADERS  += \
     datapackplugin.h \
     datapackcore.h \
     datapackquery.h \
-    datapackresult.h
+    datapackresult.h \
+    datapackserverquery.h \
+    datapackpage.h
 
 OTHER_FILES += DataPackPlugin.pluginspec

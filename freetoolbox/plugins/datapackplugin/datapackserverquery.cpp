@@ -19,87 +19,61 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-/*!
- * \class DataPackPlugin::DataPackCore
- */
-
-#include "datapackcore.h"
+#include "datapackserverquery.h"
 
 #include <utils/global.h>
-#include <translationutils/constants.h>
-#include <datapackutils/packdescription.h>
-#include <datapackutils/serverdescription.h>
-
-#include <QFile>
-
-#include <QDebug>
 
 using namespace DataPackPlugin;
-using namespace Internal;
-using namespace Trans::ConstantTranslations;
 
-DataPackCore *DataPackCore::_instance = 0;
-
-namespace DataPackPlugin {
-namespace Internal {
-class DataPackCorePrivate
+DataPackServerQuery::DataPackServerQuery()
 {
-public:
-    DataPackCorePrivate(DataPackCore *parent) :
-        q(parent)
-    {
-    }
-    
-    ~DataPackCorePrivate()
-    {
-    }
-    
-private:
-    DataPackCore *q;
-};
-}  // namespace Internal
-} // end namespace DataPackPlugin
-
-/*! Constructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::DataPackCore(QObject *parent) :
-    QObject(parent),
-    d(new DataPackCorePrivate(this))
-{
-    _instance = this;
 }
 
-/*! Destructor of the DataPackPlugin::DataPackCore class */
-DataPackCore::~DataPackCore()
+bool DataPackServerQuery::isValid() const
 {
-    if (d)
-        delete d;
-    d = 0;
-}
-
-/*! Initializes the object with the default values. Return true if initialization was completed. */
-bool DataPackCore::initialize()
-{
+    if (_absPathServer.isEmpty())
+        return false;
+    foreach(const DataPackQuery &query, _dataPackQueries) {
+        if (!query.isValid())
+            return false;
+    }
     return true;
 }
 
-/**
- * Register a DataPackQuery inside a server. You can register multiple DataPackQuery for one server.
- * All queries will be processed and added to the server.\n
- * For the server internal uuid look at Core::Constants all SERVER_* constants.
- */
-bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &serverUid)
+void DataPackServerQuery::setDataPackQueries(const QList<DataPackQuery> &queries)
 {
-    return true;
+    _dataPackQueries = queries;
 }
 
+void DataPackServerQuery::addDataPackQueries(const QList<DataPackQuery> &queries)
+{
+    _dataPackQueries << queries;
+}
+
+void DataPackServerQuery::addDataPackQuery(const DataPackQuery &query)
+{
+    _dataPackQueries << query;
+}
+
+bool DataPackServerQuery::createDirs() const
+{
+    if (!Utils::checkDir(_absPathServer, true, "DataPackServerQuery::ServerRootPath"))
+            return false;
+    // Create each datapack path
+//    foreach(const DataPackQuery &query, _dataPackQueries) {
+//        if (!Utils::checkDir(_absPathServer + , true, "DataPackServerQuery::DataPack"))
+//            return false;
+//    }
+    return true;
+}
 
 ///** Create a datapack structure using the DataPackPlugin::DataPackQuery */
-//DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
+//DataPackResult DataPackServerQuery::createDataPack(const DataPackQuery &query)
 //{
 //    DataPackResult result;
 //    if (!query.isValid())
@@ -116,8 +90,4 @@ bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &s
 //    pack.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
 //    result.setPackDescriptionXmlContent(pack.toXml());
 //    return result;
-//}
-
-//bool DataPackCore::updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath)
-//{
 //}

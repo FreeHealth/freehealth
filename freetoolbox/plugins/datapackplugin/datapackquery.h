@@ -28,6 +28,7 @@
 #define DATAPACKPLUGIN_DATAPACKQUERY_H
 
 #include <datapackplugin/datapack_exporter.h>
+#include <datapackutils/packdescription.h>
 
 /**
  * \file datapackquery.h
@@ -42,6 +43,19 @@ class DATAPACK_PLUGIN_EXPORT DataPackQuery
 {
 public:
     DataPackQuery();
+    bool isValid() const;
+
+    void setDescriptionFileAbsolutePath(const QString &absPath) {_absPathDescription=absPath;}
+    const QString &descriptionFileAbsolutePath() const {return _absPathDescription;}
+
+    void setOriginalContentFileAbsolutePath(const QString &absPath) {_absPathContentFile=absPath;}
+    const QString &originalContentFileAbsolutePath() const {return _absPathContentFile;}
+
+//    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
+//    const QString &outputServerAbsolutePath() const {return _absPathServer;}
+
+private:
+    QString _absPathDescription, _absPathContentFile; //, _absPathServer;
 };
 
 } // namespace DataPackPlugin

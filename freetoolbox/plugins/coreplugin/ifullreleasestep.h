@@ -35,16 +35,16 @@ QT_END_NAMESPACE
 /**
  * \file ifullreleasestep.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 20 Jan 2012
+ * \version 0.8.0
+ * \date 10 Nov 2012
 */
 
 namespace Core {
 
 /*!
- * \brief IFullReleaseStep provides a generic interface for generating data for FreeMedForms.
+ * \brief IFullReleaseStep provides a generic interface for generating data for FreeToolBox.
  *
- * It is a plugin extension point that is called during the FreeToolBox FullReleaseStep action.
+ * It is a plugin extension point that is called during the FreeToolBox IFullReleaseStep action.
  * Classes that implement this interface can provide a data source and storage for arbitrary data
  * that can be used then in FreeMedForms or one of its sub-applications.
  *
@@ -63,6 +63,7 @@ public:
         PimDatabase,
         PregnancyDatabase,
         ZipCodes,
+        DataPackProcessing,
         TmpCleaning
     };
 
@@ -108,6 +109,13 @@ public:
      * \returns \e true if successful, else \e false. */
     virtual bool postProcessDownload() {Q_EMIT postProcessDownloadFinished(); return true;}
 
+    /*!
+     * \brief Implementations of this method can process the registration of datapacks.
+     * \returns \e true if successful, else \e false.
+     * \sa DataPackPlugin::DataPackCore::registerDataPack()
+     */
+    virtual bool registerDataPack() = 0;
+
     /*! \brief Contains a list of error strings if something went wrong. */
     virtual QStringList errors() const = 0;
 
@@ -127,4 +135,4 @@ Q_SIGNALS:
 
 } //  End namespace Core
 
-#endif // IFULLRELEASESTEP_H.
+#endif // IFULLRELEASESTEP_H

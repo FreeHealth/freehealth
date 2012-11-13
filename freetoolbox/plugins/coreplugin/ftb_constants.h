@@ -93,6 +93,13 @@ namespace Constants {
     const char* const S_TMP_PATH         = "Path/Temporary";
     const char* const S_GITFILES_PATH    = "Path/ToSvnCheckout";
 
+    // Server internal UID
+    const char *const SERVER_COMMUNITY_FREE = "comm_free";
+    const char *const SERVER_ASSO_FREE      = "asso_free";
+    const char *const SERVER_COMMUNITY_NONFREE = "comm_nonfree";
+    const char *const SERVER_ASSO_NONFREE   = "asso_nonfree";
+
+
 }  //  End namespace Constants
 
 }  //  End namespace DrugsDbCreator

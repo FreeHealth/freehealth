@@ -264,6 +264,11 @@ bool FrenchZipCodesStep::populateDatabase()
     return true;
 }
 
+bool FrenchZipCodesStep::registerDataPack()
+{
+    // TODO: register zipcode datapack
+    return true;
+}
 
 // #################### FrenchZipCodesWidget #######################
 
