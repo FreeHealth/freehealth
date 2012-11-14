@@ -34,7 +34,7 @@
  * \file datapackquery.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 10 Nov 2012
+ * \date 14 Nov 2012
 */
 
 namespace DataPackPlugin {
@@ -42,7 +42,10 @@ namespace DataPackPlugin {
 class DATAPACK_PLUGIN_EXPORT DataPackQuery
 {
 public:
-    DataPackQuery();
+    DataPackQuery() : _zipContentFile(false) {}
+    DataPackQuery(const DataPackQuery &copy);
+    DataPackQuery &operator=(const DataPackQuery &copy);
+
     bool isValid() const;
 
     void setDescriptionFileAbsolutePath(const QString &absPath) {_absPathDescription=absPath;}
@@ -51,11 +54,14 @@ public:
     void setOriginalContentFileAbsolutePath(const QString &absPath) {_absPathContentFile=absPath;}
     const QString &originalContentFileAbsolutePath() const {return _absPathContentFile;}
 
-//    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
-//    const QString &outputServerAbsolutePath() const {return _absPathServer;}
+    void setZipOriginalFile(bool zipFile) {_zipContentFile = zipFile;}
+    bool zipOriginalFile() const {return _zipContentFile;}
+
+    bool operator==(const DataPackQuery &query) const;
 
 private:
-    QString _absPathDescription, _absPathContentFile; //, _absPathServer;
+    QString _absPathDescription, _absPathContentFile;
+    bool _zipContentFile;
 };
 
 } // namespace DataPackPlugin

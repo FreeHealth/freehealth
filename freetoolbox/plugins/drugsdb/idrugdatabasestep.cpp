@@ -116,10 +116,26 @@ void IDrugDatabaseStep::setFinalizationScript(const QString &absPath)
     _finalizationScriptPath = absPath;
 }
 
-void IDrugDatabaseStep::setDescriptionFile(const QString &absPath)
+/**
+ * Define the description file for the database itself.
+ * File name must be an absolute path.
+ * \sa setDatapackDescriptionFile()
+*/
+void IDrugDatabaseStep::setDatabaseDescriptionFile(const QString &absPath)
 {
     // TODO: add some checks
     _descriptionFilePath = absPath;
+}
+
+/**
+ * Define the description file for the datapack containing this drug database.
+ * File name must be an absolute path.
+ * \sa setDatapackDescriptionFile(), registerDataPack()
+*/
+void IDrugDatabaseStep::setDatapackDescriptionFile(const QString &absPath)
+{
+    // TODO: add some checks
+    _datapackDescriptionFilePath = absPath;
 }
 
 /** Return the absolute file path of the output database file */
@@ -849,6 +865,7 @@ bool IDrugDatabaseStep::unzipFiles()
  * Automatically register the drug database to the DataPackPlugin::DataPackCore according
  * to the DrugsDB::IDrugDatabaseStep::LicenseType and the DrugsDB::IDrugDatabaseStep::ServerOwner
  * of the object.
+ * \sa DataPackPlugin::DataPackCore
  */
 bool IDrugDatabaseStep::registerDataPack()
 {
@@ -867,8 +884,9 @@ bool IDrugDatabaseStep::registerDataPack()
         }
     }
     DataPackPlugin::DataPackQuery query;
-//    query.setDescriptionFileAbsolutePath();
-//    query.setOriginalContentFileAbsolutePath();
+    query.setDescriptionFileAbsolutePath(_datapackDescriptionFilePath);
+    query.setOriginalContentFileAbsolutePath(_outputFileName);
+    query.setZipOriginalFile(true);
     if (!dataPackCore()->registerDataPack(query, server)) {
         LOG_ERROR("Unable to register datapack for drugs database: " + connectionName());
         return false;

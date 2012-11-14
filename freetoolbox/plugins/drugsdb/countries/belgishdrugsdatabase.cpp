@@ -158,12 +158,14 @@ BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
                 .arg("/BeRawSources/"));
     setConnectionName("be_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
-//    setFinalizationScript(QString("%1/%2")
-//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-//                          .arg("/global_resources/sql/drugdb/fr/fr_db_finalize.sql"));
-    setDescriptionFile(QString("%1/%2")
-                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                       .arg("/global_resources/sql/drugdb/fr/description.xml"));
+    setDatabaseDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
+                               .arg("be/description.xml"));
+    setDatapackDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                               .arg("drugs/be_noddi/packdescription.xml"));
     setDownloadUrl("");
     setLicenseType(Free);
     createDir();
@@ -179,9 +181,17 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free Belguish drugs database"));
         setConnectionName("be_nonfree");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/be_ddi/packdescription.xml"));
     } else {
         setDisplayName(tr("Free Belguish drugs database"));
         setConnectionName("be_free");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/be_noddi/packdescription.xml"));
     }
 }
 
