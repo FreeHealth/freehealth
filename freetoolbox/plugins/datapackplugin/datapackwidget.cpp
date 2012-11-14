@@ -19,78 +19,74 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
-#define DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+/*!
+ * \class DataPackPlugin::Internal::DataPackWidget
+ * Widget of the datapack page.
+ *
+ * \sa DataPackPlugin::Internal::DataPackPage
+ */
 
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ifullreleasestep.h>
+#include "datapackwidget.h"
 
-/**
- * \file datapackpage.h
- * \author Eric Maeker
- * \version 0.8.0
- * \date 11 Nov 2012
-*/
+#include <translationutils/constants.h>
+
+#include <QDebug>
+
+#include "ui_datapackwidget.h"
+
+using namespace DataPackPlugin;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackPagePrivate;
-class DataPackStep;
-
-class DataPackPage : public Core::IToolPage
+class DataPackWidgetPrivate
 {
-    Q_OBJECT
 public:
-    explicit DataPackPage(QObject *parent = 0);
-    ~DataPackPage();
-    bool initialize();
+    DataPackWidgetPrivate(DataPackWidget *parent) :
+        q(parent)
+    {
+        ui = new Ui::DataPackWidget;
+    }
     
-    virtual QString id() const {return "DataPackPage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const;
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    Internal::DataPackPagePrivate *d;
-};
-
-class DataPackStep : public Core::IFullReleaseStep
-{
-    Q_OBJECT
-
+    ~DataPackWidgetPrivate()
+    {
+        delete ui;
+    }
+    
 public:
-    DataPackStep(QObject *parent = 0);
-    ~DataPackStep();
-
-    QString id() const {return "DataPackStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DataPackProcessing;}
-
-    bool createDir();
-    bool cleanFiles();
-
-    bool downloadFiles(QProgressBar *bar = 0);
-    bool process();
-    QString processMessage() const;
-
-    bool registerDataPack();
-
-    QStringList errors() const {return m_Errors;}
+    Ui::DataPackWidget *ui;
 
 private:
-    QStringList m_Errors;
-    bool m_WithProgress;
+    DataPackWidget *q;
 };
+}  // namespace Internal
+} // end namespace DataPackPlugin
 
-} // namespace Internal
-} // namespace DataPackPlugin
+/*! Constructor of the DataPackPlugin::Internal::DataPackWidget class */
+DataPackWidget::DataPackWidget(QWidget *parent) :
+    QWidget(parent),
+    d(new DataPackWidgetPrivate(this))
+{
+    d->ui->setupUi(this);
+}
 
-#endif // DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+/*! Destructor of the DataPackPlugin::Internal::DataPackWidget class */
+DataPackWidget::~DataPackWidget()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+/*! Initializes the object with the default values. Return true if initialization was completed. */
+bool DataPackWidget::initialize()
+{
+    return true;
+}
 

@@ -15,7 +15,8 @@ SOURCES += \
     datapackquery.cpp \
     datapackresult.cpp \
     datapackserverquery.cpp \
-    datapackpage.cpp
+    datapackpage.cpp \
+    datapackwidget.cpp
 
 
 HEADERS  += \
@@ -24,6 +25,10 @@ HEADERS  += \
     datapackquery.h \
     datapackresult.h \
     datapackserverquery.h \
-    datapackpage.h
+    datapackpage.h \
+    datapackwidget.h
 
 OTHER_FILES += DataPackPlugin.pluginspec
+
+FORMS += \
+    datapackwidget.ui

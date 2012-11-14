@@ -24,73 +24,41 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
-#define DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+#ifndef DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
+#define DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
 
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ifullreleasestep.h>
+#include <QWidget>
 
 /**
- * \file datapackpage.h
+ * \file datapackwidget.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 11 Nov 2012
+ * \date 14 Nov 2012
 */
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackPagePrivate;
-class DataPackStep;
+class DataPackWidgetPrivate;
 
-class DataPackPage : public Core::IToolPage
+class DataPackWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DataPackPage(QObject *parent = 0);
-    ~DataPackPage();
+    explicit DataPackWidget(QWidget *parent = 0);
+    ~DataPackWidget();
+    
     bool initialize();
     
-    virtual QString id() const {return "DataPackPage";}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const;
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    
 private:
-    Internal::DataPackPagePrivate *d;
-};
-
-class DataPackStep : public Core::IFullReleaseStep
-{
-    Q_OBJECT
-
-public:
-    DataPackStep(QObject *parent = 0);
-    ~DataPackStep();
-
-    QString id() const {return "DataPackStep";}
-    Steps stepNumber() const {return Core::IFullReleaseStep::DataPackProcessing;}
-
-    bool createDir();
-    bool cleanFiles();
-
-    bool downloadFiles(QProgressBar *bar = 0);
-    bool process();
-    QString processMessage() const;
-
-    bool registerDataPack();
-
-    QStringList errors() const {return m_Errors;}
-
-private:
-    QStringList m_Errors;
-    bool m_WithProgress;
+    Internal::DataPackWidgetPrivate *d;
 };
 
 } // namespace Internal
 } // namespace DataPackPlugin
 
-#endif // DATAPACKPLUGIN_INTERNAL_DATAPACKPAGE_H
+#endif // DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
 
