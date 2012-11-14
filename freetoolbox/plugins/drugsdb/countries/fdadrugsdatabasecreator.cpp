@@ -168,12 +168,14 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
                 .arg("FdaRawSources"));
     setConnectionName("fda_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
-//    setFinalizationScript(QString("%1/%2")
-//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-//                          .arg("/global_resources/sql/drugdb/us/fda_db_finalize.sql"));
-    setDescriptionFile(QString("%1/%2")
-                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                       .arg("/global_resources/sql/drugdb/us/description.xml"));
+    setDatabaseDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
+                               .arg("us/description.xml"));
+    setDatapackDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                               .arg("drugs/fda_noddi/packdescription.xml"));
     setDownloadUrl("http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip");
     setLicenseType(Free);
     createDir();
@@ -189,9 +191,17 @@ void FdaDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free FDA drugs database"));
         setConnectionName("fda_nonfree");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/fda_ddi/packdescription.xml"));
     } else {
         setDisplayName(tr("Free FDA drugs database"));
         setConnectionName("fda_free");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/fda_noddi/packdescription.xml"));
     }
 }
 

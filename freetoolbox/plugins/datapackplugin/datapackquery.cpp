@@ -30,8 +30,19 @@
 
 namespace DataPackPlugin {
 
-DataPackQuery::DataPackQuery()
+DataPackQuery::DataPackQuery(const DataPackQuery &copy)
 {
+    _zipContentFile = copy._zipContentFile;
+    _absPathDescription = copy._absPathContentFile;
+    _absPathContentFile = copy._absPathContentFile;
+}
+
+DataPackQuery &DataPackQuery::operator=(const DataPackQuery &copy)
+{
+    _zipContentFile = copy._zipContentFile;
+    _absPathDescription = copy._absPathContentFile;
+    _absPathContentFile = copy._absPathContentFile;
+    return *this;
 }
 
 /**
@@ -46,6 +57,14 @@ bool DataPackQuery::isValid() const
     if (!QFileInfo(_absPathDescription).exists() || !QFileInfo(_absPathContentFile).exists())
         return false;
     return true;
+}
+
+/** Check the equality of two objects */
+bool DataPackQuery::operator==(const DataPackQuery &query) const
+{
+    return (_zipContentFile==query._zipContentFile) &&
+            (_absPathDescription==query._absPathDescription) &&
+            (_absPathContentFile==query._absPathContentFile);
 }
 
 } // namespace DataPackPlugin

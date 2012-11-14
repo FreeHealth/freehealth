@@ -59,6 +59,10 @@ public:
     {
     }
     
+public:
+    QMultiHash<QString, DataPackQuery> _serverDatapacks;
+
+
 private:
     DataPackCore *q;
 };
@@ -90,10 +94,19 @@ bool DataPackCore::initialize()
 /**
  * Register a DataPackQuery inside a server. You can register multiple DataPackQuery for one server.
  * All queries will be processed and added to the server.\n
- * For the server internal uuid look at Core::Constants all SERVER_* constants.
+ * For the server internal uuid look at Core::Constants all SERVER_* constants. \n
  */
 bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &serverUid)
 {
+    // avoid duplicates
+    const QList<DataPackQuery> &queries = d->_serverDatapacks.values(serverUid);
+    foreach(const DataPackQuery &serverQuery, queries) {
+        if (serverQuery==query)
+            return true;
+    }
+
+    // add the query to the server
+    d->_serverDatapacks.insertMulti(serverUid, query);
     return true;
 }
 

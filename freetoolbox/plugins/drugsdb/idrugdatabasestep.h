@@ -68,7 +68,8 @@ public:
     void setOutputFileName(const QString &fileName);
     void setDownloadUrl(const QString &url);
     void setFinalizationScript(const QString &absPath);
-    void setDescriptionFile(const QString &absPath);
+    void setDatabaseDescriptionFile(const QString &absPath);
+    void setDatapackDescriptionFile(const QString &absPath);
 
     virtual QString displayName() const {return _name;}
     virtual LicenseType licenseType() const {return _licenseType;}
@@ -80,7 +81,8 @@ public:
     QString absoluteFilePath() const;
     QString downloadUrl() const {return _downloadingUrl;}
     QString finalizationScript() const {return _finalizationScriptPath;}
-    QString descriptionFile() const {return _descriptionFilePath;}
+    QString databaseDescriptionFile() const {return _descriptionFilePath;}
+    QString datapackDescriptionFile() const {return _datapackDescriptionFilePath;}
     int sourceId() const;
 
     virtual bool checkDatabase();
@@ -117,7 +119,7 @@ private:
     LicenseType _licenseType;
     ServerOwner _serverOwner;
     QString _name, _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
-    QString _finalizationScriptPath, _descriptionFilePath;
+    QString _finalizationScriptPath, _descriptionFilePath, _datapackDescriptionFilePath;
     DrugBaseEssentials *_database;
     int _sid;
 };

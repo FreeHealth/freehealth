@@ -147,12 +147,14 @@ CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
                 .arg("/CaRawSources/"));
     setConnectionName("ca_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
-//    setFinalizationScript(QString("%1/%2")
-//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-//                          .arg("/global_resources/sql/drugdb/ca/ca_db_finalize.sql"));
-    setDescriptionFile(QString("%1/%2")
-                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                       .arg("/global_resources/sql/drugdb/ca/description.xml"));
+    setDatabaseDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
+                               .arg("ca/description.xml"));
+    setDatapackDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                               .arg("drugs/ca_noddi/packdescription.xml"));
     setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
     setLicenseType(Free);
     createDir();
@@ -168,9 +170,17 @@ void CaDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free Canadian drugs database"));
         setConnectionName("ca_nonfree");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/ca_ddi/packdescription.xml"));
     } else {
         setDisplayName(tr("Free Canadian drugs database"));
         setConnectionName("ca_free");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/ca_noddi/packdescription.xml"));
     }
 }
 
