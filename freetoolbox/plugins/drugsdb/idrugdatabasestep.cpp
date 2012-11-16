@@ -85,31 +85,47 @@ IDrugDatabaseStep::~IDrugDatabaseStep()
     _database = 0;
 }
 
+/** Define the absolute temporary path to use.*/
 void IDrugDatabaseStep::setTempPath(const QString &absPath)
 {
     _tempPath = QDir::cleanPath(absPath);
 }
 
+/** Define the absolute output path to use. The resulting database will be copied into this path. */
 void IDrugDatabaseStep::setOutputPath(const QString &absPath)
 {
     _outputPath = QDir::cleanPath(absPath);
 }
 
+/**
+ * Define the connection name of this database.
+ * This connection name will be the same as the corresponding QSqlDatabase connection name.
+ */
 void IDrugDatabaseStep::setConnectionName(const QString &connection)
 {
     _connection = connection;
 }
 
+/**
+ * Define the absolute output file name to use.
+ * \sa setOutputPath()
+ */
 void IDrugDatabaseStep::setOutputFileName(const QString &fileName)
 {
     _outputFileName = fileName;
 }
 
+/**
+ * Define one URL for the automatic downloading process.
+ * If you define this URL, the URL will be automatically downloaded during the step processing.
+ * Otherwise you can overload the downloadFiles().
+ */
 void IDrugDatabaseStep::setDownloadUrl(const QString &url)
 {
     _downloadingUrl = url;
 }
 
+/** Define the absolute path to the finalization SQL script to execute. This is obsolete. */
 void IDrugDatabaseStep::setFinalizationScript(const QString &absPath)
 {
     // TODO: add some checks
@@ -144,6 +160,7 @@ QString IDrugDatabaseStep::absoluteFilePath() const
     return QString("%1/%2").arg(_outputPath).arg(outputFileName());
 }
 
+/** Return the Source Id of the drug database source from the drugs database. */
 int IDrugDatabaseStep::sourceId() const
 {
     return _sid;
@@ -766,6 +783,11 @@ QHash<int, QString> IDrugDatabaseStep::saveMoleculeIds(const QStringList &molnam
     return mids;
 }
 
+/**
+ * Add the ATC classification to the drug database. This classification is REQUIRED
+ * by all non-free steps (that need ATC to compute interactions).
+ * \sa DrugsDB::DrugDrugInteractionCore::addAtcDataToDatabase()
+ */
 bool IDrugDatabaseStep::addAtc()
 {
     if (licenseType() == IDrugDatabaseStep::Free)
@@ -773,6 +795,10 @@ bool IDrugDatabaseStep::addAtc()
     return ddiCore()->addAtcDataToDatabase(_database);
 }
 
+/**
+ * Add the drug-drug interaction data to the drug database.
+ * \sa DrugsDB::DrugDrugInteractionCore::addDrugDrugInteractionsToDatabase()
+ */
 bool IDrugDatabaseStep::addDrugDrugInteractions()
 {
     if (licenseType() == IDrugDatabaseStep::Free)
@@ -780,6 +806,10 @@ bool IDrugDatabaseStep::addDrugDrugInteractions()
     return ddiCore()->addDrugDrugInteractionsToDatabase(_database);
 }
 
+/**
+ * Add the PIMs (potentially inappropriate medication in elderly) data to the drug database.
+ * \sa DrugsDB::DrugDrugInteractionCore::addPimsToDatabase()
+ */
 bool IDrugDatabaseStep::addPims()
 {
     if (licenseType() == IDrugDatabaseStep::Free)
@@ -787,6 +817,10 @@ bool IDrugDatabaseStep::addPims()
     return ddiCore()->addPimsToDatabase(_database);
 }
 
+/**
+ * Add the pregnancy drug compatibility data to the drug database.
+ * \sa DrugsDB::DrugDrugInteractionCore::addPregnancyDataToDatabase()
+ */
 bool IDrugDatabaseStep::addPregnancyCheckingData()
 {
     if (licenseType() == IDrugDatabaseStep::Free)
@@ -795,7 +829,7 @@ bool IDrugDatabaseStep::addPregnancyCheckingData()
     return true;
 }
 
-/** Create all object working path */
+/** Create all object path (temp, output, download...) */
 bool IDrugDatabaseStep::createDir()
 {
     // Create the tempPath
@@ -815,7 +849,7 @@ bool IDrugDatabaseStep::createDir()
     return true;
 }
 
-/** Automatically clean the output database */
+/** Automatically clean the output database (removes the output file). */
 bool IDrugDatabaseStep::cleanFiles()
 {
     QFile(absoluteFilePath()).remove();
@@ -865,7 +899,7 @@ bool IDrugDatabaseStep::unzipFiles()
  * Automatically register the drug database to the DataPackPlugin::DataPackCore according
  * to the DrugsDB::IDrugDatabaseStep::LicenseType and the DrugsDB::IDrugDatabaseStep::ServerOwner
  * of the object.
- * \sa DataPackPlugin::DataPackCore
+ * \sa DataPackPlugin::DataPackCore::registerDataPack()
  */
 bool IDrugDatabaseStep::registerDataPack()
 {
