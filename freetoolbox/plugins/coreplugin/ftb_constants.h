@@ -93,6 +93,16 @@ namespace Constants {
     const char* const S_TMP_PATH         = "Path/Temporary";
     const char* const S_GITFILES_PATH    = "Path/ToSvnCheckout";
 
+    const char* const PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES = "/global_resources/sql/drugdb/";
+    const char* const PATH_TO_DATAPACK_DESCRIPTION_FILES = "/global_resources/textfiles/datapack_description/";
+
+    // Server internal UID
+    const char *const SERVER_COMMUNITY_FREE = "comm_free";
+    const char *const SERVER_ASSO_FREE      = "asso_free";
+    const char *const SERVER_COMMUNITY_NONFREE = "comm_nonfree";
+    const char *const SERVER_ASSO_NONFREE   = "asso_nonfree";
+
+
 }  //  End namespace Constants
 
 }  //  End namespace DrugsDbCreator

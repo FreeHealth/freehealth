@@ -142,6 +142,7 @@ UTILS_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = 
 UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
 UTILS_EXPORT QByteArray md5(const QString &fileName);
+UTILS_EXPORT QByteArray sha1(const QString &fileName);
 
 // Some useful widgets specific functions
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
@@ -194,6 +195,10 @@ UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QStrin
 
 // Models
 UTILS_EXPORT void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged);
+
+// List/Vector
+UTILS_EXPORT QVector<int> removeDuplicates(const QVector<int> &vector);
+UTILS_EXPORT QList<int> removeDuplicates(const QList<int> &list);
 
 }  // end Utils
 

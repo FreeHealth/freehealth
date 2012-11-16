@@ -39,6 +39,10 @@
 */
 
 namespace DrugsDB {
+class DrugDrugInteractionCore;
+}
+
+namespace DrugsDB {
 class RoutesModel;
 class MoleculeLinkerModel;
 
@@ -64,13 +68,10 @@ public:
     RoutesModel *routesModel() const;
     MoleculeLinkerModel *moleculeLinkerModel() const;
 
-    // TODO:: remove me
-    DrugsDB::Internal::DrugBaseEssentials *drugBase();
-    bool createMasterDrugInteractionDatabase();
-    // END
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 
-    bool addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database);
+    // Interaction core
+    DrugsDB::DrugDrugInteractionCore *ddiCore() const;
 
 private:
     static DrugsDBCore *_instance;

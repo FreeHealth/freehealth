@@ -73,9 +73,10 @@ public:
     PmhViewerPrivate(PmhViewer *parent) :
         ui(0),
         m_Pmh(0),
-        m_ShowPatient(false),
         q(parent)
-    {}
+    {
+        m_ShowPatient = patient() != 0;
+    }
 
     ~PmhViewerPrivate()
     {
@@ -187,7 +188,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
 
     // Manage the Edit Mode
     d->setEditMode(editMode);
-    setShowPatientInformation(d->m_ShowPatient);
+    setPatientInfoVisible(d->m_ShowPatient);
 
     // Manage View Mode
     d->m_ViewMode = viewMode;
@@ -213,18 +214,18 @@ PmhViewer::~PmhViewer()
     d = 0;
 }
 
-/** \brief Show or hide the patient information (title, name, age) inside the dialog. */
-void PmhViewer::setShowPatientInformation(bool show)
+/** \brief Show or hide the patient information (title, name) inside the dialog. */
+void PmhViewer::setPatientInfoVisible(bool visible)
 {
-    if (show) {
-        d->ui->patientGroup->show();
-        QString text = "<b>"+ patient()->data(Core::IPatient::FullName).toString();
-        text += ", " + patient()->data(Core::IPatient::Age).toString();
-        text += "</b>";
-        d->ui->patientInfos->setText(text);
+    QString text;
+    if (visible) {
+        text = QString("%1, %2").arg(
+                    patient()->data(Core::IPatient::FullName).toString(),
+                    patient()->data(Core::IPatient::DateOfBirth).toString());
     } else {
-        d->ui->patientGroup->hide();
+        text = tkTr(Trans::Constants::PASTMEDICALHISTORY);
     }
+    d->ui->titleLabel->setText(text);
 }
 
 /** Defines the edit mode to use (Read only or Read Write). \sa PMH::PmhViewer::EditMode */

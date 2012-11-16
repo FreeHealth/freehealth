@@ -29,7 +29,7 @@
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
-#include <coreplugin/ifullreleasestep.h>
+#include <drugsdb/idrugdatabasestep.h>
 
 #include <QWidget>
 #include <QMap>
@@ -38,30 +38,49 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class QProgressDialog;
 
+namespace DrugsDB {
+namespace Internal {
+class ZaDrugDatatabaseStep;
 
-namespace DrugsDbCreator {
-
-namespace Ui {
-class SouthAfricanDrugsDatabase;
-}
-
-
-class SouthAfricanDrugsDatabasePage : public Core::IToolPage
+class FreeSouthAfricanDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
-    SouthAfricanDrugsDatabasePage(QObject *parent);
+    explicit FreeSouthAfricanDrugsDatabasePage(QObject *parent = 0);
+    ~FreeSouthAfricanDrugsDatabasePage();
 
-    virtual QString id() const {return "ZADrugsDatabase";}
-    virtual QString name() const {return "ZA Drugs Database Creator";}
+    virtual QString id() const {return "FreeSouthAfricanDrugsDatabasePage";}
+    virtual QString name() const;
     virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
 
+private:
+    ZaDrugDatatabaseStep *_step;
 };
 
-class ZaDrugDatatabaseStep : public Core::IFullReleaseStep
+class NonFreeSouthAfricanDrugsDatabasePage : public Core::IToolPage
+{
+    Q_OBJECT
+public:
+    explicit NonFreeSouthAfricanDrugsDatabasePage(QObject *parent = 0);
+    ~NonFreeSouthAfricanDrugsDatabasePage();
+
+    virtual QString id() const {return "NonFreeSouthAfricanDrugsDatabasePage";}
+    virtual QString name() const;
+    virtual QString category() const;
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+
+private:
+    ZaDrugDatatabaseStep *_step;
+};
+
+class ZaDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
@@ -71,15 +90,13 @@ public:
 
     QString id() const {return "ZaDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
+    void setLicenseType(LicenseType type);
 
-    bool createDir();
-    bool cleanFiles();
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
-    QString processMessage() const {return tr("South African drugs database creation");}
+    QString processMessage() const;
 
-    bool prepareDatas();
-    bool createDatabase();
+    bool prepareData();
     bool populateDatabase();
     bool linkMolecules();
 
@@ -97,27 +114,7 @@ private:
     bool m_WithProgress;
 };
 
-class SouthAfricanDrugsDatabase : public QWidget
-{
-    Q_OBJECT
-public:
-    SouthAfricanDrugsDatabase(QWidget *parent);
-    ~SouthAfricanDrugsDatabase();
-
-protected Q_SLOTS:
-    void on_startJobs_clicked();
-    bool on_download_clicked();
-
-private:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::SouthAfricanDrugsDatabase *ui;
-    QString m_WorkingPath;
-    ZaDrugDatatabaseStep *m_Step;
-};
-
-
-}  //  End namespace DrugsDbCreator
+}  //  namespace Internal
+}  //  End namespace DrugsDB
 
 #endif // SOUTHAFRICANDRUGSDATABASE_H

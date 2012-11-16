@@ -95,8 +95,10 @@ DisplayModel::~DisplayModel(){}
 
 int DisplayModel::rowCount(const QModelIndex &parent ) const 
 {
-        Q_UNUSED(parent);
-        return m_listsOfValuesbyRows->size();
+    // prevent trees
+    if (parent.isValid()) return 0;
+
+    return m_listsOfValuesbyRows->size();
 }
 
 int DisplayModel::columnCount(const QModelIndex &parent) const 

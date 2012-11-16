@@ -113,4 +113,19 @@ void CorePlugin::remoteArgument(const QString &arg)
 //    }
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag CorePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+
+    // Here you still have a full access to
+    //   Core::ICore::instance()
+    // And all its objects (user(), patient(), settings(), theme()...).
+
+    return SynchronousShutdown;
+}
+
 Q_EXPORT_PLUGIN(CorePlugin)

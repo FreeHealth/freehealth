@@ -35,18 +35,20 @@
  * \date 23 May 2012
 */
 
-namespace DataPack {
+namespace DataPackPlugin {
 namespace Internal {
 
-class DataPackPlugin : public ExtensionSystem::IPlugin
+class DataPackIPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
 public:
-    DataPackPlugin();
-    ~DataPackPlugin();
+    DataPackIPlugin();
+    ~DataPackIPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
+
+    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
 
 };
 

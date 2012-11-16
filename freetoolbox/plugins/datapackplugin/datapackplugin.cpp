@@ -24,6 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "datapackplugin.h"
+#include "datapackcore.h"
+#include "datapackpage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -33,38 +35,59 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-using namespace DataPack;
+using namespace DataPackPlugin;
 using namespace Internal;
 
-DataPackPlugin::DataPackPlugin()
+DataPackIPlugin::DataPackIPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "Creating DataPackPlugin";
+        qWarning() << "Creating DataPackIPlugin";
+
+    //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
 }
 
-DataPackPlugin::~DataPackPlugin()
+DataPackIPlugin::~DataPackIPlugin()
 {
-    qWarning() << "DataPackPlugin::~DataPackPlugin()";
+    qWarning() << "DataPackIPlugin::~DataPackIPlugin()";
 }
 
-bool DataPackPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorMessage);
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackPlugin::initialize";
+        qWarning() << "DataPackIPlugin::initialize";
 
-    // add plugin info page
+    // Create the core
+    DataPackCore *core = new DataPackCore(this);
+    core->initialize();
+
+    // add pages
+    addAutoReleasedObject(new DataPackPage(this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     return true;
 }
 
-void DataPackPlugin::extensionsInitialized()
+void DataPackIPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DataPackPlugin::extensionsInitialized";
+        qWarning() << "DataPackIPlugin::extensionsInitialized";
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
 
-Q_EXPORT_PLUGIN(DataPackPlugin)
+    // Here you still have a full access to
+    //   Core::ICore::instance()
+    // And all its objects (user(), patient(), settings(), theme()...).
+
+    return SynchronousShutdown;
+}
+
+Q_EXPORT_PLUGIN(DataPackIPlugin)

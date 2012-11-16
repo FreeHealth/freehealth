@@ -1,3 +1,3 @@
-PACKAGE_VERSION = 0.7.7
+PACKAGE_VERSION = 0.8.0
 # Get the version number from command line in bash :
 # cat projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '

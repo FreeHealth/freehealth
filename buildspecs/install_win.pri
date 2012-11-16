@@ -42,18 +42,20 @@
         descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING.txt
         INSTALLS += descrfiles
 
-        gccLibs.path = $${INSTALL_BINARY_PATH}
-        gccLibs.files = \
-            $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll \
-            $$[QT_INSTALL_BINS]/mingwm10.dll
-        INSTALLS += gccLibs
+        # You need to install the MinGW libs by hand...
+#        gccLibs.path = $${INSTALL_BINARY_PATH}
+#        gccLibs.files = \
+#            $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll \
+#            $$[QT_INSTALL_BINS]/mingwm10.dll
+#        INSTALLS += gccLibs
 
-        OPENCV_PATH=$${CONTRIBPATH}/opencv/build/x86/mingw/bin
+        win32:OPENCV_PATH=$${SOURCES_CONTRIBS_PATH}/opencv/build/x86/mingw/bin
+        win64:OPENCV_PATH=$${SOURCES_CONTRIBS_PATH}/opencv/build/x64/mingw/bin
         openCvLibs.path = $${INSTALL_BINARY_PATH}
         openCvLibs.files = \
-            $${OPENCV_PATH}/libopencv_core242.dll \
-            $${OPENCV_PATH}/libopencv_highgui242.dll \
-            $${OPENCV_PATH}/libopencv_objdetect242.dll
+            $${OPENCV_PATH}/libopencv_core*.dll \
+            $${OPENCV_PATH}/libopencv_highgui*.dll \
+            $${OPENCV_PATH}/libopencv_objdetect*.dll
         INSTALLS += openCvLibs
     }
 

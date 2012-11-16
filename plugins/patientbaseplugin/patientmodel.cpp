@@ -331,8 +331,11 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
     Q_EMIT currentPatientChanged(index);
 }
 
-int PatientModel::rowCount(const QModelIndex &) const
+int PatientModel::rowCount(const QModelIndex &parent) const
 {
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_SqlPatient->rowCount();
 }
 

@@ -424,7 +424,9 @@ void DrugsModel::dosageDatabaseChanged()
 /** count the number of selected drugs */
 int DrugsModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     return d->m_DrugsList.count();
 }
 

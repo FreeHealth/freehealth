@@ -29,7 +29,7 @@
 
 #include <QAbstractItemModel>
 
-namespace IAMDb {
+namespace DrugsDB {
 class DrugDrugInteraction;
 namespace Internal {
 class DrugDrugInteractionModelPrivate;
@@ -116,11 +116,12 @@ public Q_SLOTS:
     void filterInteractionsForInteractor(const QString &interactorName);
     void setActualReviewer(const QString &name);
     bool saveModel();
+//    bool addDrugDrugInteraction(const QString &first, const QString &second);
 
 private:
     Internal::DrugDrugInteractionModelPrivate *d;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // DRUGDRUGINTERACTIONMODEL_H

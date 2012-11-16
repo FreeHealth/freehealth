@@ -53,7 +53,7 @@ public:
                        const bool checkStateEditable = true );
     ~StringListModel();
 
-    virtual int rowCount( const QModelIndex & = QModelIndex() ) const;
+    virtual int rowCount(const QModelIndex & parent = QModelIndex() ) const;
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );

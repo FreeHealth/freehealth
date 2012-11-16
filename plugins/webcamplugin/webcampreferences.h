@@ -79,6 +79,8 @@ private:
 
 class WebcamPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     WebcamPreferencesPage(QObject *parent = 0);
     ~WebcamPreferencesPage();

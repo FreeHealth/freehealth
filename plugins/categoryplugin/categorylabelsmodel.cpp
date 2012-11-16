@@ -96,7 +96,9 @@ CategoryLabelsModel::~CategoryLabelsModel()
 
 int CategoryLabelsModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    // prevent trees
+    if (parent.isValid()) return 0;
+
     if (!d->m_Cat)
         return 0;
     return d->m_Labels.count();

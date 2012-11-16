@@ -71,8 +71,7 @@ public:
     bool prepareDatas();
     bool createDatabase();
     bool populateDatabase();
-//    bool linkDrugsRoutes();
-//    bool linkMolecules();
+    bool registerDataPack() {return true;}
 
     QStringList errors() const {return m_Errors;}
 

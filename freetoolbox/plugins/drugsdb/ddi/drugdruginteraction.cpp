@@ -37,7 +37,7 @@
 
 #include <QDebug>
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static Core::ITheme *theme() {return Core::ICore::instance()->theme();}

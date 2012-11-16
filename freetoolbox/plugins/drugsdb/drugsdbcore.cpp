@@ -35,6 +35,7 @@
 #include "routesmodel.h"
 #include "countries/moleculelinkermodel.h"
 #include "ddi/drugdruginteractioncore.h"
+#include "ddi/drugdruginteractioncore.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
@@ -63,6 +64,7 @@ public:
     DrugsDBCorePrivate(DrugsDBCore *parent) :
         _routesModel(0),
         _moleculeLinkerModel(0),
+        _ddiCore(0),
         q(parent)
 
     {
@@ -85,6 +87,7 @@ public:
     QVector<DrugsDB::Internal::DrugBaseEssentials*> _drugsDatabases;
     RoutesModel *_routesModel;
     MoleculeLinkerModel *_moleculeLinkerModel;
+    DrugsDB::DrugDrugInteractionCore *_ddiCore;
 
 private:
     DrugsDBCore *q;
@@ -97,6 +100,7 @@ DrugsDBCore::DrugsDBCore(QObject *parent) :
     QObject(parent),
     d(new DrugsDBCorePrivate(this))
 {
+    setObjectName("DrugsDBCore");
     _instance = this;
 }
 
@@ -121,6 +125,8 @@ bool DrugsDBCore::initialize()
     d->_routesModel->initialize();
     d->_moleculeLinkerModel = new MoleculeLinkerModel(this);
     d->_moleculeLinkerModel->initialize();
+    d->_ddiCore = new DrugsDB::DrugDrugInteractionCore(this);
+    d->_ddiCore->initialize();
     return true;
 }
 
@@ -130,51 +136,13 @@ RoutesModel *DrugsDBCore::routesModel() const
     return d->_routesModel;
 }
 
+/** Return the molecule to ATC model */
 MoleculeLinkerModel *DrugsDBCore::moleculeLinkerModel() const
 {
     return d->_moleculeLinkerModel;
 }
 
-DrugsDB::Internal::DrugBaseEssentials *DrugsDBCore::drugBase()
-{
-    static DrugsDB::Internal::DrugBaseEssentials *core = 0;
-    if (!core)
-        core = new DrugsDB::Internal::DrugBaseEssentials;
-    return core;
-}
-
-///** Return the drugs database full path, for a specific country or for all countries if no \e country is specified. */
-//QString DrugsDBCore::drugsDatabaseAbsFileName(const QString &country)
-//{
-//    Q_UNUSED(country);
-//    //    QString path = QString("%1/%2/%3")
-//    //            .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())
-//    //            .arg(Core::Constants::MASTER_DATABASE_NAME)
-//    //            .arg(country)
-//    //            .arg(Core::Constants::MASTER_DATABASE_FILENAME);
-//    //    return QDir::cleanPath(path);
-//    //    }
-//    return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);
-//}
-
-bool DrugsDBCore::createMasterDrugInteractionDatabase()
-{
-//    QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-//    if (!db.isOpen() && db.isValid()) {
-//        if (!connectDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsDatabaseAbsFileName())) {
-//            LOG_ERROR_FOR("Tools", "Unable to create master database");
-//            return false;
-//        }
-//    }
-
-//    if (!db.isValid() || db.tables().count() < DrugsDB::Constants::Table_MaxParam) {
-////        executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, masterDatabaseSqlSchema());
-//        drugBase()->initialize(databaseOutputPath(), true);
-//        addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
-//    }
-    return true;
-}
-
+/** Create the drug database using the absolute path \e absPath, and the connectionName \e connection */
 DrugsDB::Internal::DrugBaseEssentials *DrugsDBCore::createDrugDatabase(const QString &absPath, const QString &connection)
 {
     DrugsDB::Internal::DrugBaseEssentials *base = d->drugsBaseFromCache(connection);
@@ -193,18 +161,12 @@ DrugsDB::Internal::DrugBaseEssentials *DrugsDBCore::createDrugDatabase(const QSt
         return 0;
     }
     d->_drugsDatabases << base;
+    LOG("Drug database created");
     return base;
 }
 
-/**
- * Add all interaction data to a drug database.
- * This includes:
- * - full ATC
- * - DDI
- * - PIM
- * - all future devs (pregnancy compatibility...)
- */
-bool DrugsDBCore::addInteractionData(DrugsDB::Internal::DrugBaseEssentials *database)
+/** Return the singleton of the drug drug interaction core */
+DrugsDB::DrugDrugInteractionCore *DrugsDBCore::ddiCore() const
 {
-    return IAMDb::DrugDrugInteractionCore::instance()->populateDrugDatabase(database);
+    return d->_ddiCore;
 }

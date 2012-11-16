@@ -47,12 +47,12 @@
 #include <QHash>
 #include <QList>
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline IAMDb::DrugDrugInteractionCore *core() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *core() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 
 namespace {
@@ -130,7 +130,7 @@ private:
 
 }
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 
 class DrugDrugInteractionModelPrivate
@@ -404,7 +404,7 @@ private:
     DrugDrugInteractionModel *q;
 };
 }  // End namespace Internal
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 
 
@@ -973,6 +973,14 @@ bool DrugDrugInteractionModel::saveModel()
     core()->saveCompleteList(d->m_ddis);
     return true;
 }
+
+//bool DrugDrugInteractionModel::addDrugDrugInteraction(const QString &first, const QString &second)
+//{
+//    if (first.isEmpty() || second.isEmpty())
+//        return false;
+
+//    return true;
+//}
 
 bool DrugDrugInteractionModel::splitMultipleLevelInteraction(const QModelIndex &index, bool splitMirrored)
 {

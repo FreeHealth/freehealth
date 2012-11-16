@@ -62,14 +62,14 @@
 #include <QUrl>
 #include <QApplication>
 
-using namespace IAMDb;
+using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
-static inline IAMDb::DrugDrugInteractionCore *core() {return IAMDb::DrugDrugInteractionCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 static inline QString oldMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
 static inline QString oldTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
@@ -85,13 +85,12 @@ QWidget *InteractorEditorPage::createPage(QWidget *parent)
     return new InteractorEditorWidget(parent);
 }
 
-namespace IAMDb {
+namespace DrugsDB {
 namespace Internal {
 class InteractorEditorWidgetPrivate
 {
 public:
     Ui::InteractorEditorWidget *ui;
-    DrugInteractorModel *m_InteractingClassesModel, *m_InteractorsModel;
     QDataWidgetMapper *m_Mapper;
     QStringListModel *m_AtcCodes, *m_ChildrenInteractors, *m_Pmids;
     QPersistentModelIndex m_EditingIndex;
@@ -115,8 +114,8 @@ public:
     QAction *copyClip;
     QAction *atcSearchDialog;
 };
-}
-}
+}  // namespace Internal
+}  // namespace DrugsDB
 
 InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     QWidget(parent), d(new InteractorEditorWidgetPrivate)
@@ -135,27 +134,23 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->ui->reformatOldSource->hide();
 
     // manage interactors classesTreeView / molsListView
-    d->m_InteractingClassesModel = new DrugInteractorModel(DrugInteractorModel::InteractingClasses, this);
-    d->m_InteractingClassesModel->setObjectName("DrugInteractorModel::ClassesModel");
-    d->ui->classesTreeView->setModel(d->m_InteractingClassesModel);
+    d->ui->classesTreeView->setModel(ddiCore()->interactingClassesModel());
     d->ui->classesTreeView->header()->hide();
-    for(int i = 0; i < d->m_InteractingClassesModel->columnCount(); ++i) {
+    for(int i = 0; i < ddiCore()->interactingClassesModel()->columnCount(); ++i) {
         d->ui->classesTreeView->hideColumn(i);
     }
     d->ui->classesTreeView->showColumn(DrugInteractorModel::TrLabel);
 
-    d->m_InteractorsModel = new DrugInteractorModel(DrugInteractorModel::InteractingMolecules, this);
-    d->m_InteractorsModel->setObjectName("DrugInteractorModel::ClassesModel");
-    d->ui->molsListView->setModel(d->m_InteractorsModel);
+    d->ui->molsListView->setModel(ddiCore()->interactingMoleculesModel());
     d->ui->molsListView->setModelColumn(DrugInteractorModel::TrLabel);
 
     d->ui->sumLabel->setText(tr("0r: %1; 0l: %2")
-                             .arg(d->m_InteractorsModel->numberOfUnreviewed())
-                             .arg(d->m_InteractorsModel->numberOfUnlinked()));
-    connect(d->m_InteractingClassesModel, SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
-    connect(d->m_InteractingClassesModel, SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
-    connect(d->m_InteractorsModel, SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
-    connect(d->m_InteractorsModel, SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
+                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnreviewed())
+                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnlinked()));
+    connect(ddiCore()->interactingClassesModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
+    connect(ddiCore()->interactingClassesModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
+    connect(ddiCore()->interactingMoleculesModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
+    connect(ddiCore()->interactingMoleculesModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
 
     // Create actions
     d->aExpandAll = new QAction(this);
@@ -231,7 +226,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(d->aTranslateThis, SIGNAL(triggered()), this, SLOT(translateCurrent()));
     connect(d->aAddClassReviewMark, SIGNAL(triggered()), this, SLOT(bookmarkClassesFromCurrent()));
     connect(d->aNextUnreviewedOrUnlinked, SIGNAL(triggered()), this, SLOT(nextUnreviewedOrUnlinked()));
-    connect(d->aDownloadAllNeededPmids, SIGNAL(triggered()), core(), SLOT(downloadAllPmids()));
+    connect(d->aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
 
     connect(d->m_ToolButton, SIGNAL(triggered(QAction*)), this, SLOT(buttonActivated(QAction*)));
     connect(d->m_CreateNewToolButton, SIGNAL(triggered(QAction*)), this, SLOT(createButtonActivated(QAction*)));
@@ -342,7 +337,7 @@ void InteractorEditorWidget::reformatOldSource()
 //    while (!mainNode.isNull()) {
 //        DrugInteractor interactor;
 //        interactor.setData(DrugInteractor::IsValid, true);
-//        interactor.setData(DrugInteractor::Id, core()->createInternalUuid());
+//        interactor.setData(DrugInteractor::Id, ddiCore()->createInternalUuid());
 //        interactor.setData(DrugInteractor::Reference, mainNode.attribute("references"));
 //        interactor.setData(DrugInteractor::DeLabel, mainNode.attribute("de"));
 //        interactor.setData(DrugInteractor::ATCCodeStringList, mainNode.attribute("atcCodes").split(","));
@@ -393,7 +388,7 @@ void InteractorEditorWidget::reformatOldSource()
     }
     QDomElement rootNode = doc.firstChildElement("AfssapsTree");
     QDomElement mainNode = rootNode.firstChildElement("Class");
-    QList<DrugInteractor *> interactors = core()->getDrugInteractors();
+    QList<DrugInteractor *> interactors = ddiCore()->getDrugInteractors();
     while (!mainNode.isNull()) {
         QString classId = Utils::removeAccents(mainNode.attribute("name")).toUpper();
         qWarning() << "processing" << classId;
@@ -502,9 +497,9 @@ void InteractorEditorWidget::createButtonActivated(QAction *selected)
 {
     QString id = Utils::askUser(tr("New item"), tr("What is the initial label (French only) ?"));
     if (selected==d->aCreateNewClass) {
-        core()->createNewInteractor(id, true);
+        ddiCore()->createNewInteractor(id, true);
     } else if (selected==d->aCreateNewInteractor) {
-        core()->createNewInteractor(id, false);
+        ddiCore()->createNewInteractor(id, false);
     }
 }
 
@@ -621,18 +616,18 @@ void InteractorEditorWidget::bookmarkClassesFromCurrent()
         return;
     }
     QModelIndex idx = d->ui->classesTreeView->selectionModel()->currentIndex();
-    QModelIndex classIdx = d->m_InteractingClassesModel->index(idx.row(), DrugInteractorModel::IsInteractingClass, idx.parent());
+    QModelIndex classIdx = ddiCore()->interactingClassesModel()->index(idx.row(), DrugInteractorModel::IsInteractingClass, idx.parent());
     // find parent category
     while (!classIdx.data().toBool() || !classIdx.isValid()) {
         classIdx = classIdx.parent();
     }
     bool yes = Utils::yesNoMessageBox(tr("BookMark class review state"),
                                       tr("Do you want all classes under the current one: \n  * %1\n\n to be marked as unreviewed ?")
-                                      .arg(d->m_InteractingClassesModel->index(classIdx.row(), DrugInteractorModel::TrLabel, classIdx.parent()).data().toString()));
+                                      .arg(ddiCore()->interactingClassesModel()->index(classIdx.row(), DrugInteractorModel::TrLabel, classIdx.parent()).data().toString()));
     if (yes) {
-        for(int i = classIdx.row() + 1; i < d->m_InteractingClassesModel->rowCount(classIdx.parent()); ++i) {
-            idx = d->m_InteractingClassesModel->index(i, DrugInteractorModel::IsReviewed);
-            d->m_InteractingClassesModel->setData(idx, false);
+        for(int i = classIdx.row() + 1; i < ddiCore()->interactingClassesModel()->rowCount(classIdx.parent()); ++i) {
+            idx = ddiCore()->interactingClassesModel()->index(i, DrugInteractorModel::IsReviewed);
+            ddiCore()->interactingClassesModel()->setData(idx, false);
         }
     }
 
@@ -641,17 +636,17 @@ void InteractorEditorWidget::bookmarkClassesFromCurrent()
 void InteractorEditorWidget::updateCounts()
 {
     d->ui->sumLabel->setText(tr("0r: %1; 0l: %2")
-                             .arg(d->m_InteractorsModel->numberOfUnreviewed())
-                             .arg(d->m_InteractorsModel->numberOfUnlinked()));
+                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnreviewed())
+                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnlinked()));
 }
 
 void InteractorEditorWidget::nextUnreviewedOrUnlinked()
 {
-    QAbstractItemModel *model = d->m_InteractingClassesModel;
+    QAbstractItemModel *model = ddiCore()->interactingClassesModel();
     QAbstractItemView *view = d->ui->classesTreeView;
     bool isTestingClasses = true;
     if (qApp->focusWidget()==d->ui->molsListView) {
-        model = d->m_InteractorsModel;
+        model = ddiCore()->interactingMoleculesModel();
         view = d->ui->molsListView;
         isTestingClasses = false;
     }
@@ -694,6 +689,17 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
         d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
         d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
+        d->aSave->setToolTip(d->aSave->text());
+        d->aEdit->setToolTip(d->aEdit->text());
+        d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
+        d->aCreateNewClass->setToolTip(d->aCreateNewClass->text());
+        d->aTranslateThis->setToolTip(d->aTranslateThis->text());
+        d->aCreateNewInteractor->setToolTip(d->aCreateNewInteractor->text());
+        d->aAddClassReviewMark->setToolTip(d->aAddClassReviewMark->text());
+        d->aCollapseAll->setToolTip(d->aCollapseAll->text());
+        d->aExpandAll->setToolTip(d->aExpandAll->text());
+        d->aNextUnreviewedOrUnlinked->setToolTip(d->aNextUnreviewedOrUnlinked->text());
+        d->aDownloadAllNeededPmids->setToolTip(d->aDownloadAllNeededPmids->text());
         d->ui->retranslateUi(this);
         updateCounts();
     }

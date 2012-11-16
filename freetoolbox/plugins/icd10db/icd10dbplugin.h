@@ -49,6 +49,8 @@ public:
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
 
+    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
+
 };
 
 } // namespace Internal

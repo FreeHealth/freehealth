@@ -1,0 +1,64 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+#ifndef DATAPACKPLUGIN_DATAPACKSERVERQUERY_H
+#define DATAPACKPLUGIN_DATAPACKSERVERQUERY_H
+
+#include <datapackplugin/datapack_exporter.h>
+#include <datapackplugin/datapackquery.h>
+#include <QList>
+
+namespace DataPackPlugin {
+
+class DATAPACK_PLUGIN_EXPORT DataPackServerQuery
+{
+public:
+    DataPackServerQuery();
+    bool isValid() const;
+
+    void setOriginalDescriptionFileAbsolutePath(const QString &absPath) {_descrAbsPath = absPath;}
+    const QString &originalDescriptionFileAbsolutePath() const {return _descrAbsPath;}
+
+    void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
+    const QString &outputServerAbsolutePath() const {return _absPathServer;}
+
+    void setDataPackQueries(const QList<DataPackQuery> &queries);
+    void addDataPackQueries(const QList<DataPackQuery> &queries);
+    void addDataPackQuery(const DataPackQuery &query);
+
+    const QList<DataPackQuery> &dataPackQueries() const {return _dataPackQueries;}
+
+private:
+    bool createDirs() const;
+
+private:
+    QString _descrAbsPath, _absPathServer;
+    QList<DataPackQuery> _dataPackQueries;
+};
+
+} // namespace DataPackPlugin
+
+#endif // DATAPACKPLUGIN_DATAPACKSERVERQUERY_H

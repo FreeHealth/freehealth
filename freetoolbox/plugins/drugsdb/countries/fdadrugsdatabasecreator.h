@@ -86,7 +86,6 @@ public:
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     void setLicenseType(LicenseType type);
 
-    bool cleanFiles();
     bool process();
     QString processMessage() const;
 

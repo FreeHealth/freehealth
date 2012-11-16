@@ -31,7 +31,7 @@
 
 class QModelIndex;
 
-namespace IAMDb {
+namespace DrugsDB {
 
 class InteractorEditorPage : public Core::IToolPage
 {
@@ -89,6 +89,6 @@ private:
 };
 
 }  // End namespace Internal
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // INTERACTOREDITORPAGE_H

@@ -247,6 +247,12 @@ bool GenericZipCodesStep::populateDatabase()
     return true;
 }
 
+bool GenericZipCodesStep::registerDataPack()
+{
+    // TODO: register zipcodes datapack
+    return true;
+}
+
 void GenericZipCodesStep::selectCountry(const QModelIndex &index)
 {
     if (!index.isValid())

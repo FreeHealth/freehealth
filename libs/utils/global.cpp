@@ -700,6 +700,18 @@ QByteArray md5(const QString &fileName)
     return QByteArray();
 }
 
+/** \brief Returns the SHA1 checksum of a file. */
+QByteArray sha1(const QString &fileName)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileData = file.readAll();
+        QByteArray hashData = QCryptographicHash::hash(fileData, QCryptographicHash::Sha1);
+        return hashData.toHex();
+    }
+    return QByteArray();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1781,6 +1793,30 @@ void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstrac
     QObject::connect(model1, SIGNAL(rowsInserted(QModelIndex, int , int )), model2, SIGNAL(rowsInserted(QModelIndex, int , int )));
     QObject::connect(model1, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )));
     QObject::connect(model1, SIGNAL(rowsRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsRemoved(QModelIndex, int , int )));
+}
+
+/** Removes duplicates from the QVector \e vector and return the resulting QVector. */
+QVector<int> removeDuplicates(const QVector<int> &vector)
+{
+    QList<int> noDuplicates;
+    foreach(int i, vector) {
+        if (noDuplicates.contains(i))
+            continue;
+        noDuplicates << i;
+    }
+    return noDuplicates.toVector();
+}
+
+/** Removes duplicates from the QList \e list and return the resulting QList. */
+QList<int> removeDuplicates(const QList<int> &list)
+{
+    QList<int> noDuplicates;
+    foreach(int i, list) {
+        if (noDuplicates.contains(i))
+            continue;
+        noDuplicates << i;
+    }
+    return noDuplicates;
 }
 
 } // End Utils

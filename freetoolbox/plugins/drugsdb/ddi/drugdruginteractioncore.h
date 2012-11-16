@@ -32,28 +32,61 @@
 #include <QDomNode>
 #include <QMultiMap>
 
+/**
+ * \file drugdruginteractioncore.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 07 Nov 2012
+*/
+
 namespace DrugsDB {
+class DrugsDBCore;
 namespace Internal {
 class DrugBaseEssentials;
 }
 }
 
-namespace IAMDb {
+namespace DrugsDB {
 class DrugDrugInteraction;
 class DrugInteractor;
+class DrugInteractorModel;
+namespace Internal {
+class DrugDrugInteractionCorePrivate;
+}  // namespace Internal
 
 class DrugDrugInteractionCore : public QObject
 {
     Q_OBJECT
+    friend class DrugsDB::DrugsDBCore;
+
+protected:
     explicit DrugDrugInteractionCore(QObject *parent = 0);
+    bool initialize();
+
 public:
     static DrugDrugInteractionCore *instance();
+    ~DrugDrugInteractionCore();
 
     int createInternalUuid() const;
+
+    // Available models
+    DrugInteractorModel *interactingMoleculesModel() const;
+    DrugInteractorModel *interactingClassesModel() const;
 
     QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
     QList<DrugInteractor *> getDrugInteractors() const;
 
+    // Feeders / Checkers
+    bool canAddAtc() const;
+    bool canAddDrugDrugInteractions() const;
+    bool canAddPims() const;
+    bool canAddPregnancyChecking() const;
+
+    bool isAtcInstalledInDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool addAtcDataToDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool addDrugDrugInteractionsToDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool addPimsToDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
+    bool addPregnancyCheckingDataToDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
     bool populateDrugDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
 
 Q_SIGNALS:
@@ -68,20 +101,9 @@ public Q_SLOTS:
     void downloadAllPmids();
 
 private:
-    bool saveAtcClassification(DrugsDB::Internal::DrugBaseEssentials *database);
-    bool saveClassDrugInteractor(DrugInteractor *interactor, const QList<DrugInteractor *> &completeList, DrugsDB::Internal::DrugBaseEssentials *database, DrugInteractor *parent);
-    bool saveDrugDrugInteractions(DrugsDB::Internal::DrugBaseEssentials *database, const QList<DrugInteractor *> &interactors, const QList<DrugDrugInteraction *> &ddis);
-    bool saveBibliographicReferences(DrugsDB::Internal::DrugBaseEssentials *database);
-
-
-private:
-    static DrugDrugInteractionCore *m_Instance;
-    mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
-    mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
-    QMultiMap<int, QString> m_iamTreePmids; //K=IAM_ID  ;  V=PMIDs
-    QMultiMap<int, QString> m_ddiPmids;     //K=IAK_ID  ;  V=PMIDs
+    Internal::DrugDrugInteractionCorePrivate *d;
 };
 
-}  // End namespace IAMDb
+}  // End namespace DrugsDB
 
 #endif // DRUGDRUGINTERACTIONCORE_H

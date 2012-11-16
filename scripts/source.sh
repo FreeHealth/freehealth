@@ -75,17 +75,18 @@ prepareFileSelection()
 echo "**** PREPARE SOURCES PACKAGE ****"
 
 SCRIPT_SOURCE="\
-scripts/mac*sh \
-scripts/release_dmg.sh \
+scripts/mac/*.sh \
+scripts/Linux/* \
 scripts/source.sh \
-scripts/win_release.bat \
-scripts/Linux \
+scripts/win/* \
+scripts/debug/* \
 "
 
 RESOURCES="\
 global_resources/datapacks/appinstalled/defaultservers.txt \
 global_resources/datapacks/appinstalled/drugs/master.db \
 global_resources/datapacks/appinstalled/drugs/readme.txt \
+global_resources/datapacks/appinstalled/account/readme.txt \
 global_resources/doc/freeaccount \
 global_resources/doc/freediams \
 global_resources/doc/freeicd \
@@ -130,6 +131,7 @@ BUILDSPEC_SOURCES="\
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
 buildspecs/*.pri \
+buildspecs/*.in \
 doc \
 "
 
@@ -219,7 +221,7 @@ tar -cf $PACKPATH/sources.tar \
 --exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
 --exclude '*.tgz' --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
---exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
+--exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \
 --exclude 'global_resources/databases' \
 --exclude 'sources.tar' \
 $EXCLUSIONS \
@@ -287,7 +289,7 @@ rm -R $PACKPATH
 
 PWD=`pwd`
 
-echo "*** Source package successfully created at"
+echo "*** Source package successfully created at `pwd`./freemedforms-$PROJECT_VERSION"
 }
 
 # params:

@@ -32,15 +32,17 @@
 #include "countries/fdadrugsdatabasecreator.h"
 #include "countries/canadiandrugsdatabase.h"
 #include "countries/belgishdrugsdatabase.h"
-//#include "countries/southafricandrugsdatabase.h"
+#include "countries/southafricandrugsdatabase.h"
 //#include "countries/portuguesedrugsdatabase.h"
 
 #include "ddi/drugdruginteractioncore.h"
 #include "ddi/afssapsintegrator.h"
 #include "ddi/interactioneditorpage.h"
 #include "ddi/interactoreditorpage.h"
-
 //#include "ddi/cytochromep450interactionspage.h"
+
+#include "pim/pimdatabasecreator.h"
+#include "pim/pimintegrator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <drugsdb/tools.h>
@@ -95,20 +97,22 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new FreeBeDrugsDatabasePage(this));
     addAutoReleasedObject(new NonFreeBeDrugsDatabasePage(this));
 
-//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
-//    addAutoReleasedObject(new PtDrugsDatabasePage(this));
+    addAutoReleasedObject(new FreeSouthAfricanDrugsDatabasePage(this));
+    addAutoReleasedObject(new NonFreeSouthAfricanDrugsDatabasePage(this));
+
+//    addAutoReleasedObject(new FreePtDrugsDatabasePage(this));
+//    addAutoReleasedObject(new NonFreePtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));
-
 //    addAutoReleasedObject(new AtcPage(this));
 
-    // Create the core object
-    IAMDb::DrugDrugInteractionCore::instance();
+//    addAutoReleasedObject(new PimDatabasePage(this));
+    addAutoReleasedObject(new PimsTreePage(this));
 
 //    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
-    addAutoReleasedObject(new IAMDb::InteractionEditorPage(this));
-    addAutoReleasedObject(new IAMDb::InteractorEditorPage(this));
+    addAutoReleasedObject(new DrugsDB::InteractionEditorPage(this));
+    addAutoReleasedObject(new DrugsDB::InteractorEditorPage(this));
 //    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 
     // add plugin info page
@@ -121,6 +125,21 @@ void DrugsDbPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag DrugsDbPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+
+    // Here you still have a full access to
+    //   Core::ICore::instance()
+    // And all its objects (user(), patient(), settings(), theme()...).
+
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(DrugsDbPlugin)

@@ -70,13 +70,14 @@ showHelp()
   echo " -b  Bundle name (optionnal)"
   echo " -j  jobs for the make process (see also make -j jobs)"
   echo " -s  Build from source package (you need to create the source package)"
-  echo " -p  extra-plugins config (eg='with-pad with-alert with-webcam')"
+  echo " -p  extra-plugins config (eg='with-pad with-alerts with-webcam')"
   echo " -h  show this help"
   echo "Win32 port can be build under Linux using crosscompilation"
 }
 
 buildFromSourcePackage()
 {
+  echo $START_COLOR"*** Building from source package"$END_COLOR
   SOURCE_PACKAGE=$SOURCES_PATH"freemedformsfullsources-"$VERSION".tgz"
   # test source package
   if [ ! -e $SOURCE_PACKAGE ] ; then
@@ -88,9 +89,11 @@ buildFromSourcePackage()
 #    rm -Rf $SOURCES_PATH
 #  fi
   TO=$SCRIPT_PATH
+  echo "   * Using archive: $SOURCE_PACKAGE"
   tar xzf $SOURCE_PACKAGE -C $TO
   PACKAGES_PATH=$SOURCES_PATH"/packages/"
-  PROJECT_FILE=$SOURCES_PATH$PROJECT.pro;
+  PROJECT_FILE=$SOURCES_PATH/$PROJECT.pro;
+  echo "   * Using project file: $PROJECT_FILE"
 }
 
 buildTranslations()
@@ -103,7 +106,7 @@ buildTranslations()
     echo "   *** Error: lrelease step wrong ***"
     exit 123
   else
-    echo "   *** Translations created"
+    echo "   * Translations created"
   fi
 }
 
@@ -137,7 +140,7 @@ buildApp()
   else
       QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release CONFIG-=debug"
   fi
-  echo "   --> $QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC"
+  echo "   * $QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC"
 
    MAKE_STEP=`$QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC`
    MAKE_STEP=$?
@@ -145,7 +148,7 @@ buildApp()
      echo "   *** Error: qmake step wrong ***"
      exit 123
    else
-     echo "   *** QMake done"
+     echo "   * QMake done"
    fi
 
    echo $START_COLOR"   --> make -j $MAKE_JOBS"$END_COLOR
@@ -155,7 +158,7 @@ buildApp()
      echo "   *** Error: make step wrong ***"
      exit 123
    else
-     echo "   *** Make done"
+     echo "   * Make done"
    fi
 
    echo $START_COLOR"   --> make install"$END_COLOR
@@ -165,7 +168,7 @@ buildApp()
      echo "   *** Error: install step wrong ***"
      exit 123
    else
-     echo "   *** Make Install done"
+     echo "   * Make Install done"
    fi
 }
 
@@ -176,16 +179,16 @@ linkQtLibs()
    cd $PACKAGES_PATH/mac/$BUNDLE_NAME
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
-     echo "*** Error: Installation not found ***"
+     echo "   *** Error: Installation not found ***"
      exit 123
    else
-     echo "moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
+     echo "   * moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
    fi
 
    MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
-   echo "*** Error: Deployement step wrong ***"
+   echo "   *** Error: Deployement step wrong ***"
    exit 123
    fi
 }
@@ -253,7 +256,7 @@ createDmg()
    MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH -v $VERSION`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
-     echo "*** Error: DMG creation step wrong ***"
+     echo "   * Error: DMG creation step wrong *"
      exit 123
    fi
 
@@ -294,10 +297,11 @@ if [ ! -e $PACKAGES_PATH ] ; then
     mkdir $PACKAGES_PATH
 fi
 
-echo $START_COLOR"*** Creating package for $BUNDLE_NAME $VERSION"$END_COLOR
+echo $START_COLOR"*** Creating package for $BUNDLE_NAME $VERSION"
 echo "      * project file $PROJECT_FILE"
 echo "      * from source path $SOURCES_PATH"
 echo "      * to package path $PACKAGES_PATH"
+echo $END_COLOR
 
 buildTranslations
 

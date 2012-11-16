@@ -30,6 +30,8 @@
 
 #include "idrugdatabasestepwidget.h"
 #include "idrugdatabasestep.h"
+#include <drugsdb/ddi/drugdruginteractioncore.h>
+#include <drugsdb/drugsdbcore.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -49,6 +51,8 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
+static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::instance();}
+static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return drugsDbCore()->ddiCore();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -139,12 +143,39 @@ void IDrugDatabaseStepWidget::on_startJobs_clicked()
         if (d->_step->populateDatabase())
             d->ui->populate->setText(d->ui->populate->text() + " CORRECTLY DONE");
     }
+
+    // Non-free part
+    if (!d->_step->createDatabase()) {
+        LOG_ERROR("Unable to create/connect drug database");
+        d->_progress->setRange(0, 1);
+        d->_progress->setValue(1);
+        return;
+    }
+    if (d->ui->addAtc->isChecked()) {
+        if (d->_step->addAtc())
+            d->ui->linkMols->setText(d->ui->linkMols->text() + " CORRECTLY DONE");
+    }
     if (d->ui->linkMols->isChecked()) {
         if (d->_step->linkMolecules())
             d->ui->linkMols->setText(d->ui->linkMols->text() + " CORRECTLY DONE");
     }
+    if (d->ui->addDDI->isChecked()) {
+        if (d->_step->addDrugDrugInteractions())
+            d->ui->addDDI->setText(d->ui->addDDI->text() + " CORRECTLY DONE");
+    }
+    if (d->ui->addPims->isChecked()) {
+        if (d->_step->addPims())
+            d->ui->addPims->setText(d->ui->addPims->text() + " CORRECTLY DONE");
+    }
+    if (d->ui->addPreg->isChecked()) {
+        if (d->_step->addPregnancyCheckingData())
+            d->ui->addPreg->setText(d->ui->addPreg->text() + " CORRECTLY DONE");
+    }
     Utils::Log::messagesToTreeWidget(d->ui->messages);
     Utils::Log::errorsToTreeWidget(d->ui->errors);
+
+    d->_progress->setRange(0, 1);
+    d->_progress->setValue(1);
 }
 
 bool IDrugDatabaseStepWidget::on_download_clicked()
@@ -166,4 +197,47 @@ void IDrugDatabaseStepWidget::changeStepProgressRange(qint64 min, qint64 max)
 {
     if (d->_step && d->_progress)
         d->_progress->setRange(min, max);
+}
+
+void IDrugDatabaseStepWidget::showEvent(QShowEvent *event)
+{
+    if (d->_step->licenseType() == IDrugDatabaseStep::Free) {
+        d->ui->addAtc->setChecked(false);
+        d->ui->linkMols->setChecked(false);
+        d->ui->addDDI->setChecked(false);
+        d->ui->addPims->setChecked(false);
+        d->ui->addPreg->setChecked(false);
+
+        d->ui->addAtc->setEnabled(false);
+        d->ui->linkMols->setEnabled(false);
+        d->ui->addDDI->setEnabled(false);
+        d->ui->addPims->setEnabled(false);
+        d->ui->addPreg->setEnabled(false);
+        QWidget::showEvent(event);
+        return;
+    }
+    // check the possibilities of the ddiCore
+    bool atc = ddiCore()->canAddAtc();
+    if (!atc) {
+        d->ui->addAtc->setChecked(false);
+        d->ui->linkMols->setChecked(false);
+    }
+    d->ui->addAtc->setEnabled(atc);
+    d->ui->linkMols->setEnabled(atc);
+
+    bool ddi = ddiCore()->canAddDrugDrugInteractions();
+    if (!ddi)
+        d->ui->addDDI->setChecked(false);
+    d->ui->addDDI->setEnabled(ddi);
+
+    bool pim = ddiCore()->canAddPims();
+    if (!pim)
+        d->ui->addPims->setChecked(false);
+    d->ui->addPims->setEnabled(pim);
+
+    bool preg = ddiCore()->canAddPregnancyChecking();
+    if (!preg)
+        d->ui->addPreg->setChecked(false);
+    d->ui->addPreg->setEnabled(preg);
+    QWidget::showEvent(event);
 }

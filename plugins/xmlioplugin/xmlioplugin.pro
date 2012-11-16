@@ -8,7 +8,9 @@ QT *= xml sql
 BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
-include( xmlioplugin_dependencies.pri )
+include(xmlioplugin_dependencies.pri)
+
+# manage the alert dependency in the pluginspec with QMAKE_SUBSTITUTES??
 
 HEADERS = xmlioplugin.h \
     xmlio_exporter.h \

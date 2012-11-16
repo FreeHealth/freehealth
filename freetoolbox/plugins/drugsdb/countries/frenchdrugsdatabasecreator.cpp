@@ -162,14 +162,17 @@ FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
                 .arg("/FrenchRawSources/"));
     setConnectionName("fr_free");
     setOutputPath(Tools::databaseOutputPath() + "/drugs/");
-//    setFinalizationScript(QString("%1/%2")
-//                          .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-//                          .arg("/global_resources/sql/drugdb/fr/fr_db_finalize.sql"));
-    setDescriptionFile(QString("%1/%2")
-                       .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
-                       .arg("/global_resources/sql/drugdb/fr/description.xml"));
+    setDatabaseDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DRUG_DATABASE_DESCRIPTION_FILES)
+                               .arg("fr/description.xml"));
+    setDatapackDescriptionFile(QString("%1/%2/%3")
+                               .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                               .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                               .arg("drugs/fr_noddi/packdescription.xml"));
     setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
     setLicenseType(Free);
+    createDir();
 }
 
 FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
@@ -182,16 +185,18 @@ void FrDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free French drugs database"));
         setConnectionName("fr_nonfree");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/fr_ddi/packdescription.xml"));
     } else {
         setDisplayName(tr("Free French drugs database"));
         setConnectionName("fr_free");
+        setDatapackDescriptionFile(QString("%1/%2/%3")
+                                   .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                                   .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
+                                   .arg("drugs/fr_noddi/packdescription.xml"));
     }
-}
-
-bool FrDrugDatatabaseStep::cleanFiles()
-{
-    QFile(absoluteFilePath()).remove();
-    return true;
 }
 
 QString FrDrugDatatabaseStep::processMessage() const
