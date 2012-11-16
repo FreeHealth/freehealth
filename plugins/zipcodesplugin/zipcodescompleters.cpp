@@ -110,6 +110,7 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/** Return all available countries included in the zipcode database */
 bool ZipCountryModel::countryAvailable(const QLocale::Country country) const
 {
     if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
@@ -129,6 +130,7 @@ bool ZipCountryModel::countryAvailable(const QLocale::Country country) const
     return false;
 }
 
+/** Return true if the zipcode \e zip and the \e city name correspond */
 bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) const
 {
     if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
@@ -148,6 +150,7 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
     return false;
 }
 
+/** Filter the model with the \e city */
 void ZipCountryModel::setCityFilter(const QString &city)
 {
     if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
@@ -166,6 +169,7 @@ void ZipCountryModel::setCityFilter(const QString &city)
     }
 }
 
+/** Filter with the zipcode \e zipCode */
 void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 {
     if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
@@ -184,6 +188,7 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
     }
 }
 
+/** Filter with the country iso code (two letters) \e countryIso */
 void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
 {
     m_countryIso = countryIso.toLower();
