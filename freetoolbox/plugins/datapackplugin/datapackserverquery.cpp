@@ -30,10 +30,12 @@
 
 using namespace DataPackPlugin;
 
+/** Create an empty object */
 DataPackServerQuery::DataPackServerQuery()
 {
 }
 
+/** Test validity of the object (return false if object is not valid) */
 bool DataPackServerQuery::isValid() const
 {
     if (_internalUid.isEmpty())
@@ -63,6 +65,7 @@ bool DataPackServerQuery::isValid() const
 //    _dataPackQueries << query;
 //}
 
+/** Create needed dirs */
 bool DataPackServerQuery::createDirs() const
 {
     if (!Utils::checkDir(_absPathServer, true, "DataPackServerQuery::ServerRootPath"))
