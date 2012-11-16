@@ -1,5 +1,5 @@
 !CONFIG(debug_without_install) {
- !linux*:error(install_linux.pri should only be used when building linux configuration)
+ !linux*|!hurd*|!glibc*:error(install_linux.pri should only be used when building linux configuration)
  !CONFIG(LINUX_INTEGRATED):message(Preparing installation for Unix)
  else:message(Preparing installation for integrated Linux)
 
