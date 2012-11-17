@@ -82,7 +82,7 @@ private Q_SLOTS:
     void refreshPacks();
     void processPacks();
     void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
-    void selectedFirstRow();
+    void selectFirstRow();
 
 private:
     void retranslate();

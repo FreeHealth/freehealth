@@ -437,7 +437,7 @@ Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 }
 
 /** Return the package at row \e index */
-const Pack &PackModel::packageAt(const int index) const
+const Pack & PackModel::packageAt(const int index) const
 {
     // Manage filter
     int row = index;
