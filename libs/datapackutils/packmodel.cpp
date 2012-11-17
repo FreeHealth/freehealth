@@ -287,7 +287,7 @@ public:
 
 public:
     bool m_InstallChecking, m_PackCheckable;
-    QList<PackItem> m_Items;    // represent the non filtered model (all packages are shown)
+    QList<PackItem> m_Items;    // represents the non filtered model (all packages are shown)
     QList<Pack> m_AvailPacks;
     Pack m_InvalidPack;
     QList<int> rowToItem;       // when filtering the model, the list is populated with the item to show. If empty == not filtered
