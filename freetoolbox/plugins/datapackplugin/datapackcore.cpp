@@ -120,7 +120,7 @@ public:
     }
     
 public:
-    QMultiHash<QString, *DataPackQuery> _serverDatapacks;
+    QMultiHash<QString, DataPackQuery*> _serverDatapacks;
     QVector<DataPackServerQuery*> _servers;
 
 private:

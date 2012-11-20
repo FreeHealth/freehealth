@@ -183,7 +183,7 @@ public:
         qSort(m_ItemsList.begin(), m_ItemsList.end(), AtcItem::lessThan);
 
         QList<AtcItem *> three, four, five, six;
-        // AtcItem *last = 0;
+        AtcItem *last = 0;
         AtcItem *lastOne = 0;
         AtcItem *lastThree = 0;
         AtcItem *lastFour = 0;
