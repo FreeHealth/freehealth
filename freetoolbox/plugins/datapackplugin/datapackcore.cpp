@@ -27,7 +27,8 @@
 /*!
  * \class DataPackPlugin::DataPackCore
  * Central place where user can register datapack to servers, get server content and description,
- * recreate/update server.
+ * recreate/update server. \n
+ * Servers references (DataPackPlugin::DataPackServerQuery) are created internally.
  */
 
 #include "datapackcore.h"
