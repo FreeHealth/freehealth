@@ -39,6 +39,8 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QCache>
 #include <QString>
@@ -245,6 +247,16 @@ QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize
         LOG_ERROR(QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName));
     }
     return QPixmap();
+}
+
+QPixmap ThemePrivate::defaultGenderPixmap(int gender, const ITheme::IconSize size)
+{
+    switch (gender) {
+    case 0:  return QPixmap(iconFullPath(Core::Constants::ICONMALE, size));
+    case 1:  return QPixmap(iconFullPath(Core::Constants::ICONFEMALE, size));
+    case 2:  return QPixmap(iconFullPath(Core::Constants::ICONHERMAPHRODISM , size));
+    default: return QPixmap();
+    }
 }
 
 void ThemePrivate::createSplashScreen(const QString &fileName)

@@ -226,7 +226,7 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     connect(d->ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
     connect(d->ui->serverListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
 
-    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectedFirstRow()));
+    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectFirstRow()));
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 }
 
@@ -577,7 +577,7 @@ void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIn
     populateServerView(c.row());
 }
 
-void ServerPackEditor::selectedFirstRow()
+void ServerPackEditor::selectFirstRow()
 {
     d->ui->packCategoriesView->setCurrentIndex(d->m_PackCategoriesModel->index(0,0));
     d->ui->packCategoriesView->selectionModel()->select(d->m_PackCategoriesModel->index(0,0), QItemSelectionModel::SelectCurrent);

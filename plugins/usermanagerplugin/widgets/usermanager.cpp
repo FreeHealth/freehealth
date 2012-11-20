@@ -218,20 +218,30 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     m_SearchBy = Core::IUser::Name;
     aCreateUser = new QAction(this);
     aCreateUser->setObjectName(QString::fromUtf8("aCreateUser"));
+
     aModifyUser = new QAction(this);
     aModifyUser->setObjectName(QString::fromUtf8("aModifyUser"));
+    aModifyUser->setEnabled(false);
+
     aSave = new QAction(this);
     aSave->setObjectName(QString::fromUtf8("aSave"));
+    aSave->setEnabled(false);
+
     aRevert = new QAction(this);
     aRevert->setObjectName(QString::fromUtf8("aRevert"));
+    aRevert->setEnabled(false);
+
     aDeleteUser = new QAction(this);
     aDeleteUser->setObjectName(QString::fromUtf8("aDeleteUser"));
+    aDeleteUser->setEnabled(false);
+
     aQuit = new QAction(this);
     aQuit->setObjectName(QString::fromUtf8("aQuit"));
+
     aToggleSearchView = new QAction(this);
+    aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
     aToggleSearchView->setCheckable(true);
     aToggleSearchView->setChecked(true);
-    aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
 
     // prepare Search Line Edit
     searchByNameAct = new QAction(this);
@@ -321,6 +331,8 @@ bool UserManagerWidget::initialize()
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
 
+    analyseCurrentUserRights();
+
     return true;
 }
 
@@ -361,11 +373,7 @@ void UserManagerWidget::analyseCurrentUserRights()
     m_CanViewAllUsers = (r & Core::IUser::ReadAll);
     m_CanDelete = (r & Core::IUser::Delete);
 
-    // manage ui <-> rights
-    aToggleSearchView->setEnabled(m_CanViewAllUsers);
-    aCreateUser->setEnabled(m_CanCreate);
-    aModifyUser->setEnabled(m_CanModify);
-    aDeleteUser->setEnabled(m_CanDelete);
+    updateButtons();
 
     // manage specific creation widgets
     ui->userTableView->setVisible(m_CanViewAllUsers);
@@ -469,6 +477,7 @@ void UserManagerWidget::onDeleteUserRequested()
         LOG(tr("User can not be deleted"));
     }
     selectUserTableView(UserModel::instance()->currentUserIndex().row());
+    updateButtons();
 }
 
 void UserManagerWidget::toggleSearchView(bool checked)
@@ -484,6 +493,23 @@ void UserManagerWidget::onUserClicked(const QModelIndex &index)
 {
     ui->userViewer->changeUserTo(index.row());
     ui->userViewer->setEnabled(true);
+    updateButtons();
+}
+
+void UserManagerWidget::updateButtons()
+{
+    const bool enabled = ui->userTableView->currentIndex().isValid();
+
+    // set enabled states of buttons according to selected user and rights
+    aToggleSearchView->setEnabled(m_CanViewAllUsers);
+    aCreateUser->setEnabled(m_CanCreate);
+
+    aSave->setEnabled(enabled && m_CanModify);
+    aDeleteUser->setEnabled(enabled && m_CanDelete);
+    aModifyUser->setEnabled(enabled && m_CanModify);
+
+    //TODO: set this right! just when modified!
+    aRevert->setEnabled(enabled);
 }
 
 void UserManagerWidget::selectUserTableView(int row)

@@ -121,14 +121,14 @@ static QString packTooltip(const PackItem &item)
 {
     const PackDescription &descr = item.pack.description();
     return QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
-                      "<p style=\"font-size:small;margin-left:20px;color:gray\">"
-                      "%2: %3<br />"
-                      "%4: %5<br />"
-                      "%6: %7<br />"
-                      "%8: %9<br />"
-                      "%10: %11"
-                      "</p>"
-                       )
+                   "<p style=\"font-size:small;margin-left:20px;color:gray\">"
+                   "%2: %3<br />"
+                   "%4: %5<br />"
+                   "%6: %7<br />"
+                   "%8: %9<br />"
+                   "%10: %11"
+                   "</p>"
+                   )
             .arg(descr.data(PackDescription::Label).toString().replace(" ","&nbsp;"))
             .arg(tkTr(Trans::Constants::VERSION))
             .arg(descr.data(PackDescription::Version).toString())
@@ -168,16 +168,16 @@ public:
     // Get all packs available from a server (avoid duplicates) : populate m_AvailPacks list
     void scanServerPack(const int index)
     {
-//        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
+        //        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
         foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
-//            qWarning() << "   ?? " << p.uuid() << p.version();
+            //            qWarning() << "   ?? " << p.uuid() << p.version();
             // Add to the package list if not already included
             if (!p.isValid())
                 continue;
-//            qWarning() << "   valid " << p.uuid() << p.version();
+            //            qWarning() << "   valid " << p.uuid() << p.version();
             if (m_AvailPacks.contains(p))
                 continue;
-//            qWarning() << "   adding" << p.uuid() << p.version();
+            //            qWarning() << "   adding" << p.uuid() << p.version();
             m_AvailPacks << p;
         }
     }
@@ -192,7 +192,7 @@ public:
             if (p.uuid() == packUuid) {
                 // keep only highest version
                 Utils::VersionNumber testing(p.version());
-//                qWarning() << "testing version" << packUuid << testing << highest;
+                //                qWarning() << "testing version" << packUuid << testing << highest;
                 if (testing > highest) {
                     highest = testing;
                     id = i;
@@ -243,8 +243,8 @@ public:
             processed << p.uuid();
         }
 
-//        qWarning() << idInUse;
-//        qWarning() << m_AvailPacks;
+        //        qWarning() << idInUse;
+        //        qWarning() << m_AvailPacks;
 
         // Create PackItem list
         foreach(int id, idInUse) {
@@ -287,7 +287,7 @@ public:
 
 public:
     bool m_InstallChecking, m_PackCheckable;
-    QList<PackItem> m_Items;    // represent the non filtered model (all packages are shown)
+    QList<PackItem> m_Items;    // represents the non filtered model (all packages are shown)
     QList<Pack> m_AvailPacks;
     Pack m_InvalidPack;
     QList<int> rowToItem;       // when filtering the model, the list is populated with the item to show. If empty == not filtered
@@ -304,7 +304,7 @@ PackModel::PackModel(QObject *parent) :
 {
     setObjectName("DataPack::PackModel");
     d->createPackItem();
-//    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
+    //    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
     connect(serverManager(), SIGNAL(serverAboutToBeRemoved(int)), this, SLOT(onServerRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));
 }
@@ -370,17 +370,17 @@ QVariant PackModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= d->m_Items.count())
         return QVariant();
 
-    if (role==Qt::DisplayRole) {
+    if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case Label: return packToHtml(d->m_Items.at(row));
         case IsInstalled: return d->m_Items.at(row).isInstalled;
         case IsAnUpdate: return d->m_Items.at(row).isAnUpdate;
         }
-    } else if (role==Qt::ToolTipRole && index.column()==Label) {
+    } else if (role == Qt::ToolTipRole && index.column()==Label) {
         return packTooltip(d->m_Items.at(row));
     } else if (d->m_PackCheckable && role==Qt::CheckStateRole) {
         return d->m_Items.at(row).userCheckState;
-    } else if (role==Qt::DecorationRole) {
+    } else if (role == Qt::DecorationRole) {
         QString iconFileName = d->m_Items.at(row).pack.description().data(PackDescription::GeneralIcon).toString();
         if (iconFileName.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH))
             iconFileName = iconFileName.remove(Core::Constants::TAG_APPLICATION_THEME_PATH);
@@ -411,7 +411,7 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
             d->m_Items[row].userCheckState = Qt::CheckState(value.toInt());
         }
 
-//        Q_EMIT packStatusChanged(d->m_Items[index.row()].pack, save, d->m_Items[index.row()].userCheckState);
+        //        Q_EMIT packStatusChanged(d->m_Items[index.row()].pack, save, d->m_Items[index.row()].userCheckState);
         Q_EMIT dataChanged(index, index);
         return true;
     }
@@ -437,7 +437,7 @@ Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 }
 
 /** Return the package at row \e index */
-const Pack &PackModel::packageAt(const int index) const
+const Pack & PackModel::packageAt(const int index) const
 {
     // Manage filter
     int row = index;

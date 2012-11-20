@@ -75,6 +75,7 @@ private:
     void selectUserTableView(int row);
     void changeEvent(QEvent *e);
     void retranslate();
+    void updateButtons();
 
 Q_SIGNALS:
     void closeRequested();

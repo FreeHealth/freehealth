@@ -26,10 +26,12 @@
  ***************************************************************************/
 /**
  * \class Patients::PatientBar
- * \brief The Patient bar is the bar surrounding all view when a patient is selected.
+ * \brief The Patient bar is the bar on the top of all views if a patient is selected.
+ *
+ * If no patient is selected, the PatientBar is hidden.
  * It contains:
- * - a brief resume of the patient's identity
- * - a bottom place holder to add various widget (like alert place holders)
+ * - a brief resumé of the patient's identity
+ * - a place holder at the bottom to add various widgets (like alert place holders)
  * - a specific place where PatientsActions are presented (not yet implemented)
  * The whole application owns a unique instance of the patient bar. This singleton is accessible
  * throught the Core::IPatient interface.
@@ -111,18 +113,8 @@ public:
         QModelIndex photoIndex = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::Photo_64x64);
         QPixmap photo = m_Model->data(photoIndex).value<QPixmap>();
         if (photo.isNull()) {
-            int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
-            switch (gender) {
-            case 0: // Male
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-                break;
-            case 1: // Female
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-                break;
-            case 2: // Herma
-                photo = QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
-                break;
-            }
+            const int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
+            photo = theme()->defaultGenderPixmap(gender);
         }
         ui->photo->setPixmap(photo);
     }

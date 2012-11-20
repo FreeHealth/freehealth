@@ -83,16 +83,10 @@ public:
         m_EmitCreationAtSubmit(false),
         q(parent)
     {
-        _defaultMalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-        _defaultFemalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-        _defaultHermaphrodismPhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM, Core::ITheme::BigIcon));
     }
 
     ~PatientModelPrivate ()
     {
-        delete _defaultMalePhoto;
-        delete _defaultFemalePhoto;
-        delete _defaultHermaphrodismPhoto;
         if (m_SqlPatient) {
             delete m_SqlPatient;
             m_SqlPatient = 0;
@@ -238,14 +232,13 @@ public:
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
     bool m_EmitCreationAtSubmit;
-    QPixmap *_defaultMalePhoto, *_defaultFemalePhoto, *_defaultHermaphrodismPhoto;
 
 private:
     PatientModel *q;
-
 };
-}
-}
+
+} // end namespace Internal
+} // end namespace Patients
 
 PatientModel *PatientModel::m_ActiveModel = 0;
 
@@ -379,7 +372,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
         case IPatient::GenderIndex:
             {
-            //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
+            // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
                     return 0;

@@ -119,13 +119,9 @@ void PixmapButton::setGenderImage(int genderIndex)
     if (m_pixmap.isNull()) {
         // if null, set default gendered icon
         QIcon icon;
-        switch (genderIndex) {
         //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
-        case 0:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon))); break;
-        case 1:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon))); break;
-        case 2:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon))); break;
-        default: icon = QIcon();
-        }
+        icon = theme()->defaultGenderPixmap(genderIndex);
+
         //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
         setPixmap(QPixmap());
         setIcon(icon);

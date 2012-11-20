@@ -59,6 +59,9 @@ public:
 
     bool validatePage();
 
+protected Q_SLOTS:
+    void toggleAgendaEditing(bool state);
+
 private:
     void retranslate();
     void changeEvent(QEvent *event);

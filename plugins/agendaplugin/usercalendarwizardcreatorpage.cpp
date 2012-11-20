@@ -102,7 +102,8 @@ UserCalendarWizardPage::UserCalendarWizardPage(QWidget *parent) :
     ui(new Ui::UserCalendarWizardCreatorWidget)
 {
   ui->setupUi(this);
-  ui->useAgenda->setChecked(false);
+  ui->createAgenda->setChecked(false);
+  connect(ui->createAgenda, SIGNAL(clicked(bool)), this, SLOT(toggleAgendaEditing(bool)));
   retranslate();
 }
 
@@ -124,7 +125,7 @@ UserCalendar *UserCalendarWizardPage::getUserCalendar(const QString &userUid)
 
 bool UserCalendarWizardPage::validatePage()
 {
-    if (ui->useAgenda->isChecked()) {
+    if (ui->createAgenda->isChecked()) {
         QStringList msg;
         if (ui->calendarLabel->text().simplified().isEmpty()) {
             msg << tr("Please specify a label for this agenda.");
@@ -152,5 +153,11 @@ void UserCalendarWizardPage::changeEvent(QEvent *event)
     if (event->type()==QEvent::LanguageChange) {
         retranslate();
     }
+}
+
+void UserCalendarWizardPage::toggleAgendaEditing(bool state)
+{
+    if (state)
+        ui->calendarLabel->setFocus();
 }
 
