@@ -31,6 +31,13 @@
 #include <datapackplugin/datapackquery.h>
 #include <QList>
 
+/**
+ * \file datapackserverquery.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 20 Nov 2012
+*/
+
 namespace DataPackPlugin {
 
 class DATAPACK_PLUGIN_EXPORT DataPackServerQuery
@@ -39,24 +46,27 @@ public:
     DataPackServerQuery();
     bool isValid() const;
 
+    void setServerInternalUuid(const QString &uid) {_internalUid = uid;}
+    const QString &serverInternalUuid() const {return _internalUid;}
+
     void setOriginalDescriptionFileAbsolutePath(const QString &absPath) {_descrAbsPath = absPath;}
     const QString &originalDescriptionFileAbsolutePath() const {return _descrAbsPath;}
 
     void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
     const QString &outputServerAbsolutePath() const {return _absPathServer;}
 
-    void setDataPackQueries(const QList<DataPackQuery> &queries);
-    void addDataPackQueries(const QList<DataPackQuery> &queries);
-    void addDataPackQuery(const DataPackQuery &query);
+//    void setDataPackQueries(const QList<DataPackQuery> &queries);
+//    void addDataPackQueries(const QList<DataPackQuery> &queries);
+//    void addDataPackQuery(const DataPackQuery &query);
 
-    const QList<DataPackQuery> &dataPackQueries() const {return _dataPackQueries;}
+//    const QList<DataPackQuery> &dataPackQueries() const {return _dataPackQueries;}
 
 private:
     bool createDirs() const;
 
 private:
-    QString _descrAbsPath, _absPathServer;
-    QList<DataPackQuery> _dataPackQueries;
+    QString _internalUid, _descrAbsPath, _absPathServer;
+//    QList<DataPackQuery> _dataPackQueries;
 };
 
 } // namespace DataPackPlugin

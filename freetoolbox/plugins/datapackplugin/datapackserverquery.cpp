@@ -36,29 +36,32 @@ DataPackServerQuery::DataPackServerQuery()
 
 bool DataPackServerQuery::isValid() const
 {
+    if (_internalUid.isEmpty())
+        return false;
+
     if (_absPathServer.isEmpty())
         return false;
-    foreach(const DataPackQuery &query, _dataPackQueries) {
-        if (!query.isValid())
-            return false;
-    }
+//    foreach(const DataPackQuery &query, _dataPackQueries) {
+//        if (!query.isValid())
+//            return false;
+//    }
     return true;
 }
 
-void DataPackServerQuery::setDataPackQueries(const QList<DataPackQuery> &queries)
-{
-    _dataPackQueries = queries;
-}
+//void DataPackServerQuery::setDataPackQueries(const QList<DataPackQuery> &queries)
+//{
+//    _dataPackQueries = queries;
+//}
 
-void DataPackServerQuery::addDataPackQueries(const QList<DataPackQuery> &queries)
-{
-    _dataPackQueries << queries;
-}
+//void DataPackServerQuery::addDataPackQueries(const QList<DataPackQuery> &queries)
+//{
+//    _dataPackQueries << queries;
+//}
 
-void DataPackServerQuery::addDataPackQuery(const DataPackQuery &query)
-{
-    _dataPackQueries << query;
-}
+//void DataPackServerQuery::addDataPackQuery(const DataPackQuery &query)
+//{
+//    _dataPackQueries << query;
+//}
 
 bool DataPackServerQuery::createDirs() const
 {
@@ -66,7 +69,7 @@ bool DataPackServerQuery::createDirs() const
             return false;
     // Create each datapack path
 //    foreach(const DataPackQuery &query, _dataPackQueries) {
-//        if (!Utils::checkDir(_absPathServer + , true, "DataPackServerQuery::DataPack"))
+//        if (!Utils::checkDir(query. + , true, "DataPackServerQuery::DataPack"))
 //            return false;
 //    }
     return true;

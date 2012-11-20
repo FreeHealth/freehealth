@@ -30,6 +30,7 @@
 #include <datapackplugin/datapack_exporter.h>
 #include <datapackplugin/datapackquery.h>
 #include <datapackplugin/datapackresult.h>
+#include <datapackplugin/datapackserverquery.h>
 
 #include <QObject>
 
@@ -37,7 +38,7 @@
  * \file datapackcore.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 10 Nov 2012
+ * \date 20 Nov 2012
 */
 
 namespace DataPackPlugin {
@@ -62,6 +63,10 @@ public:
 public Q_SLOTS:
     bool registerDataPack(const DataPackQuery &query, const QString &serverUid);
 //    bool updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath);
+
+public:
+    QList<DataPackQuery> serverRegisteredDatapacks(const QString &serverUid) const;
+    QList<DataPackServerQuery> servers() const;
 
 private:
     Internal::DataPackCorePrivate *d;

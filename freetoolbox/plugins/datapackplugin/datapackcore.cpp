@@ -26,9 +26,15 @@
  ***************************************************************************/
 /*!
  * \class DataPackPlugin::DataPackCore
+ * Central place where user can register datapack to servers, get server content and description,
+ * recreate/update server.
  */
 
 #include "datapackcore.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/ftb_constants.h>
 
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -36,12 +42,15 @@
 #include <datapackutils/serverdescription.h>
 
 #include <QFile>
+#include <QDir>
 
 #include <QDebug>
 
 using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 DataPackCore *DataPackCore::_instance = 0;
 
@@ -57,11 +66,61 @@ public:
     
     ~DataPackCorePrivate()
     {
+        qDeleteAll(_serverDatapacks);
+        qDeleteAll(_servers);
+    }
+
+    // Return the server output path
+    QString serverOutputAbsPath()
+    {
+        return QDir::cleanPath(settings()->value(Core::Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString());
+    }
+
+    // Return the path to the description files (inside global_resources)
+    QString serverDescriptionFileAbsPath()
+    {
+        return QString("%1/%2/servers")
+                .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
+                .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES);
+    }
+
+    bool createServers()
+    {
+        if (_servers.count() > 0)
+            return true;
+
+        DataPackServerQuery *freeCommunityServer = new DataPackServerQuery;
+        DataPackServerQuery *nonFreeCommunityServer = new DataPackServerQuery;
+        DataPackServerQuery *freeFrenchAssoServer = new DataPackServerQuery;
+        DataPackServerQuery *nonFreeFrenchAssoServer = new DataPackServerQuery;
+
+        freeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_FREE);
+        freeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/freecommunity/server.conf");
+        freeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/freecommunity");
+
+        nonFreeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_NONFREE);
+        nonFreeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfreecommunity/server.conf");
+        nonFreeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfreecommunity");
+
+        freeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_FREE);
+        freeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/freeasso/server.conf");
+        freeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/freeasso");
+
+        nonFreeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_NONFREE);
+        nonFreeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfreeasso/server.conf");
+        nonFreeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfreeasso");
+
+        _servers.append(freeCommunityServer);
+        _servers.append(nonFreeCommunityServer);
+        _servers.append(freeFrenchAssoServer);
+        _servers.append(nonFreeFrenchAssoServer);
+
+        return true;
     }
     
 public:
-    QMultiHash<QString, DataPackQuery> _serverDatapacks;
-
+    QMultiHash<QString, *DataPackQuery> _serverDatapacks;
+    QVector<DataPackServerQuery*> _servers;
 
 private:
     DataPackCore *q;
@@ -99,37 +158,39 @@ bool DataPackCore::initialize()
 bool DataPackCore::registerDataPack(const DataPackQuery &query, const QString &serverUid)
 {
     // avoid duplicates
-    const QList<DataPackQuery> &queries = d->_serverDatapacks.values(serverUid);
-    foreach(const DataPackQuery &serverQuery, queries) {
-        if (serverQuery==query)
+    const QList<DataPackQuery*> &queries = d->_serverDatapacks.values(serverUid);
+    foreach(DataPackQuery *serverQuery, queries) {
+        if (*serverQuery==query)
             return true;
     }
 
     // add the query to the server
-    d->_serverDatapacks.insertMulti(serverUid, query);
+    DataPackQuery *newquery = new DataPackQuery(query);
+    d->_serverDatapacks.insertMulti(serverUid, newquery);
     return true;
 }
 
+/** Return all the registered datapacks for one server identified by its \e serverUid */
+QList<DataPackQuery> DataPackCore::serverRegisteredDatapacks(const QString &serverUid) const
+{
+    QList<DataPackQuery> toReturn;
+    const QList<DataPackQuery*> &queries = d->_serverDatapacks.values(serverUid);
+    foreach(DataPackQuery *serverQuery, queries)
+       toReturn << *serverQuery;
+    return toReturn;
+}
 
-///** Create a datapack structure using the DataPackPlugin::DataPackQuery */
-//DataPackResult DataPackCore::createDataPack(const DataPackQuery &query)
-//{
-//    DataPackResult result;
-//    if (!query.isValid())
-//        return result;
-//    QFile contentFile(query.originalContentFileAbsolutePath());
+/** Create all datapack server and return the list of servers */
+QList<DataPackServerQuery> DataPackCore::servers() const
+{
+    QList<DataPackServerQuery> toReturn;
+    if (!d->createServers())
+        return toReturn;
+    for(int i=0; i < d->_servers.count(); ++i)
+        toReturn << *d->_servers.at(i);
+    return toReturn;
+}
 
-//    // get and update the packdescription
-//    DataPack::PackDescription pack;
-//    pack.setSourceFileName(query.descriptionFileAbsolutePath());
-//    pack.setData(DataPack::PackDescription::AbsFileName, query.originalContentFileAbsolutePath());
-//    pack.setData(DataPack::PackDescription::Size, contentFile.size());
-//    pack.setData(DataPack::PackDescription::Md5, Utils::md5(query.originalContentFileAbsolutePath()));
-//    pack.setData(DataPack::PackDescription::Sha1, Utils::sha1(query.originalContentFileAbsolutePath()));
-//    pack.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
-//    result.setPackDescriptionXmlContent(pack.toXml());
-//    return result;
-//}
 
 //bool DataPackCore::updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath)
 //{
