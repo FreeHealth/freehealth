@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.drugs.ca.ddi</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <vendor>asso.freemedforms.com</vendor>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-21</lmdate>
+    <icon>__theme__/drugengine_ddi.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>0.7.0/drugs/ca_ddi/master.db.zip</file>
+    <unziptopath>drugs</unziptopath>
+    <size>3536</size>
+    <md5>2fdb4e12e200b7fa9a4fdf136185f497</md5>
+    <sha1></sha1>
+    <datatype>DrugsWithInteractions</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Base de données thérapeutique canadienne (avec interactions)</label>
+    <label lang="xx">Canadian pharmaceutical drug database (with interactions)</label>
+    <description lang="fr">Données thérapeutiques canadienne pour FreeMedForms (avec interactions)</description>
+    <description lang="xx">Canadian pharmaceutical data for FreeMedForms (with interactions)</description>
+
+    <htmldescription lang="fr">&lt;p>
+      La base de données thérapeutique canadienne est construite sur la base
+      des données publiées par la HCDPD. Vous y trouverez tous les médicaments
+      commercialisés au Canada.&lt;br />
+      &lt;br />
+      L'utilisation de cette base de données est soumise à une restriction de licence
+      par biais du copyright de l'AFSSAPS.&lt;br />
+      &lt;br />
+      Cette base de données permet le calcul des interactions médicamenteuses&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      The french pharmaceutical drug database is build upon HCDPD' data.
+      You will find all available and marketed drugs for Canada.&lt;br />
+      &lt;br />
+      You can use the database according to the limiting license of the data which
+      are copyrighted by the AFSSAPS.&lt;br />
+      &lt;br />
+      Data for drug interaction engines are included in this database.&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+  <PackDependencies>
+    <Dependency t="depends" n="icd10" v="0.7.0" u="icd10" />
+  </PackDependencies>
+
+</DataPack_Pack>
