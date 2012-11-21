@@ -33,7 +33,7 @@
  * \file datapackwidget.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 14 Nov 2012
+ * \date 20 Nov 2012
 */
 
 namespace DataPackPlugin {
@@ -46,9 +46,10 @@ class DataPackWidget : public QWidget
 public:
     explicit DataPackWidget(QWidget *parent = 0);
     ~DataPackWidget();
-    
     bool initialize();
-    
+
+    bool addServer(const QString &serverUid);
+
 Q_SIGNALS:
     
 public Q_SLOTS:

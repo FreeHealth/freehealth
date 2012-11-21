@@ -32,16 +32,24 @@
  */
 
 #include "datapackwidget.h"
+#include "datapackcore.h"
 
+#include <utils/widgets/detailswidget.h>
+#include <datapackutils/serverdescription.h>
 #include <translationutils/constants.h>
+
+#include <QDir>
 
 #include <QDebug>
 
 #include "ui_datapackwidget.h"
+#include "ui_serverwidget.h"
 
 using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline DataPackPlugin::DataPackCore *datapackCore() {return DataPackPlugin::DataPackCore::instance();}
 
 namespace DataPackPlugin {
 namespace Internal {
@@ -57,10 +65,12 @@ public:
     ~DataPackWidgetPrivate()
     {
         delete ui;
+        qDeleteAll(_sui);
     }
     
 public:
     Ui::DataPackWidget *ui;
+    QHash<QString, Ui::ServerWidget *> _sui;
 
 private:
     DataPackWidget *q;
@@ -84,9 +94,74 @@ DataPackWidget::~DataPackWidget()
     d = 0;
 }
 
-/*! Initializes the object with the default values. Return true if initialization was completed. */
+/*!
+ * Initializes the object with the default values: add all registered servers from the datapackcore
+ * to the view.
+ * Return true if initialization was completed.
+ */
 bool DataPackWidget::initialize()
 {
+    QList<DataPackServerQuery> servers = datapackCore()->servers();
+    foreach(const DataPackServerQuery &s, servers)
+        if (!addServer(s.serverInternalUuid()))
+            return false;
     return true;
 }
 
+/** Add a server to the view */
+bool DataPackWidget::addServer(const QString &serverUid)
+{
+    const DataPackServerQuery &server = datapackCore()->server(serverUid);
+    if (!server.isValid())
+        return false;
+
+    // Avoid duplicates
+    if (d->_sui.contains(serverUid))
+        return true;
+
+    // Create the ui
+    QWidget *w = new QWidget(this);
+    Ui::ServerWidget *sui = new Ui::ServerWidget;
+    d->_sui.insert(serverUid, sui);
+    sui->setupUi(w);
+
+    // Populate the ui with server data
+    //    add server fields
+    sui->internalUid->setText(serverUid);
+    sui->installPath->setText(QDir::cleanPath(server.outputServerAbsolutePath()));
+    //    add description fields
+    const DataPack::ServerDescription &descr = datapackCore()->serverDescription(serverUid);
+    sui->descriptionUid->setText(descr.data(DataPack::ServerDescription::Uuid).toString());
+    foreach(const QString &lang, descr.availableLanguages()) {
+        // create labels
+        QLabel *l = new QLabel(this);
+        l->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::Label, lang).toString()));
+        sui->labelsLayout->addWidget(l);
+        // create labels
+        QLabel *dc = new QLabel(this);
+        dc->setWordWrap(true);
+        dc->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
+        sui->descriptionsLayout->addWidget(dc);
+    }
+    //   add datapacks
+    QList<DataPackQuery> packs = datapackCore()->serverRegisteredDatapacks(serverUid);
+    foreach(const DataPackQuery &query, packs) {
+        QLabel *l = new QLabel(this);
+        l->setWordWrap(true);
+        l->setText(QString("%1: %2\n"
+                           "%3: %4")
+                   .arg(tr("File").arg(query.originalContentFileAbsolutePath()))
+                   .arg(tr("Description").arg(query.descriptionFileAbsolutePath()))
+                   );
+        sui->datapacksGroupLayout->addWidget(l);
+    }
+
+    // Create the detail widget
+    Utils::DetailsWidget *detail = new Utils::DetailsWidget(this);
+    detail->setSummaryText(descr.data(DataPack::ServerDescription::Label).toString());
+    detail->setWidget(w);
+    detail->setSummaryFontBold(true);
+    detail->setState(Utils::DetailsWidget::Expanded);
+    d->ui->scrollLayout->insertWidget(d->ui->scrollLayout->count() - 1, detail);
+    return true;
+}

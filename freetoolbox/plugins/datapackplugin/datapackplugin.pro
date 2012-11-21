@@ -31,4 +31,5 @@ HEADERS  += \
 OTHER_FILES += DataPackPlugin.pluginspec
 
 FORMS += \
-    datapackwidget.ui
+    datapackwidget.ui \
+    serverwidget.ui

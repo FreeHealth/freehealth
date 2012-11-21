@@ -125,7 +125,9 @@ QIcon DataPackPage::icon() const
 
 QWidget *DataPackPage::createPage(QWidget *parent)
 {
-    return new DataPackWidget(parent);
+    DataPackWidget *w = new DataPackWidget(parent);
+    w->initialize();
+    return w;
 }
 
 /** Datapack pack and server creation step CTor. */
