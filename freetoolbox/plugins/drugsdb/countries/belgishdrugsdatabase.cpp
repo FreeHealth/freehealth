@@ -181,6 +181,7 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free Belguish drugs database"));
         setConnectionName("be_nonfree");
+        setServerOwner(FrenchAssociation);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
@@ -188,6 +189,7 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
     } else {
         setDisplayName(tr("Free Belguish drugs database"));
         setConnectionName("be_free");
+        setServerOwner(Community);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)

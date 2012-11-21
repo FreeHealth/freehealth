@@ -185,6 +185,7 @@ void FrDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free French drugs database"));
         setConnectionName("fr_nonfree");
+        setServerOwner(FrenchAssociation);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
@@ -192,6 +193,7 @@ void FrDrugDatatabaseStep::setLicenseType(LicenseType type)
     } else {
         setDisplayName(tr("Free French drugs database"));
         setConnectionName("fr_free");
+        setServerOwner(Community);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
