@@ -33,14 +33,14 @@ namespace DataPackPlugin {
 DataPackQuery::DataPackQuery(const DataPackQuery &copy)
 {
     _zipContentFile = copy._zipContentFile;
-    _absPathDescription = copy._absPathContentFile;
+    _absPathDescription = copy._absPathDescription;
     _absPathContentFile = copy._absPathContentFile;
 }
 
 DataPackQuery &DataPackQuery::operator=(const DataPackQuery &copy)
 {
     _zipContentFile = copy._zipContentFile;
-    _absPathDescription = copy._absPathContentFile;
+    _absPathDescription = copy._absPathDescription;
     _absPathContentFile = copy._absPathContentFile;
     return *this;
 }
