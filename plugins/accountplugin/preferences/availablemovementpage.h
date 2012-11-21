@@ -110,10 +110,8 @@ public:
     AvailableMovementPage(QObject *parent = 0);
     ~AvailableMovementPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

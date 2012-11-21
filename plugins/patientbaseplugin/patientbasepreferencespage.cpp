@@ -57,28 +57,22 @@ PatientBasePreferencesPage::PatientBasePreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PatientBasePreferencesPage");
+    setId(objectName());
 }
 
 PatientBasePreferencesPage::~PatientBasePreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString PatientBasePreferencesPage::id() const {
-    return objectName();
-}
-
-QString PatientBasePreferencesPage::name() const {
-    return tkTr(Trans::Constants::PATIENTS);
+QString PatientBasePreferencesPage::displayName() const {
+    return tkTr(Trans::Constants::PATIENT);
 }
 
 QString PatientBasePreferencesPage::category() const {
     return tkTr(Trans::Constants::PATIENT_DATABASE);
-}
-
-QString PatientBasePreferencesPage::title() const {
-    return tr("Patient database preferences");
 }
 
 int PatientBasePreferencesPage::sortIndex() const

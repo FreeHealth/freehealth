@@ -48,18 +48,20 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 VirtualPatientBasePage::VirtualPatientBasePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("VirtualPatientBasePage"); }
+{
+    setObjectName("VirtualPatientBasePage");
+    setId(objectName());
+}
 
 VirtualPatientBasePage::~VirtualPatientBasePage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString VirtualPatientBasePage::id() const { return objectName(); }
-QString VirtualPatientBasePage::name() const { return tr("Virtual database"); }
+QString VirtualPatientBasePage::displayName() const { return tr("Virtual database"); }
 QString VirtualPatientBasePage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
-QString VirtualPatientBasePage::title() const {return tr("Virtual database");}
 int VirtualPatientBasePage::sortIndex() const
 {
     return 0;

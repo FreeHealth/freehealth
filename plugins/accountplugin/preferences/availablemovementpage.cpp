@@ -63,6 +63,7 @@ AvailableMovementPage::AvailableMovementPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("AvailableMovementPage");
+    setId(objectName());
 }
 
 AvailableMovementPage::~AvailableMovementPage()
@@ -71,8 +72,7 @@ AvailableMovementPage::~AvailableMovementPage()
     m_Widget = 0;
 }
 
-QString AvailableMovementPage::id() const { return objectName(); }
-QString AvailableMovementPage::name() const { return tkTr(Trans::Constants::AVAILABLE_MOVEMENTS); }
+QString AvailableMovementPage::displayName() const { return tkTr(Trans::Constants::AVAILABLE_MOVEMENTS); }
 QString AvailableMovementPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int AvailableMovementPage::sortIndex() const {return 30;}
 

@@ -317,8 +317,7 @@ public:
     FormMainDebugPage(FormMain *form, QObject *parent);
     ~FormMainDebugPage();
 
-    QString id() const       { return objectName();   }
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     int sortIndex() const;
 

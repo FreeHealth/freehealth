@@ -53,18 +53,18 @@ PmhPreferencesPage::PmhPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PmhPreferencesPages");
+    setId(objectName());
 }
 
 PmhPreferencesPage::~PmhPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString PmhPreferencesPage::id() const { return objectName(); }
-QString PmhPreferencesPage::name() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
+QString PmhPreferencesPage::displayName() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
 QString PmhPreferencesPage::category() const { return tkTr(Trans::Constants::PMHX); }
-QString PmhPreferencesPage::title() const {return tkTr(Trans::Constants::PMHX_PREFERENCES);}
 int PmhPreferencesPage::sortIndex() const
 {
     return 10;

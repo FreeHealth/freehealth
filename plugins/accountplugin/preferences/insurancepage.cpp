@@ -71,6 +71,7 @@ InsurancePage::InsurancePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("InsurancePage");
+    setId(objectName());
 }
 
 InsurancePage::~InsurancePage()
@@ -79,8 +80,7 @@ InsurancePage::~InsurancePage()
     m_Widget = 0;
 }
 
-QString InsurancePage::id() const { return objectName(); }
-QString InsurancePage::name() const { return tkTr(Trans::Constants::INSURANCE); }
+QString InsurancePage::displayName() const { return tkTr(Trans::Constants::INSURANCE); }
 QString InsurancePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int InsurancePage::sortIndex() const {return 60;}
 

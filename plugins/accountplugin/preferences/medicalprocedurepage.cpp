@@ -69,6 +69,7 @@ MedicalProcedurePage::MedicalProcedurePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("MedicalProcedurePage");
+    setId(objectName());
 }
 
 MedicalProcedurePage::~MedicalProcedurePage()
@@ -77,8 +78,7 @@ MedicalProcedurePage::~MedicalProcedurePage()
     m_Widget = 0;
 }
 
-QString MedicalProcedurePage::id() const { return objectName(); }
-QString MedicalProcedurePage::name() const { return tkTr(Trans::Constants::MEDICAL_PROCEDURES); }
+QString MedicalProcedurePage::displayName() const { return tkTr(Trans::Constants::MEDICAL_PROCEDURES); }
 QString MedicalProcedurePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int MedicalProcedurePage::sortIndex() const {return 70;}
 

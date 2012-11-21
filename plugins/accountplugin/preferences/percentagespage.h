@@ -101,10 +101,8 @@ public:
     PercentagesPage(QObject *parent = 0);
     ~PercentagesPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

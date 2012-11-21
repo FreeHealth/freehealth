@@ -74,10 +74,8 @@ public:
     UserCalendarPageForUserViewer(QObject *parent = 0);
     ~UserCalendarPageForUserViewer();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent);

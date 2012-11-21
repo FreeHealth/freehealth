@@ -925,6 +925,8 @@ FormMainDebugPage::FormMainDebugPage(FormMain *form, QObject *parent) :
     IDebugPage(parent), m_Form(form)
 {
     setObjectName("FormMainDebugPage_" + m_Form->uuid());
+    setId(objectName());
+
     m_Widget = new QWidget();
     QGridLayout *layout = new QGridLayout(m_Widget);
     layout->setSpacing(0);
@@ -941,7 +943,7 @@ FormMainDebugPage::~FormMainDebugPage()
         delete m_Widget;
 }
 
-QString FormMainDebugPage::name() const
+QString FormMainDebugPage::displayName() const
 { return objectName(); }
 
 QString FormMainDebugPage::category() const

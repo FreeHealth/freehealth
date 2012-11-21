@@ -48,18 +48,18 @@ PrinterPreferencesPage::PrinterPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PrinterPreferencesPage");
+    setId(objectName());
 }
 
 PrinterPreferencesPage::~PrinterPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString PrinterPreferencesPage::id() const { return objectName(); }
-QString PrinterPreferencesPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
+QString PrinterPreferencesPage::displayName() const { return tkTr(Trans::Constants::PRINTING); }
 QString PrinterPreferencesPage::category() const { return tkTr(Trans::Constants::PRINTING); }
-QString PrinterPreferencesPage::title() const {return tr("Printer preferences");}
 int PrinterPreferencesPage::sortIndex() const {return 0;}
 
 void PrinterPreferencesPage::resetToDefaults()

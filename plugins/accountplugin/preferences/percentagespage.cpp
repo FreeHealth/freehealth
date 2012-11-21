@@ -67,6 +67,7 @@ PercentagesPage::PercentagesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PercentagesPage");
+    setId(objectName());
 }
 
 PercentagesPage::~PercentagesPage()
@@ -75,8 +76,7 @@ PercentagesPage::~PercentagesPage()
     m_Widget = 0;
 }
 
-QString PercentagesPage::id() const { return objectName(); }
-QString PercentagesPage::name() const { return tkTr(Trans::Constants::PERCENT); }
+QString PercentagesPage::displayName() const { return tkTr(Trans::Constants::PERCENT); }
 QString PercentagesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int PercentagesPage::sortIndex() const {return 70;}
 

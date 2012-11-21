@@ -111,10 +111,8 @@ public:
     AssetsRatesPage(QObject *parent = 0);
     ~AssetsRatesPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

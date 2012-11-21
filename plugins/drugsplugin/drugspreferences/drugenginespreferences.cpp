@@ -139,18 +139,18 @@ DrugEnginesPreferencesPage::DrugEnginesPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("DrugEnginesPreferencesPage");
+    setId(objectName());
 }
 
 DrugEnginesPreferencesPage::~DrugEnginesPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString DrugEnginesPreferencesPage::id() const { return objectName(); }
-QString DrugEnginesPreferencesPage::name() const { return tr("Interaction engines"); }
+QString DrugEnginesPreferencesPage::displayName() const { return tr("Interaction engines"); }
 QString DrugEnginesPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugEnginesPreferencesPage::title() const {return tr("Interaction engines");}
 int DrugEnginesPreferencesPage::sortIndex() const {return 30;}
 
 void DrugEnginesPreferencesPage::resetToDefaults()

@@ -117,6 +117,7 @@ DrugsUserOptionsPage::DrugsUserOptionsPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("DrugsUserOptionsPage");
+    setId(objectName());
 }
 
 DrugsUserOptionsPage::~DrugsUserOptionsPage()
@@ -126,10 +127,8 @@ DrugsUserOptionsPage::~DrugsUserOptionsPage()
     m_Widget = 0;
 }
 
-QString DrugsUserOptionsPage::id() const { return objectName(); }
-QString DrugsUserOptionsPage::name() const { return tr("User's documents"); }
+QString DrugsUserOptionsPage::displayName() const { return tr("User's documents"); }
 QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugsUserOptionsPage::title() const {return tr("User preferences");}
 int DrugsUserOptionsPage::sortIndex() const {return 50;}
 
 void DrugsUserOptionsPage::resetToDefaults()

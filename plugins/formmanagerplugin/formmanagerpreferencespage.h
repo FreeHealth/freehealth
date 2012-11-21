@@ -81,10 +81,8 @@ public:
     FormPreferencesFileSelectorPage(QObject *parent = 0);
     ~FormPreferencesFileSelectorPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();
@@ -142,10 +140,8 @@ public:
     FormPreferencesPage(QObject *parent = 0);
     ~FormPreferencesPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();

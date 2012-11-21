@@ -269,6 +269,7 @@ DrugPosologicSentencePage::DrugPosologicSentencePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("DrugPosologicSentencePage");
+    setId(objectName());
 }
 
 DrugPosologicSentencePage::~DrugPosologicSentencePage()
@@ -278,10 +279,8 @@ DrugPosologicSentencePage::~DrugPosologicSentencePage()
     m_Widget = 0;
 }
 
-QString DrugPosologicSentencePage::id() const { return objectName(); }
-QString DrugPosologicSentencePage::name() const { return tr("Posologic sentence"); }
+QString DrugPosologicSentencePage::displayName() const { return tr("Posologic sentence"); }
 QString DrugPosologicSentencePage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugPosologicSentencePage::title() const {return tr("Posologic sentence");}
 int DrugPosologicSentencePage::sortIndex() const {return 30;}
 
 void DrugPosologicSentencePage::resetToDefaults()

@@ -47,18 +47,21 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 ///////////////////////////////  ProtocolPreferencesPage  /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ProtocolPreferencesPage::ProtocolPreferencesPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("ProtocolPreferencesPage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("ProtocolPreferencesPage");
+    setId(objectName());
+}
 
 ProtocolPreferencesPage::~ProtocolPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString ProtocolPreferencesPage::id() const { return objectName(); }
-QString ProtocolPreferencesPage::name() const { return tkTr(Trans::Constants::PROTOCOLS); }
+QString ProtocolPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROTOCOLS); }
 QString ProtocolPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString ProtocolPreferencesPage::title() const {return tr("Drug's protocole preferences");}
 int ProtocolPreferencesPage::sortIndex() const {return 70;}
 
 void ProtocolPreferencesPage::resetToDefaults()

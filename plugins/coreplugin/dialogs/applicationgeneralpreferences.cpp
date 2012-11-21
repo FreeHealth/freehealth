@@ -106,17 +106,19 @@ void ApplicationGeneralPreferencesWidget::changeEvent(QEvent *e)
 
 ApplicationGeneralPreferencesPage::ApplicationGeneralPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("ApplicationGeneralPreferencesPage"); }
+{
+    setObjectName("ApplicationGeneralPreferencesPage");
+    setId(objectName());
+}
 
 ApplicationGeneralPreferencesPage::~ApplicationGeneralPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString ApplicationGeneralPreferencesPage::id() const { return objectName(); }
-QString ApplicationGeneralPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
-QString ApplicationGeneralPreferencesPage::title() const {return tkTr(Trans::Constants::GENERAL_PREFERENCES);}
+QString ApplicationGeneralPreferencesPage::displayName() const { return tkTr(Trans::Constants::GENERAL); }
 QString ApplicationGeneralPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 int ApplicationGeneralPreferencesPage::sortIndex() const {return 0;}
 

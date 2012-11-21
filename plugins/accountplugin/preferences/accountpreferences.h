@@ -94,10 +94,8 @@ public:
     AccountUserOptionsPage(QObject *parent = 0);
     ~AccountUserOptionsPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();
@@ -159,10 +157,8 @@ public:
     AccountDatabaseDefautsPage(QObject *parent = 0);
     ~AccountDatabaseDefautsPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

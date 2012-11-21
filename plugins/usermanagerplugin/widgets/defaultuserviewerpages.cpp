@@ -146,17 +146,15 @@ DefaultUserIdentityPage::DefaultUserIdentityPage(QObject *parent) :
     IUserViewerPage(parent)
 {
     setObjectName("DefaultUserIdentityPage");
+    setId(objectName());
 }
 
 DefaultUserIdentityPage::~DefaultUserIdentityPage()
 {}
 
-QString DefaultUserIdentityPage::id() const
-{
-    return objectName();
-}
 
-QString DefaultUserIdentityPage::name() const
+
+QString DefaultUserIdentityPage::displayName() const
 {
     return tkTr(Trans::Constants::IDENTITY_TEXT);
 }
@@ -164,11 +162,6 @@ QString DefaultUserIdentityPage::name() const
 QString DefaultUserIdentityPage::category() const
 {
     return tkTr(Trans::Constants::IDENTITY_TEXT);
-}
-
-QString DefaultUserIdentityPage::title() const
-{
-    return tr("User identity");
 }
 
 int DefaultUserIdentityPage::sortIndex() const
@@ -253,17 +246,13 @@ DefaultUserContactPage::DefaultUserContactPage(QObject *parent) :
     IUserViewerPage(parent)
 {
     setObjectName("DefaultUserContactPage");
+    setId(objectName());
 }
 
 DefaultUserContactPage::~DefaultUserContactPage()
 {}
 
-QString DefaultUserContactPage::id() const
-{
-    return objectName();
-}
-
-QString DefaultUserContactPage::name() const
+QString DefaultUserContactPage::displayName() const
 {
     return tr("Contact");
 }
@@ -271,11 +260,6 @@ QString DefaultUserContactPage::name() const
 QString DefaultUserContactPage::category() const
 {
     return tkTr(Trans::Constants::IDENTITY_TEXT);
-}
-
-QString DefaultUserContactPage::title() const
-{
-    return tr("Contact");
 }
 
 int DefaultUserContactPage::sortIndex() const
@@ -354,17 +338,13 @@ DefaultUserProfessionalPage::DefaultUserProfessionalPage(QObject *parent) :
     IUserViewerPage(parent)
 {
     setObjectName("DefaultUserProfessionalPage");
+    setId(objectName());
 }
 
 DefaultUserProfessionalPage::~DefaultUserProfessionalPage()
 {}
 
-QString DefaultUserProfessionalPage::id() const
-{
-    return objectName();
-}
-
-QString DefaultUserProfessionalPage::name() const
+QString DefaultUserProfessionalPage::displayName() const
 {
     return tr("Professional identifiers");
 }
@@ -372,11 +352,6 @@ QString DefaultUserProfessionalPage::name() const
 QString DefaultUserProfessionalPage::category() const
 {
     return tkTr(Trans::Constants::IDENTITY_TEXT);
-}
-
-QString DefaultUserProfessionalPage::title() const
-{
-    return tr("Professional identifiers");
 }
 
 int DefaultUserProfessionalPage::sortIndex() const
@@ -451,17 +426,13 @@ DefaultUserRightsPage::DefaultUserRightsPage(QObject *parent) :
     IUserViewerPage(parent)
 {
     setObjectName("DefaultUserRightsPage");
+    setId(objectName());
 }
 
 DefaultUserRightsPage::~DefaultUserRightsPage()
 {}
 
-QString DefaultUserRightsPage::id() const
-{
-    return objectName();
-}
-
-QString DefaultUserRightsPage::name() const
+QString DefaultUserRightsPage::displayName() const
 {
     return tkTr(Trans::Constants::RIGHTS);
 }
@@ -469,11 +440,6 @@ QString DefaultUserRightsPage::name() const
 QString DefaultUserRightsPage::category() const
 {
     return tkTr(Trans::Constants::RIGHTS);
-}
-
-QString DefaultUserRightsPage::title() const
-{
-    return tkTr(Trans::Constants::USER_RIGHTS);
 }
 
 int DefaultUserRightsPage::sortIndex() const
@@ -602,17 +568,15 @@ DefaultUserPapersPage::DefaultUserPapersPage(const PaperType type, QObject *pare
     m_type(type)
 {
     setObjectName("DefaultUserPapersPage");
+    setId(objectName());
 }
 
 DefaultUserPapersPage::~DefaultUserPapersPage()
 {}
 
-QString DefaultUserPapersPage::id() const
-{
-    return objectName();
-}
 
-QString DefaultUserPapersPage::name() const
+
+QString DefaultUserPapersPage::displayName() const
 {
     switch (m_type) {
     case GenericPaper: return tr("Generic papers");
@@ -625,11 +589,6 @@ QString DefaultUserPapersPage::name() const
 QString DefaultUserPapersPage::category() const
 {
     return tr("Documents");
-}
-
-QString DefaultUserPapersPage::title() const
-{
-    return name();
 }
 
 int DefaultUserPapersPage::sortIndex() const

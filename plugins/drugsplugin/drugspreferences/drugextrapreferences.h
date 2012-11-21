@@ -76,10 +76,8 @@ public:
     DrugsExtraOptionsPage(QObject *parent = 0);
     ~DrugsExtraOptionsPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();

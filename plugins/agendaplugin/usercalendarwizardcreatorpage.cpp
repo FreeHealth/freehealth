@@ -53,17 +53,13 @@ UserCalendarWizardCreatorPage::UserCalendarWizardCreatorPage(QObject *parent) :
     page(0)
 {
     setObjectName("UserCalendarWizardCreatorPage");
+    setId(objectName());
 }
 
 UserCalendarWizardCreatorPage::~UserCalendarWizardCreatorPage()
 {}
 
-QString UserCalendarWizardCreatorPage::name() const
-{
-    return tr("User's agendas");
-}
-
-QString UserCalendarWizardCreatorPage::title() const
+QString UserCalendarWizardCreatorPage::displayName() const
 {
     return tr("User's agendas");
 }

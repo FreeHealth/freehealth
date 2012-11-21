@@ -67,7 +67,11 @@ static inline AccountDB::AccountBase *base() {return AccountDB::AccountBase::ins
 /////////////////////////////////  AccountUserOptionsPage  //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AccountUserOptionsPage::AccountUserOptionsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("AccountUserOptionsPage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("AccountUserOptionsPage");
+    setId(objectName());
+}
 
 AccountUserOptionsPage::~AccountUserOptionsPage()
 {
@@ -75,8 +79,7 @@ AccountUserOptionsPage::~AccountUserOptionsPage()
     m_Widget = 0;
 }
 
-QString AccountUserOptionsPage::id() const { return objectName(); }
-QString AccountUserOptionsPage::name() const { return tkTr(Trans::Constants::USER); }
+QString AccountUserOptionsPage::displayName() const { return tkTr(Trans::Constants::USER); }
 QString AccountUserOptionsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int AccountUserOptionsPage::sortIndex() const {return 0;}
 
@@ -188,6 +191,7 @@ AccountDatabaseDefautsPage::AccountDatabaseDefautsPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("AccountDatabaseDefautsPage");
+    setId(objectName());
 }
 
 AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
@@ -196,8 +200,7 @@ AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
         m_Widget = 0;
 }
 
-QString AccountDatabaseDefautsPage::id() const { return objectName(); }
-QString AccountDatabaseDefautsPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
+QString AccountDatabaseDefautsPage::displayName() const { return tkTr(Trans::Constants::DEFAULTS); }
 QString AccountDatabaseDefautsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int AccountDatabaseDefautsPage::sortIndex() const {return 10;}
 

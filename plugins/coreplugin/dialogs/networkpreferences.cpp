@@ -155,17 +155,19 @@ void ProxyPreferencesWidget::changeEvent(QEvent *e)
 
 ProxyPreferencesPage::ProxyPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("ProxyPreferencesPage"); }
+{
+    setObjectName("ProxyPreferencesPage");
+    setId(objectName());
+}
 
 ProxyPreferencesPage::~ProxyPreferencesPage()
 {
-    if (m_Widget) delete m_Widget;
+    if (m_Widget)
+        delete m_Widget;
     m_Widget = 0;
 }
 
-QString ProxyPreferencesPage::id() const { return objectName(); }
-QString ProxyPreferencesPage::name() const { return tkTr(Trans::Constants::PROXY); }
-QString ProxyPreferencesPage::title() const {return tkTr(Trans::Constants::INTERNET_CONNECTION_PREFERENCES);}
+QString ProxyPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROXY); }
 QString ProxyPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 int ProxyPreferencesPage::sortIndex() const {return 1;}
 

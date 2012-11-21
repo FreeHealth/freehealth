@@ -104,10 +104,8 @@ public:
     DistanceRulesPage(QObject *parent = 0);
     ~DistanceRulesPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

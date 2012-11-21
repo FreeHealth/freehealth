@@ -91,10 +91,8 @@ public:
     DefaultUserIdentityPage(QObject *parent = 0);
     ~DefaultUserIdentityPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent);
@@ -131,10 +129,8 @@ public:
     DefaultUserContactPage(QObject *parent = 0);
     ~DefaultUserContactPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
@@ -170,10 +166,8 @@ public:
     DefaultUserProfessionalPage(QObject *parent = 0);
     ~DefaultUserProfessionalPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
@@ -218,10 +212,8 @@ public:
     DefaultUserRightsPage(QObject *parent = 0);
     ~DefaultUserRightsPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
@@ -274,10 +266,8 @@ public:
     DefaultUserPapersPage(const PaperType type, QObject *parent = 0);
     ~DefaultUserPapersPage();
 
-    QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const;
     int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
