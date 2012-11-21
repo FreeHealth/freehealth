@@ -36,11 +36,13 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <datapackutils/packdescription.h>
 #include <datapackutils/serverdescription.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QFile>
 #include <QDir>
@@ -51,7 +53,8 @@ using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ISettings *settings()  {return Core::ICore::instance()->settings();}
+static inline ExtensionSystem::PluginManager *pluginManager()  {return ExtensionSystem::PluginManager::instance();}
 
 DataPackCore *DataPackCore::_instance = 0;
 
@@ -149,8 +152,8 @@ public:
     }
     
 public:
-    QMultiHash<QString, DataPackQuery*> _serverDatapacks;
-    QVector<DataPackServerQuery*> _servers;
+    QMultiHash<QString, DataPackQuery *> _serverDatapacks;
+    QVector<DataPackServerQuery *> _servers;
     QHash<QString, DataPack::ServerDescription *> _serverDescription;
     DataPackServerQuery _nullServer;
     DataPack::ServerDescription _nullServerDescription;
@@ -180,6 +183,27 @@ DataPackCore::~DataPackCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool DataPackCore::initialize()
 {
+    // nothing to do
+    return true;
+}
+
+/**
+ * Call Core::IFullReleaseStep::registerDatapack() on
+ * all Core::IFullReleaseStep objects. You can then get the registered datapacks
+ * using serverRegisteredDatapacks().\n
+ * Servers uids are stored in constants: Core::Constants::SERVER_*
+ */
+bool DataPackCore::refreshServerDataPacks(const QString &serverUid)
+{
+    // remove all recorded datapack from cache
+    d->_serverDatapacks.remove(serverUid);
+
+    // ask all steps to register datapacks
+    QList<Core::IFullReleaseStep *> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
+    foreach(Core::IFullReleaseStep *step, steps) {
+        if (!step->registerDataPack())
+            return false;
+    }
     return true;
 }
 

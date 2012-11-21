@@ -65,6 +65,7 @@ public:
     ~DataPackCore();
     
 public Q_SLOTS:
+    bool refreshServerDataPacks(const QString &serverUid);
     bool registerDataPack(const DataPackQuery &query, const QString &serverUid);
 
 public:
