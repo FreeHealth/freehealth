@@ -27,6 +27,7 @@
 #include "datapackcore.h"
 #include "datapackpage.h"
 
+#include <coreplugin/icore.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -42,7 +43,7 @@ DataPackIPlugin::DataPackIPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DataPackIPlugin";
-
+//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
 }
 
@@ -74,6 +75,10 @@ void DataPackIPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DataPackIPlugin::extensionsInitialized";
 }
+
+//void DataPackIPlugin::postCoreInitialization()
+//{
+//}
 
 ExtensionSystem::IPlugin::ShutdownFlag DataPackIPlugin::aboutToShutdown()
 {
