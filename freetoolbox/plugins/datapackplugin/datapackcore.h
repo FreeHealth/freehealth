@@ -41,6 +41,10 @@
  * \date 20 Nov 2012
 */
 
+namespace DataPack {
+class ServerDescription;
+}
+
 namespace DataPackPlugin {
 namespace Internal {
 class DataPackCorePrivate;
@@ -62,11 +66,15 @@ public:
     
 public Q_SLOTS:
     bool registerDataPack(const DataPackQuery &query, const QString &serverUid);
-//    bool updateServerConfiguration(const QString &absPath, const QString &serverDescriptionAbsPath);
 
 public:
     QList<DataPackQuery> serverRegisteredDatapacks(const QString &serverUid) const;
     QList<DataPackServerQuery> servers() const;
+    const DataPackServerQuery &server(const QString &serverUid) const;
+    const DataPack::ServerDescription &serverDescription(const QString &serverUid);
+
+    //bool updateServer(const QString &serverUid);
+    //bool createServer(const QString &serverUid);
 
 private:
     Internal::DataPackCorePrivate *d;
