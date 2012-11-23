@@ -283,6 +283,25 @@ const DataPack::ServerDescription &DataPackCore::serverDescription(const QString
  * Servers uids are stored in constants: Core::Constants::SERVER_*
  * \sa Core::Constants::SERVER_COMMUNITY_FREE
  */
-//bool DataPackCore::createServer(const QString &serverUid)
-//{
-//}
+bool DataPackCore::createServer(const QString &serverUid)
+{
+    refreshServerDataPacks(serverUid);
+
+    // Check server path
+
+    // Install server config file
+
+    // Check datapacks path
+
+    // Install datapack description files
+
+    // Install datapack content files
+
+    // Update server config file
+
+    // Update datapack description files
+
+    // Zip XML files
+
+    return true;
+}

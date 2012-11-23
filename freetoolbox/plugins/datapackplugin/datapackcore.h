@@ -75,7 +75,7 @@ public:
     const DataPack::ServerDescription &serverDescription(const QString &serverUid);
 
     //bool updateServer(const QString &serverUid);
-    //bool createServer(const QString &serverUid);
+    bool createServer(const QString &serverUid);
 
 private:
     Internal::DataPackCorePrivate *d;
