@@ -200,6 +200,7 @@ void ZaDrugDatatabaseStep::setLicenseType(LicenseType type)
     if (type==NonFree) {
         setDisplayName(tr("Non-free South African drugs database"));
         setConnectionName("za_nonfree");
+        setServerOwner(FrenchAssociation);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)
@@ -207,6 +208,7 @@ void ZaDrugDatatabaseStep::setLicenseType(LicenseType type)
     } else {
         setDisplayName(tr("Free South African drugs database"));
         setConnectionName("za_free");
+        setServerOwner(Community);
         setDatapackDescriptionFile(QString("%1/%2/%3")
                                    .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
                                    .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES)

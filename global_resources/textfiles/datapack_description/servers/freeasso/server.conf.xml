@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPackServer>
+
+  <ServerDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.frenchassociation.nonfree</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <vendor>asso.freemedforms.com</vendor>
+    <RequiereAuth>1</RequiereAuth>
+    <version>0.7.2</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-21</lmdate>
+    <icon>__theme__/freemedforms.png</icon>
+    <RecomUpFreq nonParsed="EachMonth">2</RecomUpFreq>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Serveur libre de l'association asso.freemedforms.com pour le projet FreeMedForms</label>
+    <label lang="xx">Free server of the french association asso.freemedforms.com for the FreeMedForms project</label>
+    <description lang="fr">Données libres pour FreeMedForms</description>
+    <description lang="xx">Free data for FreeMedForms</description>
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </ServerDescription>
+
+  <ServerContents>
+    <Pack serverFileName="./0.7.0/drugs/all/packdescription.xml"/>
+    <Pack serverFileName="./0.7.0/drugs/fr_ddi/packdescription.xml"/>
+    <Pack serverFileName="./0.7.0/drugs/fda_ddi/packdescription.xml"/>
+    <Pack serverFileName="./0.7.0/drugs/ca_ddi/packdescription.xml"/>
+  </ServerContents>
+
+</DataPackServer>

@@ -28,13 +28,14 @@
 #define DATAPACKPLUGIN_DATAPACKQUERY_H
 
 #include <datapackplugin/datapack_exporter.h>
-#include <datapackutils/packdescription.h>
+
+#include <QDir>
 
 /**
  * \file datapackquery.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 14 Nov 2012
+ * \date 21 Nov 2012
 */
 
 namespace DataPackPlugin {
@@ -48,10 +49,10 @@ public:
 
     bool isValid() const;
 
-    void setDescriptionFileAbsolutePath(const QString &absPath) {_absPathDescription=absPath;}
+    void setDescriptionFileAbsolutePath(const QString &absPath) {_absPathDescription = QDir::cleanPath(absPath);}
     const QString &descriptionFileAbsolutePath() const {return _absPathDescription;}
 
-    void setOriginalContentFileAbsolutePath(const QString &absPath) {_absPathContentFile=absPath;}
+    void setOriginalContentFileAbsolutePath(const QString &absPath) {_absPathContentFile=QDir::cleanPath(absPath);}
     const QString &originalContentFileAbsolutePath() const {return _absPathContentFile;}
 
     void setZipOriginalFile(bool zipFile) {_zipContentFile = zipFile;}

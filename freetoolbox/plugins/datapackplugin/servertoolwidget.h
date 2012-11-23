@@ -19,47 +19,70 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
-#define DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
+#ifndef DATAPACKPLUGIN_INTERNAL_SERVERTOOLWIDGET_H
+#define DATAPACKPLUGIN_INTERNAL_SERVERTOOLWIDGET_H
 
-#include <QWidget>
+#include <utils/detailsbutton.h>
 
-/**
- * \file datapackwidget.h
- * \author Eric Maeker
- * \version 0.8.0
- * \date 20 Nov 2012
-*/
+QT_BEGIN_NAMESPACE
+class QToolButton;
+class QGraphicsOpacityEffect;
+QT_END_NAMESPACE
 
 namespace DataPackPlugin {
 namespace Internal {
-class DataPackWidgetPrivate;
 
-class DataPackWidget : public QWidget
+class FadingWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DataPackWidget(QWidget *parent = 0);
-    ~DataPackWidget();
-    bool initialize();
+    FadingWidget(QWidget *parent = 0);
+    void fadeTo(qreal value);
+    qreal opacity();
+    void setOpacity(qreal value);
+protected:
+    QGraphicsOpacityEffect *m_opacityEffect;
+};
 
-    bool addServer(const QString &serverUid);
+class ServerToolWidget : public Utils::FadingPanel
+{
+    Q_OBJECT
+public:
+    ServerToolWidget(QWidget *parent = 0);
 
-private Q_SLOTS:
-    bool refreshServerDatapacks();
-    bool createServer();
+    void fadeTo(qreal value);
+    void setOpacity(qreal value);
+
+    void setBuildStepEnabled(bool b);
+    void setUpEnabled(bool b);
+    void setDownEnabled(bool b);
+    void setRemoveEnabled(bool b);
+    void setUpVisible(bool b);
+    void setDownVisible(bool b);
+signals:
+    void disabledClicked();
+    void upClicked();
+    void downClicked();
+    void removeClicked();
 
 private:
-    Internal::DataPackWidgetPrivate *d;
+    QToolButton *m_disableButton;
+    QToolButton *m_upButton;
+    QToolButton *m_downButton;
+    QToolButton *m_removeButton;
+
+    bool m_buildStepEnabled;
+    FadingWidget *m_firstWidget;
+    FadingWidget *m_secondWidget;
+    qreal m_targetOpacity;
 };
 
 } // namespace Internal
 } // namespace DataPackPlugin
 
-#endif // DATAPACKPLUGIN_INTERNAL_DATAPACKWIDGET_H
-
+#endif // DATAPACKPLUGIN_INTERNAL_SERVERTOOLWIDGET_H

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.zipcodes.allcountries</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <vendor>asso.freemedforms.com</vendor>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-21</lmdate>
+    <icon>__theme__/zipcodes.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>0.7.0/zipcodes/zipcodes.db.zip</file>
+    <unziptopath>drugs</unziptopath>
+    <size>812</size>
+    <md5>716b1b482db545e8d0ccbf017f7d4e07</md5>
+    <sha1></sha1>
+    <datatype>ZipCodes</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Codes postaux</label>
+    <label lang="xx">Zip codes</label>
+    <description lang="fr">Base de données des codes postaux</description>
+    <description lang="xx">Zip codes database</description>
+
+    <htmldescription lang="fr">&lt;p>
+      Ce paquet donne accès à l'autoremplissage des formulaires d'adresse comprenant
+      le nom d'une ville et d'un code postal.&lt;br />
+      Les pays suivants sont disponibles :&lt;br />
+      &nbsp;* France&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+
+    <htmldescription lang="xx">&lt;p>
+      This package provides access to auto-populating of forms
+      containing an address with a name of a city and a zip code.&lt;br />
+      The following countries are available:&lt;br />
+      &nbsp;* France&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>

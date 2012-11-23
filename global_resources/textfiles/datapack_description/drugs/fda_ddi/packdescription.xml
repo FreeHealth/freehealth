@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.drugs.fda.ddi</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <vendor>asso.freemedforms.com</vendor>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-21</lmdate>
+    <icon>__theme__/drugengine_ddi.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>0.7.0/drugs/fda_ddi/master.db.zip</file>
+    <unziptopath>drugs</unziptopath>
+    <size>5360</size>
+    <md5>4a18c26900cf456f18c570f569bfa5de</md5>
+    <sha1></sha1>
+    <datatype>DrugsWithInteractions</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Base de données thérapeutique américaine (avec interactions)</label>
+    <label lang="xx">USA pharmaceutical drug database (with interactions)</label>
+    <description lang="fr">Données thérapeutiques américaine pour FreeMedForms (avec interactions)</description>
+    <description lang="xx">USA pharmaceutical data for FreeMedForms (with interactions)</description>
+
+    <htmldescription lang="fr">&lt;p>
+      La base de données thérapeutique américaine est construite sur la base
+      des données publiées par la FDA. Vous y trouverez tous les médicaments
+      commercialisés en France.&lt;br />
+      &lt;br />
+      L'utilisation de cette base de données est soumise à une restriction de licence
+      par biais du copyright de l'AFSSAPS.&lt;br />
+      &lt;br />
+      Cette base de données permet le calcul des interactions médicamenteuses&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      The french pharmaceutical drug database is build upon FDA' data.
+      You will find all available and marketed drugs for USA.&lt;br />
+      &lt;br />
+      You can use the database according to the limiting license of the data which
+      are copyrighted by the AFSSAPS.&lt;br />
+      &lt;br />
+      Data for drug interaction engines are included in this database.&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+  <PackDependencies>
+    <Dependency t="depends" n="icd10" v="0.7.0" u="icd10" />
+  </PackDependencies>
+
+</DataPack_Pack>
