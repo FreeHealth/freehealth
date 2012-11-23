@@ -34,11 +34,19 @@
 #include "datapackwidget.h"
 #include "datapackcore.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <utils/widgets/detailswidget.h>
 #include <datapackutils/serverdescription.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_menu.h>
 
 #include <QDir>
+#include <QToolButton>
 
 #include <QDebug>
 
@@ -49,6 +57,7 @@ using namespace DataPackPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DataPackPlugin::DataPackCore *datapackCore() {return DataPackPlugin::DataPackCore::instance();}
 
 namespace DataPackPlugin {
@@ -67,10 +76,69 @@ public:
         delete ui;
         qDeleteAll(_sui);
     }
+
+    // Create the tool buttons for the server actions (refresh datapacks, create server)
+    QWidget *createServerButtons(const QString &serverUid, QWidget *parent)
+    {
+        // container
+        QWidget *w = new QWidget(parent);
+        QHBoxLayout *layout = new QHBoxLayout(w);
+        w->setLayout(layout);
+        layout->addStretch(0);
+
+        // buttons
+        QToolButton *refreshPacks = new QToolButton(w);
+        refreshPacks->setIcon(theme()->icon(Core::Constants::ICON_PACKAGE, Core::ITheme::MediumIcon));
+        refreshPacks->setText(QApplication::translate("DataPackWidget", "Refresh datapacks"));
+        refreshPacks->setToolTip(refreshPacks->text());
+        refreshPacks->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        _toolButtonToServerUid.insert(refreshPacks, serverUid);
+
+        QToolButton *createServer = new QToolButton(w);
+        createServer->setIcon(theme()->icon(Core::Constants::ICON_SERVER_CONNECTED, Core::ITheme::MediumIcon)); // TODO: find a better icon
+        createServer->setText(QApplication::translate("DataPackWidget", "Create server"));
+        createServer->setToolTip(createServer->text());
+        createServer->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        _toolButtonToServerUid.insert(createServer, serverUid);
+
+        // add buttons in layout
+        layout->addWidget(createServer);
+        layout->addWidget(refreshPacks);
+
+        // connect buttons
+        QObject::connect(refreshPacks, SIGNAL(clicked()), q, SLOT(refreshServerDatapacks()));
+        QObject::connect(createServer, SIGNAL(clicked()), q, SLOT(createServer()));
+        return w;
+    }
+
+    // Add datapacks labels to the server widget (the one inside the details buttons)
+    void addDataPacksToUi(const QString &serverUid, Ui::ServerWidget *sui)
+    {
+        // remove all previously inserted datapacks
+        QList<QLabel*> labels = sui->datapacksGroup->findChildren<QLabel*>();
+        for(int i=0; i < labels.count(); ++i) {
+            sui->datapacksGroup->layout()->removeWidget(labels.at(i));
+            delete labels.at(i);
+        }
+
+        // request datapacks from core && update the view
+        QList<DataPackQuery> packs = datapackCore()->serverRegisteredDatapacks(serverUid);
+        foreach(const DataPackQuery &query, packs) {
+            QLabel *l = new QLabel(sui->datapacksGroup);
+            l->setWordWrap(true);
+            l->setText(QString("%1: %2\n"
+                               "%3: %4")
+                       .arg(tkTr(Trans::Constants::M_FILE_TEXT).remove("&")).arg(query.originalContentFileAbsolutePath())
+                       .arg(tkTr(Trans::Constants::DESCRIPTION)).arg(query.descriptionFileAbsolutePath())
+                       );
+            sui->datapacksGroup->layout()->addWidget(l);
+        }
+    }
     
 public:
     Ui::DataPackWidget *ui;
     QHash<QString, Ui::ServerWidget *> _sui;
+    QHash<QToolButton *, QString> _toolButtonToServerUid;
 
 private:
     DataPackWidget *q;
@@ -126,10 +194,10 @@ bool DataPackWidget::addServer(const QString &serverUid)
     sui->setupUi(w);
 
     // Populate the ui with server data
-    //    add server fields
+    // add server fields
     sui->internalUid->setText(serverUid);
     sui->installPath->setText(QDir::cleanPath(server.outputServerAbsolutePath()));
-    //    add description fields
+    // add description fields
     const DataPack::ServerDescription &descr = datapackCore()->serverDescription(serverUid);
     sui->descriptionUid->setText(descr.data(DataPack::ServerDescription::Uuid).toString());
     foreach(const QString &lang, descr.availableLanguages()) {
@@ -143,18 +211,9 @@ bool DataPackWidget::addServer(const QString &serverUid)
         dc->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
         sui->descriptionsLayout->addWidget(dc);
     }
-    //   add datapacks
-    QList<DataPackQuery> packs = datapackCore()->serverRegisteredDatapacks(serverUid);
-    foreach(const DataPackQuery &query, packs) {
-        QLabel *l = new QLabel(this);
-        l->setWordWrap(true);
-        l->setText(QString("%1: %2\n"
-                           "%3: %4")
-                   .arg(tr("File").arg(query.originalContentFileAbsolutePath()))
-                   .arg(tr("Description").arg(query.descriptionFileAbsolutePath()))
-                   );
-        sui->datapacksGroupLayout->addWidget(l);
-    }
+
+    // Add datapacks to the view
+    d->addDataPacksToUi(serverUid, sui);
 
     // Create the detail widget
     Utils::DetailsWidget *detail = new Utils::DetailsWidget(this);
@@ -162,6 +221,43 @@ bool DataPackWidget::addServer(const QString &serverUid)
     detail->setWidget(w);
     detail->setSummaryFontBold(true);
     detail->setState(Utils::DetailsWidget::Expanded);
+
+    w->layout()->addWidget(d->createServerButtons(serverUid, w)); // TODO: use the toolWidget of the DetailsWidget
+
+    // Insert the container in the scrollarea
     d->ui->scrollLayout->insertWidget(d->ui->scrollLayout->count() - 1, detail);
+    return true;
+}
+
+/**
+ * Slot connected to server actions, will refresh all registered datapacks.
+ * \sa DataPackPlugin::DataPackCore::refreshServerDataPacks()
+ * \internal
+ */
+bool DataPackWidget::refreshServerDatapacks()
+{
+    // Get sender serverUid
+    QToolButton *button = qobject_cast<QToolButton*>(sender());
+    if (!button)
+        return false;
+    const QString &serverUid = d->_toolButtonToServerUid.value(button);
+
+    // Ask core to update datapacks
+    datapackCore()->refreshServerDataPacks(serverUid);
+
+    // Update the server UI
+    d->addDataPacksToUi(serverUid, d->_sui.value(serverUid));
+
+    return true;
+}
+
+/**
+ * Slot connected to server actions, will refresh all registered datapacks and create the server.
+ * \sa DataPackPlugin::DataPackCore::refreshServerDataPacks()
+ * \internal
+ */
+bool DataPackWidget::createServer()
+{
+    datapackCore()->createServer(serverUid);
     return true;
 }

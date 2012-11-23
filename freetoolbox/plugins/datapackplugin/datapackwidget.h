@@ -50,10 +50,10 @@ public:
 
     bool addServer(const QString &serverUid);
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+private Q_SLOTS:
+    bool refreshServerDatapacks();
+    bool createServer();
+
 private:
     Internal::DataPackWidgetPrivate *d;
 };
