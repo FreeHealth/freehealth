@@ -449,20 +449,21 @@ bool BeDrugDatatabaseStep::populateDatabase()
 
     // Save into database
     saveDrugsIntoDatabase(drugs);
-
+    Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(2);
-
-    qDeleteAll(drugs);
-    drugs.clear();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Run SQL commands one by one
 //    if (!DrugsDB::Tools::executeSqlFile(_database, databaseFinalizationScript())) {
 //        LOG_ERROR("Can create Belguish DB.");
 //        return false;
 //    }
-    Q_EMIT progress(3);
-
     LOG(QString("Database processed"));
+    Q_EMIT progress(3);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+    qDeleteAll(drugs);
+    drugs.clear();
 
     return true;
 }
