@@ -117,6 +117,9 @@ public:
     };
 
     PackDescription();
+
+    QString toXml() const;
+
 };
 
 }  // End namespace DataPack

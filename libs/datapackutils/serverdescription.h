@@ -58,6 +58,8 @@ public:
     ServerDescription();
     ~ServerDescription();
 
+    QString toXml() const;
+
 private:
 };
 

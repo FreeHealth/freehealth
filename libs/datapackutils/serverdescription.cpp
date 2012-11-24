@@ -42,3 +42,12 @@ ServerDescription::~ServerDescription()
 {
 }
 
+QString ServerDescription::toXml() const
+{
+    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            "<!DOCTYPE FreeMedForms>\n"
+            "<DataPackServer>\n";
+    xml += Utils::GenericDescription::toXml();
+    xml += "</DataPackServer>\n";
+    return xml;
+}

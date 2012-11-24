@@ -192,3 +192,12 @@ PackDescription::PackDescription() :
     addNonTranslatableExtraData(InstalledFiles, "instfiles");
 }
 
+QString PackDescription::toXml() const
+{
+    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            "<!DOCTYPE FreeMedForms>\n"
+            "<DataPack_Pack>\n";
+    xml += Utils::GenericDescription::toXml();
+    xml += "</DataPack_Pack>\n";
+    return xml;
+}
