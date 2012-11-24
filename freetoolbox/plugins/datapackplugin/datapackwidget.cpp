@@ -197,6 +197,8 @@ bool DataPackWidget::addServer(const QString &serverUid)
     // add server fields
     sui->internalUid->setText(serverUid);
     sui->installPath->setText(QDir::cleanPath(server.outputServerAbsolutePath()));
+    sui->descriptionLabel->hide();
+
     // add description fields
     const DataPack::ServerDescription &descr = datapackCore()->serverDescription(serverUid);
     sui->descriptionUid->setText(descr.data(DataPack::ServerDescription::Uuid).toString());
@@ -205,11 +207,11 @@ bool DataPackWidget::addServer(const QString &serverUid)
         QLabel *l = new QLabel(this);
         l->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::Label, lang).toString()));
         sui->labelsLayout->addWidget(l);
-        // create labels
-        QLabel *dc = new QLabel(this);
-        dc->setWordWrap(true);
-        dc->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
-        sui->descriptionsLayout->addWidget(dc);
+//        // create descriptions
+//        QLabel *dc = new QLabel(this);
+//        dc->setWordWrap(true);
+//        dc->setText(QString("%1: %2").arg(lang).arg(descr.data(DataPack::ServerDescription::HtmlDescription, lang).toString()));
+//        sui->descriptionsLayout->addWidget(dc);
     }
 
     // Add datapacks to the view
