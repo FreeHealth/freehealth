@@ -18,8 +18,8 @@
     <bibliography/>
     <file>0.7.0/drugs/fda_ddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size>5360</size>
-    <md5>4a18c26900cf456f18c570f569bfa5de</md5>
+    <size></size>
+    <md5></md5>
     <sha1></sha1>
     <datatype>DrugsWithInteractions</datatype>
 
@@ -32,8 +32,7 @@
 
     <htmldescription lang="fr">&lt;p>
       La base de données thérapeutique américaine est construite sur la base
-      des données publiées par la FDA. Vous y trouverez tous les médicaments
-      commercialisés en France.&lt;br />
+      des données publiées par la FDA.&lt;br />
       &lt;br />
       L'utilisation de cette base de données est soumise à une restriction de licence
       par biais du copyright de l'AFSSAPS.&lt;br />
@@ -43,8 +42,7 @@
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
-      The french pharmaceutical drug database is build upon FDA' data.
-      You will find all available and marketed drugs for USA.&lt;br />
+      The french pharmaceutical drug database is build upon FDA' data.&lt;br />
       &lt;br />
       You can use the database according to the limiting license of the data which
       are copyrighted by the AFSSAPS.&lt;br />

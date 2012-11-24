@@ -18,8 +18,8 @@
     <bibliography/>
     <file>0.7.0/drugs/ca_ddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size>3536</size>
-    <md5>2fdb4e12e200b7fa9a4fdf136185f497</md5>
+    <size></size>
+    <md5></md5>
     <sha1></sha1>
     <datatype>DrugsWithInteractions</datatype>
 
@@ -36,7 +36,7 @@
       commercialisés au Canada.&lt;br />
       &lt;br />
       L'utilisation de cette base de données est soumise à une restriction de licence
-      par biais du copyright de l'AFSSAPS.&lt;br />
+      par biais du copyright de la HCDPD et de l'AFSSAPS.&lt;br />
       &lt;br />
       Cette base de données permet le calcul des interactions médicamenteuses&lt;br />
       &lt;/p>
@@ -47,7 +47,7 @@
       You will find all available and marketed drugs for Canada.&lt;br />
       &lt;br />
       You can use the database according to the limiting license of the data which
-      are copyrighted by the AFSSAPS.&lt;br />
+      are copyrighted by the HCDPD and the AFSSAPS.&lt;br />
       &lt;br />
       Data for drug interaction engines are included in this database.&lt;br />
       &lt;/p>

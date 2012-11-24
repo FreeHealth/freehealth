@@ -5,7 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.drugs.fr.ddi</uuid>
+    <uuid>freemedforms.certified.drugs.za.ddi</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
     <version>0.7.0</version>
@@ -16,24 +16,23 @@
     <icon>__theme__/drugengine_ddi.png</icon>
     <weblink></weblink>
     <bibliography/>
-    <file>0.7.0/drugs/fr_ddi/master.db.zip</file>
+    <file>0.7.0/drugs/za_ddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size>6076</size>
-    <md5>0198b85f428c0b13cd7c398a78e5654d</md5>
+    <size></size>
+    <md5></md5>
     <sha1></sha1>
     <datatype>DrugsWithInteractions</datatype>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Base de données thérapeutique française (avec interactions)</label>
-    <label lang="xx">French pharmaceutical drug database (with interactions)</label>
-    <description lang="fr">Données thérapeutiques françaises pour FreeMedForms (avec interactions)</description>
-    <description lang="xx">French pharmaceutical data for FreeMedForms (with interactions)</description>
+    <label lang="fr">Base de données thérapeutique Sud-Africaine (avec interactions)</label>
+    <label lang="xx">South-African pharmaceutical drug database (with interactions)</label>
+    <description lang="fr">Données thérapeutiques Sud-Africaine pour FreeMedForms (avec interactions)</description>
+    <description lang="xx">South-African pharmaceutical data for FreeMedForms (with interactions)</description>
 
     <htmldescription lang="fr">&lt;p>
-      La base de données thérapeutique française est construite sur la base
-      des données publiées par l'AFSSAPS. Vous y trouverez tous les médicaments
-      commercialisés en France.&lt;br />
+      La base de données thérapeutique Sud-Africaine est construite sur la base
+      des données publiées par la SAEPI.&lt;br />
       &lt;br />
       L'utilisation de cette base de données est soumise à une restriction de licence
       par biais du copyright de l'AFSSAPS.&lt;br />
@@ -43,8 +42,7 @@
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
-      The french pharmaceutical drug database is build upon AFSSAPS' data.
-      You will find all available and marketed drugs for France.&lt;br />
+      The french pharmaceutical drug database is build upon SAEPI's data.&lt;br />
       &lt;br />
       You can use the database according to the limiting license of the data which
       are copyrighted by the AFSSAPS.&lt;br />

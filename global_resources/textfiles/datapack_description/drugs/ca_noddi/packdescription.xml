@@ -5,7 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.drugs.ca.ddi</uuid>
+    <uuid>freemedforms.certified.drugs.ca.noddi</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
     <version>0.7.0</version>
@@ -16,19 +16,19 @@
     <icon>__theme__/drugengine_ddi.png</icon>
     <weblink></weblink>
     <bibliography/>
-    <file>0.7.0/drugs/ca_ddi/master.db.zip</file>
+    <file>0.7.0/drugs/ca_noddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size>3536</size>
-    <md5>2fdb4e12e200b7fa9a4fdf136185f497</md5>
+    <size></size>
+    <md5></md5>
     <sha1></sha1>
-    <datatype>DrugsWithInteractions</datatype>
+    <datatype>DrugsWithoutInteractions</datatype>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Base de données thérapeutique canadienne (avec interactions)</label>
-    <label lang="xx">Canadian pharmaceutical drug database (with interactions)</label>
-    <description lang="fr">Données thérapeutiques canadienne pour FreeMedForms (avec interactions)</description>
-    <description lang="xx">Canadian pharmaceutical data for FreeMedForms (with interactions)</description>
+    <label lang="fr">Base de données thérapeutique canadienne (sans interactions)</label>
+    <label lang="xx">Canadian pharmaceutical drug database (without interactions)</label>
+    <description lang="fr">Données thérapeutiques canadienne pour FreeMedForms (sans interactions)</description>
+    <description lang="xx">Canadian pharmaceutical data for FreeMedForms (without interactions)</description>
 
     <htmldescription lang="fr">&lt;p>
       La base de données thérapeutique canadienne est construite sur la base
@@ -36,9 +36,9 @@
       commercialisés au Canada.&lt;br />
       &lt;br />
       L'utilisation de cette base de données est soumise à une restriction de licence
-      par biais du copyright de l'AFSSAPS.&lt;br />
+      par biais du copyright de la HCDPD.&lt;br />
       &lt;br />
-      Cette base de données permet le calcul des interactions médicamenteuses&lt;br />
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
       &lt;/p>
     </htmldescription>
 
@@ -47,9 +47,9 @@
       You will find all available and marketed drugs for Canada.&lt;br />
       &lt;br />
       You can use the database according to the limiting license of the data which
-      are copyrighted by the AFSSAPS.&lt;br />
+      are copyrighted by the HCDPD.&lt;br />
       &lt;br />
-      Data for drug interaction engines are included in this database.&lt;br />
+      Data for drug interaction engines are not included in this database.&lt;br />
       &lt;/p>
     </htmldescription>
 
