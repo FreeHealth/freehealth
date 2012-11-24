@@ -356,8 +356,8 @@ bool DataPackCore::createServer(const QString &serverUid)
 //    <ServerContents>
 //      <Pack serverFileName="./icd10/packdescription.xml"/>
 //    </ServerContents>
-    serverContent.append("</ServerContents>");
-    serverContent.prepend("<ServerContents>");
+    serverContent.append("\n</ServerContents>");
+    serverContent.prepend("\n<ServerContents>\n");
     DataPack::ServerDescription descr;
     descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
     descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
