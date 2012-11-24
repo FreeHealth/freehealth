@@ -346,10 +346,10 @@ bool BeDrugDatatabaseStep::populateDatabase()
         }
     }
 
-//    if (!Utils::Database::executeSqlFile(BE_TMP_DB, tempPath() + "/dump_sqlite.sql")) {
-//        LOG_ERROR("Can not create BE DB.");
-//        return false;
-//    }
+    if (!Utils::Database::executeSqlFile(BE_TMP_DB, tempPath() + "/dump_sqlite.sql")) {
+        LOG_ERROR("Can not create BE DB.");
+        return false;
+    }
 
     be.transaction();
     QSqlQuery query(be);
