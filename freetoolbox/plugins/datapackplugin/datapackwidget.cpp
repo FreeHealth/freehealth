@@ -258,6 +258,12 @@ bool DataPackWidget::refreshServerDatapacks()
  */
 bool DataPackWidget::createServer()
 {
+    // Get sender serverUid
+    QToolButton *button = qobject_cast<QToolButton*>(sender());
+    if (!button)
+        return false;
+    const QString &serverUid = d->_toolButtonToServerUid.value(button);
+    // Ask core to create datapack server
     datapackCore()->createServer(serverUid);
     return true;
 }
