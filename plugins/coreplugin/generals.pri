@@ -45,4 +45,4 @@ SOURCES += \
     $${PWD}/ipadtools.cpp \
     $${PWD}/igenericpage.cpp \
     $${PWD}/id.cpp \
-    ../coreplugin/ioptionspage.cpp
+    $${PWD}/ioptionspage.cpp

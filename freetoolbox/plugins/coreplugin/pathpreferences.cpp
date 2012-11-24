@@ -58,7 +58,7 @@ PathPreferencesPage::~PathPreferencesPage()
 }
 
 QString PathPreferencesPage::id() const { return objectName(); }
-QString PathPreferencesPage::name() const { return tkTr(Trans::Constants::PATH); }
+QString PathPreferencesPage::displayName() const { return tkTr(Trans::Constants::PATH); }
 QString PathPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL); }
 
 void PathPreferencesPage::resetToDefaults()
