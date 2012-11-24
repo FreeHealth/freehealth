@@ -24,9 +24,26 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DataPackPlugin::DataPackQuery
+ * \b FreeToolBox only class. \n
+ * Use this class to register a datapack in a datapack server. Pack must be registered
+ * using the DataPackPlugin::DataPackCore::registerDatapack(). You must register your datapack
+ * in your Core::IFullReleaseStep::registerDatapack() implementation.
+ *
+ * A datapack query contains few information:
+ * - the absolute path to the pack description file (setDescriptionFileAbsolutePath())
+ * - the absolute path to the pack content file (setOriginalContentFileAbsolutePath())
+ * - you can query the core to automatically zip your content file using setZipOriginalFile().
+ *
+ * Servers uids are stored in constants: Core::Constants::SERVER_*
+ * \sa Core::IFullReleaseStep, DataPackPlugin::DataPackCore
+ */
+
 #include "datapackquery.h"
 
 #include <QFileInfo>
+#include <QDebug>
 
 namespace DataPackPlugin {
 
