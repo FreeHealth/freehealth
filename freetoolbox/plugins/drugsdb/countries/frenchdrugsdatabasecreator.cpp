@@ -335,6 +335,9 @@ bool FrDrugDatatabaseStep::populateDatabase()
     }
 
     saveDrugsIntoDatabase(drugsVector);
+    Q_EMIT progressRangeChanged(0, 3);
+    Q_EMIT progress(2);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
