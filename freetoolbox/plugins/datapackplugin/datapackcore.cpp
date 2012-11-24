@@ -38,11 +38,14 @@
 #include <coreplugin/ftb_constants.h>
 #include <coreplugin/ifullreleasestep.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <datapackutils/packdescription.h>
 #include <datapackutils/serverdescription.h>
 #include <extensionsystem/pluginmanager.h>
+
+#include <quazip/JlCompress.h>
 
 #include <QFile>
 #include <QDir>
@@ -286,20 +289,47 @@ const DataPack::ServerDescription &DataPackCore::serverDescription(const QString
 bool DataPackCore::createServer(const QString &serverUid)
 {
     refreshServerDataPacks(serverUid);
+    const DataPackServerQuery &server = this->server(serverUid);
+    QList<DataPackQuery> queries = serverRegisteredDatapacks(serverUid);
 
     // Check server path
+    if (!Utils::checkDir(server.outputServerAbsolutePath(), true, "DataPackCore"))
+        return false;
 
-    // Install server config file
+    // Read server config file
+    QString serverConfig = Utils::readTextFile(server.originalDescriptionFileAbsolutePath());
 
-    // Check datapacks path
+    // Manage server datapacks
+    QHash<int, DataPack::PackDescription *> packDescriptions;
+    for(int i = 0; i < queries.count(); ++i) {
+        const DataPackQuery &query = queries.at(i);
+        if (!query.isValid())
+            continue;
 
-    // Install datapack description files
+        // Read datapack description file and check datapacks path
+        DataPack::PackDescription *descr = new DataPack::PackDescription;
+        descr->fromXmlFile(query.descriptionFileAbsolutePath());
+        QString path = server.outputServerAbsolutePath() + QDir::separator() + descr->data(DataPack::PackDescription::AbsFileName).toString();
+        if (!Utils::checkDir(QFileInfo(path).absolutePath(), true, "DataPackCore")) {
+            delete descr;
+            continue;
+        }
+        packDescriptions.insert(i, descr);
 
-    // Install datapack content files
+        // Install datapack content files
+        if (query.zipOriginalFile()) {
+            LOG("Trying to compress: " + query.originalContentFileAbsolutePath());
+            if (!JlCompress::compressFile(path, query.originalContentFileAbsolutePath())) {
+                LOG_ERROR("Unable to compress file");
+            }
+            LOG("Compressed: " + path);
+        }
+    }
+
+
+    // Update & saved datapack description files
 
     // Update server config file
-
-    // Update datapack description files
 
     // Zip XML files
 
