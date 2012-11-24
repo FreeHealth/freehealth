@@ -473,8 +473,9 @@ bool CaDrugDatatabaseStep::populateDatabase()
     Q_EMIT progress(1);
 
     saveDrugsIntoDatabase(drugsVector);
-
+    Q_EMIT progressRangeChanged(0, 3);
     Q_EMIT progress(2);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
 //    // Run SQL commands one by one
 //    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
@@ -482,7 +483,10 @@ bool CaDrugDatatabaseStep::populateDatabase()
 //        LOG_ERROR("Can create Canadian DB.");
 //        return false;
 //    }
+
+    LOG(QString("Database processed"));
     Q_EMIT progress(3);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // delete pointers
     qDeleteAll(drugsVector);
