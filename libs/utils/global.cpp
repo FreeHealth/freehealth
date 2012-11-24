@@ -469,17 +469,18 @@ bool removeDir(const QString &name, QString *error)
 
 bool removeDirRecursively(const QString &absPath, QString *error)
 {
-    error->clear();
+    if (error)
+        error->clear();
     QDir dir(absPath);
-    if (!dir.exists()) {
+    if (!dir.exists())
         return true;
-    }
 
     // remove all dirs inside this dir (recursively)
     foreach(const QString &dirPath, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         QString er;
         if (!removeDirRecursively(dir.absolutePath() + QDir::separator() + dirPath, &er)) {
-            error->append(er);
+            if (error)
+                error->append(er);
             return false;
         }
     }
@@ -487,7 +488,8 @@ bool removeDirRecursively(const QString &absPath, QString *error)
     // remove this dir
     QString er;
     if (!removeDir(dir.absolutePath(), &er)) {
-        error->append(er);
+        if (error)
+            error->append(er);
         return false;
     }
 
