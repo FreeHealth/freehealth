@@ -249,6 +249,8 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     QHashIterator<int, QString> i(elements);
     while (i.hasNext()) {
         i.next();
+        if (data(i.key()).toString().isEmpty())
+            continue;
         QDomElement e = doc->createElement(i.value());
         root->appendChild(e);
         e.setNodeValue(data(i.key()).toString());
