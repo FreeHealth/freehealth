@@ -437,7 +437,11 @@ QString osName()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   FILES FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \brief This function deletes all files in the selected dir (non recursively) and tries to remove the dir */
+/**
+ * This function deletes all files in the selected dir (non recursively)
+ * and tries to remove the dir
+ * \sa Utils::removeDirRecursively()
+ */
 bool removeDir(const QString &name, QString *error)
 {
     error->clear();
@@ -467,6 +471,10 @@ bool removeDir(const QString &name, QString *error)
     return true;
 }
 
+/**
+ * Remove dir recursively. All dir content will be deleted.
+ * \sa Utils::removeDir()
+ */
 bool removeDirRecursively(const QString &absPath, QString *error)
 {
     if (error)
@@ -496,6 +504,10 @@ bool removeDirRecursively(const QString &absPath, QString *error)
     return true;
 }
 
+/**
+ * Search and return all files matching the \e filters from the path \e fromDir.
+ * You can search recursively or not using the \e recursive param.
+ */
 QFileInfoList getFiles(QDir fromDir, const QStringList &filters, DirSearchType recursive)
 {
     QFileInfoList files;
@@ -511,11 +523,21 @@ QFileInfoList getFiles(QDir fromDir, const QStringList &filters, DirSearchType r
     return files;
 }
 
+/**
+ * Search and return all files matching the \e filter from the path \e fromDir.
+ * You can search recursively or not using the \e recursive param.
+ * \sa Utils::getDirs()
+ */
 QFileInfoList getFiles(QDir fromDir, const QString &filter, DirSearchType recursive)
 {
     return getFiles(fromDir, filter.isEmpty() ? QStringList() : QStringList(filter), recursive);
 }
 
+/**
+ * Search and return all directories matching the \e filters from the path \e fromDir.
+ * You can search recursively or not using the \e recursive param.
+ * \sa Utils::getFiles()
+ */
 QFileInfoList getDirs(QDir fromDir, const QStringList &filters, DirSearchType recursive)
 {
     QFileInfoList dirs;
