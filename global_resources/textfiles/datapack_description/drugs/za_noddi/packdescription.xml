@@ -16,7 +16,7 @@
     <icon>__theme__/drugengine_ddi.png</icon>
     <weblink></weblink>
     <bibliography/>
-    <file>0.7.0/drugs/za_noddi/master.db.zip</file>
+    <file>drugs/za_noddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
     <size></size>
     <md5></md5>

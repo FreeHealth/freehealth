@@ -296,9 +296,11 @@ bool DataPackCore::createServer(const QString &serverUid)
     QList<DataPackQuery> queries = serverRegisteredDatapacks(serverUid);
 
     // Check server path
-    if (!Utils::checkDir(server.outputServerAbsolutePath(), true, "DataPackCore"))
+    QString serverPath = server.outputServerAbsolutePath();
+    if (server.autoVersion())
+        serverPath.append(QDir::separator() + QString(PACKAGE_VERSION) + QDir::separator());
+    if (!Utils::checkDir(serverPath, true, "DataPackCore"))
         return false;
-
 
     // Manage server datapacks
     QString serverContent;
@@ -310,7 +312,8 @@ bool DataPackCore::createServer(const QString &serverUid)
         // Read datapack description file and check datapacks path
         DataPack::PackDescription descr;
         descr.fromXmlFile(query.descriptionFileAbsolutePath());
-        QString path = server.outputServerAbsolutePath() + QDir::separator() + descr.data(DataPack::PackDescription::AbsFileName).toString();
+
+        QString path = serverPath + QDir::separator() + descr.data(DataPack::PackDescription::AbsFileName).toString();
         if (!Utils::checkDir(QFileInfo(path).absolutePath(), true, "DataPackCore"))
             continue;
 
@@ -348,7 +351,7 @@ bool DataPackCore::createServer(const QString &serverUid)
 
         // Update server config file
         QDir serverdir(server.outputServerAbsolutePath());
-        serverContent += QString("<Pack serverFileName=\"%1\"/>\n")
+        serverContent += QString("  <Pack serverFileName=\"%1\"/>\n")
                 .arg(serverdir.relativeFilePath(outputPackDescriptionFile));
     }
 
@@ -356,8 +359,8 @@ bool DataPackCore::createServer(const QString &serverUid)
 //    <ServerContents>
 //      <Pack serverFileName="./icd10/packdescription.xml"/>
 //    </ServerContents>
-    serverContent.append("\n</ServerContents>");
-    serverContent.prepend("\n<ServerContents>\n");
+    serverContent.append("</ServerContents>");
+    serverContent.prepend("<ServerContents>\n");
     DataPack::ServerDescription descr;
     descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
     descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
@@ -378,12 +381,21 @@ bool DataPackCore::createServer(const QString &serverUid)
     QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid();
     Utils::checkDir(tmp, true, objectName());
     QDir serverdir(server.outputServerAbsolutePath());
-    QFileInfoList list = Utils::getFiles(server.outputServerAbsolutePath(), "*.xml");
+    // Get files from versionned server
+    QFileInfoList list = Utils::getFiles(serverPath, "*.xml");
+    bool serverFileIncluded = false;
     foreach(const QFileInfo &info, list) {
         // compute server relative path
         QString tmpFile = tmp + QDir::separator() + serverdir.relativeFilePath(info.absoluteFilePath());
         Utils::checkDir(QFileInfo(tmpFile).absolutePath(), true, objectName());
         QFile(info.absoluteFilePath()).copy(tmpFile);
+        if (info.baseName()=="server.conf.xml")
+            serverFileIncluded = true;
+    }
+    if (!serverFileIncluded) {
+        // compute server relative path
+        QString tmpFile = tmp + "/server.conf.xml";
+        QFile(server.outputServerAbsolutePath() + "/server.conf.xml").copy(tmpFile);
     }
     if (!JlCompress::compressDir(server.outputServerAbsolutePath() + "/serverconf.zip", tmp))
         LOG_ERROR("Unable to zip config files");

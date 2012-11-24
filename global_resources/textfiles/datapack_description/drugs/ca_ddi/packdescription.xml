@@ -16,7 +16,7 @@
     <icon>__theme__/drugengine_ddi.png</icon>
     <weblink></weblink>
     <bibliography/>
-    <file>0.7.0/drugs/ca_ddi/master.db.zip</file>
+    <file>drugs/ca_ddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
     <size></size>
     <md5></md5>
