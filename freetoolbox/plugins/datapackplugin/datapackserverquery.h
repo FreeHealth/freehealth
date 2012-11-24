@@ -55,18 +55,15 @@ public:
     void setOutputServerAbsolutePath(const QString &absPath) {_absPathServer=absPath;}
     const QString &outputServerAbsolutePath() const {return _absPathServer;}
 
-//    void setDataPackQueries(const QList<DataPackQuery> &queries);
-//    void addDataPackQueries(const QList<DataPackQuery> &queries);
-//    void addDataPackQuery(const DataPackQuery &query);
-
-//    const QList<DataPackQuery> &dataPackQueries() const {return _dataPackQueries;}
+    void setAutoVersion(bool autoVersion) {_autoVersion = autoVersion;}
+    bool autoVersion() const {return _autoVersion;}
 
 private:
     bool createDirs() const;
 
 private:
     QString _internalUid, _descrAbsPath, _absPathServer;
-//    QList<DataPackQuery> _dataPackQueries;
+    bool _autoVersion;
 };
 
 } // namespace DataPackPlugin

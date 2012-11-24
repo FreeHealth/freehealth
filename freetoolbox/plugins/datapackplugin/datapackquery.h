@@ -43,7 +43,7 @@ namespace DataPackPlugin {
 class DATAPACK_PLUGIN_EXPORT DataPackQuery
 {
 public:
-    DataPackQuery() : _zipContentFile(false) {}
+    DataPackQuery() : _zipContentFile(false), _autoVersion(true) {}
     DataPackQuery(const DataPackQuery &copy);
     DataPackQuery &operator=(const DataPackQuery &copy);
 
@@ -58,11 +58,14 @@ public:
     void setZipOriginalFile(bool zipFile) {_zipContentFile = zipFile;}
     bool zipOriginalFile() const {return _zipContentFile;}
 
+    void setAutoVersion(bool autoVersion) {_autoVersion = autoVersion;}
+    bool autoVersion() const {return _autoVersion;}
+
     bool operator==(const DataPackQuery &query) const;
 
 private:
     QString _absPathDescription, _absPathContentFile;
-    bool _zipContentFile;
+    bool _zipContentFile, _autoVersion;
 };
 
 } // namespace DataPackPlugin

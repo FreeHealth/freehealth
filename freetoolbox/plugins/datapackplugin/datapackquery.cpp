@@ -40,6 +40,16 @@
  * \sa Core::IFullReleaseStep, DataPackPlugin::DataPackCore
  */
 
+/** \fn void DataPackPlugin::DataPackQuery::setAutoVersion(bool autoVersion)
+ * If set to true, all version tag will be updated to the current project version in the
+ * output pack description file.
+ */
+
+/** \fn bool DataPackPlugin::DataPackQuery::autoVersion() const {return _autoVersion;}
+ * If set to true, all version tag will be updated to the current project version in the
+ * output pack description file.
+ */
+
 #include "datapackquery.h"
 
 #include <QFileInfo>
@@ -52,6 +62,7 @@ DataPackQuery::DataPackQuery(const DataPackQuery &copy)
     _zipContentFile = copy._zipContentFile;
     _absPathDescription = copy._absPathDescription;
     _absPathContentFile = copy._absPathContentFile;
+    _autoVersion = copy._autoVersion;
 }
 
 DataPackQuery &DataPackQuery::operator=(const DataPackQuery &copy)
@@ -59,6 +70,7 @@ DataPackQuery &DataPackQuery::operator=(const DataPackQuery &copy)
     _zipContentFile = copy._zipContentFile;
     _absPathDescription = copy._absPathDescription;
     _absPathContentFile = copy._absPathContentFile;
+    _autoVersion = copy._autoVersion;
     return *this;
 }
 

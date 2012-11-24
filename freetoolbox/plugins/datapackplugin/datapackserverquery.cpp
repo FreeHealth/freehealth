@@ -31,7 +31,8 @@
 using namespace DataPackPlugin;
 
 /** Create an empty object */
-DataPackServerQuery::DataPackServerQuery()
+DataPackServerQuery::DataPackServerQuery() :
+    _autoVersion(true)
 {
 }
 
