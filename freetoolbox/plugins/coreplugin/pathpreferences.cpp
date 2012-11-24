@@ -83,6 +83,7 @@ void PathPreferencesPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
+    defaultvalues.insert(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
     defaultvalues.insert(Constants::S_GITFILES_PATH, QString());
 
@@ -144,6 +145,12 @@ void PathPreferencesWidget::setDataToUi()
     ui->filepath->setInitialBrowsePathBackup(s);
     ui->filepath->setPath(s);
 
+    s = settings()->value(Constants::S_DATAPACK_SERVER_OUTPUT_PATH).toString();
+    ui->datapacklabel->setText(tr("Select the datapack server output path"));
+    ui->datapackpath->setPromptDialogTitle(tr("Select the datapack server output path"));
+    ui->datapackpath->setInitialBrowsePathBackup(s);
+    ui->datapackpath->setPath(s);
+
     s = settings()->value(Constants::S_TMP_PATH).toString();
     ui->tmplabel->setText(tr("Select the temporary path"));
     ui->tmppath->setPromptDialogTitle(tr("Select the temporary path"));
@@ -173,6 +180,7 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
+    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_GITFILES_PATH, QString());
     set->sync();
 }
@@ -187,6 +195,7 @@ void PathPreferencesWidget::saveToSettings(Core::ISettings *s)
     set->setValue(Constants::S_FILEOUTPUT_PATH, ui->filepath->path());
     set->setValue(Constants::S_DBOUTPUT_PATH, ui->dbpath->path());
     set->setValue(Constants::S_TMP_PATH, ui->tmppath->path());
+    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, ui->datapackpath->path());
     set->setValue(Constants::S_GITFILES_PATH, ui->svnpath->path());
 
     set->sync();
