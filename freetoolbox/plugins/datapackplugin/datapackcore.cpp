@@ -49,6 +49,7 @@
 
 #include <QFile>
 #include <QDir>
+#include <QUuid>
 
 #include <QDebug>
 
@@ -172,6 +173,7 @@ DataPackCore::DataPackCore(QObject *parent) :
     QObject(parent),
     d(new DataPackCorePrivate(this))
 {
+    setObjectName("DataPackCore");
     _instance = this;
 }
 
@@ -288,6 +290,7 @@ const DataPack::ServerDescription &DataPackCore::serverDescription(const QString
  */
 bool DataPackCore::createServer(const QString &serverUid)
 {
+    // TODO: remove magic numbers here (filenames...)
     refreshServerDataPacks(serverUid);
     const DataPackServerQuery &server = this->server(serverUid);
     QList<DataPackQuery> queries = serverRegisteredDatapacks(serverUid);
@@ -296,42 +299,96 @@ bool DataPackCore::createServer(const QString &serverUid)
     if (!Utils::checkDir(server.outputServerAbsolutePath(), true, "DataPackCore"))
         return false;
 
-    // Read server config file
-    QString serverConfig = Utils::readTextFile(server.originalDescriptionFileAbsolutePath());
 
     // Manage server datapacks
-    QHash<int, DataPack::PackDescription *> packDescriptions;
+    QString serverContent;
     for(int i = 0; i < queries.count(); ++i) {
         const DataPackQuery &query = queries.at(i);
         if (!query.isValid())
             continue;
 
         // Read datapack description file and check datapacks path
-        DataPack::PackDescription *descr = new DataPack::PackDescription;
-        descr->fromXmlFile(query.descriptionFileAbsolutePath());
-        QString path = server.outputServerAbsolutePath() + QDir::separator() + descr->data(DataPack::PackDescription::AbsFileName).toString();
-        if (!Utils::checkDir(QFileInfo(path).absolutePath(), true, "DataPackCore")) {
-            delete descr;
+        DataPack::PackDescription descr;
+        descr.fromXmlFile(query.descriptionFileAbsolutePath());
+        QString path = server.outputServerAbsolutePath() + QDir::separator() + descr.data(DataPack::PackDescription::AbsFileName).toString();
+        if (!Utils::checkDir(QFileInfo(path).absolutePath(), true, "DataPackCore"))
             continue;
-        }
-        packDescriptions.insert(i, descr);
 
-        // Install datapack content files
+        // Install datapack content file inside server path
         if (query.zipOriginalFile()) {
             LOG("Trying to compress: " + query.originalContentFileAbsolutePath());
             if (!JlCompress::compressFile(path, query.originalContentFileAbsolutePath())) {
                 LOG_ERROR("Unable to compress file");
             }
             LOG("Compressed: " + path);
+        } else {
+            if (!QFile::copy(query.originalContentFileAbsolutePath(), path)) {
+                LOG_ERROR("Copying datapack content to the server");
+                continue;
+            }
         }
+
+        // Update & install datapack description file next to the content file
+        descr.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate());
+        descr.setData(DataPack::PackDescription::Size, QFileInfo(path).size());
+        descr.setData(DataPack::PackDescription::Md5, Utils::md5(path));
+        descr.setData(DataPack::PackDescription::Sha1, Utils::sha1(path));
+        if (query.autoVersion()) {
+            descr.setData(DataPack::ServerDescription::Version, QString(PACKAGE_VERSION));
+            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, QString(PACKAGE_VERSION));
+            descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, QString(PACKAGE_VERSION));
+            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, QString(PACKAGE_VERSION));
+        }
+
+        QString outputPackDescriptionFile = QFileInfo(path).absolutePath() + "/packdescription.xml";
+        if (!Utils::saveStringToFile(descr.toXml(), outputPackDescriptionFile, Utils::Overwrite, Utils::DontWarnUser)) {
+            LOG_ERROR("Unable to add the pack description file: " + outputPackDescriptionFile);
+            continue;
+        }
+
+        // Update server config file
+        QDir serverdir(server.outputServerAbsolutePath());
+        serverContent += QString("<Pack serverFileName=\"%1\"/>\n")
+                .arg(serverdir.relativeFilePath(outputPackDescriptionFile));
     }
 
-
-    // Update & saved datapack description files
-
-    // Update server config file
+    // Save server config file
+//    <ServerContents>
+//      <Pack serverFileName="./icd10/packdescription.xml"/>
+//    </ServerContents>
+    serverContent.append("</ServerContents>");
+    serverContent.prepend("<ServerContents>");
+    DataPack::ServerDescription descr;
+    descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
+    descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
+    if (server.autoVersion()) {
+        descr.setData(DataPack::ServerDescription::Version, QString(PACKAGE_VERSION));
+        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, QString(PACKAGE_VERSION));
+        descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, QString(PACKAGE_VERSION));
+        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, QString(PACKAGE_VERSION));
+    }
+    serverContent.prepend(descr.toXml());
+    if (!Utils::saveStringToFile(serverContent, server.outputServerAbsolutePath() + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
+        LOG_ERROR("Unable to save server configuration file");
+        return false;
+    }
 
     // Zip XML files
+    // Create a tmp server only with XML files
+    QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid();
+    Utils::checkDir(tmp, true, objectName());
+    QDir serverdir(server.outputServerAbsolutePath());
+    QFileInfoList list = Utils::getFiles(server.outputServerAbsolutePath(), "*.xml");
+    foreach(const QFileInfo &info, list) {
+        // compute server relative path
+        QString tmpFile = tmp + QDir::separator() + serverdir.relativeFilePath(info.absoluteFilePath());
+        Utils::checkDir(QFileInfo(tmpFile).absolutePath(), true, objectName());
+        QFile(info.absoluteFilePath()).copy(tmpFile);
+    }
+    if (!JlCompress::compressDir(server.outputServerAbsolutePath() + "/serverconf.zip", tmp))
+        LOG_ERROR("Unable to zip config files");
+    Utils::removeDirRecursively(tmp, 0);
 
+    // TODO: should we clean the zipped xml files?
     return true;
 }
