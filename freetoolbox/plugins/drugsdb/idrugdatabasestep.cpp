@@ -919,7 +919,7 @@ bool IDrugDatabaseStep::registerDataPack()
     }
     DataPackPlugin::DataPackQuery query;
     query.setDescriptionFileAbsolutePath(_datapackDescriptionFilePath);
-    query.setOriginalContentFileAbsolutePath(_outputFileName);
+    query.setOriginalContentFileAbsolutePath(_outputPath + QDir::separator() + _connection + QDir::separator() + _outputFileName);
     query.setZipOriginalFile(true);
     if (!dataPackCore()->registerDataPack(query, server)) {
         LOG_ERROR("Unable to register datapack for drugs database: " + connectionName());
