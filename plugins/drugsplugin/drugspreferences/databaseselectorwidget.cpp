@@ -64,21 +64,18 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 ///////////////////////////////  DrugsDatabaseSelectorPage  /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 DrugsDatabaseSelectorPage::DrugsDatabaseSelectorPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0)
-{
-    setObjectName("DrugsDatabaseSelectorPage");
-    setId(objectName());
-}
+        IOptionsPage(parent), m_Widget(0) { setObjectName("DrugsDatabaseSelectorPage"); }
 
 DrugsDatabaseSelectorPage::~DrugsDatabaseSelectorPage()
 {
-    if (m_Widget)
-        delete m_Widget;
+    if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString DrugsDatabaseSelectorPage::displayName() const { return tr("Drug database selector"); }
+QString DrugsDatabaseSelectorPage::id() const { return objectName(); }
+QString DrugsDatabaseSelectorPage::name() const { return tr("Database selector"); }
 QString DrugsDatabaseSelectorPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsDatabaseSelectorPage::title() const {return tr("Drug database selector");}
 int DrugsDatabaseSelectorPage::sortIndex() const {return 20;}
 
 void DrugsDatabaseSelectorPage::resetToDefaults()

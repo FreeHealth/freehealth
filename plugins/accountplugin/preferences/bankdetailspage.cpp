@@ -62,7 +62,6 @@ BankDetailsPage::BankDetailsPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("BankDetailsPage");
-    setId(objectName());
 }
 
 BankDetailsPage::~BankDetailsPage()
@@ -71,7 +70,8 @@ BankDetailsPage::~BankDetailsPage()
     m_Widget = 0;
 }
 
-QString BankDetailsPage::displayName() const { return tkTr(Trans::Constants::BANK_DETAILS); }
+QString BankDetailsPage::id() const { return objectName(); }
+QString BankDetailsPage::name() const { return tkTr(Trans::Constants::BANK_DETAILS); }
 QString BankDetailsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int BankDetailsPage::sortIndex() const {return 40;}
 

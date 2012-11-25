@@ -75,7 +75,6 @@ AssetsRatesPage::AssetsRatesPage(QObject *parent) :
     IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("AssetsRatesPage");
-    setId(objectName());
 }
 
 AssetsRatesPage::~AssetsRatesPage()
@@ -84,7 +83,8 @@ AssetsRatesPage::~AssetsRatesPage()
     m_Widget = 0;
 }
 
-QString AssetsRatesPage::displayName() const { return tkTr(Trans::Constants::ASSETSRATES); }
+QString AssetsRatesPage::id() const { return objectName(); }
+QString AssetsRatesPage::name() const { return tkTr(Trans::Constants::ASSETSRATES); }
 QString AssetsRatesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int AssetsRatesPage::sortIndex() const {return 20;}
 

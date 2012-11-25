@@ -47,7 +47,6 @@ PluginAboutPage::PluginAboutPage(ExtensionSystem::PluginSpec *spec, QObject *par
         Core::IAboutPage(parent), m_Spec(spec)
 {
     setObjectName("PluginAboutPage");
-    setId(objectName());
 }
 
 PluginAboutPage::~PluginAboutPage()
@@ -56,7 +55,12 @@ PluginAboutPage::~PluginAboutPage()
         delete m_Widget;
 }
 
-QString PluginAboutPage::displayName() const
+QString PluginAboutPage::id() const
+{
+    return m_Spec->name();
+}
+
+QString PluginAboutPage::name() const
 {
     return m_Spec->name();
 }

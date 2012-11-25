@@ -44,7 +44,8 @@ public:
     LogMessageDebugPage(QObject *parent);
     ~LogMessageDebugPage();
 
-    QString displayName() const;
+    QString id() const       { return objectName();   }
+    QString name() const;
     QString category() const;
     int sortIndex() const    { return 20;}
 
@@ -59,7 +60,8 @@ public:
     LogErrorDebugPage(QObject *parent);
     ~LogErrorDebugPage();
 
-    QString displayName() const;
+    QString id() const       { return objectName();   }
+    QString name() const;
     QString category() const;
     int sortIndex() const    { return 10;}
 
@@ -74,7 +76,8 @@ public:
     SettingDebugPage(QObject *parent);
     ~SettingDebugPage();
 
-    QString displayName() const     { return tr("Settings"); }
+    QString id() const       { return objectName();   }
+    QString name() const     { return tr("Settings"); }
     QString category() const { return tr("Settings"); }
     int sortIndex() const    { return 30;}
 

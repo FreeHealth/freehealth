@@ -92,8 +92,10 @@ public:
     VirtualDatabaseCreatorPage(QObject *parent = 0);
     ~VirtualDatabaseCreatorPage();
 
-    QString displayName() const;
+    QString id() const;
+    QString name() const;
     QString category() const;
+    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();

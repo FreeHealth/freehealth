@@ -50,6 +50,8 @@ class CORE_EXPORT IAboutPage : public Core::IGenericPage
 public:
     IAboutPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IAboutPage() {}
+
+    QString title() const {return name();}
 };
 
 } // namespace Core

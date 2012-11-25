@@ -114,14 +114,17 @@ UserCalendarPageForUserViewer::UserCalendarPageForUserViewer(QObject *parent) :
     UserPlugin::IUserViewerPage(parent)
 {
     setObjectName("UserCalendarPageForUserViewer");
-    setId(objectName());
 }
 
 UserCalendarPageForUserViewer::~UserCalendarPageForUserViewer()
 {}
 
+QString UserCalendarPageForUserViewer::id() const
+{
+    return objectName();
+}
 
-QString UserCalendarPageForUserViewer::displayName() const
+QString UserCalendarPageForUserViewer::name() const
 {
     return tkTr(Trans::Constants::AGENDA);
 }
@@ -129,6 +132,11 @@ QString UserCalendarPageForUserViewer::displayName() const
 QString UserCalendarPageForUserViewer::category() const
 {
     return tkTr(Trans::Constants::AGENDA);
+}
+
+QString UserCalendarPageForUserViewer::title() const
+{
+    return tr("User agendas");
 }
 
 int UserCalendarPageForUserViewer::sortIndex() const

@@ -55,8 +55,10 @@ public:
     VirtualPatientBasePage(QObject *parent = 0);
     ~VirtualPatientBasePage();
 
-    QString displayName() const;
+    QString id() const;
+    QString name() const;
     QString category() const;
+    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults() {VirtualDatabasePreferences::writeDefaultSettings();}

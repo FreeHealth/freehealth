@@ -69,7 +69,6 @@ DistanceRulesPage::DistanceRulesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("DistanceRulesPage");
-    setId(objectName());
 }
 
 DistanceRulesPage::~DistanceRulesPage()
@@ -78,7 +77,8 @@ DistanceRulesPage::~DistanceRulesPage()
     m_Widget = 0;
 }
 
-QString DistanceRulesPage::displayName() const { return tkTr(Trans::Constants::DISTRULES); }
+QString DistanceRulesPage::id() const { return objectName(); }
+QString DistanceRulesPage::name() const { return tkTr(Trans::Constants::DISTRULES); }
 QString DistanceRulesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int DistanceRulesPage::sortIndex() const {return 50;}
 

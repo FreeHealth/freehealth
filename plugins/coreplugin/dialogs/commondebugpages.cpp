@@ -44,14 +44,13 @@ LogErrorDebugPage::LogErrorDebugPage(QObject *parent) :
         IDebugPage(parent)
 {
     setObjectName("LogErrorDebugPage");
-    setId(objectName());
 }
 
 LogErrorDebugPage::~LogErrorDebugPage()
 {
 }
 
-QString LogErrorDebugPage::displayName() const     { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_ERRORS); }
+QString LogErrorDebugPage::name() const     { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_ERRORS); }
 QString LogErrorDebugPage::category() const { return Trans::ConstantTranslations::tkTr(Trans::Constants::ERRORS); }
 
 QWidget *LogErrorDebugPage::createPage(QWidget *parent)
@@ -71,14 +70,13 @@ LogMessageDebugPage::LogMessageDebugPage(QObject *parent) :
         IDebugPage(parent)
 {
     setObjectName("LogMessageDebugPage");
-    setId(objectName());
 }
 
 LogMessageDebugPage::~LogMessageDebugPage()
 {
 }
 
-QString LogMessageDebugPage::displayName() const
+QString LogMessageDebugPage::name() const
 { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_MESSAGES); }
 
 QString LogMessageDebugPage::category() const
@@ -104,7 +102,6 @@ SettingDebugPage::SettingDebugPage(QObject *parent) :
         IDebugPage(parent)
 {
     setObjectName("SettingDebugPage");
-    setId(objectName());
 }
 
 SettingDebugPage::~SettingDebugPage()

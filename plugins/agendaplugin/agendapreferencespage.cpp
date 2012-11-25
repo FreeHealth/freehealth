@@ -46,7 +46,6 @@ AgendaPreferencesPage::AgendaPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("AgendaPreferencesPage");
-    setId(objectName());
 }
 
 AgendaPreferencesPage::~AgendaPreferencesPage()
@@ -56,8 +55,12 @@ AgendaPreferencesPage::~AgendaPreferencesPage()
     m_Widget = 0;
 }
 
+QString AgendaPreferencesPage::id() const
+{
+    return objectName();
+}
 
-QString AgendaPreferencesPage::displayName() const
+QString AgendaPreferencesPage::name() const
 {
     return tkTr(Trans::Constants::AGENDA);
 }
@@ -65,6 +68,11 @@ QString AgendaPreferencesPage::displayName() const
 QString AgendaPreferencesPage::category() const
 {
     return tkTr(Trans::Constants::AGENDA);
+}
+
+QString AgendaPreferencesPage::title() const
+{
+    return tr("Agenda preferences");
 }
 
 int AgendaPreferencesPage::sortIndex() const

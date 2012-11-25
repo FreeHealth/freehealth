@@ -100,8 +100,10 @@ public:
     BankDetailsPage(QObject *parent = 0);
     ~BankDetailsPage();
 
-    QString displayName() const;
+    QString id() const;
+    QString name() const;
     QString category() const;
+    QString title() const {return name();}
     int sortIndex() const;
 
     void resetToDefaults();

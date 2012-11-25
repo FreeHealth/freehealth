@@ -51,18 +51,18 @@ TemplatesPreferencesPage::TemplatesPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("TemplatesPreferencesPages");
-    setId(objectName());
 }
 
 TemplatesPreferencesPage::~TemplatesPreferencesPage()
 {
-    if (m_Widget)
-        delete m_Widget;
+    if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString TemplatesPreferencesPage::displayName() const { return tkTr(Trans::Constants::TEMPLATES); }
+QString TemplatesPreferencesPage::id() const { return objectName(); }
+QString TemplatesPreferencesPage::name() const { return tkTr(Trans::Constants::TEMPLATES); }
 QString TemplatesPreferencesPage::category() const { return tkTr(Trans::Constants::TEMPLATES); }
+QString TemplatesPreferencesPage::title() const {return tr("Templates preferences"); }
 int TemplatesPreferencesPage::sortIndex() const {return 0;}
 
 void TemplatesPreferencesPage::resetToDefaults()

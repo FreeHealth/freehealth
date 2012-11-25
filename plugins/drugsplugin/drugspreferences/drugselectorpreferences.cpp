@@ -133,21 +133,18 @@ void DrugsSelectorWidget::changeEvent(QEvent *e)
 }
 
 DrugsSelectorOptionsPage::DrugsSelectorOptionsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0)
-{
-    setObjectName("DrugsSelectorOptionsPage");
-    setId(objectName());
-}
+        IOptionsPage(parent), m_Widget(0) { setObjectName("DrugsSelectorOptionsPage"); }
 
 DrugsSelectorOptionsPage::~DrugsSelectorOptionsPage()
 {
-    if (m_Widget)
-        delete m_Widget;
+    if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString DrugsSelectorOptionsPage::displayName() const { return tr("Selector"); }
+QString DrugsSelectorOptionsPage::id() const { return objectName(); }
+QString DrugsSelectorOptionsPage::name() const { return tr("Selector"); }
 QString DrugsSelectorOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsSelectorOptionsPage::title() const {return tr("Drug's selector preferences");}
 int DrugsSelectorOptionsPage::sortIndex() const {return 40;}
 
 void DrugsSelectorOptionsPage::resetToDefaults()

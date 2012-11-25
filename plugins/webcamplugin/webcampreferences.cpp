@@ -135,7 +135,6 @@ WebcamPreferencesPage::WebcamPreferencesPage(QObject *parent) :
     m_Widget(0)
 {
     setObjectName("WebcamPreferencesPage");
-    setId(objectName());
 }
 
 WebcamPreferencesPage::~WebcamPreferencesPage()
@@ -145,8 +144,14 @@ WebcamPreferencesPage::~WebcamPreferencesPage()
     m_Widget = 0;
 }
 
+/*! Returns the id if the preferences page. */
+QString WebcamPreferencesPage::id() const
+{
+    return objectName();
+}
+
 /*! Returns the (translated) name of the preferences page. */
-QString WebcamPreferencesPage::displayName() const
+QString WebcamPreferencesPage::name() const
 {
     return tr("General");
 }

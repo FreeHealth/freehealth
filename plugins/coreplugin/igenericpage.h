@@ -44,11 +44,11 @@ public:
     IGenericPage(QObject *parent = 0) : QObject(parent) {}
     virtual ~IGenericPage() {}
 
-    QString id() const { return m_id; }
-
+    virtual QString id() const = 0;
     /** Define the name of the page to show in the tree. */
-    virtual QString displayName() const = 0;
-
+    virtual QString name() const = 0;
+    /** Define the title of the page to show in the widget. */
+    virtual QString title() const = 0;
     /** Define the icon of the page. */
     virtual QIcon icon() const {return QIcon();}
 
@@ -62,11 +62,6 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0) = 0;
 
     static bool lessThan(IGenericPage *one, IGenericPage *two);
-
-protected:
-    void setId(const QString &id) { m_id = id; }
-
-    QString m_id;
 };
 
 } // namespace Core

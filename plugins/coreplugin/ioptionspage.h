@@ -46,9 +46,9 @@ public:
     IOptionsPage(QObject *parent = 0) : IGenericPage(parent) {}
     virtual ~IOptionsPage() {}
 
-
-//    virtual QString displayName() const = 0;
-//    virtual QString category() const = 0;
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual QString category() const = 0;
     virtual int sortIndex() const = 0;
 
     virtual void resetToDefaults() = 0;
@@ -62,8 +62,7 @@ public:
 
     virtual QString helpPage() = 0;
 
-//    virtual QWidget *createPage(QWidget *parent = 0) = 0;
-
+    virtual QWidget *createPage(QWidget *parent = 0) = 0;
 };
 
 } // namespace Core

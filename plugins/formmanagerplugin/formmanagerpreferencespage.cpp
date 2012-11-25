@@ -60,20 +60,18 @@ static inline Form::FormManager &formManager() {return Form::FormCore::instance(
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 FormPreferencesFileSelectorPage::FormPreferencesFileSelectorPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{
-    setObjectName("FormPreferencesFileSelectorPage");
-    setId(objectName());
-}
+{ setObjectName("FormPreferencesFileSelectorPage"); }
 
 FormPreferencesFileSelectorPage::~FormPreferencesFileSelectorPage()
 {
-    if (m_Widget)
-        delete m_Widget;
+    if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString FormPreferencesFileSelectorPage::displayName() const { return tkTr(Trans::Constants::SELECTOR); }
+QString FormPreferencesFileSelectorPage::id() const { return objectName(); }
+QString FormPreferencesFileSelectorPage::name() const { return tkTr(Trans::Constants::SELECTOR); }
 QString FormPreferencesFileSelectorPage::category() const { return tkTr(Trans::Constants::FORMS); }
+QString FormPreferencesFileSelectorPage::title() const {return tr("Patient file form selector");}
 int FormPreferencesFileSelectorPage::sortIndex() const
 {
     return 0;
@@ -157,8 +155,6 @@ FormPreferencesPage::FormPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("FormPreferencesPage");
-    setId(objectName());
-
     _defaultFormFont.setBold(true);
     _defaultFormFont.setCapitalization(QFont::SmallCaps);
 
@@ -167,14 +163,18 @@ FormPreferencesPage::FormPreferencesPage(QObject *parent) :
 
 FormPreferencesPage::~FormPreferencesPage()
 {
-    if (m_Widget)
-        delete m_Widget;
+    if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString FormPreferencesPage::displayName() const { return tkTr(Trans::Constants::VIEWER); }
+QString FormPreferencesPage::id() const { return objectName(); }
+QString FormPreferencesPage::name() const { return tkTr(Trans::Constants::VIEWER); }
 QString FormPreferencesPage::category() const { return tkTr(Trans::Constants::FORMS); }
-int FormPreferencesPage::sortIndex() const { return 10; }
+QString FormPreferencesPage::title() const {return tr("Form and episode tree viewer");}
+int FormPreferencesPage::sortIndex() const
+{
+    return 10;
+}
 
 void FormPreferencesPage::resetToDefaults()
 {

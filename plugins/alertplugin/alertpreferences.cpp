@@ -96,7 +96,6 @@ AlertPreferencesPage::AlertPreferencesPage(QObject *parent) :
         IOptionsPage(parent),
         m_Widget(0)
 {
-    setId(objectName());
     setObjectName("AlertPreferencesPage");
 }
 
@@ -107,8 +106,14 @@ AlertPreferencesPage::~AlertPreferencesPage()
     m_Widget = 0;
 }
 
+/*! Returns the id if the preferences page. */
+QString AlertPreferencesPage::id() const
+{
+    return objectName();
+}
+
 /*! Returns the (translated) name of the preferences page. */
-QString AlertPreferencesPage::displayName() const
+QString AlertPreferencesPage::name() const
 {
     return tkTr(Trans::Constants::ALERTS);
 }

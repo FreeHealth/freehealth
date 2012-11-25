@@ -48,7 +48,8 @@ public:
     PluginAboutPage(ExtensionSystem::PluginSpec *spec, QObject *parent);
     ~PluginAboutPage();
 
-    QString displayName() const;
+    QString id() const;
+    QString name() const;
     QString category() const;
     int sortIndex() const    { return 10;}
 

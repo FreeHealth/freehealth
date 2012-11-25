@@ -79,7 +79,9 @@ public:
     ~UserCalendarWizardCreatorPage();
 
     // Core::IGenericPage
-    QString displayName() const;
+    QString id() const {return objectName();}
+    QString name() const;
+    QString title() const;
     QString category() const;
     int sortIndex() const;
 

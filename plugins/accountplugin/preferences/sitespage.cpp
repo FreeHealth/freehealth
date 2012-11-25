@@ -71,11 +71,7 @@ const QString global_resourcesPath = qApp->applicationDirPath()+"/../../global_r
 //////////////////////////////////////  AccountUserPage  //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 SitesPage::SitesPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0)
-{
-    setObjectName("SitesPage");
-    setId(objectName());
-}
+        IOptionsPage(parent), m_Widget(0) { setObjectName("SitesPage"); }
 
 SitesPage::~SitesPage()
 {
@@ -83,7 +79,8 @@ SitesPage::~SitesPage()
     m_Widget = 0;
 }
 
-QString SitesPage::displayName() const { return tkTr(Trans::Constants::SITES); }
+QString SitesPage::id() const { return objectName(); }
+QString SitesPage::name() const { return tkTr(Trans::Constants::SITES); }
 QString SitesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int SitesPage::sortIndex() const {return 80;}
 

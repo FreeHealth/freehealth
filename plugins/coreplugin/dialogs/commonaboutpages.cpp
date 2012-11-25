@@ -50,7 +50,6 @@ BuildAboutPage::BuildAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("BuildAboutPage");
-    setId(objectName());
 }
 
 BuildAboutPage::~BuildAboutPage()
@@ -102,7 +101,6 @@ LicenseAboutPage::LicenseAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("LicenseAboutPage");
-    setId(objectName());
 }
 
 LicenseAboutPage::~LicenseAboutPage()

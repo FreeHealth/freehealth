@@ -87,8 +87,10 @@ public:
     DrugsDatabaseSelectorPage(QObject *parent = 0);
     ~DrugsDatabaseSelectorPage();
 
-    QString displayName() const;
+    QString id() const;
+    QString name() const;
     QString category() const;
+    QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();

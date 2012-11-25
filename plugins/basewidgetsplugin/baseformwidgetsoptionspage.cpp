@@ -75,15 +75,18 @@ BaseFormWidgetsOptionsPage::BaseFormWidgetsOptionsPage(QObject *parent) :
     Core::IOptionsPage(parent)
 {
     setObjectName("BaseFormWidgetsOptionsPage");
-    setId(objectName());
 }
 
 BaseFormWidgetsOptionsPage::~BaseFormWidgetsOptionsPage()
 {
 }
 
+QString BaseFormWidgetsOptionsPage::id() const
+{
+    return objectName();
+}
 
-QString BaseFormWidgetsOptionsPage::displayName() const
+QString BaseFormWidgetsOptionsPage::name() const
 {
     return tr("Base Forms Widgets");
 }

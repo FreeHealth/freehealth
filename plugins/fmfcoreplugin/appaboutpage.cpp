@@ -50,7 +50,6 @@ AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
 {
     setObjectName("AppAboutPage");
-    setId(objectName());
 }
 
 AppAboutPage::~AppAboutPage()
