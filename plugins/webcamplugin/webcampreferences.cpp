@@ -202,6 +202,10 @@ void WebcamPreferencesPage::finish()
     m_Widget = 0;
 }
 
+void WebcamPreferencesPage::matches(const QString &searchKeyWord) const
+{
+}
+
 /*! \brief Checks if the entered settings are valid.
  *
  * Overloads the interface method. For each empty value the default settings value is written.

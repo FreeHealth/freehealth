@@ -97,6 +97,8 @@ public:
     void apply();
     void finish();
 
+    void matches(const QString &searchKeyWord) const;
+
     QString helpPage() {return QString();}
 
     static void writeDefaultSettings(Core::ISettings *s) {WebcamPreferencesWidget::writeDefaultSettings(s);}
