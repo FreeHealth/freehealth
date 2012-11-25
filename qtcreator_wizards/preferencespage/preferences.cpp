@@ -59,7 +59,7 @@ void %PluginName:c%PreferencesWidget::setDataToUi()
 {
 }
 
-/*! Returns a concatenated string of all keywords that appear in the page. */
+/*! \sa IOptionsPage::matches() */
 QString %PluginName:c%PreferencesWidget::searchKeywords() const
 {
     QString rc;
