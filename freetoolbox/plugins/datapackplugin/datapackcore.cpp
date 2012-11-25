@@ -359,7 +359,7 @@ bool DataPackCore::createServer(const QString &serverUid)
 //    <ServerContents>
 //      <Pack serverFileName="./icd10/packdescription.xml"/>
 //    </ServerContents>
-    serverContent.append("</ServerContents>");
+    serverContent.append("</ServerContents>\n");
     serverContent.prepend("<ServerContents>\n");
     DataPack::ServerDescription descr;
     descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
@@ -370,8 +370,11 @@ bool DataPackCore::createServer(const QString &serverUid)
         descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, QString(PACKAGE_VERSION));
         descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, QString(PACKAGE_VERSION));
     }
-    serverContent.prepend(descr.toXml());
-    if (!Utils::saveStringToFile(serverContent, server.outputServerAbsolutePath() + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
+    // Find final tag of the server description
+    QString xml = descr.toXml();
+    int start = xml.indexOf("</DataPackServer>");
+    xml.insert(start, serverContent);
+    if (!Utils::saveStringToFile(xml, server.outputServerAbsolutePath() + "/server.conf.xml", Utils::Overwrite, Utils::DontWarnUser)) {
         LOG_ERROR("Unable to save server configuration file");
         return false;
     }
