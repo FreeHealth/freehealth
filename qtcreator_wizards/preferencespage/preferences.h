@@ -58,6 +58,7 @@ public:
     ~%PluginName:c%PreferencesWidget();
 
     void setDataToUi();
+    QString searchKeywords() const;
 
     static void writeDefaultSettings(Core::ISettings *s);
 

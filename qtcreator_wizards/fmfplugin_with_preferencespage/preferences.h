@@ -45,12 +45,13 @@ class %PluginName:c%PreferencesWidget;
 class %PluginName:c%PreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit %PluginName:c%PreferencesWidget(QWidget *parent = 0);
     ~%PluginName:c%PreferencesWidget();
-    
+
     void setDataToUi();
+    QString searchKeywords() const;
 
     static void writeDefaultSettings(Core::ISettings *s);
 

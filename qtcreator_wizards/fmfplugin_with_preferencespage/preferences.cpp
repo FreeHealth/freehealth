@@ -59,6 +59,19 @@ void %PluginName:c%PreferencesWidget::setDataToUi()
 {
 }
 
+/*! Returns a concatenated string of all keywords that appear in the page. */
+QString %PluginName:c%PreferencesWidget::searchKeywords() const
+{
+    QString rc;
+    // uncomment this lines to add some keywords from UI elements
+    // QTextStream(&rc)
+    //        << ui->someLabel->text()
+    //        << ui->otherLabel->text();
+
+    rc.remove(QLatin1Char('&'));
+    return rc;
+}
+
 /*! Saves the settings in the ui to the settings data model. */
 void %PluginName:c%PreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
@@ -92,7 +105,7 @@ void %PluginName:c%PreferencesWidget::changeEvent(QEvent *e)
 
 /* ----------------------  Preferences Page ---------------------- */
 
-/*! 
+/*!
  * \class %PluginName:c%PreferencesPage
  * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
  *
@@ -166,7 +179,7 @@ void %PluginName:c%PreferencesPage::finish()
 }
 
 /*! \brief Checks if the entered settings are valid.
- * 
+ *
  * Overloads the interface method. For each empty value the default settings value is written.
  */
 void %PluginName:c%PreferencesPage::checkSettingsValidity()

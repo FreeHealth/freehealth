@@ -73,7 +73,7 @@ DrugsDatabaseSelectorPage::~DrugsDatabaseSelectorPage()
 }
 
 QString DrugsDatabaseSelectorPage::id() const { return objectName(); }
-QString DrugsDatabaseSelectorPage::name() const { return tr("Database selector"); }
+QString DrugsDatabaseSelectorPage::displayName() const { return tr("Database selector"); }
 QString DrugsDatabaseSelectorPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsDatabaseSelectorPage::title() const {return tr("Drug database selector");}
 int DrugsDatabaseSelectorPage::sortIndex() const {return 20;}
@@ -84,7 +84,7 @@ void DrugsDatabaseSelectorPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void DrugsDatabaseSelectorPage::applyChanges()
+void DrugsDatabaseSelectorPage::apply()
 {
     if (!m_Widget) {
         return;

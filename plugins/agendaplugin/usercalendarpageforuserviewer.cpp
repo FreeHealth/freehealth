@@ -124,7 +124,7 @@ QString UserCalendarPageForUserViewer::id() const
     return objectName();
 }
 
-QString UserCalendarPageForUserViewer::name() const
+QString UserCalendarPageForUserViewer::displayName() const
 {
     return tkTr(Trans::Constants::AGENDA);
 }

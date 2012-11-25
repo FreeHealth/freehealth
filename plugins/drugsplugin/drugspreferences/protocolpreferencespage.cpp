@@ -56,7 +56,7 @@ ProtocolPreferencesPage::~ProtocolPreferencesPage()
 }
 
 QString ProtocolPreferencesPage::id() const { return objectName(); }
-QString ProtocolPreferencesPage::name() const { return tkTr(Trans::Constants::PROTOCOLS); }
+QString ProtocolPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROTOCOLS); }
 QString ProtocolPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString ProtocolPreferencesPage::title() const {return tr("Drug's protocole preferences");}
 int ProtocolPreferencesPage::sortIndex() const {return 70;}
@@ -67,7 +67,7 @@ void ProtocolPreferencesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void ProtocolPreferencesPage::applyChanges()
+void ProtocolPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

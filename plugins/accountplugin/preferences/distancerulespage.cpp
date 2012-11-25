@@ -78,7 +78,7 @@ DistanceRulesPage::~DistanceRulesPage()
 }
 
 QString DistanceRulesPage::id() const { return objectName(); }
-QString DistanceRulesPage::name() const { return tkTr(Trans::Constants::DISTRULES); }
+QString DistanceRulesPage::displayName() const { return tkTr(Trans::Constants::DISTRULES); }
 QString DistanceRulesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int DistanceRulesPage::sortIndex() const {return 50;}
 
@@ -88,7 +88,7 @@ void DistanceRulesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void DistanceRulesPage::applyChanges()
+void DistanceRulesPage::apply()
 {
     if (WarnDebugMessage)
         LOG("applyChanges");

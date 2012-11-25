@@ -84,7 +84,7 @@ AssetsRatesPage::~AssetsRatesPage()
 }
 
 QString AssetsRatesPage::id() const { return objectName(); }
-QString AssetsRatesPage::name() const { return tkTr(Trans::Constants::ASSETSRATES); }
+QString AssetsRatesPage::displayName() const { return tkTr(Trans::Constants::ASSETSRATES); }
 QString AssetsRatesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int AssetsRatesPage::sortIndex() const {return 20;}
 
@@ -94,7 +94,7 @@ void AssetsRatesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void AssetsRatesPage::applyChanges()
+void AssetsRatesPage::apply()
 {
     if (WarnDebugMessage)
               qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";

@@ -69,7 +69,7 @@ FormPreferencesFileSelectorPage::~FormPreferencesFileSelectorPage()
 }
 
 QString FormPreferencesFileSelectorPage::id() const { return objectName(); }
-QString FormPreferencesFileSelectorPage::name() const { return tkTr(Trans::Constants::SELECTOR); }
+QString FormPreferencesFileSelectorPage::displayName() const { return tkTr(Trans::Constants::SELECTOR); }
 QString FormPreferencesFileSelectorPage::category() const { return tkTr(Trans::Constants::FORMS); }
 QString FormPreferencesFileSelectorPage::title() const {return tr("Patient file form selector");}
 int FormPreferencesFileSelectorPage::sortIndex() const
@@ -82,7 +82,7 @@ void FormPreferencesFileSelectorPage::resetToDefaults()
     m_Widget->writeDefaultSettings(settings());
 }
 
-void FormPreferencesFileSelectorPage::applyChanges()
+void FormPreferencesFileSelectorPage::apply()
 {
     if (!m_Widget) {
         return;
@@ -168,7 +168,7 @@ FormPreferencesPage::~FormPreferencesPage()
 }
 
 QString FormPreferencesPage::id() const { return objectName(); }
-QString FormPreferencesPage::name() const { return tkTr(Trans::Constants::VIEWER); }
+QString FormPreferencesPage::displayName() const { return tkTr(Trans::Constants::VIEWER); }
 QString FormPreferencesPage::category() const { return tkTr(Trans::Constants::FORMS); }
 QString FormPreferencesPage::title() const {return tr("Form and episode tree viewer");}
 int FormPreferencesPage::sortIndex() const
@@ -198,7 +198,7 @@ void FormPreferencesPage::resetToDefaults()
         m_Widget->setupUiData();
 }
 
-void FormPreferencesPage::applyChanges()
+void FormPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

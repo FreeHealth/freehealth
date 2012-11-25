@@ -60,7 +60,7 @@ QString PluginAboutPage::id() const
     return m_Spec->name();
 }
 
-QString PluginAboutPage::name() const
+QString PluginAboutPage::displayName() const
 {
     return m_Spec->name();
 }

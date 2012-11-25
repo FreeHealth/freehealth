@@ -69,7 +69,7 @@ QString PatientBasePreferencesPage::id() const {
     return objectName();
 }
 
-QString PatientBasePreferencesPage::name() const {
+QString PatientBasePreferencesPage::displayName() const {
     return tkTr(Trans::Constants::PATIENTS);
 }
 
@@ -91,7 +91,7 @@ void PatientBasePreferencesPage::resetToDefaults()
     m_Widget->writeDefaultSettings(settings());
 }
 
-void PatientBasePreferencesPage::applyChanges()
+void PatientBasePreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

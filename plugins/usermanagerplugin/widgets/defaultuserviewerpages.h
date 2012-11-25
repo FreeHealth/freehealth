@@ -92,7 +92,7 @@ public:
     ~DefaultUserIdentityPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
@@ -132,7 +132,7 @@ public:
     ~DefaultUserContactPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
@@ -171,7 +171,7 @@ public:
     ~DefaultUserProfessionalPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
@@ -219,7 +219,7 @@ public:
     ~DefaultUserRightsPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
@@ -275,7 +275,7 @@ public:
     ~DefaultUserPapersPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;

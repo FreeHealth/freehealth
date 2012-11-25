@@ -55,7 +55,7 @@ CurrentUserPreferencesPage::~CurrentUserPreferencesPage()
 }
 
 QString CurrentUserPreferencesPage::id() const { return objectName(); }
-QString CurrentUserPreferencesPage::name() const { return tkTr(Trans::Constants::USER); }
+QString CurrentUserPreferencesPage::displayName() const { return tkTr(Trans::Constants::USER); }
 QString CurrentUserPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 QString CurrentUserPreferencesPage::title() const { return tkTr(Trans::Constants::USER_PREFERENCES); }
 int CurrentUserPreferencesPage::sortIndex() const {return 0;}
@@ -66,7 +66,7 @@ void CurrentUserPreferencesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void CurrentUserPreferencesPage::applyChanges()
+void CurrentUserPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

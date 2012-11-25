@@ -60,7 +60,7 @@ QString AgendaPreferencesPage::id() const
     return objectName();
 }
 
-QString AgendaPreferencesPage::name() const
+QString AgendaPreferencesPage::displayName() const
 {
     return tkTr(Trans::Constants::AGENDA);
 }
@@ -86,7 +86,7 @@ void AgendaPreferencesPage::resetToDefaults()
     m_Widget->writeDefaultSettings(settings());
 }
 
-void AgendaPreferencesPage::applyChanges()
+void AgendaPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

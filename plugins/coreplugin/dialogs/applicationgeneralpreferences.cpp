@@ -115,7 +115,7 @@ ApplicationGeneralPreferencesPage::~ApplicationGeneralPreferencesPage()
 }
 
 QString ApplicationGeneralPreferencesPage::id() const { return objectName(); }
-QString ApplicationGeneralPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
+QString ApplicationGeneralPreferencesPage::displayName() const { return tkTr(Trans::Constants::GENERAL); }
 QString ApplicationGeneralPreferencesPage::title() const {return tkTr(Trans::Constants::GENERAL_PREFERENCES);}
 QString ApplicationGeneralPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 int ApplicationGeneralPreferencesPage::sortIndex() const {return 0;}
@@ -125,7 +125,7 @@ void ApplicationGeneralPreferencesPage::resetToDefaults()
     m_Widget->writeDefaultSettings(settings());
 }
 
-void ApplicationGeneralPreferencesPage::applyChanges()
+void ApplicationGeneralPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

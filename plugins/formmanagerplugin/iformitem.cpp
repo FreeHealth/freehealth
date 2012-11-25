@@ -941,7 +941,7 @@ FormMainDebugPage::~FormMainDebugPage()
         delete m_Widget;
 }
 
-QString FormMainDebugPage::name() const
+QString FormMainDebugPage::displayName() const
 { return objectName(); }
 
 QString FormMainDebugPage::category() const

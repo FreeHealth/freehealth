@@ -39,7 +39,7 @@ public:
     ~AppAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("General"); }
+    QString displayName() const     { return tr("General"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 1;}
 
@@ -54,7 +54,7 @@ public:
     ~CommandLineAboutPage() {}
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("Command line"); }
+    QString displayName() const     { return tr("Command line"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 50;}
 

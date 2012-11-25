@@ -51,7 +51,7 @@ public:
     IAboutPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IAboutPage() {}
 
-    QString title() const {return name();}
+    QString title() const {return displayName();}
 };
 
 } // namespace Core

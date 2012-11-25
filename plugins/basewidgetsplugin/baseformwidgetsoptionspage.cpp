@@ -86,7 +86,7 @@ QString BaseFormWidgetsOptionsPage::id() const
     return objectName();
 }
 
-QString BaseFormWidgetsOptionsPage::name() const
+QString BaseFormWidgetsOptionsPage::displayName() const
 {
     return tr("Base Forms Widgets");
 }
@@ -107,7 +107,7 @@ void BaseFormWidgetsOptionsPage::resetToDefaults()
         m_Widget->resetToDefaults();
 }
 
-void BaseFormWidgetsOptionsPage::applyChanges()
+void BaseFormWidgetsOptionsPage::apply()
 {
     if (m_Widget)
         m_Widget->applyChanges();

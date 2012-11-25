@@ -164,7 +164,7 @@ ProxyPreferencesPage::~ProxyPreferencesPage()
 }
 
 QString ProxyPreferencesPage::id() const { return objectName(); }
-QString ProxyPreferencesPage::name() const { return tkTr(Trans::Constants::PROXY); }
+QString ProxyPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROXY); }
 QString ProxyPreferencesPage::title() const {return tkTr(Trans::Constants::INTERNET_CONNECTION_PREFERENCES);}
 QString ProxyPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 int ProxyPreferencesPage::sortIndex() const {return 1;}
@@ -174,7 +174,7 @@ void ProxyPreferencesPage::resetToDefaults()
     m_Widget->writeDefaultSettings(settings());
 }
 
-void ProxyPreferencesPage::applyChanges()
+void ProxyPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

@@ -68,7 +68,7 @@ SaveRestorePage::~SaveRestorePage()
 }
 
 QString SaveRestorePage::id() const { return objectName(); }
-QString SaveRestorePage::name() const { return tkTr(Trans::Constants::USER_DATA); }
+QString SaveRestorePage::displayName() const { return tkTr(Trans::Constants::USER_DATA); }
 QString SaveRestorePage::category() const { return tkTr(Trans::Constants::SAVE_AND_RESTORE); }
 QString SaveRestorePage::title() const {return tr("Save / Restore / Import / Export user's datas");}
 int SaveRestorePage::sortIndex() const {return 0;}
@@ -79,7 +79,7 @@ void SaveRestorePage::resetToDefaults()
     m_Widget->setDatasToUi();
 }
 
-void SaveRestorePage::applyChanges()
+void SaveRestorePage::apply()
 {
     if (!m_Widget) {
         return;

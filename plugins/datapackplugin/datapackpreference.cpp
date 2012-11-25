@@ -73,7 +73,7 @@ DataPackPreferencePage::~DataPackPreferencePage()
 }
 
 QString DataPackPreferencePage::id() const { return objectName(); }
-QString DataPackPreferencePage::name() const { return tkTr(Trans::Constants::DATAPACK_MANAGER); }
+QString DataPackPreferencePage::displayName() const { return tkTr(Trans::Constants::DATAPACK_MANAGER); }
 QString DataPackPreferencePage::category() const { return tkTr(Trans::Constants::DATAPACK); }
 QString DataPackPreferencePage::title() const {return tkTr(Trans::Constants::DATAPACK_MANAGER); }
 int DataPackPreferencePage::sortIndex() const {return 0;}
@@ -84,7 +84,7 @@ void DataPackPreferencePage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void DataPackPreferencePage::applyChanges()
+void DataPackPreferencePage::apply()
 {
     if (!m_Widget) {
         return;

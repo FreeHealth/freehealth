@@ -124,7 +124,7 @@ DrugsExtraOptionsPage::~DrugsExtraOptionsPage()
 }
 
 QString DrugsExtraOptionsPage::id() const { return objectName(); }
-QString DrugsExtraOptionsPage::name() const { return tr("Extras"); }
+QString DrugsExtraOptionsPage::displayName() const { return tr("Extras"); }
 QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsExtraOptionsPage::title() const {return tr("Drug's extra preferences");}
 int DrugsExtraOptionsPage::sortIndex() const {return 1000;}
@@ -135,7 +135,7 @@ void DrugsExtraOptionsPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void DrugsExtraOptionsPage::applyChanges()
+void DrugsExtraOptionsPage::apply()
 {
     if (!m_Widget) {
         return;

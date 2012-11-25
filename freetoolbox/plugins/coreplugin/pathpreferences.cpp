@@ -67,13 +67,14 @@ void PathPreferencesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void PathPreferencesPage::applyChanges()
+void PathPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
     }
     m_Widget->saveToSettings(settings());
 }
+
 void PathPreferencesPage::checkSettingsValidity()
 {
     QString appName = qApp->applicationName();

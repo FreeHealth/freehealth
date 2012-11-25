@@ -137,11 +137,11 @@ void PageWidget::setupUi(bool sortCategoryView)
         pageData.id = page->id();
 
         QTreeWidgetItem *item = new QTreeWidgetItem;
-        item->setText(0, page->name());
+        item->setText(0, page->displayName());
         item->setData(0, Qt::UserRole, qVariantFromValue(pageData));
         m_Items.insert(page, item);
 
-        QIcon icon = page->icon();
+        QIcon icon = page->categoryIcon();
         if (!icon.isNull())
             item->setIcon(0, icon);
 
@@ -353,19 +353,19 @@ void PageWidget::changeEvent(QEvent *event)
         QHashIterator<Core::IGenericPage*, QLabel *> it(m_Labels);
         while (it.hasNext()) {
             it.next();
-            it.value()->setText(it.key()->name());
+            it.value()->setText(it.key()->displayName());
         }
 
         QHashIterator<Core::IGenericPage*, QTreeWidgetItem *> it1(m_Items);
         while (it1.hasNext()) {
             it1.next();
-            it1.value()->setText(0, it1.key()->name());
+            it1.value()->setText(0, it1.key()->displayName());
         }
 
         QHashIterator<Core::IGenericPage*, QTreeWidgetItem *> it2(m_Categories);
         while (it2.hasNext()) {
             it2.next();
-            it2.value()->setText(0, it2.key()->name());
+            it2.value()->setText(0, it2.key()->displayName());
         }
     }
 }

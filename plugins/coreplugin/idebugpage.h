@@ -45,7 +45,7 @@ class CORE_EXPORT IDebugPage : public Core::IGenericPage
 public:
     IDebugPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IDebugPage() {}
-    QString title() const {return name();}
+    QString title() const {return displayName();}
 };
 
 } // namespace Core

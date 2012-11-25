@@ -76,7 +76,7 @@ PercentagesPage::~PercentagesPage()
 }
 
 QString PercentagesPage::id() const { return objectName(); }
-QString PercentagesPage::name() const { return tkTr(Trans::Constants::PERCENT); }
+QString PercentagesPage::displayName() const { return tkTr(Trans::Constants::PERCENT); }
 QString PercentagesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int PercentagesPage::sortIndex() const {return 70;}
 
@@ -86,7 +86,7 @@ void PercentagesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void PercentagesPage::applyChanges()
+void PercentagesPage::apply()
 {
     if (WarnDebugMessage)
         LOG("applyChanges");

@@ -91,7 +91,7 @@ public:
 
     void resetToDefaults();
     void checkSettingsValidity();
-    void applyChanges();
+    void apply();
     void finish();
 
     QString helpPage() {return "parametrer.html";}

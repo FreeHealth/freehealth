@@ -68,14 +68,14 @@ public:
     ~BaseFormWidgetsOptionsPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
-    QString title() const {return name();}
+    QString title() const {return displayName();}
     int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
-    void applyChanges();
+    void apply();
     void finish();
 
     /** \todo add help page */

@@ -50,7 +50,7 @@ LogErrorDebugPage::~LogErrorDebugPage()
 {
 }
 
-QString LogErrorDebugPage::name() const     { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_ERRORS); }
+QString LogErrorDebugPage::displayName() const     { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_ERRORS); }
 QString LogErrorDebugPage::category() const { return Trans::ConstantTranslations::tkTr(Trans::Constants::ERRORS); }
 
 QWidget *LogErrorDebugPage::createPage(QWidget *parent)
@@ -76,7 +76,7 @@ LogMessageDebugPage::~LogMessageDebugPage()
 {
 }
 
-QString LogMessageDebugPage::name() const
+QString LogMessageDebugPage::displayName() const
 { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_MESSAGES); }
 
 QString LogMessageDebugPage::category() const

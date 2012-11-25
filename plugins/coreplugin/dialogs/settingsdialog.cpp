@@ -87,7 +87,7 @@ void SettingsDialog::accept()
 {
     m_applied = true;
     foreach (IOptionsPage *page, m_pages) {
-        page->applyChanges();
+        page->apply();
         page->finish();
     }
     done(QDialog::Accepted);
@@ -103,7 +103,7 @@ void SettingsDialog::reject()
 void SettingsDialog::apply()
 {
     foreach (IOptionsPage *page, m_pages)
-        page->applyChanges();
+        page->apply();
     settings()->sync();
     m_applied = true;
 }

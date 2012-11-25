@@ -80,7 +80,7 @@ InsurancePage::~InsurancePage()
 }
 
 QString InsurancePage::id() const { return objectName(); }
-QString InsurancePage::name() const { return tkTr(Trans::Constants::INSURANCE); }
+QString InsurancePage::displayName() const { return tkTr(Trans::Constants::INSURANCE); }
 QString InsurancePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 int InsurancePage::sortIndex() const {return 60;}
 
@@ -90,7 +90,7 @@ void InsurancePage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void InsurancePage::applyChanges()
+void InsurancePage::apply()
 {
     if (WarnDebugMessage)
         LOG("applyChanges");

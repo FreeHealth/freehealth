@@ -34,7 +34,8 @@
  * \version 0.8.0
  * \date 16 Aug 2012
  * \class Core::IOptionsPage
- * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get the page in the Core::SettingsDialog.
+ * \brief Represents an application preferences page. Derive objects from this interface and set it
+ * inside the PluginManager object pool to get the page into the Core::SettingsDialog.
 */
 
 namespace Core {
@@ -46,23 +47,28 @@ public:
     IOptionsPage(QObject *parent = 0) : IGenericPage(parent) {}
     virtual ~IOptionsPage() {}
 
-    virtual QString id() const = 0;
-    virtual QString name() const = 0;
-    virtual QString category() const = 0;
-    virtual int sortIndex() const = 0;
+    // implemented in IGenericPage:
+//    virtual QString id() const = 0;
+//    virtual QString displayName() const = 0;
+//    virtual QString category() const = 0;
+//    virtual int sortIndex() const = 0;
+//    virtual QWidget *createPage(QWidget *parent = 0) = 0;
 
+    /*! Resets the current page to the defaults. */
     virtual void resetToDefaults() = 0;
 
     /** Check the validity of settings. You don't need to sync the settings. This will be automatically done. */
     virtual void checkSettingsValidity() = 0;
 
     /** Apply changes to the settings. You don't need to sync the settings. This will be automatically done. */
-    virtual void applyChanges() = 0;
+    virtual void apply() = 0;
+
     virtual void finish() = 0;
+
+    virtual bool matches(const QString & /* searchKeyWord */) const { return false; }
 
     virtual QString helpPage() = 0;
 
-    virtual QWidget *createPage(QWidget *parent = 0) = 0;
 };
 
 } // namespace Core

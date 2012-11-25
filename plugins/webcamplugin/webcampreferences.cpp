@@ -80,6 +80,16 @@ void WebcamPreferencesWidget::setDataToUi()
 
 }
 
+QString WebcamPreferencesWidget::searchKeywords() const
+{
+    QString rc;
+    QTextStream(&rc)
+            << ui->deviceInfoLabel->text()
+                        ;
+    rc.remove(QLatin1Char('&'));
+    return rc;
+}
+
 /*! Saves the settings in the ui to the settings data model. */
 void WebcamPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
@@ -151,7 +161,7 @@ QString WebcamPreferencesPage::id() const
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString WebcamPreferencesPage::name() const
+QString WebcamPreferencesPage::displayName() const
 {
     return tr("General");
 }
@@ -178,7 +188,7 @@ void WebcamPreferencesPage::resetToDefaults()
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void WebcamPreferencesPage::applyChanges()
+void WebcamPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

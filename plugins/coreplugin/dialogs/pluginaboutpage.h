@@ -49,7 +49,7 @@ public:
     ~PluginAboutPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     int sortIndex() const    { return 10;}
 

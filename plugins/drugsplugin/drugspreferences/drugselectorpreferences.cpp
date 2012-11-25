@@ -142,7 +142,7 @@ DrugsSelectorOptionsPage::~DrugsSelectorOptionsPage()
 }
 
 QString DrugsSelectorOptionsPage::id() const { return objectName(); }
-QString DrugsSelectorOptionsPage::name() const { return tr("Selector"); }
+QString DrugsSelectorOptionsPage::displayName() const { return tr("Selector"); }
 QString DrugsSelectorOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsSelectorOptionsPage::title() const {return tr("Drug's selector preferences");}
 int DrugsSelectorOptionsPage::sortIndex() const {return 40;}
@@ -153,7 +153,7 @@ void DrugsSelectorOptionsPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void DrugsSelectorOptionsPage::applyChanges()
+void DrugsSelectorOptionsPage::apply()
 {
     if (!m_Widget) {
         return;

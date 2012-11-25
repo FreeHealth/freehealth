@@ -62,7 +62,7 @@ PmhPreferencesPage::~PmhPreferencesPage()
 }
 
 QString PmhPreferencesPage::id() const { return objectName(); }
-QString PmhPreferencesPage::name() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
+QString PmhPreferencesPage::displayName() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
 QString PmhPreferencesPage::category() const { return tkTr(Trans::Constants::PMHX); }
 QString PmhPreferencesPage::title() const {return tkTr(Trans::Constants::PMHX_PREFERENCES);}
 int PmhPreferencesPage::sortIndex() const
@@ -76,7 +76,7 @@ void PmhPreferencesPage::resetToDefaults()
     m_Widget->setDataToUi();
 }
 
-void PmhPreferencesPage::applyChanges()
+void PmhPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

@@ -24,7 +24,23 @@
 
 /**
  * \class Core::IGenericPage
- * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get a paged widget Core::PageWidget.
+ * \brief Represents an application preferences page.
+ *
+ * Derive objects from this interface and set it inside the PluginManager object pool to get a
+ * paged widget Core::PageWidget.
+ *
+ * Implementation hints:
+ * \list
+ * \o id() is a unique identifier for referencing this page
+ * \o displayName() is the (translated) name for display
+ * \o title() returns the title of the page to show in the widget
+ * \o category() is the category to use. You can use a path encoded tree, e.g.: <em>first/second</em>
+ * \o displayCategory() is the translated name of the category
+ * \o createPage() is called to retrieve the widget to show in the preferences dialog. Implement
+ *    this to create and return your custom widget.
+ *    The widget will be destroyed by the widget hierarchy when the dialog closes.
+ * \o sortIndex() the sort index of the page. The larger the index, the more is the element at the end of the list.
+ * \endlist
  */
 
 /** Use this to sort page list by category && sort index. */

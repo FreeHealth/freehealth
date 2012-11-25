@@ -53,7 +53,7 @@ public:
     ~AppAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("General"); }
+    QString displayName() const     { return tr("General"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 1;}
 

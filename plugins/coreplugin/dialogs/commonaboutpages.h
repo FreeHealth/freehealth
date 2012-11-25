@@ -40,7 +40,7 @@ public:
     ~BuildAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("Build information"); }
+    QString displayName() const     { return tr("Build information"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 4;}
 
@@ -55,7 +55,7 @@ public:
     ~LicenseAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("License"); }
+    QString displayName() const     { return tr("License"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 3;}
 
@@ -70,7 +70,7 @@ public:
     ~TeamAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("Team"); }
+    QString displayName() const     { return tr("Team"); }
     QString category() const { return tr("Application"); }
     int sortIndex() const    { return 2;}
 

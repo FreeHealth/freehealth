@@ -82,14 +82,14 @@ public:
     ~DataPackPreferencePage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
-    void applyChanges();
+    void apply();
     void finish();
 
     QString helpPage();

@@ -45,21 +45,16 @@ public:
     virtual ~IGenericPage() {}
 
     virtual QString id() const = 0;
-    /** Define the name of the page to show in the tree. */
-    virtual QString name() const = 0;
-    /** Define the title of the page to show in the widget. */
+    virtual QString displayName() const = 0;
     virtual QString title() const = 0;
-    /** Define the icon of the page. */
-    virtual QIcon icon() const {return QIcon();}
+    virtual QIcon categoryIcon() const {return QIcon();}
 
-    /** Define the category to use. You can use path encoded tree for eg: <em>first/second/third</em>.*/
     virtual QString category() const = 0;
+    //TODO: make displayCategory pure virtual, implement in all implementing classes
+    virtual QString displayCategory() const { return QString(); }
 
-    /** Define the sort index of the page. Larger the index, the higher is the element at the end of the list.*/
-    virtual int sortIndex() const = 0;
-
-    /** Create the widget. */
     virtual QWidget *createPage(QWidget *parent = 0) = 0;
+    virtual int sortIndex() const = 0;
 
     static bool lessThan(IGenericPage *one, IGenericPage *two);
 };

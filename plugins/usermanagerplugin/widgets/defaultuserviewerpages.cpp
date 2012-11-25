@@ -156,7 +156,7 @@ QString DefaultUserIdentityPage::id() const
     return objectName();
 }
 
-QString DefaultUserIdentityPage::name() const
+QString DefaultUserIdentityPage::displayName() const
 {
     return tkTr(Trans::Constants::IDENTITY_TEXT);
 }
@@ -263,7 +263,7 @@ QString DefaultUserContactPage::id() const
     return objectName();
 }
 
-QString DefaultUserContactPage::name() const
+QString DefaultUserContactPage::displayName() const
 {
     return tr("Contact");
 }
@@ -364,7 +364,7 @@ QString DefaultUserProfessionalPage::id() const
     return objectName();
 }
 
-QString DefaultUserProfessionalPage::name() const
+QString DefaultUserProfessionalPage::displayName() const
 {
     return tr("Professional identifiers");
 }
@@ -461,7 +461,7 @@ QString DefaultUserRightsPage::id() const
     return objectName();
 }
 
-QString DefaultUserRightsPage::name() const
+QString DefaultUserRightsPage::displayName() const
 {
     return tkTr(Trans::Constants::RIGHTS);
 }
@@ -612,7 +612,7 @@ QString DefaultUserPapersPage::id() const
     return objectName();
 }
 
-QString DefaultUserPapersPage::name() const
+QString DefaultUserPapersPage::displayName() const
 {
     switch (m_type) {
     case GenericPaper: return tr("Generic papers");
@@ -629,7 +629,7 @@ QString DefaultUserPapersPage::category() const
 
 QString DefaultUserPapersPage::title() const
 {
-    return name();
+    return displayName();
 }
 
 int DefaultUserPapersPage::sortIndex() const

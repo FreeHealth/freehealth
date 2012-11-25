@@ -113,7 +113,7 @@ QString AlertPreferencesPage::id() const
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString AlertPreferencesPage::name() const
+QString AlertPreferencesPage::displayName() const
 {
     return tkTr(Trans::Constants::ALERTS);
 }
@@ -138,7 +138,7 @@ void AlertPreferencesPage::resetToDefaults()
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void AlertPreferencesPage::applyChanges()
+void AlertPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
