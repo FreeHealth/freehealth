@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Icd10::Icd10DatabaseWidget</class>
- <widget class="QWidget" name="Icd10::Icd10DatabaseWidget">
+ <class>Icd10::Internal::Icd10DatabaseWidget</class>
+ <widget class="QWidget" name="Icd10::Internal::Icd10DatabaseWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

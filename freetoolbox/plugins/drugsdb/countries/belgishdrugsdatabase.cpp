@@ -73,7 +73,7 @@ static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::
 static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
 
 /**
- * Option page for the Free French drugs database.
+ * Option page for the Free Belguish drugs database.
  * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
  * register it in the plugin manager object pool.
  */
@@ -110,7 +110,7 @@ QWidget *FreeBeDrugsDatabasePage::createPage(QWidget *parent)
 }
 
 /**
- * Option page for the non-free French drugs database.
+ * Option page for the non-free Belguish drugs database.
  * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
  * register it in the plugin manager object pool.
  */
@@ -147,7 +147,7 @@ QWidget *NonFreeBeDrugsDatabasePage::createPage(QWidget *parent)
     return widget;
 }
 
-
+/** Ctor of the belguish drug database step */
 BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
     IDrugDatabaseStep(parent),
     m_WithProgress(false)

@@ -19,76 +19,60 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ICD10DATABASECREATOR_H
-#define ICD10DATABASECREATOR_H
+#ifndef ICD_INTERNAL_ICD10STEP_H
+#define ICD_INTERNAL_ICD10STEP_H
 
-#include <coreplugin/itoolpage.h>
-#include <coreplugin/ftb_constants.h>
+#include <coreplugin/ifullreleasestep.h>
 
-#include <QWidget>
-#include <QProgressDialog>
-
-namespace Utils {
-class HttpDownloader;
-}
-
-namespace Core {
-class IFullReleaseStep;
-}
+/**
+ * \file icd10step.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 25 Nov 2012
+*/
 
 namespace Icd10 {
 namespace Internal {
+class Icd10StepPrivate;
 
-class Icd10DatabasePage : public Core::IToolPage
-{
-public:
-    Icd10DatabasePage(QObject *parent = 0);
-    ~Icd10DatabasePage();
-
-    virtual QString id() const {return objectName();}
-    virtual QString name() const;
-    virtual QString category() const;
-    virtual QIcon icon() const;
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-
-private:
-    Core::IFullReleaseStep *_step;
-};
-
-
-namespace Ui {
-    class Icd10DatabaseWidget;
-}
-
-class Icd10DatabaseWidget : public QWidget
+class Icd10Step : public Core::IFullReleaseStep
 {
     Q_OBJECT
-
 public:
-    explicit Icd10DatabaseWidget(QWidget *parent = 0);
-    ~Icd10DatabaseWidget();
-    void setStep(Core::IFullReleaseStep *step);
+    explicit Icd10Step(QObject *parent = 0);
+    ~Icd10Step();
+    bool initialize();
 
-private Q_SLOTS:
-    bool on_startCreation_clicked();
-    bool downloadFinished();
+    // Core::IFullReleaseStep Interface
+    QString id() const {return objectName();}
+    Steps stepNumber() const {return IcdDatabase;}
 
-protected:
-    void changeEvent(QEvent *e);
+    bool createDir();
+    bool cleanFiles();
+
+    bool downloadFiles(QProgressBar *bar = 0);
+    bool postProcessDownload();
+
+    bool process();
+    bool createDatabase();
+    bool populateDatabaseWithRawSources();
+    QString processMessage() const;
+
+    bool registerDataPack();
+
+    QStringList errors() const;
 
 private:
-    Ui::Icd10DatabaseWidget *ui;
-    Core::IFullReleaseStep *_step;
+    Internal::Icd10StepPrivate *d;
 };
 
-}  //  End namespace Internal
-}  //  End namespace Icd10
+} // namespace Internal
+} // namespace Icd10
 
-#endif // ICD10DATABASECREATOR_H
+#endif // ICD_INTERNAL_ICD10STEP_H
+

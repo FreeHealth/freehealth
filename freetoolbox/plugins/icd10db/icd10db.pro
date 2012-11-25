@@ -12,12 +12,14 @@ DEPENDPATH += ../
 SOURCES += \
     icd10databasecreator.cpp \
     icd10dbplugin.cpp \
-    icdgrouplinker.cpp
+    icdgrouplinker.cpp \
+    icd10step.cpp
 
 HEADERS  += \
     icd10databasecreator.h \
     icd10dbplugin.h \
-    icdgrouplinker.h
+    icdgrouplinker.h \
+    icd10step.h
 
 
 FORMS += \
