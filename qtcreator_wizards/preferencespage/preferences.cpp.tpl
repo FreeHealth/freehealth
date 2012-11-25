@@ -59,6 +59,18 @@ void %PluginName:c%PreferencesWidget::setDataToUi()
 {
 }
 
+QString %PluginName:c%PreferencesWidget::searchKeywords() const
+{
+    QString rc;
+    // uncomment these lines to add keywords to the search index
+
+//    QTextStream(&rc)
+//            << ui->deviceInfoLabel->text()
+                        ;
+    rc.remove(QLatin1Char('&'));
+    return rc;
+}
+
 /*! \sa IOptionsPage::matches() */
 QString %PluginName:c%PreferencesWidget::searchKeywords() const
 {
@@ -148,7 +160,7 @@ QString %PluginName:c%PreferencesPage::id() const
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString %PluginName:c%PreferencesPage::name() const
+QString %PluginName:c%PreferencesPage::displayName() const
 {
     return tr("General");
 }
@@ -179,7 +191,7 @@ void %PluginName:c%PreferencesPage::resetToDefaults()
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void %PluginName:c%PreferencesPage::applyChanges()
+void %PluginName:c%PreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
@@ -208,12 +220,19 @@ void %PluginName:c%PreferencesPage::checkSettingsValidity()
     settings()->sync();
 }
 
+bool %PluginName:c%PreferencesPage::matches(const QString &searchKeyWord) const
+{
+    return m_searchKeywords.contains(s, Qt::CaseInsensitive);
+}
+
 /*! Creates the settings page */
 QWidget *%PluginName:c%PreferencesPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
     m_Widget = new %PluginName:c%PreferencesWidget(parent);
+    if (m_searchKeywords.isEmpty)
+        m_searchKeywords = m_Widget->searchKeywords();
     return m_Widget;
 }
 

@@ -202,8 +202,9 @@ void WebcamPreferencesPage::finish()
     m_Widget = 0;
 }
 
-void WebcamPreferencesPage::matches(const QString &searchKeyWord) const
+bool WebcamPreferencesPage::matches(const QString &searchKeyWord) const
 {
+    return m_searchKeywords.contains(s, Qt::CaseInsensitive);
 }
 
 /*! \brief Checks if the entered settings are valid.
@@ -231,6 +232,8 @@ QWidget *WebcamPreferencesPage::createPage(QWidget *parent)
     QList<WebcamPhotoProvider*> webcams = WebcamPhotoProvider::getProviders();
     foreach(WebcamPhotoProvider *webcam, webcams)
         m_Widget->addWebcamProvider(webcam);
+    if (m_searchKeywords.isEmpty())
+        m_searchKeywords = m_Widget->searchKeywords();
     return m_Widget;
 }
 

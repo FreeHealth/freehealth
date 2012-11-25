@@ -97,7 +97,7 @@ public:
     void apply();
     void finish();
 
-    void matches(const QString &searchKeyWord) const;
+    bool matches(const QString &searchKeyWord) const;
 
     QString helpPage() {return QString();}
 
@@ -107,6 +107,7 @@ public:
 
 private:
     Internal::WebcamPreferencesWidget *m_Widget;
+    QString m_searchKeywords;
 };
 
 

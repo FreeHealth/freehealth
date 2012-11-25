@@ -81,15 +81,17 @@ public:
     ~%PluginName:c%PreferencesPage();
 
     QString id() const;
-    QString name() const;
+    QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
-    void applyChanges();
+    void apply();
     void finish();
+
+    bool matches(QString &s) const;
 
     QString helpPage() {return QString();}
 
@@ -99,6 +101,7 @@ public:
 
 private:
     QPointer<Internal::%PluginName:c%PreferencesWidget> m_Widget;
+    QString m_searchKeywords;
 };
 
 
