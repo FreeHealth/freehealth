@@ -2136,8 +2136,8 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
         return false;
     DB.transaction();
     QSqlQuery query(DB);
-    foreach(const QString &r, list) {
-
+    foreach(QString r, list) {
+        r = r.trimmed();
         //ignore empty lines
         if (r.isEmpty())
             continue;
