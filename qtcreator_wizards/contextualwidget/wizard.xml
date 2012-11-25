@@ -30,8 +30,8 @@
     <description xml:lang="de">Vereinfacht die Erstellung eines kontextualisierten Widgets für Plugins. Siehe auch Core::ContextManager</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
-        <file openeditor="true" source="contextualwidget.cpp" target="%PluginName:l%contextualwidget.%CppSourceSuffix%" />
-        <file openeditor="true" source="contextualwidget.h" target="%PluginName:l%contextualwidget.%CppHeaderSuffix%" />
+        <file openeditor="true" source="contextualwidget.cpp.tpl" target="%PluginName:l%contextualwidget.%CppSourceSuffix%" />
+        <file openeditor="true" source="contextualwidget.h.tpl" target="%PluginName:l%contextualwidget.%CppHeaderSuffix%" />
     </files>
 
     <fieldpagetitle>Contextual widget parameters</fieldpagetitle>

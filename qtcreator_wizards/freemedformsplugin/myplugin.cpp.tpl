@@ -63,8 +63,8 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
         qWarning() << "creating %PluginName%";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("%PluginName:l%"); 
-    
+    Core::ICore::instance()->translators()->addNewTranslator("%PluginName:l%");
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
     // All preferences pages must be created in this part (before user connection)
@@ -86,12 +86,12 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    
+
     setObjectName("%PluginName%");
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "creating %PluginName%";
     }
-    
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
@@ -103,10 +103,10 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-    
+
     // No user is logged in until here
-    
-    
+
+
 //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
 //
 //    QAction *action = new QAction(tr("%PluginName% action"), this);
@@ -131,7 +131,7 @@ void %PluginName%Plugin::extensionsInitialized()
 
     // Add Translator to the Application
     //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
-    
+
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."

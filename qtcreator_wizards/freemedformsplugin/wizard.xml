@@ -44,10 +44,10 @@ leave room for the Qt 4 target page.
         <file source="myplugin_dependencies.pri" target="%PluginName:l%_dependencies.pri" openproject="true"/>
         <file source="myplugin.pri" target="%PluginName:l%.pri" openproject="true"/>
         <file source="MyPlugin.pluginspec" target="%PluginName%.pluginspec" openeditor="true"/>
-        <file source="myplugin_exporter.h" target="%PluginName:l%_exporter.%CppHeaderSuffix%" openeditor="true"/>
-        <file source="mypluginconstants.h" target="%PluginName:l%constants.%CppHeaderSuffix%" openeditor="true"/>
-        <file source="myplugin.h" target="%PluginName:l%plugin.%CppHeaderSuffix%" openeditor="true"/>
-        <file source="myplugin.cpp" target="%PluginName:l%plugin.%CppSourceSuffix%" openeditor="true"/>
+        <file source="myplugin_exporter.h.tpl" target="%PluginName:l%_exporter.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="mypluginconstants.h.tpl" target="%PluginName:l%constants.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="myplugin.h.tpl" target="%PluginName:l%plugin.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="myplugin.cpp.tpl" target="%PluginName:l%plugin.%CppSourceSuffix%" openeditor="true"/>
     </files>
     <!-- Create a 2nd wizard page with parameters -->
     <fieldpagetitle>Plugin Information</fieldpagetitle>

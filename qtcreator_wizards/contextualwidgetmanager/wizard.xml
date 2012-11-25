@@ -31,8 +31,8 @@
     <description xml:lang="de">Manager von Kontextualisierten Widgets, und dazugehöriger ActionHandler</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
-        <file openeditor="true" source="contextualwidgetmanager.cpp" target="%PluginName:l%contextualwidgetmanager.%CppSourceSuffix%" />
-        <file openeditor="true" source="contextualwidgetmanager.h" target="%PluginName:l%contextualwidgetmanager.%CppHeaderSuffix%" />
+        <file openeditor="true" source="contextualwidgetmanager.cpp.tpl" target="%PluginName:l%contextualwidgetmanager.%CppSourceSuffix%" />
+        <file openeditor="true" source="contextualwidgetmanager.h.tpl" target="%PluginName:l%contextualwidgetmanager.%CppHeaderSuffix%" />
     </files>
 
     <fieldpagetitle>Manager parameters</fieldpagetitle>

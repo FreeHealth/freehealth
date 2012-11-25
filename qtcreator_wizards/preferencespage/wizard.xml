@@ -29,8 +29,8 @@
     <description xml:lang="de">Erstellt eine Klasse f&#252;r eine FreeMedForms-Einstellungen-Seite. W&#228;hlen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
-        <file openeditor="true" source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" />
-        <file openeditor="true" source="preferences.h" target="%PluginName:l%preferences.%CppHeaderSuffix%" />
+        <file openeditor="true" source="preferences.cpp.tpl" target="%PluginName:l%preferences.%CppSourceSuffix%" />
+        <file openeditor="true" source="preferences.h.tpl" target="%PluginName:l%preferences.%CppHeaderSuffix%" />
         <file openeditor="true" source="preferences.ui" target="%PluginName:l%preferences.ui" />
     </files>
 

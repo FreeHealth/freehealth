@@ -30,8 +30,8 @@
     <description>Creates a C++ class with an optional private implementation (PIMPL idioma).</description>
     <description xml:lang="de">Erzeugt eine C++-Klasse mit einer optionalen privaten Implementierung</description>
     <files>
-        <file openeditor="true" source="pimpl_class.cpp" target="%ClassName:l%.%CppSourceSuffix%" />
-        <file openeditor="true" source="pimpl_class.h" target="%ClassName:l%.%CppHeaderSuffix%" />
+        <file openeditor="true" source="pimpl_class.cpp.tpl" target="%ClassName:l%.%CppSourceSuffix%" />
+        <file openeditor="true" source="pimpl_class.h.tpl" target="%ClassName:l%.%CppHeaderSuffix%" />
     </files>
 
     <fieldpagetitle>Class parameters</fieldpagetitle>
