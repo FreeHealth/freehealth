@@ -24,75 +24,71 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Icd10::Internal::Icd10DatabasePage
+ * Option page for the Free ICD10 database.
+ */
+
 #include "icd10databasecreator.h"
+#include "icd10step.h"
 
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/ftb_constants.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
-
-#include <utils/httpdownloader.h>
 #include <utils/log.h>
-#include <utils/global.h>
-#include <utils/database.h>
 #include <translationutils/constanttranslations.h>
-#include <quazip/global.h>
-
-#include <QDir>
-#include <QTextCodec>
-#include <QProgressDialog>
-#include <QFile>
-#include <QDir>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDebug>
 
 #include "ui_icd10databasewidget.h"
 
 using namespace Icd10;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-const char* const  ICD10_URL               = "http://www.icd10.ch/telechargement/Exp_text.zip";
-const char* const  ICD10_DATABASE_NAME     =  "icd10";
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
-static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Icd10RawSources/") + QDir::separator();}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/icd10.db");}
-
-static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/icd10/icd10.sql");}
-
+/**
+ * The ctor also create the Core::IFullReleaseStep object and
+ * register it in the plugin manager object pool.
+ */
 Icd10DatabasePage::Icd10DatabasePage(QObject *parent) :
-        IToolPage(parent)
+    IToolPage(parent),
+    _step(0)
 {
     setObjectName("Icd10DatabasePage_IToolPage");
+    _step = new Icd10Step(this);
+    pluginManager()->addObject(_step);
 }
 
+Icd10DatabasePage::~Icd10DatabasePage()
+{
+    pluginManager()->removeObject(_step);
+}
+
+QString Icd10DatabasePage::name() const
+{return tr("ICD10 Database Creator");}
+
+QString Icd10DatabasePage::category() const
+{return Core::Constants::CATEGORY_ICD10DATABASE;}
+
+QIcon Icd10DatabasePage::icon() const
+{return QIcon();}
+
+/** Create the option page */
 QWidget *Icd10DatabasePage::createPage(QWidget *parent)
 {
-    return new Icd10DatabaseWidget(parent);
+    Icd10DatabaseWidget *widget = new Icd10DatabaseWidget(parent);
+    widget->setStep(_step);
+    return widget;
 }
 
+/** Widget for the Icd10::Internal::Icd10DatabasePage */
 Icd10DatabaseWidget::Icd10DatabaseWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Icd10DatabaseWidget)
+    ui(new Ui::Icd10DatabaseWidget),
+    _step(0)
 {
     setObjectName("Icd10DatabaseWidget");
     ui->setupUi(this);
-    m_WorkingPath = workingPath();
-    if (!QDir().mkpath(m_WorkingPath))
-        LOG_ERROR("Unable to create ICD10 Working Path :" + m_WorkingPath);
-    else
-        LOG("Tmp dir created");
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath))
-            LOG_ERROR("Unable to create ICD10 database output path :" + dbpath);
-        else
-            LOG("ICD10 database output dir created");
-    }
 }
 
 Icd10DatabaseWidget::~Icd10DatabaseWidget()
@@ -100,188 +96,47 @@ Icd10DatabaseWidget::~Icd10DatabaseWidget()
     delete ui;
 }
 
+/**
+ * Define the step to use with the UI
+ * \sa Icd10::Internal::Icd10DatabasePage
+*/
+void Icd10DatabaseWidget::setStep(Core::IFullReleaseStep *step)
+{
+    _step = step;
+    connect(_step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()), Qt::UniqueConnection);
+}
+
+/**
+ * Start the creation of the ICD10 database and datapack registration.
+ * \sa Icd10::Internal::Icd10Step
+*/
 bool Icd10DatabaseWidget::on_startCreation_clicked()
 {
-    QString absFileName = databaseAbsPath();
-    QString dbName = QFileInfo(absFileName).fileName();
-    QString pathOrHostName = QFileInfo(absFileName).absolutePath();
-    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
-
-    // create an empty database and connect
-    QSqlDatabase DB;
-    DB = QSqlDatabase::addDatabase("QSQLITE", ICD10_DATABASE_NAME);
-    if (!QDir(pathOrHostName).exists())
-        if (!QDir().mkpath(pathOrHostName))
-            LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
-    // Delete already existing database
-    if (QFileInfo(absFileName).exists()) {
-        QFile(absFileName).remove();
-    }
-    DB.setDatabaseName(absFileName);
-    if (!DB.open()) {
-        LOG_ERROR(DB.lastError().text());
+    Q_ASSERT(_step);
+    if (!_step)
         return false;
-    }
-
-    // create SQL schema with the bundle resources SQL file
-    QFile sqlFile(databaseCreationScript());
-    if (!sqlFile.exists()) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(sqlFile.fileName()),
-                                 tr("The ICD10 database can not be created. The application will not work properly.\n"
-                                    "Please contact the dev team."));
+    if (!_step->createDir())
         return false;
-    }
-
-    // Create SQL Schema
-    if (Utils::Database::executeSqlFile(ICD10_DATABASE_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
-        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(ICD10_DATABASE_NAME));
-    } else {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                             .arg(ICD10_DATABASE_NAME).arg(DB.lastError().text()));
+    if (!_step->downloadFiles())
         return false;
-    }
-
-    downloadRawSources();
-
     return true;
 }
 
-bool Icd10DatabaseWidget::downloadRawSources()
-{
-    QString path = workingPath();
-    if (!QDir().mkpath(path)) {
-        LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED));
-        return false;
-    }
-
-    // File already exists ? --> don't download
-    QString filename = QString(ICD10_URL).split("/").last();
-    if (QFile(path + filename).exists()) {
-        downloadFinished();
-    } else {
-        // Else Download it
-        m_Downloader = new Utils::HttpDownloader(this);
-        m_Downloader->setOutputPath(::workingPath());
-        m_Downloader->setUrl(QUrl(ICD10_URL));
-        m_Downloader->setLabelText(tr("Downloading ICD10 raw sources..."));
-        m_Downloader->setMainWindow(Core::ICore::instance()->mainWindow());
-        m_Downloader->startDownload();
-        connect(m_Downloader, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
-    }
-
-    return true;
-}
-
+/**
+ * Continue the creation of the ICD10 database and datapack registration.
+ * \sa Icd10::Internal::Icd10Step
+*/
 bool Icd10DatabaseWidget::downloadFinished()
 {
-    m_Progress = new QProgressDialog(tr("Starting ICD10 database creation"), tkTr(Trans::Constants::CANCEL), 0, 20);
-    m_Progress->setValue(0);
-    // Unzip file ?
-    if (QString(ICD10_URL).endsWith(".zip", Qt::CaseInsensitive)) {
-        if (!QuaZipTools::unzipAllFilesIntoDirs(QStringList() << workingPath())) {
-            LOG_ERROR(tr("Unable to unzip ICD10 raw sources (%1)").arg(workingPath()));
-            return false;
-        }
-    }
-
-    m_Progress->setValue(1);
-    return populateDatabaseWithRawSources();
-}
-
-bool Icd10DatabaseWidget::populateDatabaseWithRawSources()
-{
-    qWarning() <<"populate";
-    QStringList files;
-    files
-            << "CHAPTER"
-            << "COMMON"
-            << "DAGSTAR"
-            << "DESCR"
-            << "DESCRLIB"
-            << "EXCLUDE"
-            //            << "FIELDDEF"
-            << "GLOSSAIRE"
-            //            << "HTML"
-            << "INCLUDE"
-            << "INDIR"
-            << "LIBELLE"
-            << "MASTER"
-            << "MEMO"
-            << "NOTE"
-            << "REFER"
-            << "SYSTEM"
-//            << "TABLE"
-            << "VERSION"
-            ;
-    if (!m_Progress) {
-        m_Progress = new QProgressDialog(tr("Populating database"), tkTr(Trans::Constants::CANCEL), 0, files.count() +1);
-    } else {
-        m_Progress->setRange(0, files.count() +1);
-    }
-    m_Progress->setValue(1);
-
-
-    QSqlDatabase DB = QSqlDatabase::database(ICD10_DATABASE_NAME);
-
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()));
-            return false;
-        }
-    }
-
-    QString path = ::workingPath() + "/Exp_text/";
-    QDir tmpDir(path);
-
-    foreach(const QString &file, files) {
-        // convert files from Latin15 to UTF-8
-        QString content;
-        {
-            QFile f(path + file + ".txt");
-            if (!f.open(QFile::ReadOnly | QFile::Text)) {
-                m_Progress->setValue(m_Progress->value() + 1);
-                continue;
-            }
-            QByteArray data = f.readAll();
-            QTextCodec *codec = QTextCodec::codecForName("ISO 8859-1");
-            content = codec->toUnicode(data);
-            f.close();
-        }
-        {
-            QFile f(path + file + "-utf8.txt");
-            if (!f.open(QFile::WriteOnly | QFile::Text)) {
-                continue;
-            }
-            f.write(content.toAscii());
-        }
-
-        // import files
-        if (!Utils::Database::importCsvToDatabase(ICD10_DATABASE_NAME, path + file + "-utf8.txt", file.toLower(), "¦", true)) {
-            LOG_ERROR("Error");
-            continue;
-        }
-
-        // remove file
-//        tmpDir.remove(file + "-utf8.txt");
-//        tmpDir.remove(file + ".txt");
-        m_Progress->setValue(m_Progress->value() + 1);
-    }
-
-    // remove temp dir
-    foreach(const QString &file, tmpDir.entryList(QStringList() << "*")) {
-        tmpDir.remove(file);
-    }
-//    tmpDir.cdUp();
-//    tmpDir.rmdir("Exp_text");
-//    tmpDir.remove(ICD10_URL);
-//    tmpDir.cdUp();
-//    tmpDir.rmdir("freeicd_downloads");
-
-//    Q_EMIT processEnded();
-
-    Utils::informativeMessageBox(tr("ICD10 database created in path %1").arg(databaseAbsPath()), "");
+    Q_ASSERT(_step);
+    if (!_step)
+        return false;
+    if (!_step->postProcessDownload())
+        return false;
+    if (!_step->process())
+        return false;
+    if (!_step->registerDataPack())
+        return false;
     return true;
 }
 

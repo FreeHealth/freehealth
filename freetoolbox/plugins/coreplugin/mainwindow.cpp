@@ -242,12 +242,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::preparePages()
 {
+    // TODO: Use the Core::PageWidget
     QList<IToolPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IToolPage>();
     pages.prepend(m_FullReleasePage);
 
     QMap<QString, QTreeWidgetItem *> categories;
-    QFont bold;
-    bold.setBold(true);
+    QFont title;
+    title.setBold(true);
+    title.setPointSize(title.pointSize() + 1);
+    title.setCapitalization(QFont::AllUppercase);
 
     int index = 0;
     foreach (IToolPage *page, pages) {
@@ -268,8 +271,9 @@ void MainWindow::preparePages()
         if (!categories.contains(currentCategory)) {
             treeitem = new QTreeWidgetItem(ui->pageTree);
             treeitem->setText(0, trCategories.at(0));
+            treeitem->setForeground(0, QBrush(QColor("#728194")));
             treeitem->setData(0, Qt::UserRole, qVariantFromValue(pageData));
-            treeitem->setFont(0, bold);
+            treeitem->setFont(0, title);
             categories.insert(currentCategory, treeitem);
         }
 

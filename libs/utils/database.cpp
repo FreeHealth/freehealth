@@ -2127,7 +2127,8 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
 
 /**
  * Execute simple SQL commands on the QSqlDatabase \e DB. Return \e true if all was fine.\n
- * Creates a transaction on the database \e DB.
+ * Creates a transaction on the database \e DB. \n
+ * Lines starting with \e -- are ignored.
 */
 bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 {
@@ -2135,8 +2136,8 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
         return false;
     DB.transaction();
     QSqlQuery query(DB);
-    foreach(const QString &r, list) {
-
+    foreach(QString r, list) {
+        r = r.trimmed();
         //ignore empty lines
         if (r.isEmpty())
             continue;
@@ -2170,7 +2171,9 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 /**
  * Execute SQL commands on the QSqlDatabase \e DB. \n
  * WARNING: All SQL commands must be separated by a \e ; followed by a linefeed. \n
- * Creates a transaction on the database \e DB.
+ * Creates a transaction on the database \e DB. \n
+ * \warning The string is splitted with the ; and line feed. All lines starting with
+ * \e -- are ignored. Remember to add a ; at the end of your comment lines.
 */
 bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
 {
@@ -2187,7 +2190,9 @@ bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
  * Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
  * Line starting with '-- ' are ignored.\n
  * All SQL commands must end with a \e ; followed by a linefeed. \n
- * Creates a transaction on the database \e DB.
+ * Creates a transaction on the database \e DB. \n
+ * Files content \b must \b be \b utf8 encoded.
+ * \sa executeSQL(), importCsvToDatabase()
 */
 bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QString *error)
 {

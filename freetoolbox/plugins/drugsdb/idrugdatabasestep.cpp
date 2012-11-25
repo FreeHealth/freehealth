@@ -45,7 +45,6 @@
 #include <datapackplugin/datapackcore.h>
 #include <datapackplugin/datapackquery.h>
 
-
 #include <translationutils/constants.h>
 #include <quazip/global.h>
 #include <utils/httpdownloader.h>
