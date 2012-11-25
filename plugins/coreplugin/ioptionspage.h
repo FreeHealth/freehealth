@@ -65,7 +65,7 @@ public:
 
     virtual void finish() = 0;
 
-    virtual bool matches(const QString & /* searchKeyWord */) const { return false; }
+    virtual bool matches(const QString & searchKeyWord) const {Q_UNUSED(searchKeyWord); return false; }
 
     virtual QString helpPage() = 0;
 
