@@ -27,6 +27,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #DDE4EB;</string>
+       </property>
        <property name="columnCount">
         <number>1</number>
        </property>
