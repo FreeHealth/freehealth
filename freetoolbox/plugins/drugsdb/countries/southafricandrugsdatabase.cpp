@@ -98,7 +98,7 @@ FreeSouthAfricanDrugsDatabasePage::FreeSouthAfricanDrugsDatabasePage(QObject *pa
     _step(0)
 {
     setObjectName("FreeSouthAfricanDrugsDatabasePage");
-    _step = new ZaDrugDatatabaseStep(this);
+    _step = new ZaDrugDatabaseStep(this);
     pluginManager()->addObject(_step);
 }
 
@@ -135,7 +135,7 @@ NonFreeSouthAfricanDrugsDatabasePage::NonFreeSouthAfricanDrugsDatabasePage(QObje
     _step(0)
 {
     setObjectName("NonFreeSouthAfricanDrugsDatabasePage");
-    _step = new ZaDrugDatatabaseStep(this);
+    _step = new ZaDrugDatabaseStep(this);
     _step->setLicenseType(IDrugDatabaseStep::NonFree);
     pluginManager()->addObject(_step);
 }
@@ -165,7 +165,7 @@ QWidget *NonFreeSouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
 
 static char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
+ZaDrugDatabaseStep::ZaDrugDatabaseStep(QObject *parent) :
     DrugsDB::Internal::IDrugDatabaseStep(parent),
     m_Progress(0), m_WithProgress(false)
 {
@@ -188,13 +188,13 @@ ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
     createDir();
 }
 
-ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
+ZaDrugDatabaseStep::~ZaDrugDatabaseStep()
 {
     if (m_Progress)
         delete m_Progress;
 }
 
-void ZaDrugDatatabaseStep::setLicenseType(LicenseType type)
+void ZaDrugDatabaseStep::setLicenseType(LicenseType type)
 {
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
@@ -216,7 +216,7 @@ void ZaDrugDatatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
+bool ZaDrugDatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     // get all tradename html pages from the site
@@ -234,7 +234,7 @@ bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
     return true;
 }
 
-void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
+void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
 {
     static int nb = 0;
     qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
@@ -310,14 +310,14 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
     }
 }
 
-QString ZaDrugDatatabaseStep::processMessage() const
+QString ZaDrugDatabaseStep::processMessage() const
 {
     if (licenseType() == NonFree)
         return tr("Non-free South African drugs database creation");
     return tr("Free South African drugs database creation");
 }
 
-bool ZaDrugDatatabaseStep::process()
+bool ZaDrugDatabaseStep::process()
 {
     prepareData();
     createDatabase();
@@ -327,7 +327,7 @@ bool ZaDrugDatatabaseStep::process()
     return true;
 }
 
-bool ZaDrugDatatabaseStep::prepareData()
+bool ZaDrugDatabaseStep::prepareData()
 {
     m_Drug_Link.clear();
 
@@ -656,7 +656,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
     return true;
 }
 
-bool ZaDrugDatatabaseStep::populateDatabase()
+bool ZaDrugDatabaseStep::populateDatabase()
 {
     if (!checkDatabase())
         return false;
@@ -764,7 +764,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     return true;
 }
 
-bool ZaDrugDatatabaseStep::linkMolecules()
+bool ZaDrugDatabaseStep::linkMolecules()
 {
     // 29 Sept 2011
     //    NUMBER OF MOLECULES 1148

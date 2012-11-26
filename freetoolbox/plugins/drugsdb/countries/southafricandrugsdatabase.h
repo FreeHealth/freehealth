@@ -40,7 +40,7 @@ class QProgressDialog;
 
 namespace DrugsDB {
 namespace Internal {
-class ZaDrugDatatabaseStep;
+class ZaDrugDatabaseStep;
 
 class FreeSouthAfricanDrugsDatabasePage : public Core::IToolPage
 {
@@ -58,7 +58,7 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    ZaDrugDatatabaseStep *_step;
+    ZaDrugDatabaseStep *_step;
 };
 
 class NonFreeSouthAfricanDrugsDatabasePage : public Core::IToolPage
@@ -77,16 +77,16 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    ZaDrugDatatabaseStep *_step;
+    ZaDrugDatabaseStep *_step;
 };
 
-class ZaDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
+class ZaDrugDatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
 public:
-    ZaDrugDatatabaseStep(QObject *parent = 0);
-    ~ZaDrugDatatabaseStep();
+    ZaDrugDatabaseStep(QObject *parent = 0);
+    ~ZaDrugDatabaseStep();
 
     QString id() const {return "ZaDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
