@@ -257,7 +257,7 @@ void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
             LOG_ERROR(QString("ERROR: Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
             return;
         }
-        file.write(content.toAscii());
+        file.write(content.toLatin1());
     }
 
     // Get drugs pages
