@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Account::Internal::AccountDatabaseDefautsWidget</class>
- <widget class="QWidget" name="Account::Internal::AccountDatabaseDefautsWidget">
+ <class>Account::Internal::AccountDatabaseDefaultsWidget</class>
+ <widget class="QWidget" name="Account::Internal::AccountDatabaseDefaultsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

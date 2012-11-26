@@ -119,13 +119,13 @@ private:
 namespace Account {
 namespace Internal {
 
-class AccountDatabaseDefautsWidget : public QWidget, private Ui::AccountDatabaseDefautsWidget
+class AccountDatabaseDefaultsWidget : public QWidget, private Ui::AccountDatabaseDefaultsWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(AccountDatabaseDefautsWidget)
+    Q_DISABLE_COPY(AccountDatabaseDefaultsWidget)
 
 public:
-    explicit AccountDatabaseDefautsWidget(QWidget *parent = 0);
+    explicit AccountDatabaseDefaultsWidget(QWidget *parent = 0);
     void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
@@ -153,11 +153,11 @@ private:
 }  // End Internal
 
 
-class AccountDatabaseDefautsPage : public Core::IOptionsPage
+class AccountDatabaseDefaultsPage : public Core::IOptionsPage
 {
 public:
-    AccountDatabaseDefautsPage(QObject *parent = 0);
-    ~AccountDatabaseDefautsPage();
+    AccountDatabaseDefaultsPage(QObject *parent = 0);
+    ~AccountDatabaseDefaultsPage();
 
     QString id() const;
     QString displayName() const;
@@ -172,11 +172,11 @@ public:
 
     QString helpPage() {return QString();}
 
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::AccountDatabaseDefautsWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::AccountDatabaseDefaultsWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<Internal::AccountDatabaseDefautsWidget> m_Widget;
+    QPointer<Internal::AccountDatabaseDefaultsWidget> m_Widget;
 };
 
 }  // End namespace Account

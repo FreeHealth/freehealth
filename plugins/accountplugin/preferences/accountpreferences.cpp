@@ -182,32 +182,32 @@ void AccountUserWidget::changeEvent(QEvent *e)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////  AccountDatabaseDefautsPage  ////////////////////////////////////////
+///////////////////////////////  AccountDatabaseDefaultsPage  ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-AccountDatabaseDefautsPage::AccountDatabaseDefautsPage(QObject *parent) :
+AccountDatabaseDefaultsPage::AccountDatabaseDefaultsPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
-    setObjectName("AccountDatabaseDefautsPage");
+    setObjectName("AccountDatabaseDefaultsPage");
 }
 
-AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
+AccountDatabaseDefaultsPage::~AccountDatabaseDefaultsPage()
 {
     if (m_Widget) delete m_Widget;
         m_Widget = 0;
 }
 
-QString AccountDatabaseDefautsPage::id() const { return objectName(); }
-QString AccountDatabaseDefautsPage::displayName() const { return tkTr(Trans::Constants::DEFAULTS); }
-QString AccountDatabaseDefautsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int AccountDatabaseDefautsPage::sortIndex() const {return 10;}
+QString AccountDatabaseDefaultsPage::id() const { return objectName(); }
+QString AccountDatabaseDefaultsPage::displayName() const { return tkTr(Trans::Constants::DEFAULTS); }
+QString AccountDatabaseDefaultsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int AccountDatabaseDefaultsPage::sortIndex() const {return 10;}
 
-void AccountDatabaseDefautsPage::resetToDefaults()
+void AccountDatabaseDefaultsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDataToUi();
 }
 
-void AccountDatabaseDefautsPage::apply()
+void AccountDatabaseDefaultsPage::apply()
 {
     if (!m_Widget) {
         return;
@@ -215,9 +215,9 @@ void AccountDatabaseDefautsPage::apply()
     m_Widget->saveToSettings(settings());
 }
 
-void AccountDatabaseDefautsPage::finish() { delete m_Widget; }
+void AccountDatabaseDefaultsPage::finish() { delete m_Widget; }
 
-void AccountDatabaseDefautsPage::checkSettingsValidity()
+void AccountDatabaseDefaultsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
 //    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
@@ -229,25 +229,25 @@ void AccountDatabaseDefautsPage::checkSettingsValidity()
     settings()->sync();
 }
 
-QWidget *AccountDatabaseDefautsPage::createPage(QWidget *parent)
+QWidget *AccountDatabaseDefaultsPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new AccountDatabaseDefautsWidget(parent);
+    m_Widget = new AccountDatabaseDefaultsWidget(parent);
     return m_Widget;
 }
 
-AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
+AccountDatabaseDefaultsWidget::AccountDatabaseDefaultsWidget(QWidget *parent) :
         QWidget(parent)
 {
-    setObjectName("AccountDatabaseDefautsWidget");
+    setObjectName("AccountDatabaseDefaultsWidget");
     setupUi(this);
     others->hide();
     datapackButton->hide();
 //    setDataToUi();
 }
 
-void AccountDatabaseDefautsWidget::on_createButton_clicked()
+void AccountDatabaseDefaultsWidget::on_createButton_clicked()
 {
     QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     bool success = true;
@@ -303,20 +303,20 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     }
 }
 
-void AccountDatabaseDefautsWidget::setDataToUi()
+void AccountDatabaseDefaultsWidget::setDataToUi()
 {
     // TODO: For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox)
 }
 
-void AccountDatabaseDefautsWidget::saveToSettings(Core::ISettings *)
+void AccountDatabaseDefaultsWidget::saveToSettings(Core::ISettings *)
 {
 }
 
-void AccountDatabaseDefautsWidget::writeDefaultSettings(Core::ISettings *)
+void AccountDatabaseDefaultsWidget::writeDefaultSettings(Core::ISettings *)
 {
 }
 
-void AccountDatabaseDefautsWidget::changeEvent(QEvent *e)
+void AccountDatabaseDefaultsWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -335,7 +335,7 @@ static QString getCsvAbsFilePath(const QString &filePrototype)
     return QString ("%1%2_%3.csv").arg(sqlPath).arg(filePrototype).arg(QLocale().name());
 }
 
-bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototype, const int tableRef)
+bool AccountDatabaseDefaultsWidget::createDefaultsFor(const QString &filePrototype, const int tableRef)
 {
     bool yes = Utils::Database::importCsvToDatabase(AccountDB::Constants::DB_ACCOUNTANCY,
                                          getCsvAbsFilePath(filePrototype),
@@ -344,7 +344,7 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
     return yes;
 }
 
-bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
+bool AccountDatabaseDefaultsWidget::createMinimalsDefaults(const int tableRef)
 {
     bool success = true;
     QStringList valuesList;
@@ -356,7 +356,7 @@ bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
     return success;
 }
 
-bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &connectionName,const int tableRef, const QStringList & valuesList)
+bool AccountDatabaseDefaultsWidget::createMinimalDefaultsFor(const QString &connectionName,const int tableRef, const QStringList & valuesList)
 {
     QSqlDatabase db = QSqlDatabase::database(connectionName);
     if (!db.isOpen()) {
@@ -399,7 +399,7 @@ bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &conne
 }
 
 
-/*void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
+/*void AccountDatabaseDefaultsWidget::on_datapackButton_clicked()
 {
         LOG("datapackButton clicked");
         AccountDB::DatapackMPModel dtpkmodel(this);

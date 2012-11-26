@@ -75,7 +75,7 @@ AccountPlugin::AccountPlugin() :
         m_PercentPage(new PercentagesPage(this)),
         m_DistancePage(new DistanceRulesPage(this)),
         m_AssetsRatesPage(new AssetsRatesPage(this)),
-        m_DefaultPage(new AccountDatabaseDefautsPage(this))
+        m_DefaultPage(new AccountDatabaseDefaultsPage(this))
 
 {
     if (Utils::Log::warnPluginsCreation())
