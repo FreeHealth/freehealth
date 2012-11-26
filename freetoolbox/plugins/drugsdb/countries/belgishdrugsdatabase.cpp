@@ -168,7 +168,7 @@ BeDrugDatabaseStep::BeDrugDatabaseStep(QObject *parent) :
                                .arg("drugs/be_noddi/packdescription.xml"));
     setDownloadUrl("");
     setLicenseType(Free);
-    createDir();
+    createTemporaryStorage();
 }
 
 BeDrugDatabaseStep::~BeDrugDatabaseStep()
@@ -202,7 +202,7 @@ QString BeDrugDatabaseStep::tmpDatabaseAbsPath()
     return QDir::cleanPath(tempPath() + "/drugs-be.db");
 }
 
-bool BeDrugDatabaseStep::downloadFiles(QProgressBar *bar)
+bool BeDrugDatabaseStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     Q_EMIT downloadFinished();

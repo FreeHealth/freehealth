@@ -98,14 +98,14 @@ FrenchZipCodesStep::FrenchZipCodesStep(QObject *parent) :
     m_WithProgress(false)
 {
     setObjectName("FrenchZipCodesStep");
-    createDir();
+    createTemporaryStorage();
 }
 
 FrenchZipCodesStep::~FrenchZipCodesStep()
 {
 }
 
-bool FrenchZipCodesStep::createDir()
+bool FrenchZipCodesStep::createTemporaryStorage()
 {
     // Create the wortking path
     if (!QDir().mkpath(workingPath()))
@@ -124,13 +124,13 @@ bool FrenchZipCodesStep::createDir()
     return true;
 }
 
-bool FrenchZipCodesStep::cleanFiles()
+bool FrenchZipCodesStep::cleanTemporaryStorage()
 {
     QFile(databaseAbsPath()).remove();
     return true;
 }
 
-bool FrenchZipCodesStep::downloadFiles(QProgressBar *bar)
+bool FrenchZipCodesStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     // TODO: manage progress download */
@@ -302,7 +302,7 @@ FrenchZipCodesWidget::FrenchZipCodesWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     m_Step = new FrenchZipCodesStep(this);
-    m_Step->createDir();
+    m_Step->createTemporaryStorage();
     pluginManager()->addObject(m_Step);
 }
 
@@ -316,7 +316,7 @@ void FrenchZipCodesWidget::on_download_clicked()
 {
     ui->download->setEnabled(false);
     ui->download->setText(tr("Download in progress"));
-    m_Step->downloadFiles();
+    m_Step->startDownload();
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
 }
 

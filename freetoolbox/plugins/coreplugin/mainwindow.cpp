@@ -364,7 +364,7 @@ void MainWindow::createFullRelease()
     QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
     // create dirs
     foreach(Core::IFullReleaseStep *s, steps) {
-        if (!s->createDir()) {
+        if (!s->createTemporaryStorage()) {
             Utils::warningMessageBox(tr("%1 can not create its temporary directory.").arg(s->id()),
                                      tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
             return;
@@ -410,7 +410,7 @@ void MainWindow::startNextDownload()
     }
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(downloadFinished()), this, SLOT(startNextDownload()));
-    m_ActiveStep->downloadFiles();
+    m_ActiveStep->startDownload();
 }
 
 void MainWindow::startNextProcess()

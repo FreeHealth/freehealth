@@ -178,7 +178,7 @@ FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
                                .arg("drugs/fda_noddi/packdescription.xml"));
     setDownloadUrl("http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip");
     setLicenseType(Free);
-    createDir();
+    createTemporaryStorage();
 }
 
 FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()

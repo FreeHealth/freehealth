@@ -69,19 +69,19 @@
  */
 
 /*!
- * \fn virtual bool Core::IFullReleaseStep::createDir() = 0;
+ * \fn virtual bool Core::IFullReleaseStep::createTemporaryStorage() = 0;
  * \brief Creates a temporary directory.
  * \returns \e true if successful, else \e false.
  */
 
 /*!
- * \fn virtual bool Core::IFullReleaseStep::cleanFiles() = 0;
+ * \fn virtual bool Core::IFullReleaseStep::cleanTemporaryStorage() = 0;
  * \brief Removes the temporary directory and files.
  * \returns \e true if successful, else \e false.
  */
 
 /*!
- * \fn virtual bool Core::IFullReleaseStep::downloadFiles(QProgressBar *bar = 0) = 0;
+ * \fn virtual bool Core::IFullReleaseStep::startDownload(QProgressBar *bar = 0) = 0;
  * \brief Downloads some files from a server.
  *
  * Optionally updates the QProgressBar \e bar.

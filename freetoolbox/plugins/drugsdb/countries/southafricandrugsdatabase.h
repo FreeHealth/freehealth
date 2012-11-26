@@ -92,7 +92,7 @@ public:
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     void setLicenseType(LicenseType type);
 
-    bool downloadFiles(QProgressBar *bar = 0);
+    bool startDownload(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const;
 

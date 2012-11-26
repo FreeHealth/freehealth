@@ -141,18 +141,18 @@ DataPackStep::~DataPackStep()
 {
 }
 
-bool DataPackStep::createDir()
+bool DataPackStep::createTemporaryStorage()
 {
     return true;
 }
 
-bool DataPackStep::cleanFiles()
+bool DataPackStep::cleanTemporaryStorage()
 {
     return true;
 }
 
 /** Download files -> nothing to do */
-bool DataPackStep::downloadFiles(QProgressBar *bar)
+bool DataPackStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     QTimer::singleShot(10, this, SIGNAL(downloadFinished()));

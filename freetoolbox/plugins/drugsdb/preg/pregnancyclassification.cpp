@@ -154,20 +154,20 @@ PregnancyDatatabaseStep::~PregnancyDatatabaseStep()
 {
 }
 
-bool PregnancyDatatabaseStep::createDir()
+bool PregnancyDatatabaseStep::createTemporaryStorage()
 {
     Utils::checkDir(workingPath(), true, "PregnancyDatatabaseStep::createDir");
     Utils::checkDir(QFileInfo(databaseAbsPath()).absolutePath(), true, "PregnancyDatatabaseStep::createDir");
     return true;
 }
 
-bool PregnancyDatatabaseStep::cleanFiles()
+bool PregnancyDatatabaseStep::cleanTemporaryStorage()
 {
     QFile(databaseAbsPath()).remove();
     return true;
 }
 
-bool PregnancyDatatabaseStep::downloadFiles(QProgressBar *bar)
+bool PregnancyDatatabaseStep::startDownload(QProgressBar *bar)
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
 //    dld->setMainWindow(mainwindow());
@@ -254,7 +254,7 @@ PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent) :
     ui->progressBar->setRange(0,1);
     ui->progressBar->setValue(0);
     m_Step = new PregnancyDatatabaseStep(this);
-    m_Step->createDir();
+    m_Step->createTemporaryStorage();
 //    computeJavascriptFile();
 }
 
@@ -270,7 +270,7 @@ void PregnancyClassificationWidget::computeJavascriptFile()
 void PregnancyClassificationWidget::on_download_clicked()
 {
     ui->progressBar->show();
-    m_Step->downloadFiles(ui->progressBar);
+    m_Step->startDownload(ui->progressBar);
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
 }
 

@@ -61,9 +61,9 @@ public:
     QString id() const {return "PregnancyDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::PregnancyDatabase;}
 
-    bool createDir();
-    bool cleanFiles();
-    bool downloadFiles(QProgressBar *bar = 0);
+    bool createTemporaryStorage();
+    bool cleanTemporaryStorage();
+    bool startDownload(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const {return tr("Pregnancy && drugs database creation");}
 

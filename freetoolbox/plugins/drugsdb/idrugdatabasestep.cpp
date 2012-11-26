@@ -829,7 +829,7 @@ bool IDrugDatabaseStep::addPregnancyCheckingData()
 }
 
 /** Create all object path (temp, output, download...) */
-bool IDrugDatabaseStep::createDir()
+bool IDrugDatabaseStep::createTemporaryStorage()
 {
     // Create the tempPath
     if (!QDir().mkpath(_tempPath))
@@ -849,7 +849,7 @@ bool IDrugDatabaseStep::createDir()
 }
 
 /** Automatically clean the output database (removes the output file). */
-bool IDrugDatabaseStep::cleanFiles()
+bool IDrugDatabaseStep::cleanTemporaryStorage()
 {
     QFile(absoluteFilePath()).remove();
     return true;
@@ -859,7 +859,7 @@ bool IDrugDatabaseStep::cleanFiles()
  * Download the URL to the tempPath().
  * \sa setDownloadUrl()
  */
-bool IDrugDatabaseStep::downloadFiles(QProgressBar *bar)
+bool IDrugDatabaseStep::startDownload(QProgressBar *bar)
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
     dld->setProgressBar(bar);

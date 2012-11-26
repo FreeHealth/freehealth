@@ -52,10 +52,10 @@ public:
     QString id() const {return objectName();}
     Steps stepNumber() const {return IcdDatabase;}
 
-    bool createDir();
-    bool cleanFiles();
+    bool createTemporaryStorage();
+    bool cleanTemporaryStorage();
 
-    bool downloadFiles(QProgressBar *bar = 0);
+    bool startDownload(QProgressBar *bar = 0);
     bool postProcessDownload();
 
     bool process();

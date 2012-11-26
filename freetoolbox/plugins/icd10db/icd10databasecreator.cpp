@@ -115,9 +115,9 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     Q_ASSERT(_step);
     if (!_step)
         return false;
-    if (!_step->createDir())
+    if (!_step->createTemporaryStorage())
         return false;
-    if (!_step->downloadFiles())
+    if (!_step->startDownload())
         return false;
     return true;
 }

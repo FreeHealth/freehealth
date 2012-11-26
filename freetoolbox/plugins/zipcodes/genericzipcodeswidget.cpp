@@ -54,7 +54,7 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
     ui->toolButtonRemoveCountry->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
 
     m_Step = new GenericZipCodesStep(this);
-    m_Step->createDir();
+    m_Step->createTemporaryStorage();
     pluginManager()->addObject(m_Step);
 
     // provide convenience pointers for fast access to the model data of the step object
@@ -100,7 +100,7 @@ void GenericZipCodesWidget::on_downloadButton_clicked()
 //    ui->progressBar->setEnabled(true);
 //    ui->downloadButton->setText(tr("Download in progress"));
     m_availableCountriesModel->clear();
-    m_Step->downloadFiles();
+    m_Step->startDownload();
     connect(m_Step, SIGNAL(countryListDownloaded(bool)), this, SLOT(onDownloadFinished()));
 }
 

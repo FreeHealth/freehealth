@@ -185,7 +185,7 @@ ZaDrugDatabaseStep::ZaDrugDatabaseStep(QObject *parent) :
                                .arg("drugs/za_noddi/packdescription.xml"));
     setLicenseType(Free);
     setDownloadUrl("");
-    createDir();
+    createTemporaryStorage();
 }
 
 ZaDrugDatabaseStep::~ZaDrugDatabaseStep()
@@ -216,7 +216,7 @@ void ZaDrugDatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-bool ZaDrugDatabaseStep::downloadFiles(QProgressBar *bar)
+bool ZaDrugDatabaseStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     // get all tradename html pages from the site

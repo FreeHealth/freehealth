@@ -73,10 +73,10 @@ public:
     QString id() const {return "DataPackStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DataPackProcessing;}
 
-    bool createDir();
-    bool cleanFiles();
+    bool createTemporaryStorage();
+    bool cleanTemporaryStorage();
 
-    bool downloadFiles(QProgressBar *bar = 0);
+    bool startDownload(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const;
 

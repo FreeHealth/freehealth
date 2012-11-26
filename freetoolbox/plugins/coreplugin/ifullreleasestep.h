@@ -61,10 +61,10 @@ public:
     virtual QString id() const = 0;
     virtual Steps stepNumber() const = 0;
 
-    virtual bool createDir() = 0;
-    virtual bool cleanFiles() = 0;
+    virtual bool createTemporaryStorage() = 0;
+    virtual bool cleanTemporaryStorage() = 0;
 
-    virtual bool downloadFiles(QProgressBar *bar = 0) = 0;
+    virtual bool startDownload(QProgressBar *bar = 0) = 0;
     virtual bool postProcessDownload() {Q_EMIT postProcessDownloadFinished(); return true;}
 
     virtual bool process() = 0;

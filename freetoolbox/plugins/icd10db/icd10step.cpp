@@ -119,11 +119,11 @@ Icd10Step::~Icd10Step()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool Icd10Step::initialize()
 {
-    return createDir();
+    return createTemporaryStorage();
 }
 
 /** Create all object path (temp, output, download...) */
-bool Icd10Step::createDir()
+bool Icd10Step::createTemporaryStorage()
 {
     // Create the tempPath
     if (!QDir().mkpath(d->_tmpPath))
@@ -143,7 +143,7 @@ bool Icd10Step::createDir()
 }
 
 /** Automatically clean the output database (removes the output file). */
-bool Icd10Step::cleanFiles()
+bool Icd10Step::cleanTemporaryStorage()
 {
     QFile out(d->_outputPath + QDir::separator() + d->_databaseFileName);
     if (out.exists())
@@ -156,7 +156,7 @@ bool Icd10Step::cleanFiles()
  * Asynchronously emits the downloadFinished() signal when done.
  * \sa setDownloadUrl()
  */
-bool Icd10Step::downloadFiles(QProgressBar *bar)
+bool Icd10Step::startDownload(QProgressBar *bar)
 {
     // File already exists ? --> don't download
     QString filename = QString(d->_url).split("/").last();

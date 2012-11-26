@@ -108,7 +108,7 @@ GenericZipCodesStep::~GenericZipCodesStep()
 }
 
 /*! Downloads the list of available countries. */
-bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
+bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
 

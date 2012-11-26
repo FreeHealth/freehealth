@@ -157,7 +157,7 @@ CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
                                .arg("drugs/ca_noddi/packdescription.xml"));
     setDownloadUrl("http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip");
     setLicenseType(Free);
-    createDir();
+    createTemporaryStorage();
 }
 
 CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
