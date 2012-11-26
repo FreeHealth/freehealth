@@ -350,6 +350,7 @@ public:
 
     virtual bool alterTableForNewField(const int tableRef, const int newFieldRef, const int TypeOfField = FieldUndefined, const QString & nullOption = QString::null);
 
+    static bool vacuum(const QString &connectionName);
     static bool executeSQL(const QStringList &list, QSqlDatabase &DB);
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QString *error = 0);
