@@ -5,22 +5,14 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.zipcodes.allcountries</uuid>
+    <uuid>freemedforms.certified.zipcodes.frenchonly</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
-    <version>0.7.0</version>
-    <fmfv>0.7.0</fmfv>
-    <fdv>0.7.0</fdv>
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-21</lmdate>
     <icon>__theme__/zipcodes.png</icon>
-    <weblink></weblink>
-    <bibliography/>
-    <file>0.7.0/zipcodes/zipcodes.db.zip</file>
-    <unziptopath>drugs</unziptopath>
-    <size>812</size>
-    <md5>716b1b482db545e8d0ccbf017f7d4e07</md5>
-    <sha1></sha1>
+    <file>zipcodes/zipcodes.db.zip</file>
+    <unziptopath>zipcodes</unziptopath>
     <datatype>ZipCodes</datatype>
 
     <!-- Translatable values -->
@@ -38,7 +30,6 @@
       &lt;br />
       &lt;/p>
     </htmldescription>
-
 
     <htmldescription lang="xx">&lt;p>
       This package provides access to auto-populating of forms

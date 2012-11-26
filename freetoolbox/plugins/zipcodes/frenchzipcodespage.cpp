@@ -34,10 +34,15 @@
 
 #include <drugsdb/tools.h>
 
+#include <datapackplugin/datapackcore.h>
+#include <datapackplugin/datapackquery.h>
+
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
 #include <quazip/global.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -50,6 +55,7 @@
 // Data are extracted from URL: http://www.galichon.com/codesgeo/
 
 using namespace ZipCodes;
+using namespace Trans::ConstantTranslations;
 
 namespace {
 
@@ -59,6 +65,7 @@ const char* const  FRENCH_URL  = "http://www.galichon.com/codesgeo/data/insee.zi
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DataPackPlugin::DataPackCore *dataPackCore() {return DataPackPlugin::DataPackCore::instance();}
 
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/zipcodes/zipcodes.db");}
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZipCodes/") + QDir::separator();}
@@ -66,6 +73,7 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString csvFileAbsPath()         {return workingPath() + "/insee.csv";}
 static inline QString sqlMasterFileAbsPath()   {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");}
 static inline QString sqlImportFileAbsPath()   {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");}
+static inline QString datapackDescriptionFile(){return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/textfiles/datapack_description/zipcodes/packdescription.xml");}
 
 }
 
@@ -139,7 +147,7 @@ bool FrenchZipCodesStep::process()
 {
     unzipFiles();
     prepareData();
-    createDatabase();
+//    createDatabase();
     populateDatabase();
     Q_EMIT processFinished();
     return true;
@@ -192,6 +200,10 @@ bool FrenchZipCodesStep::createDatabase()
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+        .arg(QFileInfo(databaseAbsPath()).fileName())
+        .arg(QFileInfo(databaseAbsPath()).absolutePath()));
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", DB_NAME);
     db.setDatabaseName(databaseAbsPath());
     if (!db.open()) {
@@ -200,10 +212,16 @@ bool FrenchZipCodesStep::createDatabase()
     }
 
     if (db.tables().contains("ZIPS_IMPORT")) {
-        Utils::Database::executeSQL("DROP TABLE ZIPS_IMPORT;", db);
+        if (!Utils::Database::executeSQL("DROP TABLE ZIPS_IMPORT;", db)) {
+            LOG_ERROR("Unable to clean database");
+            return false;
+        }
     }
     if (!db.tables().contains("ZIPS")) {
-        Utils::Database::executeSqlFile(DB_NAME, sqlMasterFileAbsPath());
+        if (!Utils::Database::executeSqlFile(DB_NAME, sqlMasterFileAbsPath())) {
+            LOG_ERROR("Unable to create database scheme");
+            return false;
+        }
     }
 
     LOG(QString("Database schema created"));
@@ -213,9 +231,6 @@ bool FrenchZipCodesStep::createDatabase()
 
 bool FrenchZipCodesStep::populateDatabase()
 {
-//    if (!DrugsDB::Tools::connectDatabase(::DB_NAME, databaseAbsPath()))
-//        return false;
-
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
@@ -256,17 +271,26 @@ bool FrenchZipCodesStep::populateDatabase()
     // clean database
     req = "DROP TABLE ZIPS_IMPORT;";
     Utils::Database::executeSQL(req, db);
-    req = "VACUUM;";
-    Utils::Database::executeSQL(req, db);
+    Utils::Database::vacuum(db.connectionName());
 
     LOG(QString("Database processed"));
 
     return true;
 }
 
+/** Register the ZipCode datapack to the non-free french associative server */
 bool FrenchZipCodesStep::registerDataPack()
 {
-    // TODO: register zipcode datapack
+    QString server = Core::Constants::SERVER_ASSO_NONFREE;
+    DataPackPlugin::DataPackQuery query;
+    query.setDescriptionFileAbsolutePath(datapackDescriptionFile());
+    query.setOriginalContentFileAbsolutePath(databaseAbsPath());
+    query.setZipOriginalFile(true);
+    if (!dataPackCore()->registerDataPack(query, server)) {
+        LOG_ERROR("Unable to register ICD10 datapack");
+        return false;
+    }
+    LOG(QString("Registered ZipCodes datapack in server %1").arg(server));
     return true;
 }
 

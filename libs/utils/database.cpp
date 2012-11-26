@@ -2126,6 +2126,24 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
 }
 
 /**
+ * Vacuum the database (for SQLite only). Execute the 'VACUUM' sql command on the database.
+ * \warning SQLite can not vacuum inside a transaction. Be sure that the database is not
+ * in transaction.
+ */
+bool Database::vacuum(const QString &connectionName)
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName);
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    QSqlQuery query(DB);
+    if (!query.exec("VACUUM")) {
+          LOG_QUERY_ERROR_FOR("Database", query);
+          return false;
+    }
+    return true;
+}
+
+/**
  * Execute simple SQL commands on the QSqlDatabase \e DB. Return \e true if all was fine.\n
  * Creates a transaction on the database \e DB. \n
  * Lines starting with \e -- are ignored.
