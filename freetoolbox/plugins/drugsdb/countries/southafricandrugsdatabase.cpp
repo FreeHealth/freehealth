@@ -237,8 +237,10 @@ bool ZaDrugDatabaseStep::downloadFiles(QProgressBar *bar)
 void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
 {
     static int nb = 0;
-    qWarning() << "get" << reply->errorString() << reply->isFinished() << reply->isReadable()
-               << reply->url();
+    qWarning() << "get:" << reply->errorString() <<
+                  "finished:" << reply->isFinished() <<
+                  "readable:" << reply->isReadable()
+               << "URL:" << reply->url();
     QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
     fileName.remove("//home.intekom.com/pharm/index/");
@@ -252,7 +254,7 @@ void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
         }
 
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            LOG_ERROR(QString("ERROR : Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
+            LOG_ERROR(QString("ERROR: Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
             return;
         }
         file.write(content.toAscii());
