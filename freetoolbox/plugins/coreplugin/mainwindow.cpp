@@ -357,7 +357,7 @@ void MainWindow::createFullRelease()
     m_FullReleaseProgress->setModal(true);
     m_FullReleaseProgress->show();
 
-    // get all Core::IFullReleaseStep
+    // get all Core::IFullReleaseSteps
     QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
     // create dirs
     foreach(Core::IFullReleaseStep *s, steps) {
