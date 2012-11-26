@@ -64,7 +64,7 @@ public:
     QString id() const {return "GenericZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
 
-    bool createDir() { return true; }
+    bool createDir();
     bool cleanFiles() { return true; }
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
@@ -93,7 +93,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onAvailableCountriesDownloaded(QNetworkReply *reply);
+    void onAvailableCountriesDownloaded();
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:

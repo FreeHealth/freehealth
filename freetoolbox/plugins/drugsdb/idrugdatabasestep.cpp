@@ -54,6 +54,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDomDocument>
+#include <QUrl>
 
 #include <QDebug>
 
