@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.icd10.free</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <cdate>2011-11-26</cdate>
+    <icon>__theme__/freeicd.png</icon>
+    <file>icd10/icd10.zip</file>
+    <unziptopath>icd10</unziptopath>
+    <datatype>ICD</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Classification internationale des maladies</label>
+    <label lang="xx">International classification of diseases</label>
+    <description lang="fr">Classification internationale des maladies version 10</description>
+    <description lang="xx">International classification of diseases version 10</description>
+
+    <htmldescription lang="fr">&lt;p>
+        La classification internationale des maladies est une classification médicale codifiée
+        de maladies et d'une très vaste variété de signes, symptômes, lésions traumatiques,
+        empoisonnements, circonstances sociales et causes externes de blessures ou de maladies.
+        Elle est publiée par l'Organisation mondiale de la santé (OMS) et est mondialement utilisée
+        pour l'enregistrement des causes de morbidité et de mortalité touchant le domaine
+        de la médecine.&lt;br />
+        &lt;br />
+        FreeMedForms utilise cette classification au sein des antécédents et dans ses
+        moteurs de recherche d'interaction médicamenteuses (en particulier le moteur
+        des médicaments potentiellement inappropriés en gériatrie).&lt;br />
+        &lt;br />
+        Son installation est fortement recommandée. Au préalable, il est nécessaire
+        de prendre connaissance de la licence de publication et d'en accepter les
+        termes.&lt;br />&lt;/p></htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+        The International Statistical Classification of Diseases and Related Health
+        Problems (most commonly known by the abbreviation ICD) is a medical classification
+        that provides codes to classify diseases and a wide variety of signs, symptoms,
+        abnormal findings, complaints, social circumstances, and external causes of
+        injury or disease. Under this system, every health condition can be assigned to
+        a unique category and given a code, up to six characters long. Such categories
+        can include a set of similar diseases.&lt;br />
+        &lt;br />
+        The International Classification of Diseases is published by the World Health
+        Organization (WHO) and used worldwide for morbidity and mortality statistics,
+        reimbursement systems, and automated decision support in medicine. This system
+        is designed to promote international comparability in the collection,
+        processing, classification, and presentation of these statistics. &lt;br />
+        &lt;br />
+        FreeMedForms uses this classification in the PMHx plugin and in the drug
+        interaction engine (and particularly in the potentially inappropriate medications
+        in geriatrics).&lt;br />
+        &lt;br />
+        Its installation is strongly recommended. But first of all, you must agree the
+        license terms of the ICD10.
+        &lt;br />&lt;/p></htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>
