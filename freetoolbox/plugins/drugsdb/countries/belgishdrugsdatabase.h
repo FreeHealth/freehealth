@@ -35,7 +35,7 @@
 
 namespace DrugsDB {
 namespace Internal {
-class BeDrugDatatabaseStep;
+class BeDrugDatabaseStep;
 
 class FreeBeDrugsDatabasePage : public Core::IToolPage
 {
@@ -53,7 +53,7 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    BeDrugDatatabaseStep *_step;
+    BeDrugDatabaseStep *_step;
 };
 
 class NonFreeBeDrugsDatabasePage : public Core::IToolPage
@@ -72,16 +72,16 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    BeDrugDatatabaseStep *_step;
+    BeDrugDatabaseStep *_step;
 };
 
-class BeDrugDatatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
+class BeDrugDatabaseStep : public DrugsDB::Internal::IDrugDatabaseStep
 {
     Q_OBJECT
 
 public:
-    BeDrugDatatabaseStep(QObject *parent = 0);
-    ~BeDrugDatatabaseStep();
+    BeDrugDatabaseStep(QObject *parent = 0);
+    ~BeDrugDatabaseStep();
 
     QString id() const {return "BeDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}

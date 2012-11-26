@@ -82,7 +82,7 @@ FreeBeDrugsDatabasePage::FreeBeDrugsDatabasePage(QObject *parent) :
     _step(0)
 {
     setObjectName("FreeBeDrugsDatabasePage");
-    _step = new BeDrugDatatabaseStep(this);
+    _step = new BeDrugDatabaseStep(this);
     pluginManager()->addObject(_step);
 }
 
@@ -119,7 +119,7 @@ NonFreeBeDrugsDatabasePage::NonFreeBeDrugsDatabasePage(QObject *parent) :
     _step(0)
 {
     setObjectName("NonFreeBeDrugsDatabasePage");
-    _step = new BeDrugDatatabaseStep(this);
+    _step = new BeDrugDatabaseStep(this);
     _step->setLicenseType(IDrugDatabaseStep::NonFree);
     pluginManager()->addObject(_step);
 }
@@ -148,7 +148,7 @@ QWidget *NonFreeBeDrugsDatabasePage::createPage(QWidget *parent)
 }
 
 /** Ctor of the belguish drug database step */
-BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
+BeDrugDatabaseStep::BeDrugDatabaseStep(QObject *parent) :
     IDrugDatabaseStep(parent),
     m_WithProgress(false)
 {
@@ -171,11 +171,11 @@ BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
     createDir();
 }
 
-BeDrugDatatabaseStep::~BeDrugDatatabaseStep()
+BeDrugDatabaseStep::~BeDrugDatabaseStep()
 {
 }
 
-void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
+void BeDrugDatabaseStep::setLicenseType(LicenseType type)
 {
     IDrugDatabaseStep::setLicenseType(type);
     if (type==NonFree) {
@@ -197,26 +197,26 @@ void BeDrugDatatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-QString BeDrugDatatabaseStep::tmpDatabaseAbsPath()
+QString BeDrugDatabaseStep::tmpDatabaseAbsPath()
 {
     return QDir::cleanPath(tempPath() + "/drugs-be.db");
 }
 
-bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
+bool BeDrugDatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }
 
-QString BeDrugDatatabaseStep::processMessage() const
+QString BeDrugDatabaseStep::processMessage() const
 {
     if (licenseType() == NonFree)
         return tr("Non-free Belgium drugs database creation");
     return tr("Free Belgium drugs database creation");
 }
 
-bool BeDrugDatatabaseStep::process()
+bool BeDrugDatabaseStep::process()
 {
     unzipFiles();
     prepareData();
@@ -227,7 +227,7 @@ bool BeDrugDatatabaseStep::process()
     return true;
 }
 
-bool BeDrugDatatabaseStep::unzipFiles()
+bool BeDrugDatabaseStep::unzipFiles()
 {
     Q_EMIT progressLabelChanged(tr("Unzipping raw source files"));
     Q_EMIT progressRangeChanged(0, 2);
@@ -254,7 +254,7 @@ bool BeDrugDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool BeDrugDatatabaseStep::prepareData()
+bool BeDrugDatabaseStep::prepareData()
 {
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
 
@@ -319,7 +319,7 @@ bool BeDrugDatatabaseStep::prepareData()
     return true;
 }
 
-bool BeDrugDatatabaseStep::populateDatabase()
+bool BeDrugDatabaseStep::populateDatabase()
 {
     if (!checkDatabase())
         return false;
@@ -468,7 +468,7 @@ bool BeDrugDatatabaseStep::populateDatabase()
     return true;
 }
 
-bool BeDrugDatatabaseStep::linkMolecules()
+bool BeDrugDatabaseStep::linkMolecules()
 {
     // 29 Sept 2011
     //    NUMBER OF MOLECULES 2147
