@@ -269,7 +269,8 @@ void GenericZipCodesStep::selectCountry(const QModelIndex &index)
         return;
     QStandardItem *item = m_availableCountriesModel->itemFromIndex(index)->clone();
     m_availableCountriesModel->removeRow(index.row());
-    m_selectedCountriesModel->appendRow(item);
+    if (m_selectedCountriesModel->findItems(item->data(Qt::DisplayRole).toString()).isEmpty())
+        m_selectedCountriesModel->appendRow(item);
     m_selectedCountriesModel->sort(0);
 }
 
