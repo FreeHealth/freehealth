@@ -99,10 +99,30 @@ GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     m_selectedCountriesCounter(0)
 {
     setObjectName("GenericZipCodesStep");
+    createDir();
 }
 
 GenericZipCodesStep::~GenericZipCodesStep()
 {
+}
+
+bool GenericZipCodesStep::createDir()
+{
+    // Create the tempPath
+    if (!QDir().mkpath(workingPath()))
+        LOG_ERROR("Unable to create outputPath:" + workingPath());
+    else
+        LOG("Tmp dir created");
+
+    // Create database output dir
+    if (!QDir().exists(databaseAbsPath())) {
+        if (!QDir().mkpath(databaseAbsPath())) {
+            LOG_ERROR("Unable to create GenericZipCodesStep database output path: " + databaseAbsPath());
+        } else {
+            LOG("GenericZipCodesStep database output dir created");
+        }
+    }
+    return true;
 }
 
 /*! Downloads the list of available countries. */
@@ -114,7 +134,7 @@ bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
     dld->startDownload();
-    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(onAvailableCountriesDownloaded()));
+    connect(dld, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
 
@@ -133,7 +153,6 @@ bool GenericZipCodesStep::postProcessDownload()
     Q_EMIT postProcessDownloadFinished();
     return true;
 }
-
 
 bool GenericZipCodesStep::createDatabaseScheme()
 {
@@ -276,8 +295,10 @@ void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTota
 void GenericZipCodesStep::onAvailableCountriesDownloaded()
 {
     // We can catch error of the Utils::HttpDownloader if we keep it as an object var
+
     // Check if file is downloaded
-    if (!QFileInfo().exists()) {
+    // TODO: avoid magic numbers in URL & fileName
+    if (!QFileInfo(workingPath() + "/postalCodeCountryInfo").exists()) {
         LOG_ERROR("File not downloaded");
         return;
     }
@@ -292,7 +313,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded()
     QString flagPath = Core::ICore::instance()->settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
     LOG(flagPath);
 
-    src.setData(reply->readAll());
+    src.setData(Utils::readTextFile(workingPath() + "/postalCodeCountryInfo"));
     doc.setContent(src.data());
 
     // iter over countries
@@ -337,6 +358,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded()
         selectCountry(defaultCountryItem->index());
     Q_EMIT countryListDownloaded(success);
 }
+
 /*!
  * \brief Called when a QNetworkReply that started a download of a selected country is finished.
  *

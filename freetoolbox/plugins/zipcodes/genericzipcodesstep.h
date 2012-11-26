@@ -64,7 +64,7 @@ public:
     QString id() const {return "GenericZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
 
-    bool createDir() { return true; }
+    bool createDir();
     bool cleanFiles() { return true; }
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
