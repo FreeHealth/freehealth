@@ -162,7 +162,7 @@ bool DataPackStep::downloadFiles(QProgressBar *bar)
 /** Starts all process needed to manage this step */
 bool DataPackStep::process()
 {
-    // At this point all IFullReleaseStep must have register their datapacks to the datapackcore
+    // At this point all IFullReleaseSteps must have registered their datapacks to the datapackcore
     return true;
 }
 
