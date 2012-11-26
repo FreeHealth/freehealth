@@ -69,7 +69,8 @@ HEADERS += global_exporter.h \
     widgets/detailsbutton.h \
     proxyaction.h \
     stringutils.h \
-    widgets/timecombobox.h
+    widgets/timecombobox.h \
+    httpdownloader_p.h
 
 SOURCES += global.cpp \
     database.cpp \

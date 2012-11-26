@@ -45,6 +45,7 @@
 #include <QDir>
 #include <QTextCodec>
 #include <QProgressDialog>
+#include <QUrl>
 
 using namespace ICD;
 using namespace Trans::ConstantTranslations;

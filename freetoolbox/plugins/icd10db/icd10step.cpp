@@ -52,6 +52,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTimer>
+#include <QUrl>
 
 #include <QDebug>
 

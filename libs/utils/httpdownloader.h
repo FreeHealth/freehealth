@@ -23,79 +23,56 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef HTTPDOWNLOADER_H
-#define HTTPDOWNLOADER_H
+#ifndef UTILS_HTTPDOWNLOADER_H
+#define UTILS_HTTPDOWNLOADER_H
 
 #include <utils/global_exporter.h>
 #include <QObject>
-
-#include <QNetworkAccessManager>
-#include <QUrl>
-
 QT_BEGIN_NAMESPACE
-class QFile;
-class QProgressDialog;
-class QNetworkReply;
-class QMainWindow;
 class QProgressBar;
+class QUrl;
+class QMainWindow;
 QT_END_NAMESPACE
 
 /**
  * \file httpdownloader.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 20 Jan 2012
+ * \version 0.8.0
+ * \date 26 Nov 2012
 */
 
 namespace Utils {
+namespace Internal {
+class HttpDownloaderPrivate;
+}  // namespace Internal
 
 class UTILS_EXPORT HttpDownloader : public QObject
 {
     Q_OBJECT
+    friend class Utils::Internal::HttpDownloaderPrivate;
+
 public:
     explicit HttpDownloader(QObject *parent = 0);
+    ~HttpDownloader();
 
-    // OBSOLETE
     void setMainWindow(QMainWindow *win);
-    // REPLACED BY
     void setProgressBar(QProgressBar *bar);
-
     void setUrl(const QUrl &url);
     void setOutputPath(const QString &absolutePath);
-    void setLabelText(const QString &text) {m_LabelText = text;}
+    void setLabelText(const QString &text);
 
-    void startDownload();
+public Q_SLOTS:
+    bool startDownload();
 
 Q_SIGNALS:
     void downloadFinished();
     void downloadProgressRange(qint64,qint64);
     void downloadProgressRead(qint64);
 
-private Q_SLOTS:
-    void startRequest(const QUrl &url);
-    void downloadFile();
-    void cancelDownload();
-    void httpFinished();
-    void httpReadyRead();
-//    void onDownloadProgressRange(qint64,qint64);
-    void updateProgressBar(qint64 bytesRead, qint64 totalBytes);
-//    void slotAuthenticationRequired(QNetworkReply*,QAuthenticator *);
-//#ifndef QT_NO_OPENSSL
-//    void sslErrors(QNetworkReply*,const QList<QSslError> &errors);
-//#endif
-
 private:
-    QString m_Path, m_LabelText;
-    QUrl m_Url;
-    QNetworkAccessManager qnam;
-    QNetworkReply *reply;
-    QFile *file;
-    QProgressDialog *progressDialog;
-    QProgressBar *progressBar;
-    int httpGetId;
-    bool httpRequestAborted;
+    Internal::HttpDownloaderPrivate *d;
 };
 
-}
+}  // namespace Utils
 
-#endif // HTTPDOWNLOADER_H
+#endif // UTILS_HTTPDOWNLOADER_H
