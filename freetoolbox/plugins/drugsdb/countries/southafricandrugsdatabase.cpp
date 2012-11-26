@@ -90,8 +90,8 @@ static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::
 
 /**
  * Option page for the Free French drugs database.
- * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
- * register it in the plugin manager object pool.
+ * The ctor also creates the DrugsDB::Internal::IDrugDatabaseStep object and
+ * registers it in the plugin manager object pool.
  */
 FreeSouthAfricanDrugsDatabasePage::FreeSouthAfricanDrugsDatabasePage(QObject *parent) :
     IToolPage(parent),
