@@ -193,7 +193,7 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->mainToolBar->insertAction(0, a_openPreferences);
 
     ui->splitter->setCollapsible(1, false);
-    ui->pageTree->header()->setVisible(false);
+    ui->pageTree->header()->hide();
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
@@ -274,6 +274,9 @@ void MainWindow::preparePages()
             treeitem->setForeground(0, QBrush(QColor("#728194")));
             treeitem->setData(0, Qt::UserRole, qVariantFromValue(pageData));
             treeitem->setFont(0, title);
+            QSize s = treeitem->sizeHint(0);
+            s.setHeight(30);
+            treeitem->setSizeHint(0, s);
             categories.insert(currentCategory, treeitem);
         }
 
