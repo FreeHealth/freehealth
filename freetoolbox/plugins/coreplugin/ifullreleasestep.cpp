@@ -38,7 +38,7 @@
  * plugin manager object pool.
  *
  * Actions & order:
- * When the user select a "Creat Full Release" all object are retrieved from the plugin manager
+ * When the user select a "Create Full Release" all object are retrieved from the plugin manager
  * object pool and actions are called in this order:
  * - createDirs()
  * - downloadFiles(): download your files and when done, emit the downloadFinished() signal
@@ -51,6 +51,16 @@
  * - progressRangeChanged() to change the range of the progress dialog
  * - progressLabelChanged() to change the label of the progress dialog
  * - progress() to change the current progress dialog value
+ *
+ * Managing your own datapacks:
+ * You can register datapacks by overloading the registerDataPack(). This member is called
+ * after all processing methods (download, process...). In your private implementation, you
+ * can create a DataPackPlugin::DataPackQuery and register it to a specific datapack server.
+ * Basicly, a datapack only contains one file (a database in general or a zip file).
+ * You can register more than one datapack by object. \n
+ * When all objects have registered their datapacks in the DataPackPlugin::DataPackCore
+ * the final processing is an automated datapack server creation. Please refer to the
+ * documentation of the DataPackPlugin::DataPackCore for further information.
  */
 
 /*! \fn virtual QString Core::IFullReleaseStep::id() const = 0;
