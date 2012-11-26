@@ -102,7 +102,7 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
         {
             const QString &zip = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 0)).toString();
             const QString &city = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 1)).toString();
-            return zip + ", " + city;
+            return QString(tr("%1, %2").arg(zip, city));
         }
         }
 
