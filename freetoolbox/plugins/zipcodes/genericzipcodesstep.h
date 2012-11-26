@@ -64,9 +64,10 @@ public:
     QString id() const {return "GenericZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
 
-    bool createTemporaryStorage() { return true; }
+    bool createTemporaryStorage();
     bool cleanTemporaryStorage() { return true; }
     bool startDownload(QProgressBar *bar = 0);
+
     bool process();
     QString processMessage() const { return tr("Generic zip codes database creation"); }
     bool postProcessDownload();
@@ -93,7 +94,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onAvailableCountriesDownloaded(QNetworkReply *reply);
+    void onAvailableCountriesDownloaded();
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:

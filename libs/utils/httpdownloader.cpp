@@ -24,14 +24,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Utils::HttpDownloader
-  Simple Http downlader. The object must be deleted during download process.
+ * \class Utils::HttpDownloader
+ * Simple Http downlader. The object must not be deleted during the download process.
 */
 
 #include "httpdownloader.h"
+#include "httpdownloader_p.h"
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QProgressDialog>
 #include <QFileInfo>
@@ -43,53 +44,93 @@
 #include <QMainWindow>
 #include <QProgressBar>
 
-
 using namespace Utils;
+using namespace Internal;
 
+/** CTor of the object */
 HttpDownloader::HttpDownloader(QObject *parent) :
     QObject(parent),
-    reply(0),
-    file(0),
-    progressDialog(0),
-    progressBar(0),
-    httpGetId(-1),
-    httpRequestAborted(false)
+    d(new HttpDownloaderPrivate(this))
 {
     setObjectName("HttpDownloader");
 }
 
-// OBSOLETE
+/** DTor of the object */
+HttpDownloader::~HttpDownloader()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
 void HttpDownloader::setMainWindow(QMainWindow *win)
 {
-    if (progressDialog) {
-        delete progressDialog;
-        progressDialog = new QProgressDialog(win);
-        progressDialog->setWindowModality(Qt::WindowModal);
-        connect(progressDialog, SIGNAL(canceled()), this, SLOT(cancelDownload()));
+    if (d->progressDialog) {
+        delete d->progressDialog;
+        d->progressDialog = new QProgressDialog(win);
+        d->progressDialog->setWindowModality(Qt::WindowModal);
+        connect(d->progressDialog, SIGNAL(canceled()), d, SLOT(cancelDownload()));
     }
 }
 
 /** Define the progress bar to use. */
 void HttpDownloader::setProgressBar(QProgressBar *bar)
 {
-    progressBar = bar;
+    d->progressBar = bar;
 }
 
+/** Set the URL to download */
 void HttpDownloader::setUrl(const QUrl &url)
 {
-    m_Url = url;
-//    m_Url.setAuthority();
+    d->m_Url = url;
+//    d->m_Url.setAuthority();
 }
 
+/** Set the download output path (absolute path only) */
 void HttpDownloader::setOutputPath(const QString &absolutePath)
 {
     if (QDir(absolutePath).exists())
-        m_Path = absolutePath;
+        d->m_Path = absolutePath;
     else
-        m_Path.clear();
+        d->m_Path.clear();
 }
 
-void HttpDownloader::startDownload()
+/** Define the label of the progress */
+void HttpDownloader::setLabelText(const QString &text)
+{
+    d->m_LabelText = text;
+}
+
+/**
+ * Start the asynchronous downloading. When the download is finished
+ * the downloadFinished() signal is emitted. You can follow the download progress
+ * with the downloadProgressRange() and downloadProgressRead() signals.
+ */
+bool HttpDownloader::startDownload()
+{
+    return d->startDownload();
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////     PRIVATE PART    ///////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
+    reply(0),
+    file(0),
+    progressDialog(0),
+    progressBar(0),
+    httpGetId(-1),
+    httpRequestAborted(false),
+    q(parent)
+{
+    setObjectName("HttpDownloaderPrivate");
+}
+
+HttpDownloaderPrivate::~HttpDownloaderPrivate()
+{}
+
+bool HttpDownloaderPrivate::startDownload()
 {
     if (progressBar) {
         progressBar->setRange(0, 100);
@@ -97,16 +138,48 @@ void HttpDownloader::startDownload()
         progressBar->setToolTip(tr("Initialization of the download"));
     }
     if (!m_Url.isValid())
-        return;
+        return false;
     if (m_Url.isEmpty())
-        return;
-    downloadFile();
+        return false;
+    return downloadFile();
 }
 
-void HttpDownloader::startRequest(const QUrl &url)
+bool HttpDownloaderPrivate::downloadFile()
+{
+    QFileInfo fileInfo(m_Url.path());
+    QString fileName = m_Path + QDir::separator() + fileInfo.fileName();
+    if (fileName.isEmpty())
+        fileName = "index.html";
+
+    if (QFile::exists(fileName)) {        
+        if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
+                                       "the current directory. Overwrite?").arg(fileName), ""))
+            return false;
+        QFile::remove(fileName);
+    }
+
+    file = new QFile(fileName);
+    if (!file->open(QIODevice::WriteOnly)) {
+        Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
+                                 .arg(fileName).arg(file->errorString()), "");
+        delete file;
+        file = 0;
+        return false;
+    }
+
+    if (progressBar) {
+        progressBar->setToolTip(m_LabelText);
+    }
+
+    // schedule the request
+    httpRequestAborted = false;
+    return startRequest(m_Url);
+}
+
+bool HttpDownloaderPrivate::startRequest(const QUrl &url)
 {
     if (!url.isValid())
-        return;
+        return false;
     if (m_LabelText.isEmpty()) {
         LOG(tr("Start downloading: %1 to %2").arg(m_Url.toString()).arg(m_Path));
     } else {
@@ -118,47 +191,16 @@ void HttpDownloader::startRequest(const QUrl &url)
     if (progressBar) {
         connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
     }
+    return true;
 }
 
-void HttpDownloader::downloadFile()
-{
-    QFileInfo fileInfo(m_Url.path());
-    QString fileName = m_Path + QDir::separator() + fileInfo.fileName();
-    if (fileName.isEmpty())
-        fileName = "index.html";
-
-    if (QFile::exists(fileName)) {        
-        if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
-                                       "the current directory. Overwrite?").arg(fileName), ""))
-            return;
-        QFile::remove(fileName);
-    }
-
-    file = new QFile(fileName);
-    if (!file->open(QIODevice::WriteOnly)) {
-        Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
-                                 .arg(fileName).arg(file->errorString()), "");
-        delete file;
-        file = 0;
-        return;
-    }
-
-    if (progressBar) {
-        progressBar->setToolTip(m_LabelText);
-    }
-
-    // schedule the request
-    httpRequestAborted = false;
-    startRequest(m_Url);
-}
-
-void HttpDownloader::cancelDownload()
+void HttpDownloaderPrivate::cancelDownload()
 {
     httpRequestAborted = true;
     reply->abort();
 }
 
-void HttpDownloader::httpFinished()
+void HttpDownloaderPrivate::httpFinished()
 {
     qWarning() << "httpFinished" << reply->error() << reply->errorString();
 
@@ -215,10 +257,10 @@ void HttpDownloader::httpFinished()
     delete file;
     file = 0;
 
-    Q_EMIT downloadFinished();
+    Q_EMIT q->downloadFinished();
 }
 
-void HttpDownloader::httpReadyRead()
+void HttpDownloaderPrivate::httpReadyRead()
 {
     // this slot gets called everytime the QNetworkReply has new data.
     // We read all of its new data and write it into the file.
@@ -228,18 +270,18 @@ void HttpDownloader::httpReadyRead()
         file->write(reply->readAll());
 }
 
-//void HttpDownloader::onDownloadProgressRange(qint64 read, qint64 total)
+//void HttpDownloaderPrivate::onDownloadProgressRange(qint64 read, qint64 total)
 //{
 //    Q_EMIT downloadProgressRange(int(read), int(total));
 //}
 
-void HttpDownloader::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
+void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
 {
     if (httpRequestAborted)
         return;
 
-    Q_EMIT downloadProgressRange(0, totalBytes);
-    Q_EMIT downloadProgressRead(bytesRead);
+    Q_EMIT q->downloadProgressRange(0, totalBytes);
+    Q_EMIT q->downloadProgressRead(bytesRead);
 
     if (progressBar) {
         if (totalBytes>0) {
@@ -250,7 +292,7 @@ void HttpDownloader::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
     }
 }
 
-//void HttpDownloader::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
+//void HttpDownloaderPrivate::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
 //{
 //    QDialog dlg;
 //    Ui::Dialog ui;
@@ -270,7 +312,7 @@ void HttpDownloader::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
 //}
 
 //#ifndef QT_NO_OPENSSL
-//void HttpDownloader::sslErrors(QNetworkReply*,const QList<QSslError> &errors)
+//void HttpDownloaderPrivate::sslErrors(QNetworkReply*,const QList<QSslError> &errors)
 //{
 //    QString errorString;
 //    foreach (const QSslError &error, errors) {

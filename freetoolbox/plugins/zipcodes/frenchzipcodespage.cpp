@@ -49,6 +49,7 @@
 
 #include <QFile>
 #include <QDir>
+#include <QUrl>
 
 #include "ui_frenchzipcodeswidget.h"
 
