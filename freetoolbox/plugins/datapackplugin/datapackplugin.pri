@@ -1,7 +1,7 @@
-include(druginfos_dependencies.pri)
+include(datapack_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lDrugInfos_debug
-    win32:LIBS   *= -lDrugInfos_d
+    unix:LIBS    *= -lDataPackPlugin_debug
+    win32:LIBS   *= -lDataPackPlugin_d
 } else {
-    LIBS  *= -lDrugInfos
+    LIBS  *= -lDataPackPlugin
 }

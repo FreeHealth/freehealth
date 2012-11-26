@@ -1,5 +1,5 @@
--- Commune;Codepos;Departement;INSEE
--- L ABERGEMENT CLEMENCIAT;01400;AIN;1001
+-- Commune;Codepos;Departement;INSEE ;
+-- L ABERGEMENT CLEMENCIAT;01400;AIN;1001 ;
 
 CREATE TABLE `ZIPS_IMPORT` (
   `COMMUNE`   varchar(255),

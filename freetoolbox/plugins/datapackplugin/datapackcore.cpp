@@ -337,10 +337,15 @@ bool DataPackCore::createServer(const QString &serverUid)
         descr.setData(DataPack::PackDescription::Md5, Utils::md5(path));
         descr.setData(DataPack::PackDescription::Sha1, Utils::sha1(path));
         if (query.autoVersion()) {
-            descr.setData(DataPack::ServerDescription::Version, QString(PACKAGE_VERSION));
-            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, QString(PACKAGE_VERSION));
-            descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, QString(PACKAGE_VERSION));
-            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, QString(PACKAGE_VERSION));
+            QString version = QString(PACKAGE_VERSION);
+            QString versionnedFileName = descr.data(DataPack::ServerDescription::AbsFileName).toString();
+            if (!versionnedFileName.startsWith(version))
+                versionnedFileName.prepend(version + QDir::separator());
+            descr.setData(DataPack::ServerDescription::AbsFileName, versionnedFileName);
+            descr.setData(DataPack::ServerDescription::Version, version);
+            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, version);
+            descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, version);
+            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, version);
         }
 
         QString outputPackDescriptionFile = QFileInfo(path).absolutePath() + "/packdescription.xml";
