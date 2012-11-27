@@ -86,7 +86,7 @@ static inline QString sqlImportFileAbsPath()
                            "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
 }
 
-} // end namespace
+}  // end anonymous namespace
 
 
 // ########################## GenericZipCodesStep ##########################
@@ -140,6 +140,7 @@ bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
 
 }
 
+/** Automated ZipCode database creation of all available countries in GeoName */
 bool GenericZipCodesStep::process()
 {
     createDatabaseScheme();
@@ -154,6 +155,7 @@ bool GenericZipCodesStep::postProcessDownload()
     return true;
 }
 
+/** Create the GeoName zipcode database */
 bool GenericZipCodesStep::createDatabaseScheme()
 {
     LOG(tr("Creating Generic zipcodes database"));
@@ -186,6 +188,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
     return true;
 }
 
+/** Download zipcodes for selected countries */
 bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 {
     Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
@@ -210,10 +213,9 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
         m_selectedCountryList.append(Utils::countryToIso(m_selectedCountry).toLower());
         //    get list of places that GeoNames has informations for in the given country
         QNetworkRequest request;
-        request.setUrl(QUrl(
-                           QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
-                                   .arg(MAX_ROWS,
-                                        Utils::countryToIso(m_selectedCountry).toLower())));
+        request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
+                            .arg(MAX_ROWS)
+                            .arg(Utils::countryToIso(m_selectedCountry).toLower())));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
 
         netAccessManager->get(request);
