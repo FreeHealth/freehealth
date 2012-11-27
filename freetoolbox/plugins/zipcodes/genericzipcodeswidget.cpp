@@ -121,7 +121,7 @@ void GenericZipCodesWidget::onDownloadFinished()
 
 void GenericZipCodesWidget::onProcessFinished()
 {
-    m_Step->postProcessDownload();
+    m_Step->postDownloadProcessing();
 }
 
 void GenericZipCodesWidget::selectCountry(const QModelIndex &index)

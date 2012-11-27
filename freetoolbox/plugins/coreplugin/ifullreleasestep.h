@@ -65,21 +65,20 @@ public:
     virtual bool cleanTemporaryStorage() = 0;
 
     virtual bool startDownload(QProgressBar *bar = 0) = 0;
-    virtual bool postProcessDownload() {Q_EMIT postProcessDownloadFinished(); return true;}
-
+    virtual bool postDownloadProcessing() {Q_EMIT postDownloadProcessingFinished(); return true;}
     virtual bool process() = 0;
-    virtual QString processMessage() const = 0;
 
     virtual bool registerDataPack() = 0;
 
+    virtual QString processMessage() const = 0;
     virtual QStringList errors() const = 0;
 
     static bool lessThan(const IFullReleaseStep *s1, const IFullReleaseStep *s2) {return s1->stepNumber() < s2->stepNumber();}
 
 Q_SIGNALS:
     void downloadFinished();
+    void postDownloadProcessingFinished();
     void processFinished();
-    void postProcessDownloadFinished();
 
     // Progress dialog management when threaded
     void progressLabelChanged(const QString &label);

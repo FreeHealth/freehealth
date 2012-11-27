@@ -56,7 +56,7 @@ public:
     bool cleanTemporaryStorage();
 
     bool startDownload(QProgressBar *bar = 0);
-    bool postProcessDownload();
+    bool postDownloadProcessing();
 
     bool process();
     bool createDatabase();

@@ -484,7 +484,7 @@ void MainWindow::startNextPostProcessDownload()
     }
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
-    m_ActiveStep->postProcessDownload();
+    m_ActiveStep->postDownloadProcessing();
 }
 
 void MainWindow::saveSettings()
