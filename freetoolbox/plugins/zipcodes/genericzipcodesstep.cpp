@@ -66,18 +66,18 @@ const char* const MAX_ROWS     = "10000";
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static inline QString databaseAbsPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_DBOUTPUT_PATH).toString() +"/geonameszipcodes/zipcodes.db");
+    return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString()
+                           + "/geonameszipcodes/zipcodes.db");
 }
 
 static inline QString workingPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_TMP_PATH).toString() + "/GeonamesZipCodes/") + QDir::separator();
+    return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString()
+                           + "/GeonamesZipCodes/") + QDir::separator();
 }
 
 static inline QString sqlMasterFileAbsPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");
+    return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString()
+                           + "/global_resources/sql/zipcodes/zipcodes.sql");
 }
 
 static inline QString sqlImportFileAbsPath()
