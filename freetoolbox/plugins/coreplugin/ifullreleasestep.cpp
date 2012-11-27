@@ -82,9 +82,13 @@
 
 /*!
  * \fn virtual bool Core::IFullReleaseStep::startDownload(QProgressBar *bar = 0) = 0;
- * \brief Downloads some files from a server.
+ * \brief Starts downloading some files from a server.
  *
- * Optionally updates the QProgressBar \e bar.
+ * This method should not lock the event loop and
+ * download all necessary files. It should just start the Download in a separate process, e.g. using
+ * Utils::HttpDownloader, and return back to the main event loop.
+ *
+ * \param bar direct link to the progressbar that can be updated.
  * \returns \e true if successful, else \e false.
  */
 
