@@ -125,11 +125,15 @@ bool GenericZipCodesStep::createDir()
     return true;
 }
 
-/*! Downloads the list of available countries. */
+/*!
+ * Downloads the list of available countries.
+ * \sa onAvailableCountriesDownloaded()
+*/
 bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
-    // TODO: manage progress download */
+    // TODO: manage progress download
+    // TODO: in the automated management of this step all files must be downloaded at once (all countries zipcodes)
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
@@ -288,16 +292,21 @@ void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTota
     //TODO: implementation
 }
 
-/*! \brief Called when downloading of countries from GeoNames is finished. */
-void GenericZipCodesStep::onAvailableCountriesDownloaded()
+/*!
+ * Called when the downloading of the available countries index from GeoNames is finished,
+ * then emits countryListDownloaded().\n
+ * Downloads all available zipcodes from GeoNames.
+ * Emits downloadFinished() when done.
+ */
+bool GenericZipCodesStep::onAvailableCountriesDownloaded()
 {
-    // We can catch error of the Utils::HttpDownloader if we keep it as an object var
+    // We can catch error of the Utils::HttpDownloader --> qobject_cast sender()
 
     // Check if file is downloaded
     // TODO: avoid magic numbers in URL & fileName
     if (!QFileInfo(workingPath() + "/postalCodeCountryInfo").exists()) {
         LOG_ERROR("File not downloaded");
-        return;
+        return false;
     }
 
     // get XML structure of reply into a parseable format
@@ -354,6 +363,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded()
     if (defaultCountryItem)
         selectCountry(defaultCountryItem->index());
     Q_EMIT countryListDownloaded(success);
+    return true;
 }
 
 /*!

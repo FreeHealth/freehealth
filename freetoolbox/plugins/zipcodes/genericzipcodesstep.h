@@ -86,14 +86,13 @@ public:
     void selectCountry(const QModelIndex &index);
     void deselectCountry(const QModelIndex &index);
 
-
 Q_SIGNALS:
     void availableCountriesListDownloaded();
     void countryListDownloaded(bool);
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onAvailableCountriesDownloaded();
+    bool onAvailableCountriesDownloaded();
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:
@@ -106,5 +105,7 @@ private:
     int m_selectedCountriesCounter;
     QList<PostalInfo> m_postalList;
 };
+
 } // end ZipCodes
+
 #endif // GENERICZIPCODESSTEP_H
