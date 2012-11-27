@@ -103,7 +103,7 @@ Icd10DatabaseWidget::~Icd10DatabaseWidget()
 void Icd10DatabaseWidget::setStep(Core::IFullReleaseStep *step)
 {
     _step = step;
-    connect(_step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()), Qt::UniqueConnection);
+    connect(_step, SIGNAL(onDownloadFinished()), this, SLOT(onDownloadFinished()), Qt::UniqueConnection);
 }
 
 /**
@@ -126,7 +126,7 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
  * Continue the creation of the ICD10 database and datapack registration.
  * \sa Icd10::Internal::Icd10Step
 */
-bool Icd10DatabaseWidget::downloadFinished()
+bool Icd10DatabaseWidget::onDownloadFinished()
 {
     Q_ASSERT(_step);
     if (!_step)

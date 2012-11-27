@@ -78,7 +78,7 @@ public:
 
 private Q_SLOTS:
     bool on_startCreation_clicked();
-    bool downloadFinished();
+    bool onDownloadFinished();
 
 protected:
     void changeEvent(QEvent *e);
