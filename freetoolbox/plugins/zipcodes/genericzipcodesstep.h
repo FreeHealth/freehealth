@@ -42,11 +42,11 @@ QT_END_NAMESPACE
 namespace ZipCodes {
 
 struct PostalInfo {
+    PostalInfo(const QString &postalCode,
+               const QString &city,
+               const QString &country,
+               const QString &extraCode = QString::null);
 
-    explicit PostalInfo(const QString postalCode,
-                        const QString city,
-                        const QString country,
-                        const QString extraCode = QString());
     QString postalCode;
     QString city;
     QString extraCode;

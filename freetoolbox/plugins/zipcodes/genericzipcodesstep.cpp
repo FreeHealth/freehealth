@@ -226,14 +226,9 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 
 bool GenericZipCodesStep::populateDatabase()
 {
-//    if (!DrugsDB::Tools::connectDatabase(DB_NAME, databaseAbsPath()))
-//        return false;
-
     Q_EMIT progressLabelChanged(tr("Reading sources..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
-
-    // import the raw source in memory
 
     QSqlDatabase db = QSqlDatabase::database(DB_NAME);
 
@@ -456,7 +451,7 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
 }
 
 
-PostalInfo::PostalInfo(const QString postalCode, const QString city, const QString country, const QString extraCode)
+PostalInfo::PostalInfo(const QString &postalCode, const QString &city, const QString &country, const QString &extraCode)
 {
     this->postalCode = postalCode;
     this->city = city;
