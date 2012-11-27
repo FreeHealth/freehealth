@@ -94,8 +94,8 @@ static inline QString sqlImportFileAbsPath()
 GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
     m_WithProgress(false),
-    m_availableCountriesModel(new QStandardItemModel()),
-    m_selectedCountriesModel(new QStandardItemModel()),
+    m_availableCountriesModel(new QStandardItemModel(this)),
+    m_selectedCountriesModel(new QStandardItemModel(this)),
     m_selectedCountriesCounter(0)
 {
     setObjectName("GenericZipCodesStep");
