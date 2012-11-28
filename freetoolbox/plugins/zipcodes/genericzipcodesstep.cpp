@@ -147,6 +147,7 @@ bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 /** Automated ZipCode database creation of all available countries in GeoName */
 bool GenericZipCodesStep::process()
 {
+    //TODO: error handling
     createDatabaseScheme();
     startDownloadingSelectedCountryData();
     return true;
@@ -154,6 +155,7 @@ bool GenericZipCodesStep::process()
 
 bool GenericZipCodesStep::postDownloadProcessing()
 {
+    //TODO: error handling
     populateDatabase();
     Q_EMIT postDownloadProcessingFinished();
     return true;
@@ -162,6 +164,7 @@ bool GenericZipCodesStep::postDownloadProcessing()
 /** Create the GeoName zipcode database */
 bool GenericZipCodesStep::createDatabaseScheme()
 {
+    //TODO: error handling
     LOG(tr("Creating Generic zipcodes database"));
     Q_EMIT progressLabelChanged(tr("Creating Generic zipcodes database scheme"));
     Q_EMIT progressRangeChanged(0, 1);
@@ -195,6 +198,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
 /** Download zipcodes for selected countries */
 bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 {
+    //TODO: error handling
     Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
 
     // this counter is set to the number of selected countries.
@@ -230,6 +234,7 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 
 bool GenericZipCodesStep::populateDatabase()
 {
+    //TODO: error handling
     Q_EMIT progressLabelChanged(tr("Reading sources..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
