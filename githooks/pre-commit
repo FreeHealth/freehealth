@@ -1,14 +1,13 @@
 #!/bin/sh
 #
-# An example hook script to verify what is about to be committed.
 # Called by "git commit" with no arguments.  The hook should
 # exit with non-zero status after issuing an appropriate message if
 # it wants to stop the commit.
 #
 
 
-
 fix_trailing_whitespaces() {
+    # get changes since last HEAD
     if git rev-parse --verify HEAD >/dev/null 2>&1
     then
 	    against=HEAD
@@ -17,15 +16,24 @@ fix_trailing_whitespaces() {
 	    against=1d95ea7e95bf04afaaf67f22374cc4722f879392
     fi
 
-    # Find files with trailing whitespace
+    # Find files with trailing whitespace in the current commit
+    # + filter out filenames from git output with sed
 	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | sed -r 's/:[0-9]+:.*//' | uniq` ; do
+
+        # replace all trailing whitespace with ""
 		sed -i 's/[[:space:]]*$//' "$FILE"
+
+		# add modified file again to the commit
 		git add "$FILE"
+
 		echo "Automatically fixing trailing whitespace in $FILE."
 	done
 }
 
 
 
+######## main structure #########
+# here should be called all the subroutines in the preferred order
 
+# automatically fix trailing whitespace
 fix_trailing_whitespaces
