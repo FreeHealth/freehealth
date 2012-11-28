@@ -80,12 +80,6 @@ static inline QString sqlMasterFileAbsPath() {
                            + "/global_resources/sql/zipcodes/zipcodes.sql");
 }
 
-static inline QString sqlImportFileAbsPath()
-{
-    return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
-                           "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
-}
-
 }  // end anonymous namespace
 
 
