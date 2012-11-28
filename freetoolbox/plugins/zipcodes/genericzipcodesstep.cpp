@@ -129,7 +129,7 @@ bool GenericZipCodesStep::createTemporaryStorage()
  * Downloads the list of available countries.
  * \sa onAvailableCountriesDownloaded()
 */
-bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
+bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
     // TODO: manage progress download
