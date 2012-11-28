@@ -18,7 +18,7 @@ fix_trailing_whitespaces() {
 
     # Find files with trailing whitespace in the current commit
     # + filter out filenames from git output with sed
-	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | sed -r 's/:[0-9]+:.*//' | uniq` ; do
+	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | awk 'NF>2{NF-=2}1' | uniq` ; do  
 
         # replace all trailing whitespace with ""
 		sed -i 's/[[:space:]]*$//' "$FILE"
