@@ -103,7 +103,7 @@ Icd10DatabaseWidget::~Icd10DatabaseWidget()
 void Icd10DatabaseWidget::setStep(Core::IFullReleaseStep *step)
 {
     _step = step;
-    connect(_step, SIGNAL(onDownloadFinished()), this, SLOT(onDownloadFinished()), Qt::UniqueConnection);
+    connect(_step, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()), Qt::UniqueConnection);
 }
 
 /**
