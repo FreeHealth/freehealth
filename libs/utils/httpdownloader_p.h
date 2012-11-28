@@ -58,14 +58,17 @@ public:
 
     bool startDownload();
 
-private Q_SLOTS:
+public Q_SLOTS:
     bool startRequest(const QUrl &url);
     bool downloadFile();
     void cancelDownload();
     void httpFinished();
     void httpReadyRead();
-//    void onDownloadProgressRange(qint64,qint64);
     void updateProgressBar(qint64 bytesRead, qint64 totalBytes);
+
+    void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
+    void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator);
+
 //    void slotAuthenticationRequired(QNetworkReply*,QAuthenticator *);
 //#ifndef QT_NO_OPENSSL
 //    void sslErrors(QNetworkReply*,const QList<QSslError> &errors);
@@ -81,6 +84,7 @@ public:
     QProgressBar *progressBar;
     int httpGetId;
     bool httpRequestAborted;
+    QHash<QString, int> m_AuthTimes;
 
 private:
     HttpDownloader *q;

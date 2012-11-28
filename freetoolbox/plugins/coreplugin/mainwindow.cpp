@@ -249,7 +249,8 @@ void MainWindow::preparePages()
     QMap<QString, QTreeWidgetItem *> categories;
     QFont title;
     title.setBold(true);
-    title.setPointSize(title.pointSize() + 1);
+    if (Utils::isRunningOnMac())
+        title.setPointSize(title.pointSize() + 1);
     title.setCapitalization(QFont::AllUppercase);
 
     int index = 0;
@@ -275,7 +276,10 @@ void MainWindow::preparePages()
             treeitem->setData(0, Qt::UserRole, qVariantFromValue(pageData));
             treeitem->setFont(0, title);
             QSize s = treeitem->sizeHint(0);
-            s.setHeight(30);
+            if (Utils::isRunningOnMac())
+                s.setHeight(30);
+            else
+                s.setHeight(20);
             treeitem->setSizeHint(0, s);
             categories.insert(currentCategory, treeitem);
         }

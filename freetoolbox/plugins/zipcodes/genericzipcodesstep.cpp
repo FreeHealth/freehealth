@@ -66,18 +66,18 @@ const char* const MAX_ROWS     = "10000";
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static inline QString databaseAbsPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_DBOUTPUT_PATH).toString() +"/geonameszipcodes/zipcodes.db");
+    return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString()
+                           + "/geonameszipcodes/zipcodes.db");
 }
 
 static inline QString workingPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_TMP_PATH).toString() + "/GeonamesZipCodes/") + QDir::separator();
+    return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString()
+                           + "/GeonamesZipCodes/") + QDir::separator();
 }
 
 static inline QString sqlMasterFileAbsPath() {
-    return QDir::cleanPath(settings()->value(
-                               Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");
+    return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString()
+                           + "/global_resources/sql/zipcodes/zipcodes.sql");
 }
 
 static inline QString sqlImportFileAbsPath()
@@ -86,7 +86,7 @@ static inline QString sqlImportFileAbsPath()
                            "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
 }
 
-} // end namespace
+}  // end anonymous namespace
 
 
 // ########################## GenericZipCodesStep ##########################
@@ -94,8 +94,8 @@ static inline QString sqlImportFileAbsPath()
 GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
     m_WithProgress(false),
-    m_availableCountriesModel(new QStandardItemModel()),
-    m_selectedCountriesModel(new QStandardItemModel()),
+    m_availableCountriesModel(new QStandardItemModel(this)),
+    m_selectedCountriesModel(new QStandardItemModel(this)),
     m_selectedCountriesCounter(0)
 {
     setObjectName("GenericZipCodesStep");
@@ -125,11 +125,15 @@ bool GenericZipCodesStep::createTemporaryStorage()
     return true;
 }
 
-/*! Downloads the list of available countries. */
+/*!
+ * Downloads the list of available countries.
+ * \sa onAvailableCountriesDownloaded()
+*/
 bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 {
     Q_UNUSED(bar);
-    // TODO: manage progress download */
+    // TODO: manage progress download
+    // TODO: in the automated management of this step all files must be downloaded at once (all countries zipcodes)
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
@@ -140,6 +144,7 @@ bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 
 }
 
+/** Automated ZipCode database creation of all available countries in GeoName */
 bool GenericZipCodesStep::process()
 {
     createDatabaseScheme();
@@ -154,6 +159,7 @@ bool GenericZipCodesStep::postDownloadProcessing()
     return true;
 }
 
+/** Create the GeoName zipcode database */
 bool GenericZipCodesStep::createDatabaseScheme()
 {
     LOG(tr("Creating Generic zipcodes database"));
@@ -186,6 +192,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
     return true;
 }
 
+/** Download zipcodes for selected countries */
 bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 {
     Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
@@ -210,10 +217,9 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
         m_selectedCountryList.append(Utils::countryToIso(m_selectedCountry).toLower());
         //    get list of places that GeoNames has informations for in the given country
         QNetworkRequest request;
-        request.setUrl(QUrl(
-                           QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
-                                   .arg(MAX_ROWS,
-                                        Utils::countryToIso(m_selectedCountry).toLower())));
+        request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
+                            .arg(MAX_ROWS)
+                            .arg(Utils::countryToIso(m_selectedCountry).toLower())));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
 
         netAccessManager->get(request);
@@ -224,14 +230,9 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 
 bool GenericZipCodesStep::populateDatabase()
 {
-//    if (!DrugsDB::Tools::connectDatabase(DB_NAME, databaseAbsPath()))
-//        return false;
-
     Q_EMIT progressLabelChanged(tr("Reading sources..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
-
-    // import the raw source in memory
 
     QSqlDatabase db = QSqlDatabase::database(DB_NAME);
 
@@ -292,16 +293,21 @@ void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTota
     //TODO: implementation
 }
 
-/*! \brief Called when downloading of countries from GeoNames is finished. */
-void GenericZipCodesStep::onAvailableCountriesDownloaded()
+/*!
+ * Called when the downloading of the available countries index from GeoNames is finished,
+ * then emits countryListDownloaded().\n
+ * Downloads all available zipcodes from GeoNames.
+ * Emits downloadFinished() when done.
+ */
+bool GenericZipCodesStep::onAvailableCountriesDownloaded()
 {
-    // We can catch error of the Utils::HttpDownloader if we keep it as an object var
+    // We can catch error of the Utils::HttpDownloader --> qobject_cast sender()
 
     // Check if file is downloaded
     // TODO: avoid magic numbers in URL & fileName
     if (!QFileInfo(workingPath() + "/postalCodeCountryInfo").exists()) {
         LOG_ERROR("File not downloaded");
-        return;
+        return false;
     }
 
     // get XML structure of reply into a parseable format
@@ -358,6 +364,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded()
     if (defaultCountryItem)
         selectCountry(defaultCountryItem->index());
     Q_EMIT countryListDownloaded(success);
+    return true;
 }
 
 /*!
@@ -455,7 +462,7 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
 }
 
 
-PostalInfo::PostalInfo(const QString postalCode, const QString city, const QString country, const QString extraCode)
+PostalInfo::PostalInfo(const QString &postalCode, const QString &city, const QString &country, const QString &extraCode)
 {
     this->postalCode = postalCode;
     this->city = city;

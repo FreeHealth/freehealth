@@ -26,6 +26,14 @@
 /**
  * \class Utils::HttpDownloader
  * Simple Http downlader. The object must not be deleted during the download process.
+ * You can stop the current downloading using the cancelDownload().\n
+ * This downloader manages server and proxy authentication. User will be asked for their
+ * login and password is required.
+ *
+ * Proxy management: \n
+ * If you are using a proxy, you must register it with the QNetworkProxy::setApplicationProxy()
+ * before starting any downloads.
+ * If the user and password are not defined, a dialog will ask the user for its log & pass.
 */
 
 #include "httpdownloader.h"
@@ -33,6 +41,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/basiclogindialog.h>
 
 #include <QProgressDialog>
 #include <QFileInfo>
@@ -43,9 +52,17 @@
 #include <QDir>
 #include <QMainWindow>
 #include <QProgressBar>
+#include <QNetworkProxy>
+#include <QAuthenticator>
+#include <QNetworkProxy>
 
 using namespace Utils;
 using namespace Internal;
+
+namespace {
+const int MAX_AUTHENTIFICATION_TRIES = 3;
+const char * const  ICONEYES = "eyes.png";
+}
 
 /** CTor of the object */
 HttpDownloader::HttpDownloader(QObject *parent) :
@@ -111,6 +128,15 @@ bool HttpDownloader::startDownload()
     return d->startDownload();
 }
 
+/**
+ * Stop the downloading. Emits the downloadFinished() signal.
+ */
+bool HttpDownloader::cancelDownload()
+{
+    d->cancelDownload();
+    Q_EMIT downloadFinished();
+    return true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////     PRIVATE PART    ///////////////////////////////////////
@@ -125,6 +151,24 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
+    // Use a proxy (take the first registered proxy)?
+//    QList<QNetworkProxy> proxies = QNetworkProxyFactory::proxyForQuery(QNetworkProxyQuery(QUrl("http://www.google.fr")));
+//    if (proxies.count()>=1) {
+//        qnam.setProxy(proxies.at(0));
+//        LOG("Using proxy: " + qnam.proxy().hostName());
+//    }
+
+    if (!QNetworkProxy::applicationProxy().hostName().isEmpty()) {
+        qnam.setProxy(QNetworkProxy::applicationProxy());
+        LOG("Using proxy: " + qnam.proxy().hostName());
+    } else {
+        qnam.setProxy(QNetworkProxy::NoProxy);
+        LOG("Clearing proxy");
+    }
+
+    // Connect authentication request
+    connect(&qnam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
+    connect(&qnam, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 }
 
 HttpDownloaderPrivate::~HttpDownloaderPrivate()
@@ -144,6 +188,7 @@ bool HttpDownloaderPrivate::startDownload()
     return downloadFile();
 }
 
+/** Prepare the Http download */
 bool HttpDownloaderPrivate::downloadFile()
 {
     QFileInfo fileInfo(m_Url.path());
@@ -176,6 +221,7 @@ bool HttpDownloaderPrivate::downloadFile()
     return startRequest(m_Url);
 }
 
+/** Begin the Http download */
 bool HttpDownloaderPrivate::startRequest(const QUrl &url)
 {
     if (!url.isValid())
@@ -188,18 +234,22 @@ bool HttpDownloaderPrivate::startRequest(const QUrl &url)
     reply = qnam.get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+
     if (progressBar) {
         connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
     }
     return true;
 }
 
+/** Cancel the download */
 void HttpDownloaderPrivate::cancelDownload()
 {
     httpRequestAborted = true;
     reply->abort();
+    reply->deleteLater();
 }
 
+/** Slot called when the downloading is finished (with or without error) */
 void HttpDownloaderPrivate::httpFinished()
 {
     qWarning() << "httpFinished" << reply->error() << reply->errorString();
@@ -260,8 +310,10 @@ void HttpDownloaderPrivate::httpFinished()
     Q_EMIT q->downloadFinished();
 }
 
+/** Read the content of the reply and write to output file */
 void HttpDownloaderPrivate::httpReadyRead()
 {
+    qWarning() << "httpFinished" << reply;
     // this slot gets called everytime the QNetworkReply has new data.
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
@@ -270,11 +322,11 @@ void HttpDownloaderPrivate::httpReadyRead()
         file->write(reply->readAll());
 }
 
-//void HttpDownloaderPrivate::onDownloadProgressRange(qint64 read, qint64 total)
-//{
-//    Q_EMIT downloadProgressRange(int(read), int(total));
-//}
-
+/**
+  * If a progressbar is defined inside the object, update the progress bar range and value. \n
+  * Also compute the downloading percentage and emits the downloadProgressPercents() signal.
+  * \sa HttpDownloader::setProgressBar()
+  */
 void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
 {
     if (httpRequestAborted)
@@ -283,33 +335,67 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
     Q_EMIT q->downloadProgressRange(0, totalBytes);
     Q_EMIT q->downloadProgressRead(bytesRead);
 
-    if (progressBar) {
-        if (totalBytes>0) {
-            int v = bytesRead*100/totalBytes;
-            progressBar->setValue(v);
-        } else
-            progressBar->setValue(0);
+    int percent = 0;
+    if (totalBytes>0) {
+        int v = bytesRead*100/totalBytes;
+        progressBar->setValue(v);
     }
+
+    if (progressBar)
+        progressBar->setValue(percent);
+
+    Q_EMIT q->downloadProgressPercents(percent);
 }
 
-//void HttpDownloaderPrivate::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
-//{
-//    QDialog dlg;
-//    Ui::Dialog ui;
-//    ui.setupUi(&dlg);
-//    dlg.adjustSize();
-//    ui.siteDescription->setText(tr("%1 at %2").arg(authenticator->realm()).arg(url.host()));
+/** Slot connected to server authentication required */
+void HttpDownloaderPrivate::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
+{
+    LOG("Server authentication required: " +  reply->url().toString());
+    const QString &host = reply->url().toString();
+    m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
+    if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
+        LOG_ERROR("Server authentication max tries achieved. " +  host);
+        return;
+    }
+    Utils::BasicLoginDialog dlg;
+    dlg.setModal(true);
+    dlg.setTitle(tr("Server authentication required"));
+    // TODO: manage icon
+//    dlg.setToggleViewIcon(core().icon(ICONEYES));
+    if (dlg.exec()==QDialog::Accepted) {
+        authenticator->setUser(dlg.login());
+        authenticator->setPassword(dlg.password());
+    }
+    // TODO: manage ServerEngineStatus here
+}
 
-//    // Did the URL have information? Fill the UI
-//    // This is only relevant if the URL-supplied credentials were wrong
-//    ui.userEdit->setText(url.userName());
-//    ui.passwordEdit->setText(url.password());
-
-//    if (dlg.exec() == QDialog::Accepted) {
-//        authenticator->setUser(ui.userEdit->text());
-//        authenticator->setPassword(ui.passwordEdit->text());
-//    }
-//}
+/** Slot connected to proxy authentication required */
+void HttpDownloaderPrivate::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
+{
+    LOG("Proxy authentication required: " +  proxy.hostName());
+    const QString &host = proxy.hostName();
+    m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
+    if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
+        LOG_ERROR("Proxy authentication max tries achieved. " +  host);
+        return;
+    }
+    if (!proxy.user().isEmpty() && !proxy.password().isEmpty()) {
+        authenticator->setUser(proxy.user());
+        authenticator->setPassword(proxy.password());
+    } else {
+        // Ask user for identification
+        Utils::BasicLoginDialog dlg;
+        dlg.setModal(true);
+        dlg.setTitle(tr("Proxy authentication required"));
+        // TODO: manage icon
+//        dlg.setToggleViewIcon(core().icon(ICONEYES));
+        if (dlg.exec()==QDialog::Accepted) {
+            authenticator->setUser(dlg.login());
+            authenticator->setPassword(dlg.password());
+        }
+    }
+    // TODO: manage ServerEngineStatus here
+}
 
 //#ifndef QT_NO_OPENSSL
 //void HttpDownloaderPrivate::sslErrors(QNetworkReply*,const QList<QSslError> &errors)

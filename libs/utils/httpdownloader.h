@@ -63,11 +63,13 @@ public:
 
 public Q_SLOTS:
     bool startDownload();
+    bool cancelDownload();
 
 Q_SIGNALS:
     void downloadFinished();
     void downloadProgressRange(qint64,qint64);
     void downloadProgressRead(qint64);
+    void downloadProgressPercents(int);
 
 private:
     Internal::HttpDownloaderPrivate *d;
