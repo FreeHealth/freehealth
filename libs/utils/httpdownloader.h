@@ -57,8 +57,14 @@ public:
 
     void setMainWindow(QMainWindow *win);
     void setProgressBar(QProgressBar *bar);
+
     void setUrl(const QUrl &url);
+
     void setOutputPath(const QString &absolutePath);
+    void setOutputFileName(const QString &fileName);
+    QString outputFileName() const;
+    QString outputAbsoluteFileName() const;
+
     void setLabelText(const QString &text);
 
 public Q_SLOTS:

@@ -75,7 +75,7 @@ public Q_SLOTS:
 //#endif
 
 public:
-    QString m_Path, m_LabelText;
+    QString m_Path, m_OutputFileName, m_LabelText;
     QUrl m_Url;
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
