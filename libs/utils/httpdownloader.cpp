@@ -91,6 +91,7 @@ void HttpDownloader::setMainWindow(QMainWindow *win)
 }
 
 /** Define the progress bar to use. */
+//TODO: remove "bar" as direct parameter - not threadsafe - move to signal/slot mechanism.
 void HttpDownloader::setProgressBar(QProgressBar *bar)
 {
     d->progressBar = bar;

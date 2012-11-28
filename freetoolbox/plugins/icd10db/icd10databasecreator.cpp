@@ -131,7 +131,7 @@ bool Icd10DatabaseWidget::onDownloadFinished()
     Q_ASSERT(_step);
     if (!_step)
         return false;
-    if (!_step->postProcessDownload())
+    if (!_step->postDownloadProcessing())
         return false;
     if (!_step->process())
         return false;

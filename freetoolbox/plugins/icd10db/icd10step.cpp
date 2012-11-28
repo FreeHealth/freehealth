@@ -178,7 +178,7 @@ bool Icd10Step::startDownload(QProgressBar *bar)
 }
 
 /** Unzip downloaded files */
-bool Icd10Step::postProcessDownload()
+bool Icd10Step::postDownloadProcessing()
 {
     // Unzip file ?
     if (QString(d->_url).endsWith(".zip", Qt::CaseInsensitive)) {

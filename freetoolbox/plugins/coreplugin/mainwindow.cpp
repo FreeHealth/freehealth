@@ -400,7 +400,7 @@ void MainWindow::startNextDownload()
         if (id==(steps.count()-1)) {
             m_ActiveStep = 0;
             // All downloads are done, start processes
-            startNextProcess();
+            startNextPostProcessDownload();
             return;
         }
         m_ActiveStep = steps.at(id+1);
@@ -433,7 +433,7 @@ void MainWindow::startNextProcess()
         // Finished ?
         if (id==(steps.count()-1)) {
             m_ActiveStep = 0;
-            startNextPostProcessDownload();
+            startNextProcess();
             return;
         }
         m_ActiveStep = steps.at(id+1);
@@ -488,7 +488,7 @@ void MainWindow::startNextPostProcessDownload()
     }
     m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
     connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
-    m_ActiveStep->postProcessDownload();
+    m_ActiveStep->postDownloadProcessing();
 }
 
 void MainWindow::saveSettings()

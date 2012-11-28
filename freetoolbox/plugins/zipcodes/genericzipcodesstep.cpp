@@ -152,10 +152,10 @@ bool GenericZipCodesStep::process()
     return true;
 }
 
-bool GenericZipCodesStep::postProcessDownload()
+bool GenericZipCodesStep::postDownloadProcessing()
 {
     populateDatabase();
-    Q_EMIT postProcessDownloadFinished();
+    Q_EMIT postDownloadProcessingFinished();
     return true;
 }
 
