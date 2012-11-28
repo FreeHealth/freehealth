@@ -63,6 +63,7 @@ public:
 
 public Q_SLOTS:
     bool startDownload();
+    bool cancelDownload();
 
 Q_SIGNALS:
     void downloadFinished();
