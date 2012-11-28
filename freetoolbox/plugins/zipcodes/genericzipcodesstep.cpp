@@ -454,6 +454,11 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
                 continue;
             }
 
+            // do some vulnerability fixes: remove the ' char as it could be used for SQL injection
+            postalCode = postalCode.remove("'");
+            city = city.remove("'");
+            countryIso3166Code.remove("'");
+
             m_postalList.append(PostalInfo(postalCode, city, countryIso3166Code));
             qDebug() << "imported" << postalCode << city;
 
