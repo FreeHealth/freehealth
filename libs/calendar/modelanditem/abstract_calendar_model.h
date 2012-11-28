@@ -87,7 +87,7 @@ public:
     virtual QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
 
     virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end) = 0;
-    virtual Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
+    virtual CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
     virtual void removeItem(const QString &uid) = 0;
     virtual bool moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to) = 0;
 
