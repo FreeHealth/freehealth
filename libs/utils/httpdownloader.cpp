@@ -28,7 +28,7 @@
  * Simple Http downlader. The object must not be deleted during the download process.
  * You can stop the current downloading using the cancelDownload().\n
  * This downloader manages server and proxy authentication. User will be asked for their
- * login and password is required.
+ * login and password if required.
  *
  * Proxy management: \n
  * If you are using a proxy, you must register it with the QNetworkProxy::setApplicationProxy()
