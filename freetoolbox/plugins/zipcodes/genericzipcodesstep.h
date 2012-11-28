@@ -70,7 +70,7 @@ public:
 
     bool process();
     QString processMessage() const { return tr("Generic zip codes database creation"); }
-    bool postProcessDownload();
+    bool postDownloadProcessing();
 
     bool downloadSelectedCountryInfo();
 
