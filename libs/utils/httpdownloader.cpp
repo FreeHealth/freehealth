@@ -26,6 +26,9 @@
 /**
  * \class Utils::HttpDownloader
  * Simple Http downlader. The object must not be deleted during the download process.
+ * You can stop the current downloading using the cancelDownload().\n
+ * This downloader manages server and proxy authentication. User will be asked for their
+ * login and password is required.
 */
 
 #include "httpdownloader.h"
@@ -111,6 +114,15 @@ bool HttpDownloader::startDownload()
     return d->startDownload();
 }
 
+/**
+ * Stop the downloading. Emits the downloadFinished() signal.
+ */
+bool HttpDownloader::cancelDownload()
+{
+    d->cancelDownload();
+    Q_EMIT downloadFinished();
+    return true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////     PRIVATE PART    ///////////////////////////////////////
