@@ -10,10 +10,6 @@ gitroot=`git rev-parse --show-toplevel`
 
 fix_trailing_whitespaces() {
 
-    #preserve working directory and cd into repository root dir
-    owd=$PWD
-    cd $gitroot
-
     # get changes since last HEAD
     if git rev-parse --verify HEAD >/dev/null 2>&1
     then
@@ -39,7 +35,6 @@ fix_trailing_whitespaces() {
 
 		echo "Automatically fixing trailing whitespace in $FILE."
 	done
-	cd $owd
 }
 
 
