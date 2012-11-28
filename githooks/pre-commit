@@ -5,8 +5,15 @@
 # it wants to stop the commit.
 #
 
+gitroot=`git rev-parse --show-toplevel`
+
 
 fix_trailing_whitespaces() {
+
+    #preserve working directory and cd into repository root dir
+    owd=$PWD
+    cd $gitroot
+
     # get changes since last HEAD
     if git rev-parse --verify HEAD >/dev/null 2>&1
     then
@@ -17,8 +24,12 @@ fix_trailing_whitespaces() {
     fi
 
     # Find files with trailing whitespace in the current commit
-    # + filter out filenames from git output with sed
-	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | awk 'NF>2{NF-=2}1' | uniq` ; do  
+    # + filter out filenames from git output with sed/cut/uniq:
+    #
+    # remove lines with +/- at the beginning (first sed)
+    # extract filename from line (cut, delimiter ":", fragment 1)
+    # merge multiple identical filenames into one (uniq)
+	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
 
         # replace all trailing whitespace with ""
 		sed -i 's/[[:space:]]*$//' "$FILE"
@@ -28,6 +39,7 @@ fix_trailing_whitespaces() {
 
 		echo "Automatically fixing trailing whitespace in $FILE."
 	done
+	cd $owd
 }
 
 
