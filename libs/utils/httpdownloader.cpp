@@ -97,7 +97,11 @@ void HttpDownloader::setProgressBar(QProgressBar *bar)
     d->progressBar = bar;
 }
 
-/** Set the URL to download */
+/**
+ * Set the URL to download. The downloaded file will be saved into the output path with the
+ * same filename as the URL.
+ * \sa setOutputPath()
+*/
 void HttpDownloader::setUrl(const QUrl &url)
 {
     d->m_Url = url;
@@ -111,6 +115,45 @@ void HttpDownloader::setOutputPath(const QString &absolutePath)
         d->m_Path = absolutePath;
     else
         d->m_Path.clear();
+}
+
+/**
+  * Set the output file name. By default, the output filename is the filename of the URL.
+  * But you can define your own output file name. If you want to clear the output file name
+  * just pass an empty QString to this method.
+  * \sa setUrl(), setOutputPath()
+  */
+void HttpDownloader::setOutputFileName(const QString &fileName)
+{
+    d->m_OutputFileName = fileName;
+}
+
+/**
+  * Returns the output file name. By default, the output filename is the filename of the URL.
+  * But you can define your own output file name with setOutputFileName()
+  * \sa setUrl(), setOutputFileName()
+  */
+QString HttpDownloader::outputFileName() const
+{
+    if (d->m_OutputFileName.isEmpty()) {
+        QFileInfo fileInfo(d->m_Url.path());
+        QString fileName =fileInfo.fileName();
+        if (fileName.isEmpty())
+            fileName = "index.html";
+        return fileName;
+    }
+    return d->m_OutputFileName;
+}
+
+/**
+  * Returns the output absolute path and file name. By default, the output filename is
+  * the filename of the URL.
+  * But you can define your own output file name with setOutputFileName()
+  * \sa setUrl(), setOutputFileName(), setOutputPath()
+  */
+QString HttpDownloader::outputAbsoluteFileName() const
+{
+    return d->m_Path + QDir::separator() + outputFileName();
 }
 
 /** Define the label of the progress */
@@ -192,10 +235,7 @@ bool HttpDownloaderPrivate::startDownload()
 /** Prepare the Http download */
 bool HttpDownloaderPrivate::downloadFile()
 {
-    QFileInfo fileInfo(m_Url.path());
-    QString fileName = m_Path + QDir::separator() + fileInfo.fileName();
-    if (fileName.isEmpty())
-        fileName = "index.html";
+    QString fileName = q->outputAbsoluteFileName();
 
     if (QFile::exists(fileName)) {        
         if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
