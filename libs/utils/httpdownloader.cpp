@@ -350,8 +350,6 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
 /** Slot connected to server authentication required */
 void HttpDownloaderPrivate::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
-    WARN_FUNC;
-
     LOG("Server authentication required: " +  reply->url().toString());
     const QString &host = reply->url().toString();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
@@ -374,8 +372,6 @@ void HttpDownloaderPrivate::authenticationRequired(QNetworkReply *reply, QAuthen
 /** Slot connected to proxy authentication required */
 void HttpDownloaderPrivate::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
-    WARN_FUNC;
-
     LOG("Proxy authentication required: " +  proxy.hostName());
     const QString &host = proxy.hostName();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
