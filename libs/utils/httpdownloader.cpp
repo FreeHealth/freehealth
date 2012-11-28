@@ -125,6 +125,9 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
+    // Connect authentication request
+    connect(&qnam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
+    connect(&qnam, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 }
 
 HttpDownloaderPrivate::~HttpDownloaderPrivate()
@@ -188,6 +191,7 @@ bool HttpDownloaderPrivate::startRequest(const QUrl &url)
     reply = qnam.get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+
     if (progressBar) {
         connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
     }
@@ -292,22 +296,21 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
     }
 }
 
-//void HttpDownloaderPrivate::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
+// Compute download percentage and emit the downloadPercent() signal */
+//void HttpDownloaderPrivate::computeDownloadProgressPrecent(qint64 bytesRead, qint64 totalBytes)
 //{
-//    QDialog dlg;
-//    Ui::Dialog ui;
-//    ui.setupUi(&dlg);
-//    dlg.adjustSize();
-//    ui.siteDescription->setText(tr("%1 at %2").arg(authenticator->realm()).arg(url.host()));
-
-//    // Did the URL have information? Fill the UI
-//    // This is only relevant if the URL-supplied credentials were wrong
-//    ui.userEdit->setText(url.userName());
-//    ui.passwordEdit->setText(url.password());
-
-//    if (dlg.exec() == QDialog::Accepted) {
-//        authenticator->setUser(ui.userEdit->text());
-//        authenticator->setPassword(ui.passwordEdit->text());
+//    // Retreive progressBar
+//    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+//    QProgressBar *bar = m_replyToData[reply].bar;
+//    if (!bar) {
+//        disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+//        return;
+//    }
+//    if (totalBytes>0) {
+//        int v = bytesRead*100/totalBytes;
+//        bar->setValue(v);
+//    } else {
+//        bar->setValue(0);
 //    }
 //}
 
