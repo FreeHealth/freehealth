@@ -40,13 +40,17 @@
  * Actions & order:
  * When the user selects a "Create Full Release", all IFullReleaseStep objects are retrieved from the
  * plugin manager object pool and actions are called in the following order:
- * - createDir()
+ * - createTemporaryStorage()
  * - downloadFiles(): download your files and when done, emit the downloadFinished() signal
  * - postProcessDownload(): process whatever just after the download is finished then emit the postProcessDownloadFinished() signal
  * - process(): process your files and databases and when done emit the processFinished() signal
- * - cleanFiles(): cleans all temporary created files, other cleanup
+ * - cleanTemporaryStorage(): cleans all temporary created files, other cleanup
  *
  * Getting connected with the UI:
+ * The whole Step object is a non-GUI object which must not have any direct GUI access. It may run threaded, and
+ * direct GUI access is not thread save. Instead you can connect your objects to various signals.
+ *
+ * DEPRECATED: \todo this should be done by the callee!
  * When a step is started, a modal progress dialog is executed. During all your sub-processes
  * you can adapt this progress dialog using the following signals:
  * - progressRangeChanged() to change the range of the progress dialog
