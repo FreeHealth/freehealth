@@ -41,6 +41,8 @@ QT_END_NAMESPACE
 
 namespace ZipCodes {
 
+class GenericZipCodesStep;
+
 struct PostalInfo {
     PostalInfo(const QString &postalCode,
                const QString &city,
@@ -52,6 +54,30 @@ struct PostalInfo {
     QString extraCode;
     QString country;
 };
+
+namespace Internal {
+class GenericZipCodesStepPrivate
+{
+public:
+    explicit GenericZipCodesStepPrivate(GenericZipCodesStep *parent) :
+        q(parent)
+    {
+    }
+
+    ~GenericZipCodesStepPrivate() {}
+
+
+    QStringList m_Errors;
+    bool m_WithProgress;
+    QStandardItemModel *m_availableCountriesModel;
+    QStandardItemModel *m_selectedCountriesModel;
+    QLocale::Country m_selectedCountry;
+    QList<QString> m_selectedCountryList;
+    int m_selectedCountriesCounter;
+    QList<PostalInfo> m_postalList;
+    GenericZipCodesStep *q;
+};
+} // end Internal
 
 class GenericZipCodesStep : public Core::IFullReleaseStep
 {
@@ -74,15 +100,15 @@ public:
 
     bool downloadSelectedCountryInfo();
 
-    QStandardItemModel* availableCountriesModel() { return m_availableCountriesModel; }
-    QStandardItemModel* selectedCountriesModel() { return m_selectedCountriesModel; }
+    QStandardItemModel* availableCountriesModel() { return d->m_availableCountriesModel; }
+    QStandardItemModel* selectedCountriesModel() { return d->m_selectedCountriesModel; }
 
     bool createDatabaseScheme();
     bool startDownloadingSelectedCountryData();
     bool populateDatabase();
     bool registerDataPack();
 
-    QStringList errors() const {return m_Errors;}
+    QStringList errors() const {return d->m_Errors;}
 
     void selectCountry(const QModelIndex &index);
     void deselectCountry(const QModelIndex &index);
@@ -97,14 +123,7 @@ protected Q_SLOTS:
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:
-    QStringList m_Errors;
-    bool m_WithProgress;
-    QStandardItemModel *m_availableCountriesModel;
-    QStandardItemModel *m_selectedCountriesModel;
-    QLocale::Country m_selectedCountry;
-    QList<QString> m_selectedCountryList;
-    int m_selectedCountriesCounter;
-    QList<PostalInfo> m_postalList;
+    Internal::GenericZipCodesStepPrivate *d;
 };
 
 } // end ZipCodes

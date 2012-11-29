@@ -87,13 +87,14 @@ static inline QString sqlMasterFileAbsPath() {
 
 GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
-    m_WithProgress(false),
-    m_availableCountriesModel(new QStandardItemModel(this)),
-    m_selectedCountriesModel(new QStandardItemModel(this)),
-    m_selectedCountriesCounter(0)
+    d(new Internal::GenericZipCodesStepPrivate(this))
 {
     setObjectName("GenericZipCodesStep");
-    createTemporaryStorage();
+
+    d->m_WithProgress = false;
+    d->m_availableCountriesModel = new QStandardItemModel(this);
+    d->m_selectedCountriesModel = new QStandardItemModel(this);
+    d->m_selectedCountriesCounter = 0;
 }
 
 GenericZipCodesStep::~GenericZipCodesStep()
@@ -135,7 +136,6 @@ bool GenericZipCodesStep::startDownload(QProgressBar *bar)
     connect(dld, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
-
 }
 
 /** Automated ZipCode database creation of all available countries in GeoName */
@@ -198,26 +198,26 @@ bool GenericZipCodesStep::startDownloadingSelectedCountryData()
     // this counter is set to the number of selected countries.
     // it is used as reference counter for the QNetworkReplys and decreased with every finished reply slot
     // when it reaches 0, we can safely delete the netAccessManager.
-    m_selectedCountriesCounter = m_selectedCountriesModel->rowCount();
+    d->m_selectedCountriesCounter = d->m_selectedCountriesModel->rowCount();
 
-    Q_EMIT progressRangeChanged(0, m_selectedCountriesCounter);
+    Q_EMIT progressRangeChanged(0, d->m_selectedCountriesCounter);
     Q_EMIT progress(0);
 
     // the netAccessManager is deleted in onSelectedCountryDownloadFinished() when the last reply is finished.
     QNetworkAccessManager *netAccessManager = new QNetworkAccessManager(this);
 
     const QStandardItem *item;
-    for(int i = 0; i < m_selectedCountriesCounter; ++i) {
-        item = m_selectedCountriesModel->item(i);
-        m_selectedCountry = static_cast<QLocale::Country>(item->data().toInt());
+    for(int i = 0; i < d->m_selectedCountriesCounter; ++i) {
+        item =d-> m_selectedCountriesModel->item(i);
+        d->m_selectedCountry = static_cast<QLocale::Country>(item->data().toInt());
         qDebug() << static_cast<QLocale::Country>(item->data().toInt());
 
-        m_selectedCountryList.append(Utils::countryToIso(m_selectedCountry).toLower());
+        d->m_selectedCountryList.append(Utils::countryToIso(d->m_selectedCountry).toLower());
         //    get list of places that GeoNames has informations for in the given country
         QNetworkRequest request;
         request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
                             .arg(MAX_ROWS)
-                            .arg(Utils::countryToIso(m_selectedCountry).toLower())));
+                            .arg(Utils::countryToIso(d->m_selectedCountry).toLower())));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
 
         netAccessManager->get(request);
@@ -242,12 +242,12 @@ bool GenericZipCodesStep::populateDatabase()
     QString req;
 
     // remove alread recorded codes for selected countries
-    foreach(QString countryIso, m_selectedCountryList) {
+    foreach(QString countryIso, d->m_selectedCountryList) {
         req = QString("DELETE FROM `ZIPS` WHERE `ZIPS`.`COUNTRY`='%1';").arg(countryIso.toLower());
         Utils::Database::executeSQL(req, db);
     }
-    qDebug() << "postal info number:" << m_postalList.count();
-    foreach(const PostalInfo pi, m_postalList) {
+    qDebug() << "postal info number:" << d->m_postalList.count();
+    foreach(const PostalInfo pi, d->m_postalList) {
         req = QString("INSERT INTO ZIPS (`ZIP`, `CITY`, `EXTRACODE`, `COUNTRY`)\n"
                       "VALUES ('%1', '%2', '%3', '%4');").arg(pi.postalCode, pi.city, pi.extraCode, pi.country);
         Utils::Database::executeSQL(req, db);
@@ -267,21 +267,21 @@ void GenericZipCodesStep::selectCountry(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
-    QStandardItem *item = m_availableCountriesModel->itemFromIndex(index)->clone();
-    m_availableCountriesModel->removeRow(index.row());
-    if (m_selectedCountriesModel->findItems(item->data(Qt::DisplayRole).toString()).isEmpty())
-        m_selectedCountriesModel->appendRow(item);
-    m_selectedCountriesModel->sort(0);
+    QStandardItem *item = d->m_availableCountriesModel->itemFromIndex(index)->clone();
+    d->m_availableCountriesModel->removeRow(index.row());
+    if (d->m_selectedCountriesModel->findItems(item->data(Qt::DisplayRole).toString()).isEmpty())
+        d->m_selectedCountriesModel->appendRow(item);
+    d->m_selectedCountriesModel->sort(0);
 }
 
 void GenericZipCodesStep::deselectCountry(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
-    QStandardItem *item = m_selectedCountriesModel->itemFromIndex(index)->clone();
-    m_selectedCountriesModel->removeRow(index.row());
-    m_availableCountriesModel->appendRow(item);
-    m_availableCountriesModel->sort(0);
+    QStandardItem *item = d->m_selectedCountriesModel->itemFromIndex(index)->clone();
+    d->m_selectedCountriesModel->removeRow(index.row());
+    d->m_availableCountriesModel->appendRow(item);
+    d->m_availableCountriesModel->sort(0);
 }
 
 void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTotal)
@@ -352,12 +352,12 @@ bool GenericZipCodesStep::onAvailableCountriesDownloaded()
                     QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
                     QLocale::countryToString(country));
         item->setData(country);
-        m_availableCountriesModel->appendRow(item);
+        d->m_availableCountriesModel->appendRow(item);
         success = true;
     }
 
     // find default system country and add it to the selected list
-    const QStandardItem *defaultCountryItem = m_availableCountriesModel->findItems(
+    const QStandardItem *defaultCountryItem = d->m_availableCountriesModel->findItems(
                 QLocale::countryToString(QLocale::system().country())
                 ).first();
     if (defaultCountryItem)
@@ -394,14 +394,14 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
 {
 
     // decrease the reference counter
-    --m_selectedCountriesCounter;
+    --d->m_selectedCountriesCounter;
 
     if (reply->error() > 0) {
         qDebug() << reply->errorString();
     } else {
         bool success = false;
 
-        m_postalList.clear();
+        d->m_postalList.clear();
 
         // get XML structure of reply into a parseable format
         QXmlInputSource src;
@@ -413,7 +413,7 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
 
         // malformed URL?
         if (countryIso3166Code.isEmpty()) {
-            if (m_selectedCountriesCounter == 0)
+            if (d->m_selectedCountriesCounter == 0)
                 reply->parent()->deleteLater();
             Q_EMIT processFinished();
             return;
@@ -423,7 +423,7 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
         QLocale::Country country = Utils::countryIsoToCountry(countryIso3166Code);
         if (country == QLocale::AnyCountry) {
             LOG("country is not valid: " + countryIso3166Code);
-            if (m_selectedCountriesCounter == 0)
+            if (d->m_selectedCountriesCounter == 0)
                 reply->parent()->deleteLater();
             Q_EMIT processFinished();
             return;
@@ -453,13 +453,13 @@ void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply
             city = city.remove("'");
             countryIso3166Code.remove("'");
 
-            m_postalList.append(PostalInfo(postalCode, city, countryIso3166Code));
+            d->m_postalList.append(PostalInfo(postalCode, city, countryIso3166Code));
             qDebug() << "imported" << postalCode << city;
 
             success = true;
         }
     }
-    if (m_selectedCountriesCounter == 0) {
+    if (d->m_selectedCountriesCounter == 0) {
         reply->parent()->deleteLater();
         Q_EMIT processFinished();
     }
