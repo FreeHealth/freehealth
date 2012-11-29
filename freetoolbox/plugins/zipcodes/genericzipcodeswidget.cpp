@@ -100,8 +100,8 @@ void GenericZipCodesWidget::on_downloadButton_clicked()
 //    ui->progressBar->setEnabled(true);
 //    ui->downloadButton->setText(tr("Download in progress"));
     m_availableCountriesModel->clear();
-    m_Step->startDownload();
     connect(m_Step, SIGNAL(countryListDownloaded(bool)), this, SLOT(onDownloadFinished()));
+    m_Step->startDownload();
 }
 
 void GenericZipCodesWidget::on_createPackageButton_clicked()
