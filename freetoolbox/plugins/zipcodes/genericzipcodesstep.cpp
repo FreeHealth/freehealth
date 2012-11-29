@@ -134,6 +134,7 @@ bool GenericZipCodesStep::startDownload(QProgressBar *bar)
     dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
     dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
+//    connect(this, SIGNAL(countryListDownloaded(bool)),)
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     return true;
 }
@@ -141,24 +142,19 @@ bool GenericZipCodesStep::startDownload(QProgressBar *bar)
 /** Automated ZipCode database creation of all available countries in GeoName */
 bool GenericZipCodesStep::process()
 {
-    //TODO: error handling
-    createDatabaseScheme();
-    startDownloadingSelectedCountryData();
-    return true;
+    return populateDatabase();
 }
 
 bool GenericZipCodesStep::postDownloadProcessing()
 {
-    //TODO: error handling
-    populateDatabase();
+    const bool success = createDatabaseScheme();
     Q_EMIT postDownloadProcessingFinished();
-    return true;
+    return success;
 }
 
 /** Create the GeoName zipcode database */
 bool GenericZipCodesStep::createDatabaseScheme()
 {
-    //TODO: error handling
     LOG(tr("Creating Generic zipcodes database"));
     Q_EMIT progressLabelChanged(tr("Creating Generic zipcodes database scheme"));
     Q_EMIT progressRangeChanged(0, 1);
@@ -189,7 +185,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
     return true;
 }
 
-/** Download zipcodes for selected countries */
+/** Download zipcodes for (auto-)selected countries */
 bool GenericZipCodesStep::startDownloadingSelectedCountryData()
 {
     //TODO: error handling
@@ -293,10 +289,9 @@ void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTota
 }
 
 /*!
- * Called when the downloading of the available countries index from GeoNames is finished,
+ * Called when the downloading of the available countries list from GeoNames is finished,
  * then emits countryListDownloaded().\n
- * Downloads all available zipcodes from GeoNames.
- * Emits downloadFinished() when done.
+ * Starts downloading all available zipcodes from GeoNames for the system country.
  */
 bool GenericZipCodesStep::onAvailableCountriesDownloaded()
 {
@@ -351,19 +346,24 @@ bool GenericZipCodesStep::onAvailableCountriesDownloaded()
         QStandardItem *item = new QStandardItem(
                     QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
                     QLocale::countryToString(country));
+
+        // set Qt country code as data for easy retrieval
         item->setData(country);
         d->m_availableCountriesModel->appendRow(item);
-        success = true;
     }
 
-    // find default system country and add it to the selected list
+    // find default system country and automatically add it to the selected list
     const QStandardItem *defaultCountryItem = d->m_availableCountriesModel->findItems(
                 QLocale::countryToString(QLocale::system().country())
                 ).first();
-    if (defaultCountryItem)
+    if (defaultCountryItem) {
         selectCountry(defaultCountryItem->index());
-    Q_EMIT countryListDownloaded(success);
-    return true;
+
+        // everything went fine: we downloaded the countries, and we have a default one
+        success = true;
+    }
+    Q_EMIT countryListDownloaded();
+    return success;
 }
 
 /*!

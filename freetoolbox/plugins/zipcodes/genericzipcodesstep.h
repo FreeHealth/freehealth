@@ -114,8 +114,7 @@ public:
     void deselectCountry(const QModelIndex &index);
 
 Q_SIGNALS:
-    void availableCountriesListDownloaded();
-    void countryListDownloaded(bool);
+    void countryListDownloaded();
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
