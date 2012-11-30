@@ -174,14 +174,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
     connect(a_openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
 
-    QAction *a_CreateFullRelease = new QAction(this);
-    a_CreateFullRelease->setObjectName("FTB_CreateFullRelease");
-    a_CreateFullRelease->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a_CreateFullRelease, Core::Id("FTB_CreateFullRelease"), globalcontext);
-    cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
-    menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
-    connect(a_CreateFullRelease, SIGNAL(triggered()), this, SLOT(createFullRelease()));
-
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
 
@@ -189,8 +181,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
     setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
-    ui->mainToolBar->insertAction(0, a_CreateFullRelease);
-    ui->mainToolBar->insertAction(0, a_openPreferences);
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->hide();
@@ -199,8 +189,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
-//        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-//        statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
         updateChecker()->check(Utils::Constants::FREETOOLBOX_UPDATE_URL);
@@ -214,6 +202,10 @@ bool MainWindow::initialize(const QStringList &, QString *)
     return true;
 }
 
+/**
+ * Processing after the Core is opened.
+ * Update actions translations, check path preferences, show ui
+ */
 void MainWindow::postCoreInitialization()
 {
     contextManager()->updateContext();
@@ -234,12 +226,14 @@ void MainWindow::postCoreInitialization()
     setStatusBar(0);
 }
 
+/** Processing before closing mainwindow */
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     saveSettings();
     event->accept();
 }
 
+/** Get freetoolbox pages and prepare the treeview */
 void MainWindow::preparePages()
 {
     // TODO: Use the Core::PageWidget
@@ -323,12 +317,7 @@ void MainWindow::preparePages()
 //    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->layoutWidget), 1);
 }
 
-//void MainWindow::addPage(IToolPage *page)
-//{
-//    if (page)
-//        m_pages << page;
-//}
-
+/** When a page is selected shows the corresponding widget */
 void MainWindow::pageSelected()
 {
     QTreeWidgetItem *item = ui->pageTree->currentItem();
@@ -339,6 +328,7 @@ void MainWindow::pageSelected()
     ui->stackedPages->setCurrentIndex(index);
 }
 
+/** Show help of the current page (not coded) */
 void MainWindow::showHelp()
 {
 //    QTreeWidgetItem *item = ui->pageTree->currentItem();
@@ -491,6 +481,7 @@ void MainWindow::startNextPostProcessDownload()
     m_ActiveStep->postDownloadProcessing();
 }
 
+/** Save mainwindow settings */
 void MainWindow::saveSettings()
 {
     settings()->setValue("LastPreferenceCategory", m_currentCategory);
@@ -502,6 +493,7 @@ void MainWindow::saveSettings()
     settings()->sync();
 }
 
+/** Read mainwindow settings */
 void MainWindow::readSettings()
 {
     m_currentCategory = settings()->value("LastPreferenceCategory").toString();
