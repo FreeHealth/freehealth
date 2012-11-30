@@ -23,6 +23,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Core::FullReleasePage
+ * FreeToolBox user page that allow users to start and manage all
+ * Core::IFullReleaseStep in one action. The widget shows the
+ * steps running and its output.\n
+ * This object owns the code mechanism for the full release.
+ */
+
 #include "fullreleasepage.h"
 
 #include <coreplugin/constants_icons.h>
@@ -57,6 +65,7 @@ QIcon FullReleasePage::icon() const
     return theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon);
 }
 
+/** Create the page (return the widget for the page */
 QWidget *FullReleasePage::createPage(QWidget *parent)
 {
     m_Widget = new QWidget(parent);
