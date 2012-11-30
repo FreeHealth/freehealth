@@ -56,6 +56,9 @@ using namespace ZipCodes;
 
 namespace {
 const char* const  DB_NAME     = "ZIPCODES";
+
+// Dump URL: http://download.geonames.org/export/zip/allCountries.zip
+
 // this defines the maximum downloaded zipcodes from the page
 
 #ifdef DEBUG
@@ -95,6 +98,7 @@ GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     d->m_availableCountriesModel = new QStandardItemModel(this);
     d->m_selectedCountriesModel = new QStandardItemModel(this);
     d->m_selectedCountriesCounter = 0;
+    d->m_downloader = 0;
 }
 
 GenericZipCodesStep::~GenericZipCodesStep()
@@ -128,13 +132,27 @@ bool GenericZipCodesStep::startDownload()
 {
     // TODO: manage progress download
     // TODO: in the automated management of this step all files must be downloaded at once (all countries zipcodes)
-    Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-    dld->setOutputPath(workingPath());
-    dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
-    connect(dld, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
-//    connect(this, SIGNAL(countryListDownloaded(bool)),)
-    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    dld->startDownload();
+    d->m_downloader = new Utils::HttpDownloader(this);
+    d->m_downloader->setOutputPath(workingPath());
+    d->m_downloader->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
+    connect(d->m_downloader, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
+    d->m_downloader->startDownload();
+    return true;
+}
+
+bool GenericZipCodesStep::downloadZipCodesUsingCachedIso()
+{
+    // Finished ?
+    if (d->m_availableIsoCodes.isEmpty()) {
+        return true;
+    }
+
+    QString iso = d->m_availableIsoCodes.takeFirst().toLower();
+    d->m_downloader->setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
+                              .arg(MAX_ROWS)
+                              .arg(iso)));
+    d->m_downloader->setOutputFileName(QString("%1.xml").arg(iso));
+    d->m_downloader->startDownload();
     return true;
 }
 

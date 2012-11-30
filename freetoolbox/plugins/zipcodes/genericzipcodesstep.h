@@ -38,6 +38,16 @@ class QProgressBar;
 class QStandardItemModel;
 QT_END_NAMESPACE
 
+/**
+ * \file genericzipcodestep.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 30 Nov 2012
+*/
+
+namespace Utils {
+class HttpDownloader;
+}
 
 namespace ZipCodes {
 
@@ -66,15 +76,15 @@ public:
 
     ~GenericZipCodesStepPrivate() {}
 
-
     QStringList m_Errors;
     bool m_WithProgress;
     QStandardItemModel *m_availableCountriesModel;
     QStandardItemModel *m_selectedCountriesModel;
     QLocale::Country m_selectedCountry;
-    QList<QString> m_selectedCountryList;
+    QStringList m_selectedCountryList, m_availableIsoCodes;
     int m_selectedCountriesCounter;
     QList<PostalInfo> m_postalList;
+    Utils::HttpDownloader *m_downloader;
     GenericZipCodesStep *q;
 };
 } // end Internal
@@ -119,6 +129,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
     bool onAvailableCountriesDownloaded();
+    bool downloadZipCodesUsingCachedIso();
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:

@@ -77,7 +77,7 @@
    <item>
     <widget class="QPushButton" name="downloadButton">
      <property name="text">
-      <string>&amp;Download list of available countries</string>
+      <string>&amp;Download files</string>
      </property>
     </widget>
    </item>

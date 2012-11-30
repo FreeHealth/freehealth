@@ -31,6 +31,13 @@
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
 
+/**
+ * \file frenchzipcodespage.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 30 Nov 2012
+*/
+
 namespace ZipCodes {
 
 class FrenchZipCodesPage : public Core::IToolPage
