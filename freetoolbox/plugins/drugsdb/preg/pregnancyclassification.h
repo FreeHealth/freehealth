@@ -68,7 +68,7 @@ public:
     QString processMessage() const {return tr("Pregnancy && drugs database creation");}
 
     bool unzipFiles();
-    bool prepareDatas();
+    bool prepareData();
     bool createDatabase();
     bool populateDatabase();
     bool registerDataPack() {return true;}

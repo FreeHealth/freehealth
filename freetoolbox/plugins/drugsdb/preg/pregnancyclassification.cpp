@@ -185,7 +185,7 @@ bool PregnancyDatatabaseStep::startDownload(QProgressBar *bar)
 bool PregnancyDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
 //    linkMolecules();
@@ -201,7 +201,7 @@ bool PregnancyDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool PregnancyDatatabaseStep::prepareDatas()
+bool PregnancyDatatabaseStep::prepareData()
 {
     return true;
 }
