@@ -67,7 +67,6 @@
 #include <QDockWidget>
 #include <QCloseEvent>
 #include <QLabel>
-#include <QtConcurrentRun>
 #include <QProgressDialog>
 
 using namespace Core;
@@ -105,26 +104,19 @@ MainWindow::MainWindow(QWidget *parent) :
         Core::IMainWindow(parent),
         ui(0),
         m_FullReleasePage(0),
-        m_ActiveStep(0),
-        m_Watcher(0),
-        m_applied(false),
-        m_FullReleaseProgress(0)
+        m_applied(false)
 {
     setObjectName("MainWindow");
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
-//    setWindowIcon(theme()->icon(Core::Constants::ICONFREETOOLBOX));
     messageSplash(tr("Creating Main Window"));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    if (m_Watcher) {
-        delete m_Watcher;
-        m_Watcher=0;
-    }
 }
 
+/** Initialize the main window (create actions and menus) */
 bool MainWindow::initialize(const QStringList &, QString *)
 {
     // create the help dialog
@@ -174,14 +166,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
     connect(a_openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
 
-    QAction *a_CreateFullRelease = new QAction(this);
-    a_CreateFullRelease->setObjectName("FTB_CreateFullRelease");
-    a_CreateFullRelease->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a_CreateFullRelease, Core::Id("FTB_CreateFullRelease"), globalcontext);
-    cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
-    menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
-    connect(a_CreateFullRelease, SIGNAL(triggered()), this, SLOT(createFullRelease()));
-
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
 
@@ -189,8 +173,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
     setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
-    ui->mainToolBar->insertAction(0, a_CreateFullRelease);
-    ui->mainToolBar->insertAction(0, a_openPreferences);
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->hide();
@@ -199,8 +181,6 @@ bool MainWindow::initialize(const QStringList &, QString *)
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
-//        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-//        statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
         updateChecker()->check(Utils::Constants::FREETOOLBOX_UPDATE_URL);
@@ -214,6 +194,10 @@ bool MainWindow::initialize(const QStringList &, QString *)
     return true;
 }
 
+/**
+ * Processing after the Core is opened.
+ * Update actions translations, check path preferences, show ui
+ */
 void MainWindow::postCoreInitialization()
 {
     contextManager()->updateContext();
@@ -234,12 +218,14 @@ void MainWindow::postCoreInitialization()
     setStatusBar(0);
 }
 
+/** Processing before closing mainwindow */
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     saveSettings();
     event->accept();
 }
 
+/** Get freetoolbox pages and prepare the treeview */
 void MainWindow::preparePages()
 {
     // TODO: Use the Core::PageWidget
@@ -323,12 +309,7 @@ void MainWindow::preparePages()
 //    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->layoutWidget), 1);
 }
 
-//void MainWindow::addPage(IToolPage *page)
-//{
-//    if (page)
-//        m_pages << page;
-//}
-
+/** When a page is selected shows the corresponding widget */
 void MainWindow::pageSelected()
 {
     QTreeWidgetItem *item = ui->pageTree->currentItem();
@@ -339,6 +320,7 @@ void MainWindow::pageSelected()
     ui->stackedPages->setCurrentIndex(index);
 }
 
+/** Show help of the current page (not coded) */
 void MainWindow::showHelp()
 {
 //    QTreeWidgetItem *item = ui->pageTree->currentItem();
@@ -347,150 +329,7 @@ void MainWindow::showHelp()
 //    Core::HelpDialog::showPage(m_pages.at(index)->helpPage());
 }
 
-void MainWindow::createFullRelease()
-{
-    // Activate m_FullReleasePage
-    ui->pageTree->setCurrentItem(ui->pageTree->topLevelItem(0));
-    pageSelected();
-    m_ActiveStep = 0;
-
-    if (m_FullReleaseProgress) {
-        delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-    }
-
-    // Create the progress dialog
-    m_FullReleaseProgress = new QProgressDialog(this);
-    m_FullReleaseProgress->setModal(true);
-    m_FullReleaseProgress->show();
-
-    // get all Core::IFullReleaseSteps
-    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-    // create dirs
-    foreach(Core::IFullReleaseStep *s, steps) {
-        if (!s->createTemporaryStorage()) {
-            Utils::warningMessageBox(tr("%1 can not create its temporary directory.").arg(s->id()),
-                                     tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
-            return;
-        }
-        connect(s, SIGNAL(progressLabelChanged(QString)), m_FullReleaseProgress, SLOT(setLabelText(QString)));
-        connect(s, SIGNAL(progress(int)), m_FullReleaseProgress, SLOT(setValue(int)));
-        connect(s, SIGNAL(progressRangeChanged(int,int)), m_FullReleaseProgress, SLOT(setRange(int,int)));
-    }
-
-    // TODO: add a if (userWantsToDld)... */
-    startNextDownload();
-//    startNextProcess();
-//    startNextPostProcessDownload();
-}
-
-void MainWindow::startNextDownload()
-{
-    // get all Core::IFullReleaseStep
-    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
-
-    // Actual process is m_ActiveStep if == 0 start first step
-    if (!m_ActiveStep) {
-        m_ActiveStep = steps.first();
-    } else {
-        // Stop running step process
-        m_FullReleasePage->endDownloadingProcess(m_ActiveStep->id());
-        int id = steps.indexOf(m_ActiveStep);
-        if (id==(steps.count()-1)) {
-            m_ActiveStep = 0;
-            // All downloads are done, start processes
-            startNextPostProcessDownload();
-            return;
-        }
-        m_ActiveStep = steps.at(id+1);
-    }
-
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-    m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
-    connect(m_ActiveStep, SIGNAL(downloadFinished()), this, SLOT(startNextDownload()));
-    m_ActiveStep->startDownload();
-}
-
-void MainWindow::startNextProcess()
-{
-    // get all Core::IFullReleaseStep
-    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
-
-    // Actual process is m_ActiveStep if == 0 start first step
-    if (!m_ActiveStep) {
-        m_ActiveStep = steps.first();
-    } else {
-        // Stop running step process
-        m_FullReleasePage->endLastAddedProcess();
-        int id = steps.indexOf(m_ActiveStep);
-        // Finished ?
-        if (id==(steps.count()-1)) {
-            m_ActiveStep = 0;
-            startNextProcess();
-            return;
-        }
-        m_ActiveStep = steps.at(id+1);
-    }
-
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-    m_FullReleasePage->addRunningProcess(m_ActiveStep->processMessage());
-//    if (!m_Watcher) {
-//        m_Watcher = new QFutureWatcher<void>;
-//    }
-//    QFuture<void> future = QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
-    QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
-    connect(m_ActiveStep, SIGNAL(processFinished()), this, SLOT(startNextProcess()));
-//    m_Watcher->setFuture(future);
-
-}
-
-void MainWindow::startNextPostProcessDownload()
-{
-    // get all Core::IFullReleaseStep
-    QList<Core::IFullReleaseStep*> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-    qSort(steps.begin(), steps.end(), Core::IFullReleaseStep::lessThan);
-
-    // Actual process is m_ActiveStep if == 0 start first step
-    if (!m_ActiveStep) {
-        m_ActiveStep = steps.first();
-    } else {
-        // Stop running step process
-        m_FullReleasePage->endDownloadingProcess(m_ActiveStep->id());
-        int id = steps.indexOf(m_ActiveStep);
-        if (id==(steps.count()-1)) {
-            // jobs terminated
-            m_ActiveStep = 0;
-            if (m_FullReleaseProgress)
-                delete m_FullReleaseProgress;
-            m_FullReleaseProgress = 0;
-            return;
-        }
-        m_ActiveStep = steps.at(id+1);
-    }
-
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-    m_FullReleasePage->addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
-    connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
-    m_ActiveStep->postDownloadProcessing();
-}
-
+/** Save mainwindow settings */
 void MainWindow::saveSettings()
 {
     settings()->setValue("LastPreferenceCategory", m_currentCategory);
@@ -502,6 +341,7 @@ void MainWindow::saveSettings()
     settings()->sync();
 }
 
+/** Read mainwindow settings */
 void MainWindow::readSettings()
 {
     m_currentCategory = settings()->value("LastPreferenceCategory").toString();
