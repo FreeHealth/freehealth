@@ -165,7 +165,7 @@ void HttpDownloader::setLabelText(const QString &text)
 /**
  * Start the asynchronous downloading. When the download is finished
  * the downloadFinished() signal is emitted. You can follow the download progress
- * with the downloadProgressRange() and downloadProgressRead() signals.
+ * with the downloadProgressRange(), downloadProgressValue(), and downloadProgressPercents() signals.
  */
 bool HttpDownloader::startDownload()
 {
@@ -364,8 +364,9 @@ void HttpDownloaderPrivate::httpReadyRead()
 }
 
 /**
-  * If a progressbar is defined inside the object, update the progress bar range and value. \n
-  * Also compute the downloading percentage and emits the downloadProgressPercents() signal.
+  * Emits signals that can be connected to a QProgressBar which is then updated according
+  * to the current download status (range and value). \n
+  * Also computes the downloading percentage and emits the downloadProgressPercents() signal.
   * \sa HttpDownloader::setProgressBar()
   */
 void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
@@ -374,7 +375,7 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
         return;
 
     Q_EMIT q->downloadProgressRange(0, totalBytes);
-    Q_EMIT q->downloadProgressRead(bytesRead);
+    Q_EMIT q->downloadProgressValue(bytesRead);
 
     int percent = 0;
     if (totalBytes>0) {

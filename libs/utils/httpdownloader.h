@@ -74,7 +74,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void downloadFinished();
     void downloadProgressRange(qint64,qint64);
-    void downloadProgressRead(qint64);
+    void downloadProgressValue(qint64);
     void downloadProgressPercents(int);
 
 private:
