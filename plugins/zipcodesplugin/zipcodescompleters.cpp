@@ -194,11 +194,13 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 /** Filter with the country iso code (two letters) \e countryIso */
 void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
 {
+    const QString iso = countryIso.remove("'");
+
     // basic check if param is a valid country ISO filter
-    if(countryIso.length() != 2)
+    if(iso.length() != 2)
         return;
 
-    m_countryIso = countryIso.toLower();
+    m_countryIso = iso.toLower();
 }
 
 // Find the database to use. In priority order:
