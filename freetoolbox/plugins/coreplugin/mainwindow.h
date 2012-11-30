@@ -24,21 +24,30 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef FREETOOLBOX_MAINWINDOW_H
+#define FREETOOLBOX_MAINWINDOW_H
 
 #include <coreplugin/imainwindow.h>
 
 #include <QSettings>
 #include <QFutureWatcher>
+QT_BEGIN_NAMESPACE
 class QProgressDialog;
+QT_END_NAMESPACE
+
+/**
+ * \file mainwindow.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 30 Nov 2012
+*/
 
 namespace Core {
 class FullReleasePage;
 class IFullReleaseStep;
 
 namespace Ui {
-    class MainWindow;
+class MainWindow;
 }
 
 class IToolPage;
@@ -84,8 +93,7 @@ private:
     QProgressDialog *m_FullReleaseProgress;
 };
 
-
 }  //  End namespace Core
 
 
-#endif // MAINWINDOW_H
+#endif // FREETOOLBOX_MAINWINDOW_H
