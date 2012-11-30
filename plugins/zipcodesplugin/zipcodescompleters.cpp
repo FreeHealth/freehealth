@@ -164,11 +164,12 @@ void ZipCountryModel::setCityFilter(const QString &city)
     if (m_City==city)
         return;
 
-    m_City = city.remove("'");
+    QString tmpcity = city;
+    m_City = tmpcity.remove("'");
 
     QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
                           "AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
-            .arg(m_countryIso).arg(city);
+            .arg(m_countryIso, m_City);
     setQuery(req, db);
     if (!query().isActive()) {
         LOG_QUERY_ERROR(query());
@@ -186,10 +187,11 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
     if (m_Zip==zipCode)
         return;
 
-    m_Zip = zipCode.remove("'");
+    QString zip = zipCode;
+    m_Zip = zip.remove("'");
     QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
                           "AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
-            .arg(m_countryIso).arg(zipCode);
+            .arg(m_countryIso, m_Zip);
     setQuery(req, db);
     if (!query().isActive()) {
         LOG_QUERY_ERROR(query());
@@ -200,7 +202,8 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
 {
     // strip possible SQL injection char
-    const QString iso = countryIso.remove("'");
+    QString iso = countryIso;
+    iso = iso.remove("'");
 
     // basic check if param is a valid country ISO filter
     if (m_countryIso == iso|| iso.length() != 2)
