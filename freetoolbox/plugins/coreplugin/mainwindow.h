@@ -70,10 +70,6 @@ public Q_SLOTS:
 private Q_SLOTS:
     void pageSelected();
     void showHelp();
-    void createFullRelease();
-    void startNextDownload();
-    void startNextProcess();
-    void startNextPostProcessDownload();
 
 protected:
     void closeEvent(QCloseEvent *event);
