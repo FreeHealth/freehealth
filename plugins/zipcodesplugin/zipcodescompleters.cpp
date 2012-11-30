@@ -62,10 +62,11 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
-/**
-  \class ZipCountryModel
-  Private model used by the ZipCountryCompleters
-*/
+/*!
+ * \class ZipCountryModel
+ * Private model used by the ZipCountryCompleters. It is a kind of proxy model for a QSqlModel
+ * that provides easy access for ZIP, city, and Country data.
+ */
 ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvailable) :
     QSqlQueryModel(parent),
     m_DbAvailable(dbAvailable)
@@ -91,6 +92,8 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role==Qt::DisplayRole || role==Qt::EditRole) {
+
+        // translate ColumnRepresentation values into real columns of the database
         switch (index.column()) {
         case Zip:
             return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 0));
