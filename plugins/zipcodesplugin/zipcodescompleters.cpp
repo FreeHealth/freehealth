@@ -142,7 +142,7 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
         }
     }
     QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY`='%2' AND ZIP='%3'")
-            .arg(m_countryIso).arg(city).arg(zip);
+            .arg(m_countryIso, city, zip);
     QSqlQuery query(db);
     if (query.exec(req)) {
         if (query.next())
