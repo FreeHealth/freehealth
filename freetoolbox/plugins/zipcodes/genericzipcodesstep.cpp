@@ -56,6 +56,9 @@ using namespace ZipCodes;
 
 namespace {
 const char* const  DB_NAME     = "ZIPCODES";
+
+// Dump URL: http://download.geonames.org/export/zip/allCountries.zip
+
 // this defines the maximum downloaded zipcodes from the page
 
 #ifdef DEBUG
