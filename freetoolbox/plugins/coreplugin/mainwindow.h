@@ -85,12 +85,9 @@ private:
     Ui::MainWindow *ui;
     FullReleasePage *m_FullReleasePage;
     QList<IToolPage *> m_pages;
-    Core::IFullReleaseStep *m_ActiveStep;
-    QFutureWatcher<void> *m_Watcher;
     bool m_applied;
     QString m_currentCategory;
     QString m_currentPage;
-    QProgressDialog *m_FullReleaseProgress;
 };
 
 }  //  End namespace Core
