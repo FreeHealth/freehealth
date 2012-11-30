@@ -152,9 +152,8 @@ bool DataPackStep::cleanTemporaryStorage()
 }
 
 /** Download files -> nothing to do */
-bool DataPackStep::startDownload(QProgressBar *bar)
+bool DataPackStep::startDownload()
 {
-    Q_UNUSED(bar);
     QTimer::singleShot(10, this, SIGNAL(downloadFinished()));
     return true;
 }

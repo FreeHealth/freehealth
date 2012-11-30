@@ -55,6 +55,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QUrl>
+#include <QProgressBar>
 
 #include <QDebug>
 
@@ -860,16 +861,18 @@ bool IDrugDatabaseStep::cleanTemporaryStorage()
  * Download the URL to the tempPath().
  * \sa setDownloadUrl()
  */
-bool IDrugDatabaseStep::startDownload(QProgressBar *bar)
+bool IDrugDatabaseStep::startDownload()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
-    dld->setProgressBar(bar);
+
 //    dld->setMainWindow(mainwindow());
     dld->setOutputPath(tempPath());
     dld->setUrl(QUrl(downloadUrl()));
-    dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
+    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
+    dld->startDownload();
     return true;
 }
 

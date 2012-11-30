@@ -89,7 +89,7 @@
  */
 
 /*!
- * \fn virtual bool Core::IFullReleaseStep::startDownload(QProgressBar *bar = 0) = 0;
+ * \fn virtual bool Core::IFullReleaseStep::startDownload() = 0;
  * \brief Starts downloading some files from a server.
  *
  * This method should not lock the event loop and

@@ -124,18 +124,17 @@ bool GenericZipCodesStep::createTemporaryStorage()
  * Downloads the list of available countries.
  * \sa onAvailableCountriesDownloaded()
 */
-bool GenericZipCodesStep::startDownload(QProgressBar *bar)
+bool GenericZipCodesStep::startDownload()
 {
-    Q_UNUSED(bar);
     // TODO: manage progress download
     // TODO: in the automated management of this step all files must be downloaded at once (all countries zipcodes)
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl("http://api.geonames.org/postalCodeCountryInfo?username=freemedforms"));
-    dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
 //    connect(this, SIGNAL(countryListDownloaded(bool)),)
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    dld->startDownload();
     return true;
 }
 

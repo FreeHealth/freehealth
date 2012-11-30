@@ -56,7 +56,6 @@ public:
     ~HttpDownloader();
 
     void setMainWindow(QMainWindow *win);
-    void setProgressBar(QProgressBar *bar);
 
     void setUrl(const QUrl &url);
 
@@ -73,9 +72,9 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void downloadFinished();
-    void downloadProgressRange(qint64,qint64);
-    void downloadProgressValue(qint64);
-    void downloadProgressPercents(int);
+    void downloadProgressRangeChanged(int,int);
+    void downloadProgressValueChanged(int);
+    void downloadProgressPercentsChanged(int);
 
 private:
     Internal::HttpDownloaderPrivate *d;

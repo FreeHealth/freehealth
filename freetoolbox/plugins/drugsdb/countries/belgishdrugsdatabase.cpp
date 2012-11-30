@@ -202,9 +202,8 @@ QString BeDrugDatabaseStep::tmpDatabaseAbsPath()
     return QDir::cleanPath(tempPath() + "/drugs-be.db");
 }
 
-bool BeDrugDatabaseStep::startDownload(QProgressBar *bar)
+bool BeDrugDatabaseStep::startDownload()
 {
-    Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }

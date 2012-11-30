@@ -182,8 +182,10 @@ bool IDrugDatabaseStepWidget::on_download_clicked()
 {
     d->ui->download->setEnabled(false);
     d->ui->progressBar->show();
-    d->_step->startDownload(d->ui->progressBar);
+    connect(d->_step, SIGNAL(progressRangeChanged(int,int)), d->ui->progressBar, SLOT(setRange(int,int)));
+    connect(d->_step, SIGNAL(progress(int)), d->ui->progressBar, SLOT(setValue(int)));
     connect(d->_step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    d->_step->startDownload();
     return true;
 }
 

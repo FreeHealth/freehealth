@@ -92,7 +92,7 @@ public:
 
     bool createTemporaryStorage();
     bool cleanTemporaryStorage() { return true; }
-    bool startDownload(QProgressBar *bar = 0);
+    bool startDownload();
 
     bool process();
     QString processMessage() const { return tr("Generic zip codes database creation"); }

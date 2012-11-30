@@ -76,7 +76,7 @@ public:
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
 
-    bool startDownload(QProgressBar *bar = 0);
+    bool startDownload();
     bool process();
     QString processMessage() const;
 

@@ -131,16 +131,15 @@ bool FrenchZipCodesStep::cleanTemporaryStorage()
     return true;
 }
 
-bool FrenchZipCodesStep::startDownload(QProgressBar *bar)
+bool FrenchZipCodesStep::startDownload()
 {
-    Q_UNUSED(bar);
     // TODO: manage progress download */
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FRENCH_URL));
-    dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    dld->startDownload();
     return true;
 }
 

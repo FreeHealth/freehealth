@@ -80,6 +80,8 @@ HttpDownloader::~HttpDownloader()
     d = 0;
 }
 
+/*! \deprecated should not have any direct contact to GUI!
+ */
 void HttpDownloader::setMainWindow(QMainWindow *win)
 {
     if (d->progressDialog) {
@@ -90,15 +92,8 @@ void HttpDownloader::setMainWindow(QMainWindow *win)
     }
 }
 
-/** Define the progress bar to use. */
-//TODO: remove "bar" as direct parameter - not threadsafe - move to signal/slot mechanism.
-void HttpDownloader::setProgressBar(QProgressBar *bar)
-{
-    d->progressBar = bar;
-}
-
 /**
- * Set the URL to download. The downloaded file will be saved into the output path with the
+ * Sets the URL to download. The downloaded file will be saved into the output path with the
  * same filename as the URL.
  * \sa setOutputPath()
 */
@@ -108,7 +103,7 @@ void HttpDownloader::setUrl(const QUrl &url)
 //    d->m_Url.setAuthority();
 }
 
-/** Set the download output path (absolute path only) */
+/** Sets the download output path (absolute path only) */
 void HttpDownloader::setOutputPath(const QString &absolutePath)
 {
     if (QDir(absolutePath).exists())
@@ -117,10 +112,11 @@ void HttpDownloader::setOutputPath(const QString &absolutePath)
         d->m_Path.clear();
 }
 
-/**
-  * Set the output file name. By default, the output filename is the filename of the URL.
-  * But you can define your own output file name. If you want to clear the output file name
-  * just pass an empty QString to this method.
+/*!
+  * \brief Sets the output file name.
+  *
+  * By default, the output filename is the filename of the URL. This method sets a custom out put filename.
+  * If you want to clear the output file name just pass an empty QString to this method.
   * \sa setUrl(), setOutputPath()
   */
 void HttpDownloader::setOutputFileName(const QString &fileName)
@@ -128,9 +124,10 @@ void HttpDownloader::setOutputFileName(const QString &fileName)
     d->m_OutputFileName = fileName;
 }
 
-/**
-  * Returns the output file name. By default, the output filename is the filename of the URL.
-  * But you can define your own output file name with setOutputFileName()
+/*!
+  * \brief Returns the output file name.
+  *
+  * By default, the output filename is the filename of the URL, you can customize it with setOutputFileName().
   * \sa setUrl(), setOutputFileName()
   */
 QString HttpDownloader::outputFileName() const
@@ -145,10 +142,10 @@ QString HttpDownloader::outputFileName() const
     return d->m_OutputFileName;
 }
 
-/**
-  * Returns the output absolute path and file name. By default, the output filename is
-  * the filename of the URL.
-  * But you can define your own output file name with setOutputFileName()
+/*!
+  * \brief Returns the output absolute path and file name.
+  *
+  * By default, the output filename is the filename of the URL, you can customize it with setOutputFileName().
   * \sa setUrl(), setOutputFileName(), setOutputPath()
   */
 QString HttpDownloader::outputAbsoluteFileName() const
@@ -156,16 +153,17 @@ QString HttpDownloader::outputAbsoluteFileName() const
     return d->m_Path + QDir::separator() + outputFileName();
 }
 
-/** Define the label of the progress */
+/** Defines the label of the progress */
 void HttpDownloader::setLabelText(const QString &text)
 {
     d->m_LabelText = text;
 }
 
 /**
- * Start the asynchronous downloading. When the download is finished
+ * Starts the asynchronous downloading. When the download is finished
  * the downloadFinished() signal is emitted. You can follow the download progress
- * with the downloadProgressRange(), downloadProgressValue(), and downloadProgressPercents() signals.
+ * with the downloadProgressRangeChanged(), downloadProgressValueChanged(), and
+ * downloadProgressPercentsChanged() signals.
  */
 bool HttpDownloader::startDownload()
 {
@@ -173,7 +171,7 @@ bool HttpDownloader::startDownload()
 }
 
 /**
- * Stop the downloading. Emits the downloadFinished() signal.
+ * Stops the downloading. Emits the downloadFinished() signal.
  */
 bool HttpDownloader::cancelDownload()
 {
@@ -366,7 +364,7 @@ void HttpDownloaderPrivate::httpReadyRead()
 /**
   * Emits signals that can be connected to a QProgressBar which is then updated according
   * to the current download status (range and value). \n
-  * Also computes the downloading percentage and emits the downloadProgressPercents() signal.
+  * Also computes the downloading percentage and emits the downloadProgressPercentsChanged() signal.
   * \sa HttpDownloader::setProgressBar()
   */
 void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
@@ -374,8 +372,8 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
     if (httpRequestAborted)
         return;
 
-    Q_EMIT q->downloadProgressRange(0, totalBytes);
-    Q_EMIT q->downloadProgressValue(bytesRead);
+    Q_EMIT q->downloadProgressRangeChanged(0, totalBytes);
+    Q_EMIT q->downloadProgressValueChanged(bytesRead);
 
     int percent = 0;
     if (totalBytes>0) {
@@ -386,7 +384,7 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
     if (progressBar)
         progressBar->setValue(percent);
 
-    Q_EMIT q->downloadProgressPercents(percent);
+    Q_EMIT q->downloadProgressPercentsChanged(percent);
 }
 
 /** Slot connected to server authentication required */
