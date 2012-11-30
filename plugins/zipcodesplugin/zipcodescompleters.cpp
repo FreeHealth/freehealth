@@ -199,10 +199,11 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 /** Filter with the country iso code (two letters) \e countryIso */
 void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
 {
+    // strip possible SQL injection char
     const QString iso = countryIso.remove("'");
 
     // basic check if param is a valid country ISO filter
-    if(iso.length() != 2)
+    if (m_countryIso == iso|| iso.length() != 2)
         return;
 
     m_countryIso = iso.toLower();
@@ -453,7 +454,7 @@ bool ZipCountryCompleters::eventFilter(QObject *o, QEvent *e)
             QSize sz = m_CityButton->sizeHint();
             int frameWidth = m_cityEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
             m_CityButton->move(m_cityEdit->rect().left() + frameWidth ,
-                              (m_cityEdit->rect().bottom() + 1 - sz.height()) / 2);
+                               (m_cityEdit->rect().bottom() + 1 - sz.height()) / 2);
         }
     }
     return false;
