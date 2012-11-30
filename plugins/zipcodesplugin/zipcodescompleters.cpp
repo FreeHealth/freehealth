@@ -163,8 +163,11 @@ void ZipCountryModel::setCityFilter(const QString &city)
     }
     if (m_City==city)
         return;
-    m_City=city;
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
+
+    m_City = city.remove("'");
+
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
+                          "AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
             .arg(m_countryIso).arg(city);
     setQuery(req, db);
     if (!query().isActive()) {
@@ -182,8 +185,10 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
     }
     if (m_Zip==zipCode)
         return;
-    m_Zip=zipCode;
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
+
+    m_Zip = zipCode.remove("'");
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
+                          "AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
             .arg(m_countryIso).arg(zipCode);
     setQuery(req, db);
     if (!query().isActive()) {
