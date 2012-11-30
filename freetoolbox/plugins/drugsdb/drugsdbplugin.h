@@ -35,7 +35,6 @@
  * \date 27 Oct 2010
 */
 
-
 namespace DrugsDB {
 namespace Internal {
 
