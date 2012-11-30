@@ -46,11 +46,15 @@
  * - process(): process your files and databases and when done emit the processFinished() signal
  * - cleanTemporaryStorage(): cleans all temporary created files, other cleanup
  *
+ * The whole IFullReleaseStep Object is designed to work completely without UI, could be used in a command line tool
+ * and must not depend on or call any UI widgets. The methods should be thread-safe, so any connection to the UI must be
+ * done via Qt's Signal/Slot mechanism.
+ *
  * Getting connected with the UI:
  * The whole Step object is a non-GUI object which must not have any direct GUI access. It may run threaded, and
  * direct GUI access is not thread save. Instead you can connect your objects to various signals.
  *
- * DEPRECATED: \todo this should be done by the callee!
+ * DEPRECATED: ***** this should be done by the callee! NO direct UI calls! *****
  * When a step is started, a modal progress dialog is executed. During all your sub-processes
  * you can adapt this progress dialog using the following signals:
  * - progressRangeChanged() to change the range of the progress dialog
