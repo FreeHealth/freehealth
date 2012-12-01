@@ -106,11 +106,12 @@ GenericZipCodesWidget::~GenericZipCodesWidget()
 /*! auto-connected slot, starts downloading the data */
 void GenericZipCodesWidget::on_downloadButton_clicked()
 {
-    ui->downloadButton->setText(tr("Download in progress"));
-    ui->downloadButton->setEnabled(false);
-    ui->progressBar->setEnabled(true);
-    m_availableCountriesModel->clear();
-    m_Step->startDownload();
+    if (m_Step->startDownload()) {
+        ui->downloadButton->setText(tr("Download in progress"));
+        ui->downloadButton->setEnabled(false);
+        ui->progressBar->setEnabled(true);
+        m_availableCountriesModel->clear();
+    }
 }
 
 /**
