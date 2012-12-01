@@ -32,8 +32,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsdb/tools.h>
-
 #include <datapackplugin/datapackcore.h>
 #include <datapackplugin/datapackquery.h>
 
