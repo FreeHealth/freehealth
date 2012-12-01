@@ -113,9 +113,16 @@ void GenericZipCodesWidget::on_downloadButton_clicked()
     m_Step->startDownload();
 }
 
+/**
+ * Starts the whole datapack creation (one per country + multi-country)
+ * \sa ZipCodes::GenericZipCodesStep::populateDatabase()
+ */
 void GenericZipCodesWidget::on_populateDbButton_clicked()
 {
+    ui->progressBar->setEnabled(true);
     m_Step->populateDatabase();
+    ui->progressBar->setEnabled(false);
+    ui->progressBar->setValue(0);
 }
 
 /*!
