@@ -273,10 +273,8 @@ bool HttpDownloaderPrivate::startRequest(const QUrl &url)
     reply = qnam.get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateDownloadProgress(qint64,qint64)));
 
-    if (progressBar) {
-        connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
-    }
     return true;
 }
 
@@ -352,7 +350,6 @@ void HttpDownloaderPrivate::httpFinished()
 /** Read the content of the reply and write to output file */
 void HttpDownloaderPrivate::httpReadyRead()
 {
-    qWarning() << "httpFinished" << reply;
     // this slot gets called everytime the QNetworkReply has new data.
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
@@ -367,7 +364,7 @@ void HttpDownloaderPrivate::httpReadyRead()
   * Also computes the downloading percentage and emits the downloadProgressPercentsChanged() signal.
   * \sa HttpDownloader::setProgressBar()
   */
-void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
+void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesRead, qint64 totalBytes)
 {
     if (httpRequestAborted)
         return;
@@ -376,10 +373,8 @@ void HttpDownloaderPrivate::updateProgressBar(qint64 bytesRead, qint64 totalByte
     Q_EMIT q->downloadProgressValueChanged(bytesRead);
 
     int percent = 0;
-    if (totalBytes>0) {
-        int v = bytesRead*100/totalBytes;
-        progressBar->setValue(v);
-    }
+    if (totalBytes>0)
+        percent = bytesRead*100/totalBytes;
 
     if (progressBar)
         progressBar->setValue(percent);

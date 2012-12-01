@@ -64,7 +64,7 @@ public Q_SLOTS:
     void cancelDownload();
     void httpFinished();
     void httpReadyRead();
-    void updateProgressBar(qint64 bytesRead, qint64 totalBytes);
+    void updateDownloadProgress(qint64 bytesRead, qint64 totalBytes);
 
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
     void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator);
