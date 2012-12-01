@@ -86,20 +86,30 @@ public:
 
     QString sqlMasterFileAbsPath() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql";}
 
-    bool createRawDatabase()
+    bool connectRawDatabase()
     {
-        // try to get the already opened ZIP database connection
-        QSqlDatabase db = QSqlDatabase::database(DB_NAME, true);
-        if (!db.isValid()) {
+        QSqlDatabase db;
+        if (QSqlDatabase::connectionNames().contains(DB_NAME)) {
+            db = QSqlDatabase::database(DB_NAME);
+        } else {
             db = QSqlDatabase::addDatabase("QSQLITE", DB_NAME);
             db.setDatabaseName(databaseOutputAbsFilePath());
             LOG_FOR(q, "using zipcodes database: " + databaseOutputAbsFilePath());
         }
-        // ok, here we can be sure that there is a database, now open it
-        if (!db.open()) {
-            LOG_ERROR_FOR(q, "Unable to open database.");
-            return false;
+        if (!db.isOpen()) {
+            if (!db.open()) {
+                LOG_ERROR_FOR(q, "Unable to open database: " + databaseOutputAbsFilePath());
+                return false;
+            }
         }
+        return true;
+    }
+
+    bool createRawDatabase()
+    {
+        if (!connectRawDatabase())
+            return false;
+        QSqlDatabase db = QSqlDatabase::database(DB_NAME);
 
         if (db.tables().contains("IMPORT")) {
             Utils::Database::executeSQL("DROP TABLE IMPORT;", db);
@@ -113,6 +123,9 @@ public:
 
     bool populateRawDatabase()
     {
+        if (!connectRawDatabase())
+            return false;
+
         // Push CSV to raw database
         QString csvFile = tmpPath() + "/allCountries.txt";
         if (!Utils::Database::importCsvToDatabase(DB_NAME, csvFile, "IMPORT", "\t"))
@@ -120,9 +133,109 @@ public:
         return true;
     }
 
-    bool createOutputDatabase(const QStringList &countryIsoCodes)
+    // Get all available countries from database and populate the model
+    bool populateCountryModel()
+    {
+        qWarning() << "wwwwwwwwwwwwwwwww";
+        // Clear cache
+        m_availableCountriesModel->clear();
+        m_availableIsoCodes.clear();
+
+        // Connect raw database
+        if (!connectRawDatabase())
+            return false;
+        QSqlDatabase db = QSqlDatabase::database(DB_NAME);
+
+        // Read database
+        const QString &flagPath = Core::ICore::instance()->settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
+        QSqlQuery query(db);
+        if (query.exec("SELECT DISTINCT `COUNTRY` FROM `IMPORT`;")) {
+            while (query.next()) {
+                const QString &isoCode = query.value(0).toString();
+                // Check iso code
+                if (isoCode.isEmpty() || (isoCode.size() != 2)) {
+                    LOG_ERROR_FOR(q, "Country conversion error: wrong ISO: "+ isoCode);
+                    continue;
+                }
+                m_availableIsoCodes << isoCode;
+
+                // Transform ISO3166 to QLocale::Country
+                QLocale::Country locale = Utils::countryIsoToCountry(isoCode);
+                if (locale == QLocale::AnyCountry) {
+                    LOG_ERROR_FOR(q, "Country conversion error: country " + isoCode + " has no Qt equivalent.");
+                    continue;
+                }
+
+                // Create a standard item in the countries model
+                QStandardItem *item = new QStandardItem(QIcon(QString("%1/%2.png").arg(flagPath, isoCode)), QLocale::countryToString(locale));
+                item->setData(locale);
+                m_availableCountriesModel->appendRow(item);
+            }
+        } else {
+            LOG_QUERY_ERROR_FOR(q, query);
+            return false;
+        }
+        return true;
+    }
+
+    bool createAllDatapackDatabase()
+    {
+        return true;
+    }
+
+    bool createDatabaseForDatapack(const QStringList &countryIsoCodes)
     {
         Q_UNUSED(countryIsoCodes);
+        QFileInfo file(databaseForDatapackOutputAbsFilePath(countryIsoCodes));
+
+        // Check dir
+        if (!QDir().mkpath(file.absolutePath())) {
+            LOG_ERROR_FOR(q, "Unable to create path: " + file.absolutePath());
+            return false;
+        }
+
+        // Copy the raw source database into the path
+        if (!QFile::copy(databaseOutputAbsFilePath(), file.absoluteFilePath())) {
+            LOG_ERROR_FOR(q, "Unable to copy file: " + file.absoluteFilePath());
+            return false;
+        }
+
+        // Connection & database preparation
+        QString connection = QString("%1_%2").arg(DB_NAME).arg(countryIsoCodes.join("_"));
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSLITE", connection);
+        if (!db.isOpen()) {
+            if (!db.open()) {
+                LOG_ERROR_FOR(q, "Unable to open database: " + file.absoluteFilePath());
+                return false;
+            }
+        }
+
+        // Remove uneeded data
+        // DELETE FROM `IMPORT` WHERE (`COUNTRY` NOT IN ('FR', 'BE'))
+        QString req = QString("DELETE FROM `IMPORT` WHERE (`COUNTRY` NOT IN ('%1'))")
+                .arg(countryIsoCodes.join("', '"));
+        if (!Utils::Database::executeSQL(req, db))
+            return false;
+
+        // Vacuum
+        if (!Utils::Database::vacuum(connection))
+            return false;
+
+        return true;
+    }
+
+    bool setDatabaseVersion(const QString &connection, const QString &version, const QDate &date)
+    {
+        QSqlDatabase db = QSqlDatabase::database(connection);
+        if (!db.isOpen()) {
+            LOG_ERROR_FOR(q, "Database not open");
+            return false;
+        }
+        if (!Utils::Database::executeSQL("DELETE FROM `VERSION`;", db))
+            return false;
+        if (!Utils::Database::executeSQL(QString("INSERT INTO `VERSION` (`CURRENT`, `DATE`) "
+                                                 "VALUES ('%1', '%2');").arg(version).arg(date.toString(Qt::ISODate)), db))
+            return false;
         return true;
     }
 
@@ -210,108 +323,6 @@ bool GenericZipCodesStep::startDownload()
     return true;
 }
 
-/*!
- * Called when the downloading of the available countries index from GeoNames is finished,
- * then emits countryListDownloaded().\n
- * Downloads all available zipcodes from GeoNames.
- * Emits downloadFinished() when done.
- * \internal
- */
-bool GenericZipCodesStep::onAvailableCountriesDownloaded()
-{
-//    Q_ASSERT(d->m_downloader);
-//    if (!d->m_downloader)
-//        return false;
-
-//    // Reconnect downloader to the correct slot
-//    disconnect(d->m_downloader, SIGNAL(downloadFinished()), this, SLOT(onAvailableCountriesDownloaded()));
-//    connect(d->m_downloader, SIGNAL(downloadFinished()), this, SLOT(downloadZipCodesUsingCachedIso()));
-
-//    // Clear cache
-//    d->m_availableCountriesModel->clear();
-//    d->m_availableIsoCodes.clear();
-
-//    // Check if file is downloaded
-//    // TODO: avoid magic numbers in URL & fileName
-//    if (!QFileInfo(d->tmpPath() + "/postalCodeCountryInfo").exists()) {
-//        LOG_ERROR("File not downloaded");
-//        return false;
-//    }
-
-//    // Read all available languages
-//    QDomDocument doc;
-//    int line, col;
-//    line = 0;
-//    col = 0;
-//    QString error;
-//    if (!doc.setContent(Utils::readTextFile(tmpPath() + "/postalCodeCountryInfo"), &error, &line, &col)) {
-//        LOG_ERROR(QString("XML Error (%1;%2): %3").arg(line).arg(col).arg(error));
-//        Utils::warningMessageBox(QString("XML Error (%1;%2): %3").arg(line).arg(col).arg(error), "");
-//        return false;
-//    }
-
-//    // Start parsing the XML doc
-//    const QString &flagPath = Core::ICore::instance()->settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
-//    QDomElement root = doc.firstChildElement("geonames");
-//    QDomElement country = root.firstChildElement("country");
-//    while (!country.isNull()) {
-//        // Get subitems
-//        QDomElement iso = country.firstChildElement("countryCode");
-//        const QString &isoCode = iso.text();
-//        d->m_availableIsoCodes << isoCode;
-////        QDomElement name = country.firstChildElement("countryName");
-////        const QString &countryName = name.text();
-
-//        // Check iso code
-//        if (isoCode.isEmpty() || (isoCode.size() != 2)) {
-//            LOG_ERROR("Country conversion error: wrong ISO: "+ isoCode);
-//            country = country.nextSiblingElement("country");
-//            continue;
-//        }
-
-//        // Transform ISO3166 to QLocale::Country
-//        QLocale::Country locale = Utils::countryIsoToCountry(isoCode);
-//        if (locale == QLocale::AnyCountry) {
-//            LOG_ERROR("Country conversion error: country " + isoCode + " has no Qt equivalent.");
-//            country = country.nextSiblingElement("country");
-//            continue;
-//        }
-
-//        // Create a standard item in the countries model
-//        QStandardItem *item = new QStandardItem(QIcon(QString("%1/%2.png").arg(flagPath, isoCode)), QLocale::countryToString(locale));
-//        item->setData(locale);
-//        d->m_availableCountriesModel->appendRow(item);
-
-//        // process next country
-//        country = country.nextSiblingElement("country");
-//    }
-
-//    // find default system country and add it to the selected list
-//    QList<QStandardItem*> f = d->m_availableCountriesModel->findItems(QLocale::countryToString(QLocale::system().country()));
-//    if (f.count() > 0)
-//        selectCountry(f.first()->index());
-//    Q_EMIT countryListDownloaded();
-
-//    // Start to download all zipcode files
-//    downloadZipCodesUsingCachedIso();
-    return true;
-}
-
-bool GenericZipCodesStep::downloadZipCodesUsingCachedIso()
-{
-//    // Finished ?
-//    if (d->m_availableIsoCodes.isEmpty()) {
-//        return true;
-//    }
-
-//    QString iso = d->m_availableIsoCodes.takeFirst().toLower();
-//    d->m_downloader->setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
-//                              .arg(MAX_ROWS)
-//                              .arg(iso)));
-//    d->m_downloader->setOutputFileName(QString("%1.xml").arg(iso));
-//    d->m_downloader->startDownload();
-    return true;
-}
 
 QString GenericZipCodesStep::processMessage() const
 {
@@ -333,6 +344,10 @@ bool GenericZipCodesStep::process()
     Q_EMIT progressLabelChanged(tr("Populating geoname zipcodes raw database"));
     if (!d->populateRawDatabase())
         return false;
+
+    if (!d->createAllDatapackDatabase())
+        return false;
+
     Q_EMIT progress(2);
 
     return true;
@@ -359,48 +374,16 @@ QStandardItemModel* GenericZipCodesStep::availableCountriesModel()
 {
     return d->m_availableCountriesModel;
 }
+
+bool GenericZipCodesStep::populateCountryModel() const
+{
+    return d->populateCountryModel();
+}
+
 QStandardItemModel* GenericZipCodesStep::selectedCountriesModel()
 {
     return d->m_selectedCountriesModel;
 }
-
-
-/** Download zipcodes for selected countries */
-//bool GenericZipCodesStep::startDownloadingSelectedCountryData()
-//{
-//    //TODO: error handling
-//    Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
-
-//    // this counter is set to the number of selected countries.
-//    // it is used as reference counter for the QNetworkReplys and decreased with every finished reply slot
-//    // when it reaches 0, we can safely delete the netAccessManager.
-//    m_selectedCountriesCounter = m_selectedCountriesModel->rowCount();
-
-//    Q_EMIT progressRangeChanged(0, m_selectedCountriesCounter);
-//    Q_EMIT progress(0);
-
-//    // the netAccessManager is deleted in onSelectedCountryDownloadFinished() when the last reply is finished.
-//    QNetworkAccessManager *netAccessManager = new QNetworkAccessManager(this);
-
-//    const QStandardItem *item;
-//    for(int i = 0; i < m_selectedCountriesCounter; ++i) {
-//        item = m_selectedCountriesModel->item(i);
-//        m_selectedCountry = static_cast<QLocale::Country>(item->data().toInt());
-//        qDebug() << static_cast<QLocale::Country>(item->data().toInt());
-
-//        m_selectedCountryList.append(Utils::countryToIso(m_selectedCountry).toLower());
-//        //    get list of places that GeoNames has informations for in the given country
-//        QNetworkRequest request;
-//        request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
-//                            .arg(MAX_ROWS)
-//                            .arg(Utils::countryToIso(m_selectedCountry).toLower())));
-//        request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
-
-//        netAccessManager->get(request);
-//        connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSelectedCountryDownloadFinished(QNetworkReply*)));
-//    }
-//    return true;
-//}
 
 bool GenericZipCodesStep::populateDatabase()
 {
@@ -464,14 +447,6 @@ void GenericZipCodesStep::deselectCountry(const QModelIndex &index)
     d->m_selectedCountriesModel->removeRow(index.row());
     d->m_availableCountriesModel->appendRow(item);
     d->m_availableCountriesModel->sort(0);
-}
-
-void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTotal)
-{
-    Q_UNUSED(bytesReceived)
-    Q_UNUSED(bytesTotal)
-
-    //TODO: implementation
 }
 
 /*!

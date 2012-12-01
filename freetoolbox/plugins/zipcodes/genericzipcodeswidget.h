@@ -48,6 +48,7 @@ public:
 protected Q_SLOTS:
     void on_downloadButton_clicked();
     void on_createPackageButton_clicked();
+    void on_readCountries_clicked();
     void onDownloadFinished();
     void onPostDownloadProcessFinished();
     void onProcessFinished();

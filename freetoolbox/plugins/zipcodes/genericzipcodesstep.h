@@ -87,6 +87,8 @@ public:
     bool postDownloadProcessing();
 
     QStandardItemModel* availableCountriesModel();
+    bool populateCountryModel() const;
+
     QStandardItemModel* selectedCountriesModel();
 
     bool createDatabaseScheme();
@@ -102,9 +104,8 @@ Q_SIGNALS:
     void countryListDownloaded();
 
 protected Q_SLOTS:
-    void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    bool onAvailableCountriesDownloaded();
-    bool downloadZipCodesUsingCachedIso();
+//    bool onAvailableCountriesDownloaded();
+//    bool downloadZipCodesUsingCachedIso();
     void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:

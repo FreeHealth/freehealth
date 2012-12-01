@@ -23,6 +23,11 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class ZipCodes::GenericZipCodesWidget
+ * Ui for user actions for the ZipCodes::GenericZipCodesStep.
+*/
+
 #include "genericzipcodeswidget.h"
 #include "ui_genericzipcodeswidget.h"
 
@@ -97,7 +102,7 @@ GenericZipCodesWidget::~GenericZipCodesWidget()
     delete ui;
 }
 
-/*! auto-connected slot, starts querying the webservice for getting the countries list */
+/*! auto-connected slot, starts downloading the data */
 void GenericZipCodesWidget::on_downloadButton_clicked()
 {
     ui->downloadButton->setText(tr("Download in progress"));
@@ -113,12 +118,28 @@ void GenericZipCodesWidget::on_createPackageButton_clicked()
     m_Step->process();
 }
 
+/*!
+ * Auto-connected slot, populates the available countries model/view
+ * using the ZipCodes::GenericZipCodesStep::populateCountryModel(), and
+ * select the OS country.
+*/
+void GenericZipCodesWidget::on_readCountries_clicked()
+{
+    m_Step->populateCountryModel();
+    // find default system country and add it to the selected list
+    QList<QStandardItem*> f = m_Step->availableCountriesModel()->findItems(QLocale::countryToString(QLocale::system().country()));
+    if (f.count() > 0)
+        selectCountry(f.first()->index());
+}
+
+/** When download is finished, unzip file */
 void GenericZipCodesWidget::onDownloadFinished()
 {
     ui->downloadButton->setText(tr("Unzipping downloaded file"));
     m_Step->postDownloadProcessing();
 }
 
+/** When download is finished and post-dowload steps are done */
 void GenericZipCodesWidget::onPostDownloadProcessFinished()
 {
     ui->downloadButton->setText(tr("File downloaded and unzipped"));
