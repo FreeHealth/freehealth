@@ -24,8 +24,6 @@
   \sa Utils::Log
 */
 
-
-
 /**
   \class Utils::Log
   \brief this class holds the logs messages.
