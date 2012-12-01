@@ -48,7 +48,8 @@ public:
 protected Q_SLOTS:
     void on_downloadButton_clicked();
     void on_createPackageButton_clicked();
-    void onCountryListDownloadFinished();
+    void onDownloadFinished();
+    void onPostDownloadProcessFinished();
     void onProcessFinished();
 
     void selectCountry(const QModelIndex &index);

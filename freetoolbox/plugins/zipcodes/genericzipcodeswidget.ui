@@ -82,6 +82,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="localeDataGroupBox">
      <property name="enabled">
       <bool>false</bool>
@@ -109,20 +116,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="availCountriesLabel">
-          <property name="text">
-           <string>Available countries:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Selected countries:</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="QToolButton" name="toolButtonAddCountry">
           <property name="text">
@@ -143,16 +136,10 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="0" rowspan="4">
-         <widget class="QListView" name="availableCountriesListView">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SingleSelection</enum>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+        <item row="0" column="0">
+         <widget class="QLabel" name="availCountriesLabel">
+          <property name="text">
+           <string>Available countries:</string>
           </property>
          </widget>
         </item>
@@ -169,6 +156,26 @@
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="4">
+         <widget class="QListView" name="availableCountriesListView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Selected countries:</string>
           </property>
          </widget>
         </item>
