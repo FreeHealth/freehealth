@@ -1,0 +1,41 @@
+-- /***************************************************************************
+--  *  The FreeMedForms project is a set of free, open source medical         *
+--  *  applications.                                                          *
+--  *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+--  *  All rights reserved.                                                   *
+--  *                                                                         *
+--  *  This program is free software: you can redistribute it and/or modify   *
+--  *  it under the terms of the GNU General Public License as published by   *
+--  *  the Free Software Foundation, either version 3 of the License, or      *
+--  *  (at your option) any later version.                                    *
+--  *                                                                         *
+--  *  This program is distributed in the hope that it will be useful,        *
+--  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+--  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+--  *  GNU General Public License for more details.                           *
+--  *                                                                         *
+--  *  You should have received a copy of the GNU General Public License      *
+--  *  along with this program (COPYING.FREEMEDFORMS file).                   *
+--  *  If not, see <http://www.gnu.org/licenses/>.                            *
+--  ***************************************************************************/
+--
+-- This file is part of the FreeToolBox / ZipCodesPlugin.
+-- Use this file to create multi-country datapacks.
+--
+-- All lines represent a datapack, countries must be:
+--   - named in ISO_3166-1 (see http://en.wikipedia.org/wiki/ISO_3166-1)
+--   - separated with a coma
+-- If you want to set the name of the datapack countries, just write it as first isocode.
+-- See example of Europe above. Name must be more to 2chars.
+--
+-- Lines begining with -- or # are not processed. Please don't insert empty lines.
+--
+FR;BE;LU
+FR;BE
+FR;CH
+GB;IM
+IM;IE
+ES;PT
+GE;AM;AZ
+-- All Europe
+EUROPE;AD;AL;AM;AT;AX;AZ;BA;BE;BG;BY;CH;CY;CZ;DE;DK;EE;ES;FI;FO;FR;GB;GE;GG;GI;GR;HR;HU;IE;IM;IS;IT;JE;KZ;LI;LT;LU;LV;MC;MD;ME;MK;MT;NL;NO;PL;PT;RO;RS;RU;SE;SI;SJ;SK;SM;TR;UA;VA

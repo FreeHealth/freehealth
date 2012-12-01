@@ -191,25 +191,54 @@ public:
         foreach(QString line, multiContent.split("\n")) {
             // clean line
             line = line.trimmed();
+            if (line.isEmpty())
+                continue;
             // remove comment line
             if (line.startsWith("--") || line.startsWith("#"))
                 continue;
             multi << line;
         }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
         // Read available countries
         if (!getAllAvailableCountriesFromRawDatabase())
             return false;
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+        // Manage progress
+        int max = m_availableIsoCodes.count() + multi.count();
+        int min = 0;
+        Q_EMIT q->progressLabelChanged(QString("Creating %1 geonames datapacks").arg(max));
+        Q_EMIT q->progressRangeChanged(min, max);
+        Q_EMIT q->progress(min);
 
         // Create the one-country datapacks
         foreach(const QString &iso, m_availableIsoCodes) {
+            ++min;
+            Q_EMIT q->progress(min);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             if (!createDatabaseForDatapack(QStringList() << iso)) {
                 LOG_ERROR_FOR(q, "Unable to create zipcodes datapack: " + iso);
                 continue;
             }
             LOG_FOR(q, "ZipCodes datapack created: " + iso);
         }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
+        // Create the one-country datapacks
+        foreach(const QString &iso, multi) {
+            ++min;
+            Q_EMIT q->progress(min);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            if (!createDatabaseForDatapack(iso.split(";"))) {
+                LOG_ERROR_FOR(q, "Unable to create zipcodes datapack: " + iso);
+                continue;
+            }
+            LOG_FOR(q, "ZipCodes datapack created: " + iso);
+        }
+
+        Q_EMIT q->progress(max);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         return true;
     }
 
@@ -234,6 +263,7 @@ public:
             return false;
         }
         LOG_FOR(q, "Raw database copied into: " + file.absoluteFilePath());
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
         // Connection & database preparation
         QString connection = QString("%1_%2").arg(DB_NAME).arg(countryIsoCodes.join("_"));
@@ -253,22 +283,41 @@ public:
         if (!Utils::Database::executeSQL(req, db))
             return false;
 
+        // Recreate old fashion zips table to avoid version breaking for zipcode autocompleters
+        foreach(const QString &iso, countryIsoCodes) {
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            req =   "INSERT INTO `ZIPS` (`ZIP`, `CITY`, `COUNTRY`) "
+                    "SELECT `IMPORT`.`ZIP`, `IMPORT`.`CITY`, `IMPORT`.`COUNTRY` FROM `IMPORT`";
+            if (!Utils::Database::executeSQL(req, db)) {
+                LOG_ERROR_FOR(q, "Unable to create the old database version");
+            }
+        }
+
         // Add version
         if (!setDatabaseVersion(connection, QString(PACKAGE_VERSION), QDate::currentDate())) {
             LOG_ERROR_FOR(q, "Unable to set version to database: " + file.absoluteFilePath());
             return false;
         }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
         // Copy the datapack description file
         QStringList names;
         QString content = Utils::readTextFile(genericDatapackDescriptionFile());
         foreach(const QString &iso, countryIsoCodes) {
+            // If there is a > 2char iso, the user want this as country name (like EUROPE)
+            if (iso.size() > 2) {
+                names.clear();
+                names.append(iso);
+                break;
+            }
+            // Otherwise add country name
             QLocale::Country locale = Utils::countryIsoToCountry(iso);
             names << QLocale::countryToString(locale);
         }
         content = content.replace("__COUNTRY__", names.join(", "));
         content = content.replace("__COUNTRY_ISO__", countryIsoCodes.join(", "));
         Utils::saveStringToFile(content, file.absolutePath() + "/packdescription.xml", Utils::Overwrite, Utils::DontWarnUser);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
         // Vacuum
         if (!Utils::Database::vacuum(connection))
@@ -404,8 +453,10 @@ bool GenericZipCodesStep::process()
     if (!d->createRawDatabase())
         return false;
     Q_EMIT progress(1);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     Q_EMIT progressLabelChanged(tr("Populating geoname zipcodes raw database"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!d->populateRawDatabase())
         return false;
 
@@ -413,6 +464,7 @@ bool GenericZipCodesStep::process()
         return false;
 
     Q_EMIT progress(2);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     Q_EMIT processFinished();
     return true;
 }
@@ -452,15 +504,25 @@ QStandardItemModel* GenericZipCodesStep::selectedCountriesModel()
 /** Populate the raw database with the downloaded CSV file */
 bool GenericZipCodesStep::populateDatabase()
 {
+    Q_EMIT progressLabelChanged(tr("Creating geoname zipcodes raw database"));
+    Q_EMIT progressRangeChanged(0, 2);
+    Q_EMIT progress(0);
     if (!d->connectRawDatabase())
         return false;
     QSqlDatabase db = QSqlDatabase::database(DB_NAME);
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!d->createRawDatabase())
         return false;
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progress(1);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     if (!d->populateRawDatabase())
         return false;
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progressRangeChanged(0, 2);
+    Q_EMIT progress(2);
     return true;
 }
 
@@ -475,127 +537,6 @@ QStringList GenericZipCodesStep::errors() const
 {
     return d->m_Errors;
 }
-
-void GenericZipCodesStep::selectCountry(const QModelIndex &index)
-{
-    if (!index.isValid())
-        return;
-    QStandardItem *item = d->m_availableCountriesModel->itemFromIndex(index)->clone();
-    d->m_availableCountriesModel->removeRow(index.row());
-    if (d->m_selectedCountriesModel->findItems(item->data(Qt::DisplayRole).toString()).isEmpty())
-        d->m_selectedCountriesModel->appendRow(item);
-    d->m_selectedCountriesModel->sort(0);
-}
-
-void GenericZipCodesStep::deselectCountry(const QModelIndex &index)
-{
-    if (!index.isValid())
-        return;
-    QStandardItem *item = d->m_selectedCountriesModel->itemFromIndex(index)->clone();
-    d->m_selectedCountriesModel->removeRow(index.row());
-    d->m_availableCountriesModel->appendRow(item);
-    d->m_availableCountriesModel->sort(0);
-}
-
-/*!
- * \brief Called when a QNetworkReply that started a download of a selected country is finished.
- *
- * This function queries the GeoNames API and fetches all postalcode infos for the \e country
- * value found in the URL of the \e reply.
- *
- * A typical xml code of this reply looks like this:
- * \code
- * <code>
- * <postalcode>1070</postalcode>
- * <name>Wien</name>
- * <countryCode>AT</countryCode>
- * <lat>48.2</lat>
- * <lng>16.35</lng>
- * <adminName2>Politischer Bezirk Wien (Stadt)</adminName2>
- * <adminCode3>907</adminCode3>
- * <adminName3>Wien</adminName3>
- * </code>
- * \endcode
- * We extract just the \e name and the \e postalcode, as FreeMedForms does not use more data.
- * \param reply The QNetworkreply that was finished. Contains the URL and
- * the used parameters there.
- * \sa QNetworkReply::url(), QNetworkReply::queryItemValue()
- */
-void GenericZipCodesStep::onSelectedCountryDownloadFinished(QNetworkReply *reply)
-{
-
-//    // decrease the reference counter
-//    --d->m_selectedCountriesCounter;
-
-//    if (reply->error() > 0) {
-//        qDebug() << reply->errorString();
-//    } else {
-//        bool success = false;
-
-//        d->m_postalList.clear();
-
-//        // get XML structure of reply into a parseable format
-//        QXmlInputSource src;
-//        QDomDocument doc;
-
-//        // get country code from URL, so we know which reply we have
-//        QString countryIso3166Code = reply->url().queryItemValue("placename").toLower();
-//        qDebug() << "countryIsoCode from reply:" << countryIso3166Code << reply->url().toString();
-
-//        // malformed URL?
-//        if (countryIso3166Code.isEmpty()) {
-//            if (d->m_selectedCountriesCounter == 0)
-//                reply->parent()->deleteLater();
-//            Q_EMIT processFinished();
-//            return;
-//        }
-
-//        // double check if this country is a valid QLocale::Country
-//        QLocale::Country country = Utils::countryIsoToCountry(countryIso3166Code);
-//        if (country == QLocale::AnyCountry) {
-//            LOG("country is not valid: " + countryIso3166Code);
-//            if (d->m_selectedCountriesCounter == 0)
-//                reply->parent()->deleteLater();
-//            Q_EMIT processFinished();
-//            return;
-//        }
-
-//        src.setData(reply->readAll());
-//        doc.setContent(src.data());
-
-//        QString postalCode, city;
-
-//        // iter over postal code chunks
-//        QDomNodeList codes = doc.elementsByTagName("code");
-//        for (uint i = 0; i < codes.length(); i++) {
-
-//            // get the postalcode subitem
-//            // (countryCode, countryName, numPostalCodes, minPostalCode, maxPostalCode)
-//            postalCode = codes.item(i).firstChildElement("postalcode").toElement().text();
-//            city = codes.item(i).firstChildElement("name").toElement().text();
-
-//            if (postalCode.isEmpty() || (countryIso3166Code.size() != 2) || city.isEmpty()) {
-//                qWarning() << "postal code conversion error: " << postalCode << city;
-//                continue;
-//            }
-
-//            // do some vulnerability fixes: remove the ' char as it could be used for SQL injection
-//            postalCode = postalCode.remove("'");
-//            city = city.remove("'");
-//            countryIso3166Code.remove("'");
-
-//            d->m_postalList.append(PostalInfo(postalCode, city, countryIso3166Code));
-//            qDebug() << "imported" << postalCode << city;
-
-//            success = true;
-//        }
-//    }
-//    if (d->m_selectedCountriesCounter == 0) {
-//        reply->parent()->deleteLater();
-//        Q_EMIT processFinished();
-//    }
-}
-
 
 PostalInfo::PostalInfo(const QString &postalCode, const QString &city, const QString &country, const QString &extraCode)
 {
