@@ -114,7 +114,7 @@ public:
     QStandardItemModel* selectedCountriesModel() { return d->m_selectedCountriesModel; }
 
     bool createDatabaseScheme();
-    bool startDownloadingSelectedCountryData();
+//    bool startDownloadingSelectedCountryData();
     bool populateDatabase();
     bool registerDataPack();
 

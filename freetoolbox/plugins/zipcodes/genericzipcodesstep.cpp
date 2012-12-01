@@ -202,42 +202,42 @@ bool GenericZipCodesStep::createDatabaseScheme()
     return true;
 }
 
-/** Download zipcodes for (auto-)selected countries */
-bool GenericZipCodesStep::startDownloadingSelectedCountryData()
-{
-    //TODO: error handling
-    Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
+/** Download zipcodes for selected countries */
+//bool GenericZipCodesStep::startDownloadingSelectedCountryData()
+//{
+//    //TODO: error handling
+//    Q_EMIT progressLabelChanged(tr("Downloading data for selected countries"));
 
-    // this counter is set to the number of selected countries.
-    // it is used as reference counter for the QNetworkReplys and decreased with every finished reply slot
-    // when it reaches 0, we can safely delete the netAccessManager.
-    d->m_selectedCountriesCounter = d->m_selectedCountriesModel->rowCount();
+//    // this counter is set to the number of selected countries.
+//    // it is used as reference counter for the QNetworkReplys and decreased with every finished reply slot
+//    // when it reaches 0, we can safely delete the netAccessManager.
+//    m_selectedCountriesCounter = m_selectedCountriesModel->rowCount();
 
-    Q_EMIT progressRangeChanged(0, d->m_selectedCountriesCounter);
-    Q_EMIT progress(0);
+//    Q_EMIT progressRangeChanged(0, m_selectedCountriesCounter);
+//    Q_EMIT progress(0);
 
-    // the netAccessManager is deleted in onSelectedCountryDownloadFinished() when the last reply is finished.
-    QNetworkAccessManager *netAccessManager = new QNetworkAccessManager(this);
+//    // the netAccessManager is deleted in onSelectedCountryDownloadFinished() when the last reply is finished.
+//    QNetworkAccessManager *netAccessManager = new QNetworkAccessManager(this);
 
-    const QStandardItem *item;
-    for(int i = 0; i < d->m_selectedCountriesCounter; ++i) {
-        item =d-> m_selectedCountriesModel->item(i);
-        d->m_selectedCountry = static_cast<QLocale::Country>(item->data().toInt());
-        qDebug() << static_cast<QLocale::Country>(item->data().toInt());
+//    const QStandardItem *item;
+//    for(int i = 0; i < m_selectedCountriesCounter; ++i) {
+//        item = m_selectedCountriesModel->item(i);
+//        m_selectedCountry = static_cast<QLocale::Country>(item->data().toInt());
+//        qDebug() << static_cast<QLocale::Country>(item->data().toInt());
 
-        d->m_selectedCountryList.append(Utils::countryToIso(d->m_selectedCountry).toLower());
-        //    get list of places that GeoNames has informations for in the given country
-        QNetworkRequest request;
-        request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
-                            .arg(MAX_ROWS)
-                            .arg(Utils::countryToIso(d->m_selectedCountry).toLower())));
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
+//        m_selectedCountryList.append(Utils::countryToIso(m_selectedCountry).toLower());
+//        //    get list of places that GeoNames has informations for in the given country
+//        QNetworkRequest request;
+//        request.setUrl(QUrl(QString("http://api.geonames.org/postalCodeSearch?username=freemedforms&maxRows=%1&style=short&placename=%2")
+//                            .arg(MAX_ROWS)
+//                            .arg(Utils::countryToIso(m_selectedCountry).toLower())));
+//        request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
 
-        netAccessManager->get(request);
-        connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSelectedCountryDownloadFinished(QNetworkReply*)));
-    }
-    return true;
-}
+//        netAccessManager->get(request);
+//        connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSelectedCountryDownloadFinished(QNetworkReply*)));
+//    }
+//    return true;
+//}
 
 bool GenericZipCodesStep::populateDatabase()
 {
