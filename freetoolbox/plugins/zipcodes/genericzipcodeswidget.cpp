@@ -210,6 +210,6 @@ void GenericZipCodesWidget::on_createPackageButton_clicked()
     m_Step->process();
 }
 
-//void GenericZipCodesWidget::onProcessFinished()
-//{
-//}
+void GenericZipCodesWidget::onProcessFinished()
+{
+}
