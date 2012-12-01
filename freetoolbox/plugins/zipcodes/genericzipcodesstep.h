@@ -70,6 +70,7 @@ class GenericZipCodesStepPrivate;
 class GenericZipCodesStep : public Core::IFullReleaseStep
 {
     Q_OBJECT
+    friend class ZipCodes::Internal::GenericZipCodesStepPrivate;
 
 public:
     GenericZipCodesStep(QObject *parent = 0);
@@ -99,16 +100,8 @@ public:
 
     QStringList errors() const;
 
-    void selectCountry(const QModelIndex &index);
-    void deselectCountry(const QModelIndex &index);
-
 Q_SIGNALS:
     void countryListDownloaded();
-
-protected Q_SLOTS:
-//    bool onAvailableCountriesDownloaded();
-//    bool downloadZipCodesUsingCachedIso();
-    void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:
     Internal::GenericZipCodesStepPrivate *d;
