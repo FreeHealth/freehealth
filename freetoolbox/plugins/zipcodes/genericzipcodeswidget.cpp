@@ -157,11 +157,12 @@ void GenericZipCodesWidget::onPostDownloadProcessFinished()
  */
 void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
 {
-    const bool validIndex = index.isValid();
-    if (validIndex)
-        m_Step->selectCountry(index);
-    updateActions();
-    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
+    // TODO: code here
+//    const bool validIndex = index.isValid();
+//    if (validIndex)
+//        m_Step->selectCountry(index);
+//    updateActions();
+//    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
 void GenericZipCodesWidget::selectCurrentCountry()
@@ -171,9 +172,10 @@ void GenericZipCodesWidget::selectCurrentCountry()
 
 void GenericZipCodesWidget::deselectCountry(const QModelIndex &index)
 {
-    m_Step->deselectCountry(index);
-    updateActions();
-    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
+    // TODO: code here
+//    m_Step->deselectCountry(index);
+//    updateActions();
+//    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
 void GenericZipCodesWidget::deselectCurrentCountry()
