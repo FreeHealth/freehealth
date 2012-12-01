@@ -5,7 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.zipcodes.geonames</uuid>
+    <uuid>freemedforms.certified.zipcodes.geonames.__COUNTRY_ISO__</uuid>
     <authors>Eric Maeker, MD</authors>
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-21</lmdate>
