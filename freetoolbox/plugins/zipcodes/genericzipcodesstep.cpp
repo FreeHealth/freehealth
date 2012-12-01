@@ -73,7 +73,16 @@ public:
 
     QString tmpPath() const {return settings()->value(Core::Constants::S_TMP_PATH).toString() + "/GeonamesZipCodes/";}
 
+    // This database contains **all** zipcodes available for **all** countries
     QString databaseOutputAbsFilePath() const {return settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/geonameszipcodes/zipcodes.db";}
+
+    // Return the path for a database containing \e countries usable for a datapack creation
+    // This database is different from the databaseOutputAbsFilePath()
+    QString databaseForDatapackOutputAbsFilePath(const QStringList &countries) const
+    {
+        QFileInfo info(databaseOutputAbsFilePath());
+        return info.absolutePath() + QDir::separator() + countries.join("-") + QDir::separator() + "zipcodes.db";
+    }
 
     QString sqlMasterFileAbsPath() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql";}
 
@@ -92,8 +101,8 @@ public:
             return false;
         }
 
-        if (db.tables().contains("ZIPS_IMPORT")) {
-            Utils::Database::executeSQL("DROP TABLE ZIPS_IMPORT;", db);
+        if (db.tables().contains("IMPORT")) {
+            Utils::Database::executeSQL("DROP TABLE IMPORT;", db);
         }
         if (!db.tables().contains("ZIPS")) {
             Utils::Database::executeSqlFile(DB_NAME, sqlMasterFileAbsPath());
@@ -104,9 +113,18 @@ public:
 
     bool populateRawDatabase()
     {
+        // Push CSV to raw database
+        QString csvFile = tmpPath() + "/allCountries.txt";
+        if (!Utils::Database::importCsvToDatabase(DB_NAME, csvFile, "IMPORT", "\t"))
+            LOG_ERROR_FOR(q, "Unable to import CSV file");
         return true;
     }
 
+    bool createOutputDatabase(const QStringList &countryIsoCodes)
+    {
+        Q_UNUSED(countryIsoCodes);
+        return true;
+    }
 
 public:
     QStringList m_Errors;
@@ -152,9 +170,10 @@ bool GenericZipCodesStep::createTemporaryStorage()
         LOG("Tmp dir created");
 
     // Create database output dir
-    if (!QDir().exists(d->databaseOutputAbsFilePath())) {
-        if (!QDir().mkpath(d->databaseOutputAbsFilePath())) {
-            LOG_ERROR("Unable to create GenericZipCodesStep database output path: " + d->databaseOutputAbsFilePath());
+    QString outputDir = QFileInfo(d->databaseOutputAbsFilePath()).absolutePath();
+    if (!QDir().exists(outputDir)) {
+        if (!QDir().mkpath(outputDir)) {
+            LOG_ERROR("Unable to create GenericZipCodesStep database output path: " + outputDir);
         } else {
             LOG("GenericZipCodesStep database output dir created");
         }
