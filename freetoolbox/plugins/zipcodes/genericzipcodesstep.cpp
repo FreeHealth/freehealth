@@ -85,6 +85,32 @@ static inline QString sqlMasterFileAbsPath() {
 
 }  // end anonymous namespace
 
+namespace ZipCodes {
+namespace Internal {
+class GenericZipCodesStepPrivate
+{
+public:
+    explicit GenericZipCodesStepPrivate(GenericZipCodesStep *parent) :
+        q(parent)
+    {
+    }
+
+    ~GenericZipCodesStepPrivate() {}
+
+    QStringList m_Errors;
+    bool m_WithProgress;
+    QStandardItemModel *m_availableCountriesModel;
+    QStandardItemModel *m_selectedCountriesModel;
+    QLocale::Country m_selectedCountry;
+    QStringList m_selectedCountryList, m_availableIsoCodes;
+    int m_selectedCountriesCounter;
+    QList<PostalInfo> m_postalList;
+    Utils::HttpDownloader *m_downloader;
+    GenericZipCodesStep *q;
+};
+}  // namespace Internal
+}  // namespace ZipCodes
+
 
 // ########################## GenericZipCodesStep ##########################
 
@@ -124,6 +150,11 @@ bool GenericZipCodesStep::createTemporaryStorage()
     return true;
 }
 
+bool GenericZipCodesStep::cleanTemporaryStorage()
+{
+    return true;
+}
+
 /*!
  * Downloads the list of available countries.
  * \sa onAvailableCountriesDownloaded()
@@ -156,6 +187,11 @@ bool GenericZipCodesStep::downloadZipCodesUsingCachedIso()
     return true;
 }
 
+QString GenericZipCodesStep::processMessage() const
+{
+    return tr("Generic zip codes database creation");
+}
+
 /** Automated ZipCode database creation of all available countries in GeoName */
 bool GenericZipCodesStep::process()
 {
@@ -167,6 +203,15 @@ bool GenericZipCodesStep::postDownloadProcessing()
     const bool success = createDatabaseScheme();
     Q_EMIT postDownloadProcessingFinished();
     return success;
+}
+
+QStandardItemModel* GenericZipCodesStep::availableCountriesModel()
+{
+    return d->m_availableCountriesModel;
+}
+QStandardItemModel* GenericZipCodesStep::selectedCountriesModel()
+{
+    return d->m_selectedCountriesModel;
 }
 
 /** Create the GeoName zipcode database */
@@ -274,6 +319,12 @@ bool GenericZipCodesStep::registerDataPack()
 {
     // TODO: register zipcodes datapack
     return true;
+}
+
+// TODO: OBSOLETE
+QStringList GenericZipCodesStep::errors() const
+{
+    return d->m_Errors;
 }
 
 void GenericZipCodesStep::selectCountry(const QModelIndex &index)
