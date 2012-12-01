@@ -51,8 +51,6 @@ class HttpDownloader;
 
 namespace ZipCodes {
 
-class GenericZipCodesStep;
-
 struct PostalInfo {
     PostalInfo(const QString &postalCode,
                const QString &city,
@@ -66,28 +64,8 @@ struct PostalInfo {
 };
 
 namespace Internal {
-class GenericZipCodesStepPrivate
-{
-public:
-    explicit GenericZipCodesStepPrivate(GenericZipCodesStep *parent) :
-        q(parent)
-    {
-    }
-
-    ~GenericZipCodesStepPrivate() {}
-
-    QStringList m_Errors;
-    bool m_WithProgress;
-    QStandardItemModel *m_availableCountriesModel;
-    QStandardItemModel *m_selectedCountriesModel;
-    QLocale::Country m_selectedCountry;
-    QStringList m_selectedCountryList, m_availableIsoCodes;
-    int m_selectedCountriesCounter;
-    QList<PostalInfo> m_postalList;
-    Utils::HttpDownloader *m_downloader;
-    GenericZipCodesStep *q;
-};
-} // end Internal
+class GenericZipCodesStepPrivate;
+}  // namespace Internal
 
 class GenericZipCodesStep : public Core::IFullReleaseStep
 {
@@ -101,24 +79,21 @@ public:
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
 
     bool createTemporaryStorage();
-    bool cleanTemporaryStorage() { return true; }
+    bool cleanTemporaryStorage();
     bool startDownload();
 
     bool process();
-    QString processMessage() const { return tr("Generic zip codes database creation"); }
+    QString processMessage() const;
     bool postDownloadProcessing();
 
-    bool downloadSelectedCountryInfo();
-
-    QStandardItemModel* availableCountriesModel() { return d->m_availableCountriesModel; }
-    QStandardItemModel* selectedCountriesModel() { return d->m_selectedCountriesModel; }
+    QStandardItemModel* availableCountriesModel();
+    QStandardItemModel* selectedCountriesModel();
 
     bool createDatabaseScheme();
-    bool startDownloadingSelectedCountryData();
     bool populateDatabase();
     bool registerDataPack();
 
-    QStringList errors() const {return d->m_Errors;}
+    QStringList errors() const;
 
     void selectCountry(const QModelIndex &index);
     void deselectCountry(const QModelIndex &index);
