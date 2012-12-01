@@ -107,14 +107,10 @@ void Log::addQueryError(const QObject *o, const QSqlQuery &q, const QString &fil
 
 void Log::addQueryError(const QString &o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
 {
-    if (!m_MuteConsole || forceWarning) {
-        qWarning() << QCoreApplication::translate("Log", "SQL Error: Driver: %1, Database: %2, Query: %3")
-                      .arg(q.lastError().driverText())
-                      .arg(q.lastError().databaseText())
-                      .arg(q.lastQuery());
-    }
-    addError(o, QCoreApplication::translate("Log", "%1: %2 - SQL Error: Driver: %3, Database: %4, Query: %5")
-             .arg(o, QDateTime::currentDateTime().toString())
+    addError(o, QCoreApplication::translate("Log", "SQL Error: \n"
+                                            "     * %1\n"
+                                            "     * %2\n"
+                                            "     * %3")
              .arg(q.lastError().driverText())
              .arg(q.lastError().databaseText())
              .arg(q.lastQuery()), file, line, forceWarning);
