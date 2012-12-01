@@ -10,7 +10,7 @@
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-21</lmdate>
     <icon>__theme__/zipcodes.png</icon>
-    <file>zipcodes/zipcodes.db.zip</file>
+    <file>zipcodes/geonames/__COUNTRY_ISO__/zipcodes.db.zip</file>
     <unziptopath>zipcodes</unziptopath>
     <datatype>ZipCodes</datatype>
 

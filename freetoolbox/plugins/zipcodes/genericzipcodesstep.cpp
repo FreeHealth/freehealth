@@ -29,7 +29,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsdb/tools.h>
+#include <datapackplugin/datapackcore.h>
+#include <datapackplugin/datapackquery.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -48,6 +49,7 @@
 using namespace ZipCodes;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DataPackPlugin::DataPackCore *dataPackCore() {return DataPackPlugin::DataPackCore::instance();}
 
 namespace {
 const char* const  DB_NAME     = "ZIPCODES";
@@ -527,7 +529,23 @@ bool GenericZipCodesStep::populateDatabase()
 
 bool GenericZipCodesStep::registerDataPack()
 {
-    // TODO: register zipcodes datapack
+    // TODO: avoid magic numbers
+    QString server = Core::Constants::SERVER_COMMUNITY_FREE;
+    QString dbFileName = QFileInfo(d->databaseOutputAbsFilePath()).fileName();
+
+    // Find all created datapacks
+    QFileInfoList files = Utils::getFiles(QFileInfo(d->databaseOutputAbsFilePath()).absolutePath(), "packdescription.xml");
+    foreach(const QFileInfo &file, files) {
+        DataPackPlugin::DataPackQuery query;
+        query.setDescriptionFileAbsolutePath(file.absoluteFilePath());
+        query.setOriginalContentFileAbsolutePath(file.absolutePath() + QDir::separator() + dbFileName);
+        query.setZipOriginalFile(true);
+        if (!dataPackCore()->registerDataPack(query, server)) {
+            LOG_ERROR("Unable to register ZipCode datapack: " + file.absoluteFilePath());
+            return false;
+        }
+        LOG(QString("Registered ZipCodes %1 datapack in server %2").arg(file.absoluteFilePath()).arg(server));
+    }
     return true;
 }
 
