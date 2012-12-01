@@ -54,7 +54,7 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
     ui(new Ui::GenericZipCodesWidget)
 {
     ui->setupUi(this);
-    ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
     ui->progressBar->setEnabled(false);
     ui->toolButtonAddCountry->setIcon(theme()->icon(Core::Constants::ICONADD));
     ui->toolButtonRemoveCountry->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
@@ -107,7 +107,7 @@ GenericZipCodesWidget::~GenericZipCodesWidget()
 void GenericZipCodesWidget::on_downloadButton_clicked()
 {
     if (m_Step->startDownload()) {
-        ui->downloadButton->setText(tr("Download in progress"));
+        ui->statusLabel->setText(tr("Download in progress"));
         ui->downloadButton->setEnabled(false);
         ui->progressBar->setEnabled(true);
         m_availableCountriesModel->clear();
@@ -143,14 +143,15 @@ void GenericZipCodesWidget::on_readCountries_clicked()
 /** When download is finished, unzip file */
 void GenericZipCodesWidget::onDownloadFinished()
 {
-    ui->downloadButton->setText(tr("Unzipping downloaded file"));
+    ui->statusLabel->setText(tr("Unzipping downloaded file..."));
     m_Step->postDownloadProcessing();
 }
 
 /** When download is finished and post-dowload steps are done */
 void GenericZipCodesWidget::onPostDownloadProcessFinished()
 {
-    ui->downloadButton->setText(tr("File downloaded and unzipped"));
+    ui->statusLabel->setText(tr("File downloaded and unzipped."));
+    ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
     ui->downloadButton->setEnabled(true);
     ui->progressBar->setEnabled(false);
     ui->progressBar->setValue(100);

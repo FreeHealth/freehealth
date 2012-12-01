@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>410</height>
+    <width>487</width>
+    <height>424</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,7 +61,7 @@
       <string notr="true">color: rgb(208, 50, 15);</string>
      </property>
      <property name="text">
-      <string>This plugins uses the &lt;a href=&quot;http://download.geonames.org&quot;&gt;GeoNames database&lt;/a&gt; webservice to create a zipcodes database for the FreeMedForms project.</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This plugin uses the &lt;a href=&quot;http://download.geonames.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;GeoNames database&lt;/span&gt;&lt;/a&gt; to create a zipcodes database for the FreeMedForms project.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -77,7 +77,7 @@
    <item>
     <widget class="QPushButton" name="downloadButton">
      <property name="text">
-      <string>&amp;Download files</string>
+      <string>&amp;Download zipped database file</string>
      </property>
     </widget>
    </item>
@@ -91,7 +91,7 @@
    <item>
     <widget class="QProgressBar" name="progressBar">
      <property name="value">
-      <number>24</number>
+      <number>0</number>
      </property>
     </widget>
    </item>
@@ -107,7 +107,7 @@
       <item row="3" column="3">
        <widget class="QPushButton" name="createPackageButton">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>Create database package of selected countries</string>
@@ -190,6 +190,30 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="statusCaption">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Status:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="statusLabel">
+       <property name="text">
+        <string>idle</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
