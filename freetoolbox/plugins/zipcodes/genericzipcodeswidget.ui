@@ -82,9 +82,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="localeDataGroupBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Zip codes</string>
@@ -93,7 +100,7 @@
       <item row="3" column="3">
        <widget class="QPushButton" name="createPackageButton">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>Create database package of selected countries</string>
@@ -106,20 +113,6 @@
          <widget class="QToolButton" name="toolButtonRemoveCountry">
           <property name="text">
            <string>...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="availCountriesLabel">
-          <property name="text">
-           <string>Available countries:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Selected countries:</string>
           </property>
          </widget>
         </item>
@@ -143,19 +136,6 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="0" rowspan="4">
-         <widget class="QListView" name="availableCountriesListView">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SingleSelection</enum>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="2" rowspan="4">
          <widget class="QListView" name="selectedCountriesListView">
           <property name="horizontalScrollBarPolicy">
@@ -169,6 +149,33 @@
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="4">
+         <widget class="QListView" name="availableCountriesListView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Selected countries:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QToolButton" name="readCountries">
+          <property name="text">
+           <string>Read available countries</string>
           </property>
          </widget>
         </item>

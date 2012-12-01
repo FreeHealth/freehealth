@@ -23,6 +23,11 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class ZipCodes::GenericZipCodesWidget
+ * Ui for user actions for the ZipCodes::GenericZipCodesStep.
+*/
+
 #include "genericzipcodeswidget.h"
 #include "ui_genericzipcodeswidget.h"
 
@@ -50,6 +55,7 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    ui->progressBar->setEnabled(false);
     ui->toolButtonAddCountry->setIcon(theme()->icon(Core::Constants::ICONADD));
     ui->toolButtonRemoveCountry->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
 
@@ -64,9 +70,12 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
     m_selectedCountriesModel = m_Step->selectedCountriesModel();
     ui->selectedCountriesListView->setModel(m_selectedCountriesModel);
 
-    // after downloading the countries list, enable/disable the widgets according to download success
-    connect(m_Step, SIGNAL(countryListDownloaded(bool)),
-            ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+    // Connect step signals
+//    connect(m_Step, SIGNAL(countryListDownloaded(bool)), ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
+    connect(m_Step, SIGNAL(postDownloadProcessingFinished()), this, SLOT(onPostDownloadProcessFinished()));
+    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), ui->progressBar, SLOT(setRange(int,int)));
+    connect(m_Step, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
     // actions on item activation
     connect(ui->availableCountriesListView, SIGNAL(activated(QModelIndex)),
@@ -93,14 +102,13 @@ GenericZipCodesWidget::~GenericZipCodesWidget()
     delete ui;
 }
 
-/*! auto-connected slot, starts querying the webservice for getting the countries list */
+/*! auto-connected slot, starts downloading the data */
 void GenericZipCodesWidget::on_downloadButton_clicked()
 {
+    ui->downloadButton->setText(tr("Download in progress"));
     ui->downloadButton->setEnabled(false);
-//    ui->progressBar->setEnabled(true);
-//    ui->downloadButton->setText(tr("Download in progress"));
+    ui->progressBar->setEnabled(true);
     m_availableCountriesModel->clear();
-    connect(m_Step, SIGNAL(countryListDownloaded()), this, SLOT(onCountryListDownloadFinished()));
     m_Step->startDownload();
 }
 
@@ -110,14 +118,36 @@ void GenericZipCodesWidget::on_createPackageButton_clicked()
     m_Step->process();
 }
 
-void GenericZipCodesWidget::onCountryListDownloadFinished()
+/*!
+ * Auto-connected slot, populates the available countries model/view
+ * using the ZipCodes::GenericZipCodesStep::populateCountryModel(), and
+ * select the OS country.
+*/
+void GenericZipCodesWidget::on_readCountries_clicked()
 {
-//    ui->downloadButton->setText(tr("Download terminated"));
-    ui->downloadButton->setEnabled(true);
-    m_availableCountriesModel->sort(0);
-    //    ui->progressBar->setValue(100);
-    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
+    m_Step->populateCountryModel();
+    // find default system country and add it to the selected list
+    QList<QStandardItem*> f = m_Step->availableCountriesModel()->findItems(QLocale::countryToString(QLocale::system().country()));
+    if (f.count() > 0)
+        selectCountry(f.first()->index());
+}
+
+/** When download is finished, unzip file */
+void GenericZipCodesWidget::onDownloadFinished()
+{
+    ui->downloadButton->setText(tr("Unzipping downloaded file"));
     m_Step->postDownloadProcessing();
+}
+
+/** When download is finished and post-dowload steps are done */
+void GenericZipCodesWidget::onPostDownloadProcessFinished()
+{
+    ui->downloadButton->setText(tr("File downloaded and unzipped"));
+    ui->downloadButton->setEnabled(true);
+    ui->progressBar->setEnabled(false);
+    ui->progressBar->setValue(100);
+    m_availableCountriesModel->sort(0);
+    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
 void GenericZipCodesWidget::onProcessFinished()
