@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.zipcodes.geonames</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-21</lmdate>
+    <icon>__theme__/zipcodes.png</icon>
+    <file>zipcodes/zipcodes.db.zip</file>
+    <unziptopath>zipcodes</unziptopath>
+    <datatype>ZipCodes</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Codes postaux : __COUNTRY__</label>
+    <label lang="xx">Zip codes: __COUNTRY__</label>
+    <description lang="fr">Base de données des codes postaux : __COUNTRY__</description>
+    <description lang="xx">Zip codes database: __COUNTRY__</description>
+
+    <htmldescription lang="fr">&lt;p>
+      Ce paquet donne accès à l'autoremplissage des formulaires d'adresse comprenant
+      le nom d'une ville et d'un code postal.&lt;br />
+      Les pays suivants sont disponibles :&lt;br />
+      &nbsp;* __COUNTRY__&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      This package provides access to auto-populating of forms
+      containing an address with a name of a city and a zip code.&lt;br />
+      The following countries are available:&lt;br />
+      &nbsp;* __COUNTRY__&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.8.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>
