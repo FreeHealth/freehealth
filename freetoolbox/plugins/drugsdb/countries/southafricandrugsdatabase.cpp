@@ -216,9 +216,8 @@ void ZaDrugDatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
-bool ZaDrugDatabaseStep::startDownload(QProgressBar *bar)
+bool ZaDrugDatabaseStep::startDownload()
 {
-    Q_UNUSED(bar);
     // get all tradename html pages from the site
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));

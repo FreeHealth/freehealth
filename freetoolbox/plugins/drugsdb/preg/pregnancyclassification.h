@@ -63,12 +63,12 @@ public:
 
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
-    bool startDownload(QProgressBar *bar = 0);
+    bool startDownload();
     bool process();
     QString processMessage() const {return tr("Pregnancy && drugs database creation");}
 
     bool unzipFiles();
-    bool prepareDatas();
+    bool prepareData();
     bool createDatabase();
     bool populateDatabase();
     bool registerDataPack() {return true;}

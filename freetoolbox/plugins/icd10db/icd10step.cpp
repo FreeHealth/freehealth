@@ -153,11 +153,14 @@ bool Icd10Step::cleanTemporaryStorage()
 }
 
 /**
- * Download the URL to the tempPath(). \n
+ * \brief Download the URL to the tempPath().
+ *
+ * You can optionally provide a QProgressBar to the method that will be connected to the
+ * download progress. The connection is thread safe.\n
  * Asynchronously emits the downloadFinished() signal when done.
  * \sa setDownloadUrl()
  */
-bool Icd10Step::startDownload(QProgressBar *bar)
+bool Icd10Step::startDownload()
 {
     // File already exists ? --> don't download
     QString filename = QString(d->_url).split("/").last();
@@ -167,13 +170,15 @@ bool Icd10Step::startDownload(QProgressBar *bar)
     }
 
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
-    dld->setProgressBar(bar);
+
 //    dld->setMainWindow(mainwindow());
     dld->setOutputPath(d->_tmpPath);
     dld->setUrl(QUrl(d->_url));
-    dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
+    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
+    dld->startDownload();
     return true;
 }
 

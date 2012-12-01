@@ -204,7 +204,7 @@ bool PtDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     connect(dld, SIGNAL(downloadProgressRange(qint64,qint64)), this, SIGNAL(progressRangeChanged(int,int)));
-    connect(dld, SIGNAL(downloadProgressRead(qint64)), this, SIGNAL(progress(int)));
+    connect(dld, SIGNAL(downloadProgressValue(qint64)), this, SIGNAL(progress(int)));
     return true;
 }
 

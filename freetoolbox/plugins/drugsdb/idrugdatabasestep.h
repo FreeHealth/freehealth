@@ -106,7 +106,7 @@ public:
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     bool createTemporaryStorage();
     virtual bool cleanTemporaryStorage();
-    virtual bool startDownload(QProgressBar *bar = 0);
+    virtual bool startDownload();
     virtual bool unzipFiles();
     virtual bool registerDataPack();
 

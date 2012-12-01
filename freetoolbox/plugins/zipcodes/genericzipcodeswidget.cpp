@@ -100,28 +100,28 @@ void GenericZipCodesWidget::on_downloadButton_clicked()
 //    ui->progressBar->setEnabled(true);
 //    ui->downloadButton->setText(tr("Download in progress"));
     m_availableCountriesModel->clear();
+    connect(m_Step, SIGNAL(countryListDownloaded()), this, SLOT(onCountryListDownloadFinished()));
     m_Step->startDownload();
-    connect(m_Step, SIGNAL(countryListDownloaded(bool)), this, SLOT(onDownloadFinished()));
 }
 
 void GenericZipCodesWidget::on_createPackageButton_clicked()
 {
-    m_Step->process();
     connect(m_Step, SIGNAL(processFinished()), this, SLOT(onProcessFinished()));
+    m_Step->process();
 }
 
-void GenericZipCodesWidget::onDownloadFinished()
+void GenericZipCodesWidget::onCountryListDownloadFinished()
 {
 //    ui->downloadButton->setText(tr("Download terminated"));
     ui->downloadButton->setEnabled(true);
     m_availableCountriesModel->sort(0);
     //    ui->progressBar->setValue(100);
     ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
+    m_Step->postDownloadProcessing();
 }
 
 void GenericZipCodesWidget::onProcessFinished()
 {
-    m_Step->postDownloadProcessing();
 }
 
 void GenericZipCodesWidget::selectCountry(const QModelIndex &index)

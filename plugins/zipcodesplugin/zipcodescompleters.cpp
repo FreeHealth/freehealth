@@ -62,10 +62,11 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
-/**
-  \class ZipCountryModel
-  Private model used by the ZipCountryCompleters
-*/
+/*!
+ * \class ZipCountryModel
+ * Private model used by the ZipCountryCompleters. It is a kind of proxy model for a QSqlModel
+ * that provides easy access for ZIP, city, and Country data.
+ */
 ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvailable) :
     QSqlQueryModel(parent),
     m_DbAvailable(dbAvailable)
@@ -91,6 +92,8 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role==Qt::DisplayRole || role==Qt::EditRole) {
+
+        // translate ColumnRepresentation values into real columns of the database
         switch (index.column()) {
         case Zip:
             return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 0));
@@ -139,7 +142,7 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
         }
     }
     QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY`='%2' AND ZIP='%3'")
-            .arg(m_countryIso).arg(city).arg(zip);
+            .arg(m_countryIso, city, zip);
     QSqlQuery query(db);
     if (query.exec(req)) {
         if (query.next())
@@ -160,8 +163,11 @@ void ZipCountryModel::setCityFilter(const QString &city)
     }
     if (m_City==city)
         return;
-    m_City=city;
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
+
+    m_City = city.remove("'");
+
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
+                          "AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
             .arg(m_countryIso).arg(city);
     setQuery(req, db);
     if (!query().isActive()) {
@@ -179,8 +185,10 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
     }
     if (m_Zip==zipCode)
         return;
-    m_Zip=zipCode;
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
+
+    m_Zip = zipCode.remove("'");
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
+                          "AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
             .arg(m_countryIso).arg(zipCode);
     setQuery(req, db);
     if (!query().isActive()) {
@@ -191,7 +199,14 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 /** Filter with the country iso code (two letters) \e countryIso */
 void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
 {
-    m_countryIso = countryIso.toLower();
+    // strip possible SQL injection char
+    const QString iso = countryIso.remove("'");
+
+    // basic check if param is a valid country ISO filter
+    if (m_countryIso == iso|| iso.length() != 2)
+        return;
+
+    m_countryIso = iso.toLower();
 }
 
 // Find the database to use. In priority order:
@@ -439,7 +454,7 @@ bool ZipCountryCompleters::eventFilter(QObject *o, QEvent *e)
             QSize sz = m_CityButton->sizeHint();
             int frameWidth = m_cityEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
             m_CityButton->move(m_cityEdit->rect().left() + frameWidth ,
-                              (m_cityEdit->rect().bottom() + 1 - sz.height()) / 2);
+                               (m_cityEdit->rect().bottom() + 1 - sz.height()) / 2);
         }
     }
     return false;

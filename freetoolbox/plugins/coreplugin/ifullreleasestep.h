@@ -28,9 +28,6 @@
 
 #include <coreplugin/core_exporter.h>
 #include <QObject>
-QT_BEGIN_NAMESPACE
-class QProgressBar;
-QT_END_NAMESPACE
 
 /**
  * \file ifullreleasestep.h
@@ -64,7 +61,7 @@ public:
     virtual bool createTemporaryStorage() = 0;
     virtual bool cleanTemporaryStorage() = 0;
 
-    virtual bool startDownload(QProgressBar *bar = 0) = 0;
+    virtual bool startDownload() = 0;
     virtual bool postDownloadProcessing() {Q_EMIT postDownloadProcessingFinished(); return true;}
     virtual bool process() = 0;
 
@@ -82,8 +79,8 @@ Q_SIGNALS:
 
     // Progress dialog management when threaded
     void progressLabelChanged(const QString &label);
-    void progress(int done);
-    void progressRangeChanged(qint64 min, qint64 max);
+    void progress(int value); //TODO: consider renaming to "progressValueChanged"
+    void progressRangeChanged(int min, int max);
 };
 
 } //  End namespace Core

@@ -167,25 +167,24 @@ bool PregnancyDatatabaseStep::cleanTemporaryStorage()
     return true;
 }
 
-bool PregnancyDatatabaseStep::startDownload(QProgressBar *bar)
+bool PregnancyDatatabaseStep::startDownload()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
 //    dld->setMainWindow(mainwindow());
-    dld->setProgressBar(bar);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(PREGNANCY_TGA_URL));
-    dld->startDownload();
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressRange(qint64,qint64)), this, SIGNAL(progressRangeChanged(qint64,qint64)));
-//    connect(dld, SIGNAL(downloadProgressRead(qint64)), this, SIGNAL(progress(int)));
+    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
+    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
+    dld->startDownload();
     return true;
 }
 
 bool PregnancyDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
 //    linkMolecules();
@@ -201,7 +200,7 @@ bool PregnancyDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool PregnancyDatatabaseStep::prepareDatas()
+bool PregnancyDatatabaseStep::prepareData()
 {
     return true;
 }
@@ -270,8 +269,10 @@ void PregnancyClassificationWidget::computeJavascriptFile()
 void PregnancyClassificationWidget::on_download_clicked()
 {
     ui->progressBar->show();
-    m_Step->startDownload(ui->progressBar);
+    connect(m_Step, SIGNAL(progressRangeChanged(int,int)), ui->progressBar, SLOT(setRange(int,int)));
+    connect(m_Step, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+    m_Step->startDownload();
 }
 
 void PregnancyClassificationWidget::downloadFinished()
