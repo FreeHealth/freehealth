@@ -31,6 +31,7 @@
 #include <calendar/calendar_exporter.h>
 
 #include <QPair>
+#include <QStringList>
 
 /**
  * \file common.h

@@ -49,6 +49,8 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QLabel>
+#include <QMimeData>
+#include <QDrag>
 
 #include <QDebug>
 

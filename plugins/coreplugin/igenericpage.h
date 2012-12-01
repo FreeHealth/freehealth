@@ -23,10 +23,10 @@
 
 #include <coreplugin/core_exporter.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWidget>
-#include <QtGui/QIcon>
+#include <QObject>
+#include <QString>
+#include <QWidget>
+#include <QIcon>
 
 /**
  * \file igenericpage.h
