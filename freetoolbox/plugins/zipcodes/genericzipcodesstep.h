@@ -95,6 +95,8 @@ public:
     bool populateDatabase();
     bool registerDataPack();
 
+    bool createDatapackForCountries();
+
     QStringList errors() const;
 
     void selectCountry(const QModelIndex &index);
