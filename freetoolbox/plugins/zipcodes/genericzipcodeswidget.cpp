@@ -74,6 +74,7 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
 //    connect(m_Step, SIGNAL(countryListDownloaded(bool)), ui->localeDataGroupBox, SLOT(setEnabled(bool)));
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
     connect(m_Step, SIGNAL(postDownloadProcessingFinished()), this, SLOT(onPostDownloadProcessFinished()));
+    connect(m_Step, SIGNAL(processFinished()), this, SLOT(onProcessFinished()));
     connect(m_Step, SIGNAL(progressRangeChanged(int,int)), ui->progressBar, SLOT(setRange(int,int)));
     connect(m_Step, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
@@ -82,13 +83,13 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
             this, SLOT(selectCountry(QModelIndex)));
     connect(ui->availableCountriesListView, SIGNAL(clicked(QModelIndex)),
             ui->selectedCountriesListView, SLOT(clearSelection()));
-    connect(ui->toolButtonAddCountry, SIGNAL(clicked()), this, SLOT(selectCountry()));
+    connect(ui->toolButtonAddCountry, SIGNAL(clicked()), this, SLOT(selectCurrentCountry()));
 
     connect(ui->selectedCountriesListView, SIGNAL(activated(QModelIndex)),
             this, SLOT(deselectCountry(QModelIndex)));
     connect(ui->selectedCountriesListView, SIGNAL(clicked(QModelIndex)),
             ui->availableCountriesListView, SLOT(clearSelection()));
-    connect(ui->toolButtonRemoveCountry, SIGNAL(clicked()), this, SLOT(deselectCountry()));
+    connect(ui->toolButtonRemoveCountry, SIGNAL(clicked()), this, SLOT(deselectCurrentCountry()));
 
     // update actions after selection changes
     connect(ui->availableCountriesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateActions()));
@@ -112,10 +113,9 @@ void GenericZipCodesWidget::on_downloadButton_clicked()
     m_Step->startDownload();
 }
 
-void GenericZipCodesWidget::on_createPackageButton_clicked()
+void GenericZipCodesWidget::on_populateDbButton_clicked()
 {
-    connect(m_Step, SIGNAL(processFinished()), this, SLOT(onProcessFinished()));
-    m_Step->process();
+    m_Step->populateDatabase();
 }
 
 /*!
@@ -150,10 +150,11 @@ void GenericZipCodesWidget::onPostDownloadProcessFinished()
     ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
-void GenericZipCodesWidget::onProcessFinished()
-{
-}
-
+/**
+ * Add a country to the selected view/model.
+ * This view/model will be used to create a datapack
+ * including all the countries included in this model/view
+ */
 void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
 {
     const bool validIndex = index.isValid();
@@ -163,7 +164,7 @@ void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
     ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
-void GenericZipCodesWidget::selectCountry()
+void GenericZipCodesWidget::selectCurrentCountry()
 {
     selectCountry(m_availableCountriesModel->index(ui->availableCountriesListView->currentIndex().row(), 0));
 }
@@ -175,7 +176,7 @@ void GenericZipCodesWidget::deselectCountry(const QModelIndex &index)
     ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
 }
 
-void GenericZipCodesWidget::deselectCountry()
+void GenericZipCodesWidget::deselectCurrentCountry()
 {
     deselectCountry(m_selectedCountriesModel->index(ui->selectedCountriesListView->currentIndex().row(), 0));
 }
@@ -188,3 +189,18 @@ void GenericZipCodesWidget::updateActions()
     model = ui->selectedCountriesListView->selectionModel();
     ui->toolButtonRemoveCountry->setEnabled(model && model->hasSelection());
 }
+
+/**
+ * Creates all the datapacks files (description + zipped database).\n
+ * You can then create or update the datapack server from the datapack page.
+ * \sa ZipCodes::GenericZipCodesStep::process()
+ */
+void GenericZipCodesWidget::on_createPackageButton_clicked()
+{
+    // TODO: connect progress signals
+    m_Step->process();
+}
+
+//void GenericZipCodesWidget::onProcessFinished()
+//{
+//}

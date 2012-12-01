@@ -47,17 +47,18 @@ public:
 
 protected Q_SLOTS:
     void on_downloadButton_clicked();
-    void on_createPackageButton_clicked();
+    void on_populateDbButton_clicked();
     void on_readCountries_clicked();
     void onDownloadFinished();
     void onPostDownloadProcessFinished();
-    void onProcessFinished();
 
     void selectCountry(const QModelIndex &index);
-    void selectCountry();
+    void selectCurrentCountry();
     void deselectCountry(const QModelIndex &index);
-    void deselectCountry();
+    void deselectCurrentCountry();
     void updateActions();
+    void on_createPackageButton_clicked();
+
 private:
     Ui::GenericZipCodesWidget *ui;
     GenericZipCodesStep *m_Step;

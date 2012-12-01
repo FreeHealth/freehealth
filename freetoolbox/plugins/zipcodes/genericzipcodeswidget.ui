@@ -82,6 +82,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="populateDbButton">
+     <property name="text">
+      <string>Populate / update raw database</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QProgressBar" name="progressBar">
      <property name="value">
       <number>24</number>
