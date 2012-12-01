@@ -28,9 +28,9 @@
 
 #include <coreplugin/core_exporter.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
+#include <QObject>
+#include <QString>
+#include <QWizardPage>
 
 /**
  * \file ifirstconfigurationpage.h

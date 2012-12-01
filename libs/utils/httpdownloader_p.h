@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QUrl>
+#include <QHash>
 
 QT_BEGIN_NAMESPACE
 class QFile;

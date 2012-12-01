@@ -24,9 +24,9 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/igenericpage.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QObject>
+#include <QString>
+#include <QWidget>
 
 /**
  * \file idebugpage.h
