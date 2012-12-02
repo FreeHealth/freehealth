@@ -478,6 +478,7 @@ PackInstallPage::PackInstallPage(QWidget *parent) :
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
+
     QVBoxLayout *lay = new QVBoxLayout(this);
     setLayout(lay);
     lay->addWidget(m_Area);
