@@ -35,10 +35,10 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsdb/tools.h>
-
 #include <biblio/bibliocore.h>
 
+#include <drugsdb/tools.h>
+#include <drugsdb/drugsdbcore.h>
 #include <drugsdb/atcmodel.h>
 #include <drugsdb/searchatcindatabasedialog.h>
 
@@ -69,6 +69,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
+static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
 
 static inline QString oldMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
@@ -572,7 +573,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorModel::ATCCodeStringList, index.parent());
     QStringList atcCodes;
     foreach(const QString &code, atcCodesIndex.data().toStringList())
-        atcCodes << code + ": " + DrugsDB::AtcModel::instance()->getAtcLabel(QStringList() << code).join(";");
+        atcCodes << code + ": " + dbCore()->atcModel()->getAtcLabel(QStringList() << code).join(";");
     d->m_AtcCodes->setStringList(atcCodes);
 
     QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorModel::PMIDStringList, index.parent());

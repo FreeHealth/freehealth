@@ -57,14 +57,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString atcCsvFile()      {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::ATC_FILENAME));}
 
-AtcModel *AtcModel::m_Instance = 0;
-
-AtcModel *AtcModel::instance(QObject *parent)
-{
-    if (!m_Instance)
-        m_Instance = new AtcModel(parent);
-    return m_Instance;
-}
+AtcModel *AtcModel::_instance = 0;
 
 namespace DrugsDB {
 namespace Internal {
@@ -233,15 +226,17 @@ private:
 AtcModel::AtcModel(QObject * parent) :
         QAbstractItemModel(parent), d(new AtcModelPrivate(this))
 {
-    init();
+    _instance = this;
 }
 
 AtcModel::~AtcModel()
 {}
 
-void AtcModel::init()
+/** Initialize ATC Model. Read the ATC CSV file in the global_resources */
+bool AtcModel::initialize()
 {
     d->getTree();
+    return true;
 }
 
 QModelIndex AtcModel::index(int row, int column, const QModelIndex &parent) const
@@ -302,6 +297,9 @@ QVariant AtcModel::data(const QModelIndex & item, int role) const
     case Qt::EditRole :
     case Qt::DisplayRole :
     {
+        if (item.column() == ATC_CodeAndLabel) {
+            return it->data(ATC_Code) + " - " + it->data(ATC_EnglishLabel);
+        }
         return it->data(item.column());
     }
     case Qt::ToolTipRole :

@@ -24,20 +24,21 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ATCMODEL_H
-#define ATCMODEL_H
+#ifndef FREETOOLBOX_ATCMODEL_H
+#define FREETOOLBOX_ATCMODEL_H
 
 #include <QAbstractItemModel>
 #include <QObject>
 
 /**
  * \file atcmodel.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.2
- * \date 29 June 2010
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 02 Dec 2012
 */
 
 namespace DrugsDB {
+class DrugsDBCore;
 namespace Internal {
 class AtcModelPrivate;
 }
@@ -46,8 +47,12 @@ class AtcModel : public QAbstractItemModel
 {
     Q_OBJECT
     friend class DrugsDB::Internal::AtcModelPrivate;
+    friend class DrugsDB::DrugsDBCore;
 
+protected:
     AtcModel(QObject * parent = 0);
+    bool initialize();
+
 public:
     enum DataRepresentation {
         ATC_Code = 0,
@@ -57,9 +62,7 @@ public:
         ATC_CodeAndLabel,
         NumberOfColumn
     };
-    static AtcModel *instance(QObject *parent = 0);
     ~AtcModel();
-    void init();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
@@ -76,11 +79,10 @@ public:
     static bool insertAtcCodeToDatabase(const QString &connectionName);
 
 private:
-    static AtcModel *m_Instance;
+    static AtcModel *_instance;
     Internal::AtcModelPrivate *d;
 };
 
-}  //  End namespace DrugsDbCreator
+}  //  End namespace DrugsDB
 
-
-#endif // ATCMODEL_H
+#endif // FREETOOLBOX_ATCMODEL_H

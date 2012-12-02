@@ -33,6 +33,7 @@
 #include <coreplugin/ftb_constants.h>
 
 #include <drugsdb/tools.h>
+#include <drugsdb/drugsdbcore.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -53,6 +54,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/BIAM/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/druginfos-fr_FR.db");}
@@ -163,7 +165,7 @@ QVariant PimTreeModel::data(const QModelIndex &index, int role) const
 //        //        tmp += attributeMap.namedItem("name").nodeValue();
 //        //        QStringList codes = attributeMap.namedItem("AtcCode").nodeValue().split(",");
 //        //        tmp += "\n  " + codes.join("\n  ");
-//        //        tmp += "\n  " + AtcModel::instance()->getAtcLabel(codes).join("\n  ");
+//        //        tmp += "\n  " + dbCore()->atcModel()->getAtcLabel(codes).join("\n  ");
 //        return tmp;
 //    } else if (role==Qt::ForegroundRole) {
 //        if (!attributeMap.namedItem("autoFound").nodeValue().isEmpty()) {

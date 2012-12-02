@@ -45,6 +45,7 @@ class DrugDrugInteractionCore;
 namespace DrugsDB {
 class RoutesModel;
 class MoleculeLinkerModel;
+class AtcModel;
 
 namespace Internal {
 class DrugsDbPlugin;
@@ -67,6 +68,7 @@ public:
 
     RoutesModel *routesModel() const;
     MoleculeLinkerModel *moleculeLinkerModel() const;
+    AtcModel *atcModel() const;
 
     DrugsDB::Internal::DrugBaseEssentials *createDrugDatabase(const QString &absPath, const QString &connection);
 

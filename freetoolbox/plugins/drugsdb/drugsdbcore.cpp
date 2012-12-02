@@ -36,6 +36,7 @@
 #include "countries/moleculelinkermodel.h"
 #include "ddi/drugdruginteractioncore.h"
 #include "ddi/drugdruginteractioncore.h"
+#include "atcmodel.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
@@ -64,6 +65,7 @@ public:
     DrugsDBCorePrivate(DrugsDBCore *parent) :
         _routesModel(0),
         _moleculeLinkerModel(0),
+        _atcModel(0),
         _ddiCore(0),
         q(parent)
 
@@ -87,6 +89,7 @@ public:
     QVector<DrugsDB::Internal::DrugBaseEssentials*> _drugsDatabases;
     RoutesModel *_routesModel;
     MoleculeLinkerModel *_moleculeLinkerModel;
+    AtcModel *_atcModel;
     DrugsDB::DrugDrugInteractionCore *_ddiCore;
 
 private:
@@ -127,6 +130,8 @@ bool DrugsDBCore::initialize()
     d->_moleculeLinkerModel->initialize();
     d->_ddiCore = new DrugsDB::DrugDrugInteractionCore(this);
     d->_ddiCore->initialize();
+    d->_atcModel = new AtcModel(this);
+    d->_atcModel->initialize();
     return true;
 }
 
@@ -140,6 +145,12 @@ RoutesModel *DrugsDBCore::routesModel() const
 MoleculeLinkerModel *DrugsDBCore::moleculeLinkerModel() const
 {
     return d->_moleculeLinkerModel;
+}
+
+/** Return the unique ATC Model pointer. This pointer must not be deleted. */
+AtcModel *DrugsDBCore::atcModel() const
+{
+    return d->_atcModel;
 }
 
 /** Create the drug database using the absolute path \e absPath, and the connectionName \e connection */

@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "atcpage.h"
 #include "atcmodel.h"
+#include "drugsdbcore.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
@@ -34,6 +35,8 @@
 
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
+
+static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 AtcPage::AtcPage(QObject *parent) :
         IToolPage(parent)
@@ -49,13 +52,15 @@ QWidget *AtcPage::createPage(QWidget *parent)
     return new AtcWidget(parent);
 }
 
-
 AtcWidget::AtcWidget(QWidget *parent) :
         QWidget(parent),
         ui(new Ui::AtcPage)
 {
     ui->setupUi(this);
-    ui->atcView->setModel(AtcModel::instance(this));
+    ui->atcView->setModel(dbCore()->atcModel());
+    for(int i = 0; i < dbCore()->atcModel()->columnCount(); ++i)
+        ui->atcView->setColumnHidden(i, true);
+    ui->atcView->setColumnHidden(AtcModel::ATC_CodeAndLabel, false);
 }
 
 AtcWidget::~AtcWidget()

@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "afssapsintegrator.h"
 //#include "atcmodel.h"
+#include <drugsdb/drugsdbcore.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -65,6 +66,7 @@ using namespace DrugsDB;
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/AfssapsIntegratorSources/") + QDir::separator();}
 //static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
@@ -402,7 +404,7 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
         //        tmp += attributeMap.namedItem("name").nodeValue();
         //        QStringList codes = attributeMap.namedItem("AtcCode").nodeValue().split(",");
         //        tmp += "\n  " + codes.join("\n  ");
-        //        tmp += "\n  " + AtcModel::instance()->getAtcLabel(codes).join("\n  ");
+        //        tmp += "\n  " + dbCore()->atcModel()->getAtcLabel(codes).join("\n  ");
         //        return tmp;
         return QVariant();
     } else if (role==Qt::ForegroundRole) {
