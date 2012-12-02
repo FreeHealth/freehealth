@@ -2247,7 +2247,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
 /**
  * Import a CSV structured file \e fileName into a database \e connectionName,
- * table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.\n
+ * table \e table, using the speficied \e separator, and \e ignoreFirstLine or not.\n
  * Creates a transaction on the database.
 */
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
@@ -2258,6 +2258,13 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         return false;
     DB.transaction();
 
+    // get table field's name
+    if (!DB.tables().contains(table)) {
+        LOG_ERROR_FOR("Database", "No table found");
+        DB.rollback();
+        return false;
+    }
+
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
     if (content.isEmpty())
         return false;
@@ -2267,12 +2274,6 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     if (ignoreFirstLine)
         start = 1;
 
-    // get table field's name
-    if (!DB.tables().contains(table)) {
-        LOG_ERROR_FOR("Database", "No table found");
-        DB.rollback();
-        return false;
-    }
     // prepare the sql query
     QSqlRecord record = DB.record(table);
     QString req = "INSERT INTO " + table + " (\n";

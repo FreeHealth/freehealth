@@ -324,8 +324,7 @@ PackDownloadPage::PackDownloadPage(QWidget *parent) :
 {
     setObjectName("PackDownloadPage");
     setTitle(tr("Downloading packs"));
-    // TODO: better would be "Please wait until..." (HIG), more professional
-    setSubTitle(tr("You just have to wait until all packs are downloaded."));
+    setSubTitle(tr("Please wait until all packs are downloaded."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
