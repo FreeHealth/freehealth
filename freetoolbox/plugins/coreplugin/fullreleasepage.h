@@ -61,7 +61,7 @@ public Q_SLOTS:
     void createFullRelease();
 
 private Q_SLOTS:
-    void setProgressRange(qint64 min, qint64 max);
+    void setProgressRange(int min, int max);
     void startNextDownload();
     void startNextProcess();
     void startNextPostProcessDownload();

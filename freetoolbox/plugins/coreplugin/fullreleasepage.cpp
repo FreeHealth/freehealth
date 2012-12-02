@@ -107,9 +107,9 @@ void FullReleasePageWidget::createFullRelease()
                                      tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
             return;
         }
-        connect(s, SIGNAL(progressLabelChanged(QString)), m_FullReleaseProgress, SLOT(setLabelText(QString)));
-        connect(s, SIGNAL(progress(int)), m_FullReleaseProgress, SLOT(setValue(int)));
-        connect(s, SIGNAL(progressRangeChanged(qint64,qint64)), this, SLOT(setProgressRange(qint64,qint64)));
+        connect(s, SIGNAL(progressLabelChanged(QString)), m_FullReleaseProgress, SLOT(setLabelText(QString)), Qt::UniqueConnection);
+        connect(s, SIGNAL(progress(int)), m_FullReleaseProgress, SLOT(setValue(int)), Qt::UniqueConnection);
+        connect(s, SIGNAL(progressRangeChanged(int,int)), this, SLOT(setProgressRange(int,int)), Qt::UniqueConnection);
     }
 
     startNextDownload();
