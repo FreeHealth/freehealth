@@ -75,6 +75,9 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
     connect(m_Step, SIGNAL(postDownloadProcessingFinished()), this, SLOT(onPostDownloadProcessFinished()));
     connect(m_Step, SIGNAL(processFinished()), this, SLOT(onProcessFinished()));
+
+    // the progressbar must only be connected ONCE here. The m_Step is a member, so the connection
+    // will be kept until the step object is deleted = everything is finished.
     connect(m_Step, SIGNAL(progressRangeChanged(int,int)), ui->progressBar, SLOT(setRange(int,int)));
     connect(m_Step, SIGNAL(progress(int)), ui->progressBar, SLOT(setValue(int)));
 
@@ -208,8 +211,9 @@ void GenericZipCodesWidget::updateActions()
  */
 void GenericZipCodesWidget::on_createPackageButton_clicked()
 {
-    // TODO: connect progress signals
+    ui->progressBar->setEnabled(true);
     m_Step->process();
+    ui->progressBar->setEnabled(false);
 }
 
 void GenericZipCodesWidget::onProcessFinished()
