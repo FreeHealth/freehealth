@@ -113,7 +113,7 @@
  */
 
 /*!
- * \fn virtual bool Core::IFullReleaseStep::postProcessDownload()
+ * \fn virtual bool Core::IFullReleaseStep::postDownloadProcessing()
  * \brief Implementations of this method can process the data after downloading.
  *
  * The default implementation emits \e postProcessDownloadFinished(). This should be done
