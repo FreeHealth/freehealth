@@ -196,6 +196,7 @@ bool Icd10Step::postDownloadProcessing()
         }
         LOG("Unzip done");
     }
+    Q_EMIT postDownloadProcessingFinished();
     return true;
 }
 
