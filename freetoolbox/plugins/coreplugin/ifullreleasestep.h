@@ -62,7 +62,7 @@ public:
     virtual bool cleanTemporaryStorage() = 0;
 
     virtual bool startDownload() = 0;
-    virtual bool postDownloadProcessing() {Q_EMIT postDownloadProcessingFinished(); return true;}
+    virtual bool postDownloadProcessing();
     virtual bool process() = 0;
 
     virtual bool registerDataPack() = 0;

@@ -145,3 +145,8 @@
  * Provides a comparison of two steps, used by the sort algorythm.
  */
 
+bool Core::IFullReleaseStep::postDownloadProcessing()
+{
+    Q_EMIT postDownloadProcessingFinished();
+    return true;
+}
