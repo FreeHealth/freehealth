@@ -132,6 +132,7 @@ bool InteractionStep::process()
 //    }
 //    DrugsDB::Tools::drugBase()->initialize(databaseOutputPath(), true);
 //    return computeModelsAndPopulateDatabase();
+    Q_EMIT processFinished();
     return true;
 }
 

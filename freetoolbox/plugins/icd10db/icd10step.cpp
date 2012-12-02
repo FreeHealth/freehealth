@@ -209,7 +209,9 @@ bool Icd10Step::process()
 {
     if (!createDatabase())
         return false;
-    return populateDatabaseWithRawSources();
+    bool ok = populateDatabaseWithRawSources();
+    Q_EMIT processFinished();
+    return ok;
 }
 
 /** Create an empty database with the correct SQL schema to inject the downloaded ICD10 data */

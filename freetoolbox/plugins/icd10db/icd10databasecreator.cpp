@@ -137,6 +137,7 @@ bool Icd10DatabaseWidget::onDownloadFinished()
         return false;
     if (!_step->registerDataPack())
         return false;
+    Q_EMIT processFinished();
     return true;
 }
 

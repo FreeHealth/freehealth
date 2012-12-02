@@ -162,6 +162,7 @@ bool DataPackStep::startDownload()
 bool DataPackStep::process()
 {
     // At this point all IFullReleaseSteps must have registered their datapacks to the datapackcore
+    Q_EMIT processFinished();
     return true;
 }
 
