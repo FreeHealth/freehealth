@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+// LeafFilterProxyModel was adapated from http://qt-project.org/forums/viewthread/7782
 /**
  * \class DrugsDB::AtcPage
  * ATC classification manipulation page.
@@ -40,6 +41,10 @@
 #include "atcmodel.h"
 #include "drugsdbcore.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <utils/widgets/detailswidget.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
@@ -49,10 +54,12 @@
 #include <QLabel>
 #include <QFormLayout>
 #include <QLineEdit>
+#include <QToolButton>
 
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::DrugsDBCore *dbCore() {return DrugsDB::DrugsDBCore::instance();}
 
 AtcPage::AtcPage(QObject *parent) :
@@ -69,15 +76,94 @@ QWidget *AtcPage::createPage(QWidget *parent)
     return new AtcWidget(parent);
 }
 
-AtcWidget::AtcWidget(QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::AtcPage)
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////   LeafFilterProxyModel   ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+LeafFilterProxyModel::LeafFilterProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
 {
+}
+
+bool LeafFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (filterAcceptsRowItself(source_row, source_parent))
+        return true;
+
+    //accept if any of the parents is accepted on it's own merits
+    QModelIndex parent = source_parent;
+    while (parent.isValid()) {
+        if (filterAcceptsRowItself(parent.row(), parent.parent()))
+            return true;
+        parent = parent.parent();
+    }
+
+    //accept if any of the children is accepted on it's own merits
+    if (hasAcceptedChildren(source_row, source_parent)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool LeafFilterProxyModel::filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const
+{
+    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+}
+
+bool LeafFilterProxyModel::hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const
+{
+    QModelIndex item = sourceModel()->index(source_row,0,source_parent);
+    if (!item.isValid()) {
+        //qDebug() << "item invalid" << source_parent << source_row;
+        return false;
+    }
+
+    //check if there are children
+    int childCount = item.model()->rowCount(item);
+    if (childCount == 0)
+        return false;
+
+    for (int i = 0; i < childCount; ++i) {
+        if (filterAcceptsRowItself(i, item))
+            return true;
+        //recursive call -> NOTICE that this is depth-first searching, you're probably better off with breadth first search...
+        if (hasAcceptedChildren(i, item))
+            return true;
+    }
+
+    return false;
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////   AtcWidget   /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+AtcWidget::AtcWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::AtcPage)
+{
+    // Creating UI
     ui->setupUi(this);
-    ui->atcView->setModel(dbCore()->atcModel());
     ui->atcView->setIndentation(7);
     ui->atcView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _left = new QToolButton(ui->search);
+    aSearchEnglish = new QAction(this);
+    aSearchEnglish->setText(tr("Filter on the english labels"));
+    aSearchEnglish->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    aSearchCode = new QAction(this);
+    aSearchCode->setText(tr("Filter on the ATC code"));
+    aSearchCode->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    _left->addAction(aSearchEnglish);
+    _left->addAction(aSearchCode);
+    _left->setDefaultAction(aSearchEnglish);
+    ui->search->setLeftButton(_left);
+
+    // Managing proxy model
+    _proxyModel = new LeafFilterProxyModel(this);
+    _proxyModel->setSourceModel(dbCore()->atcModel());
+    ui->atcView->setModel(_proxyModel);
+
+    // Ui connections
     connect(ui->atcView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onAtcCodeSelectionChanged(QModelIndex,QModelIndex)));
+    connect(ui->search, SIGNAL(textChanged(QString)), this, SLOT(onFilterChanged(QString)));
 
     // Create the ATC details widget & content
     _details = new Utils::DetailsWidget(this);
@@ -130,6 +216,18 @@ void AtcWidget::onAtcCodeSelectionChanged(const QModelIndex &current, const QMod
     _french->setText(fr.data().toString());
     _deutsch->setText(de.data().toString());
 //    _spanish->setText(es.data().toString());
+}
+
+void AtcWidget::onFilterChanged(const QString &filter)
+{
+    _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    if (_left->defaultAction() == aSearchCode)
+        _proxyModel->setFilterKeyColumn(AtcModel::ATC_Code);
+    else if (_left->defaultAction() == aSearchEnglish)
+        _proxyModel->setFilterKeyColumn(AtcModel::ATC_EnglishLabel);
+    _proxyModel->setFilterFixedString(filter);
+    if (filter.count() > 4)
+        ui->atcView->expandAll();
 }
 
 void AtcWidget::changeEvent(QEvent *e)
