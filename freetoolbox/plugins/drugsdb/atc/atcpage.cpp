@@ -58,6 +58,8 @@
 #include <QLineEdit>
 #include <QToolButton>
 
+#include <QDebug>
+
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
@@ -206,11 +208,12 @@ AtcWidget::~AtcWidget()
 void AtcWidget::onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
+    QModelIndex source = _proxyModel->mapToSource(current);
     AtcModel *model = dbCore()->atcModel();
-    QModelIndex code = model->index(current.row(), AtcModel::ATC_Code, current.parent());
-    QModelIndex en = model->index(current.row(), AtcModel::ATC_EnglishLabel, current.parent());
-    QModelIndex fr = model->index(current.row(), AtcModel::ATC_FrenchLabel, current.parent());
-    QModelIndex de = model->index(current.row(), AtcModel::ATC_DeutschLabel, current.parent());
+    QModelIndex code = model->index(source.row(), AtcModel::ATC_Code, source.parent());
+    QModelIndex en = model->index(source.row(), AtcModel::ATC_EnglishLabel, source.parent());
+    QModelIndex fr = model->index(source.row(), AtcModel::ATC_FrenchLabel, source.parent());
+    QModelIndex de = model->index(source.row(), AtcModel::ATC_DeutschLabel, source.parent());
     _details->setSummaryText(code.data().toString() + " - " + en.data().toString());
 //    QModelIndex es = model->index(current.row(), AtcModel::ATC_SpanishLabel, current.parent());
     _code->setText(code.data().toString());
