@@ -28,6 +28,13 @@
 
 #include <QVariant>
 
+/**
+ * \file drug.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 21 Oct 2012
+*/
+
 namespace DrugsDB {
 namespace Internal {
 class ComponentPrivate;
