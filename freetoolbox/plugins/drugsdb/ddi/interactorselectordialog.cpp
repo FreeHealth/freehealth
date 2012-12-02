@@ -27,6 +27,7 @@
 /*!
  * \class DrugsDB::Internal::InteractorSelectorDialog
  * Dialog to select an interacting molecule or class already recorded in the models.
+ * \n FreeToolBox specific class.
  */
 
 #include "interactorselectordialog.h"

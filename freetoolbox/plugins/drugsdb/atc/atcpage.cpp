@@ -28,12 +28,14 @@
 /**
  * \class DrugsDB::AtcPage
  * ATC classification visualisation page.
+ * \n FreeToolBox specific class.
  * \internal
  */
 
 /**
  * \class DrugsDB::AtcWidget
  * Show the ATC tree.
+ * \n FreeToolBox specific class.
  * \internal
  */
 

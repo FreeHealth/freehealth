@@ -28,6 +28,7 @@
  * \class DrugsDB::DrugDrugInteractionCore
  * This class owns all the shared part of the DDI code part.\n
  * The single instance is create by the DrugsDB::DrugsDBCore object.
+ * \n FreeToolBox specific class.
  */
 
 #include "drugdruginteractioncore.h"

@@ -27,6 +27,7 @@
 /*!
  * \class DrugsDB::IDrugDatabaseStep
  * Default drug database creator step.
+ * \n FreeToolBox specific class.
  */
 
 #include "idrugdatabasestep.h"

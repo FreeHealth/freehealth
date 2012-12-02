@@ -25,16 +25,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class MoleculeLinkerModel
-  Based on an XML formatted file to ease the SVN commit process.
-  XML File format is:
-  \code
- <FreeToolBox>
-  <MoleculeLinker database="">
-    <Molecule name="NAME" AtcCode="" review="" reviewer="" reference="" comment=""/>
-  </MoleculeLinker>
- </FreeToolBox>
- \endcode
+ * \class MoleculeLinkerModel
+ * Based on an XML formatted file to ease the SVN commit process.
+ * XML File format is:
+ * \code
+ * <FreeToolBox>
+ *   <MoleculeLinker database="">
+ *     <Molecule name="NAME" AtcCode="" review="" reviewer="" reference="" comment=""/>
+ *   </MoleculeLinker>
+ * </FreeToolBox>
+ * \endcode
+ * \n FreeToolBox specific class.
 */
 
 #include "moleculelinkermodel.h"

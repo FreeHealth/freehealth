@@ -27,6 +27,7 @@
 /*!
  * \class DrugsDB::DrugsDBCore
  * \brief Central core singleton object for the DrugsDB plugin.
+ * \n FreeToolBox specific class.
  */
 
 #include "drugsdbcore.h"

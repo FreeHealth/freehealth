@@ -26,6 +26,7 @@
  ***************************************************************************/
 /*!
  * \class DrugsDB::Internal::IDrugDatabaseStepWidget
+ * \n FreeToolBox specific class.
  */
 
 #include "idrugdatabasestepwidget.h"
