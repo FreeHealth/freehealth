@@ -2247,7 +2247,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
 /**
  * Import a CSV structured file \e fileName into a database \e connectionName,
- * table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.\n
+ * table \e table, using the speficied \e separator, and \e ignoreFirstLine or not.\n
  * Creates a transaction on the database.
 */
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
