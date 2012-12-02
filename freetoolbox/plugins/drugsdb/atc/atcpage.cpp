@@ -27,7 +27,7 @@
 // LeafFilterProxyModel was adapated from http://qt-project.org/forums/viewthread/7782
 /**
  * \class DrugsDB::AtcPage
- * ATC classification manipulation page.
+ * ATC classification visualisation page.
  * \internal
  */
 
