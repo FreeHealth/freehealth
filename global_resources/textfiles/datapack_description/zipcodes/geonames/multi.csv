@@ -26,7 +26,7 @@
 --   - named in ISO_3166-1 (see http://en.wikipedia.org/wiki/ISO_3166-1)
 --   - separated with a coma
 -- If you want to set the name of the datapack countries, just write it as first isocode.
--- See example of Europe above. Name must be more to 2chars.
+-- Name must be more to 2chars. Don't create database with more than 3 countries.
 --
 -- Lines begining with -- or # are not processed. Please don't insert empty lines.
 --
@@ -37,5 +37,3 @@ GB;IM
 IM;IE
 ES;PT
 GE;AM;AZ
--- All Europe
-EUROPE;AD;AL;AM;AT;AX;AZ;BA;BE;BG;BY;CH;CY;CZ;DE;DK;EE;ES;FI;FO;FR;GB;GE;GG;GI;GR;HR;HU;IE;IM;IS;IT;JE;KZ;LI;LT;LU;LV;MC;MD;ME;MK;MT;NL;NO;PL;PT;RO;RS;RU;SE;SI;SJ;SK;SM;TR;UA;VA
