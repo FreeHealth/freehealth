@@ -63,6 +63,9 @@ public:
     ~AtcWidget();
 
 private:
+    void changeEvent(QEvent *e);
+
+private:
     Ui::AtcPage *ui;
 };
 

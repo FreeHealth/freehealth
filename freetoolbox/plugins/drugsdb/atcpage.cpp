@@ -24,6 +24,18 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::AtcPage
+ * ATC classification manipulation page.
+ * \internal
+ */
+
+/**
+ * \class DrugsDB::AtcWidget
+ * Show the ATC tree.
+ * \internal
+ */
+
 #include "atcpage.h"
 #include "atcmodel.h"
 #include "drugsdbcore.h"
@@ -58,12 +70,24 @@ AtcWidget::AtcWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->atcView->setModel(dbCore()->atcModel());
-    for(int i = 0; i < dbCore()->atcModel()->columnCount(); ++i)
-        ui->atcView->setColumnHidden(i, true);
-    ui->atcView->setColumnHidden(AtcModel::ATC_CodeAndLabel, false);
+    ui->atcView->setIndentation(7);
+    ui->atcView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 AtcWidget::~AtcWidget()
 {
     delete ui;
+}
+
+void AtcWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        for(int i = 0; i < dbCore()->atcModel()->columnCount(); ++i)
+            ui->atcView->setColumnHidden(i, true);
+        ui->atcView->setColumnHidden(AtcModel::ATC_Code, false);
+        // TODO: find the current language and set the correct column not hidden
+        ui->atcView->setColumnHidden(AtcModel::ATC_EnglishLabel, false);
+        ui->atcView->header()->setResizeMode(AtcModel::ATC_Code, QHeaderView::ResizeToContents);
+        ui->atcView->header()->setResizeMode(AtcModel::ATC_EnglishLabel, QHeaderView::Stretch);
+    }
 }
