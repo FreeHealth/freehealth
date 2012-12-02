@@ -50,6 +50,7 @@ protected Q_SLOTS:
     void on_populateDbButton_clicked();
     void on_readCountries_clicked();
     void onDownloadFinished();
+    void onProcessFinished();
     void onPostDownloadProcessFinished();
 
     void selectCountry(const QModelIndex &index);

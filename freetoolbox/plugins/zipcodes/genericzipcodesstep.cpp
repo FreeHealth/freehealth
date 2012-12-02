@@ -423,8 +423,7 @@ bool GenericZipCodesStep::startDownload()
     Q_EMIT progress(0);
     d->m_downloader->setOutputPath(d->tmpPath());
     d->m_downloader->setUrl(d->url());
-    d->m_downloader->startDownload();
-    return true;
+    return d->m_downloader->startDownload();
 }
 
 
