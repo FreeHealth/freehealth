@@ -54,6 +54,7 @@ public:
         ATC_EnglishLabel,
         ATC_FrenchLabel,
         ATC_DeutschLabel,
+        ATC_CodeAndLabel,
         NumberOfColumn
     };
     static AtcModel *instance(QObject *parent = 0);
