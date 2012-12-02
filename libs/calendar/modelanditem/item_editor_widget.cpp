@@ -315,7 +315,7 @@ void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
 
 void ItemEditorWidget::onDateTimeChanged(QDateTime dateTime)
 {
-    qDebug() << "onDateTimeChanged: called from" << sender()->objectName() << dateTime ;
+//    qDebug() << "onDateTimeChanged: called from" << sender()->objectName() << dateTime ;
     QDateTime startDateTime = QDateTime(d->ui->startDateEdit->date(), d->ui->startTimeEdit->time());
     QDateTime endDateTime = QDateTime(d->ui->endDateEdit->date(), d->ui->endTimeEdit->time());
 
