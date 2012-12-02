@@ -51,7 +51,6 @@ using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
@@ -126,7 +125,6 @@ private:
     QList<AtcItem*> m_Children;
     QHash<int, QString> m_Datas;
 };
-
 
 class AtcModelPrivate
 {
@@ -232,7 +230,6 @@ private:
 }  // namespace Internal
 }  // namespace DrugsDB
 
-
 AtcModel::AtcModel(QObject * parent) :
         QAbstractItemModel(parent), d(new AtcModelPrivate(this))
 {
@@ -304,44 +301,44 @@ QVariant AtcModel::data(const QModelIndex & item, int role) const
     {
     case Qt::EditRole :
     case Qt::DisplayRole :
-        {
-            return it->data(item.column());
-        }
+    {
+        return it->data(item.column());
+    }
     case Qt::ToolTipRole :
-        {
-            return it->english();
-        }
+    {
+        return it->english();
+    }
     case Qt::ForegroundRole :
-        {
-//            if (it->isTemplate()) {
-//                return QColor(settings()->value(Core::Constants::S_FOREGROUND_TEMPLATES, "#000").toString());
-//            } else {
-//                return QColor(settings()->value(Core::Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
-//            }
-            break;
-        }
+    {
+        //            if (it->isTemplate()) {
+        //                return QColor(settings()->value(Core::Constants::S_FOREGROUND_TEMPLATES, "#000").toString());
+        //            } else {
+        //                return QColor(settings()->value(Core::Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
+        //            }
+        break;
+    }
     case Qt::BackgroundRole :
-        {
-//            QColor c;
-//            if (it->isTemplate()) {
-//                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_TEMPLATES, "white").toString());
-//            } else {
-//                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_CATEGORIES, "white").toString());
-//            }
-//            if (!Utils::isReleaseCompilation()) {
-//                if (it->isNewlyCreated()) {
-//                    c = QColor(Qt::blue);
-//                } else
-//                    if (it->isModified()) {
-//                    c = QColor(Qt::red);
-//                }
-//            }
-//            if (c.name()=="#ffffff")
-//                return QVariant();
-//            c.setAlpha(125);
-//            return c;
-            break;
-        }
+    {
+        //            QColor c;
+        //            if (it->isTemplate()) {
+        //                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_TEMPLATES, "white").toString());
+        //            } else {
+        //                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_CATEGORIES, "white").toString());
+        //            }
+        //            if (!Utils::isReleaseCompilation()) {
+        //                if (it->isNewlyCreated()) {
+        //                    c = QColor(Qt::blue);
+        //                } else
+        //                    if (it->isModified()) {
+        //                    c = QColor(Qt::red);
+        //                }
+        //            }
+        //            if (c.name()=="#ffffff")
+        //                return QVariant();
+        //            c.setAlpha(125);
+        //            return c;
+        break;
+    }
     }
     return QVariant();
 }
