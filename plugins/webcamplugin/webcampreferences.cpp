@@ -37,6 +37,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <extensionsystem/pluginmanager.h>
 
+#include <QTextStream>
+
 using namespace Webcam;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -204,7 +206,7 @@ void WebcamPreferencesPage::finish()
 
 bool WebcamPreferencesPage::matches(const QString &searchKeyWord) const
 {
-    return m_searchKeywords.contains(s, Qt::CaseInsensitive);
+    return m_searchKeywords.contains(searchKeyWord, Qt::CaseInsensitive);
 }
 
 /*! \brief Checks if the entered settings are valid.
