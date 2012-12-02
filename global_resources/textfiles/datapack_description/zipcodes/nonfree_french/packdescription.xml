@@ -5,22 +5,22 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.zipcodes.frenchonly</uuid>
+    <uuid>freemedforms.certified.zipcodes.galichon.FR</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-21</lmdate>
     <icon>__theme__/zipcodes.png</icon>
-    <file>zipcodes/zipcodes.db.zip</file>
+    <file>zipcodes/galichon-FR/zipcodes.db.zip</file>
     <unziptopath>zipcodes</unziptopath>
     <datatype>ZipCodes</datatype>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <label lang="fr">Codes postaux</label>
-    <label lang="xx">Zip codes</label>
-    <description lang="fr">Base de données des codes postaux</description>
-    <description lang="xx">Zip codes database</description>
+    <label lang="fr">Codes postaux français</label>
+    <label lang="xx">French zip codes</label>
+    <description lang="fr">Base de données des codes postaux français</description>
+    <description lang="xx">French zip codes database</description>
 
     <htmldescription lang="fr">&lt;p>
       Ce paquet donne accès à l'autoremplissage des formulaires d'adresse comprenant
