@@ -40,10 +40,15 @@
 #include "atcmodel.h"
 #include "drugsdbcore.h"
 
+#include <utils/widgets/detailswidget.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 
 #include "ui_atcpage.h"
+
+#include <QLabel>
+#include <QFormLayout>
+#include <QLineEdit>
 
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
@@ -72,11 +77,59 @@ AtcWidget::AtcWidget(QWidget *parent) :
     ui->atcView->setModel(dbCore()->atcModel());
     ui->atcView->setIndentation(7);
     ui->atcView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    connect(ui->atcView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onAtcCodeSelectionChanged(QModelIndex,QModelIndex)));
+
+    // Create the ATC details widget & content
+    _details = new Utils::DetailsWidget(this);
+    QLabel *codeLabel = new QLabel(tr("Code"), _details);
+    QLabel *englishLabel = new QLabel(tr("English"), _details);
+    QLabel *frenchLabel = new QLabel(tr("French"), _details);
+    QLabel *deutschLabel = new QLabel(tr("Deutsch"), _details);
+    QLabel *spanishLabel = new QLabel(tr("Spanish"), _details);
+    _code = new QLineEdit(_details);
+    _english = new QLineEdit(_details);
+    _french = new QLineEdit(_details);
+    _deutsch = new QLineEdit(_details);
+    _spanish = new QLineEdit(_details);
+    _code->setReadOnly(true);
+    _english->setReadOnly(true);
+    _french->setReadOnly(true);
+    _deutsch->setReadOnly(true);
+    _spanish->setReadOnly(true);
+    QWidget *container = new QWidget(_details);
+    QFormLayout *form = new QFormLayout(container);
+    form->setMargin(0);
+    form->addRow(codeLabel, _code);
+    form->addRow(englishLabel, _english);
+    form->addRow(frenchLabel, _french);
+    form->addRow(deutschLabel, _deutsch);
+    form->addRow(spanishLabel, _spanish);
+    _details->setWidget(container);
+    _details->setSummaryText(tr("No ATC selected"));
+
+    layout()->addWidget(_details);
 }
 
 AtcWidget::~AtcWidget()
 {
     delete ui;
+}
+
+void AtcWidget::onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    Q_UNUSED(previous);
+    AtcModel *model = dbCore()->atcModel();
+    QModelIndex code = model->index(current.row(), AtcModel::ATC_Code, current.parent());
+    QModelIndex en = model->index(current.row(), AtcModel::ATC_EnglishLabel, current.parent());
+    QModelIndex fr = model->index(current.row(), AtcModel::ATC_FrenchLabel, current.parent());
+    QModelIndex de = model->index(current.row(), AtcModel::ATC_DeutschLabel, current.parent());
+    _details->setSummaryText(code.data().toString() + " - " + en.data().toString());
+//    QModelIndex es = model->index(current.row(), AtcModel::ATC_SpanishLabel, current.parent());
+    _code->setText(code.data().toString());
+    _english->setText(en.data().toString());
+    _french->setText(fr.data().toString());
+    _deutsch->setText(de.data().toString());
+//    _spanish->setText(es.data().toString());
 }
 
 void AtcWidget::changeEvent(QEvent *e)
