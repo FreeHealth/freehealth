@@ -27,6 +27,7 @@
 /*!
  * \class DrugsDB::Internal::InteractorCompleter
  * QCompleter configured with the interacting molecules.
+ * \n FreeToolBox specific class.
  */
 
 #include "interactorcompleter.h"

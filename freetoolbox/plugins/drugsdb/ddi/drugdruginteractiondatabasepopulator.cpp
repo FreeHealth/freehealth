@@ -28,6 +28,7 @@
  * \class DrugsDB::Internal::DrugDrugInteractionDatabasePopulator
  * Populate a Drug database with DDI (ATC codes, DDI).\n
  * This object directly uses XML files to populate the drugs database.
+ * \n FreeToolBox specific class.
  */
 
 #include "drugdruginteractiondatabasepopulator.h"

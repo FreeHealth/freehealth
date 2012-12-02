@@ -39,8 +39,8 @@
 
 #include <drugsdb/tools.h>
 #include <drugsdb/drugsdbcore.h>
-#include <drugsdb/atcmodel.h>
 #include <drugsdb/searchatcindatabasedialog.h>
+#include <drugsdb/atc/atcmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>

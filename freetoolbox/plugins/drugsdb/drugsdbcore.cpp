@@ -27,6 +27,7 @@
 /*!
  * \class DrugsDB::DrugsDBCore
  * \brief Central core singleton object for the DrugsDB plugin.
+ * \n FreeToolBox specific class.
  */
 
 #include "drugsdbcore.h"
@@ -36,7 +37,7 @@
 #include "countries/moleculelinkermodel.h"
 #include "ddi/drugdruginteractioncore.h"
 #include "ddi/drugdruginteractioncore.h"
-#include "atcmodel.h"
+#include "atc/atcmodel.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>

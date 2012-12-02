@@ -23,6 +23,16 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::Drug
+ * \n FreeToolBox specific class.
+ */
+
+/**
+ * \class DrugsDB::Component
+ * \n FreeToolBox specific class.
+ */
+
 #include "drug.h"
 
 #include <coreplugin/ftb_constants.h>

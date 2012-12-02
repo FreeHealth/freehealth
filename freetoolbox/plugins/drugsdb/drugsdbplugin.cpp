@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "drugsdbplugin.h"
 #include "drugsdbcore.h"
-#include "atcpage.h"
+#include "atc/atcpage.h"
 #include "countries/moleculelinkerwidget.h"
 
 #include "countries/frenchdrugsdatabasecreator.h"

@@ -24,14 +24,30 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ATCPAGE_H
-#define ATCPAGE_H
+#ifndef FREETOOLBOX_ATCPAGE_H
+#define FREETOOLBOX_ATCPAGE_H
 
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
+#include <QSortFilterProxyModel>
 
 #include <QWidget>
+QT_BEGIN_NAMESPACE
+class QLineEdit;
+class QModelIndex;
+class QToolButton;
+QT_END_NAMESPACE
 
+/**
+ * \file atcpage.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 02 Dec 2012
+*/
+
+namespace Utils {
+class DetailsWidget;
+}
 
 namespace DrugsDB {
 
@@ -51,25 +67,44 @@ public:
 };
 
 namespace Ui {
-    class AtcPage;
+class AtcPage;
 }
+
+class LeafFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    explicit LeafFilterProxyModel(QObject *parent = 0);
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const;
+    bool hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const;
+};
 
 class AtcWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit AtcWidget(QWidget *parent = 0);
     ~AtcWidget();
+
+private Q_SLOTS:
+    void onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
+    void onFilterChanged(const QString &filter);
 
 private:
     void changeEvent(QEvent *e);
 
 private:
     Ui::AtcPage *ui;
+    Utils::DetailsWidget *_details;
+    LeafFilterProxyModel *_proxyModel;
+    QLineEdit *_code, *_english, *_french, *_deutsch, *_spanish;
+    QToolButton *_left;
+    QAction *aSearchEnglish, *aSearchCode;
 };
 
+}  //  End namespace DrugsDB
 
-}  //  End namespace DrugsDbCreator
-
-#endif // ATCPAGE_H
+#endif // FREETOOLBOX_ATCPAGE_H

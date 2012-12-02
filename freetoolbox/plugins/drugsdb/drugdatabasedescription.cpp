@@ -23,6 +23,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::DrugDatabaseDescription
+ * \n FreeToolBox specific class.
+ */
+
 #include "drugdatabasedescription.h"
 
 //<DrugDbDescriptor>

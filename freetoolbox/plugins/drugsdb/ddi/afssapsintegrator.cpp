@@ -75,9 +75,6 @@ static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->v
 static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
 static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
 
-
-
-
 QWidget *AfssapsIntegratorPage::createPage(QWidget *parent)
 {
     return new AfssapsIntegratorWidget(parent);

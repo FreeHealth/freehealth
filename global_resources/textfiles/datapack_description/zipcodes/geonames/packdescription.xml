@@ -5,7 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms.certified.zipcodes.geonames.__COUNTRY_ISO__</uuid>
+    <uuid>freemedforms.certified.zipcodes.geonames.nonfree.__COUNTRY_ISO__</uuid>
     <authors>Eric Maeker, MD</authors>
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-21</lmdate>
@@ -15,7 +15,14 @@
     <datatype>ZipCodes</datatype>
 
     <!-- Translatable values -->
-    <license>GPLv3</license>
+    <license>CC-BY-3.0</license>
+    <licenseterms>
+        Creative Commons Attribution 3.0 License &lt;br />
+        CC-BY-3.0 &lt;br />
+        &lt;br />
+        &lt;b>License terms can be found here: http://creativecommons.org/licenses/by/3.0/&lt;/b>
+    </licenseterms>
+
     <label lang="fr">Codes postaux : __COUNTRY__</label>
     <label lang="xx">Zip codes: __COUNTRY__</label>
     <description lang="fr">Base de données des codes postaux : __COUNTRY__</description>

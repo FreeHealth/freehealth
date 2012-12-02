@@ -530,7 +530,7 @@ bool GenericZipCodesStep::populateDatabase()
 bool GenericZipCodesStep::registerDataPack()
 {
     // TODO: avoid magic numbers
-    QString server = Core::Constants::SERVER_COMMUNITY_FREE;
+    QString server = Core::Constants::SERVER_ASSO_NONFREE;
     QString dbFileName = QFileInfo(d->databaseOutputAbsFilePath()).fileName();
 
     // Find all created datapacks

@@ -24,6 +24,22 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::Internal::FreeSouthAfricanDrugsDatabasePage
+ * Option page for the Free South African drugs database.
+ * The ctor also creates the DrugsDB::Internal::IDrugDatabaseStep object and
+ * registers it in the plugin manager object pool.
+ * \n FreeToolBox specific class.
+ */
+
+/**
+ * \class DrugsDB::Internal::NonFreeSouthAfricanDrugsDatabasePage
+ * Option page for the non-free French drugs database.
+ * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
+ * register it in the plugin manager object pool.
+ * \n FreeToolBox specific class.
+ */
+
 #include "southafricandrugsdatabase.h"
 #include "moleculelinkermodel.h"
 #include "drug.h"
@@ -88,11 +104,6 @@ static inline DrugsDB::DrugsDBCore *drugsDbCore() {return DrugsDB::DrugsDBCore::
 
 static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
 
-/**
- * Option page for the Free French drugs database.
- * The ctor also creates the DrugsDB::Internal::IDrugDatabaseStep object and
- * registers it in the plugin manager object pool.
- */
 FreeSouthAfricanDrugsDatabasePage::FreeSouthAfricanDrugsDatabasePage(QObject *parent) :
     IToolPage(parent),
     _step(0)
@@ -125,11 +136,6 @@ QWidget *FreeSouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
     return widget;
 }
 
-/**
-     * Option page for the non-free French drugs database.
-     * The ctor also create the DrugsDB::Internal::IDrugDatabaseStep object and
-     * register it in the plugin manager object pool.
-     */
 NonFreeSouthAfricanDrugsDatabasePage::NonFreeSouthAfricanDrugsDatabasePage(QObject *parent) :
     IToolPage(parent),
     _step(0)
