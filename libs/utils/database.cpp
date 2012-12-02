@@ -2258,6 +2258,13 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         return false;
     DB.transaction();
 
+    // get table field's name
+    if (!DB.tables().contains(table)) {
+        LOG_ERROR_FOR("Database", "No table found");
+        DB.rollback();
+        return false;
+    }
+
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
     if (content.isEmpty())
         return false;
@@ -2267,12 +2274,6 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     if (ignoreFirstLine)
         start = 1;
 
-    // get table field's name
-    if (!DB.tables().contains(table)) {
-        LOG_ERROR_FOR("Database", "No table found");
-        DB.rollback();
-        return false;
-    }
     // prepare the sql query
     QSqlRecord record = DB.record(table);
     QString req = "INSERT INTO " + table + " (\n";
