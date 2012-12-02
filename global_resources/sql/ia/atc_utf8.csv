@@ -5626,18 +5626,64 @@
 -- Corrections
 "P01BF";"Artemisinin and derivatives, combinations";"Artémisinine et dérivés en association";""
 "P01BF01";"artemether and lumefantrine";"artemether et lumefantrine";"artemether und lumefantrine"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--
+--
+-- ATC 2013 Additions
+--
+--
+"A06AX04";"linaclotide";"";""
+"A07AA12";"fidaxomicin";"";""
+"A10BD12";"pioglitazone and sitagliptin";"";""
+"A10BD13";"metformin and alogliptin";"";""
+"A10BH51";"sitagliptin and simvastatin";"";""
+"A16AX09";"glycerol phenylbutyrate";"";""
+"B01AF";"Direct factor Xa inhibitors";"";""
+"B01AF02";"apixaban";"";""
+"B02BD12";"trenonacog alfa";"";""
+"B03XA04";"peginesatide";"";""
+"B05BB04";"electrolytes in combination with other drugs";"";""
+"C10AX12";"lomitapide";"";""
+"C10BA04";"simvastatin and fenofibrate";"";""
+"C10BA05";"atorvastatin and ezetimibe";"";""
+"D01AC17";"eberconazole";"";""
+"D06BX02";"ingenol mebutate";"";""
+"G02CX03";"Agni casti fructus";"";""
+"G02CX04";"Cimicifugae rhizoma";"";""
+"G03XC04";"ormeloxifen";"";""
+"G04BD12";"mirabegron";"";""
+"G04CA53";"tamsulosin and solifenacin";"";""
+"J01CF06";"nafcillin";"";""
+"J01DI03";"faropenem";"";""
+"J05AE12";"boceprevir";"";""
+"J05AR09";"emtricitabine, tenofovir disoproxil, elvitegravir and cobicistat";"";""
+"J05AX11";"elvitegravir";"";""
+"J07AH10";"meningococcus A, purified polysaccharides antigen conjugated";"";""
+"J07BF04";"poliomyelitis oral, bivalent, live attenuated";"";""
+"L01XC13";"pertuzumab";"";""
+"L01XE19";"ridaforolimus";"";""
+"L01XE21";"regorafenib";"";""
+"L01XE22";"masitinib";"";""
+"L01XX43";"vismodegib";"";""
+"L03AA14";"lipegfilgrastim";"";""
+"L04AA29";"tofacitinib";"";""
+"M05BB06";"alendronic acid and alfacalcidol, sequential";"";""
+"N05AE05";"lurasidone";"";""
+"N06CA03";"fluoxetine and psycholeptics";"fluoxetine et antipsychotiques";""
+"N07XX59";"dextromethorphan, combinations";"";""
+"R01AD13";"ciclesonide";"";""
+"R01AD58";"fluticasone, combinations";"";""
+"R03BB05";"aclidinium bromide";"";""
+"R03BB06";"glycopyrronium bromide";"";""
+"R05CA12";"Hederae helicis folium";"";""
+"R06AX31";"quifenadine";"";""
+"R07AX02";"ivacaftor";"";""
+"S01AA27";"cefuroxime";"";""
+"S01AE";"Fluoroquinolones";"";""
+"S01GX11";"alcaftadine";"";""
+"S01XA19";"limbal stems cells, autologous";"";""
+"V03AX03";"cobicistat";"";""
+"V09AX04";"flutemetamol (18F)";"";""
+"V09AX05";"florbetapir (18F)";"";""
+"V09CA06";"technetium (99mTc) ethylenedicysteine";"";""
+"V09GX04";"rubidium (82Rb) chloride";"";""
+"C10AA08";"pitavastatin";"pitavastatine";"pitavastatin"
