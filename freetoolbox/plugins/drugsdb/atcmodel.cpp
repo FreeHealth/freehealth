@@ -34,6 +34,7 @@
 #include <drugsdb/tools.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QString>
@@ -44,6 +45,7 @@
 #include <QFile>
 #include <QDir>
 #include <QProgressDialog>
+#include <QStandardItem>
 
 #include <QDebug>
 
@@ -58,6 +60,12 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString atcCsvFile()      {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::ATC_FILENAME));}
 
 AtcModel *AtcModel::_instance = 0;
+namespace {
+const int ENGLISH = Qt::UserRole + 1;
+const int FRENCH = ENGLISH + 1;
+const int SPANISH = FRENCH + 1;
+const int CODE = SPANISH + 1;
+}  // anymous namespace
 
 namespace DrugsDB {
 namespace Internal {
@@ -123,67 +131,68 @@ class AtcModelPrivate
 {
 public:
     AtcModelPrivate(AtcModel *parent) :
-            m_Root(0), q(parent)
+        q(parent)
     {
-        m_Root = new AtcItem;
-        m_Root->setData(0, "ROOT");
+        bold.setBold(true);
     }
 
     ~AtcModelPrivate()
     {}
 
-    void getTree()
+    bool getTree()
     {
-        qWarning() << "AtcModel::getTree()";
-        QFile file(atcCsvFile());
-        if (!file.open(QFile::ReadOnly | QFile::Text)) {
-            Utils::Log::addError("ATCModel", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()),__FILE__, __LINE__);
-            return;
-        }
-        QString content = QString::fromUtf8(file.readAll());
-        foreach(const QString &line, content.split("\n")) {
+        // Get ATC CSV file content
+        QString content = Utils::readTextFile(atcCsvFile());
+        if (content.isEmpty())
+            return false;
+
+        // Read line by line
+        QStringList lines = content.split("\n");
+        lines.sort();
+        QString code, tmp, en;
+        QList<QStandardItem*> items;
+        QStandardItem *lastOne = 0;
+        QStandardItem *lastThree = 0;
+        QStandardItem *lastFour = 0;
+        QStandardItem *lastFive = 0;
+        QStandardItem *parent = 0;
+        QList<QStandardItem*> cols;
+        foreach(const QString &line, lines) {
+            cols.clear();
             const QStringList &vals = line.split("\";\"");
-            if (vals.count()!=4) {
-                qWarning() << vals;
+            if (vals.count() == 0)
+                continue;
+
+            if (vals.count() != 4) {
+                if (!vals.at(0).startsWith("--"))
+                    LOG_ERROR_FOR(q, "ATC CSV file error at line: " + vals.at(0));
                 continue;
             }
-            QString tmp;
-            AtcItem *item = new AtcItem();
+
             tmp = vals.at(0).toUpper();
             tmp.remove("\"");
-            item->setData(AtcModel::ATC_Code, tmp);
+            code = tmp;
+            QStandardItem *item = new QStandardItem(tmp);
+            cols << item;
             QString en = vals.at(1).toUpper();
             en.remove("\"");
-            item->setData(AtcModel::ATC_EnglishLabel, en);
+            cols <<  new QStandardItem(en);
             tmp = vals.at(2).toUpper();
             tmp.remove("\"");
             if (tmp.isEmpty())
-                item->setData(AtcModel::ATC_FrenchLabel, en);
-            else
-                item->setData(AtcModel::ATC_FrenchLabel, tmp);
+                tmp = en;
+            cols <<  new QStandardItem(tmp);
             tmp = vals.at(3);
             tmp = tmp.remove("\"").toUpper();
             if (tmp.isEmpty())
-                item->setData(AtcModel::ATC_DeutschLabel, en);
-            else
-                item->setData(AtcModel::ATC_DeutschLabel, tmp);
-            m_ItemsList.append(item);
-        }
+                tmp = en;
+            cols << new QStandardItem(tmp);
+            cols << new QStandardItem(code + " - " + en);
 
-        qWarning() << "get" << m_ItemsList.count() << "ATC";
-        qSort(m_ItemsList.begin(), m_ItemsList.end(), AtcItem::lessThan);
-
-        QList<AtcItem *> three, four, five, six;
-        AtcItem *last = 0;
-        AtcItem *lastOne = 0;
-        AtcItem *lastThree = 0;
-        AtcItem *lastFour = 0;
-        AtcItem *lastFive = 0;
-        AtcItem *parent = 0;
-        foreach(AtcItem *item, m_ItemsList) {
-            switch (item->code().count())
+            // Find the parent item
+            switch (code.count())
             {
-            case 1: parent = m_Root;     lastOne = item; break;
+            case 1: parent = 0; lastOne = item; break;
             case 3: parent = lastOne;    lastThree = item; break;
             case 4: parent = lastThree;  lastFour = item;  break;
             case 5: parent = lastFour;   lastFive = item;  break;
@@ -191,30 +200,19 @@ public:
             }
             // need to be reparented
             if (!parent) {
-                qWarning() << item->code() << "no parent";
-            } else {
-                item->setParent(parent);
-                parent->addChildren(item);
+                qWarning() << code << en << "no parent";
+                parent = q->invisibleRootItem();
             }
-            last = item;
+            parent->appendRow(cols);
             parent = 0;
         }
-        q->reset();
-    }
 
-    AtcItem *getItem(const QModelIndex &index) const
-    {
-        if (index.isValid()) {
-            AtcItem *item = static_cast<AtcItem *>(index.internalPointer());
-            if (item)
-                return item;
-        }
-        return m_Root;
+//        q->reset();
+        return true;
     }
 
 public:
-    AtcItem *m_Root;
-    QList<AtcItem *> m_ItemsList;
+    QFont bold;
 
 private:
     AtcModel *q;
@@ -224,7 +222,8 @@ private:
 }  // namespace DrugsDB
 
 AtcModel::AtcModel(QObject * parent) :
-        QAbstractItemModel(parent), d(new AtcModelPrivate(this))
+    QStandardItemModel(parent),
+    d(new AtcModelPrivate(this))
 {
     _instance = this;
 }
@@ -239,104 +238,29 @@ bool AtcModel::initialize()
     return true;
 }
 
-QModelIndex AtcModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (parent.isValid() && parent.column() != 0)
-        return QModelIndex();
-
-//     if (!parent.isValid())
-//         return QModelIndex();
-
-    AtcItem *parentItem = d->getItem(parent);
-    AtcItem *childItem = 0;
-    childItem = parentItem->child(row);
-
-    if (childItem) {
-        return createIndex(row, column, childItem);
-    }
-    return QModelIndex();
-}
-
-QModelIndex AtcModel::parent(const QModelIndex &index) const
+QVariant AtcModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
-        return QModelIndex();
-
-    AtcItem *childItem = d->getItem(index);
-    AtcItem *parentItem = childItem->parent();
-
-    if (parentItem == d->m_Root)
-        return QModelIndex();
-
-    return createIndex(parentItem->childNumber(), 0, parentItem);
-}
-
-int AtcModel::rowCount(const QModelIndex &parent) const
-{
-    AtcItem *item = d->getItem(parent);
-    if (item) {
-        return item->childCount();
-    }
-    return 0;
-}
-
-int AtcModel::columnCount(const QModelIndex &) const
-{
-    return NumberOfColumn;
-}
-
-QVariant AtcModel::data(const QModelIndex & item, int role) const
-{
-    if (!item.isValid())
         return QVariant();
 
-    const AtcItem *it = d->getItem(item);
-
-    switch (role)
-    {
-    case Qt::EditRole :
-    case Qt::DisplayRole :
-    {
-        if (item.column() == ATC_CodeAndLabel) {
-            return it->data(ATC_Code) + " - " + it->data(ATC_EnglishLabel);
-        }
-        return it->data(item.column());
-    }
-    case Qt::ToolTipRole :
-    {
-        return it->english();
-    }
-    case Qt::ForegroundRole :
-    {
-        //            if (it->isTemplate()) {
-        //                return QColor(settings()->value(Core::Constants::S_FOREGROUND_TEMPLATES, "#000").toString());
-        //            } else {
-        //                return QColor(settings()->value(Core::Constants::S_FOREGROUND_CATEGORIES, "darkblue").toString());
-        //            }
-        break;
-    }
-    case Qt::BackgroundRole :
-    {
-        //            QColor c;
-        //            if (it->isTemplate()) {
-        //                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_TEMPLATES, "white").toString());
-        //            } else {
-        //                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_CATEGORIES, "white").toString());
-        //            }
-        //            if (!Utils::isReleaseCompilation()) {
-        //                if (it->isNewlyCreated()) {
-        //                    c = QColor(Qt::blue);
-        //                } else
-        //                    if (it->isModified()) {
-        //                    c = QColor(Qt::red);
-        //                }
-        //            }
-        //            if (c.name()=="#ffffff")
-        //                return QVariant();
-        //            c.setAlpha(125);
-        //            return c;
-        break;
-    }
+    if (role == Qt::DisplayRole || role==Qt::EditRole) {
+        return QStandardItemModel::data(index, role);
+    } else if (role == Qt::ToolTipRole) {
+        QModelIndex code = this->index(index.row(), ATC_Code, index.parent());
+        QModelIndex english = this->index(index.row(), ATC_EnglishLabel, index.parent());
+        QModelIndex french = this->index(index.row(), ATC_EnglishLabel, index.parent());
+        QModelIndex deutsch = this->index(index.row(), ATC_EnglishLabel, index.parent());
+        return QString("<b>ATC: %1</b> <br />"
+                       "* en: %2 <br />"
+                       "* fr: %3 <br />"
+                       "* de: %4")
+                .arg(code.data().toString())
+                .arg(english.data().toString())
+                .arg(french.data().toString())
+                .arg(deutsch.data().toString());
+    } else if (role==Qt::FontRole) {
+        if (index.parent() == QModelIndex())
+            return d->bold;
     }
     return QVariant();
 }
@@ -350,18 +274,18 @@ Qt::ItemFlags AtcModel::flags(const QModelIndex &index) const
 QStringList AtcModel::getAtcLabel(const QStringList &codes)
 {
     QStringList list;
-    bool fr = QLocale().name().left(2).toLower()=="fr";
-    foreach(const QString &code, codes) {
-        foreach(AtcItem *item, d->m_ItemsList) {
-            if (item->code() == code) {
-                if (fr)
-                    list << item->french();
-                else
-                    list << item->english();
-                break;
-            }
-        }
-    }
+//    bool fr = QLocale().name().left(2).toLower()=="fr";
+//    foreach(const QString &code, codes) {
+//        foreach(AtcItem *item, d->m_ItemsList) {
+//            if (item->code() == code) {
+//                if (fr)
+//                    list << item->french();
+//                else
+//                    list << item->english();
+//                break;
+//            }
+//        }
+//    }
     return list;
 }
 
