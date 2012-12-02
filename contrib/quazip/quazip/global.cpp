@@ -49,8 +49,10 @@ namespace QuaZipTools {
 /** Unzip the specified file named \e fileName to the specified path \e pathToUnZippedFiles. If the output path is empty, unzip in the same dir as the zip file. */
 bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QProgressBar *bar)
 {
-    Q_ASSERT_X(QFile(fileName).exists() , "Function unzipFile()",
-               qPrintable(QString("File %1 does not exist").arg(fileName)));
+    if (!QFile(fileName).exists()) {
+        qWarning() << QString("QuaZip: File %1 does not exist").arg(fileName);
+        return false;
+    }
 
     QString outputPath = pathToUnZippedFiles;
     if (pathToUnZippedFiles.isEmpty())
