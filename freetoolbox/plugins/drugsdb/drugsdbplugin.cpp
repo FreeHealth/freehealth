@@ -104,7 +104,7 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 //    addAutoReleasedObject(new NonFreePtDrugsDatabasePage(this));
 
     addAutoReleasedObject(new MoleculeLinkerPage(this));
-//    addAutoReleasedObject(new AtcPage(this));
+    addAutoReleasedObject(new AtcPage(this));
 
 //    addAutoReleasedObject(new PimDatabasePage(this));
     addAutoReleasedObject(new PimsTreePage(this));
