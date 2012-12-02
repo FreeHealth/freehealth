@@ -116,14 +116,17 @@ void FullReleasePageWidget::createFullRelease()
 }
 
 /** Set the range of the progress dialog */
-void FullReleasePageWidget::setProgressRange(qint64 min, qint64 max)
+void FullReleasePageWidget::setProgressRange(int min, int max)
 {
     if (!m_FullReleaseProgress)
         return;
     m_FullReleaseProgress->setRange(min, max);
 }
 
-/** Start a new download from the registered Core::IFullReleaseStep objects in plugin manager object pool */
+/**
+ * Start a new download from the registered Core::IFullReleaseStep objects
+ * in plugin manager object pool.
+ */
 void FullReleasePageWidget::startNextDownload()
 {
     // Get the step to start
