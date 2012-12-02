@@ -182,12 +182,6 @@ bool FrenchZipCodesStep::prepareData()
         Utils::warningMessageBox(tr("No source file found"), tr("Contact dev team."));
         return false;
     }
-//    // correcting wrong chars
-//    QString content = Utils::readTextFile(csvFileAbsPath(), "ISO-8859-1");
-//    qWarning() << content;
-//    content.remove("†");
-//    Utils::saveStringToFile(content, csvFileAbsPath());
-
     return true;
 }
 
@@ -209,12 +203,6 @@ bool FrenchZipCodesStep::createDatabase()
         return false;
     }
 
-    if (db.tables().contains("ZIPS_IMPORT")) {
-        if (!Utils::Database::executeSQL("DROP TABLE ZIPS_IMPORT;", db)) {
-            LOG_ERROR("Unable to clean database");
-            return false;
-        }
-    }
     if (!db.tables().contains("ZIPS")) {
         if (!Utils::Database::executeSqlFile(DB_NAME, sqlMasterFileAbsPath())) {
             LOG_ERROR("Unable to create database scheme");
@@ -254,7 +242,7 @@ bool FrenchZipCodesStep::populateDatabase()
     req = "DELETE FROM `ZIPS` WHERE `ZIPS`.`COUNTRY`='fr';";
     Utils::Database::executeSQL(req, db);
 
-    // import new french codes
+    // OLD table: import new french codes
     // 4 chars
 //    select * from zips where length(ZIP)>5;
 //    select substr('00000' || ZIP, -5, 5) from ZIPS where zip like'14%';
@@ -271,8 +259,33 @@ bool FrenchZipCodesStep::populateDatabase()
     Utils::Database::executeSQL(req, db);
     Utils::Database::vacuum(db.connectionName());
 
+    // NEW table: import new french codes
+    req = "DELETE FROM `IMPORT`";
+    Utils::Database::executeSQL(req, db);
+    req = "INSERT INTO `IMPORT` (`ZIP`,`CITY`,`ADMIN_CODE1`, `COUNTRY`) \n"
+          "SELECT `ZIP`, `CITY`, `EXTRACODE`, 'FR' FROM `ZIPS`;";
+    Utils::Database::executeSQL(req, db);
+
+    // Add version
+    setDatabaseVersion(db.connectionName(), QString(PACKAGE_VERSION), QDate::currentDate());
+
     LOG(QString("Database processed"));
 
+    return true;
+}
+
+bool FrenchZipCodesStep::setDatabaseVersion(const QString &connection, const QString &version, const QDate &date)
+{
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        LOG_ERROR("Database not open");
+        return false;
+    }
+    if (!Utils::Database::executeSQL("DELETE FROM `VERSION`;", db))
+        return false;
+    if (!Utils::Database::executeSQL(QString("INSERT INTO `VERSION` (`CURRENT`, `DATE`) "
+                                             "VALUES ('%1', '%2');").arg(version).arg(date.toString(Qt::ISODate)), db))
+        return false;
     return true;
 }
 

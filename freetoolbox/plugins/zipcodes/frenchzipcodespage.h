@@ -31,6 +31,10 @@
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
 
+QT_BEGIN_NAMESPACE
+class QDate;
+QT_END_NAMESPACE
+
 /**
  * \file frenchzipcodespage.h
  * \author Eric MAEKER
@@ -77,6 +81,7 @@ public:
     bool prepareData();
     bool createDatabase();
     bool populateDatabase();
+    bool setDatabaseVersion(const QString &connection, const QString &version, const QDate &date);
 
     bool registerDataPack();
 
