@@ -38,9 +38,9 @@
 */
 
 #include "moleculelinkermodel.h"
-#include "atcmodel.h"
 #include "moleculelinkdata.h"
 #include <drugsdb/drugsdbcore.h>
+#include <drugsdb/atc/atcmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>

@@ -36,7 +36,7 @@
 #include "countries/moleculelinkermodel.h"
 #include "ddi/drugdruginteractioncore.h"
 #include "ddi/drugdruginteractioncore.h"
-#include "atcmodel.h"
+#include "atc/atcmodel.h"
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>

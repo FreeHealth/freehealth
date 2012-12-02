@@ -12,8 +12,6 @@ DEPENDPATH += ../
 HEADERS  += \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
     tools.h \
-    atcmodel.h \
-    atcpage.h \
     drugsdbplugin.h \
     searchatcindatabasedialog.h \
     drug.h \
@@ -22,6 +20,9 @@ HEADERS  += \
     drugsdbcore.h \
     idrugdatabasestep.h \
     idrugdatabasestepwidget.h \
+    \
+    atc/atcmodel.h \
+    atc/atcpage.h \
     \
     countries/frenchdrugsdatabasecreator.h \
     countries/fdadrugsdatabasecreator.h \
@@ -56,8 +57,6 @@ HEADERS  += \
 SOURCES += \
     $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
     tools.cpp \
-    atcmodel.cpp \
-    atcpage.cpp \
     drugsdbplugin.cpp \
     searchatcindatabasedialog.cpp \
     drug.cpp \
@@ -66,6 +65,9 @@ SOURCES += \
     drugsdbcore.cpp \
     idrugdatabasestep.cpp \
     idrugdatabasestepwidget.cpp \
+    \
+    atc/atcmodel.cpp \
+    atc/atcpage.cpp \
     \
     countries/frenchdrugsdatabasecreator.cpp \
     countries/fdadrugsdatabasecreator.cpp \
@@ -98,9 +100,10 @@ SOURCES += \
 
 FORMS += \
     countries/moleculelinkerwidget.ui \
-    atcpage.ui \
     searchatcindatabasedialog.ui \
     idrugdatabasestepwidget.ui \
+    \
+    atc/atcpage.ui \
     \
     ddi/afssapslinkerwidget.ui \
     ddi/afssapstreewidget.ui \
