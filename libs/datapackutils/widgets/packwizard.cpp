@@ -232,7 +232,7 @@ PackLicensePage::PackLicensePage(QWidget *parent) :
     setSubTitle(tr("The following packs need a license agreement."));
     m_Browser = new QTextBrowser(this);
     m_AgreeBox = new QCheckBox(this);
-    m_AgreeBox->setText(tr("Accept all license terms"));
+    m_AgreeBox->setText(tr("&Accept all license terms"));
     m_AgreeBox->setToolTip(m_AgreeBox->text());
     QVBoxLayout *lay = new QVBoxLayout(this);
     setLayout(lay);
@@ -499,26 +499,26 @@ void PackInstallPage::initializePage()
         const QString &key = packKey(pack);
         if (!m_PackLabel.keys().contains(key)) {
             // Create a label
-            QLabel *processLabel = new QLabel(this);
-            processLabel->setPixmap(icon("package.png", DataPackCore::SmallPixmaps).pixmap(16,16));
-            processLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            QLabel *processIconLabel = new QLabel(this);
+            processIconLabel->setPixmap(icon("package.png", DataPackCore::SmallPixmaps).pixmap(16,16));
+            processIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-            QLabel *label = new QLabel(pack.name() + " " + pack.version(), this);
-            label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            QLabel *descriptionLabel = new QLabel(QString("%1 %2").arg(pack.name(),pack.version()), this);
+            descriptionLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
             // Create a progBar
             QProgressBar *bar = new QProgressBar(this);
 
             // Register both
-            m_PackProcessing.insert(key, processLabel);
-            m_PackLabel.insert(key, label);
+            m_PackProcessing.insert(key, processIconLabel);
+            m_PackLabel.insert(key, descriptionLabel);
             m_PackBar.insert(key, bar);
 
             // Put into ui
             int row = m_Grid->rowCount() + 1;
-            m_Grid->addWidget(processLabel, row, 0);
-            m_Grid->addWidget(label, row, 1);
-            QHBoxLayout *hb = new QHBoxLayout;
+            m_Grid->addWidget(processIconLabel, row, 0);
+            m_Grid->addWidget(descriptionLabel, row, 1);
+            QHBoxLayout *hb = new QHBoxLayout();
             QSpacerItem *sp = new QSpacerItem(20,20, QSizePolicy::Fixed, QSizePolicy::Fixed);
             hb->addSpacerItem(sp);
             hb->addWidget(bar);
