@@ -58,7 +58,8 @@ SOURCES += \
     categorylistwidget.cpp \
     packdependencychecker.cpp \
     packmanager.cpp \
-    widgets/packwizard.cpp
+    widgets/packwizard.cpp \
+    ipackmanager.cpp
 
 FORMS += \
     widgets/serverpackeditor.ui \

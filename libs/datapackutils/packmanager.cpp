@@ -24,6 +24,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DataPack::PackManager::PackManager
+ * \internal
+ */
+
 #include "packmanager.h"
 #include "datapackcore.h"
 #include "iserverengine.h"

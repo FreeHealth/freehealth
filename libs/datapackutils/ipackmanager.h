@@ -57,6 +57,7 @@ public:
 
     virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
+    // TODO: remove QProgressBar direct access and use sig/slot instead?
     virtual bool downloadPack(const Pack &pack, QProgressBar *bar) = 0;
     virtual bool checkCachedPackFileIntegrity(const Pack &pack) = 0;
     virtual bool installDownloadedPack(const Pack &pack, QProgressBar *bar = 0) = 0;

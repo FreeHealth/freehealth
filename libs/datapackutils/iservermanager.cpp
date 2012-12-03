@@ -28,7 +28,7 @@
 
 /**
  * \class DataPack::IServerManager
- * Virtual interface of the server manager.
+ * Public interface of the server manager.
  * Usage:
  \code
    // Define the configuration of the manager

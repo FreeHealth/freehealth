@@ -199,10 +199,8 @@ public:
             case 7: parent = lastFive;    break;
             }
             // need to be reparented
-            if (!parent) {
-                qWarning() << code << en << "no parent";
+            if (!parent)
                 parent = q->invisibleRootItem();
-            }
             parent->appendRow(cols);
             parent = 0;
         }
