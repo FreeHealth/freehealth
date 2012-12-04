@@ -37,8 +37,8 @@
  * The whole application owns a unique instance of the patient bar. This singleton is accessible
  * throught the Core::IPatient interface.
  *
- * The PatientBar owns a QDataMapperWidget that manages labels update. Just ensure that the
- * Core::IPatient sub-class emits the dataChanged() correctly to keep the bar up to date.
+ * The PatientBar owns a QDataMapperWidget that manages label updates. Just ensure that your
+ * Core::IPatient sub-class emits the dataChanged() signal correctly to keep the bar up to date.
  *
  * \sa Patients::PatientAction, Patients::Internal::PatientBarAlertPlaceHolder, Core::IPatient::showPatientBar(), Core::IPatient::hidePatientBar(), Core::IPatient::isPatientBarVisible()
 */
