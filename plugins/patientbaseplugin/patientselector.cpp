@@ -58,8 +58,13 @@
 
 #include <QToolButton>
 #include <QMenu>
+#include <QSortFilterProxyModel>
 
 #include <QDebug>
+
+// Till this feature is not stable, you can remove the proxy model usage at anytime setting
+// this to false
+enum { UseProxyModel = false };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -79,6 +84,7 @@ public:
     PatientSelectorPrivate(PatientSelector *parent) :
             ui(new Ui::PatientSelector),
             m_Model(0),
+            m_proxyModel(0),
             q(parent)
     {
     }
@@ -146,6 +152,7 @@ public:
     QToolButton *m_SearchToolButton, *m_NavigationToolButton;
     QMenu *m_NavigationMenu;
     int m_SearchMethod;
+    QSortFilterProxyModel *m_proxyModel;
 
 private:
     PatientSelector *q;
@@ -165,6 +172,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     d->ui->searchLine->setDelayedSignals(true);
 
     // Get the active model
+    d->m_proxyModel = new QSortFilterProxyModel(this);
     if (!PatientModel::activeModel()) {
         PatientModel *model = new PatientModel(this);
         PatientModel::setActiveModel(model);
@@ -246,7 +254,12 @@ void PatientSelector::setPatientModel(PatientModel *m)
 {
     Q_ASSERT(m);
     d->m_Model = m;
-    d->ui->tableView->setModel(d->m_Model);
+    if (UseProxyModel) {
+        d->m_proxyModel->setSourceModel(m);
+        d->ui->tableView->setModel(d->m_proxyModel);
+    } else {
+        d->ui->tableView->setModel(m);
+    }
     setFieldsToShow(d->m_Fields);
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
@@ -260,7 +273,10 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
 
-    d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
+    if (UseProxyModel)
+        d->ui->numberOfPatients->setText(QString::number(d->m_proxyModel->rowCount()));//m->numberOfFilteredPatients()));
+    else
+        d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
     connect(d->m_Model, SIGNAL(currentPatientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
@@ -334,14 +350,20 @@ void PatientSelector::refreshFilter(const QString &)
         return;
     QString text = d->ui->searchLine->text();
     QString name, firstname;
-    switch (d->m_SearchMethod) {
-    case SearchByName: name = text; break;
-    case SearchByNameFirstname: name = text.mid(0,text.indexOf(";")).trimmed(); firstname = text.right(text.indexOf(";")); break;
-    case SearchByFirstname: firstname = text; break;
-    case SearchByDOB: break;
+    if (UseProxyModel) {
+        d->m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        d->m_proxyModel->setFilterKeyColumn(Core::IPatient::BirthName);
+        d->m_proxyModel->setFilterFixedString(text);
+    } else {
+        switch (d->m_SearchMethod) {
+        case SearchByName: name = text; break;
+        case SearchByNameFirstname: name = text.mid(0,text.indexOf(";")).trimmed(); firstname = text.right(text.indexOf(";")); break;
+        case SearchByFirstname: firstname = text; break;
+        case SearchByDOB: break;
+        }
+        d->m_Model->setFilter(name, firstname);
+        d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
     }
-    d->m_Model->setFilter(name, firstname);
-    d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
 /** \brief Slot activated when the user selects a patient from the selector. \sa setSelectedPatient()*/
