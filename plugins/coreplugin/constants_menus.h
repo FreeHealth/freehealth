@@ -286,6 +286,7 @@ const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brie
 const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_DEBUGHELPER        = "actionDebugHelper";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_BUGREPORT          = "actionBugReport";         /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Configuration Menu Action's name

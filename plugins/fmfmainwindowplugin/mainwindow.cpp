@@ -204,7 +204,8 @@ void MainWindow::init()
             Core::MainWindowActions::A_AppHelp |
             Core::MainWindowActions::A_DebugDialog |
             Core::MainWindowActions::A_CheckUpdate |
-            Core::MainWindowActions::A_AppGoToWebSite
+            Core::MainWindowActions::A_AppGoToWebSite |
+            Core::MainWindowActions::A_BugReport
                 //|
 //            Core::MainWindowActions::A_QtAbout
             );

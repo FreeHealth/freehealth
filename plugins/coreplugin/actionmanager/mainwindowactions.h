@@ -84,7 +84,8 @@ public:
         A_PluginsAbout           = 0x00020000,
         A_FormsAbout             = 0x00040000,
         A_CheckUpdate            = 0x00080000,
-        A_AppGoToWebSite         = 0x00100000
+        A_AppGoToWebSite         = 0x00100000,
+        A_BugReport              = 0x00200000
     };
     enum TemplatesAction {
         A_Templates_New          = 0x00200000,

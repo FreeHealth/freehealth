@@ -436,7 +436,6 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
         menu->addAction(cmd, group);
     }
-
     if (actions & Core::MainWindowActions::A_CheckUpdate) {
         a = aGeneralCheckUpdate = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
@@ -1145,6 +1144,14 @@ void MainWindowActionHandler::createHelpActions(int actions)
         menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
     }
 
+    if (actions & Core::MainWindowActions::A_BugReport) {
+        a = aReportBug = new QAction(this);
+        a->setIcon(theme()->icon("face-sad.png"));
+        cmd = actionManager()->registerAction(a, Constants::A_BUGREPORT, ctx);
+        cmd->setTranslations(Trans::Constants::BUG_REPORT);
+        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
+    }
+
     if (actions & Core::MainWindowActions::A_CheckUpdate) {
         a = aCheckUpdate = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
@@ -1183,6 +1190,9 @@ void MainWindowActionHandler::connectHelpActions()
 
     if (aCheckUpdate)
         connect(aCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
+
+    if (aReportBug)
+        connect(aReportBug, SIGNAL(triggered()), this, SLOT(reportBug()));
 
     if (aAppGoToWebSite)
         connect(aAppGoToWebSite, SIGNAL(triggered()), this, SLOT(goToAppWebSite()));
@@ -1280,6 +1290,11 @@ bool MainWindowActionHandler::checkUpdate()
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
         updateChecker()->check(settings()->path(Core::ISettings::UpdateUrl));
     }
+    return true;
+}
+
+bool MainWindowActionHandler::reportBug()
+{
     return true;
 }
 
