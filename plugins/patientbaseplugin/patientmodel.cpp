@@ -49,7 +49,9 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <medicalutils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
+#include <translationutils/trans_titles.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QObject>
@@ -246,9 +248,7 @@ PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
     setObjectName("PatientModel");
-
     onCoreDatabaseServerChanged();
-
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
