@@ -66,7 +66,6 @@ public:
 
     void setCurrentView(PatientSelector *view);
 
-
 private Q_SLOTS:
     void searchActionChanged(QAction *action);
     void viewPatientInformation();
@@ -85,19 +84,12 @@ protected:
     QAction *aViewPatientInformation;
     QAction *aPrintPatientInformation;
     QAction *aShowPatientDatabaseInformation;
-
     QActionGroup *gSearchMethod;
-
     // setDeceased
     // writeALetter...
-
     QPointer<PatientSelector> m_CurrentView;
-
 };
-
 }  // End Internal
-
-
 
 class PATIENT_EXPORT PatientWidgetManager : public Internal::PatientActionHandler
 {
