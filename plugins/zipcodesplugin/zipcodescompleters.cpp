@@ -121,7 +121,7 @@ bool ZipCountryModel::countryAvailable(const QLocale::Country country) const
             return false;
         }
     }
-    QString req = QString("SELECT DISTINCT COUNT(COUNTRY) FROM ZIPS WHERE `COUNTRY`='%1'")
+    QString req = QString("SELECT DISTINCT COUNT(COUNTRY) FROM ZIPS WHERE `COUNTRY`=\"%1\"")
             .arg(Utils::countryToIso(country).toLower());
     QSqlQuery query(db);
     if (query.exec(req)) {
@@ -141,7 +141,7 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
             return false;
         }
     }
-    QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY`='%2' AND ZIP='%3'")
+    QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`=\"%1\" AND `CITY`=\"%2\" AND ZIP=\"%3\"")
             .arg(m_countryIso, city, zip);
     QSqlQuery query(db);
     if (query.exec(req)) {
@@ -167,8 +167,8 @@ void ZipCountryModel::setCityFilter(const QString &city)
     QString tmpcity = city;
     m_City = tmpcity.remove("'");
 
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
-                          "AND `CITY` like '%2%' ORDER BY CITY ASC LIMIT 0, 20")
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`=\"%1\" "
+                          "AND `CITY` like \"%2%\" ORDER BY CITY ASC LIMIT 0, 20")
             .arg(m_countryIso, m_City);
     setQuery(req, db);
     if (!query().isActive()) {
@@ -189,8 +189,8 @@ void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
 
     QString zip = zipCode;
     m_Zip = zip.remove("'");
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`='%1' "
-                          "AND `ZIP` like '%2%' ORDER BY ZIP LIMIT 0, 20")
+    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`=\"%1\" "
+                          "AND `ZIP` like \"%2%\" ORDER BY ZIP LIMIT 0, 20")
             .arg(m_countryIso, m_Zip);
     setQuery(req, db);
     if (!query().isActive()) {
