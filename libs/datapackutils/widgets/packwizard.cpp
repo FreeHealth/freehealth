@@ -30,7 +30,6 @@
   install, remove, update.
 
 */
-// FIXME: Crash when cancelling dialog if a download was started --> add core.stopJobsAndClearQueues()
 
 #include "packwizard.h"
 #include <datapackutils/datapackcore.h>
@@ -395,6 +394,8 @@ void PackDownloadPage::initializePage()
         packWizard()->button(QWizard::NextButton)->setEnabled(false);
         QTimer::singleShot(2, this, SLOT(startDownloads()));
     }
+    connect(packWizard()->button(QWizard::CancelButton), SIGNAL(clicked()), this, SLOT(cancelDownloads()));
+
 }
 
 void PackDownloadPage::startDownloads()
@@ -403,6 +404,11 @@ void PackDownloadPage::startDownloads()
     const QString &k = packKey(m_DownloadPacks.at(0));
     packManager()->downloadPack(m_DownloadPacks.at(0), m_PackBar.value(k));
     //        m_PackProcessing.value(k)->setMovie(movie());
+}
+
+void PackDownloadPage::cancelDownloads()
+{
+    core().stopJobsAndClearQueues();
 }
 
 //void PackDownloadPage::cleanupPage()
@@ -458,6 +464,7 @@ void PackDownloadPage::packDownloaded(const DataPack::Pack &pack, const DataPack
         allDownloadFinished();
     }
 }
+
 
 void PackDownloadPage::allDownloadFinished()
 {

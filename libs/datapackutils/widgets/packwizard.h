@@ -157,6 +157,7 @@ public:
 private Q_SLOTS:
     void startDownloads();
     void packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
+    void cancelDownloads();
 
 private:
     void allDownloadFinished();
