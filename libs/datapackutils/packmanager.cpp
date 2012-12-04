@@ -121,6 +121,8 @@ QList<Pack> PackManager::installedPack(bool forceRefresh)
     return m_InstalledPacks;
 }
 
+//FIXME: *bar must not be directly accessed, not thread safe & bad design
+//--> use signal/slot mechanism
 bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
 {
     Q_ASSERT(!m_Engines.isEmpty());
