@@ -19,96 +19,80 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTWIDGETMANAGER_H
-#define PATIENTWIDGETMANAGER_H
+#ifndef PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
+#define PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
 
-#include <coreplugin/contextmanager/icontext.h>
-
-#include <patientbaseplugin/patientbase_exporter.h>
-#include <patientbaseplugin/patientselector.h>
-
-#include <QWidget>
-#include <QObject>
-#include <QAction>
-#include <QPointer>
+#include <QAbstractListModel>
 
 /**
- * \file patientwidgetmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file basicsqlpatientmodel.h
+ * \author Eric Maeker
  * \version 0.8.0
- * \date 05 Dec 2012
+ * \date 04 Dec 2012
 */
 
 namespace Patients {
 class PatientCore;
 namespace Internal {
-class PatientContext : public Core::IContext
+class BasicSqlPatientModelPrivate;
+
+class BasicSqlPatientFilter
 {
 public:
-    PatientContext(QWidget *w) : Core::IContext(w)
-    {
-        setObjectName("PatientContext");
-        setWidget(w);
-    }
-};
+    BasicSqlPatientFilter();
 
-class PatientActionHandler : public QObject
-{
-    Q_OBJECT
-public:
-    PatientActionHandler(QObject *parent = 0);
-    virtual ~PatientActionHandler() {}
+    bool isNull() const {return _birthName.isEmpty() && _secondName.isEmpty() && _firstName.isEmpty();}
 
-    void setCurrentView(PatientSelector *view);
+    void setBirthName(const QString &name) {_birthName = name;}
+    QString birthName() const {return _birthName;}
 
-private Q_SLOTS:
-    void searchActionChanged(QAction *action);
-    void viewPatientInformation();
-    void printPatientsInformation();
+    void setSecondName(const QString &name) {_secondName = name;}
+    QString secondName() const {return _secondName;}
 
-    void showPatientDatabaseInformation();
+    void setFirstName(const QString &name) {_firstName = name;}
+    QString firstName() const {return _firstName;}
 
 private:
-    void updateActions();
-
-protected:
-    QAction *aSearchName;
-    QAction *aSearchFirstname;
-    QAction *aSearchNameFirstname;
-    QAction *aSearchDob;
-    QAction *aViewPatientInformation;
-    QAction *aPrintPatientInformation;
-    QAction *aShowPatientDatabaseInformation;
-    QActionGroup *gSearchMethod;
-    // setDeceased
-    // writeALetter...
-    QPointer<PatientSelector> m_CurrentView;
+    QString _birthName, _secondName, _firstName;
 };
 
-class PatientWidgetManager : public Internal::PatientActionHandler
+class BasicSqlPatientModel : public QAbstractListModel
 {
     Q_OBJECT
     friend class Patients::PatientCore;
 
 protected:
-    PatientWidgetManager(QObject *parent = 0);
-    void postCoreInitialization();
+    explicit BasicSqlPatientModel(QObject *parent = 0);
+    bool initialize();
 
 public:
-    ~PatientWidgetManager() {}
+    ~BasicSqlPatientModel();
 
-    PatientSelector *selector() const;
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &) const;
+    int numberOfFilteredPatients() const;
+
+    void fetchMore(const QModelIndex &parent);
+    bool canFetchMore(const QModelIndex &parent) const;
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    bool setFilter(const BasicSqlPatientFilter &filter);
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
+    void onCoreDatabaseServerChanged();
+    
+private:
+    Internal::BasicSqlPatientModelPrivate *d;
 };
 
-}  // namespace Internal
-}  // namespace Patients
+} // namespace Internal
+} // namespace Patients
 
-#endif // PATIENTWIDGETMANAGER_H
+#endif // PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
+

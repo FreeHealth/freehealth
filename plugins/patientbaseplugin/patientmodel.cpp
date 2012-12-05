@@ -49,7 +49,9 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <medicalutils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
+#include <translationutils/trans_titles.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QObject>
@@ -246,9 +248,7 @@ PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
     setObjectName("PatientModel");
-
     onCoreDatabaseServerChanged();
-
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -471,6 +471,8 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Photo_32x32 :
         {
             QPixmap pix = d->getPatientPhoto(index);
+            if (pix.isNull())
+                return pix;
             if (pix.size()==QSize(32,32)) {
                 return pix;
             }
@@ -479,6 +481,8 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Photo_64x64 :
         {
             QPixmap pix = d->getPatientPhoto(index);
+            if (pix.isNull())
+                return pix;
             if (pix.size()==QSize(64,64)) {
                 return pix;
             }
@@ -696,6 +700,12 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void PatientModel::setFilter(const QString &name, const QString &firstname, const QString &uuid, const FilterOn on)
 {
+
+    qWarning() << "SETFILTER" << name << firstname << uuid << on;
+
+    qWarning() << d->m_ExtraFilter;
+
+    QString saveFilter = d->m_ExtraFilter;
     // Calculate new filter
     switch (on) {
     case FilterOnFullName :
@@ -762,7 +772,10 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         }
     }
 
-    d->refreshFilter();
+    qWarning() << d->m_ExtraFilter;
+
+    if (saveFilter != d->m_ExtraFilter)
+        d->refreshFilter();
 }
 
 QString PatientModel::filter() const

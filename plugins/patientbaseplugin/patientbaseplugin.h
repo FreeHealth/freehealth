@@ -42,7 +42,6 @@ namespace Patients {
 namespace Internal {
 class PatientBasePreferencesPage;
 class PatientSearchMode;
-class PatientModelWrapper;
 
 class PatientBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -55,13 +54,9 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
-private Q_SLOTS:
-    void postCoreInitialization();
-
 private:
     Internal::PatientSearchMode *m_Mode;
     Internal::PatientBasePreferencesPage *prefpage;
-    Internal::PatientModelWrapper *m_PatientModelWrapper;
 };
 
 }  // namespace Internal

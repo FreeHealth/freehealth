@@ -183,7 +183,6 @@ void DataPackPluginIPlugin::extensionsInitialized()
     // TODO: Check for package update -> thread this
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 void DataPackPluginIPlugin::postCoreInitialization()

@@ -40,20 +40,20 @@
 /**
  * \file patientbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 06 Aug 2011
+ * \version 0.8.0
+ * \date 04 Dec 2012
 */
 
 namespace Patients {
+class PatientCore;
 namespace Internal {
-class PatientBasePlugin;
 class PatientBasePrivate;
 class PatientData;
 
 class PATIENT_EXPORT PatientBase : public QObject, public Utils::Database
 {
     Q_OBJECT
-    friend class Patients::Internal::PatientBasePlugin;
+    friend class Patients::PatientCore;
 
 protected:
     PatientBase(QObject *parent = 0);

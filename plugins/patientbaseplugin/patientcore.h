@@ -19,96 +19,64 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTWIDGETMANAGER_H
-#define PATIENTWIDGETMANAGER_H
-
-#include <coreplugin/contextmanager/icontext.h>
+#ifndef PATIENTS_PATIENTCORE_H
+#define PATIENTS_PATIENTCORE_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
-#include <patientbaseplugin/patientselector.h>
-
-#include <QWidget>
 #include <QObject>
-#include <QAction>
-#include <QPointer>
 
 /**
- * \file patientwidgetmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file PatientCore.h
+ * \author Eric Maeker
  * \version 0.8.0
- * \date 05 Dec 2012
+ * \date 04 Dec 2012
 */
 
 namespace Patients {
-class PatientCore;
+class PatientModel;
 namespace Internal {
-class PatientContext : public Core::IContext
-{
-public:
-    PatientContext(QWidget *w) : Core::IContext(w)
-    {
-        setObjectName("PatientContext");
-        setWidget(w);
-    }
-};
+class PatientBase;
+class PatientBasePlugin;
+class BasicSqlPatientModel;
+class PatientWidgetManager;
+class PatientCorePrivate;
+}  // namespace Internal
 
-class PatientActionHandler : public QObject
+// TODO: this core is purely internal
+class PATIENT_EXPORT PatientCore : public QObject
 {
     Q_OBJECT
+    friend class Patients::Internal::PatientBasePlugin;
+
+protected:
+    explicit PatientCore(QObject *parent = 0);
+    bool initialize();
+    bool createDefaultVirtualPatients() const;
+
 public:
-    PatientActionHandler(QObject *parent = 0);
-    virtual ~PatientActionHandler() {}
+    static PatientCore *instance() {return _instance;}
+    ~PatientCore();
 
-    void setCurrentView(PatientSelector *view);
+    Internal::PatientBase *patientBase() const;
+    Internal::BasicSqlPatientModel *basicSqlPatientModel() const;
+    Internal::PatientWidgetManager *patientWidgetManager() const;
 
-private Q_SLOTS:
-    void searchActionChanged(QAction *action);
-    void viewPatientInformation();
-    void printPatientsInformation();
-
-    void showPatientDatabaseInformation();
-
-private:
-    void updateActions();
-
-protected:
-    QAction *aSearchName;
-    QAction *aSearchFirstname;
-    QAction *aSearchNameFirstname;
-    QAction *aSearchDob;
-    QAction *aViewPatientInformation;
-    QAction *aPrintPatientInformation;
-    QAction *aShowPatientDatabaseInformation;
-    QActionGroup *gSearchMethod;
-    // setDeceased
-    // writeALetter...
-    QPointer<PatientSelector> m_CurrentView;
-};
-
-class PatientWidgetManager : public Internal::PatientActionHandler
-{
-    Q_OBJECT
-    friend class Patients::PatientCore;
-
-protected:
-    PatientWidgetManager(QObject *parent = 0);
+Q_SIGNALS:
+    
+public Q_SLOTS:
     void postCoreInitialization();
 
-public:
-    ~PatientWidgetManager() {}
-
-    PatientSelector *selector() const;
-
-private Q_SLOTS:
-    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
+private:
+    Internal::PatientCorePrivate *d;
+    static PatientCore *_instance;
 };
 
-}  // namespace Internal
-}  // namespace Patients
+} // namespace Patients
 
-#endif // PATIENTWIDGETMANAGER_H
+#endif  // PATIENTS_PATIENTCORE_H
+

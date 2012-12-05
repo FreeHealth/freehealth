@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTMODEL_H
-#define PATIENTMODEL_H
+#ifndef PATIENTS_PATIENTMODEL_H
+#define PATIENTS_PATIENTMODEL_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
 
@@ -109,4 +109,4 @@ private:
 }  // End namespace Patients
 
 
-#endif // PATIENTMODEL_H
+#endif // PATIENTS_PATIENTMODEL_H
