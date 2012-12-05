@@ -27,16 +27,23 @@
 /*!
  * \class Patients::PatientCore
  * \brief Core object of the patientsbaseplugin (namespace Patients).
+ * This object can be initialized only if a user is correctly logged.
  */
 
 #include "patientcore.h"
 #include "patientbase.h"
 #include "patientmodelwrapper.h"
 #include "patientmodel.h"
+#include "patientwidgetmanager.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
 
+#include <utils/log.h>
 #include <translationutils/constants.h>
+
+#include <QDir>
 
 #include <QDebug>
 
@@ -44,17 +51,14 @@ using namespace Patients;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+
 namespace Patients {
 
 PatientCore *PatientCore::_instance = 0;
 
 namespace Internal {
-/*!
- * \class Patients::Internal::PatientCorePrivate
- * \brief Private implementation of the Patients::PatientCore class.
- *
- * documentation here
- */
 class PatientCorePrivate
 {
 public:
@@ -62,6 +66,7 @@ public:
         _base(0),
         _patientModelWrapper(0),
         _basicSqlPatientModel(0),
+        _patientWidgetManager(0),
         q(parent)
     {
     }
@@ -74,6 +79,7 @@ public:
     PatientBase *_base;
     PatientModelWrapper *_patientModelWrapper;
     BasicSqlPatientModel *_basicSqlPatientModel;
+    PatientWidgetManager *_patientWidgetManager;
 
 private:
     PatientCore *q;
@@ -109,11 +115,47 @@ bool PatientCore::initialize()
     if (!d->_base->initialize())
         return false;
 
+    d->_patientWidgetManager = new PatientWidgetManager(this);
+
     // create singleton model
     PatientModel *model = new PatientModel(this);
     PatientModel::setActiveModel(model);
     d->_patientModelWrapper->initialize(model);
 
+    return true;
+}
+
+/** Initialization with a full opened Core::ICore */
+void PatientCore::postCoreInitialization()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
+
+//    PatientModel::activeModel()->refreshModel();
+    d->_patientWidgetManager->postCoreInitialization();
+}
+
+/** Create the default virtual patients: Archer, Kirk, Janeway... */
+bool PatientCore::createDefaultVirtualPatients() const
+{
+    QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
+    int userLkId = 1;
+
+    QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
+    d->_base->createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "US", "USS Enterprise",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
+
+    uid = "2c49299b9b554300b46a6e3ef6d40a65";
+    d->_base->createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "US", "USS Enterprise-D",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.png");
+
+    uid = "ef97f37361824b6f826d5c9246f9dc49";
+    d->_base->createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "US", "Enterprise (NX-01) commanding officer",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainarcher.jpg");
+
+    uid = "493aa06a1b8745b2ae6c79c531ef12a0";
+    d->_base->createVirtualPatient("JANEWAY", "", "Kathryn", "F", 6, QDate(1938, 04, 20), "US", "USS Voyager",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainjaneway.jpg");
     return true;
 }
 
@@ -125,4 +167,9 @@ Internal::PatientBase *PatientCore::patientBase() const
 Internal::BasicSqlPatientModel *PatientCore::basicSqlPatientModel() const
 {
     return d->_basicSqlPatientModel;
+}
+
+Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
+{
+    return d->_patientWidgetManager;
 }

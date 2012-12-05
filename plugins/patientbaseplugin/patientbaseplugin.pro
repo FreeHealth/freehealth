@@ -29,7 +29,9 @@ HEADERS = patientbaseplugin.h \
     filephotoprovider.h \
     urlphotoprovider.h \
     urlphotodialog.h \
-    patientsearchedit.h
+    patientsearchedit.h \
+    patientcore.h \
+    basicsqlpatientmodel.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -47,7 +49,9 @@ SOURCES = patientbaseplugin.cpp \
     filephotoprovider.cpp \
     urlphotoprovider.cpp \
     urlphotodialog.cpp \
-    patientsearchedit.cpp
+    patientsearchedit.cpp \
+    patientcore.cpp \
+    basicsqlpatientmodel.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \

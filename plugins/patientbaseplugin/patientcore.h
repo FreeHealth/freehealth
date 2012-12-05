@@ -43,9 +43,11 @@ namespace Internal {
 class PatientBase;
 class PatientBasePlugin;
 class BasicSqlPatientModel;
+class PatientWidgetManager;
 class PatientCorePrivate;
 }  // namespace Internal
 
+// TODO: this core is purely internal
 class PATIENT_EXPORT PatientCore : public QObject
 {
     Q_OBJECT
@@ -54,18 +56,21 @@ class PATIENT_EXPORT PatientCore : public QObject
 protected:
     explicit PatientCore(QObject *parent = 0);
     bool initialize();
-    
+    bool createDefaultVirtualPatients() const;
+
 public:
     static PatientCore *instance() {return _instance;}
     ~PatientCore();
 
     Internal::PatientBase *patientBase() const;
     Internal::BasicSqlPatientModel *basicSqlPatientModel() const;
+    Internal::PatientWidgetManager *patientWidgetManager() const;
 
 Q_SIGNALS:
     
 public Q_SLOTS:
-    
+    void postCoreInitialization();
+
 private:
     Internal::PatientCorePrivate *d;
     static PatientCore *_instance;

@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Patients::Internal::PatientWidgetManager
+ * \internal
+ * Manage the contextual objects of the plugin.
+ * Instance is owned and managed by the Patients::PatientCore
+*/
 #include "patientwidgetmanager.h"
 #include "constants_menus.h"
 #include "constants_trans.h"
@@ -61,15 +67,6 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-PatientWidgetManager *PatientWidgetManager::m_Instance = 0;
-
-PatientWidgetManager *PatientWidgetManager::instance()
-{
-    if (!m_Instance)
-        m_Instance = new PatientWidgetManager(qApp);
-    return m_Instance;
-}
-
 PatientWidgetManager::PatientWidgetManager(QObject *parent) : PatientActionHandler(parent)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),

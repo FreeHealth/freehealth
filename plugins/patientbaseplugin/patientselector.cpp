@@ -26,9 +26,18 @@
  ***************************************************************************/
 /**
  * \class Patients::PatientSelector
+ *
  * \brief Selector Widget for the recorded patients.
  * Allow user to search and select patient from the complete database. \n
  * Automatically removes the search filter on user changed to null.
+ *
+ * Bugs and evolutions:
+ * In versions <= 0.8.0, the Core::IPatient was directly used in the patient view
+ * and was filtered with the search text. The Core::IPatient was filtered using a SQL
+ * query causing indexes to be lost after a search.
+ * This was not a good behavior (because of model persistence lose),
+ * so in later version we introduced a proxymodel over the Core::IPatient model.
+ *
  * \sa Patient::PatientModel
  */
 
@@ -144,7 +153,6 @@ public:
         settings()->setValue(Constants::S_SEARCHMETHOD, m_SearchMethod);
     }
 
-
 public:
     Ui::PatientSelector *ui;
     PatientModel *m_Model;
@@ -157,8 +165,6 @@ public:
 private:
     PatientSelector *q;
 };
-
-
 }  // End namespace Internal
 }  // End namespace Patients
 
@@ -214,16 +220,23 @@ PatientSelector::~PatientSelector()
 /** \brief Initialize view and actions, select the first available patient. */
 void PatientSelector::initialize()
 {
+    // Here we assume that the Core::IPatient model is not already filtered
+    QModelIndex current;
     if (!d->m_Model->currentPatient().isValid()) {
-        QModelIndex index = d->m_Model->index(0,0);
+        current = d->m_Model->index(0,0);
         d->m_Model->blockSignals(true);
-        d->m_Model->setCurrentPatient(index);
+        d->m_Model->setCurrentPatient(current);
         d->m_Model->blockSignals(false);
-        d->ui->tableView->selectRow(0);
-        changeIdentity(index, QModelIndex());
     } else {
-        changeIdentity(d->m_Model->currentPatient(), QModelIndex());
+        current = d->m_Model->currentPatient();
     }
+
+    if (UseProxyModel) {
+        current = d->m_proxyModel->mapFromSource(current);
+    }
+
+    d->ui->tableView->selectRow(current.row());
+    changeIdentity(current, QModelIndex());
 }
 
 void PatientSelector::updateNavigationButton()
@@ -316,44 +329,76 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     }
 }
 
-/** \brief Define the selected patient (use this if patient was selected from outside the selector). */
+/**
+ * \brief Define the selected patient (use this if patient was selected from outside the selector).
+ * The index must be a Core::Patient model index.
+*/
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
+//    if (UseProxyModel) {
+//        // Remove any filter
+//        d->ui->searchLine->clear();
+//        d->m_proxyModel->invalidate();
+//        QModelIndex proxyIndex = d->m_proxyModel->mapFromSource(index);
+//    }
     d->ui->tableView->selectRow(index.row());
     updatePatientActions(index);
 }
 
-/** \brief Update the IdentityWidget with the new current identity. */
+/**
+ * \brief Update the IdentityWidget with the new current identity.
+ * \internal
+ * This slot receive indexes from the proxymodel if the proxymodel is in use, otherwise
+ * it receive indexes from the Core::IPatient model.
+*/
 void PatientSelector::changeIdentity(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-    d->ui->identity->setCurrentIndex(current);
-    updatePatientActions(current);
+    if (UseProxyModel) {
+        QModelIndex source = d->m_proxyModel->mapToSource(current);
+        d->ui->identity->setCurrentIndex(source);
+        updatePatientActions(source);
+    } else {
+        d->ui->identity->setCurrentIndex(current);
+        updatePatientActions(current);
+    }
 }
 
 /*!
  * \brief Updates (enables/disables) the corresponding QActions for the given patient
- * \param index QModelIndex of a valid patient
+ * \internal
+ * Receive index from the Core::IPatient model (if the proxy model is in use you must
+ * map the proxy index to the Core::IPatient index).
  */
 void PatientSelector::updatePatientActions(const QModelIndex &index)
 {
     const bool enabled = index.isValid();
-
     actionManager()->command(Core::Constants::A_PATIENT_VIEWIDENTITY)->action()->setEnabled(enabled);
     actionManager()->command(Core::Constants::A_PATIENT_REMOVE)->action()->setEnabled(enabled);
 }
 
-/** \brief Refresh the search filter of the Patient::PatientModel */
+/**
+ * \brief Refresh the search filter of the Patient::PatientModel
+ * \internal
+ * Refresh the search filter.
+*/
 void PatientSelector::refreshFilter(const QString &)
 {
     if (!d->m_Model)
         return;
     QString text = d->ui->searchLine->text();
+
+    qWarning() << "SELECTOR SEARCH FILTER" << text;
+
     QString name, firstname;
     if (UseProxyModel) {
-        d->m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        d->m_proxyModel->setFilterKeyColumn(Core::IPatient::BirthName);
-        d->m_proxyModel->setFilterFixedString(text);
+        if (text.isEmpty()) {
+            d->m_proxyModel->invalidate();
+        } else {
+            d->m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+            d->m_proxyModel->setFilterKeyColumn(Core::IPatient::BirthName);
+            d->m_proxyModel->setFilterFixedString(text);
+        }
     } else {
         switch (d->m_SearchMethod) {
         case SearchByName: name = text; break;
@@ -366,23 +411,34 @@ void PatientSelector::refreshFilter(const QString &)
     }
 }
 
-/** \brief Slot activated when the user selects a patient from the selector. \sa setSelectedPatient()*/
+/**
+ * \brief Slot activated when the user selects a patient from the selector.
+ * \internal
+ * This slot receive proxy index if the proxymodel is in use.
+ * \sa setSelectedPatient()
+ */
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    if (d->m_Model && index == d->m_Model->currentPatient()) {
+    QModelIndex idx = index;
+    if (UseProxyModel)
+        idx = d->m_proxyModel->mapToSource(index);
+
+    if (d->m_Model && idx == d->m_Model->currentPatient()) {
         modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
         return;
     }
 
     mainWindow()->startProcessingSpinner();
+
     // Inform Core::IPatient model wrapper
     if (d->m_Model)
-        d->m_Model->setCurrentPatient(index);
-    else
-        PatientModel::activeModel()->setCurrentPatient(index);
+        d->m_Model->setCurrentPatient(idx);
 }
 
-/** Update the view on user changed */
+/**
+ * \brief Update the view on user changed
+ * \internal
+*/
 void PatientSelector::onUserChanged()
 {
     // TODO: reconnect user specific patient list (using the Practionner LKID)
@@ -395,6 +451,10 @@ void PatientSelector::onUserChanged()
     initialize();
 }
 
+/**
+ * \brief Manages patientbar visibility and translatability
+ * \internal
+ */
 bool PatientSelector::event(QEvent *event)
 {
     switch (event->type()) {

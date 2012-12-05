@@ -38,13 +38,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Patients::PatientSearchMode
-  \brief Core::IMode for the Patient selector.
-  \sa Core::IMode
+ * \class Patients::Internal::PatientSearchMode
+ * \internal
+ * \brief Core::IMode for the Patient selector.
+ * \sa Core::IMode
 */
 
 #include "patientsearchmode.h"
 #include "patientselector.h"
+#include "patientcore.h"
 #include "patientwidgetmanager.h"
 #include "constants_menus.h"
 
@@ -83,7 +85,7 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
 
     // create the mode widget
     m_Selector = new PatientSelector;
-    PatientWidgetManager::instance()->setCurrentView(m_Selector);
+    PatientCore::instance()->patientWidgetManager()->setCurrentView(m_Selector);
     m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
     m_Selector->initialize();
     setWidget(m_Selector);

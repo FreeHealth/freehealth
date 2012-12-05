@@ -40,12 +40,12 @@
 /**
  * \file patientwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 23 Apr 2010
- * \internal
+ * \version 0.8.0
+ * \date 05 Dec 2012
 */
 
 namespace Patients {
+class PatientCore;
 namespace Internal {
 class PatientContext : public Core::IContext
 {
@@ -89,27 +89,26 @@ protected:
     // writeALetter...
     QPointer<PatientSelector> m_CurrentView;
 };
-}  // End Internal
 
-class PATIENT_EXPORT PatientWidgetManager : public Internal::PatientActionHandler
+class PatientWidgetManager : public Internal::PatientActionHandler
 {
     Q_OBJECT
-public:
-    static PatientWidgetManager *instance();
-    ~PatientWidgetManager() {}
+    friend class Patients::PatientCore;
 
+protected:
+    PatientWidgetManager(QObject *parent = 0);
     void postCoreInitialization();
 
-    PatientSelector  *selector() const;
+public:
+    ~PatientWidgetManager() {}
+
+    PatientSelector *selector() const;
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
-
-private:
-    PatientWidgetManager(QObject *parent = 0);
-    static PatientWidgetManager *m_Instance;
 };
 
-}  // End namespace Patients
+}  // namespace Internal
+}  // namespace Patients
 
 #endif // PATIENTWIDGETMANAGER_H

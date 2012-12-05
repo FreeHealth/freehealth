@@ -29,7 +29,7 @@
 
 #include <coreplugin/modemanager/imode.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 class QIcon;
@@ -44,7 +44,6 @@ namespace Internal {
 class PatientSearchMode : public Core::IMode
 {
     Q_OBJECT
-
 public:
     PatientSearchMode(QObject *parent);
     ~PatientSearchMode();
@@ -57,6 +56,5 @@ private:
 
 } // namespace Internal
 } // namespace Patients
-
 
 #endif // PATIENTSEARCHMODE_H

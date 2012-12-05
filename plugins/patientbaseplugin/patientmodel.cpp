@@ -700,6 +700,12 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void PatientModel::setFilter(const QString &name, const QString &firstname, const QString &uuid, const FilterOn on)
 {
+
+    qWarning() << "SETFILTER" << name << firstname << uuid << on;
+
+    qWarning() << d->m_ExtraFilter;
+
+    QString saveFilter = d->m_ExtraFilter;
     // Calculate new filter
     switch (on) {
     case FilterOnFullName :
@@ -766,7 +772,10 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         }
     }
 
-    d->refreshFilter();
+    qWarning() << d->m_ExtraFilter;
+
+    if (saveFilter != d->m_ExtraFilter)
+        d->refreshFilter();
 }
 
 QString PatientModel::filter() const
