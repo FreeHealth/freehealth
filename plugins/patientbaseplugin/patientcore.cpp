@@ -96,7 +96,7 @@ PatientCore::PatientCore(QObject *parent) :
     setObjectName("PatientCore");
     d->_base = new PatientBase(this);
 
-    // Create IPatient
+    // Create the Core::IPatient
     d->_patientModelWrapper = new Internal::PatientModelWrapper(this);
     Core::ICore::instance()->setPatient(d->_patientModelWrapper);
 }
@@ -119,8 +119,11 @@ bool PatientCore::initialize()
 
     // create singleton model
     PatientModel *model = new PatientModel(this);
-    PatientModel::setActiveModel(model);
     d->_patientModelWrapper->initialize(model);
+
+    // TODO: remove this
+    PatientModel *model2 = new PatientModel(this);
+    PatientModel::setActiveModel(model2);
 
     return true;
 }
@@ -174,3 +177,15 @@ Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
     return d->_patientWidgetManager;
 }
 
+bool PatientCore::setCurrentPatientUuid(const QString &uuid)
+{
+    PatientModel *patientModel = d->_patientModelWrapper->patientModel();
+    patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
+    if (patientModel->numberOfFilteredPatients() != 1) {
+        LOG_ERROR(QString("No patient found; Number of uuids: %1")
+                  .arg(patientModel->numberOfFilteredPatients()));
+        return false;
+    }
+    patientModel->setCurrentPatient(patientModel->index(0,0));
+    return true;
+}

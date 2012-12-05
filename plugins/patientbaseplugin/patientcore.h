@@ -66,6 +66,9 @@ public:
     Internal::BasicSqlPatientModel *basicSqlPatientModel() const;
     Internal::PatientWidgetManager *patientWidgetManager() const;
 
+public Q_SLOTS:
+    bool setCurrentPatientUuid(const QString &uuid);
+
 Q_SIGNALS:
     
 private Q_SLOTS:
