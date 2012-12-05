@@ -61,7 +61,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-enum { WarnDatabaseFilter = false };
+enum { WarnDatabaseFilter = true };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -74,8 +74,6 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 namespace Patients {
 namespace Internal {
-
-
 class PatientModelPrivate
 {
 public:
@@ -83,6 +81,7 @@ public:
         m_SqlPatient(0),
         m_SqlPhoto(0),
         m_EmitCreationAtSubmit(false),
+        m_RefreshModelOnCoreDatabaseServerChanged(false),
         q(parent)
     {
     }
@@ -105,11 +104,6 @@ public:
 
     void refreshFilter()
     {
-        // TODO: filter photo SQL as well
-
-        // WHERE (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_PRACT_UID='...')) OR
-        //       (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_GROUP_UID='...'))
-
         // Manage virtual patients
         QHash<int, QString> where;
         if (!settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA, true).toBool())
@@ -124,17 +118,14 @@ public:
         if (!m_ExtraFilter.isEmpty())
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
-        filter += QString(" ORDER BY lower(`%1`) ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
+        filter += QString(" ORDER BY `%1` ASC")
+                .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
 
         if (WarnDatabaseFilter)
             LOG_FOR(q, "Filtering patient database with: " + filter);
 
         m_SqlPatient->setFilter(filter);
         m_SqlPatient->select();
-
-//        qWarning() << m_SqlPatient->query().lastQuery();
-
-//        q->reset();
     }
 
     QIcon iconizedGender(const QModelIndex &index)
@@ -226,14 +217,13 @@ public:
         return QPixmap();
     }
 
-
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
-    bool m_EmitCreationAtSubmit;
+    bool m_EmitCreationAtSubmit, m_RefreshModelOnCoreDatabaseServerChanged;
 
 private:
     PatientModel *q;
@@ -249,6 +239,7 @@ PatientModel::PatientModel(QObject *parent) :
 {
     setObjectName("PatientModel");
     onCoreDatabaseServerChanged();
+    d->m_RefreshModelOnCoreDatabaseServerChanged = true;
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -289,7 +280,8 @@ void PatientModel::onCoreDatabaseServerChanged()
         delete d->m_SqlPhoto;
     d->m_SqlPhoto = new QSqlTableModel(this, patientBase()->database());
     d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
-    d->refreshFilter();
+    if (d->m_RefreshModelOnCoreDatabaseServerChanged)
+        d->refreshFilter();
 }
 
 /**
