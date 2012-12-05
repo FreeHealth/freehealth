@@ -36,7 +36,8 @@
  * and was filtered with the search text. The Core::IPatient was filtered using a SQL
  * query causing indexes to be lost after a search.
  * This was not a good behavior (because of model persistence lose),
- * so in later version we introduced a proxymodel over the Core::IPatient model.
+ * so in later version we introduced an internal model and linked it to the Core::IPatient
+ * model.
  *
  * \sa Patient::PatientModel
  */
@@ -46,6 +47,7 @@
 #include "patientbar.h"
 #include "constants_menus.h"
 #include "constants_settings.h"
+#include "patientcore.h"
 
 #include "ui_patientselector.h"
 
@@ -61,19 +63,15 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/modemanager/modemanager.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
 #include <QMenu>
-#include <QSortFilterProxyModel>
 
 #include <QDebug>
-
-// Till this feature is not stable, you can remove the proxy model usage at anytime setting
-// this to false
-enum { UseProxyModel = false };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -84,6 +82,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 namespace Patients {
 namespace Internal {
@@ -93,9 +92,10 @@ public:
     PatientSelectorPrivate(PatientSelector *parent) :
             ui(new Ui::PatientSelector),
             m_Model(0),
-            m_proxyModel(0),
             q(parent)
     {
+        // Force a first refresh when calling refreshFilter() with an empty QString
+        m_LastSearch = "_##_";
     }
 
     ~PatientSelectorPrivate()
@@ -160,7 +160,8 @@ public:
     QToolButton *m_SearchToolButton, *m_NavigationToolButton;
     QMenu *m_NavigationMenu;
     int m_SearchMethod;
-    QSortFilterProxyModel *m_proxyModel;
+    QString m_LastSearch;
+    PatientSelector::RefreshSearchResult m_refreshMethod;
 
 private:
     PatientSelector *q;
@@ -178,14 +179,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     d->ui->searchLine->setDelayedSignals(true);
 
     // Get the active model
-    d->m_proxyModel = new QSortFilterProxyModel(this);
-    if (!PatientModel::activeModel()) {
-        PatientModel *model = new PatientModel(this);
-        PatientModel::setActiveModel(model);
-        setPatientModel(model);
-    } else {
-        setPatientModel(PatientModel::activeModel());
-    }
+    setPatientModel(new PatientModel(this));
 
     // datetime delegate
     d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
@@ -194,18 +188,22 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 
     // Some connections
     connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
-    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientActivated(QModelIndex)));
 
     updatePatientActions(QModelIndex());
-
     if (fields == None) {
         d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
     } else {
         d->m_Fields = fields;
     }
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
+
+    // Manage settings
+    if (settings()->value(Constants::S_SEARCHWHILETYPING).toBool())
+        setRefreshSearchResultMethod(WhileTyping);
+    else
+        setRefreshSearchResultMethod(ReturnPress);
 }
 
 PatientSelector::~PatientSelector()
@@ -230,11 +228,6 @@ void PatientSelector::initialize()
     } else {
         current = d->m_Model->currentPatient();
     }
-
-    if (UseProxyModel) {
-        current = d->m_proxyModel->mapFromSource(current);
-    }
-
     d->ui->tableView->selectRow(current.row());
     changeIdentity(current, QModelIndex());
 }
@@ -267,12 +260,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 {
     Q_ASSERT(m);
     d->m_Model = m;
-    if (UseProxyModel) {
-        d->m_proxyModel->setSourceModel(m);
-        d->ui->tableView->setModel(d->m_proxyModel);
-    } else {
-        d->ui->tableView->setModel(m);
-    }
+    d->ui->tableView->setModel(m);
     setFieldsToShow(d->m_Fields);
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
@@ -286,10 +274,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
 
-    if (UseProxyModel)
-        d->ui->numberOfPatients->setText(QString::number(d->m_proxyModel->rowCount()));//m->numberOfFilteredPatients()));
-    else
-        d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
+    d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
     connect(d->m_Model, SIGNAL(currentPatientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
@@ -329,18 +314,23 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     }
 }
 
+void PatientSelector::setRefreshSearchResultMethod(RefreshSearchResult method)
+{
+    disconnect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter()));
+    disconnect(d->ui->searchLine, SIGNAL(textEdited(QString)), this, SLOT(refreshFilter()));
+    d->m_refreshMethod = method;
+    if (method == WhileTyping)
+        connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter()));
+    else
+        connect(d->ui->searchLine, SIGNAL(returnPressed()), this, SLOT(refreshFilter()));
+}
+
 /**
  * \brief Define the selected patient (use this if patient was selected from outside the selector).
  * The index must be a Core::Patient model index.
 */
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
-//    if (UseProxyModel) {
-//        // Remove any filter
-//        d->ui->searchLine->clear();
-//        d->m_proxyModel->invalidate();
-//        QModelIndex proxyIndex = d->m_proxyModel->mapFromSource(index);
-//    }
     d->ui->tableView->selectRow(index.row());
     updatePatientActions(index);
 }
@@ -354,14 +344,8 @@ void PatientSelector::setSelectedPatient(const QModelIndex &index)
 void PatientSelector::changeIdentity(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-    if (UseProxyModel) {
-        QModelIndex source = d->m_proxyModel->mapToSource(current);
-        d->ui->identity->setCurrentIndex(source);
-        updatePatientActions(source);
-    } else {
-        d->ui->identity->setCurrentIndex(current);
-        updatePatientActions(current);
-    }
+    d->ui->identity->setCurrentIndex(current);
+    updatePatientActions(current);
 }
 
 /*!
@@ -382,33 +366,23 @@ void PatientSelector::updatePatientActions(const QModelIndex &index)
  * \internal
  * Refresh the search filter.
 */
-void PatientSelector::refreshFilter(const QString &)
+void PatientSelector::refreshFilter()
 {
     if (!d->m_Model)
         return;
     QString text = d->ui->searchLine->text();
-
-    qWarning() << "SELECTOR SEARCH FILTER" << text;
-
+    if (text == d->m_LastSearch)
+        return;
+    d->m_LastSearch = text;
     QString name, firstname;
-    if (UseProxyModel) {
-        if (text.isEmpty()) {
-            d->m_proxyModel->invalidate();
-        } else {
-            d->m_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-            d->m_proxyModel->setFilterKeyColumn(Core::IPatient::BirthName);
-            d->m_proxyModel->setFilterFixedString(text);
-        }
-    } else {
-        switch (d->m_SearchMethod) {
-        case SearchByName: name = text; break;
-        case SearchByNameFirstname: name = text.mid(0,text.indexOf(";")).trimmed(); firstname = text.right(text.indexOf(";")); break;
-        case SearchByFirstname: firstname = text; break;
-        case SearchByDOB: break;
-        }
-        d->m_Model->setFilter(name, firstname);
-        d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
+    switch (d->m_SearchMethod) {
+    case SearchByName: name = text; break;
+    case SearchByNameFirstname: name = text.mid(0,text.indexOf(";")).trimmed(); firstname = text.right(text.indexOf(";")); break;
+    case SearchByFirstname: firstname = text; break;
+    case SearchByDOB: break;
     }
+    d->m_Model->setFilter(name, firstname);
+    d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
 /**
@@ -419,20 +393,22 @@ void PatientSelector::refreshFilter(const QString &)
  */
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    QModelIndex idx = index;
-    if (UseProxyModel)
-        idx = d->m_proxyModel->mapToSource(index);
+    qWarning() << "ACTIVATED";
+    // if user click
+//    if (d->m_Model && index == d->m_Model->currentPatient()) {
+//        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+//        return;
+//    }
 
-    if (d->m_Model && idx == d->m_Model->currentPatient()) {
-        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
-        return;
-    }
-
+    // Start the processing spinner. The spinner will be ended by another process
     mainWindow()->startProcessingSpinner();
 
     // Inform Core::IPatient model wrapper
-    if (d->m_Model)
-        d->m_Model->setCurrentPatient(idx);
+    QModelIndex uuidIndex = d->m_Model->index(index.row(), Core::IPatient::Uid);
+    const QString &uuid = d->m_Model->data(uuidIndex).toString();
+    qWarning() << uuid << index.data().toString();
+    if (!patientCore()->setCurrentPatientUuid(uuid))
+        LOG_ERROR("Unable to select the patient: " + uuid);
 }
 
 /**
@@ -444,9 +420,7 @@ void PatientSelector::onUserChanged()
     // TODO: reconnect user specific patient list (using the Practionner LKID)
     // reset the search filter
     d->ui->searchLine->clear();
-
-    refreshFilter("");
-
+    refreshFilter();
     // re-initialize the view
     initialize();
 }
