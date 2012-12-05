@@ -28,6 +28,7 @@
 #include "constants_settings.h"
 #include "constants_db.h"
 #include "patientselector.h"
+
 #include "ui_patientbasepreferencespage.h"
 
 #include <utils/log.h>
@@ -38,18 +39,9 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/iphotoprovider.h>
 
-
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QProgressDialog>
-#include <QDir>
-#include <QByteArray>
-#include <QBuffer>
-
 using namespace Patients;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
-
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
@@ -108,6 +100,7 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     defaultvalues.insert(Constants::S_PATIENTBARCOLOR, Qt::white);
     defaultvalues.insert(Core::Constants::S_PATIENTCHANGEONCREATION, true);
+    defaultvalues.insert(Constants::S_SEARCHWHILETYPING, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -122,8 +115,6 @@ QWidget *PatientBasePreferencesPage::createPage(QWidget *parent)
     m_Widget = new PatientBasePreferencesWidget(parent);
     return m_Widget;
 }
-
-
 
 PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
         QWidget(parent)
@@ -145,6 +136,7 @@ void PatientBasePreferencesWidget::setDataToUi()
     ui->selectNewlyCreatedBox->setChecked(settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool());
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
+    ui->searchWhileTyping->setChecked(settings()->value(Constants::S_SEARCHWHILETYPING).toBool());
 
     // find the id of the photo source in the combo box items
     const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
@@ -163,11 +155,24 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
+    s->setValue(Constants::S_SEARCHWHILETYPING, ui->searchWhileTyping->isChecked());
 
     // save the id of the provider to identify it the next time.
     const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
                 ui->comboDefaultPhotoSource->currentIndex()).toString();
     s->setValue(Constants::S_DEFAULTPHOTOSOURCE, photoSourceId);
+
+    // inform PatientSelector of the refreshsearchresult method
+    Patients::PatientSelector::RefreshSearchResult method;
+    if (ui->searchWhileTyping->isChecked())
+        method = Patients::PatientSelector::WhileTyping;
+    else
+        method = Patients::PatientSelector::ReturnPress;
+    foreach (QWidget *widget, QApplication::allWidgets()) {
+        Patients::PatientSelector *sel = qobject_cast<Patients::PatientSelector *>(widget);
+        if (sel)
+            sel->setRefreshSearchResultMethod(method);
+    }
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -177,10 +182,10 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
+    s->setValue(Constants::S_SEARCHWHILETYPING, true);
 
     QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
     qSort(providerList);
-    qDebug() << providerList;
     if (providerList.isEmpty())
         s->setValue(Constants::S_DEFAULTPHOTOSOURCE, "");
     else

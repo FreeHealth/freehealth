@@ -36,6 +36,7 @@ namespace Constants {
     const char * const  S_SEARCHMETHOD = "Patients/Selector/SearchMethod";
     const char * const  S_PATIENTBARCOLOR = "Patients/Bar/Color";
     const char * const  S_DEFAULTPHOTOSOURCE = "Patients/Photo/Source";
+    const char * const  S_SEARCHWHILETYPING = "Patients/SeachWhileTyping";
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients
