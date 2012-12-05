@@ -101,7 +101,8 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         int title, lk;
         QDate death, dob;
 
-        name = r.getRandomName();
+        while (name.isEmpty())
+            name = r.getRandomName();
         dob = r.randomDate(1910);
 
         if (r.randomInt(2) == 1) {
