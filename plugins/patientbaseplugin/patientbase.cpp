@@ -24,6 +24,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Patients::Internal::PatientBase
+ * \internal
+ * Own the database connection mecanisms. The Patients::PatientModel
+ * is a wrapper to the database and allow you to save/update/create patient data.
+ *
+ * Avoid to access directly to the database, use the Patients::PatientModel
+ * model or the Core::IPatient model.
+ * \sa Patients::PatientModel, Core::IPatient
+ */
 #include "patientbase.h"
 #include "constants_db.h"
 
@@ -82,6 +92,7 @@ PatientBase *PatientBase::instance()
     return m_Instance;
 }
 
+/** Unique instance is created and managed by the Patients::PatientCore object */
 PatientBase::PatientBase(QObject *parent) :
     QObject(parent), Utils::Database(),
     m_initialized(false)
@@ -151,6 +162,7 @@ PatientBase::~PatientBase()
 {
 }
 
+/** Initialize and connect to the database */
 bool PatientBase::initialize()
 {
     // only one base can be initialized
