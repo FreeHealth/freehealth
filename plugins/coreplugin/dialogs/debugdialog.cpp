@@ -130,7 +130,7 @@ void DebugDialog::onSendMessage_done()
 {
     LOG(tr("Debugging information successfully sent."));
     if (m_infoMessageBox) {
-        m_infoMessageBox->setInformativeText( tr("Debugging information successfully send to the development team.\n"
+        m_infoMessageBox->setInformativeText( tr("Debugging information successfully sent to the development team.\n"
                                              "Using Url: %1\n"
                                              "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );
         m_infoMessageBox->exec();
