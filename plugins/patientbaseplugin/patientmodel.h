@@ -58,7 +58,7 @@ public:
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
 
     void setCurrentPatient(const QModelIndex &index);
-    QModelIndex currentPatient() const {return m_CurrentPatient;}
+    QModelIndex currentPatient() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -79,6 +79,8 @@ public:
     bool canFetchMore(const QModelIndex &parent) const;
 
     static QHash<QString, QString> patientName(const QList<QString> &uuids);
+
+    QString patientUuid(const QModelIndex &index) const;
 
 public Q_SLOTS:
     bool submit();
@@ -103,7 +105,6 @@ private Q_SLOTS:
 private:
     Internal::PatientModelPrivate *d;
     static PatientModel *m_ActiveModel;
-    QPersistentModelIndex m_CurrentPatient;
 };
 
 }  // End namespace Patients
