@@ -30,21 +30,22 @@
  *
  * If no patient is selected, the PatientBar is hidden.
  * It contains:
- * - a brief resumé of the patient's identity
+ * - a brief summary of the patient's identity
  * - a place holder at the bottom to add various widgets (like alert place holders)
  * - a specific place where PatientsActions are presented (not yet implemented)
  *
  * The whole application owns a unique instance of the patient bar. This singleton is accessible
  * throught the Core::IPatient interface.
  *
- * The PatientBar owns a QDataMapperWidget that manages labels update. Just ensure that the
- * Core::IPatient sub-class emits the dataChanged() correctly to keep the bar up to date.
+ * The PatientBar owns a QDataMapperWidget over the Core::IPatient model
+ * that manages labels update.
+ * Just ensure that the Core::IPatient sub-class emits the dataChanged()
+ * correctly to keep the bar up to date.
  *
  * \sa Patients::PatientAction, Patients::Internal::PatientBarAlertPlaceHolder, Core::IPatient::showPatientBar(), Core::IPatient::hidePatientBar(), Core::IPatient::isPatientBarVisible()
 */
 
 #include "patientbar.h"
-#include "patientmodel.h"
 #include "constants_settings.h"
 
 #include "ui_patientbar.h"
@@ -80,7 +81,6 @@ class PatientBarPrivate
 public:
     PatientBarPrivate(PatientBar *parent) :
         ui(new Ui::PatientBar),
-        m_Model(0),
         m_Mapper(0),
         m_Index(0),
         q(parent)
@@ -92,17 +92,16 @@ public:
         delete ui;
     }
 
-    void setUi()
-    {
-        Q_ASSERT(m_Model);
-        if (m_Mapper)
-            return;
-        m_Mapper = new QDataWidgetMapper(q);
-        m_Mapper->setModel(m_Model);
-        m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
-        m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
-//        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
-    }
+//    void setUi()
+//    {
+//        if (m_Mapper)
+//            return;
+//        m_Mapper = new QDataWidgetMapper(q);
+//        m_Mapper->setModel(patient());
+//        m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
+//        m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
+////        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
+//    }
 
     void clearUi()
     {
@@ -112,13 +111,21 @@ public:
         ui->photo->clear();
     }
 
+    void updateUi()
+    {
+        ui->age->setText(patient()->data(Core::IPatient::Age).toString());
+        QModelIndex dob = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
+        ui->age->setToolTip(patient()->data(dob, Qt::ToolTipRole).toString());
+        ui->gender->setPixmap(patient()->data(Core::IPatient::GenderPixmap).value<QPixmap>());
+        ui->names->setText(patient()->data(Core::IPatient::FullName).toString());
+        updatePatientPhoto();
+    }
+
     void updatePatientPhoto()
     {
-        // TODO: see issue #200
-        QModelIndex photoIndex = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::Photo_64x64);
-        QPixmap photo = m_Model->data(photoIndex).value<QPixmap>();
+        QPixmap photo = patient()->data(Core::IPatient::Photo_64x64).value<QPixmap>();
         if (photo.isNull()) {
-            const int gender = m_Model->index(m_Mapper->currentIndex(), Core::IPatient::GenderIndex).data().toInt();
+            const int gender = patient()->data(Core::IPatient::GenderIndex).toInt();
             photo = theme()->defaultGenderPixmap(gender);
         }
         ui->photo->setPixmap(photo);
@@ -126,7 +133,6 @@ public:
 
 public:
     Ui::PatientBar *ui;
-    PatientModel *m_Model;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex *m_Index;
 
@@ -151,10 +157,8 @@ PatientBar::PatientBar(QWidget *parent) :
 {
     setObjectName("PatientBar");
     d->ui->setupUi(this);
-    if (!PatientModel::activeModel()) {
-        PatientModel::setActiveModel(new PatientModel(qApp));
-    }
-    setPatientModel(PatientModel::activeModel());
+//    d->setUi();
+    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
@@ -163,52 +167,33 @@ PatientBar::~PatientBar()
 {
 }
 
-/** Define the Patients::PatientModel to use. By default the Patients::PatientModel::activeModel() is used */
-void PatientBar::setPatientModel(PatientModel *model)
-{
-    if (d->m_Model)
-        disconnect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
-    d->m_Model = model;
-    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
-    d->setUi();
-    d->m_Mapper->setModel(model);
-}
-
 /** Add a widget at the bottom of the patient bar */
 void PatientBar::addBottomWidget(QWidget *widget)
 {
     d->ui->bottomLayout->addWidget(widget);
 }
 
-/** Set the current patient index */
-void PatientBar::setCurrentIndex(const QModelIndex &index)
-{
-    if (d->m_Index)
-        delete d->m_Index;
-    d->m_Index = new QPersistentModelIndex(index);
-    d->clearUi();
-    QModelIndex top = d->m_Model->index(index.row(),0);
-    QModelIndex bottom = d->m_Model->index(index.row(), d->m_Model->columnCount() - 1);
-    patientDataChanged(top, bottom);
-    d->m_Mapper->setCurrentModelIndex(QModelIndex());
-    d->m_Mapper->setCurrentModelIndex(index);
-    d->updatePatientPhoto();
-}
-
 /** Set the current patient index when patient changed */
 void PatientBar::onCurrentPatientChanged()
 {
-    setCurrentIndex(d->m_Model->currentPatient());
+    d->updateUi();
 }
 
 /** Update the view when a data of the patient model is changed */
 void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &bottom)
 {
-    if (IN_RANGE(Core::IPatient::DateOfBirth, top.column(), bottom.column())) {
-        QModelIndex dob = d->m_Model->index(d->m_Index->row(), Core::IPatient::DateOfBirth);
-        QModelIndex age = d->m_Model->index(d->m_Index->row(), Core::IPatient::Age);
-        d->ui->age->setText(d->m_Model->data(age, Qt::DisplayRole).toString());
-        d->ui->age->setToolTip(d->m_Model->data(dob, Qt::ToolTipRole).toString());
+    QList<int> test;
+    test << Core::IPatient::DateOfBirth
+         << Core::IPatient::Age
+         << Core::IPatient::FullName
+         << Core::IPatient::FullAddress
+         << Core::IPatient::GenderIndex
+            ;
+    foreach(int ref, test) {
+        if (IN_RANGE(ref, top.column(), bottom.column())) {
+            d->updateUi();
+            break;
+        }
     }
 }
 

@@ -48,11 +48,7 @@ public:
     static PatientBar *instance(QWidget *parent = 0);
     ~PatientBar();
 
-    void setPatientModel(PatientModel *model);
     void addBottomWidget(QWidget *widget);
-
-public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &index);
 
 private Q_SLOTS:
     void onCurrentPatientChanged();
