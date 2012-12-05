@@ -471,9 +471,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Photo_32x32 :
         {
             QPixmap pix = d->getPatientPhoto(index);
-            if (pix.isNull())
-                return pix;
-            if (pix.size()==QSize(32,32)) {
+            if (pix.isNull() || pix.size() == QSize(32,32)) {
                 return pix;
             }
             return pix.scaled(QSize(32,32));
@@ -481,9 +479,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Photo_64x64 :
         {
             QPixmap pix = d->getPatientPhoto(index);
-            if (pix.isNull())
-                return pix;
-            if (pix.size()==QSize(64,64)) {
+            if (pix.isNull() || pix.size() == QSize(64,64)) {
                 return pix;
             }
             return pix.scaled(QSize(64,64));
