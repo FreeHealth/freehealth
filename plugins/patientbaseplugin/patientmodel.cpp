@@ -121,10 +121,11 @@ public:
         filter += QString(" ORDER BY `%1` ASC")
                 .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
 
-        if (WarnDatabaseFilter)
-            LOG_FOR(q, "Filtering patient database with: " + filter);
-
         m_SqlPatient->setFilter(filter);
+
+        if (WarnDatabaseFilter)
+            LOG_FOR(q, "Filtering patient model with: " + m_SqlPatient->filter());
+
         m_SqlPatient->select();
     }
 
@@ -224,6 +225,8 @@ public:
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
     bool m_EmitCreationAtSubmit, m_RefreshModelOnCoreDatabaseServerChanged;
+    QString m_CurrentPatientUuid;
+    QPersistentModelIndex m_CurrentPatientIndex;
 
 private:
     PatientModel *q;
@@ -297,9 +300,11 @@ void PatientModel::onCoreDatabaseServerChanged()
  */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
-    if (index == m_CurrentPatient) {
+    const QString &patientUuid = this->patientUuid(index);
+    if (patientUuid == d->m_CurrentPatientUuid) {
         return;
     }
+    d->m_CurrentPatientUuid = patientUuid;
 
     // Call all extensions that provide listeners to patient change: the extensions can now do things like
     // save data BEFORE the patient is changed.
@@ -310,10 +315,19 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
         }
     }
 
-    m_CurrentPatient = index;
-    LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT currentPatientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+    d->m_CurrentPatientIndex = index;
+    LOG("setCurrentPatient: " + patientUuid);
+    Q_EMIT currentPatientChanged(patientUuid);
     Q_EMIT currentPatientChanged(index);
+}
+
+/**
+ * Return the current patient index in this model.
+ * Be warned that after any filter update the index may change.
+ */
+QModelIndex PatientModel::currentPatient() const
+{
+    return d->m_CurrentPatientIndex;
 }
 
 int PatientModel::rowCount(const QModelIndex &parent) const
@@ -692,12 +706,8 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void PatientModel::setFilter(const QString &name, const QString &firstname, const QString &uuid, const FilterOn on)
 {
-
-    qWarning() << "SETFILTER" << name << firstname << uuid << on;
-
-    qWarning() << d->m_ExtraFilter;
-
     QString saveFilter = d->m_ExtraFilter;
+    QHash<int, QString> where;
     // Calculate new filter
     switch (on) {
     case FilterOnFullName :
@@ -742,8 +752,8 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE NAME LIKE '%'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME) + " ";
-            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(name);
+            where.insert(Constants::IDENTITY_BIRTHNAME, QString("LIKE '%%1%'").arg(name));
+            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
             break;
         }
     case FilterOnCity:
@@ -758,14 +768,11 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE PATIENT_UID='xxxx'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID) + " ";
-            d->m_ExtraFilter += QString("='%1'").arg(uuid);
+            where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(uuid));
+            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
             break;
         }
     }
-
-    qWarning() << d->m_ExtraFilter;
-
     if (saveFilter != d->m_ExtraFilter)
         d->refreshFilter();
 }
@@ -905,3 +912,11 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
     DB.commit();
     return names;
 }
+
+/** Return the Uuid of the patient according to the \e index */
+QString PatientModel::patientUuid(const QModelIndex &index) const
+{
+    QModelIndex idx = this->index(index.row(), Core::IPatient::Uid);
+    return data(idx).toString();
+}
+
