@@ -47,7 +47,7 @@ class PatientWidgetManager;
 class PatientCorePrivate;
 }  // namespace Internal
 
-// TODO: this core is purely internal
+// TODO: this core is purely internal?
 class PATIENT_EXPORT PatientCore : public QObject
 {
     Q_OBJECT
@@ -68,7 +68,7 @@ public:
 
 Q_SIGNALS:
     
-public Q_SLOTS:
+private Q_SLOTS:
     void postCoreInitialization();
 
 private:

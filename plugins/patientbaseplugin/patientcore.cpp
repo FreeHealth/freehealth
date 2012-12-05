@@ -173,3 +173,4 @@ Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
 {
     return d->_patientWidgetManager;
 }
+
