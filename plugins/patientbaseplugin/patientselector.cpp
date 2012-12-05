@@ -393,7 +393,6 @@ void PatientSelector::refreshFilter()
  */
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    qWarning() << "ACTIVATED";
     // if user click
 //    if (d->m_Model && index == d->m_Model->currentPatient()) {
 //        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
@@ -404,11 +403,11 @@ void PatientSelector::onPatientActivated(const QModelIndex &index)
     mainWindow()->startProcessingSpinner();
 
     // Inform Core::IPatient model wrapper
-    QModelIndex uuidIndex = d->m_Model->index(index.row(), Core::IPatient::Uid);
-    const QString &uuid = d->m_Model->data(uuidIndex).toString();
-    qWarning() << uuid << index.data().toString();
-    if (!patientCore()->setCurrentPatientUuid(uuid))
+    const QString &uuid = d->m_Model->patientUuid(index);
+    if (!patientCore()->setCurrentPatientUuid(uuid)) {
         LOG_ERROR("Unable to select the patient: " + uuid);
+        mainWindow()->endProcessingSpinner();
+    }
 }
 
 /**
