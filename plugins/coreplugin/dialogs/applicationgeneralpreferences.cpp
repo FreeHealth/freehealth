@@ -101,9 +101,6 @@ void ApplicationGeneralPreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
-
-
-
 ApplicationGeneralPreferencesPage::ApplicationGeneralPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 { setObjectName("ApplicationGeneralPreferencesPage"); }
@@ -115,9 +112,21 @@ ApplicationGeneralPreferencesPage::~ApplicationGeneralPreferencesPage()
 }
 
 QString ApplicationGeneralPreferencesPage::id() const { return objectName(); }
-QString ApplicationGeneralPreferencesPage::displayName() const { return tkTr(Trans::Constants::GENERAL); }
-QString ApplicationGeneralPreferencesPage::title() const {return tkTr(Trans::Constants::GENERAL_PREFERENCES);}
-QString ApplicationGeneralPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
+QString ApplicationGeneralPreferencesPage::displayName() const
+{
+    return tkTr(Trans::Constants::GENERAL).remove("&");
+}
+
+QString ApplicationGeneralPreferencesPage::title() const
+{
+    return tkTr(Trans::Constants::GENERAL_PREFERENCES).remove("&");
+}
+
+QString ApplicationGeneralPreferencesPage::category() const
+{
+    return tkTr(Trans::Constants::GENERAL_PREFERENCES).remove("&");
+}
+
 int ApplicationGeneralPreferencesPage::sortIndex() const {return 0;}
 
 void ApplicationGeneralPreferencesPage::resetToDefaults()
