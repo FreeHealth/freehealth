@@ -25,10 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Patients::PatientModel
-  \brief All Patients' accessible data are provided by this model.
-  The model creates and manages the Core::IPatient model wrapper.
-  \sa Core::IMode, Core::IPatient
+ * \class Patients::PatientModel
+ * \brief All Patients' SQL accessible data are provided by this model.
+ * \sa Patients::PatientCore, Core::IMode, Core::IPatient
 */
 
 #include "patientmodel.h"
@@ -234,8 +233,6 @@ private:
 
 } // end namespace Internal
 } // end namespace Patients
-
-PatientModel *PatientModel::m_ActiveModel = 0;
 
 PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
@@ -881,6 +878,7 @@ bool PatientModel::submit()
 {
     bool ok = true;
     if (!d->m_SqlPatient->submitAll()) {
+        LOG_ERROR("Model not submitted. " + d->m_SqlPatient->lastError().text());
         ok = false;
     } else {
         // emit created uids
