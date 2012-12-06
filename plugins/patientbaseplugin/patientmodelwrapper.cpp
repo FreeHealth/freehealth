@@ -90,7 +90,9 @@ void PatientModelWrapper::initialize(Patients::PatientModel *model)
 /** \brief Return the QModelIndex of the current patient. The index is parented with the Patient::PatientModel model. */
 QModelIndex PatientModelWrapper::currentPatientIndex() const
 {
-    return m_Model->currentPatient();
+    // Return an index created by THIS model
+    QModelIndex index = this->index(m_Model->currentPatient().row(), m_Model->currentPatient().column());
+    return index;
 }
 
 /**
