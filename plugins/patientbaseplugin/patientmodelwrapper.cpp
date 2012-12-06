@@ -195,3 +195,10 @@ void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
     if (m_Model->currentPatient().row() == index.row())
         Q_EMIT dataChanged(index, index);
 }
+
+/** Submit SQL part of the model */
+bool PatientModelWrapper::submit()
+{
+    return m_Model->submit();
+}
+

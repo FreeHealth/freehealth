@@ -78,6 +78,7 @@ public:
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const;
 
 private Q_SLOTS:
+    bool submit();
     void onCurrentPatientChanged(const QString &);
     void patientDataChanged(const QModelIndex &index);
 
