@@ -127,10 +127,6 @@ bool PatientCore::initialize()
 
     d->_patientBar = new PatientBar;
 
-    // TODO: remove this
-    PatientModel *model2 = new PatientModel(this);
-    PatientModel::setActiveModel(model2);
-
     return true;
 }
 
