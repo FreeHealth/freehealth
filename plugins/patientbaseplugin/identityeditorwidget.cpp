@@ -37,6 +37,7 @@
 #include "identityeditorwidget.h"
 #include "patientmodel.h"
 #include "patientbase.h"
+#include "patientcore.h"
 #include "constants_db.h"
 
 #include "ui_identitywidget.h"
@@ -73,6 +74,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
 
@@ -216,7 +218,8 @@ public:
         }
     }
 
-    void updateDefaultPhotoAction() {
+    void updateDefaultPhotoAction()
+    {
         QString defaultId = settings()->value(Patients::Constants::S_DEFAULTPHOTOSOURCE).toString();
         foreach(QAction *action, editUi->photoButton->actions()) {
             if (action->data().toString() == defaultId)
@@ -303,6 +306,7 @@ IdentityEditorWidget::IdentityEditorWidget(QWidget *parent, EditMode mode) :
     setObjectName("Patient::IdentityEditorWidget");
     d->createGenericMapper();
     d->m_Mapper->toFirst();
+    updateGenderImage();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
@@ -324,6 +328,7 @@ void IdentityEditorWidget::setPatientModel(PatientModel *model)
 {
     d->createPatientModelMapper(model);
     d->m_Mapper->toFirst();
+    updateGenderImage();
 }
 
 /**
@@ -335,7 +340,6 @@ void IdentityEditorWidget::setPatientModel(PatientModel *model)
  */
 void IdentityEditorWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    qWarning() << patientIndex.model() << d->m_Mapper->model();
     if (patientIndex.model() == d->m_Mapper->model())
         d->m_Mapper->setCurrentModelIndex(patientIndex);
 }
@@ -490,7 +494,9 @@ bool IdentityEditorWidget::hasPhoto() const
 bool IdentityEditorWidget::submit()
 {
     if ((d->m_EditMode == ReadWriteMode) && d->m_Mapper) {
-        return d->m_Mapper->submit();
+        bool ok = d->m_Mapper->submit();
+        if (ok)
+            patientCore()->refreshAllPatientModel();
     }
     return false;
 }
