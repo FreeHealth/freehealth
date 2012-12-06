@@ -150,7 +150,9 @@ void PatientCore::postCoreInitialization()
     d->_patientWidgetManager->postCoreInitialization();
 }
 
-/** Create the default virtual patients: Archer, Kirk, Janeway... */
+/**
+ * Create the default virtual patients: Archer, Kirk, Janeway...
+ */
 bool PatientCore::createDefaultVirtualPatients() const
 {
     QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
@@ -174,21 +176,38 @@ bool PatientCore::createDefaultVirtualPatients() const
     return true;
 }
 
+/**
+ * Return the unique instance of the Patients::Internal::PatientBase. \n
+ * Avoid usage of this method (mainly plugin internal method).
+ */
 Internal::PatientBase *PatientCore::patientBase() const
 {
     return d->_base;
 }
 
+/**
+ * Return the unique instance of the Patients::Internal::PatientWidgetManager. \n
+ * Avoid usage of this method (mainly plugin internal method).
+ */
 Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
 {
     return d->_patientWidgetManager;
 }
 
+/**
+ * Return the unique instance of the PatientBar. In this configuration,
+ * the PatientBar does not have any parent. The deletion of the pointer
+ * is managed by this object.
+ */
 PatientBar *PatientCore::patientBar() const
 {
     return d->_patientBar;
 }
 
+/**
+ * Define the current patient using its \e uuid. Return true if the current patient
+ * was correctly set.
+ */
 bool PatientCore::setCurrentPatientUuid(const QString &uuid)
 {
     // Take the Core:IPatient internal PatientModel
@@ -215,6 +234,11 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
     return true;
 }
 
+/**
+ * Force refreshing of all registered PatientModel. This can be CPU consuming has
+ * all the PatientModel will re-select the SQL database.
+ * \sa registerPatientModel()
+ */
 void PatientCore::refreshAllPatientModel() const
 {
     d->_patientModels.removeAll(0);
