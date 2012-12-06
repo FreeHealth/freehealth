@@ -51,7 +51,7 @@ class PATIENT_EXPORT PatientModel : public QAbstractTableModel
     friend class Patients::PatientCore;
 
 public:
-    // Data representation is stored in Core::IPatient
+    // Column data representation is stored in Core::IPatient
 
     enum FilterOn {
         FilterOnName,
@@ -62,9 +62,6 @@ public:
 
     PatientModel(QObject *parent);
     ~PatientModel();
-
-    static PatientModel *activeModel() {return m_ActiveModel;}
-    static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
 
     QModelIndex currentPatient() const;
 
@@ -117,7 +114,6 @@ private Q_SLOTS:
 
 private:
     Internal::PatientModelPrivate *d;
-    static PatientModel *m_ActiveModel;
 };
 
 }  // End namespace Patients
