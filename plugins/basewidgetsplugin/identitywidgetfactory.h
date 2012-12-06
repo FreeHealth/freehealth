@@ -36,14 +36,14 @@ class QModelIndex;
 QT_END_NAMESPACE
 
 /**
- * \file patientbaseplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 15 Sept 2011
+ * \file identitywidgetfactory.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 06 Dec 2012
 */
 
 namespace Patients {
-class IdentityWidget;
+class IdentityEditorWidget;
 }
 
 namespace BaseWidgets {
@@ -71,16 +71,13 @@ public:
     IdentityFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
     ~IdentityFormWidget();
 
-//    void addWidgetToContainer(IFormWidget * widget);
-
     QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();
-    void onCurrentPatientChanged();
 
 public:
-    Patients::IdentityWidget *m_Identity;
+    Patients::IdentityEditorWidget *m_Identity;
 
 private:
     QGridLayout *m_ContainerLayout;
@@ -90,7 +87,8 @@ class IdentityWidgetData : public Form::IFormItemData
 {
 public:
     IdentityWidgetData(Form::FormItem *item) :
-            m_FormItem(item), m_Widget(0)
+        m_FormItem(item),
+        m_Widget(0)
     {}
 
     ~IdentityWidgetData() {}

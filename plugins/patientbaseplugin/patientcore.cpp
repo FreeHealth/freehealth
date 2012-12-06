@@ -35,6 +35,7 @@
 #include "patientmodelwrapper.h"
 #include "patientmodel.h"
 #include "patientwidgetmanager.h"
+#include "patientbar.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,6 +45,7 @@
 #include <translationutils/constants.h>
 
 #include <QDir>
+#include <QPointer>
 
 #include <QDebug>
 
@@ -65,8 +67,8 @@ public:
     PatientCorePrivate(PatientCore *parent) :
         _base(0),
         _patientModelWrapper(0),
-        _basicSqlPatientModel(0),
         _patientWidgetManager(0),
+        _patientBar(0),
         q(parent)
     {
     }
@@ -78,8 +80,9 @@ public:
 public:
     PatientBase *_base;
     PatientModelWrapper *_patientModelWrapper;
-    BasicSqlPatientModel *_basicSqlPatientModel;
     PatientWidgetManager *_patientWidgetManager;
+    PatientBar *_patientBar;
+    QList< QPointer<PatientModel> >_patientModels;
 
 private:
     PatientCore *q;
@@ -104,6 +107,7 @@ PatientCore::PatientCore(QObject *parent) :
 /*! Destructor of the Patients::PatientCore class */
 PatientCore::~PatientCore()
 {
+    delete d->_patientBar;
     if (d)
         delete d;
     d = 0;
@@ -121,11 +125,19 @@ bool PatientCore::initialize()
     PatientModel *model = new PatientModel(this);
     d->_patientModelWrapper->initialize(model);
 
+    d->_patientBar = new PatientBar;
+
     // TODO: remove this
     PatientModel *model2 = new PatientModel(this);
     PatientModel::setActiveModel(model2);
 
     return true;
+}
+
+/** You must register all your patient models to keep them sync */
+void PatientCore::registerPatientModel(PatientModel *model)
+{
+    d->_patientModels << QPointer<PatientModel>(model);
 }
 
 /** Initialization with a full opened Core::ICore */
@@ -167,25 +179,45 @@ Internal::PatientBase *PatientCore::patientBase() const
     return d->_base;
 }
 
-Internal::BasicSqlPatientModel *PatientCore::basicSqlPatientModel() const
-{
-    return d->_basicSqlPatientModel;
-}
-
 Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
 {
     return d->_patientWidgetManager;
 }
 
+PatientBar *PatientCore::patientBar() const
+{
+    return d->_patientBar;
+}
+
 bool PatientCore::setCurrentPatientUuid(const QString &uuid)
 {
+    // Take the Core:IPatient internal PatientModel
     PatientModel *patientModel = d->_patientModelWrapper->patientModel();
+
+    // Start changing the current patient
+    if (!patientModel->beginChangeCurrentPatient())
+        return false;
+
+    // Update the filter to the correct uuid
     patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
     if (patientModel->numberOfFilteredPatients() != 1) {
         LOG_ERROR(QString("No patient found; Number of uuids: %1")
                   .arg(patientModel->numberOfFilteredPatients()));
         return false;
     }
+
+    // Define the new current patient
     patientModel->setCurrentPatient(patientModel->index(0,0));
+
+    // Finish the current patient modification process
+    patientModel->endChangeCurrentPatient();
+
     return true;
+}
+
+void PatientCore::refreshAllPatientModel() const
+{
+    d->_patientModels.removeAll(0);
+    foreach(PatientModel *model, d->_patientModels)
+        model->refreshModel();
 }

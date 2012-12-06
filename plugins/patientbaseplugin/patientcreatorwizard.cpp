@@ -25,7 +25,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "patientcreatorwizard.h"
-#include "identitywidget.h"
+#include "identityeditorwidget.h"
+#include "patientcore.h"
 #include "patientmodel.h"
 #include "patientbase.h"
 #include "constants_settings.h"
@@ -56,6 +57,7 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
     QWizard(parent)
@@ -95,8 +97,8 @@ void PatientCreatorWizard::done(int r)
             Patients::PatientModel *m = Patients::PatientModel::activeModel();
             if (m) {
                 QString uid = m_Page->lastInsertedUuid();
-                m->setFilter("", "", uid, Patients::PatientModel::FilterOnUuid);
-                m->setCurrentPatient(m->index(0,0));
+                if (!patientCore()->setCurrentPatientUuid(uid))
+                    LOG_ERROR("Unable to set the current patient");
             }
         }
         QDialog::done(r);
@@ -111,15 +113,15 @@ IdentityPage::IdentityPage(QWidget *parent) :
 {
     setObjectName("IdentityPage");
     setTitle(tr("Please enter the patient's identity."));
-    m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
+    m_Identity = new IdentityEditorWidget(this, IdentityEditorWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
     m_Model->emitPatientCreationOnSubmit(true);
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
-    m_Identity->setPatientModel(m_Model);
-    m_Identity->setCurrentIndex(m_Model->index(0,0));
+//    m_Identity->setPatientModel(m_Model);
+//    m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(0);

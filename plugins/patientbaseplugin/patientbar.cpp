@@ -34,15 +34,14 @@
  * - a place holder at the bottom to add various widgets (like alert place holders)
  * - a specific place where PatientsActions are presented (not yet implemented)
  *
- * The whole application owns a unique instance of the patient bar. This singleton is accessible
- * throught the Core::IPatient interface.
+ * The whole application owns a unique instance of the patient bar. This instance is accessible
+ * throught the Patients::PatientCore interface.
  *
- * The PatientBar owns a QDataMapperWidget over the Core::IPatient model
- * that manages labels update.
+ * The PatientBar acts like a QDataMapperWidget over the Core::IPatient model.
  * Just ensure that the Core::IPatient sub-class emits the dataChanged()
  * correctly to keep the bar up to date.
  *
- * \sa Patients::PatientAction, Patients::Internal::PatientBarAlertPlaceHolder, Core::IPatient::showPatientBar(), Core::IPatient::hidePatientBar(), Core::IPatient::isPatientBarVisible()
+ * \sa Patients::PatientAction, Patients::Internal::PatientBarAlertPlaceHolder, Core::IPatient::showPatientBar(), Core::IPatient::hidePatientBar(), Core::IPatient::isPatientBarVisible(), Patients::PatientCore::patientBar()
 */
 
 #include "patientbar.h"
@@ -139,18 +138,13 @@ public:
 private:
     PatientBar *q;
 };
-}
-}
+}  // namespace Internal
+}  // namespace Patients
 
-PatientBar *PatientBar::m_Instance = 0;
-PatientBar *PatientBar::instance(QWidget *parent)
-{
-    if (!m_Instance)
-        m_Instance = new PatientBar(parent);
-    return m_Instance;
-}
-
-/** ctor of the widget, uses the single Patients::PatientModel::activeModel() or create it */
+/**
+ * ctor of the widget, uses the Core::IPatient has central model.
+ * The unique instance is available in Patients::PatientCore::patientBar()
+ */
 PatientBar::PatientBar(QWidget *parent) :
     QWidget(parent),
     d(new Internal::PatientBarPrivate(this))

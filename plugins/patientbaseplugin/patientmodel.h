@@ -31,7 +31,15 @@
 
 #include <QAbstractTableModel>
 
+/**
+ * \file patientmodel.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 06 Dec 2012
+*/
+
 namespace Patients {
+class PatientCore;
 namespace Internal {
 class PatientModelPrivate;
 }  // End namespace Internal
@@ -40,6 +48,7 @@ class PATIENT_EXPORT PatientModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class Internal::PatientModelPrivate;
+    friend class Patients::PatientCore;
 
 public:
     // Data representation is stored in Core::IPatient
@@ -57,7 +66,6 @@ public:
     static PatientModel *activeModel() {return m_ActiveModel;}
     static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
 
-    void setCurrentPatient(const QModelIndex &index);
     QModelIndex currentPatient() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -95,6 +103,11 @@ Q_SIGNALS:
     void currentPatientChanged(const QString &uuid);
     void patientDeleted(const QString &uuid);
     void patientCreated(const QString &uuid);
+
+protected:
+    bool beginChangeCurrentPatient();
+    void setCurrentPatient(const QModelIndex &index);
+    void endChangeCurrentPatient();
 
 protected Q_SLOTS:
     void changeUserUuid();

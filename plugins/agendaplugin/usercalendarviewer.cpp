@@ -48,7 +48,8 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <patientbaseplugin/patientmodel.h>
+
+#include <patientbaseplugin/patientcore.h>
 
 #include <calendar/modelanditem/basic_item_edition_dialog.h>
 #include <utils/log.h>
@@ -74,7 +75,7 @@ static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::insta
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
-static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
@@ -161,6 +162,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     QWidget(parent),
     d(new UserCalendarViewerPrivate(this))
 {
+    setObjectName("UserCalendarViewer");
     d->ui->setupUi(this);
     this->layout()->setMargin(0);
     d->ui->startDate->setDate(QDate::currentDate());
@@ -487,8 +489,9 @@ void UserCalendarViewer::onSwitchToPatientClicked()
     QList<Calendar::People> people = d->m_CalendarItemModel->peopleList(item);
     foreach(const Calendar::People &guest, people) {
         if (guest.type == Calendar::People::PeopleAttendee) {
-            patientModel()->setFilter("", "", guest.uid, Patients::PatientModel::FilterOnUuid);
-            patientModel()->setCurrentPatient(patientModel()->index(0,0));
+            if (!patientCore()->setCurrentPatientUuid(guest.uid)) {
+                LOG_ERROR("Unable to set current patient");
+            }
             break;
         }
     }

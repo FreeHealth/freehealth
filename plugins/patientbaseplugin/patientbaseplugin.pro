@@ -12,7 +12,6 @@ HEADERS = patientbaseplugin.h \
     patientbase_exporter.h \
     patientbase.h \
     patientmodel.h \
-    identitywidget.h \
     constants_db.h \
     constants_menus.h \
     constants_settings.h \
@@ -24,19 +23,18 @@ HEADERS = patientbaseplugin.h \
     patientbar.h \
     patientcreatorwizard.h \
     pixmapbutton.h \
+    identityeditorwidget.h \
     identityviewerwidget.h \
     patientmodelwrapper.h \
     filephotoprovider.h \
     urlphotoprovider.h \
     urlphotodialog.h \
     patientsearchedit.h \
-    patientcore.h \
-    basicsqlpatientmodel.h
+    patientcore.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
     patientmodel.cpp \
-    identitywidget.cpp \
     patientselector.cpp \
     patientwidgetmanager.cpp \
     patientsearchmode.cpp \
@@ -44,14 +42,14 @@ SOURCES = patientbaseplugin.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
     pixmapbutton.cpp \
+    identityeditorwidget.cpp \
     identityviewerwidget.cpp \
     patientmodelwrapper.cpp \
     filephotoprovider.cpp \
     urlphotoprovider.cpp \
     urlphotodialog.cpp \
     patientsearchedit.cpp \
-    patientcore.cpp \
-    basicsqlpatientmodel.cpp
+    patientcore.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \

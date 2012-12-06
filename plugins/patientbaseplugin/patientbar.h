@@ -32,8 +32,16 @@
 #include <QWidget>
 #include <QModelIndex>
 
+/**
+ * \file patientbar.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 06 Dec 2012
+*/
+
 namespace Patients {
 class PatientModel;
+class PatientCore;
 
 namespace Internal {
 class PatientBarPrivate;
@@ -42,10 +50,12 @@ class PatientBarPrivate;
 class PATIENT_EXPORT PatientBar : public QWidget
 {
     Q_OBJECT
+    friend class Patients::PatientCore;
 
+protected:
     PatientBar(QWidget *parent = 0);
+
 public:
-    static PatientBar *instance(QWidget *parent = 0);
     ~PatientBar();
 
     void addBottomWidget(QWidget *widget);
@@ -60,7 +70,6 @@ protected:
 
 private:
     Internal::PatientBarPrivate *d;
-    static PatientBar *m_Instance;
 };
 
 }  // End namespace Patients

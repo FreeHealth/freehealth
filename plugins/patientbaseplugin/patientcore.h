@@ -31,31 +31,33 @@
 #include <QObject>
 
 /**
- * \file PatientCore.h
+ * \file patientcore.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 04 Dec 2012
+ * \date 06 Dec 2012
 */
 
 namespace Patients {
 class PatientModel;
+class PatientSelector;
+class PatientBar;
 namespace Internal {
 class PatientBase;
 class PatientBasePlugin;
-class BasicSqlPatientModel;
 class PatientWidgetManager;
 class PatientCorePrivate;
 }  // namespace Internal
 
-// TODO: this core is purely internal?
 class PATIENT_EXPORT PatientCore : public QObject
 {
     Q_OBJECT
     friend class Patients::Internal::PatientBasePlugin;
+    friend class Patients::PatientSelector;
 
 protected:
     explicit PatientCore(QObject *parent = 0);
     bool initialize();
+    void registerPatientModel(PatientModel *model);
     bool createDefaultVirtualPatients() const;
 
 public:
@@ -63,11 +65,13 @@ public:
     ~PatientCore();
 
     Internal::PatientBase *patientBase() const;
-    Internal::BasicSqlPatientModel *basicSqlPatientModel() const;
     Internal::PatientWidgetManager *patientWidgetManager() const;
+
+    PatientBar *patientBar() const;
 
 public Q_SLOTS:
     bool setCurrentPatientUuid(const QString &uuid);
+    void refreshAllPatientModel() const;
 
 Q_SIGNALS:
     

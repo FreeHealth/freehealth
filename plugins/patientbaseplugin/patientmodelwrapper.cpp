@@ -33,6 +33,7 @@
 
 #include "patientmodelwrapper.h"
 #include "patientbar.h"
+#include "patientcore.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -48,6 +49,7 @@
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 using namespace Patients;
 using namespace Internal;
@@ -160,21 +162,21 @@ bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value
 
 void PatientModelWrapper::hidePatientBar()
 {
-    Patients::PatientBar::instance()->hide();
+    patientCore()->patientBar()->hide();
 }
 
 void PatientModelWrapper::showPatientBar()
 {
     // Show only if a patient is currently selected
     if (m_Model->currentPatient().isValid())
-        Patients::PatientBar::instance()->show();
+        patientCore()->patientBar()->show();
     else
-        Patients::PatientBar::instance()->hide();
+        patientCore()->patientBar()->hide();
 }
 
 bool PatientModelWrapper::isPatientBarVisible() const
 {
-    return Patients::PatientBar::instance()->isVisible();
+    return patientCore()->patientBar()->isVisible();
 }
 
 QHash<QString, QString> PatientModelWrapper::fullPatientName(const QString &uuid) const

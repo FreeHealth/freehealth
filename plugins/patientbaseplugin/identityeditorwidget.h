@@ -19,80 +19,71 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
-#define PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
+#ifndef PATIENTS_IDENTITYEDITORWIDGET_H
+#define PATIENTS_IDENTITYEDITORWIDGET_H
 
-#include <QAbstractListModel>
+#include <patientbaseplugin/patientbase_exporter.h>
+#include <coreplugin/iphotoprovider.h>
 
-/**
- * \file basicsqlpatientmodel.h
- * \author Eric Maeker
- * \version 0.8.0
- * \date 04 Dec 2012
-*/
+#include <QWidget>
+#include <QModelIndex>
 
 namespace Patients {
-class PatientCore;
+class PatientModel;
+
 namespace Internal {
-class BasicSqlPatientModelPrivate;
+class IdentityEditorWidgetPrivate;
+}
 
-class BasicSqlPatientFilter
-{
-public:
-    BasicSqlPatientFilter();
-
-    bool isNull() const {return _birthName.isEmpty() && _secondName.isEmpty() && _firstName.isEmpty();}
-
-    void setBirthName(const QString &name) {_birthName = name;}
-    QString birthName() const {return _birthName;}
-
-    void setSecondName(const QString &name) {_secondName = name;}
-    QString secondName() const {return _secondName;}
-
-    void setFirstName(const QString &name) {_firstName = name;}
-    QString firstName() const {return _firstName;}
-
-private:
-    QString _birthName, _secondName, _firstName;
-};
-
-class BasicSqlPatientModel : public QAbstractListModel
+class PATIENT_EXPORT IdentityEditorWidget : public QWidget
 {
     Q_OBJECT
-    friend class Patients::PatientCore;
-
-protected:
-    explicit BasicSqlPatientModel(QObject *parent = 0);
-    bool initialize();
+    friend class Internal::IdentityEditorWidgetPrivate;
 
 public:
-    ~BasicSqlPatientModel();
+    enum EditMode {
+        ReadOnlyMode,
+        ReadWriteMode
+    };
 
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &) const;
-    int numberOfFilteredPatients() const;
+    IdentityEditorWidget(QWidget *parent = 0, EditMode mode = ReadOnlyMode);
+    ~IdentityEditorWidget();
 
-    void fetchMore(const QModelIndex &parent);
-    bool canFetchMore(const QModelIndex &parent) const;
+    bool isIdentityValid() const;
+    bool isIdentityAlreadyInDatabase() const;
+    bool isModified() const;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QString currentBirthName() const;
+    QString currentSecondName() const;
+    QString currentFirstName() const;
+    QString currentGender() const;
+    QDate currentDateOfBirth() const;
 
-    bool setFilter(const BasicSqlPatientFilter &filter);
+    QPixmap currentPhoto() const;
+    bool hasPhoto() const;
+
+public Q_SLOTS:
+//    void setCurrentIndex(const QModelIndex &patientIndex);
+    bool submit();
+    void updateGenderImage(int genderIndex);
+    void updateGenderImage();
+
+private:
+    void changeEvent(QEvent *e);
 
 private Q_SLOTS:
-    void onCoreDatabaseServerChanged();
-    
+    void photoButton_clicked();
+    void onCurrentPatientChanged();
+
 private:
-    Internal::BasicSqlPatientModelPrivate *d;
+    Internal::IdentityEditorWidgetPrivate *d;
 };
 
-} // namespace Internal
-} // namespace Patients
+}  // End namespace Patients
 
-#endif // PATIENTS_INTERNAL_BASICSQLPATIENTMODEL_H
-
+#endif // PATIENTS_IDENTITYEDITORWIDGET_H

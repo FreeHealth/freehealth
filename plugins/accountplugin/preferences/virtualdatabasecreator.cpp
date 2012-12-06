@@ -281,55 +281,6 @@ void VirtualDatabaseCreator::on_populate_clicked()
         createAccount(userUid, &r);
     }
     accountBase()->database().commit();
-
-//    for(int i = 0; i < nb; ++i) {
-//        if (i % 100 == 0) {
-//            dlg.setValue(i);
-//            patientBase()->database().transaction();
-//        }
-//        QString name, sur, sec, g;
-//        int title, lk;
-//        QDate death, dob;
-
-//        name = r.getRandomName();
-//        dob = r.randomDate(1910);
-
-//        if (r.randomInt(2) == 1) {
-//            g = "F";
-//            sur= r.getRandomFirstname(false);
-//            sec = r.getRandomName();
-//            title = 2;
-//        } else {
-//            g = "M";
-//            sur= r.getRandomFirstname(true);
-//            sec = r.getRandomName();
-//            title = 1;
-//        }
-
-//        if (r.randomInt(2)) {
-//            death = r.randomDate(1980);
-//        }
-//        QPair<int, QString> p = r.getRandomFrenchCity();
-//        if (r.randomInt(3) == 1)
-//            lk =  userLkId + 1;
-//        else
-//            lk = userLkId;
-
-//        createPatient(name,sec, sur,g,title,
-//                      dob,"France","",r.getRandomString(65),
-//                      QString::number(p.first), p.second,
-//                      Utils::Database::createUid(), lk, "", death);
-
-//        if (i % 100 == 99)
-//            patientBase()->database().commit();
-
-//        qApp->processEvents();
-//        if (dlg.wasCanceled())
-//            break;
-//    }
-//    patientBase()->database().commit();
-
-//    refreshPatientModel();
 }
 
 void VirtualDatabaseCreator::changeEvent(QEvent *e)

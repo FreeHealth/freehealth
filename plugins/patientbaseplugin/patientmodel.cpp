@@ -288,10 +288,30 @@ void PatientModel::onCoreDatabaseServerChanged()
 }
 
 /**
+ * Call all the plugin Core::IPatientListener::currentPatientAboutToChange()
+ * to e.g. save data before changing to the new patient. This method MUST BE
+ * used BEFORE any setCurrentPatient(). \n
+ * It returns true if you can set the new current patient, otherwise it returns false.
+ * You should not set the current patient if this method returns false.
+ * \sa setCurrentPatient(), endChangeCurrentPatient(), Core::IPatientListener
+ */
+bool PatientModel::beginChangeCurrentPatient()
+{
+    // Call all extensions that provide listeners to patient change: the extensions can now do things like
+    // save data BEFORE the patient is changed.
+    QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
+    for(int i = 0; i < listeners.count(); ++i) {
+        if (!listeners.at(i)->currentPatientAboutToChange()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
   * \brief Sets the index to the given patient QModelIndex.
   *
-  * Before changing to the new patient, the plugin extension Core::IPatientListener->currentPatientAboutToChange()
-  * is called to enable plugins to e.g. save data before changing to the new patient.
+  * Before changing to the new patient, .
   *
   * Two new signals \e currentPatientChanged() and currentPatientChanged(QModelIndex) are emitted when the new current patient
   * is set. If the new patient is the current one, no signals are emitted.
@@ -300,25 +320,30 @@ void PatientModel::onCoreDatabaseServerChanged()
  */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
+    // Same patient as the current one?
     const QString &patientUuid = this->patientUuid(index);
     if (patientUuid == d->m_CurrentPatientUuid) {
         return;
     }
     d->m_CurrentPatientUuid = patientUuid;
 
-    // Call all extensions that provide listeners to patient change: the extensions can now do things like
-    // save data BEFORE the patient is changed.
-    QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
-    for(int i = 0; i < listeners.count(); ++i) {
-        if (!listeners.at(i)->currentPatientAboutToChange()) {
-            return;
-        }
-    }
-
     d->m_CurrentPatientIndex = index;
     LOG("setCurrentPatient: " + patientUuid);
-    Q_EMIT currentPatientChanged(patientUuid);
-    Q_EMIT currentPatientChanged(index);
+}
+
+/**
+ * After setting the current patient with beginChangeCurrentPatient() and setCurrentPatient(),
+ * you must call this method to ensure that all view and submodels get sync with the
+ * new current patient. \n
+ * Internally, this method emits the two following signals:
+ * - currentPatientChanged(QString);
+ * - currentPatientChanged(QModelIndex);
+ * \sa setCurrentPatient(), beginChangeCurrentPatient(), Core::IPatientListener
+ */
+void PatientModel::endChangeCurrentPatient()
+{
+    Q_EMIT currentPatientChanged(d->m_CurrentPatientUuid);
+    Q_EMIT currentPatientChanged(d->m_CurrentPatientIndex);
 }
 
 /**

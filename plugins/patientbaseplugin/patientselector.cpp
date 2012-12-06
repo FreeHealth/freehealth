@@ -179,7 +179,9 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     d->ui->searchLine->setDelayedSignals(true);
 
     // Get the active model
-    setPatientModel(new PatientModel(this));
+    PatientModel *model = new PatientModel(this);
+    setPatientModel(model);
+    patientCore()->registerPatientModel(model);
 
     // datetime delegate
     d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
@@ -219,17 +221,17 @@ PatientSelector::~PatientSelector()
 void PatientSelector::initialize()
 {
     // Here we assume that the Core::IPatient model is not already filtered
-    QModelIndex current;
-    if (!d->m_Model->currentPatient().isValid()) {
-        current = d->m_Model->index(0,0);
-        d->m_Model->blockSignals(true);
-        d->m_Model->setCurrentPatient(current);
-        d->m_Model->blockSignals(false);
-    } else {
-        current = d->m_Model->currentPatient();
-    }
-    d->ui->tableView->selectRow(current.row());
-    changeIdentity(current, QModelIndex());
+//    QModelIndex current;
+//    if (!d->m_Model->currentPatient().isValid()) {
+//        current = d->m_Model->index(0,0);
+//        d->m_Model->blockSignals(true);
+//        d->m_Model->setCurrentPatient(current);
+//        d->m_Model->blockSignals(false);
+//    } else {
+//        current = d->m_Model->currentPatient();
+//    }
+//    d->ui->tableView->selectRow(current.row());
+//    changeIdentity(current, QModelIndex());
 }
 
 void PatientSelector::updateNavigationButton()
@@ -435,10 +437,10 @@ bool PatientSelector::event(QEvent *event)
         d->ui->retranslateUi(this);
         break;
     case QEvent::Show:
-        PatientBar::instance()->hide();
+        patientCore()->patientBar()->hide();
         break;
     case QEvent::Hide:
-        PatientBar::instance()->show();
+        patientCore()->patientBar()->show();
         break;
     default:
         break;
