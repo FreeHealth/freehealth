@@ -54,6 +54,8 @@ public:
     IdentityEditorWidget(QWidget *parent = 0, EditMode mode = ReadOnlyMode);
     ~IdentityEditorWidget();
 
+    void setPatientModel(PatientModel *model);
+
     bool isIdentityValid() const;
     bool isIdentityAlreadyInDatabase() const;
     bool isModified() const;
@@ -68,7 +70,7 @@ public:
     bool hasPhoto() const;
 
 public Q_SLOTS:
-//    void setCurrentIndex(const QModelIndex &patientIndex);
+    void setCurrentIndex(const QModelIndex &patientIndex);
     bool submit();
     void updateGenderImage(int genderIndex);
     void updateGenderImage();

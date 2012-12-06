@@ -224,7 +224,8 @@ public:
         }
     }
 
-    void createMapper()
+    // Create the mapper over the Core::IPatient
+    void createGenericMapper()
     {
         if (m_EditMode == IdentityEditorWidget::ReadWriteMode) {
             if (m_Mapper) {
@@ -234,24 +235,43 @@ public:
             m_Mapper = new FMFWidgetMapper(q);
             m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
             m_Mapper->setModel(patient());
-//            m_Mapper->setModel(m_PatientModel);
-            m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
-            m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
-            m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
-            m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
-
-            m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
-            m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
-            m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
-            m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
-
-            //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
-            // this prevents m_Mapper.isDirty from working correctly!
-            //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
-            m_Mapper->toFirst();
+            addMapperMapping();
         }
+    }
+
+    // Create the mapper over a specified PatientModel
+    void createPatientModelMapper(PatientModel *model)
+    {
+        if (m_EditMode == IdentityEditorWidget::ReadWriteMode) {
+            if (m_Mapper) {
+                delete m_Mapper;
+                m_Mapper = 0;
+            }
+            m_Mapper = new FMFWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
+            m_Mapper->setModel(model);
+            addMapperMapping();
+        }
+    }
+
+    // Add mapping to the mapper
+    void addMapperMapping()
+    {
+        m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
+        m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
+        m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
+        m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
+        m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
+        m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
+
+        m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
+        m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
+        m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
+        m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
+
+        //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
+        // this prevents m_Mapper.isDirty from working correctly!
+        //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
     }
 
 public:
@@ -281,7 +301,8 @@ IdentityEditorWidget::IdentityEditorWidget(QWidget *parent, EditMode mode) :
     d(new Internal::IdentityEditorWidgetPrivate(this, mode))
 {
     setObjectName("Patient::IdentityEditorWidget");
-    d->createMapper();
+    d->createGenericMapper();
+    d->m_Mapper->toFirst();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
@@ -290,6 +311,33 @@ IdentityEditorWidget::~IdentityEditorWidget()
     if (d)
         delete d;
     d = 0;
+}
+
+/**
+ * If you don't want to use the identity editor over the Core::IPatient
+ * (which represents the current patient), you can set your own Patients::PatientModel.
+ * The mapper is auto-selecting the first row of the model.\n
+ * Use the setCurrentIndex() to set the current index of the current editing index.
+ * \sa setCurrentIndex()
+ */
+void IdentityEditorWidget::setPatientModel(PatientModel *model)
+{
+    d->createPatientModelMapper(model);
+    d->m_Mapper->toFirst();
+}
+
+/**
+ * If you don't want to use the identity editor over the Core::IPatient
+ * (which represents the current patient), you can set your own Patients::PatientModel.
+ * Use the setPatientModel() and setCurrentIndex() to set the current index of
+ * the current editing index.
+ * \sa setPatientModel()
+ */
+void IdentityEditorWidget::setCurrentIndex(const QModelIndex &patientIndex)
+{
+    qWarning() << patientIndex.model() << d->m_Mapper->model();
+    if (patientIndex.model() == d->m_Mapper->model())
+        d->m_Mapper->setCurrentModelIndex(patientIndex);
 }
 
 /** \brief Test the validity of the "actually shown" identity. */

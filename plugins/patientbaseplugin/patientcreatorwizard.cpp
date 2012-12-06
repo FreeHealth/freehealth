@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class IdentityPage
+ * Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
+ */
+
 #include "patientcreatorwizard.h"
 #include "identityeditorwidget.h"
 #include "patientcore.h"
@@ -87,27 +92,20 @@ void PatientCreatorWizard::done(int r)
                                                              "", tr("Patient not saved"));
         if (reallyClose) {
             QDialog::done(r);
-            if (Patients::PatientModel::activeModel())
-                Patients::PatientModel::activeModel()->refreshModel();
+            patientCore()->refreshAllPatientModel();
         }
     } else if (r == QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
         if (settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool()) {
-            Patients::PatientModel *m = Patients::PatientModel::activeModel();
-            if (m) {
-                QString uid = m_Page->lastInsertedUuid();
-                if (!patientCore()->setCurrentPatientUuid(uid))
-                    LOG_ERROR("Unable to set the current patient");
-            }
+            QString uid = m_Page->lastInsertedUuid();
+            if (!patientCore()->setCurrentPatientUuid(uid))
+                LOG_ERROR("Unable to set the current patient");
         }
         QDialog::done(r);
     }
 }
 
-/** \class IdentityPage
-  * \brief Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
-  */
 IdentityPage::IdentityPage(QWidget *parent) :
     QWizardPage(parent)
 {
@@ -120,8 +118,8 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
-//    m_Identity->setPatientModel(m_Model);
-//    m_Identity->setCurrentIndex(m_Model->index(0,0));
+    m_Identity->setPatientModel(m_Model);
+    m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(0);
@@ -130,6 +128,10 @@ IdentityPage::IdentityPage(QWidget *parent) :
     setLayout(layout);
 }
 
+/**
+ * Validate the wizard page. \n
+ * Also check for identity duplicates
+ */
 bool IdentityPage::validatePage()
 {
     if (!m_Identity->isIdentityValid())
@@ -179,11 +181,12 @@ bool IdentityPage::validatePage()
         }
         delete model;
     }
+
     // submit the new patient
     bool ok = true;
-    connect(m_Model, SIGNAL(patientCreated(QString)), Patients::PatientModel::activeModel(), SIGNAL(patientCreated(QString)));
+    connect(m_Model, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {
-        Patients::PatientModel::activeModel()->refreshModel();
+        patientCore()->refreshAllPatientModel();
         LOG("Patient successfully created");
     } else {
         LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");
