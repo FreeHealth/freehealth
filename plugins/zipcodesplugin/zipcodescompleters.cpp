@@ -24,6 +24,22 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/*!
+ * \class ZipCodes::Internal::ZipCountryModel
+ * Private model used by the ZipCountryCompleters. It is a kind of proxy model for a QSqlModel
+ * that provides easy access for zipcodes, city, province and country data.
+ */
+
+/**
+ * \class ZipCodes::ZipCountryCompleters
+ * The ZipCountryCompleters is an object that eases the input of zipcodes and city names. It
+ * works together with a zipcode database. You just have to set the zipcode and city
+ * QLineEdit with setZipLineEdit() and setCityLineEdit(). Users will get a completer
+ * for the zipcode and the city. \n
+ * When the user will select a zipcode or a city name, both line edit will be updated
+ * with the selected data.
+*/
+
 #include "zipcodescompleters.h"
 
 #include <coreplugin/icore.h>
@@ -62,11 +78,6 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
-/*!
- * \class ZipCountryModel
- * Private model used by the ZipCountryCompleters. It is a kind of proxy model for a QSqlModel
- * that provides easy access for ZIP, city, and Country data.
- */
 ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvailable) :
     QSqlQueryModel(parent),
     m_DbAvailable(dbAvailable)
@@ -82,8 +93,6 @@ ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvail
             }
         }
     }
-
-
 }
 
 QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
@@ -231,17 +240,15 @@ static QString databaseFileName()
     return databasePath() + QDir::separator() + "zipcodes" + QDir::separator() + "zipcodes.db";
 }
 
-/**
-  \class ZipCountryCompleters
-  The ZipCountryCompleters is an object that eases the input of zipcodes and city names. It
-  works together with a zipcode database. You just have to set the zipcode and city QLineEdit with
-  setZipLineEdit() and setCityLineEdit(). Users will get a completer for the zipcode and the city.
-  When the user will select a zipcode or a city name, both line edit will be updated with the selected
-  data.
-*/
 ZipCountryCompleters::ZipCountryCompleters(QObject *parent) :
-    QObject(parent), m_cityEdit(0), m_zipEdit(0), m_countryCombo(0), m_Model(0),
-    m_ZipButton(0), m_CityButton(0), m_DbAvailable(false)
+    QObject(parent),
+    m_cityEdit(0),
+    m_zipEdit(0),
+    m_countryCombo(0),
+    m_Model(0),
+    m_ZipButton(0),
+    m_CityButton(0),
+    m_DbAvailable(false)
 {
     setObjectName("ZipCountryCompleters");
     createModel();
@@ -258,6 +265,10 @@ ZipCountryCompleters::~ZipCountryCompleters()
 
 void ZipCountryCompleters::createModel()
 {
+    if (m_Model) {
+        delete m_Model;
+        m_Model = 0;
+    }
     QSqlDatabase db;
     if (QSqlDatabase::connectionNames().contains("ZIPS")) {
         db = QSqlDatabase::database("ZIPS");
@@ -276,18 +287,31 @@ void ZipCountryCompleters::createModel()
             LOG_ERROR("Unable to open Zip database");
             m_DbAvailable = false;
         } else {
+            m_Model = new ZipCountryModel(this, db, m_DbAvailable);
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg("zipcodes").arg("sqlite"));
         }
     }
-    m_Model = new ZipCountryModel(this, db, m_DbAvailable);
 }
 
-/*! Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
+/*!
+ * Define the QComboBox to use as country selector.
+ * The combo will be automatically populated and its
+ * current index will be set to the current QLocale::Country
+ */
 void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 {
     m_countryCombo = box;
     connect(m_countryCombo, SIGNAL(currentCountryChanged(QLocale::Country)), this, SLOT(setCountryFilter(QLocale::Country)));
     setCountryFilter(m_countryCombo->currentCountry());
+}
+
+/*!
+ * Define the QComboBox to use as state/province selector.
+ * The combobox will be automatically populated.
+ */
+void setStateProvinceComboBox(QComboBox *box)
+{
+    Q_UNUSED(box);
 }
 
 /*! Define the QLineEdit to use as city name editor */
@@ -304,7 +328,7 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
     completer->popup()->setAlternatingRowColors(true);
     city->setCompleter(completer);
     connect(m_cityEdit, SIGNAL(textChanged(QString)), this, SLOT(cityTextChanged()));
-    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(indexActivated(QModelIndex)));
+    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(onCompleterIndexActivated(QModelIndex)));
 
     // button
     m_CityButton = new QToolButton(m_cityEdit);
@@ -326,7 +350,7 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     completer->popup()->setAlternatingRowColors(true);
     zip->setCompleter(completer);
     connect(m_zipEdit, SIGNAL(textChanged(QString)), this, SLOT(zipTextChanged()));
-    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(indexActivated(QModelIndex)));
+    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(onCompleterIndexActivated(QModelIndex)));
 
     // button
     m_ZipButton = new QToolButton(m_zipEdit);
@@ -335,13 +359,16 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     m_zipEdit->installEventFilter(this);
 }
 
-/*! When user selects a zip or a city this private slot is activated. It causes the line edit
-    to be populated with the selected values.
+/*!
+ * When user selects a zip or a city this private slot is activated. It causes the line edit
+ * to be populated with the selected values.
 */
-void ZipCountryCompleters::indexActivated(const QModelIndex &index)
+void ZipCountryCompleters::onCompleterIndexActivated(const QModelIndex &index)
 {
-    QString zip = m_Model->index(index.row(), ZipCountryModel::Zip).data().toString();
-    QString city = m_Model->index(index.row(), ZipCountryModel::City).data().toString();
+    if (!m_Model)
+        return;
+    const QString &zip = m_Model->index(index.row(), ZipCountryModel::Zip).data().toString();
+    const QString &city = m_Model->index(index.row(), ZipCountryModel::City).data().toString();
     if (m_zipEdit) {
         m_zipEdit->clearFocus();
         m_zipEdit->setText(zip);
@@ -367,18 +394,24 @@ void ZipCountryCompleters::setCountryFilter(const QLocale::Country country)
 /*! Sets a the new text new as filter for the zip completer */
 void ZipCountryCompleters::zipTextChanged()
 {
+    if (!m_Model)
+        return;
     m_Model->setZipCodeFilter(m_zipEdit->completer()->completionPrefix());
 }
 
 /*! Sets a the new text new as filter for the city completer */
 void ZipCountryCompleters::cityTextChanged()
 {
+    if (!m_Model)
+        return;
     m_Model->setCityFilter(m_cityEdit->completer()->completionPrefix());
 }
 
 /*! Checks validity of country/city/zipcode associationand sets icons according to the current status */
 void ZipCountryCompleters::checkData()
 {
+    if (!m_Model)
+        return;
     if (!m_zipEdit || !m_cityEdit) {
         return;
     }
@@ -429,8 +462,6 @@ void ZipCountryCompleters::checkData()
 void ZipCountryCompleters::packChanged(const DataPack::Pack &pack)
 {
     if (pack.dataType() == DataPack::Pack::ZipCodes) {
-        delete m_Model;
-        m_Model = 0;
         QSqlDatabase::removeDatabase("ZIPS");
         createModel();
         m_cityEdit->completer()->setModel(m_Model);
@@ -440,25 +471,3 @@ void ZipCountryCompleters::packChanged(const DataPack::Pack &pack)
     }
 }
 
-/** \deprecated Event Filter is used to draw toolButtons inside the QLineEdit. */
-bool ZipCountryCompleters::eventFilter(QObject *o, QEvent *e)
-{
-    if (o==m_zipEdit) {
-        if (e->type()==QEvent::Resize) {
-            m_zipEdit->event(e);
-            QSize sz = m_ZipButton->sizeHint();
-            int frameWidth = m_zipEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            m_ZipButton->move(m_zipEdit->rect().left() + frameWidth ,
-                              (m_zipEdit->rect().bottom() + 1 - sz.height()) / 2);
-        }
-    } else if (o==m_cityEdit) {
-        if (e->type()==QEvent::Resize) {
-            m_cityEdit->event(e);
-            QSize sz = m_CityButton->sizeHint();
-            int frameWidth = m_cityEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            m_CityButton->move(m_cityEdit->rect().left() + frameWidth ,
-                               (m_cityEdit->rect().bottom() + 1 - sz.height()) / 2);
-        }
-    }
-    return false;
-}

@@ -99,13 +99,14 @@ public:
     ~ZipCountryCompleters();
 
     void setCountryComboBox(Utils::CountryComboBox *box);
+    void setStateProvinceComboBox(QComboBox *box);
     void setCityLineEdit(Utils::QButtonLineEdit *country);
     void setZipLineEdit(Utils::QButtonLineEdit *zip);
     void checkData();
     QAbstractItemModel *completionModel() const {return m_Model;}
 
 private Q_SLOTS:
-    void indexActivated(const QModelIndex &index);
+    void onCompleterIndexActivated(const QModelIndex &index);
     void setCountryFilter(const QLocale::Country country);
     void zipTextChanged();
     void cityTextChanged();
@@ -113,7 +114,6 @@ private Q_SLOTS:
 
 private:
     void createModel();
-    bool eventFilter(QObject *, QEvent *);
 
 private:
     Utils::QButtonLineEdit *m_cityEdit, *m_zipEdit;
