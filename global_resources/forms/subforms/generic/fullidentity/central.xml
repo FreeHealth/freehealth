@@ -50,25 +50,27 @@
     <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
     <icon>__theme__/identity.png</icon>
 
-    <Item type="detailswidget" name="TrustedPerson" uifilename="./ui/xx/trusted.ui">
-        <label lang="xx">Trusted person</label>
-        <label lang="fr">Personne de confiance</label>
+    <Item type="detailswidget" name="FrGroup" uifilename="./ui/xx/ident.ui">
+        <uilink label="" widget="" layout="identityLayout"/>
+        <label lang="xx">Identity and address</label>
+        <label lang="fr">Identité et adresse</label>
+        <label lang="de">Identität und Anschrift</label>
+        <label lang="es">Identidad y dirección</label>
+        <options>SummaryFontBold;expanded</options>
+        <Item type="identity" name="IdentityWidget">
+            <uilink label="" widget="" layout="identityIncludeLayout"/>
+            <label lang="xx">Full Identity</label>
+            <label lang="fr">Identité</label>
+        </Item>
     </Item>
 
-    <Item type="identity" name="IdentityWidget">
+    <Item type="detailswidget" name="FrGroup" uifilename="./ui/xx/social.ui">
       <uilink label="" widget="" layout="identityLayout"/>
-      <label lang="xx">Full Identity</label>
-      <label lang="fr">Identité</label>
-      <options>compact</options>
-    </Item>
-
-    <Item type="group" name="FrGroup">
-      <uilink widget="frenchGroup"/>
       <country>FR</country>
       <label lang="xx">Social insurance</label>
       <label lang="fr">Sécurité sociale</label>
       <column>1</column>
-      <options>DontPrintEmptyValues</options>
+      <options>DontPrintEmptyValues;SummaryFontBold</options>
 
       <Item type="frenchnss" name="FrGroup::NSS">
         <uilink label="socialNumberLabel" widget="" layout="socialNumberLayout"/>
@@ -94,12 +96,12 @@
       </Item>
     </Item>
 
-    <Item type="group" name="ContactGroup">
-      <uilink widget="contactGroup"/>
+    <Item type="detailswidget" name="ContactGroup" uifilename="./ui/xx/contact.ui">
+      <uilink label="" widget="" layout="identityLayout"/>
       <label lang="xx">Contact</label>
       <label lang="fr">Contact</label>
       <column>1</column>
-      <options>DontPrintEmptyValues</options>
+      <options>DontPrintEmptyValues;SummaryFontBold</options>
 
       <Item type="shorttext" name="ContactGroup::Tels">
         <uilink label="telsLabel" widget="telsEdit"/>
@@ -165,12 +167,12 @@
 
     </Item>
 
-    <Item type="group" name="ProfGroup">
-        <uilink widget="profGroup"/>
+    <Item type="detailswidget" name="ProfGroup" uifilename="./ui/xx/prof.ui">
+        <uilink label="" widget="" layout="identityLayout"/>
         <label lang="xx">Profession</label>
         <label lang="fr">Profession</label>
         <column>1</column>
-        <options>DontPrintEmptyValues</options>
+        <options>DontPrintEmptyValues;SummaryFontBold</options>
 
         <Item type="shorttext" name="ProfGroup::Profession">
           <uilink label="profLabel" widget="profEdit"/>
@@ -194,6 +196,54 @@
           <label lang="fr">Téléphone professionel</label>
           <options>DontPrintEmptyValues</options>
           <patientdata>ProfessionalTels</patientdata>
+        </Item>
+
+    </Item>
+
+    <Item type="detailswidget" name="TrustedPerson" uifilename="./ui/xx/trusted.ui">
+        <uilink label="" widget="" layout="identityLayout"/>
+        <label lang="xx">Trusted person</label>
+        <label lang="fr">Personne de confiance</label>
+        <options>DontPrintEmptyValues;SummaryFontBold</options>
+
+        <Item type="shorttext" name="TrustedPerson::Names">
+          <uilink label="nameslabel" widget="names"/>
+          <label lang="xx">Names</label>
+          <label lang="fr">Noms</label>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="shorttext" name="TrustedPerson::FirstNames">
+          <uilink label="firstlabel" widget="firstnames"/>
+          <label lang="xx">Firstnames</label>
+          <label lang="fr">Prénoms</label>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="shorttext" name="TrustedPerson::DOB">
+          <uilink label="doblabel" widget="profTelsEdit"/>
+          <label lang="xx">Date of birth</label>
+          <label lang="fr">Date de naissance</label>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="date" name="TrustedPerson::DOB">
+          <uilink label="doblabel" layout="doblayout"/>
+          <label lang="xx">Date of birth</label>
+          <label lang="fr">Date de naissance</label>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="longtext" name="TrustedPerson::Address">
+          <uilink label="addresslabel" widget="address"/>
+          <label lang="xx">Date of birth</label>
+          <label lang="fr">Date de naissance</label>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="zipcitycountry" name="TrustedPerson::ZipTownCountry">
+          <uilink label="" layout="ziplayout"/>
+          <options>DontPrintEmptyValues</options>
         </Item>
 
     </Item>

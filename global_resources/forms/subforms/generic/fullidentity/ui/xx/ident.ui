@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QGridLayout" name="identityLayout">
+  <layout class="QGridLayout" name="identityIncludeLayout">
    <property name="spacing">
-    <number>10</number>
+    <number>5</number>
    </property>
   </layout>
  </widget>
