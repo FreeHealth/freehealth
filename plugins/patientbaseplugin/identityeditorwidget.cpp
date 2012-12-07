@@ -53,6 +53,7 @@
 
 #include <zipcodesplugin/zipcodescompleters.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/uppercasevalidator.h>
 #include <extensionsystem/pluginmanager.h>
@@ -140,7 +141,6 @@ public:
     IdentityEditorWidgetPrivate(IdentityEditorWidget *parent, IdentityEditorWidget::EditMode mode) :
         editUi(0),
         m_Mapper(0), m_EditMode(mode),
-        zipCompleter(0),
         m_hasRealPhoto(false),
         q(parent)
     {
@@ -151,6 +151,8 @@ public:
             editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
             editUi->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));
 
+            editUi->zipcodesWidget->initialize(ZipCodes::ZipCodesWidget::GridLayout);
+
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
 
@@ -160,11 +162,6 @@ public:
 
             Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
             editUi->firstname->setValidator(capVal);
-
-            zipCompleter = new ZipCodes::ZipCountryCompleters(q);
-            zipCompleter->setCityLineEdit(editUi->city);
-            zipCompleter->setZipLineEdit(editUi->zipcode);
-            zipCompleter->setCountryComboBox(editUi->country);
 
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
             //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
@@ -187,10 +184,8 @@ public:
                 updateDefaultPhotoAction();
 
             } else {
-                // no IPhotoProvider plugin available!
-
+                LOG_ERROR_FOR(q, "No photoProvider");
                 // buggy: the photo saving does not work ATM!
-
 //                if (editUi->photoButton->pixmap().isNull())
 //                    editUi->photoButton->setDisabled(true);
             }
@@ -267,14 +262,13 @@ public:
         m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
         m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
 
-        m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
-        m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
-        m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
-        m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
-
+        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Street, ZipCodes::ZipCodesWidget::StreetPlainText);
+        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::City, ZipCodes::ZipCodesWidget::CityPlainText);
+        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::ZipCode, ZipCodes::ZipCodesWidget::ZipcodePlainText);
+        //        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::State, ZipCodes::ZipCodesWidget::StateProvincePlainText);
         //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
         // this prevents m_Mapper.isDirty from working correctly!
-        //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
+        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Country, ZipCodes::ZipCodesWidget::CountryIso);
     }
 
 public:
@@ -282,7 +276,6 @@ public:
     FMFWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityEditorWidget::EditMode m_EditMode;
-    ZipCodes::ZipCountryCompleters *zipCompleter;
     QPixmap m_Photo;
     bool m_hasRealPhoto;
 

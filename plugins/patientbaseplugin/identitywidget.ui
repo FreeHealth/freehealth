@@ -23,80 +23,8 @@
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Street</string>
-        </property>
-        <property name="buddy">
-         <cstring>street</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>City</string>
-        </property>
-        <property name="buddy">
-         <cstring>city</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="Utils::QButtonLineEdit" name="city"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Zipcode</string>
-        </property>
-        <property name="buddy">
-         <cstring>zipcode</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="Utils::QButtonLineEdit" name="zipcode"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Country</string>
-        </property>
-        <property name="buddy">
-         <cstring>country</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="Views::CountryComboBox" name="country"/>
-      </item>
-      <item row="4" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPlainTextEdit" name="street">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="tabChangesFocus">
-         <bool>true</bool>
-        </property>
-       </widget>
+      <item row="0" column="0" colspan="2">
+       <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
       </item>
      </layout>
     </widget>
@@ -267,16 +195,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Utils::QButtonLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">utils/widgets/qbuttonlineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Views::CountryComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">listviewplugin/countrycombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>Utils::BirthDayEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">utils/widgets/birthdayedit.h</header>
@@ -286,6 +204,12 @@
    <extends>QToolButton</extends>
    <header location="global">patientbaseplugin/pixmapbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>ZipCodes::ZipCodesWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">zipcodesplugin/zipcodeswidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>titleCombo</tabstop>
@@ -294,10 +218,6 @@
   <tabstop>firstname</tabstop>
   <tabstop>genderCombo</tabstop>
   <tabstop>dob</tabstop>
-  <tabstop>street</tabstop>
-  <tabstop>city</tabstop>
-  <tabstop>zipcode</tabstop>
-  <tabstop>country</tabstop>
   <tabstop>photoButton</tabstop>
  </tabstops>
  <resources/>
