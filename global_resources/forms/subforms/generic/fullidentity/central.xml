@@ -69,6 +69,7 @@
       <country>FR</country>
       <label lang="xx">Social insurance</label>
       <label lang="fr">Sécurité sociale</label>
+      <extralabel>{Subs::Tools::Identity::FrGroup::NSS}</extralabel>
       <column>1</column>
       <options>DontPrintEmptyValues;SummaryFontBold</options>
 
@@ -220,15 +221,8 @@
           <options>DontPrintEmptyValues</options>
         </Item>
 
-        <Item type="shorttext" name="TrustedPerson::DOB">
-          <uilink label="doblabel" widget="profTelsEdit"/>
-          <label lang="xx">Date of birth</label>
-          <label lang="fr">Date de naissance</label>
-          <options>DontPrintEmptyValues</options>
-        </Item>
-
-        <Item type="date" name="TrustedPerson::DOB">
-          <uilink label="doblabel" layout="doblayout"/>
+        <Item type="moderndate" name="TrustedPerson::DOB">
+          <uilink label="doblabel" widget="" layout="doblayout"/>
           <label lang="xx">Date of birth</label>
           <label lang="fr">Date de naissance</label>
           <options>DontPrintEmptyValues</options>
@@ -236,13 +230,8 @@
 
         <Item type="longtext" name="TrustedPerson::Address">
           <uilink label="addresslabel" widget="address"/>
-          <label lang="xx">Date of birth</label>
-          <label lang="fr">Date de naissance</label>
-          <options>DontPrintEmptyValues</options>
-        </Item>
-
-        <Item type="zipcitycountry" name="TrustedPerson::ZipTownCountry">
-          <uilink label="" layout="ziplayout"/>
+          <label lang="xx">Full address</label>
+          <label lang="fr">Adresse complète</label>
           <options>DontPrintEmptyValues</options>
         </Item>
 
