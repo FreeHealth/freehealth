@@ -45,11 +45,17 @@ using namespace Internal;
 namespace {
 const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
 const char * const  NOT_PRINTABLE        = "notprintable";
+const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
 }
 
 static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
+}
+
+static inline bool hasOption(Form::FormItem *item, const QString &option)
+{
+    return item->getOptions().contains(option, Qt::CaseInsensitive);
 }
 
 BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) :
@@ -58,32 +64,38 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
 {
     setObjectName("BaseDetailsWidget");
 
+    qWarning() << "BASEDETAILS";
+
     // Create detailsWidget content
     QWidget *content = 0;
     const QString &uiContent = formItem->spec()->value(Form::FormItemSpec::Spec_UiFileContent).toString();
     if (!uiContent.isEmpty()) {
         // Create the Ui using the QtUi file
-        QUiLoader loader;
-        QBuffer buf;
-        buf.setData(uiContent.toAscii());
-        content = loader.load(&buf, this);
+//        QUiLoader loader;
+//        QBuffer buf;
+//        buf.setData(uiContent.toAscii());
+//        content = loader.load(&buf, this);
 
         // Manage options
     } else {
         // TODO: manage error
+        LOG_ERROR("Ui file not found: " + formItem->spec()->value(Form::FormItemSpec::Spec_UiFileContent).toString());
     }
+
+    // Add the detailsWidget
+    _detailsWidget = new Utils::DetailsWidget(this);
+    _detailsWidget->setWidget(content);
+    _detailsWidget->setSummaryText(formItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
+
+    // manage options
+    if (hasOption(formItem, ::SUMMARY_FONT_BOLD))
+        _detailsWidget->setSummaryFontBold(true);
 
     // Create the global layout
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
     layout->setMargin(0);
     layout->setSpacing(0);
-
-    // Add the detailsWidget
-    _detailsWidget = new Utils::DetailsWidget(this);
-    _detailsWidget->setWidget(content);
-//    _detailsWidget->setSummaryText();
-//    _detailsWidget->setSummaryFontBold();
 
     layout->addWidget(_detailsWidget);
 
@@ -176,4 +188,6 @@ QString BaseDetailsWidget::printableHtml(bool withValues) const
 
 void BaseDetailsWidget::retranslate()
 {
+    Q_ASSERT(_detailsWidget);
+    _detailsWidget->setSummaryText(m_FormItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
 }
