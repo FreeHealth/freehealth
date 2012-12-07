@@ -133,8 +133,8 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_ADDRESS_STREET, "STREET", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_ADDRESS_STREET_NUMBER, "STREET_NUMBER", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_ADDRESS_ZIPCODE, "ZIP", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADRESS_CITY, "CITY", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_ADRESS_PROVINCE, "PROV", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_ADDRESS_CITY, "CITY", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_ADDRESS_PROVINCE, "PROV", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_ADDRESS_COUNTRY, "COUNTRY", FieldIsLanguageText);  // two chars field
     addField(Table_IDENT, IDENTITY_ADDRESS_NOTE, "NOTE", FieldIsLongText);
     addField(Table_IDENT, IDENTITY_MAILS, "MAILS", FieldIsLongText);  // Context:Value;Context;Value... Work:eric@work.fr...
@@ -256,9 +256,9 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
     query.bindValue(IDENTITY_ADDRESS_STREET, street);
     query.bindValue(IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
     query.bindValue(IDENTITY_ADDRESS_ZIPCODE, zip);
-    query.bindValue(IDENTITY_ADRESS_CITY, city);
+    query.bindValue(IDENTITY_ADDRESS_CITY, city);
     query.bindValue(IDENTITY_ADDRESS_COUNTRY, country);
-    query.bindValue(IDENTITY_ADRESS_PROVINCE, QVariant());
+    query.bindValue(IDENTITY_ADDRESS_PROVINCE, QVariant());
     query.bindValue(IDENTITY_ADDRESS_NOTE, note);
     query.bindValue(IDENTITY_MAILS, QVariant());
     query.bindValue(IDENTITY_TELS, QVariant());

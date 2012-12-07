@@ -427,8 +427,9 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Profession:    col = Constants::IDENTITY_PROFESSION;        break;
         case IPatient::Street:        col = Constants::IDENTITY_ADDRESS_STREET;    break;
         case IPatient::ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;   break;
-        case IPatient::City:          col = Constants::IDENTITY_ADRESS_CITY;       break;
+        case IPatient::City:          col = Constants::IDENTITY_ADDRESS_CITY;       break;
         case IPatient::Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
+        case IPatient::StateProvince: col = Constants::IDENTITY_ADDRESS_PROVINCE;   break;
         case IPatient::AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
         case IPatient::Mails:         col = Constants::IDENTITY_MAILS;             break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;              break;
@@ -476,14 +477,15 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 break;
             }
         case IPatient::FullAddress:
-            {
-                const QString &street = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_STREET)).toString();
-                const QString &city = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADRESS_CITY)).toString();
-                const QString &zip = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_ZIPCODE)).toString();
-                QString country = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_COUNTRY)).toString();
-                country = Utils::countryIsoToName(country);
-                return QString("%1 %2 %3 %4").arg(street, city, zip, country).simplified();
-            }
+        {
+            const QString &street = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_STREET)).toString();
+            const QString &province = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_PROVINCE)).toString();
+            const QString &city = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_CITY)).toString();
+            const QString &zip = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_ZIPCODE)).toString();
+            QString country = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_COUNTRY)).toString();
+            country = Utils::countryIsoToName(country);
+            return QString("%1 %2 %3 %4 %5").arg(street, province, city, zip, country).simplified();
+        }
         case IPatient::Age:
         {
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
@@ -639,13 +641,19 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
         case IPatient::City:
         {
-            col = Constants::IDENTITY_ADRESS_CITY;
+            col = Constants::IDENTITY_ADDRESS_CITY;
             colsToEmit << Core::IPatient::FullAddress;
             break;
         }
         case IPatient::Country:
         {
             col = Constants::IDENTITY_ADDRESS_COUNTRY;
+            colsToEmit << Core::IPatient::FullAddress;
+            break;
+        }
+        case IPatient::StateProvince:
+        {
+            col = Constants::IDENTITY_ADDRESS_PROVINCE;
             colsToEmit << Core::IPatient::FullAddress;
             break;
         }
@@ -778,7 +786,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
 //            // WHERE CITY LIKE '%'
 //            d->m_ExtraFilter.clear();
-//            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ADRESS_CITY) + " ";
+//            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ADDRESS_CITY) + " ";
 //            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(filter);
             break;
         }

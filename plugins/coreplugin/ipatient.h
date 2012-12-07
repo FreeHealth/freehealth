@@ -85,6 +85,7 @@ public:
         ZipCode,
         City,
         Country,
+        StateProvince,
         AddressNote,
         FullAddress,
         Mails,             // 30
