@@ -23,6 +23,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Views::CountryComboBox
+ * Ready to use country combobox, with flags...\n
+ * Path the theme and initialization are set/done in the ctor.
+ * \sa Utils::CountryComboBox
+ */
+
 #include "countrycombobox.h"
 
 #include <coreplugin/icore.h>
