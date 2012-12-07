@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "baseformwidgets.h"
 #include "frenchsocialnumber.h"
+#include "basedetailswidget.h"
 //#include "austriansocialnumber.h"
 
 #include <coreplugin/icore.h>
@@ -94,6 +95,7 @@ namespace {
         Type_Group,
         Type_Date,
         Type_Button,
+        Type_DetailsWidget,
         Type_FrenchNSS,
         Type_AustrianSVNR,
         Type_MaxType
@@ -104,7 +106,7 @@ namespace {
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
             << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
             << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "button" << "frenchnss" << "austriansvnr";
+            << "date" << "button" << "detailswidget" << "frenchnss" << "austriansvnr";
 
     const char * const  EXTRAS_COUNTRY          = "country";
     const char * const  EXTRAS_KEY              = "option";
@@ -302,6 +304,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_Spin : return new BaseSpin(formItem,parent);
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
+    case ::Type_DetailsWidget: return new BaseDetailsWidget(formItem, parent);
     case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
 //    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
     default: return 0;
