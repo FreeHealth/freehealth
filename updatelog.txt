@@ -1,36 +1,32 @@
 FreeMedForms
-0.8.0
+0.8.2
 ===== News =====
 
-  * Activation of forms now per single instead of double click
-  * First release of the alert plugin
-  * First release of the webcam plugin
+  * New form items:
+    * detailswidget
+    * moderndate
 
 ===== Bug correction =====
 
   * FreeMedForms
-    * Birth date editor in patient creator corrected
-    * Preferences dialog appears without any latency
-    * Ultra-fast application closing
     * Faster start of the app
+    * Patient selector corrections
+    * Bug report sending improvements
+  * FreeDiams
   * FreeAccount
-    * Segfault when closing FreeAccount
+  * FreeToolBox
+    * UI update, workflow simplified
+    * Datapack server creation (free & non-free)
+    * New zipcodes datapack (whole world)
+    * Drugs database & datapack automation updated
+    * Many bug fixes
   * Installation && configuration / databases
-    * Avoid UI freezing when creating && populating databases
-    * Network configuration && database transactions
   * PMHx
-    * correctly manages the ICD10 database now
   * Agenda:
-    * Drag'n drop corrected
-    * Correcting the appointement context menu
+  * DataPack manager
+    * Correcting crash when download dialog is cancelled
   * Debian specific
-    * kFreeBSD compilation corrected
-    * hurd compilation corrected
   * Under the hood
-    * Updating QtCreator libs to 4.5 release
-    * Updating Plugin information dialog
-  * Many typos corrected
-  * Many bug fixes
 
 ===== Packaging and documentation ====
 

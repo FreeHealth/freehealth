@@ -1,5 +1,5 @@
-version=0.7.6
+version=0.8.0
 {
-    * June, 2012
-    * Debug version
+    * Nov, 2012
+    * New stable version with new features
 }
