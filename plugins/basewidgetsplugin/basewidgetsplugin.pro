@@ -10,6 +10,7 @@ include(../fmf_plugins.pri)
 include(basewidgetsplugin_dependencies.pri)
 
 HEADERS += basewidgetsplugin.h \
+    constants.h \
     baseformwidgets.h \
     baseformwidgetsoptionspage.h \
     texteditorfactory.h \
@@ -18,9 +19,10 @@ HEADERS += basewidgetsplugin.h \
     frenchsocialnumber.h \
     basedetailswidget.h \
     basedatecompleterwidget.h \
-    constants.h
+#    basezipcodeswidget.h
 
 SOURCES += basewidgetsplugin.cpp \
+    constants.cpp \
     baseformwidgets.cpp \
     baseformwidgetsoptionspage.cpp \
     texteditorfactory.cpp \
@@ -29,7 +31,7 @@ SOURCES += basewidgetsplugin.cpp \
     calculationwidgets.cpp \
     basedetailswidget.cpp \
     basedatecompleterwidget.cpp \
-    constants.cpp
+#    basezipcodeswidget.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \
     baseformwidget.ui \
