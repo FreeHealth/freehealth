@@ -25,10 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Patients::PatientModel
-  \brief All Patients' accessible data are provided by this model.
-  The model creates and manages the Core::IPatient model wrapper.
-  \sa Core::IMode, Core::IPatient
+ * \class Patients::PatientModel
+ * \brief All Patients' SQL accessible data are provided by this model.
+ * \sa Patients::PatientCore, Core::IMode, Core::IPatient
 */
 
 #include "patientmodel.h"
@@ -61,7 +60,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-enum { WarnDatabaseFilter = false };
+enum { WarnDatabaseFilter = true };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -74,8 +73,6 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 namespace Patients {
 namespace Internal {
-
-
 class PatientModelPrivate
 {
 public:
@@ -83,6 +80,7 @@ public:
         m_SqlPatient(0),
         m_SqlPhoto(0),
         m_EmitCreationAtSubmit(false),
+        m_RefreshModelOnCoreDatabaseServerChanged(false),
         q(parent)
     {
     }
@@ -105,11 +103,6 @@ public:
 
     void refreshFilter()
     {
-        // TODO: filter photo SQL as well
-
-        // WHERE (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_PRACT_UID='...')) OR
-        //       (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_GROUP_UID='...'))
-
         // Manage virtual patients
         QHash<int, QString> where;
         if (!settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA, true).toBool())
@@ -124,17 +117,15 @@ public:
         if (!m_ExtraFilter.isEmpty())
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
-        filter += QString(" ORDER BY lower(`%1`) ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
-
-        if (WarnDatabaseFilter)
-            LOG_FOR(q, "Filtering patient database with: " + filter);
+        filter += QString(" ORDER BY `%1` ASC")
+                .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
 
         m_SqlPatient->setFilter(filter);
+
+        if (WarnDatabaseFilter)
+            LOG_FOR(q, "Filtering patient model with: " + m_SqlPatient->filter());
+
         m_SqlPatient->select();
-
-//        qWarning() << m_SqlPatient->query().lastQuery();
-
-//        q->reset();
     }
 
     QIcon iconizedGender(const QModelIndex &index)
@@ -226,14 +217,15 @@ public:
         return QPixmap();
     }
 
-
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
-    bool m_EmitCreationAtSubmit;
+    bool m_EmitCreationAtSubmit, m_RefreshModelOnCoreDatabaseServerChanged;
+    QString m_CurrentPatientUuid;
+    QPersistentModelIndex m_CurrentPatientIndex;
 
 private:
     PatientModel *q;
@@ -242,13 +234,12 @@ private:
 } // end namespace Internal
 } // end namespace Patients
 
-PatientModel *PatientModel::m_ActiveModel = 0;
-
 PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
     setObjectName("PatientModel");
     onCoreDatabaseServerChanged();
+    d->m_RefreshModelOnCoreDatabaseServerChanged = true;
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -289,14 +280,35 @@ void PatientModel::onCoreDatabaseServerChanged()
         delete d->m_SqlPhoto;
     d->m_SqlPhoto = new QSqlTableModel(this, patientBase()->database());
     d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
-    d->refreshFilter();
+    if (d->m_RefreshModelOnCoreDatabaseServerChanged)
+        d->refreshFilter();
+}
+
+/**
+ * Call all the plugin Core::IPatientListener::currentPatientAboutToChange()
+ * to e.g. save data before changing to the new patient. This method MUST BE
+ * used BEFORE any setCurrentPatient(). \n
+ * It returns true if you can set the new current patient, otherwise it returns false.
+ * You should not set the current patient if this method returns false.
+ * \sa setCurrentPatient(), endChangeCurrentPatient(), Core::IPatientListener
+ */
+bool PatientModel::beginChangeCurrentPatient()
+{
+    // Call all extensions that provide listeners to patient change: the extensions can now do things like
+    // save data BEFORE the patient is changed.
+    QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
+    for(int i = 0; i < listeners.count(); ++i) {
+        if (!listeners.at(i)->currentPatientAboutToChange()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
   * \brief Sets the index to the given patient QModelIndex.
   *
-  * Before changing to the new patient, the plugin extension Core::IPatientListener->currentPatientAboutToChange()
-  * is called to enable plugins to e.g. save data before changing to the new patient.
+  * Before changing to the new patient, .
   *
   * Two new signals \e currentPatientChanged() and currentPatientChanged(QModelIndex) are emitted when the new current patient
   * is set. If the new patient is the current one, no signals are emitted.
@@ -305,23 +317,39 @@ void PatientModel::onCoreDatabaseServerChanged()
  */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
-    if (index == m_CurrentPatient) {
+    // Same patient as the current one?
+    const QString &patientUuid = this->patientUuid(index);
+    if (patientUuid == d->m_CurrentPatientUuid) {
         return;
     }
+    d->m_CurrentPatientUuid = patientUuid;
 
-    // Call all extensions that provide listeners to patient change: the extensions can now do things like
-    // save data BEFORE the patient is changed.
-    QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
-    for(int i = 0; i < listeners.count(); ++i) {
-        if (!listeners.at(i)->currentPatientAboutToChange()) {
-            return;
-        }
-    }
+    d->m_CurrentPatientIndex = index;
+    LOG("setCurrentPatient: " + patientUuid);
+}
 
-    m_CurrentPatient = index;
-    LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT currentPatientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT currentPatientChanged(index);
+/**
+ * After setting the current patient with beginChangeCurrentPatient() and setCurrentPatient(),
+ * you must call this method to ensure that all view and submodels get sync with the
+ * new current patient. \n
+ * Internally, this method emits the two following signals:
+ * - currentPatientChanged(QString);
+ * - currentPatientChanged(QModelIndex);
+ * \sa setCurrentPatient(), beginChangeCurrentPatient(), Core::IPatientListener
+ */
+void PatientModel::endChangeCurrentPatient()
+{
+    Q_EMIT currentPatientChanged(d->m_CurrentPatientUuid);
+    Q_EMIT currentPatientChanged(d->m_CurrentPatientIndex);
+}
+
+/**
+ * Return the current patient index in this model.
+ * Be warned that after any filter update the index may change.
+ */
+QModelIndex PatientModel::currentPatient() const
+{
+    return d->m_CurrentPatientIndex;
 }
 
 int PatientModel::rowCount(const QModelIndex &parent) const
@@ -696,12 +724,8 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void PatientModel::setFilter(const QString &name, const QString &firstname, const QString &uuid, const FilterOn on)
 {
-
-    qWarning() << "SETFILTER" << name << firstname << uuid << on;
-
-    qWarning() << d->m_ExtraFilter;
-
     QString saveFilter = d->m_ExtraFilter;
+    QHash<int, QString> where;
     // Calculate new filter
     switch (on) {
     case FilterOnFullName :
@@ -746,8 +770,8 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE NAME LIKE '%'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME) + " ";
-            d->m_ExtraFilter += QString("LIKE '%%1%'").arg(name);
+            where.insert(Constants::IDENTITY_BIRTHNAME, QString("LIKE '%%1%'").arg(name));
+            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
             break;
         }
     case FilterOnCity:
@@ -762,14 +786,11 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE PATIENT_UID='xxxx'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID) + " ";
-            d->m_ExtraFilter += QString("='%1'").arg(uuid);
+            where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(uuid));
+            d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
             break;
         }
     }
-
-    qWarning() << d->m_ExtraFilter;
-
     if (saveFilter != d->m_ExtraFilter)
         d->refreshFilter();
 }
@@ -857,6 +878,7 @@ bool PatientModel::submit()
 {
     bool ok = true;
     if (!d->m_SqlPatient->submitAll()) {
+        LOG_ERROR("Model not submitted. " + d->m_SqlPatient->lastError().text());
         ok = false;
     } else {
         // emit created uids
@@ -909,3 +931,11 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
     DB.commit();
     return names;
 }
+
+/** Return the Uuid of the patient according to the \e index */
+QString PatientModel::patientUuid(const QModelIndex &index) const
+{
+    QModelIndex idx = this->index(index.row(), Core::IPatient::Uid);
+    return data(idx).toString();
+}
+

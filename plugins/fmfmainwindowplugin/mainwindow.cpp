@@ -64,7 +64,7 @@
 #include <patientbaseplugin/patientbar.h>
 #include <patientbaseplugin/patientsearchmode.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
-#include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientcore.h>
 #include <patientbaseplugin/patientcreatorwizard.h>
 
 #include <extensionsystem/pluginerrorview.h>
@@ -105,13 +105,11 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 
-static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
-
-
 
 MainWindowUserListener::MainWindowUserListener(MainWindow *parent) :
     UserPlugin::IUserListener(parent), m_MainWindow(parent)
@@ -253,7 +251,7 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-    m_modeStack->insertTopWidget(Patients::PatientBar::instance(this));
+    m_modeStack->insertTopWidget(patientCore()->patientBar());
     m_modeStack->statusBar()->hide();
 
     setCentralWidget(m_modeStack);
@@ -507,11 +505,8 @@ void MainWindow::openRecentPatient()
     if (uuid.isEmpty())
         return;
 
-    // get the QModelIndex corresponding to the uuid
-    // TODO: this should be extracted or managed using the Core::IPatient
-    patientModel()->setFilter("", "", uuid, Patients::PatientModel::FilterOnUuid);
-    QModelIndex index = patientModel()->index(0,0);
-    patientModel()->setCurrentPatient(index);
+    // get the corresponding to the uuid
+    patientCore()->setCurrentPatientUuid(uuid);
 }
 
 /** \brief Reads main window's settings */

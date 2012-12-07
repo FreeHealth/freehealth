@@ -45,6 +45,11 @@ class PATIENT_EXPORT PatientSelector : public QWidget
     friend class Internal::PatientSelectorPrivate;
 
 public:
+    enum RefreshSearchResult {
+        WhileTyping = 0,
+        ReturnPress
+    };
+
     enum SearchMethod {
         SearchByName = 0,
         SearchByFirstname,
@@ -73,7 +78,6 @@ public:
     };
     Q_DECLARE_FLAGS(FieldsToShow, FieldToShow)
 
-
     PatientSelector(QWidget *parent = 0, const FieldsToShow fields = None);
     ~PatientSelector();
 
@@ -82,7 +86,7 @@ public:
     void setSearchMode(const int search);
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
-
+    void setRefreshSearchResultMethod(RefreshSearchResult method);
 
 public Q_SLOTS:
     void setSelectedPatient(const QModelIndex &index);
@@ -95,7 +99,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateNavigationButton();
     void changeIdentity(const QModelIndex &current, const QModelIndex &previous);
-    void refreshFilter(const QString &);
+    void refreshFilter();
     void onPatientActivated(const QModelIndex &index);
     void onUserChanged();
 

@@ -26,14 +26,18 @@
  ***************************************************************************/
 
 /**
- * \class Patients::IdentityWidget
+ * \class Patients::IdentityEditorWidget
  * \brief Identity editor.
- * This widget allow user to edit the identity of a patient.
+ * This widget allow user to view & edit the identity of a patient.
+ * You can define the Patients::PatientModel and the index to use,
+ * or just keep the identity always sync with the Core::IPatient current
+ * patient.
 */
 
-#include "identitywidget.h"
+#include "identityeditorwidget.h"
 #include "patientmodel.h"
 #include "patientbase.h"
+#include "patientcore.h"
 #include "constants_db.h"
 
 #include "ui_identitywidget.h"
@@ -69,6 +73,8 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
 
@@ -128,10 +134,10 @@ public:
     }
 };
 
-class IdentityWidgetPrivate
+class IdentityEditorWidgetPrivate
 {
 public:
-    IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
+    IdentityEditorWidgetPrivate(IdentityEditorWidget *parent, IdentityEditorWidget::EditMode mode) :
         editUi(0),
         m_Mapper(0), m_EditMode(mode),
         zipCompleter(0),
@@ -139,7 +145,7 @@ public:
         q(parent)
     {
         switch (mode) {
-        case IdentityWidget::ReadWriteMode: {
+        case IdentityEditorWidget::ReadWriteMode: {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
             editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
@@ -192,7 +198,7 @@ public:
             q->connect(editUi->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
             break;
         }
-        case IdentityWidget::ReadOnlyMode: {
+        case IdentityEditorWidget::ReadOnlyMode: {
             break;
         }
         default:
@@ -200,7 +206,7 @@ public:
         }
     }
 
-    ~IdentityWidgetPrivate()
+    ~IdentityEditorWidgetPrivate()
     {
         if (m_Mapper) {
             delete m_Mapper;
@@ -212,7 +218,8 @@ public:
         }
     }
 
-    void updateDefaultPhotoAction() {
+    void updateDefaultPhotoAction()
+    {
         QString defaultId = settings()->value(Patients::Constants::S_DEFAULTPHOTOSOURCE).toString();
         foreach(QAction *action, editUi->photoButton->actions()) {
             if (action->data().toString() == defaultId)
@@ -220,48 +227,68 @@ public:
         }
     }
 
-    void createMapper()
+    // Create the mapper over the Core::IPatient
+    void createGenericMapper()
     {
-        if (m_EditMode == IdentityWidget::ReadWriteMode) {
+        if (m_EditMode == IdentityEditorWidget::ReadWriteMode) {
             if (m_Mapper) {
                 delete m_Mapper;
                 m_Mapper = 0;
             }
             m_Mapper = new FMFWidgetMapper(q);
             m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
-            m_Mapper->setModel(m_PatientModel);
-            m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
-            m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
-            m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
-            m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
-
-            m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
-            m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
-            m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
-            m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
-
-            //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
-            // this prevents m_Mapper.isDirty from working correctly!
-            //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
-            m_Mapper->toFirst();
+            m_Mapper->setModel(patient());
+            addMapperMapping();
         }
     }
 
+    // Create the mapper over a specified PatientModel
+    void createPatientModelMapper(PatientModel *model)
+    {
+        if (m_EditMode == IdentityEditorWidget::ReadWriteMode) {
+            if (m_Mapper) {
+                delete m_Mapper;
+                m_Mapper = 0;
+            }
+            m_Mapper = new FMFWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
+            m_Mapper->setModel(model);
+            addMapperMapping();
+        }
+    }
+
+    // Add mapping to the mapper
+    void addMapperMapping()
+    {
+        m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
+        m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
+        m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
+        m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
+        m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
+        m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
+
+        m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
+        m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
+        m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
+        m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
+
+        //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
+        // this prevents m_Mapper.isDirty from working correctly!
+        //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
+    }
 
 public:
     Ui::IdentityWidget *editUi;
     FMFWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
-    IdentityWidget::EditMode m_EditMode;
+    IdentityEditorWidget::EditMode m_EditMode;
     ZipCodes::ZipCountryCompleters *zipCompleter;
     QPixmap m_Photo;
     bool m_hasRealPhoto;
 
 private:
     QAction *m_deletePhotoAction;
-    IdentityWidget *q;
+    IdentityEditorWidget *q;
 };
 
 }  // namespace Internal
@@ -270,56 +297,56 @@ private:
 /**
  * \brief Create an Identity viewer with the specific \e mode of edition.
  * You must specify the PatientModel to use
- * \sa IdentityWidget::EditMode, IdentityWidget::setCurrentPatientModel
+ * \sa IdentityEditorWidget::EditMode, IdentityEditorWidget::setCurrentPatientModel
 */
-IdentityWidget::IdentityWidget(QWidget *parent, EditMode mode) :
+IdentityEditorWidget::IdentityEditorWidget(QWidget *parent, EditMode mode) :
     QWidget(parent),
-    d(new Internal::IdentityWidgetPrivate(this, mode))
+    d(new Internal::IdentityEditorWidgetPrivate(this, mode))
 {
-    setObjectName("Patient::IdentityWidget");
+    setObjectName("Patient::IdentityEditorWidget");
+    d->createGenericMapper();
+    d->m_Mapper->toFirst();
+    updateGenderImage();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
-IdentityWidget::~IdentityWidget()
+IdentityEditorWidget::~IdentityEditorWidget()
 {
     if (d)
         delete d;
     d = 0;
 }
 
-/** \brief Define the model to use. */
-void IdentityWidget::setPatientModel(Patients::PatientModel *model)
+/**
+ * If you don't want to use the identity editor over the Core::IPatient
+ * (which represents the current patient), you can set your own Patients::PatientModel.
+ * The mapper is auto-selecting the first row of the model.\n
+ * Use the setCurrentIndex() to set the current index of the current editing index.
+ * \sa setCurrentIndex()
+ */
+void IdentityEditorWidget::setPatientModel(PatientModel *model)
 {
-    d->m_PatientModel = model;
-    if (d->m_EditMode == ReadWriteMode)
-        d->createMapper();
-}
-
-/** \brief Return the actual PatientModel or 0 if it was not set. */
-Patients::PatientModel *IdentityWidget::patientModel() const
-{
-    return d->m_PatientModel;
-}
-
-/** \brief Change the current identity to the QModelIndex \e patientIndex. */
-void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
-{
-    switch (d->m_EditMode) {
-    case ReadWriteMode:
-    {
-        Q_ASSERT(d->m_Mapper);
-        d->m_Mapper->setCurrentModelIndex(patientIndex);
-        d->zipCompleter->checkData();
-        break;
-    }
-    default: break;
-    }  // switch (d->m_EditMode)
+    d->createPatientModelMapper(model);
+    d->m_Mapper->toFirst();
     updateGenderImage();
 }
 
-/** \brief Test the validity of the "actually shown" identity. */
-bool IdentityWidget::isIdentityValid() const
+/**
+ * If you don't want to use the identity editor over the Core::IPatient
+ * (which represents the current patient), you can set your own Patients::PatientModel.
+ * Use the setPatientModel() and setCurrentIndex() to set the current index of
+ * the current editing index.
+ * \sa setPatientModel()
+ */
+void IdentityEditorWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
+    if (patientIndex.model() == d->m_Mapper->model())
+        d->m_Mapper->setCurrentModelIndex(patientIndex);
+}
+
+/** \brief Test the validity of the "actually shown" identity. */
+bool IdentityEditorWidget::isIdentityValid() const
+{
     if (d->editUi->birthName->text().isEmpty()) {
         Utils::warningMessageBox(tr("You must specify a birthname."),
                                  tr("You can not create a patient without a birthname"),
@@ -352,10 +379,8 @@ bool IdentityWidget::isIdentityValid() const
 }
 
 /** \brief Avoid duplicates. */
-bool IdentityWidget::isIdentityAlreadyInDatabase() const
+bool IdentityEditorWidget::isIdentityAlreadyInDatabase() const
 {
-    Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
-
     // check database for double entries
     QString where = QString("`%1`='%2' AND ").
             arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME),
@@ -371,7 +396,7 @@ bool IdentityWidget::isIdentityAlreadyInDatabase() const
 }
 
 /** \brief Identity has been modified by the user? */
-bool IdentityWidget::isModified() const
+bool IdentityEditorWidget::isModified() const
 {
     if (d->m_EditMode==ReadOnlyMode)
         return false;
@@ -380,21 +405,21 @@ bool IdentityWidget::isModified() const
 }
 
 /** Return the current editing value */
-QString IdentityWidget::currentBirthName() const
+QString IdentityEditorWidget::currentBirthName() const
 {
     Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
     return d->editUi->birthName->text();
 }
 
 /** Return the current editing value */
-QString IdentityWidget::currentSecondName() const
+QString IdentityEditorWidget::currentSecondName() const
 {
     Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
     return d->editUi->secondName->text();
 }
 
 /** Return the current editing value */
-QString IdentityWidget::currentFirstName() const
+QString IdentityEditorWidget::currentFirstName() const
 {
     Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
     switch (d->m_EditMode) {
@@ -407,24 +432,24 @@ QString IdentityWidget::currentFirstName() const
 }
 
 /** Return the current editing value */
-QString IdentityWidget::currentGender() const
+QString IdentityEditorWidget::currentGender() const
 {
     int genderIndex = -1;
 
     switch (d->m_EditMode) {
-
     case ReadOnlyMode: {
         //        we must query the model here because the viewUi doesn't provide a good input here.
-        const QModelIndex index = d->m_PatientModel->currentPatient();
-        if (!index.isValid())
-            return QString();
+//        const QModelIndex index = d->m_PatientModel->currentPatient();
+//        if (!index.isValid())
+//            return QString();
 
-        genderIndex = d->m_PatientModel->index(index.row(), Core::IPatient::GenderIndex).data().toInt();
+//        genderIndex = d->m_PatientModel->index(index.row(), Core::IPatient::GenderIndex).data().toInt();
+        genderIndex = patient()->data(Core::IPatient::GenderIndex).toInt();
         break;
     }
     case ReadWriteMode:
         genderIndex = d->editUi->genderCombo->currentIndex();
-    }
+    } // switch
 
     if (genderIndex > 0 && genderIndex < genders().count())
         return genders()[genderIndex];
@@ -433,7 +458,7 @@ QString IdentityWidget::currentGender() const
 }
 
 /** Return the current editing value */
-QDate IdentityWidget::currentDateOfBirth() const
+QDate IdentityEditorWidget::currentDateOfBirth() const
 {
     Q_ASSERT(d->m_EditMode == ReadWriteMode);
     return d->editUi->dob->date();
@@ -446,7 +471,7 @@ QDate IdentityWidget::currentDateOfBirth() const
  * If patient has no photo in the current widget (this function does NOT query the database!),
  * it returns a QPixmap()
  */
-QPixmap IdentityWidget::currentPhoto() const
+QPixmap IdentityEditorWidget::currentPhoto() const
 {
     QPixmap photo;
 
@@ -459,27 +484,29 @@ QPixmap IdentityWidget::currentPhoto() const
     return photo;
 }
 
-bool IdentityWidget::hasPhoto() const
+bool IdentityEditorWidget::hasPhoto() const
 {
     Q_ASSERT(d->editUi);
     return (!d->editUi->photoButton->pixmap().isNull());
 }
 
 /** \brief Submit the Identity to the model and the database if in ReadWriteMode. */
-bool IdentityWidget::submit()
+bool IdentityEditorWidget::submit()
 {
     if ((d->m_EditMode == ReadWriteMode) && d->m_Mapper) {
-        return d->m_Mapper->submit();
+        bool ok = d->m_Mapper->submit();
+        if (ok)
+            patientCore()->refreshAllPatientModel();
     }
     return false;
 }
 
-void IdentityWidget::updateGenderImage()
+void IdentityEditorWidget::updateGenderImage()
 {
     updateGenderImage(d->editUi->genderCombo->currentIndex());
 }
 
-void IdentityWidget::updateGenderImage(int genderIndex)
+void IdentityEditorWidget::updateGenderImage(int genderIndex)
 {
     switch(d->m_EditMode) {
     case ReadWriteMode:
@@ -489,7 +516,7 @@ void IdentityWidget::updateGenderImage(int genderIndex)
     }
 }
 
-void IdentityWidget::changeEvent(QEvent *e)
+void IdentityEditorWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -503,12 +530,17 @@ void IdentityWidget::changeEvent(QEvent *e)
 }
 
 /** \brief Triggers the default action of the photo button. */
-void IdentityWidget::photoButton_clicked()
+void IdentityEditorWidget::photoButton_clicked()
 {
-    if (d->m_EditMode != ReadWriteMode)
-        return;
     QAction *action = d->editUi->photoButton->defaultAction();
     if (action)
         action->trigger();
 }
 
+/** Force UI to update with the new current patient data */
+void IdentityEditorWidget::onCurrentPatientChanged()
+{
+    d->m_Mapper->setCurrentModelIndex(QModelIndex());
+    d->m_Mapper->setCurrentModelIndex(patient()->currentPatientIndex());
+    updateGenderImage();
+}

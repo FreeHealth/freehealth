@@ -24,8 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class IdentityPage
+ * Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
+ */
+
 #include "patientcreatorwizard.h"
-#include "identitywidget.h"
+#include "identityeditorwidget.h"
+#include "patientcore.h"
 #include "patientmodel.h"
 #include "patientbase.h"
 #include "constants_settings.h"
@@ -56,6 +62,7 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
     QWizard(parent)
@@ -85,33 +92,26 @@ void PatientCreatorWizard::done(int r)
                                                              "", tr("Patient not saved"));
         if (reallyClose) {
             QDialog::done(r);
-            if (Patients::PatientModel::activeModel())
-                Patients::PatientModel::activeModel()->refreshModel();
+            patientCore()->refreshAllPatientModel();
         }
     } else if (r == QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
         if (settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool()) {
-            Patients::PatientModel *m = Patients::PatientModel::activeModel();
-            if (m) {
-                QString uid = m_Page->lastInsertedUuid();
-                m->setFilter("", "", uid, Patients::PatientModel::FilterOnUuid);
-                m->setCurrentPatient(m->index(0,0));
-            }
+            QString uid = m_Page->lastInsertedUuid();
+            if (!patientCore()->setCurrentPatientUuid(uid))
+                LOG_ERROR("Unable to set the current patient");
         }
         QDialog::done(r);
     }
 }
 
-/** \class IdentityPage
-  * \brief Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
-  */
 IdentityPage::IdentityPage(QWidget *parent) :
     QWizardPage(parent)
 {
     setObjectName("IdentityPage");
     setTitle(tr("Please enter the patient's identity."));
-    m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
+    m_Identity = new IdentityEditorWidget(this, IdentityEditorWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
     m_Model->emitPatientCreationOnSubmit(true);
@@ -128,6 +128,10 @@ IdentityPage::IdentityPage(QWidget *parent) :
     setLayout(layout);
 }
 
+/**
+ * Validate the wizard page. \n
+ * Also check for identity duplicates
+ */
 bool IdentityPage::validatePage()
 {
     if (!m_Identity->isIdentityValid())
@@ -177,11 +181,12 @@ bool IdentityPage::validatePage()
         }
         delete model;
     }
+
     // submit the new patient
     bool ok = true;
-    connect(m_Model, SIGNAL(patientCreated(QString)), Patients::PatientModel::activeModel(), SIGNAL(patientCreated(QString)));
+    connect(m_Model, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {
-        Patients::PatientModel::activeModel()->refreshModel();
+        patientCore()->refreshAllPatientModel();
         LOG("Patient successfully created");
     } else {
         LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");

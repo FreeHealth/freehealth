@@ -52,6 +52,7 @@ public:
     PatientModelWrapper(QObject *parent = 0);
     ~PatientModelWrapper();
     void initialize(Patients::PatientModel *model);
+    Patients::PatientModel *patientModel() {return m_Model;}
 
     // IPatient interface
     void clear() {}
@@ -77,6 +78,7 @@ public:
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const;
 
 private Q_SLOTS:
+    bool submit();
     void onCurrentPatientChanged(const QString &);
     void patientDataChanged(const QModelIndex &index);
 

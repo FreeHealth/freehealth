@@ -29,7 +29,7 @@
 #include <usermanagerplugin/usermodel.h>
 
 #include <patientbaseplugin/patientbase.h>
-#include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/patientcore.h>
 #include <patientbaseplugin/constants_db.h>
 
 #include <formmanagerplugin/episodemodel.h>
@@ -55,19 +55,12 @@
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
-static inline Patients::PatientModel *patientModel()  { return Patients::PatientModel::activeModel(); }
+static inline Patients::PatientCore *patientCore()  { return Patients::PatientCore::instance(); }
 static inline Form::Internal::EpisodeBase *episodeBase()  { return Form::Internal::EpisodeBase::instance(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
-
-
-static inline void refreshPatientModel()
-{
-    if (patientModel())
-        patientModel()->refreshModel();
-}
 
 VirtualDatabasePreferences::VirtualDatabasePreferences(QWidget *parent) :
         QWidget(parent)
@@ -101,7 +94,8 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         int title, lk;
         QDate death, dob;
 
-        name = r.getRandomName();
+        while (name.isEmpty())
+            name = r.getRandomName();
         dob = r.randomDate(1910);
 
         if (r.randomInt(2) == 1) {
@@ -139,7 +133,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     }
     patientBase()->database().commit();
 
-    refreshPatientModel();
+    patientCore()->refreshAllPatientModel();
 }
 
 void VirtualDatabasePreferences::on_populateEpisodes_clicked()

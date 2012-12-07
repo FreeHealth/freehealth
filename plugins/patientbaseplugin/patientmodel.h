@@ -31,7 +31,15 @@
 
 #include <QAbstractTableModel>
 
+/**
+ * \file patientmodel.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 06 Dec 2012
+*/
+
 namespace Patients {
+class PatientCore;
 namespace Internal {
 class PatientModelPrivate;
 }  // End namespace Internal
@@ -40,9 +48,10 @@ class PATIENT_EXPORT PatientModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class Internal::PatientModelPrivate;
+    friend class Patients::PatientCore;
 
 public:
-    // Data representation is stored in Core::IPatient
+    // Column data representation is stored in Core::IPatient
 
     enum FilterOn {
         FilterOnName,
@@ -54,11 +63,7 @@ public:
     PatientModel(QObject *parent);
     ~PatientModel();
 
-    static PatientModel *activeModel() {return m_ActiveModel;}
-    static void setActiveModel(PatientModel *model) {m_ActiveModel = model;}
-
-    void setCurrentPatient(const QModelIndex &index);
-    QModelIndex currentPatient() const {return m_CurrentPatient;}
+    QModelIndex currentPatient() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -80,6 +85,8 @@ public:
 
     static QHash<QString, QString> patientName(const QList<QString> &uuids);
 
+    QString patientUuid(const QModelIndex &index) const;
+
 public Q_SLOTS:
     bool submit();
     bool refreshModel();
@@ -94,6 +101,11 @@ Q_SIGNALS:
     void patientDeleted(const QString &uuid);
     void patientCreated(const QString &uuid);
 
+protected:
+    bool beginChangeCurrentPatient();
+    void setCurrentPatient(const QModelIndex &index);
+    void endChangeCurrentPatient();
+
 protected Q_SLOTS:
     void changeUserUuid();
 
@@ -102,8 +114,6 @@ private Q_SLOTS:
 
 private:
     Internal::PatientModelPrivate *d;
-    static PatientModel *m_ActiveModel;
-    QPersistentModelIndex m_CurrentPatient;
 };
 
 }  // End namespace Patients

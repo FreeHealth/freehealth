@@ -35,6 +35,7 @@
 #include "patientmodelwrapper.h"
 #include "patientmodel.h"
 #include "patientwidgetmanager.h"
+#include "patientbar.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,6 +45,7 @@
 #include <translationutils/constants.h>
 
 #include <QDir>
+#include <QPointer>
 
 #include <QDebug>
 
@@ -65,8 +67,8 @@ public:
     PatientCorePrivate(PatientCore *parent) :
         _base(0),
         _patientModelWrapper(0),
-        _basicSqlPatientModel(0),
         _patientWidgetManager(0),
+        _patientBar(0),
         q(parent)
     {
     }
@@ -78,8 +80,9 @@ public:
 public:
     PatientBase *_base;
     PatientModelWrapper *_patientModelWrapper;
-    BasicSqlPatientModel *_basicSqlPatientModel;
     PatientWidgetManager *_patientWidgetManager;
+    PatientBar *_patientBar;
+    QList< QPointer<PatientModel> >_patientModels;
 
 private:
     PatientCore *q;
@@ -96,7 +99,7 @@ PatientCore::PatientCore(QObject *parent) :
     setObjectName("PatientCore");
     d->_base = new PatientBase(this);
 
-    // Create IPatient
+    // Create the Core::IPatient
     d->_patientModelWrapper = new Internal::PatientModelWrapper(this);
     Core::ICore::instance()->setPatient(d->_patientModelWrapper);
 }
@@ -104,6 +107,7 @@ PatientCore::PatientCore(QObject *parent) :
 /*! Destructor of the Patients::PatientCore class */
 PatientCore::~PatientCore()
 {
+    delete d->_patientBar;
     if (d)
         delete d;
     d = 0;
@@ -119,10 +123,17 @@ bool PatientCore::initialize()
 
     // create singleton model
     PatientModel *model = new PatientModel(this);
-    PatientModel::setActiveModel(model);
     d->_patientModelWrapper->initialize(model);
 
+    d->_patientBar = new PatientBar;
+
     return true;
+}
+
+/** You must register all your patient models to keep them sync */
+void PatientCore::registerPatientModel(PatientModel *model)
+{
+    d->_patientModels << QPointer<PatientModel>(model);
 }
 
 /** Initialization with a full opened Core::ICore */
@@ -135,7 +146,9 @@ void PatientCore::postCoreInitialization()
     d->_patientWidgetManager->postCoreInitialization();
 }
 
-/** Create the default virtual patients: Archer, Kirk, Janeway... */
+/**
+ * Create the default virtual patients: Archer, Kirk, Janeway...
+ */
 bool PatientCore::createDefaultVirtualPatients() const
 {
     QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
@@ -159,17 +172,72 @@ bool PatientCore::createDefaultVirtualPatients() const
     return true;
 }
 
+/**
+ * Return the unique instance of the Patients::Internal::PatientBase. \n
+ * Avoid usage of this method (mainly plugin internal method).
+ */
 Internal::PatientBase *PatientCore::patientBase() const
 {
     return d->_base;
 }
 
-Internal::BasicSqlPatientModel *PatientCore::basicSqlPatientModel() const
-{
-    return d->_basicSqlPatientModel;
-}
-
+/**
+ * Return the unique instance of the Patients::Internal::PatientWidgetManager. \n
+ * Avoid usage of this method (mainly plugin internal method).
+ */
 Internal::PatientWidgetManager *PatientCore::patientWidgetManager() const
 {
     return d->_patientWidgetManager;
+}
+
+/**
+ * Return the unique instance of the PatientBar. In this configuration,
+ * the PatientBar does not have any parent. The deletion of the pointer
+ * is managed by this object.
+ */
+PatientBar *PatientCore::patientBar() const
+{
+    return d->_patientBar;
+}
+
+/**
+ * Define the current patient using its \e uuid. Return true if the current patient
+ * was correctly set.
+ */
+bool PatientCore::setCurrentPatientUuid(const QString &uuid)
+{
+    // Take the Core:IPatient internal PatientModel
+    PatientModel *patientModel = d->_patientModelWrapper->patientModel();
+
+    // Start changing the current patient
+    if (!patientModel->beginChangeCurrentPatient())
+        return false;
+
+    // Update the filter to the correct uuid
+    patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
+    if (patientModel->numberOfFilteredPatients() != 1) {
+        LOG_ERROR(QString("No patient found; Number of uuids: %1")
+                  .arg(patientModel->numberOfFilteredPatients()));
+        return false;
+    }
+
+    // Define the new current patient
+    patientModel->setCurrentPatient(patientModel->index(0,0));
+
+    // Finish the current patient modification process
+    patientModel->endChangeCurrentPatient();
+
+    return true;
+}
+
+/**
+ * Force refreshing of all registered PatientModel. This can be CPU consuming has
+ * all the PatientModel will re-select the SQL database.
+ * \sa registerPatientModel()
+ */
+void PatientCore::refreshAllPatientModel() const
+{
+    d->_patientModels.removeAll(0);
+    foreach(PatientModel *model, d->_patientModels)
+        model->refreshModel();
 }

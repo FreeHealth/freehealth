@@ -34,15 +34,14 @@
 
 /**
  * \file patientcreatorwizard.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric MAEKER
  * \version 0.4.0
  * \date 25 May 2010
 */
 
-
 namespace Patients {
 class PatientModel;
-class IdentityWidget;
+class IdentityEditorWidget;
 class IdentityPage;
 
 class PATIENT_EXPORT PatientCreatorWizard : public QWizard
@@ -75,7 +74,7 @@ public:
 
 private:
     PatientModel *m_Model;
-    IdentityWidget *m_Identity;
+    IdentityEditorWidget *m_Identity;
     QString m_uuid;
 };
 

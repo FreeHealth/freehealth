@@ -199,7 +199,7 @@ void MessageSender::httpDone(bool error)
         LOG_ERROR(d->m_Buffer->data());
     }
 
-    d->m_LastResult = QString(d->m_Buffer->data());
+    d->m_LastResult = QString(d->m_Buffer->errorString());
 
     // Show information
     if (d->m_ShowMsgBox) {

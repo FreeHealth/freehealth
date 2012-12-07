@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "identitywidgetfactory.h"
 
-#include <patientbaseplugin/identitywidget.h>
+#include <patientbaseplugin/identityeditorwidget.h>
 #include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
 #include <patientbaseplugin/patientselector.h>
@@ -118,14 +118,13 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
 
     // get options
     const QStringList &options = formItem->getOptions();
-    Patients::IdentityWidget::EditMode mode;
+    Patients::IdentityEditorWidget::EditMode mode;
     if (options.contains("readonly", Qt::CaseInsensitive))
-        mode = Patients::IdentityWidget::ReadOnlyMode;
+        mode = Patients::IdentityEditorWidget::ReadOnlyMode;
     else
-        mode = Patients::IdentityWidget::ReadWriteMode;
+        mode = Patients::IdentityEditorWidget::ReadWriteMode;
 
-    m_Identity = new Patients::IdentityWidget(this, mode);
-    m_Identity->setPatientModel(Patients::PatientModel::activeModel());
+    m_Identity = new Patients::IdentityEditorWidget(this, mode);
 
     // QtUi Loaded ?
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
@@ -152,9 +151,6 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         m_Identity->layout()->setMargin(0);
     }
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-    onCurrentPatientChanged();
-
     // create itemdata
     IdentityWidgetData *data = new IdentityWidgetData(m_FormItem);
     data->setIdentityFormWiget(this);
@@ -176,11 +172,6 @@ IdentityFormWidget::~IdentityFormWidget()
 //    m_ContainerLayout->addWidget(widget , row, col);
 //    i++;
 //}
-
-void IdentityFormWidget::onCurrentPatientChanged()
-{
-    m_Identity->setCurrentIndex(patient()->currentPatientIndex());
-}
 
 void IdentityFormWidget::retranslate()
 {
