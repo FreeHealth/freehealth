@@ -36,6 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iscriptmanager.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 //#include <translationutils/constants.h>
 //#include <translationutils/trans_menu.h>
