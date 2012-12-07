@@ -142,6 +142,7 @@ account.depends += listview
 
 zipcodes.subdir = ../../plugins/zipcodesplugin
 zipcodes.depends += core
+zipcodes.depends += listview
 
 script.subdir = ../../plugins/scriptplugin
 script.depends += core
