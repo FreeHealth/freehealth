@@ -24,8 +24,8 @@
  *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef BIRTHDAYEDIT_H
-#define BIRTHDAYEDIT_H
+#ifndef UTILS_BIRTHDAYEDIT_H
+#define UTILS_BIRTHDAYEDIT_H
 
 #include <utils/widgets/qbuttonlineedit.h>
 #include <utils/global_exporter.h>
@@ -99,4 +99,4 @@ private:
 
 } // end Utils
 
-#endif // BIRTHDAYEDIT_H
+#endif // UTILS_BIRTHDAYEDIT_H
