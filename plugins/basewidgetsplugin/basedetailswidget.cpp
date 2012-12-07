@@ -46,6 +46,7 @@ namespace {
 const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
 const char * const  NOT_PRINTABLE        = "notprintable";
 const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
+const char * const  EXPANDED             = "expanded";
 }
 
 static inline bool dontPrintEmptyValues(Form::FormItem *item)
@@ -62,9 +63,7 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
     Form::IFormWidget(formItem, parent),
     _detailsWidget(0)
 {
-    setObjectName("BaseDetailsWidget");
-
-    qWarning() << "BASEDETAILS";
+    setObjectName("BaseDetailsWidge_" + m_FormItem->uuid());
 
     // Create the detailsWidget
     _detailsWidget = new Utils::DetailsWidget(this);
@@ -90,14 +89,27 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
     _detailsWidget->setWidget(content);
     if (hasOption(formItem, ::SUMMARY_FONT_BOLD))
         _detailsWidget->setSummaryFontBold(true);
+    if (hasOption(formItem, ::EXPANDED))
+        _detailsWidget->setExpanded(true);
 
     // Create the global layout
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    setLayout(layout);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    layout->addWidget(_detailsWidget);
+    const QString &uiLayout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!uiLayout.isEmpty()) {
+        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), uiLayout);
+        if (lay) {
+            lay->addWidget(_detailsWidget);
+            lay->setMargin(0);
+            lay->setSpacing(0);
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
+        }
+    } else {
+        QVBoxLayout *layout = new QVBoxLayout(this);
+        setLayout(layout);
+        //    layout->setMargin(0);
+        //    layout->setSpacing(0);
+        layout->addWidget(_detailsWidget);
+    }
 
     // create itemdata
 //    BaseFormData *baseFormData = new BaseFormData(formItem);
@@ -119,7 +131,7 @@ void BaseDetailsWidget::addWidgetToContainer(Form::IFormWidget *widget)
 
 bool BaseDetailsWidget::isContainer() const
 {
-    return false;
+    return true;
 }
 
 // Printing
