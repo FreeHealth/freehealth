@@ -32,12 +32,31 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QDataWidgetMapper>
 
 namespace Patients {
 class PatientModel;
 
 namespace Internal {
 class IdentityEditorWidgetPrivate;
+
+class IsDirtyDataWidgetMapper: public QDataWidgetMapper
+{
+    Q_OBJECT
+public:
+    IsDirtyDataWidgetMapper(QObject *parent = 0);
+    void onModelSubmitted();
+    bool isDirty() const;
+
+public Q_SLOTS:
+    void setCurrentIndex(int index);
+
+private:
+    void refreshCache();
+
+private:
+    QHash<QWidget *, QVariant> _original;
+};
 }
 
 class PATIENT_EXPORT IdentityEditorWidget : public QWidget

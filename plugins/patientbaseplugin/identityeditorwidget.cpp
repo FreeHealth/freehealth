@@ -59,7 +59,6 @@
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 
-#include <QDataWidgetMapper>
 #include <QDir>
 #include <QFileDialog>
 #include <QDateEdit>
@@ -82,58 +81,75 @@ static inline Patients::PatientCore *patientCore() {return Patients::PatientCore
 namespace Patients {
 namespace Internal {
 
-//TODO: extract this class into Utils?
 
-// Thanks to Davor Josipovic for the custom DataWidgetWrapper code,
-// found at http://davor.no-ip.com/blog/2010/05/11/isdirty-class-member-for-qdatawidgetmapper/
-
-/** \brief wrapper function for QDataWidgetMapper with isDirty() method*/
-class FMFWidgetMapper: public QDataWidgetMapper
+/**
+ * \class Patients::Internal::IsDirtyDataWidgetMapper
+ * The data mapper keeps the model original value when you set its current index,
+ * then you can use the isDirty() method to make the comparison between cached original
+ * values and the widgets current value. \n
+ * Note that when the model is submitted, you have to refresh the cache with onModelSubmitted(). \n
+ * This make no sense to use this data mapper with a submit policy (setSubmitPolicy())
+ * different from QDataWidgetMapper::ManualSubmit.
+*/
+IsDirtyDataWidgetMapper::IsDirtyDataWidgetMapper(QObject *parent) :
+    QDataWidgetMapper(parent)
 {
-public:
-    FMFWidgetMapper(QObject *parent = 0) :
-        QDataWidgetMapper(parent)
-    {}
+    //TODO: extract this class into Utils?
+}
 
-    bool isDirty() const {
-        //TODO: support both orientations
-        Q_ASSERT(orientation() == Qt::Horizontal);
-        Q_ASSERT(rootIndex() == QModelIndex());
+/** Use this method each time the model gets correctly submitted */
+void IsDirtyDataWidgetMapper::onModelSubmitted()
+{
+    refreshCache();
+}
 
-        //        qDebug() << "FMWidgetmapper.isDirty() called:";
+/** Return true if the current values of the mapped widget differs from the original model values */
+bool IsDirtyDataWidgetMapper::isDirty() const
+{
+    Q_ASSERT(orientation() == Qt::Horizontal);
+    Q_ASSERT(rootIndex() == QModelIndex());
 
-        // cycle through all widgets the mapper supports
-        for(int i = 0; i < model()->columnCount(); i++) {
-            QWidget *mapWidget = mappedWidgetAt(i);
-            if (mapWidget){
-                QByteArray p = mappedPropertyName(mapWidget);
-                QModelIndex idx = model()->index(currentIndex(), i);
+    // cycle through all widgets the mapper supports
+    for(int i = 0; i < model()->columnCount(); i++) {
+        QWidget *mapWidget = mappedWidgetAt(i);
+        if (mapWidget) {
+            const QVariant &current = mapWidget->property(mappedPropertyName(mapWidget));
+            const QVariant &orig = _original.value(mapWidget);
 
-                //                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
-
-                QVariant data = idx.data(Qt::EditRole);
-                //                qDebug(mapWidget->metaObject()->className());
-
-                // special case: QDateEdit can not display NULL value. so compare here manually
-                if (mapWidget->metaObject()->className() == QString("QDateEdit")) {
-                    QDateEdit* dateEdit = qobject_cast<QDateEdit*>(mapWidget);
-                    if (dateEdit) {
-                        //                        qDebug() << data.toDate();
-                        //                        qDebug() << dateEdit->date();
-                        //                        qDebug() << dateEdit->minimumDate();
-                        if (data.toDate() == QDate() && dateEdit->date() != dateEdit->minimumDate()) {
-                            return true;
-                        }
-                    }
-                }
-                // if data in model != widget's value, data was modified, page is "dirty"
-                if (data != mapWidget->property(p))
-                    return true;
+            // Special case of null original variant
+            if (orig.isNull() && current.toString().isEmpty())
+                continue;
+            if (current != orig) {
+//                qWarning() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(i))
+//                           << "orig" << orig
+//                           << "current" << current;
+                return true;
             }
         }
-        return false;
     }
-};
+    return false;
+}
+
+/** Overload method (creates the internal cache) */
+void IsDirtyDataWidgetMapper::setCurrentIndex(int index)
+{
+    refreshCache();
+    QDataWidgetMapper::setCurrentIndex(index);
+}
+
+void IsDirtyDataWidgetMapper::refreshCache()
+{
+    Q_ASSERT(orientation() == Qt::Horizontal);
+    Q_ASSERT(rootIndex() == QModelIndex());
+    _original.clear();
+    // cycle through all widgets the mapper supports
+    for(int i = 0; i < model()->columnCount(); i++) {
+        QWidget *mapWidget = mappedWidgetAt(i);
+        if (mapWidget) {
+            _original.insert(mapWidget, model()->data(model()->index(currentIndex(), i)));
+        }
+    }
+}
 
 class IdentityEditorWidgetPrivate
 {
@@ -230,8 +246,8 @@ public:
                 delete m_Mapper;
                 m_Mapper = 0;
             }
-            m_Mapper = new FMFWidgetMapper(q);
-            m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
+            m_Mapper = new IsDirtyDataWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
             m_Mapper->setModel(patient());
             addMapperMapping();
         }
@@ -245,8 +261,8 @@ public:
                 delete m_Mapper;
                 m_Mapper = 0;
             }
-            m_Mapper = new FMFWidgetMapper(q);
-            m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
+            m_Mapper = new IsDirtyDataWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
             m_Mapper->setModel(model);
             addMapperMapping();
         }
@@ -265,15 +281,14 @@ public:
         editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Street, ZipCodes::ZipCodesWidget::StreetPlainText);
         editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::City, ZipCodes::ZipCodesWidget::CityPlainText);
         editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::ZipCode, ZipCodes::ZipCodesWidget::ZipcodePlainText);
-        //        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::State, ZipCodes::ZipCodesWidget::StateProvincePlainText);
-        //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
-        // this prevents m_Mapper.isDirty from working correctly!
+        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::StateProvince, ZipCodes::ZipCodesWidget::StateProvincePlainText);
+        //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL this prevents m_Mapper.isDirty from working correctly!
         editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Country, ZipCodes::ZipCodesWidget::CountryIso);
     }
 
 public:
     Ui::IdentityWidget *editUi;
-    FMFWidgetMapper *m_Mapper;
+    IsDirtyDataWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityEditorWidget::EditMode m_EditMode;
     QPixmap m_Photo;
@@ -488,8 +503,10 @@ bool IdentityEditorWidget::submit()
 {
     if ((d->m_EditMode == ReadWriteMode) && d->m_Mapper) {
         bool ok = d->m_Mapper->submit();
-        if (ok)
+        if (ok) {
+            d->m_Mapper->onModelSubmitted();
             patientCore()->refreshAllPatientModel();
+        }
     }
     return false;
 }
