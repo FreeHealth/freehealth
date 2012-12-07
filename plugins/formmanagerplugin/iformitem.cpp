@@ -141,6 +141,9 @@
  * \var Form::FormItemSpec::Spec_Label
  * Translatable label of the item.
  *
+ * \var Form::FormItemSpec::Spec_ExtraLabel
+ * Translatable extra-label of the item. This extra-string is only used by some plugins.
+ *
  * \var Form::FormItemSpec::Spec_Priority
  * Priority of the item (usually an integer).\n
  * For eg, used to place Form::FormPage in the mainwindow tabbar.

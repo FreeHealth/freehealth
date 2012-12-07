@@ -72,6 +72,7 @@ public:
         Spec_Description,
         Spec_Bibliography,
         Spec_Label,
+        Spec_ExtraLabel,
         Spec_Priority,
         Spec_Plugin,
         Spec_UiFileContent, // only used for FormMain (non empty roots)
@@ -100,6 +101,7 @@ public:
     QString description(const QString &lang = QString::null) const {return value(Spec_Description,lang).toString();}
     QString bibliography(const QString &lang = QString::null) const {return value(Spec_Bibliography,lang).toString();}
     QString label(const QString &lang = QString::null) const {return value(Spec_Label,lang).toString();}
+    QString extraLabel(const QString &lang = QString::null) const {return value(Spec_ExtraLabel,lang).toString();}
     QString pluginName(const QString &lang = QString::null) const {return value(Spec_Plugin,lang).toString();}
     QString iconFileName(const QString &lang = QString::null) const {return value(Spec_IconFileName,lang).toString();}
     QString tooltip(const QString &lang = QString::null) const {return value(Spec_Tooltip,lang).toString();}

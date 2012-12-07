@@ -107,6 +107,7 @@ const char* const TAG_SPEC_DESCRIPTION  = "description";
 const char* const TAG_SPEC_HTMLDESCRIPTION  = "htmldescription";
 const char* const TAG_SPEC_HTMLSYNTHESIS  = "htmlsynthesis";
 const char* const TAG_SPEC_LABEL        = "label";
+const char* const TAG_SPEC_EXTRALABEL   = "extralabel";
 const char* const TAG_SPEC_PLUGINNAME   = "type";
 const char* const TAG_FORM_DESCRIPTION  = "formdescription";
 const char* const TAG_SPEC_VERSION      = "version";
