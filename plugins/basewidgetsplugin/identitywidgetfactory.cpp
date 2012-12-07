@@ -53,7 +53,7 @@ static inline QStringList getOptions(Form::FormItem *item)
 }
 
 IdentityWidgetFactory::IdentityWidgetFactory(QObject *parent) :
-        IFormWidgetFactory(parent)
+    IFormWidgetFactory(parent)
 {
 }
 
