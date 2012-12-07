@@ -213,6 +213,7 @@ void ZipCodesWidget::addMapping(QDataWidgetMapper *mapper, const int section, Ma
 void ZipCodesWidget::changeEvent(QEvent *e)
 {
     if (e->type() == QEvent::LanguageChange) {
+        d->_streetLabel->setText(tr("Street"));
         d->_cityLabel->setText(tr("City"));
         d->_countryLabel->setText(tr("Country"));
         d->_stateLabel->setText(tr("State/Province"));
