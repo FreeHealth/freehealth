@@ -589,7 +589,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
 
             if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
                 QString content = base()->getFormContent(form.uid, XmlIOBase::UiFile, element.attribute(Constants::ATTRIB_UIFILE));
-                item->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, content, Trans::Constants::ALL_LANGUAGE);
+                child->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, content, Trans::Constants::ALL_LANGUAGE);
             }
 
             loadElement(child, element, form);
