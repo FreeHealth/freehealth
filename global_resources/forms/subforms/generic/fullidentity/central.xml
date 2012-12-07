@@ -50,6 +50,11 @@
     <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
     <icon>__theme__/identity.png</icon>
 
+    <Item type="detailswidget" name="TrustedPerson" uifilename="./ui/xx/trusted.ui">
+        <label lang="xx">Trusted person</label>
+        <label lang="fr">Personne de confiance</label>
+    </Item>
+
     <Item type="identity" name="IdentityWidget">
       <uilink label="" widget="" layout="identityLayout"/>
       <label lang="xx">Full Identity</label>
