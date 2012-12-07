@@ -66,15 +66,19 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
 
     qWarning() << "BASEDETAILS";
 
+    // Create the detailsWidget
+    _detailsWidget = new Utils::DetailsWidget(this);
+    _detailsWidget->setSummaryText(formItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
+
     // Create detailsWidget content
     QWidget *content = 0;
     const QString &uiContent = formItem->spec()->value(Form::FormItemSpec::Spec_UiFileContent).toString();
     if (!uiContent.isEmpty()) {
         // Create the Ui using the QtUi file
-//        QUiLoader loader;
-//        QBuffer buf;
-//        buf.setData(uiContent.toAscii());
-//        content = loader.load(&buf, this);
+        QUiLoader loader;
+        QBuffer buf;
+        buf.setData(uiContent.toAscii());
+        content = loader.load(&buf, _detailsWidget);
 
         // Manage options
     } else {
@@ -82,12 +86,8 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
         LOG_ERROR("Ui file not found: " + formItem->spec()->value(Form::FormItemSpec::Spec_UiFileContent).toString());
     }
 
-    // Add the detailsWidget
-    _detailsWidget = new Utils::DetailsWidget(this);
-    _detailsWidget->setWidget(content);
-    _detailsWidget->setSummaryText(formItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
-
     // manage options
+    _detailsWidget->setWidget(content);
     if (hasOption(formItem, ::SUMMARY_FONT_BOLD))
         _detailsWidget->setSummaryFontBold(true);
 
