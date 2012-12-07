@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "basedetailswidget.h"
+#include "constants.h"
 
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
@@ -42,23 +43,6 @@
 using namespace BaseWidgets;
 using namespace Internal;
 
-namespace {
-const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
-const char * const  NOT_PRINTABLE        = "notprintable";
-const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
-const char * const  EXPANDED             = "expanded";
-}
-
-static inline bool dontPrintEmptyValues(Form::FormItem *item)
-{
-    return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
-}
-
-static inline bool hasOption(Form::FormItem *item, const QString &option)
-{
-    return item->getOptions().contains(option, Qt::CaseInsensitive);
-}
-
 BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
     _detailsWidget(0)
@@ -67,7 +51,7 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
 
     // Create the detailsWidget
     _detailsWidget = new Utils::DetailsWidget(this);
-    _detailsWidget->setSummaryText(formItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
+    _detailsWidget->setSummaryText(formItem->spec()->label());
 
     // Create detailsWidget content
     QWidget *content = 0;
@@ -87,10 +71,10 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
 
     // manage options
     _detailsWidget->setWidget(content);
-    if (hasOption(formItem, ::SUMMARY_FONT_BOLD))
+    if (Constants::hasOption(formItem, Constants::SUMMARY_FONT_BOLD))
         _detailsWidget->setSummaryFontBold(true);
-    if (hasOption(formItem, ::EXPANDED))
-        _detailsWidget->setExpanded(true);
+    if (Constants::hasOption(formItem, Constants::EXTRAS_GROUP_EXPANDED))
+        _detailsWidget->setState(Utils::DetailsWidget::Expanded);
 
     // Create the global layout
     const QString &uiLayout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
@@ -98,8 +82,6 @@ BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) 
         QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), uiLayout);
         if (lay) {
             lay->addWidget(_detailsWidget);
-            lay->setMargin(0);
-            lay->setSpacing(0);
         } else {
             LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
         }
@@ -137,7 +119,7 @@ bool BaseDetailsWidget::isContainer() const
 // Printing
 QString BaseDetailsWidget::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QStringList html;
@@ -149,7 +131,7 @@ QString BaseDetailsWidget::printableHtml(bool withValues) const
     }
     html.removeAll("");
 
-    if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
+    if (html.isEmpty() && Constants::dontPrintEmptyValues(m_FormItem))
         return QString();
 
     int i = 0;
@@ -201,5 +183,17 @@ QString BaseDetailsWidget::printableHtml(bool withValues) const
 void BaseDetailsWidget::retranslate()
 {
     Q_ASSERT(_detailsWidget);
-    _detailsWidget->setSummaryText(m_FormItem->spec()->value(Form::FormItemSpec::Spec_Label).toString());
+    // TODO: manage extralabel
+//    QString extra = m_FormItem->spec()->extraLabel();
+//    foreach(Form::FormItem *item, m_FormItem->flattenFormItemChildren()) {
+//        if (item->itemData())
+//            extra.replace(QString("{%1}").arg(item->uuid()), item->itemData()->data(0).toString());
+//        else
+//            extra.remove(item->uuid());
+//    }
+
+//    if (extra.isEmpty())
+        _detailsWidget->setSummaryText(m_FormItem->spec()->label());
+//    else
+//        _detailsWidget->setSummaryText(m_FormItem->spec()->label() + " - " + extra);
 }

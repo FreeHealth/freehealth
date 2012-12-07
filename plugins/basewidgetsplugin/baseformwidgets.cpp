@@ -27,7 +27,9 @@
 #include "baseformwidgets.h"
 #include "frenchsocialnumber.h"
 #include "basedetailswidget.h"
+#include "basedatecompleterwidget.h"
 //#include "austriansocialnumber.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -94,6 +96,7 @@ namespace {
         Type_File,
         Type_Group,
         Type_Date,
+        Type_ModernDate,
         Type_Button,
         Type_DetailsWidget,
         Type_FrenchNSS,
@@ -106,145 +109,7 @@ namespace {
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
             << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
             << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "button" << "detailswidget" << "frenchnss" << "austriansvnr";
-
-    const char * const  EXTRAS_COUNTRY          = "country";
-    const char * const  EXTRAS_KEY              = "option";
-    const char * const  EXTRAS_KEY2             = "options";
-    const char * const  EXTRAS_KEY_COLUMN       = "column";
-    const char * const  EXTRAS_COMPACT_VIEW     = "compact";
-    const char * const  EXTRAS_GROUP_CHECKABLE  = "checkable";
-    const char * const  EXTRAS_GROUP_COLLAPSIBLE  = "collapsible";
-    const char * const  EXTRAS_GROUP_EXPANDED  = "expanded";
-    const char * const  EXTRAS_GROUP_CHECKED    = "checked";
-    const char * const  EXTRAS_ALIGN_VERTICAL   = "vertical";
-    const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
-
-    // Date options
-    const char * const  DATE_EXTRAS_KEY         = "dateformat";
-    const char * const  DATE_NOW                = "now";
-    const char * const  DATE_PATIENTLIMITS      = "patientLimits";
-
-    // Spins
-    const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
-    const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
-    const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
-
-    // General options
-    const char * const  LABEL_ALIGN_TOP      = "labelontop";
-    const char * const  LABEL_ALIGN_LEFT     = "labelonleft";
-    const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
-    const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
-    const char * const  NOT_PRINTABLE        = "notprintable";
-}
-
-static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
-{
-    const QStringList &o = item->getOptions();
-    if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnTop;
-    else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnLeft;
-    return defaultValue;
-}
-
-static inline QStringList getCountries(Form::FormItem *item)
-{
-    if (!item->extraData().value(::EXTRAS_COUNTRY).isEmpty())
-        return item->extraData().value(::EXTRAS_COUNTRY).split(";");
-    return QStringList();
-}
-
-static inline int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
-{
-    if (!item->extraData().value(::EXTRAS_KEY_COLUMN).isEmpty())
-        return item->extraData().value(::EXTRAS_KEY_COLUMN).toInt();
-    else
-        return defaultValue;
-}
-
-static inline int isCompactView(Form::FormItem *item, bool defaultValue = false)
-{
-    if (item->getOptions().contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
-        return true;
-    return defaultValue;
-}
-
-static inline int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
-{
-    if (item->getOptions().contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
-        return true;
-    return defaultValue;
-}
-
-static inline int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
-{
-    if (item->getOptions().contains(::EXTRAS_GROUP_COLLAPSIBLE, Qt::CaseInsensitive))
-        return true;
-    return defaultValue;
-}
-
-static inline int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
-{
-    if (item->getOptions().contains(::EXTRAS_GROUP_EXPANDED, Qt::CaseInsensitive))
-        return true;
-    return defaultValue;
-}
-
-static inline int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
-{
-    if (item->getOptions().contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
-        return true;
-    return defaultValue;
-}
-
-static inline int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
-{
-    if (item->getOptions().contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
-        return true;
-    else if (item->getOptions().contains(::EXTRAS_ALIGN_VERTICAL, Qt::CaseInsensitive))
-        return false;
-    return defaultValue;
-}
-
-static inline QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
-{
-    if (!item->extraData().value(::DATE_EXTRAS_KEY).isEmpty()) {
-        return item->extraData().value(::DATE_EXTRAS_KEY);
-    }
-    return defaultValue;
-}
-
-static inline bool dontPrintEmptyValues(Form::FormItem *item)
-{
-    return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
-}
-
-static inline bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
-{
-    return item->getOptions().contains(::HIDEHEADERONUNIQUEEPISODE, Qt::CaseInsensitive);
-}
-
-static inline void executeOnValueChangedScript(Form::FormItem *item)
-{
-    if (!item->scripts()->onValueChangedScript().isEmpty())
-        scriptManager()->evaluate(item->scripts()->onValueChangedScript());
-}
-
-static inline QLabel *findLabel(Form::FormItem *item)
-{
-    QLabel *l = 0;
-    // Find label
-    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
-    if (!lbl.isEmpty()) {
-        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
-        if (l) {
-            l->setText(item->spec()->label());
-        } else {
-            l = new QLabel(item->formWidget());
-        }
-    }
-    return l;
+            << "date" << "moderndate" << "button" << "detailswidget" << "frenchnss" << "austriansvnr";
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
@@ -301,6 +166,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_UniqueList : return new BaseList(formItem,parent,true);
     case ::Type_Combo : return new BaseCombo(formItem,parent);
     case ::Type_Date : return new BaseDate(formItem,parent);
+    case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem,parent);
     case ::Type_Spin : return new BaseSpin(formItem,parent);
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
@@ -312,10 +178,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     return 0;
 }
 
-
-
 // TODO: Verify usage of clear() in all itemData() --> originalValue ?
-
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseForm implementation ---------------------------------------
@@ -372,7 +235,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
         if (form) {
             mainLayout->addWidget(header);
-            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
+            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && Constants::hideHeaderOnUniqueEpisode(formItem))) {
                 header->show();
             } else {
                 header->hide();
@@ -385,8 +248,8 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         // create container layout
         m_ContainerLayout = new QGridLayout(mainWidget);
         // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
-        numberColumns = getNumberOfColumns(m_FormItem);
-        if (isCompactView(m_FormItem)) {
+        numberColumns = Constants::getNumberOfColumns(m_FormItem);
+        if (Constants::isCompactView(m_FormItem)) {
             mainLayout->setMargin(5);
             mainLayout->setSpacing(5);
             m_ContainerLayout->setMargin(5);
@@ -397,7 +260,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
         if (form) {
             m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
-            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
+            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && Constants::hideHeaderOnUniqueEpisode(formItem))) {
                 i = numberColumns * 2;
                 header->show();
             } else {
@@ -493,7 +356,7 @@ void BaseForm::addWidgetToContainer(IFormWidget *widget)
 
 QString BaseForm::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QStringList html;
@@ -505,10 +368,10 @@ QString BaseForm::printableHtml(bool withValues) const
     }
     html.removeAll("");
 
-//    qWarning() << m_FormItem->spec()->label() << dontPrintEmptyValues(m_FormItem) << html.count();
+//    qWarning() << m_FormItem->spec()->label() << Constants::dontPrintEmptyValues(m_FormItem) << html.count();
 //    qWarning() << m_FormItem->getOptions();
 
-    if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
+    if (html.isEmpty() && Constants::dontPrintEmptyValues(m_FormItem))
         return QString();
 
 //    qWarning() << html;
@@ -706,11 +569,11 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         vblayout->setMargin(0);
 
         // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
-        numberColumns = getNumberOfColumns(m_FormItem, 2);
+        numberColumns = Constants::getNumberOfColumns(m_FormItem, 2);
 
         // Create the gridlayout with all the widgets
         m_ContainerLayout = new QGridLayout(m_Group);
-        if (isCompactView(m_FormItem)) {
+        if (Constants::isCompactView(m_FormItem)) {
             m_ContainerLayout->setMargin(0);
             m_ContainerLayout->setSpacing(2);
         }
@@ -719,14 +582,14 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     m_Group->setTitle(m_FormItem->spec()->label());
 
     // Check country specific options
-    const QStringList &countries = getCountries(formItem);
+    const QStringList &countries = Constants::getCountries(formItem);
     if (!countries.isEmpty()) {
         if (!countries.contains(QLocale().name().right(2), Qt::CaseInsensitive))
             this->hide();
     }
 
     getCheckAndCollapsibleState();
-    if (isGroupCollapsible(m_FormItem, false))
+    if (Constants::isGroupCollapsible(m_FormItem, false))
         connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(expandGroup(bool)));
 
     // create itemdata
@@ -756,11 +619,11 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
 
 QString BaseGroup::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     // Check country specific options
-    const QStringList &countries = getCountries(m_FormItem);
+    const QStringList &countries = Constants::getCountries(m_FormItem);
     if (!countries.isEmpty()) {
         if (!countries.contains(QLocale().name().right(2), Qt::CaseInsensitive))
             return QString();
@@ -779,7 +642,7 @@ QString BaseGroup::printableHtml(bool withValues) const
 
     // group is empty ?
     if (withValues) {
-        if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
+        if (html.isEmpty() && Constants::dontPrintEmptyValues(m_FormItem))
             return QString();
     }
 
@@ -846,14 +709,14 @@ void BaseGroup::retranslate()
 
 void BaseGroup::getCheckAndCollapsibleState()
 {
-    if (isGroupCheckable(m_FormItem, false)) {
+    if (Constants::isGroupCheckable(m_FormItem, false)) {
         m_Group->setCheckable(true);
-        m_Group->setChecked(isGroupChecked(m_FormItem,false));
+        m_Group->setChecked(Constants::isGroupChecked(m_FormItem,false));
     }
 
-    if (isGroupCollapsible(m_FormItem, false)) {
+    if (Constants::isGroupCollapsible(m_FormItem, false)) {
         m_Group->setCheckable(true);
-        if (isGroupExpanded(m_FormItem, false)) {
+        if (Constants::isGroupExpanded(m_FormItem, false)) {
             m_Group->setChecked(true);
             expandGroup(true);
         } else {
@@ -890,13 +753,13 @@ void BaseGroupData::setBaseGroup(BaseGroup *gr)
 
 void BaseGroupData::clear()
 {
-    if (isGroupCollapsible(m_FormItem, false))
+    if (Constants::isGroupCollapsible(m_FormItem, false))
         m_BaseGroup->getCheckAndCollapsibleState();
 }
 
 bool BaseGroupData::isModified() const
 {
-    if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+    if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false))
         return m_OriginalValue_isChecked != m_BaseGroup->m_Group->isChecked();
     return false;
 }
@@ -904,7 +767,7 @@ bool BaseGroupData::isModified() const
 void BaseGroupData::setModified(bool modified)
 {
     if (!modified) {
-        if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+        if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false))
             m_OriginalValue_isChecked = m_BaseGroup->m_Group->isChecked();
     }
 }
@@ -915,12 +778,12 @@ bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
     if (!m_BaseGroup)
         return false;
     if (role==Qt::CheckStateRole) {
-        if (isGroupCollapsible(m_FormItem, false)) {
+        if (Constants::isGroupCollapsible(m_FormItem, false)) {
             m_BaseGroup->m_Group->setChecked(data.toBool());
             m_BaseGroup->expandGroup(data.toBool());
             onValueChanged();
         }
-        else if (isGroupCheckable(m_FormItem, false)) {
+        else if (Constants::isGroupCheckable(m_FormItem, false)) {
             m_BaseGroup->m_Group->setChecked(data.toBool());
             onValueChanged();
         }
@@ -932,7 +795,7 @@ QVariant BaseGroupData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     if (role==Qt::CheckStateRole)
-        if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+        if (Constants::isGroupCollapsible(m_FormItem, false) || Constants::isGroupCheckable(m_FormItem, false))
             return m_BaseGroup->m_Group->isChecked();
     return QVariant();
 }
@@ -952,7 +815,7 @@ QVariant BaseGroupData::storableData() const
 
 void BaseGroupData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 
@@ -1003,7 +866,7 @@ BaseCheck::~BaseCheck()
 
 QString BaseCheck::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     // ⍌⎕☒☑
@@ -1134,7 +997,7 @@ QVariant BaseCheckData::storableData() const
 
 void BaseCheckData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 
@@ -1154,10 +1017,10 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         if (!radioLayout) {
             radioLayout = new QHBoxLayout(this);
         }
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(Constants::labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
 
         // Add QLabel
         //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
@@ -1169,7 +1032,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         //     QSizePolicy sizePolicy = gb->sizePolicy();
         //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
         //     gb->setSizePolicy(sizePolicy);
-        if (isRadioHorizontalAlign(m_FormItem)) {
+        if (Constants::isRadioHorizontalAlign(m_FormItem)) {
             radioLayout = new QBoxLayout(QBoxLayout::LeftToRight, gb);
         } else {
             radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
@@ -1219,15 +1082,15 @@ BaseRadio::~BaseRadio()
 
 QString BaseRadio::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
-    if (dontPrintEmptyValues(m_FormItem) && m_ButGroup->checkedButton()==0)
+    if (Constants::dontPrintEmptyValues(m_FormItem) && m_ButGroup->checkedButton()==0)
         return QString();
 
     // ⚪⚫
     QStringList html;
-    bool horiz = isRadioHorizontalAlign(m_FormItem);
+    bool horiz = Constants::isRadioHorizontalAlign(m_FormItem);
     foreach (QRadioButton *button, m_RadioList) {
         if (withValues) {
             if (button->isChecked()) {
@@ -1436,7 +1299,7 @@ QVariant BaseRadioData::storableData() const
 
 void BaseRadioData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -1470,7 +1333,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
             }
         }
         // Find Label
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
         QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1508,11 +1371,11 @@ BaseSimpleText::~BaseSimpleText()
 
 QString BaseSimpleText::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     if (withValues) {
-        if (dontPrintEmptyValues(m_FormItem)) {
+        if (Constants::dontPrintEmptyValues(m_FormItem)) {
             if (m_Line && m_Line->text().isEmpty())
                 return QString();
             else if (m_Text && m_Text->toPlainText().isEmpty())
@@ -1659,7 +1522,7 @@ QVariant BaseSimpleTextData::storableData() const
 
 void BaseSimpleTextData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
@@ -1682,7 +1545,7 @@ BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
         }
         m_Label->setText(m_FormItem->spec()->label());
     } else if (!label.isEmpty()) {
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         QHBoxLayout *hb = new QHBoxLayout(this);
         // Add QLabel
@@ -1700,7 +1563,7 @@ BaseHelpText::~BaseHelpText()
 QString BaseHelpText::printableHtml(bool withValues) const
 {
     Q_UNUSED(withValues);
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
     return QString("<table width=100% border=0 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                    "<tbody>"
@@ -1742,7 +1605,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
             m_List = new QListView(this);
         }
         // Find Label
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
         QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1780,7 +1643,7 @@ BaseList::~BaseList()
 
 QString BaseList::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QString content;
@@ -1790,7 +1653,7 @@ QString BaseList::printableHtml(bool withValues) const
         }
     } else {
         QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
-        if (dontPrintEmptyValues(m_FormItem) && indexes.isEmpty())
+        if (Constants::dontPrintEmptyValues(m_FormItem) && indexes.isEmpty())
             return QString();
         qSort(indexes);
         foreach(const QModelIndex &i, indexes) {
@@ -1951,7 +1814,7 @@ QVariant BaseListData::storableData() const
 
 void BaseListData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
@@ -1974,7 +1837,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
             m_Combo = new QComboBox(this);
         }
         // Find label
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
         QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -2001,7 +1864,7 @@ BaseCombo::~BaseCombo()
 
 QString BaseCombo::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QString content;
@@ -2133,7 +1996,7 @@ QVariant BaseComboData::storableData() const
 void BaseComboData::onValueChanged()
 {
 //    WARN_FUNC;
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(Form::IFormItemData::ID_CurrentUuid);
 }
 //--------------------------------------------------------------------------------------------------------
@@ -2156,7 +2019,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
             m_Date = new QDateTimeEdit(this);
         }
         // Find Label
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {    // Prepare Widget Layout and label
         QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
@@ -2168,13 +2031,13 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
         m_Date->setCalendarPopup(true);
         hb->addWidget(m_Date);
     }
-    m_Date->setDisplayFormat(getDateFormat(m_FormItem));
+    m_Date->setDisplayFormat(Constants::getDateFormat(m_FormItem));
 
     // Manage options
     const QStringList &options = formItem->getOptions();
-    if (options.contains(::DATE_NOW, Qt::CaseInsensitive))
+    if (options.contains(Constants::DATE_NOW, Qt::CaseInsensitive))
         m_Date->setDateTime(QDateTime::currentDateTime());
-    if (options.contains(::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
+    if (options.contains(Constants::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
         onCurrentPatientChanged();
     }
@@ -2207,7 +2070,7 @@ void BaseDate::onCurrentPatientChanged()
 
 QString BaseDate::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QString content;
@@ -2226,7 +2089,7 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
-        if (dontPrintEmptyValues(m_FormItem) && m_Date->date().isNull())
+        if (Constants::dontPrintEmptyValues(m_FormItem) && m_Date->date().isNull())
             return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                        "<tbody>"
@@ -2240,7 +2103,8 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label()).arg(QLocale().toString(m_Date->date(), getDateFormat(m_FormItem)).replace(" ","&nbsp;"));
+                .arg(m_FormItem->spec()->label())
+                .arg(QLocale().toString(m_Date->date(), Constants::getDateFormat(m_FormItem)).replace(" ","&nbsp;"));
     }
     return content;
 }
@@ -2323,7 +2187,7 @@ QVariant BaseDateData::storableData() const
 
 void BaseDateData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
@@ -2371,7 +2235,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         }
         m_Spin->setToolTip(m_FormItem->spec()->tooltip());
         // Find label
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
         QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -2381,17 +2245,17 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *spin = new QDoubleSpinBox(this);
             spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
-            spin->setMinimum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
-            spin->setMaximum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
-            spin->setSingleStep(formItem->extraData().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+            spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
+            spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
+            spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
             connect(spin, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             m_Spin = spin;
         } else {
             QSpinBox *spin = new QSpinBox(this);
             spin->setObjectName("Spin_" + m_FormItem->uuid());
-            spin->setMinimum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
-            spin->setMaximum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
-            spin->setSingleStep(formItem->extraData().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+            spin->setMinimum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MIN, "0").toInt());
+            spin->setMaximum(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
+            spin->setSingleStep(formItem->extraData().value(Constants::SPIN_EXTRAS_KEY_STEP, "1").toInt());
             m_Spin = spin;
             connect(spin, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
         }
@@ -2409,7 +2273,7 @@ BaseSpin::~BaseSpin()
 
 QString BaseSpin::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
         return QString();
 
     QString content;
@@ -2563,7 +2427,7 @@ QVariant BaseSpinData::storableData() const
 
 void BaseSpinData::onValueChanged()
 {
-    executeOnValueChangedScript(m_FormItem);
+    Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------

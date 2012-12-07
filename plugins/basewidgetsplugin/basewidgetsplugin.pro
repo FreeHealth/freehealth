@@ -16,7 +16,9 @@ HEADERS += basewidgetsplugin.h \
     identitywidgetfactory.h \
     calculationwidgets.h \
     frenchsocialnumber.h \
-    basedetailswidget.h
+    basedetailswidget.h \
+    basedatecompleterwidget.h \
+    constants.h
 
 SOURCES += basewidgetsplugin.cpp \
     baseformwidgets.cpp \
@@ -25,7 +27,9 @@ SOURCES += basewidgetsplugin.cpp \
     identitywidgetfactory.cpp \
     frenchsocialnumber.cpp \
     calculationwidgets.cpp \
-    basedetailswidget.cpp
+    basedetailswidget.cpp \
+    basedatecompleterwidget.cpp \
+    constants.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \
     baseformwidget.ui \

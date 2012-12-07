@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "frenchsocialnumber.h"
+#include "constants.h"
 #include "ui_frenchsocialnumber.h"
 
 #include <formmanagerplugin/iformitem.h>
@@ -55,23 +56,6 @@ const QString controlKey6 = "299082B234349";  // clé 29
 
 using namespace BaseWidgets;
 using namespace Internal;
-
-static inline QLabel *findLabel(Form::FormItem *item)
-{
-    QLabel *l = 0;
-    // Find label
-    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
-    if (!lbl.isEmpty()) {
-        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
-        if (l) {
-            l->setText(item->spec()->label());
-        } else {
-            l = new QLabel(item->formWidget());
-            l->setText(item->spec()->label());
-        }
-    }
-    return l;
-}
 
 FrenchSocialNumber::FrenchSocialNumber(QWidget *parent) :
     QWidget(parent),
@@ -493,7 +477,7 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
         } else {
             LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
         }
-        m_Label = findLabel(formItem);
+        m_Label = Constants::findLabel(formItem);
     } else {
         QHBoxLayout *hb = new QHBoxLayout(this);
         // Add QLabel
