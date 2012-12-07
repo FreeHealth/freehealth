@@ -139,7 +139,9 @@
 using namespace Form;
 
 IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
-    QWidget(parent), m_FormItem(formItem)
+    QWidget(parent),
+    m_Label(0),
+    m_FormItem(formItem)
 {
     m_FormItem->setFormWidget(this);
 }
