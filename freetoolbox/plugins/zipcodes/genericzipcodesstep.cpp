@@ -485,7 +485,7 @@ bool GenericZipCodesStep::postDownloadProcessing()
     bool ok = QuaZipTools::unzipFile(fileName, d->tmpPath());
 
     // uppercase the whole file
-    Utils::saveStringToFile(Utils::readTextFile(fileName).toUpper(), fileName, Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(Utils::readTextFile(d->tmpPath() + "/allCountries.txt").toUpper(), d->tmpPath() + "/allCountries.txt", Utils::Overwrite, Utils::DontWarnUser);
 
     Q_EMIT postDownloadProcessingFinished();
     return ok;
