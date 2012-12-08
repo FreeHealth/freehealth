@@ -12,6 +12,7 @@ FreeMedForms
     * Faster start of the app
     * Patient selector corrections
     * Bug report sending improvements
+    * Managing state/province in address (using the zipcodes datapacks)
   * FreeDiams
   * FreeAccount
   * FreeToolBox
@@ -25,6 +26,8 @@ FreeMedForms
   * Agenda:
   * DataPack manager
     * Correcting crash when download dialog is cancelled
+  * Forms
+    * Identity sub-form updated with detaileswidget and a trusted person information
   * Debian specific
   * Under the hood
 

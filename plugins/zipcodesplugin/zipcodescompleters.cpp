@@ -78,21 +78,21 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
-ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvailable) :
-    QSqlQueryModel(parent),
-    m_DbAvailable(dbAvailable)
-{
-    db = _db;
-    m_countryIso = Utils::countryToIso(QLocale().country()).toLower();
+namespace {
+const char* const SELECT_IMPORT = "SELECT `ZIP`, `CITY`, `ADMIN_NAME1` FROM `IMPORT`";
+const char* const SELECT_PROV_IMPORT = "SELECT DISTINCT `ADMIN_NAME1` FROM `IMPORT`";
+const char* const SELECT_LIMIT  = "LIMIT 0, 50";
+        const int ZIP_COL = 0;
+        const int CITY_COL = 1;
+        const int PROVINCE_COL = 2;
+}
 
-    if (m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
-        if (db.isOpen()) {
-            setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
-            if (!query().isActive()) {
-                LOG_QUERY_ERROR(query());
-            }
-        }
-    }
+ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase db) :
+    QSqlQueryModel(parent),
+    _provinceModel(0)
+{
+    _db = db;
+    _provinceModel = new ZipStateProvinceModel(this, db);
 }
 
 QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
@@ -101,38 +101,35 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role==Qt::DisplayRole || role==Qt::EditRole) {
-
         // translate ColumnRepresentation values into real columns of the database
         switch (index.column()) {
         case Zip:
-            return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 0));
+            return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::ZIP_COL));
         case City:
-            return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 1));
+            return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::CITY_COL));
         case Country:
             return QLocale::countryToString(QLocale(QSqlQueryModel::data(QSqlQueryModel::index(index.row(), Country)).toString()).country());
+        case Province:
+            return QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::PROVINCE_COL));
         case ZipCity:
         {
-            const QString &zip = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 0)).toString();
-            const QString &city = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), 1)).toString();
+            const QString &zip = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::ZIP_COL)).toString();
+            const QString &city = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::CITY_COL)).toString();
             return QString(tr("%1, %2").arg(zip, city));
         }
-        }
-
+        } // switch
     }
     return QVariant();
 }
 
 /** Return all available countries included in the zipcode database */
-bool ZipCountryModel::countryAvailable(const QLocale::Country country) const
+bool ZipCountryModel::isCountryAvailable(const QLocale::Country country) const
 {
-    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
-        if (!db.isOpen()) {
-            return false;
-        }
-    }
-    QString req = QString("SELECT DISTINCT COUNT(COUNTRY) FROM ZIPS WHERE `COUNTRY`=\"%1\"")
+    if (!_db.isOpen())
+        return false;
+    QString req = QString("SELECT DISTINCT COUNT(`COUNTRY`) FROM `IMPORT` WHERE `COUNTRY`=\"%1\"")
             .arg(Utils::countryToIso(country).toLower());
-    QSqlQuery query(db);
+    QSqlQuery query(_db);
     if (query.exec(req)) {
         if (query.next())
             return query.value(0).toInt();
@@ -143,82 +140,109 @@ bool ZipCountryModel::countryAvailable(const QLocale::Country country) const
 }
 
 /** Return true if the zipcode \e zip and the \e city name correspond */
-bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) const
+bool ZipCountryModel::exists(const QString &countryIso, const QString &city, const QString &zip, const QString &province) const
 {
-    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
-        if (!db.isOpen()) {
-            return false;
-        }
-    }
-    QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`=\"%1\" AND `CITY`=\"%2\" AND ZIP=\"%3\"")
-            .arg(m_countryIso, city, zip);
-    QSqlQuery query(db);
+    if (!_db.isOpen())
+        return false;
+    QStringList f;
+    if (!countryIso.isEmpty())
+        f << QString("`COUNTRY`=\"%1\"").arg(countryIso);
+    if (!zip.isEmpty())
+        f << QString("`ZIP`=\"%1\"").arg(zip);
+    if (!city.isEmpty())
+        f << QString("`CITY`=\"%1\"").arg(city);
+    if (!province.isEmpty())
+        f << QString("`ADMIN_NAME1`=\"%1\"").arg(province);
+    QString filter = f.join(" AND ");
+
+    QString req = QString("%1 WHERE %2").arg(::SELECT_IMPORT).arg(filter);
+
+    QSqlQuery query(_db);
     if (query.exec(req)) {
         if (query.next())
-            return query.value(0).toInt();
+            return true;
     } else {
         LOG_QUERY_ERROR(query);
     }
     return false;
 }
 
-/** Filter the model with the \e city */
+ZipStateProvinceModel *ZipCountryModel::provinceModel() const
+{
+    return _provinceModel;
+}
+
+void ZipCountryModel::setCountryFilter(const QString &iso)
+{
+    _countryIso = iso;
+}
+
 void ZipCountryModel::setCityFilter(const QString &city)
 {
-    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
-        if (!db.isOpen()) {
-            return;
-        }
-    }
-    if (m_City==city)
+    _zip.clear();
+    _province.clear();
+    _city = city;
+    refreshQuery();
+}
+
+void ZipCountryModel::setZipFilter(const QString &zip)
+{
+    _zip = zip;
+    _province.clear();
+    _city.clear();
+    refreshQuery();
+}
+
+/** Return the WHERE clause according to the internal data (zip, city, province, country) */
+QString ZipCountryModel::currentFilter() const
+{
+    QStringList f;
+    if (!_countryIso.isEmpty())
+        f << QString("`COUNTRY`=\"%1\"").arg(_countryIso);
+    if (!_zip.isEmpty())
+        f << QString("`ZIP` LIKE \"%1%\"").arg(_zip);
+    if (!_city.isEmpty())
+        f << QString("`CITY` LIKE \"%1%\"").arg(_city);
+    if (!_province.isEmpty())
+        f << QString("`ADMIN_NAME1` LIKE \"%1%\"").arg(_province);
+    return f.join(" AND ");
+}
+
+void ZipCountryModel::refreshQuery()
+{
+    // Compute where clause
+    QString filter = currentFilter();
+    // Create the SqlQuery command
+    QString req = QString("%1 WHERE %2").arg(::SELECT_IMPORT).arg(filter);
+    req += " ORDER BY `CITY` ASC ";
+    req += ::SELECT_LIMIT;
+    if (req == _sqlQuery)
         return;
+    _sqlQuery = req;
 
-    QString tmpcity = city;
-    m_City = tmpcity.remove("'");
-
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`=\"%1\" "
-                          "AND `CITY` like \"%2%\" ORDER BY CITY ASC LIMIT 0, 20")
-            .arg(m_countryIso, m_City);
-    setQuery(req, db);
+    setQuery(_sqlQuery, _db);
     if (!query().isActive()) {
         LOG_QUERY_ERROR(query());
     }
+
+    req = QString("%1 WHERE %2").arg(::SELECT_PROV_IMPORT).arg(filter);
+    req += " ORDER BY `ADMIN_NAME1` ASC ";
+    req += ::SELECT_LIMIT;
+    _provinceModel->setQuery(req, _db);
 }
 
-/** Filter with the zipcode \e zipCode */
-void ZipCountryModel::setZipCodeFilter(const QString &zipCode)
-{
-    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
-        if (!db.isOpen()) {
-            return;
-        }
-    }
-    if (m_Zip==zipCode)
-        return;
 
-    QString zip = zipCode;
-    m_Zip = zip.remove("'");
-    QString req = QString("SELECT ZIP, CITY FROM ZIPS WHERE `COUNTRY`=\"%1\" "
-                          "AND `ZIP` like \"%2%\" ORDER BY ZIP LIMIT 0, 20")
-            .arg(m_countryIso, m_Zip);
-    setQuery(req, db);
-    if (!query().isActive()) {
-        LOG_QUERY_ERROR(query());
-    }
+ZipStateProvinceModel::ZipStateProvinceModel(QObject *parent, QSqlDatabase db) :
+    QSqlQueryModel(parent)
+{
+    _db = db;
 }
 
-/** Filter with the country iso code (two letters) \e countryIso */
-void ZipCountryModel::setCountryIsoFilter(const QString &countryIso)
+QVariant ZipStateProvinceModel::data(const QModelIndex &index, int role) const
 {
-    // strip possible SQL injection char
-    QString iso = countryIso;
-    iso = iso.remove("'");
-
-    // basic check if param is a valid country ISO filter
-    if (m_countryIso == iso|| iso.length() != 2)
-        return;
-
-    m_countryIso = iso.toLower();
+    if (!index.isValid())
+        return QVariant();
+    return QSqlQueryModel::data(index, role);
 }
 
 // Find the database to use. In priority order:
@@ -245,6 +269,7 @@ ZipCountryCompleters::ZipCountryCompleters(QObject *parent) :
     m_cityEdit(0),
     m_zipEdit(0),
     m_countryCombo(0),
+    m_provinceCombo(0),
     m_Model(0),
     m_ZipButton(0),
     m_CityButton(0),
@@ -263,6 +288,10 @@ ZipCountryCompleters::~ZipCountryCompleters()
 {
 }
 
+/**
+ * \internal
+ * Creates all needed models
+ */
 void ZipCountryCompleters::createModel()
 {
     if (m_Model) {
@@ -272,6 +301,7 @@ void ZipCountryCompleters::createModel()
     QSqlDatabase db;
     if (QSqlDatabase::connectionNames().contains("ZIPS")) {
         db = QSqlDatabase::database("ZIPS");
+        m_DbAvailable = true;
     } else {
         LOG(QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
         db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
@@ -287,7 +317,7 @@ void ZipCountryCompleters::createModel()
             LOG_ERROR("Unable to open Zip database");
             m_DbAvailable = false;
         } else {
-            m_Model = new ZipCountryModel(this, db, m_DbAvailable);
+            m_Model = new ZipCountryModel(this, db);
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg("zipcodes").arg("sqlite"));
         }
     }
@@ -309,9 +339,14 @@ void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
  * Define the QComboBox to use as state/province selector.
  * The combobox will be automatically populated.
  */
-void setStateProvinceComboBox(QComboBox *box)
+void ZipCountryCompleters::setStateProvinceComboBox(QComboBox *box)
 {
-    Q_UNUSED(box);
+    m_provinceCombo = box;
+    if (m_Model) {
+        m_provinceCombo->setModel(m_Model->provinceModel());
+        m_provinceCombo->setModelColumn(0);
+        connect(m_provinceCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setStateProvinceFilter(int)));
+    }
 }
 
 /*! Define the QLineEdit to use as city name editor */
@@ -321,12 +356,11 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
     // Completer
     QCompleter *completer = new QCompleter(this);
     completer->setModel(m_Model);
-    completer->setCompletionColumn(ZipCountryModel::City);
+    completer->setCompletionColumn(ZipCountryModel::ZipCity);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
-//    m_Completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->popup()->setAlternatingRowColors(true);
-    city->setCompleter(completer);
+    m_cityEdit->setCompleter(completer);
     connect(m_cityEdit, SIGNAL(textChanged(QString)), this, SLOT(cityTextChanged()));
     connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(onCompleterIndexActivated(QModelIndex)));
 
@@ -334,7 +368,7 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
     m_CityButton = new QToolButton(m_cityEdit);
     m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     m_cityEdit->setRightButton(m_CityButton);
-    m_cityEdit->installEventFilter(this);
+//    m_cityEdit->installEventFilter(this);
 }
 
 /** Define the QLineEdit to use as zip code editor */
@@ -346,9 +380,9 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     completer->setModel(m_Model);
     completer->setCompletionColumn(ZipCountryModel::ZipCity);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->popup()->setAlternatingRowColors(true);
-    zip->setCompleter(completer);
+    m_zipEdit->setCompleter(completer);
     connect(m_zipEdit, SIGNAL(textChanged(QString)), this, SLOT(zipTextChanged()));
     connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(onCompleterIndexActivated(QModelIndex)));
 
@@ -356,7 +390,7 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     m_ZipButton = new QToolButton(m_zipEdit);
     m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     m_zipEdit->setRightButton(m_ZipButton);
-    m_zipEdit->installEventFilter(this);
+//    m_zipEdit->installEventFilter(this);
 }
 
 /*!
@@ -369,45 +403,89 @@ void ZipCountryCompleters::onCompleterIndexActivated(const QModelIndex &index)
         return;
     const QString &zip = m_Model->index(index.row(), ZipCountryModel::Zip).data().toString();
     const QString &city = m_Model->index(index.row(), ZipCountryModel::City).data().toString();
+    const QString &province = m_Model->index(index.row(), ZipCountryModel::Province).data().toString();
+
+    qWarning() << "COMPLETER ACT"<<zip<<city<<province;
+
+    // Disconnect editors
+    m_zipEdit->blockSignals(true);
+    m_cityEdit->blockSignals(true);
+    m_provinceCombo->blockSignals(true);
     if (m_zipEdit) {
         m_zipEdit->clearFocus();
-        m_zipEdit->setText(zip);
+        m_zipEdit->setText(zip.toUpper());
     }
     if (m_cityEdit) {
         m_cityEdit->clearFocus();
-        m_cityEdit->setText(city);
+        m_cityEdit->setText(city.toUpper());
     }
+    if (m_provinceCombo) {
+        m_provinceCombo->clearFocus();
+        m_provinceCombo->setCurrentIndex(m_provinceCombo->findText(province));
+    }
+    // Reconnect editors
+    m_zipEdit->blockSignals(false);
+    m_cityEdit->blockSignals(false);
+    m_provinceCombo->blockSignals(false);
     checkData();
 }
 
-/*! Sets the country filter \e country for the zip/city edits */
+/*!
+ * \internal
+ * Slot connect to the country combo. Update the model filter according
+ * to its content.
+*/
 void ZipCountryCompleters::setCountryFilter(const QLocale::Country country)
 {
-    if (!m_countryCombo)
-        return;
-    if (!m_Model)
-        return;
-    m_Model->setCountryIsoFilter(Utils::countryToIso(country));
+    if (m_Model)
+        m_Model->setCountryFilter(Utils::countryToIso(country));
     checkData();
 }
 
-/*! Sets a the new text new as filter for the zip completer */
+/*!
+ * \internal
+ * Slot connect to the Zipcode textedit. Update the model filter according
+ * to its content.
+*/
 void ZipCountryCompleters::zipTextChanged()
 {
-    if (!m_Model)
-        return;
-    m_Model->setZipCodeFilter(m_zipEdit->completer()->completionPrefix());
+    if (m_Model)
+        m_Model->setZipFilter(m_zipEdit->completer()->completionPrefix());
+    checkData();
 }
 
-/*! Sets a the new text new as filter for the city completer */
+/*!
+ * \internal
+ * Slot connect to the City textedit. Update the model filter according
+ * to its content.
+*/
 void ZipCountryCompleters::cityTextChanged()
 {
-    if (!m_Model)
-        return;
-    m_Model->setCityFilter(m_cityEdit->completer()->completionPrefix());
+    // Filter model
+    if (m_Model)
+        m_Model->setCityFilter(m_cityEdit->completer()->completionPrefix());
 }
 
-/*! Checks validity of country/city/zipcode associationand sets icons according to the current status */
+/*!
+ * \internal
+ * Slot connect to the ProvinceState combo. Update the model filter according
+ * to its content.
+*/
+void ZipCountryCompleters::setStateProvinceFilter(int index)
+{
+    Q_UNUSED(index);
+//    if (m_Model)
+//        m_Model->setProvinceFilter(m_provinceCombo->itemText(index));
+//    if (m_ProvinceModel)
+//        m_ProvinceModel->setFilter(m_filter);
+    checkData();
+}
+
+/*!
+ * \internal
+ * Checks validity of country/city/province/zipcode association
+ * and sets icons according to the current status
+ */
 void ZipCountryCompleters::checkData()
 {
     if (!m_Model)
@@ -424,7 +502,7 @@ void ZipCountryCompleters::checkData()
         return;
     }
     // zipcodes available for selected country
-    if (!m_Model->countryAvailable(m_countryCombo->currentCountry())) {
+    if (!m_Model->isCountryAvailable(m_countryCombo->currentCountry())) {
         m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         m_CityButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         //: %1 is a country
@@ -438,7 +516,11 @@ void ZipCountryCompleters::checkData()
 
     // zip && city not empty -> check the couple with the model
     if (!m_zipEdit->text().isEmpty() && !m_cityEdit->text().isEmpty()) {
-        if (m_Model->coupleExists(m_zipEdit->text(), m_cityEdit->text())) {
+        // We assume that the filter is up to date
+        QString province;
+        if (m_provinceCombo)
+            province = m_provinceCombo->currentText();
+        if (m_Model->exists(m_countryCombo->currentIsoCountry(), m_cityEdit->text(), m_zipEdit->text(), province)) {
             m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
             m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
             m_ZipButton->setToolTip(tr("Zip/city/country association checked"));
@@ -466,7 +548,6 @@ void ZipCountryCompleters::packChanged(const DataPack::Pack &pack)
         createModel();
         m_cityEdit->completer()->setModel(m_Model);
         m_zipEdit->completer()->setModel(m_Model);
-        m_Model->setCountryIsoFilter(m_countryCombo->currentIsoCountry());
         checkData();
     }
 }
