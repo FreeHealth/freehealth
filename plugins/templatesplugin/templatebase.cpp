@@ -170,8 +170,7 @@ public:
         if (updateVersionNumber) {
             query.prepare(q->prepareUpdateQuery(Constants::Table_Version, Constants::VERSION_ACTUAL));
             query.bindValue(0, Constants::DB_ACTUAL_VERSION);
-            query.exec();
-            if (!query.isActive()) {
+            if (!query.exec()) {
                 LOG_QUERY_ERROR_FOR(q, query);
                 query.finish();
                 DB.rollback();

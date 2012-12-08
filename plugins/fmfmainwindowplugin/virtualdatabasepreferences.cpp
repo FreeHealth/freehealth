@@ -146,8 +146,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
 
     // Retreive all patients and create n episodes for them
     QSet<QString> patients;
-    query.exec(patientBase()->selectDistinct(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID));
-    if (query.isActive()) {
+    if (query.exec(patientBase()->selectDistinct(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID))) {
         while (query.next())
             patients << query.value(0).toString();
     } else {

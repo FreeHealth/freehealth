@@ -525,10 +525,14 @@ bool AgendaBase::hasCalendar(const QString &userUuid)
     QSqlQuery query(DB);
     if (query.exec(select(get, join, cond))) {
         if (query.next()) {
+            query.finish();
             DB.commit();
             return true;
         }
+    } else {
+        LOG_QUERY_ERROR(query);
     }
+    query.finish();
     DB.commit();
     return false;
 }

@@ -175,15 +175,13 @@ QStringList MedicalProcedureModel::distinctAvailableType() const
 {
     QStringList toReturn;
     QSqlQuery query(accountBase()->database());
-    query.exec(accountBase()->selectDistinct(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_TYPE));
-    if (query.isActive()) {
+    if (query.exec(accountBase()->selectDistinct(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_TYPE))) {
         while (query.next()) {
             toReturn << query.value(0).toString();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
-    query.finish();
     return toReturn;
 }
 
