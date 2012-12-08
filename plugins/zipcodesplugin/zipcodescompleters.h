@@ -47,8 +47,8 @@ QT_END_NAMESPACE
 /**
  * \file zipcodescompleters.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 14 Feb 2012
+ * \version 0.8.0
+ * \date 08 Dec 2012
 */
 
 namespace DataPack {
