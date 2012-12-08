@@ -60,7 +60,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-enum { WarnDatabaseFilter = true };
+enum { WarnDatabaseFilter = false };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
