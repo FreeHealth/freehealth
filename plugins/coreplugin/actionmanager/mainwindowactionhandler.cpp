@@ -86,6 +86,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aGeneralAppPrefs(0), aGeneralAppConfigurator(0), aGeneralPlugsPrefs(0), aGeneralMedinTux(0),
         aGeneralAppAbout(0), aGeneralPlugsAbout(0), aGeneralAppHelp(0), aGeneralQtAbout(0), aGeneralDebugDialog(0),
         aGeneralCheckUpdate(0), aGeneralUpdateAvailable(0),
+        aReportBug(0),
         aNew(0),
         aOpen(0),
         aSave(0),
