@@ -169,7 +169,7 @@ bool FrenchZipCodesStep::unzipFiles()
     // unzip downloaded using QProcess
     if (!QuaZipTools::unzipFile(fileName, workingPath()))
         return false;
-
+    // INSEE File is already all uppercase
     return true;
 }
 
