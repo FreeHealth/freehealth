@@ -110,16 +110,11 @@ public:
         _stateCombo = new QComboBox(q);
         _country = new Views::CountryComboBox(q);
 
-        Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
-        _city->setValidator(upperVal);
-        _zip->setValidator(upperVal);
-
         _zipCompleter = new ZipCodes::ZipCountryCompleters(q);
         _zipCompleter->setCityLineEdit(_city);
         _zipCompleter->setZipLineEdit(_zip);
         _zipCompleter->setCountryComboBox(_country);
         _zipCompleter->setStateProvinceComboBox(_stateCombo);
-//        _zipCompleter->refreshFilter();
     }
 
     void populateLayout()
