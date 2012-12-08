@@ -118,6 +118,8 @@ public:
         _zipCompleter->setCityLineEdit(_city);
         _zipCompleter->setZipLineEdit(_zip);
         _zipCompleter->setCountryComboBox(_country);
+        _zipCompleter->setStateProvinceComboBox(_stateCombo);
+//        _zipCompleter->refreshFilter();
     }
 
     void populateLayout()
