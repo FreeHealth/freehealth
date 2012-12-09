@@ -553,7 +553,6 @@ DrugInteractorModel::DrugInteractorModel(ShowData show, QObject *parent) :
     d->m_ddis = core()->getDrugDrugInteractions();
     d->m_ShowData = show;
     d->filter();
-    connect(core(), SIGNAL(interactorCreated(DrugInteractor*)), this, SLOT(onInteractorCreated(DrugInteractor*)));
 }
 
 DrugInteractorModel::~DrugInteractorModel()
