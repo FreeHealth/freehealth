@@ -1473,9 +1473,9 @@ QString removeAccents(const QString &text)
     accents.insert(QString::fromUtf8("Õ"), "O");
 
     QString toReturn = text;
-    foreach(const QString &k, accents.keys()) {
+    foreach(const QString &k, accents.keys())
         toReturn = toReturn.replace(k, accents.value(k));
-    }
+
     return toReturn;
 }
 
