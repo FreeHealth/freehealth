@@ -1116,7 +1116,7 @@ QString DrugDrugInteractionModel::repartition(int index)
  * Return true if the interaction was correctly added. \n
  * NOTE: When the DDI is added, the model gets re-filtered with the previous filter.
  */
-bool DrugDrugInteractionModel::addDrugDrugInteraction(const DrugDrugInteraction &ddi)
+bool DrugDrugInteractionModel::addDrugDrugInteraction(const Internal::DrugDrugInteraction &ddi)
 {
     if (!ddi.isValid())
         return false;

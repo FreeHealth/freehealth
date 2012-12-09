@@ -120,7 +120,7 @@ public:
 //    void fetchMore(const QModelIndex &parent = QModelIndex());
 
 public Q_SLOTS:
-    bool addDrugDrugInteraction(const DrugDrugInteraction &ddi);
+    bool addDrugDrugInteraction(const Internal::DrugDrugInteraction &ddi);
     void filterInteractionsForInteractor(const QString &interactorName);
     void setActualReviewer(const QString &name);
     bool saveModel();
