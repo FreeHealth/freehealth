@@ -130,11 +130,11 @@ class InteractorEditorWidgetPrivate
 public:
     InteractorEditorWidgetPrivate(InteractorEditorWidget *parent) :
         ui(0),
-        m_Mapper(0),
-        m_AtcCodes(0),
-        m_ChildrenInteractors(0),
-        m_Pmids(0),
-        m_ToolBar(0),
+        _mapper(0),
+        _atcCodesStringListModel(0),
+        _childrenInteractorsStringListModel(0),
+        _pmidStringListModel(0),
+        _toolBar(0),
         aExpandAll(0),
         aCollapseAll(0),
         aSave(0),
@@ -146,8 +146,8 @@ public:
         aAddClassReviewMark(0),
         aNextUnreviewedOrUnlinked(0),
         aDownloadAllNeededPmids(0),
-        m_ToolButton(0),
-        m_CreateNewToolButton(0),
+        _toolButton(0),
+        _createNewToolButton(0),
         aGoogle(0),
         aWho(0),
         aResip(0),
@@ -208,36 +208,36 @@ public:
         aRemoveCurrent->setEnabled(false);
         aTranslateThis->setEnabled(false);
 
-        m_ToolButton = new QToolButton(q);
-        m_ToolButton->addAction(aAtcSearchDialog);
-        m_ToolButton->addAction(aGoogle);
-        m_ToolButton->addAction(aWho);
-        m_ToolButton->addAction(aResip);
-        m_ToolButton->addAction(aCopyClip);
-        m_ToolButton->setDefaultAction(aAtcSearchDialog);
-        m_ToolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
-        m_ToolButton->setPopupMode(QToolButton::InstantPopup);
-        m_ToolButton->setEnabled(false);
+        _toolButton = new QToolButton(q);
+        _toolButton->addAction(aAtcSearchDialog);
+        _toolButton->addAction(aGoogle);
+        _toolButton->addAction(aWho);
+        _toolButton->addAction(aResip);
+        _toolButton->addAction(aCopyClip);
+        _toolButton->setDefaultAction(aAtcSearchDialog);
+        _toolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        _toolButton->setPopupMode(QToolButton::InstantPopup);
+        _toolButton->setEnabled(false);
 
-        m_CreateNewToolButton = new QToolButton(q);
-        m_CreateNewToolButton->addAction(aCreateNewClass);
-        m_CreateNewToolButton->addAction(aCreateNewInteractor);
-        m_CreateNewToolButton->setDefaultAction(aCreateNewClass);
-        m_CreateNewToolButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-        m_CreateNewToolButton->setPopupMode(QToolButton::InstantPopup);
+        _createNewToolButton = new QToolButton(q);
+        _createNewToolButton->addAction(aCreateNewClass);
+        _createNewToolButton->addAction(aCreateNewInteractor);
+        _createNewToolButton->setDefaultAction(aCreateNewClass);
+        _createNewToolButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+        _createNewToolButton->setPopupMode(QToolButton::InstantPopup);
 
-        m_ToolBar = new QToolBar(q);
-        m_ToolBar->addAction(aDownloadAllNeededPmids);
-        m_ToolBar->addAction(aAddClassReviewMark);
-        m_ToolBar->addWidget(m_CreateNewToolButton);
-        m_ToolBar->addAction(aNextUnreviewedOrUnlinked);
-        m_ToolBar->addAction(aRemoveCurrent);
-        m_ToolBar->addAction(aEdit);
-        m_ToolBar->addAction(aTranslateThis);
-        m_ToolBar->addAction(aSave);
-        m_ToolBar->addWidget(m_ToolButton);
-        m_ToolBar->setIconSize(QSize(16,16));
-        ui->toolbarLayout->addWidget(m_ToolBar);
+        _toolBar = new QToolBar(q);
+        _toolBar->addAction(aDownloadAllNeededPmids);
+        _toolBar->addAction(aAddClassReviewMark);
+        _toolBar->addWidget(_createNewToolButton);
+        _toolBar->addAction(aNextUnreviewedOrUnlinked);
+        _toolBar->addAction(aRemoveCurrent);
+        _toolBar->addAction(aEdit);
+        _toolBar->addAction(aTranslateThis);
+        _toolBar->addAction(aSave);
+        _toolBar->addWidget(_toolButton);
+        _toolBar->setIconSize(QSize(16,16));
+        ui->toolbarLayout->addWidget(_toolBar);
     }
 
     void connectActions()
@@ -251,8 +251,8 @@ public:
         QObject::connect(aAddClassReviewMark, SIGNAL(triggered()), q, SLOT(bookmarkClassesFromCurrent()));
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
-        QObject::connect(m_ToolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
-        QObject::connect(m_CreateNewToolButton, SIGNAL(triggered(QAction*)), q, SLOT(createButtonActivated(QAction*)));
+        QObject::connect(_toolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
+        QObject::connect(_createNewToolButton, SIGNAL(triggered(QAction*)), q, SLOT(createButtonActivated(QAction*)));
     }
 
     void prepareSearchLine()
@@ -295,24 +295,24 @@ public:
 
         // Models and views in the editor
         // AtcCodes
-        m_AtcCodes = new QStringListModel(q);
-        ui->atcTableView->setModel(m_AtcCodes);
+        _atcCodesStringListModel = new QStringListModel(q);
+        ui->atcTableView->setModel(_atcCodesStringListModel);
         ui->atcTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
         ui->atcTableView->setAlternatingRowColors(true);
         ui->atcTableView->horizontalHeader()->hide();
         ui->atcTableView->verticalHeader()->hide();
         ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-        m_ChildrenInteractors = new QStringListModel(q);
-        ui->classChildrenTableView->setModel(m_ChildrenInteractors);
+        _childrenInteractorsStringListModel = new QStringListModel(q);
+        ui->classChildrenTableView->setModel(_childrenInteractorsStringListModel);
         ui->classChildrenTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
         ui->classChildrenTableView->setAlternatingRowColors(true);
         ui->classChildrenTableView->horizontalHeader()->hide();
         ui->classChildrenTableView->verticalHeader()->hide();
         //ui->classChildrenTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-        m_Pmids = new QStringListModel(q);
-        ui->pmidListView->setModel(m_Pmids);
+        _pmidStringListModel = new QStringListModel(q);
+        ui->pmidListView->setModel(_pmidStringListModel);
         //ui->pmidListView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
         ui->pmidListView->setAlternatingRowColors(true);
         //ui->pmidListView->horizontalHeader()->hide();
@@ -321,11 +321,13 @@ public:
 
 public:
     Ui::InteractorEditorWidget *ui;
-    QDataWidgetMapper *m_Mapper;
-    QStringListModel *m_AtcCodes, *m_ChildrenInteractors, *m_Pmids;
+    QDataWidgetMapper *_mapper;
+    QStringListModel *_atcCodesStringListModel;
+    QStringListModel *_childrenInteractorsStringListModel;
+    QStringListModel *_pmidStringListModel;
     QPersistentModelIndex m_EditingIndex;
 
-    QToolBar *m_ToolBar;
+    QToolBar *_toolBar;
     QAction *aExpandAll, *aCollapseAll;
     QAction *aSave;
     QAction *aEdit;
@@ -337,7 +339,7 @@ public:
     QAction *aNextUnreviewedOrUnlinked;
     QAction *aDownloadAllNeededPmids;
 
-    QToolButton *m_ToolButton, *m_CreateNewToolButton;
+    QToolButton *_toolButton, *_createNewToolButton;
     QAction *aGoogle;
     QAction *aWho;
     QAction *aResip;
@@ -368,7 +370,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
 
     d->prepareModelsAndViews();
 
-    d->m_Mapper = new QDataWidgetMapper(this);
+    d->_mapper = new QDataWidgetMapper(this);
 
     updateCounts();
     connect(ddiCore()->interactingClassesModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
@@ -408,7 +410,7 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
     d->ui->classInfoEs->setEnabled(state);
     d->ui->classInfoFr->setEnabled(state);
     d->ui->notWarnDuplicated->setEnabled(state);
-    d->m_ToolButton->setEnabled(state);
+    d->_toolButton->setEnabled(state);
 }
 
 void InteractorEditorWidget::reformatOldSource()
@@ -568,7 +570,7 @@ void InteractorEditorWidget::save()
 {
     if (d->m_EditingIndex.isValid()) {
         d->ui->classesTreeView->setFocus();
-        d->m_Mapper->submit();
+        d->_mapper->submit();
         QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
         // bug with mapper / checkbox in macos
         QModelIndex reviewed = model->index(d->m_EditingIndex.row(), DrugInteractorModel::IsReviewed, d->m_EditingIndex.parent());
@@ -579,15 +581,15 @@ void InteractorEditorWidget::save()
         // manage ATC / PMIDs
         QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ATCCodeStringList, d->m_EditingIndex.parent());
         QStringList codes;
-        foreach(const QString &code, d->m_AtcCodes->stringList()) {
+        foreach(const QString &code, d->_atcCodesStringListModel->stringList()) {
             codes << code.left(code.indexOf(":"));
         }
         model->setData(atc, codes);
         QModelIndex children = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ChildrenUuid, d->m_EditingIndex.parent());
-        model->setData(children, d->m_ChildrenInteractors->stringList());
+        model->setData(children, d->_childrenInteractorsStringListModel->stringList());
 
         QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorModel::PMIDStringList, d->m_EditingIndex.parent());
-        model->setData(pmids, d->m_Pmids->stringList());
+        model->setData(pmids, d->_pmidStringListModel->stringList());
 
         DrugInteractorModel *interactorModel = qobject_cast<DrugInteractorModel *>(model);
         interactorModel->saveModel();
@@ -641,7 +643,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
         if (Utils::yesNoMessageBox(tr("Data changed but not saved."), tr("Do you want to save changes to the file ?"))) {
             save();
         } else {
-            d->m_Mapper->revert();
+            d->_mapper->revert();
         }
     }
 
@@ -673,27 +675,27 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
 
     // Set the mapper over the source model
     d->m_EditingIndex = model->mapToSource(index);
-    d->m_Mapper->setModel(model->sourceModel());
-    d->m_Mapper->addMapping(d->ui->interactorLabel, DrugInteractorModel::TrLabel, "text");
-    d->m_Mapper->addMapping(d->ui->commentTextEdit, DrugInteractorModel::Comment, "plainText");
-    d->m_Mapper->addMapping(d->ui->dateCreation, DrugInteractorModel::DateOfCreation, "date");
-    d->m_Mapper->addMapping(d->ui->dateUpdate, DrugInteractorModel::DateLastUpdate, "date");
-    d->m_Mapper->addMapping(d->ui->frLabel, DrugInteractorModel::FrLabel, "text");
-    d->m_Mapper->addMapping(d->ui->enLabel, DrugInteractorModel::EnLabel, "text");
-    d->m_Mapper->addMapping(d->ui->deLabel, DrugInteractorModel::DeLabel, "text");
-    d->m_Mapper->addMapping(d->ui->esLabel, DrugInteractorModel::EsLabel, "text");
-    d->m_Mapper->addMapping(d->ui->reference, DrugInteractorModel::Reference, "text");
+    d->_mapper->setModel(model->sourceModel());
+    d->_mapper->addMapping(d->ui->interactorLabel, DrugInteractorModel::TrLabel, "text");
+    d->_mapper->addMapping(d->ui->commentTextEdit, DrugInteractorModel::Comment, "plainText");
+    d->_mapper->addMapping(d->ui->dateCreation, DrugInteractorModel::DateOfCreation, "date");
+    d->_mapper->addMapping(d->ui->dateUpdate, DrugInteractorModel::DateLastUpdate, "date");
+    d->_mapper->addMapping(d->ui->frLabel, DrugInteractorModel::FrLabel, "text");
+    d->_mapper->addMapping(d->ui->enLabel, DrugInteractorModel::EnLabel, "text");
+    d->_mapper->addMapping(d->ui->deLabel, DrugInteractorModel::DeLabel, "text");
+    d->_mapper->addMapping(d->ui->esLabel, DrugInteractorModel::EsLabel, "text");
+    d->_mapper->addMapping(d->ui->reference, DrugInteractorModel::Reference, "text");
 
-    d->m_Mapper->addMapping(d->ui->classInfoFr, DrugInteractorModel::ClassInformationFr, "plainText");
-    d->m_Mapper->addMapping(d->ui->classInfoEn, DrugInteractorModel::ClassInformationEn, "plainText");
-    d->m_Mapper->addMapping(d->ui->classInfoDe, DrugInteractorModel::ClassInformationDe, "plainText");
-//    d->m_Mapper->addMapping(d->ui->classInfoEs, DrugInteractorModel::ClassInformationEs, "plainText");
+    d->_mapper->addMapping(d->ui->classInfoFr, DrugInteractorModel::ClassInformationFr, "plainText");
+    d->_mapper->addMapping(d->ui->classInfoEn, DrugInteractorModel::ClassInformationEn, "plainText");
+    d->_mapper->addMapping(d->ui->classInfoDe, DrugInteractorModel::ClassInformationDe, "plainText");
+//    d->_mapper->addMapping(d->ui->classInfoEs, DrugInteractorModel::ClassInformationEs, "plainText");
 
-//    d->m_Mapper->addMapping(d->ui->atcTableView, DrugInteractorModel:, "");
-//    d->m_Mapper->addMapping(d->ui->classChildrenTableView, DrugInteractorModel:, "");
-//    d->m_Mapper->addMapping(d->ui, DrugInteractorModel:, "");
-    d->m_Mapper->setRootIndex(d->m_EditingIndex.parent());
-    d->m_Mapper->setCurrentModelIndex(d->m_EditingIndex);
+//    d->_mapper->addMapping(d->ui->atcTableView, DrugInteractorModel:, "");
+//    d->_mapper->addMapping(d->ui->classChildrenTableView, DrugInteractorModel:, "");
+//    d->_mapper->addMapping(d->ui, DrugInteractorModel:, "");
+    d->_mapper->setRootIndex(d->m_EditingIndex.parent());
+    d->_mapper->setCurrentModelIndex(d->m_EditingIndex);
 
     // set data
     // manage a OSX bug with checkboxes in mappers
@@ -709,15 +711,15 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     QStringList atcCodes;
     foreach(const QString &code, atcCodesIndex.data().toStringList())
         atcCodes << code + ": " + dbCore()->atcModel()->getAtcLabel(QStringList() << code).join(";");
-    d->m_AtcCodes->setStringList(atcCodes);
+    d->_atcCodesStringListModel->setStringList(atcCodes);
 
     QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorModel::PMIDStringList, index.parent());
     QStringList pmids = pmidsIndex.data().toStringList();
-    d->m_Pmids->setStringList(pmids);
+    d->_pmidStringListModel->setStringList(pmids);
 
     QModelIndex childrenIndex = model->index(index.row(), DrugInteractorModel::ChildrenUuid, index.parent());
     QStringList children = childrenIndex.data().toStringList();
-    d->m_ChildrenInteractors->setStringList(children);
+    d->_childrenInteractorsStringListModel->setStringList(children);
 }
 
 void InteractorEditorWidget::buttonActivated(QAction *selected)
@@ -730,7 +732,7 @@ void InteractorEditorWidget::buttonActivated(QAction *selected)
         if (dlg.exec() == QDialog::Accepted) {
             QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ATCCodeStringList, d->m_EditingIndex.parent());
             model->setData(atc, dlg.getSelectedCodes());
-            d->m_AtcCodes->setStringList(dlg.getSelectedCodes());
+            d->_atcCodesStringListModel->setStringList(dlg.getSelectedCodes());
         }
     } else if (selected == d->aGoogle) {
         QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(label)));
