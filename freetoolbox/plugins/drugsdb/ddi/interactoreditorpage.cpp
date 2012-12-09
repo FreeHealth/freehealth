@@ -231,8 +231,6 @@ public:
         m_ToolBar->addAction(aAddClassReviewMark);
         m_ToolBar->addWidget(m_CreateNewToolButton);
         m_ToolBar->addAction(aNextUnreviewedOrUnlinked);
-        m_ToolBar->addAction(aExpandAll);
-        m_ToolBar->addAction(aCollapseAll);
         m_ToolBar->addAction(aRemoveCurrent);
         m_ToolBar->addAction(aEdit);
         m_ToolBar->addAction(aTranslateThis);
@@ -613,6 +611,14 @@ void InteractorEditorWidget::createButtonActivated(QAction *selected)
         ddiCore()->createNewInteractor(id, true);
     } else if (selected==d->aCreateNewInteractor) {
         ddiCore()->createNewInteractor(id, false);
+    }
+    // Select created interactor
+    d->ui->searchLine->setText(id);
+    filterDrugInteractorModel(id);
+    if (selected==d->aCreateNewClass) {
+        interactorActivated(d->_proxyClassModel->index(0,0));
+    } else if (selected==d->aCreateNewInteractor) {
+        interactorActivated(d->_proxyMoleculeModel->index(0,0));
     }
 }
 
