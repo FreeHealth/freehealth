@@ -448,12 +448,14 @@ void InteractionEditorWidget::createNewDDI()
     LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
 }
 
+/** Filter the DDI model with the search terms \e filter */
 void InteractionEditorWidget::filterDrugDrugInteractionModel(const QString &filter)
 {
     d->m_DDIModel->filterInteractionsForInteractor(filter);
     d->ui->treeView->expandAll();
 }
 
+/** Edit the current selected DDI */
 void InteractionEditorWidget::edit()
 {
     if (d->m_DDIModel->hasChildren(d->ui->treeView->currentIndex()))
@@ -461,6 +463,10 @@ void InteractionEditorWidget::edit()
     setEditorsEnabled(true);
 }
 
+/**
+ * \internal
+ * Activated a specific DDI
+ */
 void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
 {
     if (d->m_EditingIndex==index)
@@ -525,6 +531,7 @@ void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
     d->m_EditingIndex = index;
 }
 
+/** Save the DDI model and all its changes */
 void InteractionEditorWidget::save()
 {
     if (d->m_EditingIndex.isValid()) {
@@ -557,6 +564,7 @@ void InteractionEditorWidget::save()
     setEditorsEnabled(false);
 }
 
+/** Remove the current selected DDI */
 void InteractionEditorWidget::removeCurrent()
 {
     if (d->m_EditingIndex.isValid()) {
@@ -564,6 +572,7 @@ void InteractionEditorWidget::removeCurrent()
     }
 }
 
+/** Translated DDI texts of the currently selected one */
 void InteractionEditorWidget::translateCurrent()
 {
     if (!d->googleTranslator) {
@@ -581,6 +590,10 @@ void InteractionEditorWidget::translateCurrent()
     d->googleTranslator->startTranslation("fr", "en", trans);
 }
 
+/**
+ * \internal
+ * Acts when translations are downloaded
+ */
 void InteractionEditorWidget::translationDone(const QString &trans)
 {
     qWarning() << "translationDone" << trans;
@@ -604,6 +617,10 @@ void InteractionEditorWidget::translationDone(const QString &trans)
     }
 }
 
+/**
+ * \internal
+ * DISCONNECTED
+ */
 void InteractionEditorWidget::translateAll()
 {
 //    InteractionModel *model = InteractionModel::instance();
@@ -775,6 +792,11 @@ void InteractionEditorWidget::reformatOldXmlSource()
     Utils::saveStringToFile(xml, afssapsNewIamXmlFile());
 }
 
+/**
+ * \internal
+ * When a DDI has multiple levels (contraindication, precaution...)
+ * splits this DDI into each level.
+ */
 void InteractionEditorWidget::splitCurrent()
 {
     // Not acting on categories
