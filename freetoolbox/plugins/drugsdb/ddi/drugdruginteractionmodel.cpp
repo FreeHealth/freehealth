@@ -228,6 +228,9 @@ public:
 
     void filter(const QString &interactor = QString::null)
     {
+        if (interactor == m_currentFilter)
+            return;
+        m_currentFilter = interactor;
         delete rootItem;
         rootItem = new DDITreeItem(0,0);
         QFont bold;
@@ -400,6 +403,7 @@ public:
     QMultiMap<DrugDrugInteraction *, QString> m_ddiError;
     QString reviewer;
     int m_FetchedRows;
+    QString m_currentFilter;
 
 private:
     DrugDrugInteractionModel *q;
