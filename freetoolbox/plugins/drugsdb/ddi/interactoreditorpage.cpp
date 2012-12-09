@@ -89,6 +89,42 @@ QWidget *InteractorEditorPage::createPage(QWidget *parent)
 
 namespace DrugsDB {
 namespace Internal {
+class TreeProxyModel : public QSortFilterProxyModel
+{
+public:
+    TreeProxyModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+    {
+        setFilterCaseSensitivity(Qt::CaseInsensitive);
+    }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+    {
+        if(filterRegExp().isEmpty())
+            return true;
+
+        QModelIndex current(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
+
+        if(sourceModel()->hasChildren(current)) {
+            bool atLeastOneValidChild = false;
+            int i = 0;
+            while(!atLeastOneValidChild) {
+                const QModelIndex child(current.child(i, current.column()));
+                if (!child.isValid())
+                    // No valid child
+                    break;
+
+                atLeastOneValidChild = filterAcceptsRow(i, current);
+                i++;
+            }
+            return atLeastOneValidChild;
+        }
+
+        return sourceModel()->data(current).toString().contains(filterRegExp());
+    }
+};
+
 class InteractorEditorWidgetPrivate
 {
 public:
@@ -238,7 +274,7 @@ public:
     {
         // Models and views in the selector
         // Classes
-        _proxyClassModel = new QSortFilterProxyModel(q);
+        _proxyClassModel = new TreeProxyModel(q);
         _proxyClassModel->setSourceModel(ddiCore()->interactingClassesModel());
         _proxyClassModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         _proxyClassModel->setFilterKeyColumn(DrugInteractorModel::TrLabel);
@@ -613,8 +649,25 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    QAbstractItemModel *model = (QAbstractItemModel *)index.model();
-    d->m_Mapper->setModel(model);
+    // Find the proxy & its source
+    QSortFilterProxyModel *model = (QSortFilterProxyModel *)index.model();
+    if (!model) {
+        LOG_ERROR("No proxymodel found???");
+        return;
+    }
+    if (model == d->_proxyMoleculeModel) {
+        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), false);
+        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), false);
+    } else if (model == d->_proxyClassModel) {
+        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), true);
+        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), true);
+    } else {
+        LOG_ERROR("NO MODEL???");
+    }
+
+    // Set the mapper over the source model
+    d->m_EditingIndex = model->mapToSource(index);
+    d->m_Mapper->setModel(model->sourceModel());
     d->m_Mapper->addMapping(d->ui->interactorLabel, DrugInteractorModel::TrLabel, "text");
     d->m_Mapper->addMapping(d->ui->commentTextEdit, DrugInteractorModel::Comment, "plainText");
     d->m_Mapper->addMapping(d->ui->dateCreation, DrugInteractorModel::DateOfCreation, "date");
@@ -659,8 +712,6 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     QModelIndex childrenIndex = model->index(index.row(), DrugInteractorModel::ChildrenUuid, index.parent());
     QStringList children = childrenIndex.data().toStringList();
     d->m_ChildrenInteractors->setStringList(children);
-
-    d->m_EditingIndex = index;
 }
 
 void InteractorEditorWidget::buttonActivated(QAction *selected)
