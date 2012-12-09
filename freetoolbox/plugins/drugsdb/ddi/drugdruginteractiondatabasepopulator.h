@@ -33,7 +33,7 @@
  * \file drugdruginteractiondatabasepopulator.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 07 Nov 2012
+ * \date 09 Dec 2012
 */
 
 namespace DrugsDB {
@@ -44,8 +44,6 @@ class DrugBaseEssentials;
 }
 
 namespace DrugsDB {
-class DrugDrugInteraction;
-class DrugInteractor;
 class DrugDrugInteractionCore;
 namespace Internal {
 class DrugDrugInteractionDatabasePopulatorPrivate;

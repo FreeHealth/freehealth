@@ -48,6 +48,7 @@
 #include <QList>
 
 using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -140,6 +141,7 @@ public:
             q(parent)
     {
         rootItem = new DDITreeItem(0);
+        m_currentFilter = "--@@##--";
     }
 
     ~DrugDrugInteractionModelPrivate()
@@ -165,8 +167,8 @@ public:
             DrugDrugInteraction *ddi = ddis.at(i);
             if (!ddi->data(DrugDrugInteraction::IsValid).toBool())
                 continue;
-            const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-            const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            const QString &firstInteractor = ddi->firstInteractor();
+            const QString &secondInteractor = ddi->secondInteractor();
             DDITreeItem *cat = 0;
             if (filterInteractor.isEmpty()) {
                 if (!categories.keys().contains(firstInteractor)) {
@@ -199,8 +201,8 @@ public:
             DrugDrugInteraction *ddi = ddis.at(i);
             if (!ddi->isValid())
                 continue;
-            const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-            const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            const QString &firstInteractor = ddi->firstInteractor();
+            const QString &secondInteractor = ddi->secondInteractor();
             // create DDI
             DDITreeItem *cat = 0;
             if (createMirroredDDI) {
@@ -227,6 +229,9 @@ public:
 
     void filter(const QString &interactor = QString::null)
     {
+        if (interactor == m_currentFilter)
+            return;
+        m_currentFilter = interactor;
         delete rootItem;
         rootItem = new DDITreeItem(0,0);
         QFont bold;
@@ -240,8 +245,8 @@ public:
                 DrugDrugInteraction *ddi = m_ddis.at(i);
                 if (!ddi->isValid())
                     continue;
-                const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-                const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+                const QString &firstInteractor = ddi->firstInteractor();
+                const QString &secondInteractor = ddi->secondInteractor();
                 if (firstInteractor.startsWith(interactor, Qt::CaseInsensitive)) {
                     keepMe << ddi;
                 } else if (secondInteractor.startsWith(interactor, Qt::CaseInsensitive)) {
@@ -335,8 +340,8 @@ public:
             m_interactorChecking.insert(ddi, 0);  // 0=Ok
             bool firstFound = false;
             bool secondFound = false;
-            const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-            const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            const QString &first = ddi->firstInteractor();
+            const QString &second = ddi->secondInteractor();
             DrugInteractor *firstInteractor = 0;
             DrugInteractor *secondInteractor = 0;
             for(int i=0; i<m_interactors.count();++i) {
@@ -358,8 +363,8 @@ public:
             }
             bool ok = (firstFound && secondFound);
             if (!ok) {
-//                const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-//                const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+//                const QString &first = ddi->firstInteractor();
+//                const QString &second = ddi->secondInteractor();
                 if (!firstFound) {
                     if (!m_ddiError.values(ddi).contains("First interactor not found"))
                         m_ddiError.insertMulti(ddi, "First interactor not found");
@@ -399,6 +404,7 @@ public:
     QMultiMap<DrugDrugInteraction *, QString> m_ddiError;
     QString reviewer;
     int m_FetchedRows;
+    QString m_currentFilter;
 
 private:
     DrugDrugInteractionModel *q;
@@ -423,18 +429,6 @@ DrugDrugInteractionModel::~DrugDrugInteractionModel()
     if (d)
         delete d;
     d = 0;
-}
-
-void DrugDrugInteractionModel::filterInteractionsForInteractor(const QString &interactorName)
-{
-    d->filter(interactorName);
-    d->m_FetchedRows = 0;
-    reset();
-}
-
-void DrugDrugInteractionModel::setActualReviewer(const QString &name)
-{
-    d->reviewer = name;
 }
 
 int DrugDrugInteractionModel::rowCount(const QModelIndex &parent) const
@@ -539,8 +533,8 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
         case InternalUid: return ddi->data(DrugDrugInteraction::InternalUuid);
         case InternalUidWithInteractors:
         {
-            QString first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-            QString second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            QString first = ddi->firstInteractor();
+            QString second = ddi->secondInteractor();
             if (first.size() > 10)
                 first = first.left(10) + "...";
             if (second.size() > 10)
@@ -553,7 +547,7 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
         case LevelComboIndex:
         {
             // Be aware that InteractionEditorWidget ui->comboLevel must be sync with this part !!!
-            const QString &levelCode = ddi->data(DrugDrugInteraction::LevelCode).toString();
+            const QString &levelCode = ddi->levelCode();
             if (levelCode=="C")   return 0;
             if (levelCode=="D")   return 1;
             if (levelCode=="450") return 2;
@@ -968,20 +962,6 @@ Qt::ItemFlags DrugDrugInteractionModel::flags(const QModelIndex &index) const
     return f;
 }
 
-bool DrugDrugInteractionModel::saveModel()
-{
-    core()->saveCompleteList(d->m_ddis);
-    return true;
-}
-
-//bool DrugDrugInteractionModel::addDrugDrugInteraction(const QString &first, const QString &second)
-//{
-//    if (first.isEmpty() || second.isEmpty())
-//        return false;
-
-//    return true;
-//}
-
 bool DrugDrugInteractionModel::splitMultipleLevelInteraction(const QModelIndex &index, bool splitMirrored)
 {
     DDITreeItem *itemToSplit = d->getItem(index);
@@ -1132,4 +1112,36 @@ QString DrugDrugInteractionModel::repartition(int index)
 //    endInsertRows();
 //}
 
+/**
+ * Add an interaction in the model.
+ * Return true if the interaction was correctly added. \n
+ * NOTE: When the DDI is added, the model gets re-filtered with the previous filter.
+ */
+bool DrugDrugInteractionModel::addDrugDrugInteraction(const Internal::DrugDrugInteraction &ddi)
+{
+    if (!ddi.isValid())
+        return false;
+    d->m_ddis << new DrugDrugInteraction(ddi);
+    QString save = d->m_currentFilter;
+    d->m_currentFilter.clear();
+    d->filter(save);
+    return true;
+}
 
+void DrugDrugInteractionModel::filterInteractionsForInteractor(const QString &interactorName)
+{
+    d->filter(interactorName);
+    d->m_FetchedRows = 0;
+    reset();
+}
+
+void DrugDrugInteractionModel::setActualReviewer(const QString &name)
+{
+    d->reviewer = name;
+}
+
+bool DrugDrugInteractionModel::saveModel()
+{
+    core()->saveCompleteList(d->m_ddis);
+    return true;
+}

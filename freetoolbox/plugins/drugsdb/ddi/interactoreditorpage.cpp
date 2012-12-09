@@ -147,7 +147,6 @@ public:
         aNextUnreviewedOrUnlinked(0),
         aDownloadAllNeededPmids(0),
         _toolButton(0),
-        _createNewToolButton(0),
         aGoogle(0),
         aWho(0),
         aResip(0),
@@ -197,12 +196,12 @@ public:
         aAddClassReviewMark->setIcon(theme()->icon(Core::Constants::ICONBOOKMARK));
         aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
-        aCreateNewClass->setIcon(theme()->icon(Core::Constants::ICONADD));
-        aCreateNewInteractor->setIcon(theme()->icon(Core::Constants::ICONADD));
+        aCreateNewClass->setIcon(theme()->icon("black_dci.png")); // FIXME: create a new icon, remove magic number
+        aCreateNewInteractor->setIcon(theme()->icon("molecule.png")); // FIXME: remove magic number
         aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
         aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
         aNextUnreviewedOrUnlinked->setIcon(theme()->icon(Core::Constants::ICONNEXT));
-        aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICONDOCTOR));
+        aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICON_PACKAGE)); // FIXME: add a download icon and correct me
         aSave->setEnabled(false);
         aEdit->setEnabled(false);
         aRemoveCurrent->setEnabled(false);
@@ -219,21 +218,19 @@ public:
         _toolButton->setPopupMode(QToolButton::InstantPopup);
         _toolButton->setEnabled(false);
 
-        _createNewToolButton = new QToolButton(q);
-        _createNewToolButton->addAction(aCreateNewClass);
-        _createNewToolButton->addAction(aCreateNewInteractor);
-        _createNewToolButton->setDefaultAction(aCreateNewClass);
-        _createNewToolButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-        _createNewToolButton->setPopupMode(QToolButton::InstantPopup);
-
         _toolBar = new QToolBar(q);
         _toolBar->addAction(aDownloadAllNeededPmids);
         _toolBar->addAction(aAddClassReviewMark);
-        _toolBar->addWidget(_createNewToolButton);
+        _toolBar->addSeparator();
+        _toolBar->addAction(aCreateNewClass);
+        _toolBar->addAction(aCreateNewInteractor);
+        _toolBar->addSeparator();
         _toolBar->addAction(aNextUnreviewedOrUnlinked);
+        _toolBar->addSeparator();
         _toolBar->addAction(aRemoveCurrent);
         _toolBar->addAction(aEdit);
         _toolBar->addAction(aTranslateThis);
+        _toolBar->addSeparator();
         _toolBar->addAction(aSave);
         _toolBar->addWidget(_toolButton);
         _toolBar->setIconSize(QSize(16,16));
@@ -252,7 +249,8 @@ public:
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
         QObject::connect(_toolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
-        QObject::connect(_createNewToolButton, SIGNAL(triggered(QAction*)), q, SLOT(createButtonActivated(QAction*)));
+        QObject::connect(aCreateNewClass, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
+        QObject::connect(aCreateNewInteractor, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
     }
 
     void prepareSearchLine()
@@ -339,7 +337,7 @@ public:
     QAction *aNextUnreviewedOrUnlinked;
     QAction *aDownloadAllNeededPmids;
 
-    QToolButton *_toolButton, *_createNewToolButton;
+    QToolButton *_toolButton;
     QAction *aGoogle;
     QAction *aWho;
     QAction *aResip;
@@ -566,6 +564,10 @@ void InteractorEditorWidget::reformatOldSource()
 
 }
 
+/**
+ * \internal
+ * Save the current editing class/interactor.
+ */
 void InteractorEditorWidget::save()
 {
     if (d->m_EditingIndex.isValid()) {
@@ -598,6 +600,10 @@ void InteractorEditorWidget::save()
     setEditorsEnabled(false);
 }
 
+/**
+ * \internal
+ * Filter all proxy models with searched string
+ */
 void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
 {
     Q_UNUSED(text);
@@ -606,8 +612,15 @@ void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
     // TODO: code here ??? */
 }
 
-void InteractorEditorWidget::createButtonActivated(QAction *selected)
+/**
+ * \internal
+ * Creates a new interacting class or interactor according to the sender()
+ */
+void InteractorEditorWidget::createActionTriggered()
 {
+    QAction *selected = qobject_cast<QAction*>(sender());
+    if (!selected)
+        return;
     QString id = Utils::askUser(tr("New item"), tr("What is the initial label (French only) ?"));
     if (selected==d->aCreateNewClass) {
         ddiCore()->createNewInteractor(id, true);
