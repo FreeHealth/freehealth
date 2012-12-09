@@ -378,11 +378,12 @@ void InteractionEditorWidget::setEditorsEnabled(bool state)
 void InteractionEditorWidget::createNewDDI()
 {
     // get the first interactor
-    QString first;
     QModelIndex index = d->ui->treeView->currentIndex();
     while (index.parent().isValid())
         index = index.parent();
 
+    DrugDrugInteraction ddi;
+    QString first;
     // Can not find the first interactor -> ask user
     if (!index.isValid()) {
         Internal::InteractorSelectorDialog dlg(this);
@@ -394,21 +395,16 @@ void InteractionEditorWidget::createNewDDI()
         }
         if (first.isEmpty())
             return;
-        // find the corresponding index in the interactor class model
-        QModelIndexList list = d->m_DDIModel->match(d->m_DDIModel->index(0,0), Qt::DisplayRole, first, 1, Qt::MatchFixedString | Qt::MatchWrap | Qt::MatchRecursive);
-        if (list.count() > 0)
-            index = list.at(0);
+        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
     } else {
-        first = index.data().toString();
+        ddi.setData(DrugDrugInteraction::FirstInteractorName, index.data().toString());
     }
 
-    qWarning() << "first" << index << index.data() << first;
-
     // ask for the second interactor
-    QString second;
     Internal::InteractorSelectorDialog dlg(this);
     dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
     dlg.initialize();
+    QString second;
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.selectedNames().count() == 1)
             second = dlg.selectedNames().at(0);
@@ -423,24 +419,12 @@ void InteractionEditorWidget::createNewDDI()
                                       "", "", tr("Drug-drug interaction creation"));
     if (!yes)
         return;
+    ddi.setData(DrugDrugInteraction::SecondInteractorName, second);
+    ddi.setData(DrugDrugInteraction::DateCreation, QDate::currentDate());
+    ddi.setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
 
-    // no corresponding index for the first interactor -> create one
-    if (!index.isValid()) {
-        LOG("First interactor does not already have interactions. Trying to create one");
-        if (!d->m_DDIModel->insertRow(0, QModelIndex()))
-            return;
-        index = d->m_DDIModel->index(0, DrugDrugInteractionModel::GeneralLabel);
-        d->m_DDIModel->setData(index, first);
-    }
-
-    // insert row to model
-    if (!d->m_DDIModel->insertRow(0, index))
-        return;
-    QModelIndex secondIndex = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
-    if (!d->m_DDIModel->setData(secondIndex, second))
-        return;
-
-    qWarning() << "second" << secondIndex << secondIndex.data() << second;
+    if (!d->m_DDIModel->addDrugDrugInteraction(ddi))
+        LOG_ERROR(QString("Unable to add the DDI: %1 <-> %2").arg(ddi.firstInteractor()));
 
     // select the first interactor in the view
     d->ui->searchLine->setText(first);
@@ -627,6 +611,10 @@ void InteractionEditorWidget::translateAll()
 //    model->correctTranslations();
 }
 
+/**
+ * \internal
+ * OBSOLETE CODE
+ */
 void InteractionEditorWidget::reformatOldXmlSource()
 {
     // read the old thesaurus XML
@@ -749,9 +737,9 @@ void InteractionEditorWidget::reformatOldXmlSource()
 //                    break;
                 }
 //                qWarning() << "Duplication "
-//                           << first.data(DrugDrugInteraction::FirstInteractorName).toString()
-//                           << first.data(DrugDrugInteraction::SecondInteractorName).toString()
-//                           << first.data(DrugDrugInteraction::LevelName).toString();
+//                           << first.firstInteractor()
+//                           << first.secondInteractor()
+//                           << first.levelName();
             }
         }
     }
@@ -767,8 +755,8 @@ void InteractionEditorWidget::reformatOldXmlSource()
 //        if (remove.contains(i))
 //            continue;
         if (ddis.at(i).data(DrugDrugInteraction::IsDuplicated).toBool()) {
-            qWarning() << "**" << ddis.at(i).data(DrugDrugInteraction::FirstInteractorName).toString()
-                          << ddis.at(i).data(DrugDrugInteraction::SecondInteractorName).toString();
+            qWarning() << "**" << ddis.at(i).firstInteractor()
+                          << ddis.at(i).secondInteractor();
             continue;
         }
         xml += ddis.at(i).toXml();
