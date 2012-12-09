@@ -171,6 +171,7 @@ void InteractorSelectorDialog::setTitle(const QString &title)
 /** Return the selected interactors. All accents are removed */
 QStringList InteractorSelectorDialog::selectedNames() const
 {
+    // FIXME: get the InitialLabel (as they are like UUID)
     QStringList toReturn;
     if (!d->_allowMultipleSelection) {
         if (d->ui->classView->selectionModel()->hasSelection())
