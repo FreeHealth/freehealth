@@ -612,7 +612,6 @@ QVariant DrugInteractorModel::data(const QModelIndex &index, int role) const
     }
     DrugInteractor *di = item->di();
     if (!di) {
-        LOG_ERROR("NO DDI???");
         return QVariant();
     }
 
