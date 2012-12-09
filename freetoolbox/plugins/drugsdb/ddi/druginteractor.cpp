@@ -29,6 +29,7 @@
 #include "drugdruginteraction.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QFont>
@@ -390,6 +391,7 @@ public:
          return rootItem;
      }
 
+    // Reconstruct the complete tree
     void filter(const QString &interactor = QString::null)
     {
         delete rootItem;
@@ -521,6 +523,13 @@ public:
         return msg.join("<br />");
     }
 
+    void onInteractorCreated()
+    {
+        filter();
+        q->reset();
+    }
+
+
 public:
     DITreeItem *rootItem;
     QList<DrugInteractor *> m_interactors;
@@ -603,6 +612,7 @@ QVariant DrugInteractorModel::data(const QModelIndex &index, int role) const
     }
     DrugInteractor *di = item->di();
     if (!di) {
+        LOG_ERROR("NO DDI???");
         return QVariant();
     }
 
@@ -827,31 +837,52 @@ Qt::ItemFlags DrugInteractorModel::flags(const QModelIndex &index) const
     return f;
 }
 
-void DrugInteractorModel::createInteractingClass(const QString &initialLabel)
+/**
+ * Creates a new drug interacting class and store it in the model.
+ * In case of success, return the created DrugsDB::DrugInteractor pointer
+ * else return 0.
+ */
+DrugInteractor *DrugInteractorModel::createInteractingClass(const QString &initialLabel)
 {
     for(int i=0; i < d->m_interactors.count(); ++i) {
         if (d->m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString() == initialLabel.toUpper()) {
-            return;
+            return 0;
         }
     }
-    core()->createNewInteractor(initialLabel, true);
+    DrugInteractor *di = new DrugInteractor;
+    di->setData(DrugInteractor::IsValid, true);
+    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
+    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
+    di->setData(DrugInteractor::IsClass, true);
+    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
+    di->setData(DrugInteractor::IsDuplicated, false);
+    d->m_interactors.append(di);
+    d->onInteractorCreated();
+    return di;
 }
 
-void DrugInteractorModel::createInteractor(const QString &initialLabel)
+/**
+ * Creates a new interactor and store it in the model.
+ * In case of success, return the created DrugsDB::DrugInteractor pointer
+ * else return 0.
+ */
+DrugInteractor *DrugInteractorModel::createInteractor(const QString &initialLabel)
 {
     for(int i=0; i < d->m_interactors.count(); ++i) {
         if (d->m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString() == initialLabel.toUpper()) {
-            return;
+            return 0;
         }
     }
-    core()->createNewInteractor(initialLabel, false);
-}
-
-void DrugInteractorModel::onInteractorCreated(DrugInteractor *di)
-{
-    d->m_interactors << di;
-    d->filter();
-    reset();
+    DrugInteractor *di = new DrugInteractor;
+    di->setData(DrugInteractor::IsValid, true);
+    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
+    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
+    di->setData(DrugInteractor::IsClass, false);
+    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
+    di->setData(DrugInteractor::IsDuplicated, false);
+    d->m_interactors.append(di);
+    d->onInteractorCreated();
+    return di;
 }
 
 int DrugInteractorModel::numberOfUnreviewed() const

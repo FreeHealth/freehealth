@@ -373,14 +373,13 @@ void DrugDrugInteractionCore::saveCompleteList(const QList<DrugInteractor *> &in
 /** Create a new DrugInteractor with the \e initialLabel as \e isClass. */
 DrugInteractor *DrugDrugInteractionCore::createNewInteractor(const QString &initialLabel, const bool isClass)
 {
-    DrugInteractor *di = new DrugInteractor;
-    di->setData(DrugInteractor::IsValid, true);
-    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
-    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
-    di->setData(DrugInteractor::IsClass, isClass);
-    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
-    di->setData(DrugInteractor::IsDuplicated, false);
-    Q_EMIT interactorCreated(di);
+    DrugInteractor *di = 0;
+    if (isClass)
+        di = d->m_InteractorsModel->createInteractingClass(initialLabel);
+    else
+        di = d->m_InteractorsModel->createInteractor(initialLabel);
+    if (di)
+        Q_EMIT interactorCreated(di);
     return di;
 }
 

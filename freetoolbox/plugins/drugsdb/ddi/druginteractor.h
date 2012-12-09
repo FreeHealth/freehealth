@@ -116,6 +116,8 @@ class DrugInteractorModelPrivate;
 class DrugInteractorModel : public QAbstractItemModel
 {
     Q_OBJECT
+    friend class DrugsDB::Internal::DrugInteractorModelPrivate;
+
 public:
     enum DataRepresentation {
         TrLabel = 0,
@@ -165,14 +167,13 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void createInteractingClass(const QString &initialLabel);
-    void createInteractor(const QString &initialLabel);
+    DrugInteractor *createInteractingClass(const QString &initialLabel);
+    DrugInteractor *createInteractor(const QString &initialLabel);
 
     int numberOfUnreviewed() const;
     int numberOfUnlinked() const;
 
 public Q_SLOTS:
-    void onInteractorCreated(DrugInteractor *di);
     bool saveModel();
 
 Q_SIGNALS:
