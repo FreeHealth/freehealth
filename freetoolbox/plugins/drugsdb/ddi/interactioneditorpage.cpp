@@ -397,7 +397,8 @@ void InteractionEditorWidget::createNewDDI()
             return;
         ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
     } else {
-        ddi.setData(DrugDrugInteraction::FirstInteractorName, index.data().toString());
+        first = index.data().toString();
+        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
     }
 
     // ask for the second interactor
