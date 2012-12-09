@@ -24,14 +24,21 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DRUGDRUGINTERACTIONMODEL_H
-#define DRUGDRUGINTERACTIONMODEL_H
+#ifndef FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H
+#define FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H
 
 #include <QAbstractItemModel>
 
+/**
+ * \file drugdruginteractionmodel.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 09 Dec 2012
+*/
+
 namespace DrugsDB {
-class DrugDrugInteraction;
 namespace Internal {
+class DrugDrugInteraction;
 class DrugDrugInteractionModelPrivate;
 }
 
@@ -124,4 +131,4 @@ private:
 
 }  // End namespace DrugsDB
 
-#endif // DRUGDRUGINTERACTIONMODEL_H
+#endif // FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H

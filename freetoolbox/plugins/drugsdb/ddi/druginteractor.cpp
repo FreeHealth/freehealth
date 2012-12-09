@@ -40,6 +40,7 @@
 #include <QDebug>
 
 using namespace DrugsDB;
+using namespace Internal;
 
 static inline DrugsDB::DrugDrugInteractionCore *core() {return DrugsDB::DrugDrugInteractionCore::instance();}
 

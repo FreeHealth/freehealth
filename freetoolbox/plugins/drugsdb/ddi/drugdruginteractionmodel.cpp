@@ -48,6 +48,7 @@
 #include <QList>
 
 using namespace DrugsDB;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }

@@ -36,7 +36,7 @@
  * \file drugdruginteractioncore.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 07 Nov 2012
+ * \date 09 Dec 2012
 */
 
 namespace DrugsDB {
@@ -47,10 +47,10 @@ class DrugBaseEssentials;
 }
 
 namespace DrugsDB {
-class DrugDrugInteraction;
-class DrugInteractor;
-class DrugInteractorModel;
 namespace Internal {
+class DrugInteractor;
+class DrugDrugInteraction;
+class DrugInteractorModel;
 class DrugDrugInteractionCorePrivate;
 }  // namespace Internal
 
@@ -70,11 +70,11 @@ public:
     int createInternalUuid() const;
 
     // Available models
-    DrugInteractorModel *interactingMoleculesModel() const;
-    DrugInteractorModel *interactingClassesModel() const;
+    Internal::DrugInteractorModel *interactingMoleculesModel() const;
+    Internal::DrugInteractorModel *interactingClassesModel() const;
 
-    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
-    QList<DrugInteractor *> getDrugInteractors() const;
+    QList<Internal::DrugDrugInteraction *> getDrugDrugInteractions() const;
+    QList<Internal::DrugInteractor *> getDrugInteractors() const;
 
     // Feeders / Checkers
     bool canAddAtc() const;
@@ -89,15 +89,12 @@ public:
     bool addPregnancyCheckingDataToDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
     bool populateDrugDatabase(DrugsDB::Internal::DrugBaseEssentials *database);
 
-Q_SIGNALS:
-    void interactorCreated(DrugInteractor *di);
-
 public Q_SLOTS:
-    void updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi);
-    void saveCompleteList(const QList<DrugDrugInteraction *> &ddis);
-    void saveCompleteList(const QList<DrugInteractor *> &interactors);
+    void updateXmlFileForDrugDrugInteraction(Internal::DrugDrugInteraction *ddi);
+    void saveCompleteList(const QList<Internal::DrugDrugInteraction *> &ddis);
+    void saveCompleteList(const QList<Internal::DrugInteractor *> &interactors);
 
-    DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
+    Internal::DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
     void downloadAllPmids();
 
 private:

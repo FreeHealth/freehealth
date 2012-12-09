@@ -24,29 +24,22 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DRUGDRUGINTERACTION_H
-#define DRUGDRUGINTERACTION_H
+#ifndef FREETOOLBOX_DRUGDRUGINTERACTION_H
+#define FREETOOLBOX_DRUGDRUGINTERACTION_H
 
 #include <QVariant>
 #include <QHash>
 #include <QDomElement>
 
+/**
+ * \file drugdruginteraction.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 09 Dec 2012
+*/
+
 namespace DrugsDB {
-
-//class InteractionFormalization
-//{
-//public:
-//    enum DataRepresentation {
-
-//    };
-
-//    InteractionFormalization(DrugDrugInteraction *parent);
-//    ~InteractionFormalization();
-
-
-//};
-
-
+namespace Internal {
 class DrugDrugInteractionDose {
 public:
     enum DataRepresentation {
@@ -139,7 +132,7 @@ private:
     QHash<QString,QString> m_Formalized;
     DrugDrugInteractionDose m_FirstDose, m_SecondDose;
 };
+}  // namespace Internal
+}  // namespace DrugsDB
 
-} //  End namespace DrugsDB
-
-#endif // DRUGDRUGINTERACTION_H
+#endif // FREETOOLBOX_DRUGDRUGINTERACTION_H

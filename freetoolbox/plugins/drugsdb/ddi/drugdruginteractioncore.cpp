@@ -81,6 +81,7 @@ static inline QString ddiFile()  {return QDir::cleanPath(settings()->value(Core:
 static inline QString pimsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::PIMS_FILENAME);}
 
 using namespace DrugsDB;
+using namespace Internal;
 
 namespace DrugsDB {
 namespace Internal {
@@ -154,19 +155,19 @@ int DrugDrugInteractionCore::createInternalUuid() const
 }
 
 /** Return the interacting molecule model */
-DrugInteractorModel *DrugDrugInteractionCore::interactingMoleculesModel() const
+Internal::DrugInteractorModel *DrugDrugInteractionCore::interactingMoleculesModel() const
 {
     return d->m_InteractorsModel;
 }
 
 /** Return the interacting classes model */
-DrugInteractorModel *DrugDrugInteractionCore::interactingClassesModel() const
+Internal::DrugInteractorModel *DrugDrugInteractionCore::interactingClassesModel() const
 {
     return d->m_InteractingClassesModel;
 }
 
 /** Read the DDI XML file if needed and return the list of created DDI. */
-QList<DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() const
+QList<Internal::DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() const
 {
     if (d->m_ddisToNode.isEmpty()) {
         QDomDocument domDocument;
@@ -225,7 +226,7 @@ bool DrugDrugInteractionCore::canAddPregnancyChecking() const
 }
 
 /** Read the DDI XML file if needed and return the list of created interactors. */
-QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
+QList<Internal::DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
 {
     if (d->m_interactorsToNode.isEmpty()) {
         QDomDocument domDocument;
@@ -328,14 +329,14 @@ bool DrugDrugInteractionCore::addPregnancyCheckingDataToDatabase(DrugsDB::Intern
 }
 
 /** Update the XML file for the specified DrugDrugInteraction pointer. This pointer should be extracted from the list created using the getDrugDrugInteractions(). \sa getDrugDrugInteractions() */
-void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugInteraction */*ddi*/)
+void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(Internal::DrugDrugInteraction */*ddi*/)
 {
     // Populate the DomNode
     // TODO: code here ??? */
 }
 
 /** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent data will be lost. */
-void DrugDrugInteractionCore::saveCompleteList(const QList<DrugDrugInteraction *> &ddis)
+void DrugDrugInteractionCore::saveCompleteList(const QList<Internal::DrugDrugInteraction *> &ddis)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"
             "<!-- date format = yyyy-MM-dd -->\n"
@@ -358,7 +359,7 @@ void DrugDrugInteractionCore::saveCompleteList(const QList<DrugDrugInteraction *
 }
 
 /** Will overwrite the thesaurus file with a new one created on the basis of the \e interactors. All precedent data will be lost. */
-void DrugDrugInteractionCore::saveCompleteList(const QList<DrugInteractor *> &interactors)
+void DrugDrugInteractionCore::saveCompleteList(const QList<Internal::DrugInteractor *> &interactors)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"
             "<!-- date format = yyyy-MM-dd -->\n"
@@ -378,8 +379,6 @@ DrugInteractor *DrugDrugInteractionCore::createNewInteractor(const QString &init
         di = d->m_InteractorsModel->createInteractingClass(initialLabel);
     else
         di = d->m_InteractorsModel->createInteractor(initialLabel);
-    if (di)
-        Q_EMIT interactorCreated(di);
     return di;
 }
 

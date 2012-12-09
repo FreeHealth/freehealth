@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IAMDB__DRUGINTERACTOR_H
-#define IAMDB__DRUGINTERACTOR_H
+#ifndef FREETOOLBOX_DRUGINTERACTOR_H
+#define FREETOOLBOX_DRUGINTERACTOR_H
 
 #include <QMultiHash>
 #include <QVariant>
@@ -34,7 +34,15 @@
 #include <QStringList>
 #include <QDomElement>
 
+/**
+ * \file druginteractor.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 09 Dec 2012
+*/
+
 namespace DrugsDB {
+namespace Internal {
 
 class DrugInteractor
 {
@@ -109,10 +117,7 @@ private:
     QMultiHash<QString, QString> m_ChildClassifPMIDs;
 };
 
-namespace Internal {
 class DrugInteractorModelPrivate;
-}
-
 class DrugInteractorModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -181,9 +186,10 @@ Q_SIGNALS:
     void unlinkedCountChanged();
 
 private:
-    Internal::DrugInteractorModelPrivate *d;
+    DrugInteractorModelPrivate *d;
 };
 
-}  // End namespace DrugsDB
+}  // namespace Internal
+}  // namespace DrugsDB
 
-#endif // IAMDB__DRUGINTERACTOR_H
+#endif // FREETOOLBOX_DRUGINTERACTOR_H
