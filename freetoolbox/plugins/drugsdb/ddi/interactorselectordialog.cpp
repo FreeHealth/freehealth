@@ -183,9 +183,9 @@ QStringList InteractorSelectorDialog::selectedNames() const
     }
 
     QStringList noAccent;
-    foreach(const QString &r, toReturn) {
+    foreach(const QString &r, toReturn)
         noAccent << Utils::removeAccents(r);
-    }
+
     return noAccent;
 }
 
