@@ -515,6 +515,7 @@ DrugDrugInteractionDatabasePopulator::DrugDrugInteractionDatabasePopulator(QObje
     QObject(parent),
     d(new DrugDrugInteractionDatabasePopulatorPrivate(this))
 {
+    setObjectName("DrugDrugInteractionDatabasePopulator");
 }
 
 /*! Destructor of the DrugsDB::Internal::DrugDrugInteractionDatabasePopulator class */
