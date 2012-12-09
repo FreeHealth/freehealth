@@ -148,11 +148,11 @@ public:
         aDownloadAllNeededPmids(0),
         m_ToolButton(0),
         m_CreateNewToolButton(0),
-        google(0),
-        who(0),
-        resip(0),
-        copyClip(0),
-        atcSearchDialog(0),
+        aGoogle(0),
+        aWho(0),
+        aResip(0),
+        aCopyClip(0),
+        aAtcSearchDialog(0),
         _proxyClassModel(0),
         _proxyMoleculeModel(0),
         q(parent)
@@ -175,11 +175,11 @@ public:
 
     void createActionsAndToolBars()
     {
-        google = new QAction(q);
-        resip = new QAction(q);
-        who = new QAction(q);
-        copyClip = new QAction(q);
-        atcSearchDialog = new QAction(q);
+        aGoogle = new QAction(q);
+        aResip = new QAction(q);
+        aWho = new QAction(q);
+        aCopyClip = new QAction(q);
+        aAtcSearchDialog = new QAction(q);
 
         aExpandAll = new QAction(q);
         aCollapseAll = new QAction(q);
@@ -209,12 +209,12 @@ public:
         aTranslateThis->setEnabled(false);
 
         m_ToolButton = new QToolButton(q);
-        m_ToolButton->addAction(atcSearchDialog);
-        m_ToolButton->addAction(google);
-        m_ToolButton->addAction(who);
-        m_ToolButton->addAction(resip);
-        m_ToolButton->addAction(copyClip);
-        m_ToolButton->setDefaultAction(atcSearchDialog);
+        m_ToolButton->addAction(aAtcSearchDialog);
+        m_ToolButton->addAction(aGoogle);
+        m_ToolButton->addAction(aWho);
+        m_ToolButton->addAction(aResip);
+        m_ToolButton->addAction(aCopyClip);
+        m_ToolButton->setDefaultAction(aAtcSearchDialog);
         m_ToolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         m_ToolButton->setPopupMode(QToolButton::InstantPopup);
         m_ToolButton->setEnabled(false);
@@ -338,11 +338,11 @@ public:
     QAction *aDownloadAllNeededPmids;
 
     QToolButton *m_ToolButton, *m_CreateNewToolButton;
-    QAction *google;
-    QAction *who;
-    QAction *resip;
-    QAction *copyClip;
-    QAction *atcSearchDialog;
+    QAction *aGoogle;
+    QAction *aWho;
+    QAction *aResip;
+    QAction *aCopyClip;
+    QAction *aAtcSearchDialog;
 
     QSortFilterProxyModel *_proxyClassModel, *_proxyMoleculeModel;
 
@@ -725,21 +725,21 @@ void InteractorEditorWidget::buttonActivated(QAction *selected)
     QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
     QModelIndex idx = model->index(d->m_EditingIndex.row(), DrugInteractorModel::TrLabel, d->m_EditingIndex.parent());
     QString label = idx.data().toString();
-    if (selected == d->atcSearchDialog) {
+    if (selected == d->aAtcSearchDialog) {
         DrugsDB::SearchAtcInDatabaseDialog dlg(this, label);
         if (dlg.exec() == QDialog::Accepted) {
             QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ATCCodeStringList, d->m_EditingIndex.parent());
             model->setData(atc, dlg.getSelectedCodes());
             d->m_AtcCodes->setStringList(dlg.getSelectedCodes());
         }
-    } else if (selected == d->google) {
+    } else if (selected == d->aGoogle) {
         QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(label)));
-    } else if (selected == d->who) {
+    } else if (selected == d->aWho) {
         QDesktopServices::openUrl(QUrl(QString("http://www.whocc.no/atc_ddd_index/?name=%1").arg(label)));
-    } else if (selected == d->resip) {
+    } else if (selected == d->aResip) {
         QApplication::clipboard()->setText(label);
         QDesktopServices::openUrl(QUrl("http://www.portailmedicaments.resip.fr/bcb_recherche/classes.asp?cc=1"));
-    } else if (selected == d->copyClip) {
+    } else if (selected == d->aCopyClip) {
         QApplication::clipboard()->setText(label);
     }
 }
@@ -813,11 +813,11 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
         // Texts
-        d->google->setText(tr("Search Google (copy molecule to clipboard)"));
-        d->who->setText(tr("Search WHO (copy molecule to clipboard)"));
-        d->resip->setText(tr("Search RESIP (copy molecule to clipboard)"));
-        d->copyClip->setText(tr("Copy molecule name to clipboard"));
-        d->atcSearchDialog->setText(tr("Open the ATC search dialog"));
+        d->aGoogle->setText(tr("Search Google (copy molecule to clipboard)"));
+        d->aWho->setText(tr("Search WHO (copy molecule to clipboard)"));
+        d->aResip->setText(tr("Search RESIP (copy molecule to clipboard)"));
+        d->aCopyClip->setText(tr("Copy molecule name to clipboard"));
+        d->aAtcSearchDialog->setText(tr("Open the ATC search dialog"));
         d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
         d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
         d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
@@ -830,10 +830,10 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
         d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
         // Tooltips
-        d->google->setToolTip(d->google->text());
-        d->who->setToolTip(d->who->text());
-        d->resip->setToolTip(d->resip->text());
-        d->copyClip->setToolTip(d->copyClip->text());
+        d->aGoogle->setToolTip(d->aGoogle->text());
+        d->aWho->setToolTip(d->aWho->text());
+        d->aResip->setToolTip(d->aResip->text());
+        d->aCopyClip->setToolTip(d->aCopyClip->text());
         d->aSave->setToolTip(d->aSave->text());
         d->aEdit->setToolTip(d->aEdit->text());
         d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
