@@ -247,7 +247,7 @@ public:
         QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
         QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
         QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
-        QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
+//        QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
         QObject::connect(aAddClassReviewMark, SIGNAL(triggered()), q, SLOT(bookmarkClassesFromCurrent()));
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
@@ -301,7 +301,7 @@ public:
         ui->atcTableView->setAlternatingRowColors(true);
         ui->atcTableView->horizontalHeader()->hide();
         ui->atcTableView->verticalHeader()->hide();
-        ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//        ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
         _childrenInteractorsStringListModel = new QStringListModel(q);
         ui->classChildrenTableView->setModel(_childrenInteractorsStringListModel);
