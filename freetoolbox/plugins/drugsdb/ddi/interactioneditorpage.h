@@ -35,7 +35,7 @@ class QModelIndex;
 QT_END_NAMESPACE
 
 namespace DrugsDB {
-
+namespace Internal {
 class InteractionEditorPage : public Core::IToolPage
 {
     Q_OBJECT
@@ -52,12 +52,6 @@ public:
     // widget will be deleted after the show
     virtual QWidget *createPage(QWidget *parent = 0);
 };
-
-
-
-namespace Ui {
-class InteractionEditorWidget;
-}
 
 class InteractionEditorWidgetPrivate;
 
@@ -90,10 +84,10 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::InteractionEditorWidget *ui;
     InteractionEditorWidgetPrivate *d;
 };
 
-}  //  End namespace DrugsDB
+}  // namespace Internal
+}  // namespace DrugsDB
 
 #endif // INTERACTIONEDITORPAGE_H

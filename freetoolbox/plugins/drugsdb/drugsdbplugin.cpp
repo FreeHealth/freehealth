@@ -111,7 +111,7 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
 //    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
-    addAutoReleasedObject(new DrugsDB::InteractionEditorPage(this));
+    addAutoReleasedObject(new DrugsDB::Internal::InteractionEditorPage(this));
     addAutoReleasedObject(new DrugsDB::InteractorEditorPage(this));
 //    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 
