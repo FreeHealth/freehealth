@@ -67,7 +67,7 @@ private Q_SLOTS:
     void reformatOldSource();
     void save();
     void filterDrugInteractorModel(const QString &text);
-    void createButtonActivated(QAction *selected);
+    void createActionTriggered();
     void removeCurrent();
     void edit();
     void interactorActivated(const QModelIndex &index);
