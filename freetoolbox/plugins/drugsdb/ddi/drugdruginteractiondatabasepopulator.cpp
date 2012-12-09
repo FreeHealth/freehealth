@@ -213,8 +213,8 @@ public:
             // find first && second interactors
             bool firstFound = false;
             bool secondFound = false;
-            const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-            const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            const QString &first = ddi->firstInteractor();
+            const QString &second = ddi->secondInteractor();
             DrugInteractor *firstInteractor = 0;
             DrugInteractor *secondInteractor = 0;
             for(int i=0; i < interactors.count();++i) {
@@ -237,9 +237,9 @@ public:
             bool ok = (firstFound && secondFound);
             if (!ok) {
                 LOG_ERROR_FOR(q, QString("*** Interactors not found: \n  %1 - %2 (%3)")
-                          .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
-                          .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
-                          .arg(ddi->data(DrugDrugInteraction::LevelName).toString()));
+                          .arg(ddi->firstInteractor())
+                          .arg(ddi->secondInteractor())
+                          .arg(ddi->levelName()));
                 continue;
             }
 

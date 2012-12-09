@@ -481,22 +481,22 @@ public:
             // direct ddis
             DrugDrugInteraction *ddi = m_ddis.at(i);
             const QString &id = di->data(DrugInteractor::InitialLabel).toString();
-            if (ddi->data(DrugDrugInteraction::FirstInteractorName).toString()==id) {
+            if (ddi->firstInteractor()==id) {
                 directDdis << QString("&nbsp;&nbsp;* %1 (%2)")
                        .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
                        .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
-            } else if (ddi->data(DrugDrugInteraction::SecondInteractorName).toString()==id) {
+            } else if (ddi->secondInteractor()==id) {
                 directDdis << QString("&nbsp;&nbsp;* %1 (%2)")
                         .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
                         .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
             }
             // parent ddis
-            if (di->parentIds().contains(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())) {
-                parentDdis.insertMulti(ddi->data(DrugDrugInteraction::FirstInteractorName).toString(),
+            if (di->parentIds().contains(ddi->firstInteractor())) {
+                parentDdis.insertMulti(ddi->firstInteractor(),
                                        QString("%1 (%2)")
-                                       .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
-                                       .arg(ddi->data(DrugDrugInteraction::LevelName).toString()));
-            } else if (di->parentIds().contains(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())) {
+                                       .arg(ddi->secondInteractor())
+                                       .arg(ddi->levelName()));
+            } else if (di->parentIds().contains(ddi->secondInteractor())) {
                 parentDdis.insertMulti(ddi->data(DrugDrugInteraction::SecondInteractorName).toString(),
                                        QString("%1 (%2)")
                                        .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())

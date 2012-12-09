@@ -100,9 +100,13 @@ public:
 
     bool levelValidity() const;
 
+    QString firstInteractor() const {return data(FirstInteractorName).toString();}
+    QString secondInteractor() const {return data(SecondInteractorName).toString();}
+    QString levelCode() const {return data(LevelCode).toString();}
+    QString levelName() const {return data(LevelName).toString();}
+
     void setRisk(const QString &risk, const QString &lang);
     void setManagement(const QString &management, const QString &lang);
-
     QString risk(const QString &lang) const;
     QString management(const QString &lang) const;
 

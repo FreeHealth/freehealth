@@ -40,7 +40,7 @@ namespace DrugsDB {
 namespace Internal {
 class DrugDrugInteraction;
 class DrugDrugInteractionModelPrivate;
-}
+}  // namespace Internal
 
 class DrugDrugInteractionModel : public QAbstractItemModel
 {
@@ -120,10 +120,10 @@ public:
 //    void fetchMore(const QModelIndex &parent = QModelIndex());
 
 public Q_SLOTS:
+    bool addDrugDrugInteraction(const DrugDrugInteraction &ddi);
     void filterInteractionsForInteractor(const QString &interactorName);
     void setActualReviewer(const QString &name);
     bool saveModel();
-//    bool addDrugDrugInteraction(const QString &first, const QString &second);
 
 private:
     Internal::DrugDrugInteractionModelPrivate *d;
