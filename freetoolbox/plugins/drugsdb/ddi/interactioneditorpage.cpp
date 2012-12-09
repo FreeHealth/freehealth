@@ -75,17 +75,6 @@ const char * const  INTERACTION_ICONOK =               "ok.png";            /*!<
 const char * const  INTERACTION_ICONP450 =             "p450iam.png";            /*!< \brief Themed icon name for Interactions logo. */
 const char * const  INTERACTION_ICONGPG =              "gpgiam.png";            /*!< \brief Themed icon name for Interactions logo. */
 
-static void setLevelNamesToCombo(QComboBox *box)
-{
-    box->clear();
-    box->addItem(theme()->icon(INTERACTION_ICONCRITICAL), tkTr(Trans::Constants::CONTRAINDICATION));
-    box->addItem(theme()->icon(INTERACTION_ICONDECONSEILLEE), tkTr(Trans::Constants::DISCOURAGED));
-    box->addItem(theme()->icon(INTERACTION_ICONP450), tkTr(Trans::Constants::P450_IAM));
-    box->addItem(theme()->icon(INTERACTION_ICONGPG), tkTr(Trans::Constants::GPG_IAM));
-    box->addItem(theme()->icon(INTERACTION_ICONTAKEINTOACCOUNT), tkTr(Trans::Constants::TAKE_INTO_ACCOUNT));
-    box->addItem(theme()->icon(INTERACTION_ICONPRECAUTION), tkTr(Trans::Constants::PRECAUTION_FOR_USE));
-    box->addItem(theme()->icon(INTERACTION_ICONINFORMATION), tkTr(Trans::Constants::INFORMATION));
-}
 }  // namespace anonymous
 
 namespace DrugsDB {
@@ -93,12 +82,204 @@ namespace Internal {
 class InteractionEditorWidgetPrivate
 {
 public:
+    InteractionEditorWidgetPrivate(InteractionEditorWidget *parent):
+        ui(0),
+        m_DDIModel(0),
+        m_Mapper(0),
+        aSave(0),
+        aEdit(0),
+        aRemoveCurrent(0),
+        aCreateNew(0),
+        aTranslateAll(0),
+        aTranslateThis(0),
+        aReformatOldXmlSources(0),
+        aSplitInteractionAccordingToLevel(0),
+        aExpandAll(0),
+        aCollapseAll(0),
+        googleTranslator(0),
+        firstInteractorRoutes(0), secondInteractorRoutes(0),
+        biblioModel(0),
+        q(parent)
+    {}
+
+    ~InteractionEditorWidgetPrivate()
+    {}
+
+    void setupUi()
+    {
+        ui = new Ui::InteractionEditorWidget;
+        ui->setupUi(q);
+        // Some ui settings
+        ui->treeLayout->setMargin(0);
+        ui->treeLayout->setSpacing(0);
+        ui->tabWidget->setCurrentIndex(0);
+    }
+
+    void createActionsAndToolBar()
+    {
+        QToolBar *b = new QToolBar(q);
+        ui->toolbarLayout->addWidget(b);
+        b->setIconSize(QSize(16,16));
+
+        aSave = new QAction(q);
+        aRemoveCurrent = new QAction(q);
+        aEdit = new QAction(q);
+        aTranslateAll = new QAction(q);
+        aTranslateThis = new QAction(q);
+        aReformatOldXmlSources = new QAction(q);
+        aCreateNew = new QAction(q);
+        aSplitInteractionAccordingToLevel = new QAction(q);
+        aExpandAll = new QAction(q);
+        aCollapseAll = new QAction(q);
+
+        aSave->setEnabled(false);
+        aEdit->setEnabled(false);
+        aTranslateThis->setEnabled(false);
+        aRemoveCurrent->setEnabled(false);
+        aSplitInteractionAccordingToLevel->setEnabled(false);
+
+        aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+        aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+        aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+        aTranslateAll->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
+        aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
+        aReformatOldXmlSources->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
+        aCreateNew->setIcon(theme()->icon(Core::Constants::ICONADD));
+        aSplitInteractionAccordingToLevel->setIcon(theme()->icon("splitfile.png"));
+        aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
+        aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
+
+        b->addAction(aRemoveCurrent);
+        b->addAction(aEdit);
+        b->addAction(aTranslateThis);
+        b->addAction(aSave);
+        b->addAction(aTranslateAll);
+        b->addAction(aReformatOldXmlSources);
+        b->addAction(aSplitInteractionAccordingToLevel);
+    }
+
+    void connectActions()
+    {
+        QObject::connect(aCreateNew, SIGNAL(triggered()), q, SLOT(createNewDDI()));
+        QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
+        QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
+        QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
+        QObject::connect(aTranslateAll, SIGNAL(triggered()), q, SLOT(translateAll()));
+        QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
+        QObject::connect(aReformatOldXmlSources, SIGNAL(triggered()), q, SLOT(reformatOldXmlSource()));
+        QObject::connect(aSplitInteractionAccordingToLevel, SIGNAL(triggered()), q, SLOT(splitCurrent()));
+        QObject::connect(aExpandAll, SIGNAL(triggered()), ui->treeView, SLOT(expandAll()));
+        QObject::connect(aCollapseAll, SIGNAL(triggered()), ui->treeView, SLOT(collapseAll()));
+    }
+
+    void prepareSearchLine()
+    {
+        // manage search line
+        ui->searchLine->setDelayedSignals(true);
+        QToolButton *left = new QToolButton(q);
+        left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        ui->searchLine->setLeftButton(left);
+        QToolButton *right = new QToolButton(q);
+        right->addAction(aCreateNew);
+        right->addAction(aExpandAll);
+        right->addAction(aCollapseAll);
+        right->setDefaultAction(aCreateNew);
+        right->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        right->setPopupMode(QToolButton::InstantPopup);
+        ui->searchLine->setRightButton(right);
+    }
+
+    void setLevelNamesToCombo(QComboBox *box)
+    {
+        box->clear();
+        box->addItem(theme()->icon(INTERACTION_ICONCRITICAL), tkTr(Trans::Constants::CONTRAINDICATION));
+        box->addItem(theme()->icon(INTERACTION_ICONDECONSEILLEE), tkTr(Trans::Constants::DISCOURAGED));
+        box->addItem(theme()->icon(INTERACTION_ICONP450), tkTr(Trans::Constants::P450_IAM));
+        box->addItem(theme()->icon(INTERACTION_ICONGPG), tkTr(Trans::Constants::GPG_IAM));
+        box->addItem(theme()->icon(INTERACTION_ICONTAKEINTOACCOUNT), tkTr(Trans::Constants::TAKE_INTO_ACCOUNT));
+        box->addItem(theme()->icon(INTERACTION_ICONPRECAUTION), tkTr(Trans::Constants::PRECAUTION_FOR_USE));
+        box->addItem(theme()->icon(INTERACTION_ICONINFORMATION), tkTr(Trans::Constants::INFORMATION));
+    }
+
+    void createModelsAndViews()
+    {
+        // Manage combos && views
+        setLevelNamesToCombo(ui->comboLevel);
+        ui->firstDoseFromUnits->addItems(DrugDrugInteractionModel::units());
+        ui->firstDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
+        ui->firstDoseToUnits->addItems(DrugDrugInteractionModel::units());
+        ui->firstDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
+        ui->secondDoseFromUnits->addItems(DrugDrugInteractionModel::units());
+        ui->secondDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
+        ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
+        ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
+
+        firstInteractorRoutes = new DrugsDB::RoutesModel(q);
+        ui->listViewFirstInteractorRoute->setModel(firstInteractorRoutes);
+        ui->listViewFirstInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
+        secondInteractorRoutes = new DrugsDB::RoutesModel(q);
+        ui->listViewSecondInteractorRoute->setModel(secondInteractorRoutes);
+        ui->listViewSecondInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
+
+        biblioModel = new QStringListModel(q);
+        ui->bilbioTableView->setModel(biblioModel);
+        ui->bilbioTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+        ui->bilbioTableView->setAlternatingRowColors(true);
+        ui->bilbioTableView->horizontalHeader()->hide();
+        ui->bilbioTableView->verticalHeader()->hide();
+
+        m_DDIModel = new DrugDrugInteractionModel(q);
+        ui->treeView->setModel(m_DDIModel);
+        ui->treeView->setWordWrap(true);
+        for(int i = 0; i < m_DDIModel->rowCount(); ++i) {
+            ui->treeView->hideColumn(i);
+        }
+        ui->treeView->showColumn(0);
+        ui->treeView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+        ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui->treeView->header()->hide();
+    }
+
+    void createMapper()
+    {
+        // Create DDI Model && manage Mapper
+        m_Mapper = new QDataWidgetMapper(q);
+        m_Mapper->setModel(m_DDIModel);
+        m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+        m_Mapper->addMapping(ui->risk, DrugDrugInteractionModel::RiskFr, "plainText");
+        m_Mapper->addMapping(ui->risk_en, DrugDrugInteractionModel::RiskEn, "plainText");
+        m_Mapper->addMapping(ui->management, DrugDrugInteractionModel::ManagementFr, "plainText");
+        m_Mapper->addMapping(ui->management_en, DrugDrugInteractionModel::ManagementEn, "plainText");
+        m_Mapper->addMapping(ui->createdOn, DrugDrugInteractionModel::DateCreation, "date");
+        m_Mapper->addMapping(ui->updatedOn, DrugDrugInteractionModel::DateLastUpdate, "date");
+        m_Mapper->addMapping(ui->comboLevel, DrugDrugInteractionModel::LevelComboIndex, "currentIndex");
+
+        m_Mapper->addMapping(ui->firstDoseFromValue, DrugDrugInteractionModel::FirstDoseFromValue, "text");
+        m_Mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionModel::FirstDoseFromUnits, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionModel::FirstDoseFromRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseToValue, DrugDrugInteractionModel::FirstDoseToValue, "text");
+        m_Mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionModel::FirstDoseToUnits, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionModel::FirstDoseToRepartition, "currentIndex");
+
+        m_Mapper->addMapping(ui->secondDoseFromValue, DrugDrugInteractionModel::SecondDoseFromValue, "text");
+        m_Mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionModel::SecondDoseFromUnits, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionModel::SecondDoseFromRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseToValue, DrugDrugInteractionModel::SecondDoseToValue, "text");
+        m_Mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionModel::SecondDoseToUnits, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionModel::SecondDoseToRepartition, "currentIndex");
+
+        m_Mapper->addMapping(ui->humanSynthesis, DrugDrugInteractionModel::HumanReadableSynthesis, "html");
+
+        //    m_Mapper->addMapping(ui->comboFirstInteractorRoute, DrugDrugInteractionModel::FirstInteractorRouteIndex, "currentIndex");
+        //    m_Mapper->addMapping(ui->comboSecondInteractorRoute, DrugDrugInteractionModel::SecondInteractorRouteIndex, "currentIndex");
+    }
+
+public:
     Ui::InteractionEditorWidget *ui;
     DrugDrugInteractionModel *m_DDIModel;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex m_EditingIndex;
     bool m_ReviewModified;
-
     QAction *aSave;
     QAction *aEdit;
     QAction *aRemoveCurrent;
@@ -109,11 +290,12 @@ public:
     QAction *aSplitInteractionAccordingToLevel;
     QAction *aExpandAll;
     QAction *aCollapseAll;
-
     Utils::GoogleTranslator *googleTranslator;
-
     DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
     QStringListModel *biblioModel;
+
+private:
+    InteractionEditorWidget *q;
 };
 }  // namespace Internal
 }  // namespace DrugsDB
@@ -136,154 +318,20 @@ QWidget *InteractionEditorPage::createPage(QWidget *parent)
 /////////////////////////////////////////////////////////////////////////////////////////
 InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     QWidget(parent),
-    d(new InteractionEditorWidgetPrivate)
+    d(new InteractionEditorWidgetPrivate(this))
 {
-    d->ui = new Ui::InteractionEditorWidget;
-    d->googleTranslator = 0;
-    d->ui->setupUi(this);
-    // Some ui settings
+    d->setupUi();
     layout()->setMargin(0);
     layout()->setSpacing(0);
-    d->ui->treeLayout->setMargin(0);
-    d->ui->treeLayout->setSpacing(0);
-    d->ui->tabWidget->setCurrentIndex(0);
 
-    // Create the toolbar and actions
-    QToolBar *b = new QToolBar(this);
-    d->ui->toolbarLayout->addWidget(b);
-    b->setIconSize(QSize(16,16));
-
-    d->aSave = new QAction(this);
-    d->aRemoveCurrent = new QAction(this);
-    d->aEdit = new QAction(this);
-    d->aTranslateAll = new QAction(this);
-    d->aTranslateThis = new QAction(this);
-    d->aReformatOldXmlSources = new QAction(this);
-    d->aCreateNew = new QAction(this);
-    d->aSplitInteractionAccordingToLevel = new QAction(this);
-    d->aExpandAll = new QAction(this);
-    d->aCollapseAll = new QAction(this);
-
-    d->aSave->setEnabled(false);
-    d->aEdit->setEnabled(false);
-    d->aTranslateThis->setEnabled(false);
-    d->aRemoveCurrent->setEnabled(false);
-    d->aSplitInteractionAccordingToLevel->setEnabled(false);
-
-    d->aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
-    d->aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    d->aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
-    d->aTranslateAll->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
-    d->aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
-    d->aReformatOldXmlSources->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
-    d->aCreateNew->setIcon(theme()->icon(Core::Constants::ICONADD));
-    d->aSplitInteractionAccordingToLevel->setIcon(theme()->icon("splitfile.png"));
-    d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
-    d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
-
-    b->addAction(d->aRemoveCurrent);
-    b->addAction(d->aEdit);
-    b->addAction(d->aTranslateThis);
-    b->addAction(d->aSave);
-    b->addAction(d->aTranslateAll);
-    b->addAction(d->aReformatOldXmlSources);
-    b->addAction(d->aSplitInteractionAccordingToLevel);
-
-    connect(d->aCreateNew, SIGNAL(triggered()), this, SLOT(createNewDDI()));
-    connect(d->aSave, SIGNAL(triggered()), this, SLOT(save()));
-    connect(d->aRemoveCurrent, SIGNAL(triggered()), this, SLOT(removeCurrent()));
-    connect(d->aEdit, SIGNAL(triggered()), this, SLOT(edit()));
-    connect(d->aTranslateAll, SIGNAL(triggered()), this, SLOT(translateAll()));
-    connect(d->aTranslateThis, SIGNAL(triggered()), this, SLOT(translateCurrent()));
-    connect(d->aReformatOldXmlSources, SIGNAL(triggered()), this, SLOT(reformatOldXmlSource()));
-    connect(d->aSplitInteractionAccordingToLevel, SIGNAL(triggered()), this, SLOT(splitCurrent()));
-    connect(d->aExpandAll, SIGNAL(triggered()), d->ui->treeView, SLOT(expandAll()));
-    connect(d->aCollapseAll, SIGNAL(triggered()), d->ui->treeView, SLOT(collapseAll()));
-
-    // manage search line
-    d->ui->searchLine->setDelayedSignals(true);
-    QToolButton *left = new QToolButton(this);
-    left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    d->ui->searchLine->setLeftButton(left);
-    QToolButton *right = new QToolButton(this);
-    right->addAction(d->aCreateNew);
-    right->addAction(d->aExpandAll);
-    right->addAction(d->aCollapseAll);
-    right->setDefaultAction(d->aCreateNew);
-    right->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    right->setPopupMode(QToolButton::InstantPopup);
-    d->ui->searchLine->setRightButton(right);
-
-    // Manage combos && views
-    setLevelNamesToCombo(d->ui->comboLevel);
-    d->ui->firstDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-    d->ui->firstDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-    d->ui->firstDoseToUnits->addItems(DrugDrugInteractionModel::units());
-    d->ui->firstDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
-    d->ui->secondDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-    d->ui->secondDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-    d->ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
-    d->ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
-
-    d->firstInteractorRoutes = new DrugsDB::RoutesModel(this);
-    d->ui->listViewFirstInteractorRoute->setModel(d->firstInteractorRoutes);
-    d->ui->listViewFirstInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
-    d->secondInteractorRoutes = new DrugsDB::RoutesModel(this);
-    d->ui->listViewSecondInteractorRoute->setModel(d->secondInteractorRoutes);
-    d->ui->listViewSecondInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
-
-    d->biblioModel = new QStringListModel(this);
-    d->ui->bilbioTableView->setModel(d->biblioModel);
-    d->ui->bilbioTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->bilbioTableView->setAlternatingRowColors(true);
-    d->ui->bilbioTableView->horizontalHeader()->hide();
-    d->ui->bilbioTableView->verticalHeader()->hide();
-
-    // Create DDI Model && manage Mapper
-    d->m_DDIModel = new DrugDrugInteractionModel(this);
-    d->m_Mapper = new QDataWidgetMapper(this);
-    d->m_Mapper->setModel(d->m_DDIModel);
-    d->m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    d->m_Mapper->addMapping(d->ui->risk, DrugDrugInteractionModel::RiskFr, "plainText");
-    d->m_Mapper->addMapping(d->ui->risk_en, DrugDrugInteractionModel::RiskEn, "plainText");
-    d->m_Mapper->addMapping(d->ui->management, DrugDrugInteractionModel::ManagementFr, "plainText");
-    d->m_Mapper->addMapping(d->ui->management_en, DrugDrugInteractionModel::ManagementEn, "plainText");
-    d->m_Mapper->addMapping(d->ui->createdOn, DrugDrugInteractionModel::DateCreation, "date");
-    d->m_Mapper->addMapping(d->ui->updatedOn, DrugDrugInteractionModel::DateLastUpdate, "date");
-    d->m_Mapper->addMapping(d->ui->comboLevel, DrugDrugInteractionModel::LevelComboIndex, "currentIndex");
-
-    d->m_Mapper->addMapping(d->ui->firstDoseFromValue, DrugDrugInteractionModel::FirstDoseFromValue, "text");
-    d->m_Mapper->addMapping(d->ui->firstDoseFromUnits, DrugDrugInteractionModel::FirstDoseFromUnits, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->firstDoseFromRepart, DrugDrugInteractionModel::FirstDoseFromRepartition, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->firstDoseToValue, DrugDrugInteractionModel::FirstDoseToValue, "text");
-    d->m_Mapper->addMapping(d->ui->firstDoseToUnits, DrugDrugInteractionModel::FirstDoseToUnits, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->firstDoseToRepart, DrugDrugInteractionModel::FirstDoseToRepartition, "currentIndex");
-
-    d->m_Mapper->addMapping(d->ui->secondDoseFromValue, DrugDrugInteractionModel::SecondDoseFromValue, "text");
-    d->m_Mapper->addMapping(d->ui->secondDoseFromUnits, DrugDrugInteractionModel::SecondDoseFromUnits, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->secondDoseFromRepart, DrugDrugInteractionModel::SecondDoseFromRepartition, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->secondDoseToValue, DrugDrugInteractionModel::SecondDoseToValue, "text");
-    d->m_Mapper->addMapping(d->ui->secondDoseToUnits, DrugDrugInteractionModel::SecondDoseToUnits, "currentIndex");
-    d->m_Mapper->addMapping(d->ui->secondDoseToRepart, DrugDrugInteractionModel::SecondDoseToRepartition, "currentIndex");
-
-    d->m_Mapper->addMapping(d->ui->humanSynthesis, DrugDrugInteractionModel::HumanReadableSynthesis, "html");
-
-    //    d->m_Mapper->addMapping(d->ui->comboFirstInteractorRoute, DrugDrugInteractionModel::FirstInteractorRouteIndex, "currentIndex");
-//    d->m_Mapper->addMapping(d->ui->comboSecondInteractorRoute, DrugDrugInteractionModel::SecondInteractorRouteIndex, "currentIndex");
-
-    // Some settings on the treeView
-    d->ui->treeView->setModel(d->m_DDIModel);
-    d->ui->treeView->setWordWrap(true);
-    for(int i = 0; i < d->m_DDIModel->rowCount(); ++i) {
-        d->ui->treeView->hideColumn(i);
-    }
-    d->ui->treeView->showColumn(0);
-    d->ui->treeView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    d->ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    d->ui->treeView->header()->hide();
-    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
-
+    d->createActionsAndToolBar();
+    d->connectActions();
+    d->prepareSearchLine();
+    d->createModelsAndViews();
+    d->createMapper();
     setEditorsEnabled(false);
+
+    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionModel(QString)));
 }
 
@@ -296,6 +344,7 @@ InteractionEditorWidget::~InteractionEditorWidget()
     }
 }
 
+/** Enable/Disable the whole editor user interface */
 void InteractionEditorWidget::setEditorsEnabled(bool state)
 {
     d->ui->generalGroupBox->setEnabled(state);
@@ -767,7 +816,7 @@ void InteractionEditorWidget::changeEvent(QEvent *e)
         d->aExpandAll->setToolTip(d->aExpandAll->text());
         d->ui->retranslateUi(this);
         int current = d->ui->comboLevel->currentIndex();
-        setLevelNamesToCombo(d->ui->comboLevel);
+        d->setLevelNamesToCombo(d->ui->comboLevel);
         d->ui->comboLevel->setCurrentIndex(current);
     }
 }
