@@ -138,6 +138,15 @@ DrugDrugInteraction::DrugDrugInteraction()
     m_SecondDose.setData(DrugDrugInteractionDose::Uid, ++doseUid);
 }
 
+/** Copy ctor */
+DrugDrugInteraction::DrugDrugInteraction(const DrugDrugInteraction &copy)
+{
+    this->m_Data = copy.m_Data;
+    this->m_FirstDose = copy.m_FirstDose;
+    this->m_Formalized = copy.m_Formalized;
+    this->m_SecondDose = copy.m_SecondDose;
+}
+
 /** Construct an DrugDrugInteraction object using the XML QDomElement. */
 DrugDrugInteraction::DrugDrugInteraction(const QDomElement &element)
 {
@@ -204,11 +213,13 @@ DrugDrugInteraction::~DrugDrugInteraction()
 {
 }
 
+/** Return the value of the \e reference. Reference points to the DataRepresentation enum */
 QVariant DrugDrugInteraction::data(const int reference) const
 {
     return m_Data.value(reference, QVariant());
 }
 
+/** Set the value of the \e reference. Reference points to the DataRepresentation enum */
 bool DrugDrugInteraction::setData(const int reference, const QVariant &value)
 {
     if (reference==LevelCode) {
@@ -218,6 +229,7 @@ bool DrugDrugInteraction::setData(const int reference, const QVariant &value)
     return true;
 }
 
+/** The validity of the encoded DDI level */
 bool DrugDrugInteraction::levelValidity() const
 {
     const QString &level = m_Data.value(LevelCode).toString();
@@ -226,26 +238,31 @@ bool DrugDrugInteraction::levelValidity() const
     return (level.size()==1);
 }
 
+/** Set the translated DDI risk */
 void DrugDrugInteraction::setRisk(const QString &risk, const QString &lang)
 {
     m_Data.insert(RISK_ID + languageIndex(lang), risk);
 }
 
+/** Set the translated DDI management comment */
 void DrugDrugInteraction::setManagement(const QString &management, const QString &lang)
 {
     m_Data.insert(MANAGEMENT_ID + languageIndex(lang), management);
 }
 
+/** Return the translated DDI risk */
 QString DrugDrugInteraction::risk(const QString &lang) const
 {
     return m_Data.value(RISK_ID + languageIndex(lang)).toString();
 }
 
+/** Return the translated DDI management comment */
 QString DrugDrugInteraction::management(const QString &lang) const
 {
     return m_Data.value(MANAGEMENT_ID + languageIndex(lang)).toString();
 }
 
+/** Return the icon corresponding to the DDI level according to the current theme */
 QIcon DrugDrugInteraction::levelIcon() const
 {
     const QString &levelUid = m_Data.value(LevelCode).toString();
@@ -266,6 +283,7 @@ QIcon DrugDrugInteraction::levelIcon() const
     return theme()->icon(Core::Constants::ICONHELP);
 }
 
+/** When DDI are reviewed, add a reviewer name to the current reviewers */
 void DrugDrugInteraction::addReviewer(const QString &name)
 {
     QStringList reviewers = m_Data.value(ReviewersStringList).toStringList();
@@ -275,11 +293,13 @@ void DrugDrugInteraction::addReviewer(const QString &name)
     }
 }
 
+/** Add a "DDI formalized" value */
 void DrugDrugInteraction::addFormalized(const QString &attr, const QString &value)
 {
     m_Formalized.insert(attr,value);
 }
 
+/** Transform the DDI to XML */
 QString DrugDrugInteraction::toXml() const
 {
     QString xml;
@@ -498,6 +518,7 @@ bool DrugDrugInteraction::updateDomElement(QDomElement *element, QDomDocument *d
     return true;
 }
 
+/** Return true if DDI are equal */
 bool DrugDrugInteraction::operator==(const DrugDrugInteraction &other) const
 {
     // same interactor (whatever is the order)
@@ -516,6 +537,7 @@ bool DrugDrugInteraction::operator==(const DrugDrugInteraction &other) const
     return false;
 }
 
+/** Helper for qSort */
 bool DrugDrugInteraction::lowerThan(const DrugDrugInteraction &d1, const DrugDrugInteraction &d2)
 {
     return d1.data(DrugDrugInteraction::FirstInteractorName).toString() < d2.data(DrugDrugInteraction::FirstInteractorName).toString();

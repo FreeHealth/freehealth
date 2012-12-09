@@ -91,6 +91,7 @@ public:
     };
 
     DrugDrugInteraction();
+    DrugDrugInteraction(const DrugDrugInteraction &copy);
     DrugDrugInteraction(const QDomElement &element);
     ~DrugDrugInteraction();
 
@@ -115,7 +116,6 @@ public:
     bool isReviewed() const {return data(IsReviewed).toBool();}
     bool isDuplicated() const {return data(IsDuplicated).toBool();}
 
-
     // Draft
     void addFormalized(const QString &attr, const QString &value);
     // End Draft
@@ -125,7 +125,6 @@ public:
 
     bool operator==(const DrugDrugInteraction &other) const;
     static bool lowerThan(const DrugDrugInteraction &d1, const DrugDrugInteraction &d2);
-
 
 private:
     QHash<int, QVariant> m_Data;
