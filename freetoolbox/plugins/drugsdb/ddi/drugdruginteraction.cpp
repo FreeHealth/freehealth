@@ -158,7 +158,7 @@ DrugDrugInteraction::DrugDrugInteraction(const QDomElement &element)
         m_Data.insert(FirstInteractorRouteOfAdministrationIds, element.attribute("i1ra").split(";"));
         m_Data.insert(SecondInteractorRouteOfAdministrationIds, element.attribute("i2ra").split(";"));
         m_Data.insert(LevelCode, element.attribute("l"));
-        m_Data.insert(LevelName, levelName(element.attribute("l")));
+        m_Data.insert(LevelName, ::levelName(element.attribute("l")));
         m_Data.insert(DateCreation, QDate::fromString(element.attribute("a", QDate(2010,01,01).toString(Qt::ISODate)), Qt::ISODate));
         m_Data.insert(DateLastUpdate, QDate::fromString(element.attribute("lu", QDate(2010,01,01).toString(Qt::ISODate)), Qt::ISODate));
         m_Data.insert(IsValid, element.attribute("v", "1").toInt());
@@ -223,7 +223,7 @@ QVariant DrugDrugInteraction::data(const int reference) const
 bool DrugDrugInteraction::setData(const int reference, const QVariant &value)
 {
     if (reference==LevelCode) {
-        m_Data.insert(LevelName, levelName(value.toString()));
+        m_Data.insert(LevelName, ::levelName(value.toString()));
     }
     m_Data.insert(reference, value);
     return true;
