@@ -141,6 +141,7 @@ public:
             q(parent)
     {
         rootItem = new DDITreeItem(0);
+        m_currentFilter = "--@@##--";
     }
 
     ~DrugDrugInteractionModelPrivate()
