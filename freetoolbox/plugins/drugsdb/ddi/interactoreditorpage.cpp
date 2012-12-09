@@ -61,6 +61,7 @@
 #include <QClipboard>
 #include <QUrl>
 #include <QApplication>
+#include <QSortFilterProxyModel>
 
 using namespace DrugsDB;
 using namespace Internal;
@@ -91,6 +92,200 @@ namespace Internal {
 class InteractorEditorWidgetPrivate
 {
 public:
+    InteractorEditorWidgetPrivate(InteractorEditorWidget *parent) :
+        ui(0),
+        m_Mapper(0),
+        m_AtcCodes(0),
+        m_ChildrenInteractors(0),
+        m_Pmids(0),
+        m_ToolBar(0),
+        aExpandAll(0),
+        aCollapseAll(0),
+        aSave(0),
+        aEdit(0),
+        aRemoveCurrent(0),
+        aCreateNewClass(0),
+        aCreateNewInteractor(0),
+        aTranslateThis(0),
+        aAddClassReviewMark(0),
+        aNextUnreviewedOrUnlinked(0),
+        aDownloadAllNeededPmids(0),
+        m_ToolButton(0),
+        m_CreateNewToolButton(0),
+        google(0),
+        who(0),
+        resip(0),
+        copyClip(0),
+        atcSearchDialog(0),
+        _proxyClassModel(0),
+        _proxyMoleculeModel(0),
+        q(parent)
+    {}
+
+    ~InteractorEditorWidgetPrivate()
+    {
+    }
+
+    void setupUi()
+    {
+        ui = new Ui::InteractorEditorWidget;
+        ui->setupUi(q);
+        ui->treeLayout->setMargin(0);
+        ui->treeLayout->setSpacing(0);
+        ui->widgetContainer->layout()->setMargin(0);
+        ui->tabWidget->setCurrentIndex(0);
+        ui->reformatOldSource->hide();
+    }
+
+    void createActionsAndToolBars()
+    {
+        google = new QAction(q);
+        resip = new QAction(q);
+        who = new QAction(q);
+        copyClip = new QAction(q);
+        atcSearchDialog = new QAction(q);
+
+        aExpandAll = new QAction(q);
+        aCollapseAll = new QAction(q);
+        aNextUnreviewedOrUnlinked = new QAction(q);
+        aSave = new QAction(q);
+        aRemoveCurrent = new QAction(q);
+        aEdit = new QAction(q);
+        aCreateNewClass = new QAction(q);
+        aCreateNewInteractor = new QAction(q);
+        aTranslateThis = new QAction(q);
+        aAddClassReviewMark = new QAction(q);
+        aDownloadAllNeededPmids = new QAction(q);
+        aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
+        aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
+        aAddClassReviewMark->setIcon(theme()->icon(Core::Constants::ICONBOOKMARK));
+        aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+        aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+        aCreateNewClass->setIcon(theme()->icon(Core::Constants::ICONADD));
+        aCreateNewInteractor->setIcon(theme()->icon(Core::Constants::ICONADD));
+        aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+        aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
+        aNextUnreviewedOrUnlinked->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+        aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICONDOCTOR));
+        aSave->setEnabled(false);
+        aEdit->setEnabled(false);
+        aRemoveCurrent->setEnabled(false);
+        aTranslateThis->setEnabled(false);
+
+        m_ToolButton = new QToolButton(q);
+        m_ToolButton->addAction(atcSearchDialog);
+        m_ToolButton->addAction(google);
+        m_ToolButton->addAction(who);
+        m_ToolButton->addAction(resip);
+        m_ToolButton->addAction(copyClip);
+        m_ToolButton->setDefaultAction(atcSearchDialog);
+        m_ToolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        m_ToolButton->setPopupMode(QToolButton::InstantPopup);
+        m_ToolButton->setEnabled(false);
+
+        m_CreateNewToolButton = new QToolButton(q);
+        m_CreateNewToolButton->addAction(aCreateNewClass);
+        m_CreateNewToolButton->addAction(aCreateNewInteractor);
+        m_CreateNewToolButton->setDefaultAction(aCreateNewClass);
+        m_CreateNewToolButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+        m_CreateNewToolButton->setPopupMode(QToolButton::InstantPopup);
+
+        m_ToolBar = new QToolBar(q);
+        m_ToolBar->addAction(aDownloadAllNeededPmids);
+        m_ToolBar->addAction(aAddClassReviewMark);
+        m_ToolBar->addWidget(m_CreateNewToolButton);
+        m_ToolBar->addAction(aNextUnreviewedOrUnlinked);
+        m_ToolBar->addAction(aExpandAll);
+        m_ToolBar->addAction(aCollapseAll);
+        m_ToolBar->addAction(aRemoveCurrent);
+        m_ToolBar->addAction(aEdit);
+        m_ToolBar->addAction(aTranslateThis);
+        m_ToolBar->addAction(aSave);
+        m_ToolBar->addWidget(m_ToolButton);
+        m_ToolBar->setIconSize(QSize(16,16));
+        ui->toolbarLayout->addWidget(m_ToolBar);
+    }
+
+    void connectActions()
+    {
+        QObject::connect(aExpandAll, SIGNAL(triggered()), ui->classesTreeView, SLOT(expandAll()));
+        QObject::connect(aCollapseAll, SIGNAL(triggered()), ui->classesTreeView, SLOT(collapseAll()));
+        QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
+        QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
+        QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
+        QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
+        QObject::connect(aAddClassReviewMark, SIGNAL(triggered()), q, SLOT(bookmarkClassesFromCurrent()));
+        QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
+        QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
+        QObject::connect(m_ToolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
+        QObject::connect(m_CreateNewToolButton, SIGNAL(triggered(QAction*)), q, SLOT(createButtonActivated(QAction*)));
+    }
+
+    void prepareSearchLine()
+    {
+        ui->searchLine->setDelayedSignals(true);
+        QToolButton *left = new QToolButton(q);
+        left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        ui->searchLine->setLeftButton(left);
+        QToolButton *right = new QToolButton(q);
+        right->addAction(aExpandAll);
+        right->addAction(aCollapseAll);
+        right->setDefaultAction(aExpandAll);
+        ui->searchLine->setRightButton(right);
+    }
+
+    void prepareModelsAndViews()
+    {
+        // Models and views in the selector
+        // Classes
+        _proxyClassModel = new QSortFilterProxyModel(q);
+        _proxyClassModel->setSourceModel(ddiCore()->interactingClassesModel());
+        _proxyClassModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        _proxyClassModel->setFilterKeyColumn(DrugInteractorModel::TrLabel);
+        ui->classesTreeView->setModel(_proxyClassModel);
+        ui->classesTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui->classesTreeView->header()->hide();
+        for(int i = 0; i < ddiCore()->interactingClassesModel()->columnCount(); ++i) {
+            ui->classesTreeView->hideColumn(i);
+        }
+        ui->classesTreeView->showColumn(DrugInteractorModel::TrLabel);
+
+        // Molecules
+        _proxyMoleculeModel = new QSortFilterProxyModel(q);
+        _proxyMoleculeModel->setSourceModel(ddiCore()->interactingMoleculesModel());
+        _proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        _proxyMoleculeModel->setFilterKeyColumn(DrugInteractorModel::TrLabel);
+        ui->molsListView->setModel(_proxyMoleculeModel);
+        ui->molsListView->setModelColumn(DrugInteractorModel::TrLabel);
+        ui->molsListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+        // Models and views in the editor
+        // AtcCodes
+        m_AtcCodes = new QStringListModel(q);
+        ui->atcTableView->setModel(m_AtcCodes);
+        ui->atcTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+        ui->atcTableView->setAlternatingRowColors(true);
+        ui->atcTableView->horizontalHeader()->hide();
+        ui->atcTableView->verticalHeader()->hide();
+        ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+        m_ChildrenInteractors = new QStringListModel(q);
+        ui->classChildrenTableView->setModel(m_ChildrenInteractors);
+        ui->classChildrenTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+        ui->classChildrenTableView->setAlternatingRowColors(true);
+        ui->classChildrenTableView->horizontalHeader()->hide();
+        ui->classChildrenTableView->verticalHeader()->hide();
+        //ui->classChildrenTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+        m_Pmids = new QStringListModel(q);
+        ui->pmidListView->setModel(m_Pmids);
+        //ui->pmidListView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+        ui->pmidListView->setAlternatingRowColors(true);
+        //ui->pmidListView->horizontalHeader()->hide();
+        //ui->pmidListView->verticalHeader()->hide();
+    }
+
+public:
     Ui::InteractorEditorWidget *ui;
     QDataWidgetMapper *m_Mapper;
     QStringListModel *m_AtcCodes, *m_ChildrenInteractors, *m_Pmids;
@@ -114,165 +309,44 @@ public:
     QAction *resip;
     QAction *copyClip;
     QAction *atcSearchDialog;
+
+    QSortFilterProxyModel *_proxyClassModel, *_proxyMoleculeModel;
+
+private:
+    InteractorEditorWidget *q;
 };
 }  // namespace Internal
 }  // namespace DrugsDB
 
 InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
-    QWidget(parent), d(new InteractorEditorWidgetPrivate)
+    QWidget(parent),
+    d(new InteractorEditorWidgetPrivate(this))
 {
     setObjectName("InteractorEditorWidget");
-    d->ui = new Ui::InteractorEditorWidget;
-    d->ui->setupUi(this);
+
+    d->setupUi();
     this->layout()->setMargin(0);
     this->layout()->setSpacing(0);
-    d->ui->treeLayout->setMargin(0);
-    d->ui->treeLayout->setSpacing(0);
-    d->ui->widgetContainer->layout()->setMargin(0);
-    d->ui->tabWidget->setCurrentIndex(0);
-    d->ui->classesTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    d->ui->molsListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    d->ui->reformatOldSource->hide();
 
-    // manage interactors classesTreeView / molsListView
-    d->ui->classesTreeView->setModel(ddiCore()->interactingClassesModel());
-    d->ui->classesTreeView->header()->hide();
-    for(int i = 0; i < ddiCore()->interactingClassesModel()->columnCount(); ++i) {
-        d->ui->classesTreeView->hideColumn(i);
-    }
-    d->ui->classesTreeView->showColumn(DrugInteractorModel::TrLabel);
+    d->createActionsAndToolBars();
+    d->connectActions();
+    d->prepareSearchLine();
 
-    d->ui->molsListView->setModel(ddiCore()->interactingMoleculesModel());
-    d->ui->molsListView->setModelColumn(DrugInteractorModel::TrLabel);
+    d->prepareModelsAndViews();
 
-    d->ui->sumLabel->setText(tr("0r: %1; 0l: %2")
-                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnreviewed())
-                             .arg(ddiCore()->interactingMoleculesModel()->numberOfUnlinked()));
+    d->m_Mapper = new QDataWidgetMapper(this);
+
+    updateCounts();
     connect(ddiCore()->interactingClassesModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
     connect(ddiCore()->interactingClassesModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
     connect(ddiCore()->interactingMoleculesModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
     connect(ddiCore()->interactingMoleculesModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
 
-    // Create actions
-    d->aExpandAll = new QAction(this);
-    d->aCollapseAll = new QAction(this);
-    d->aNextUnreviewedOrUnlinked = new QAction(this);
-    d->aSave = new QAction(this);
-    d->aRemoveCurrent = new QAction(this);
-    d->aEdit = new QAction(this);
-    d->aCreateNewClass = new QAction(this);
-    d->aCreateNewInteractor = new QAction(this);
-    d->aTranslateThis = new QAction(this);
-    d->aAddClassReviewMark = new QAction(this);
-    d->aDownloadAllNeededPmids = new QAction(this);
-    d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
-    d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
-    d->aAddClassReviewMark->setIcon(theme()->icon(Core::Constants::ICONBOOKMARK));
-    d->aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
-    d->aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
-    d->aCreateNewClass->setIcon(theme()->icon(Core::Constants::ICONADD));
-    d->aCreateNewInteractor->setIcon(theme()->icon(Core::Constants::ICONADD));
-    d->aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    d->aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
-    d->aNextUnreviewedOrUnlinked->setIcon(theme()->icon(Core::Constants::ICONNEXT));
-    d->aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICONDOCTOR));
-    d->aSave->setEnabled(false);
-    d->aEdit->setEnabled(false);
-    d->aRemoveCurrent->setEnabled(false);
-    d->aTranslateThis->setEnabled(false);
-
-    d->m_ToolButton = new QToolButton(this);
-    d->google = new QAction(tr("Search Google (copy molecule to clipboard)"), d->m_ToolButton);
-    d->who = new QAction(tr("Search WHO (copy molecule to clipboard)"), d->m_ToolButton);
-    d->resip = new QAction(tr("Search RESIP (copy molecule to clipboard)"), d->m_ToolButton);
-    d->copyClip = new QAction(tr("Copy molecule name to clipboard"), d->m_ToolButton);
-    d->atcSearchDialog = new QAction(tr("Open the ATC search dialog"), d->m_ToolButton);
-    d->m_ToolButton->addAction(d->atcSearchDialog);
-    d->m_ToolButton->addAction(d->google);
-    d->m_ToolButton->addAction(d->who);
-    d->m_ToolButton->addAction(d->resip);
-    d->m_ToolButton->addAction(d->copyClip);
-    d->m_ToolButton->setDefaultAction(d->atcSearchDialog);
-    d->m_ToolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
-    d->m_ToolButton->setPopupMode(QToolButton::InstantPopup);
-    d->m_ToolButton->setEnabled(false);
-
-    d->m_CreateNewToolButton = new QToolButton(this);
-    d->m_CreateNewToolButton->addAction(d->aCreateNewClass);
-    d->m_CreateNewToolButton->addAction(d->aCreateNewInteractor);
-    d->m_CreateNewToolButton->setDefaultAction(d->aCreateNewClass);
-    d->m_CreateNewToolButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    d->m_CreateNewToolButton->setPopupMode(QToolButton::InstantPopup);
-
-    d->m_ToolBar = new QToolBar(this);
-    d->m_ToolBar->addAction(d->aDownloadAllNeededPmids);
-    d->m_ToolBar->addAction(d->aAddClassReviewMark);
-    d->m_ToolBar->addWidget(d->m_CreateNewToolButton);
-    d->m_ToolBar->addAction(d->aNextUnreviewedOrUnlinked);
-    d->m_ToolBar->addAction(d->aExpandAll);
-    d->m_ToolBar->addAction(d->aCollapseAll);
-    d->m_ToolBar->addAction(d->aRemoveCurrent);
-    d->m_ToolBar->addAction(d->aEdit);
-    d->m_ToolBar->addAction(d->aTranslateThis);
-    d->m_ToolBar->addAction(d->aSave);
-    d->m_ToolBar->addWidget(d->m_ToolButton);
-    d->m_ToolBar->setIconSize(QSize(16,16));
-    d->ui->toolbarLayout->addWidget(d->m_ToolBar);
-
-    connect(d->aExpandAll, SIGNAL(triggered()), d->ui->classesTreeView, SLOT(expandAll()));
-    connect(d->aCollapseAll, SIGNAL(triggered()), d->ui->classesTreeView, SLOT(collapseAll()));
-    connect(d->aSave, SIGNAL(triggered()), this, SLOT(save()));
-    connect(d->aRemoveCurrent, SIGNAL(triggered()), this, SLOT(removeCurrent()));
-    connect(d->aEdit, SIGNAL(triggered()), this, SLOT(edit()));
-    connect(d->aTranslateThis, SIGNAL(triggered()), this, SLOT(translateCurrent()));
-    connect(d->aAddClassReviewMark, SIGNAL(triggered()), this, SLOT(bookmarkClassesFromCurrent()));
-    connect(d->aNextUnreviewedOrUnlinked, SIGNAL(triggered()), this, SLOT(nextUnreviewedOrUnlinked()));
-    connect(d->aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
-
-    connect(d->m_ToolButton, SIGNAL(triggered(QAction*)), this, SLOT(buttonActivated(QAction*)));
-    connect(d->m_CreateNewToolButton, SIGNAL(triggered(QAction*)), this, SLOT(createButtonActivated(QAction*)));
-
-    // manage search line
-    d->ui->searchLine->setDelayedSignals(true);
-    QToolButton *left = new QToolButton(this);
-    left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    d->ui->searchLine->setLeftButton(left);
-    QToolButton *right = new QToolButton(this);
-    right->addAction(d->aExpandAll);
-    right->addAction(d->aCollapseAll);
-    right->setDefaultAction(d->aExpandAll);
-    d->ui->searchLine->setRightButton(right);
-
-    // Create models && mapper
-    d->m_AtcCodes = new QStringListModel(this);
-    d->ui->atcTableView->setModel(d->m_AtcCodes);
-    d->ui->atcTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->atcTableView->setAlternatingRowColors(true);
-    d->ui->atcTableView->horizontalHeader()->hide();
-    d->ui->atcTableView->verticalHeader()->hide();
-    d->ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    d->m_ChildrenInteractors = new QStringListModel(this);
-    d->ui->classChildrenTableView->setModel(d->m_ChildrenInteractors);
-    d->ui->classChildrenTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->classChildrenTableView->setAlternatingRowColors(true);
-    d->ui->classChildrenTableView->horizontalHeader()->hide();
-    d->ui->classChildrenTableView->verticalHeader()->hide();
-//    d->ui->classChildrenTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    d->m_Pmids = new QStringListModel(this);
-    d->ui->pmidListView->setModel(d->m_Pmids);
-//    d->ui->pmidListView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->pmidListView->setAlternatingRowColors(true);
-//    d->ui->pmidListView->horizontalHeader()->hide();
-//    d->ui->pmidListView->verticalHeader()->hide();
-
-    d->m_Mapper = new QDataWidgetMapper(this);
-
     setEditorsEnabled(false);
     connect(d->ui->reformatOldSource, SIGNAL(clicked()), this, SLOT(reformatOldSource()));
     connect(d->ui->classesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
+
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
 }
 
@@ -491,6 +565,8 @@ void InteractorEditorWidget::save()
 void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
 {
     Q_UNUSED(text);
+    d->_proxyClassModel->setFilterFixedString(text);
+    d->_proxyMoleculeModel->setFilterFixedString(text);
     // TODO: code here ??? */
 }
 
@@ -679,6 +755,12 @@ void InteractorEditorWidget::nextUnreviewedOrUnlinked()
 void InteractorEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
+        // Texts
+        d->google->setText(tr("Search Google (copy molecule to clipboard)"));
+        d->who->setText(tr("Search WHO (copy molecule to clipboard)"));
+        d->resip->setText(tr("Search RESIP (copy molecule to clipboard)"));
+        d->copyClip->setText(tr("Copy molecule name to clipboard"));
+        d->atcSearchDialog->setText(tr("Open the ATC search dialog"));
         d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
         d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
         d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
@@ -690,6 +772,11 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
         d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
         d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
+        // Tooltips
+        d->google->setToolTip(d->google->text());
+        d->who->setToolTip(d->who->text());
+        d->resip->setToolTip(d->resip->text());
+        d->copyClip->setToolTip(d->copyClip->text());
         d->aSave->setToolTip(d->aSave->text());
         d->aEdit->setToolTip(d->aEdit->text());
         d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
@@ -706,38 +793,3 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
     }
 }
 
-//bool InteractorEditorWidget::event(QEvent *e)
-//{
-//    if (e->type()==QEvent::Show) {
-//        // Add actions to mainWindow toolbar
-//        qWarning() << "ADD";
-//        if (!d->toolbarIncluded) {
-//            mainWindow()->addToolBar(d->m_ToolBar);
-//            d->m_ToolBar->setVisible(true);
-//        }
-//    } else if (e->type()==QEvent::Hide) {
-//        qWarning() << "REMOVE";
-//        if (d->toolbarIncluded) {
-//            mainWindow()->removeToolBar(d->m_ToolBar);
-//            d->m_ToolBar->setVisible(false);
-//            mainWindow()->update();
-//        }
-//    }
-//    return QWidget::event(e);
-//}
-
-//void InteractorEditorWidget::showEvent(QShowEvent *e)
-//{
-//    qWarning() << "SHOW" << d->m_ToolBar << d->m_ToolBar->isVisible();
-//    if (!d->m_ToolBar->isVisible())
-//        mainWindow()->addToolBar(d->m_ToolBar);
-//    QWidget::showEvent(e);
-//}
-
-//void InteractorEditorWidget::hideEvent(QHideEvent *e)
-//{
-//    qWarning() << "HIDE" << d->m_ToolBar << d->m_ToolBar->isVisible();
-//    if (d->m_ToolBar->isVisible())
-//        mainWindow()->removeToolBar(d->m_ToolBar);
-//    QWidget::hideEvent(e);
-//}
