@@ -692,8 +692,8 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
 //    d->m_Mapper->addMapping(d->ui->atcTableView, DrugInteractorModel:, "");
 //    d->m_Mapper->addMapping(d->ui->classChildrenTableView, DrugInteractorModel:, "");
 //    d->m_Mapper->addMapping(d->ui, DrugInteractorModel:, "");
-    d->m_Mapper->setRootIndex(index.parent());
-    d->m_Mapper->setCurrentModelIndex(index);
+    d->m_Mapper->setRootIndex(d->m_EditingIndex.parent());
+    d->m_Mapper->setCurrentModelIndex(d->m_EditingIndex);
 
     // set data
     // manage a OSX bug with checkboxes in mappers
