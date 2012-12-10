@@ -70,7 +70,8 @@ HEADERS += global_exporter.h \
     proxyaction.h \
     stringutils.h \
     widgets/timecombobox.h \
-    httpdownloader_p.h
+    httpdownloader_p.h \
+    emailvalidator.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -125,7 +126,8 @@ SOURCES += global.cpp \
     widgets/detailsbutton.cpp \
     proxyaction.cpp \
     stringutils.cpp \
-    widgets/timecombobox.cpp
+    widgets/timecombobox.cpp \
+    emailvalidator.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm

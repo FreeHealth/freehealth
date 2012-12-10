@@ -54,6 +54,7 @@
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
+#include <coreplugin/dialogs/bugreportdialog.h>
 
 #include <utils/log.h>
 
@@ -1296,7 +1297,11 @@ bool MainWindowActionHandler::checkUpdate()
 
 bool MainWindowActionHandler::reportBug()
 {
+    BugReportDialog dlg;
+    int result = dlg.exec();
+
     return true;
+//    return result = QDialog::Accepted;
 }
 
 /**
