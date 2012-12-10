@@ -47,6 +47,8 @@
 #include <QHash>
 #include <QList>
 
+#include "math.h"
+
 using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -227,6 +229,64 @@ public:
         }
     }
 
+    DrugInteractor *getInteractor(const QString &uuid, const QList<DrugInteractor *> &interactors)
+    {
+        foreach(DrugInteractor *interactor, interactors) {
+            if (interactor->data(DrugInteractor::InitialLabel).toString()==uuid)
+                return interactor;
+        }
+        return 0;
+    }
+
+    // When all DDI are loaded, read all DDI level and store the stat into the
+    // m_levelStatistics (K=level name  ; V=number of ddi recorded)
+    void globalLevelStatistics(const QList<DrugDrugInteraction *> &ddis)
+    {
+        int total = 0;
+        for(int i=0; i < ddis.count(); ++i) {
+            DrugDrugInteraction *ddi = ddis.at(i);
+            int n = 0;
+            DrugInteractor *interactor1 = getInteractor(ddi->firstInteractor(), m_interactors);
+            DrugInteractor *interactor2 = getInteractor(ddi->secondInteractor(), m_interactors);
+            if (!interactor1 || !interactor2) {
+                LOG_ERROR_FOR(q, "Interactor not found? " + ddi->firstInteractor() + " - " + ddi->secondInteractor());
+                continue;
+            }
+            if (interactor1->isClass() && interactor2->isClass()) {
+                n = interactor1->childrenCount() * interactor2->childrenCount();
+            } else if (interactor1->isClass() && !interactor2->isClass()) {
+                n = interactor1->childrenCount();
+            } else if (!interactor1->isClass() && interactor2->isClass()) {
+                n = interactor2->childrenCount();
+            } else {
+                n = 1;
+            }
+
+            foreach(QString name, ddi->levelName().split(", ")) {
+                if (name.isEmpty()) {
+                    name = ddi->levelCode();
+                    qWarning() << "EMPTY LEVEL" << ddi->firstInteractor() << ddi->secondInteractor();
+                }
+                m_levelStatistics.insert(name, m_levelStatistics.value(name, 0) + n);
+                total += n;
+            }
+        }
+
+        QHashIterator<QString, int> it(m_levelStatistics);
+        QString out;
+        while (it.hasNext()) {
+            it.next();
+            out += QString("%1 %2 %3%\n")
+                    .arg(it.key().leftJustified(50, '.'))
+                    .arg(QString::number(it.value()).leftJustified(7))
+                    .arg(QString::number(it.value()*100/total, 'G', 2));
+        }
+        out += QString("\n%1 %2 100%\n")
+                .arg(QString("Total DDI per INN").leftJustified(50, '.'))
+                .arg(QString::number(total).leftJustified(7));
+        qWarning() << out;
+    }
+
     void filter(const QString &interactor = QString::null)
     {
         if (interactor == m_currentFilter)
@@ -405,6 +465,7 @@ public:
     QString reviewer;
     int m_FetchedRows;
     QString m_currentFilter;
+    QHash<QString, int> m_levelStatistics;
 
 private:
     DrugDrugInteractionModel *q;
@@ -412,14 +473,13 @@ private:
 }  // End namespace Internal
 }  // End namespace DrugsDB
 
-
-
 DrugDrugInteractionModel::DrugDrugInteractionModel(QObject *parent) :
         QAbstractItemModel(parent), d(new Internal::DrugDrugInteractionModelPrivate(this))
 {
     setObjectName("DrugDrugInteractionModel");
     d->m_ddis = core()->getDrugDrugInteractions();
     d->m_interactors = core()->getDrugInteractors();
+    d->globalLevelStatistics(d->m_ddis);
     d->filter();
     d->m_FetchedRows = 0;
 }
