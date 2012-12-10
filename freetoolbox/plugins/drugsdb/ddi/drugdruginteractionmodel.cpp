@@ -1173,6 +1173,16 @@ QString DrugDrugInteractionModel::repartition(int index)
 //}
 
 /**
+ * Computes the statistics of the model and return a QHash with
+ * in keys the level names, and in value the number of possible interactions.
+ */
+QHash<QString, int> DrugDrugInteractionModel::getLevelStatistics() const
+{
+    d->globalLevelStatistics(d->m_ddis);
+    return d->m_levelStatistics;
+}
+
+/**
  * Add an interaction in the model.
  * Return true if the interaction was correctly added. \n
  * NOTE: When the DDI is added, the model gets re-filtered with the previous filter.

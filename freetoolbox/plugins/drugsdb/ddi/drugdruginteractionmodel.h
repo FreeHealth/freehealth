@@ -119,6 +119,8 @@ public:
 //    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
 //    void fetchMore(const QModelIndex &parent = QModelIndex());
 
+    QHash<QString, int> getLevelStatistics() const;
+
 public Q_SLOTS:
     bool addDrugDrugInteraction(const Internal::DrugDrugInteraction &ddi);
     void filterInteractionsForInteractor(const QString &interactorName);
