@@ -31,4 +31,8 @@ FORMS += mainwindow.ui \
 
 OTHER_FILES += Core.pluginspec
 
+# include translations
+TRANSLATION_NAME = ftbcore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
 

@@ -26,9 +26,9 @@ SOURCES += coreplugin.cpp \
     commandlineparser.cpp \
     user.cpp
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdcoreplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/fdcoreplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/fdcoreplugin_es.ts
+# include translations
+TRANSLATION_NAME = fdcore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
 
 OTHER_FILES += Core.pluginspec

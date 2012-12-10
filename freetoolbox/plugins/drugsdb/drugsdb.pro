@@ -158,7 +158,9 @@ OTHER_FILES += \
     ../global_resources/sql/pims/icdlinks.xml \
     ../global_resources/sql/pims/pims.xml \
 
-
 OTHER_FILES += DrugsDB.pluginspec
 
+# include translations
+TRANSLATION_NAME = ftbdrugsdb
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 

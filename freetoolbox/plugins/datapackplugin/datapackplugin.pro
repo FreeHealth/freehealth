@@ -30,8 +30,13 @@ HEADERS  += \
     datapackwidget.h
 #    servertoolwidget.h
 
-OTHER_FILES += DataPackPlugin.pluginspec
-
 FORMS += \
     datapackwidget.ui \
     serverwidget.ui
+
+OTHER_FILES += DataPackPlugin.pluginspec
+
+# include translations
+TRANSLATION_NAME = ftbdatapack
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+

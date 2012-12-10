@@ -21,10 +21,9 @@ SOURCES = mainwindowplugin.cpp \
 FORMS = mainwindow.ui \
     mainwindowpreferenceswidget.ui
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/faccountmainwindowplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/faccountmainwindowplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/faccountmainwindowplugin_es.ts
+# include translations
+TRANSLATION_NAME = famainwindow
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = MainWindow.pluginspec
 

@@ -21,9 +21,8 @@ SOURCES += coreplugin.cpp \
     commandlineparser.cpp \
     patient.cpp
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/faccountcoreplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/faccountcoreplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/faccountcoreplugin_es.ts
+# include translations
+TRANSLATION_NAME = facore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES += $${PWD}/Core.pluginspec

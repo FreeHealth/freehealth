@@ -22,6 +22,6 @@ OTHER_FILES = %PluginName%.pluginspec
 
 PROVIDER = %VendorName%
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/%PluginName:l%_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/%PluginName:l%_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/%PluginName:l%_es.ts
+T# include translations
+TRANSLATION_NAME = %PluginName:l%
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
