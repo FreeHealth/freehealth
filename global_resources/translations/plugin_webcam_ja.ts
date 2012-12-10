@@ -145,7 +145,7 @@
 <context>
     <name>Webcam::WebcamPlugin</name>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="153"/>
+        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="150"/>
         <source>Initializing Webcam...</source>
         <translation type="unfinished"></translation>
     </message>
