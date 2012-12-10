@@ -136,36 +136,12 @@
 <context>
     <name>PMH::Internal::PmhViewer</name>
     <message>
-        <source>Past Medical History</source>
-        <translation>Antécédents</translation>
-    </message>
-    <message>
         <source>General information</source>
         <translation>Informations générales</translation>
     </message>
     <message>
-        <source>Personal label</source>
-        <translation>Intitulé personnalisé</translation>
-    </message>
-    <message>
-        <source>Confidence index</source>
-        <translation>Indice de confiance</translation>
-    </message>
-    <message>
-        <source>Privacy</source>
-        <translation>Accès privé</translation>
-    </message>
-    <message>
-        <source>Make this PMHx private</source>
-        <translation>Privatiser cet antécédent</translation>
-    </message>
-    <message>
         <source>Category</source>
         <translation>Catégorie</translation>
-    </message>
-    <message>
-        <source>Manage ICD10 Codes</source>
-        <translation>Gérer les codes CIM10</translation>
     </message>
     <message>
         <source>Episodes</source>
@@ -188,24 +164,56 @@
         <translation></translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Contacts</source>
         <translation></translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation></translation>
+        <source>ICD 10</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Patient</source>
-        <translation></translation>
+        <source>Manage &amp;ICD10 Codes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GroupBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Label:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Date:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This PMHx is &amp;private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>unsure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>proven</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Confidence index:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Past Medical History for PATIENT NAME</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

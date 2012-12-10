@@ -5,111 +5,111 @@
     <name>tkConstants</name>
     <message>
         <source>English</source>
-        <translation >Deutsch</translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <source>Recent files</source>
-        <translation >Letzte Dateien</translation>
+        <translation>Letzte Dateien</translation>
     </message>
     <message>
         <source>Templates</source>
-        <translation >Vorlagen</translation>
+        <translation>Vorlagen</translation>
     </message>
     <message>
         <source>Font</source>
-        <translation >Schrift</translation>
+        <translation>Schrift</translation>
     </message>
     <message>
         <source>Paragraph</source>
-        <translation >Absatz</translation>
+        <translation>Absatz</translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation >Plugins</translation>
+        <translation>Plugins</translation>
     </message>
     <message>
         <source>About</source>
-        <translation >Über</translation>
+        <translation>Über</translation>
     </message>
     <message>
         <source>About databases</source>
-        <translation >Über Datenbanken...</translation>
+        <translation>Über Datenbanken...</translation>
     </message>
     <message>
         <source>Update available</source>
-        <translation >Update verfügbar</translation>
+        <translation>Update verfügbar</translation>
     </message>
     <message>
         <source>Print preview</source>
-        <translation >Druckvorschau</translation>
+        <translation>Druckvorschau</translation>
     </message>
     <message>
         <source>Identity</source>
-        <translation >Identität</translation>
+        <translation>Identität</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation >Ö&amp;ffnen...</translation>
+        <translation>Ö&amp;ffnen...</translation>
     </message>
     <message>
         <source>Save &amp;as...</source>
-        <translation >Speichern &amp;unter...</translation>
+        <translation>Speichern &amp;unter...</translation>
     </message>
     <message>
         <source>Open a prescription</source>
-        <translation >Öffnen eines Rezeptes</translation>
+        <translation>Öffnen eines Rezeptes</translation>
     </message>
     <message>
         <source>Save a prescription</source>
-        <translation >Speichern eines Rezeptes</translation>
+        <translation>Speichern eines Rezeptes</translation>
     </message>
     <message>
         <source>Print a prescription</source>
-        <translation >Drucken eines Rezept</translation>
+        <translation>Drucken eines Rezept</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation >Schliessen</translation>
+        <translation>Schliessen</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation >Kopieren</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation >Ausschneiden</translation>
+        <translation>Ausschneiden</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation >Einfügen</translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation >Rückgängig</translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation >Wieder tun</translation>
+        <translation>Wieder tun</translation>
     </message>
     <message>
         <source>Deselect</source>
-        <translation >Demarkieren</translation>
+        <translation>Demarkieren</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation >Nächstes</translation>
+        <translation>Nächstes</translation>
     </message>
     <message>
         <source>Previous</source>
-        <translation >Vorheriges</translation>
+        <translation>Vorheriges</translation>
     </message>
     <message>
         <source>Add to list</source>
-        <translation >Zur Liste hinzufügen</translation>
+        <translation>Zur Liste hinzufügen</translation>
     </message>
     <message>
         <source>Move item up</source>
-        <translation >Bewege das Item nach oben</translation>
+        <translation>Bewege das Item nach oben</translation>
     </message>
     <message>
         <source>Move item down</source>
@@ -117,7 +117,7 @@
     </message>
     <message>
         <source>Clear</source>
-        <translation >Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Sort</source>
@@ -442,7 +442,7 @@
     <message>
         <source>View synthetic interactions</source>
         <translatorcomment>bad translation - what means &quot;synthetic&quot; in this case &quot;theoretical&quot;?</translatorcomment>
-        <translation >Syntetische Interaktionen ansehen</translation>
+        <translation>Syntetische Interaktionen ansehen</translation>
     </message>
     <message>
         <source>from</source>
@@ -450,11 +450,11 @@
     </message>
     <message>
         <source>to</source>
-        <translation >zu</translation>
+        <translation>zu</translation>
     </message>
     <message>
         <source>from %1 to %2</source>
-        <translation >von %1 bis %2</translation>
+        <translation>von %1 bis %2</translation>
     </message>
     <message>
         <source>during</source>
@@ -494,11 +494,11 @@
     </message>
     <message>
         <source>Take into account</source>
-        <translation >Erhalte infos zum Account</translation>
+        <translation>Erhalte infos zum Account</translation>
     </message>
     <message>
         <source>Discouraged</source>
-        <translation >Vermeidung</translation>
+        <translation>Vermeidung</translation>
     </message>
     <message>
         <source>Contraindication</source>
@@ -547,7 +547,7 @@
     </message>
     <message>
         <source>Database %1: Schema error.</source>
-        <translation >Datenbank %1: Schema-Fehler</translation>
+        <translation>Datenbank %1: Schema-Fehler</translation>
     </message>
     <message>
         <source>Change password</source>
@@ -569,19 +569,19 @@ Ort: %2</translation>
     </message>
     <message>
         <source>Unable to open database %1 - Error: %2</source>
-        <translation >Kann Datenbank %1 nicht öffnen - Fehler: %2</translation>
+        <translation>Kann Datenbank %1 nicht öffnen - Fehler: %2</translation>
     </message>
     <message>
         <source>Database %1 successfully created</source>
-        <translation >Datenbank %1 erfolgreich erstellt</translation>
+        <translation>Datenbank %1 erfolgreich erstellt</translation>
     </message>
     <message>
         <source>User %1 successfully created</source>
-        <translation >Benutzer %1 erfolgreich erstellt</translation>
+        <translation>Benutzer %1 erfolgreich erstellt</translation>
     </message>
     <message>
         <source>Searching database %1 in path %2</source>
-        <translation >Suche Datenbank %1 in Pfad %2</translation>
+        <translation>Suche Datenbank %1 in Pfad %2</translation>
     </message>
     <message>
         <source>Duration</source>
@@ -754,7 +754,7 @@ Ort: %2</translation>
     <message>
         <source>Starting application at %1</source>
         <translatorcomment>maybe &quot;Starte das Programm um %1&quot;?</translatorcomment>
-        <translation >Start der Applikation um %1</translation>
+        <translation>Start der Applikation um %1</translation>
     </message>
     <message>
         <source>Initializing libraries...</source>
@@ -822,11 +822,11 @@ Ort: %2</translation>
     </message>
     <message>
         <source>Current version:</source>
-        <translation >Aktuelle Version:</translation>
+        <translation>Aktuelle Version:</translation>
     </message>
     <message>
         <source>Latest version:</source>
-        <translation >Neueste Version:</translation>
+        <translation>Neueste Version:</translation>
     </message>
     <message>
         <source>Update</source>
@@ -838,662 +838,662 @@ Ort: %2</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation >Installation</translation>
+        <translation>Installation</translation>
     </message>
     <message>
         <source>Recommended update frequency</source>
-        <translation >Empfohlene Aktualisierungsfrequenz</translation>
+        <translation>Empfohlene Aktualisierungsfrequenz</translation>
     </message>
     <message>
         <source>The FreeMedForms community</source>
-        <translation >FreeMedForms-Community</translation>
+        <translation>FreeMedForms-Community</translation>
     </message>
     <message>
         <source>Please contact the development team.</source>
-        <translation >Bitte kontaktieren Sie das Entwicklerteam.</translation>
+        <translation>Bitte kontaktieren Sie das Entwicklerteam.</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation >Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation >Status</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>ICD10</source>
-        <translation >ICD10</translation>
+        <translation>ICD10</translation>
     </message>
     <message>
         <source>now</source>
-        <translation >jetzt</translation>
+        <translation>jetzt</translation>
     </message>
     <message>
         <source>low</source>
-        <translation >niedrig</translation>
+        <translation>niedrig</translation>
     </message>
     <message>
         <source>medium</source>
-        <translation >mittel</translation>
+        <translation>mittel</translation>
     </message>
     <message>
         <source>high</source>
-        <translation >hoch</translation>
+        <translation>hoch</translation>
     </message>
     <message>
         <source>modify</source>
         <translatorcomment>maybe bad translation</translatorcomment>
-        <translation >ändern</translation>
+        <translation>ändern</translation>
     </message>
     <message>
         <source>Forms</source>
-        <translation >Formulare</translation>
+        <translation>Formulare</translation>
     </message>
     <message>
         <source>Subforms</source>
-        <translation >Subformulare</translation>
+        <translation>Subformulare</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation >Server</translation>
+        <translation>Server</translation>
     </message>
     <message>
         <source>Package</source>
-        <translation >Paket</translation>
+        <translation>Paket</translation>
     </message>
     <message>
         <source>Servers</source>
-        <translation >Server</translation>
+        <translation>Server</translation>
     </message>
     <message>
         <source>Packages</source>
-        <translation >Pakete</translation>
+        <translation>Pakete</translation>
     </message>
     <message>
         <source>Server(s)</source>
-        <translation >Server</translation>
+        <translation>Server</translation>
     </message>
     <message>
         <source>Package(s)</source>
-        <translation >Paket(e)</translation>
+        <translation>Paket(e)</translation>
     </message>
     <message>
         <source>Unknown server</source>
-        <translation >Unbekannter Server</translation>
+        <translation>Unbekannter Server</translation>
     </message>
     <message>
         <source>Installed</source>
-        <translation >Installiert</translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <source>Currently installed</source>
-        <translation >Momentan installiert</translation>
+        <translation>Momentan installiert</translation>
     </message>
     <message>
         <source>Undefined</source>
-        <translation >Undefiniert</translation>
+        <translation>Undefiniert</translation>
     </message>
     <message>
         <source>License</source>
-        <translation >Lizenz</translation>
+        <translation>Lizenz</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation >Beschriftung</translation>
+        <translation>Beschriftung</translation>
     </message>
     <message>
         <source>Unique identifier</source>
-        <translation >Eindeutiger Bezeichner</translation>
+        <translation>Eindeutiger Bezeichner</translation>
     </message>
     <message>
         <source>URL</source>
-        <translation >URL</translation>
+        <translation>URL</translation>
     </message>
     <message>
         <source>Token</source>
-        <translation >Token</translation>
+        <translation>Token</translation>
     </message>
     <message>
         <source>Token: %1</source>
-        <translation >Token: %1</translation>
+        <translation>Token: %1</translation>
     </message>
     <message>
         <source>Edit token</source>
-        <translation >Token bearbeiten</translation>
+        <translation>Token bearbeiten</translation>
     </message>
     <message>
         <source>Alert</source>
-        <translation >Alarm</translation>
+        <translation>Alarm</translation>
     </message>
     <message>
         <source>Dynamic alert</source>
-        <translation >Dynamischer Alarm</translation>
+        <translation>Dynamischer Alarm</translation>
     </message>
     <message>
         <source>Settings recovered</source>
-        <translation >Einstellungen wiederhergestelt</translation>
+        <translation>Einstellungen wiederhergestelt</translation>
     </message>
     <message>
         <source>Show details</source>
-        <translation >Details anzeigen</translation>
+        <translation>Details anzeigen</translation>
     </message>
     <message>
         <source>Data pack</source>
-        <translation >Datenpaket</translation>
+        <translation>Datenpaket</translation>
     </message>
     <message>
         <source>Data pack manager</source>
-        <translation >Datenpaket-Manager</translation>
+        <translation>Datenpaket-Manager</translation>
     </message>
     <message>
         <source>Last modification</source>
-        <translation >Letzte Änderung</translation>
+        <translation>Letzte Änderung</translation>
     </message>
     <message>
         <source>Data type</source>
-        <translation >Datentyp</translation>
+        <translation>Datentyp</translation>
     </message>
     <message>
         <source>Zip codes</source>
-        <translation >Postleitzahlen</translation>
+        <translation>Postleitzahlen</translation>
     </message>
     <message>
         <source>User documents</source>
-        <translation >Benutzerdokumente</translation>
+        <translation>Benutzerdokumente</translation>
     </message>
     <message>
         <source>International classification of diseases</source>
-        <translation >Internationale Krankheitsklassifikation</translation>
+        <translation>Internationale Krankheitsklassifikation</translation>
     </message>
     <message>
         <source>Diseases classifications</source>
-        <translation >Krankheitenklassifikationen</translation>
+        <translation>Krankheitenklassifikationen</translation>
     </message>
     <message>
         <source>Various</source>
-        <translation >Verschiedenes</translation>
+        <translation>Verschiedenes</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation >Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <source>Rights</source>
-        <translation >Rechte</translation>
+        <translation>Rechte</translation>
     </message>
     <message>
         <source>User rights</source>
-        <translation >Benutzerrechte</translation>
+        <translation>Benutzerrechte</translation>
     </message>
     <message>
         <source>Medical rights</source>
-        <translation >Medizinische Rechte</translation>
+        <translation>Medizinische Rechte</translation>
     </message>
     <message>
         <source>Administrative rights</source>
-        <translation >Administrative Rechte</translation>
+        <translation>Administrative Rechte</translation>
     </message>
     <message>
         <source>User manager rights</source>
-        <translation >Benutzerverwaltungs-Rechte</translation>
+        <translation>Benutzerverwaltungs-Rechte</translation>
     </message>
     <message>
         <source>Drug rights</source>
-        <translation >Medikamenten-Rechte</translation>
+        <translation>Medikamenten-Rechte</translation>
     </message>
     <message>
         <source>Telephone</source>
-        <translation >Telefon</translation>
+        <translation>Telefon</translation>
     </message>
     <message>
         <source>Fax</source>
-        <translation >Fax</translation>
+        <translation>Fax</translation>
     </message>
     <message>
         <source>E-Mail</source>
-        <translation >E-Mail</translation>
+        <translation>E-Mail</translation>
     </message>
     <message>
         <source>Path</source>
-        <translation >Pfad</translation>
+        <translation>Pfad</translation>
     </message>
     <message>
         <source>Save file</source>
-        <translation >Datei speichern</translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <source>Wrong number of tags (%1)</source>
         <translatorcomment>evtl &quot;Etiketten&quot;?</translatorcomment>
-        <translation >Falsche Anzahl an Tags (%1)</translation>
+        <translation>Falsche Anzahl an Tags (%1)</translation>
     </message>
     <message>
         <source>Wrong root tag %1 %2.</source>
-        <translation >Falscher Wurzel-Tag %1 %2.</translation>
+        <translation>Falscher Wurzel-Tag %1 %2.</translation>
     </message>
     <message>
         <source>General preferences</source>
-        <translation >Allgemeine Einstellungen</translation>
+        <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
         <source>User preferences</source>
-        <translation >Benutzereinstellungen</translation>
+        <translation>Benutzereinstellungen</translation>
     </message>
     <message>
         <source>Internet connection preferences</source>
-        <translation >Internet-Verbindungseinstellungen</translation>
+        <translation>Internet-Verbindungseinstellungen</translation>
     </message>
     <message>
         <source>Proxy</source>
-        <translation >Proxy</translation>
+        <translation>Proxy</translation>
     </message>
     <message>
         <source>Last check</source>
-        <translation >Letzter Check</translation>
+        <translation>Letzter Check</translation>
     </message>
     <message>
         <source>Connected</source>
-        <translation >Verbunden</translation>
+        <translation>Verbunden</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation >Nicht verbunden</translation>
+        <translation>Nicht verbunden</translation>
     </message>
     <message>
         <source>Version information</source>
-        <translation >Versionsinformation</translation>
+        <translation>Versionsinformation</translation>
     </message>
     <message>
         <source>Agenda</source>
-        <translation >Terminplanung</translation>
+        <translation>Terminplanung</translation>
     </message>
     <message>
         <source>Agenda event</source>
-        <translation >Termineintrag</translation>
+        <translation>Termineintrag</translation>
     </message>
     <message>
         <source>Agenda events</source>
-        <translation >Termineinträge</translation>
+        <translation>Termineinträge</translation>
     </message>
     <message>
         <source>No availability</source>
-        <translation >Keine Verfügbarkeit</translation>
+        <translation>Keine Verfügbarkeit</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation >Besitzer</translation>
+        <translation>Besitzer</translation>
     </message>
     <message>
         <source>Today</source>
-        <translation >Heute</translation>
+        <translation>Heute</translation>
     </message>
     <message>
         <source>Tomorrow</source>
-        <translation >Morgen</translation>
+        <translation>Morgen</translation>
     </message>
     <message>
         <source>Yesterday</source>
-        <translation >gestern</translation>
+        <translation>gestern</translation>
     </message>
     <message>
         <source>Current week</source>
-        <translation >Diese Woche</translation>
+        <translation>Diese Woche</translation>
     </message>
     <message>
         <source>Next week</source>
-        <translation >Nächste Woche</translation>
+        <translation>Nächste Woche</translation>
     </message>
     <message>
         <source>Previous week</source>
-        <translation >Vorige Woche</translation>
+        <translation>Vorige Woche</translation>
     </message>
     <message>
         <source>Current month</source>
-        <translation >Dieser Monat</translation>
+        <translation>Dieser Monat</translation>
     </message>
     <message>
         <source>Next month</source>
-        <translation >Nächster Monat</translation>
+        <translation>Nächster Monat</translation>
     </message>
     <message>
         <source>Arrived</source>
         <translatorcomment>no capital!!</translatorcomment>
-        <translation >Angekommen</translation>
+        <translation>Angekommen</translation>
     </message>
     <message>
         <source>Cancelled</source>
-        <translation >Abgesagt</translation>
+        <translation>Abgesagt</translation>
     </message>
     <message>
         <source>This feature is not yet implemented.</source>
-        <translation >Dieses Feature ist noch nicht implementiert.</translation>
+        <translation>Dieses Feature ist noch nicht implementiert.</translation>
     </message>
     <message>
         <source>Checking for updates...</source>
-        <translation >Suche nach Updates...</translation>
+        <translation>Suche nach Updates...</translation>
     </message>
     <message>
         <source>Initializing databases...</source>
-        <translation >Initialisiere Datenbanken...</translation>
+        <translation>Initialisiere Datenbanken...</translation>
     </message>
     <message>
         <source>Welcome to FreeMedForms, you are now connected.</source>
-        <translation >Willkommen zu FreeMedForms, Sie sind nun verbunden.</translation>
+        <translation>Willkommen zu FreeMedForms, Sie sind nun verbunden.</translation>
     </message>
     <message>
         <source>No user connected.</source>
-        <translation >Kein User verbunden.</translation>
+        <translation>Kein User verbunden.</translation>
     </message>
     <message>
         <source>Path %1 does not exist</source>
-        <translation >Pfad %1 existiert nicht</translation>
+        <translation>Pfad %1 existiert nicht</translation>
     </message>
     <message>
         <source>Path %1 is not empty</source>
-        <translation >Pfad %1 ist nicht leer</translation>
+        <translation>Pfad %1 ist nicht leer</translation>
     </message>
     <message>
         <source>Path %1 contains dirs</source>
-        <translation >Pfad %1 beinhaltet Verzeichnisse</translation>
+        <translation>Pfad %1 beinhaltet Verzeichnisse</translation>
     </message>
     <message>
         <source>Path %1 can not be removed</source>
-        <translation >Pfad %1 kann nicht entfernt werden</translation>
+        <translation>Pfad %1 kann nicht entfernt werden</translation>
     </message>
     <message>
         <source>File %1 does not exist</source>
-        <translation >File %1 existiert nicht</translation>
+        <translation>File %1 existiert nicht</translation>
     </message>
     <message>
         <source>File %1 is not readable</source>
-        <translation >Datei %1 ist nicht lesbar</translation>
+        <translation>Datei %1 ist nicht lesbar</translation>
     </message>
     <message>
         <source>File %1 can not be removed</source>
-        <translation >Dateil %1 kann nicht entfernt werden</translation>
+        <translation>Dateil %1 kann nicht entfernt werden</translation>
     </message>
     <message>
         <source>File %1 loaded</source>
-        <translation >File %1 geladen</translation>
+        <translation>File %1 geladen</translation>
     </message>
     <message>
         <source>Open file</source>
-        <translation >Öffnen der Datei</translation>
+        <translation>Öffnen der Datei</translation>
     </message>
     <message>
         <source>Opening file %1</source>
-        <translation >Öffne Datei %1</translation>
+        <translation>Öffne Datei %1</translation>
     </message>
     <message>
         <source>Saving file %1</source>
-        <translation >Speichere Datei %1</translation>
+        <translation>Speichere Datei %1</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation >Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation >Unbekannt</translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <source>Ready</source>
-        <translation >Fertig</translation>
+        <translation>Fertig</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation >Nachrichten</translation>
+        <translation>Nachrichten</translation>
     </message>
     <message>
         <source>Logged Messages</source>
-        <translation >Geloggte Nachrichten</translation>
+        <translation>Geloggte Nachrichten</translation>
     </message>
     <message>
         <source>Errors</source>
-        <translation >Fehler</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <source>Logged Errors</source>
-        <translation >Geloggte Fehler</translation>
+        <translation>Geloggte Fehler</translation>
     </message>
     <message>
         <source>%1 is not avaible</source>
-        <translation >%1 ist nicht verfügbar</translation>
+        <translation>%1 ist nicht verfügbar</translation>
     </message>
     <message>
         <source>%1 is not avaible and can not be created</source>
-        <translation >%1 ist nicht verfügbar und kann nicht erstellt werden</translation>
+        <translation>%1 ist nicht verfügbar und kann nicht erstellt werden</translation>
     </message>
     <message>
         <source>%1 are not avaible</source>
-        <translation >%1 ist nicht verfügbar</translation>
+        <translation>%1 ist nicht verfügbar</translation>
     </message>
     <message>
         <source>Setting %1 path to %2</source>
-        <translation >Setze %1 pfad tu %2</translation>
+        <translation>Setze %1 pfad tu %2</translation>
     </message>
     <message>
         <source>Error %1 from database %2</source>
-        <translation >Error %1 von Datenbank %2</translation>
+        <translation>Error %1 von Datenbank %2</translation>
     </message>
     <message>
         <source>Creating default settings for %1</source>
-        <translation >Erstelle Voreinstellung für %1</translation>
+        <translation>Erstelle Voreinstellung für %1</translation>
     </message>
     <message>
         <source>Drugs</source>
-        <translation >Medikamente</translation>
+        <translation>Medikamente</translation>
     </message>
     <message>
         <source>Reading settings file</source>
-        <translation >Lese Einstellungen</translation>
+        <translation>Lese Einstellungen</translation>
     </message>
     <message>
         <source>No object to translate</source>
-        <translation >Kein Objekt zum übersetzen</translation>
+        <translation>Kein Objekt zum übersetzen</translation>
     </message>
     <message>
         <source>Please describe your problem.</source>
-        <translation >Bitte beschreibe dein Problem.</translation>
+        <translation>Bitte beschreibe dein Problem.</translation>
     </message>
     <message>
         <source>Starting to send message.</source>
-        <translation >Starte einen Nachrichtenversand.</translation>
+        <translation>Starte einen Nachrichtenversand.</translation>
     </message>
     <message>
         <source>Checking for updates from %1</source>
-        <translation >Überprüfe Updates von %1</translation>
+        <translation>Überprüfe Updates von %1</translation>
     </message>
     <message>
         <source>Version up to date</source>
-        <translation >Version ist auf dem neuesten Stand</translation>
+        <translation>Version ist auf dem neuesten Stand</translation>
     </message>
     <message>
         <source>Packager</source>
-        <translation >Paketierer</translation>
+        <translation>Paketierer</translation>
     </message>
     <message>
         <source>Packager for %1</source>
-        <translation >Paketierer für %1</translation>
+        <translation>Paketierer für %1</translation>
     </message>
     <message>
         <source>Drugs Database Management</source>
-        <translation >Medikamenten Datenbank Management</translation>
+        <translation>Medikamenten Datenbank Management</translation>
     </message>
     <message>
         <source>Medical advisors</source>
-        <translation >Medizinische Advisors</translation>
+        <translation>Medizinische Advisors</translation>
     </message>
     <message>
         <source>Medical advisor</source>
-        <translation >Medical advisor</translation>
+        <translation>Medical advisor</translation>
     </message>
     <message>
         <source>Full application</source>
-        <translation >Volle Applikation</translation>
+        <translation>Volle Applikation</translation>
     </message>
     <message>
         <source>Header</source>
-        <translation >Kopfzeile</translation>
+        <translation>Kopfzeile</translation>
     </message>
     <message>
         <source>Footer</source>
-        <translation >Fuß</translation>
+        <translation>Fuß</translation>
     </message>
     <message>
         <source>Watermark</source>
-        <translation >Wasserzeichen</translation>
+        <translation>Wasserzeichen</translation>
     </message>
     <message>
         <source>France</source>
-        <translation >Frankreich</translation>
+        <translation>Frankreich</translation>
     </message>
     <message>
         <source>Germany</source>
-        <translation >Deutschland</translation>
+        <translation>Deutschland</translation>
     </message>
     <message>
         <source>Austria</source>
-        <translation >Österreich</translation>
+        <translation>Österreich</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation >Alter</translation>
+        <translation>Alter</translation>
     </message>
     <message>
         <source>Age in years</source>
-        <translation >Alter in Jahren</translation>
+        <translation>Alter in Jahren</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation >Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation >Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <source>Creatinin clerance</source>
-        <translation >Kreatinin-Clearance</translation>
+        <translation>Kreatinin-Clearance</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation >Units</translation>
+        <translation>Units</translation>
     </message>
     <message>
         <source>Patient</source>
-        <translation >Patient</translation>
+        <translation>Patient</translation>
     </message>
     <message>
         <source>Patients</source>
-        <translation >Patienten</translation>
+        <translation>Patienten</translation>
     </message>
     <message>
         <source>Patient database</source>
-        <translation >Patientendatenbank</translation>
+        <translation>Patientendatenbank</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation >Adresse</translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <source>Male</source>
-        <translation >Männlich</translation>
+        <translation>Männlich</translation>
     </message>
     <message>
         <source>Female</source>
-        <translation >Weiblich</translation>
+        <translation>Weiblich</translation>
     </message>
     <message>
         <source>Hermaphrodism</source>
-        <translation >Hermaphrodismus</translation>
+        <translation>Hermaphrodismus</translation>
     </message>
     <message>
         <source>Mister</source>
-        <translation >Herr</translation>
+        <translation>Herr</translation>
     </message>
     <message>
         <source>Miss</source>
-        <translation >Frau</translation>
+        <translation>Frau</translation>
     </message>
     <message>
         <source>Madam</source>
-        <translation >Fräulein</translation>
+        <translation>Fräulein</translation>
     </message>
     <message>
         <source>Doctor</source>
-        <translation >Doktor</translation>
+        <translation>Doktor</translation>
     </message>
     <message>
         <source>Professor</source>
-        <translation >Professor</translation>
+        <translation>Professor</translation>
     </message>
     <message>
         <source>Ctrl+L</source>
         <extracomment>Text Align Left shortcut key
 ----------
 Text Align Left shortcut key : Mac specific</extracomment>
-        <translation >Strg+L</translation>
+        <translation>Strg+L</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
         <extracomment>Text Align Right shortcut key
 ----------
 Text Align Right shortcut key : Mac specific</extracomment>
-        <translation >Strg+R</translation>
+        <translation>Strg+R</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
         <extracomment>Text Align Center shortcut key
 ----------
 Text Align Center shortcut key : Mac specific</extracomment>
-        <translation >Strg+E</translation>
+        <translation>Strg+E</translation>
     </message>
     <message>
         <source>Ctrl+J</source>
         <extracomment>Text Align Justify shortcut key
 ----------
 Text Align Justify shortcut key : Mac specific</extracomment>
-        <translation >Strg+J</translation>
+        <translation>Strg+J</translation>
     </message>
     <message>
         <source>Ctrl+Shift+T</source>
         <extracomment>Add table Editor shortcut key</extracomment>
-        <translation >Strg+Umschalt+T</translation>
+        <translation>Strg+Umschalt+T</translation>
     </message>
     <message>
         <source>Toggle toolbar</source>
-        <translation >Werkzeugleiste aus-/einblenden</translation>
+        <translation>Werkzeugleiste aus-/einblenden</translation>
     </message>
     <message>
         <source>Open in editor</source>
-        <translation >Öffnen in einem Editor</translation>
+        <translation>Öffnen in einem Editor</translation>
     </message>
     <message>
         <source>Save editor</source>
-        <translation >Speichern in einem Editor</translation>
+        <translation>Speichern in einem Editor</translation>
     </message>
     <message>
         <source>All languages</source>
-        <translation >Alle Sprachen</translation>
+        <translation>Alle Sprachen</translation>
     </message>
     <message>
         <source>All other languages</source>
-        <translation >Alle anderen Sprachen</translation>
+        <translation>Alle anderen Sprachen</translation>
     </message>
     <message>
         <source>MM dd yyyy</source>
         <extracomment>This date format will be used in every QDateEdit only</extracomment>
-        <translation >dd.MM.yyyy</translation>
+        <translation>dd.MM.yyyy</translation>
     </message>
     <message>
         <source>MM dd yyyy hh:mm</source>
         <extracomment>This date time format will be used in every QDateTimeEdit only</extracomment>
-        <translation >dd.MM.yy hh:mm</translation>
+        <translation>dd.MM.yy hh:mm</translation>
     </message>
     <message>
         <source>hh:mm</source>
         <extracomment>This time format will be used in every QTimeEdit only</extracomment>
-        <translation >hh:mm</translation>
+        <translation>hh:mm</translation>
     </message>
     <message>
         <source>MM-dd-yyyy</source>
@@ -1985,10 +1985,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fatal error: Application failure. Please restart application.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2311,6 +2307,14 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Profession</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Report application error...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

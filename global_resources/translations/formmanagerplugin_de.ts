@@ -162,13 +162,6 @@ Do you really want to remove the current episode?</source>
     </message>
 </context>
 <context>
-    <name>Form::Internal::FormManagerMode</name>
-    <message>
-        <source>Patients Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
         <source>Initializing form manager plugin...</source>

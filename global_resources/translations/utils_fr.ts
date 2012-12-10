@@ -44,7 +44,7 @@
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="2052"/>
+        <location filename="../../libs/utils/database.cpp" line="2055"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -61,42 +61,40 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="113"/>
-        <source>SQL Error: Driver: %1, Database: %2, Query: %3</source>
-        <translation>Erreur SQL : pilote %1, base de données %2, requête %3</translation>
+        <location filename="../../libs/utils/log.cpp" line="110"/>
+        <source>SQL Error:
+     * %1
+     * %2
+     * %3</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="118"/>
-        <source>%1: %2 - SQL Error: Driver: %3, Database: %4, Query: %5</source>
-        <translation>%1 : %2 - Erreur SQL : pilote %3, base de données %4, requête %5</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/log.cpp" line="135"/>
+        <location filename="../../libs/utils/log.cpp" line="129"/>
         <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
         <translation>%1 : %2 - Erreur SQL : pilote %3,hôte %4, port %5, Utilisateur %6, Pass %7</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="149"/>
+        <location filename="../../libs/utils/log.cpp" line="143"/>
         <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="222"/>
+        <location filename="../../libs/utils/log.cpp" line="216"/>
         <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="237"/>
+        <location filename="../../libs/utils/log.cpp" line="231"/>
         <source>LOG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="242"/>
+        <location filename="../../libs/utils/log.cpp" line="236"/>
         <source>ERRORS</source>
         <translation>ERREURS</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="259"/>
+        <location filename="../../libs/utils/log.cpp" line="253"/>
         <source>MESSAGES</source>
         <translation></translation>
     </message>
@@ -132,14 +130,14 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="586"/>
-        <location filename="../../libs/utils/global.cpp" line="591"/>
-        <location filename="../../libs/utils/global.cpp" line="606"/>
+        <location filename="../../libs/utils/global.cpp" line="610"/>
+        <location filename="../../libs/utils/global.cpp" line="615"/>
+        <location filename="../../libs/utils/global.cpp" line="630"/>
         <source>Error %1 while trying to save file %2</source>
         <translation>Erreur %1 en tentant de sauvegarder le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="622"/>
+        <location filename="../../libs/utils/global.cpp" line="646"/>
         <source>Save to file</source>
         <translation>Sauvegarde dans le fichier</translation>
     </message>
@@ -150,89 +148,89 @@
         <translation>Erreur en récupérant les données de uname sous %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="542"/>
+        <location filename="../../libs/utils/global.cpp" line="566"/>
         <source>%1: %2 does not exist. Trying to create it.</source>
         <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="545"/>
+        <location filename="../../libs/utils/global.cpp" line="569"/>
         <source>Unable to create the %1: %2.</source>
         <translation>Impossible de créer %1 : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="550"/>
+        <location filename="../../libs/utils/global.cpp" line="574"/>
         <source>%1: %2 does not exist.</source>
         <translation>%1 : %2 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="581"/>
+        <location filename="../../libs/utils/global.cpp" line="605"/>
         <source>File %1 already exists. Do you want de replace it?</source>
         <translation>Fichier %1 existe déjà. Voulez-vous le remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="598"/>
-        <location filename="../../libs/utils/global.cpp" line="610"/>
+        <location filename="../../libs/utils/global.cpp" line="622"/>
+        <location filename="../../libs/utils/global.cpp" line="634"/>
         <source>%1 successfully saved</source>
         <translation>%1 correctement sauvegardé</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="600"/>
+        <location filename="../../libs/utils/global.cpp" line="624"/>
         <source>Save file aborted by user (file already exists): </source>
         <translation>Sauvegarde annulée par l&apos;utilisateur (le fichier existe déjà) : </translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="656"/>
+        <location filename="../../libs/utils/global.cpp" line="680"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation>Le fichier %1 n&apos;existe pas ou n&apos;est pas lisible.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="662"/>
+        <location filename="../../libs/utils/global.cpp" line="686"/>
         <source>Error %1 while trying to open file %2</source>
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="873"/>
+        <location filename="../../libs/utils/global.cpp" line="909"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="964"/>
+        <location filename="../../libs/utils/global.cpp" line="1000"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="965"/>
+        <location filename="../../libs/utils/global.cpp" line="1001"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1026"/>
+        <location filename="../../libs/utils/global.cpp" line="1062"/>
         <source>Do you agree these terms?</source>
         <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1006"/>
-        <location filename="../../libs/utils/global.cpp" line="1007"/>
+        <location filename="../../libs/utils/global.cpp" line="1042"/>
+        <location filename="../../libs/utils/global.cpp" line="1043"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1018"/>
+        <location filename="../../libs/utils/global.cpp" line="1054"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1096"/>
+        <location filename="../../libs/utils/global.cpp" line="1132"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1101"/>
+        <location filename="../../libs/utils/global.cpp" line="1137"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1650"/>
+        <location filename="../../libs/utils/global.cpp" line="1685"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -359,61 +357,6 @@
         <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="76"/>
         <source>Update text</source>
         <translation>Texte de mise à jour</translation>
-    </message>
-</context>
-<context>
-    <name>Utils::HttpDownloader</name>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="97"/>
-        <source>Initialization of the download</source>
-        <translation>Initialisation du téléchargement</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="111"/>
-        <source>Start downloading: %1 to %2</source>
-        <translation>Début du téléchargement : %1 à %2</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="131"/>
-        <source>There already exists a file called %1 in the current directory. Overwrite?</source>
-        <translation>Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="139"/>
-        <source>Unable to save the file %1: %2.</source>
-        <translation>Impossible de sauvegarder le fichier %1 : %2.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="181"/>
-        <source>Download finished with an error: %1.</source>
-        <translation>Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="184"/>
-        <source>Download finished.</source>
-        <translation>Téléchargement terminé.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="195"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="200"/>
-        <source>HTTP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
-        <source>Redirect to %1?</source>
-        <translation>Redirigé vers %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
-        <source>Download failed: %1.</source>
-        <translation>Le téléchargement a échoué %1.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="210"/>
-        <source>Downloaded %1 to current directory.</source>
-        <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>
 </context>
 <context>
@@ -583,6 +526,71 @@
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="381"/>
         <source>XML</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::Internal::HttpDownloaderPrivate</name>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="224"/>
+        <source>Initialization of the download</source>
+        <translation type="unfinished">Initialisation du téléchargement</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="239"/>
+        <source>There already exists a file called %1 in the current directory. Overwrite?</source>
+        <translation type="unfinished">Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="247"/>
+        <source>Unable to save the file %1: %2.</source>
+        <translation type="unfinished">Impossible de sauvegarder le fichier %1 : %2.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="269"/>
+        <source>Start downloading: %1 to %2</source>
+        <translation type="unfinished">Début du téléchargement : %1 à %2</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="310"/>
+        <source>Download finished with an error: %1.</source>
+        <translation type="unfinished">Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="313"/>
+        <source>Download finished.</source>
+        <translation type="unfinished">Téléchargement terminé.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="323"/>
+        <source>Download failed: %1.</source>
+        <translation type="unfinished">Le téléchargement a échoué %1.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="324"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="329"/>
+        <source>HTTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="327"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="328"/>
+        <source>Redirect to %1?</source>
+        <translation type="unfinished">Redirigé vers %1 ?</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="339"/>
+        <source>Downloaded %1 to current directory.</source>
+        <translation type="unfinished">Téléchargement terminé de %1 dans le répertoire courant.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="397"/>
+        <source>Server authentication required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="424"/>
+        <source>Proxy authentication required</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

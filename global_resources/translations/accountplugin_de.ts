@@ -115,63 +115,63 @@
     </message>
 </context>
 <context>
-    <name>Account::Internal::AccountDatabaseDefautsWidget</name>
-    <message>
-        <source>Available defaults</source>
-        <translation>Verfügbare Defaults</translation>
-    </message>
-    <message>
-        <source>Medical procedure</source>
-        <translation>Medizinische Prozedur</translation>
-    </message>
-    <message>
-        <source>Available Movements</source>
-        <translation>Verfügbare Bewegungen</translation>
-    </message>
-    <message>
-        <source>Distance rules</source>
-        <translation>Regeln für Distanzen (Visite)</translation>
-    </message>
-    <message>
-        <source>Insurance</source>
-        <translation>Versicherung</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Sonstiges</translation>
-    </message>
-    <message>
-        <source>Create defaults</source>
-        <translation>Defaults erzeugen</translation>
-    </message>
-    <message>
-        <source>Load datapack</source>
-        <translation>Datenpaket laden</translation>
-    </message>
-    <message>
-        <source>Medical procedure defaults can not be included.</source>
-        <translation>Medizinische Prozeduren-Default kann nicht eingebunden werden.</translation>
-    </message>
-    <message>
-        <source>Only few medical procedures are included.
-You have to complete them yourself.</source>
-        <translation>Nur wenige Medizinische Prozeduren sind inkludiert. Sie müssen die restlichen selbst vervollständigen.</translation>
-    </message>
-    <message>
-        <source>Minimal defaults.</source>
-        <translation>Minimale Defaults</translation>
-    </message>
+    <name>Account::Internal::AccountDatabaseDefaultsWidget</name>
     <message>
         <source>Form</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available defaults</source>
+        <translation type="unfinished">Verfügbare Defaults</translation>
+    </message>
+    <message>
+        <source>Medical procedure</source>
+        <translation type="unfinished">Medizinische Prozedur</translation>
+    </message>
+    <message>
+        <source>Available Movements</source>
+        <translation type="unfinished">Verfügbare Bewegungen</translation>
     </message>
     <message>
         <source>Assets rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Distance rules</source>
+        <translation type="unfinished">Regeln für Distanzen (Visite)</translation>
+    </message>
+    <message>
+        <source>Insurance</source>
+        <translation type="unfinished">Versicherung</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished">Sonstiges</translation>
+    </message>
+    <message>
+        <source>Create defaults</source>
+        <translation type="unfinished">Defaults erzeugen</translation>
+    </message>
+    <message>
+        <source>Load datapack</source>
+        <translation type="unfinished">Datenpaket laden</translation>
+    </message>
+    <message>
+        <source>Medical procedure defaults can not be included.</source>
+        <translation type="unfinished">Medizinische Prozeduren-Default kann nicht eingebunden werden.</translation>
+    </message>
+    <message>
         <source>Medical procedure minimal defaults can not be included.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only few medical procedures are included.
+You have to complete them yourself.</source>
+        <translation type="unfinished">Nur wenige Medizinische Prozeduren sind inkludiert. Sie müssen die restlichen selbst vervollständigen.</translation>
+    </message>
+    <message>
+        <source>Minimal defaults.</source>
+        <translation type="unfinished">Minimale Defaults</translation>
     </message>
     <message>
         <source>Assets Rates defaults can not be included.</source>
@@ -1302,109 +1302,6 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <source>Clear all.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ControlReceipts</name>
-    <message>
-        <source>Euros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a line.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Line deleted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cash</source>
-        <translation type="unfinished">Bar</translation>
-    </message>
-    <message>
-        <source>Chq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Banking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="unfinished">Sonstiges</translation>
-    </message>
-    <message>
-        <source>Dues</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Datum</translation>
-    </message>
-    <message>
-        <source>Acts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Checks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insurance</source>
-        <translation type="unfinished">Versicherung</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="unfinished">Sonstiges</translation>
-    </message>
-    <message>
-        <source>Due</source>
-        <translation type="unfinished">Schulden</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check</source>
-        <translation type="unfinished">Scheck</translation>
-    </message>
-    <message>
-        <source>Due by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract of receipts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Credit Cards</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TOTAL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1640,10 +1640,6 @@ Emplacement : %2</translation>
         <translation>Non</translation>
     </message>
     <message>
-        <source>General</source>
-        <translation>Général</translation>
-    </message>
-    <message>
         <source>Unable to save data in database %1.</source>
         <translation>Impossible de sauvegarder les données dans la base de données %1.</translation>
     </message>
@@ -2307,6 +2303,14 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Profession</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>&amp;General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Report application error...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

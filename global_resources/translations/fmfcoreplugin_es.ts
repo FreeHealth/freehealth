@@ -9,6 +9,39 @@
     </message>
 </context>
 <context>
+    <name>BugReportDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>yourname@gmail.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Problem description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What steps are needed to reproduce the problem?
+1.
+2.
+3.
+
+What is the expected output? What do you see instead?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I have a &amp;Google account:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::AppConfigWizard</name>
     <message>
         <source>Application Configurator Wizard</source>
@@ -260,7 +293,7 @@ Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Debugging information successfully send to the development team.
+        <source>Debugging information successfully sent to the development team.
 Using Url: %1
 %2</source>
         <translation type="unfinished"></translation>
