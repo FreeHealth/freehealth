@@ -76,6 +76,10 @@ static QString levelName(const QString &levelUid)
         tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
     if (levelUid.contains("I"))
         tmp << tkTr(Trans::Constants::INFORMATION);
+    if (levelUid.contains("Y"))
+        tmp << tkTr(Trans::Constants::GPG_IAM);
+    if (levelUid.contains("450"))
+        tmp << tkTr(Trans::Constants::P450_IAM);
     return tmp.join( ", " );
 }
 
