@@ -35,7 +35,6 @@ FORMS += $${PWD}/templatesview.ui \
     $${PWD}/templatespreferenceswidget.ui \
     $${PWD}/templatescreationdialog.ui
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_es.ts
+# include translations
+TRANSLATION_NAME = templates
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

@@ -61,7 +61,6 @@ FORMS += \
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 
-TRANSLATIONS += \
-    $${SOURCES_TRANSLATIONS_PATH}/alertplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/alertplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/alertplugin_es.ts
+# include translations
+TRANSLATION_NAME = alert
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

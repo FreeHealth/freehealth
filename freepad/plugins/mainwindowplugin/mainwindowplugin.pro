@@ -31,10 +31,9 @@ SOURCES += mainwindowplugin.cpp \
 FORMS += mainwindow.ui \
 #    preferences/useroptionspage.ui
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_es.ts
+# include translations
+TRANSLATION_NAME = freepadmainwindow
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES += MainWindow.pluginspec
 

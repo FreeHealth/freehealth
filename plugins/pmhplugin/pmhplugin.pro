@@ -46,13 +46,6 @@ SOURCES = pmhplugin.cpp \
 #    pmhcategoryonlyproxymodel.cpp \
 #    categorylabelsmodel.cpp \
 
-
-OTHER_FILES = PMH.pluginspec
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_es.ts
-
 FORMS += \
     pmhviewer.ui \
     pmhmodewidget.ui \
@@ -60,3 +53,9 @@ FORMS += \
     pmhepisodeviewer.ui \
     pmhpreferencespage.ui
 #    pmhcategorywidget.ui \
+
+OTHER_FILES = PMH.pluginspec
+
+# include translations
+TRANSLATION_NAME = pmh
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

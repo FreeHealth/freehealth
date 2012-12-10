@@ -43,8 +43,8 @@ FORMS += $${PWD}/icdviewer.ui \
     $${PWD}/icdcodeselector.ui \
     $${PWD}/icdcentralwidget.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/icdplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/icdplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/icdplugin_es.ts
+# include translations
+TRANSLATION_NAME = icd
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES += $${SOURCES_RESOURCES_SQL}/icd10/icd10.sql

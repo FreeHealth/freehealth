@@ -47,7 +47,6 @@ FORMS += \
     $${PWD}/tokeneditorwidget.ui \
     $${PWD}/tokeneditor.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_es.ts
-
+# include translations
+TRANSLATION_NAME = padtools
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

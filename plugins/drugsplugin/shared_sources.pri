@@ -93,7 +93,6 @@ FORMS += $${PWD}/drugswidget/druginfo.ui \
     $${PWD}/drugswidget/dynamicalert.ui
 #    $${PWD}/drugswidget/druginteractionreport.ui \
 
-# translations
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_es.ts
+# include translations
+TRANSLATION_NAME = drugs
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

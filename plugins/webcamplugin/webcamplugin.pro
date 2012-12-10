@@ -35,13 +35,9 @@ FORMS += \
     webcamdialog.ui \
     webcampreferences.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/webcam_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/webcam_es.ts
-
 OTHER_FILES = \
     Webcam.pluginspec
 
-#RESOURCES += \
-#    opencv.qrc
-
+# include translations
+TRANSLATION_NAME = webcam
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

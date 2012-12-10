@@ -125,7 +125,6 @@ SOURCES += $${PWD}/ledger/ledgerio.cpp \
     $${PWD}/ledger/ledgeredit.cpp \
     $${PWD}/ledger/mythread.cpp
 
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/accountplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/accountplugin_es.ts
+# include translations
+TRANSLATION_NAME = account
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

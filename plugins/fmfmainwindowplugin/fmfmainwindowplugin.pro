@@ -22,8 +22,8 @@ SOURCES = mainwindowplugin.cpp \
 
 FORMS = virtualbasepage.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_es.ts
+# include translations
+TRANSLATION_NAME = fmfmainwindow
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = MainWindow.pluginspec

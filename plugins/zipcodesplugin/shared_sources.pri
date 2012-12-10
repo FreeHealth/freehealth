@@ -12,6 +12,6 @@ SOURCES = $${PWD}/zipcodesplugin.cpp \
     $${PWD}/zipcodescompleters.cpp \
     $${PWD}/zipcodeswidget.cpp
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/zipcodesplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/zipcodesplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/zipcodesplugin_es.ts
+# include translations
+TRANSLATION_NAME = zipcodes
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

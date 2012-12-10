@@ -136,11 +136,6 @@ macx {
     SOURCES += iconbadgealert.cpp
 }
 
-# translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/utils_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/utils_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/utils_es.ts
-
 # resources
 #RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
 
@@ -150,3 +145,7 @@ FORMS += \
     widgets/genericinformationeditordialog.ui \
     widgets/loginwidget.ui \
     widgets/basiclogindialog.ui
+
+# include translations
+TRANSLATION_NAME = utils
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

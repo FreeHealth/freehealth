@@ -64,7 +64,6 @@ SOURCES += \
 FORMS += modelanditem/basic_item_edition_dialog.ui \
     modelanditem/item_editor_widget.ui
 
-# translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/calendar_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/calendar_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/calendar_es.ts
+# include translations
+TRANSLATION_NAME = calendar
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

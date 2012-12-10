@@ -24,4 +24,6 @@ SOURCES += global.cpp \
     ebmdata.cpp \
     ebmmodel.cpp
 
-
+# include translations
+TRANSLATION_NAME = medical
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

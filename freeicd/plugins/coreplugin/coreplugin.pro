@@ -3,7 +3,6 @@ TARGET = Core
 
 include(../../../plugins/coreplugin/common_core.pri)
 
-
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
@@ -18,3 +17,7 @@ SOURCES += coreimpl.cpp \
     commandlineparser.cpp
 
 OTHER_FILES += Core.pluginspec
+
+# include translations
+TRANSLATION_NAME = freeicdcore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

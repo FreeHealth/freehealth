@@ -66,15 +66,14 @@ SOURCES = formmanagerplugin.cpp \
     episodemanager.cpp \
     formviewdelegate.cpp
 
-OTHER_FILES = FormManager.pluginspec
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_es.ts
-
 FORMS += formfilesselectorwidget.ui \
     formeditordialog.ui \
     formmanagerpreferenceswidget.ui \
     formpreferenceswidget.ui \
     formplaceholder.ui
 
+OTHER_FILES = FormManager.pluginspec
+
+# include translations
+TRANSLATION_NAME = formmanager
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

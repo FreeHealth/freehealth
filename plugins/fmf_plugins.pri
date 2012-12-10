@@ -3,6 +3,9 @@
 # set plugin name define
 isEmpty(TARGET):error(You must specify a target when including fmf_plugins.pri)
 
+# manage pre tag translations
+PRE_TRANSLATION  = plugin
+
 PLUGINSPECS = $${_PRO_FILE_PWD_}/$${TARGET}.pluginspec
 
 # include config file

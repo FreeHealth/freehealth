@@ -59,8 +59,6 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/idruginteraction.cpp \
     $${PWD}/prescriptiontoken.cpp
 
-
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_es.ts
+# include translations
+TRANSLATION_NAME = drugsbase
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

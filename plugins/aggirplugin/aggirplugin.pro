@@ -19,6 +19,10 @@ SOURCES = \
     girwidget.cpp \
     girmodel.cpp
 
+FORMS += girwidget.ui
+
 OTHER_FILES = Gir.pluginspec
 
-FORMS += girwidget.ui
+# include translations
+TRANSLATION_NAME = aggir
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

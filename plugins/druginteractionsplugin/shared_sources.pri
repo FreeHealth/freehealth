@@ -15,6 +15,6 @@ SOURCES = $${PWD}/druginteractionsplugin.cpp \
     $${PWD}/drugdruginteractionengine.cpp \
     $${PWD}/pimengine.cpp
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/druginteractionsplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/druginteractionsplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/druginteractionsplugin_es.ts
+# include translations
+TRANSLATION_NAME = druginteractions
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

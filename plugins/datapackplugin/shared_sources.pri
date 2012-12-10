@@ -13,10 +13,9 @@ SOURCES = $${PWD}/datapackplugin.cpp \
 FORMS += \
     $${PWD}/datapackpreference.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/datapackplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/datapackplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/datapackplugin_es.ts
-
+# include translations
+TRANSLATION_NAME = datapack
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 
 

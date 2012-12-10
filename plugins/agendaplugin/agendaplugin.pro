@@ -47,12 +47,6 @@ SOURCES = agendaplugin.cpp \
     availabilitycreatordialog.cpp \
     nextavailabiliystepviewer.cpp
 
-OTHER_FILES = Agenda.pluginspec
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_es.ts
-
 FORMS += \
     calendaritemeditorpatientmapper.ui \
     usercalendarviewer.ui \
@@ -65,8 +59,8 @@ FORMS += \
     nextavailabiliystepviewer.ui
 #    agendauserviewerwidget.ui \
 
+OTHER_FILES = Agenda.pluginspec
 
-
-
-
-
+# include translations
+TRANSLATION_NAME = agenda
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

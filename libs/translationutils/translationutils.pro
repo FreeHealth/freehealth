@@ -38,7 +38,6 @@ HEADERS += \
 SOURCES += constanttranslations.cpp \
     googletranslator.cpp
 
-# translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/translationutils_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/translationutils_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/translationutils_es.ts
+# include translations
+TRANSLATION_NAME = translations
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

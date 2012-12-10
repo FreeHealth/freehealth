@@ -48,7 +48,6 @@ SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/amountmodel.cpp \
     $${PWD}/datapackmodel.cpp
 
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountbaseplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/accountbaseplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/accountbaseplugin_es.ts
+# include translations
+TRANSLATION_NAME = accountbase
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

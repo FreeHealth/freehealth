@@ -23,7 +23,6 @@ HEADERS += configuration.h \
 
 SOURCES += configuration.cpp
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/medintuxtoolkit_fr.ts \
-                $${SOURCES_TRANSLATIONS}/medintuxtoolkit_de.ts \
-                $${SOURCES_TRANSLATIONS}/medintuxtoolkit_es.ts
+# include translations
+TRANSLATION_NAME = medintux
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

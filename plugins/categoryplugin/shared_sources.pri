@@ -16,8 +16,6 @@ HEADERS += \
     $${PWD}/categorylabelsmodel.h \
     $${PWD}/categorydialog.h \
 
-
-
 SOURCES += \
     $${PWD}/categoryplugin.cpp \
     $${PWD}/categorybase.cpp \
@@ -28,11 +26,9 @@ SOURCES += \
     $${PWD}/categorylabelsmodel.cpp \
     $${PWD}/categorydialog.cpp \
 
-
 FORMS += \
     $${PWD}/categorydialog.ui \
 
-
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_es.ts
+# include translations
+TRANSLATION_NAME = category
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

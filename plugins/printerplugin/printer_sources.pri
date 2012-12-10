@@ -25,9 +25,8 @@ FORMS = $${PWD}/printerpreviewer_p.ui \
     $${PWD}/printerpreferences.ui \
     $${PWD}/printdialog.ui
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/printerplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/printerplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/printerplugin_es.ts
+# include translations
+TRANSLATION_NAME = printer
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = Printer.pluginspec

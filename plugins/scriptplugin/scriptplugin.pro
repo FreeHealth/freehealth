@@ -23,14 +23,6 @@ SOURCES = scriptplugin.cpp \
 OTHER_FILES = Script.pluginspec \
     $${SOURCES_GLOBAL_RESOURCES}/test.js
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/scriptplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/scriptplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/scriptplugin_es.ts
-
-
-
-
-
-
-
-
+# include translations
+TRANSLATION_NAME = script
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

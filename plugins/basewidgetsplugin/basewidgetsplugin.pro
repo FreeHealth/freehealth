@@ -38,7 +38,9 @@ FORMS += baseformwidgetsoptionspage.ui \
     frenchsocialnumber.ui \
     austriansocialnumber.ui
 
-
 OTHER_FILES = BaseWidgets.pluginspec
 
+# include translations
+TRANSLATION_NAME = basewidgets
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 

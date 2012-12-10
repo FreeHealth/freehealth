@@ -69,7 +69,6 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userviewer_professional.ui \
     $${PWD}/widgets/useridentityandloginpage.ui
 
-# translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_es.ts
+# include translations
+TRANSLATION_NAME = usermanager
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

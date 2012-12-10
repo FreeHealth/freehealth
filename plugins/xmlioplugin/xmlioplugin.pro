@@ -34,7 +34,6 @@ with-alerts{
     OTHER_FILES = XmlIO.pluginspec
 }
 
-# translators
-TRANSLATIONS = $${SOURCES_TRANSLATIONS_PATH}/xmlioplugin_fr.ts \
-               $${SOURCES_TRANSLATIONS_PATH}/xmlioplugin_de.ts \
-               $${SOURCES_TRANSLATIONS_PATH}/xmlioplugin_es.ts
+# include translations
+TRANSLATION_NAME = xmlio
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

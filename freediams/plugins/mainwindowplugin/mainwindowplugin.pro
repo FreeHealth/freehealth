@@ -20,10 +20,9 @@ SOURCES = mainwindowplugin.cpp \
 
 FORMS = mainwindow.ui
 
-# Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/fdmainwindowplugin_es.ts
+# include translations
+TRANSLATION_NAME = fdmainwindow
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = MainWindow.pluginspec
 

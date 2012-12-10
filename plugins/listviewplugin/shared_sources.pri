@@ -3,7 +3,6 @@ DEFINES += LISTVIEW_LIBRARY
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/listviewplugin_dependencies.pri)
 
-
 HEADERS += \
     $${PWD}/listview.h \
     $${PWD}/listviewplugin.h \
@@ -20,7 +19,6 @@ HEADERS += \
     $${PWD}/languagecomboboxdelegate.h \
     $${PWD}/countrycombobox.h \
     $${PWD}/addremovecombobox.h
-
 
 SOURCES += \
     $${PWD}/listview.cpp \
@@ -39,3 +37,7 @@ SOURCES += \
 
 FORMS += \
     $${PWD}/fancytreeview.ui \
+
+# include translations
+TRANSLATION_NAME = listview
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

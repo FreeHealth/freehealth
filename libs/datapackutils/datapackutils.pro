@@ -65,7 +65,6 @@ FORMS += \
     widgets/serverpackeditor.ui \
     widgets/addserverdialog.ui
 
-# translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/datapackutils_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/datapackutils_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/datapackutils_es.ts
+# include translations
+TRANSLATION_NAME = datapack
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

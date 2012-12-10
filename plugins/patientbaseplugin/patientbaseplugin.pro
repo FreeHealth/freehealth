@@ -60,6 +60,6 @@ FORMS += identitywidget.ui \
 
 OTHER_FILES = PatientBase.pluginspec
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_es.ts
+# include translations
+TRANSLATION_NAME = patientbase
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

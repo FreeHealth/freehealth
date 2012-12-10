@@ -20,8 +20,8 @@ SOURCES += coreplugin.cpp \
     appconfigwizard.cpp \
     commandlineparser.cpp
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_es.ts
+# include translations
+TRANSLATION_NAME = fmfcore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES = Core.pluginspec
