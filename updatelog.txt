@@ -5,6 +5,7 @@ FreeMedForms
   * New form items:
     * detailswidget
     * moderndate
+  * New languages available (translations undone)
 
 ===== Bug correction =====
 
