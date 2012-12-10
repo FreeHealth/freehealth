@@ -427,14 +427,14 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Profession:    col = Constants::IDENTITY_PROFESSION;        break;
         case IPatient::Street:        col = Constants::IDENTITY_ADDRESS_STREET;    break;
         case IPatient::ZipCode:       col = Constants::IDENTITY_ADDRESS_ZIPCODE;   break;
-        case IPatient::City:          col = Constants::IDENTITY_ADDRESS_CITY;       break;
+        case IPatient::City:          col = Constants::IDENTITY_ADDRESS_CITY;      break;
         case IPatient::Country:       col = Constants::IDENTITY_ADDRESS_COUNTRY;   break;
-        case IPatient::StateProvince: col = Constants::IDENTITY_ADDRESS_PROVINCE;   break;
+        case IPatient::StateProvince: col = Constants::IDENTITY_ADDRESS_PROVINCE;  break;
         case IPatient::AddressNote:   col = Constants::IDENTITY_ADDRESS_NOTE;      break;
         case IPatient::Mails:         col = Constants::IDENTITY_MAILS;             break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;              break;
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;             break;
-        case IPatient::TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
+        case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;             break;
         case IPatient::Title:
             {
                 col = Constants::IDENTITY_TITLE;
@@ -666,7 +666,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::Mails:         col = Constants::IDENTITY_MAILS;            break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;             break;
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;            break;
-        case IPatient::TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
+        case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;            break;
         case IPatient::Title:
             {
                 QString t = value.toString();
