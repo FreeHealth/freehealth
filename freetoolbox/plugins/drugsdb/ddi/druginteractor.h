@@ -81,6 +81,8 @@ public:
     QVariant data(const int reference, const QString &lang = QString::null) const;
     bool setData(const int reference, const QVariant &value, const QString &lang = QString::null);
 
+    QString label() const {return data(TranslatedLabel).toString();}
+
     bool isValid() const {return data(IsValid).toBool();}
     bool isClass() const {return data(IsClass).toBool();}
     bool isReviewed() const {return data(IsReviewed).toBool();}
@@ -95,8 +97,9 @@ public:
 
     void setChildId(const QStringList &ids) {m_ChildrenId = ids;}
     void addChildId(const QString &id) {m_ChildrenId<<id;}
-    QStringList childrenIds() const {return m_ChildrenId;}
     void removeChildId(const QString &id) {m_ChildrenId.removeAll(id);}
+    QStringList childrenIds() const {return m_ChildrenId;}
+    int childrenCount() const {return m_ChildrenId.count();}
 
     void addChildClassificationPMID(const QString &childId, const QString &pmid) {m_ChildClassifPMIDs.insertMulti(childId, pmid);}
     void addChildClassificationPMIDs(const QString &childId, const QStringList &pmids);
