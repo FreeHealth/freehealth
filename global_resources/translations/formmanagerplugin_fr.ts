@@ -166,13 +166,6 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
     </message>
 </context>
 <context>
-    <name>Form::Internal::FormManagerMode</name>
-    <message>
-        <source>Patients Files</source>
-        <translation>Formulaires patient</translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
         <source>Initializing form manager plugin...</source>

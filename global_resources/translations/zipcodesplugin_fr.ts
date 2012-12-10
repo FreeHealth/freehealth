@@ -2,6 +2,36 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
+    <name>ZipCodes::Internal::ZipCountryModel</name>
+    <message>
+        <source>%1, %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ZipCodes::ZipCodesWidget</name>
+    <message>
+        <source>Street</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State/Province</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zipcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ZipCodes::ZipCountryCompleters</name>
     <message>
         <source>No country selected</source>

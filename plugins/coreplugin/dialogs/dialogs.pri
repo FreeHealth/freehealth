@@ -11,7 +11,8 @@ SOURCES += $${PWD}/aboutdialog.cpp \
     $${PWD}/simpletextdialog.cpp \
     $${PWD}/serverpreferenceswidget.cpp \
     $${PWD}/pagewidget.cpp \
-    $${PWD}/networkpreferences.cpp
+    $${PWD}/networkpreferences.cpp \
+    ../coreplugin/dialogs/bugreportdialog.cpp
 
 HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/commonaboutpages.h \
@@ -25,7 +26,8 @@ HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/simpletextdialog.h \
     $${PWD}/serverpreferenceswidget.h \
     $${PWD}/pagewidget.h \
-    $${PWD}/networkpreferences.h
+    $${PWD}/networkpreferences.h \
+    ../coreplugin/dialogs/bugreportdialog.h
 
 FORMS += $${PWD}/aboutdialog.ui \
     $${PWD}/debugdialog.ui \
@@ -34,5 +36,6 @@ FORMS += $${PWD}/aboutdialog.ui \
     $${PWD}/simpletextdialog.ui \
     $${PWD}/serverpreferenceswidget.ui \
     $${PWD}/pagewidget.ui \
-    $${PWD}/proxypreferenceswidget.ui
+    $${PWD}/proxypreferenceswidget.ui \
+    ../coreplugin/dialogs/bugreportdialog.ui
 

@@ -208,39 +208,39 @@
 <context>
     <name>Agenda::Internal::UserCalendarWizardCreatorWidget</name>
     <message>
-        <source>Quick params</source>
-        <translation>Parametros rapidos</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etiqueta</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation>Descripcion</translation>
-    </message>
-    <message>
-        <source>minutes</source>
-        <translation>minutos</translation>
-    </message>
-    <message>
-        <source>Default location</source>
-        <translation>Localizacion por defecto</translation>
-    </message>
-    <message>
-        <source>Do you want to create an agenda for this user ?</source>
-        <translation>Usted desea crear una agenda para este usuario?</translation>
-    </message>
-    <message>
-        <source>Create an agenda</source>
-        <translation>Crear una agenda</translation>
-    </message>
-    <message>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default appointment duration</source>
+        <source>Agenda</source>
+        <translation type="unfinished">Agenda</translation>
+    </message>
+    <message>
+        <source>Create an agenda for this user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quick parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;appointment duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> minutes</source>
+        <translation type="unfinished">minutos</translation>
+    </message>
+    <message>
+        <source>Default &amp;location</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

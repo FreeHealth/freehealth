@@ -181,7 +181,7 @@ Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Debugging information successfully send to the development team.
+        <source>Debugging information successfully sent to the development team.
 Using Url: %1
 %2</source>
         <translation type="unfinished"></translation>

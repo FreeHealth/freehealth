@@ -70,6 +70,57 @@
     </message>
 </context>
 <context>
+    <name>Patients::IdentityEditorWidget</name>
+    <message>
+        <source>You must specify a birthname.</source>
+        <translation type="unfinished">Vous devez spécifier un nom de naissance.</translation>
+    </message>
+    <message>
+        <source>You can not create a patient without a birthname</source>
+        <translation type="unfinished">Vous ne pouvez pas créer un patient sans nom de naissance</translation>
+    </message>
+    <message>
+        <source>No birthname</source>
+        <translation type="unfinished">Pas de nom de naissance</translation>
+    </message>
+    <message>
+        <source>You must specify a first name.</source>
+        <translation type="unfinished">Vous devez spécifier un prénom.</translation>
+    </message>
+    <message>
+        <source>You can not create a patient without a first name</source>
+        <translation type="unfinished">Vous ne pouvez pas créer un patient sans prénom</translation>
+    </message>
+    <message>
+        <source>No firstname</source>
+        <translation type="unfinished">Pas de prénom</translation>
+    </message>
+    <message>
+        <source>You must specify a date of birth.</source>
+        <translation type="unfinished">Vous devez spécifier une date de naissance.</translation>
+    </message>
+    <message>
+        <source>You can not create a patient without a date of birth</source>
+        <translation type="unfinished">Vous ne pouvez pas créer un patient sans date de naissance</translation>
+    </message>
+    <message>
+        <source>No date of birth</source>
+        <translation type="unfinished">Pas de date de naissance</translation>
+    </message>
+    <message>
+        <source>You must specify a gender.</source>
+        <translation type="unfinished">Vous devez spécifier un sexe.</translation>
+    </message>
+    <message>
+        <source>You can not create a patient without a gender</source>
+        <translation type="unfinished">Vous ne pouvez pas créer un patient sans sexe</translation>
+    </message>
+    <message>
+        <source>No gender</source>
+        <translation type="unfinished">Pas de sexe</translation>
+    </message>
+</context>
+<context>
     <name>Patients::IdentityPage</name>
     <message>
         <source>Please enter the patient&apos;s identity.</source>
@@ -98,57 +149,6 @@
     <message>
         <source>Patients of the same name exist</source>
         <translation>Des patients homonymes existent</translation>
-    </message>
-</context>
-<context>
-    <name>Patients::IdentityWidget</name>
-    <message>
-        <source>You must specify a birthname.</source>
-        <translation>Vous devez spécifier un nom de naissance.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a birthname</source>
-        <translation>Vous ne pouvez pas créer un patient sans nom de naissance</translation>
-    </message>
-    <message>
-        <source>No birthname</source>
-        <translation>Pas de nom de naissance</translation>
-    </message>
-    <message>
-        <source>You must specify a first name.</source>
-        <translation>Vous devez spécifier un prénom.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a first name</source>
-        <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
-    </message>
-    <message>
-        <source>No firstname</source>
-        <translation>Pas de prénom</translation>
-    </message>
-    <message>
-        <source>You must specify a date of birth.</source>
-        <translation>Vous devez spécifier une date de naissance.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a date of birth</source>
-        <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
-    </message>
-    <message>
-        <source>No date of birth</source>
-        <translation>Pas de date de naissance</translation>
-    </message>
-    <message>
-        <source>You must specify a gender.</source>
-        <translation>Vous devez spécifier un sexe.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a gender</source>
-        <translation>Vous ne pouvez pas créer un patient sans sexe</translation>
-    </message>
-    <message>
-        <source>No gender</source>
-        <translation>Pas de sexe</translation>
     </message>
 </context>
 <context>
@@ -199,22 +199,6 @@
     <message>
         <source>Date of birth</source>
         <translation>Date de naissance</translation>
-    </message>
-    <message>
-        <source>Street</source>
-        <translation>Rue</translation>
-    </message>
-    <message>
-        <source>City</source>
-        <translation>Ville</translation>
-    </message>
-    <message>
-        <source>Zipcode</source>
-        <translation>Code postal</translation>
-    </message>
-    <message>
-        <source>Country</source>
-        <translation>Pays</translation>
     </message>
     <message>
         <source>Form</source>
@@ -287,6 +271,22 @@
     <message>
         <source>Default photo source:</source>
         <translation>Source par défaut pour les photographies :</translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing. If you are using FreeMedForms over a network, this can lead to heavy network usage.
+This option is not recommended with big patient database (&gt; 10.000 patients).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search patients while typing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
+
+Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

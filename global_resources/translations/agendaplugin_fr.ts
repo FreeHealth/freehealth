@@ -205,40 +205,40 @@
 <context>
     <name>Agenda::Internal::UserCalendarWizardCreatorWidget</name>
     <message>
-        <source>Quick params</source>
-        <translation>Paramètres rapides</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Libellé</translation>
-    </message>
-    <message>
-        <source>Default location</source>
-        <translation>Localisation par défaut</translation>
-    </message>
-    <message>
-        <source>Do you want to create an agenda for this user ?</source>
-        <translation>Voulez-vous créer un agenda pour cet utilisateur ?</translation>
-    </message>
-    <message>
-        <source>Create an agenda</source>
-        <translation>Créer un agenda</translation>
-    </message>
-    <message>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <source>Description</source>
-        <translation></translation>
+        <source>Agenda</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default appointment duration</source>
-        <translation>Durée par défaut des rendez-vous</translation>
+        <source>Create an agenda for this user</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>minutes</source>
-        <translation></translation>
+        <source>Quick parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;appointment duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> minutes</source>
+        <translation type="unfinished">minutes</translation>
+    </message>
+    <message>
+        <source>Default &amp;location</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

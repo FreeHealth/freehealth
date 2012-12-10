@@ -70,38 +70,7 @@
     </message>
 </context>
 <context>
-    <name>Patients::IdentityPage</name>
-    <message>
-        <source>Please enter the patient&apos;s identity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are about to create the following  patient: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patients with the same names exist in the database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want to create this patient?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patients of the same name exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Patients::IdentityWidget</name>
+    <name>Patients::IdentityEditorWidget</name>
     <message>
         <source>You must specify a birthname.</source>
         <translation type="unfinished"></translation>
@@ -152,6 +121,37 @@
     </message>
 </context>
 <context>
+    <name>Patients::IdentityPage</name>
+    <message>
+        <source>Please enter the patient&apos;s identity.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are about to create the following  patient: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patients with the same names exist in the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to create this patient?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patients of the same name exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Patients::Internal::IdentityViewer</name>
     <message>
         <source>Form</source>
@@ -170,22 +170,6 @@
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Street</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>City</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Zipcode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -286,6 +270,22 @@
     </message>
     <message>
         <source>Default photo source:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing. If you are using FreeMedForms over a network, this can lead to heavy network usage.
+This option is not recommended with big patient database (&gt; 10.000 patients).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search patients while typing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
+
+Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

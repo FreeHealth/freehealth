@@ -5,7 +5,7 @@
     <name>tkConstants</name>
     <message>
         <source>English</source>
-        <translation >Español</translation>
+        <translation>Español</translation>
     </message>
     <message>
         <source>All languages</source>
@@ -1681,10 +1681,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>General preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2304,6 +2300,14 @@ Place: %2</source>
     </message>
     <message>
         <source>Profession</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Report application error...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
