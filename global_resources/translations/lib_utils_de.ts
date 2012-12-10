@@ -62,7 +62,7 @@
     <name>Log</name>
     <message>
         <location filename="../../libs/utils/log.cpp" line="110"/>
-        <source>SQL Error:
+        <source>SQL Error: 
      * %1
      * %2
      * %3</source>
