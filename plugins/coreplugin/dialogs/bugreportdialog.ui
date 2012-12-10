@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>644</width>
-    <height>405</height>
+    <width>653</width>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="emailLabel">
      <property name="text">
-      <string>&amp;Email address:</string>
+      <string>&amp;Email:</string>
      </property>
      <property name="buddy">
       <cstring>emailEdit</cstring>
@@ -79,7 +79,7 @@ What is the expected output? What do you see instead?
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="instructionsLabel">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;We are using &lt;a href=&quot;http://code.google.com/p/freemedforms/issues/list&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Google Code&lt;/span&gt;&lt;/a&gt; as issue tracker. If you have a &lt;a href=&quot;https://accounts.google.com/SignUp&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;GMail account&lt;/span&gt;&lt;/a&gt;, you can use it for creating issues here.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;We are using &lt;a href=&quot;http://code.google.com/p/freemedforms/issues/list&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Google Code&lt;/span&gt;&lt;/a&gt; as issue tracker. If you have a &lt;a href=&quot;https://accounts.google.com/SignUp&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;GMail account&lt;/span&gt;&lt;/a&gt;, you can use it for creating issues here. If you use a non-GMail address, a normal mail is sent to the developers instead of creating an issue on Google Code.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

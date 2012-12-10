@@ -43,6 +43,12 @@ BugReportDialog::BugReportDialog(QWidget *parent) :
     m_sendReportButton->setDisabled(true);
     ui->buttonBox->addButton(m_sendReportButton, QDialogButtonBox::ActionRole);
     connect(m_sendReportButton, SIGNAL(clicked()), this, SLOT(sendBugReport()));
+
+    // if current user has a valid email address, use it
+    QString email = user()->value(Core::IUser::Mail).toString();
+    int pos = 0;
+    if (ui->emailEdit->validator()->validate(email, pos) == QValidator::Acceptable)
+        ui->emailEdit->setText(email);
 }
 
 BugReportDialog::~BugReportDialog()
