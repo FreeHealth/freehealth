@@ -479,7 +479,7 @@ DrugDrugInteractionModel::DrugDrugInteractionModel(QObject *parent) :
     setObjectName("DrugDrugInteractionModel");
     d->m_ddis = core()->getDrugDrugInteractions();
     d->m_interactors = core()->getDrugInteractors();
-    d->globalLevelStatistics(d->m_ddis);
+//    d->globalLevelStatistics(d->m_ddis);
     d->filter();
     d->m_FetchedRows = 0;
 }
