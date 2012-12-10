@@ -91,7 +91,7 @@ DrugsPlugin::DrugsPlugin() :
 #endif
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("drugsplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_drugs");
 
     viewPage = new DrugGeneralOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);

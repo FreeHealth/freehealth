@@ -65,7 +65,7 @@ WebcamPlugin::WebcamPlugin() :
     setObjectName("WebcamPlugin");
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("webcam");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_webcam");
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     
@@ -134,9 +134,6 @@ void WebcamPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qDebug() << "Webcam::extensionsInitialized";
     }
-    
-    // Add Translator to the Application
-    //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
     
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all

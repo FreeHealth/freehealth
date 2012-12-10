@@ -81,7 +81,7 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("icdplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_icd");
     messageSplash(tr("Initializing ICD10 plugin..."));
 
     m_PlugVersion = pluginSpec()->version();

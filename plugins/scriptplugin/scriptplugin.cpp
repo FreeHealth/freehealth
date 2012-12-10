@@ -59,7 +59,7 @@ ScriptPlugin::ScriptPlugin() :
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("scriptplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_script");
 }
 
 ScriptPlugin::~ScriptPlugin()

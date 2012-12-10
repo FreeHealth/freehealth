@@ -72,7 +72,7 @@ bool PrinterPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(errorString);
 
     // Add translator
-    Core::ICore::instance()->translators()->addNewTranslator("printerplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_printer");
 
     return true;
 }

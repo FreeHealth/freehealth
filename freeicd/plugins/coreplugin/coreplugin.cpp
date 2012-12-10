@@ -28,6 +28,7 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <translationutils/constants.h>
 
 #include <coreplugin/appaboutpage.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
@@ -84,9 +85,8 @@ void CorePlugin::extensionsInitialized()
     addObject(prefPage);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-//    Core::ICore::instance()->translators()->addNewTranslator("freeicd-coreplugin");
+    Core::ICore::instance()->translators()->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
+    Core::ICore::instance()->translators()->addNewTranslator("lib_utils");
 }
 
 void CorePlugin::remoteArgument(const QString &arg)

@@ -44,7 +44,7 @@ DataPackIPlugin::DataPackIPlugin()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DataPackIPlugin";
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
-    //    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_ftbdatapack");
 }
 
 DataPackIPlugin::~DataPackIPlugin()

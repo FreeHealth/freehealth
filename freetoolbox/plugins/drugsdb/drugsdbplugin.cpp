@@ -65,7 +65,7 @@ DrugsDbPlugin::DrugsDbPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DrugsDbPlugin";
-//    Core::ICore::instance()->translators()->addNewTranslator("drugsdbplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_ftbdrugsdb");
 }
 
 DrugsDbPlugin::~DrugsDbPlugin()

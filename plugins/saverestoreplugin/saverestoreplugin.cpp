@@ -61,7 +61,7 @@ bool SaveRestorePlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(errorString);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("saverestoreplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_saverestore");
 
     return true;
 }

@@ -76,7 +76,7 @@ FormManagerPlugin::FormManagerPlugin() :
         qWarning() << "creating FormManagerPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_formmanager");
 
     m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
     addObject(m_FirstRun);

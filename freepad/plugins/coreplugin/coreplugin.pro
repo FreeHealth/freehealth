@@ -9,7 +9,6 @@ BUILD_PATH_POSTFIXE = FreePad
 
 include(../../../plugins/coreplugin/common_core.pri)
 
-
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
@@ -22,3 +21,7 @@ SOURCES += coreimpl.cpp \
     coreplugin.cpp
 
 OTHER_FILES += Core.pluginspec
+
+# include translations
+TRANSLATION_NAME = freepadcore
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

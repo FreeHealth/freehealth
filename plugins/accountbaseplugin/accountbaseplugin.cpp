@@ -56,7 +56,7 @@ AccountBasePlugin::AccountBasePlugin()
         qWarning() << "creating AccountBasePlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_accountbase");
 
     // Create the database instance
     new AccountBase(this);

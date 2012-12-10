@@ -47,9 +47,9 @@ CorePlugin::CorePlugin() :
     m_CoreImpl(new CoreImpl(this)), prefPage(0)
 {
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-    //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-coreplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_utils");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_translations");
+    //    Core::ICore::instance()->translators()->addNewTranslator("plugin_freeicdcore");
 }
 
 CorePlugin::~CorePlugin()

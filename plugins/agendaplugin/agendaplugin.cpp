@@ -85,8 +85,8 @@ AgendaPlugin::AgendaPlugin() :
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AgendaPlugin";
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("agendaplugin");
-    Core::ICore::instance()->translators()->addNewTranslator("calendar");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_agenda");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_calendar");
 
     // Create the core object
     m_Core = new AgendaCore(this);

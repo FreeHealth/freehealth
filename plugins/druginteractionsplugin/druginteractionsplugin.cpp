@@ -40,7 +40,7 @@ DrugInteractionsPlugin::DrugInteractionsPlugin() :
         qWarning() << "creating DrugInteractionsPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("druginteractionsplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_druginteractions");
 
     // Create the drugs engines
     m_AllergyEngine = new DrugAllergyEngine(this);

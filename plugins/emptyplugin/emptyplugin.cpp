@@ -49,7 +49,7 @@ EmptyPlugin::EmptyPlugin()
         qWarning() << "creating EmptyPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_empty");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 

@@ -43,7 +43,7 @@ TextEditorPlugin::TextEditorPlugin()
         qWarning() << "creating TextEditorPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_texteditor");
 }
 
 TextEditorPlugin::~TextEditorPlugin()

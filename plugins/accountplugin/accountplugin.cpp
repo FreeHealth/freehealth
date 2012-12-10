@@ -82,7 +82,7 @@ AccountPlugin::AccountPlugin() :
         qWarning() << "creating AccountPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_account");
 
     // Add pages to plugins manager object pool
     addObject(m_BankPage);

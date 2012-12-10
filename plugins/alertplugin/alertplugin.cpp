@@ -61,7 +61,7 @@ AlertPlugin::AlertPlugin() :
         qWarning() << "creating AlertPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("AlertPlugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_alert");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 

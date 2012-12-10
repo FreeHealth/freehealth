@@ -62,7 +62,7 @@ PmhPlugin::PmhPlugin() :
         qWarning() << "creating PmhPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("pmhplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_pmh");
 
     m_PrefPage = new Internal::PmhPreferencesPage(this);
     addAutoReleasedObject(m_PrefPage);

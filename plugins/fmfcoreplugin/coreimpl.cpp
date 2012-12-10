@@ -107,10 +107,10 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Translators->addNewTranslator("qt");
     // Core Needed Libs
     m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
-    m_Translators->addNewTranslator("utils");
-    m_Translators->addNewTranslator("medicalutils");
-    m_Translators->addNewTranslator("calendar");
-    m_Translators->addNewTranslator("fmfcoreplugin");
+    m_Translators->addNewTranslator("lib_utils");
+    m_Translators->addNewTranslator("lib_medical");
+    m_Translators->addNewTranslator("lib_calendar");
+    m_Translators->addNewTranslator("plugin_fmfcore");
 
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");

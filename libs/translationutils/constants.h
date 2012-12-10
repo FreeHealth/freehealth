@@ -36,7 +36,7 @@ namespace Trans {
 namespace Constants {
 
 const char* const CONSTANTS_TR_CONTEXT = "tkConstants";
-const char* const CONSTANTS_TRANSLATOR_NAME = "translationutils";
+const char* const CONSTANTS_TRANSLATOR_NAME = "lib_translations";
 
 // For multilingual class template
 const char* const ALL_LANGUAGE = "xx";

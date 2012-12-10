@@ -60,7 +60,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorStri
     // No user connected here
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("zipcodesplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_zipcodes");
 
     // Initialize database here
     // Initialize the drugs engines

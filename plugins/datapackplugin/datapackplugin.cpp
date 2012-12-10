@@ -71,7 +71,7 @@ DataPackPluginIPlugin::DataPackPluginIPlugin() :
         qWarning() << "creating DataPackPluginIPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("datapackutils");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_datapack");
     Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool

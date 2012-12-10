@@ -76,7 +76,7 @@ PadToolsPlugin::PadToolsPlugin() :
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PadToolsPlugin";
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_padtools");
 
     // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
     _impl = new PadToolsImpl(this);

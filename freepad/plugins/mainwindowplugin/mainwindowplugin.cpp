@@ -41,6 +41,10 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEPAD::MainWinPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_freepadmainwindow");
+
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->initialize(QStringList(),0);
@@ -73,9 +77,6 @@ void MainWinPlugin::extensionsInitialized()
 	qDebug("Mainwindow::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("freepad-mainwindow");
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 //    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));

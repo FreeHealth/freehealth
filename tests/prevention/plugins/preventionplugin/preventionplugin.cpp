@@ -48,9 +48,9 @@ PreventionPlugin::PreventionPlugin() :
 {
     qWarning() << "PreventionPlugin::PreventionPlugin()";
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-//    Core::ICore::instance()->translators()->addNewTranslator("preventionplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_utils");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_translations");
+//    Core::ICore::instance()->translators()->addNewTranslator("plugin_prevention");
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }

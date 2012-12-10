@@ -104,7 +104,7 @@ UserManagerPlugin::UserManagerPlugin() :
         qWarning() << "creating UserManagerPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_usermanager");
 
     new UserBase(this);
 

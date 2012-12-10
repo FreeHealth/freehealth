@@ -78,7 +78,7 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
     Q_UNUSED(errorString);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_texteditor");
 
     return true;
 }

@@ -55,7 +55,7 @@ CategoryPlugin::CategoryPlugin()
         qWarning() << "creating CategoryPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("categoryplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_category");
 
     // Create the core instance
     CategoryCore::instance(this);

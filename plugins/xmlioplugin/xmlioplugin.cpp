@@ -59,7 +59,7 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
         qWarning() << "creating XmlIOPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("xmlioplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_xmlio");
 
     // create instance
     m_XmlReader = XmlFormContentReader::instance();

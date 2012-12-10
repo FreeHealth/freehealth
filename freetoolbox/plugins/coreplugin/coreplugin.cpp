@@ -43,8 +43,11 @@
 
 using namespace Core::Internal;
 
-CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this)), prefPage(0)
+CorePlugin::CorePlugin() :
+    m_CoreImpl(new CoreImpl(this)),
+    prefPage(0)
 {
+    // Core add translators
 }
 
 CorePlugin::~CorePlugin()
@@ -88,11 +91,6 @@ void CorePlugin::extensionsInitialized()
 //    prefPage = new ApplicationGeneralPreferencesPage(this);
 //    prefPage->checkSettingsValidity();
 //    addObject(prefPage);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-//    Core::ICore::instance()->translators()->addNewTranslator("freeicd-coreplugin");
 
     // All pages must be included in the plugin manager here
     // So that mainwindow can construct the full tree page

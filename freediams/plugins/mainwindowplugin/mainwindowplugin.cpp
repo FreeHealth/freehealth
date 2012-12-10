@@ -59,7 +59,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(errorString);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_fdmainwindow");
 
     m_MainWindow->initialize(QStringList(),0);
     return true;

@@ -57,7 +57,7 @@ MainWinPlugin::MainWinPlugin() :
         qWarning() << "creating MainWinPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("faccountmainwindowplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_famainwindow");
 
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);

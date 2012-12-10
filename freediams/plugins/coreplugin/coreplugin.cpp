@@ -28,6 +28,7 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <translationutils/constants.h>
 
 #include <coreplugin/appaboutpage.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
@@ -96,10 +97,10 @@ void CorePlugin::extensionsInitialized()
     addObject(proxyPage);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
-    Core::ICore::instance()->translators()->addNewTranslator("fdcoreplugin");
+    Core::ICore::instance()->translators()->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
+    Core::ICore::instance()->translators()->addNewTranslator("lib_utils");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_medicalutils");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_fdcore");
 }
 
 void CorePlugin::remoteArgument(const QString &arg)

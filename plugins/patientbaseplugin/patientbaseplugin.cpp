@@ -83,7 +83,7 @@ PatientBasePlugin::PatientBasePlugin() :
         qWarning() << "creating PatientBasePlugin";
 
     // Add Translators
-    Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_patientbase");
 
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);

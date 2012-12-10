@@ -52,7 +52,7 @@ TemplatesPlugin::TemplatesPlugin()
         qWarning() << "creating TemplatesPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_templates");
 
     // Create the instance of Core
     new Templates::TemplatesCore(this);

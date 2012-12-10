@@ -63,7 +63,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
         qWarning() << "creating %PluginName%";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("%PluginName:l%"); 
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_%PluginName:l%");
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
@@ -128,9 +128,6 @@ void %PluginName%Plugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "%PluginName%::extensionsInitialized";
     }
-
-    // Add Translator to the Application
-    //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
     
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all

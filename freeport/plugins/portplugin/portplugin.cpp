@@ -39,7 +39,7 @@ PortPlugin::PortPlugin()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PortPlugin";
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("PortPlugin");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_port");
 }
 
 PortPlugin::~PortPlugin()

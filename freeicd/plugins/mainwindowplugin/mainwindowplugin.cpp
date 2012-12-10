@@ -41,7 +41,7 @@ MainWinPlugin::MainWinPlugin() :
         qWarning() << "creating FREEICD::MainWinPlugin";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("freeicd-mainwindow");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_freeicdmainwindow");
 
     m_MainWindow = new MainWindow();
     Core::ICore::instance()->setMainWindow(m_MainWindow);
