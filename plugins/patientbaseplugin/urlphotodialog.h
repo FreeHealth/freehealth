@@ -36,6 +36,10 @@ QT_BEGIN_NAMESPACE
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Utils {
+class HttpDownloader;
+}
+
 /**
  * \file urlphotodialog.h
  * \author Christian A Reiter
@@ -60,19 +64,21 @@ public:
     QPixmap photo() const;
 
 private Q_SLOTS:
-    void on_urlChanged(const QString &url);
+    void on_urlChanged(const QString &userUrlText);
     void downloadRequested();
-    void requestFinished(QNetworkReply *reply);
-    void progress(qint64 done, qint64 total);
+    void onDownloadFinished();
+
+    void updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
     Ui::UrlPhotoDialog *ui;
     QPushButton *m_OkButton;
     int m_httpGetId;
-    QNetworkAccessManager *m_netAccMan;
+    Utils::HttpDownloader *m_httpDld;
     QNetworkReply *m_reply;
     QByteArray m_picture;
     bool m_alreadyDownloading, m_alreadyUrlChecking;
+    qint64 m_progressTotal;
 };
 
 } // namespace Internal

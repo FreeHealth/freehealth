@@ -31,6 +31,12 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QTimer>
+#include <QFile>
+
+#include <utils/httpdownloader.h>
+#include <utils/log.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 
 namespace Patients {
 namespace Internal {
@@ -39,7 +45,8 @@ UrlPhotoDialog::UrlPhotoDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UrlPhotoDialog),
     m_alreadyDownloading(false),
-    m_alreadyUrlChecking(false)
+    m_alreadyUrlChecking(false),
+    m_progressTotal(0)
 {
     ui->setupUi(this);
     connect(ui->urlEdit, SIGNAL(textChanged(QString)), this, SLOT(on_urlChanged(QString)));
@@ -50,6 +57,7 @@ UrlPhotoDialog::UrlPhotoDialog(QWidget *parent) :
     ui->errorLabel->hide();
     ui->progressBar->hide();
     ui->progressBar->setValue(0);
+    ui->progressBar->setRange(0, 4096);
 }
 
 UrlPhotoDialog::~UrlPhotoDialog()
@@ -63,11 +71,17 @@ QPixmap UrlPhotoDialog::photo() const
     return pix? pix->copy() : QPixmap();
 }
 
-void UrlPhotoDialog::on_urlChanged(const QString &url)
+void UrlPhotoDialog::on_urlChanged(const QString &userUrlText)
 {
-    Q_UNUSED(url)
     if (m_alreadyUrlChecking)
         return;
+
+    // try to get a valid URL out of the user input
+    QUrl url = QUrl::fromUserInput(userUrlText);
+    if (!url.isValid()) {
+        ui->photoLabel->setPixmap(QPixmap());
+        return;
+    }
     QTimer::singleShot(500, this, SLOT(downloadRequested()));
     m_alreadyUrlChecking = true;
 }
@@ -100,29 +114,38 @@ void UrlPhotoDialog::downloadRequested()
     ui->urlEdit->setDisabled(true);
     m_alreadyDownloading = true;
 
-    // FIXME: Use the Utils::HttpDownloader instead and manage dialog cancellation. Issue 239
-
-    m_netAccMan = new QNetworkAccessManager(this);
-    //    connect(m_netAccMan, SIGNAL((int,int)), this, SLOT(progress(int,int)));
-    m_reply = m_netAccMan->get(QNetworkRequest(url));
-    connect(m_netAccMan, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
-    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(progress(qint64,qint64)));
+    // FIXME: manage dialog cancellation. Issue 239
+    m_httpDld = new Utils::HttpDownloader(this);
+    m_httpDld->setUrl(url);
+    m_httpDld->setOutputPath(Core::ICore::instance()->settings()->path(Core::ISettings::ApplicationTempPath));
+    connect(m_httpDld, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
+    connect(m_httpDld, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateDownloadProgress(qint64,qint64)));
+    m_httpDld->startDownload();
     ui->progressBar->show();
 }
 
-void UrlPhotoDialog::requestFinished(QNetworkReply *reply)
+void UrlPhotoDialog::onDownloadFinished()
 {
     ui->progressBar->hide();
-    if( reply->error()) {
-        ui->errorLabel->setToolTip(reply->errorString());
-        ui->errorLabel->show();
-        ui->photoLabel->setPixmap(QPixmap());
-        m_OkButton->setDisabled(true);
-    }
+    // TODO: eror handling! HttpDownloader???
+//    if( m_httpDld->reply->error()) {
+//        ui->errorLabel->setToolTip(reply->errorString());
+//        ui->errorLabel->show();
+//        ui->photoLabel->setPixmap(QPixmap());
+//        m_OkButton->setDisabled(true);
+//    }
 
     QPixmap pixmap;
-    pixmap.loadFromData(reply->readAll());
-    reply->deleteLater();
+    QString filename = m_httpDld->outputAbsoluteFileName();
+    if (!QFile::exists(filename)) {
+        m_httpDld->deleteLater();
+        LOG_ERROR(QString("Could not save %1.").arg(filename));
+        return;
+    }
+
+    pixmap.load(m_httpDld->outputAbsoluteFileName());
+    m_httpDld->deleteLater();
+
     ui->photoLabel->setPixmap(pixmap);
     m_alreadyDownloading = false;
     m_OkButton->setEnabled(true);
@@ -130,10 +153,10 @@ void UrlPhotoDialog::requestFinished(QNetworkReply *reply)
     ui->urlEdit->setFocus();
 }
 
-void UrlPhotoDialog::progress(qint64 done, qint64 total)
+void UrlPhotoDialog::updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-    ui->progressBar->setRange(0, total);
-    ui->progressBar->setValue(done);
+    ui->progressBar->setValue(bytesReceived);
+    ui->progressBar->setRange(0, bytesTotal);
 }
 
 } // namespace Internal

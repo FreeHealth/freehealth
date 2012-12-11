@@ -162,8 +162,7 @@ void HttpDownloader::setLabelText(const QString &text)
 /**
  * Starts the asynchronous downloading. When the download is finished
  * the downloadFinished() signal is emitted. You can follow the download progress
- * with the downloadProgressRangeChanged(), downloadProgressValueChanged(), and
- * downloadProgressPercentsChanged() signals.
+ * with the downloadProgress() or downloadProgressPercentsChanged() signals.
  */
 bool HttpDownloader::startDownload()
 {
@@ -235,7 +234,8 @@ bool HttpDownloaderPrivate::downloadFile()
 {
     QString fileName = q->outputAbsoluteFileName();
 
-    if (QFile::exists(fileName)) {        
+    if (QFile::exists(fileName)) {
+        // FIXME: No direct GUI access from a non-GUI class!!!
         if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
                                        "the current directory. Overwrite?").arg(fileName), ""))
             return false;
@@ -244,6 +244,7 @@ bool HttpDownloaderPrivate::downloadFile()
 
     file = new QFile(fileName);
     if (!file->open(QIODevice::WriteOnly)) {
+        // FIXME: No direct GUI access from a non-GUI class!!!
         Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
                                  .arg(fileName).arg(file->errorString()), "");
         delete file;
@@ -361,25 +362,20 @@ void HttpDownloaderPrivate::httpReadyRead()
 /**
   * Emits signals that can be connected to a QProgressBar which is then updated according
   * to the current download status (range and value). \n
-  * Also computes the downloading percentage and emits the downloadProgressPercentsChanged() signal.
-  * \sa HttpDownloader::setProgressBar()
+  * Also computes the downloading in tenths of a percent and emits the downloadProgressPermill() signal.
   */
-void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesRead, qint64 totalBytes)
+void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesReceived, qint64 totalBytes)
 {
     if (httpRequestAborted)
         return;
 
-    Q_EMIT q->downloadProgressRangeChanged(0, totalBytes);
-    Q_EMIT q->downloadProgressValueChanged(bytesRead);
+    Q_EMIT q->downloadProgress(bytesReceived, totalBytes);
 
-    int percent = 0;
+    int permill = 0;
     if (totalBytes>0)
-        percent = bytesRead*100/totalBytes;
+        permill = bytesReceived*1000/totalBytes;
 
-    if (progressBar)
-        progressBar->setValue(percent);
-
-    Q_EMIT q->downloadProgressPercentsChanged(percent);
+    Q_EMIT q->downloadProgressPermill(permill);
 }
 
 /** Slot connected to server authentication required */
