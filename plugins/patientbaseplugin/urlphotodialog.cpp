@@ -99,6 +99,9 @@ void UrlPhotoDialog::downloadRequested()
 
     ui->urlEdit->setDisabled(true);
     m_alreadyDownloading = true;
+
+    // FIXME: Use the Utils::HttpDownloader instead and manage dialog cancellation. Issue 239
+
     m_netAccMan = new QNetworkAccessManager(this);
     //    connect(m_netAccMan, SIGNAL((int,int)), this, SLOT(progress(int,int)));
     m_reply = m_netAccMan->get(QNetworkRequest(url));
