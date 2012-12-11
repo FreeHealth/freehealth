@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Patients::UrlPhotoDialog</class>
- <widget class="QDialog" name="Patients::UrlPhotoDialog">
+ <class>Patients::Internal::UrlPhotoDialog</class>
+ <widget class="QDialog" name="Patients::Internal::UrlPhotoDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>369</width>
-    <height>224</height>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,7 +120,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Patients::UrlPhotoDialog</receiver>
+   <receiver>Patients::Internal::UrlPhotoDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -136,7 +136,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Patients::UrlPhotoDialog</receiver>
+   <receiver>Patients::Internal::UrlPhotoDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
