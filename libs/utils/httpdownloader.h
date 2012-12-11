@@ -72,6 +72,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void downloadFinished();
+    //FIXME: this should be qint64 as download size could be more than int can hold; issue #240
     void downloadProgressRangeChanged(int,int);
     void downloadProgressValueChanged(int);
     void downloadProgressPercentsChanged(int);
