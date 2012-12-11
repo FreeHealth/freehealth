@@ -10,4 +10,4 @@ OTHER_FILES +=  \
                $${PWD}/api/whatsnew.qdoc \
                $${PWD}/api/buildinstructions.qdoc \
                $${PWD}/api/fmf_datamanagement.qdoc \
-               $${PWD}/api_Doxyfile
+               $${PWD}/Doxyfile
