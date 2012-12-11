@@ -47,13 +47,13 @@ div.navtab {
 /* @group Link Styling */
 
 a {
-    color: #153788;
+    color: #900;
     font-weight: normal;
     text-decoration: none;
 }
 
 .contents a:visited {
-    color: #1b77c5;
+    color: #F75151;
 }
 
 a:hover {
@@ -304,28 +304,29 @@ hr {
     font-weight: bold;
 }
 
-.memproto, .memdoc {
-    border: 1px solid #84b0c7;
+.memproto /*, .memdoc */ {
+    border: 1px solid #F7ACAC;
 }
 
 .memproto {
     padding: 0;
-    background-color: #d5e1e8;
+    background-color: #FDD;
     font-weight: bold;
-    -webkit-border-top-left-radius: 8px;
-    -webkit-border-top-right-radius: 8px;
-    -moz-border-radius-topleft: 8px;
-    -moz-border-radius-topright: 8px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
 }
 
 .memdoc {
     padding: 2px 5px;
-    background-color: #eef3f5;
+    /*
+    background-color: #FFD3D3;
     border-top-width: 0;
     -webkit-border-bottom-left-radius: 8px;
     -webkit-border-bottom-right-radius: 8px;
     -moz-border-radius-bottomleft: 8px;
     -moz-border-radius-bottomright: 8px;
+    */
 }
 
 .paramkey {
