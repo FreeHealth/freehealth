@@ -50,6 +50,7 @@ namespace Utils {
 class HttpDownloader;
 namespace Internal {
 
+//FIXME: private part should be no QObject, but derive from QObjectPrivate
 class HttpDownloaderPrivate : public QObject
 {
     Q_OBJECT
