@@ -1409,6 +1409,7 @@ QString toHtmlAccent(const QString &html)
     return toReturn;
 }
 
+/** Capitalize the first letter of a string */
 QString firstLetterUpperCase(const QString &s)
 {
     QString tmp = s;
@@ -1416,6 +1417,7 @@ QString firstLetterUpperCase(const QString &s)
     return tmp;
 }
 
+/** Removes accent from a UTF8 only string */
 QString removeAccents(const QString &text)
 {
     QHash< QString, QString > accents;
