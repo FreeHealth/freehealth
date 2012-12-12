@@ -73,6 +73,19 @@ public:
 
     void addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const;
 
+    void setStreet(const QString &street);
+    void setCity(const QString &city);
+    void setStateProvince(const QString &state);
+    void setCountry(const QString &twoCharIsoCode);
+    void setZipCode(const QString &zip);
+
+    QString street() const;
+    QString city() const;
+    QString stateProvince() const;
+    QString countryName() const;
+    QString countryIso() const;
+    QString zipCode() const;
+
 private:
     void changeEvent(QEvent *e);
 

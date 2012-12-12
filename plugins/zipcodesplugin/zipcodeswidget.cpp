@@ -33,6 +33,11 @@
  * - city
  * - zipcode
  * - zipcode/city/state/province auto-completer.
+ *
+ * You can use this widget like a QDataWidgetMapper, just add mapping to your internal
+ * mapper with addMapping(). You have to manage yourself the mapper submition to
+ * the model. Or you can use this widget like old fashion stuff by
+ * setting/getting values by hand.
  */
 
 #include "zipcodeswidget.h"
@@ -222,6 +227,68 @@ void ZipCodesWidget::addMapping(QDataWidgetMapper *mapper, const int section, Ma
     case ZipcodePlainText: mapper->addMapping(d->_zip, section, "text"); break;
     }
 }
+
+void ZipCodesWidget::setStreet(const QString &street)
+{
+    d->_street->setPlainText(street);
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setCity(const QString &city)
+{
+    d->_city->setText(city);
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setStateProvince(const QString &state)
+{
+    d->_stateCombo->setCurrentIndex(d->_stateCombo->findText(state));
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setCountry(const QString &twoCharIsoCode)
+{
+    d->_country->setCurrentIsoCountry(twoCharIsoCode);
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setZipCode(const QString &zip)
+{
+    d->_zip->setText(zip);
+    d->_zipCompleter->checkData();
+}
+
+
+QString ZipCodesWidget::street() const
+{
+    return d->_street->toPlainText();
+}
+
+QString ZipCodesWidget::city() const
+{
+    return d->_city->text();
+}
+
+QString ZipCodesWidget::stateProvince() const
+{
+    return d->_stateCombo->currentText();
+}
+
+QString ZipCodesWidget::countryName() const
+{
+    return d->_country->currentCountryName();
+}
+
+QString ZipCodesWidget::countryIso() const
+{
+    return d->_country->currentIsoCountry();
+}
+
+QString ZipCodesWidget::zipCode() const
+{
+    return d->_zip->text();
+}
+
 
 /** Retranslate the UI */
 void ZipCodesWidget::changeEvent(QEvent *e)
