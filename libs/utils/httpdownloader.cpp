@@ -362,7 +362,7 @@ void HttpDownloaderPrivate::httpReadyRead()
 /**
   * Emits signals that can be connected to a QProgressBar which is then updated according
   * to the current download status (range and value). \n
-  * Also computes the downloading in tenths of a percent and emits the downloadProgressPermill() signal.
+  * Also computes the downloading in tenths of a percent and emits the downloadProgressPermille() signal.
   */
 void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesReceived, qint64 totalBytes)
 {
@@ -371,11 +371,11 @@ void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesReceived, qint64 
 
     Q_EMIT q->downloadProgress(bytesReceived, totalBytes);
 
-    int permill = 0;
+    int permille = 0;
     if (totalBytes>0)
-        permill = bytesReceived*1000/totalBytes;
+        permille = bytesReceived*1000/totalBytes;
 
-    Q_EMIT q->downloadProgressPermill(permill);
+    Q_EMIT q->downloadProgressPermille(permille);
 }
 
 /** Slot connected to server authentication required */

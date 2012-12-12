@@ -119,6 +119,7 @@ void UrlPhotoDialog::downloadRequested()
     m_httpDld->setUrl(url);
     m_httpDld->setOutputPath(Core::ICore::instance()->settings()->path(Core::ISettings::ApplicationTempPath));
     connect(m_httpDld, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
+    connect(m_httpDld, SIGNAL(downloadFinished()), m_httpDld, SLOT(deleteLater()));
     connect(m_httpDld, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateDownloadProgress(qint64,qint64)));
     m_httpDld->startDownload();
     ui->progressBar->show();
@@ -138,13 +139,11 @@ void UrlPhotoDialog::onDownloadFinished()
     QPixmap pixmap;
     QString filename = m_httpDld->outputAbsoluteFileName();
     if (!QFile::exists(filename)) {
-        m_httpDld->deleteLater();
         LOG_ERROR(QString("Could not save %1.").arg(filename));
         return;
     }
 
     pixmap.load(m_httpDld->outputAbsoluteFileName());
-    m_httpDld->deleteLater();
 
     ui->photoLabel->setPixmap(pixmap);
     m_alreadyDownloading = false;
@@ -155,8 +154,8 @@ void UrlPhotoDialog::onDownloadFinished()
 
 void UrlPhotoDialog::updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-    ui->progressBar->setValue(bytesReceived);
     ui->progressBar->setRange(0, bytesTotal);
+    ui->progressBar->setValue(bytesReceived);
 }
 
 } // namespace Internal

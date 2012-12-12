@@ -867,12 +867,15 @@ bool IDrugDatabaseStep::startDownload()
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
 
 //    dld->setMainWindow(mainwindow());
-    dld->setOutputPath(tempPath());
-    dld->setUrl(QUrl(downloadUrl()));
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
-    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
+    connect(dld, SIGNAL(downloadProgressPermille(int)), this, SIGNAL(progress(int)));
+
+    Q_EMIT progressRangeChanged(0, 1000);
+    Q_EMIT progress(0);
+
+    dld->setOutputPath(tempPath());
+    dld->setUrl(QUrl(downloadUrl()));
     dld->startDownload();
     return true;
 }

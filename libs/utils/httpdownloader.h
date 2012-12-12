@@ -73,7 +73,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void downloadFinished();
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void downloadProgressPermill(int);
+    void downloadProgressPermille(int);
 
 private:
     Internal::HttpDownloaderPrivate *d;

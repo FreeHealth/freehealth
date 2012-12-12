@@ -75,6 +75,8 @@ public:
 
     QStringList errors() const {return m_Errors;}
 
+private Q_SLOTS:
+    void emitDownloadProgress(qint64 value, qint64 total);
 private:
     QStringList m_Errors;
     bool m_WithProgress;

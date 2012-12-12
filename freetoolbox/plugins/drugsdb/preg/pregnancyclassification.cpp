@@ -175,8 +175,7 @@ bool PregnancyDatatabaseStep::startDownload()
     dld->setUrl(QUrl(PREGNANCY_TGA_URL));
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
-    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
+    connect(dld, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(emitDownloadProgress(qint64,qint64)));
     dld->startDownload();
     return true;
 }
@@ -242,7 +241,13 @@ bool PregnancyDatatabaseStep::populateDatabase()
     return true;
 }
 
-
+//FIXME: this is a quick&dirty update of the possibly connected progressbar
+// qint64 -> int casting is dangerous.
+void PregnancyDatatabaseStep::emitDownloadProgress(qint64 value, qint64 total)
+{
+    Q_EMIT progressRangeChanged(0, total);
+    Q_EMIT progress(value);
+}
 
 
 PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent) :
