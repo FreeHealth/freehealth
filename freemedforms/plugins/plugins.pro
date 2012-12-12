@@ -6,12 +6,13 @@ SUBDIRS = \
     listview \
     texteditor \
     templates \
-    formmanager \
     zipcodes \
     datapack \
 #    saverestore \    # unstable
     # Depend to more than one plugin
+    formmanager \
     printer \
+    identity \
     category \
     patientbase \
     usermanager \
@@ -46,6 +47,7 @@ saverestore.depends += core
 templates.subdir   = ../../plugins/templatesplugin
 templates.depends += core
 
+# complex plugins
 formmanager.subdir   = ../../plugins/formmanagerplugin
 formmanager.depends += core
 formmanager.depends += listview
@@ -54,7 +56,10 @@ printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-# complex plugins
+identity.subdir = ../../plugins/identityplugin
+identity.depends += core
+identity.depends += zipcodes
+
 mainwin.subdir   = ../../plugins/fmfmainwindowplugin
 mainwin.depends += core
 mainwin.depends += texteditor
