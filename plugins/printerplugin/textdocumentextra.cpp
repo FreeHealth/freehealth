@@ -30,7 +30,8 @@
 /**
   \class TextDocumentExtra
   \brief This class is used by Printer for header/footer/watermark management.
-  Xml structure looks like :\n
+  Xml structure looks like:\n
+  \verbatim
   <tkConstants::TKDOCUMENT_GENERAL_XML_TAG> </idem>\n
     <tkConstants::TKDOCUMENT_VERSION_XML_TAG> </idem>\n
     <tkConstants::TKDOCUMENT_PRESENCE_XML_TAG> </idem>\n
@@ -38,7 +39,8 @@
     <tkConstants::TKDOCUMENT_EXTRA_XML_TAG> </idem>\n
     <tkConstants::TKDOCUMENT_HTML_XML_TAG> </idem>\n
   </tkConstants::TKDOCUMENT_GENERAL_XML_TAG>\n
-  You can :
+  \endverbatim
+  You can:
   \li get a pointer to the referenced QTextDocument using document().\n
   \li set the Presence of the document according to Printer::Presence\n
   \li set the Priority of the document according to Printer::Priority\n
