@@ -26,29 +26,22 @@
 #include "%PluginName:l%plugin.%CppHeaderSuffix%"
 #include "%PluginName:l%constants.%CppHeaderSuffix%"
 
-#include <utils/log.h>
-
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
-
-#include <extensionsystem/pluginmanager.h>
-
 //#include <coreplugin/contextmanager/icontext.h>
-#include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/actionmanager/command.h>
-#include <coreplugin/actionmanager/actioncontainer.h>
+//#include <coreplugin/actionmanager/actionmanager.h>
+//#include <coreplugin/actionmanager/command.h>
+//#include <coreplugin/actionmanager/actioncontainer.h>
 //#include <coreplugin/coreconstants.h>
 
-#include <QtGui/QAction>
-#include <QtGui/QMessageBox>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
+#include <utils/log.h>
+#include <extensionsystem/pluginmanager.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace %PluginName%::Internal;
@@ -59,6 +52,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 %PluginName%Plugin::%PluginName%Plugin()
 {
+    setObjectName("%PluginName%Plugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating %PluginName%";
 
@@ -87,7 +81,6 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
     
-    setObjectName("%PluginName%");
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "creating %PluginName%";
     }
