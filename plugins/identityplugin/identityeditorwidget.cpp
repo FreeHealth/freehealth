@@ -331,10 +331,11 @@ public:
     QWidget *getWidget(IdentityEditorWidget::AvailableWidget widget)
     {
         switch (widget) {
-        case IdentityEditorWidget::Title: return ui->titleCombo;
+        case IdentityEditorWidget::TitleIndex: return ui->titleCombo;
         case IdentityEditorWidget::BirthName: return ui->birthName;
         case IdentityEditorWidget::SecondName: return ui->secondName;
         case IdentityEditorWidget::FirstName: return ui->firstname;
+        case IdentityEditorWidget::GenderIndex:
         case IdentityEditorWidget::Gender: return ui->genderCombo;
         case IdentityEditorWidget::Language_QLocale: return ui->language;
         case IdentityEditorWidget::DateOfBirth: return ui->dob;
@@ -348,8 +349,9 @@ public:
     QByteArray getWidgetPropertyForMapper(IdentityEditorWidget::AvailableWidget widget)
     {
         switch (widget) {
-        case IdentityEditorWidget::Title:
+        case IdentityEditorWidget::TitleIndex:
         case IdentityEditorWidget::Gender:
+        case IdentityEditorWidget::GenderIndex:
             return "currentIndex";
         case IdentityEditorWidget::BirthName:
         case IdentityEditorWidget::SecondName:
@@ -495,8 +497,8 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 {
     if (!d->ui)
         return;
-    d->ui->titleCombo->setEnabled(widgets & Title);
-    d->ui->genderCombo->setEnabled(widgets & Gender);
+    d->ui->titleCombo->setEnabled(widgets & TitleIndex);
+    d->ui->genderCombo->setEnabled(widgets & Gender || widgets & GenderIndex);
     d->ui->birthName->setEnabled(widgets & BirthName);
     d->ui->secondName->setEnabled(widgets & SecondName);
     d->ui->firstname->setEnabled(widgets & FirstName);
