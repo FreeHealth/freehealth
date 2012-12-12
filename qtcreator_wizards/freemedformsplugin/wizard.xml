@@ -30,9 +30,9 @@ leave room for the Qt 4 target page.
         class="qt4project" firstpage="10"
         id="A.FMFPlugin" category="X.FMFProjects">
     <icon>../shared/freemedforms_24.png</icon>
-    <description>Creates a basic FreeMedForms plugin.</description>
-    <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms.</description>
-    <description xml:lang="de">Erstellt ein einfaches FreeMedForms-Plugin.</description>
+    <description>Creates a basic FreeMedForms plugin (without preferences page).</description>
+    <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms (sans page de préférences).</description>
+    <description xml:lang="de">Erstellt ein einfaches FreeMedForms-Plugin (ohne präferenzen seite).</description>
     <displayname>FreeMedForms plugin</displayname>;
     <displayname xml:lang="fr">Greffon FreeMedForms</displayname>;
     <displayname xml:lang="de">FreeMedForms-Plugin</displayname>;
@@ -40,7 +40,7 @@ leave room for the Qt 4 target page.
     <displaycategory xml:lang="fr">FreeMedForms</displaycategory>
     <displaycategory xml:lang="de">FreeMedForms</displaycategory>
     <files>
-        <file source="myplugin.pro" target="%PluginName:l%.pro" openproject="true"/>
+        <file source="myplugin.pro" target="%PluginName:l%plugin.pro" openproject="true"/>
         <file source="myplugin_dependencies.pri" target="%PluginName:l%_dependencies.pri" openproject="true"/>
         <file source="myplugin.pri" target="%PluginName:l%.pri" openproject="true"/>
         <file source="MyPlugin.pluginspec" target="%PluginName%.pluginspec" openeditor="true"/>
