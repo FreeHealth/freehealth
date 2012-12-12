@@ -22,6 +22,6 @@ OTHER_FILES = %PluginName%.pluginspec
 
 PROVIDER = %VendorName%
 
-T# include translations
+#include translations
 TRANSLATION_NAME = %PluginName:l%
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

@@ -71,7 +71,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 %PluginName%Plugin::~%PluginName%Plugin()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << WARN_FUNC;
+        WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
 }
@@ -150,7 +150,7 @@ void %PluginName%Plugin::extensionsInitialized()
 void %PluginName%Plugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << WARN_FUNC;
+        WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
 }
@@ -158,7 +158,7 @@ void %PluginName%Plugin::postCoreInitialization()
 ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << WARN_FUNC;
+        WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
@@ -180,7 +180,7 @@ ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 void %PluginName%Plugin::coreAboutToClose()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << WARN_FUNC;
+        WARN_FUNC;
     // Core is about to close
     // ICore::user() is still available
 }

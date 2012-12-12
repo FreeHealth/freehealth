@@ -58,7 +58,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 /*!
  * Default constructor of the ThemedGenderButton class.
- * \param parent parent of the button, reached through to QToolButton.
+ * \param parent parent of the button, passed through to QToolButton.
  * Just calls the QPushButton constructor and initializes the internal Pixmap.
  */
 ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
