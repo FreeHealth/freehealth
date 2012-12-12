@@ -85,6 +85,12 @@ QLocale::Country CountryComboBox::currentCountry() const
     return ok? QLocale::Country(country) : QLocale::AnyCountry;
 }
 
+/** Return the translated, human readable country name */
+QString CountryComboBox::currentCountryName() const
+{
+    return QLocale::countryToString(currentCountry());
+}
+
 /*! Returns an uppercase 2-char ISO name of the current selected country. */
 QString CountryComboBox::currentIsoCountry() const
 {

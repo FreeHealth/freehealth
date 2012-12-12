@@ -54,6 +54,7 @@ public:
 
     QLocale::Country currentCountry() const;
     QString currentIsoCountry() const;
+    QString currentCountryName() const;
 
 public Q_SLOTS:
     void setCurrentIsoCountry(const QString &isoCode);

@@ -277,10 +277,16 @@ QLocale::Language LanguageComboBox::currentLanguage() const
     return currentLang;
 }
 
-/** \brief Return the name of the current selected language.*/
+/** \brief Return the human readable name of the current selected language.*/
 QString LanguageComboBox::currentLanguageName() const
 {
     return currentText();
+}
+
+/** \brief Return the ISO name of the current selected language.*/
+QString LanguageComboBox::currentLanguageIsoName() const
+{
+    return QLocale(currentLanguage()).name().left(2);
 }
 
 void LanguageComboBox::setCurrentIsoLanguage(const QString &languageIsoCode)
