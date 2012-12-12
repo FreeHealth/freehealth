@@ -40,8 +40,6 @@
 #include "patientcore.h"
 #include "constants_db.h"
 
-#include "ui_identitywidget.h"
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
