@@ -57,7 +57,7 @@
   <MedForm name="Subs::Tools::IdentitySynopsis" uifilename="./ui/xx/identity.ui">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
-    <options>noepisode;HideHeaderOnUniqueEpisode</options>
+    <options>NoEpisode</options>
     <icon>__theme__/identity.png</icon>
 
       <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui" isidentity="true">
