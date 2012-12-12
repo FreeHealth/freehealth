@@ -45,6 +45,9 @@
 #include "pim/pimintegrator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <drugsdb/tools.h>
 
 #include <extensionsystem/pluginmanager.h>

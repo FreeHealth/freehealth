@@ -29,6 +29,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/translators.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
