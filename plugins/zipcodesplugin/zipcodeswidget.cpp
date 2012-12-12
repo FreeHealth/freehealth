@@ -38,8 +38,10 @@
 #include "zipcodeswidget.h"
 #include "zipcodescompleters.h"
 
-#include <listviewplugin/countrycombobox.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
+#include <utils/widgets/countrycombobox.h>
 #include <utils/widgets/uppercasevalidator.h>
 #include <utils/widgets/qbuttonlineedit.h>
 #include <translationutils/constants.h>
@@ -56,6 +58,8 @@
 using namespace ZipCodes;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace ZipCodes {
 namespace Internal {
@@ -108,7 +112,9 @@ public:
         _city = new Utils::QButtonLineEdit(q);
         _zip = new Utils::QButtonLineEdit(q);
         _stateCombo = new QComboBox(q);
-        _country = new Views::CountryComboBox(q);
+        _country = new Utils::CountryComboBox(q);
+        _country->setFlagPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
+        _country->initialize();
 
         _zipCompleter = new ZipCodes::ZipCountryCompleters(q);
         _zipCompleter->setCityLineEdit(_city);
@@ -158,7 +164,7 @@ public:
     QTextEdit *_street;
     Utils::QButtonLineEdit *_city, *_zip;
     QComboBox *_stateCombo;
-    Views::CountryComboBox *_country;
+    Utils::CountryComboBox *_country;
     ZipCountryCompleters *_zipCompleter;
     ZipCodesWidget::TypeOfLayout _typeOfLayout;
 
