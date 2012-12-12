@@ -13,64 +13,7 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="nameslabel">
-     <property name="text">
-      <string>Names</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="names"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="firstlabel">
-     <property name="text">
-      <string>FirstName</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="firstnames"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="doblabel">
-     <property name="text">
-      <string>DOB</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <layout class="QHBoxLayout" name="doblayout"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="addresslabel">
-     <property name="text">
-      <string>Address</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" rowspan="2">
-    <widget class="QTextEdit" name="address"/>
-   </item>
-   <item row="4" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>242</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="ziplayout"/>
-   </item>
-  </layout>
+  <layout class="QGridLayout" name="trustedLayout"/>
  </widget>
  <resources/>
  <connections/>
