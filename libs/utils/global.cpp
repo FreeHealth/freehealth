@@ -52,6 +52,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QNetworkConfigurationManager>
+#include <QBuffer>
 
 /**
   \namespace Utils
@@ -60,7 +61,6 @@
 
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
-
 
 namespace {
 static const unsigned char two_letter_country_code_list[] =
@@ -1656,6 +1656,35 @@ void xmlWrite(QDomElement &father, const QString &name, bool value)
 {
     QString valueStr = QString::number((int) value);
     Utils::xmlWrite(father, name, valueStr);
+}
+
+/**
+ * Transform a QPixmap to a base 64 QByteArray
+ * \sa pixmapFromBase64()
+*/
+QByteArray pixmapToBase64(const QPixmap &pixmap)
+{
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    if (!pixmap.save(&buffer, "PNG")) {
+        LOG_ERROR_FOR("Global", "Unable to transform QPixmap to base64 QByteArray");
+        return QByteArray();
+    }
+    return byteArray.toBase64();
+}
+
+/**
+ * Transform a QPixmap to a base 64 QByteArray
+ * \sa pixmapFromBase64()
+*/
+QPixmap pixmapFromBase64(const QByteArray &base64)
+{
+    QPixmap pix;
+    if (!pix.load(QByteArray::fromBase64(base64))) {
+        LOG_ERROR_FOR("Global", "Unable to transform base64 QByteArray to QPixmap");
+        return QPixmap();
+    }
+    return pix;
 }
 
 /** \brief Replace a token into a string. */
