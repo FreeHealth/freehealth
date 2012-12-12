@@ -27,6 +27,8 @@
 #ifndef USERCONSTANTS_H
 #define USERCONSTANTS_H
 
+#include <qglobal.h>
+
 /**
  \brief all constants used by the usertoolkit objects and widgets.
  \ingroup usertoolkit constants_usertoolkit
