@@ -19,37 +19,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_TRANS_CONSTANTS_H
-#define PATIENTS_TRANS_CONSTANTS_H
+#ifndef IDENTITYCONSTANTS_H
+#define IDENTITYCONSTANTS_H
 
-/**
- * \file constants_trans.h
- * \author Eric MAEKER
- * \version 0.7.6
- * \date 02 Mar 2011
-*/
-
-namespace Patients {
+namespace Identity {
 namespace Constants {
 
-    const char* const   TRANS_CONTEXT             = "Patients";
+const char * const ACTION_ID = "Identity.Action";
+const char * const MENU_ID = "Identity.Menu";
 
-    const char* const   SEARCHBYNAME_TEXT         = QT_TRANSLATE_NOOP("Patients", "Search by Name");
-    const char* const   SEARCHBYFIRSTNAME_TEXT      = QT_TRANSLATE_NOOP("Patients", "Search by First name");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TEXT  = QT_TRANSLATE_NOOP("Patients", "Search by Name and First name");
-    const char* const   SEARCHBYDOB_TEXT          = QT_TRANSLATE_NOOP("Patients", "Search by Date Of Birth");
+} // namespace Identity
+} // namespace Constants
 
-    const char* const   SEARCHBYNAME_TOOLTIP         = QT_TRANSLATE_NOOP("Patients", "Type the name or second name of the patient");
-    const char* const   SEARCHBYFIRSTNAME_TOOLTIP      = QT_TRANSLATE_NOOP("Patients", "Type the firstname of the patient");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TOOLTIP  = QT_TRANSLATE_NOOP("Patients", "Type the name or second name followed by ; and the firstname");
-    const char* const   SEARCHBYDOB_TOOLTIP          = QT_TRANSLATE_NOOP("Patients", "Type the date of birth (yyyy/MM/dd)");
+#endif // IDENTITYCONSTANTS_H
 
-}  // End namespace Patients::Constants
-}  // End namespace Patients
-
-#endif // PATIENTS_TRANS_CONSTANTS_H

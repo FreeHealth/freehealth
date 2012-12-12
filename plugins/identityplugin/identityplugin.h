@@ -19,54 +19,44 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PIXMAPBUTTON_H
-#define PIXMAPBUTTON_H
+#ifndef IDENTITY_H
+#define IDENTITY_H
 
-#include <QToolButton>
+#include "identity_exporter.h"
+#include "identitypreferences.h"
 
-namespace Patients {
-/*!
- * \class PixmapButton
- * \brief This class provides a QPushButton with a displayed Pixmap on it.
- *
- * The normal Qt QPushButton only can store a QIcon and has ho pixmap property. This
- * can be unconvenient when using the button as display widget in a MVC pattern as
- * widget - a QDataWidgetMapper doesn't know how to handle a QPushbutton.
- * Here comes the PixmapButton. It still displays a QIcon, but stores a QPixmap underneath.
- * It also provides a \e pixmap property for easy interacting with a QDataWidgetMapper.
- *
- */
-class PixmapButton : public QToolButton
+#include <extensionsystem/iplugin.h>
+
+namespace Identity {
+namespace Internal {
+
+class IdentityPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
-
+    
 public:
-    explicit PixmapButton(QWidget* parent = 0);
-    QPixmap pixmap() const;
-    void setDefaultAction(QAction *action);
-    QAction* defaultAction() const;
-    QAction* deletePhotoAction() const;
-
-Q_SIGNALS:
-
-public Q_SLOTS:
-    void setPixmap(const QPixmap& pixmap);
-    void clearPixmap();
-    void setGenderImage(int genderIndex);
-
+    IdentityPlugin();
+    ~IdentityPlugin();
+    
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
+    //    ShutdownFlag aboutToShutdown();
+    
+private Q_SLOTS:
+    void postCoreInitialization();
+    void coreAboutToClose();
+    //    void triggerAction();
+    
 private:
-    QPixmap m_pixmap;
-    QAction* m_deletePhotoAction;
-    QAction *m_separator;
-    QAction *m_defaultAction;
+//    IdentityPreferencesPage *m_prefPage;
 };
 
-} // end Patients
+} // namespace Internal
+} // namespace Identity
 
-#endif // PIXMAPBUTTON_H
+#endif // IDENTITY_H
+

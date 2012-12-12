@@ -60,6 +60,7 @@ public:
     DisplayMode displayMode() const;
     QLocale::Language currentLanguage() const;
     QString currentLanguageName() const;
+    QString currentLanguageIsoName() const;
 
 public Q_SLOTS:
     void setCurrentIsoLanguage(const QString &languageIsoCode);

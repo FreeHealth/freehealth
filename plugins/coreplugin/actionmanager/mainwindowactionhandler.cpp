@@ -1297,10 +1297,11 @@ bool MainWindowActionHandler::checkUpdate()
 
 bool MainWindowActionHandler::reportBug()
 {
-    // this is the short version: just opens the Google issue tracker
-    // Maybe later we could use the Utils::BugReportDialog
-    QDesktopServices::openUrl(QUrl("https://code.google.com/p/freemedforms/issues/entry"));
+    BugReportDialog dlg;
+    int result = dlg.exec();
+    Q_UNUSED(result);
     return true;
+//    return result = QDialog::Accepted;
 }
 
 /**

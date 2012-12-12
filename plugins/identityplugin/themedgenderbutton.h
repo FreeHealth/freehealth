@@ -19,37 +19,44 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Eric Maeker                                                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_TRANS_CONSTANTS_H
-#define PATIENTS_TRANS_CONSTANTS_H
+#ifndef IDENTITY_THEMEDGENDERBUTTON_H
+#define IDENTITY_THEMEDGENDERBUTTON_H
 
-/**
- * \file constants_trans.h
- * \author Eric MAEKER
- * \version 0.7.6
- * \date 02 Mar 2011
-*/
+#include <QToolButton>
 
-namespace Patients {
-namespace Constants {
+namespace Identity {
+namespace Internal {
+class ThemedGenderButton : public QToolButton
+{
+    Q_OBJECT
+    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap) // TODO: add NOTIFY currentLanguageChanged
 
-    const char* const   TRANS_CONTEXT             = "Patients";
+public:
+    explicit ThemedGenderButton(QWidget* parent = 0);
 
-    const char* const   SEARCHBYNAME_TEXT         = QT_TRANSLATE_NOOP("Patients", "Search by Name");
-    const char* const   SEARCHBYFIRSTNAME_TEXT      = QT_TRANSLATE_NOOP("Patients", "Search by First name");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TEXT  = QT_TRANSLATE_NOOP("Patients", "Search by Name and First name");
-    const char* const   SEARCHBYDOB_TEXT          = QT_TRANSLATE_NOOP("Patients", "Search by Date Of Birth");
+    QPixmap pixmap() const;
+    void setDefaultAction(QAction *action);
+    QAction* defaultAction() const;
+    QAction* deletePhotoAction() const;
 
-    const char* const   SEARCHBYNAME_TOOLTIP         = QT_TRANSLATE_NOOP("Patients", "Type the name or second name of the patient");
-    const char* const   SEARCHBYFIRSTNAME_TOOLTIP      = QT_TRANSLATE_NOOP("Patients", "Type the firstname of the patient");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TOOLTIP  = QT_TRANSLATE_NOOP("Patients", "Type the name or second name followed by ; and the firstname");
-    const char* const   SEARCHBYDOB_TOOLTIP          = QT_TRANSLATE_NOOP("Patients", "Type the date of birth (yyyy/MM/dd)");
+public Q_SLOTS:
+    void setPixmap(const QPixmap &pixmap);
+    void clearPixmap();
+    void setGenderImage(int genderIndex);
 
-}  // End namespace Patients::Constants
-}  // End namespace Patients
+private:
+    QPixmap m_pixmap;
+    QAction* m_deletePhotoAction;
+    QAction *m_separator;
+    QAction *m_defaultAction;
+};
 
-#endif // PATIENTS_TRANS_CONSTANTS_H
+} // namespace Internal
+} // namespace Identity
+
+#endif // IDENTITY_THEMEDGENDERBUTTON_H

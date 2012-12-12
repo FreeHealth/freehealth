@@ -31,7 +31,6 @@
 #include <printerplugin/printer_exporter.h>
 
 #include <QWidget>
-#include <QFlags>
 #include <QPixmap>
 #include <QTextDocument>
 #include <QPrinter>
@@ -50,7 +49,6 @@ QT_END_NAMESPACE
  * \version 0.4.2
  * \date 14 July 2010
 */
-
 
 namespace Print {
 namespace Internal {
@@ -202,7 +200,6 @@ class PrinterPreviewer : public QWidget
     Q_PROPERTY(int headerPresence     READ headerPresence    WRITE setHeaderPresence    USER true)
     Q_PROPERTY(int footerPresence     READ footerPresence    WRITE setFooterPresence    USER true)
     Q_PROPERTY(int watermarkPresence  READ watermarkPresence WRITE setWatermarkPresence NOTIFY watermarkPresenceChanged USER true)
-
 
 public:
     explicit PrinterPreviewer(QWidget *parent = 0) : QWidget(parent) {}

@@ -68,12 +68,24 @@ public:
     explicit ZipCodesWidget(QWidget *parent = 0);
     ~ZipCodesWidget();
     bool initialize(TypeOfLayout layout);
-    
+
+    void setReadOnly(bool readOnly);
+
     void addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const;
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
+    void clear();
+    void setStreet(const QString &street);
+    void setCity(const QString &city);
+    void setStateProvince(const QString &state);
+    void setCountry(const QString &twoCharIsoCode);
+    void setZipCode(const QString &zip);
+
+    QString street() const;
+    QString city() const;
+    QString stateProvince() const;
+    QString countryName() const;
+    QString countryIso() const;
+    QString zipCode() const;
 
 private:
     void changeEvent(QEvent *e);

@@ -228,13 +228,13 @@ QStringList dailySchemeXmlTagList()
 //    return list;
 //}
 
-/** \brief Transforms the dailyScheme QFlag mfDosageModel::DailySchemes to the corresponding QStringList \e list */
+/** \brief Transforms the dailyScheme QFlag DrugsDB::DosageModel::DailySchemes to the corresponding QStringList \e list */
 QString dailyScheme(const int scheme)
 {
     return dailySchemeList().at(scheme);
 }
 
-///** \brief Transforms the dailyScheme \e list to the corresponding QFlag mfDosageModel::DailySchemes */
+///** \brief Transforms the dailyScheme \e list to the corresponding QFlag DrugsDB::DosageModel::DailySchemes */
 //Constants::Time::DailySchemes toDailyScheme( const QStringList & list )
 //{
 //    Constants::Time::DailySchemes r = Constants::Time::Undefined;
@@ -309,7 +309,7 @@ QString mealTime(const int index)
     return QString();
 }
 
-
+/** Return the list of available translated gender (male, female, hermaphrodism) */
 QStringList genders()
 {
     return QStringList()
@@ -319,6 +319,7 @@ QStringList genders()
             ;
 }
 
+/** Return the list of available translated titles */
 QStringList titles()
 {
     return QStringList()
@@ -333,5 +334,4 @@ QStringList titles()
 }
 
 } // End ConstantTranslations
-
 } // End Trans

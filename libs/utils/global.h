@@ -178,6 +178,10 @@ UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, int valu
 UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, long int value);
 UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool value);
 
+// Some pixmap transformations
+UTILS_EXPORT QByteArray pixmapToBase64(const QPixmap &pixmap);
+UTILS_EXPORT QPixmap pixmapFromBase64(const QByteArray &base64);
+
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
 UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);

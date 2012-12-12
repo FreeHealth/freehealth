@@ -19,37 +19,82 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric Maeker <eric.maeker@gmail.com>                             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_TRANS_CONSTANTS_H
-#define PATIENTS_TRANS_CONSTANTS_H
+#ifndef IDENTITY_INTERNAL_IDENTITYPREFERENCES_H
+#define IDENTITY_INTERNAL_IDENTITYPREFERENCES_H
 
-/**
- * \file constants_trans.h
- * \author Eric MAEKER
- * \version 0.7.6
- * \date 02 Mar 2011
-*/
+#include <coreplugin/ioptionspage.h>
 
-namespace Patients {
-namespace Constants {
+#include <QWidget>
+#include <QPointer>
 
-    const char* const   TRANS_CONTEXT             = "Patients";
+namespace Core {
+class ISettings;
+}
 
-    const char* const   SEARCHBYNAME_TEXT         = QT_TRANSLATE_NOOP("Patients", "Search by Name");
-    const char* const   SEARCHBYFIRSTNAME_TEXT      = QT_TRANSLATE_NOOP("Patients", "Search by First name");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TEXT  = QT_TRANSLATE_NOOP("Patients", "Search by Name and First name");
-    const char* const   SEARCHBYDOB_TEXT          = QT_TRANSLATE_NOOP("Patients", "Search by Date Of Birth");
+namespace Identity {
+namespace Internal {
+namespace Ui {
+class IdentityPreferencesWidget;
+}
 
-    const char* const   SEARCHBYNAME_TOOLTIP         = QT_TRANSLATE_NOOP("Patients", "Type the name or second name of the patient");
-    const char* const   SEARCHBYFIRSTNAME_TOOLTIP      = QT_TRANSLATE_NOOP("Patients", "Type the firstname of the patient");
-    const char* const   SEARCHBYNAMEFIRSTNAME_TOOLTIP  = QT_TRANSLATE_NOOP("Patients", "Type the name or second name followed by ; and the firstname");
-    const char* const   SEARCHBYDOB_TOOLTIP          = QT_TRANSLATE_NOOP("Patients", "Type the date of birth (yyyy/MM/dd)");
+class IdentityPreferencesWidget : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    explicit IdentityPreferencesWidget(QWidget *parent = 0);
+    ~IdentityPreferencesWidget();
+    
+    void setDataToUi();
+    QString searchKeywords() const;
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+    
+private:
+    Ui::IdentityPreferencesWidget *ui;
+};
 
-}  // End namespace Patients::Constants
-}  // End namespace Patients
 
-#endif // PATIENTS_TRANS_CONSTANTS_H
+class IdentityPreferencesPage : public Core::IOptionsPage
+{
+public:
+    IdentityPreferencesPage(QObject *parent = 0);
+    ~IdentityPreferencesPage();
+    
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const {return name();}
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {IdentityPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
+private:
+    QPointer<Internal::IdentityPreferencesWidget> m_Widget;
+};
+
+
+} // namespace Internal
+} // namespace Identity
+#endif // IDENTITY_INTERNAL_IDENTITYPREFERENCES_H
+

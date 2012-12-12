@@ -25,15 +25,16 @@
  ***************************************************************************/
 #include "identitywidgetfactory.h"
 
-#include <patientbaseplugin/identityeditorwidget.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <patientbaseplugin/patientmodel.h>
 #include <patientbaseplugin/patientwidgetmanager.h>
 #include <patientbaseplugin/patientselector.h>
 
 #include <formmanagerplugin/iformitem.h>
 
-#include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
+#include <identityplugin/identityeditorwidget.h>
 
 #include <utils/log.h>
 #include <translationutils/constants.h>
@@ -112,19 +113,26 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
-//    QWidget *mainWidget = new QWidget;
-//    mainLayout->addWidget(mainWidget);
-//    mainLayout->addStretch();
 
     // get options
     const QStringList &options = formItem->getOptions();
-    Patients::IdentityEditorWidget::EditMode mode;
-    if (options.contains("readonly", Qt::CaseInsensitive))
-        mode = Patients::IdentityEditorWidget::ReadOnlyMode;
-    else
-        mode = Patients::IdentityEditorWidget::ReadWriteMode;
+    m_Identity = new Identity::IdentityEditorWidget(this);
+    m_Identity->initialize();
 
-    m_Identity = new Patients::IdentityEditorWidget(this, mode);
+    Identity::IdentityEditorWidget::AvailableWidgets widgets = Identity::IdentityEditorWidget::FullIdentity;
+    if (options.contains("with-photo", Qt::CaseInsensitive))
+        widgets |= Identity::IdentityEditorWidget::Photo;
+    if (options.contains("with-address", Qt::CaseInsensitive))
+        widgets |= Identity::IdentityEditorWidget::FullAddress;
+    if (options.contains("with-login", Qt::CaseInsensitive))
+        widgets |= Identity::IdentityEditorWidget::FullLogin;
+    m_Identity->setAvailableWidgets(widgets);
+
+    if (options.contains("xml", Qt::CaseInsensitive))
+        m_Identity->setXmlInOut(true);
+
+    if (options.contains("readonly", Qt::CaseInsensitive))
+        m_Identity->setReadOnly(true);
 
     // QtUi Loaded ?
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
@@ -139,10 +147,6 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
             LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
         }
     } else {
-//        m_ContainerLayout = new QGridLayout(mainWidget);
-//        m_ContainerLayout->setMargin(0);
-//        m_ContainerLayout->setSpacing(0);
-//        m_ContainerLayout->addWidget(m_Identity, 1, 0,  1, numberColumns);
         mainLayout->addWidget(m_Identity, 1, 0);
     }
 
@@ -226,7 +230,8 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
 
 void IdentityWidgetData::clear()
 {
-    // Nothing to do here
+    if (m_Widget->m_Identity->isXmlInOut())
+        m_Widget->m_Identity->clear();
 }
 
 bool IdentityWidgetData::isModified() const
@@ -242,12 +247,17 @@ void IdentityWidgetData::setModified(bool modified)
 
 void IdentityWidgetData::setStorableData(const QVariant &value)
 {
-    Q_UNUSED(value);
-    // Nothing to do here
+    if (m_Widget->m_Identity->isXmlInOut()) {
+        m_Widget->m_Identity->fromXml(value.toString());
+    }
 }
 
 QVariant IdentityWidgetData::storableData() const
 {
-    m_Widget->m_Identity->submit();
+    if (m_Widget->m_Identity->isXmlInOut()) {
+        return m_Widget->m_Identity->toXml();
+    } else {
+        m_Widget->m_Identity->submit();
+    }
     return QVariant();
 }

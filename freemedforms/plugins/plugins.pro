@@ -6,12 +6,13 @@ SUBDIRS = \
     listview \
     texteditor \
     templates \
-    formmanager \
     zipcodes \
     datapack \
 #    saverestore \    # unstable
     # Depend to more than one plugin
+    formmanager \
     printer \
+    identity \
     category \
     patientbase \
     usermanager \
@@ -46,6 +47,7 @@ saverestore.depends += core
 templates.subdir   = ../../plugins/templatesplugin
 templates.depends += core
 
+# complex plugins
 formmanager.subdir   = ../../plugins/formmanagerplugin
 formmanager.depends += core
 formmanager.depends += listview
@@ -54,7 +56,10 @@ printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-# complex plugins
+identity.subdir = ../../plugins/identityplugin
+identity.depends += core
+identity.depends += zipcodes
+
 mainwin.subdir   = ../../plugins/fmfmainwindowplugin
 mainwin.depends += core
 mainwin.depends += texteditor
@@ -74,6 +79,7 @@ basewidgets.depends += core
 basewidgets.depends += texteditor
 basewidgets.depends += formmanager
 basewidgets.depends += patientbase
+basewidgets.depends += identity
 
 aggir.subdir   = ../../plugins/aggirplugin
 aggir.depends += core
@@ -142,7 +148,6 @@ account.depends += listview
 
 zipcodes.subdir = ../../plugins/zipcodesplugin
 zipcodes.depends += core
-zipcodes.depends += listview
 
 script.subdir = ../../plugins/scriptplugin
 script.depends += core
@@ -178,6 +183,7 @@ patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
+patientbase.depends += identity
 
 # manage non free content
 #include(../buildspecs/config.pri)

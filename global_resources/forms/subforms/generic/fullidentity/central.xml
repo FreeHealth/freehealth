@@ -9,7 +9,7 @@
     <version>test</version>
     <fmfv>0.8.0</fmfv>
     <cdate>2012-01-01</cdate>
-    <lmdate>2012-09-12</lmdate>
+    <lmdate>2012-12-12</lmdate>
     <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -57,10 +57,12 @@
         <label lang="de">Identität und Anschrift</label>
         <label lang="es">Identidad y dirección</label>
         <options>SummaryFontBold;expanded</options>
+
         <Item type="identity" name="IdentityWidget">
             <uilink label="" widget="" layout="identityIncludeLayout"/>
             <label lang="xx">Full Identity</label>
             <label lang="fr">Identité</label>
+            <options>with-address;with-photo</options>
         </Item>
     </Item>
 
@@ -207,32 +209,11 @@
         <label lang="fr">Personne de confiance</label>
         <options>DontPrintEmptyValues;SummaryFontBold</options>
 
-        <Item type="shorttext" name="TrustedPerson::Names">
-          <uilink label="nameslabel" widget="names"/>
-          <label lang="xx">Names</label>
-          <label lang="fr">Noms</label>
-          <options>DontPrintEmptyValues</options>
-        </Item>
-
-        <Item type="shorttext" name="TrustedPerson::FirstNames">
-          <uilink label="firstlabel" widget="firstnames"/>
-          <label lang="xx">Firstnames</label>
-          <label lang="fr">Prénoms</label>
-          <options>DontPrintEmptyValues</options>
-        </Item>
-
-        <Item type="moderndate" name="TrustedPerson::DOB">
-          <uilink label="doblabel" widget="" layout="doblayout"/>
-          <label lang="xx">Date of birth</label>
-          <label lang="fr">Date de naissance</label>
-          <options>DontPrintEmptyValues</options>
-        </Item>
-
-        <Item type="longtext" name="TrustedPerson::Address">
-          <uilink label="addresslabel" widget="address"/>
-          <label lang="xx">Full address</label>
-          <label lang="fr">Adresse complète</label>
-          <options>DontPrintEmptyValues</options>
+        <Item type="identity" name="TrustedPerson::TrustedPerson">
+            <uilink label="" widget="" layout="trustedLayout"/>
+            <label lang="xx">Full Identity</label>
+            <label lang="fr">Identité</label>
+            <options>with-address;xml</options>
         </Item>
 
     </Item>

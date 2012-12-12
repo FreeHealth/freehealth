@@ -52,6 +52,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QNetworkConfigurationManager>
+#include <QBuffer>
 
 /**
   \namespace Utils
@@ -60,7 +61,6 @@
 
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
-
 
 namespace {
 static const unsigned char two_letter_country_code_list[] =
@@ -1409,6 +1409,7 @@ QString toHtmlAccent(const QString &html)
     return toReturn;
 }
 
+/** Capitalize the first letter of a string */
 QString firstLetterUpperCase(const QString &s)
 {
     QString tmp = s;
@@ -1416,6 +1417,7 @@ QString firstLetterUpperCase(const QString &s)
     return tmp;
 }
 
+/** Removes accent from a UTF8 only string */
 QString removeAccents(const QString &text)
 {
     QHash< QString, QString > accents;
@@ -1656,6 +1658,39 @@ void xmlWrite(QDomElement &father, const QString &name, bool value)
     Utils::xmlWrite(father, name, valueStr);
 }
 
+/**
+ * Transform a QPixmap to a base 64 QByteArray
+ * \sa pixmapFromBase64()
+*/
+QByteArray pixmapToBase64(const QPixmap &pixmap)
+{
+    QByteArray byteArray;
+    if (pixmap.isNull())
+        return byteArray;
+    QBuffer buffer(&byteArray);
+    if (!pixmap.save(&buffer, "PNG")) {
+        LOG_ERROR_FOR("Global", "Unable to transform QPixmap to base64 QByteArray");
+        return QByteArray();
+    }
+    return byteArray.toBase64();
+}
+
+/**
+ * Transform a QPixmap to a base 64 QByteArray
+ * \sa pixmapFromBase64()
+*/
+QPixmap pixmapFromBase64(const QByteArray &base64)
+{
+    QPixmap pix;
+    if (base64.isEmpty())
+        return pix;
+    if (!pix.load(QByteArray::fromBase64(base64))) {
+        LOG_ERROR_FOR("Global", "Unable to transform base64 QByteArray to QPixmap");
+        return QPixmap();
+    }
+    return pix;
+}
+
 /** \brief Replace a token into a string. */
 int replaceToken(QString &textToAnalyse, const QString &token, const QString &value)
 {
@@ -1738,7 +1773,10 @@ QString testInternetConnection()
     return QString("yes");
 }
 
-/** First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be added into database without problem - no special characters). */
+/**
+ * Destructive string encryption using SHA1 logarythm.
+ * The output is base64 encoded.
+ */
 QString cryptPassword(const QString &toCrypt)
 {
     QCryptographicHash crypter( QCryptographicHash::Sha1 );
@@ -1758,7 +1796,10 @@ QString loginFromSQL(const QVariant &sql)
 QString loginFromSQL(const QString &sql)
 { return QByteArray::fromBase64(sql.toAscii()); }
 
-
+/**
+ * Non-destructive string encryption.
+ * \sa decrypt()
+*/
 QByteArray crypt(const QString &text, const QString &key)
 {
     QByteArray texteEnBytes = text.toAscii();
@@ -1776,6 +1817,9 @@ QByteArray crypt(const QString &text, const QString &key)
 
 // "MTEwZjI5MGQxODNhNDQwODMzMmI=" "CacaBoudin"
 
+/**
+ * Decrypt a string encrypted with the Utils::crypt() method
+*/
 QString decrypt(const QByteArray &texte, const QString &key)
 {
     QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));

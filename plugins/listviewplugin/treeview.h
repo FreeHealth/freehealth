@@ -33,7 +33,6 @@
 #include <QWidget>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
-#include <QFlags>
 #include <QMenu>
 #include <QTreeView>
 

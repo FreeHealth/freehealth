@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BaseWidgets::Internal::BaseFormWidget</class>
- <widget class="QWidget" name="BaseWidgets::Internal::BaseFormWidget">
+ <class>Identity::Internal::IdentityPreferencesWidget</class>
+ <widget class="QWidget" name="Identity::Internal::IdentityPreferencesWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
-    <height>395</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>Identity Preferences</string>
   </property>
-  <layout class="QGridLayout" name="trustedLayout"/>
  </widget>
  <resources/>
  <connections/>
 </ui>
+

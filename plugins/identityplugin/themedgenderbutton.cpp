@@ -21,27 +21,47 @@
 /***************************************************************************
  *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Eric Maeker                                                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "pixmapbutton.h"
-#include <QtGui/QMenu>
+
+/*!
+ * \class Identity::Internal::ThemedGenderButton
+ * \brief This class provides a QPushButton with a displayed Pixmap on it.
+ * \internal
+ *
+ * Pixmap property: \n
+ * The normal Qt QPushButton only can store a QIcon and has ho pixmap property. This
+ * can be unconvenient when using the button as display widget in a MVC pattern as
+ * widget - a QDataWidgetMapper doesn't know how to handle a QPushbutton.
+ * Here comes the Identity::Internal::ThemedGenderButton. \n
+ * It still displays a QIcon, but stores a QPixmap underneath.
+ * It also provides a \e pixmap property for easy interacting with a QDataWidgetMapper.
+ *
+ * Theme connection: \n
+ * This button is automatically connected to the application central theme and
+ * correctly manages the Gender Pixmap.
+ */
+
+#include "themedgenderbutton.h"
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/itheme.h>
 
-using namespace Patients;
+#include <QMenu>
+
+using namespace Identity;
+using namespace Internal;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 /*!
- * \brief Default constructor of the PixmapButton class.
+ * Default constructor of the ThemedGenderButton class.
  * \param parent parent of the button, reached through to QToolButton.
- *
  * Just calls the QPushButton constructor and initializes the internal Pixmap.
  */
-PixmapButton::PixmapButton(QWidget *parent) :
+ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
     QToolButton(parent),
     m_pixmap(QPixmap()),
     m_deletePhotoAction(0),
@@ -63,12 +83,14 @@ PixmapButton::PixmapButton(QWidget *parent) :
     addAction(m_separator);
 }
 
-QPixmap PixmapButton::pixmap() const
+/** Return the current pixmap of the button */
+QPixmap ThemedGenderButton::pixmap() const
 {
     return m_pixmap;
 }
 
-void PixmapButton::setDefaultAction(QAction *action)
+/** Set the default action of the button */
+void ThemedGenderButton::setDefaultAction(QAction *action)
 {
     // don't accept the deleteaction as default!
     if (action == m_deletePhotoAction)
@@ -89,30 +111,38 @@ void PixmapButton::setDefaultAction(QAction *action)
         m_defaultAction = action;
 }
 
-QAction *PixmapButton::defaultAction() const
+/** Return the default action of the button */
+QAction *ThemedGenderButton::defaultAction() const
 {
     return m_defaultAction;
 }
 
-QAction *PixmapButton::deletePhotoAction() const
+/** Delete the photo action */
+QAction *ThemedGenderButton::deletePhotoAction() const
 {
     return m_deletePhotoAction;
 }
 
-void PixmapButton::setPixmap(const QPixmap& pixmap)
+/** Set the pixmap of the button */
+void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
 {
     setIcon(QIcon(pixmap));
     m_pixmap = pixmap;
     m_deletePhotoAction->setEnabled(!pixmap.isNull());
 }
 
-void PixmapButton::clearPixmap()
+/** Clear the internal pixmap of the button */
+void ThemedGenderButton::clearPixmap()
 {
     setPixmap(QPixmap());
     m_deletePhotoAction->setEnabled(false);
 }
 
-void PixmapButton::setGenderImage(int genderIndex)
+/**
+ * Set the gender pixmap to the \e genderIndex
+ * \sa Trans::ConstantTranslations::genders(), Core::IPatient::GenderIdex
+*/
+void ThemedGenderButton::setGenderImage(int genderIndex)
 {
     // check if there is a has a real pixmap
     // if there is a pixmap, DON'T change the photo!

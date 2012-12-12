@@ -33,13 +33,20 @@
  * - city
  * - zipcode
  * - zipcode/city/state/province auto-completer.
+ *
+ * You can use this widget like a QDataWidgetMapper, just add mapping to your internal
+ * mapper with addMapping(). You have to manage yourself the mapper submition to
+ * the model. Or you can use this widget like old fashion stuff by
+ * setting/getting values by hand.
  */
 
 #include "zipcodeswidget.h"
 #include "zipcodescompleters.h"
 
-#include <listviewplugin/countrycombobox.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
+#include <utils/widgets/countrycombobox.h>
 #include <utils/widgets/uppercasevalidator.h>
 #include <utils/widgets/qbuttonlineedit.h>
 #include <translationutils/constants.h>
@@ -56,6 +63,8 @@
 using namespace ZipCodes;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace ZipCodes {
 namespace Internal {
@@ -108,7 +117,9 @@ public:
         _city = new Utils::QButtonLineEdit(q);
         _zip = new Utils::QButtonLineEdit(q);
         _stateCombo = new QComboBox(q);
-        _country = new Views::CountryComboBox(q);
+        _country = new Utils::CountryComboBox(q);
+        _country->setFlagPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
+        _country->initialize();
 
         _zipCompleter = new ZipCodes::ZipCountryCompleters(q);
         _zipCompleter->setCityLineEdit(_city);
@@ -158,7 +169,7 @@ public:
     QTextEdit *_street;
     Utils::QButtonLineEdit *_city, *_zip;
     QComboBox *_stateCombo;
-    Views::CountryComboBox *_country;
+    Utils::CountryComboBox *_country;
     ZipCountryCompleters *_zipCompleter;
     ZipCodesWidget::TypeOfLayout _typeOfLayout;
 
@@ -193,6 +204,17 @@ bool ZipCodesWidget::initialize(TypeOfLayout layout)
     return true;
 }
 
+/** Set/unset the view in read-only mode */
+void ZipCodesWidget::setReadOnly(bool readOnly)
+{
+    d->_street->setReadOnly(readOnly);
+    d->_city->setReadOnly(readOnly);
+    d->_zip->setReadOnly(readOnly);
+
+    d->_stateCombo->setEnabled(readOnly);
+    d->_country->setEnabled(readOnly);
+}
+
 /** Add mapping to a QDataWidgetMapper for a specific \e section and a specific \e Mapping */
 void ZipCodesWidget::addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const
 {
@@ -205,6 +227,77 @@ void ZipCodesWidget::addMapping(QDataWidgetMapper *mapper, const int section, Ma
     case ZipcodePlainText: mapper->addMapping(d->_zip, section, "text"); break;
     }
 }
+
+/** Clear the UI content. If you are using a mapper, you don't need to clear the view. */
+void ZipCodesWidget::clear()
+{
+    d->_street->clear();
+    d->_city->clear();
+    d->_zip->clear();
+    d->_stateCombo->setCurrentIndex(-1);
+    d->_country->setCurrentIndex(-1);
+}
+
+void ZipCodesWidget::setStreet(const QString &street)
+{
+    d->_street->setPlainText(street);
+}
+
+void ZipCodesWidget::setCity(const QString &city)
+{
+    d->_city->setText(city);
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setStateProvince(const QString &state)
+{
+    d->_stateCombo->setCurrentIndex(d->_stateCombo->findText(state));
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setCountry(const QString &twoCharIsoCode)
+{
+    d->_country->setCurrentIsoCountry(twoCharIsoCode);
+    d->_zipCompleter->checkData();
+}
+
+void ZipCodesWidget::setZipCode(const QString &zip)
+{
+    d->_zip->setText(zip);
+    d->_zipCompleter->checkData();
+}
+
+
+QString ZipCodesWidget::street() const
+{
+    return d->_street->toPlainText();
+}
+
+QString ZipCodesWidget::city() const
+{
+    return d->_city->text();
+}
+
+QString ZipCodesWidget::stateProvince() const
+{
+    return d->_stateCombo->currentText();
+}
+
+QString ZipCodesWidget::countryName() const
+{
+    return d->_country->currentCountryName();
+}
+
+QString ZipCodesWidget::countryIso() const
+{
+    return d->_country->currentIsoCountry();
+}
+
+QString ZipCodesWidget::zipCode() const
+{
+    return d->_zip->text();
+}
+
 
 /** Retranslate the UI */
 void ZipCodesWidget::changeEvent(QEvent *e)

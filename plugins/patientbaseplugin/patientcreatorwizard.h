@@ -39,6 +39,10 @@
  * \date 25 May 2010
 */
 
+namespace Identity {
+class IdentityEditorWidget;
+}
+
 namespace Patients {
 class PatientModel;
 class IdentityEditorWidget;
@@ -74,7 +78,7 @@ public:
 
 private:
     PatientModel *m_Model;
-    IdentityEditorWidget *m_Identity;
+    Identity::IdentityEditorWidget *m_Identity;
     QString m_uuid;
 };
 

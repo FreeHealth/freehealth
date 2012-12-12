@@ -22,7 +22,6 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    pixmapbutton.h \
     identityeditorwidget.h \
     identityviewerwidget.h \
     patientmodelwrapper.h \
@@ -41,7 +40,6 @@ SOURCES = patientbaseplugin.cpp \
     patientbasepreferencespage.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
-    pixmapbutton.cpp \
     identityeditorwidget.cpp \
     identityviewerwidget.cpp \
     patientmodelwrapper.cpp \
@@ -51,7 +49,7 @@ SOURCES = patientbaseplugin.cpp \
     patientsearchedit.cpp \
     patientcore.cpp
 
-FORMS += identitywidget.ui \
+FORMS += \
     patientselector.ui \
     patientbasepreferencespage.ui \
     patientbar.ui \
