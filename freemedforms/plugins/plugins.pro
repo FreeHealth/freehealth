@@ -182,6 +182,7 @@ patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
+patientbase.depends += identity
 
 # manage non free content
 #include(../buildspecs/config.pri)
