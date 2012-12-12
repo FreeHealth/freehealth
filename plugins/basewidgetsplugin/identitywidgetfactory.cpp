@@ -128,6 +128,9 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         widgets |= Identity::IdentityEditorWidget::FullLogin;
     m_Identity->setAvailableWidgets(widgets);
 
+    if (options.contains("xml", Qt::CaseInsensitive))
+        m_Identity->setXmlInOut(true);
+
     if (options.contains("readonly", Qt::CaseInsensitive))
         m_Identity->setReadOnly(true);
 
@@ -227,7 +230,8 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
 
 void IdentityWidgetData::clear()
 {
-    // Nothing to do here
+    if (m_Widget->m_Identity->isXmlInOut())
+        m_Widget->m_Identity->clear();
 }
 
 bool IdentityWidgetData::isModified() const
@@ -243,12 +247,17 @@ void IdentityWidgetData::setModified(bool modified)
 
 void IdentityWidgetData::setStorableData(const QVariant &value)
 {
-    Q_UNUSED(value);
-    // Nothing to do here
+    if (m_Widget->m_Identity->isXmlInOut()) {
+        m_Widget->m_Identity->fromXml(value.toString());
+    }
 }
 
 QVariant IdentityWidgetData::storableData() const
 {
-    m_Widget->m_Identity->submit();
+    if (m_Widget->m_Identity->isXmlInOut()) {
+        return m_Widget->m_Identity->toXml();
+    } else {
+        m_Widget->m_Identity->submit();
+    }
     return QVariant();
 }

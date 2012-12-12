@@ -107,6 +107,7 @@ const char * const XML_NAME2    = "n2";
 const char * const XML_NAME3    = "n3";
 const char * const XML_NAME4    = "n4";
 const char * const XML_FIRSTNAME= "first";
+const char * const XML_TITLE    = "tt";
 const char * const XML_GENDER   = "gdr";
 const char * const XML_LANG     = "i18";
 const char * const XML_DOB      = "dob";
@@ -368,35 +369,70 @@ public:
     {
         if (!m_xmlOnly)
             return false;
-        Q_UNUSED(xml);
-//        QHash<QString, QSting> tags;
-//        if (!Utils::readXml(xml, "Identity", tags))
-//            return false;
+        m_lastXml = xml;
+
+        // Read XML
+        QHash<QString, QString> tags;
+        if (!Utils::readXml(xml, "Identity", tags))
+            return false;
+        ui->birthName->setText(tags.value(::XML_NAME1));
+        ui->secondName->setText(tags.value(::XML_NAME2));
+        ui->firstname->setText(tags.value(::XML_FIRSTNAME));
+        ui->titleCombo->setCurrentIndex(ui->titleCombo->findText(tags.value(::XML_TITLE)));
+        int id = -1;
+        const QString &g = tags.value(::XML_GENDER);
+        if (g == "M")
+            id = 0;
+        else if (g == "F")
+            id = 1;
+        if (g == "H")
+            id = 2;
+        ui->genderCombo->setCurrentIndex(id);
+        ui->language->setCurrentIsoLanguage(tags.value(::XML_LANG));
+        ui->dob->setDate(QDate::fromString(tags.value(::XML_DOB), Qt::ISODate));
+        //ui->dod->setText(tags.value(::XML_DOD));
+        ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toAscii()));
+
+        ui->zipcodesWidget->setStreet(tags.value(::XML_STREET));
+        ui->zipcodesWidget->setCountry(tags.value(::XML_COUNTRY));
+        ui->zipcodesWidget->setCity(tags.value(::XML_CITY));
+        ui->zipcodesWidget->setZipCode(tags.value(::XML_ZIPCODE));
+        ui->zipcodesWidget->setStateProvince(tags.value(::XML_PROVINCE));
         return true;
     }
 
     QString toXml()
     {
-//        QHash<QString, QSting> tags;
-//        tags.insert(::XML_NAME1, ui->);
-//        tags.insert(::XML_NAME2, ui->);
+        QHash<QString, QString> tags;
+        tags.insert(::XML_NAME1, ui->birthName->text());
+        tags.insert(::XML_NAME2, ui->secondName->text());
 //        tags.insert(::XML_NAME3, ui->);
 //        tags.insert(::XML_NAME4, ui->);
-//        tags.insert(::XML_FIRSTNAME, ui->);
-//        tags.insert(::XML_GENDER, ui->);
-//        tags.insert(::XML_LANG, ui->);
-//        tags.insert(::XML_DOB, ui->);
-//        tags.insert(::XML_DOD, ui->);
-//        tags.insert(::XML_PHOTO, ui->);
-//        tags.insert(::XML_STREET, ui->);
-//        tags.insert(::XML_CITY, ui->);
-//        tags.insert(::XML_PROVINCE, ui->);
-//        tags.insert(::XML_COUNTRY, ui->);
-//        tags.insert(::XML_ZIPCODE, ui->);
-//        tags.insert(::XML_LOGIN, ui->);
-//        tags.insert(::XML_PASSWORD, ui->);
-//        return Utils::createXml("Identity", tags, 2);
-        return QString::null;
+        tags.insert(::XML_FIRSTNAME, ui->firstname->text());
+        tags.insert(::XML_TITLE, ui->titleCombo->currentText());
+        switch (ui->genderCombo->currentIndex()) {
+        case 0: //Male
+            tags.insert(::XML_GENDER, "M");
+            break;
+        case 1: //Female
+            tags.insert(::XML_GENDER, "F");
+            break;
+        case 2: //Herma
+            tags.insert(::XML_GENDER, "H");
+            break;
+        }
+        tags.insert(::XML_LANG, ui->language->currentLanguageIsoName());
+        tags.insert(::XML_DOB, ui->dob->date().toString(Qt::ISODate));
+        //tags.insert(::XML_DOD, ui->dod->date().toString(Qt::ISODate));
+        tags.insert(::XML_PHOTO, Utils::pixmapToBase64(ui->photoButton->pixmap()));
+        tags.insert(::XML_STREET, ui->zipcodesWidget->street());
+        tags.insert(::XML_CITY, ui->zipcodesWidget->city());
+        tags.insert(::XML_PROVINCE, ui->zipcodesWidget->stateProvince());
+        tags.insert(::XML_COUNTRY, ui->zipcodesWidget->countryIso());
+        tags.insert(::XML_ZIPCODE, ui->zipcodesWidget->zipCode());
+        tags.insert(::XML_LOGIN, Utils::crypt(ui->login->text()));
+        tags.insert(::XML_PASSWORD, Utils::crypt(ui->password->text()));
+        return Utils::createXml("Identity", tags, 2);
     }
 
 public:
@@ -405,6 +441,7 @@ public:
     QAbstractItemModel *m_Model;
     QPixmap m_Photo;
     bool m_initialized, m_hasRealPhoto, m_xmlOnly;
+    QString m_lastXml;
 
 private:
     QAction *m_deletePhotoAction;
@@ -455,35 +492,35 @@ bool IdentityEditorWidget::initialize()
  */
 void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 {
-    qWarning()  << widgets;
-
     if (!d->ui)
         return;
-    d->ui->titleLabel->setVisible(widgets & Title);
-    d->ui->titleCombo->setVisible(widgets & Title);
-    d->ui->birthName->setVisible(widgets & BirthName);
-    d->ui->birthNameLabel->setVisible(widgets & BirthName);
-    d->ui->secondName->setVisible(widgets & SecondName);
-    d->ui->secondNameLabel->setVisible(widgets & SecondName);
-    d->ui->firstname->setVisible(widgets & FirstName);
-    d->ui->firstnameLabel->setVisible(widgets & FirstName);
-    d->ui->genderCombo->setVisible(widgets & Gender);
-    d->ui->genderLabel->setVisible(widgets & Gender);
-    d->ui->language->setVisible(widgets & Language_QLocale);
-    d->ui->languageLabel->setVisible(widgets & Language_QLocale);
-    d->ui->dob->setVisible(widgets & DateOfBirth);
-    d->ui->dobLabel->setVisible(widgets & DateOfBirth);
-    //    d->ui->dod->setVisible(widgets & DateOfDeath);
-    //    d->ui->dodLabel->setVisible(widgets & DateOfDeath);
+    d->ui->titleCombo->setEnabled(widgets & Title);
+    d->ui->genderCombo->setEnabled(widgets & Gender);
+    d->ui->birthName->setEnabled(widgets & BirthName);
+    d->ui->secondName->setEnabled(widgets & SecondName);
+    d->ui->firstname->setEnabled(widgets & FirstName);
+    d->ui->language->setEnabled(widgets & Language_QLocale);
+    d->ui->dob->setEnabled(widgets & DateOfBirth);
+    //d->ui->dod->setEnabled(widgets & DateOfDeath);
+    d->ui->photoButton->setEnabled(widgets & Photo);
 
-    d->ui->photoButton->setVisible(widgets & Photo);
-
-    qWarning() << ((widgets & Street)
-                   || (widgets & City)
-                   || (widgets & Zipcode)
-                   || (widgets & Province)
-                   || (widgets & Country_TwoCharIso)
-                   || (widgets & Country_QLocale));
+    d->ui->titleLabel->setVisible(d->ui->titleCombo->isEnabled());
+    d->ui->titleCombo->setVisible(d->ui->titleCombo->isEnabled());
+    d->ui->birthName->setVisible(d->ui->birthName->isEnabled());
+    d->ui->birthNameLabel->setVisible(d->ui->birthName->isEnabled());
+    d->ui->secondName->setVisible(d->ui->secondName->isEnabled());
+    d->ui->secondNameLabel->setVisible(d->ui->secondName->isEnabled());
+    d->ui->firstname->setVisible(d->ui->firstname->isEnabled());
+    d->ui->firstnameLabel->setVisible(d->ui->firstname->isEnabled());
+    d->ui->genderCombo->setVisible(d->ui->genderCombo->isEnabled());
+    d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
+    d->ui->language->setVisible(d->ui->language->isEnabled());
+    d->ui->languageLabel->setVisible(d->ui->language->isEnabled());
+    d->ui->dob->setVisible(d->ui->dob->isEnabled());
+    d->ui->dobLabel->setVisible(d->ui->dob->isEnabled());
+    //d->ui->dod->setVisible(d->ui->dod->isEnabled());
+    //d->ui->dodLabel->setVisible(d->ui->dod->isEnabled());
+    d->ui->photoButton->setVisible(d->ui->photoButton->isEnabled());
 
     bool showAddress = (widgets & Street)
             || (widgets & City)
@@ -492,16 +529,22 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
             || (widgets & Country_TwoCharIso)
             || (widgets & Country_QLocale);
 
-    d->ui->zipcodesWidget->setVisible(showAddress);
+    d->ui->zipcodesWidget->setEnabled(showAddress);
     d->ui->editAdressGroup->setVisible(showAddress);
 
     bool showLog = (widgets & Extra_Login)
             || (widgets & Extra_Password)
             || (widgets & Extra_ConfirmPassword);
     d->ui->loginGroup->setVisible(showLog);
-    d->ui->login->setVisible(widgets & Extra_Login);
-    d->ui->password->setVisible(widgets & Extra_Password);
     d->ui->password2->setVisible(widgets & Extra_ConfirmPassword);
+    d->ui->login->setEnabled(widgets & Extra_Login);
+    d->ui->password->setEnabled(widgets & Extra_Password);
+    d->ui->password2->setEnabled(widgets & Extra_ConfirmPassword);
+
+    d->ui->zipcodesWidget->setVisible(d->ui->zipcodesWidget->isEnabled());
+    d->ui->login->setVisible(d->ui->login->isEnabled());
+    d->ui->password->setVisible(d->ui->password->isEnabled());
+    d->ui->password2->setVisible(d->ui->password2->isEnabled());
 }
 
 /** Set/unset the view in read-only mode */
@@ -605,6 +648,9 @@ bool IdentityEditorWidget::addMapping(AvailableWidget widget, int modelIndex)
 }
 
 /**
+ * Set the widget to work without any model. The input and output
+ * can be defined with fromXml(), toXml(). The submit() method
+ * is inhibited.
  */
 void IdentityEditorWidget::setXmlInOut(bool xmlonly)
 {
@@ -685,6 +731,9 @@ bool IdentityEditorWidget::isIdentityValid() const
 /** \brief Identity has been modified by the user? */
 bool IdentityEditorWidget::isModified() const
 {
+    if (d->m_xmlOnly)
+        return d->m_lastXml != d->toXml();
+
     return d->m_Mapper->isDirty();
 }
 
@@ -785,6 +834,7 @@ void IdentityEditorWidget::updateGenderImage(int genderIndex)
  */
 bool IdentityEditorWidget::fromXml(const QString &xml)
 {
+    clear();
     return d->fromXml(xml);
 }
 
