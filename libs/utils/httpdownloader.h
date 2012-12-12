@@ -28,6 +28,8 @@
 
 #include <utils/global_exporter.h>
 #include <QObject>
+#include <QNetworkReply>
+
 QT_BEGIN_NAMESPACE
 class QProgressBar;
 class QUrl;
@@ -65,6 +67,9 @@ public:
     QString outputAbsoluteFileName() const;
 
     void setLabelText(const QString &text);
+
+    QString lastErrorString() const;
+    QNetworkReply::NetworkError networkError();
 
 public Q_SLOTS:
     bool startDownload();

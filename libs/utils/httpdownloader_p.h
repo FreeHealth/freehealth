@@ -30,11 +30,11 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QHash>
+#include <QNetworkReply>
 
 QT_BEGIN_NAMESPACE
 class QFile;
 class QProgressDialog;
-class QNetworkReply;
 class QMainWindow;
 class QProgressBar;
 QT_END_NAMESPACE
@@ -87,6 +87,8 @@ public:
     int httpGetId;
     bool httpRequestAborted;
     QHash<QString, int> m_AuthTimes;
+    QString lastError;
+    QNetworkReply::NetworkError networkError;
 
 private:
     HttpDownloader *q;

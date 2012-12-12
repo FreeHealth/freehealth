@@ -128,13 +128,13 @@ void UrlPhotoDialog::downloadRequested()
 void UrlPhotoDialog::onDownloadFinished()
 {
     ui->progressBar->hide();
-    // TODO: eror handling! HttpDownloader???
-//    if( m_httpDld->reply->error()) {
-//        ui->errorLabel->setToolTip(reply->errorString());
-//        ui->errorLabel->show();
-//        ui->photoLabel->setPixmap(QPixmap());
-//        m_OkButton->setDisabled(true);
-//    }
+    if( m_httpDld->networkError() != QNetworkReply::NoError) {
+        ui->errorLabel->setToolTip(m_httpDld->lastErrorString());
+        ui->errorLabel->show();
+        ui->photoLabel->setPixmap(QPixmap());
+        m_OkButton->setDisabled(true);
+        return;
+    }
 
     QPixmap pixmap;
     QString filename = m_httpDld->outputAbsoluteFileName();

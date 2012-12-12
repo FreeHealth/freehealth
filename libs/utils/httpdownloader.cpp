@@ -159,6 +159,16 @@ void HttpDownloader::setLabelText(const QString &text)
     d->m_LabelText = text;
 }
 
+QString HttpDownloader::lastErrorString() const
+{
+    return d->lastError;
+}
+
+QNetworkReply::NetworkError HttpDownloader::networkError()
+{
+    return d->networkError;
+}
+
 /**
  * Starts the asynchronous downloading. When the download is finished
  * the downloadFinished() signal is emitted. You can follow the download progress
@@ -189,6 +199,8 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     progressBar(0),
     httpGetId(-1),
     httpRequestAborted(false),
+    networkError(QNetworkReply::NoError),
+    lastError(""),
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
@@ -285,6 +297,8 @@ void HttpDownloaderPrivate::cancelDownload()
     httpRequestAborted = true;
     reply->abort();
     reply->deleteLater();
+    networkError = QNetworkReply::OperationCanceledError;
+    lastError = tr("Download canceled.");
 }
 
 /** Slot called when the downloading is finished (with or without error) */
@@ -292,7 +306,10 @@ void HttpDownloaderPrivate::httpFinished()
 {
     qWarning() << "httpFinished" << reply->error() << reply->errorString();
 
-    if (httpRequestAborted || reply->error()!=QNetworkReply::NoError) {
+    networkError = reply->error();
+
+    if (httpRequestAborted || networkError != QNetworkReply::NoError) {
+
         if (file) {
             file->close();
             file->remove();
@@ -306,9 +323,10 @@ void HttpDownloaderPrivate::httpFinished()
     }
 
     if (progressBar) {
-        if (reply->error() != QNetworkReply::NoError) {
+        if (networkError != QNetworkReply::NoError) {
             progressBar->setValue(0);
-            progressBar->setToolTip(tr("Download finished with an error: %1.").arg(reply->errorString()));
+            lastError = tr("Download finished with an error: %1.").arg(reply->errorString());
+            progressBar->setToolTip(lastError);
         } else  {
             progressBar->setValue(100);
             progressBar->setToolTip(tr("Download finished."));
@@ -319,7 +337,7 @@ void HttpDownloaderPrivate::httpFinished()
     file->close();
 
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (reply->error()) {
+    if (networkError) {
         file->remove();
         Utils::informativeMessageBox(tr("Download failed: %1.")
                                      .arg(reply->errorString()), "", "", tr("HTTP"));
