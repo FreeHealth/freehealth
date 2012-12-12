@@ -27,9 +27,12 @@
 #ifndef PATIENTS_TRANS_CONSTANTS_H
 #define PATIENTS_TRANS_CONSTANTS_H
 
-#include <QFlags>
-#include <QHash>
-#include <QStringList>
+/**
+ * \file constants_trans.h
+ * \author Eric MAEKER
+ * \version 0.7.6
+ * \date 02 Mar 2011
+*/
 
 namespace Patients {
 namespace Constants {

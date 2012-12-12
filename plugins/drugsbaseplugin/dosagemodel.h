@@ -33,7 +33,6 @@
 #include <QObject>
 #include <QSqlTableModel>
 #include <QSet>
-#include <QFlags>
 
 /**
  * \file dosagemodel.h

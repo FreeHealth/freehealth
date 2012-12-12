@@ -29,7 +29,6 @@
 
 #include <drugsbaseplugin/constants_databaseschema.h>
 
-#include <QFlags>
 #include <QHash>
 #include <QStringList>
 

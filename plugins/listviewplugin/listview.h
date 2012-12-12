@@ -34,7 +34,6 @@
 #include <QListView>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
-#include <QFlags>
 #include <QMenu>
 
 /**

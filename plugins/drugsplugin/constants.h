@@ -27,10 +27,6 @@
 #ifndef DRUGSCONSTANTS_H
 #define DRUGSCONSTANTS_H
 
-#include <QFlags>
-#include <QHash>
-#include <QStringList>
-
 /**
  \brief Some constants for Drugs management
 */
