@@ -25,11 +25,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "pixmapbutton.h"
-#include <QtGui/QMenu>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/itheme.h>
+
+#include <QMenu>
 
 using namespace Patients;
 
