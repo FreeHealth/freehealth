@@ -88,6 +88,7 @@ public:
     QString zipCode() const;
 
 private:
+    void retranslateUi();
     void changeEvent(QEvent *e);
 
 private:

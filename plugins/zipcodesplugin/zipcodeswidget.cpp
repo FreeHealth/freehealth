@@ -201,6 +201,7 @@ bool ZipCodesWidget::initialize(TypeOfLayout layout)
     d->createWidgetsAndObjects();
     d->populateLayout();
     d->setTabOrder();
+    retranslateUi();
     return true;
 }
 
@@ -298,15 +299,18 @@ QString ZipCodesWidget::zipCode() const
     return d->_zip->text();
 }
 
+void ZipCodesWidget::retranslateUi()
+{
+    d->_streetLabel->setText(tr("Street"));
+    d->_cityLabel->setText(tr("City"));
+    d->_countryLabel->setText(tr("Country"));
+    d->_stateLabel->setText(tr("State/Province"));
+    d->_zipLabel->setText(tr("Zipcode"));
+}
 
 /** Retranslate the UI */
 void ZipCodesWidget::changeEvent(QEvent *e)
 {
-    if (e->type() == QEvent::LanguageChange) {
-        d->_streetLabel->setText(tr("Street"));
-        d->_cityLabel->setText(tr("City"));
-        d->_countryLabel->setText(tr("Country"));
-        d->_stateLabel->setText(tr("State/Province"));
-        d->_zipLabel->setText(tr("Zipcode"));
-    }
+    if (e->type() == QEvent::LanguageChange)
+        retranslateUi();
 }
