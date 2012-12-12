@@ -686,6 +686,6 @@ int PackRemovePage::nextId() const
 PackEndPage::PackEndPage(QWidget *parent) :
     PackPage(parent)
 {
-    setTitle(tr("Pack(s) processed."));
+    setTitle(tr("All Pack(s) processed."));
     setFinalPage(true);
 }
