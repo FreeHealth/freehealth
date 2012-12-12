@@ -192,7 +192,7 @@ private:
 } // End AGGIR
 } // End MedicalUtils
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MedicalUtils::AGGIR::NewGirScore::Reponses);
+Q_DECLARE_OPERATORS_FOR_FLAGS(MedicalUtils::AGGIR::NewGirScore::Reponses)
 
 #endif  // End GIRSCORE_H
 
