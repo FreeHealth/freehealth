@@ -96,7 +96,6 @@
  * download all necessary files. It should just start the Download in a separate process, e.g. using
  * Utils::HttpDownloader, and return back to the main event loop.
  *
- * \param bar direct link to the progressbar that can be updated.
  * \returns \e true if successful, else \e false.
  */
 

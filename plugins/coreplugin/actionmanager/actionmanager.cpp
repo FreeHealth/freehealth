@@ -235,7 +235,6 @@ ActionManagerPrivate* ActionManagerPrivate::m_instance = 0;
 
 /*!
     \class ActionManagerPrivate
-    \inheaderfile actionmanager_p.h
     \internal
 */
 

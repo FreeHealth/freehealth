@@ -1,6 +1,6 @@
 #!/bin/sh
 
-QTCREATOR_CONFIG_PATH="$HOME/.config/Nokia/qtcreator/templates/wizards"
+QTCREATOR_CONFIG_PATH="$HOME/.config/QtProject/qtcreator/templates/wizards"
 
 
 if [ ! -e $QTCREATOR_CONFIG_PATH ]; then

@@ -51,15 +51,15 @@
     This widget is using a grid layout and places the items
     in the following way:
 
-    \code
-+------------+-------------------------+---------------+
-+summaryLabel|              toolwidget | detailsButton |
-+------------+-------------------------+---------------+
-+                additional summary                    |
-+------------+-------------------------+---------------+
-|                  widget                              |
-+------------+-------------------------+---------------+
-    \endcode
+    \verbatim
+    +------------+-------------------------+---------------+
+    +summaryLabel|              toolwidget | detailsButton |
+    +------------+-------------------------+---------------+
+    +                additional summary                    |
+    +------------+-------------------------+---------------+
+    |                  widget                              |
+    +------------+-------------------------+---------------+
+    \endverbatim
 */
 
 namespace Utils {

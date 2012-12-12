@@ -68,8 +68,9 @@ public:
 
     /*! \brief Returns the active state of the provider.
      *
-     * \e true means that there is "physically" an e.g. connected webcam attached. \false means, there is no picture
-     * source available/connected or it is not ready to use in ase or errors e.g. */
+     * \li \e true means that there is "physically" an e.g. connected webcam attached.
+     * \li \e false  there is no picture source available/connected or it is not ready to use in ase or errors e.g.
+     */
     virtual bool isActive() const = 0;
 
     /*! \brief Returns the enabled state of the provider. This can be changed in user settings. */

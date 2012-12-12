@@ -450,7 +450,7 @@ QRect OpenCVWidget::frame() const
  * \brief Sets the frozen state to the given value and (un)freezes the capture stream.
  *
  * The widget then emits the frozen signal.
- * \param aFrozen state that should be set.
+ * \param aFreeze state that should be set.
  */
 void OpenCVWidget::setFrozen(bool aFreeze)
 {

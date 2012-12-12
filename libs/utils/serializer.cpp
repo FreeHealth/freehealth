@@ -370,7 +370,7 @@ const QHash<int,QVariant> toVariantHash( const QString &serialized, bool base64P
 
 /**
   \brief obsolete
-  \obsolete
+  \deprecated
 */
 const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, bool base64Protection )
 {
@@ -395,7 +395,7 @@ const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, boo
 
 /**
   \brief obsolete
-  \obsolete
+  \deprecated
 */
 const QHash<QString,QString> threeCharKeyHashToHash( const QString & serialized, bool base64Protection )
 {
