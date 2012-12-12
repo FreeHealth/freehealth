@@ -146,9 +146,16 @@ QString %PluginName:c%PreferencesPage::id() const
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString %PluginName:c%PreferencesPage::name() const
+QString %PluginName:c%PreferencesPage::displayName() const
 {
     return tr("General");
+}
+
+/*! Returns the sort index of the page. The higher the number, the lower the page. */
+int %PluginName:c%PreferencesPage::sortIndex() const
+{
+    //TODO: write a meaningful number here
+    return 0;
 }
 
 /*! Returns the (translated) category of the preferences page. */
@@ -165,7 +172,7 @@ void %PluginName:c%PreferencesPage::resetToDefaults()
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void %PluginName:c%PreferencesPage::applyChanges()
+void %PluginName:c%PreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
