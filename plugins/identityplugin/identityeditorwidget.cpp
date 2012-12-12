@@ -306,6 +306,7 @@ public:
         m_Mapper = new IsDirtyDataWidgetMapper(q);
         m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
         m_Mapper->setModel(model);
+        m_Model = model;
         addMapperMapping();
     }
 
