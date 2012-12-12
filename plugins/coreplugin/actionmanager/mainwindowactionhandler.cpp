@@ -1299,7 +1299,7 @@ bool MainWindowActionHandler::reportBug()
 {
     BugReportDialog dlg;
     int result = dlg.exec();
-
+    Q_UNUSED(result);
     return true;
 //    return result = QDialog::Accepted;
 }
