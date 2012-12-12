@@ -286,7 +286,16 @@ public:
         if (index==_currentEditingForm)
             return;
         clearFormContents();
-        _currentEditingForm = index;
+
+        // If the current form does not handle episode -> show its first child
+        QModelIndex current = index;
+        if (_formTreeModel->isNoEpisode(current)) {
+            if (_formTreeModel->rowCount(current) > 0) {
+                current = _formTreeModel->index(0, 0, current);
+            }
+        }
+
+        _currentEditingForm = current;
 
         if (ui->episodeView->selectionModel())
             QObject::disconnect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
@@ -589,8 +598,6 @@ void FormPlaceHolder::handlePressed(const QModelIndex &index)
 // Used for the delegate
 void FormPlaceHolder::handleClicked(const QModelIndex &index)
 {
-    setCurrentEditingFormItem(index);
-    Q_EMIT actionsEnabledStateChanged();
     if (index.column() == FormTreeModel::EmptyColumn1) { // the funky button
         if (!d->_formTreeModel->isNoEpisode(index))
             createEpisode();
@@ -614,8 +621,8 @@ void FormPlaceHolder::updateFormCount()
 /** Update actions on current form selection changed */
 void FormPlaceHolder::currentSelectedFormChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    Q_UNUSED(current);
     Q_UNUSED(previous);
+    setCurrentEditingFormItem(current);
     Q_EMIT actionEnabledStateChanged(Action_RemoveSub);
 }
 
@@ -625,13 +632,11 @@ void FormPlaceHolder::currentSelectedFormChanged(const QModelIndex &current, con
  */
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
-//    qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm << index;
     if (index != d->_currentEditingForm) {
         // autosave feature
         d->saveCurrentEditingEpisode();
         d->setCurrentForm(index);
         d->selectAndActivateFirstEpisode();
-//        qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm;
         Q_EMIT actionsEnabledStateChanged();
     }
 }
