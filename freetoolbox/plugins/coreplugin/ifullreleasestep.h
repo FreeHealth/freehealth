@@ -79,7 +79,7 @@ Q_SIGNALS:
 
     // Progress dialog management when threaded
     void progressLabelChanged(const QString &label);
-    void progress(int value); //TODO: consider renaming to "progressValueChanged"
+    void progress(int value);
     void progressRangeChanged(int min, int max);
 };
 
