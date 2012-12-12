@@ -22,11 +22,11 @@
 #include "bugreportdialog.h"
 #include "ui_bugreportdialog.h"
 
-#include <QPushButton>
-
 #include <coreplugin/iuser.h>
 #include <coreplugin/icore.h>
 #include <utils/emailvalidator.h>
+
+#include <QPushButton>
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
@@ -69,6 +69,7 @@ void BugReportDialog::on_emailEdit_textChanged(const QString &text)
 
 void BugReportDialog::sendBugReport()
 {
+    // TODO: code
 }
 
 void BugReportDialog::changeEvent(QEvent *e)
