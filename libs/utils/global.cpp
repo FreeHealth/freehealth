@@ -1665,6 +1665,8 @@ void xmlWrite(QDomElement &father, const QString &name, bool value)
 QByteArray pixmapToBase64(const QPixmap &pixmap)
 {
     QByteArray byteArray;
+    if (pixmap.isNull())
+        return byteArray;
     QBuffer buffer(&byteArray);
     if (!pixmap.save(&buffer, "PNG")) {
         LOG_ERROR_FOR("Global", "Unable to transform QPixmap to base64 QByteArray");
@@ -1680,6 +1682,8 @@ QByteArray pixmapToBase64(const QPixmap &pixmap)
 QPixmap pixmapFromBase64(const QByteArray &base64)
 {
     QPixmap pix;
+    if (base64.isEmpty())
+        return pix;
     if (!pix.load(QByteArray::fromBase64(base64))) {
         LOG_ERROR_FOR("Global", "Unable to transform base64 QByteArray to QPixmap");
         return QPixmap();
