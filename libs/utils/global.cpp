@@ -1740,7 +1740,10 @@ QString testInternetConnection()
     return QString("yes");
 }
 
-/** First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be added into database without problem - no special characters). */
+/**
+ * Destructive string encryption using SHA1 logarythm.
+ * The output is base64 encoded.
+ */
 QString cryptPassword(const QString &toCrypt)
 {
     QCryptographicHash crypter( QCryptographicHash::Sha1 );
@@ -1760,7 +1763,10 @@ QString loginFromSQL(const QVariant &sql)
 QString loginFromSQL(const QString &sql)
 { return QByteArray::fromBase64(sql.toAscii()); }
 
-
+/**
+ * Non-destructive string encryption.
+ * \sa decrypt()
+*/
 QByteArray crypt(const QString &text, const QString &key)
 {
     QByteArray texteEnBytes = text.toAscii();
@@ -1778,6 +1784,9 @@ QByteArray crypt(const QString &text, const QString &key)
 
 // "MTEwZjI5MGQxODNhNDQwODMzMmI=" "CacaBoudin"
 
+/**
+ * Decrypt a string encrypted with the Utils::crypt() method
+*/
 QString decrypt(const QByteArray &texte, const QString &key)
 {
     QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));
