@@ -200,7 +200,6 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     httpGetId(-1),
     httpRequestAborted(false),
     networkError(QNetworkReply::NoError),
-    lastError(""),
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
