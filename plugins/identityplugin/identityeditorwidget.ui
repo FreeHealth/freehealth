@@ -14,21 +14,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="editAdressGroup">
-     <property name="title">
-      <string>Address</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::ExpandingFieldsGrow</enum>
-      </property>
-      <item row="0" column="0" colspan="2">
-       <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="editIdentityGroup">
      <property name="title">
@@ -37,8 +22,11 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QFormLayout" name="formLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_7">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+        </property>
+        <item row="1" column="0">
+         <widget class="QLabel" name="titleLabel">
           <property name="text">
            <string>Title</string>
           </property>
@@ -47,7 +35,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QComboBox" name="titleCombo">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -57,8 +45,8 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
+        <item row="2" column="0">
+         <widget class="QLabel" name="birthNameLabel">
           <property name="text">
            <string>Birth name</string>
           </property>
@@ -67,11 +55,11 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <widget class="QLineEdit" name="birthName"/>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
+        <item row="3" column="0">
+         <widget class="QLabel" name="secondNameLabel">
           <property name="text">
            <string>Second name</string>
           </property>
@@ -80,11 +68,11 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="QLineEdit" name="secondName"/>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_3">
+        <item row="4" column="0">
+         <widget class="QLabel" name="firstnameLabel">
           <property name="text">
            <string>First name</string>
           </property>
@@ -93,20 +81,23 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="QLineEdit" name="firstname"/>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_5">
+        <item row="7" column="0">
+         <widget class="QLabel" name="dobLabel">
           <property name="text">
-           <string>Gender</string>
+           <string>Date of birth</string>
           </property>
           <property name="buddy">
-           <cstring>genderCombo</cstring>
+           <cstring>dob</cstring>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
+        <item row="7" column="1">
+         <widget class="Utils::BirthDayEdit" name="dob"/>
+        </item>
+        <item row="0" column="1">
          <widget class="QComboBox" name="genderCombo">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -116,18 +107,25 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="genderLabel">
           <property name="text">
-           <string>Date of birth</string>
+           <string>Gender</string>
           </property>
           <property name="buddy">
-           <cstring>dob</cstring>
+           <cstring>genderCombo</cstring>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
-         <widget class="Utils::BirthDayEdit" name="dob"/>
+        <item row="8" column="0">
+         <widget class="QLabel" name="languageLabel">
+          <property name="text">
+           <string>Language</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1">
+         <widget class="Utils::LanguageComboBox" name="language"/>
         </item>
        </layout>
       </item>
@@ -191,6 +189,60 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="editAdressGroup">
+     <property name="title">
+      <string>Address</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <item row="0" column="0" colspan="2">
+       <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="loginGroup">
+     <property name="title">
+      <string>Login and password</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="loginLabel">
+        <property name="text">
+         <string>Login</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="passwordLabel">
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="password2Label">
+        <property name="text">
+         <string>Confirm password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="login"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="password"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="password2"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -210,13 +262,22 @@
    <extends>QToolButton</extends>
    <header location="global">identityplugin/themedgenderbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>Utils::LanguageComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">utils/widgets/languagecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Utils::LineEditEchoSwitcher</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/lineeditechoswitcher.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>titleCombo</tabstop>
   <tabstop>birthName</tabstop>
   <tabstop>secondName</tabstop>
   <tabstop>firstname</tabstop>
-  <tabstop>genderCombo</tabstop>
   <tabstop>dob</tabstop>
   <tabstop>photoButton</tabstop>
  </tabstops>

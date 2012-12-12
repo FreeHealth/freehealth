@@ -34,7 +34,7 @@ namespace Internal {
 class ThemedGenderButton : public QToolButton
 {
     Q_OBJECT
-    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
+    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap) // TODO: add NOTIFY currentLanguageChanged
 
 public:
     explicit ThemedGenderButton(QWidget* parent = 0);

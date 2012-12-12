@@ -26,6 +26,8 @@
  ***************************************************************************/
 /**
  * \class Identity::Internal::IsDirtyDataWidgetMapper
+ *
+ * Workflow:\n
  * The data mapper keeps the model original value when you set its current index,
  * then you can use the isDirty() method to make the comparison between cached original
  * values and the widgets current value. \n
@@ -41,6 +43,8 @@
  * You can define a model, the mapping and the index to use,
  * or just keep the identity always sync with the Core::IPatient current
  * patient. \n
+ *
+ * Available widgets and view adaptation: \n
  * This editor contains:
  * - names
  * - firstnames
@@ -51,6 +55,9 @@
  *    - city
  *    - state/province
  *    - country
+ * - full login and password
+ * If you don't want the whole information, you can be defined the widget to
+ * show/hide using the setAvailableWidgets().
 */
 
 #include "identityeditorwidget.h"
@@ -93,6 +100,26 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 //static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
+
+namespace {
+const char * const XML_NAME1    = "n1";
+const char * const XML_NAME2    = "n2";
+const char * const XML_NAME3    = "n3";
+const char * const XML_NAME4    = "n4";
+const char * const XML_FIRSTNAME= "first";
+const char * const XML_GENDER   = "gdr";
+const char * const XML_LANG     = "i18";
+const char * const XML_DOB      = "dob";
+const char * const XML_DOD      = "dod";
+const char * const XML_PHOTO    = "pix";
+const char * const XML_STREET   = "str";
+const char * const XML_CITY     = "city";
+const char * const XML_PROVINCE = "prov";
+const char * const XML_COUNTRY  = "ctry";
+const char * const XML_ZIPCODE  = "zc";
+const char * const XML_LOGIN    = "log";
+const char * const XML_PASSWORD = "pwd";
+} // namespace anonymous
 
 namespace Identity {
 namespace Internal {
@@ -160,31 +187,43 @@ class IdentityEditorWidgetPrivate
 {
 public:
     IdentityEditorWidgetPrivate(IdentityEditorWidget *parent) :
-        editUi(0),
+        ui(0),
         m_Mapper(0),
+        m_initialized(false),
         m_hasRealPhoto(false),
         m_xmlOnly(false),
         q(parent)
     {
-        editUi = new Ui::IdentityWidget;
-        editUi->setupUi(q);
-        editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
-        editUi->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));
+        ui = new Ui::IdentityWidget;
+        ui->setupUi(q);
+        ui->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
+        ui->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));
 
-        editUi->zipcodesWidget->initialize(ZipCodes::ZipCodesWidget::GridLayout);
+        ui->zipcodesWidget->initialize(ZipCodes::ZipCodesWidget::GridLayout);
 
-        editUi->genderCombo->addItems(genders());
-        editUi->titleCombo->addItems(titles());
+        ui->genderCombo->addItems(genders());
+        ui->titleCombo->addItems(titles());
+
+        ui->language->setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath));
+        ui->language->setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
+        ui->language->setCurrentLanguage(QLocale().language());
+
+        ui->login->setIcon(theme()->icon(Core::Constants::ICONEYES));
+        ui->password->setIcon(theme()->icon(Core::Constants::ICONEYES));
+        ui->password2->setIcon(theme()->icon(Core::Constants::ICONEYES));
+        ui->login->setEchoMode(QLineEdit::Normal);
+        ui->password->setEchoMode(QLineEdit::Password);
+        ui->password2->setEchoMode(QLineEdit::Password);
 
         Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
-        editUi->birthName->setValidator(upperVal);
-        editUi->secondName->setValidator(upperVal);
+        ui->birthName->setValidator(upperVal);
+        ui->secondName->setValidator(upperVal);
 
         Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
-        editUi->firstname->setValidator(capVal);
+        ui->firstname->setValidator(capVal);
 
-        q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
-        //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+        q->connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+        //            q->connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
 
         QList<Core::IPhotoProvider *> photoProviderList = pluginManager()->getObjects<Core::IPhotoProvider>();
 
@@ -197,20 +236,20 @@ public:
                 //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                 photoAction = new QAction(provider->displayText(), q);
                 q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
-                q->connect(provider, SIGNAL(photoReady(QPixmap)), editUi->photoButton, SLOT(setPixmap(QPixmap)));
+                q->connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)));
                 photoAction->setData(provider->id());
-                editUi->photoButton->addAction(photoAction);
+                ui->photoButton->addAction(photoAction);
             }
             updateDefaultPhotoAction();
 
         } else {
             LOG_ERROR_FOR(q, "No photoProvider");
             // buggy: the photo saving does not work ATM!
-            //                if (editUi->photoButton->pixmap().isNull())
-            //                    editUi->photoButton->setDisabled(true);
+            //                if (ui->photoButton->pixmap().isNull())
+            //                    ui->photoButton->setDisabled(true);
         }
-        q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
-        q->connect(editUi->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
+        q->connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
+        q->connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
         }
 
     ~IdentityEditorWidgetPrivate()
@@ -219,18 +258,18 @@ public:
             delete m_Mapper;
             m_Mapper = 0;
         }
-        if (editUi) {
-            delete editUi;
-            editUi = 0;
+        if (ui) {
+            delete ui;
+            ui = 0;
         }
     }
 
     void updateDefaultPhotoAction()
     {
         QString defaultId = settings()->value(Patients::Constants::S_DEFAULTPHOTOSOURCE).toString();
-        foreach(QAction *action, editUi->photoButton->actions()) {
+        foreach(QAction *action, ui->photoButton->actions()) {
             if (action->data().toString() == defaultId)
-                editUi->photoButton->setDefaultAction(action);
+                ui->photoButton->setDefaultAction(action);
         }
     }
 
@@ -272,36 +311,100 @@ public:
     // Add mapping to the mapper
     void addMapperMapping()
     {
-        m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
-        m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
-        m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
-        m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
-        m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
-        m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
+        m_Mapper->addMapping(ui->birthName, Core::IPatient::BirthName, "text");
+        m_Mapper->addMapping(ui->secondName, Core::IPatient::SecondName, "text");
+        m_Mapper->addMapping(ui->firstname, Core::IPatient::Firstname, "text");
+        m_Mapper->addMapping(ui->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
+        m_Mapper->addMapping(ui->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
+        m_Mapper->addMapping(ui->dob, Core::IPatient::DateOfBirth, "date");
 
-        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Street, ZipCodes::ZipCodesWidget::StreetPlainText);
-        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::City, ZipCodes::ZipCodesWidget::CityPlainText);
-        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::ZipCode, ZipCodes::ZipCodesWidget::ZipcodePlainText);
-        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::StateProvince, ZipCodes::ZipCodesWidget::StateProvincePlainText);
-        editUi->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Country, ZipCodes::ZipCodesWidget::CountryIso);
+        ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Street, ZipCodes::ZipCodesWidget::StreetPlainText);
+        ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::City, ZipCodes::ZipCodesWidget::CityPlainText);
+        ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::ZipCode, ZipCodes::ZipCodesWidget::ZipcodePlainText);
+        ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::StateProvince, ZipCodes::ZipCodesWidget::StateProvincePlainText);
+        ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Country, ZipCodes::ZipCodesWidget::CountryIso);
+    }
+
+    // Get the corresponding QWidget pointer
+    QWidget *getWidget(IdentityEditorWidget::AvailableWidget widget)
+    {
+        switch (widget) {
+        case IdentityEditorWidget::Title: return ui->titleCombo;
+        case IdentityEditorWidget::BirthName: return ui->birthName;
+        case IdentityEditorWidget::SecondName: return ui->secondName;
+        case IdentityEditorWidget::FirstName: return ui->firstname;
+        case IdentityEditorWidget::Gender: return ui->genderCombo;
+        case IdentityEditorWidget::Language_QLocale: return ui->language;
+        case IdentityEditorWidget::DateOfBirth: return ui->dob;
+        case IdentityEditorWidget::DateOfDeath: return 0; //TODO: ui->dod;
+        case IdentityEditorWidget::Photo: return ui->photoButton;
+        default: break;
+        }
+        return 0;
+    }
+
+    QByteArray getWidgetPropertyForMapper(IdentityEditorWidget::AvailableWidget widget)
+    {
+        switch (widget) {
+        case IdentityEditorWidget::Title:
+        case IdentityEditorWidget::Gender:
+            return "currentIndex";
+        case IdentityEditorWidget::BirthName:
+        case IdentityEditorWidget::SecondName:
+        case IdentityEditorWidget::FirstName:
+            return "text";
+        case IdentityEditorWidget::DateOfBirth:
+        case IdentityEditorWidget::DateOfDeath:
+            return "date";
+//        case IdentityEditorWidget::Photo: return "pixmap";
+        case IdentityEditorWidget::Language_QLocale:
+            return "currentLanguage";
+        default: break;
+        }
+        return "";
     }
 
     bool fromXml(const QString &xml)
     {
+        if (!m_xmlOnly)
+            return false;
+        Q_UNUSED(xml);
+//        QHash<QString, QSting> tags;
+//        if (!Utils::readXml(xml, "Identity", tags))
+//            return false;
         return true;
     }
 
     QString toXml()
     {
+//        QHash<QString, QSting> tags;
+//        tags.insert(::XML_NAME1, ui->);
+//        tags.insert(::XML_NAME2, ui->);
+//        tags.insert(::XML_NAME3, ui->);
+//        tags.insert(::XML_NAME4, ui->);
+//        tags.insert(::XML_FIRSTNAME, ui->);
+//        tags.insert(::XML_GENDER, ui->);
+//        tags.insert(::XML_LANG, ui->);
+//        tags.insert(::XML_DOB, ui->);
+//        tags.insert(::XML_DOD, ui->);
+//        tags.insert(::XML_PHOTO, ui->);
+//        tags.insert(::XML_STREET, ui->);
+//        tags.insert(::XML_CITY, ui->);
+//        tags.insert(::XML_PROVINCE, ui->);
+//        tags.insert(::XML_COUNTRY, ui->);
+//        tags.insert(::XML_ZIPCODE, ui->);
+//        tags.insert(::XML_LOGIN, ui->);
+//        tags.insert(::XML_PASSWORD, ui->);
+//        return Utils::createXml("Identity", tags, 2);
         return QString::null;
     }
 
 public:
-    Ui::IdentityWidget *editUi;
+    Ui::IdentityWidget *ui;
     IsDirtyDataWidgetMapper *m_Mapper;
     QAbstractItemModel *m_Model;
     QPixmap m_Photo;
-    bool m_hasRealPhoto, m_xmlOnly;
+    bool m_initialized, m_hasRealPhoto, m_xmlOnly;
 
 private:
     QAction *m_deletePhotoAction;
@@ -313,18 +416,17 @@ private:
 
 /**
  * \brief Create an Identity viewer with the specific \e mode of edition.
- * You can specify the QAbstractItemModel to use
- * \sa IdentityEditorWidget::setModel()
+ * By default, the view is connected to the Core::IPatient but
+ * you can specify the QAbstractItemModel to use, or use this view with
+ * an unique XML in/out. \n
+ * You must firstly initialize the object with initialize().
+ * \sa setModel(), setXmlInOut()
 */
 IdentityEditorWidget::IdentityEditorWidget(QWidget *parent) :
     QWidget(parent),
     d(new Internal::IdentityEditorWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityEditorWidget");
-    d->createGenericMapper();
-    d->m_Mapper->toFirst();
-    updateGenderImage();
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 IdentityEditorWidget::~IdentityEditorWidget()
@@ -334,11 +436,100 @@ IdentityEditorWidget::~IdentityEditorWidget()
     d = 0;
 }
 
+/** Initialize the view with the default Core::IPatient model */
+bool IdentityEditorWidget::initialize()
+{
+    if (d->m_initialized)
+        return true;
+    d->createGenericMapper();
+    d->m_Mapper->toFirst();
+    updateGenderImage();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    d->m_initialized = true;
+    return true;
+}
+
+/**
+ * Define the widgets to include in the view . You must initialize() the widget before
+ * defining the view's content.
+ */
+void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
+{
+    qWarning()  << widgets;
+
+    if (!d->ui)
+        return;
+    d->ui->titleLabel->setVisible(widgets & Title);
+    d->ui->titleCombo->setVisible(widgets & Title);
+    d->ui->birthName->setVisible(widgets & BirthName);
+    d->ui->birthNameLabel->setVisible(widgets & BirthName);
+    d->ui->secondName->setVisible(widgets & SecondName);
+    d->ui->secondNameLabel->setVisible(widgets & SecondName);
+    d->ui->firstname->setVisible(widgets & FirstName);
+    d->ui->firstnameLabel->setVisible(widgets & FirstName);
+    d->ui->genderCombo->setVisible(widgets & Gender);
+    d->ui->genderLabel->setVisible(widgets & Gender);
+    d->ui->language->setVisible(widgets & Language_QLocale);
+    d->ui->languageLabel->setVisible(widgets & Language_QLocale);
+    d->ui->dob->setVisible(widgets & DateOfBirth);
+    d->ui->dobLabel->setVisible(widgets & DateOfBirth);
+    //    d->ui->dod->setVisible(widgets & DateOfDeath);
+    //    d->ui->dodLabel->setVisible(widgets & DateOfDeath);
+
+    d->ui->photoButton->setVisible(widgets & Photo);
+
+    qWarning() << ((widgets & Street)
+                   || (widgets & City)
+                   || (widgets & Zipcode)
+                   || (widgets & Province)
+                   || (widgets & Country_TwoCharIso)
+                   || (widgets & Country_QLocale));
+
+    bool showAddress = (widgets & Street)
+            || (widgets & City)
+            || (widgets & Zipcode)
+            || (widgets & Province)
+            || (widgets & Country_TwoCharIso)
+            || (widgets & Country_QLocale);
+
+    d->ui->zipcodesWidget->setVisible(showAddress);
+    d->ui->editAdressGroup->setVisible(showAddress);
+
+    bool showLog = (widgets & Extra_Login)
+            || (widgets & Extra_Password)
+            || (widgets & Extra_ConfirmPassword);
+    d->ui->loginGroup->setVisible(showLog);
+    d->ui->login->setVisible(widgets & Extra_Login);
+    d->ui->password->setVisible(widgets & Extra_Password);
+    d->ui->password2->setVisible(widgets & Extra_ConfirmPassword);
+}
+
+/** Set/unset the view in read-only mode */
+void IdentityEditorWidget::setReadOnly(bool readOnly)
+{
+    d->ui->birthName->setReadOnly(readOnly);
+    d->ui->secondName->setReadOnly(readOnly);
+    d->ui->firstname->setReadOnly(readOnly);
+    d->ui->dob->setReadOnly(readOnly);
+
+    d->ui->genderCombo->setEnabled(readOnly);
+    d->ui->titleCombo->setEnabled(readOnly);
+    d->ui->language->setEnabled(readOnly);
+    d->ui->photoButton->setEnabled(readOnly);
+
+    d->ui->zipcodesWidget->setReadOnly(readOnly);
+
+    d->ui->login->setReadOnly(readOnly);
+    d->ui->password->setReadOnly(readOnly);
+    d->ui->password2->setReadOnly(readOnly);
+}
+
 /**
  * If you don't want to use the identity editor over the Core::IPatient
  * (which represents the current patient), you can set your own QAbstractItemModel.
  * The mapper is auto-selecting the first row of the model.\n
- * Use the setCurrentIndex() to set the current index of the current editing index.
+ * Use the setCurrentIndex() to set the current index of the current editing index.\n
+ * \note The model should be a QTableAbstractItemModel.
  * \sa setCurrentIndex()
  */
 void IdentityEditorWidget::setModel(QAbstractItemModel *model)
@@ -349,12 +540,65 @@ void IdentityEditorWidget::setModel(QAbstractItemModel *model)
 }
 
 /**
+ * If you want to use your own QAbstractItemModel, you can, once registered with
+ * setModel(), define the mappings. Use the AvailableWidget to define the widget and
+ * the \e modelIndex to define the corresponding model index. \n
+ * Return \e true is the mapping was created, otherwise return \e false.
+ */
+bool IdentityEditorWidget::addMapping(AvailableWidget widget, int modelIndex)
+{
+    Q_ASSERT(d->m_Model);
+    Q_ASSERT(d->m_Mapper);
+    if (!d->m_Model)
+        return false;
+    QWidget *w = d->getWidget(widget);
+    if (w) {
+        // widget is directly accessible from the ui
+        d->m_Mapper->addMapping(w, modelIndex, d->getWidgetPropertyForMapper(widget));
+    } else {
+        // widget is not directly accessible from the ui
+        if (widget == Street ||
+                widget == City ||
+                widget == Zipcode ||
+                widget == Province ||
+                widget == Country_QLocale ||
+                widget == Country_TwoCharIso) {
+            // Use the zipcodesWidget
+            ZipCodes::ZipCodesWidget::Mapping zipMapping;
+            switch (widget) {
+            case Street: zipMapping = ZipCodes::ZipCodesWidget::StreetPlainText; break;
+            case City: zipMapping = ZipCodes::ZipCodesWidget::CityPlainText; break;
+            case Zipcode: zipMapping = ZipCodes::ZipCodesWidget::ZipcodePlainText; break;
+            case Province: zipMapping = ZipCodes::ZipCodesWidget::StateProvincePlainText; break;
+            case Country_TwoCharIso: zipMapping = ZipCodes::ZipCodesWidget::CountryIso; break;
+            case Country_QLocale: zipMapping = ZipCodes::ZipCodesWidget::CountryLocale; break;
+            default: break;
+            }
+            d->ui->zipcodesWidget->addMapping(d->m_Mapper, modelIndex, zipMapping);
+        } else {
+            // Error
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  */
 void IdentityEditorWidget::setXmlInOut(bool xmlonly)
 {
     d->m_xmlOnly = xmlonly;
     d->createPatientModelMapper(0);
     updateGenderImage();
+}
+
+/**
+ * Transform the current data to an XML content.
+ * \sa fromXml(), setXmlInOut()
+ */
+QString IdentityEditorWidget::toXml() const
+{
+    return d->toXml();
 }
 
 /**
@@ -370,47 +614,42 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->m_Mapper->setCurrentModelIndex(patientIndex);
 }
 
-/** Test the validity of the "actually shown" identity. */
+/**
+ * Test the validity of the "actually shown" identity. The default implementation
+ * test the content of the firstname, birthname, gender & DOB.
+ * When subclassing, if you return false, the object can not submit to the model.
+ */
 bool IdentityEditorWidget::isIdentityValid() const
 {
-    if (d->editUi->birthName->text().isEmpty()) {
+    if (d->ui->birthName->text().isEmpty()) {
         Utils::warningMessageBox(tr("You must specify a birthname."),
                                  tr("You can not create a patient without a birthname"),
                                  "", tr("No birthname"));
-        d->editUi->birthName->setFocus();
+        d->ui->birthName->setFocus();
         return false;
     }
-    if (d->editUi->firstname->text().isEmpty()) {
+    if (d->ui->firstname->text().isEmpty()) {
         Utils::warningMessageBox(tr("You must specify a first name."),
                                  tr("You can not create a patient without a first name"),
                                  "", tr("No firstname"));
-        d->editUi->firstname->setFocus();
+        d->ui->firstname->setFocus();
         return false;
     }
-    if (d->editUi->dob->date().isNull()) {
+    if (d->ui->dob->date().isNull()) {
         Utils::warningMessageBox(tr("You must specify a date of birth."),
                                  tr("You can not create a patient without a date of birth"),
                                  "", tr("No date of birth"));
-        d->editUi->dob->setFocus();
+        d->ui->dob->setFocus();
         return false;
     }
-    if (d->editUi->genderCombo->currentIndex() == -1) {
+    if (d->ui->genderCombo->currentIndex() == -1) {
         Utils::warningMessageBox(tr("You must specify a gender."),
                                  tr("You can not create a patient without a gender"),
                                  "", tr("No gender"));
-        d->editUi->genderCombo->setFocus();
+        d->ui->genderCombo->setFocus();
         return false;
     }
     return true;
-}
-
-/**
- * Manage duplicates. If this member returns \e true, the mapper can not be submitted.
- * By default, returns \e false.
- */
-bool IdentityEditorWidget::isIdentityAlreadyInDatabase() const
-{
-    return false;
 }
 
 /** \brief Identity has been modified by the user? */
@@ -422,26 +661,26 @@ bool IdentityEditorWidget::isModified() const
 /** Return the current editing value */
 QString IdentityEditorWidget::currentBirthName() const
 {
-    return d->editUi->birthName->text();
+    return d->ui->birthName->text();
 }
 
 /** Return the current editing value */
 QString IdentityEditorWidget::currentSecondName() const
 {
-    return d->editUi->secondName->text();
+    return d->ui->secondName->text();
 }
 
 /** Return the current editing value */
 QString IdentityEditorWidget::currentFirstName() const
 {
-    return d->editUi->firstname->text();
+    return d->ui->firstname->text();
 }
 
 /** Return the current editing value */
 QString IdentityEditorWidget::currentGender() const
 {
     int genderIndex = -1;
-    genderIndex = d->editUi->genderCombo->currentIndex();
+    genderIndex = d->ui->genderCombo->currentIndex();
 
     if (IN_RANGE_STRICT_MAX(genderIndex, 0, Trans::ConstantTranslations::genders().count()))
         return Trans::ConstantTranslations::genders()[genderIndex];
@@ -452,7 +691,7 @@ QString IdentityEditorWidget::currentGender() const
 /** Return the current editing value */
 QDate IdentityEditorWidget::currentDateOfBirth() const
 {
-    return d->editUi->dob->date();
+    return d->ui->dob->date();
 }
 
 /*!
@@ -465,22 +704,17 @@ QDate IdentityEditorWidget::currentDateOfBirth() const
 QPixmap IdentityEditorWidget::currentPhoto() const
 {
     QPixmap photo;    
-    photo = hasPhoto() ? d->editUi->photoButton->pixmap() : QPixmap();
+    photo = hasPhoto() ? d->ui->photoButton->pixmap() : QPixmap();
     return photo;
 }
 
+/**
+ * Return \e true if the identity photo was populated with a user pixmap.
+ * Return \e false, if the photo is populated with the default gender pixmap.
+ */
 bool IdentityEditorWidget::hasPhoto() const
 {
-    return (!d->editUi->photoButton->pixmap().isNull());
-}
-
-/**
- * Transform the current data to an XML content.
- * \sa fromXml(), setXmlInOut()
- */
-QString IdentityEditorWidget::toXml() const
-{
-    return d->toXml();
+    return (!d->ui->photoButton->pixmap().isNull());
 }
 
 /**
@@ -493,22 +727,26 @@ bool IdentityEditorWidget::submit()
     if (d->m_xmlOnly)
         return true;
     if (d->m_Mapper) {
-        bool ok = d->m_Mapper->submit();
-        if (ok) {
-            d->m_Mapper->onModelSubmitted();
-        }
+        if (!d->m_Mapper->submit())
+            return false;
+        d->m_Mapper->onModelSubmitted();
     }
-    return false;
+    return true;
 }
 
+/** Force refreshing the photo */
 void IdentityEditorWidget::updateGenderImage()
 {
-    updateGenderImage(d->editUi->genderCombo->currentIndex());
+    updateGenderImage(d->ui->genderCombo->currentIndex());
 }
 
+/**
+ * \internal
+ * Connected to the gender ui combobox, update the gender pixmap.
+ */
 void IdentityEditorWidget::updateGenderImage(int genderIndex)
 {
-    d->editUi->photoButton->setGenderImage(genderIndex);
+    d->ui->photoButton->setGenderImage(genderIndex);
 }
 
 /**
@@ -525,8 +763,8 @@ void IdentityEditorWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        if (d->editUi)
-            d->editUi->retranslateUi(this);
+        if (d->ui)
+            d->ui->retranslateUi(this);
         break;
     default:
         break;
@@ -534,10 +772,13 @@ void IdentityEditorWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
 }
 
-/** \brief Triggers the default action of the photo button. */
+/**
+ * \internal
+ * Triggers the default action of the photo button.
+ */
 void IdentityEditorWidget::photoButton_clicked()
 {
-    QAction *action = d->editUi->photoButton->defaultAction();
+    QAction *action = d->ui->photoButton->defaultAction();
     if (action)
         action->trigger();
 }

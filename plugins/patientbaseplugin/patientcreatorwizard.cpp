@@ -43,6 +43,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <identityplugin/identityeditorwidget.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -111,14 +113,14 @@ IdentityPage::IdentityPage(QWidget *parent) :
 {
     setObjectName("IdentityPage");
     setTitle(tr("Please enter the patient's identity."));
-    m_Identity = new IdentityEditorWidget(this, IdentityEditorWidget::ReadWriteMode);
+    m_Identity = new Identity::IdentityEditorWidget(this);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
     m_Model->emitPatientCreationOnSubmit(true);
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
-    m_Identity->setPatientModel(m_Model);
+    m_Identity->setModel(m_Model);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout;

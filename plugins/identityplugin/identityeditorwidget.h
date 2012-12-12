@@ -63,31 +63,48 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
 
 public:
     enum AvailableWidget {
-        BirthName = 0,
-        SecondName,
-        FirstName,
-        Gender,
-        Title,
-        DateOfBirth,
-        DateOfDeath,
-        Photo,
-        Street,
-        City,
-        Zipcode,
-        Province,
-        Country
+        Title           = 0x00000001,
+        BirthName       = 0x00000002,
+        SecondName      = 0x00000004,
+        FirstName       = 0x00000008,
+        Gender          = 0x00000010,
+        Language_QLocale= 0x00000020,
+        DateOfBirth     = 0x00000040,
+        DateOfDeath     = 0x00000080,
+        Photo           = 0x00000100,
+        Street          = 0x00000200,
+        City            = 0x00000400,
+        Zipcode         = 0x00000800,
+        Province        = 0x00001000,
+        Country_TwoCharIso  = 0x00002000,
+        Country_QLocale = 0x00004000,
+        // TODO: implement the following
+        Extra_Login     = 0x00008000,
+        Extra_Password  = 0x00010000,
+        Extra_ConfirmPassword   = 0x00020000,
+        FullIdentity = Title | BirthName | SecondName | FirstName | Gender | DateOfBirth,
+        FullAddress =  Street | City | Zipcode | Province | Country_TwoCharIso |Country_QLocale,
+        FullLogin = Extra_Login | Extra_Password | Extra_ConfirmPassword
     };
+    Q_DECLARE_FLAGS(AvailableWidgets, AvailableWidget)
 
     IdentityEditorWidget(QWidget *parent = 0);
     ~IdentityEditorWidget();
 
-    void setModel(QAbstractItemModel *model);
-    void addMapping(AvailableWidget widget, int modelIndex);
+    // initialize
+    bool initialize();
+    void setAvailableWidgets(AvailableWidgets widgets);
+    void setReadOnly(bool readOnly);
 
+    // Use model
+    void setModel(QAbstractItemModel *model);
+    bool addMapping(AvailableWidget widget, int modelIndex);
+
+    // Use XML
     void setXmlInOut(bool xmlonly);
+    QString toXml() const;
 
     virtual bool isIdentityValid() const;
-    virtual bool isIdentityAlreadyInDatabase() const;
     bool isModified() const;
 
     QString currentBirthName() const;
@@ -98,8 +115,6 @@ public:
 
     QPixmap currentPhoto() const;
     bool hasPhoto() const;
-
-    QString toXml() const;
 
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);
@@ -122,5 +137,7 @@ private:
 };
 
 }  // End namespace Identity
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Identity::IdentityEditorWidget::AvailableWidgets)
 
 #endif // IDENTITY_IDENTITYEDITORWIDGET_H

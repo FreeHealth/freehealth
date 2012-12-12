@@ -39,10 +39,10 @@ QT_END_NAMESPACE
  * \file identitywidgetfactory.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 06 Dec 2012
+ * \date 12 Dec 2012
 */
 
-namespace Patients {
+namespace Identity {
 class IdentityEditorWidget;
 }
 
@@ -77,7 +77,7 @@ public Q_SLOTS:
     void retranslate();
 
 public:
-    Patients::IdentityEditorWidget *m_Identity;
+    Identity::IdentityEditorWidget *m_Identity;
 
 private:
     QGridLayout *m_ContainerLayout;

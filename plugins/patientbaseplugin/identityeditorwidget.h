@@ -28,11 +28,14 @@
 #define PATIENTS_IDENTITYEDITORWIDGET_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
-#include <coreplugin/iphotoprovider.h>
+#include <identityplugin/identityeditorwidget.h>
 
-#include <QWidget>
-#include <QModelIndex>
-#include <QDataWidgetMapper>
+/**
+ * \file identityeditorwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 12 Dec 2012
+*/
 
 namespace Patients {
 class PatientModel;
@@ -40,71 +43,22 @@ class PatientModel;
 namespace Internal {
 class IdentityEditorWidgetPrivate;
 
-class IsDirtyDataWidgetMapper: public QDataWidgetMapper
-{
-    Q_OBJECT
-public:
-    IsDirtyDataWidgetMapper(QObject *parent = 0);
-    void onModelSubmitted();
-    bool isDirty() const;
-
-public Q_SLOTS:
-    void setCurrentIndex(int index);
-
-private:
-    void refreshCache();
-
-private:
-    QHash<QWidget *, QVariant> _original;
-};
-}
-
-class PATIENT_EXPORT IdentityEditorWidget : public QWidget
+class PATIENT_EXPORT IdentityEditorWidget : public Identity::IdentityEditorWidget
 {
     Q_OBJECT
     friend class Internal::IdentityEditorWidgetPrivate;
 
 public:
-    enum EditMode {
-        ReadOnlyMode,
-        ReadWriteMode
-    };
-
-    IdentityEditorWidget(QWidget *parent = 0, EditMode mode = ReadOnlyMode);
+    explicit IdentityEditorWidget(QWidget *parent = 0);
     ~IdentityEditorWidget();
 
-    void setPatientModel(PatientModel *model);
-
     bool isIdentityValid() const;
-    bool isIdentityAlreadyInDatabase() const;
-    bool isModified() const;
-
-    QString currentBirthName() const;
-    QString currentSecondName() const;
-    QString currentFirstName() const;
-    QString currentGender() const;
-    QDate currentDateOfBirth() const;
-
-    QPixmap currentPhoto() const;
-    bool hasPhoto() const;
-
-public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &patientIndex);
-    bool submit();
-    void updateGenderImage(int genderIndex);
-    void updateGenderImage();
-
-private:
-    void changeEvent(QEvent *e);
-
-private Q_SLOTS:
-    void photoButton_clicked();
-    void onCurrentPatientChanged();
 
 private:
     Internal::IdentityEditorWidgetPrivate *d;
 };
 
+}  // End namespace Internal
 }  // End namespace Patients
 
 #endif // PATIENTS_IDENTITYEDITORWIDGET_H

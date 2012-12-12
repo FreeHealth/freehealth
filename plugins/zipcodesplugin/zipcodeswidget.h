@@ -68,12 +68,10 @@ public:
     explicit ZipCodesWidget(QWidget *parent = 0);
     ~ZipCodesWidget();
     bool initialize(TypeOfLayout layout);
-    
-    void addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const;
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
+    void setReadOnly(bool readOnly);
+
+    void addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const;
 
 private:
     void changeEvent(QEvent *e);
