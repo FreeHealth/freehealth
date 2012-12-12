@@ -155,10 +155,9 @@ bool Icd10Step::cleanTemporaryStorage()
 /**
  * \brief Download the URL to the tempPath().
  *
- * You can optionally provide a QProgressBar to the method that will be connected to the
- * download progress. The connection is thread safe.\n
+ * You can optionally connect a QProgressBar to the progress() and progressRangeChanged() signals, it will
+ * be updated according to the download progress.
  * Asynchronously emits the downloadFinished() signal when done.
- * \sa setDownloadUrl()
  */
 bool Icd10Step::startDownload()
 {
@@ -169,15 +168,18 @@ bool Icd10Step::startDownload()
         return true;
     }
 
-    Utils::HttpDownloader *dld = new Utils::HttpDownloader;
+    Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
 
 //    dld->setMainWindow(mainwindow());
+    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()), Qt::UniqueConnection);
+    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    connect(dld, SIGNAL(downloadProgressPermill(int)), this, SIGNAL(progress(int)));
+
+    Q_EMIT progressRangeChanged(0, 1000);
+    Q_EMIT progress(0);
+
     dld->setOutputPath(d->_tmpPath);
     dld->setUrl(QUrl(d->_url));
-    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
-    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
-    connect(dld, SIGNAL(downloadProgressRangeChanged(int,int)), this, SIGNAL(progressRangeChanged(int,int)));
-    connect(dld, SIGNAL(downloadProgressValueChanged(int)), this, SIGNAL(progress(int)));
     dld->startDownload();
     return true;
 }

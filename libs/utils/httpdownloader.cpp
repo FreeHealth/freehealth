@@ -159,11 +159,20 @@ void HttpDownloader::setLabelText(const QString &text)
     d->m_LabelText = text;
 }
 
+QString HttpDownloader::lastErrorString() const
+{
+    return d->lastError;
+}
+
+QNetworkReply::NetworkError HttpDownloader::networkError()
+{
+    return d->networkError;
+}
+
 /**
  * Starts the asynchronous downloading. When the download is finished
  * the downloadFinished() signal is emitted. You can follow the download progress
- * with the downloadProgressRangeChanged(), downloadProgressValueChanged(), and
- * downloadProgressPercentsChanged() signals.
+ * with the downloadProgress() or downloadProgressPercentsChanged() signals.
  */
 bool HttpDownloader::startDownload()
 {
@@ -190,6 +199,8 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     progressBar(0),
     httpGetId(-1),
     httpRequestAborted(false),
+    networkError(QNetworkReply::NoError),
+    lastError(""),
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
@@ -235,7 +246,8 @@ bool HttpDownloaderPrivate::downloadFile()
 {
     QString fileName = q->outputAbsoluteFileName();
 
-    if (QFile::exists(fileName)) {        
+    if (QFile::exists(fileName)) {
+        // FIXME: No direct GUI access from a non-GUI class!!!
         if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
                                        "the current directory. Overwrite?").arg(fileName), ""))
             return false;
@@ -244,6 +256,7 @@ bool HttpDownloaderPrivate::downloadFile()
 
     file = new QFile(fileName);
     if (!file->open(QIODevice::WriteOnly)) {
+        // FIXME: No direct GUI access from a non-GUI class!!!
         Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
                                  .arg(fileName).arg(file->errorString()), "");
         delete file;
@@ -284,6 +297,8 @@ void HttpDownloaderPrivate::cancelDownload()
     httpRequestAborted = true;
     reply->abort();
     reply->deleteLater();
+    networkError = QNetworkReply::OperationCanceledError;
+    lastError = tr("Download canceled.");
 }
 
 /** Slot called when the downloading is finished (with or without error) */
@@ -291,7 +306,10 @@ void HttpDownloaderPrivate::httpFinished()
 {
     qWarning() << "httpFinished" << reply->error() << reply->errorString();
 
-    if (httpRequestAborted || reply->error()!=QNetworkReply::NoError) {
+    networkError = reply->error();
+
+    if (httpRequestAborted || networkError != QNetworkReply::NoError) {
+
         if (file) {
             file->close();
             file->remove();
@@ -305,9 +323,10 @@ void HttpDownloaderPrivate::httpFinished()
     }
 
     if (progressBar) {
-        if (reply->error() != QNetworkReply::NoError) {
+        if (networkError != QNetworkReply::NoError) {
             progressBar->setValue(0);
-            progressBar->setToolTip(tr("Download finished with an error: %1.").arg(reply->errorString()));
+            lastError = tr("Download finished with an error: %1.").arg(reply->errorString());
+            progressBar->setToolTip(lastError);
         } else  {
             progressBar->setValue(100);
             progressBar->setToolTip(tr("Download finished."));
@@ -318,7 +337,7 @@ void HttpDownloaderPrivate::httpFinished()
     file->close();
 
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (reply->error()) {
+    if (networkError) {
         file->remove();
         Utils::informativeMessageBox(tr("Download failed: %1.")
                                      .arg(reply->errorString()), "", "", tr("HTTP"));
@@ -361,25 +380,20 @@ void HttpDownloaderPrivate::httpReadyRead()
 /**
   * Emits signals that can be connected to a QProgressBar which is then updated according
   * to the current download status (range and value). \n
-  * Also computes the downloading percentage and emits the downloadProgressPercentsChanged() signal.
-  * \sa HttpDownloader::setProgressBar()
+  * Also computes the downloading in tenths of a percent and emits the downloadProgressPermille() signal.
   */
-void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesRead, qint64 totalBytes)
+void HttpDownloaderPrivate::updateDownloadProgress(qint64 bytesReceived, qint64 totalBytes)
 {
     if (httpRequestAborted)
         return;
 
-    Q_EMIT q->downloadProgressRangeChanged(0, totalBytes);
-    Q_EMIT q->downloadProgressValueChanged(bytesRead);
+    Q_EMIT q->downloadProgress(bytesReceived, totalBytes);
 
-    int percent = 0;
+    int permille = 0;
     if (totalBytes>0)
-        percent = bytesRead*100/totalBytes;
+        permille = bytesReceived*1000/totalBytes;
 
-    if (progressBar)
-        progressBar->setValue(percent);
-
-    Q_EMIT q->downloadProgressPercentsChanged(percent);
+    Q_EMIT q->downloadProgressPermille(permille);
 }
 
 /** Slot connected to server authentication required */

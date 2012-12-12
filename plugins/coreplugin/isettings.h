@@ -60,7 +60,6 @@ class CORE_EXPORT ISettings : public QObject
 public:
 
     enum Paths {
-        /** \todo rename ResourcesPath to UserResourcesPath */
         UserResourcesPath = 0,
         ApplicationPath,
         BundleRootPath,

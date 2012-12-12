@@ -409,7 +409,9 @@ bool GenericZipCodesStep::cleanTemporaryStorage()
 
 /*!
  * Downloads the list of available countries.
- * \sa onAvailableCountriesDownloaded()
+ * You can connect the progress() signal to a QComboBox (with range 0..1000) to watch the
+ * download progress.
+ * \sa downloadFinished(), progress()
 */
 bool GenericZipCodesStep::startDownload()
 {
@@ -417,10 +419,13 @@ bool GenericZipCodesStep::startDownload()
     if (!d->m_downloader) {
         d->m_downloader = new Utils::HttpDownloader(this);
         connect(d->m_downloader, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()), Qt::UniqueConnection);
-        connect(d->m_downloader, SIGNAL(downloadProgressPercentsChanged(int)), this, SIGNAL(progress(int)));
+        connect(d->m_downloader, SIGNAL(downloadFinished()), d->m_downloader, SLOT(deleteLater()));
+        connect(d->m_downloader, SIGNAL(downloadProgressPermille(int)), this, SIGNAL(progress(int)));
     }
-    Q_EMIT progressRangeChanged(0, 100);
+
+    Q_EMIT progressRangeChanged(0, 1000);
     Q_EMIT progress(0);
+
     d->m_downloader->setOutputPath(d->tmpPath());
     d->m_downloader->setUrl(d->url());
     return d->m_downloader->startDownload();

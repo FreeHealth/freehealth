@@ -28,6 +28,8 @@
 
 #include <utils/global_exporter.h>
 #include <QObject>
+#include <QNetworkReply>
+
 QT_BEGIN_NAMESPACE
 class QProgressBar;
 class QUrl;
@@ -66,15 +68,17 @@ public:
 
     void setLabelText(const QString &text);
 
+    QString lastErrorString() const;
+    QNetworkReply::NetworkError networkError();
+
 public Q_SLOTS:
     bool startDownload();
     bool cancelDownload();
 
 Q_SIGNALS:
     void downloadFinished();
-    void downloadProgressRangeChanged(int,int);
-    void downloadProgressValueChanged(int);
-    void downloadProgressPercentsChanged(int);
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void downloadProgressPermille(int);
 
 private:
     Internal::HttpDownloaderPrivate *d;
