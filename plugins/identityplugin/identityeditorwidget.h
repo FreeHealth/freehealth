@@ -102,6 +102,7 @@ public:
 
     // Use XML
     void setXmlInOut(bool xmlonly);
+    bool isXmlInOut() const;
     QString toXml() const;
 
     virtual bool isIdentityValid() const;

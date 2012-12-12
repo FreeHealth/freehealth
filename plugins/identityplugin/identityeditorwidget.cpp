@@ -593,6 +593,15 @@ void IdentityEditorWidget::setXmlInOut(bool xmlonly)
 }
 
 /**
+ * Return true if the widget works only with an XML input/output
+ * \sa setXmlInOut()
+*/
+bool IdentityEditorWidget::isXmlInOut() const
+{
+    return d->m_xmlOnly;
+}
+
+/**
  * Transform the current data to an XML content.
  * \sa fromXml(), setXmlInOut()
  */
