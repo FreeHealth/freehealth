@@ -73,6 +73,7 @@ public:
 
     void addMapping(QDataWidgetMapper *mapper, const int section, Mapping mapping) const;
 
+    void clear();
     void setStreet(const QString &street);
     void setCity(const QString &city);
     void setStateProvince(const QString &state);

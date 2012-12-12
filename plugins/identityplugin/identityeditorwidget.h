@@ -95,6 +95,7 @@ public:
     bool initialize();
     void setAvailableWidgets(AvailableWidgets widgets);
     void setReadOnly(bool readOnly);
+    void clear();
 
     // Use model
     void setModel(QAbstractItemModel *model);

@@ -228,10 +228,19 @@ void ZipCodesWidget::addMapping(QDataWidgetMapper *mapper, const int section, Ma
     }
 }
 
+/** Clear the UI content. If you are using a mapper, you don't need to clear the view. */
+void ZipCodesWidget::clear()
+{
+    d->_street->clear();
+    d->_city->clear();
+    d->_zip->clear();
+    d->_stateCombo->setCurrentIndex(-1);
+    d->_country->setCurrentIndex(-1);
+}
+
 void ZipCodesWidget::setStreet(const QString &street)
 {
     d->_street->setPlainText(street);
-    d->_zipCompleter->checkData();
 }
 
 void ZipCodesWidget::setCity(const QString &city)

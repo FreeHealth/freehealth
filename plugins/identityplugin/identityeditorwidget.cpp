@@ -525,6 +525,27 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
 }
 
 /**
+ * Clear the view. If you are using a model or the Core::IPatient,
+ * you don't need to clear the view.
+ */
+void IdentityEditorWidget::clear()
+{
+    d->ui->titleCombo->setCurrentIndex(-1);
+    d->ui->genderCombo->setCurrentIndex(-1);
+    d->ui->language->setCurrentLanguage(QLocale().language());
+    d->ui->birthName->clear();
+    d->ui->secondName->clear();
+    d->ui->firstname->clear();
+    d->ui->dob->clear();
+    d->ui->photoButton->clearPixmap();
+    d->ui->zipcodesWidget->clear();
+    d->ui->login->clear();
+    d->ui->password->clear();
+    d->ui->password2->clear();
+//    d->ui->dod->clear();
+}
+
+/**
  * If you don't want to use the identity editor over the Core::IPatient
  * (which represents the current patient), you can set your own QAbstractItemModel.
  * The mapper is auto-selecting the first row of the model.\n
