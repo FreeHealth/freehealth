@@ -80,9 +80,10 @@ void UrlPhotoProvider::startReceivingPhoto()
 {
     UrlPhotoDialog dialog;
     QPixmap photo;
-    if (dialog.exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted) {
         photo = dialog.photo();
-    Q_EMIT photoReady(photo);
+        Q_EMIT photoReady(photo);
+    }
 }
 
 } // namespace Internal
