@@ -825,6 +825,7 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
+    mb.setWindowFlags(mb.windowFlags() & ~Qt::WindowCloseButtonHint);
     if (icon.isNull()) {
         mb.setIcon(QMessageBox::Question);
     } else {
