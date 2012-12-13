@@ -65,7 +65,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     m_ui->widget->setupUi();
     m_ui->widget->expandAllCategories();
 
-    setWindowTitle(tkTr(Trans::Constants::ABOUT_TEXT).remove("&"));
+    setWindowTitle(tr("About FreeMedForms"));
 
     // resize and center window
     Utils::resizeAndCenter(this);
