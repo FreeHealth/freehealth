@@ -463,7 +463,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
             if (file.versionString()=="test" || file>db) {
                 // update database
                 XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
-                // Construct the detailled text of the user's question messagebox
+                // Construct the detailed text of the user's question messagebox
                 QString html;
                 html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br />&nbsp;&nbsp;•&nbsp;%3<br />")
                         .arg(tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString())
