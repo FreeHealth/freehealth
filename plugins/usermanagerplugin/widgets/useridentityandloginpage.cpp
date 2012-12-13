@@ -227,6 +227,10 @@ void UserIdentityAndLoginPage::toggleErrorLabels()
     }
 }
 
+/**
+ * Validate the wizard page. Checks the name and firstname,
+ * check the password confirmation then validate
+ */
 bool UserIdentityAndLoginPage::validatePage()
 {
     if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {

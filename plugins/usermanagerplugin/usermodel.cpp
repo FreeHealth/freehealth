@@ -70,7 +70,6 @@
 #include <QHash>
 #include <QSqlTableModel>
 
-
 // ******************************************************************************************************
 // * WARNING, ENABLING ONE OF THOSE SWITCHES LEADS TO PRINTING THE CLEARTEXT PASSWORD ON THE CONSOLE!   *
 // * THIS ISIS A SECURITY ISSUE, ONLY DO THIS IN DEBUG MODE!                                            *

@@ -37,7 +37,6 @@
 #include <QHash>
 #include <QStringList>
 
-
 /**
  * \file usermodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
@@ -49,7 +48,6 @@ namespace Print {
 class PrinterPreviewer;
 class TextDocumentExtra;
 }
-
 
 namespace UserPlugin {
 class UserModel;

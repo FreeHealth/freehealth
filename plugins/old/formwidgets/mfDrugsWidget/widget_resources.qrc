@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/" >
-        <file alias="link-class-substances.csv" >link-class-substances.csv</file>
-        <file alias="done.csv" >done.csv</file>
-    </qresource>
-</RCC>

@@ -107,7 +107,7 @@ usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
 usermanager.depends += zipcodes
-#usermanager.depends += agenda
+usermanager.depends += identity
 
 agenda.subdir = ../../plugins/agendaplugin
 agenda.depends += core

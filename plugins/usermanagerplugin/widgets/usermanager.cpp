@@ -25,14 +25,20 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class UserPlugin::UserManager
-  This is the Users' Manager of FreeMedForms.
-
-  You can use it as main app or secondary mainWindow.\n
-  You only need to instanciate the UserModel and define a current user before using this mainwindow.
-  \ingroup usertoolkit widget_usertoolkit
-  \ingroup usermanager
+ * \class UserPlugin::UserManager
+ * This is the Users' Manager of FreeMedForms. \n
+ * You can use it as main app or secondary mainWindow.\n
+ * You only need to instanciate the UserModel and define a current user
+ * before using this mainwindow.
 */
+
+/**
+ * \class UserPlugin::UserManagerDialog
+ * User Manager as a dialog.
+ * User Model must have been instanciated before creating the dialog,
+ * and a current user must have been set.\n
+ * \sa UserModel, UserModel::hasCurrentUser()
+ */
 
 #include "usermanager.h"
 #include "usermanager_p.h"
@@ -102,14 +108,9 @@ public:
 }  // End  Internal
 }  // End UserPlugin
 
-
-/**
-  Main user interface for User Manager.
-  User Model must have been instanciated BEFORE this interface, and a current user must have been set.\n
-  You must instanciate this class as a pointer in order to avoid errors at deletion.
-  \sa UserModel, UserModel::hasCurrentUser()
-  \todo Search user by city, search by name & firstname,
-*/
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////   UserManager   ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserManager::UserManager(QWidget * parent) :
         QMainWindow(parent)
 {
@@ -122,6 +123,12 @@ UserManager::UserManager(QWidget * parent) :
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
+/** Destructor */
+UserManager::~UserManager()
+{
+}
+
+/** Initialize the mainwindow */
 bool UserManager::initialize()
 {
     m_Widget->initialize();
@@ -138,20 +145,9 @@ void UserManager::closeEvent(QCloseEvent *event)
     }
 }
 
-/** Destructor */
-UserManager::~UserManager()
-{
-}
-
-
-
-/**
-  Main user interface for User Manager.
-  User Model must have been instanciated BEFORE this interface, and a current user must have been set.\n
-  You must instanciate this class as a pointer in order to avoid errors at deletion.
-  \sa UserModel, UserModel::hasCurrentUser()
-  \todo Search user by city, search by name & firstname,
-*/
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////   UserManagerDialog   /////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserManagerDialog::UserManagerDialog(QWidget * parent) :
     QDialog(parent)
 {
@@ -160,11 +156,19 @@ UserManagerDialog::UserManagerDialog(QWidget * parent) :
         return;
 //    setAttribute(Qt::WA_DeleteOnClose);
     QGridLayout *lay = new QGridLayout(this);
+    lay->setMargin(0);
+    lay->setSpacing(0);
     setLayout(lay);
     m_Widget = new UserManagerWidget(this);
     lay->addWidget(m_Widget, 0, 0);
 }
 
+/** Destructor */
+UserManagerDialog::~UserManagerDialog()
+{
+}
+
+/** Initialize the dialog (define the icon and window title) */
 bool UserManagerDialog::initialize()
 {
     m_Widget->initialize();
@@ -187,14 +191,9 @@ void UserManagerDialog::showEvent(QShowEvent *event)
     Utils::centerWidget(this);
 }
 
-
-/** Destructor */
-UserManagerDialog::~UserManagerDialog()
-{
-}
-
-
-/** UserManager Main Ui interface. */
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////   UserManagerWidget   /////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserManagerWidget::UserManagerWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserManagerWidget),
@@ -288,6 +287,13 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     ui->userViewer->setEnabled(false);
 }
 
+/** Dtor */
+UserManagerWidget::~UserManagerWidget()
+{
+    delete ui;
+}
+
+/** Initialize the view, connect actions */
 bool UserManagerWidget::initialize()
 {
     UserModel *model = UserModel::instance();
@@ -336,11 +342,10 @@ bool UserManagerWidget::initialize()
     return true;
 }
 
-UserManagerWidget::~UserManagerWidget()
-{
-    delete ui;
-}
-
+/**
+ * Check the content of the view, verify unsaved data.
+ * Return \e true if the view can be closed, otherwise return false
+ */
 bool UserManagerWidget::canCloseParent()
 {
     if (UserModel::instance()->isDirty()) {
@@ -362,6 +367,7 @@ bool UserManagerWidget::canCloseParent()
     return true;
 }
 
+/** Check the current user rights and adapt the view to them. */
 void UserManagerWidget::analyseCurrentUserRights()
 {
     // retreive user manager rights from model
@@ -393,6 +399,10 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
         m_SearchBy= Core::IUser::City;
 }
 
+/**
+ * \internal
+ * React to Core::IUser::currentUserChanged
+ */
 void UserManagerWidget::onCurrentUserChanged()
 {
     int row = UserModel::instance()->currentUserIndex().row();
@@ -402,13 +412,11 @@ void UserManagerWidget::onCurrentUserChanged()
     ui->userViewer->changeUserTo(row);
 }
 
-/**
-  Update the users' model filter
-  \todo Manage error when user select an action in the toolbutton
-  \todo where can only be calculated by model
- */
+/** Update the users' model filter */
 void UserManagerWidget::onSearchRequested()
 {
+    // TODO: Manage error when user select an action in the toolbutton
+    // TODO: where can only be calculated by model
     QHash<int, QString> where;
     where.insert(m_SearchBy, QString("LIKE '%1%'").arg(ui->searchLineEdit->text()));
     UserModel::instance()->setFilter(where);
@@ -446,6 +454,10 @@ void UserManagerWidget::onClearModificationRequested()
 //        m_Parent->statusBar()->showMessage(tr("Can not clear modifications"), 2000);
 }
 
+/**
+ * \internal
+ * Save the model.
+ */
 void UserManagerWidget::onSaveRequested()
 {
     if ((!m_CanModify) || (!m_CanCreate))
@@ -462,6 +474,10 @@ void UserManagerWidget::onSaveRequested()
     }
 }
 
+/**
+ * \internal
+ * Slot connected to the delete user action
+ */
 void UserManagerWidget::onDeleteUserRequested()
 {
     if (!ui->userTableView->selectionModel()->hasSelection())
@@ -496,6 +512,10 @@ void UserManagerWidget::onUserClicked(const QModelIndex &index)
     updateButtons();
 }
 
+/**
+ * \internal
+ * Update the actions/buttons
+ */
 void UserManagerWidget::updateButtons()
 {
     const bool enabled = ui->userTableView->currentIndex().isValid();

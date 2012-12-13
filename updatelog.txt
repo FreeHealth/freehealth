@@ -14,6 +14,7 @@ FreeMedForms
     * Patient selector corrections
     * Bug report sending improvements
     * Managing state/province in address (using the zipcodes datapacks)
+    * Don't show forms with the 'noepsiode' option, show its first children instead
   * FreeDiams
   * FreeAccount
   * FreeToolBox
