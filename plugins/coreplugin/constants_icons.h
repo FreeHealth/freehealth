@@ -160,9 +160,23 @@ const char * const  ICONSEARCH =       "search.png";
 const char * const  ICONPREFERENCES =  "configure.png";
 const char * const  ICONPLUGIN =       "plugin.png";
 const char * const  ICONHELP =         "help.png";
-const char * const  ICONABOUT =        "freemedforms.png";
 const char * const  ICONHELPTEXT =     "helptext.png";
 const char * const  ICONDEBUGHELPER =  "";
+
+// define icons depending on main app
+#if defined(FREEMEDFORMS)
+const char * const  ICONABOUT =        "freemedforms.png";
+#elif defined(FREEDIAMS)
+const char * const  ICONABOUT =        "freediams.png";
+#elif defined(FREEACCOUNT)
+const char * const  ICONABOUT =        "freemedforms.png";
+#elif defined(FREEPAD)
+const char * const  ICONABOUT =        "freepad.png";
+#elif defined(FREEICD)
+const char * const  ICONABOUT =        "freeicd.png";
+#elif defined(FREETOOLBOX)
+const char * const  ICONABOUT =        "freetoolbox.png";
+#endif
 
 // menu Extras
 const char * const  ICONCRASHRECOVER = "crashrecoverer.png";

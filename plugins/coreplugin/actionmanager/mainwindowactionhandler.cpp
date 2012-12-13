@@ -1167,7 +1167,7 @@ void MainWindowActionHandler::createHelpActions(int actions)
         menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
 
-    // About FreeMedForms
+    // About App (FreeMedForms, FreeDiams,...)
     if (actions & Core::MainWindowActions::A_AppAbout) {
         a = aAppAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
