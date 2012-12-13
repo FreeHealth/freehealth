@@ -45,6 +45,10 @@ class Printer;
 class PrinterPreviewer;
 }
 
+namespace Identity {
+class IdentityEditorWidget;
+}
+
 namespace ZipCodes {
 class ZipCountryCompleters;
 }
@@ -118,6 +122,7 @@ private:
     void changeEvent(QEvent *e);
 
 private:
+    Identity::IdentityEditorWidget *m_identity;
     Ui::UserViewer_ContactUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;

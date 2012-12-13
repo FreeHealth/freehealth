@@ -64,7 +64,6 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
-
 namespace UserPlugin {
 namespace Internal {
 
@@ -129,7 +128,7 @@ UserViewer::UserViewer(QWidget *parent) :
     d->m_Widget = new Core::PageWidget(this);
     layout->addWidget(d->m_Widget);
 
-    d->m_pages << new Internal::DefaultUserIdentityPage(this);
+//    d->m_pages << new Internal::DefaultUserIdentityPage(this);
     d->m_pages << new Internal::DefaultUserContactPage(this);
     d->m_pages << new Internal::DefaultUserRightsPage(this);
     d->m_pages << new Internal::DefaultUserProfessionalPage(this);

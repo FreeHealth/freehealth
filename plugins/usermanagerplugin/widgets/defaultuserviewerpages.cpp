@@ -34,6 +34,9 @@
 #include <printerplugin/printer.h>
 #include <printerplugin/textdocumentextra.h>
 
+#include <identityplugin/identityeditorwidget.h>
+
+// TODO: remove this line
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
@@ -53,7 +56,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-
 
 DefaultUserIdentityWidget::DefaultUserIdentityWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
@@ -181,16 +183,22 @@ QWidget *DefaultUserIdentityPage::createPage(QWidget *parent)
     return new DefaultUserIdentityWidget(parent);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
-    ui(new Ui::UserViewer_ContactUI),
+    ui(0), //new Ui::UserViewer_ContactUI),
     m_Mapper(0),
     m_Model(0),
     m_ZipCompleter(0)
 {
-    ui->setupUi(this);
+    QHBoxLayout *lay = new QHBoxLayout(this);
+    setLayout(lay);
+    lay->setMargin(0);
+    lay->setSpacing(0);
+    m_identity = new Identity::IdentityEditorWidget(this);
+//    m_identity->initialize();
+    lay->addWidget(m_identity);
+//    ui->setupUi(this);
 }
 
 DefaultUserContactWidget::~DefaultUserContactWidget()
@@ -204,30 +212,46 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     if (!m_Mapper) {
         m_Mapper = new QDataWidgetMapper(this);
     }
-    m_Mapper->setModel(model);
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Address, "plainText");
-    m_Mapper->addMapping(ui->country, Core::IUser::IsoCountry, "currentIsoCountry");
-    m_Mapper->addMapping(ui->zipcodeLineEdit, Core::IUser::Zipcode);
-    m_Mapper->addMapping(ui->cityLineEdit, Core::IUser::City);
-    m_Mapper->addMapping(ui->tel1LineEdit, Core::IUser::Tel1);
-    m_Mapper->addMapping(ui->tel2LineEdit, Core::IUser::Tel2);
-    m_Mapper->addMapping(ui->tel3LineEdit, Core::IUser::Tel3);
-    m_Mapper->addMapping(ui->faxLineEdit, Core::IUser::Fax);
-    m_Mapper->addMapping(ui->mailLineEdit, Core::IUser::Mail);
-    m_ZipCompleter = new ZipCodes::ZipCountryCompleters(this);
-    m_ZipCompleter->setCityLineEdit(ui->cityLineEdit);
-    m_ZipCompleter->setZipLineEdit(ui->zipcodeLineEdit);
-    m_ZipCompleter->setCountryComboBox(ui->country);
+    m_Model = model;
+    m_identity->setModel(model);
+//    m_Mapper->setModel(model);
+//    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Address);
+//    m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::Address);
+    m_identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IUser::Country);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IUser::Zipcode);
+
+    m_identity->addMapping(Identity::IdentityEditorWidget::FirstName, Core::IUser::Firstname);
+    m_identity->addMapping(Identity::IdentityEditorWidget::BirthName, Core::IUser::Name);
+    m_identity->addMapping(Identity::IdentityEditorWidget::SecondName, Core::IUser::SecondName);
+    m_identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IUser::TitleIndex);
+    m_identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IUser::GenderIndex);
+//    m_identity->addMapping(Identity::IdentityEditorWidget::Language_QLocale, Core::IUser::LanguageISO);
+//    m_identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::);
+//    m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::Photo);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::Login64);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
+
+//    m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Address, "plainText");
+//    m_Mapper->addMapping(ui->country, Core::IUser::IsoCountry, "currentIsoCountry");
+//    m_Mapper->addMapping(ui->zipcodeLineEdit, Core::IUser::Zipcode);
+//    m_Mapper->addMapping(ui->cityLineEdit, Core::IUser::City);
+//    m_Mapper->addMapping(ui->tel1LineEdit, Core::IUser::Tel1);
+//    m_Mapper->addMapping(ui->tel2LineEdit, Core::IUser::Tel2);
+//    m_Mapper->addMapping(ui->tel3LineEdit, Core::IUser::Tel3);
+//    m_Mapper->addMapping(ui->faxLineEdit, Core::IUser::Fax);
+//    m_Mapper->addMapping(ui->mailLineEdit, Core::IUser::Mail);
+//    m_ZipCompleter = new ZipCodes::ZipCountryCompleters(this);
+//    m_ZipCompleter->setCityLineEdit(ui->cityLineEdit);
+//    m_ZipCompleter->setZipLineEdit(ui->zipcodeLineEdit);
+//    m_ZipCompleter->setCountryComboBox(ui->country);
 }
 
 void DefaultUserContactWidget::setUserIndex(const int index)
 {
-    if (m_Mapper) {
-        m_Mapper->setCurrentIndex(index);
-    }
-    if (m_ZipCompleter)
-        m_ZipCompleter->checkData();
+    if (m_identity)
+        m_identity->setCurrentIndex(m_Model->index(index, 0));
 }
 
 void DefaultUserContactWidget::clear()
@@ -237,8 +261,9 @@ void DefaultUserContactWidget::clear()
 
 bool DefaultUserContactWidget::submit()
 {
-    if (m_Mapper)
-        return m_Mapper->submit();
+    m_identity->submit();
+//    if (m_Mapper)
+//        return m_Mapper->submit();
     return false;
 }
 
