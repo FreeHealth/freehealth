@@ -93,7 +93,7 @@ private:
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const;
 
 public:
-    bool checkDatabaseFormFileForUpdates() const;
+    QList<Utils::GenericUpdateInformation> checkDatabaseFormFileForUpdates() const;
 
 private:
      mutable QString m_AbsFileName;
