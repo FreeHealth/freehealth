@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
- *   Contributors :                                                        *
+ *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Contributors:                                                         *
  *       Eric Maeker                                                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -30,8 +30,8 @@
  * \brief This class provides a QPushButton with a displayed Pixmap on it.
  * \internal
  *
- * Pixmap property: \n
- * The normal Qt QPushButton only can store a QIcon and has ho pixmap property. This
+ * \property Pixmap The normal Qt QPushButton only can store a QIcon and has
+ * no pixmap property. This
  * can be unconvenient when using the button as display widget in a MVC pattern as
  * widget - a QDataWidgetMapper doesn't know how to handle a QPushbutton.
  * Here comes the Identity::Internal::ThemedGenderButton. \n
