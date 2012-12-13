@@ -53,7 +53,7 @@ const char * const  M_CONFIGURATION_TEXT     = QT_TRANSLATE_NOOP("tkConstants", 
 const char * const  M_TOOLBARS_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "&Toolbars");
 const char * const  M_LANGUAGES_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Lan&guages");
 const char * const  M_INTERPRETER_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Interpreter");
-const char * const  M_ABOUT_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "About");
+const char * const  M_ABOUT_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "&Help");
 const char * const  ABOUTDATABASES_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "About databases");
 const char * const  M_UPDATE_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "Update available");
 
@@ -136,10 +136,10 @@ const char * const  TABLE_REMOVECOLUMN_TEXT = QT_TRANSLATE_NOOP("tkConstants", "
 const char * const  TABLE_MERGECELLS_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Merge cells");
 const char * const  TABLE_SPLITCELLS_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Split cells");
 
-const char * const  ABOUT_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "&About");
-const char * const  ABOUTPLUGINS_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "About &Plugins");
-const char * const  ABOUTQT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "About &Qt");
-const char * const  ABOUTFORM_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "About this &form");
+const char * const  ABOUT_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "&About FreeMedForms...");
+const char * const  ABOUTPLUGINS_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "About &plugins...");
+const char * const  ABOUTQT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "About &Qt...");
+const char * const  ABOUTFORM_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "About this &form...");
 const char * const  APPLICATIONHELP_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "&Help");
 const char * const  DEBUGHELPER_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Debugging tools");
 const char * const  HELPTEXTTOGGLER_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Display/Hide form's help text");

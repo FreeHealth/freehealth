@@ -683,11 +683,11 @@ void MainWindowActionHandler::createHelpMenu()
     menubar->addMenu(m, Constants::G_HELP);
     m->setTranslations(Trans::Constants::M_ABOUT_TEXT);
     m->appendGroup(Id(Constants::G_HELP_HELP));
-    m->appendGroup(Id(Constants::G_HELP_ABOUT));
-    m->appendGroup(Id(Constants::G_HELP_DATABASES));
-    m->appendGroup(Id(Constants::G_HELP_OTHER));
     m->appendGroup(Id(Constants::G_UPDATE));
     m->appendGroup(Id(Constants::G_HELP_DEBUG));
+    m->appendGroup(Id(Constants::G_HELP_OTHER));
+    m->appendGroup(Id(Constants::G_HELP_DATABASES));
+    m->appendGroup(Id(Constants::G_HELP_ABOUT));
 
     ActionContainer *mdb = actionManager()->createMenu(Constants::M_HELP_DATABASES);
     m->addMenu(mdb, Constants::G_HELP_DATABASES);
@@ -1096,30 +1096,7 @@ void MainWindowActionHandler::createHelpActions(int actions)
     if (!menu)
         return;
 
-    if (actions & Core::MainWindowActions::A_AppAbout) {
-        a = aAppAbout = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONABOUT));
-        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUT), ctx);
-        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
-#ifdef Q_OS_MAC
-        cmd->action()->setMenuRole(QAction::AboutRole);
-#endif
-        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
-    }
-    if (actions & Core::MainWindowActions::A_AppGoToWebSite) {
-        a = aAppGoToWebSite = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONINTERNET));
-        cmd = actionManager()->registerAction(a, Id(Constants::A_APPWEBSITE), ctx);
-        cmd->setTranslations(Trans::Constants::WEBSITE_TEXT);
-        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
-    }
-    if (actions & Core::MainWindowActions::A_PluginsAbout) {
-        a = aPlugsAbout = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONHELP));
-        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUTPLUGINS), ctx);
-        cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
-        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
-    }
+    // Application help
     if (actions & Core::MainWindowActions::A_AppHelp) {
         a = aAppHelp = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONHELP));
@@ -1128,6 +1105,57 @@ void MainWindowActionHandler::createHelpActions(int actions)
         cmd->setTranslations(Trans::Constants::HELP_TEXT);
         menu->addAction(cmd, Id(Constants::G_HELP_HELP));
     }
+
+    // Web site
+    if (actions & Core::MainWindowActions::A_AppGoToWebSite) {
+        a = aAppGoToWebSite = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONINTERNET));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_APPWEBSITE), ctx);
+        cmd->setTranslations(Trans::Constants::WEBSITE_TEXT);
+        menu->addAction(cmd, Id(Constants::G_HELP_HELP));
+    }
+
+    menu->addSeparator(ctx, Id(Constants::G_HELP_HELP));
+
+    // Check for update
+    if (actions & Core::MainWindowActions::A_CheckUpdate) {
+        a = aCheckUpdate = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_CHECKUPDATE), ctx);
+        cmd->setTranslations(Trans::Constants::CHECKUPDATE);
+        menu->addAction(cmd, Id(Constants::G_UPDATE));
+    }
+
+    // bug report
+    if (actions & Core::MainWindowActions::A_BugReport) {
+        a = aReportBug = new QAction(this);
+        a->setIcon(theme()->icon("face-sad.png"));
+        cmd = actionManager()->registerAction(a, Constants::A_BUGREPORT, ctx);
+        cmd->setTranslations(Trans::Constants::BUG_REPORT);
+        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
+    }
+
+    // Debugging tools
+    if (actions & Core::MainWindowActions::A_DebugDialog) {
+        a = aDebugDialog = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONHELP));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_DEBUGHELPER), ctx);
+        cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
+        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
+    }
+
+    menu->addSeparator(ctx, Id(Constants::G_HELP_DEBUG));
+
+    // About plugins
+    if (actions & Core::MainWindowActions::A_PluginsAbout) {
+        a = aPlugsAbout = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONPLUGIN));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUTPLUGINS), ctx);
+        cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
+    }
+
+    // About Qt
     if (actions & Core::MainWindowActions::A_QtAbout) {
         a = aQtAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
@@ -1138,28 +1166,17 @@ void MainWindowActionHandler::createHelpActions(int actions)
 #endif
         menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
-    if (actions & Core::MainWindowActions::A_DebugDialog) {
-        a = aDebugDialog = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONHELP));
-        cmd = actionManager()->registerAction(a, Id(Constants::A_DEBUGHELPER), ctx);
-        cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
-        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
-    }
 
-    if (actions & Core::MainWindowActions::A_BugReport) {
-        a = aReportBug = new QAction(this);
-        a->setIcon(theme()->icon("face-sad.png"));
-        cmd = actionManager()->registerAction(a, Constants::A_BUGREPORT, ctx);
-        cmd->setTranslations(Trans::Constants::BUG_REPORT);
-        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
-    }
-
-    if (actions & Core::MainWindowActions::A_CheckUpdate) {
-        a = aCheckUpdate = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
-        cmd = actionManager()->registerAction(a, Id(Constants::A_CHECKUPDATE), ctx);
-        cmd->setTranslations(Trans::Constants::CHECKUPDATE);
-        menu->addAction(cmd, Id(Constants::G_UPDATE));
+    // About FreeMedForms
+    if (actions & Core::MainWindowActions::A_AppAbout) {
+        a = aAppAbout = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONABOUT));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUT), ctx);
+        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
+#ifdef Q_OS_MAC
+        cmd->action()->setMenuRole(QAction::AboutRole);
+#endif
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
 
     //    if (actions & Core::MainWindowActions::A_FormsAbout) {
