@@ -72,6 +72,7 @@ class ZipCodesWidgetPrivate
 {
 public:
     ZipCodesWidgetPrivate(ZipCodesWidget *parent) :
+        _initialized(false),
         _grid(0),
         _form(0),
         _cityLabel(0),
@@ -136,7 +137,7 @@ public:
             _form->addRow(_zipLabel, _zip);
             _form->addRow(_countryLabel, _country);
         } else {
-            int row = 0;
+            int row = _grid->rowCount();
             _grid->addWidget(_streetLabel, row, 0, 1, 1);
             _grid->addWidget(_street, row, 1, 1, 1);
             ++row;
@@ -163,6 +164,7 @@ public:
     }
     
 public:
+    bool _initialized;
     QGridLayout *_grid;
     QFormLayout *_form;
     QLabel *_cityLabel, *_countryLabel, *_zipLabel, *_stateLabel, *_streetLabel;
@@ -197,11 +199,14 @@ ZipCodesWidget::~ZipCodesWidget()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool ZipCodesWidget::initialize(TypeOfLayout layout)
 {
+    if (d->_initialized)
+        return true;
     d->createLayout(layout);
     d->createWidgetsAndObjects();
     d->populateLayout();
     d->setTabOrder();
     retranslateUi();
+    d->_initialized = true;
     return true;
 }
 

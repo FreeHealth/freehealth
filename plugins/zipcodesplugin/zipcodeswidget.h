@@ -67,6 +67,7 @@ public:
 
     explicit ZipCodesWidget(QWidget *parent = 0);
     ~ZipCodesWidget();
+
     bool initialize(TypeOfLayout layout);
 
     void setReadOnly(bool readOnly);
