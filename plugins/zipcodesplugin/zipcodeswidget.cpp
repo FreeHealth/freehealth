@@ -115,6 +115,7 @@ public:
         _streetLabel = new QLabel(q);
 
         _street = new QTextEdit(q);
+        _street->setMaximumHeight(50);
         _city = new Utils::QButtonLineEdit(q);
         _zip = new Utils::QButtonLineEdit(q);
         _stateCombo = new QComboBox(q);

@@ -438,6 +438,16 @@ public:
         return Utils::createXml("Identity", tags, 2);
     }
 
+    void retranslate()
+    {
+        if (ui) {
+            ui->retranslateUi(q);
+            ui->birthName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Birth Name"));
+            ui->secondName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Second Name"));
+            ui->firstname->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Firstname"));
+        }
+    }
+
 public:
     Ui::IdentityWidget *ui;
     IsDirtyDataWidgetMapper *m_Mapper;
@@ -467,6 +477,7 @@ IdentityEditorWidget::IdentityEditorWidget(QWidget *parent) :
     d(new Internal::IdentityEditorWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityEditorWidget");
+    d->retranslate();
 }
 
 IdentityEditorWidget::~IdentityEditorWidget()
@@ -507,16 +518,16 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     //d->ui->dod->setEnabled(widgets & DateOfDeath);
     d->ui->photoButton->setEnabled(widgets & Photo);
 
-    d->ui->titleLabel->setVisible(d->ui->titleCombo->isEnabled());
+//    d->ui->titleLabel->setVisible(d->ui->titleCombo->isEnabled());
     d->ui->titleCombo->setVisible(d->ui->titleCombo->isEnabled());
     d->ui->birthName->setVisible(d->ui->birthName->isEnabled());
-    d->ui->birthNameLabel->setVisible(d->ui->birthName->isEnabled());
+//    d->ui->birthNameLabel->setVisible(d->ui->birthName->isEnabled());
     d->ui->secondName->setVisible(d->ui->secondName->isEnabled());
     d->ui->secondNameLabel->setVisible(d->ui->secondName->isEnabled());
     d->ui->firstname->setVisible(d->ui->firstname->isEnabled());
     d->ui->firstnameLabel->setVisible(d->ui->firstname->isEnabled());
     d->ui->genderCombo->setVisible(d->ui->genderCombo->isEnabled());
-    d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
+//    d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
     d->ui->language->setVisible(d->ui->language->isEnabled());
     d->ui->languageLabel->setVisible(d->ui->language->isEnabled());
     d->ui->dob->setVisible(d->ui->dob->isEnabled());
@@ -533,7 +544,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
             || (widgets & Country_QLocale);
 
     d->ui->zipcodesWidget->setEnabled(showAddress);
-    d->ui->editAdressGroup->setVisible(showAddress);
+//    d->ui->editAdressGroup->setVisible(showAddress);
 
     bool showLog = (widgets & Extra_Login)
             || (widgets & Extra_Password)
@@ -846,8 +857,7 @@ void IdentityEditorWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        if (d->ui)
-            d->ui->retranslateUi(this);
+        d->retranslate();
         break;
     default:
         break;
