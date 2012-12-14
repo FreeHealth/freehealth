@@ -1530,11 +1530,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="56"/>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="57"/>
         <source>About databases</source>
         <translation type="unfinished"></translation>
@@ -1893,28 +1888,29 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="56"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="139"/>
-        <source>&amp;About</source>
+        <source>&amp;About...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
-        <source>About &amp;Plugins</source>
+        <source>About &amp;plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="141"/>
-        <source>About &amp;Qt</source>
+        <source>About &amp;Qt...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="142"/>
-        <source>About this &amp;form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
-        <source>&amp;Help</source>
+        <source>About this &amp;form...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

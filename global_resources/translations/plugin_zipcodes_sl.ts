@@ -12,27 +12,27 @@
 <context>
     <name>ZipCodes::ZipCodesWidget</name>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="213"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="304"/>
         <source>Street</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="214"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="305"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="215"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="306"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="216"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="307"/>
         <source>State/Province</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="217"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodeswidget.cpp" line="308"/>
         <source>Zipcode</source>
         <translation type="unfinished"></translation>
     </message>

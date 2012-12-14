@@ -28,10 +28,6 @@
         <translation>Plugins</translation>
     </message>
     <message>
-        <source>About</source>
-        <translation>Über</translation>
-    </message>
-    <message>
         <source>About databases</source>
         <translation>Über Datenbanken...</translation>
     </message>
@@ -358,22 +354,6 @@
     <message>
         <source>Select all</source>
         <translation>Alles auswählen</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation>Ü&amp;ber...</translation>
-    </message>
-    <message>
-        <source>About &amp;Plugins</source>
-        <translation>Über &amp;Plugins...</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>Über &amp;Qt...</translation>
-    </message>
-    <message>
-        <source>About this &amp;form</source>
-        <translation>Über dieses &amp;Formular...</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -2315,6 +2295,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>&amp;Report application error...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;plugins...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About this &amp;form...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -272,42 +272,42 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="81"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="79"/>
         <source>Each Pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="82"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="80"/>
         <source>First page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="81"/>
         <source>Second page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="82"/>
         <source>Last page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
         <source>All pages but first</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
         <source>Odd pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="87"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
         <source>Even pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="88"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
         <source>Duplicates only</source>
         <translation type="unfinished"></translation>
     </message>

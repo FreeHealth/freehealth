@@ -200,6 +200,10 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <source>Application name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>About FreeMedForms</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::AppAboutPage</name>

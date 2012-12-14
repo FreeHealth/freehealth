@@ -202,7 +202,7 @@
     <name>DataPack::Internal::PackEndPage</name>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="689"/>
-        <source>Pack(s) processed.</source>
+        <source>All Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

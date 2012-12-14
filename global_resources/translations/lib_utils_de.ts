@@ -189,48 +189,48 @@
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="909"/>
+        <location filename="../../libs/utils/global.cpp" line="910"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1000"/>
+        <location filename="../../libs/utils/global.cpp" line="1001"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1001"/>
+        <location filename="../../libs/utils/global.cpp" line="1002"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1062"/>
+        <location filename="../../libs/utils/global.cpp" line="1063"/>
         <source>Do you agree these terms?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1042"/>
         <location filename="../../libs/utils/global.cpp" line="1043"/>
+        <location filename="../../libs/utils/global.cpp" line="1044"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1054"/>
+        <location filename="../../libs/utils/global.cpp" line="1055"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1132"/>
+        <location filename="../../libs/utils/global.cpp" line="1133"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1137"/>
+        <location filename="../../libs/utils/global.cpp" line="1138"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1685"/>
+        <location filename="../../libs/utils/global.cpp" line="1721"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>
@@ -531,64 +531,69 @@
 <context>
     <name>Utils::Internal::HttpDownloaderPrivate</name>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="224"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="234"/>
         <source>Initialization of the download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="239"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="250"/>
         <source>There already exists a file called %1 in the current directory. Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="247"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="259"/>
         <source>Unable to save the file %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="269"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="281"/>
         <source>Start downloading: %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="310"/>
-        <source>Download finished with an error: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="313"/>
-        <source>Download finished.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="323"/>
-        <source>Download failed: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="324"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="329"/>
-        <source>HTTP</source>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="300"/>
+        <source>Download canceled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="327"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="328"/>
+        <source>Download finished with an error: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="331"/>
+        <source>Download finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="341"/>
+        <source>Download failed: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="342"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="347"/>
+        <source>HTTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="345"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="346"/>
         <source>Redirect to %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="339"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="357"/>
         <source>Downloaded %1 to current directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="397"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="410"/>
         <source>Server authentication required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="424"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="437"/>
         <source>Proxy authentication required</source>
         <translation type="unfinished"></translation>
     </message>

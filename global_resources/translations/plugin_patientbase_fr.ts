@@ -70,57 +70,6 @@
     </message>
 </context>
 <context>
-    <name>Patients::IdentityEditorWidget</name>
-    <message>
-        <source>You must specify a birthname.</source>
-        <translation type="unfinished">Vous devez spécifier un nom de naissance.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a birthname</source>
-        <translation type="unfinished">Vous ne pouvez pas créer un patient sans nom de naissance</translation>
-    </message>
-    <message>
-        <source>No birthname</source>
-        <translation type="unfinished">Pas de nom de naissance</translation>
-    </message>
-    <message>
-        <source>You must specify a first name.</source>
-        <translation type="unfinished">Vous devez spécifier un prénom.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a first name</source>
-        <translation type="unfinished">Vous ne pouvez pas créer un patient sans prénom</translation>
-    </message>
-    <message>
-        <source>No firstname</source>
-        <translation type="unfinished">Pas de prénom</translation>
-    </message>
-    <message>
-        <source>You must specify a date of birth.</source>
-        <translation type="unfinished">Vous devez spécifier une date de naissance.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a date of birth</source>
-        <translation type="unfinished">Vous ne pouvez pas créer un patient sans date de naissance</translation>
-    </message>
-    <message>
-        <source>No date of birth</source>
-        <translation type="unfinished">Pas de date de naissance</translation>
-    </message>
-    <message>
-        <source>You must specify a gender.</source>
-        <translation type="unfinished">Vous devez spécifier un sexe.</translation>
-    </message>
-    <message>
-        <source>You can not create a patient without a gender</source>
-        <translation type="unfinished">Vous ne pouvez pas créer un patient sans sexe</translation>
-    </message>
-    <message>
-        <source>No gender</source>
-        <translation type="unfinished">Pas de sexe</translation>
-    </message>
-</context>
-<context>
     <name>Patients::IdentityPage</name>
     <message>
         <source>Please enter the patient&apos;s identity.</source>
@@ -159,49 +108,6 @@
     </message>
     <message>
         <source>photo</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Patients::Internal::IdentityWidget</name>
-    <message>
-        <source>Identity</source>
-        <translation>Identité</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>Titre</translation>
-    </message>
-    <message>
-        <source>Click to add/change the photo</source>
-        <translation>Cliquez pour ajouter/modifier la photographie</translation>
-    </message>
-    <message>
-        <source>Birth name</source>
-        <translation>Nom de naissance</translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation>Prénom</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Adresse</translation>
-    </message>
-    <message>
-        <source>Second name</source>
-        <translation>Nom marital</translation>
-    </message>
-    <message>
-        <source>Gender</source>
-        <translation>Sexe</translation>
-    </message>
-    <message>
-        <source>Date of birth</source>
-        <translation>Date de naissance</translation>
-    </message>
-    <message>
-        <source>Form</source>
         <translation></translation>
     </message>
 </context>
@@ -290,6 +196,25 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     </message>
 </context>
 <context>
+    <name>Patients::Internal::UrlPhotoDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Error downloading the file.&lt;br/&gt;Please check the correctness of the URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Une erreur est survenue durant le téléchargement du fichier.&lt;br/&gt;Veuillez vérifier l&apos;adresse du fichier.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The picture must be in one of the following formats: &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Please be sure that you have the permission to use this picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&apos;image doit être dans un des formats suivants : &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Veuillez vous assurez que vous disposez des permissions adéquates pour utiliser cette image.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
     <name>Patients::PatientCreatorWizard</name>
     <message>
         <source>New Patient</source>
@@ -306,32 +231,6 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     <message>
         <source>Patient not saved</source>
         <translation>Patient non sauvegardé</translation>
-    </message>
-</context>
-<context>
-    <name>Patients::PixmapButton</name>
-    <message>
-        <source>Delete photo</source>
-        <translation>Supprimer la photographie</translation>
-    </message>
-</context>
-<context>
-    <name>Patients::UrlPhotoDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;URL:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Error downloading the file.&lt;br/&gt;Please check the correctness of the URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Une erreur est survenue durant le téléchargement du fichier.&lt;br/&gt;Veuillez vérifier l&apos;adresse du fichier.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The picture must be in one of the following formats: &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Please be sure that you have the permission to use this picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&apos;image doit être dans un des formats suivants : &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Veuillez vous assurez que vous disposez des permissions adéquates pour utiliser cette image.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 </TS>

@@ -124,6 +124,10 @@ What is the expected output? What do you see instead?
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>About FreeMedForms</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::AppAboutPage</name>

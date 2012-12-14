@@ -150,6 +150,11 @@ What is the expected output? What do you see instead?
         <source>Application name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/aboutdialog.cpp" line="68"/>
+        <source>About FreeMedForms</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::AppAboutPage</name>
@@ -954,12 +959,12 @@ Using Url: %1
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="185"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="186"/>
         <source>Add Translator %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="192"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="193"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>

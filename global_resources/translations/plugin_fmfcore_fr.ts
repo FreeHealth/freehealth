@@ -203,6 +203,10 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
         <source>Dialog</source>
         <translation></translation>
     </message>
+    <message>
+        <source>About FreeMedForms</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::Internal::AppAboutPage</name>

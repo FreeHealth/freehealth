@@ -24,10 +24,6 @@
         <translation>Paragraphes</translation>
     </message>
     <message>
-        <source>About</source>
-        <translation>À propos</translation>
-    </message>
-    <message>
         <source>About databases</source>
         <translation>À propos des bases de données</translation>
     </message>
@@ -350,22 +346,6 @@
     <message>
         <source>Select all</source>
         <translation>Tout sélectionner</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation>&amp;A propos</translation>
-    </message>
-    <message>
-        <source>About &amp;Plugins</source>
-        <translation>&amp;A propos des greffons</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>A propos de &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About this &amp;form</source>
-        <translation>A propos des &amp;formulaires</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -2310,6 +2290,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>&amp;Report application error...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;plugins...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About this &amp;form...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
