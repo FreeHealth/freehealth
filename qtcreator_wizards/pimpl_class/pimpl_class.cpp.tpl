@@ -56,9 +56,7 @@ using namespace Trans::ConstantTranslations;
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
-@if "%Internal%" == "true"
 namespace Internal {
-@endif
 @if "%Doxygen%" == "true"
 /*!
 @if "%Internal%" == "true"
@@ -89,10 +87,7 @@ public:
 private:
     %ClassName:c% *q;
 };
-
-@if "%Internal%" == "true"
-}  // namespace Internal
-@endif
+} // namespace Internal
 } // end namespace %PluginNamespace:c%
 @endif
 
