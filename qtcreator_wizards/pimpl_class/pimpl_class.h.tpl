@@ -43,15 +43,14 @@
  * \version 0.8.0
  * \date %CurrentDate%
 */
+
 namespace %PluginNamespace:c% {
-@if "%Internal%" == "true"
 namespace Internal {
-@endif
 @if  "%PIMPL%" == "true"
 class %ClassName:c%Private;
 @endif
-@if "%Internal%" == "true"
-}
+@if "%Internal%" != "true"
+} // namespace Internal
 @endif
 
 @if "%Exported%" == "true"
@@ -91,6 +90,9 @@ private:
 @endif
 };
 
+@if "%Internal%" == "true"
+} // namespace Internal
+@endif
 } // namespace %PluginNamespace:c%
 
 @if "%Internal%" == "true"
