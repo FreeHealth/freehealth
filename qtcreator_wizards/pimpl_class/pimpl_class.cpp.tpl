@@ -92,21 +92,20 @@ private:
 @endif
 
 @if "%Singleton%" == "true"
-@if "%Internal%" == "true"
-%PluginNamespace:c%::Internal::%ClassName:c% *%PluginNamespace:c%::Internal::%ClassName:c%::_instance = 0;
+// Singleton initialization
+%ClassName:c% *%ClassName:c%::_instance = 0;
 
-%PluginNamespace:c%::Internal::%ClassName:c% &instance() // static
-@else
-%PluginNamespace:c%::%ClassName:c% *%PluginNamespace:c%::%ClassName:c%::_instance = 0;
-
+/**
+ * Singleton access. This object creates its instance in the Ctor. So you should never
+ * request the ctor more than once.
+ */
 %PluginNamespace:c%::%ClassName:c% &%PluginNamespace:c%::%ClassName:c%::instance() // static
-@endif
 {
     Q_ASSERT(_instance);
     return *_instance;
 }
-
 @endif
+
 @if "%Doxygen%" == "true"
 @if "%Internal%" == "true"
 /*! Constructor of the %PluginNamespace%::Internal::%ClassName:c% class */
