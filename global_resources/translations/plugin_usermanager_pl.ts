@@ -1154,12 +1154,12 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserViewer</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="196"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="208"/>
         <source>You can not access to these data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="196"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="208"/>
         <source>You don&apos;t have access rights.</source>
         <translation type="unfinished"></translation>
     </message>
