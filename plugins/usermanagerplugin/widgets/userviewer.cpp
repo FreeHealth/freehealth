@@ -85,6 +85,15 @@ bool UserViewerModelCoreListener::coreAboutToClose()
 class UserViewerPrivate
 {
 public:
+    UserViewerPrivate(UserViewer *parent) :
+        m_Model(0),
+        m_Widget(0),
+        m_Listener(0),
+        m_CurrentRow(-1),
+        m_CanRead(false),
+        q(parent)
+    {}
+
     bool canReadRow(int row)
     {
         bool canRead = false;
@@ -108,14 +117,17 @@ public:
     UserViewerModelCoreListener *m_Listener;
     int m_CurrentRow;
     bool m_CanRead;
+
+private:
+    UserViewer *q;
 };
 }  // End Internal
 }  // End UserPlugin
 
 
 UserViewer::UserViewer(QWidget *parent) :
-     QWidget(parent),
-    d(new UserViewerPrivate)
+    QWidget(parent),
+    d(new UserViewerPrivate(this))
 {
     setObjectName("UserViewer");
     d->m_Listener = new UserViewerModelCoreListener(this);
