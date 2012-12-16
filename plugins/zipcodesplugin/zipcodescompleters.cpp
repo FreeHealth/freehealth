@@ -213,6 +213,8 @@ void ZipCountryModel::refreshQuery()
 {
     // Compute where clause
     QString filter = currentFilter();
+    if (filter.isEmpty())
+        return;
     // Create the SqlQuery command
     QString req = QString("%1 WHERE %2").arg(::SELECT_IMPORT).arg(filter);
     req += " ORDER BY `CITY` ASC ";
