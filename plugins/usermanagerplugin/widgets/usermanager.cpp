@@ -140,7 +140,7 @@ void UserTreeDelegateWidget::setFullName(const QString &fullName)
 
 void UserTreeDelegateWidget::setGenderPhoto(const QPixmap &pix)
 {
-    ui->photoLabel->setPixmap(pix.scaled(QSize(32,32)));
+    ui->photoLabel->setPixmap(pix.scaled(QSize(24, 24)));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ void UserTreeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     const QString &s = index.data().toString();
     _itemWidget->setTitle(_model->title(index));
     _itemWidget->setFullName(s);
-    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index)));
+    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index), Core::ITheme::BigIcon ));
 
     // Change the background color of the widget if it is selected.
     QPalette pal;
@@ -196,7 +196,7 @@ QSize UserTreeDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
 {
     const bool topLevel = !index.parent().isValid();
     if (topLevel)
-        return QSize(64, 64);
+        return QSize(125, 42);
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
