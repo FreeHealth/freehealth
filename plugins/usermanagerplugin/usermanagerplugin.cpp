@@ -37,6 +37,7 @@
 */
 
 #include "usermanagerplugin.h"
+#include "usercore.h"
 #include "usermodel.h"
 #include "database/userbase.h"
 #include "widgets/usermanager.h"
@@ -82,12 +83,14 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
+
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -106,7 +109,7 @@ UserManagerPlugin::UserManagerPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_usermanager");
 
-    new UserBase(this);
+    new UserCore(this);
 
     addObject(m_FirstCreation);
 }
@@ -126,11 +129,11 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing user manager plugin..."));
 
-    // is UserBase reachable ?
-    Internal::UserBase *base = UserBase::instance();
-    base->initialize();
+    // is Core initialized ?
+    if (!userCore().initialize())
+        return false;
 
-    if (!base->isInitialized()) {
+    if (!userBase()->isInitialized()) {
         Utils::warningMessageBox(tr("Unable to connect to the user database."),
                                  tr("The user database is not reachable. Please check your configuration.\n"
                                     "Application will stop."));
@@ -149,33 +152,33 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
         bool created = true;
         // Doctors
-        created = base->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+        created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
                                       QStringList() << "Medical Doctor",
                                       QStringList() << "Chief medical officer USS Enterprise",
                                       Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
         if (created) {
-            base->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+            userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
                                           QStringList() << "Intergalactic medicine",
                                           QStringList() << "Chief medical officer Enterprise NX-01",
                                           Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
             // Secretaries or so :  Uhura  U.S.S. Enterprise
-            base->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+            userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Communications officer",
                                           QStringList() << "Enterprise NX-01",
                                           0, 0, 0, Core::IUser::AllRights, 0);
             // Nurses : Christine Chapel U.S.S. Enterprise
-            base->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+            userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Space nurse",
                                           QStringList() << "Nurse, Enterprise NX-01",
                                           0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);
             // Admins
 
             // refresh model
-            UserModel::instance()->refresh();
+            userModel()->refresh();
             // reconnect user
             Utils::DatabaseConnector c = settings()->databaseConnector();
             // clear cache, don't check preferences validity
-            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true, false);
+            userModel()->setCurrentUser(c.clearLog(), c.clearPass(), true, false);
         }
     }
 
@@ -348,11 +351,7 @@ void UserManagerPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    userModel()->checkUserPreferencesValidity();
-    // be sure everyone is informed of the currently connected user
-    userModel()->emitUserConnected();
-    // and be sure that ui is translated in the correct language
-    Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFERREDLANGUAGE, user()->value(Core::IUser::LanguageISO).toString()).toString());
+    userCore().postCoreInitialization();
 }
 
 /** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */

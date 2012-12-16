@@ -61,6 +61,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/widgets/userrightswidget.h>
 #include <usermanagerplugin/iuserwizardpage.h>
@@ -95,10 +96,12 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
-static inline UserPlugin::Internal::UserBase *userBase() { return UserPlugin::Internal::UserBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
+
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)

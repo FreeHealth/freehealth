@@ -36,15 +36,17 @@
 /**
  * \file userviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 03 Apr 2012
+ * \version 0.8.0
+ * \date 16 Dec 2012
 */
 
 namespace UserPlugin {
 class UserViewer;
+class IUserViewerPage;
 
 namespace Internal {
 class UserViewerPrivate;
+class UserManagerModel;
 
 class UserViewerModelCoreListener : public Core::ICoreListener
 {
@@ -70,15 +72,13 @@ public:
     explicit UserViewer(QWidget *parent = 0);
     ~UserViewer();
 
-    void changeUserTo(const int modelRow);
+    bool initialize(Internal::UserManagerModel *model);
+
     void submitChangesToModel();
 
-protected:
-    void disconnectPluginManager();
-
-private Q_SLOTS:
-    void pluginManagerObjectAdded(QObject *o);
-    void pluginManagerObjectRemoved(QObject *o);
+public Q_SLOTS:
+    void setCurrentUser(const QString &userUid);
+    void setCurrentPage(int index);
 
 private:
     Internal::UserViewerPrivate *d;

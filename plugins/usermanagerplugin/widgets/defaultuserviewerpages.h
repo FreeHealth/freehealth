@@ -31,13 +31,15 @@
 
 #include <QWidget>
 #include <QPointer>
+QT_BEGIN_NAMESPACE
 class QDataWidgetMapper;
+QT_END_NAMESPACE
 
 /**
  * \file defaultuserviewerpages.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 12 Jul 2011
+ * \version 0.8.0
+ * \date 16 Dec 2012
 */
 
 namespace Print {
@@ -49,11 +51,9 @@ namespace Identity {
 class IdentityEditorWidget;
 }
 
-namespace ZipCodes {
-class ZipCountryCompleters;
-}
-
 namespace UserPlugin {
+class UserModel;
+
 namespace Internal {
 namespace Ui {
 class UserViewer_IdentityUI;
@@ -68,6 +68,9 @@ class DefaultUserIdentityWidget : public UserPlugin::IUserViewerWidget
 public:
     DefaultUserIdentityWidget(QWidget *parent = 0);
     ~DefaultUserIdentityWidget();
+
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
 
     void setUserModel(UserModel *model);
     void setUserIndex(const int index);
@@ -86,6 +89,7 @@ private:
     Ui::UserViewer_IdentityUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
+    QString m_parentId;
 };
 
 class DefaultUserIdentityPage : public IUserViewerPage
@@ -112,6 +116,9 @@ public:
     DefaultUserContactWidget(QWidget *parent = 0);
     ~DefaultUserContactWidget();
 
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
+
     void setUserModel(UserModel *model);
     void setUserIndex(const int index);
 
@@ -126,7 +133,7 @@ private:
     Ui::UserViewer_ContactUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
-    ZipCodes::ZipCountryCompleters *m_ZipCompleter;
+    QString m_parentId;
 };
 
 class DefaultUserContactPage : public IUserViewerPage
@@ -153,6 +160,9 @@ public:
     DefaultUserProfessionalWidget(QWidget *parent = 0);
     ~DefaultUserProfessionalWidget();
 
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
+
     void setUserModel(UserModel *model);
     void setUserIndex(const int index);
 
@@ -166,6 +176,7 @@ private:
     Ui::UserViewer_ProfessionalUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
+    QString m_parentId;
 };
 
 class DefaultUserProfessionalPage : public IUserViewerPage
@@ -201,6 +212,9 @@ public:
     DefaultUserRightsWidget(QWidget *parent = 0);
     ~DefaultUserRightsWidget();
 
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
+
     void setUserModel(UserModel *model);
     void setUserIndex(const int index);
 
@@ -214,6 +228,7 @@ private:
     Ui::UserViewer_RightsUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
+    QString m_parentId;
 };
 
 class DefaultUserRightsPage : public IUserViewerPage
@@ -249,6 +264,9 @@ public:
     DefaultUserPapersWidget(const int type, QWidget *parent = 0);
     ~DefaultUserPapersWidget();
 
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
+
     void setUserModel(UserModel *model);
     void setUserIndex(const int index);
 
@@ -264,6 +282,7 @@ private:
     UserModel *m_Model;
     int m_type;
     int m_row;
+    QString m_parentId;
 };
 
 class DefaultUserPapersPage : public IUserViewerPage
@@ -298,57 +317,6 @@ private:
     PaperType m_type;
 };
 
-/*
-class DefaultUserProfessionalPage : public IUserViewerPage
-{
-    Q_OBJECT
-public:
-    DefaultUserPapersPage(QObject *parent = 0);
-    ~DefaultUserPapersPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-    QString title() const;
-    int sortIndex() const;
-
-    QWidget *createPage(QWidget *parent = 0);
-
-    void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
-    bool clear();
-    bool submit();
-
-private:
-    QPointer<DefaultUserRightsWidget> m_Widget;
-    UserModel *m_Model;
-};
-
-class DefaultUserPapersPage : public IUserViewerPage
-{
-    Q_OBJECT
-public:
-    DefaultUserPapersPage(QObject *parent = 0);
-    ~DefaultUserPapersPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-    QString title() const;
-
-    QWidget *createPage(QWidget *parent = 0);
-
-    void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
-    bool clear();
-    bool submit();
-
-private:
-    QPointer<DefaultUserRightsWidget> m_Widget;
-    UserModel *m_Model;
-};
-
-*/
 }  // End namespace Internal
 }  // End namespace UserPlugin
 

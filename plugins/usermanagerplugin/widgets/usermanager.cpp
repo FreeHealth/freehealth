@@ -55,10 +55,12 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/usermanagermodel.h>
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/widgets/userviewer.h>
 #include <usermanagerplugin/constants.h>
-#include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/widgets/userwizard.h>
 
 #include <translationutils/constants.h>
@@ -90,6 +92,8 @@ static inline Core::ContextManager *contextManager() {return  Core::ICore::insta
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 namespace UserPlugin {
 namespace Internal {
@@ -114,8 +118,8 @@ public:
 UserManager::UserManager(QWidget * parent) :
         QMainWindow(parent)
 {
-    Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
-    if (!UserModel::instance()->hasCurrentUser())
+    Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
+    if (!userModel()->hasCurrentUser())
         return;
     setAttribute(Qt::WA_DeleteOnClose);
     m_Widget = new UserManagerWidget(this);
@@ -151,8 +155,8 @@ void UserManager::closeEvent(QCloseEvent *event)
 UserManagerDialog::UserManagerDialog(QWidget * parent) :
     QDialog(parent)
 {
-    Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
-    if (!UserModel::instance()->hasCurrentUser())
+    Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
+    if (!userModel()->hasCurrentUser())
         return;
 //    setAttribute(Qt::WA_DeleteOnClose);
     QGridLayout *lay = new QGridLayout(this);
@@ -194,151 +198,230 @@ void UserManagerDialog::showEvent(QShowEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   UserManagerWidget   /////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+namespace UserPlugin {
+namespace Internal {
+class UserManagerWidgetPrivate {
+public:
+    UserManagerWidgetPrivate(UserManagerWidget *parent) :
+        ui(new Ui::UserManagerWidget),
+        m_ToolBar(0),
+        m_SearchToolButton(0),
+        aCreateUser(0),
+        aModifyUser(0),
+        aSave(0),
+        aRevert(0),
+        aDeleteUser(0),
+        aQuit(0),
+        aToggleSearchView(0),
+        searchByNameAct(0),
+        searchByFirstnameAct(0),
+        searchByNameAndFirstnameAct(0),
+        searchByCityAct(0),
+        m_Context(0),
+        m_model(0),
+        q(parent)
+    {}
+
+    ~UserManagerWidgetPrivate()
+    {
+        delete ui;
+    }
+
+    void createUiAndActions()
+    {
+        ui->setupUi(q);
+        ui->splitter->setSizes(QList<int>() << 1 << 3);
+
+        m_SearchBy = Core::IUser::Name;
+        aCreateUser = new QAction(q);
+        aCreateUser->setObjectName(QString::fromUtf8("aCreateUser"));
+
+        aModifyUser = new QAction(q);
+        aModifyUser->setObjectName(QString::fromUtf8("aModifyUser"));
+        aModifyUser->setEnabled(false);
+
+        aSave = new QAction(q);
+        aSave->setObjectName(QString::fromUtf8("aSave"));
+        aSave->setEnabled(false);
+
+        aRevert = new QAction(q);
+        aRevert->setObjectName(QString::fromUtf8("aRevert"));
+        aRevert->setEnabled(false);
+
+        aDeleteUser = new QAction(q);
+        aDeleteUser->setObjectName(QString::fromUtf8("aDeleteUser"));
+        aDeleteUser->setEnabled(false);
+
+        aQuit = new QAction(q);
+        aQuit->setObjectName(QString::fromUtf8("aQuit"));
+
+        aToggleSearchView = new QAction(q);
+        aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
+        aToggleSearchView->setCheckable(true);
+        aToggleSearchView->setChecked(true);
+
+        // prepare Search Line Edit
+        searchByNameAct = new QAction(q);
+        searchByFirstnameAct = new QAction(q);
+        searchByNameAndFirstnameAct = new QAction(q);
+        searchByCityAct = new QAction(q);
+
+        // manage theme / icons
+        Core::ITheme *th = theme();
+        aSave->setIcon(th->icon(Core::Constants::ICONSAVE, Core::ITheme::MediumIcon));
+        aCreateUser->setIcon(th->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
+        aModifyUser->setIcon(th->icon(Core::Constants::ICONEDITUSER, Core::ITheme::MediumIcon));
+        aRevert->setIcon(th->icon(Core::Constants::ICONCLEARUSER, Core::ITheme::MediumIcon));
+        aDeleteUser->setIcon(th->icon(Core::Constants::ICONDELETEUSER, Core::ITheme::MediumIcon));
+        aQuit->setIcon(th->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
+        aToggleSearchView->setIcon(th->icon(Core::Constants::ICONSEARCHUSER, Core::ITheme::MediumIcon));
+
+        searchByNameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+        searchByFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+        searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+        searchByCityAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
+    }
+
+    void createToolBar()
+    {
+        m_ToolBar = new QToolBar(q);
+        m_ToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        m_ToolBar->addAction(aToggleSearchView);
+        m_ToolBar->addAction(aCreateUser);
+        m_ToolBar->addAction(aModifyUser);
+        m_ToolBar->addAction(aSave);
+        m_ToolBar->addAction(aDeleteUser);
+        m_ToolBar->addAction(aRevert);
+    //    m_ToolBar->addAction(aQuit);
+        m_ToolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        ui->toolbarLayout->addWidget(m_ToolBar);
+    }
+
+    void manageSearchLine()
+    {
+        m_SearchToolButton = new QToolButton(ui->searchLineEdit);
+        m_SearchToolButton->addAction(searchByNameAct);
+        m_SearchToolButton->addAction(searchByFirstnameAct);
+        //    m_SearchToolButton->addAction(searchByNameAndFirstnameAct);
+        //    m_SearchToolButton->addAction(searchByCityAct);
+        m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
+        m_SearchToolButton->setDefaultAction(searchByNameAct);
+        ui->searchLineEdit->setLeftButton(m_SearchToolButton);
+    }
+
+    void connectUiAndActions()
+    {
+        aSave->setShortcut(QKeySequence::Save);
+        aCreateUser->setShortcut(QKeySequence::New);
+
+        // connect actions
+        QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(onSaveRequested()));
+        QObject::connect(aCreateUser, SIGNAL(triggered()), q, SLOT(onCreateUserRequested()));
+        QObject::connect(aRevert, SIGNAL(triggered()), q, SLOT(onClearModificationRequested()));
+        QObject::connect(aDeleteUser,  SIGNAL(triggered()), q, SLOT(onDeleteUserRequested()));
+        QObject::connect(aQuit,  SIGNAL(triggered()), q, SIGNAL(closeRequested()));
+        QObject::connect(aToggleSearchView, SIGNAL(toggled(bool)), q, SLOT(toggleSearchView(bool)));
+
+        // connect tableView selector
+        QObject::connect(ui->userTreeView, SIGNAL(clicked(QModelIndex)), q, SLOT(onUserClicked(const QModelIndex &)));
+
+        // connect search line edit
+        QObject::connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), q, SLOT(onSearchRequested()));
+        QObject::connect(m_SearchToolButton, SIGNAL(triggered(QAction*)), q, SLOT(onSearchToolButtonTriggered(QAction*)));
+    }
+
+    // Check the current user rights and adapt the view to them.
+    void analyseCurrentUserRights()
+    {
+        // retreive user manager rights from model
+        UserModel *m = userModel();
+        Core::IUser::UserRights r (m->currentUserData(Core::IUser::ManagerRights).toInt());
+        // translate to bools
+        m_CanModify = (r & Core::IUser::WriteAll);
+        m_CanCreate = (r & Core::IUser::Create);
+        m_CanViewAllUsers = (r & Core::IUser::ReadAll);
+        m_CanDelete = (r & Core::IUser::Delete);
+
+        updateButtons();
+
+        // manage specific creation widgets
+        ui->userTreeView->setVisible(m_CanViewAllUsers);
+        ui->searchLineEdit->setVisible(m_CanViewAllUsers);
+    }
+
+    // Update buttons and actions according to the current user rights
+    void updateButtons()
+    {
+        const bool enabled = ui->userTreeView->currentIndex().isValid();
+
+        // set enabled states of buttons according to selected user and rights
+        aToggleSearchView->setEnabled(m_CanViewAllUsers);
+        aCreateUser->setEnabled(m_CanCreate);
+
+        aSave->setEnabled(enabled && m_CanModify);
+        aDeleteUser->setEnabled(enabled && m_CanDelete);
+        aModifyUser->setEnabled(enabled && m_CanModify);
+
+        //TODO: set this right! just when modified!
+        aRevert->setEnabled(enabled);
+    }
+
+public:
+    Ui::UserManagerWidget *ui;
+    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete;
+    int m_EditingRow;
+    int m_SearchBy;
+    QToolBar *m_ToolBar;
+    QToolButton *m_SearchToolButton;
+    QAction *aCreateUser;
+    QAction *aModifyUser;
+    QAction *aSave;
+    QAction *aRevert;
+    QAction *aDeleteUser;
+    QAction *aQuit;
+    QAction *aToggleSearchView;
+    QAction *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
+    UserManagerContext *m_Context;
+    Internal::UserManagerModel *m_model;
+
+private:
+    UserManagerWidget *q;
+};
+} // namespace Internal
+} // namespace UserPlugin
+
 UserManagerWidget::UserManagerWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::UserManagerWidget),
-    m_ToolBar(0),
-    m_SearchToolButton(0),
-    aCreateUser(0),
-    aModifyUser(0),
-    aSave(0),
-    aRevert(0),
-    aDeleteUser(0),
-    aQuit(0),
-    aToggleSearchView(0),
-    searchByNameAct(0),
-    searchByFirstnameAct(0),
-    searchByNameAndFirstnameAct(0),
-    searchByCityAct(0),
-    m_Context(0)
+    d(new UserManagerWidgetPrivate(this))
 {
-    ui->setupUi(this);
-    ui->splitter->setSizes(QList<int>() << 1 << 3);
-    m_SearchBy = Core::IUser::Name;
-    aCreateUser = new QAction(this);
-    aCreateUser->setObjectName(QString::fromUtf8("aCreateUser"));
-
-    aModifyUser = new QAction(this);
-    aModifyUser->setObjectName(QString::fromUtf8("aModifyUser"));
-    aModifyUser->setEnabled(false);
-
-    aSave = new QAction(this);
-    aSave->setObjectName(QString::fromUtf8("aSave"));
-    aSave->setEnabled(false);
-
-    aRevert = new QAction(this);
-    aRevert->setObjectName(QString::fromUtf8("aRevert"));
-    aRevert->setEnabled(false);
-
-    aDeleteUser = new QAction(this);
-    aDeleteUser->setObjectName(QString::fromUtf8("aDeleteUser"));
-    aDeleteUser->setEnabled(false);
-
-    aQuit = new QAction(this);
-    aQuit->setObjectName(QString::fromUtf8("aQuit"));
-
-    aToggleSearchView = new QAction(this);
-    aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
-    aToggleSearchView->setCheckable(true);
-    aToggleSearchView->setChecked(true);
-
-    // prepare Search Line Edit
-    searchByNameAct = new QAction(this);
-    searchByFirstnameAct = new QAction(this);
-    searchByNameAndFirstnameAct = new QAction(this);
-    searchByCityAct = new QAction(this);
-
-    // manage theme / icons
-    Core::ITheme *th = theme();
-    aSave->setIcon(th->icon(Core::Constants::ICONSAVE, Core::ITheme::MediumIcon));
-    aCreateUser->setIcon(th->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
-    aModifyUser->setIcon(th->icon(Core::Constants::ICONEDITUSER, Core::ITheme::MediumIcon));
-    aRevert->setIcon(th->icon(Core::Constants::ICONCLEARUSER, Core::ITheme::MediumIcon));
-    aDeleteUser->setIcon(th->icon(Core::Constants::ICONDELETEUSER, Core::ITheme::MediumIcon));
-    aQuit->setIcon(th->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
-    aToggleSearchView->setIcon(th->icon(Core::Constants::ICONSEARCHUSER, Core::ITheme::MediumIcon));
-
-    searchByNameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    searchByFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    searchByCityAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
-
-    m_ToolBar = new QToolBar(this);
-    m_ToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    m_ToolBar->addAction(aToggleSearchView);
-    m_ToolBar->addAction(aCreateUser);
-    m_ToolBar->addAction(aModifyUser);
-    m_ToolBar->addAction(aSave);
-    m_ToolBar->addAction(aDeleteUser);
-    m_ToolBar->addAction(aRevert);
-//    m_ToolBar->addAction(aQuit);
-    m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    ui->toolbarLayout->addWidget(m_ToolBar);
-
-    m_SearchToolButton = new QToolButton(ui->searchLineEdit);
-    m_SearchToolButton->addAction(searchByNameAct);
-    m_SearchToolButton->addAction(searchByFirstnameAct);
-    //    m_SearchToolButton->addAction(searchByNameAndFirstnameAct);
-    //    m_SearchToolButton->addAction(searchByCityAct);
-    m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
-    m_SearchToolButton->setDefaultAction(searchByNameAct);
-    ui->searchLineEdit->setLeftButton(m_SearchToolButton);
-
-    ui->userViewer->setEnabled(false);
+    d->createUiAndActions();
+    d->createToolBar();
+    d->manageSearchLine();
+    d->ui->userViewer->setEnabled(false);
 }
 
 /** Dtor */
 UserManagerWidget::~UserManagerWidget()
 {
-    delete ui;
+    delete d;
 }
 
 /** Initialize the view, connect actions */
 bool UserManagerWidget::initialize()
 {
-    UserModel *model = UserModel::instance();
-    ui->userTableView->setModel(model);
-    for(int i=0; i < model->columnCount(); ++i) {
-        ui->userTableView->hideColumn(i);
-    }
-    ui->userTableView->showColumn(Core::IUser::Name);
-    ui->userTableView->showColumn(Core::IUser::SecondName);
-    ui->userTableView->showColumn(Core::IUser::Firstname);
-    ui->userTableView->horizontalHeader()->setStretchLastSection(true);
-    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::Name, QHeaderView::ResizeToContents);
-    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::SecondName, QHeaderView::ResizeToContents);
-    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::Firstname, QHeaderView::ResizeToContents);
-    ui->userTableView->horizontalHeader()->hide();
-    ui->userTableView->verticalHeader()->hide();
-    ui->userTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    retranslate();
-
-    aSave->setShortcut(QKeySequence::Save);
-    aCreateUser->setShortcut(QKeySequence::New);
-
-    // connect actions
-    connect(aSave, SIGNAL(triggered()), this, SLOT(onSaveRequested()));
-    connect(aCreateUser, SIGNAL(triggered()), this, SLOT(onCreateUserRequested()));
-    connect(aRevert, SIGNAL(triggered()), this, SLOT(onClearModificationRequested()));
-    connect(aDeleteUser,  SIGNAL(triggered()), this, SLOT(onDeleteUserRequested()));
-    connect(aQuit,  SIGNAL(triggered()), this, SIGNAL(closeRequested()));
-    connect(aToggleSearchView, SIGNAL(toggled(bool)), this, SLOT(toggleSearchView(bool)));
-
-    // connect tableView selector
-    connect(ui->userTableView, SIGNAL(clicked(QModelIndex)),
-             this, SLOT(onUserClicked(const QModelIndex &)));
-
-    // connect search line edit
-    connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchRequested()));
-    connect(m_SearchToolButton, SIGNAL(triggered(QAction*)), this, SLOT(onSearchToolButtonTriggered(QAction*)));
-
+//    UserModel *model = userModel();
+    d->m_model = new Internal::UserManagerModel(this);
+    d->m_model->initialize();
+    d->m_model->setFilter(Internal::UserManagerModelFilter());
+    d->ui->userTreeView->setModel(d->m_model);
+    d->ui->userTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    d->ui->userTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->ui->userTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->ui->userViewer->initialize(d->m_model);
+    d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
-
-    analyseCurrentUserRights();
-
+    d->analyseCurrentUserRights();
+    retranslate();
     return true;
 }
 
@@ -348,7 +431,7 @@ bool UserManagerWidget::initialize()
  */
 bool UserManagerWidget::canCloseParent()
 {
-    if (UserModel::instance()->isDirty()) {
+    if (userModel()->isDirty()) {
         int ret = Utils::withButtonsMessageBox(tr("You've modified the users list."), tr("Do you want to save your changes?"), "",
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save, windowTitle());
@@ -356,7 +439,7 @@ bool UserManagerWidget::canCloseParent()
             return true;
         else if (ret == QMessageBox::Cancel)
             return false;
-        else if (UserModel::instance()->submitAll()) {
+        else if (userModel()->submitAll()) {
             QMessageBox::information(this, windowTitle(), tr("Changes have been saved successfully."));
             return true;
         } else {
@@ -367,36 +450,18 @@ bool UserManagerWidget::canCloseParent()
     return true;
 }
 
-/** Check the current user rights and adapt the view to them. */
-void UserManagerWidget::analyseCurrentUserRights()
-{
-    // retreive user manager rights from model
-    UserModel *m = UserModel::instance();
-    Core::IUser::UserRights r (m->currentUserData(Core::IUser::ManagerRights).toInt());
-    // translate to bools
-    m_CanModify = (r & Core::IUser::WriteAll);
-    m_CanCreate = (r & Core::IUser::Create);
-    m_CanViewAllUsers = (r & Core::IUser::ReadAll);
-    m_CanDelete = (r & Core::IUser::Delete);
-
-    updateButtons();
-
-    // manage specific creation widgets
-    ui->userTableView->setVisible(m_CanViewAllUsers);
-    ui->searchLineEdit->setVisible(m_CanViewAllUsers);
-}
 
 /** Change the search method for the users's model */
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 {
-    if (act == searchByNameAct)
-        m_SearchBy= Core::IUser::Name;
-    else if (act == searchByFirstnameAct)
-        m_SearchBy= Core::IUser::Firstname;
-    else if (act == searchByNameAndFirstnameAct)
-        m_SearchBy= -1;
-    else if (act == searchByCityAct)
-        m_SearchBy= Core::IUser::City;
+    if (act == d->searchByNameAct)
+        d->m_SearchBy= Core::IUser::Name;
+    else if (act == d->searchByFirstnameAct)
+        d->m_SearchBy= Core::IUser::Firstname;
+    else if (act == d->searchByNameAndFirstnameAct)
+        d->m_SearchBy= -1;
+    else if (act == d->searchByCityAct)
+        d->m_SearchBy= Core::IUser::City;
 }
 
 /**
@@ -405,11 +470,11 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
  */
 void UserManagerWidget::onCurrentUserChanged()
 {
-    int row = UserModel::instance()->currentUserIndex().row();
-    ui->userTableView->setCurrentIndex(ui->userTableView->model()->index(row, Core::IUser::Name));
-    ui->userTableView->selectRow(row);
-    analyseCurrentUserRights();
-    ui->userViewer->changeUserTo(row);
+    int row = userModel()->currentUserIndex().row();
+    d->ui->userTreeView->setCurrentIndex(d->ui->userTreeView->model()->index(row, Core::IUser::Name));
+//    ui->userTreeView->selectRow(row);
+    d->analyseCurrentUserRights();
+//    ui->userViewer->setCurrentUser(row);
 }
 
 /** Update the users' model filter */
@@ -418,37 +483,37 @@ void UserManagerWidget::onSearchRequested()
     // TODO: Manage error when user select an action in the toolbutton
     // TODO: where can only be calculated by model
     QHash<int, QString> where;
-    where.insert(m_SearchBy, QString("LIKE '%1%'").arg(ui->searchLineEdit->text()));
-    UserModel::instance()->setFilter(where);
+    where.insert(d->m_SearchBy, QString("LIKE '%1%'").arg(d->ui->searchLineEdit->text()));
+    userModel()->setFilter(where);
 }
 
 /** Create a new user using UserPlugin::UserWizard. */
 void UserManagerWidget::onCreateUserRequested()
 {
-    int createdRow = ui->userTableView->model()->rowCount();
-    if (!ui->userTableView->model()->insertRows(createdRow, 1)) {
+    int createdRow = d->ui->userTreeView->model()->rowCount();
+    if (!d->ui->userTreeView->model()->insertRows(createdRow, 1)) {
         LOG_ERROR("Error creating new user: cannot add row to model");
         return;
     }
-    QModelIndex index = ui->userTableView->model()->index(createdRow, USER_NAME);
+    QModelIndex index = d->ui->userTreeView->model()->index(createdRow, USER_NAME);
     UserWizard wiz(this);
     // TODO: code here
 //    wiz.setModelRow(createdRow);
     int r = wiz.exec();
     if (r == QDialog::Rejected) {
-        if (!ui->userTableView->model()->removeRows(createdRow, 1)) {
+        if (!d->ui->userTreeView->model()->removeRows(createdRow, 1)) {
             LOG_ERROR("Error deleting new user: cannot delete row from model");
             return;
         }
     } else {
-        ui->userTableView->selectRow(createdRow);
+//        d->ui->userTreeView->selectRow(createdRow);
         onUserClicked(index);
     }
 }
 
 void UserManagerWidget::onClearModificationRequested()
 {
-//    if (UserModel::instance()->revertAll())
+//    if (userModel()->revertAll())
 //        m_Parent->statusBar()->showMessage(tr("Modifications cleared"), 2000);
 //    else
 //        m_Parent->statusBar()->showMessage(tr("Can not clear modifications"), 2000);
@@ -460,16 +525,16 @@ void UserManagerWidget::onClearModificationRequested()
  */
 void UserManagerWidget::onSaveRequested()
 {
-    if ((!m_CanModify) || (!m_CanCreate))
+    if ((!d->m_CanModify) || (!d->m_CanCreate))
         return;
-    m_ToolBar->setFocus();
+    d->m_ToolBar->setFocus();
 
     // tell all pages to submit data to the model
-    ui->userViewer->submitChangesToModel();
+    d->ui->userViewer->submitChangesToModel();
 
     // submit user to database
-    QString uuid = ui->userTableView->model()->index(ui->userTableView->currentIndex().row(), Core::IUser::Uuid).data().toString();
-    if (!UserModel::instance()->submitUser(uuid)) {
+    QString uuid = d->ui->userTreeView->model()->index(d->ui->userTreeView->currentIndex().row(), Core::IUser::Uuid).data().toString();
+    if (!userModel()->submitUser(uuid)) {
         LOG_ERROR("Unable to save user " + uuid);
     }
 }
@@ -480,69 +545,51 @@ void UserManagerWidget::onSaveRequested()
  */
 void UserManagerWidget::onDeleteUserRequested()
 {
-    if (!ui->userTableView->selectionModel()->hasSelection())
+    if (!d->ui->userTreeView->selectionModel()->hasSelection())
         return;
 
     // User can not delete himself
-    if (ui->userTableView->currentIndex().row() == UserModel::instance()->currentUserIndex().row())
+    if (d->ui->userTreeView->currentIndex().row() == userModel()->currentUserIndex().row())
         return;
 
-    if (UserModel::instance()->removeRow(ui->userTableView->currentIndex().row())) {
+    if (userModel()->removeRow(d->ui->userTreeView->currentIndex().row())) {
         LOG(tr("User deleted"));
     } else {
         LOG(tr("User can not be deleted"));
     }
-    selectUserTableView(UserModel::instance()->currentUserIndex().row());
-    updateButtons();
+    selectuserTreeView(userModel()->currentUserIndex().row());
+    d->updateButtons();
 }
 
 void UserManagerWidget::toggleSearchView(bool checked)
 {
     if (checked) {
-        ui->splitter->setSizes(QList<int>() << 1 << 3);
+        d->ui->splitter->setSizes(QList<int>() << 1 << 3);
     } else {
-        ui->splitter->setSizes(QList<int>() << 0 << 1);
+        d->ui->splitter->setSizes(QList<int>() << 0 << 1);
     }
 }
 
 void UserManagerWidget::onUserClicked(const QModelIndex &index)
 {
-    ui->userViewer->changeUserTo(index.row());
-    ui->userViewer->setEnabled(true);
-    updateButtons();
+    qWarning() << "UserManagerWidget::onUserClicked" << index;
+    d->ui->userViewer->setCurrentUser(d->m_model->userUuid(index));
+    d->ui->userViewer->setCurrentPage(d->m_model->pageIndexFromIndex(index));
+    d->ui->userViewer->setEnabled(true);
+    d->updateButtons();
 }
 
-/**
- * \internal
- * Update the actions/buttons
- */
-void UserManagerWidget::updateButtons()
+void UserManagerWidget::selectuserTreeView(int row)
 {
-    const bool enabled = ui->userTableView->currentIndex().isValid();
-
-    // set enabled states of buttons according to selected user and rights
-    aToggleSearchView->setEnabled(m_CanViewAllUsers);
-    aCreateUser->setEnabled(m_CanCreate);
-
-    aSave->setEnabled(enabled && m_CanModify);
-    aDeleteUser->setEnabled(enabled && m_CanDelete);
-    aModifyUser->setEnabled(enabled && m_CanModify);
-
-    //TODO: set this right! just when modified!
-    aRevert->setEnabled(enabled);
-}
-
-void UserManagerWidget::selectUserTableView(int row)
-{
-    ui->userViewer->changeUserTo(row);
+//    d->ui->userViewer->setCurrentUser(row);
 }
 
 /** Assume retranslation of UI. */
 void UserManagerWidget::changeEvent(QEvent *e)
 {
     if ((e->type() == QEvent::LanguageChange)) {
-        if (ui) {
-            ui->retranslateUi(this);
+        if (d->ui) {
+            d->ui->retranslateUi(this);
             retranslate();
        }
     }
@@ -551,39 +598,39 @@ void UserManagerWidget::changeEvent(QEvent *e)
 /** Retranslate the UI */
 void UserManagerWidget::retranslate()
 {
-    if (!searchByNameAct)
+    if (!d->searchByNameAct)
         return;
-    searchByNameAct->setText(tr("Search user by name"));
-    searchByFirstnameAct->setText(tr("Search user by firstname"));
-    searchByNameAndFirstnameAct->setText(tr("Search user by name and firstname"));
-    searchByCityAct->setText(tr("Search user by city"));
+    d->searchByNameAct->setText(tr("Search user by name"));
+    d->searchByFirstnameAct->setText(tr("Search user by firstname"));
+    d->searchByNameAndFirstnameAct->setText(tr("Search user by name and firstname"));
+    d->searchByCityAct->setText(tr("Search user by city"));
 
-    searchByNameAct->setToolTip(searchByNameAct->text());
-    searchByFirstnameAct->setToolTip(searchByFirstnameAct->text());
-    searchByNameAndFirstnameAct->setToolTip(searchByNameAndFirstnameAct->text());
-    searchByCityAct->setToolTip(searchByCityAct->text());
-    m_SearchToolButton->setToolTip(m_SearchToolButton->text());
+    d->searchByNameAct->setToolTip(d->searchByNameAct->text());
+    d->searchByFirstnameAct->setToolTip(d->searchByFirstnameAct->text());
+    d->searchByNameAndFirstnameAct->setToolTip(d->searchByNameAndFirstnameAct->text());
+    d->searchByCityAct->setToolTip(d->searchByCityAct->text());
+    d->m_SearchToolButton->setToolTip(d->m_SearchToolButton->text());
 
-    aCreateUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
-    aCreateUser->setToolTip(aCreateUser->text());
-    aModifyUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::MODIFY_USER));
-    aModifyUser->setToolTip(aModifyUser->text());
-    aSave->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::SAVE_USER));
-    aSave->setToolTip(aSave->text());
-    aRevert->setText(tr("Clear modifications"));
-    aRevert->setToolTip(aRevert->text());
-    aDeleteUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::DELETE_USER));
-    aDeleteUser->setToolTip(aDeleteUser->text());
-    aQuit->setText(tr("Quit User Manager"));
-    aQuit->setToolTip(aQuit->text());
-    aToggleSearchView->setText(tr("Search user"));
-    aToggleSearchView->setToolTip(aToggleSearchView->text());
+    d->aCreateUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
+    d->aModifyUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::MODIFY_USER));
+    d->aSave->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::SAVE_USER));
+    d->aRevert->setText(tr("Clear modifications"));
+    d->aDeleteUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::DELETE_USER));
+    d->aQuit->setText(tr("Quit User Manager"));
+    d->aToggleSearchView->setText(tr("Search user"));
+    d->aCreateUser->setToolTip(d->aCreateUser->text());
+    d->aModifyUser->setToolTip(d->aModifyUser->text());
+    d->aSave->setToolTip(d->aSave->text());
+    d->aRevert->setToolTip(d->aRevert->text());
+    d->aDeleteUser->setToolTip(d->aDeleteUser->text());
+    d->aQuit->setToolTip(d->aQuit->text());
+    d->aToggleSearchView->setToolTip(d->aToggleSearchView->text());
 }
 
 /** For debugging purpose */
 void UserManagerWidget::showUserDebugDialog(const QModelIndex &id)
 {
     QStringList list;
-    list << UserModel::instance()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
+    list << userModel()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
     Utils::quickDebugDialog(list);
 }

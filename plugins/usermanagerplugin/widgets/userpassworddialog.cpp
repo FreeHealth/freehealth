@@ -26,20 +26,23 @@
  ***************************************************************************/
 
 /**
-  \class UserPlugin::UserPasswordDialog
-  \brief Dialog for password changing.
-  With this dialog, user can change its password. He's asked of the actual password once, and of the new password
-  twice. When user accept the dialog a verification is done, no changes are saved into database or users' model. \n
-  - canGetNewPassword() return the verification state. If it's true, all is good: old password was verified, and
-  new password was confirmed correctly.
-  - cryptedPassword() return the crypted new password to use.
-  - clearPassword() return the new password (non crypted).
-  - applyChanges() call it after dialog validation to submit the new password to the database and server.
-  You have to send the new password to the user model by yourself.
+ * \class UserPlugin::Internal::UserPasswordDialog
+ * \brief Dialog for password changing.
+ * With this dialog, user can change its password. He's asked of the actual
+ * password once, and of the new password twice. When user accept the dialog
+ * a verification is done, no changes are saved into database or users' model. \n
+ * - canGetNewPassword() return the verification state. If it's true, all
+ * is good: old password was verified, and new password was confirmed correctly.
+ * - cryptedPassword() return the crypted new password to use.
+ * - clearPassword() return the new password (non crypted).
+ * - applyChanges() call it after dialog validation to submit the new password
+ * to the database and server.
+ * You have to send the new password to the user model by yourself.
 */
 
 #include "userpassworddialog.h"
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
@@ -53,9 +56,11 @@
 #include <QDebug>
 
 using namespace UserPlugin;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent) :
     QDialog(parent)
@@ -142,7 +147,6 @@ bool UserPasswordDialog::applyChanges(UserModel *model, int userRow) const
     }
     return model->setData(model->index(userRow, Core::IUser::ClearPassword), clearPassword());
 }
-
 
 void UserPasswordDialog::accept()
 {

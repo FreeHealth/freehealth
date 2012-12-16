@@ -52,13 +52,15 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
-#include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/icommandline.h>
 
 #include <patientbaseplugin/patientmodel.h>
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
+
+#include <printerplugin/textdocumentextra.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -84,10 +86,11 @@ using namespace Internal;
 using namespace Agenda::Constants;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {

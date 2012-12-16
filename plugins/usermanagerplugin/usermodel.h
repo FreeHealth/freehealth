@@ -51,9 +51,10 @@ class TextDocumentExtra;
 
 namespace UserPlugin {
 class UserModel;
+class UserCore;
+class UserViewer;
 
 namespace Internal {
-class UserManagerPlugin;
 class UserModelPrivate;
 
 class UserModelWrapper : public Core::IUser
@@ -87,17 +88,17 @@ private:
 };
 }  // End Internal
 
-
-
 class USER_EXPORT UserModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class UserPlugin::Internal::UserManagerPlugin;
+    friend class UserPlugin::UserCore;
+    friend class UserPlugin::UserViewer;
 
+protected:
     UserModel(QObject *parent);
+    bool initialize();
 
 public:
-    static UserModel *instance(QObject *parent = 0);
     ~UserModel();
 
     bool isCorrectLogin(const QString &clearLog, const QString &clearPassword);
@@ -170,7 +171,6 @@ private Q_SLOTS:
 
 private:
     Internal::UserModelPrivate *d;
-    static UserModel *m_Instance;
 };
 
 }  // End UserPlugin

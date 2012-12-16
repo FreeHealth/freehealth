@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "virtualdatabasepreferences.h"
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 
 #include <patientbaseplugin/patientbase.h>
@@ -52,12 +53,13 @@
 #include <QByteArray>
 #include <QBuffer>
 
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
 static inline Patients::PatientCore *patientCore()  { return Patients::PatientCore::instance(); }
 static inline Form::Internal::EpisodeBase *episodeBase()  { return Form::Internal::EpisodeBase::instance(); }
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;

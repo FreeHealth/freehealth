@@ -20,35 +20,37 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <item row="1" column="0">
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="toolbarLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="Utils::MiniSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="">
       <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
        <item>
         <widget class="Utils::QButtonLineEdit" name="searchLineEdit"/>
        </item>
        <item>
-        <widget class="QTableView" name="userTableView"/>
+        <widget class="QTreeView" name="userTreeView"/>
        </item>
       </layout>
      </widget>
-     <widget class="UserPlugin::UserViewer" name="userViewer" native="true"/>
+     <widget class="UserPlugin::UserViewer" name="userViewer" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
     </widget>
-   </item>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="toolbarLayout"/>
    </item>
   </layout>
  </widget>
@@ -62,6 +64,12 @@
    <class>UserPlugin::UserViewer</class>
    <extends>QWidget</extends>
    <header location="global">usermanagerplugin/widgets/userviewer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

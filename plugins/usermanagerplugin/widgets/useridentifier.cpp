@@ -54,6 +54,7 @@
 
 #include <utils/widgets/loginwidget.h>
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
@@ -67,6 +68,9 @@ using namespace UserPlugin::Internal;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserIdentifier::UserIdentifier(QWidget *parent) :
         QDialog(parent)
@@ -88,7 +92,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     m_ui->lblAppName->setMinimumSize(splash.size() + QSize(10,10));
     m_NumberOfTries = 0;
     setWindowTitle(qApp->applicationName());
-    if (Internal::UserBase::instance()->isNewlyCreated()) {
+    if (userBase()->isNewlyCreated()) {
         m_ui->newlyMessage->show();
     } else {
         m_ui->newlyMessage->hide();
@@ -109,7 +113,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
 
 void UserIdentifier::done(int result)
 {
-    UserModel *m = UserModel::instance();
+    UserModel *m = userModel();
     if (result == QDialog::Accepted) {
         // ask database with login/password couple
         if (!m->isCorrectLogin(login(), password())) {

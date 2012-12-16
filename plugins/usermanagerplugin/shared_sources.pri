@@ -15,7 +15,9 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/widgets/iuserviewerpage.h \
     $${PWD}/widgets/defaultuserviewerpages.h \
     $${PWD}/iuserwizardpage.h \
-    $${PWD}/widgets/useridentityandloginpage.h
+    $${PWD}/widgets/useridentityandloginpage.h \
+    $${PWD}/usercore.h \
+    $${PWD}/usermanagermodel.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
@@ -23,8 +25,9 @@ SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/usermanagermode.cpp \
     $${PWD}/widgets/iuserviewerpage.cpp \
     $${PWD}/widgets/defaultuserviewerpages.cpp \
-    $${PWD}/widgets/useridentityandloginpage.cpp
-
+    $${PWD}/widgets/useridentityandloginpage.cpp \
+    $${PWD}/usercore.cpp \
+    $${PWD}/usermanagermodel.cpp
 
 # Compile
 HEADERS += \

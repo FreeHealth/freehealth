@@ -47,6 +47,7 @@ public:
     explicit IUserViewerWidget(QWidget *parent = 0) : QWidget(parent) {}
     virtual ~IUserViewerWidget() {}
 
+    virtual const QString &parentUserViewerPageId() const = 0;
     virtual void setUserModel(UserModel *model) = 0;
     virtual void setUserIndex(const int row) = 0;
     virtual void clear() = 0;

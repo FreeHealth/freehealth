@@ -24,9 +24,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "currentuserpreferencespage.h"
-#include "usermodel.h"
-#include "constants.h"
-#include "widgets/userviewer.h"
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/constants.h>
+#include <usermanagerplugin/widgets/userviewer.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -40,7 +41,8 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-static inline UserPlugin::UserModel *userModel() {return UserModel::instance();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////  CurrentUserPreferencesPage  //////////////////////////////////////
@@ -88,8 +90,6 @@ QWidget *CurrentUserPreferencesPage::createPage(QWidget *parent)
     return m_Widget;
 }
 
-
-
 CurrentUserPreferencesWidget::CurrentUserPreferencesWidget(QWidget *parent) :
         QWidget(parent), m_Viewer(0)
 {
@@ -102,8 +102,9 @@ CurrentUserPreferencesWidget::CurrentUserPreferencesWidget(QWidget *parent) :
 
 void CurrentUserPreferencesWidget::setDataToUi()
 {
-    if (userModel()->hasCurrentUser())
-        m_Viewer->changeUserTo(userModel()->currentUserIndex().row());
+    // TODO: recode this
+//    if (userModel()->hasCurrentUser())
+//        m_Viewer->setCurrentUser(userModel()->data(Core::IUser::Uuid).toString());
 }
 
 void CurrentUserPreferencesWidget::saveToSettings(Core::ISettings *)

@@ -30,7 +30,8 @@
 */
 
 #include "userlineeditcompletersearch.h"
-#include "../database/userbase.h"
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/constants.h>
 
 #include <coreplugin/icore.h>
@@ -47,8 +48,9 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 namespace {
 

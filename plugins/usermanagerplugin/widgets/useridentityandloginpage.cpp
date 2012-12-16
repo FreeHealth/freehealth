@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "useridentityandloginpage.h"
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
@@ -47,7 +48,9 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     QWizardPage(parent),
@@ -124,7 +127,7 @@ void UserIdentityAndLoginPage::checkLogin()
         ui->lblLogin->setStyleSheet("color:red;");
         ui->lblLogin->setToolTip(tr("You must specify a valid login. Login must be more than 6 characters."));
         ui->lblLoginError->setText(tr("You must specify a valid login. Login must be more than 6 characters."));
-    } else if (UserBase::instance()->isLoginAlreadyExists(ui->leLogin->text())) {
+    } else if (userBase()->isLoginAlreadyExists(ui->leLogin->text())) {
         ui->lblLogin->setStyleSheet("color:red;");
         ui->lblLogin->setToolTip(tr("Login in use. Please select another login"));
         ui->lblLoginError->setText(tr("Login in use. Please select another login"));

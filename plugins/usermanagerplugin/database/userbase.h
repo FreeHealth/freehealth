@@ -43,40 +43,32 @@
 */
 
 namespace UserPlugin {
+class UserCore;
 class UserModel;
+class UserCreationPage;
 
 namespace Internal {
 class UserData;
-class UserManagerPlugin;
 
 class USER_EXPORT UserBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class UserPlugin::UserModel;
-    friend class UserPlugin::Internal::UserManagerPlugin;
+    friend class UserPlugin::UserCreationPage;
+    friend class UserPlugin::UserCore;
 
 protected:
     UserBase(QObject *parent = 0);
+    bool initialize();
     void onCoreDatabaseServerChanged();
 
 protected Q_SLOTS:
     void onCoreFirstRunCreationRequested();
 
 public:
-    // Constructor
-    static UserBase *instance();
     virtual ~UserBase() {}
 
-    // initialize
-    bool initialize(Core::ISettings *settings = 0);
     bool isInitialized() const;
-    bool createDatabase(const QString &connectionName, const QString &dbName,
-                        const QString &pathOrHostName,
-                        TypeOfAccess access, AvailableDrivers driver,
-                        const QString &login, const QString &pass,
-                        const int port,
-                        CreationOption createOption
-                       );
     bool checkDatabaseVersion();
     bool isNewlyCreated() const;
     QString getCurrentVersion();
@@ -119,6 +111,14 @@ public:
     void toTreeWidget(QTreeWidget *tree);
 
 private:
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                        const QString &pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString &login, const QString &pass,
+                        const int port,
+                        CreationOption createOption
+                       );
+
     // privates retreivers
     UserData *getUser(const QHash<int, QString> &conditions) const;
 
@@ -126,7 +126,6 @@ private:
 private:
     bool m_initialized;
     mutable QString  m_LastUuid, m_LastLogin, m_LastPass;
-    static UserBase *m_Instance;
     bool m_IsNewlyCreated;
 };
 

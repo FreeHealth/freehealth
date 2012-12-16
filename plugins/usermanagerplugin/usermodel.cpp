@@ -57,6 +57,7 @@
 
 #include <printerplugin/textdocumentextra.h>
 
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/iuserlistener.h>
@@ -83,9 +84,10 @@ using namespace UserPlugin::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 namespace {
     const char * const SERVER_ADMINISTRATOR_UUID = "serverAdmin";
@@ -153,11 +155,6 @@ void UserModelWrapper::newUserConnected(const QString &uid)
     Q_EMIT userChanged();
 }
 
-
-/**
-  Private Part.
-  \internal
-*/
 class UserModelPrivate
 {
 public:
@@ -415,34 +412,20 @@ public:
 }  // End Internal
 }  // End UserPlugin
 
-
-
-UserModel *UserModel::m_Instance = 0;
-
-UserModel *UserModel::instance(QObject *parent)
-{
-    if (!m_Instance) {
-        if (parent)
-            m_Instance = new UserModel(parent);
-        else
-            m_Instance = new UserModel(qApp);
-    }
-    return m_Instance;
-}
-
 /** Constructor */
 UserModel::UserModel(QObject *parent) :
-        QAbstractTableModel(parent), d(0)
+    QAbstractTableModel(parent),
+    d(new Internal::UserModelPrivate(this))
 {
     setObjectName("UserModel");
-    d = new Internal::UserModelPrivate(this);
+}
 
+/** Initialize the model */
+bool UserModel::initialize()
+{
     // install the Core Patient wrapper
     Core::ICore::instance()->setUser(d->m_UserModelWrapper);
     connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
-    if (!parent)
-        setParent(qApp);
-
     onCoreDatabaseServerChanged();
     d->checkNullUser();
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -1294,8 +1277,8 @@ void UserModel::revertRow(int row)
 }
 
 /**
-  Define the filter of the model.
-  \sa Utils::Database::getWhereClause()
+ * Define the filter of the model. The QHash keys are Core::IUser datarepresentation.
+ * \sa Utils::Database::getWhereClause()
 */
 void UserModel::setFilter(const QHash<int,QString> &conditions)
 {
@@ -1307,11 +1290,13 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
         QString baseField = "";
         switch (r)
         {
+        case Core::IUser::Uuid : baseField = b->fieldName(Table_USERS, USER_UUID); break;
         case Core::IUser::Name : baseField = b->fieldName(Table_USERS, USER_NAME); break;
         case Core::IUser::Firstname : baseField = b->fieldName(Table_USERS, USER_FIRSTNAME); break;
         default: break;
         }
-        if (baseField.isEmpty()) continue;
+        if (baseField.isEmpty())
+            continue;
         filter += QString("(`%1` %2) AND\n").arg(baseField, conditions.value(r));
     }
     filter.chop(5);

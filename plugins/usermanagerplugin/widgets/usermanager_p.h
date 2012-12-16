@@ -29,21 +29,22 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
 class QModelIndex;
-class QTableView;
-class QToolButton;
-class QToolBar;
-class QLabel;
-class QWidget;
-class QGroupBox;
+class QAction;
+QT_END_NAMESPACE
+
+/**
+ * \file usermanager_p.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 16 Dec 2012
+*/
 
 namespace UserPlugin {
 namespace Internal {
 class UserManagerContext;
-
-namespace Ui {
-    class UserManagerWidget;
-}
+class UserManagerWidgetPrivate;
 
 class UserManagerWidget : public QWidget
 {
@@ -71,33 +72,18 @@ private Q_SLOTS:
     void showUserDebugDialog(const QModelIndex &id);
 
 private:
-    void analyseCurrentUserRights();
-    void selectUserTableView(int row);
+    void selectuserTreeView(int row);
     void changeEvent(QEvent *e);
     void retranslate();
-    void updateButtons();
 
 Q_SIGNALS:
     void closeRequested();
 
 private:
-    Ui::UserManagerWidget *ui;
-    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete;
-    int m_EditingRow;
-    int m_SearchBy;
-    QToolBar *m_ToolBar;
-    QToolButton *m_SearchToolButton;
-    QAction *aCreateUser;
-    QAction *aModifyUser;
-    QAction *aSave;
-    QAction *aRevert;
-    QAction *aDeleteUser;
-    QAction *aQuit;
-    QAction *aToggleSearchView;
-    QAction *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
+    Internal::UserManagerWidgetPrivate *d;
 
-public:
-    UserManagerContext *m_Context;
+//public:
+//    UserManagerContext *m_Context;
 };
 
 }  // End Internal

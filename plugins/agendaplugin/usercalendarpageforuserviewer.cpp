@@ -146,6 +146,8 @@ int UserCalendarPageForUserViewer::sortIndex() const
 
 QWidget *UserCalendarPageForUserViewer::createPage(QWidget *parent)
 {
-    return new UserCalendarPageForUserViewerWidget(parent);
+    UserCalendarPageForUserViewerWidget *w = new UserCalendarPageForUserViewerWidget(parent);
+    w->setParentPageId(id());
+    return w;
 }
 

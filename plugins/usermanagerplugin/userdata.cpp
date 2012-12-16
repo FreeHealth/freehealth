@@ -37,7 +37,6 @@
   \sa UserBase
 */
 
-
 /**
   \class UserPlugin::UserData
   \brief This class owns the user data.
@@ -61,8 +60,8 @@
 */
 
 #include "userdata.h"
-#include "database/userbase.h"
-
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/constants.h>
 
 #include <utils/global.h>
@@ -79,13 +78,15 @@
 #include <QVariant>
 #include <QSet>
 
-using namespace UserPlugin::Internal;
 using namespace UserPlugin;
+using namespace Internal;
 using namespace UserPlugin::Constants;
+
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 namespace UserPlugin {
 namespace Internal {
-
 class UserDynamicDataPrivate {
 public:
     UserDynamicDataPrivate() :
@@ -1059,13 +1060,10 @@ QStringList UserData::warnText() const
 {
     QStringList list;
     int i;
-    UserBase *tkb = UserBase::instance();
-
     QString tmp;
-
     for (i = 0; i < USER_MaxParam; i++)
         tmp += QString("%1 = %2\n")
-        .arg(tkb->fieldName(Table_USERS , i))
+        .arg(userBase()->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
     tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
     tmp += QString("%1 = ").arg("LkIds (list)");
@@ -1093,7 +1091,7 @@ QStringList UserData::warnText() const
             for (i = 0; i < RIGHTS_MaxParam; i++)
                 tmp += QString("%1: %2 = %3\n")
                                    .arg(id)
-                                   .arg(tkb->fieldName(Table_RIGHTS , i))
+                                   .arg(userBase()->fieldName(Table_RIGHTS , i))
                                    .arg(d->m_Role_Rights.value(id).value(i).toString());
         }
     list << tmp;

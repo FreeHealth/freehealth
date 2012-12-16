@@ -54,7 +54,6 @@ namespace Ui {
 class UserIdentityAndLoginPage;
 }
 
-
 class UserIdentityAndLoginPage: public QWizardPage
 {
     Q_OBJECT

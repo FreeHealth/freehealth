@@ -34,17 +34,17 @@
 /**
  * \file userpassworddialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 18 Sept 2009
+ * \version 0.8.2
+ * \date 16 Dec 2012
 */
 
 namespace UserPlugin {
+class UserModel;
+
 namespace Internal {
 namespace Ui {
 class  UserPasswordDialog;
 }  // End ui
-}  // End Internal
-class UserModel;
 
 class USER_EXPORT UserPasswordDialog : public QDialog
 {
@@ -73,7 +73,7 @@ private:
     QString m_CryptedNewPass;
     QDialog * m_Parent;
 };
-
-}  // End UserPlugin
+}  // namespace Internal
+}  // namespace UserPlugin
 
 #endif // USERPASSWORDDIALOG_H

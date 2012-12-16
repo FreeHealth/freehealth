@@ -79,7 +79,8 @@
 
 enum { WarnUserPreferences = false };
 
-using namespace UserPlugin::Internal;
+using namespace UserPlugin;
+using namespace Internal;
 using namespace UserPlugin::Constants;
 using namespace Trans::ConstantTranslations;
 
@@ -100,25 +101,13 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
     return true;
 }
 
-// Initializing static data
-UserBase *UserBase::m_Instance = 0;
-
-/**
-  Returns the unique instance of UserBase. If the instance does not exist it is created.
-  You should never construct a instance of this object using the constructor.
-*/
-UserBase *UserBase::instance()
-{
-    Q_ASSERT(m_Instance);
-    return m_Instance;
-}
-
 /** Constructor, inform Utils::Database of the database scheme. */
 UserBase::UserBase(QObject *parent) :
-    QObject(parent), Utils::Database(),
-    m_initialized(false), m_IsNewlyCreated(false)
+    QObject(parent),
+    Utils::Database(),
+    m_initialized(false),
+    m_IsNewlyCreated(false)
 {
-    m_Instance = this;
     setObjectName("UserBase");
 
     // populate tables and fields of database
@@ -191,16 +180,9 @@ UserBase::UserBase(QObject *parent) :
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
-/**
-  Initialize users base using the \e settings values.
-  \sa Core::ISettings, Core::ISettings::ReadWriteDatabasesPath
-*/
-bool UserBase::initialize(Core::ISettings *s)
+/** Initialize users base. */
+bool UserBase::initialize()
 {
-    Core::ISettings *set = s;
-    if (!set)
-        set = settings();
-
     if (m_initialized)
         return true;
 

@@ -36,9 +36,6 @@
 
 #include <identityplugin/identityeditorwidget.h>
 
-// TODO: remove this line
-#include <zipcodesplugin/zipcodescompleters.h>
-
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
@@ -180,7 +177,9 @@ int DefaultUserIdentityPage::sortIndex() const
 
 QWidget *DefaultUserIdentityPage::createPage(QWidget *parent)
 {
-    return new DefaultUserIdentityWidget(parent);
+    DefaultUserIdentityWidget *w = new DefaultUserIdentityWidget(parent);
+    w->setParentPageId(id());
+    return w;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -188,8 +187,7 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(0), //new Ui::UserViewer_ContactUI),
     m_Mapper(0),
-    m_Model(0),
-    m_ZipCompleter(0)
+    m_Model(0)
 {
     QHBoxLayout *lay = new QHBoxLayout(this);
     setLayout(lay);
@@ -232,20 +230,6 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
 //    m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::Photo);
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::Login64);
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
-
-//    m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Address, "plainText");
-//    m_Mapper->addMapping(ui->country, Core::IUser::IsoCountry, "currentIsoCountry");
-//    m_Mapper->addMapping(ui->zipcodeLineEdit, Core::IUser::Zipcode);
-//    m_Mapper->addMapping(ui->cityLineEdit, Core::IUser::City);
-//    m_Mapper->addMapping(ui->tel1LineEdit, Core::IUser::Tel1);
-//    m_Mapper->addMapping(ui->tel2LineEdit, Core::IUser::Tel2);
-//    m_Mapper->addMapping(ui->tel3LineEdit, Core::IUser::Tel3);
-//    m_Mapper->addMapping(ui->faxLineEdit, Core::IUser::Fax);
-//    m_Mapper->addMapping(ui->mailLineEdit, Core::IUser::Mail);
-//    m_ZipCompleter = new ZipCodes::ZipCountryCompleters(this);
-//    m_ZipCompleter->setCityLineEdit(ui->cityLineEdit);
-//    m_ZipCompleter->setZipLineEdit(ui->zipcodeLineEdit);
-//    m_ZipCompleter->setCountryComboBox(ui->country);
 }
 
 void DefaultUserContactWidget::setUserIndex(const int index)
@@ -310,7 +294,9 @@ int DefaultUserContactPage::sortIndex() const
 
 QWidget *DefaultUserContactPage::createPage(QWidget *parent)
 {
-    return new DefaultUserContactWidget(parent);
+    DefaultUserContactWidget *w = new DefaultUserContactWidget(parent);
+    w->setParentPageId(id());
+    return w;
 }
 
 
@@ -411,7 +397,9 @@ int DefaultUserProfessionalPage::sortIndex() const
 
 QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)
 {
-    return new DefaultUserProfessionalWidget(parent);
+    DefaultUserProfessionalWidget *w = new DefaultUserProfessionalWidget(parent);
+    w->setParentPageId(id());
+    return w;
 }
 
 
@@ -508,7 +496,9 @@ int DefaultUserRightsPage::sortIndex() const
 
 QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
 {
-    return new DefaultUserRightsWidget(parent);
+    DefaultUserRightsWidget *w = new DefaultUserRightsWidget(parent);
+    w->setParentPageId(id());
+    return w;
 }
 
 
@@ -626,7 +616,7 @@ DefaultUserPapersPage::DefaultUserPapersPage(const PaperType type, QObject *pare
     IUserViewerPage(parent),
     m_type(type)
 {
-    setObjectName("DefaultUserPapersPage");
+    setObjectName("DefaultUserPapersPage_" + QString::number((int)type));
 }
 
 DefaultUserPapersPage::~DefaultUserPapersPage()
@@ -664,7 +654,9 @@ int DefaultUserPapersPage::sortIndex() const
 
 QWidget *DefaultUserPapersPage::createPage(QWidget *parent)
 {
-    return new DefaultUserPapersWidget(m_type, parent);
+    DefaultUserPapersWidget *w = new DefaultUserPapersWidget(m_type, parent);
+    w->setParentPageId(id());
+    return w;
 }
 
 

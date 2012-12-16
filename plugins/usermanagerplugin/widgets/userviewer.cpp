@@ -25,36 +25,31 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class UserPlugin::UserViewer
-  \brief This class is a data wrapper for users.
-  When you instanciate this widget, it retreive and show the
-  UserPlugin::UserModel::currentUserIndex().\n
-  Rights are managed via the UserPlugin::UserModel.\n
-  Changes are automaticaly saved into the UserPlugin::UserModel.\n
-  You can add pages to the viewer using the virtual class UserPlugin::IUserViewerPage. \n
-  \todo limit memory usage.
-*/
+ * \class UserPlugin::UserViewer
+ * \brief This class is a data widget wrapper for users.
+ * This mapper has its own UserPlugin::UserModel independent from the
+ * Core::IUser and filter it on the user uuid. Data are sent to this
+ * model and all usermodel must be updated after a submition of data.
+ */
 
 #include "userviewer.h"
-#include "iuserviewerpage.h"
-#include "defaultuserviewerpages.h"
+#include <usermanagerplugin/widgets/iuserviewerpage.h>
+#include <usermanagerplugin/widgets/defaultuserviewerpages.h>
+#include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/usermanagermodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
-#include <coreplugin/dialogs/pagewidget.h>
-#include <extensionsystem/pluginmanager.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
-#include "ui_userviewer_identity.h"
-#include "ui_userviewer_papers.h"
-#include "ui_userviewer_medicalrights.h"
-#include "ui_userviewer_professional.h"
-
+#include <QStackedWidget>
+#include <QHBoxLayout>
+#include <QScrollArea>
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -63,6 +58,12 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+
+// TODO
+// Get pages from the model
+//
 
 namespace UserPlugin {
 namespace Internal {
@@ -78,7 +79,6 @@ UserViewerModelCoreListener::~UserViewerModelCoreListener() {}
 bool UserViewerModelCoreListener::coreAboutToClose()
 {
     qWarning() << Q_FUNC_INFO;
-    _viewer->disconnectPluginManager();
     return true;
 }
 
@@ -86,44 +86,77 @@ class UserViewerPrivate
 {
 public:
     UserViewerPrivate(UserViewer *parent) :
-        m_Model(0),
-        m_Widget(0),
+        m_userModel(0),
+        m_stackedWidgets(0),
         m_Listener(0),
         m_CurrentRow(-1),
+        m_identityPageIndex(-1),
         m_CanRead(false),
+        m_userManagerModel(0),
         q(parent)
     {}
 
     bool canReadRow(int row)
     {
         bool canRead = false;
-        int currentUserRow = m_Model->currentUserIndex().row();
+        int currentUserRow = m_userModel->currentUserIndex().row();
         if (currentUserRow == row) {
             // showing currentuser
-            Core::IUser::UserRights r = Core::IUser::UserRights(m_Model->currentUserData(Core::IUser::ManagerRights).toInt());
+            Core::IUser::UserRights r = Core::IUser::UserRights(m_userModel->currentUserData(Core::IUser::ManagerRights).toInt());
             canRead = (r ^ Core::IUser::ReadOwn);
         } else {
             // not showing currentuser
-            Core::IUser::UserRights r = Core::IUser::UserRights(m_Model->currentUserData(Core::IUser::ManagerRights).toInt());
+            Core::IUser::UserRights r = Core::IUser::UserRights(m_userModel->currentUserData(Core::IUser::ManagerRights).toInt());
             canRead = (r & Core::IUser::ReadAll);
         }
         return canRead;
     }
 
+    void setUserModelAndRow(UserModel *model, int row)
+    {
+        for(int i = 0; i < m_widgets.count(); ++i) {
+            IUserViewerWidget *w = m_widgets.at(i);
+            if (w) {
+                w->setUserModel(model);
+                w->setUserIndex(row);
+            }
+        }
+    }
+
+    void populateStackedWidget()
+    {
+        foreach(IUserViewerPage *page, m_userManagerModel->pages()) {
+            // add a scrollarea with the widget's page to add
+            QWidget *pageWidget = page->createPage(m_stackedWidgets);
+            IUserViewerWidget *w = qobject_cast<IUserViewerWidget*>(pageWidget);
+            Q_ASSERT(w);
+            m_widgets << w;
+            pageWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            if (pageWidget->layout())
+                pageWidget->layout()->setMargin(0);
+            QScrollArea *scroll = new QScrollArea(q);
+            scroll->setWidget(pageWidget);
+            scroll->setWidgetResizable(true);
+            scroll->setFrameShape(QFrame::NoFrame);
+            m_stackedWidgets->addWidget(scroll);
+        }
+    }
+
 public:
-    UserModel *m_Model;
-    Core::PageWidget *m_Widget;
-    QList<IUserViewerPage*> m_pages;
+    UserModel *m_userModel;
+    QStackedWidget *m_stackedWidgets;
+    QList<IUserViewerWidget *> m_widgets;
     UserViewerModelCoreListener *m_Listener;
-    int m_CurrentRow;
+    int m_CurrentRow, m_identityPageIndex;
     bool m_CanRead;
+    UserManagerModel *m_userManagerModel;
+    QString m_currentUserUuid;
 
 private:
     UserViewer *q;
 };
 }  // End Internal
 }  // End UserPlugin
-
 
 UserViewer::UserViewer(QWidget *parent) :
     QWidget(parent),
@@ -133,50 +166,19 @@ UserViewer::UserViewer(QWidget *parent) :
     d->m_Listener = new UserViewerModelCoreListener(this);
     pluginManager()->addObject(d->m_Listener);
 
-    d->m_Model = UserModel::instance(); //new UserModel(this);
+    // Manage user model && stackedwidget
+    d->m_userModel = new UserModel(this);
+    d->m_userModel->initialize();
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
-    d->m_Widget = new Core::PageWidget(this);
-    layout->addWidget(d->m_Widget);
-
-//    d->m_pages << new Internal::DefaultUserIdentityPage(this);
-    d->m_pages << new Internal::DefaultUserContactPage(this);
-    d->m_pages << new Internal::DefaultUserRightsPage(this);
-    d->m_pages << new Internal::DefaultUserProfessionalPage(this);
-
-    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::GenericPaper, this);
-    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::AdministrativePaper, this);
-    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::PrescriptionPaper, this);
-
-    d->m_pages << pluginManager()->getObjects<IUserViewerPage>();
-
-    d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
-    d->m_Widget->setSettingKey("UserViewer/Pages");
-    d->m_Widget->setupUi(false);
-
-    d->m_Widget->expandAllCategories();
-
-    d->m_Widget->setVisible(d->canReadRow(d->m_Model->currentUserIndex().row()));
-
-    for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
-        IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
-        if (w) {
-            w->setUserModel(d->m_Model);
-            w->setUserIndex(d->m_Model->currentUserIndex().row());
-        }
-    }
-
-    int width = size().width();
-    int third = width/3;
-    d->m_Widget->setSplitterSizes(QList<int>() << third << width-third);
-
-    connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
-    connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
-//    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
-//    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
+    d->m_stackedWidgets = new QStackedWidget(this);
+    layout->addWidget(d->m_stackedWidgets);
+    d->setUserModelAndRow(d->m_userModel, 0);
 }
 
+/** Dtor */
 UserViewer::~UserViewer()
 {
     pluginManager()->removeObject(d->m_Listener);
@@ -185,77 +187,48 @@ UserViewer::~UserViewer()
     d = 0;
 }
 
-void UserViewer::disconnectPluginManager()
+/** Define the UserPlugin::Internal::UserManagerModel to use in the mapper */
+bool UserViewer::initialize(Internal::UserManagerModel *model)
 {
-    // Disconnect all pluginmanager signals
-    pluginManager()->disconnect(this);
+    d->m_userManagerModel = model;
+    d->populateStackedWidget();
+    return true;
 }
 
 /** \brief Change current viewing user to \e modelRow from UserModel */
-void UserViewer::changeUserTo(const int modelRow)
+void UserViewer::setCurrentUser(const QString &userUid)
 {
-    // manage row changing
-    if (d->canReadRow(modelRow)) {
-        d->m_CurrentRow = modelRow;
-        for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
-            IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
-            if (w) {
-                w->setUserModel(d->m_Model);
-                w->setUserIndex(modelRow);
-            }
-        }
-    } else {
-        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
-    }
+    qWarning() << "UserViewer::setCurrentUser" << userUid;
+    if (d->m_currentUserUuid == userUid)
+        return;
+    d->m_currentUserUuid = userUid;
+    QHash<int, QString> where;
+    where.insert(Core::IUser::Uuid, QString("='%1'").arg(userUid));
+    d->m_userModel->setFilter(where);
+//    if (d->canReadRow(modelRow)) {
+        d->m_CurrentRow = 0;
+        d->setUserModelAndRow(d->m_userModel, 0);
+//    } else {
+//        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
+//    }
+}
+
+/** Set the current IUserViewerPage to present in the viewer */
+void UserViewer::setCurrentPage(int index)
+{
+    qWarning() << "UserViewer::setCurrentPage"<<index;
+    if (index == -1)
+        d->m_stackedWidgets->setCurrentIndex(0);
+    d->m_stackedWidgets->setCurrentIndex(index);
 }
 
 void UserViewer::submitChangesToModel()
 {
-    for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
-        IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
+    for(int i = 0; i < d->m_widgets.count(); ++i) {
+        IUserViewerWidget *w = d->m_widgets.at(i);
         if (w) {
             if (!w->submit())
                 LOG_ERROR(w->objectName() + " submition error");
         }
-    }
-}
-
-void UserViewer::pluginManagerObjectAdded(QObject *o)
-{
-    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
-    if (page) {
-        d->m_pages << page;
-        d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
-        d->m_Widget->setupUi(false);
-
-        for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
-            IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
-            if (w) {
-                w->setUserModel(d->m_Model);
-                w->setUserIndex(d->m_CurrentRow);
-            }
-        }
-        d->m_Widget->expandAllCategories();
-    }
-}
-
-void UserViewer::pluginManagerObjectRemoved(QObject *o)
-{
-    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
-    if (page) {
-        if (d->m_pages.contains(page)) {
-            d->m_pages.removeAll(page);
-            d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
-            d->m_Widget->setupUi(false);
-        }
-
-        for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
-            IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
-            if (w) {
-                w->setUserModel(d->m_Model);
-                w->setUserIndex(d->m_CurrentRow);
-            }
-        }
-        d->m_Widget->expandAllCategories();
     }
 }

@@ -25,11 +25,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "userfirstrunpage.h"
-#include "widgets/useridentifier.h"
-#include "widgets/usermanager.h"
-#include "widgets/userwizard.h"
-#include "usermanagerplugin/database/userbase.h"
-#include "usermanagerplugin/usermodel.h"
+#include <usermanagerplugin/widgets/useridentifier.h>
+#include <usermanagerplugin/widgets/usermanager.h>
+#include <usermanagerplugin/widgets/userwizard.h>
+#include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/database/userbase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -50,10 +51,10 @@ using namespace UserPlugin;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserCreationPage::UserCreationPage(QWidget *parent) :
     QWizardPage(parent),

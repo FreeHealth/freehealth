@@ -54,6 +54,9 @@ public:
     UserCalendarPageForUserViewerWidget(QWidget *parent = 0);
     ~UserCalendarPageForUserViewerWidget();
 
+    void setParentPageId(const QString &id) {m_parentId=id;}
+    const QString &parentUserViewerPageId() const {return m_parentId;}
+
     void setUserModel(UserPlugin::UserModel *model);
     void setUserIndex(const int index);
     void clear();
@@ -65,6 +68,7 @@ private Q_SLOTS:
 private:
     UserCalendarModelFullEditorWidget *m_Widget;
     UserPlugin::UserModel *m_UserModel;
+    QString m_parentId;
 };
 
 class UserCalendarPageForUserViewer : public UserPlugin::IUserViewerPage
