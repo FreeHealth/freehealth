@@ -152,7 +152,7 @@ void UserManager::closeEvent(QCloseEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   UserManagerDialog   /////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-UserManagerDialog::UserManagerDialog(QWidget * parent) :
+UserManagerDialog::UserManagerDialog(QWidget *parent) :
     QDialog(parent)
 {
     Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
@@ -230,7 +230,8 @@ public:
     void createUiAndActions()
     {
         ui->setupUi(q);
-        ui->splitter->setSizes(QList<int>() << 1 << 3);
+        ui->userSearchLayout->setMargin(0);
+        ui->userSearchLayout->setSpacing(0);
 
         m_SearchBy = Core::IUser::Name;
         aCreateUser = new QAction(q);
@@ -397,6 +398,8 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     d->createUiAndActions();
     d->createToolBar();
     d->manageSearchLine();
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
     d->ui->userViewer->setEnabled(false);
 }
 
@@ -422,6 +425,8 @@ bool UserManagerWidget::initialize()
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     d->analyseCurrentUserRights();
     retranslate();
+    int width = size().width();
+    d->ui->splitter->setSizes(QList<int>() << width/4 << width*3/4);
     return true;
 }
 

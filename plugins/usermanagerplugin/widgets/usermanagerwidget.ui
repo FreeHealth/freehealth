@@ -29,11 +29,20 @@
    </item>
    <item row="1" column="0">
     <widget class="Utils::MiniSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout">
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="userSearchLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="Utils::QButtonLineEdit" name="searchLineEdit"/>
        </item>

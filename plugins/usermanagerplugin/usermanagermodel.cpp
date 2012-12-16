@@ -83,7 +83,7 @@ public:
 
         _pages << pluginManager()->getObjects<IUserViewerPage>();
 
-        qSort(_pages.begin(), _pages.end(), Core::IGenericPage::lessThan);
+        qSort(_pages.begin(), _pages.end(), Core::IGenericPage::sortIndexLessThan);
     }
 
     // Get the SQL command filtered

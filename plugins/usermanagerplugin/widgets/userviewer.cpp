@@ -112,14 +112,20 @@ public:
         return canRead;
     }
 
-    void setUserModelAndRow(UserModel *model, int row)
+    // We must create the stack BEFORE
+    void setUserModel(UserModel *model)
     {
         for(int i = 0; i < m_widgets.count(); ++i) {
             IUserViewerWidget *w = m_widgets.at(i);
-            if (w) {
-                w->setUserModel(model);
-                w->setUserIndex(row);
-            }
+            w->setUserModel(model);
+        }
+    }
+
+    void setUserModelRow(int row)
+    {
+        for(int i = 0; i < m_widgets.count(); ++i) {
+            IUserViewerWidget *w = m_widgets.at(i);
+            w->setUserIndex(row);
         }
     }
 
@@ -168,14 +174,12 @@ UserViewer::UserViewer(QWidget *parent) :
 
     // Manage user model && stackedwidget
     d->m_userModel = new UserModel(this);
-    d->m_userModel->initialize();
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
     d->m_stackedWidgets = new QStackedWidget(this);
     layout->addWidget(d->m_stackedWidgets);
-    d->setUserModelAndRow(d->m_userModel, 0);
 }
 
 /** Dtor */
@@ -191,7 +195,9 @@ UserViewer::~UserViewer()
 bool UserViewer::initialize(Internal::UserManagerModel *model)
 {
     d->m_userManagerModel = model;
+    d->m_userModel->initialize();
     d->populateStackedWidget();
+    d->setUserModel(d->m_userModel);
     return true;
 }
 
@@ -207,7 +213,7 @@ void UserViewer::setCurrentUser(const QString &userUid)
     d->m_userModel->setFilter(where);
 //    if (d->canReadRow(modelRow)) {
         d->m_CurrentRow = 0;
-        d->setUserModelAndRow(d->m_userModel, 0);
+        d->setUserModelRow(0);
 //    } else {
 //        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
 //    }
