@@ -141,7 +141,8 @@ QString UserCalendarPageForUserViewer::title() const
 
 int UserCalendarPageForUserViewer::sortIndex() const
 {
-    return 10;
+    // Just after Identity.*
+    return 35;
 }
 
 QWidget *UserCalendarPageForUserViewer::createPage(QWidget *parent)
