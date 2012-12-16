@@ -28,7 +28,10 @@
         <enum>Qt::Horizontal</enum>
        </property>
        <widget class="QWidget" name="layoutWidget">
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="userSearchLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
           <widget class="Utils::QButtonLineEdit" name="searchLineEdit"/>
          </item>
