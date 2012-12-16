@@ -500,7 +500,7 @@ UserManagerWidget::~UserManagerWidget()
     delete d;
 }
 
-/** Initialize the view, connect actions */
+/** Initializes the view, connect actions */
 bool UserManagerWidget::initialize()
 {
 //    UserModel *model = userModel();
@@ -529,7 +529,7 @@ bool UserManagerWidget::initialize()
 }
 
 /**
- * Check the content of the view, verify unsaved data.
+ * Checks the content of the view, verify unsaved data.
  * Return \e true if the view can be closed, otherwise return false
  */
 bool UserManagerWidget::canCloseParent()
@@ -554,7 +554,7 @@ bool UserManagerWidget::canCloseParent()
 }
 
 
-/** Change the search method for the users's model */
+/** Changes the search method for the users's model */
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 {
     if (act == d->searchByNameAct)
@@ -569,7 +569,7 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 
 /**
  * \internal
- * React to Core::IUser::currentUserChanged
+ * Reacts to Core::IUser::currentUserChanged
  */
 void UserManagerWidget::onCurrentUserChanged()
 {
@@ -580,7 +580,7 @@ void UserManagerWidget::onCurrentUserChanged()
 //    ui->userViewer->setCurrentUser(row);
 }
 
-/** Update the users' model filter */
+/** Updates the users' model filter */
 void UserManagerWidget::onSearchRequested()
 {
     // TODO: Manage error when user select an action in the toolbutton
@@ -590,7 +590,7 @@ void UserManagerWidget::onSearchRequested()
     userModel()->setFilter(where);
 }
 
-/** Create a new user using UserPlugin::UserWizard. */
+/** Creates a new user using UserPlugin::UserWizard. */
 void UserManagerWidget::onCreateUserRequested()
 {
     int createdRow = d->ui->userTreeView->model()->rowCount();
@@ -644,7 +644,7 @@ void UserManagerWidget::onSaveRequested()
 
 /**
  * \internal
- * Slot connected to the delete user action
+ * Slot connected to the "delete user" action
  */
 void UserManagerWidget::onDeleteUserRequested()
 {
