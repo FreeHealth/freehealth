@@ -256,12 +256,7 @@ int UserManagerModel::pageIndexFromIndex(const QModelIndex &index)
 {
     QStandardItem *item = itemFromIndex(index);
     const QString &id = item->data().toString();
-
-    qWarning() << "ID?" << id << item->data();
-
     for(int i=0; i < d->_pages.count(); ++i) {
-        qWarning() << "   " << d->_pages.at(i)->id();
-
         if (d->_pages.at(i)->id()==id)
             return i;
     }
