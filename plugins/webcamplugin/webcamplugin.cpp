@@ -111,6 +111,9 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     // No user is logged in until here
     
+    messageSplash(tr("Initializing Webcam..."));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
     detectDevices();
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
