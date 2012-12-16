@@ -423,7 +423,7 @@ public:
     }
 
     // Check the current user rights and adapt the view to them.
-    void analyseCurrentUserRights()
+    void analyzeCurrentUserRights()
     {
         // retreive user manager rights from model
         UserModel *m = userModel();
@@ -521,7 +521,7 @@ bool UserManagerWidget::initialize()
 
     d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
-    d->analyseCurrentUserRights();
+    d->analyzeCurrentUserRights();
     retranslate();
     int width = size().width();
     d->ui->splitter->setSizes(QList<int>() << width/4 << width*3/4);
@@ -576,7 +576,7 @@ void UserManagerWidget::onCurrentUserChanged()
     int row = userModel()->currentUserIndex().row();
     d->ui->userTreeView->setCurrentIndex(d->ui->userTreeView->model()->index(row, Core::IUser::Name));
 //    ui->userTreeView->selectRow(row);
-    d->analyseCurrentUserRights();
+    d->analyzeCurrentUserRights();
 //    ui->userViewer->setCurrentUser(row);
 }
 
