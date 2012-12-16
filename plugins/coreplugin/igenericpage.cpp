@@ -56,3 +56,7 @@ bool Core::IGenericPage::lessThan(IGenericPage *one, IGenericPage *two)
     return false;
 }
 
+bool Core::IGenericPage::sortIndexLessThan(IGenericPage *one, IGenericPage *two)
+{
+    return one->sortIndex() < two->sortIndex();
+}

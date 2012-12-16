@@ -57,6 +57,7 @@ public:
     virtual int sortIndex() const = 0;
 
     static bool lessThan(IGenericPage *one, IGenericPage *two);
+    static bool sortIndexLessThan(IGenericPage *one, IGenericPage *two);
 };
 
 } // namespace Core
