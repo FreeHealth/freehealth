@@ -70,7 +70,8 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userviewer_papers.ui \
     $${PWD}/widgets/userviewer_medicalrights.ui \
     $${PWD}/widgets/userviewer_professional.ui \
-    $${PWD}/widgets/useridentityandloginpage.ui
+    $${PWD}/widgets/useridentityandloginpage.ui \
+    $${PWD}/widgets/userviewer_treedelegate.ui
 
 # include translations
 TRANSLATION_NAME = usermanager

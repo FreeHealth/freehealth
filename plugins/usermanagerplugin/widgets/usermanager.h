@@ -30,18 +30,51 @@
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <QMainWindow>
 #include <QDialog>
-
+#include <QStyledItemDelegate>
 
 /**
  * \file usermanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 15 May 2011
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 16 Dec 2012
 */
 
 namespace UserPlugin {
 namespace Internal {
+class UserManagerModel;
 class UserManagerWidget;
+namespace Ui{
+class UserViewerTreeDelegateWidget;
+}
+
+class UserTreeDelegateWidget : public QWidget
+{
+public:
+    UserTreeDelegateWidget(QWidget *parent = 0);
+    ~UserTreeDelegateWidget();
+
+    void setTitle(const QString &title);
+    void setFullName(const QString &fullName);
+    void setGenderPhoto(const QPixmap &pix);
+
+private:
+    Ui::UserViewerTreeDelegateWidget *ui;
+};
+
+class UserTreeDelegate : public QStyledItemDelegate
+{
+public:
+    UserTreeDelegate(QObject *parent);
+    ~UserTreeDelegate();
+    void setUserManagerModel(UserManagerModel *model);
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    UserManagerModel *_model;
+    UserTreeDelegateWidget *_itemWidget;
+};
 }  // End Internal
 
 class USER_EXPORT UserManager : public QMainWindow

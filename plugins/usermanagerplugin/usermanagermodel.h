@@ -66,6 +66,9 @@ public:
     int pageIndexFromIndex(const QModelIndex &index);
     QList<IUserViewerPage *> pages() const;
     QString userUuid(const QModelIndex &index);
+    int genderIndex(const QModelIndex &index);
+    QString lastLogin(const QModelIndex &index);
+    QString title(const QModelIndex &index);
 
 Q_SIGNALS:
     

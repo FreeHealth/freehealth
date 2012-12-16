@@ -81,8 +81,10 @@
 #include <QGroupBox>
 #include <QDialogButtonBox>
 #include <QCloseEvent>
+#include <QPainter>
 
 #include "ui_usermanagerwidget.h"
+#include "ui_userviewer_treedelegate.h"
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -97,7 +99,9 @@ static inline UserPlugin::UserModel *userModel() {return userCore().userModel();
 
 namespace UserPlugin {
 namespace Internal {
-
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////    UserManagerContext    ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 class UserManagerContext : public Core::IContext
 {
 public:
@@ -109,6 +113,93 @@ public:
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////    UserTreeDelegateWidget    //////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+UserTreeDelegateWidget::UserTreeDelegateWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::UserViewerTreeDelegateWidget)
+{
+    ui->setupUi(this);
+}
+
+UserTreeDelegateWidget::~UserTreeDelegateWidget()
+{
+    delete ui;
+}
+
+void UserTreeDelegateWidget::setTitle(const QString &title)
+{
+    ui->line1->setText(title);
+}
+
+void UserTreeDelegateWidget::setFullName(const QString &fullName)
+{
+    ui->line2->setText(fullName);
+}
+
+void UserTreeDelegateWidget::setGenderPhoto(const QPixmap &pix)
+{
+    ui->photoLabel->setPixmap(pix.scaled(QSize(32,32)));
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////    UserTreeDelegate    /////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+UserTreeDelegate::UserTreeDelegate(QObject *parent) :
+    QStyledItemDelegate(parent),
+    _itemWidget(new UserTreeDelegateWidget)
+{
+}
+
+UserTreeDelegate::~UserTreeDelegate()
+{
+    delete _itemWidget;
+}
+
+void UserTreeDelegate::setUserManagerModel(UserManagerModel *model)
+{
+    _model = model;
+}
+
+void UserTreeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (index.parent().isValid()) {
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
+    _itemWidget->resize(option.rect.size());
+
+    // Update data of widget here.
+    const QString &s = index.data().toString();
+    _itemWidget->setTitle(_model->title(index));
+    _itemWidget->setFullName(s);
+    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index)));
+
+    // Change the background color of the widget if it is selected.
+    QPalette pal;
+    if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
+        pal.setBrush(QPalette::Window, QBrush(QColor(Qt::lightGray)));
+    } else {
+        pal.setBrush(QPalette::Window, QBrush(QColor(Qt::transparent)));
+    }
+    _itemWidget->setPalette(pal);
+
+    // Paint the widget now.
+    painter->save();
+    painter->translate(option.rect.topLeft());
+    _itemWidget->render(painter);
+    painter->restore();
+}
+
+QSize UserTreeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    const bool topLevel = !index.parent().isValid();
+    if (topLevel)
+        return QSize(64, 64);
+    return QStyledItemDelegate::sizeHint(option, index);
+}
+
 }  // End  Internal
 }  // End UserPlugin
 
@@ -116,7 +207,7 @@ public:
 ////////////////////////////////   UserManager   ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 UserManager::UserManager(QWidget * parent) :
-        QMainWindow(parent)
+    QMainWindow(parent)
 {
     Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
     if (!userModel()->hasCurrentUser())
@@ -416,11 +507,18 @@ bool UserManagerWidget::initialize()
     d->m_model = new Internal::UserManagerModel(this);
     d->m_model->initialize();
     d->m_model->setFilter(Internal::UserManagerModelFilter());
+
     d->ui->userTreeView->setModel(d->m_model);
     d->ui->userTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     d->ui->userTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->ui->userTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->userViewer->initialize(d->m_model);
+
+    // Add delegate
+    UserTreeDelegate *delegate = new UserTreeDelegate(this);
+    delegate->setUserManagerModel(d->m_model);
+    d->ui->userTreeView->setItemDelegate(delegate);
+
     d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     d->analyseCurrentUserRights();

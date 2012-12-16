@@ -41,6 +41,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -50,6 +51,8 @@
 #include <QStackedWidget>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QLabel>
+
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -57,17 +60,17 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
-// TODO
-// Get pages from the model
-//
+namespace {
+const char * const CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
+}
 
 namespace UserPlugin {
 namespace Internal {
-
 UserViewerModelCoreListener::UserViewerModelCoreListener(UserPlugin::UserViewer *parent) :
         Core::ICoreListener(parent)
 {
@@ -82,6 +85,9 @@ bool UserViewerModelCoreListener::coreAboutToClose()
     return true;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////    UserViewerPrivate    /////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 class UserViewerPrivate
 {
 public:
@@ -132,19 +138,44 @@ public:
     void populateStackedWidget()
     {
         foreach(IUserViewerPage *page, m_userManagerModel->pages()) {
+            QWidget *container = new QWidget(q);
+            QVBoxLayout *lay = new QVBoxLayout(container);
+            lay->setMargin(0);
+            container->setLayout(lay);
+
+            // add title and line
+            QFont bold;
+            bold.setBold(true);
+            bold.setPointSize(bold.pointSize()+1);
+            QLabel *title = new QLabel(container);
+            title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            title->setFont(bold);
+            title->setWordWrap(true);
+            title->setText(page->title());
+            title->setStyleSheet(::CSS);
+            title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            lay->addWidget(title);
+
+            QFrame *line = new QFrame(container);
+            line->setFrameShape(QFrame::HLine);
+            line->setFrameShadow(QFrame::Sunken);
+            lay->addWidget(line);
+
             // add a scrollarea with the widget's page to add
-            QWidget *pageWidget = page->createPage(m_stackedWidgets);
+            QWidget *pageWidget = page->createPage(container);
             IUserViewerWidget *w = qobject_cast<IUserViewerWidget*>(pageWidget);
             Q_ASSERT(w);
             m_widgets << w;
             pageWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             if (pageWidget->layout())
                 pageWidget->layout()->setMargin(0);
-            QScrollArea *scroll = new QScrollArea(q);
+            QScrollArea *scroll = new QScrollArea(container);
             scroll->setWidget(pageWidget);
             scroll->setWidgetResizable(true);
             scroll->setFrameShape(QFrame::NoFrame);
-            m_stackedWidgets->addWidget(scroll);
+            lay->addWidget(scroll);
+
+            m_stackedWidgets->addWidget(container);
         }
     }
 

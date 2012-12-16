@@ -113,7 +113,10 @@ public:
                                  << Constants::USER_NAME
                                  << Constants::USER_SECONDNAME
                                  << Constants::USER_FIRSTNAME
-                                 << Constants::USER_UUID) +
+                                 << Constants::USER_UUID
+                                 << Constants::USER_TITLE
+                                 << Constants::USER_LASTLOG
+                                 << Constants::USER_GENDER) +
                 QString(" WHERE (%1)").arg(f);
         return sql;
     }
@@ -240,11 +243,38 @@ QList<IUserViewerPage *> UserManagerModel::pages() const
     return d->_pages;
 }
 
-/** Return the user uuid corresponding to the \e index. */
+/** Return the user uuid corresponding to the \e index whatever is the branch deep. */
 QString UserManagerModel::userUuid(const QModelIndex &index)
 {
-    QModelIndex uid = d->_sqlModel->index(index.row(), 3);
+    QModelIndex uid = this->index(index.row(), 0, index.parent());
+    while (uid.parent().isValid()) uid = uid.parent();
+    uid = d->_sqlModel->index(uid.row(), 3);
     return d->_sqlModel->data(uid).toString();
+}
+
+int UserManagerModel::genderIndex(const QModelIndex &index)
+{
+    QModelIndex sql = d->_sqlModel->index(index.row(), 6);
+    const QString &g = d->_sqlModel->data(sql).toString();
+    if (g=="M")
+        return 0;
+    else if (g=="F")
+        return 1;
+    else if (g=="H")
+        return 2;
+    return 0;
+}
+
+QString UserManagerModel::lastLogin(const QModelIndex &index)
+{
+    QModelIndex sql = d->_sqlModel->index(index.row(), 5);
+    return d->_sqlModel->data(sql).toString();
+}
+
+QString UserManagerModel::title(const QModelIndex &index)
+{
+    QModelIndex sql = d->_sqlModel->index(index.row(), 4);
+    return Trans::ConstantTranslations::titles().at(d->_sqlModel->data(sql).toInt());
 }
 
 /**
