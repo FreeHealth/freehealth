@@ -265,7 +265,7 @@ void UserViewer::submitChangesToModel()
         IUserViewerWidget *w = d->m_widgets.at(i);
         if (w) {
             if (!w->submit())
-                LOG_ERROR(w->objectName() + " submition error");
+                LOG_ERROR(w->objectName() + " submission error");
         }
     }
 }
