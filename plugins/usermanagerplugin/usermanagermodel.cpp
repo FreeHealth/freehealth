@@ -230,11 +230,11 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     {
         int i = index.row();
-        QModelIndex name = d->_sqlModel->index(i, 0);
-        const QString &secondname = d->_sqlModel->index(i, 1).data().toString();
-        QModelIndex firstname = d->_sqlModel->index(i, 2);
-        QModelIndex title = d->_sqlModel->index(i, 4);
-        QModelIndex lastLog = d->_sqlModel->index(i, 5);
+        QModelIndex name = d->_sqlModel->index(i, Name);
+        const QString &secondname = d->_sqlModel->index(i, SecondName).data().toString();
+        QModelIndex firstname = d->_sqlModel->index(i, FirstName);
+        QModelIndex title = d->_sqlModel->index(i, Title);
+        QModelIndex lastLogin = d->_sqlModel->index(i, LastLogin);
         QString titleString = Trans::ConstantTranslations::titles().at(d->_sqlModel->data(title).toInt());
         QString fullname;
         if (!secondname.isEmpty())
@@ -245,7 +245,7 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
                                "<span style=\"font-size:small;color:gray\">%3</span>")
                 .arg(titleString.replace(" ", "&nbsp;"))
                 .arg(fullname)
-                .arg(tr("Last loging: ") + d->_sqlModel->data(lastLog).toString());
+                .arg(tr("Last login: %1").arg(d->_sqlModel->data(lastLogin).toString()));
         return html;
     }
     case Qt::DecorationRole:
