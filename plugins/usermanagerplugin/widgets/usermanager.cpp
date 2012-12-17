@@ -454,6 +454,7 @@ bool UserManagerWidget::initialize()
  */
 bool UserManagerWidget::canCloseParent()
 {
+    // FIXME: DO NOT USE USERMODEL()
     if (userModel()->isDirty()) {
         int ret = Utils::withButtonsMessageBox(tr("You've modified the users list."), tr("Do you want to save your changes?"), "",
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
@@ -472,7 +473,6 @@ bool UserManagerWidget::canCloseParent()
     }
     return true;
 }
-
 
 /** Changes the search method for the users's model */
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
@@ -505,6 +505,7 @@ void UserManagerWidget::onSearchRequested()
 {
     // TODO: Manage error when user select an action in the toolbutton
     // TODO: where can only be calculated by model
+    // FIXME: DO NOT USE USERMODEL()
     QHash<int, QString> where;
     where.insert(d->m_SearchBy, QString("LIKE '%1%'").arg(d->ui->searchLineEdit->text()));
     userModel()->setFilter(where);
@@ -513,6 +514,7 @@ void UserManagerWidget::onSearchRequested()
 /** Creates a new user using UserPlugin::UserWizard. */
 void UserManagerWidget::onCreateUserRequested()
 {
+    // FIXME: DO NOT USE TREEVIEW MODEL
     int createdRow = d->ui->userTreeView->model()->rowCount();
     if (!d->ui->userTreeView->model()->insertRows(createdRow, 1)) {
         LOG_ERROR("Error creating new user: cannot add row to model");
@@ -559,6 +561,7 @@ void UserManagerWidget::onSaveRequested()
  */
 void UserManagerWidget::onDeleteUserRequested()
 {
+    // FIXME: DO NOT USE USERMODEL()
     if (!d->ui->userTreeView->selectionModel()->hasSelection())
         return;
 
@@ -644,6 +647,7 @@ void UserManagerWidget::retranslate()
 /** For debugging purpose */
 void UserManagerWidget::showUserDebugDialog(const QModelIndex &id)
 {
+    // FIXME: DO NOT USE USERMODEL()
     QStringList list;
     list << userModel()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
     Utils::quickDebugDialog(list);
