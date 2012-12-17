@@ -520,7 +520,7 @@ bool UserManagerWidget::initialize()
 //    delegate->setUserManagerModel(d->m_model);
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate(this);
     d->ui->userTreeView->setItemDelegate(delegate);
-    d->ui->userTreeView->setIndentation(5);
+    d->ui->userTreeView->setIndentation(10);
     d->ui->userTreeView->setAnimated(true);
     d->ui->userTreeView->setUniformRowHeights(false);
 
