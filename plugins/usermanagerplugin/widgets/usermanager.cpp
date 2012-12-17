@@ -328,7 +328,7 @@ public:
         QObject::connect(aToggleSearchView, SIGNAL(toggled(bool)), q, SLOT(toggleSearchView(bool)));
 
         // connect tableView selector
-        QObject::connect(ui->userTreeView, SIGNAL(clicked(QModelIndex)), q, SLOT(onUserClicked(const QModelIndex &)));
+        QObject::connect(ui->userTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(onCurrentSelectedIndexChanged(QModelIndex,QModelIndex)));
 
         // connect search line edit
         QObject::connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), q, SLOT(onSearchRequested()));
@@ -528,8 +528,7 @@ void UserManagerWidget::onCreateUserRequested()
             return;
         }
     } else {
-//        d->ui->userTreeView->selectRow(createdRow);
-        onUserClicked(index);
+        onCurrentSelectedIndexChanged(index, d->ui->userTreeView->currentIndex());
     }
 }
 
@@ -592,11 +591,11 @@ void UserManagerWidget::toggleSearchView(bool checked)
     }
 }
 
-void UserManagerWidget::onUserClicked(const QModelIndex &index)
+void UserManagerWidget::onCurrentSelectedIndexChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << "UserManagerWidget::onUserClicked" << index;
-    d->ui->userViewer->setCurrentUser(d->m_model->userUuid(index));
-    d->ui->userViewer->setCurrentPage(d->m_model->pageIndexFromIndex(index));
+//    qWarning() << "UserManagerWidget::onCurrentSelectedIndexChanged" << index;
+    d->ui->userViewer->setCurrentUser(d->m_model->userUuid(current));
+    d->ui->userViewer->setCurrentPage(d->m_model->pageIndexFromIndex(current));
     d->ui->userViewer->setEnabled(true);
     d->updateButtons();
 }

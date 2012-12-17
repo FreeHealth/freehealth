@@ -63,7 +63,7 @@ private Q_SLOTS:
     void onSearchRequested();
     void onSearchToolButtonTriggered(QAction *act);
     void onSaveRequested();
-    void onUserClicked(const QModelIndex &index);
+    void onCurrentSelectedIndexChanged(const QModelIndex &current, const QModelIndex &previous);
     void onCreateUserRequested();
     void onClearModificationRequested();
     void onDeleteUserRequested();
