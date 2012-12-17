@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "mainwindow.h"
 #include "fakehtmlmodel.h"
+//#include "AnnouncementItemDelegate.h"
 
 #include "ui_mainwindow.h"
 
@@ -41,7 +42,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->listView->setItemDelegate(new Utils::HtmlDelegate(this));
     ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
+    ui->treeView->setIndentation(10);
     ui->tableView->setItemDelegate(new Utils::HtmlDelegate(this));
+
+//    ui->listView->setItemDelegate(new AnnouncementItemDelegate(ui->listView));
+//    ui->treeView->setItemDelegate(new AnnouncementItemDelegate(ui->treeView));
+//    ui->tableView->setItemDelegate(new AnnouncementItemDelegate(ui->tableView));
 
     QStandardItemModel *model = new FakeHtmlModel(this);
     ui->listView->setModel(model);

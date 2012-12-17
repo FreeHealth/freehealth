@@ -21,6 +21,9 @@ FakeHtmlModel::FakeHtmlModel(QObject *parent) :
     test = new QStandardItem;
     test->setText("<b>This is Multiline</b><br />html code <br />without decoration");
     invisibleRootItem()->appendRow(test);
+    QStandardItem *test2 = new QStandardItem;
+    test2->setText("<b>This is Child</b><br />html code <br />with decoration");
+    test->appendRow(test2);
 }
 
 QVariant FakeHtmlModel::data(const QModelIndex &index, int role) const

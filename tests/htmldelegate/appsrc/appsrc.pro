@@ -10,12 +10,14 @@ include(../../../libs/rpath.pri)
 
 HEADERS = mainwindow.h \
     ../../../libs/utils/widgets/htmldelegate.h \
-    fakehtmlmodel.h
+    fakehtmlmodel.h \
+    AnnouncementItemDelegate.h
 
 SOURCES = main.cpp \
     ../../../libs/utils/widgets/htmldelegate.cpp \
     mainwindow.cpp \
-    fakehtmlmodel.cpp
+    fakehtmlmodel.cpp \
+    AnnouncementItemDelegate.cpp
 
 FORMS = mainwindow.ui
 
