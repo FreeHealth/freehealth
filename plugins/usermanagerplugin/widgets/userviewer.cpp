@@ -146,12 +146,11 @@ public:
             bold.setBold(true);
             bold.setPointSize(bold.pointSize()+1);
             QLabel *title = new QLabel(container);
-            title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             title->setFont(bold);
             title->setWordWrap(true);
             title->setText(page->title());
             title->setStyleSheet(::CSS);
-            title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
             lay->addWidget(title);
 
             QFrame *line = new QFrame(container);
