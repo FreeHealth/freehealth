@@ -140,12 +140,9 @@ public:
     void appendPages(QStandardItem *currentItem)
     {
         QMap<QString, QStandardItem *> categories;
-        QFont bold;
-        bold.setBold(true);
-
         foreach(IUserViewerPage *page, _pages) {
             QStandardItem *item = new QStandardItem;
-            item->setText(page->displayName());
+            item->setText(QString("<span style=\"color:black\">%1</span>").arg(page->displayName()));
             item->setData(page->id());
 
             QIcon icon = page->categoryIcon();
@@ -160,8 +157,7 @@ public:
             QStandardItem *catItem;
             if (!categories.contains(currentCategory)) {
                 catItem = new QStandardItem;
-                catItem->setText(trCategories.at(0));
-//                catItem->setFont(bold);
+                catItem->setText(QString("<span style=\"color:black\">%1</span>").arg(trCategories.at(0)));
                 catItem->setData(page->id());
                 categories.insert(currentCategory, catItem);
                 currentItem->appendRow(catItem);
@@ -245,8 +241,8 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
             fullname = name.data().toString() + " - " + secondname + " " + firstname.data().toString();
         else
             fullname = name.data().toString() + " " + firstname.data().toString();
-        QString html = QString("<b>%1</b><br />%2<br />"
-                               "<span style=\"font-size:small;color:darkgray\">%3</span>")
+        QString html = QString("<span style=\"font-weight:bold;color:black\">%1<br />%2</span><br />"
+                               "<span style=\"font-size:small;color:gray\">%3</span>")
                 .arg(titleString.replace(" ", "&nbsp;"))
                 .arg(fullname)
                 .arg(tr("Last loging: ") + d->_sqlModel->data(lastLog).toString());
