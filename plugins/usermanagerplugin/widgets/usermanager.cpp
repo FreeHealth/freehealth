@@ -113,94 +113,6 @@ public:
         m_context = Core::Context(Core::Constants::C_USERMANAGER);
     }
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////    UserTreeDelegateWidget    //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-UserTreeDelegateWidget::UserTreeDelegateWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::UserViewerTreeDelegateWidget)
-{
-    ui->setupUi(this);
-}
-
-UserTreeDelegateWidget::~UserTreeDelegateWidget()
-{
-    delete ui;
-}
-
-void UserTreeDelegateWidget::setTitle(const QString &title)
-{
-    ui->line1->setText(title);
-}
-
-void UserTreeDelegateWidget::setFullName(const QString &fullName)
-{
-    ui->line2->setText(fullName);
-}
-
-void UserTreeDelegateWidget::setGenderPhoto(const QPixmap &pix)
-{
-    ui->photoLabel->setPixmap(pix.scaled(QSize(24, 24)));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////    UserTreeDelegate    /////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-UserTreeDelegate::UserTreeDelegate(QObject *parent) :
-    QStyledItemDelegate(parent),
-    _itemWidget(new UserTreeDelegateWidget)
-{
-}
-
-UserTreeDelegate::~UserTreeDelegate()
-{
-    delete _itemWidget;
-}
-
-void UserTreeDelegate::setUserManagerModel(UserManagerModel *model)
-{
-    _model = model;
-}
-
-void UserTreeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    if (index.parent().isValid()) {
-        QStyledItemDelegate::paint(painter, option, index);
-        return;
-    }
-    _itemWidget->resize(option.rect.size());
-
-    // Update data of widget here.
-    const QString &s = index.data().toString();
-    _itemWidget->setTitle(_model->title(index));
-    _itemWidget->setFullName(s);
-    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index), Core::ITheme::BigIcon ));
-
-    // Change the background color of the widget if it is selected.
-    QPalette pal;
-    if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
-        pal.setBrush(QPalette::Window, QBrush(QColor(Qt::lightGray)));
-    } else {
-        pal.setBrush(QPalette::Window, QBrush(QColor(Qt::transparent)));
-    }
-    _itemWidget->setPalette(pal);
-
-    // Paint the widget now.
-    painter->save();
-    painter->translate(option.rect.topLeft());
-    _itemWidget->render(painter);
-    painter->restore();
-}
-
-QSize UserTreeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    const bool topLevel = !index.parent().isValid();
-    if (topLevel)
-        return QSize(125, 42);
-    return QStyledItemDelegate::sizeHint(option, index);
-}
-
 }  // End  Internal
 }  // End UserPlugin
 
@@ -424,13 +336,14 @@ public:
     }
 
     // Check the current user rights and adapt the view to them.
+    // The UserManagerModel manages the user rights too (in the filter).
     void analyzeCurrentUserRights()
     {
         // retreive user manager rights from model
-        UserModel *m = userModel();
-        Core::IUser::UserRights r (m->currentUserData(Core::IUser::ManagerRights).toInt());
+        Core::IUser::UserRights r(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
         // translate to bools
-        m_CanModify = (r & Core::IUser::WriteAll);
+        m_CanReadOwn = (r & Core::IUser::ReadOwn);
+        m_CanModify = (r & Core::IUser::WriteAll || r & Core::IUser::WriteOwn);
         m_CanCreate = (r & Core::IUser::Create);
         m_CanViewAllUsers = (r & Core::IUser::ReadAll);
         m_CanDelete = (r & Core::IUser::Delete);
@@ -438,7 +351,7 @@ public:
         updateButtons();
 
         // manage specific creation widgets
-        ui->userTreeView->setVisible(m_CanViewAllUsers);
+        ui->userTreeView->setVisible(m_CanViewAllUsers || m_CanReadOwn);
         ui->searchLineEdit->setVisible(m_CanViewAllUsers);
     }
 
@@ -461,7 +374,7 @@ public:
 
 public:
     Ui::UserManagerWidget *ui;
-    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete;
+    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete, m_CanReadOwn;
     int m_EditingRow;
     int m_SearchBy;
     QToolBar *m_ToolBar;

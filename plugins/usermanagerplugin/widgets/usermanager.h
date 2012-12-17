@@ -46,35 +46,6 @@ class UserManagerWidget;
 namespace Ui{
 class UserViewerTreeDelegateWidget;
 }
-
-class UserTreeDelegateWidget : public QWidget
-{
-public:
-    UserTreeDelegateWidget(QWidget *parent = 0);
-    ~UserTreeDelegateWidget();
-
-    void setTitle(const QString &title);
-    void setFullName(const QString &fullName);
-    void setGenderPhoto(const QPixmap &pix);
-
-private:
-    Ui::UserViewerTreeDelegateWidget *ui;
-};
-
-class UserTreeDelegate : public QStyledItemDelegate
-{
-public:
-    UserTreeDelegate(QObject *parent);
-    ~UserTreeDelegate();
-    void setUserManagerModel(UserManagerModel *model);
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-private:
-    UserManagerModel *_model;
-    UserTreeDelegateWidget *_itemWidget;
-};
 }  // End Internal
 
 class USER_EXPORT UserManager : public QMainWindow
