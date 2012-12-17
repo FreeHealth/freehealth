@@ -35,8 +35,11 @@
 #include <QTextDocument>
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
+#include <QTreeView>
 
 #include <QDebug>
+
+enum { DrawDelegateRect = false };
 
 namespace Utils {
 
@@ -61,7 +64,6 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 {
     QStyleOptionViewItemV4 optionV4 = option;
     initStyleOption(&optionV4, index);
-
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
 
     QTextDocument doc;
@@ -79,17 +81,53 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (optionV4.state & QStyle::State_Selected)
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
 
-    // we only need the left of the plain text rect and the vertical middle. All other data are irrelevant because of HTML.
+    // plainTextRect == rect where to draw the HTML
+    // We only need the left of the plain text rect and the vertical middle.
+    // All other data are irrelevant because of HTML.
     QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
+    plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
+
+    // TextRect includes the decoration + item data. On treeview it does not include the branch.
     QRect textRect = optionV4.rect;
     textRect.setTop(plainTextRect.center().y() - doc.size().height() / 2);
     textRect.setHeight(doc.size().height());
+    textRect = textRect.adjusted(1,1,-1,-1);
+
+    QPen pen;
+    if (DrawDelegateRect) {
+        pen.setColor(QColor("red"));
+        painter->setPen(pen);
+        painter->drawRect(plainTextRect);
+        pen.setColor(QColor("blue"));
+        painter->setPen(pen);
+        painter->drawRoundedRect(textRect, 5, 5);
+    }
+
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    //doc.setTextWidth(textRect.width());
     QRect htmlRect = textRect.translated(-textRect.topLeft());
     painter->translate(plainTextRect.left(), 0);
+
+    // Manage indentation?
+    QTreeView *treeview = qobject_cast<QTreeView*>(const_cast<QWidget*>(optionV4.widget));
+    if (treeview) {
+        QModelIndex idx = index;
+        int indent = treeview->indentation();
+        while (idx.parent().isValid()) {
+            idx = idx.parent();
+            indent += treeview->indentation();
+        }
+        painter->translate(-QPointF(indent, 0));
+    }
+
+    if (DrawDelegateRect) {
+        pen.setColor(QColor("green"));
+        painter->setPen(pen);
+        painter->drawRoundedRect(htmlRect.adjusted(2,2,-2,-2), 5, 5);
+    }
+
+    doc.setTextWidth(htmlRect.width());
     doc.drawContents(painter, htmlRect);
     painter->translate(-plainTextRect.left(), 0);
     painter->restore();
