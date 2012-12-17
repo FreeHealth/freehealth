@@ -120,7 +120,7 @@ public:
     bool hasPhoto() const;
 
 public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &patientIndex);
+    void setCurrentIndex(const QModelIndex &modelIndex);
     virtual bool submit();
     void updateGenderImage(int genderIndex);
     void updateGenderImage();

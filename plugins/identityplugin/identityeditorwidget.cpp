@@ -166,8 +166,8 @@ bool IsDirtyDataWidgetMapper::isDirty() const
 /** Overload method (creates the internal cache) */
 void IsDirtyDataWidgetMapper::setCurrentIndex(int index)
 {
-    refreshCache();
     QDataWidgetMapper::setCurrentIndex(index);
+    refreshCache();
 }
 
 void IsDirtyDataWidgetMapper::refreshCache()
@@ -287,8 +287,8 @@ public:
         addMapperMapping();
     }
 
-    // Create the mapper over a specified model
-    void createPatientModelMapper(QAbstractItemModel *model)
+    // Create the mapper over a specified model. No-auto mapping
+    void createModelMapper(QAbstractItemModel *model)
     {
         if (m_xmlOnly) {
             if (m_Mapper) {
@@ -307,7 +307,6 @@ public:
         m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
         m_Mapper->setModel(model);
         m_Model = model;
-        addMapperMapping();
     }
 
     // Add mapping to the mapper
@@ -607,13 +606,13 @@ void IdentityEditorWidget::clear()
  * (which represents the current patient), you can set your own QAbstractItemModel.
  * The mapper is auto-selecting the first row of the model.\n
  * Use the setCurrentIndex() to set the current index of the current editing index.\n
- * \note The model should be a QTableAbstractItemModel.
- * \sa setCurrentIndex()
+ * \note The model should be a QTableAbstractItemModel. There are no auto-mapping.
+ * \sa setCurrentIndex(), addMapping()
  */
 void IdentityEditorWidget::setModel(QAbstractItemModel *model)
 {
-    d->createPatientModelMapper(model);
-    d->m_Mapper->toFirst();
+    d->createModelMapper(model);
+//    d->m_Mapper->toFirst();
     updateGenderImage();
 }
 
@@ -669,7 +668,7 @@ bool IdentityEditorWidget::addMapping(AvailableWidget widget, int modelIndex)
 void IdentityEditorWidget::setXmlInOut(bool xmlonly)
 {
     d->m_xmlOnly = xmlonly;
-    d->createPatientModelMapper(0);
+    d->createModelMapper(0);
     updateGenderImage();
 }
 
@@ -694,14 +693,15 @@ QString IdentityEditorWidget::toXml() const
 /**
  * If you don't want to use the identity editor over the Core::IPatient
  * (which represents the current patient), you can set your own Patients::PatientModel.
- * Use the setPatientModel() and setCurrentIndex() to set the current index of
+ * Use the setModel() and setCurrentIndex() to set the current index of
  * the current editing index.
- * \sa setPatientModel()
+ * \sa setModel(), initiliaze()
  */
-void IdentityEditorWidget::setCurrentIndex(const QModelIndex &patientIndex)
+void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 {
-    if (patientIndex.model() == d->m_Mapper->model())
-        d->m_Mapper->setCurrentModelIndex(patientIndex);
+//    qWarning() << modelIndex << (modelIndex.model() == d->m_Mapper->model());
+    if (modelIndex.model() == d->m_Mapper->model())
+        d->m_Mapper->setCurrentIndex(modelIndex.row());
 }
 
 /**
