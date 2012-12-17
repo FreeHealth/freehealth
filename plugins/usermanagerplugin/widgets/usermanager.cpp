@@ -523,6 +523,7 @@ bool UserManagerWidget::initialize()
     d->ui->userTreeView->setIndentation(10);
     d->ui->userTreeView->setAnimated(true);
     d->ui->userTreeView->setUniformRowHeights(false);
+    d->ui->userTreeView->setAlternatingRowColors(true);
 
     d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
