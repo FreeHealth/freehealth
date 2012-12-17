@@ -232,39 +232,37 @@ bool UserViewer::initialize(Internal::UserManagerModel *model)
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewer::setCurrentUser(const QString &userUid)
 {
-    qWarning() << "UserViewer::setCurrentUser" << userUid;
+//    qWarning() << "UserViewer::setCurrentUser" << userUid;
     if (d->m_currentUserUuid == userUid)
         return;
-//    d->setUserModelRow(-1);
     d->m_currentUserUuid = userUid;
     QHash<int, QString> where;
     where.insert(Core::IUser::Uuid, QString("='%1'").arg(userUid));
     d->m_userModel->setFilter(where);
     d->setUserModelRow(0);
     d->m_CurrentRow = 0;
-
-//    if (d->canReadRow(modelRow)) {
-//    } else {
-//        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
-//    }
 }
 
 /** Set the current IUserViewerPage to present in the viewer */
 void UserViewer::setCurrentPage(int index)
 {
-    qWarning() << "UserViewer::setCurrentPage"<<index;
+//    qWarning() << "UserViewer::setCurrentPage"<<index;
     if (index == -1 || index >= d->m_stackedWidgets->count())
         d->m_stackedWidgets->setCurrentIndex(0);
     d->m_stackedWidgets->setCurrentIndex(index);
 }
 
+/**
+ * Submit all UserPlugin::IUserViewerWidget modifications to the internal UserPlugin::UserModel
+ * \sa UserPlugin::IUserViewerWidget::submit()
+ */
 void UserViewer::submitChangesToModel()
 {
     for(int i = 0; i < d->m_widgets.count(); ++i) {
         IUserViewerWidget *w = d->m_widgets.at(i);
-        if (w) {
-            if (!w->submit())
-                LOG_ERROR(w->objectName() + " submission error");
-        }
+        if (w && !w->submit())
+            LOG_ERROR(w->objectName() + " submission error: " + w->parentUserViewerPageId());
     }
+    d->m_userModel->submitAll();
+    userModel()->forceReset();
 }

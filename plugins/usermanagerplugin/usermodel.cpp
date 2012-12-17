@@ -1169,25 +1169,13 @@ bool UserModel::submitUser(const QString &uuid)
         qWarning() << "modified" << user->isModified();
 
     // act only on modified users
-    bool hasRights = false;
     if (user->isModified()) {
-        // check user write rights
-        if (user->isCurrent() &&
-            (d->m_CurrentUserRights & Core::IUser::WriteOwn)) {
-            hasRights = true;
-        } else if ((!user->isCurrent()) &&
-                   (d->m_CurrentUserRights & Core::IUser::WriteAll)) {
-            hasRights = true;
+        if (!d->userCanWriteData(uuid)) {
+            LOG_ERROR("Not enought rights to save data");
+            return false;
         }
-
-        if (WarnAllProcesses)
-            qWarning() << "isCurrent" << user->isCurrent() << "hasRights" << hasRights;
-
-        if (hasRights) {
-            if (!userBase()->saveUser(user)) {
-                toReturn = false;
-            }
-        }
+        if (!userBase()->saveUser(user))
+            toReturn = false;
     }
 
     if (WarnAllProcesses)

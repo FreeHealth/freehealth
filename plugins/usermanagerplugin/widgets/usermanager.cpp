@@ -400,6 +400,7 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     QWidget(parent),
     d(new UserManagerWidgetPrivate(this))
 {
+    setObjectName("UserManagerWidget");
     d->createUiAndActions();
     d->createToolBar();
     d->manageSearchLine();
@@ -534,10 +535,8 @@ void UserManagerWidget::onCreateUserRequested()
 
 void UserManagerWidget::onClearModificationRequested()
 {
-//    if (userModel()->revertAll())
-//        m_Parent->statusBar()->showMessage(tr("Modifications cleared"), 2000);
-//    else
-//        m_Parent->statusBar()->showMessage(tr("Can not clear modifications"), 2000);
+    if (userModel()->revertAll())
+        Utils::informativeMessageBox(tr("Modification correctly cleared"), "");
 }
 
 /**
@@ -546,18 +545,12 @@ void UserManagerWidget::onClearModificationRequested()
  */
 void UserManagerWidget::onSaveRequested()
 {
-    if ((!d->m_CanModify) || (!d->m_CanCreate))
+    if ((!d->m_CanModify) && (!d->m_CanCreate))
         return;
     d->m_ToolBar->setFocus();
 
     // tell all pages to submit data to the model
     d->ui->userViewer->submitChangesToModel();
-
-    // submit user to database
-    QString uuid = d->ui->userTreeView->model()->index(d->ui->userTreeView->currentIndex().row(), Core::IUser::Uuid).data().toString();
-    if (!userModel()->submitUser(uuid)) {
-        LOG_ERROR("Unable to save user " + uuid);
-    }
 }
 
 /**
@@ -593,7 +586,7 @@ void UserManagerWidget::toggleSearchView(bool checked)
 
 void UserManagerWidget::onCurrentSelectedIndexChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-//    qWarning() << "UserManagerWidget::onCurrentSelectedIndexChanged" << index;
+    Q_UNUSED(previous);
     d->ui->userViewer->setCurrentUser(d->m_model->userUuid(current));
     d->ui->userViewer->setCurrentPage(d->m_model->pageIndexFromIndex(current));
     d->ui->userViewer->setEnabled(true);
