@@ -18,6 +18,9 @@ FakeHtmlModel::FakeHtmlModel(QObject *parent) :
     QStandardItem *test = new QStandardItem;
     test->setText("<b>This is Multiline</b><br />html code");
     invisibleRootItem()->appendRow(test);
+    test = new QStandardItem;
+    test->setText("<b>This is Multiline</b><br />html code <br />without decoration");
+    invisibleRootItem()->appendRow(test);
 }
 
 QVariant FakeHtmlModel::data(const QModelIndex &index, int role) const
@@ -27,12 +30,14 @@ QVariant FakeHtmlModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DecorationRole:
     {
-        QString path = qApp->applicationDirPath();
-        if (Utils::isRunningOnMac())
-            path += MAC;
-        path += PIX32;
-        path = QDir::cleanPath(path);
-        return QPixmap(path);
+        if (index.row()==0) {
+            QString path = qApp->applicationDirPath();
+            if (Utils::isRunningOnMac())
+                path += MAC;
+            path += PIX32;
+            path = QDir::cleanPath(path);
+            return QPixmap(path);
+        }
     }
     default: break;
     }
