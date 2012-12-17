@@ -59,16 +59,17 @@ public:
     ~UserManagerModel();
     bool initialize();
 
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void setFilter(const UserManagerModelFilter &filter);
 
-    int pageIndexFromIndex(const QModelIndex &index);
+    int pageIndexFromIndex(const QModelIndex &index) const;
     QList<IUserViewerPage *> pages() const;
-    QString userUuid(const QModelIndex &index);
-    int genderIndex(const QModelIndex &index);
-    QString lastLogin(const QModelIndex &index);
-    QString title(const QModelIndex &index);
+    QString userUuid(const QModelIndex &index) const;
+    int genderIndex(const QModelIndex &index) const;
+    QString lastLogin(const QModelIndex &index) const;
+    QString title(const QModelIndex &index) const;
 
 Q_SIGNALS:
     

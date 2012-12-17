@@ -38,6 +38,9 @@
 #include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/widgets/defaultuserviewerpages.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -52,6 +55,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
@@ -207,6 +211,42 @@ bool UserManagerModel::initialize()
     return true;
 }
 
+QVariant UserManagerModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.parent().isValid())
+        return QStandardItemModel::data(index, role);
+
+    switch (role) {
+    case Qt::DisplayRole:
+    {
+        int i = index.row();
+        QModelIndex name = d->_sqlModel->index(i, 0);
+        const QString &secondname = d->_sqlModel->index(i, 1).data().toString();
+        QModelIndex firstname = d->_sqlModel->index(i, 2);
+        QModelIndex title = d->_sqlModel->index(i, 4);
+        QModelIndex lastLog = d->_sqlModel->index(i, 5);
+        QString titleString = Trans::ConstantTranslations::titles().at(d->_sqlModel->data(title).toInt());
+        QString fullname;
+        if (!secondname.isEmpty())
+            fullname = name.data().toString() + " - " + secondname + " " + firstname.data().toString();
+        else
+            fullname = name.data().toString() + " " + firstname.data().toString();
+        QString html = QString("<b>%1</b><br />%2<br />"
+                               "<span style=\"font-size:small;color:darkgray\">%3</span>")
+                .arg(titleString.replace(" ", "&nbsp;"))
+                .arg(fullname)
+                .arg(tr("Last loging: ") + d->_sqlModel->data(lastLog).toString());
+        return html;
+    }
+    case Qt::DecorationRole:
+        return theme()->defaultGenderPixmap(genderIndex(index)).scaled(QSize(24, 24));
+    }
+    return QVariant();
+}
+
 Qt::ItemFlags UserManagerModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
@@ -244,7 +284,7 @@ QList<IUserViewerPage *> UserManagerModel::pages() const
 }
 
 /** Return the user uuid corresponding to the \e index whatever is the branch deep. */
-QString UserManagerModel::userUuid(const QModelIndex &index)
+QString UserManagerModel::userUuid(const QModelIndex &index) const
 {
     QModelIndex uid = this->index(index.row(), 0, index.parent());
     while (uid.parent().isValid()) uid = uid.parent();
@@ -252,7 +292,8 @@ QString UserManagerModel::userUuid(const QModelIndex &index)
     return d->_sqlModel->data(uid).toString();
 }
 
-int UserManagerModel::genderIndex(const QModelIndex &index)
+/** Return the gender index of the user \sa Trans::ConstantTranslations::genders() */
+int UserManagerModel::genderIndex(const QModelIndex &index) const
 {
     QModelIndex sql = d->_sqlModel->index(index.row(), 6);
     const QString &g = d->_sqlModel->data(sql).toString();
@@ -265,13 +306,13 @@ int UserManagerModel::genderIndex(const QModelIndex &index)
     return 0;
 }
 
-QString UserManagerModel::lastLogin(const QModelIndex &index)
+QString UserManagerModel::lastLogin(const QModelIndex &index) const
 {
     QModelIndex sql = d->_sqlModel->index(index.row(), 5);
     return d->_sqlModel->data(sql).toString();
 }
 
-QString UserManagerModel::title(const QModelIndex &index)
+QString UserManagerModel::title(const QModelIndex &index) const
 {
     QModelIndex sql = d->_sqlModel->index(index.row(), 4);
     return Trans::ConstantTranslations::titles().at(d->_sqlModel->data(sql).toInt());
@@ -282,7 +323,7 @@ QString UserManagerModel::title(const QModelIndex &index)
  * Returns -1 in case of an error.
  * \sa pages()
  */
-int UserManagerModel::pageIndexFromIndex(const QModelIndex &index)
+int UserManagerModel::pageIndexFromIndex(const QModelIndex &index) const
 {
     QStandardItem *item = itemFromIndex(index);
     const QString &id = item->data().toString();

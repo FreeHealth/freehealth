@@ -45,6 +45,7 @@
 
 #include <utils/log.h>
 #include <utils/widgets/qbuttonlineedit.h>
+#include <utils/widgets/htmldelegate.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -515,9 +516,13 @@ bool UserManagerWidget::initialize()
     d->ui->userViewer->initialize(d->m_model);
 
     // Add delegate
-    UserTreeDelegate *delegate = new UserTreeDelegate(this);
-    delegate->setUserManagerModel(d->m_model);
+//    UserTreeDelegate *delegate = new UserTreeDelegate(this);
+//    delegate->setUserManagerModel(d->m_model);
+    Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate(this);
     d->ui->userTreeView->setItemDelegate(delegate);
+    d->ui->userTreeView->setIndentation(5);
+    d->ui->userTreeView->setAnimated(true);
+    d->ui->userTreeView->setUniformRowHeights(false);
 
     d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
