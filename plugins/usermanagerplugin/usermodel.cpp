@@ -345,6 +345,46 @@ public:
         }
     }
 
+    // Return true if the current user has enought rights to read data from the user \e userUidToRead
+    bool userCanReadData(const QString &userUidToRead)
+    {
+        // TODO: manage user delegates
+        bool canReadAll = false;
+        bool canReadOwn = false;
+        if (!m_CurrentUserUuid.isEmpty()) {
+            // Use internal data
+            canReadAll = m_CurrentUserRights & Core::IUser::ReadAll;
+            canReadOwn = (m_CurrentUserUuid==userUidToRead && m_CurrentUserRights & Core::IUser::ReadOwn);
+        } else {
+            // Use Core::IUser
+            Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+            const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+            canReadAll = rights & Core::IUser::ReadAll;
+            canReadOwn = (userUuid==userUidToRead && rights & Core::IUser::ReadOwn);
+        }
+        return (canReadAll || canReadOwn);
+    }
+
+    // Return true if the current user has enought rights to write data to the user \e userUidToRead
+    bool userCanWriteData(const QString &userUidToRead)
+    {
+        // TODO: manage user delegates
+        bool canWriteAll = false;
+        bool canWriteOwn = false;
+        if (!m_CurrentUserUuid.isEmpty()) {
+            // Use internal data
+            canWriteAll = m_CurrentUserRights & Core::IUser::WriteAll;
+            canWriteOwn = (m_CurrentUserUuid==userUidToRead && m_CurrentUserRights & Core::IUser::WriteOwn);
+        } else {
+            // Use Core::IUser
+            Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+            const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+            canWriteAll = rights & Core::IUser::WriteAll;
+            canWriteOwn = (userUuid==userUidToRead && rights & Core::IUser::WriteOwn);
+        }
+        return (canWriteAll || canWriteOwn);
+    }
+
 public:
     QSqlTableModel *m_Sql;
     QHash<QString, UserData *> m_Uuid_UserList;
@@ -818,7 +858,6 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
 /** Define the data of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
-//    qWarning() << Q_FUNC_INFO ;
     if (!item.isValid())
         return false;
 
@@ -832,28 +871,21 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         LOG_ERROR(QString("Wrong uuid, Index(%1,%2)").arg(item.row()).arg(item.column()));
         return false;
     }
+
+    // Check user rights
+    if (!d->userCanWriteData(uuid))
+        return false;
+
+    // Get userdata pointer from cache/database
     if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
         Q_EMIT memoryUsageChanged();
     }
-
     Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
     if (!user) {
         LOG_ERROR("No user for uuid " + uuid);
         return false;
     }
-
-//    qWarning() << Q_FUNC_INFO << user;
-
-    // check user write rights
-    if (user->isCurrent()) {
-        if (!d->m_CurrentUserRights & Core::IUser::WriteOwn)
-            return false;
-    } else if (!d->m_CurrentUserRights & Core::IUser::WriteAll)
-        return false;
-
-
-    // TODO: if user if a delegate of current user
 
     // set data directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
@@ -948,9 +980,16 @@ QVariant UserModel::currentUserData(const int column) const
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO << column;
     d->checkNullUser();
-    if (d->m_CurrentUserUuid.isEmpty()) {
+
+    // No current user?
+    if (d->m_CurrentUserUuid.isEmpty())
         return QVariant();
-    }
+
+    // Check user rights
+    if (!d->userCanReadData(d->m_CurrentUserUuid))
+        return QVariant();
+
+    // Get data
     const Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
     if (!user)
         return QVariant();
@@ -969,6 +1008,10 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         LOG_ERROR(QString("Wrong uuid, Index(%1,%2)").arg(item.row()).arg(item.column()));
         return QVariant();
     }
+
+    // Check user rights
+    if (!d->userCanReadData(uuid))
+        return QVariant();
 
     if (uuid==d->m_CurrentUserUuid && (role==Qt::DisplayRole || role==Qt::EditRole)) {
         return currentUserData(item.column());
@@ -1002,49 +1045,18 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
          return c;
     }
     else if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
-        // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
+        // From internal SQL?
         if ((item.column() < Core::IUser::LocaleLanguage)) {
-            // here we suppose that it is the currentUser the ask for data
-//            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
-            // TODO: code here : has delegates rights
-            if (!d->m_CurrentUserUuid.isEmpty()) {
-                // Use internal data
-                if (d->m_CurrentUserRights & Core::IUser::ReadAll)
-                    return d->m_Sql->data(item, role);
-                else if (d->m_CurrentUserUuid == uuid)
-                    return d->m_Sql->data(item, role);
-            } else {
-                // Use Core::IUser
-                Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
-                const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
-                if (rights & Core::IUser::ReadAll
-                        || (userUuid == uuid && Core::IUser::ReadOwn)) {
-                    return d->m_Sql->data(item, role);
-                }
-                return QVariant();
-            }
+            return d->m_Sql->data(item, role);
         }
 
-        // Here we must get values from complete user, so retreive it from database if necessary
+        // From complete UserData ?
         if (!d->m_Uuid_UserList.keys().contains(uuid)) {
             d->addUserFromDatabase(uuid);
             Q_EMIT memoryUsageChanged();
         }
         const Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
         Q_ASSERT(user);
-
-        // check user write rights
-        if (user->isCurrent()) {
-            if (!d->m_CurrentUserRights & Core::IUser::ReadOwn)
-                return QVariant();
-        } else if (!d->m_CurrentUserRights & Core::IUser::ReadAll)
-            return QVariant();
-        // TODO: if user is a delegate of current user
-
-        // get data directly from database using QSqlTableModel if possible
-        if (item.column() < USER_LANGUAGE)
-            return d->m_Sql->data(item, role);
-
         return d->getUserData(user, item.column());
     }
     return toReturn;

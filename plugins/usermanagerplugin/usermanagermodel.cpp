@@ -34,6 +34,7 @@
 
 #include "usermanagermodel.h"
 #include <usermanagerplugin/usercore.h>
+#include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/constants.h>
 #include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/widgets/defaultuserviewerpages.h>
@@ -58,6 +59,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 namespace UserPlugin {
 namespace Internal {
@@ -90,28 +92,37 @@ public:
         qSort(_pages.begin(), _pages.end(), Core::IGenericPage::sortIndexLessThan);
     }
 
-    // Get the SQL command filtered
+    // Get the SQL command filtered. Manages user rights
     QString getSqlQuery(const UserManagerModelFilter &filter)
     {
         QString sql, f;
-        Utils::FieldList birthNameConds;
-        // Birth/second name
-        if (filter._birth.isEmpty()) {
-            birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%'"));
-            birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%'"));
-        } else {
-            birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%1%'").arg(filter._birth));
-            birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%1%'").arg(filter._birth));
+        Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+        bool canReadAll = rights & Core::IUser::ReadAll;
+        bool canReadOwn = rights & Core::IUser::ReadOwn;
+
+        if (canReadAll) {
+            Utils::FieldList birthNameConds;
+            // Birth/second name
+            if (filter._birth.isEmpty()) {
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%'"));
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%'"));
+            } else {
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%1%'").arg(filter._birth));
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%1%'").arg(filter._birth));
+            }
+            f = userBase()->getWhereClause(birthNameConds, Utils::Database::OR);
+            f += " AND ";
+
+            // Firstname
+            if (filter._first.isEmpty())
+                f += userBase()->fieldName(Constants::Table_USERS, Constants::USER_FIRSTNAME) + QString(" LIKE '%'");
+            else
+                f += userBase()->fieldName(Constants::Table_USERS, Constants::USER_FIRSTNAME) + QString(" LIKE '%1%'").arg(filter._first);
+        } else if (canReadOwn) {
+            Utils::FieldList conds;
+            conds << Utils::Field(Constants::Table_USERS, Constants::USER_UUID, QString("='%1'").arg(userModel()->currentUserData(Core::IUser::Uuid).toString()));
+            f = userBase()->getWhereClause(conds);
         }
-        f = userBase()->getWhereClause(birthNameConds, Utils::Database::OR);
-        f += " AND ";
-
-        // Firstname
-        if (filter._first.isEmpty())
-            f += userBase()->fieldName(Constants::Table_USERS, Constants::USER_FIRSTNAME) + QString(" LIKE '%'");
-        else
-            f += userBase()->fieldName(Constants::Table_USERS, Constants::USER_FIRSTNAME) + QString(" LIKE '%1%'").arg(filter._first);
-
         // Add the SELECT
         sql = userBase()->select(Constants::Table_USERS, QList<int>()
                                  << Constants::USER_NAME
@@ -256,6 +267,8 @@ Qt::ItemFlags UserManagerModel::flags(const QModelIndex &index) const
 /** Filter the model */
 void UserManagerModel::setFilter(const UserManagerModelFilter &filter)
 {
+    // Clear model and apply filter
+    clear();
     d->_sqlModel->setQuery(d->getSqlQuery(filter), userBase()->database());
     if (!d->_sqlModel->query().isActive()) {
         LOG_ERROR("Wrong filtering");
@@ -265,6 +278,7 @@ void UserManagerModel::setFilter(const UserManagerModelFilter &filter)
         return;
     }
     setColumnCount(1);
+
     // Read all indexes from the sqlmodel and create the StandardItems
     for(int i = 0; i < d->_sqlModel->rowCount(); ++i) {
         QModelIndex name = d->_sqlModel->index(i, 0);
