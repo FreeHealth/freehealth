@@ -102,6 +102,7 @@ public:
 public Q_SLOTS:
     void postCoreInitialization();
     void onCurrentUserChanged();
+    void onUserDataChanged(int);
     void onCurrentPatientChanged();
 
     // Interface of MainWidowActionHandler

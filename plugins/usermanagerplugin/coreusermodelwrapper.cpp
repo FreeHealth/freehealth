@@ -87,8 +87,12 @@ CoreUserModelWrapper::~CoreUserModelWrapper()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool CoreUserModelWrapper::initialize(UserModel *model)
 {
+    if (d->_userModel)
+        disconnect(d->_userModel);
+
     d->_userModel = model;
     connect(d->_userModel, SIGNAL(userConnected(QString)), this, SLOT(newUserConnected(QString)));
+    connect(d->_userModel, SIGNAL(modelReset()), this, SIGNAL(reset()));
     return true;
 }
 

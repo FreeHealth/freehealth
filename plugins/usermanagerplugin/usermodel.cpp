@@ -104,7 +104,8 @@ class UserModelPrivate
 {
 public:
     UserModelPrivate(UserModel *parent) :
-            m_Sql(0)
+        m_Sql(0),
+        q(parent)
     {}
 
     ~UserModelPrivate()
@@ -119,10 +120,16 @@ public:
         }
     }
 
-    /**
-      Retreive all users data and store it to the cache of the model.
-      \sa numberOfUsersInMemory(), m_Uuid_UserList
-    */
+    // Clear the cache
+    void clearCache()
+    {
+        qDeleteAll(m_Uuid_UserList);
+        m_Uuid_UserList.clear();
+        m_Uuid_UserList.insert(m_CurrentUserUuid, userBase()->getUserByUuid(m_CurrentUserUuid));
+    }
+
+    // Retreive all users data and store it to the cache of the model.
+    // \sa numberOfUsersInMemory(), m_Uuid_UserList
     bool addUserFromDatabase(const QString &uuid)
     {
         if (WarnAllProcesses)
@@ -137,10 +144,8 @@ public:
         return true;
     }
 
-    /**
-      Retreive all users data and store it to the cache of the model. Return the created uuid.
-      \sa numberOfUsersInMemory(), m_Uuid_UserList
-    */
+    // Retreive all users data and store it to the cache of the model. Return the created uuid.
+    //  \sa numberOfUsersInMemory(), m_Uuid_UserList
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
     {
         // get user from database
@@ -157,7 +162,8 @@ public:
         return uuid;
     }
 
-    /** Create and empty user into the model. The uuid of the user is automatically set and returned. */
+    // Create and empty user into the model.
+    // The uuid of the user is automatically set and returned.
     QString createNewEmptyUser(UserModel *model, const int createdRow)
     {
         Q_UNUSED(model);
@@ -390,6 +396,9 @@ public:
     QHash<QString, UserData *> m_Uuid_UserList;
     QString m_CurrentUserUuid;
     Core::IUser::UserRights m_CurrentUserRights;
+
+private:
+    UserModel *q;
 };
 
 }  // End Internal
@@ -409,6 +418,7 @@ bool UserModel::initialize()
     onCoreDatabaseServerChanged();
     d->checkNullUser();
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    return true;
 }
 
 /** Destructor */
@@ -684,9 +694,14 @@ QModelIndex UserModel::currentUserIndex() const
     return QModelIndex();
 }
 
+/**
+ * Force a reset of the model:
+ * - clear any internal cache
+ * - reset the model
+ */
 void UserModel::forceReset()
 {
-    d->checkNullUser();
+    d->clearCache();
     d->m_Sql->select();
     reset();
 }
@@ -1169,25 +1184,13 @@ bool UserModel::submitUser(const QString &uuid)
         qWarning() << "modified" << user->isModified();
 
     // act only on modified users
-    bool hasRights = false;
     if (user->isModified()) {
-        // check user write rights
-        if (user->isCurrent() &&
-            (d->m_CurrentUserRights & Core::IUser::WriteOwn)) {
-            hasRights = true;
-        } else if ((!user->isCurrent()) &&
-                   (d->m_CurrentUserRights & Core::IUser::WriteAll)) {
-            hasRights = true;
+        if (!d->userCanWriteData(uuid)) {
+            LOG_ERROR("Not enought rights to save data");
+            return false;
         }
-
-        if (WarnAllProcesses)
-            qWarning() << "isCurrent" << user->isCurrent() << "hasRights" << hasRights;
-
-        if (hasRights) {
-            if (!userBase()->saveUser(user)) {
-                toReturn = false;
-            }
-        }
+        if (!userBase()->saveUser(user))
+            toReturn = false;
     }
 
     if (WarnAllProcesses)
