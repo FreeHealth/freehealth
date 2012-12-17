@@ -141,7 +141,7 @@ void UserTreeDelegateWidget::setFullName(const QString &fullName)
 
 void UserTreeDelegateWidget::setGenderPhoto(const QPixmap &pix)
 {
-    ui->photoLabel->setPixmap(pix.scaled(QSize(32,32)));
+    ui->photoLabel->setPixmap(pix.scaled(QSize(24, 24)));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ void UserTreeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     const QString &s = index.data().toString();
     _itemWidget->setTitle(_model->title(index));
     _itemWidget->setFullName(s);
-    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index)));
+    _itemWidget->setGenderPhoto(theme()->defaultGenderPixmap(_model->genderIndex(index), Core::ITheme::BigIcon ));
 
     // Change the background color of the widget if it is selected.
     QPalette pal;
@@ -197,7 +197,7 @@ QSize UserTreeDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
 {
     const bool topLevel = !index.parent().isValid();
     if (topLevel)
-        return QSize(64, 64);
+        return QSize(125, 42);
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
@@ -424,7 +424,7 @@ public:
     }
 
     // Check the current user rights and adapt the view to them.
-    void analyseCurrentUserRights()
+    void analyzeCurrentUserRights()
     {
         // retreive user manager rights from model
         UserModel *m = userModel();
@@ -501,7 +501,7 @@ UserManagerWidget::~UserManagerWidget()
     delete d;
 }
 
-/** Initialize the view, connect actions */
+/** Initializes the view, connect actions */
 bool UserManagerWidget::initialize()
 {
 //    UserModel *model = userModel();
@@ -526,7 +526,7 @@ bool UserManagerWidget::initialize()
 
     d->connectUiAndActions();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
-    d->analyseCurrentUserRights();
+    d->analyzeCurrentUserRights();
     retranslate();
     int width = size().width();
     d->ui->splitter->setSizes(QList<int>() << width/4 << width*3/4);
@@ -534,7 +534,7 @@ bool UserManagerWidget::initialize()
 }
 
 /**
- * Check the content of the view, verify unsaved data.
+ * Checks the content of the view, verify unsaved data.
  * Return \e true if the view can be closed, otherwise return false
  */
 bool UserManagerWidget::canCloseParent()
@@ -559,7 +559,7 @@ bool UserManagerWidget::canCloseParent()
 }
 
 
-/** Change the search method for the users's model */
+/** Changes the search method for the users's model */
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 {
     if (act == d->searchByNameAct)
@@ -574,18 +574,18 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 
 /**
  * \internal
- * React to Core::IUser::currentUserChanged
+ * Reacts to Core::IUser::currentUserChanged
  */
 void UserManagerWidget::onCurrentUserChanged()
 {
     int row = userModel()->currentUserIndex().row();
     d->ui->userTreeView->setCurrentIndex(d->ui->userTreeView->model()->index(row, Core::IUser::Name));
 //    ui->userTreeView->selectRow(row);
-    d->analyseCurrentUserRights();
+    d->analyzeCurrentUserRights();
 //    ui->userViewer->setCurrentUser(row);
 }
 
-/** Update the users' model filter */
+/** Updates the users' model filter */
 void UserManagerWidget::onSearchRequested()
 {
     // TODO: Manage error when user select an action in the toolbutton
@@ -595,7 +595,7 @@ void UserManagerWidget::onSearchRequested()
     userModel()->setFilter(where);
 }
 
-/** Create a new user using UserPlugin::UserWizard. */
+/** Creates a new user using UserPlugin::UserWizard. */
 void UserManagerWidget::onCreateUserRequested()
 {
     int createdRow = d->ui->userTreeView->model()->rowCount();
@@ -649,7 +649,7 @@ void UserManagerWidget::onSaveRequested()
 
 /**
  * \internal
- * Slot connected to the delete user action
+ * Slot connected to the "delete user" action
  */
 void UserManagerWidget::onDeleteUserRequested()
 {

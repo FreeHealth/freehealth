@@ -254,7 +254,7 @@ void UserViewer::setCurrentUser(const QString &userUid)
 void UserViewer::setCurrentPage(int index)
 {
     qWarning() << "UserViewer::setCurrentPage"<<index;
-    if (index == -1)
+    if (index == -1 || index >= d->m_stackedWidgets->count())
         d->m_stackedWidgets->setCurrentIndex(0);
     d->m_stackedWidgets->setCurrentIndex(index);
 }
@@ -265,7 +265,7 @@ void UserViewer::submitChangesToModel()
         IUserViewerWidget *w = d->m_widgets.at(i);
         if (w) {
             if (!w->submit())
-                LOG_ERROR(w->objectName() + " submition error");
+                LOG_ERROR(w->objectName() + " submission error");
         }
     }
 }

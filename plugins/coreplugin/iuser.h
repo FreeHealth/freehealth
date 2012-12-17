@@ -48,15 +48,15 @@ public:
     enum DataRepresentation {
         // ORDER SHOULD NEVER CHANGE
         Id = 0,
-        Uuid,           /*!< \brief Unique identifier the each users */
+        Uuid,           /*!< \brief Unique identifier of each user */
         Validity,       /*!< \brief Validity of this user */
-        IsVirtual,      /*!< \brief User is virtual ?*/
-        Login64,        /*!< \brief Crypted login \sa UserGlobal::loginForSQL() */
-        Password,       /*!< \brief Crypted password \sa UserGlobal::crypt() */
+        IsVirtual,      /*!< \brief User is virtual?*/
+        Login64,        /*!< \brief Encrypted login username \sa UserGlobal::loginForSQL() */
+        Password,       /*!< \brief Encrypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */
-        Name,           /*!< \brief Name */
-        SecondName,     /*!< \brief Second name */
-        Firstname,      /*!< \brief First name */
+        Name,           /*!< \brief Lastname */
+        SecondName,     /*!< \brief Second name (name after marriage) */
+        Firstname,      /*!< \brief Firstname, ("Given" name) */
         Mail,           /*!< \brief Mail address */
         LanguageISO,    /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */

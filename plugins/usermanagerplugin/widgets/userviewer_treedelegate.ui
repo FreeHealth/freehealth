@@ -6,32 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
-    <height>42</height>
+    <width>281</width>
+    <height>36</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="margin">
     <number>0</number>
    </property>
-   <property name="spacing">
-    <number>5</number>
-   </property>
    <item row="0" column="0" rowspan="3">
     <widget class="QLabel" name="photoLabel">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>24</width>
+       <height>24</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>24</width>
+       <height>24</height>
       </size>
      </property>
      <property name="text">
