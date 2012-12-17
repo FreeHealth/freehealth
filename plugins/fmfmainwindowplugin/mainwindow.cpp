@@ -132,10 +132,6 @@ bool MainWindowUserListener::currentUserAboutToDisconnect()
     return true;
 }
 
-
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------- Constructor / Destructor ---------------------------------------
-//--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
     Core::IMainWindow(parent),
     m_modeStack(0),
@@ -149,6 +145,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_RecentPatients->setSettingsKey(Core::Constants::S_PATIENT_UUID_HISTORY);
 }
 
+/**
+ * Initialize the main window.\n
+ * Creates menus, actions and the modeWidget
+ */
 void MainWindow::init()
 {
     Q_ASSERT(actionManager());
@@ -217,13 +217,10 @@ void MainWindow::init()
     modeManager()->init(m_modeStack);
 }
 
-//bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
-//{
-//    Q_UNUSED(arguments);
-//    Q_UNUSED(errorString);
-//    return true;
-//}
-
+/**
+ * Second initialization step after all dependencies are initialized.
+ * Set windowIcon, connect menus and actions, start the updatechecker,
+ */
 void MainWindow::extensionsInitialized()
 {
 //    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
@@ -281,7 +278,11 @@ MainWindow::~MainWindow()
     m_modeStack = 0;
 }
 
-/** \brief Post core initialization of MainWindow. */
+/**
+ * Third step of initialization after the core gets fuly opened.
+ * Manages user, menus and actions translations, finish splashscreen
+ * show UI.
+ */
 void MainWindow::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
@@ -290,13 +291,13 @@ void MainWindow::postCoreInitialization()
     onCurrentUserChanged();
     pluginManager()->addObject(m_UserListener = new MainWindowUserListener(this));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
+    connect(user(), SIGNAL(userDataChanged(int)), this, SLOT(onUserDataChanged(int)));
+    connect(user(), SIGNAL(reset()), this, SLOT(onCurrentUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
-    // Open Last Opened Forms is necessary
-//    openPatientFormsFile();  // TODO: code here: remove this and all sub-member
     // Create the patient navigation menu (needed in Patient::PatientSelector)
     aboutToShowRecentPatients();
 
@@ -311,7 +312,10 @@ void MainWindow::postCoreInitialization()
     setFocus();
 }
 
-/** \brief Slot connected to Core::IUser::userChanged().*/
+/**
+ * \internal
+ * Slot connected to Core::IUser::userChanged().
+ */
 void MainWindow::onCurrentUserChanged()
 {
     // Change window title
@@ -321,7 +325,25 @@ void MainWindow::onCurrentUserChanged()
     readSettings();
 }
 
-/** \brief  Define the current patient to different structure such as Form::FormManager, Form::EpisodeModel.*/
+/**
+ * \internal
+ * Slot connected to Core::IUser::userDataChanged(int).
+ * Reset the window title.
+ */
+void MainWindow::onUserDataChanged(int id)
+{
+    if (id == Core::IUser::FullName) {
+        // Change window title
+        setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
+                       user()->value(Core::IUser::FullName).toString());
+    }
+}
+
+/**
+ * \internal
+ * Define the current patient to different structure such as
+ * Form::FormManager, Form::EpisodeModel.
+ */
 void MainWindow::onCurrentPatientChanged()
 {
     // Activate Patient files mode

@@ -159,6 +159,7 @@ public:
 Q_SIGNALS:
     void userChanged();
     void userDataChanged(const int ref);
+    void reset();
 };
 
 }  // End Core
