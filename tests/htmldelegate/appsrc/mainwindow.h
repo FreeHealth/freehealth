@@ -27,10 +27,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <datapackutils/serverdescription.h>
-
 #include <QMainWindow>
-#include <QNetworkReply>
 
 namespace Ui {
     class MainWindow;
@@ -45,7 +42,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    DataPack::ServerDescription serverDescr;
 };
 
 #endif // MAINWINDOW_H

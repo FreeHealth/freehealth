@@ -4,10 +4,11 @@
 
 #include <QDir>
 #include <QApplication>
+#include <QDebug>
 
 namespace {
 const char *const MAC = "/../../../";
-const char *const PIX32 = "global_resources/pixmap/32x32/identity.png";
+const char *const PIX32 = "/../../global_resources/pixmap/32x32/identity.png";
 }
 
 FakeHtmlModel::FakeHtmlModel(QObject *parent) :
@@ -15,11 +16,11 @@ FakeHtmlModel::FakeHtmlModel(QObject *parent) :
 {
     setColumnCount(1);
     QStandardItem *test = new QStandardItem;
-    test->setText("<b>This is Multiline<b><br />html code");
+    test->setText("<b>This is Multiline</b><br />html code");
     invisibleRootItem()->appendRow(test);
 }
 
-QVariant FakeHtmlModel::data(const QModelIndex &index, int role = Qt::DisplayRole) const
+QVariant FakeHtmlModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
