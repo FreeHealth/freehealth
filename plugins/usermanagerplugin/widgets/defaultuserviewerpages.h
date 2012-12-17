@@ -120,7 +120,7 @@ public:
     const QString &parentUserViewerPageId() const {return m_parentId;}
 
     void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
+    void setUserIndex(const int row);
 
     void clear();
     bool submit();

@@ -206,14 +206,10 @@ DefaultUserContactWidget::~DefaultUserContactWidget()
 
 void DefaultUserContactWidget::setUserModel(UserModel *model)
 {
-    // prepare the mapper
-    if (!m_Mapper) {
-        m_Mapper = new QDataWidgetMapper(this);
-    }
+    qWarning() << "DefaultUserContactWidget::setUserModel" << model;
+
     m_Model = model;
     m_identity->setModel(model);
-//    m_Mapper->setModel(model);
-//    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Address);
 //    m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::Address);
     m_identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
@@ -232,10 +228,11 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
 }
 
-void DefaultUserContactWidget::setUserIndex(const int index)
+void DefaultUserContactWidget::setUserIndex(const int row)
 {
+    qWarning() << "DefaultUserContactWidget::setUserIndex" << row;
     if (m_identity)
-        m_identity->setCurrentIndex(m_Model->index(index, 0));
+        m_identity->setCurrentIndex(m_Model->index(row, 0));
 }
 
 void DefaultUserContactWidget::clear()
