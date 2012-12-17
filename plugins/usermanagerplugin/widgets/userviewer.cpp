@@ -129,10 +129,8 @@ public:
 
     void setUserModelRow(int row)
     {
-        for(int i = 0; i < m_widgets.count(); ++i) {
-            IUserViewerWidget *w = m_widgets.at(i);
-            w->setUserIndex(row);
-        }
+        for(int i = 0; i < m_widgets.count(); ++i)
+            m_widgets.at(i)->setUserIndex(row);
     }
 
     void populateStackedWidget()
@@ -238,13 +236,15 @@ void UserViewer::setCurrentUser(const QString &userUid)
     qWarning() << "UserViewer::setCurrentUser" << userUid;
     if (d->m_currentUserUuid == userUid)
         return;
+//    d->setUserModelRow(-1);
     d->m_currentUserUuid = userUid;
     QHash<int, QString> where;
     where.insert(Core::IUser::Uuid, QString("='%1'").arg(userUid));
     d->m_userModel->setFilter(where);
+    d->setUserModelRow(0);
+    d->m_CurrentRow = 0;
+
 //    if (d->canReadRow(modelRow)) {
-        d->m_CurrentRow = 0;
-        d->setUserModelRow(0);
 //    } else {
 //        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
 //    }
