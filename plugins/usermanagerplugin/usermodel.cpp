@@ -71,13 +71,7 @@
 #include <QHash>
 #include <QSqlTableModel>
 
-// ******************************************************************************************************
-// * WARNING, ENABLING ONE OF THOSE SWITCHES LEADS TO PRINTING THE CLEARTEXT PASSWORD ON THE CONSOLE!   *
-// * THIS ISIS A SECURITY ISSUE, ONLY DO THIS IN DEBUG MODE!                                            *
-// *                                                                                                    *
 enum { WarnAllProcesses = false, WarnUserConnection = true };  //                                       *
-// *                                                                                                    *
-// ******************************************************************************************************
 
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
@@ -87,6 +81,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 namespace {
@@ -105,61 +100,10 @@ namespace {
 
 namespace UserPlugin {
 namespace Internal {
-
-UserModelWrapper::UserModelWrapper(UserModel *model) :
-        Core::IUser(model), m_Model(model)
-{
-    connect(model, SIGNAL(userConnected(QString)), this, SLOT(newUserConnected(QString)));
-}
-
-UserModelWrapper::~UserModelWrapper()
-{
-    // remove this wrapper from the core implementation
-//    Core::ICore::instance()->setUser(0);
-}
-
-// IPatient interface
-bool UserModelWrapper::hasCurrentUser() const {return m_Model->hasCurrentUser();}
-
-QVariant UserModelWrapper::value(const int ref) const {return m_Model->currentUserData(ref);}
-
-bool UserModelWrapper::setValue(const int ref, const QVariant &value)
-{
-    if (m_Model->setData(m_Model->index(m_Model->currentUserIndex().row(), ref), value)) {
-        Q_EMIT this->userDataChanged(ref);
-        return true;
-    }
-    return false;
-}
-
-bool UserModelWrapper::saveChanges()
-{
-    if (m_Model) {
-        return m_Model->submitUser(uuid());
-    }
-    return false;
-}
-
-QString UserModelWrapper::fullNameOfUser(const QVariant &uid)
-{
-    if (m_Model) {
-        QHash<QString, QString> s = m_Model->getUserNames(QStringList() << uid.toString());
-        return s.value(uid.toString());
-    }
-    return QString();
-}
-
-void UserModelWrapper::newUserConnected(const QString &uid)
-{
-    Q_UNUSED(uid);
-    Q_EMIT userChanged();
-}
-
 class UserModelPrivate
 {
 public:
     UserModelPrivate(UserModel *parent) :
-            m_UserModelWrapper(new UserModelWrapper(parent)),
             m_Sql(0)
     {}
 
@@ -402,7 +346,6 @@ public:
     }
 
 public:
-    UserModelWrapper *m_UserModelWrapper;
     QSqlTableModel *m_Sql;
     QHash<QString, UserData *> m_Uuid_UserList;
     QString m_CurrentUserUuid;
@@ -423,9 +366,6 @@ UserModel::UserModel(QObject *parent) :
 /** Initialize the model */
 bool UserModel::initialize()
 {
-    // install the Core Patient wrapper
-    Core::ICore::instance()->setUser(d->m_UserModelWrapper);
-    connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
     onCoreDatabaseServerChanged();
     d->checkNullUser();
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -467,10 +407,9 @@ void UserModel::onCoreDatabaseServerChanged()
 */
 bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache, bool checkPrefValidity)
 {
+    // FIXME: move this in the private part of the Core::IUser==CoreUserModelWrapper?
     if (WarnAllProcesses || WarnUserConnection)
-        // WARNING, PRINTING THE CLEARTEXT PASSWORD IS A SECURITY ISSUE
-        // ONLY DO THIS IN DEBUG MODE!
-        qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
+        qWarning() << Q_FUNC_INFO << clearLog;
     d->checkNullUser();
 
     QString log64 = Utils::loginForSQL(clearLog);
@@ -1068,11 +1007,22 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             // here we suppose that it is the currentUser the ask for data
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
             // TODO: code here : has delegates rights
-            if (d->m_CurrentUserRights & Core::IUser::ReadAll)
-                return d->m_Sql->data(item, role);
-            else if (d->m_CurrentUserUuid == uuid)
-                return d->m_Sql->data(item, role);
-            return QVariant();
+            if (!d->m_CurrentUserUuid.isEmpty()) {
+                // Use internal data
+                if (d->m_CurrentUserRights & Core::IUser::ReadAll)
+                    return d->m_Sql->data(item, role);
+                else if (d->m_CurrentUserUuid == uuid)
+                    return d->m_Sql->data(item, role);
+            } else {
+                // Use Core::IUser
+                Core::IUser::UserRights rights = Core::IUser::UserRights(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+                const QString &userUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+                if (rights & Core::IUser::ReadAll
+                        || (userUuid == uuid && Core::IUser::ReadOwn)) {
+                    return d->m_Sql->data(item, role);
+                }
+                return QVariant();
+            }
         }
 
         // Here we must get values from complete user, so retreive it from database if necessary

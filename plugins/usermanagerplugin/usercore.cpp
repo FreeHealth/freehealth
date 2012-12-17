@@ -32,6 +32,7 @@
 #include "usercore.h"
 #include <usermanagerplugin/database/userbase.h>
 #include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/coreusermodelwrapper.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -58,6 +59,7 @@ public:
     UserCorePrivate(UserCore *parent) :
         _base(0),
         _model(0),
+        _coreUserModelWrapper(0),
         q(parent)
     {
     }
@@ -69,6 +71,7 @@ public:
 public:
     UserBase *_base;
     UserModel *_model;
+    CoreUserModelWrapper *_coreUserModelWrapper;
 
 private:
     UserCore *q;
@@ -112,8 +115,15 @@ bool UserCore::initialize()
 {
     if (!d->_base->initialize())
         return false;
+
+    // Create the Core::IUser models
     d->_model = new UserModel(this);
     d->_model->initialize();
+    d->_coreUserModelWrapper = new CoreUserModelWrapper(this);
+    d->_coreUserModelWrapper->initialize(d->_model);
+    Core::ICore::instance()->setUser(d->_coreUserModelWrapper);
+    connect(settings(), SIGNAL(userSettingsSynchronized()), d->_coreUserModelWrapper, SLOT(updateUserPreferences()));
+
     return true;
 }
 

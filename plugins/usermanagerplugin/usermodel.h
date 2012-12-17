@@ -56,36 +56,6 @@ class UserViewer;
 
 namespace Internal {
 class UserModelPrivate;
-
-class UserModelWrapper : public Core::IUser
-{
-    Q_OBJECT
-public:
-    UserModelWrapper(UserModel *model);
-    ~UserModelWrapper();
-
-    // IPatient interface
-    void clear() {}
-    bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
-    bool hasCurrentUser() const;
-
-    QVariant value(const int ref) const;
-    bool setValue(const int ref, const QVariant &value);
-
-    /** \todo Is this needed in freemedforms ? */
-    QString toXml() const {return QString();}
-    bool fromXml(const QString &) {return true;}
-
-    bool saveChanges();
-
-    QString fullNameOfUser(const QVariant &uid);
-
-private Q_SLOTS:
-    void newUserConnected(const QString &uid);
-
-private:
-    UserModel *m_Model;
-};
 }  // End Internal
 
 class USER_EXPORT UserModel : public QAbstractTableModel
