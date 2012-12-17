@@ -237,15 +237,12 @@ void DefaultUserContactWidget::setUserIndex(const int row)
 
 void DefaultUserContactWidget::clear()
 {
-//    m_Mapper->model()->revert();
+    m_identity->clear();
 }
 
 bool DefaultUserContactWidget::submit()
 {
-    m_identity->submit();
-//    if (m_Mapper)
-//        return m_Mapper->submit();
-    return false;
+    return m_identity->submit();
 }
 
 void DefaultUserContactWidget::changeEvent(QEvent *e)
