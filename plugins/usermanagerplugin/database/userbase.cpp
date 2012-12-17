@@ -138,15 +138,15 @@ UserBase::UserBase(QObject *parent) :
 
     addField(Table_DATA, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
     addField(Table_DATA, DATA_USER_UUID,   "USER_UUID",       FieldIsUUID);
-    addField(Table_DATA, DATAS_DATANAME,    "DATANAME",        FieldIsShortText);
-    addField(Table_DATA, DATAS_STRING,      "DATA_STRING",     FieldIsShortText);
-    addField(Table_DATA, DATAS_LONGSTRING,  "DATA_LONGSTRING", FieldIsLongText);
-    addField(Table_DATA, DATAS_FILE,        "DATA_FILE",       FieldIsBlob);
-    addField(Table_DATA, DATAS_NUMERIC,     "DATA_NUMERIC",    FieldIsInteger);
-    addField(Table_DATA, DATAS_DATE,        "DATA_DATE",       FieldIsDate);
-    addField(Table_DATA, DATAS_LANGUAGE,    "DATA_LANGUAGE",   FieldIsShortText);
-    addField(Table_DATA, DATAS_LASTCHANGE,  "LASTCHANGE",      FieldIsDate);
-    addField(Table_DATA, DATAS_TRACE_ID,    "TRACE_ID",        FieldIsInteger);
+    addField(Table_DATA, DATA_DATANAME,    "DATANAME",        FieldIsShortText);
+    addField(Table_DATA, DATA_STRING,      "DATA_STRING",     FieldIsShortText);
+    addField(Table_DATA, DATA_LONGSTRING,  "DATA_LONGSTRING", FieldIsLongText);
+    addField(Table_DATA, DATA_FILE,        "DATA_FILE",       FieldIsBlob);
+    addField(Table_DATA, DATA_NUMERIC,     "DATA_NUMERIC",    FieldIsInteger);
+    addField(Table_DATA, DATA_DATE,        "DATA_DATE",       FieldIsDate);
+    addField(Table_DATA, DATA_LANGUAGE,    "DATA_LANGUAGE",   FieldIsShortText);
+    addField(Table_DATA, DATA_LASTCHANGE,  "LASTCHANGE",      FieldIsDate);
+    addField(Table_DATA, DATA_TRACE_ID,    "TRACE_ID",        FieldIsInteger);
     addIndex(Table_DATA, DATA_USER_UUID);
 
     addField(Table_RIGHTS, RIGHTS_ID,        "RIGHTS_ID",       FieldIsUniquePrimaryKey);
@@ -594,7 +594,7 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     QSqlQuery query(DB);
     QHash<int, QString> where;
     where.insert(DATA_USER_UUID, QString("='%1'").arg(userUid));
-    where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
+    where.insert(DATA_DATANAME, QString("='%1'").arg(dynDataUuid));
     QString req = select(Table_DATA, where);
     if (query.exec(req)) {
         if (query.next()) {
@@ -1057,7 +1057,7 @@ bool UserBase::saveUser(UserData *user)
                     QHash<int , QString> w;
                     w.insert(DATA_USER_UUID, QString("='%1'").arg(user->uuid()));
                     w.insert(DATAS_ID, QString ("=%1").arg(dyn->id()));
-                    w.insert(DATAS_DATANAME, QString("='%1'").arg(dyn->name()));
+                    w.insert(DATA_DATANAME, QString("='%1'").arg(dyn->name()));
                     query.prepare(prepareUpdateQuery(Table_DATA, w));
                     query.bindValue(DATAS_ID, dyn->id());
                 }
@@ -1358,7 +1358,7 @@ bool UserBase::savePapers(UserData *user)
             QHash<int , QString> w;
             w.insert(DATA_USER_UUID, QString("='%1'").arg(user->uuid()));
             w.insert(DATAS_ID, QString ("=%1").arg(dyn->id()));
-            w.insert(DATAS_DATANAME, QString("='%1'").arg(dyn->name()));
+            w.insert(DATA_DATANAME, QString("='%1'").arg(dyn->name()));
             query.prepare(prepareUpdateQuery(Table_DATA, w));
             query.bindValue(DATAS_ID, dyn->id());
         }
@@ -1432,21 +1432,21 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
 
     QHash<int, QString> where;
     where.insert(DATA_USER_UUID, QString("='%1'").arg(userUid));
-    where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
+    where.insert(DATA_DATANAME, QString("='%1'").arg(dynDataUuid));
     // save the dynamic data
     if (count(Constants::Table_DATA, Constants::DATAS_ID, getWhereClause(Constants::Table_DATA, where))==0) {
         // save
         query.prepare(prepareInsertQuery(Table_DATA));
         query.bindValue(DATA_USER_UUID,  userUid);
-        query.bindValue(DATAS_DATANAME ,  dynDataUuid);
-        query.bindValue(DATAS_STRING ,    QVariant());
-        query.bindValue(DATAS_LONGSTRING, QVariant());
-        query.bindValue(DATAS_FILE,       value.toString());
-        query.bindValue(DATAS_NUMERIC,    QVariant());
-        query.bindValue(DATAS_DATE,       QVariant());
-        query.bindValue(DATAS_LANGUAGE,   QLocale().name().left(2));
-        query.bindValue(DATAS_LASTCHANGE, QDateTime::currentDateTime());
-        query.bindValue(DATAS_TRACE_ID,   QVariant());
+        query.bindValue(DATA_DATANAME ,  dynDataUuid);
+        query.bindValue(DATA_STRING ,    QVariant());
+        query.bindValue(DATA_LONGSTRING, QVariant());
+        query.bindValue(DATA_FILE,       value.toString());
+        query.bindValue(DATA_NUMERIC,    QVariant());
+        query.bindValue(DATA_DATE,       QVariant());
+        query.bindValue(DATA_LANGUAGE,   QLocale().name().left(2));
+        query.bindValue(DATA_LASTCHANGE, QDateTime::currentDateTime());
+        query.bindValue(DATA_TRACE_ID,   QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             query.finish();
@@ -1455,7 +1455,7 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
         }
     } else {
         // update
-        query.prepare(prepareUpdateQuery(Table_DATA, DATAS_FILE, where));
+        query.prepare(prepareUpdateQuery(Table_DATA, DATA_FILE, where));
         query.bindValue(0, value.toString());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);

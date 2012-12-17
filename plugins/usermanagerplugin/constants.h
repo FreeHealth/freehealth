@@ -148,12 +148,12 @@ namespace Constants {
         USER_MaxParam
     };
 
-    /** \brief Enumerates the fields of the table USERS_DATAS */
-    enum DATASfields
+    /** \brief Enumerates the fields of the table USERS_DATA */
+    enum DATAfields
     {
         DATAS_ID = 0 , DATA_USER_UUID,
-        DATAS_DATANAME, DATAS_STRING, DATAS_LONGSTRING, DATAS_FILE, DATAS_NUMERIC, DATAS_DATE,
-        DATAS_LANGUAGE, DATAS_LASTCHANGE, DATAS_TRACE_ID,
+        DATA_DATANAME, DATA_STRING, DATA_LONGSTRING, DATA_FILE, DATA_NUMERIC, DATA_DATE,
+        DATA_LANGUAGE, DATA_LASTCHANGE, DATA_TRACE_ID,
         DATA_MaxParam
     };
 

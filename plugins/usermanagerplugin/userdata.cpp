@@ -211,14 +211,14 @@ void UserDynamicData::setUserUuid(const QString &uuid)
 */
 void UserDynamicData::feedFromSql(const int field, const QVariant& value)
 {
-    Q_ASSERT(field>=DATAS_ID && field <= DATAS_TRACE_ID);
+    Q_ASSERT(field>=DATAS_ID && field <= DATA_TRACE_ID);
     switch (field) {
             case DATAS_ID : d->m_Id = value.toInt(); break;
             case DATA_USER_UUID : d->m_UserUuid = value.toString(); break;
-            case DATAS_DATANAME: setName(value.toString()); break;
-            case DATAS_LANGUAGE: d->m_Language = value.toString(); break;
-            case DATAS_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
-            case DATAS_TRACE_ID: d->m_Trace = value.toInt(); break;
+            case DATA_DATANAME: setName(value.toString()); break;
+            case DATA_LANGUAGE: d->m_Language = value.toString(); break;
+            case DATA_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
+            case DATA_TRACE_ID: d->m_Trace = value.toInt(); break;
             default: // Store the value
                 {
                     if (value.isNull())
@@ -296,40 +296,40 @@ QVariant UserDynamicData::value() const
 }
 
 /**
-  \brief Defines the binded values of the QSqlQuery according to the database scheme without the Id field.
-  \sa tkUserConstants::DATASfields, UserBase::saveUser()
+  \brief Defines the bound values of the QSqlQuery according to the database scheme without the Id field.
+  \sa tkUserConstants::DATAfields, UserBase::saveUser()
 */
 void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
 {
     bindedQuery.bindValue(DATA_USER_UUID,  d->m_UserUuid);
-    bindedQuery.bindValue(DATAS_DATANAME ,  d->m_Name);
+    bindedQuery.bindValue(DATA_DATANAME ,  d->m_Name);
 
     if (d->m_Name==Constants::USER_DATA_PREFERENCES) {
-        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-        bindedQuery.bindValue(DATAS_FILE,       d->m_Value);
-        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
-        bindedQuery.bindValue(DATAS_DATE,       QVariant());
+        bindedQuery.bindValue(DATA_STRING ,    QVariant());
+        bindedQuery.bindValue(DATA_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATA_FILE,       d->m_Value);
+        bindedQuery.bindValue(DATA_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATA_DATE,       QVariant());
     } else {
         switch (d->m_Value.type())
         {
         case QVariant::DateTime :
         {
-        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-        bindedQuery.bindValue(DATAS_FILE,       QVariant());
-        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
-        bindedQuery.bindValue(DATAS_DATE,       d->m_Value);
+        bindedQuery.bindValue(DATA_STRING ,    QVariant());
+        bindedQuery.bindValue(DATA_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATA_FILE,       QVariant());
+        bindedQuery.bindValue(DATA_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATA_DATE,       d->m_Value);
             break;
         }
         case QVariant::Double :
         case QVariant::Int :
         {
-        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-        bindedQuery.bindValue(DATAS_FILE,       QVariant());
-        bindedQuery.bindValue(DATAS_NUMERIC,    d->m_Value);
-        bindedQuery.bindValue(DATAS_DATE,       QVariant());
+        bindedQuery.bindValue(DATA_STRING ,    QVariant());
+        bindedQuery.bindValue(DATA_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATA_FILE,       QVariant());
+        bindedQuery.bindValue(DATA_NUMERIC,    d->m_Value);
+        bindedQuery.bindValue(DATA_DATE,       QVariant());
             break;
         }
         default:
@@ -338,27 +338,27 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
             if (type() == ExtraDocument)
                 tmp = d->m_Doc->toXml();
             if (tmp.length() < 200) {
-        bindedQuery.bindValue(DATAS_STRING ,    tmp);
-        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-        bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATA_STRING ,    tmp);
+        bindedQuery.bindValue(DATA_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATA_FILE,       QVariant());
             } else if (tmp.length() < 2000) {
-        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-        bindedQuery.bindValue(DATAS_LONGSTRING, tmp);
-        bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATA_STRING ,    QVariant());
+        bindedQuery.bindValue(DATA_LONGSTRING, tmp);
+        bindedQuery.bindValue(DATA_FILE,       QVariant());
             } else {
-        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-        bindedQuery.bindValue(DATAS_FILE,       tmp);
+        bindedQuery.bindValue(DATA_STRING ,    QVariant());
+        bindedQuery.bindValue(DATA_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATA_FILE,       tmp);
             }
-        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
-        bindedQuery.bindValue(DATAS_DATE,       QVariant());
+        bindedQuery.bindValue(DATA_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATA_DATE,       QVariant());
             break;
         }
         }
     }
-    bindedQuery.bindValue(DATAS_LANGUAGE,   d->m_Language);
-    bindedQuery.bindValue(DATAS_LASTCHANGE, d->m_Lastchange);
-    bindedQuery.bindValue(DATAS_TRACE_ID,   d->m_Trace);
+    bindedQuery.bindValue(DATA_LANGUAGE,   d->m_Language);
+    bindedQuery.bindValue(DATA_LASTCHANGE, d->m_Lastchange);
+    bindedQuery.bindValue(DATA_TRACE_ID,   d->m_Trace);
 }
 
 /** \brief For debugging purpose only */
