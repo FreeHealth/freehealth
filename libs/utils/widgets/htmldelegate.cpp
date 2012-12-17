@@ -52,6 +52,11 @@ static QString changeColors(const QStyleOptionViewItem &option, QString text)
     return text;
 }
 
+HtmlDelegate::HtmlDelegate(QObject *parent) :
+    QStyledItemDelegate(parent)
+{
+}
+
 void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 optionV4 = option;
