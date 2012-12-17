@@ -1021,9 +1021,8 @@ QVariant UserModel::currentUserData(const int column) const
 /** Returns the data of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
-    if (!item.isValid()) {
+    if (!item.isValid())
         return QVariant();
-    }
 
     // get user
     QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
