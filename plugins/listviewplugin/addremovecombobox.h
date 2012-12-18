@@ -63,6 +63,7 @@ public:
 
     inline int currentIndex() const { Q_ASSERT(mCombo); return  mCombo->currentIndex(); }
     inline void setCurrentIndex(int index) { Q_ASSERT(mCombo); mCombo->setCurrentIndex(index); }
+    inline void setMinimumRowsAllowed(int rows) { minimumRowsAllowed = rows < 0? 0 : rows; }
 
     void changeEvent(QEvent *e);
 
@@ -90,6 +91,7 @@ private:
     QComboBox *mCombo;
     QPushButton *mAddButton;
     QPushButton *mRemoveButton;
+    int minimumRowsAllowed;
 };
 
 } // end namespace Views
