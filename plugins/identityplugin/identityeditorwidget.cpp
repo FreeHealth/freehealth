@@ -195,6 +195,9 @@ public:
         m_hasRealPhoto(false),
         m_xmlOnly(false),
         m_availaibleSet(false),
+        m_checkPasswordConfirmation(true),
+        m_minimalLoginLength(6),
+        m_minimalPasswordLength(6),
         q(parent)
     {
     }
@@ -233,8 +236,9 @@ public:
         ui->login->setEchoMode(QLineEdit::Normal);
         ui->password->setEchoMode(QLineEdit::Password);
         ui->password2->setEchoMode(QLineEdit::Password);
-        ui->login->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"), q));
-        ui->password->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"),q));
+        createLoginValidator(m_minimalLoginLength);
+        createPasswordValidator(m_minimalPasswordLength);
+        setCheckPasswordConfirmation(m_checkPasswordConfirmation);
 
         Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
         ui->birthName->setValidator(upperVal);
@@ -287,8 +291,35 @@ public:
 
         QObject::connect(ui->login, SIGNAL(textChanged(QString)), q, SIGNAL(clearLoginChanged(QString)));
         QObject::connect(ui->password, SIGNAL(textChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
+        QObject::connect(ui->login, SIGNAL(editingFinished()), q, SIGNAL(clearLoginEditionFinished()));
+
+        QObject::connect(ui->login, SIGNAL(textChanged(QString)), q, SLOT(checkLoginLength(QString)));
+        QObject::connect(ui->password, SIGNAL(textChanged(QString)), q, SLOT(checkPasswordLength(QString)));
     }
 
+    void createLoginValidator(int length)
+    {
+        QRegExp reg("^[a-zA-Z0-9\\.\\-_]{" + QString::number(length) + ",}");
+        ui->login->setValidator(new QRegExpValidator(reg, q));
+        q->checkLoginLength(ui->login->text());
+    }
+
+    void createPasswordValidator(int length)
+    {
+        QRegExp reg("^[a-zA-Z0-9\\.\\-_]{" + QString::number(length) + ",}");
+        ui->password->setValidator(new QRegExpValidator(reg, q));
+        q->checkPasswordLength(ui->password->text());
+    }
+
+    void setCheckPasswordConfirmation(bool check)
+    {
+        ui->password2->setVisible(check);
+        ui->password2Label->setVisible(check);
+        if (check)
+            QObject::connect(ui->password2, SIGNAL(textChanged(QString)), q, SLOT(checkPasswordConfirmation(QString)));
+        else
+            QObject::disconnect(ui->password2, SIGNAL(textChanged(QString)), q, SLOT(checkPasswordConfirmation(QString)));
+    }
 
     void updateDefaultPhotoAction()
     {
@@ -477,8 +508,9 @@ public:
     IsDirtyDataWidgetMapper *m_Mapper;
     QAbstractItemModel *m_Model;
     QPixmap m_Photo;
-    bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet;
+    bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation;
     QString m_lastXml;
+    int m_minimalLoginLength, m_minimalPasswordLength;
 
 private:
     QAction *m_deletePhotoAction;
@@ -835,6 +867,36 @@ QString IdentityEditorWidget::currentLanguage() const
     return d->ui->language->currentLanguageName();
 }
 
+/**
+ * Define the minimal length of the login.
+ * Incorrect login is notified to user using a red font color
+ * of the buddy label. Default is 6 chars.
+ */
+void IdentityEditorWidget::setMinimalLoginLength(int length)
+{
+    d->createLoginValidator(length);
+}
+
+/**
+ * Define the minimal length of the password.
+ * Incorrect login is notified to user using a red font color
+ * of the buddy label. Default is 6 chars.
+ */
+void IdentityEditorWidget::setMinimalPasswordLength(int length)
+{
+    d->createPasswordValidator(length);
+}
+
+/**
+ * Define if the view should ask for a confirmation of the password.
+ * Incorrect confirmation is notified to user using a red font color
+ * of the buddy label. Default is true.
+ */
+void IdentityEditorWidget::setCheckPasswordConfirmation(bool check)
+{
+    d->setCheckPasswordConfirmation(check);
+}
+
 /** Return the current editing value */
 QString IdentityEditorWidget::currentClearLogin() const
 {
@@ -947,4 +1009,44 @@ void IdentityEditorWidget::onCurrentPatientChanged()
     d->m_Mapper->setCurrentModelIndex(QModelIndex());
     d->m_Mapper->setCurrentModelIndex(patient()->currentPatientIndex());
     updateGenderImage();
+}
+
+/**
+ * \internal
+ * Check the login length and set the color to the buddy label
+ */
+void IdentityEditorWidget::checkLoginLength(const QString &login)
+{
+    qWarning() << "Check login" << login;
+    if (login.length() >= d->m_minimalLoginLength) {
+        d->ui->loginLabel->setStyleSheet("color:black;");
+    } else {
+        d->ui->loginLabel->setStyleSheet("color:red;");
+    }
+}
+
+/**
+ * \internal
+ * Check the password length and set the color to the buddy label
+ */
+void IdentityEditorWidget::checkPasswordLength(const QString &password)
+{
+    if (password.length() >= d->m_minimalPasswordLength) {
+        d->ui->passwordLabel->setStyleSheet("color:black;");
+    } else {
+        d->ui->passwordLabel->setStyleSheet("color:red;");
+    }
+}
+
+/**
+ * \internal
+ * Check the password confirmation
+ */
+void IdentityEditorWidget::checkPasswordConfirmation(const QString &)
+{
+    if (d->ui->password->text() == d->ui->password2->text()) {
+        d->ui->password2Label->setStyleSheet("color:black;");
+    } else {
+        d->ui->password2Label->setStyleSheet("color:red;");
+    }
 }
