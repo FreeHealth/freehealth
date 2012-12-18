@@ -79,6 +79,9 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
     Q_PROPERTY(QString language READ currentLanguage NOTIFY languageChanged)
 //    QPixmap currentPhoto() const;
 
+    Q_PROPERTY(QString clearLogin READ currentClearLogin NOTIFY clearLoginChanged)
+    Q_PROPERTY(QString clearPassword READ currentClearPassword NOTIFY clearPasswordChanged)
+
 public:
     enum AvailableWidget {
         TitleIndex      = 0x00000001,
@@ -137,6 +140,9 @@ public:
     QDate currentDateOfBirth() const;
     QString currentLanguage() const;
 
+    QString currentClearLogin() const;
+    QString currentClearPassword() const;
+
     QPixmap currentPhoto() const;
     bool hasPhoto() const;
 
@@ -158,6 +164,8 @@ Q_SIGNALS:
     void genderIndexChanged(int genderIndex);
     void genderChanged(const QString &gender);
     void languageChanged(const QString &languageName);
+    void clearLoginChanged(const QString &login);
+    void clearPasswordChanged(const QString &lpassword);
 
 private:
     void changeEvent(QEvent *e);

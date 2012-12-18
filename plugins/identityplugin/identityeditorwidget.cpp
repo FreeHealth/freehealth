@@ -284,6 +284,9 @@ public:
 //        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(titleIndexChanged(int)));
         QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(titleChanged(QString)));
 //        QObject::connect(ui->photoButton, SIGNAL(), q, SIGNAL(birthNameChanged(QString)));
+
+        QObject::connect(ui->login, SIGNAL(textChanged(QString)), q, SIGNAL(clearLoginChanged(QString)));
+        QObject::connect(ui->password, SIGNAL(textChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
     }
 
 
@@ -830,6 +833,18 @@ QDate IdentityEditorWidget::currentDateOfBirth() const
 QString IdentityEditorWidget::currentLanguage() const
 {
     return d->ui->language->currentLanguageName();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentClearLogin() const
+{
+    return d->ui->login->text();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentClearPassword() const
+{
+    return d->ui->password->text();
 }
 
 /*!
