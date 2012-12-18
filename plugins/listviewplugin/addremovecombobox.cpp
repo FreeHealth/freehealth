@@ -53,6 +53,26 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
  *
 */
 
+/*!
+ * \fn void AddRemoveComboBox::setModel(QAbstractItemModel *model)
+ * \brief Sets the internal model of the ComboBox.
+ */
+
+/*!
+ * \fn void AddRemoveComboBox::setModelColumn(int column)
+ * \brief Sets the model column that is shown in the ComboBox.
+ */
+
+/*!
+ * \fn int AddRemoveComboBox::currentIndex() const
+ * \brief returns the currentIndex() of the ComboBox model.
+ */
+
+/*!
+ * \fn void AddRemoveComboBox::setCurrentIndex(int index)
+ * \brief sets the currentIndex() of the ComboBox model.
+ */
+
 
 /*! Default constructor */
 AddRemoveComboBox::AddRemoveComboBox(QWidget *parent) :
