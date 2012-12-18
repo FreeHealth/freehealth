@@ -33,19 +33,13 @@
 
 /**
  * \file useridentityandloginpage.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.0
- * \date 04 Mar 2012
+ * \author Eric MAEKER
+ * \version 0.8.2
+ * \date 18 Dec 2012
 */
 
-namespace Views {
-class StringListView;
-class LanguageComboBox;
-}
-
-namespace Utils {
-class LineEditEchoSwitcher;
-class UpperCaseValidator;
+namespace Identity {
+class IdentityEditorWidget;
 }
 
 namespace UserPlugin {
@@ -62,24 +56,21 @@ public:
     explicit UserIdentityAndLoginPage(QWidget *parent = 0);
     ~UserIdentityAndLoginPage();
 
+    bool isComplete() const;
     bool validatePage();
 
 private Q_SLOTS:
-    void checkLogin();
     void checkLoginAfterEdition();
-    void checkControlPassword(const QString &text);
-    void on_leName_textChanged(const QString &text);
-    void on_leFirstName_textChanged(const QString &text);
-    void on_leLogin_textChanged(const QString &text);
-    void onNamesEditionFinished();
+    void onPasswordConfirmed();
+//    void onNamesEditionFinished();
 
 private:
+    bool checkLogin() const;
     void changeEvent(QEvent *e);
     void retranslate();
-    void toggleErrorLabels();
 
 private:
-    Internal::Ui::UserIdentityAndLoginPage *ui;
+    Identity::IdentityEditorWidget *_identity;
     bool _showErrorLabels;
 };
 

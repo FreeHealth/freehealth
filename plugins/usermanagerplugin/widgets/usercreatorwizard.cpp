@@ -51,7 +51,6 @@
  */
 
 #include "usercreatorwizard.h"
-
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/database/userbase.h>
 
@@ -59,8 +58,6 @@
 
 #include <listviewplugin/stringlistview.h>
 #include <listviewplugin/stringlistmodel.h>
-
-#include <zipcodesplugin/zipcodescompleters.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -118,7 +115,7 @@ public:
     ~UserContactPage();
 
 private:
-    Internal::Ui::UserWizardContactWidget *ui;
+    Ui::UserWizardContactWidget *ui;
 };
 
 class UserProfilePage : public QWizardPage
@@ -394,14 +391,6 @@ void UserCreatorWizard::showEvent(QShowEvent *event)
     Utils::centerWidget(this);
 }
 
-QString UserCreatorWizard::createdUuid() const
-{
-    if (d->m_User) {
-        return d->m_User->uuid();
-    }
-    return QString();
-}
-
 void UserCreatorWizard::setUserPaper(const int ref, const QString &xml)
 {
     UserCreatorWizardPrivate::m_Papers.insert(ref, xml);
@@ -417,6 +406,9 @@ int UserCreatorWizard::userRights(const int role)
     return UserCreatorWizardPrivate::m_Rights.value(role,0);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////    UserIdentityPage    ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserContactPage::UserContactPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::UserWizardContactWidget)
@@ -427,10 +419,10 @@ UserContactPage::UserContactPage(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
 
-    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
-    c->setCountryComboBox(ui->comboBox);
-    c->setZipLineEdit(ui->zipcode);
-    c->setCityLineEdit(ui->city);
+//    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
+//    c->setCountryComboBox(ui->comboBox);
+//    c->setZipLineEdit(ui->zipcode);
+//    c->setCityLineEdit(ui->city);
     const QRegExp emailRegExp = QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive);
     ui->mail->setValidator(new QRegExpValidator(emailRegExp,this));
     registerField("Address", ui->address, "plainText");

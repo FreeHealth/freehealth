@@ -82,8 +82,6 @@ public:
 
     static bool checkUserRights();
 
-    QString createdUuid() const;
-
     static void setUserPaper(const int ref, const QString &xml);
     static void setUserRights(const int role, const int value);
     static int userRights(const int role);

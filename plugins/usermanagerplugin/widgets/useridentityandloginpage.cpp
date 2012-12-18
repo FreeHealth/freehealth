@@ -34,14 +34,17 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/translators.h>
 
-#include <listviewplugin/languagecombobox.h>
+#include <identityplugin/identityeditorwidget.h>
+//#include <listviewplugin/languagecombobox.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/widgets/uppercasevalidator.h>
-#include <translationutils/constanttranslations.h>
+//#include <utils/widgets/uppercasevalidator.h>
+#include <translationutils/constants.h>
 
-#include "ui_useridentityandloginpage.h"
+//#include "ui_useridentityandloginpage.h"
+
+#include <QHBoxLayout>
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -54,140 +57,78 @@ static inline UserPlugin::Internal::UserBase *userBase() {return userCore().user
 
 UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     QWizardPage(parent),
-    ui(new Ui::UserIdentityAndLoginPage),
+    _identity(0),
     _showErrorLabels(false)
 {
-    ui->setupUi(this);
-    toggleErrorLabels();
+    // TODO: connect(ui->cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 
-    ui->cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
-    ui->cbLanguage->setCurrentLanguage(QLocale().language());
+    // Create the layout
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    setLayout(layout);
+    layout->setMargin(0);
+    layout->setSpacing(0);
 
-    Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(this);
-    ui->leName->setValidator(val);
-    ui->leSecondName->setValidator(val);
-    Utils::CapitalizationValidator *firstval = new Utils::CapitalizationValidator(this);
-    ui->leFirstName->setValidator(firstval);
+    // Create the identity widget
+    _identity = new Identity::IdentityEditorWidget(this);
+    _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
+    _identity->setCheckPasswordConfirmation(true);
+    _identity->setMinimalLoginLength(6);
+    _identity->setMinimalPasswordLength(6);
+    layout->addWidget(_identity);
 
-    connect(ui->cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
+    registerField("Name*", _identity, "birthName");
+    registerField("Firstname*", _identity, "firstName");
+    registerField("SecondName", _identity, "secondName");
+    registerField("Title", _identity, "title");
+    registerField("GenderIndex", _identity, "genderIndex");
+    registerField("Gender", _identity, "gender");
+    registerField("Language*", _identity, "language");
 
-    registerField("Language", ui->cbLanguage , "currentLanguage");
-    registerField("Name*", ui->leName);
-    registerField("Firstname*", ui->leFirstName);
-    registerField("SecondName", ui->leSecondName);
-    registerField("Title", ui->cbTitle);
-    registerField("Gender", ui->cbGender);
+    registerField("Login*", _identity, "clearLogin");
+    registerField("Password*", _identity, "clearPassword");
 
-    // TODO: centralize login/password length with a constant!
-    ui->leLogin->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"), this));
-    ui->leLogin->setToolTip(tr("minimum: 6 characters\nonly characters and digits allowed"));
-    ui->leLogin->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkLoginAfterEdition()));
+    connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(onPasswordConfirmed()));
 
-    // TODO: centralize login/password length with a constant!
-    ui->lePassword->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"),this));
-    ui->lePassword->setToolTip(tr("minimum: 6 characters"));
-    ui->lePassword->toogleEchoMode();
-    ui->lePassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
-
-    ui->lePasswordConfirm->toogleEchoMode();
-    ui->lePasswordConfirm->setIcon(theme()->icon(Core::Constants::ICONEYES));
-
-    registerField("Login*", ui->leLogin);
-    registerField("Password*", ui->lePassword);
-    registerField("ConfirmPassword*", ui->lePasswordConfirm);
-
-    retranslate();
-
-    connect(ui->leLogin, SIGNAL(textChanged(QString)), this, SLOT(checkLogin()));
-//    connect(ui->leLogin, SIGNAL(editingFinished()), this, SLOT(checkLoginAfterEdition()));
-    connect(ui->lePasswordConfirm, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-    connect(ui->lePassword, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-
-    // Auto-login
-    connect(ui->leFirstName, SIGNAL(editingFinished()), this, SLOT(onNamesEditionFinished()));
-    connect(ui->leName, SIGNAL(editingFinished()), this, SLOT(onNamesEditionFinished()));
-
-    // set right stylesheets to the labels
-    checkControlPassword("");
-    on_leName_textChanged("");
-    on_leFirstName_textChanged("");
-    on_leLogin_textChanged("");
+    Utils::resizeAndCenter(this, parent);
 }
 
 UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 {
-    delete ui;
+//    delete ui;
 }
 
-void UserIdentityAndLoginPage::checkLogin()
+bool UserIdentityAndLoginPage::checkLogin() const
 {
     // user login must be unique in the FreeMedForms database
     // user login must be unique on the server
-    if (ui->leLogin->text().length() < 6) {
-        ui->lblLogin->setStyleSheet("color:red;");
-        ui->lblLogin->setToolTip(tr("You must specify a valid login. Login must be more than 6 characters."));
-        ui->lblLoginError->setText(tr("You must specify a valid login. Login must be more than 6 characters."));
-    } else if (userBase()->isLoginAlreadyExists(ui->leLogin->text())) {
-        ui->lblLogin->setStyleSheet("color:red;");
-        ui->lblLogin->setToolTip(tr("Login in use. Please select another login"));
-        ui->lblLoginError->setText(tr("Login in use. Please select another login"));
-    } else {
-        ui->lblLogin->setStyleSheet(QString::null);
-        ui->lblLogin->setStyleSheet(QString::null);
-        ui->lblLoginError->clear();
+    const QString &login = _identity->currentClearLogin();
+    if (login.length() < 6)
+        return false;
+
+    if (userBase()->isLoginAlreadyExists(_identity->currentClearLogin())) {
+        Utils::warningMessageBox(tr("Login error"), tr("Login already in use. Please select another login"));
+        return false;
     }
-//    toggleErrorLabels();
+    return true;
 }
 
 void UserIdentityAndLoginPage::checkLoginAfterEdition()
 {
-    checkLogin();
+    if (checkLogin())
+        Q_EMIT completeChanged();
+
     _showErrorLabels = true;
-    toggleErrorLabels();
 }
 
-void UserIdentityAndLoginPage::checkControlPassword(const QString &text)
+/**
+ * \internal
+ */
+void UserIdentityAndLoginPage::onPasswordConfirmed()
 {
-    Q_UNUSED(text);
-
-    QString stylesheet = "color:red;";
-    // TODO: centralize login/password length with a constant!
-
-    // check wether both passwords meet the specifications
-    if (ui->lePassword->text().length() >= 6 && ui->lePasswordConfirm->text().length() >= 6) {
-        if (ui->lePasswordConfirm->text() == ui->lePassword->text()) { // congruent passwords
-            stylesheet = "";
-        }
-    }
-    ui->lblConfirmPassword->setStyleSheet(stylesheet);
-    ui->lblPassword->setStyleSheet(stylesheet);
-}
-
-void UserIdentityAndLoginPage::on_leName_textChanged(const QString &text)
-{
-    ui->lblName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
-}
-
-void UserIdentityAndLoginPage::on_leFirstName_textChanged(const QString &text)
-{
-    ui->lblFirstName->setStyleSheet(!text.isEmpty()? 0 : "color:red;");
-}
-
-void UserIdentityAndLoginPage::on_leLogin_textChanged(const QString &text)
-{
-    ui->lblLogin->setStyleSheet(text.length() >= 6? 0 : "color:red;");
-}
-
-void UserIdentityAndLoginPage::onNamesEditionFinished()
-{
-    if (ui->leFirstName->text().isEmpty() || ui->leName->text().isEmpty())
-        return;
-    if (!ui->leLogin->text().isEmpty())
-        return;
-    ui->leLogin->setText(QString("%1.%2")
-                         .arg(ui->leFirstName->text().toLower())
-                         .arg(ui->leName->text()).toLower());
-    checkLogin();
+    if (checkLogin())
+        Q_EMIT completeChanged();
 }
 
 void UserIdentityAndLoginPage::changeEvent(QEvent *e)
@@ -200,34 +141,16 @@ void UserIdentityAndLoginPage::retranslate()
 {
     setTitle(tr("Create a new user"));
     setSubTitle(tr("Please enter your identity."));
-
-    if (ui->langLbl) {
-        ui->langLbl->setText(tr("Language"));
-        ui->lblTitle->setText(tkTr(Trans::Constants::TITLE));
-        ui->lblName->setText(tkTr(Trans::Constants::NAME));
-        ui->lblFirstName->setText(tr("First name"));
-        ui->lblSecondName->setText(tr("Second name"));
-        ui->lblGender->setText(tkTr(Trans::Constants::GENDER));
-        ui->cbTitle->addItems(titles());
-        ui->cbGender->addItems(genders());
-        ui->lblLogin->setText(tkTr(Trans::Constants::LOGIN));
-        ui->lblPassword->setText(tkTr(Trans::Constants::PASSWORD));
-        ui->lblConfirmPassword->setText(tr("Confirm password"));
-        ui->identGroup->setTitle(tr("Identity"));
-        ui->logGroup->setTitle(tr("Database connection"));
-    }
 }
 
-void UserIdentityAndLoginPage::toggleErrorLabels()
+bool UserIdentityAndLoginPage::isComplete() const
 {
-//    WARN_FUNC << ui->lblLoginError->text();
-    if (_showErrorLabels) {
-        ui->lblLoginError->setVisible(!ui->lblLoginError->text().isEmpty());
-        ui->lblPasswordError->setVisible(!ui->lblPasswordError->text().isEmpty());
-    } else {
-        ui->lblLoginError->setVisible(false);
-        ui->lblPasswordError->setVisible(false);
-    }
+    return (!_identity->currentBirthName().isEmpty()
+            && !_identity->currentFirstName().isEmpty()
+            && !_identity->currentGender().isEmpty()
+            && !_identity->currentLanguage().isEmpty()
+            && checkLogin()
+            && _identity->isPasswordCompleted());
 }
 
 /**
@@ -236,40 +159,5 @@ void UserIdentityAndLoginPage::toggleErrorLabels()
  */
 bool UserIdentityAndLoginPage::validatePage()
 {
-    if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
-        Utils::warningMessageBox(tr("Forbidden anonymous user."),
-                                 tr("All users must have at least a name and a first name.\n"
-                                    "You can not proceed with an anonymous user."), "",
-                                 tr("Forbidden anonymous user."));
-        return false;
-    }
-    if (field("Password").toString() != field("ConfirmPassword")) {
-        Utils::warningMessageBox(tr("Password confirmation error."),
-                                 tr("You must correctly confirm your password to go through this page."),
-                                 "", tr("Wrong password"));
-        return false;
-    }
-    if (field("Login").toString().isEmpty()) {
-        Utils::warningMessageBox(tr("Login error."),
-                                 tr("You must specify a valid login. An empty login is forbidden."),
-                                 "", tr("Wrong login"));
-        return false;
-    }
-    if (field("Login").toString().size() < 6) {
-        Utils::warningMessageBox(tr("Login error."),
-                                 tr("You must specify a valid login. Login must be more than 6 characters."),
-                                 "", tr("Wrong login"));
-        return false;
-    }
-
-    // log/pass already used ?
-    if (userModel()->isCorrectLogin(field("Login").toString(),
-                                    field("Password").toString())) {
-        Utils::warningMessageBox(tr("Login and password already used"),
-                                 tr("The users' database already contains the same login/password couple.\n"
-                                    "You must specify a different login/password."),
-                                 "", tr("Login/Password already used"));
-        return false;
-    }
     return true;
 }
