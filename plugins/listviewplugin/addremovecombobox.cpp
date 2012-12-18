@@ -193,6 +193,7 @@ void AddRemoveComboBox::updateUi()
     mRemoveButton->setEnabled(mCombo->currentIndex() != -1);
 }
 
+/*! This slot takes an int as \e index parameter and emits the corresponding currentIndexChanged(QModelIndex). */
 void AddRemoveComboBox::translateIntIndexChanged(int index)
 {
     if(index == -1)
