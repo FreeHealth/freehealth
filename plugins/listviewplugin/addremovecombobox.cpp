@@ -76,7 +76,8 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 /*! Default constructor */
 AddRemoveComboBox::AddRemoveComboBox(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    minimumRowsAllowed(0)
 {
     mLabel = new QLabel("");
     initialize();
@@ -87,7 +88,8 @@ AddRemoveComboBox::AddRemoveComboBox(QWidget *parent) :
  * Per default the label is placed on the left side of the ComboBox.
  */
 AddRemoveComboBox::AddRemoveComboBox(const QString &labelText, QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    minimumRowsAllowed(0)
 {
     mLabel = new QLabel(labelText);
     initialize();
@@ -166,12 +168,13 @@ void AddRemoveComboBox::addItem()
 /*! \brief Removes the currentItem from the combobox model
  *
  * After succesful removal, the itemRemoved() signal is emitted.
- * \sa addItem, itemAdded, itemRemoved
+ * If there are only the minimum allowed rows in the model, the method just returns.
+ * \sa addItem(), itemAdded(), itemRemoved(), setMinimumRowsAllowed()
  */
 void AddRemoveComboBox::removeItem()
 {
     QAbstractItemModel *model = mCombo->model();
-    if (model->rowCount() == 0)
+    if (model->rowCount() == minimumRowsAllowed)
         return;
 
     if (!model->removeRow(mCombo->currentIndex())) {
@@ -193,6 +196,7 @@ void AddRemoveComboBox::updateUi()
     mRemoveButton->setEnabled(mCombo->currentIndex() != -1);
 }
 
+/*! This slot takes an int as \e index parameter and emits the corresponding currentIndexChanged(QModelIndex). */
 void AddRemoveComboBox::translateIntIndexChanged(int index)
 {
     if(index == -1)
