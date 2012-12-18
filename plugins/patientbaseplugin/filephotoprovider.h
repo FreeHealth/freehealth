@@ -35,6 +35,7 @@
  * \version 0.8.0
  * \date 2012-09-29
 */
+
 namespace Patients {
 
 class FilePhotoProvider : public Core::IPhotoProvider

@@ -29,6 +29,13 @@
 
 #include <QToolButton>
 
+/**
+ * \file themedgenderbutton.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 18 Dec 2012
+*/
+
 namespace Identity {
 namespace Internal {
 class ThemedGenderButton : public QToolButton
