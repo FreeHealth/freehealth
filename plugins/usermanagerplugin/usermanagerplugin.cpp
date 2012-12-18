@@ -42,7 +42,7 @@
 #include "database/userbase.h"
 #include "widgets/usermanager.h"
 #include "widgets/useridentifier.h"
-#include "widgets/userwizard.h"
+#include "widgets/usercreatorwizard.h"
 #include "currentuserpreferencespage.h"
 #include "userfirstrunpage.h"
 #include "usermanagermode.h"
@@ -357,7 +357,7 @@ void UserManagerPlugin::postCoreInitialization()
 /** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */
 void UserManagerPlugin::createUser()
 {
-    UserWizard wiz;
+    UserCreatorWizard wiz;
 //    wiz.createUser(true);
     wiz.exec();
 }

@@ -48,10 +48,10 @@ class QTreeWidget;
 QT_END_NAMESPACE
 
 /**
- * \file userwizard.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 29 May 2011
+ * \file usercreatorwizard.h
+ * \author Eric MAEKER
+ * \version 0.8.2
+ * \date 17 Dec 2012
 */
 
 namespace Views {
@@ -67,7 +67,6 @@ class PrinterPreviewer;
 class TextDocumentExtra;
 }
 
-
 namespace UserPlugin {
 class IUserWizardPage;
 
@@ -80,7 +79,7 @@ class UserWizardContactWidget;
 }  // End namespace Ui
 }  // End namespace Internal
 
-class USER_EXPORT UserWizard : public QWizard
+class USER_EXPORT UserCreatorWizard : public QWizard
 {
     Q_OBJECT
 public:
@@ -94,8 +93,9 @@ public:
         LastPage = 10000
     };
 
-    UserWizard(QWidget *parent = 0);
-    ~UserWizard();
+    UserCreatorWizard(QWidget *parent = 0);
+    ~UserCreatorWizard();
+
     QString createdUuid() const;
 
     static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}

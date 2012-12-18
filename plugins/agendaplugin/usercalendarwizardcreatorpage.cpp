@@ -25,8 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Agenda::Internal::UserCalendarWizardCreatorPage
-  Is an Internal class of the Agenda plugin and an extension for the UserPlugin::UserWizard (user creator wizard).
+ * \class Agenda::Internal::UserCalendarWizardCreatorPage
+ * Is an Internal class of the Agenda plugin and an extension
+ * for the UserPlugin::UserCreatorWizard (user creator wizard).
 */
 
 #include "usercalendarwizardcreatorpage.h"

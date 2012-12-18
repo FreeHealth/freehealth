@@ -62,7 +62,7 @@
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/widgets/userviewer.h>
 #include <usermanagerplugin/constants.h>
-#include <usermanagerplugin/widgets/userwizard.h>
+#include <usermanagerplugin/widgets/usercreatorwizard.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
@@ -521,7 +521,7 @@ void UserManagerWidget::onCreateUserRequested()
         return;
     }
     QModelIndex index = d->ui->userTreeView->model()->index(createdRow, USER_NAME);
-    UserWizard wiz(this);
+    UserCreatorWizard wiz(this);
     // TODO: code here
 //    wiz.setModelRow(createdRow);
     int r = wiz.exec();

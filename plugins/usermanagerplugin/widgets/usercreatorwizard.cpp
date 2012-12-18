@@ -25,24 +25,25 @@
  *      NAME <MAIL@Address>                                                *
  ***************************************************************************/
 /**
-  \class UserPlugin::UserWizard
-  \brief Wizard for user creation.
-  You can tell UserWizrd to create the user itself or use a defined user. createUser() define the
-  creation mode. If you set it to false, inform the row of the model to use with setModelRow(). By default,
-  UserWizard create itself a new user.\n
-  You can extend the wizard with the UserPlugin::IUserWizardPage interface. The wizard will catch all
-  objects (in its contructor) from the plugin manager object pool and present the pages to the user.\n
-  Usage :
-  \code
-    UserWizard wiz;
-    wiz.createUser(true);   // will create the user (optional)
-    wiz.show();
-  \endcode
-
-  \todo If row is defined --> populate all wizard pages with users values.
+ * \class UserPlugin::UserCreatorWizard
+ * \brief Wizard for user creation.
+ * You use the UserPlugin::UserCreatorWizard to create a new user.
+ * createUser() define the creation mode. If you set it to false,
+ * inform the row of the model to use with setModelRow(). By default,
+ * UserCreatorWizard create itself a new user.\n
+ * You can extend the wizard with the UserPlugin::IUserWizardPage interface. The wizard will catch all
+ * objects (in its contructor) from the plugin manager object pool and present the pages to the user.\n
+ * Usage :
+ * \code
+ *   UserCreatorWizard wiz;
+ *   wiz.createUser(true);   // will create the user (optional)
+ *   wiz.show();
+ * \endcode
+ *
+ * \todo If row is defined --> populate all wizard pages with users values.
 */
 
-#include "userwizard.h"
+#include "usercreatorwizard.h"
 
 #include <usermanagerplugin/userdata.h>
 #include <usermanagerplugin/database/userbase.h>
@@ -150,17 +151,21 @@ static inline QString defaultWatermark(const QString &profession, const QString 
     return defaultPaper(profession, "watermark", paperType);
 }
 
-QHash<int, QString> UserWizard::m_Papers;
-QHash<int, int> UserWizard::m_Rights;
+QHash<int, QString> UserCreatorWizard::m_Papers;
+QHash<int, int> UserCreatorWizard::m_Rights;
 
-/** Create a full UserWizard creator with the extending IUserWizardPage from the plugin manager object pool. */
-UserWizard::UserWizard(QWidget *parent) :
+/**
+ * Create a full UserCreatorWizard creator with the extending
+ * UserPlugin::IUserWizardPage from the plugin manager object pool.
+ */
+UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
         QWizard(parent),
         m_User(new UserData),
         m_Row(-1),
         m_Saved(false),
         m_CreateUser(true)
 {
+    setObjectName("UserCreatorWizard");
     setPage(IdentityAndLoginPage, new UserIdentityAndLoginPage(this));
     setPage(ContactPage, new UserContactPage(this));
     setPage(ProfilPage, new UserProfilePage(this));
@@ -179,7 +184,7 @@ UserWizard::UserWizard(QWidget *parent) :
     setOptions(options() | QWizard::HaveHelpButton);
 }
 
-UserWizard::~UserWizard()
+UserCreatorWizard::~UserCreatorWizard()
 {
     if (m_User) {
         delete m_User;
@@ -187,7 +192,7 @@ UserWizard::~UserWizard()
     }
 }
 
-void UserWizard::done(int r)
+void UserCreatorWizard::done(int r)
 {
     validateCurrentPage();
 
@@ -282,13 +287,13 @@ void UserWizard::done(int r)
     }
 }
 
-void UserWizard::showEvent(QShowEvent *event)
+void UserCreatorWizard::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     Utils::centerWidget(this);
 }
 
-QString UserWizard::createdUuid() const
+QString UserCreatorWizard::createdUuid() const
 {
     if (m_User) {
         return m_User->uuid();
@@ -363,50 +368,50 @@ UserProfilePage::UserProfilePage(QWidget *parent) :
 
 bool UserProfilePage::validatePage()
 {
-    UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
-    UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::NoRights);
-    UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
-    UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::NoRights);
-    UserWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
-    UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
-    next = UserWizard::SpecialiesQualificationsPage;
+    UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
+    UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
+    next = UserCreatorWizard::SpecialiesQualificationsPage;
     QStringList result = view->getCheckedStringList().toStringList();
 
     if (result.contains(tkTr(Trans::Constants::DOCTOR)) || result.contains(tkTr(Trans::Constants::MEDICAL_STUDENT))) {
-        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
-        UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
-        UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
-        UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
-        UserWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
-        UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
-        next = UserWizard::SpecialiesQualificationsPage;
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
+        UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
+        next = UserCreatorWizard::SpecialiesQualificationsPage;
 
         // create default papers
-        UserWizard::setUserPaper(Core::IUser::GenericHeader, defaultPaper("medicals", "header"));
-        UserWizard::setUserPaper(Core::IUser::GenericFooter, defaultPaper("medicals", "footer"));
-        UserWizard::setUserPaper(Core::IUser::GenericWatermark, defaultPaper("medicals", "watermark"));
+        UserCreatorWizard::setUserPaper(Core::IUser::GenericHeader, defaultPaper("medicals", "header"));
+        UserCreatorWizard::setUserPaper(Core::IUser::GenericFooter, defaultPaper("medicals", "footer"));
+        UserCreatorWizard::setUserPaper(Core::IUser::GenericWatermark, defaultPaper("medicals", "watermark"));
 
-        UserWizard::setUserPaper(Core::IUser::PrescriptionHeader, defaultPaper("medicals", "header", "prescriptions"));
-        UserWizard::setUserPaper(Core::IUser::PrescriptionFooter, defaultPaper("medicals", "footer", "prescriptions"));
-        UserWizard::setUserPaper(Core::IUser::PrescriptionWatermark, defaultPaper("medicals", "watermark", "prescriptions"));
+        UserCreatorWizard::setUserPaper(Core::IUser::PrescriptionHeader, defaultPaper("medicals", "header", "prescriptions"));
+        UserCreatorWizard::setUserPaper(Core::IUser::PrescriptionFooter, defaultPaper("medicals", "footer", "prescriptions"));
+        UserCreatorWizard::setUserPaper(Core::IUser::PrescriptionWatermark, defaultPaper("medicals", "watermark", "prescriptions"));
 
-        UserWizard::setUserPaper(Core::IUser::AdministrativeHeader, defaultPaper("medicals", "header"));
-        UserWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
-        UserWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
+        UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeHeader, defaultPaper("medicals", "header"));
+        UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
+        UserCreatorWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
     } else if (result.contains(tkTr(Trans::Constants::NURSE))) {
 
     } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
 
     } else if (result.contains(tkTr(Trans::Constants::SECRETARY))) {
-        UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
-        UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
+        UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
+        UserCreatorWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
     }
     if (result.contains(tkTr(Trans::Constants::SOFT_ADMIN))) {
-        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
+        UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
     }
 
     if (box->isChecked()) {
-        next = UserWizard::RightsPage;
+        next = UserCreatorWizard::RightsPage;
         return true;
     }
     return true;
@@ -469,21 +474,21 @@ UserRightsPage::UserRightsPage(QWidget *parent)
 
 void UserRightsPage::initializePage()
 {
-    um->setRights(UserWizard::userRights(Core::IUser::ManagerRights));
-    drugs->setRights(UserWizard::userRights(Core::IUser::DrugsRights));
-    med->setRights(UserWizard::userRights(Core::IUser::MedicalRights));
-    paramed->setRights(UserWizard::userRights(Core::IUser::ParamedicalRights));
-    administ->setRights(UserWizard::userRights(Core::IUser::AdministrativeRights));
+    um->setRights(UserCreatorWizard::userRights(Core::IUser::ManagerRights));
+    drugs->setRights(UserCreatorWizard::userRights(Core::IUser::DrugsRights));
+    med->setRights(UserCreatorWizard::userRights(Core::IUser::MedicalRights));
+    paramed->setRights(UserCreatorWizard::userRights(Core::IUser::ParamedicalRights));
+    administ->setRights(UserCreatorWizard::userRights(Core::IUser::AdministrativeRights));
 
 }
 
 bool UserRightsPage::validatePage()
 {
-    UserWizard::setUserRights(Core::IUser::ManagerRights, um->getRights());
-    UserWizard::setUserRights(Core::IUser::DrugsRights, drugs->getRights());
-    UserWizard::setUserRights(Core::IUser::MedicalRights, med->getRights());
-    UserWizard::setUserRights(Core::IUser::ParamedicalRights, paramed->getRights());
-    UserWizard::setUserRights(Core::IUser::AdministrativeRights, administ->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::ManagerRights, um->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::DrugsRights, drugs->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::MedicalRights, med->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::ParamedicalRights, paramed->getRights());
+    UserCreatorWizard::setUserRights(Core::IUser::AdministrativeRights, administ->getRights());
     return true;
 }
 

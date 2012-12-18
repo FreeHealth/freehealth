@@ -27,7 +27,7 @@
 #include "userfirstrunpage.h"
 #include <usermanagerplugin/widgets/useridentifier.h>
 #include <usermanagerplugin/widgets/usermanager.h>
-#include <usermanagerplugin/widgets/userwizard.h>
+#include <usermanagerplugin/widgets/usercreatorwizard.h>
 #include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
@@ -89,7 +89,7 @@ void UserCreationPage::userManager()
 
 void UserCreationPage::userWizard()
 {
-    UserWizard wiz;
+    UserCreatorWizard wiz;
     wiz.exec();
 }
 

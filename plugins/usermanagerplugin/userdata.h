@@ -59,7 +59,7 @@ class TextDocumentExtra;
 
 namespace UserPlugin {
 class UserModel;
-class UserWizard;
+class UserCreatorWizard;
 
 namespace Internal {
 class UserDataPrivate;
@@ -121,7 +121,7 @@ class USER_EXPORT UserData
 {
     friend class UserBase;
     friend class UserPlugin::UserModel;
-    friend class UserPlugin::UserWizard;
+    friend class UserPlugin::UserCreatorWizard;
 
 public:
     UserData();
@@ -143,52 +143,52 @@ public:
     void setUuid(const QString &val);
 
     // setters to create or change the values
-    void setDynamicDataValue(const char *name, const QVariant & val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
+    void setDynamicDataValue(const char *name, const QVariant &val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
     void setRights(const char *roleName, const Core::IUser::UserRights rights);
 
 
     // simplified setters (TODO : some must be logged)
-    void  setId(const QVariant & val)                  { setValue(Table_USERS, USER_ID, val); }
-    void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
-    void  setVirtual(const QVariant & val)             { setValue(Table_USERS, USER_ISVIRTUAL, val); }
-    void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
+    void  setId(const QVariant &val)                  { setValue(Table_USERS, USER_ID, val); }
+    void  setValidity(const QVariant &val)            { setValue(Table_USERS, USER_VALIDITY, val); }
+    void  setVirtual(const QVariant &val)             { setValue(Table_USERS, USER_ISVIRTUAL, val); }
+    void  setLocker(const QVariant &val)              { setValue(Table_USERS, USER_LOCKER ,val); }
     void  setClearPassword(const QString &val);
     void  setTitleIndex(const QVariant &val)           { setValue(Table_USERS, USER_TITLE ,val); }
     void  setGenderIndex(const QVariant &val)          { setValue(Table_USERS, USER_GENDER ,val); }
-    void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
-    void  setSecondName(const QVariant & val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
-    void  setFirstname(const QVariant & val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
+    void  setName(const QVariant &val)                { setValue(Table_USERS, USER_NAME, val); }
+    void  setSecondName(const QVariant &val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
+    void  setFirstname(const QVariant &val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
     void  setLanguageIso(const QVariant &val)          { setValue(Table_USERS, USER_LANGUAGE, val); }
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
-    void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
+    void  setMail(const QVariant &val)                { setValue(Table_USERS, USER_MAIL, val); }
 
-    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATA_ADDRESS , val); }
-    void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATA_ZIPCODE , val); }
-    void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATA_CITY , val); }
-    void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATA_COUNTRY , val); }
-    void  setCountryIso(const QVariant & val)          { setDynamicDataValue(USER_DATA_COUNTRY , val); }
-    void  setTel1(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL1 , val); }
-    void  setTel2(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL2 , val); }
-    void  setTel3(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL3 , val); }
-    void  setFax(const QVariant & val)                 { setDynamicDataValue(USER_DATA_FAX , val); }
-    void  setPractitionerIdentifiant(const QStringList & val) { setDynamicDataValue(USER_DATA_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
+    void  setAddress(const QVariant &val)             { setDynamicDataValue(USER_DATA_ADDRESS , val); }
+    void  setZipcode(const QVariant &val)             { setDynamicDataValue(USER_DATA_ZIPCODE , val); }
+    void  setCity(const QVariant &val)                { setDynamicDataValue(USER_DATA_CITY , val); }
+    void  setCountry(const QVariant &val)             { setDynamicDataValue(USER_DATA_COUNTRY , val); }
+    void  setCountryIso(const QVariant &val)          { setDynamicDataValue(USER_DATA_COUNTRY , val); }
+    void  setTel1(const QVariant &val)                { setDynamicDataValue(USER_DATA_TEL1 , val); }
+    void  setTel2(const QVariant &val)                { setDynamicDataValue(USER_DATA_TEL2 , val); }
+    void  setTel3(const QVariant &val)                { setDynamicDataValue(USER_DATA_TEL3 , val); }
+    void  setFax(const QVariant &val)                 { setDynamicDataValue(USER_DATA_FAX , val); }
+    void  setPractitionerIdentifiant(const QStringList &val) { setDynamicDataValue(USER_DATA_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
 
-    void  setSpecialty(const QStringList & val)         { setDynamicDataValue(USER_DATA_SPECIALTY, Utils::Serializer::toString(val)); }
-    void  setQualification(const QStringList & val)     { setDynamicDataValue(USER_DATA_QUALIFICATION, Utils::Serializer::toString(val)); }
+    void  setSpecialty(const QStringList &val)         { setDynamicDataValue(USER_DATA_SPECIALTY, Utils::Serializer::toString(val)); }
+    void  setQualification(const QStringList &val)     { setDynamicDataValue(USER_DATA_QUALIFICATION, Utils::Serializer::toString(val)); }
 
-    void  setGenericHeader(const QVariant & val)        { setDynamicDataValue(USER_DATA_GENERICHEADER , val); }
-    void  setGenericFooter(const QVariant & val)        { setDynamicDataValue(USER_DATA_GENERICFOOTER , val); }
+    void  setGenericHeader(const QVariant &val)        { setDynamicDataValue(USER_DATA_GENERICHEADER , val); }
+    void  setGenericFooter(const QVariant &val)        { setDynamicDataValue(USER_DATA_GENERICFOOTER , val); }
     void  setGenericWatermark(const QVariant &val)      { setDynamicDataValue(USER_DATA_GENERICWATERMARK , val); }
 
-    void  setAdminHeader(const QVariant & val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEHEADER , val); }
-    void  setAdminFooter(const QVariant & val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEFOOTER , val); }
+    void  setAdminHeader(const QVariant &val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEHEADER , val); }
+    void  setAdminFooter(const QVariant &val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEFOOTER , val); }
     void  setAdminWatermark(const QVariant &val)        { setDynamicDataValue(USER_DATA_ADMINISTRATIVEWATERMARK , val); }
 
-    void  setPrescriptionHeader(const QVariant & val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONHEADER , val); }
-    void  setPrescriptionFooter(const QVariant & val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONFOOTER , val); }
+    void  setPrescriptionHeader(const QVariant &val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONHEADER , val); }
+    void  setPrescriptionFooter(const QVariant &val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONFOOTER , val); }
     void  setPrescriptionWatermark(const QVariant &val) { setDynamicDataValue(USER_DATA_PRESCRIPTIONWATERMARK , val); }
 
-    void  setPreferences(const QVariant & val)          { setDynamicDataValue(USER_DATA_PREFERENCES , val); }
+    void  setPreferences(const QVariant &val)          { setDynamicDataValue(USER_DATA_PREFERENCES , val); }
 
     void  addLoginToHistory();
 
@@ -266,17 +266,17 @@ public:
 
 
 protected:
-    // use only with database UserBase
+    // use only with database UserBase / UserCreatorWizard
 
     // generic setters to use only when retreiving data from database
-    void setValue(const int tableref, const int fieldref, const QVariant & val);
+    void setValue(const int tableref, const int fieldref, const QVariant &val);
     void addDynamicDataFromDatabase(const QList<UserDynamicData*> &list);
-    void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val);
+    void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant &val);
     void setLkIds(const QList<int> &lkids);
 
     // Login can not be changed for any users
-    void setLogin64(const QVariant & val)             { setValue(Table_USERS, USER_LOGIN, val); }
-    void setLastLogin(const QVariant & val)           { setValue(Table_USERS, USER_LASTLOG, val); }
+    void setLogin64(const QVariant &val)             { setValue(Table_USERS, USER_LOGIN, val); }
+    void setLastLogin(const QVariant &val)           { setValue(Table_USERS, USER_LASTLOG, val); }
     // Crypted password must always be sync with clear password
     void setCryptedPassword(const QVariant &val);
 

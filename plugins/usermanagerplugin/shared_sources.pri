@@ -43,7 +43,7 @@ HEADERS += \
     $${PWD}/widgets/usermanager_p.h \
     $${PWD}/widgets/userpassworddialog.h \
     $${PWD}/widgets/userrightswidget.h \
-    $${PWD}/widgets/userwizard.h \
+    $${PWD}/widgets/usercreatorwizard.h \
     $${PWD}/widgets/userlineeditcompletersearch.h
 
 SOURCES += \
@@ -55,7 +55,7 @@ SOURCES += \
     $${PWD}/widgets/usermanager.cpp \
     $${PWD}/widgets/userpassworddialog.cpp \
     $${PWD}/widgets/userrightswidget.cpp \
-    $${PWD}/widgets/userwizard.cpp \
+    $${PWD}/widgets/usercreatorwizard.cpp \
     $${PWD}/widgets/userlineeditcompletersearch.cpp
 
 
