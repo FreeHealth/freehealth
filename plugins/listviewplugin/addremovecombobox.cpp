@@ -122,6 +122,10 @@ void AddRemoveComboBox::initialize()
     connect(mAddButton, SIGNAL(clicked()), this, SLOT(addItem()));
     connect(mRemoveButton, SIGNAL(clicked()), this, SLOT(removeItem()));
     connect(mCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentIndexChanged(int)));
+
+    // translate int signals to QModelIndex signals
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(translateIntIndexChanged(int)));
+
     connect(mCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUi()));
 }
 
@@ -187,6 +191,21 @@ void AddRemoveComboBox::removeItem()
 void AddRemoveComboBox::updateUi()
 {
     mRemoveButton->setEnabled(mCombo->currentIndex() != -1);
+}
+
+void AddRemoveComboBox::translateIntIndexChanged(int index)
+{
+    if(index == -1)
+        return;
+
+    Q_EMIT currentIndexChanged(intIndexToQModelIndex(index));
+}
+
+QModelIndex AddRemoveComboBox::intIndexToQModelIndex(int intIndex) const
+{
+    if(!mCombo || !mCombo->model())
+        return QModelIndex();
+    return QModelIndex(mCombo->model()->index(intIndex, mCombo->modelColumn()));
 }
 
 /*! Reimplemented event handler to handle state changes. Used for language change. */

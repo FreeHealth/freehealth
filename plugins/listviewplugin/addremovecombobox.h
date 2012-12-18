@@ -19,14 +19,16 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Christian A Reiter                                  *
- *   Contributors :                                                        *
+ *   Main developers: Christian A Reiter                                   *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ADDREMOVECOMBOBOX_H
 #define ADDREMOVECOMBOBOX_H
 
 #include <listviewplugin/listview_exporter.h>
+#include <listviewplugin/extendedview.h>
+
 #include <QWidget>
 #include <QComboBox>
 #include <QGroupBox>
@@ -38,7 +40,7 @@ QT_END_NAMESPACE
 
 /**
  * \file addremovecombobox.h
- * \author Christian A Reiter
+ * \author Christian A. Reiter
  * \version 0.8.0
  * \date 18 Oct 2012
 */
@@ -69,8 +71,8 @@ Q_SIGNALS:
     void itemAdded(const QModelIndex &index);           //!< item was successfully added
     void aboutToRemoveItem(const QModelIndex &index);   //!< emitted before Item removal
     void itemRemoved();                                 //!< the Item was removed
-    void currentIndexChanged(int index);                //!< current index was changed
-
+    void currentIndexChanged(int index);                //!< current index was changed (int version)
+    void currentIndexChanged(const QModelIndex &index); //!< current index was changed (QModelIndex version)
 
 public Q_SLOTS:
     void setEditText(const QString &text);
@@ -80,8 +82,10 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateUi();
+    void translateIntIndexChanged(int index);
 
 private:
+    QModelIndex intIndexToQModelIndex(int intIndex) const;
     QLabel *mLabel;
     QComboBox *mCombo;
     QPushButton *mAddButton;

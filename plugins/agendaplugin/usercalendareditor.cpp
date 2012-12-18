@@ -86,7 +86,7 @@ void UserCalendarEditorWidget::setUserCalendarModel(UserCalendarModel *model)
 /** Define the \e index to use. You must firstly define the Agenda::UserCalendarModel with setUserCalendarModel(). */
 void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
 {
-    Q_ASSERT(m_UserCalendarModel);
+//    Q_ASSERT(m_UserCalendarModel);
     if (!m_UserCalendarModel)
         return;
 

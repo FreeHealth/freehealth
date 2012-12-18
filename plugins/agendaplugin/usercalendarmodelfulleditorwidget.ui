@@ -13,41 +13,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
-   <item row="0" column="0">
-    <widget class="Utils::MiniSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="Views::ListView" name="listView">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="Agenda::UserCalendarEditorWidget" name="editor" native="true"/>
-    </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="Views::AddRemoveComboBox" name="agendaNamesCombo" native="true"/>
+   </item>
+   <item>
+    <widget class="Agenda::UserCalendarEditorWidget" name="editor" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>Utils::MiniSplitter</class>
-   <extends>QSplitter</extends>
-   <header location="global">utils/widgets/minisplitter.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Agenda::UserCalendarEditorWidget</class>
    <extends>QWidget</extends>
@@ -55,9 +30,10 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Views::ListView</class>
-   <extends>QListView</extends>
-   <header location="global">listviewplugin/stringlistview.h</header>
+   <class>Views::AddRemoveComboBox</class>
+   <extends>QWidget</extends>
+   <header location="global">listviewplugin/addremovecombobox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

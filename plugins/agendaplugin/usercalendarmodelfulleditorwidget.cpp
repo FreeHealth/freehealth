@@ -73,10 +73,9 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
 
     ui->setupUi(this);
     ui->editor->setEnabled(false);
-    ui->listView->setActions(Views::Constants::AddRemove);
 
-    connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
-    // INFO: User calendars are added/removed using the ListView actions' connected to the view model
+    connect(ui->agendaNamesCombo, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
+    // INFO: User calendars are added/removed using the Combos actions' connected to the view model
 }
 
 UserCalendarModelFullEditorWidget::~UserCalendarModelFullEditorWidget()
@@ -92,8 +91,8 @@ void UserCalendarModelFullEditorWidget::setUserCalendarModel(UserCalendarModel *
     if (m_UserCalendarModel==model)
         return;
     m_UserCalendarModel = model;
-    ui->listView->setModel(m_UserCalendarModel);
-    ui->listView->setModelColumn(UserCalendarModel::Label);
+    ui->agendaNamesCombo->setModel(m_UserCalendarModel);
+    ui->agendaNamesCombo->setModelColumn(UserCalendarModel::Label);
     ui->editor->setUserCalendarModel(m_UserCalendarModel);
 }
 
@@ -108,7 +107,7 @@ void UserCalendarModelFullEditorWidget::clear()
 {
     ui->editor->clear();
     ui->editor->setEnabled(false);
-    ui->listView->setModel(0);
+    ui->agendaNamesCombo->setModel(0);
     m_UserCalendarModel = 0;
 }
 
