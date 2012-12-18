@@ -27,21 +27,28 @@
 /**
  * \class UserPlugin::UserCreatorWizard
  * \brief Wizard for user creation.
+ * Creating new user:\n
  * You use the UserPlugin::UserCreatorWizard to create a new user.
- * createUser() define the creation mode. If you set it to false,
- * inform the row of the model to use with setModelRow(). By default,
- * UserCreatorWizard create itself a new user.\n
- * You can extend the wizard with the UserPlugin::IUserWizardPage interface. The wizard will catch all
- * objects (in its contructor) from the plugin manager object pool and present the pages to the user.\n
+ * The wizard is directly connected to the UserPlugin::Internal::UserBase and
+ * request a reset of the UserPlugin::UserCore::userModel() when the user
+ * is saved in the database.\n
+ *
+ * Checking user rights: \n
+ * Before creating this wizard you can use the checkUserRights() to
+ * check if the current has the rights to create a new user.
+ *
+ * Extending the wizard: \n
+ * You can extend the wizard with the UserPlugin::IUserWizardPage interface.
+ * The wizard will get all objects from the plugin manager object pool
+ * and will include theses pages.\n
+ *
  * Usage :
  * \code
  *   UserCreatorWizard wiz;
  *   wiz.createUser(true);   // will create the user (optional)
  *   wiz.show();
  * \endcode
- *
- * \todo If row is defined --> populate all wizard pages with users values.
-*/
+ */
 
 #include "usercreatorwizard.h"
 
@@ -103,6 +110,90 @@ static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::ins
 static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
+namespace {
+class UserContactPage: public QWizardPage
+{
+public:
+    UserContactPage(QWidget *parent = 0);
+    ~UserContactPage();
+
+private:
+    Internal::Ui::UserWizardContactWidget *ui;
+};
+
+class UserProfilePage : public QWizardPage
+{
+public:
+    UserProfilePage(QWidget *parent = 0);
+    bool validatePage();
+
+    int nextId() const {return next;}
+
+private:
+    Views::StringListView *view;
+    QCheckBox *box;
+    int next;
+};
+
+class UserSpecialiesQualificationsPage: public QWizardPage
+{
+public:
+    UserSpecialiesQualificationsPage(QWidget *parent = 0);
+};
+
+class UserRightsPage: public QWizardPage
+{
+public:
+    UserRightsPage(QWidget *parent = 0);
+    void initializePage();
+    bool validatePage();
+
+private:
+    Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
+};
+
+class UserLastPage: public QWizardPage
+{
+public:
+    UserLastPage(QWidget *parent = 0);
+    void initializePage();
+private:
+    QTreeWidget *tree;
+};
+
+} // namespace anonymous
+
+namespace UserPlugin {
+namespace Internal {
+class UserCreatorWizardPrivate
+{
+public:
+    UserCreatorWizardPrivate(UserCreatorWizard *parent) :
+        m_User(new UserData),
+        m_Row(-1),
+        m_Saved(false),
+        m_CreateUser(true),
+        q(parent)
+    {}
+
+    ~UserCreatorWizardPrivate()
+    {}
+
+public:
+    Internal::UserData *m_User;
+    int m_Row;
+    bool m_Saved, m_CreateUser;
+    QString m_Uuid;
+    QList<IUserWizardPage*> m_ExtraPages;
+    static QHash<int, QString> m_Papers;
+    static QHash<int, int> m_Rights;
+
+private:
+    UserCreatorWizard *q;
+};
+} // namespace Internal
+} // namespace UserPlugin
+
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
@@ -151,8 +242,8 @@ static inline QString defaultWatermark(const QString &profession, const QString 
     return defaultPaper(profession, "watermark", paperType);
 }
 
-QHash<int, QString> UserCreatorWizard::m_Papers;
-QHash<int, int> UserCreatorWizard::m_Rights;
+QHash<int, QString> UserCreatorWizardPrivate::m_Papers;
+QHash<int, int> UserCreatorWizardPrivate::m_Rights;
 
 /**
  * Create a full UserCreatorWizard creator with the extending
@@ -160,10 +251,7 @@ QHash<int, int> UserCreatorWizard::m_Rights;
  */
 UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
         QWizard(parent),
-        m_User(new UserData),
-        m_Row(-1),
-        m_Saved(false),
-        m_CreateUser(true)
+        d(new UserCreatorWizardPrivate(this))
 {
     setObjectName("UserCreatorWizard");
     setPage(IdentityAndLoginPage, new UserIdentityAndLoginPage(this));
@@ -173,9 +261,9 @@ UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
 
     // hook in all plugged in extrapages using the PluginManager
-    m_ExtraPages = pluginManager()->getObjects<IUserWizardPage>();
-    for(int i = 0; i < m_ExtraPages.count(); ++i) {
-        setPage(ExtraPages + i, m_ExtraPages.at(i)->createWizardPage(this));
+    d->m_ExtraPages = pluginManager()->getObjects<IUserWizardPage>();
+    for(int i = 0; i < d->m_ExtraPages.count(); ++i) {
+        setPage(ExtraPages + i, d->m_ExtraPages.at(i)->createWizardPage(this));
     }
 
     setPage(LastPage, new UserLastPage(this));
@@ -186,10 +274,23 @@ UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
 
 UserCreatorWizard::~UserCreatorWizard()
 {
-    if (m_User) {
-        delete m_User;
-        m_User = 0;
+    if (d->m_User) {
+        delete d->m_User;
+        d->m_User = 0;
     }
+    delete d;
+    d = 0;
+}
+
+/**
+ * Check the current user rights for the creation of new users.
+ * Return \e true if user can create a new user, otherwise returns false.
+ * \sa Core::IUser::ManagerRights, Core::IUser::Create
+ */
+bool UserCreatorWizard::checkUserRights()
+{
+    Core::IUser::UserRights r(userModel()->currentUserData(Core::IUser::ManagerRights).toInt());
+    return r & Core::IUser::Create;
 }
 
 void UserCreatorWizard::done(int r)
@@ -197,14 +298,14 @@ void UserCreatorWizard::done(int r)
     validateCurrentPage();
 
     // No user -> rejected & close
-    if (!m_User) {
+    if (!d->m_User) {
         QDialog::done(QDialog::Rejected);
         return;
     }
 
     // dialog result == Rejected -> ask for a confirmation
     if (r == QDialog::Rejected) {
-        m_Saved = false;
+        d->m_Saved = false;
         bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this user. "
                                              "If you continue without saving, all changes will be lost."),
                                tr("Do you really want to close this dialog?"),
@@ -219,50 +320,50 @@ void UserCreatorWizard::done(int r)
     if (true) {
 
         // Feed userData with the wizard values
-        m_User->setValidity(1);
-        m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
-        m_User->setClearPassword(field("Password").toString());
-        m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
-        m_User->setName(field("Name"));
-        m_User->setSecondName(field("SecondName"));
-        m_User->setFirstname(field("Firstname"));
-        m_User->setTitleIndex(field("Title"));
-        m_User->setGenderIndex(field("Gender"));
-        m_User->setAddress(field("Address"));
-        m_User->setZipcode(field("Zipcode"));
-        m_User->setCity(field("City"));
-        m_User->setCountry(field("Country"));
-        m_User->setLocaleLanguage(QLocale::Language(field("Language").toInt()));
-        m_User->setTel1(field("Tel1"));
-        m_User->setTel2(field("Tel2"));
-        m_User->setTel3(field("Tel3"));
-        m_User->setFax(field("Fax"));
-        m_User->setMail(field("Mail"));
-        m_User->setSpecialty(field("Specialities").toStringList());
-        m_User->setQualification(field("Qualifications").toStringList());
-        m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
+        d->m_User->setValidity(1);
+        d->m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
+        d->m_User->setClearPassword(field("Password").toString());
+        d->m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
+        d->m_User->setName(field("Name"));
+        d->m_User->setSecondName(field("SecondName"));
+        d->m_User->setFirstname(field("Firstname"));
+        d->m_User->setTitleIndex(field("Title"));
+        d->m_User->setGenderIndex(field("Gender"));
+        d->m_User->setAddress(field("Address"));
+        d->m_User->setZipcode(field("Zipcode"));
+        d->m_User->setCity(field("City"));
+        d->m_User->setCountry(field("Country"));
+        d->m_User->setLocaleLanguage(QLocale::Language(field("Language").toInt()));
+        d->m_User->setTel1(field("Tel1"));
+        d->m_User->setTel2(field("Tel2"));
+        d->m_User->setTel3(field("Tel3"));
+        d->m_User->setFax(field("Fax"));
+        d->m_User->setMail(field("Mail"));
+        d->m_User->setSpecialty(field("Specialities").toStringList());
+        d->m_User->setQualification(field("Qualifications").toStringList());
+        d->m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
 
-        m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(m_Rights.value(Core::IUser::ManagerRights)));
-        m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::MedicalRights)));
-        m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(m_Rights.value(Core::IUser::DrugsRights)));
-        m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::ParamedicalRights)));
-        m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(m_Rights.value(Core::IUser::AdministrativeRights)));
+        d->m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ManagerRights)));
+        d->m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::MedicalRights)));
+        d->m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::DrugsRights)));
+        d->m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ParamedicalRights)));
+        d->m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::AdministrativeRights)));
 
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
 
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeHeader)), Core::IUser::AdministrativeHeader);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeFooter)), Core::IUser::AdministrativeFooter);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeWatermark)), Core::IUser::AdministrativeWatermark);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeHeader)), Core::IUser::AdministrativeHeader);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeFooter)), Core::IUser::AdministrativeFooter);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeWatermark)), Core::IUser::AdministrativeWatermark);
 
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionHeader)), Core::IUser::PrescriptionHeader);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
-        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionHeader)), Core::IUser::PrescriptionHeader);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
+        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
 
-        if (m_CreateUser) {
+        if (d->m_CreateUser) {
             // Create user in database
-            if (!userBase()->createUser(m_User)) {
+            if (!userBase()->createUser(d->m_User)) {
                 Utils::warningMessageBox(tr("An error occured during database access."),
                                          tr("Logged errors saved. Please refer to the %1 to manage this error.")
                                          .arg(Utils::Log::saveLog()),
@@ -273,14 +374,14 @@ void UserCreatorWizard::done(int r)
                 userModel()->forceReset();
 
                 // Submit extra-pages ?
-                for(int i = 0; i < m_ExtraPages.count(); ++i) {
-                    m_ExtraPages.at(i)->submit(m_User->uuid());
+                for(int i = 0; i < d->m_ExtraPages.count(); ++i) {
+                    d->m_ExtraPages.at(i)->submit(d->m_User->uuid());
                 }
 
                 Utils::informativeMessageBox(tr("User successfully saved into database."),
                                              tr("The user was successfully created and saved into database."),
                                              "", tr("User successfully saved into database."));
-                m_Saved = true;
+                d->m_Saved = true;
                 QDialog::done(r);
             }
         }
@@ -295,12 +396,26 @@ void UserCreatorWizard::showEvent(QShowEvent *event)
 
 QString UserCreatorWizard::createdUuid() const
 {
-    if (m_User) {
-        return m_User->uuid();
+    if (d->m_User) {
+        return d->m_User->uuid();
     }
     return QString();
 }
 
+void UserCreatorWizard::setUserPaper(const int ref, const QString &xml)
+{
+    UserCreatorWizardPrivate::m_Papers.insert(ref, xml);
+}
+
+void UserCreatorWizard::setUserRights(const int role, const int value)
+{
+    UserCreatorWizardPrivate::m_Rights.insert(role, value);
+}
+
+int UserCreatorWizard::userRights(const int role)
+{
+    return UserCreatorWizardPrivate::m_Rights.value(role,0);
+}
 
 UserContactPage::UserContactPage(QWidget *parent) :
     QWizardPage(parent),
@@ -317,8 +432,7 @@ UserContactPage::UserContactPage(QWidget *parent) :
     c->setZipLineEdit(ui->zipcode);
     c->setCityLineEdit(ui->city);
     const QRegExp emailRegExp = QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive);
-    ui->mail->setValidator(new QRegExpValidator(
-                               emailRegExp,this));
+    ui->mail->setValidator(new QRegExpValidator(emailRegExp,this));
     registerField("Address", ui->address, "plainText");
     registerField("City", ui->city, "text");
     registerField("Zipcode", ui->zipcode, "text");

@@ -54,25 +54,9 @@ QT_END_NAMESPACE
  * \date 17 Dec 2012
 */
 
-namespace Views {
-class StringListView;
-}
-
-namespace Utils {
-class LineEditEchoSwitcher;
-}
-
-namespace Print {
-class PrinterPreviewer;
-class TextDocumentExtra;
-}
-
 namespace UserPlugin {
-class IUserWizardPage;
-
 namespace Internal {
-class UserRightsWidget;
-class UserData;
+class UserCreatorWizardPrivate;
 
 namespace Ui {
 class UserWizardContactWidget;
@@ -96,11 +80,13 @@ public:
     UserCreatorWizard(QWidget *parent = 0);
     ~UserCreatorWizard();
 
+    static bool checkUserRights();
+
     QString createdUuid() const;
 
-    static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}
-    static void setUserRights(const int role, const int value) {m_Rights.insert(role, value);}
-    static int userRights(const int role) {return m_Rights.value(role,0);}
+    static void setUserPaper(const int ref, const QString &xml);
+    static void setUserRights(const int role, const int value);
+    static int userRights(const int role);
 
 protected Q_SLOTS:
     void done(int r);
@@ -108,69 +94,8 @@ protected Q_SLOTS:
 private:
     void showEvent(QShowEvent *event);
 
-    Internal::UserData *m_User;
-    int m_Row;
-    bool m_Saved, m_CreateUser;
-    QString m_Uuid;
-    static QHash<int, QString> m_Papers;
-    static QHash<int, int> m_Rights;
-    QList<IUserWizardPage*> m_ExtraPages;
-};
-
-
-class UserContactPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserContactPage(QWidget *parent = 0);
-    ~UserContactPage();
-
 private:
-    Internal::Ui::UserWizardContactWidget *ui;
-};
-
-class UserProfilePage : public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserProfilePage(QWidget *parent = 0);
-    bool validatePage();
-
-    int nextId() const {return next;}
-
-private:
-    Views::StringListView *view;
-    QCheckBox *box;
-    int next;
-};
-
-class UserSpecialiesQualificationsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserSpecialiesQualificationsPage(QWidget *parent = 0);
-};
-
-class UserRightsPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserRightsPage(QWidget *parent = 0);
-    void initializePage();
-    bool validatePage();
-
-private:
-    Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
-};
-
-class UserLastPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserLastPage(QWidget *parent = 0);
-    void initializePage();
-private:
-    QTreeWidget *tree;
+    Internal::UserCreatorWizardPrivate *d;
 };
 
 }  // End namespace UserPlugin
