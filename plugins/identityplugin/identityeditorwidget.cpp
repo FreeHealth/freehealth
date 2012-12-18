@@ -85,6 +85,7 @@
 #include <QFileDialog>
 #include <QDateEdit>
 #include <QMenu>
+#include <QRegExpValidator>
 
 #include <QDebug>
 
@@ -232,6 +233,8 @@ public:
         ui->login->setEchoMode(QLineEdit::Normal);
         ui->password->setEchoMode(QLineEdit::Password);
         ui->password2->setEchoMode(QLineEdit::Password);
+        ui->login->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"), q));
+        ui->password->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"),q));
 
         Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
         ui->birthName->setValidator(upperVal);
@@ -900,6 +903,8 @@ void IdentityEditorWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         d->retranslate();
+        d->ui->login->setToolTip(tr("minimum: 6 characters\nonly characters and digits allowed"));
+        d->ui->password->setToolTip(tr("minimum: 6 characters"));
         break;
     default:
         break;
