@@ -65,7 +65,7 @@ namespace UserPlugin {
 namespace Internal {
 
 /// Private data representation for user data
-enum UserManagerModel::UserDataRepresentation {
+enum UserDataRepresentation {
     Name = 0,
     SecondName,
     FirstName,
@@ -79,8 +79,6 @@ enum UserManagerModel::UserDataRepresentation {
 
 class UserManagerModelPrivate
 {
-
-
 public:
     UserManagerModelPrivate(UserManagerModel *parent) :
         _sqlModel(0),
