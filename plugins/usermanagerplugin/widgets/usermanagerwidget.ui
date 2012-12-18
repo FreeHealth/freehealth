@@ -47,7 +47,11 @@
         <widget class="Utils::QButtonLineEdit" name="searchLineEdit"/>
        </item>
        <item>
-        <widget class="QTreeView" name="userTreeView"/>
+        <widget class="QTreeView" name="userTreeView">
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -70,15 +74,15 @@
    <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>UserPlugin::UserViewer</class>
-   <extends>QWidget</extends>
-   <header location="global">usermanagerplugin/widgets/userviewer.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Utils::MiniSplitter</class>
    <extends>QSplitter</extends>
    <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UserPlugin::UserViewer</class>
+   <extends>QWidget</extends>
+   <header location="global">usermanagerplugin/widgets/userviewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
