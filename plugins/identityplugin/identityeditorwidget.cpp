@@ -248,6 +248,7 @@ public:
         ui->firstname->setValidator(capVal);
 
         QObject::connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+        q->updateGenderImage();
         //            QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
 
         QList<Core::IPhotoProvider *> photoProviderList = pluginManager()->getObjects<Core::IPhotoProvider>();
@@ -909,6 +910,16 @@ QString IdentityEditorWidget::currentClearPassword() const
     return d->ui->password->text();
 }
 
+/**
+ * Check if the password is corrected (check length) and is correctly confirmed.
+ * Return \e true if password is complete and confirmed.
+ */
+bool IdentityEditorWidget::isPasswordCompleted() const
+{
+    return ((d->ui->password->text() == d->ui->password2->text())
+            && d->ui->password->text().length() >= d->m_minimalPasswordLength);
+}
+
 /*!
  * \brief Returns current widget photo of patient
  *
@@ -1017,7 +1028,6 @@ void IdentityEditorWidget::onCurrentPatientChanged()
  */
 void IdentityEditorWidget::checkLoginLength(const QString &login)
 {
-    qWarning() << "Check login" << login;
     if (login.length() >= d->m_minimalLoginLength) {
         d->ui->loginLabel->setStyleSheet("color:black;");
     } else {
@@ -1046,6 +1056,7 @@ void IdentityEditorWidget::checkPasswordConfirmation(const QString &)
 {
     if (d->ui->password->text() == d->ui->password2->text()) {
         d->ui->password2Label->setStyleSheet("color:black;");
+        Q_EMIT passwordConfirmed();
     } else {
         d->ui->password2Label->setStyleSheet("color:red;");
     }

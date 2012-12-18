@@ -147,6 +147,7 @@ public:
 
     QString currentClearLogin() const;
     QString currentClearPassword() const;
+    bool isPasswordCompleted() const;
 
     QPixmap currentPhoto() const;
     bool hasPhoto() const;
@@ -173,6 +174,7 @@ Q_SIGNALS:
     void clearPasswordChanged(const QString &lpassword);
 
     void clearLoginEditionFinished();
+    void passwordConfirmed();
 
 private:
     void changeEvent(QEvent *e);
