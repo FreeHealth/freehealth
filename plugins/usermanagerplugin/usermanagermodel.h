@@ -55,18 +55,6 @@ class UserManagerModel : public QStandardItemModel
 {
     Q_OBJECT
 
-    enum UserDataRepresentation {
-        Name = 0,
-        SecondName,
-        FirstName,
-        Uuid,
-        Title,
-        LastLogin,
-        Gender,
-
-        NumberOfColumns
-    };
-
 public:
     explicit UserManagerModel(QObject *parent = 0);
     ~UserManagerModel();

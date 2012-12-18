@@ -63,8 +63,24 @@ static inline UserPlugin::UserModel *userModel() {return userCore().userModel();
 
 namespace UserPlugin {
 namespace Internal {
+
+/// Private data representation for user data
+enum UserManagerModel::UserDataRepresentation {
+    Name = 0,
+    SecondName,
+    FirstName,
+    Uuid,
+    Title,
+    LastLogin,
+    Gender,
+
+    NumberOfColumns
+};
+
 class UserManagerModelPrivate
 {
+
+
 public:
     UserManagerModelPrivate(UserManagerModel *parent) :
         _sqlModel(0),
