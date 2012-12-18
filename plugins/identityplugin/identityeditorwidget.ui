@@ -6,113 +6,95 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>590</width>
-    <height>519</height>
+    <width>525</width>
+    <height>478</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="birthName"/>
-   </item>
-   <item row="8" column="2" colspan="2">
-    <widget class="QComboBox" name="genderCombo">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="loginGroup">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="title">
+      <string>Login and password</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="loginLabel">
+        <property name="text">
+         <string>Login</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="passwordLabel">
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="password2Label">
+        <property name="text">
+         <string>Confirm password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="login"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="password"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="password2"/>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="9" column="1">
-    <widget class="QLabel" name="languageLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Language</string>
-     </property>
+   <item row="1" column="0">
+    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true">
+     <zorder></zorder>
     </widget>
    </item>
-   <item row="13" column="0" colspan="4">
-    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
-   </item>
-   <item row="8" column="1">
-    <widget class="Utils::BirthDayEdit" name="dob"/>
-   </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="QComboBox" name="titleCombo">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLabel" name="secondNameLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Second name</string>
-     </property>
-     <property name="buddy">
-      <cstring>secondName</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QLabel" name="dobLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Date of birth</string>
-     </property>
-     <property name="buddy">
-      <cstring>dob</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="3">
-    <widget class="QLineEdit" name="firstname"/>
-   </item>
-   <item row="4" column="1" colspan="3">
-    <widget class="QLineEdit" name="secondName"/>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="firstnameLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>First name</string>
-     </property>
-     <property name="buddy">
-      <cstring>firstname</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" rowspan="10">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="3" column="1">
+      <widget class="QLabel" name="secondNameLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Second name</string>
+       </property>
+       <property name="buddy">
+        <cstring>secondName</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="3">
       <widget class="Identity::Internal::ThemedGenderButton" name="photoButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -152,62 +134,159 @@
        </property>
       </widget>
      </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+     <item row="5" column="1">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Gender</string>
        </property>
-       <property name="sizeHint" stdset="0">
+      </widget>
+     </item>
+     <item row="6" column="2" colspan="2">
+      <widget class="Utils::LanguageComboBox" name="language">
+       <property name="minimumSize">
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>0</width>
+         <height>20</height>
         </size>
        </property>
-      </spacer>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="firstnameLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>First name</string>
+       </property>
+       <property name="buddy">
+        <cstring>firstname</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QComboBox" name="titleCombo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <widget class="QLineEdit" name="birthName">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="languageLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Language</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="dobLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Date of birth</string>
+       </property>
+       <property name="buddy">
+        <cstring>dob</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QLineEdit" name="firstname">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QLineEdit" name="secondName">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2" colspan="2">
+      <widget class="Utils::BirthDayEdit" name="dob">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2" colspan="2">
+      <widget class="QComboBox" name="genderCombo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
-   </item>
-   <item row="10" column="1" colspan="3">
-    <widget class="Utils::LanguageComboBox" name="language"/>
-   </item>
-   <item row="14" column="0" colspan="4">
-    <widget class="QGroupBox" name="loginGroup">
-     <property name="title">
-      <string>Login and password</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="loginLabel">
-        <property name="text">
-         <string>Login</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="passwordLabel">
-        <property name="text">
-         <string>Password</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="password2Label">
-        <property name="text">
-         <string>Confirm password</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="login"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="password"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="password2"/>
-      </item>
-     </layout>
-    </widget>
    </item>
   </layout>
  </widget>
@@ -240,10 +319,16 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>secondName</tabstop>
+  <tabstop>titleCombo</tabstop>
+  <tabstop>birthName</tabstop>
   <tabstop>firstname</tabstop>
+  <tabstop>secondName</tabstop>
   <tabstop>dob</tabstop>
-  <tabstop>photoButton</tabstop>
+  <tabstop>genderCombo</tabstop>
+  <tabstop>language</tabstop>
+  <tabstop>login</tabstop>
+  <tabstop>password</tabstop>
+  <tabstop>password2</tabstop>
  </tabstops>
  <resources/>
  <connections/>

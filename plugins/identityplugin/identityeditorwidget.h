@@ -32,6 +32,14 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QDataWidgetMapper>
+#include <QDate>
+
+/**
+ * \file identityeditorwidget.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 18 Dec 2012
+*/
 
 namespace Identity {
 namespace Internal {
@@ -60,6 +68,16 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
 {
     Q_OBJECT
     friend class Internal::IdentityEditorWidgetPrivate;
+
+    Q_PROPERTY(QString title READ currentTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString birthName READ currentBirthName NOTIFY birthNameChanged)
+    Q_PROPERTY(QString secondName READ currentSecondName NOTIFY secondNameChanged)
+    Q_PROPERTY(QString firstName READ currentFirstName NOTIFY firstNameChanged)
+    Q_PROPERTY(QDate dateOfBirth READ currentDateOfBirth NOTIFY dateOfBirthChanged)
+    Q_PROPERTY(QString gender READ currentGender NOTIFY genderChanged)
+    Q_PROPERTY(int genderIndex READ currentGenderIndex NOTIFY genderIndexChanged)
+    Q_PROPERTY(QString language READ currentLanguage NOTIFY languageChanged)
+//    QPixmap currentPhoto() const;
 
 public:
     enum AvailableWidget {
@@ -110,11 +128,14 @@ public:
     virtual bool isIdentityValid() const;
     bool isModified() const;
 
+    QString currentTitle() const;
     QString currentBirthName() const;
     QString currentSecondName() const;
     QString currentFirstName() const;
     QString currentGender() const;
+    int currentGenderIndex() const;
     QDate currentDateOfBirth() const;
+    QString currentLanguage() const;
 
     QPixmap currentPhoto() const;
     bool hasPhoto() const;
@@ -127,6 +148,16 @@ public Q_SLOTS:
 
     // Xml management
     bool fromXml(const QString &xml);
+
+Q_SIGNALS:
+    void titleChanged(const QString &title);
+    void birthNameChanged(const QString &birthName);
+    void secondNameChanged(const QString &secondName);
+    void firstNameChanged(const QString &firstName);
+    void dateOfBirthChanged(const QDate &date);
+    void genderIndexChanged(int genderIndex);
+    void genderChanged(const QString &gender);
+    void languageChanged(const QString &languageName);
 
 private:
     void changeEvent(QEvent *e);

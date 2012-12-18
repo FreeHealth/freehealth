@@ -193,7 +193,24 @@ public:
         m_initialized(false),
         m_hasRealPhoto(false),
         m_xmlOnly(false),
+        m_availaibleSet(false),
         q(parent)
+    {
+    }
+
+    ~IdentityEditorWidgetPrivate()
+    {
+        if (m_Mapper) {
+            delete m_Mapper;
+            m_Mapper = 0;
+        }
+        if (ui) {
+            delete ui;
+            ui = 0;
+        }
+    }
+
+    void setupUi()
     {
         ui = new Ui::IdentityWidget;
         ui->setupUi(q);
@@ -223,8 +240,8 @@ public:
         Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
         ui->firstname->setValidator(capVal);
 
-        q->connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
-        //            q->connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+        QObject::connect(ui->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+        //            QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
 
         QList<Core::IPhotoProvider *> photoProviderList = pluginManager()->getObjects<Core::IPhotoProvider>();
 
@@ -236,8 +253,8 @@ public:
             foreach(Core::IPhotoProvider *provider, photoProviderList) {
                 //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                 photoAction = new QAction(provider->displayText(), q);
-                q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
-                q->connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)));
+                QObject::connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
+                QObject::connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)));
                 photoAction->setData(provider->id());
                 ui->photoButton->addAction(photoAction);
             }
@@ -249,21 +266,23 @@ public:
             //                if (ui->photoButton->pixmap().isNull())
             //                    ui->photoButton->setDisabled(true);
         }
-        q->connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
-        q->connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
-        }
-
-    ~IdentityEditorWidgetPrivate()
-    {
-        if (m_Mapper) {
-            delete m_Mapper;
-            m_Mapper = 0;
-        }
-        if (ui) {
-            delete ui;
-            ui = 0;
-        }
+        QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
+        QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
     }
+
+    void connectPropertiesNotifier()
+    {
+        QObject::connect(ui->birthName, SIGNAL(textChanged(QString)), q, SIGNAL(birthNameChanged(QString)));
+        QObject::connect(ui->secondName, SIGNAL(textChanged(QString)), q, SIGNAL(secondNameChanged(QString)));
+        QObject::connect(ui->firstname, SIGNAL(textChanged(QString)), q, SIGNAL(firstNameChanged(QString)));
+        QObject::connect(ui->dob, SIGNAL(dateChanged(QDate)), q, SIGNAL(dateOfBirthChanged(QDate)));
+        QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(genderIndexChanged(int)));
+        QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(genderChanged(QString)));
+//        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(titleIndexChanged(int)));
+        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(titleChanged(QString)));
+//        QObject::connect(ui->photoButton, SIGNAL(), q, SIGNAL(birthNameChanged(QString)));
+    }
+
 
     void updateDefaultPhotoAction()
     {
@@ -452,7 +471,7 @@ public:
     IsDirtyDataWidgetMapper *m_Mapper;
     QAbstractItemModel *m_Model;
     QPixmap m_Photo;
-    bool m_initialized, m_hasRealPhoto, m_xmlOnly;
+    bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet;
     QString m_lastXml;
 
 private:
@@ -476,6 +495,9 @@ IdentityEditorWidget::IdentityEditorWidget(QWidget *parent) :
     d(new Internal::IdentityEditorWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityEditorWidget");
+    d->setupUi();
+    d->connectPropertiesNotifier();
+
     d->retranslate();
 }
 
@@ -501,10 +523,13 @@ bool IdentityEditorWidget::initialize()
 
 /**
  * Define the widgets to include in the view . You must initialize() the widget before
- * defining the view's content.
+ * defining the view's content.\n
+ * \note: You can only set the widgets once.
  */
 void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 {
+    if (d->m_availaibleSet)
+        return;
     if (!d->ui)
         return;
     d->ui->titleCombo->setEnabled(widgets & TitleIndex);
@@ -541,9 +566,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
             || (widgets & Province)
             || (widgets & Country_TwoCharIso)
             || (widgets & Country_QLocale);
-
     d->ui->zipcodesWidget->setEnabled(showAddress);
-//    d->ui->editAdressGroup->setVisible(showAddress);
 
     bool showLog = (widgets & Extra_Login)
             || (widgets & Extra_Password)
@@ -558,6 +581,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->login->setVisible(d->ui->login->isEnabled());
     d->ui->password->setVisible(d->ui->password->isEnabled());
     d->ui->password2->setVisible(d->ui->password2->isEnabled());
+    d->m_availaibleSet = true;
 }
 
 /** Set/unset the view in read-only mode */
@@ -752,6 +776,12 @@ bool IdentityEditorWidget::isModified() const
 }
 
 /** Return the current editing value */
+QString IdentityEditorWidget::currentTitle() const
+{
+    return d->ui->titleCombo->currentText();
+}
+
+/** Return the current editing value */
 QString IdentityEditorWidget::currentBirthName() const
 {
     return d->ui->birthName->text();
@@ -782,9 +812,21 @@ QString IdentityEditorWidget::currentGender() const
 }
 
 /** Return the current editing value */
+int IdentityEditorWidget::currentGenderIndex() const
+{
+    return d->ui->genderCombo->currentIndex();
+}
+
+/** Return the current editing value */
 QDate IdentityEditorWidget::currentDateOfBirth() const
 {
     return d->ui->dob->date();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentLanguage() const
+{
+    return d->ui->language->currentLanguageName();
 }
 
 /*!
