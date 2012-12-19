@@ -24,9 +24,42 @@
  *       Christian A. Reiter <christian.a.reiter@gmail.com>>               *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class UserPlugin::Internal::UserIdentityAndLoginPage
+ * Wizard page for the UserPlugin::UserCreatorWizard that manages
+ * user identity and login/password.
+ *
+ * Wizard fields:
+ * Some fields are mandatory:
+ * - (birth)name
+ * - firstname
+ * - language
+ * - login
+ * - password
+ * Login and password are checked:
+ * - no duplicate login possible
+ * - password needs a confirmation
+ *
+ * Workflow:
+ * The page becomes completed when:
+ * - all mandatory fields are populated
+ * - login and password are correctly checked.
+ *
+ * Fields name:
+ * - "Name*"
+ * - "Firstname*"
+ * -"SecondName"
+ * - "Title"
+ * - "GenderIndex"
+ * - "Gender"
+ * - "Language*"
+ * - "Login*"
+ * - "Password*"
+ */
+// TODO: remove fields name "magic number"
+
 #include "useridentityandloginpage.h"
 #include <usermanagerplugin/usercore.h>
-#include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
 #include <coreplugin/icore.h>
@@ -35,14 +68,10 @@
 #include <coreplugin/translators.h>
 
 #include <identityplugin/identityeditorwidget.h>
-//#include <listviewplugin/languagecombobox.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
-//#include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constants.h>
-
-//#include "ui_useridentityandloginpage.h"
 
 #include <QHBoxLayout>
 
@@ -52,7 +81,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
-static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
 
 UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
