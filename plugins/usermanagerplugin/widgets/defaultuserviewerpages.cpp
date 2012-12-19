@@ -42,7 +42,6 @@
 #include <QDataWidgetMapper>
 #include <QStringListModel>
 
-#include "ui_userviewer_identity.h"
 #include "ui_userviewer_contact.h"
 #include "ui_userviewer_medicalrights.h"
 #include "ui_userviewer_papers.h"
