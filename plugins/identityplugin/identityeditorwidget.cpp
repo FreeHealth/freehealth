@@ -428,6 +428,21 @@ public:
         return "";
     }
 
+    bool populatePixmap()
+    {
+        // BUG: QPixmap from the themedGenderButton is not correctly managed by the QDataWidgetMapper
+        // So do this by hand
+        if (!m_Mapper)
+            return false;
+        int index = m_Mapper->mappedSection(ui->photoButton);
+        if (index > -1) {
+            QModelIndex modelIndex = m_Mapper->model()->index(m_Mapper->currentIndex(), index);
+            const QPixmap &pixmap = m_Mapper->model()->data(modelIndex).value<QPixmap>();
+            ui->photoButton->setPixmap(pixmap);
+        }
+        return true;
+    }
+
     bool fromXml(const QString &xml)
     {
         if (!m_xmlOnly)
@@ -768,8 +783,11 @@ QString IdentityEditorWidget::toXml() const
 void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 {
 //    qWarning() << modelIndex << (modelIndex.model() == d->m_Mapper->model());
-    if (modelIndex.model() == d->m_Mapper->model())
+    if (modelIndex.model() == d->m_Mapper->model()) {
         d->m_Mapper->setCurrentIndex(modelIndex.row());
+        d->populatePixmap();
+        updateGenderImage();
+    }
 }
 
 /**
@@ -1032,6 +1050,7 @@ void IdentityEditorWidget::onCurrentPatientChanged()
         return;
     d->m_Mapper->setCurrentModelIndex(QModelIndex());
     d->m_Mapper->setCurrentModelIndex(patient()->currentPatientIndex());
+    d->populatePixmap();
     updateGenderImage();
 }
 
