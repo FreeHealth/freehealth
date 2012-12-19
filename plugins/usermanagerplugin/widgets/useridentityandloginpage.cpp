@@ -111,6 +111,7 @@ bool UserIdentityAndLoginPage::checkLogin() const
         Utils::warningMessageBox(tr("Login error"), tr("Login already in use. Please select another login"));
         return false;
     }
+
     return true;
 }
 
@@ -145,9 +146,7 @@ void UserIdentityAndLoginPage::retranslate()
 
 bool UserIdentityAndLoginPage::isComplete() const
 {
-    return (!_identity->currentBirthName().isEmpty()
-            && !_identity->currentFirstName().isEmpty()
-            && !_identity->currentGender().isEmpty()
+    return (!_identity->isIdentityValid()
             && !_identity->currentLanguage().isEmpty()
             && checkLogin()
             && _identity->isPasswordCompleted());
