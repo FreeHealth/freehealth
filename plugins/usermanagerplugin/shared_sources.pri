@@ -67,7 +67,6 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/firstrunusercreationwidget.ui \
     $${PWD}/widgets/usermanagerwidget.ui \
     $${PWD}/widgets/userwizardcontactwidget.ui \
-    $${PWD}/widgets/userviewer_identity.ui \
     $${PWD}/widgets/userviewer_contact.ui \
     $${PWD}/widgets/userviewer_papers.ui \
     $${PWD}/widgets/userviewer_medicalrights.ui \
