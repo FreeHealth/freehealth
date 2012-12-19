@@ -96,6 +96,9 @@ public:
     void addPeople(const int row, const Calendar::People &people);
     void removePeople(const int row, const QString &uid);
 
+Q_SIGNALS:
+    void defaultAgendaChanged(const QModelIndex &index);
+
 public Q_SLOTS:
     bool submit();
     void revert();

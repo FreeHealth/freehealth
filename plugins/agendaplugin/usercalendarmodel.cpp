@@ -206,6 +206,7 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
                     u->setData(UserCalendar::IsDefault, false);
             }
             u->setData(UserCalendar::IsDefault, value);
+            Q_EMIT defaultAgendaChanged(index);
             break;
         }
         case IsPrivate: u->setData(UserCalendar::IsPrivate, value); break;
