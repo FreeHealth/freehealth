@@ -107,8 +107,8 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
     if (index.isValid())
         m_Mapper->setCurrentIndex(index.row());
     else {
-        m_Mapper->setCurrentIndex(-1);
         clear();
+        m_Mapper->setCurrentIndex(-1);
     }
 
     // Availability
@@ -184,7 +184,7 @@ void UserCalendarEditorWidget::submit()
         m_Mapper->submit();
 }
 
-/** Submit changes to the model. */
+/** Revert changes from the model. */
 void UserCalendarEditorWidget::revert()
 {
     if (m_Mapper)
