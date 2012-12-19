@@ -1473,6 +1473,10 @@ void UserModel::emitUserConnected() const
     Q_EMIT userConnected(d->m_CurrentUserUuid);
 }
 
+/**
+ * Get and save user preferences to the user database.
+ * \sa Core::ISettings::userSettingsSynchronized()
+ */
 void UserModel::updateUserPreferences()
 {
     if (WarnAllProcesses)

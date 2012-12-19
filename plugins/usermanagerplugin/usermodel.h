@@ -135,9 +135,11 @@ protected:
     void emitUserConnected() const;
     void checkUserPreferencesValidity();
 
+public Q_SLOTS:
+    void updateUserPreferences();
+
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
-    void updateUserPreferences();
 
 private:
     Internal::UserModelPrivate *d;

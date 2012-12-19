@@ -122,7 +122,7 @@ bool UserCore::initialize()
     d->_coreUserModelWrapper = new CoreUserModelWrapper(this);
     d->_coreUserModelWrapper->initialize(d->_model);
     Core::ICore::instance()->setUser(d->_coreUserModelWrapper);
-    connect(settings(), SIGNAL(userSettingsSynchronized()), d->_coreUserModelWrapper, SLOT(updateUserPreferences()));
+    connect(settings(), SIGNAL(userSettingsSynchronized()), d->_model, SLOT(updateUserPreferences()));
 
     return true;
 }
