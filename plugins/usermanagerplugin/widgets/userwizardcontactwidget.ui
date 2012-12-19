@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>207</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,65 +23,9 @@
       <attribute name="title">
        <string>Address</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout">
+      <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Address</string>
-         </property>
-         <property name="buddy">
-          <cstring>address</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QTextEdit" name="address">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>80</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>City</string>
-         </property>
-         <property name="buddy">
-          <cstring>city</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="Utils::QButtonLineEdit" name="city"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Zipcode</string>
-         </property>
-         <property name="buddy">
-          <cstring>zipcode</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="Utils::QButtonLineEdit" name="zipcode"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Country</string>
-         </property>
-         <property name="buddy">
-          <cstring>comboBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="Views::CountryComboBox" name="comboBox"/>
+        <widget class="ZipCodes::ZipCodesWidget" name="zipCodesWidget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -150,14 +94,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Views::CountryComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">listviewplugin/countrycombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Utils::QButtonLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">utils/widgets/qbuttonlineedit.h</header>
+   <class>ZipCodes::ZipCodesWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">zipcodesplugin/zipcodeswidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
