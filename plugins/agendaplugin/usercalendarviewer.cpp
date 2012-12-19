@@ -39,6 +39,7 @@
 #include "usercalendar.h"
 #include "usercalendarmodel.h"
 #include "agendacore.h"
+#include "dayavailability.h"
 
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/icore.h>

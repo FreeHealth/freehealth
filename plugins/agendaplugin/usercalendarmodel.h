@@ -108,34 +108,6 @@ private:
 };
 
 
-namespace Internal {
-class DayAvailabilityModelPrivate;
-}
-
-class DayAvailabilityModel : public QStandardItemModel
-{
-    Q_OBJECT
-public:
-    DayAvailabilityModel(QObject *parent = 0);
-    ~DayAvailabilityModel();
-
-    void clearAvailabilities();
-
-    void setUserCalendar(UserCalendar *calendar);
-    void addAvailability(const DayAvailability &availability);
-    void removeAvailability(const QModelIndex &index);
-
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-public Q_SLOTS:
-    bool submit();
-
-private:
-    Internal::DayAvailabilityModelPrivate *d;
-};
-
-
 } // End namespace Agenda
 
 #endif // USERCALENDARMODEL_H

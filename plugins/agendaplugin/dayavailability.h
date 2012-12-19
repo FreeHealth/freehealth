@@ -2,11 +2,21 @@
 #define DAYAVAILABILITY_H
 
 #include "agenda_exporter.h"
+#include "usercalendar.h"
 
 #include <QTime>
 #include <QVector>
+#include <QStandardItemModel>
 
 namespace Agenda {
+
+enum DayAvailabilityRoles {
+    WeekDayRole = Qt::UserRole + 1,
+    HourFromRole,
+    HourToRole,
+    TimeRangeIdRole,
+    AvailIdRole
+};
 
 struct AGENDA_EXPORT TimeRange {
     TimeRange() : id(-1) {}
@@ -16,6 +26,9 @@ struct AGENDA_EXPORT TimeRange {
     QTime from, to;
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////      DayAvailability     ////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 class AGENDA_EXPORT DayAvailability
 {
 public:
@@ -46,6 +59,37 @@ private:
     int m_WeekDay;
     bool m_isAvailable;
     QVector<TimeRange> timeRanges;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////      DayAvailabilityModel     ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+namespace Internal {
+class DayAvailabilityModelPrivate;
+}
+
+class DayAvailabilityModel : public QStandardItemModel
+{
+    Q_OBJECT
+public:
+    DayAvailabilityModel(QObject *parent = 0);
+    ~DayAvailabilityModel();
+
+    void clearAvailabilities();
+
+    void setUserCalendar(UserCalendar *calendar);
+    void addAvailability(const DayAvailability &availability);
+    void removeAvailability(const QModelIndex &index);
+
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+public Q_SLOTS:
+    bool submit();
+
+private:
+    Internal::DayAvailabilityModelPrivate *d;
 };
 
 } // end namespace Agenda
