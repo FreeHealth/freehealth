@@ -1689,7 +1689,7 @@ QPixmap pixmapFromBase64(const QByteArray &base64)
     QPixmap pix;
     if (base64.isEmpty())
         return pix;
-    if (!pix.load(QByteArray::fromBase64(base64))) {
+    if (!pix.loadFromData(QByteArray::fromBase64(base64))) {
         LOG_ERROR_FOR("Global", "Unable to transform base64 QByteArray to QPixmap");
         return QPixmap();
     }
