@@ -60,17 +60,21 @@ class AGENDA_EXPORT DayAvailability
 public:
     DayAvailability();
 
-    void setId(const int id) {m_id= id;}
+    void setId(const int id) {m_id = id;}
     int id() const {return m_id;}
 
     void clearTimeRange() {timeRanges.clear();}
 
-    void setWeekDay(const int _weekDays) {m_WeekDay=_weekDays;}
+    void setWeekDay(const int weekDay)
+    {
+        Q_ASSERT(weekDay >= Qt::Monday && weekDay <= Qt::Friday);
+        m_WeekDay = static_cast<Qt::DayOfWeek>(weekDay);
+    }
     int weekDay() const {return m_WeekDay;}
 
     void addTimeRange(const QTime &from, const QTime &to);
     void addTimeRange(const TimeRange &tr);
-    void setTimeRanges(const QVector<TimeRange> &ranges) {timeRanges=ranges;}
+    void setTimeRanges(const QVector<TimeRange> &ranges) {timeRanges = ranges;}
 
     int timeRangeCount() const {return timeRanges.count();}
     TimeRange timeRange(const int index) const;
@@ -127,7 +131,7 @@ public:
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
     void clearAvailabilities();
-    void removeAvailabilitiesForWeekDay(const int weekday);
+    void removeAvailabilitiesForWeekDay(const Qt::DayOfWeek weekday);
     void removeAvailabilitiesTimeRange(const int weekday, const QTime &from, const QTime &to);
 
 
