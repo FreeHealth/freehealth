@@ -189,6 +189,8 @@ private Q_SLOTS:
     void checkPasswordLength(const QString &password);
     void checkPasswordConfirmation(const QString &);
     void onPhotoPixmapChanged();
+    void onPhotoProviderRequested();
+    void onPhotoProviderPhotoReady(const QPixmap &pixmap);
 
 private:
     Internal::IdentityEditorWidgetPrivate *d;

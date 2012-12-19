@@ -208,6 +208,7 @@ public:
         m_checkPasswordConfirmation(true),
         m_minimalLoginLength(6),
         m_minimalPasswordLength(6),
+        m_requestedProvider(0),
         q(parent)
     {
     }
@@ -270,9 +271,9 @@ public:
             QAction *photoAction;
             foreach(Core::IPhotoProvider *provider, photoProviderList) {
                 //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
-                photoAction = new QAction(provider->displayText(), q);
-                QObject::connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
-                QObject::connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)), Qt::UniqueConnection);
+                photoAction = new QAction(provider->displayText(), provider);
+                QObject::connect(photoAction, SIGNAL(triggered()), q, SLOT(onPhotoProviderRequested()));
+                QObject::connect(provider, SIGNAL(photoReady(QPixmap)), q, SLOT(onPhotoProviderPhotoReady(QPixmap)));
                 photoAction->setData(provider->id());
                 ui->photoButton->addAction(photoAction);
             }
@@ -543,6 +544,7 @@ public:
     bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation;
     QString m_lastXml;
     int m_minimalLoginLength, m_minimalPasswordLength;
+    Core::IPhotoProvider *m_requestedProvider;
 
 private:
     QAction *m_deletePhotoAction;
@@ -1116,4 +1118,36 @@ void IdentityEditorWidget::onPhotoPixmapChanged()
     // Manage the dirty state of the mapper by hand
     if (d->m_Mapper)
         d->m_Mapper->setPixmapDirty(true);
+}
+
+/**
+ * \internal
+ * Avoid photoprovider to populate all instance of the IdentityEditorWidget
+ * \sa onPhotoProviderPhotoReady()
+ */
+void IdentityEditorWidget::onPhotoProviderRequested()
+{
+    d->m_requestedProvider = 0;
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (!action)
+        return;
+    Core::IPhotoProvider *provider = qobject_cast<Core::IPhotoProvider*>(action->parent());
+    if (!provider)
+        return;
+    d->m_requestedProvider = provider;
+    provider->startReceivingPhoto();
+}
+
+/**
+ * \internal
+ * Avoid photoprovider to populate all instance of the IdentityEditorWidget
+ * \sa onPhotoProviderRequested()
+ */
+void IdentityEditorWidget::onPhotoProviderPhotoReady(const QPixmap &pixmap)
+{
+    // Did the user ask the provider from this widget?
+    if (!d->m_requestedProvider)
+        return;
+    d->ui->photoButton->setPixmap(pixmap);
+    d->m_requestedProvider = 0;
 }
