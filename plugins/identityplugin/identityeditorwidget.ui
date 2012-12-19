@@ -66,9 +66,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true">
-     <zorder></zorder>
-    </widget>
+    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
@@ -135,7 +133,7 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="genderLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
