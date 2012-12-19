@@ -226,7 +226,7 @@ void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
 
 bool DayAvailabilityModel::submit()
 {
-    // TODO: code here
+    // FIXME: Data are not correctly submitted?
     qDebug() << "DayAvailabilityModel::submit() is a stub.";
     return false;
 }
