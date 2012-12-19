@@ -120,13 +120,8 @@ public:
                     dayItem->appendRow(time);
                 }
             }
-            if (dayItem->rowCount()) {
+            if (dayItem->rowCount() > 0) {
                 dayItem->sortChildren(0);
-            } else {
-                QStandardItem *item = new QStandardItem(QObject::tr("not available"));
-                item->setData(day, WeekDayRole);
-                item->setData(-1, AvailIdRole);
-                dayItem->appendRow(item);
             }
             q->invisibleRootItem()->appendRow(dayItem);
         }
@@ -144,7 +139,9 @@ private:
 DayAvailabilityModel::DayAvailabilityModel(QObject *parent) :
     QStandardItemModel(parent),
     d(new Internal::DayAvailabilityModelPrivate(this))
-{}
+{
+    setHeaderData(1, Qt::Horizontal, "test");
+}
 
 DayAvailabilityModel::~DayAvailabilityModel()
 {
@@ -195,12 +192,12 @@ void DayAvailabilityModel::addAvailability(const DayAvailability &availability)
     // Insert the TimeRanges
     for(int i = 0; i < availability.timeRangeCount(); ++i) {
         TimeRange range = availability.timeRangeAt(i);
-        QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
-        time->setData(availability.weekDay(), WeekDayRole);
-        time->setData(range.from, HourFromRole);
-        time->setData(range.to, HourToRole);
-        time->setToolTip(time->text());
-        dayItem->appendRow(time);
+        QStandardItem *timeItem = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
+        timeItem->setData(availability.weekDay(), WeekDayRole);
+        timeItem->setData(range.from, HourFromRole);
+        timeItem->setData(range.to, HourToRole);
+        timeItem->setToolTip(timeItem->text());
+        dayItem->appendRow(timeItem);
     }
     dayItem->sortChildren(0);
 
