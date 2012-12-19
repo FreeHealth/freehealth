@@ -126,7 +126,8 @@ const char * const XML_PASSWORD = "pwd";
 namespace Identity {
 namespace Internal {
 IsDirtyDataWidgetMapper::IsDirtyDataWidgetMapper(QObject *parent) :
-    QDataWidgetMapper(parent)
+    QDataWidgetMapper(parent),
+    m_PixDirty(false)
 {
     //TODO: extract this class into Utils?
 }
@@ -142,6 +143,9 @@ bool IsDirtyDataWidgetMapper::isDirty() const
 {
     Q_ASSERT(orientation() == Qt::Horizontal);
     Q_ASSERT(rootIndex() == QModelIndex());
+
+    if (m_PixDirty)
+        return true;
 
     // cycle through all widgets the mapper supports
     for(int i = 0; i < model()->columnCount(); i++) {
@@ -164,6 +168,11 @@ bool IsDirtyDataWidgetMapper::isDirty() const
     return false;
 }
 
+void IsDirtyDataWidgetMapper::setPixmapDirty(bool dirty)
+{
+    m_PixDirty = dirty;
+}
+
 /** Overload method (creates the internal cache) */
 void IsDirtyDataWidgetMapper::setCurrentIndex(int index)
 {
@@ -183,6 +192,7 @@ void IsDirtyDataWidgetMapper::refreshCache()
             _original.insert(mapWidget, model()->data(model()->index(currentIndex(), i)));
         }
     }
+    m_PixDirty = false;
 }
 
 class IdentityEditorWidgetPrivate
@@ -276,6 +286,7 @@ public:
         }
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
+        QObject::connect(ui->photoButton, SIGNAL(pixmapChanged(QPixmap)), q, SLOT(onPhotoPixmapChanged()));
     }
 
     void connectPropertiesNotifier()
@@ -375,6 +386,7 @@ public:
         m_Mapper->addMapping(ui->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
         m_Mapper->addMapping(ui->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
         m_Mapper->addMapping(ui->dob, Core::IPatient::DateOfBirth, "date");
+        m_Mapper->addMapping(ui->photoButton, Core::IPatient::Photo_64x64, "pixmap");
 
         ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::Street, ZipCodes::ZipCodesWidget::StreetPlainText);
         ui->zipcodesWidget->addMapping(m_Mapper, Core::IPatient::City, ZipCodes::ZipCodesWidget::CityPlainText);
@@ -1092,4 +1104,16 @@ void IdentityEditorWidget::checkPasswordConfirmation(const QString &)
     } else {
         d->ui->password2Label->setStyleSheet("color:red;");
     }
+}
+
+/**
+ * \internal
+ * Connected to the photobutton pixmapChanged signal. Manages the mapper dirty state.
+ */
+void IdentityEditorWidget::onPhotoPixmapChanged()
+{
+    // BUG: QPixmap are not managed in QDataWidgetMapper
+    // Manage the dirty state of the mapper by hand
+    if (d->m_Mapper)
+        d->m_Mapper->setPixmapDirty(true);
 }
