@@ -28,6 +28,7 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
+#include <utils/global.h>
 
 #include <QDate>
 #include <QStandardItem>
@@ -63,7 +64,7 @@ void DayAvailability::addTimeRange(const TimeRange &tr)
 
 TimeRange DayAvailability::timeRange(const int index) const
 {
-    if (index < timeRanges.count())
+    if (IN_RANGE(index, 0, timeRanges.count()))
         return timeRanges.at(index);
     return TimeRange();
 }

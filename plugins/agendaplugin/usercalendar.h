@@ -131,7 +131,7 @@ public:
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
     void clearAvailabilities();
-    void removeAvailabilitiesForWeekDay(const Qt::DayOfWeek weekday);
+    void removeAvailabilitiesForWeekDay(const int weekday);
     void removeAvailabilitiesTimeRange(const int weekday, const QTime &from, const QTime &to);
 
 
