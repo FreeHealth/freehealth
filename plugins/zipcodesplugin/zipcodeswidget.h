@@ -48,10 +48,15 @@ class ZipCodesWidgetPrivate;
 class ZIPCODES_EXPORT ZipCodesWidget : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString street READ street WRITE setStreet NOTIFY streetChanged)
+    Q_PROPERTY(QString city READ city WRITE setCity NOTIFY cityChanged)
+    Q_PROPERTY(QString zipCode READ zipCode WRITE setZipCode NOTIFY zipCodeChanged)
+    Q_PROPERTY(QString countryIso READ countryIso WRITE setCountryIso NOTIFY countryIsoChanged)
+    Q_PROPERTY(QString stateProvince READ stateProvince WRITE setStateProvince NOTIFY stateProvinceChanged)
+
 public:
     enum TypeOfLayout {
-//        GridLayoutOnePerLine,
-//        GridLayoutTwoPerLine,
         GridLayout,
         FormLayout
     };
@@ -78,7 +83,7 @@ public:
     void setStreet(const QString &street);
     void setCity(const QString &city);
     void setStateProvince(const QString &state);
-    void setCountry(const QString &twoCharIsoCode);
+    void setCountryIso(const QString &twoCharIsoCode);
     void setZipCode(const QString &zip);
 
     QString street() const;
@@ -87,6 +92,14 @@ public:
     QString countryName() const;
     QString countryIso() const;
     QString zipCode() const;
+
+Q_SIGNALS:
+    void streetChanged(const QString &street);
+    void cityChanged(const QString &city);
+    void zipCodeChanged(const QString &zip);
+    void stateProvinceChanged(const QString &state);
+    void countryIsoChanged(const QString &iso);
+    void countryNameChanged(const QString &name);
 
 private:
     void retranslateUi();
