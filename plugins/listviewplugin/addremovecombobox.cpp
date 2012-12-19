@@ -199,15 +199,12 @@ void AddRemoveComboBox::updateUi()
 /*! This slot takes an int as \e index parameter and emits the corresponding currentIndexChanged(QModelIndex). */
 void AddRemoveComboBox::translateIntIndexChanged(int index)
 {
-    if(index == -1)
-        return;
-
     Q_EMIT currentIndexChanged(intIndexToQModelIndex(index));
 }
 
 QModelIndex AddRemoveComboBox::intIndexToQModelIndex(int intIndex) const
 {
-    if(!mCombo || !mCombo->model())
+    if(!mCombo || !mCombo->model() || intIndex == -1)
         return QModelIndex();
     return QModelIndex(mCombo->model()->index(intIndex, mCombo->modelColumn()));
 }
