@@ -44,10 +44,14 @@ public:
     explicit AvailabilityEditDialog(QWidget *parent = 0);
     ~AvailabilityEditDialog();
 
-    QList<DayAvailability> getAvailability() const;
+    QList<DayAvailability> getAvailabilities() const;
+    void setAvailability(const int dayOfWeek, const QTime &from, const QTime &to);
+    void setDayOfWeek(const int dayOfWeek);
+    void disableDayChange();
 
 private Q_SLOTS:
     void on_startTime_timeChanged(const QTime &from);
+    void updateUi();
 
 private:
     Ui::AvailabilityCreatorDialog *ui;

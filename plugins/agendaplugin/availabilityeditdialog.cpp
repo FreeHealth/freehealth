@@ -29,11 +29,14 @@
 
 #include "dayavailability.h"
 
-#include <translationutils/constants.h>
+#include <translationutils/constanttranslations.h>
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_current.h>
 
+#include <utils/global.h>
+
 #include <QDate>
+#include <QPushButton>
 
 using namespace Agenda;
 using namespace Trans::ConstantTranslations;
@@ -45,7 +48,12 @@ AvailabilityEditDialog::AvailabilityEditDialog(QWidget *parent) :
     ui->setupUi(this);
     for(int i=1; i < 8;++i)
         ui->dayCombo->addItem(QDate::longDayName(i));
-    ui->dayCombo->addItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(QDate::longDayName(1)).arg(QDate::longDayName(5)));
+    ui->dayCombo->addItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(QDate::longDayName(1), QDate::longDayName(5)));
+
+    connect(ui->startTime, SIGNAL(timeChanged(QTime)), this, SLOT(updateUi()));
+    connect(ui->endTime, SIGNAL(timeChanged(QTime)), this, SLOT(updateUi()));
+
+    updateUi();
 }
 
 AvailabilityEditDialog::~AvailabilityEditDialog()
@@ -58,19 +66,29 @@ void AvailabilityEditDialog::on_startTime_timeChanged(const QTime &from)
     ui->endTime->setMinimumTime(from);
 }
 
-QList<DayAvailability> AvailabilityEditDialog::getAvailability() const
+void AvailabilityEditDialog::updateUi()
+{
+    // disable Ok button if start time >= end time
+    const bool okEnabled = ui->startTime->time() < ui->endTime->time();
+    QPushButton *okButton = ui->buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(okEnabled);
+    okButton->setToolTip(okEnabled? "" : tr("The end start time cannot be before the end time."));
+
+}
+
+QList<DayAvailability> AvailabilityEditDialog::getAvailabilities() const
 {
     QList<DayAvailability> toReturn;
-    int id = ui->dayCombo->currentIndex();
-    if (id < 7) {
+    int day = ui->dayCombo->currentIndex()+1; // Mo, Tu, We, Th, Fr, Sa, Su, Mo-Fr
+    if (day != -1 && day <= Qt::Sunday) {
         // One day only
         DayAvailability av;
-        av.setWeekDay(id+1);
+        av.setWeekDay(day);
         av.addTimeRange(ui->startTime->time(), ui->endTime->time());
         toReturn << av;
-    } else if (id == 7) {
+    } else if (day == Qt::Sunday+1) {
         // From monday to friday
-        for(int i=1; i < 6; ++i) {
+        for(int i = Qt::Monday; i <= Qt::Friday ; ++i) {
             DayAvailability av;
             av.setWeekDay(i);
             av.addTimeRange(ui->startTime->time(), ui->endTime->time());
@@ -78,4 +96,34 @@ QList<DayAvailability> AvailabilityEditDialog::getAvailability() const
         }
     }
     return toReturn;
+}
+
+void AvailabilityEditDialog::setAvailability(const int dayOfWeek, const QTime & from, const QTime &to)
+{
+    if (!IN_RANGE(dayOfWeek, Qt::Monday, Qt::Sunday)) {
+        ui->dayCombo->setCurrentIndex(-1);
+        ui->startTime->setTime(QTime(0,0));
+        ui->endTime->setTime(QTime(0,0));
+    } else {
+        ui->dayCombo->setCurrentIndex(dayOfWeek-1);
+        ui->startTime->setTime(from);
+        ui->endTime->setTime(to);
+    }
+    updateUi();
+}
+
+/*! \brief Sets the day of week in the dialog. */
+void AvailabilityEditDialog::setDayOfWeek(const int dayOfWeek)
+{
+    if (IN_RANGE(dayOfWeek, Qt::Monday, Qt::Sunday))
+        ui->dayCombo->setCurrentIndex(dayOfWeek - 1);
+}
+
+/*! \brief Disables changing of the availability day during edit.
+ *
+ * Disable the change of day when you edit an existing TimeRange.
+ */
+void AvailabilityEditDialog::disableDayChange()
+{
+    ui->dayCombo->setEnabled(false);
 }

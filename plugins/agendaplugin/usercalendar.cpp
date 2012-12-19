@@ -139,7 +139,7 @@ void UserCalendar::removeAvailabilitiesTimeRange(const int weekday, const QTime 
         DayAvailability &av = m_availabilities[i];
         if (av.weekDay() == weekday) {
             for(int j = av.timeRangeCount() - 1; j >= 0; --j) {
-                if (av.timeRange(j).from == from && av.timeRange(j).to == to) {
+                if (av.timeRangeAt(j).from == from && av.timeRangeAt(j).to == to) {
                     av.removeTimeRangeAt(j);
                     m_modified = true;
                 }
@@ -158,7 +158,7 @@ bool UserCalendar::canBeAvailable(const QDateTime &date) const
     for(int i = 0; i < m_availabilities.count(); ++i) {
         if (m_availabilities.at(i).weekDay()==day) {
             for(int j = 0; j < m_availabilities.at(i).timeRangeCount(); ++j) {
-                TimeRange range = m_availabilities.at(i).timeRange(j);
+                TimeRange range = m_availabilities.at(i).timeRangeAt(j);
                 // date included in one timeRange ? --> return true
                 if (time >= range.from && time <= range.to) {
                     return true;
@@ -186,7 +186,7 @@ bool UserCalendar::canBeAvailable(const QDateTime &start, const int durationInMi
     for(int i = 0; i < m_availabilities.count(); ++i) {
         if (m_availabilities.at(i).weekDay()==day) {
             for(int j = 0; j < m_availabilities.at(i).timeRangeCount(); ++j) {
-                TimeRange range = m_availabilities.at(i).timeRange(j);
+                TimeRange range = m_availabilities.at(i).timeRangeAt(j);
                 // start and end are included in one unique timeRange ? --> return true
                 if ((startTime >= range.from && startTime <= range.to) &&
                     (endTime >= range.from && endTime <= range.to)) {
@@ -202,7 +202,7 @@ QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c)
 {
     QStringList t;
     for(int i = 0; i < c.timeRangeCount(); ++i) {
-        const TimeRange &tr = c.timeRange(i);
+        const TimeRange &tr = c.timeRangeAt(i);
         t << QString("%1-%2").arg(tr.from.toString()).arg(tr.to.toString());
     }
     dbg.nospace() << "DayAvailability("

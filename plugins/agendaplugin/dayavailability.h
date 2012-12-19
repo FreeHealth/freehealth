@@ -28,20 +28,33 @@
 #define AGENDA_DAYAVAILABILITY_H
 
 #include "agenda_exporter.h"
+#include "usercalendar.h"
 
 #include <QTime>
 #include <QVector>
+#include <QStandardItemModel>
 
 namespace Agenda {
 
+enum DayAvailabilityRoles {
+    WeekDayRole = Qt::UserRole + 1,
+    HourFromRole,
+    HourToRole,
+    TimeRangeIdRole,
+    AvailIdRole
+};
+
 struct AGENDA_EXPORT TimeRange {
     TimeRange() : id(-1) {}
-
+    inline bool operator== (const TimeRange &other) const { return (id == other.id) && (from == other.from) && (to == other.to);}
     // the id is used for database accesses and should be modified
     int id;
     QTime from, to;
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////      DayAvailability     ////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 class AGENDA_EXPORT DayAvailability
 {
 public:
@@ -64,14 +77,43 @@ public:
     void setTimeRanges(const QVector<TimeRange> &ranges) {timeRanges = ranges;}
 
     int timeRangeCount() const {return timeRanges.count();}
-    TimeRange timeRange(const int index) const;
+    TimeRange timeRangeAt(const int index) const;
     void removeTimeRangeAt(const int index);
+    void removeTimeRanges(const TimeRange &timeRangeAt);
 
 private:
     int m_id;
-    int m_WeekDay;
+    int m_WeekDay; // == Qt::DayOfWeek
     bool m_isAvailable;
     QVector<TimeRange> timeRanges;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////      DayAvailabilityModel     ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+namespace Internal {
+class DayAvailabilityModelPrivate;
+}
+
+class DayAvailabilityModel : public QStandardItemModel
+{
+    Q_OBJECT
+public:
+    DayAvailabilityModel(QObject *parent = 0);
+    ~DayAvailabilityModel();
+
+    void clearAvailabilities();
+
+    void setUserCalendar(UserCalendar *calendar);
+    void addAvailability(const DayAvailability &availability);
+    void removeAvailability(const QModelIndex &index);
+
+public Q_SLOTS:
+    bool submit();
+
+private:
+    Internal::DayAvailabilityModelPrivate *d;
 };
 
 } // end namespace Agenda

@@ -683,7 +683,7 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
     query.finish();
     DB.commit();
 
-    // Get Peoples
+    // Get People
     for(int i = 0; i < toReturn.count(); ++i) {
         Agenda::UserCalendar *u = toReturn[i];
         getRelatedPeoples(RelatedToCalendar, u->data(Constants::Db_CalId).toInt(), u);
@@ -783,15 +783,15 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
     // recreate availabilities
     QVector<Agenda::DayAvailability> av = calendar->availabilities();
     QHash<int, Agenda::DayAvailability> hashAv;
-    // fusion availabilties by days
-    for(int i = 0; i < av.count(); ++i) {
-        int weekDay = av.at(i).weekDay();
+    // fusion availabilities by days
+    for(int availabilityIndex = 0; availabilityIndex < av.count(); ++availabilityIndex) {
+        int weekDay = av.at(availabilityIndex).weekDay();
         if (hashAv.contains(weekDay)) {
-            for(int z = 0; z < av.at(i).timeRangeCount(); ++z) {
-                hashAv[weekDay].addTimeRange(av.at(i).timeRange(z));
+            for(int timeRangeIndex = 0; timeRangeIndex < av.at(availabilityIndex).timeRangeCount(); ++timeRangeIndex) {
+                hashAv[weekDay].addTimeRange(av.at(availabilityIndex).timeRangeAt(timeRangeIndex));
             }
         } else {
-            hashAv.insert(av.at(i).weekDay(), av.at(i));
+            hashAv.insert(av.at(availabilityIndex).weekDay(), av.at(availabilityIndex));
         }
     }
 
@@ -814,7 +814,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         // save all timeRanges
         QVector<Agenda::TimeRange> newRanges;
         for(int z = 0; z < it.value().timeRangeCount(); ++z) {
-            Agenda::TimeRange range = it.value().timeRange(z);
+            Agenda::TimeRange range = it.value().timeRangeAt(z);
             query.prepare(prepareInsertQuery(Constants::Table_TIMERANGE));
             query.bindValue(Constants::TIMERANGE_ID, QVariant());
             query.bindValue(Constants::TIMERANGE_FROM, range.from.toString());
@@ -1572,7 +1572,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     for(int i=0; i < calendar.availabilities().count(); ++i) {
         DayAvailability av = calendar.availabilities().at(i);
         for(int j = 0; j < av.timeRangeCount(); ++j) {
-            const TimeRange &tr = av.timeRange(j);
+            const TimeRange &tr = av.timeRangeAt(j);
             avs.append(NextAvailabiliyManager::simplifiedDateToRect(av.weekDay(), tr.from, tr.to));
         }
     }
