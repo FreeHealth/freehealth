@@ -253,77 +253,77 @@ public:
         case Core::IUser::GenericWatermark :  toReturn = user->extraDocumentHtml(Core::IUser::GenericWatermark); break;
 
         case Core::IUser::GenericHeaderPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericHeader);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericHeader);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::GenericFooterPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericFooter);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericFooter);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::GenericWatermarkPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericWatermark);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::GenericWatermark);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::GenericWatermarkAlignement :
-            {
-                // TODO: return Watermark alignement
-                return Qt::AlignCenter;
-            }
+        {
+            // TODO: return Watermark alignement
+            return Qt::AlignCenter;
+        }
 
         case Core::IUser::AdministrativeHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
         case Core::IUser::AdministrativeFooter : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeFooter); break;
         case Core::IUser::AdministrativeWatermark : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeWatermark); break;
         case Core::IUser::AdministrativeWatermarkPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeWatermark);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeWatermark);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::AdministrativeWatermarkAlignement :
-            {
-                // TODO: return Watermark alignement
-                return Qt::AlignCenter;
-            }
+        {
+            // TODO: return Watermark alignement
+            return Qt::AlignCenter;
+        }
 
         case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionHeader); break;
         case Core::IUser::PrescriptionFooter : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionFooter); break;
         case Core::IUser::PrescriptionWatermark : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionWatermark); break;
         case Core::IUser::PrescriptionHeaderPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionHeader);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionHeader);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::PrescriptionFooterPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionFooter);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionFooter);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::PrescriptionWatermarkPresence :
-            {
-                Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionWatermark);
-                if (doc)
-                    return doc->presence();
-                return Print::Printer::EachPages;
-            }
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionWatermark);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
         case Core::IUser::PrescriptionWatermarkAlignement :
-            {
-                // TODO: return Watermark alignement
-                return Qt::AlignCenter;
-            }
+        {
+            // TODO: return Watermark alignement
+            return Qt::AlignCenter;
+        }
 
         case Core::IUser::IsModified : toReturn = user->isModified(); break;
         case Core::IUser::ManagerRights : toReturn = user->rightsValue(USER_ROLE_USERMANAGER); break;
