@@ -104,7 +104,12 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
         m_Mapper->addMapping(ui->isPrivateCheck, UserCalendarModel::IsPrivate, "checked");
         m_Mapper->addMapping(ui->passwordEdit, UserCalendarModel::Password);
     }
-    m_Mapper->setCurrentIndex(index.row());
+    if (index.isValid())
+        m_Mapper->setCurrentIndex(index.row());
+    else {
+        m_Mapper->setCurrentIndex(-1);
+        clear();
+    }
 
     // Availability
     if (m_AvailabilityModel) {

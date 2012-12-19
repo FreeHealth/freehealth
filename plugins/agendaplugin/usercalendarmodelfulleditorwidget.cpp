@@ -66,10 +66,10 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
     ui(new Ui::UserCalendarModelFullEditorWidget),
     m_UserCalendarModel(0)
 {
-    QAction *a= aCreateCalendar = new QAction(this);
-    a->setObjectName("aCreateCalendar");
-    a->setText(tr("Create a new calendar"));
-    a->setToolTip(a->text());
+//    QAction *a= aCreateCalendar = new QAction(this);
+//    a->setObjectName("aCreateCalendar");
+//    a->setText(tr("Create a new calendar"));
+//    a->setToolTip(a->text());
 
     ui->setupUi(this);
     ui->editor->setEnabled(false);
@@ -91,15 +91,15 @@ void UserCalendarModelFullEditorWidget::setUserCalendarModel(UserCalendarModel *
     if (m_UserCalendarModel==model)
         return;
     m_UserCalendarModel = model;
+    ui->editor->setUserCalendarModel(m_UserCalendarModel);
     ui->agendaNamesCombo->setModel(m_UserCalendarModel);
     ui->agendaNamesCombo->setModelColumn(UserCalendarModel::Label);
-    ui->editor->setUserCalendarModel(m_UserCalendarModel);
 }
 
 void UserCalendarModelFullEditorWidget::setCurrentIndex(const QModelIndex &index)
 {
     // inform UserCalendarEditor
-    ui->editor->setEnabled(true);
+    ui->editor->setEnabled(index.isValid());
     ui->editor->setCurrentIndex(index);
 }
 
