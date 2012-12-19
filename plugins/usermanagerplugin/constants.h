@@ -43,6 +43,7 @@ namespace Constants {
 
     // constants for DATA table represent DATANAME field
     const char * const USER_DATA_PHOTO             = "identity.photo";
+    const char * const USER_DATA_DOB               = "identity.dob";
     const char * const USER_DATA_ADDRESS           = "identity.adress";
     const char * const USER_DATA_ZIPCODE           = "identity.zip";
     const char * const USER_DATA_STATEPROVINCE     = "identity.state";

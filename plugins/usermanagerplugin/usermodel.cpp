@@ -204,6 +204,8 @@ public:
         case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
 
         case Core::IUser::PhotoPixmap : toReturn = user->photo(); break;
+        case Core::IUser::DateOfBirth : toReturn = user->dob(); break;
+
         case Core::IUser::Address : toReturn = user->address(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::StateProvince : toReturn = user->stateProvince(); break;
@@ -960,6 +962,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::LanguageISO :  user->setLanguageIso(value); break;
     case Core::IUser::LocaleCodedLanguage: user->setLocaleLanguage(QLocale::Language(value.toInt())); break;
     case Core::IUser::PhotoPixmap: user->setPhoto(value.value<QPixmap>()); break;
+    case Core::IUser::DateOfBirth : user->setDob(value); break;
     case Core::IUser::Address:
         colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
         user->setAddress(value);

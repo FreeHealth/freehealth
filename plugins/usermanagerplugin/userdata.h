@@ -164,6 +164,7 @@ public:
 
     void  setPhoto(const QPixmap &pix);
 
+    void  setDob(const QVariant &val)                { setDynamicDataValue(USER_DATA_DOB, val); }
     void  setAddress(const QVariant &val)             { setDynamicDataValue(USER_DATA_ADDRESS , val); }
     void  setZipcode(const QVariant &val)             { setDynamicDataValue(USER_DATA_ZIPCODE , val); }
     void  setStateProvince(const QVariant &val)       { setDynamicDataValue(USER_DATA_STATEPROVINCE , val); }
@@ -220,6 +221,7 @@ public:
 
     QPixmap photo() const;
 
+    QDate dob() const                    { return dynamicDataValue(USER_DATA_DOB).toDate(); }
     QString address() const              { return dynamicDataValue(USER_DATA_ADDRESS).toString(); }
     QString zipcode() const              { return dynamicDataValue(USER_DATA_ZIPCODE).toString(); }
     QString stateProvince() const        { return dynamicDataValue(USER_DATA_STATEPROVINCE).toString(); }

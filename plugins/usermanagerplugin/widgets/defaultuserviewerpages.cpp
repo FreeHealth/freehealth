@@ -98,9 +98,6 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
 
 void DefaultUserContactWidget::setUserIndex(const int row)
 {
-    qWarning() << "DefaultUserContactWidget::setUserIndex" << row;
-    QVariant val = m_Model->index(row, Core::IUser::LanguageISO).data();
-    qWarning() << val;
     if (m_identity)
         m_identity->setCurrentIndex(m_Model->index(row, 0));
 }
