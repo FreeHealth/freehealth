@@ -175,7 +175,9 @@ void UserIdentityAndLoginPage::retranslate()
 
 bool UserIdentityAndLoginPage::isComplete() const
 {
-    return (!_identity->isIdentityValid()
+    return (!_identity->currentBirthName().isEmpty()
+            && !_identity->currentFirstName().isEmpty()
+            && !_identity->currentGender().isEmpty()
             && !_identity->currentLanguage().isEmpty()
             && checkLogin()
             && _identity->isPasswordCompleted());
