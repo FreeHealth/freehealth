@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDAPREFERENCESPAGE_H
-#define AGENDAPREFERENCESPAGE_H
+#ifndef AGENDA_AGENDAPREFERENCESPAGE_H
+#define AGENDA_AGENDAPREFERENCESPAGE_H
 
 #include <coreplugin/ioptionspage.h>
 
@@ -98,4 +98,4 @@ private:
 }  // End Agenda
 
 
-#endif // AGENDAPREFERENCESPAGE_H
+#endif // AGENDA_AGENDAPREFERENCESPAGE_H

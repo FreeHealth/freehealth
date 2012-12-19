@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef NEXTAVAILABILIYSTEPVIEWER_H
-#define NEXTAVAILABILIYSTEPVIEWER_H
+#ifndef AGENDA_NEXTAVAILABILIYSTEPVIEWER_H
+#define AGENDA_NEXTAVAILABILIYSTEPVIEWER_H
 
 #include <QWidget>
 #include <QDateTime>
@@ -100,4 +100,4 @@ private:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // NEXTAVAILABILIYSTEPVIEWER_H
+#endif // AGENDA_NEXTAVAILABILIYSTEPVIEWER_H

@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDAR_H
-#define USERCALENDAR_H
+#ifndef AGENDA_USERCALENDAR_H
+#define AGENDA_USERCALENDAR_H
 
 #include <agendaplugin/agenda_exporter.h>
 #include <calendar/modelanditem/calendar_people.h>
@@ -129,4 +129,4 @@ private:
 QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c);
 QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c);
 
-#endif // USERCALENDAR_H
+#endif // AGENDA_USERCALENDAR_H

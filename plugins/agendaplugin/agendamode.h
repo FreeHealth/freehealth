@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDAMODE_H
-#define AGENDAMODE_H
+#ifndef AGENDA_AGENDAMODE_H
+#define AGENDA_AGENDAMODE_H
 
 #include <coreplugin/modemanager/imode.h>
 
@@ -35,7 +35,7 @@
 
 /**
  * \file agendamode.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric MAEKER
  * \version 0.6.0
  * \date 17 Jun 2011
 */
@@ -70,4 +70,4 @@ private:
 }  // End namespace Agenda
 
 
-#endif // AGENDAMODE_H
+#endif // AGENDA_AGENDAMODE_H

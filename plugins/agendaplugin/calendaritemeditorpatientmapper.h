@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CALENDARITEMEDITORPATIENTMAPPER_H
-#define CALENDARITEMEDITORPATIENTMAPPER_H
+#ifndef AGENDA_CALENDARITEMEDITORPATIENTMAPPER_H
+#define AGENDA_CALENDARITEMEDITORPATIENTMAPPER_H
 
 #include <calendar/icalendaritemdatawidget.h>
 #include <calendar/modelanditem/calendar_people.h>
@@ -120,4 +120,4 @@ private:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // CALENDARITEMEDITORPATIENTMAPPER_H
+#endif // AGENDA_CALENDARITEMEDITORPATIENTMAPPER_H

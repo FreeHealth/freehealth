@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDARPAGEFORUSERVIEWER_H
-#define USERCALENDARPAGEFORUSERVIEWER_H
+#ifndef AGENDA_USERCALENDARPAGEFORUSERVIEWER_H
+#define AGENDA_USERCALENDARPAGEFORUSERVIEWER_H
 
 #include <usermanagerplugin/widgets/iuserviewerpage.h>
 
@@ -90,4 +90,4 @@ public:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // USERCALENDARPAGEFORUSERVIEWER_H
+#endif // AGENDA_USERCALENDARPAGEFORUSERVIEWER_H
