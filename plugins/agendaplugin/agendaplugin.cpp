@@ -306,7 +306,7 @@ void AgendaPlugin::testDatabase()
             ucal->setData(Agenda::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
             ucal->setData(Agenda::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
             // Create availabilities
-            for(int i = 1; i < 6; ++i) {
+            for(int i = Qt::Monday; i <= Qt::Sunday; ++i) {
                 QTime from = r.randomTime(6, 12);
                 QTime to = r.randomTime(17, 20);
                 Agenda::DayAvailability av;
