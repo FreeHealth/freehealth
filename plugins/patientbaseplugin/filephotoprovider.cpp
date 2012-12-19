@@ -99,7 +99,6 @@ void FilePhotoProvider::startReceivingPhoto()
                                                     QDir::homePath(),
                                                     "Image (*.png *.jpg *.gif *.tiff)");
     if (!fileName.isEmpty()) {
-
         QPixmap photo;
         photo.load(fileName);
         Q_EMIT photoReady(photo);
