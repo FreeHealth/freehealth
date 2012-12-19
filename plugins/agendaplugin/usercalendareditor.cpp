@@ -34,6 +34,7 @@
 #include "usercalendarmodel.h"
 #include "usercalendar.h"
 #include "availabilityeditdialog.h"
+#include "dayavailability.h"
 
 #include <utils/log.h>
 #include <utils/global.h>

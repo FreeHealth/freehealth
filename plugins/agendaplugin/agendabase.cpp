@@ -48,6 +48,7 @@
 #include "calendaritemmodel.h"
 #include "nextavailabiliystepviewer.h"
 #include "usercalendar.h"
+#include "dayavailability.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

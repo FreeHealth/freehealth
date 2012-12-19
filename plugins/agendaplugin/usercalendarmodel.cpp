@@ -34,6 +34,7 @@
 #include "usercalendar.h"
 #include "agendabase.h"
 #include "agendacore.h"
+#include "dayavailability.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>

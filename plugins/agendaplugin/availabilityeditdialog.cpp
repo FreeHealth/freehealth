@@ -27,6 +27,8 @@
 #include "availabilityeditdialog.h"
 #include "ui_availabilityeditdialog.h"
 
+#include "dayavailability.h"
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_current.h>

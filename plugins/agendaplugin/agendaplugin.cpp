@@ -48,6 +48,7 @@
 // END TEST
 
 #include <utils/log.h>
+#include <agendaplugin/dayavailability.h>
 #include <calendar/calendar_theme.h>
 
 #include <coreplugin/icore.h>

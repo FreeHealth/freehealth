@@ -25,7 +25,8 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     agendapreferencespage.h \
     usercalendardelegatesmapper.h \
     nextavailabiliystepviewer.h \
-    availabilityeditdialog.h
+    availabilityeditdialog.h \
+    dayavailability.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
@@ -45,7 +46,8 @@ SOURCES = agendaplugin.cpp \
     agendapreferencespage.cpp \
     usercalendardelegatesmapper.cpp \
     nextavailabiliystepviewer.cpp \
-    availabilityeditdialog.cpp
+    availabilityeditdialog.cpp \
+    dayavailability.cpp
 
 FORMS += \
     calendaritemeditorpatientmapper.ui \
