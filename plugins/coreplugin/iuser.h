@@ -64,6 +64,7 @@ public:
 
         // ORDER CAN CHANGE
         DateOfBirth,
+        PhotoPixmap,
         ClearLogin,
         ClearPassword,
         LocaleCodedLanguage,
@@ -74,7 +75,7 @@ public:
         FullHtmlAddress,
         Tel1, Tel2, Tel3, Fax, PractitionerId,
         FullHtmlContact,
-        Specialities, Qualifications, Preferences,  // 31
+        Specialities, Qualifications, Preferences,  // 33
 
         GenericHeader,
         GenericFooter,
