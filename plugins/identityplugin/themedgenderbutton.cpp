@@ -51,6 +51,8 @@
 
 #include <QMenu>
 
+#include <QDebug>
+
 using namespace Identity;
 using namespace Internal;
 
@@ -86,6 +88,7 @@ ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
 /** Return the current pixmap of the button */
 QPixmap ThemedGenderButton::pixmap() const
 {
+    qWarning() << "pixmap"<<m_pixmap.size();
     return m_pixmap;
 }
 
@@ -129,6 +132,10 @@ void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
     setIcon(QIcon(pixmap));
     m_pixmap = pixmap;
     m_deletePhotoAction->setEnabled(!pixmap.isNull());
+
+    qWarning() << "SetPixmap"<<m_pixmap.size();
+
+    Q_EMIT pixmapChanged(pixmap);
 }
 
 /** Clear the internal pixmap of the button */
@@ -148,12 +155,11 @@ void ThemedGenderButton::setGenderImage(int genderIndex)
     // if there is a pixmap, DON'T change the photo!
     if (m_pixmap.isNull()) {
         // if null, set default gendered icon
-        QIcon icon;
+        QPixmap genderPix;
         //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
-        icon = theme()->defaultGenderPixmap(genderIndex);
+        genderPix = theme()->defaultGenderPixmap(genderIndex);
 
         //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
-        setPixmap(QPixmap());
-        setIcon(icon);
+        setPixmap(genderPix);
     }
 }
