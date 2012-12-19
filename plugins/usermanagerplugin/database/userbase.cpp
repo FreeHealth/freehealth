@@ -1059,6 +1059,7 @@ bool UserBase::saveUser(UserData *user)
                     w.insert(DATA_DATANAME, QString("='%1'").arg(dyn->name()));
                     query.prepare(prepareUpdateQuery(Table_DATA, w));
                     query.bindValue(DATAS_ID, dyn->id());
+
                 }
                 dyn->prepareQuery(query);
                 if (!query.exec()) {
