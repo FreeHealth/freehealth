@@ -262,7 +262,7 @@ public:
                 //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                 photoAction = new QAction(provider->displayText(), q);
                 QObject::connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
-                QObject::connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)));
+                QObject::connect(provider, SIGNAL(photoReady(QPixmap)), ui->photoButton, SLOT(setPixmap(QPixmap)), Qt::UniqueConnection);
                 photoAction->setData(provider->id());
                 ui->photoButton->addAction(photoAction);
             }
@@ -960,6 +960,14 @@ bool IdentityEditorWidget::submit()
     if (d->m_Mapper) {
         if (!d->m_Mapper->submit())
             return false;
+        // BUG: QPixmap from the themedGenderButton is not correctly submitted
+        // So do this by hand
+        int index = d->m_Mapper->mappedSection(d->ui->photoButton);
+        if (index > -1) {
+            QModelIndex modelIndex = d->m_Mapper->model()->index(d->m_Mapper->currentIndex(), index);
+            if (!d->m_Mapper->model()->setData(modelIndex, d->ui->photoButton->pixmap()))
+                return false;
+        }
         d->m_Mapper->onModelSubmitted();
     }
     return true;
