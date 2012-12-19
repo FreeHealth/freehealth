@@ -1670,7 +1670,11 @@ QByteArray pixmapToBase64(const QPixmap &pixmap)
         return byteArray;
     QBuffer buffer(&byteArray);
     if (!pixmap.save(&buffer, "PNG")) {
-        LOG_ERROR_FOR("Global", "Unable to transform QPixmap to base64 QByteArray");
+        LOG_ERROR_FOR("Global",
+                      QString("Unable to transform QPixmap to base64 QByteArray. "
+                              "Pixmap size: (%1,%2)")
+                      .arg(pixmap.size().width())
+                      .arg(pixmap.size().height()));
         return QByteArray();
     }
     return byteArray.toBase64();
