@@ -27,7 +27,7 @@
 
 /*!
  * \class Patients::Internal::IdentityViewerWidget
- * \brief The identity viewer makes the coagulum between the Patients::PatientModel data and the patient form's data.
+ * \brief The identity viewer makes the coagulum between the Patients::PatientModel identity data and the patient form's data.
  *
  * The viewer is not dependent on the Core::IPatient. It manages it's own mechanism
  * to get the correct information about the patient between what is extracted from the
