@@ -27,53 +27,20 @@
 
 /**
  * \class Patients::IdentityEditorWidget
- * \brief Identity editor.
- * This widget allow user to view & edit the identity of a patient.
- * You can define the Patients::PatientModel and the index to use,
- * or just keep the identity always sync with the Core::IPatient current
- * patient.
+ * \brief Wrapper over the Identity::IdentityEditorWidget
+ * Check the identity validity.
 */
 
 #include "identityeditorwidget.h"
-#include "patientmodel.h"
 #include "patientbase.h"
-#include "patientcore.h"
 #include "constants_db.h"
 
-#include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/constants_tokensandsettings.h>
-#include <coreplugin/ipatient.h>
-#include <coreplugin/itheme.h>
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/iphotoprovider.h>
-#include <patientbaseplugin/constants_settings.h>
-
-#include <zipcodesplugin/zipcodescompleters.h>
-
-#include <utils/log.h>
-#include <utils/global.h>
-#include <utils/widgets/uppercasevalidator.h>
-#include <extensionsystem/pluginmanager.h>
-#include <translationutils/constants.h>
-
-#include <QDir>
-#include <QFileDialog>
-#include <QDateEdit>
-
 #include <QDebug>
-#include <QMenu>
 
 using namespace Patients;
 using namespace Internal;
-using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
-static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
 
