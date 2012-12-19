@@ -418,7 +418,6 @@ UserManagerWidget::~UserManagerWidget()
 /** Initializes the view, connect actions */
 bool UserManagerWidget::initialize()
 {
-//    UserModel *model = userModel();
     d->m_model = new Internal::UserManagerModel(this);
     d->m_model->initialize();
     d->m_model->setFilter(Internal::UserManagerModelFilter());
@@ -430,8 +429,6 @@ bool UserManagerWidget::initialize()
     d->ui->userViewer->initialize(d->m_model);
 
     // Add delegate
-//    UserTreeDelegate *delegate = new UserTreeDelegate(this);
-//    delegate->setUserManagerModel(d->m_model);
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate(this);
     d->ui->userTreeView->setItemDelegate(delegate);
     d->ui->userTreeView->setIndentation(10);

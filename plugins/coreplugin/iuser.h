@@ -46,7 +46,7 @@ class CORE_EXPORT IUser : public QObject
     Q_OBJECT
 public:
     enum DataRepresentation {
-        // ORDER SHOULD NEVER CHANGE
+        // ORDER SHOULD NEVER CHANGE -> SQL Synchronization
         Id = 0,
         Uuid,           /*!< \brief Unique identifier of each user */
         Validity,       /*!< \brief Validity of this user */
@@ -57,23 +57,27 @@ public:
         Name,           /*!< \brief Lastname */
         SecondName,     /*!< \brief Second name (name after marriage) */
         Firstname,      /*!< \brief Firstname, ("Given" name) */
+        TitleIndex,     /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::titles() */
+        GenderIndex,    /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::genders() */
         Mail,           /*!< \brief Mail address */
         LanguageISO,    /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */
         LocaleLanguage, /*!< \brief Language index from Core::Translators::availableLanguages() */  //12
 
         // ORDER CAN CHANGE
+        DateOfBirth,
+        PhotoPixmap,
         ClearLogin,
         ClearPassword,
         LocaleCodedLanguage,
         PersonalLinkId,
         FullName,
-        GenderIndex, TitleIndex, Gender, Title,
-        Address, Zipcode, City, Country, IsoCountry,
+        Gender, Title,
+        Address, Zipcode, City, StateProvince, Country, IsoCountry,
         FullHtmlAddress,
         Tel1, Tel2, Tel3, Fax, PractitionerId,
         FullHtmlContact,
-        Specialities, Qualifications, Preferences,  // 31
+        Specialities, Qualifications, Preferences,  // 33
 
         GenericHeader,
         GenericFooter,

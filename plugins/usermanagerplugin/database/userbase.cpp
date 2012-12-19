@@ -24,7 +24,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-
 /**
   \class UserPlugin::Internal::UserBase
   This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
@@ -286,7 +285,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
             uuid = query.value(USER_UUID).toString();
             toReturn = new UserData(uuid);
             for (i = 0; i < USER_MaxParam; ++i)
-                toReturn->setValue(Table_USERS, i , query.value(i));
+                toReturn->setValue(Table_USERS, i, query.value(i));
         }
     } else {
         LOG_QUERY_ERROR(query);

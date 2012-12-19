@@ -394,6 +394,7 @@ public:
         case IdentityEditorWidget::GenderIndex:
         case IdentityEditorWidget::Gender: return ui->genderCombo;
         case IdentityEditorWidget::Language_QLocale: return ui->language;
+        case IdentityEditorWidget::LanguageIso: return ui->language;
         case IdentityEditorWidget::DateOfBirth: return ui->dob;
         case IdentityEditorWidget::DateOfDeath: return 0; //TODO: ui->dod;
         case IdentityEditorWidget::Photo: return ui->photoButton;
@@ -416,9 +417,12 @@ public:
         case IdentityEditorWidget::DateOfBirth:
         case IdentityEditorWidget::DateOfDeath:
             return "date";
-//        case IdentityEditorWidget::Photo: return "pixmap";
+//        case IdentityEditorWidget::Photo:
+//            return "pixmap";
         case IdentityEditorWidget::Language_QLocale:
             return "currentLanguage";
+        case IdentityEditorWidget::LanguageIso:
+            return "currentLanguageIso";
         default: break;
         }
         return "";
@@ -571,15 +575,16 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
         return;
     if (!d->ui)
         return;
-    d->ui->titleCombo->setEnabled(widgets & TitleIndex);
-    d->ui->genderCombo->setEnabled(widgets & Gender || widgets & GenderIndex);
-    d->ui->birthName->setEnabled(widgets & BirthName);
-    d->ui->secondName->setEnabled(widgets & SecondName);
-    d->ui->firstname->setEnabled(widgets & FirstName);
-    d->ui->language->setEnabled(widgets & Language_QLocale);
-    d->ui->dob->setEnabled(widgets & DateOfBirth);
-    //d->ui->dod->setEnabled(widgets & DateOfDeath);
-    d->ui->photoButton->setEnabled(widgets & Photo);
+
+    d->ui->titleCombo->setEnabled(widgets.testFlag(TitleIndex));
+    d->ui->genderCombo->setEnabled(widgets.testFlag(Gender) || widgets.testFlag(GenderIndex));
+    d->ui->birthName->setEnabled(widgets.testFlag(BirthName));
+    d->ui->secondName->setEnabled(widgets.testFlag(SecondName));
+    d->ui->firstname->setEnabled(widgets.testFlag(FirstName));
+    d->ui->language->setEnabled(widgets.testFlag(Language_QLocale) || widgets.testFlag(LanguageIso));
+    d->ui->dob->setEnabled(widgets.testFlag(DateOfBirth));
+    //d->ui->dod->setEnabled(widgets.testFlag(DateOfDeath));
+    d->ui->photoButton->setEnabled(widgets.testFlag(Photo));
 
 //    d->ui->titleLabel->setVisible(d->ui->titleCombo->isEnabled());
     d->ui->titleCombo->setVisible(d->ui->titleCombo->isEnabled());
@@ -590,7 +595,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->firstname->setVisible(d->ui->firstname->isEnabled());
     d->ui->firstnameLabel->setVisible(d->ui->firstname->isEnabled());
     d->ui->genderCombo->setVisible(d->ui->genderCombo->isEnabled());
-//    d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
+    d->ui->genderLabel->setVisible(d->ui->genderCombo->isEnabled());
     d->ui->language->setVisible(d->ui->language->isEnabled());
     d->ui->languageLabel->setVisible(d->ui->language->isEnabled());
     d->ui->dob->setVisible(d->ui->dob->isEnabled());
@@ -599,22 +604,22 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     //d->ui->dodLabel->setVisible(d->ui->dod->isEnabled());
     d->ui->photoButton->setVisible(d->ui->photoButton->isEnabled());
 
-    bool showAddress = (widgets & Street)
-            || (widgets & City)
-            || (widgets & Zipcode)
-            || (widgets & Province)
-            || (widgets & Country_TwoCharIso)
-            || (widgets & Country_QLocale);
+    bool showAddress = (widgets.testFlag(Street)
+            || widgets.testFlag(City)
+            || widgets.testFlag(Zipcode)
+            || widgets.testFlag(Province)
+            || widgets.testFlag(Country_TwoCharIso)
+            || widgets.testFlag(Country_QLocale));
     d->ui->zipcodesWidget->setEnabled(showAddress);
 
-    bool showLog = (widgets & Extra_Login)
-            || (widgets & Extra_Password)
-            || (widgets & Extra_ConfirmPassword);
+    bool showLog = (widgets.testFlag(Extra_Login)
+            || widgets.testFlag(Extra_Password)
+            || widgets.testFlag(Extra_ConfirmPassword));
     d->ui->loginGroup->setVisible(showLog);
-    d->ui->password2->setVisible(widgets & Extra_ConfirmPassword);
-    d->ui->login->setEnabled(widgets & Extra_Login);
-    d->ui->password->setEnabled(widgets & Extra_Password);
-    d->ui->password2->setEnabled(widgets & Extra_ConfirmPassword);
+    d->ui->password2->setVisible(widgets.testFlag(Extra_ConfirmPassword));
+    d->ui->login->setEnabled(widgets.testFlag(Extra_Login));
+    d->ui->password->setEnabled(widgets.testFlag(Extra_Password));
+    d->ui->password2->setEnabled(widgets.testFlag(Extra_ConfirmPassword));
 
     d->ui->zipcodesWidget->setVisible(d->ui->zipcodesWidget->isEnabled());
     d->ui->login->setVisible(d->ui->login->isEnabled());

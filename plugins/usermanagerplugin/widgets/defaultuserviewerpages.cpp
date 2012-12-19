@@ -42,7 +42,6 @@
 #include <QDataWidgetMapper>
 #include <QStringListModel>
 
-#include "ui_userviewer_identity.h"
 #include "ui_userviewer_contact.h"
 #include "ui_userviewer_medicalrights.h"
 #include "ui_userviewer_papers.h"
@@ -54,139 +53,11 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
-DefaultUserIdentityWidget::DefaultUserIdentityWidget(QWidget *parent) :
-    UserPlugin::IUserViewerWidget(parent),
-    ui(new Ui::UserViewer_IdentityUI),
-    m_Mapper(0),
-    m_Model(0)
-{
-    ui->setupUi(this);
-    ui->languageCombo->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
-    ui->titleCombo->addItems(titles());
-    ui->genderCombo->addItems(genders());
-}
-
-DefaultUserIdentityWidget::~DefaultUserIdentityWidget()
-{
-    delete ui;
-}
-
-void DefaultUserIdentityWidget::setUserModel(UserModel *model)
-{
-    // prepare the mapper
-    if (!m_Mapper) {
-        m_Mapper = new QDataWidgetMapper(this);
-    }
-    m_Model = model;
-    m_Mapper->setModel(model);
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    m_Mapper->addMapping(ui->uuidLineEdit, Core::IUser::Uuid);
-    m_Mapper->addMapping(ui->titleCombo, Core::IUser::TitleIndex, "currentIndex");
-    m_Mapper->addMapping(ui->genderCombo, Core::IUser::GenderIndex, "currentIndex");
-    m_Mapper->addMapping(ui->nameLineEdit, Core::IUser::Name);
-    m_Mapper->addMapping(ui->loginLineEdit, Core::IUser::ClearLogin);
-    m_Mapper->addMapping(ui->secNameLineEdit, Core::IUser::SecondName);
-    m_Mapper->addMapping(ui->firstnameLineEdit, Core::IUser::Firstname);
-    m_Mapper->addMapping(ui->lastLoginDateTimeEdit, Core::IUser::LastLogin);
-    m_Mapper->addMapping(ui->languageCombo, Core::IUser::LocaleCodedLanguage, "currentLanguage");
-}
-
-void DefaultUserIdentityWidget::setUserIndex(const int index)
-{
-    if (m_Mapper)
-        m_Mapper->setCurrentIndex(index);
-}
-
-void DefaultUserIdentityWidget::clear()
-{
-//    m_Mapper->model()->revert();
-}
-
-bool DefaultUserIdentityWidget::submit()
-{
-    if (m_Mapper)
-        return m_Mapper->submit();
-    return false;
-}
-
-void DefaultUserIdentityWidget::on_but_changePassword_clicked()
-{
-    int row = m_Mapper->currentIndex();
-    UserPasswordDialog d(m_Model->index(row, Core::IUser::Password).data().toString(), this);
-    if (d.exec() == QDialog::Accepted) {
-        if (!d.canGetNewPassword())
-            return;
-        if (d.applyChanges(m_Model, row)) {
-            Utils::informativeMessageBox(tr("Password saved"), tr("Password successfully modified and saved into database."), "", tr("Password saved"));
-        }
-    }
-}
-
-void DefaultUserIdentityWidget::on_but_viewHistory_clicked()
-{
-    int row = m_Mapper->currentIndex();
-    Utils::informativeMessageBox(tr("Login history."),
-                                     tr("User %1\nLast connection: %2")
-                           .arg(m_Model->index(row,Core::IUser::Name).data().toString())
-                           .arg(m_Model->index(row,Core::IUser::LastLogin).data().toDateTime().toString()),
-                            m_Model->index(row,Core::IUser::LoginHistory).data().toString(),
-                            qApp->applicationName());
-}
-
-void DefaultUserIdentityWidget::changeEvent(QEvent *e)
-{
-    if (e->type()==QEvent::LanguageChange) {
-        ui->retranslateUi(this);
-    }
-}
-
-
-DefaultUserIdentityPage::DefaultUserIdentityPage(QObject *parent) :
-    IUserViewerPage(parent)
-{
-    setObjectName("DefaultUserIdentityPage");
-}
-
-DefaultUserIdentityPage::~DefaultUserIdentityPage()
-{}
-
-QString DefaultUserIdentityPage::id() const
-{
-    return objectName();
-}
-
-QString DefaultUserIdentityPage::displayName() const
-{
-    return tkTr(Trans::Constants::IDENTITY_TEXT);
-}
-
-QString DefaultUserIdentityPage::category() const
-{
-    return tkTr(Trans::Constants::IDENTITY_TEXT);
-}
-
-QString DefaultUserIdentityPage::title() const
-{
-    return tr("User identity");
-}
-
-int DefaultUserIdentityPage::sortIndex() const
-{
-    return 10;
-}
-
-QWidget *DefaultUserIdentityPage::createPage(QWidget *parent)
-{
-    DefaultUserIdentityWidget *w = new DefaultUserIdentityWidget(parent);
-    w->setParentPageId(id());
-    return w;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////   DefaultUserContactWidget   ////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
-    ui(0), //new Ui::UserViewer_ContactUI),
-    m_Mapper(0),
     m_Model(0)
 {
     QHBoxLayout *lay = new QHBoxLayout(this);
@@ -194,24 +65,21 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     lay->setMargin(0);
     lay->setSpacing(0);
     m_identity = new Identity::IdentityEditorWidget(this);
-//    m_identity->initialize();
+//    m_identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::FullAddress | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     lay->addWidget(m_identity);
-//    ui->setupUi(this);
 }
 
 DefaultUserContactWidget::~DefaultUserContactWidget()
 {
-    delete ui;
 }
 
 void DefaultUserContactWidget::setUserModel(UserModel *model)
 {
     qWarning() << "DefaultUserContactWidget::setUserModel" << model;
-
     m_Model = model;
     m_identity->setModel(model);
     m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Address);
-//    m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::Address);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::StateProvince);
     m_identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
     m_identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IUser::Country);
     m_identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IUser::Zipcode);
@@ -221,16 +89,15 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     m_identity->addMapping(Identity::IdentityEditorWidget::SecondName, Core::IUser::SecondName);
     m_identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IUser::TitleIndex);
     m_identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IUser::GenderIndex);
-//    m_identity->addMapping(Identity::IdentityEditorWidget::Language_QLocale, Core::IUser::LanguageISO);
-//    m_identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::);
-//    m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::Photo);
+    m_identity->addMapping(Identity::IdentityEditorWidget::LanguageIso, Core::IUser::LanguageISO);
+    m_identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::DateOfBirth);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::Login64);
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
 }
 
 void DefaultUserContactWidget::setUserIndex(const int row)
 {
-    qWarning() << "DefaultUserContactWidget::setUserIndex" << row;
     if (m_identity)
         m_identity->setCurrentIndex(m_Model->index(row, 0));
 }
@@ -245,12 +112,12 @@ bool DefaultUserContactWidget::submit()
     return m_identity->submit();
 }
 
-void DefaultUserContactWidget::changeEvent(QEvent *e)
-{
-    if (e->type()==QEvent::LanguageChange) {
-        ui->retranslateUi(this);
-    }
-}
+//void DefaultUserContactWidget::changeEvent(QEvent *e)
+//{
+//    if (e->type()==QEvent::LanguageChange) {
+//        ui->retranslateUi(this);
+//    }
+//}
 
 DefaultUserContactPage::DefaultUserContactPage(QObject *parent) :
     IUserViewerPage(parent)
@@ -293,9 +160,9 @@ QWidget *DefaultUserContactPage::createPage(QWidget *parent)
     return w;
 }
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////   DefaultUserProfessionalWidget   /////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserProfessionalWidget::DefaultUserProfessionalWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_ProfessionalUI),
@@ -396,8 +263,9 @@ QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)
     return w;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////   DefaultUserRightsWidget   //////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_RightsUI),
@@ -495,8 +363,9 @@ QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
     return w;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////   DefaultUserPapersWidget   //////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),
@@ -597,13 +466,6 @@ bool DefaultUserPapersWidget::submit()
     }
     return true;
 }
-
-//void DefaultUserRightsWidget::changeEvent(QEvent *e)
-//{
-//    if (e->type()==QEvent::LanguageChange) {
-//        ui->retranslateUi(this);
-//    }
-//}
 
 
 DefaultUserPapersPage::DefaultUserPapersPage(const PaperType type, QObject *parent) :
