@@ -56,8 +56,6 @@ class UserModel;
 
 namespace Internal {
 namespace Ui {
-class UserViewer_IdentityUI;
-class UserViewer_ContactUI;
 class UserViewer_RightsUI;
 class UserViewer_ProfessionalUI;
 }
@@ -78,13 +76,11 @@ public:
     void clear();
     bool submit();
 
-private:
-    void changeEvent(QEvent *e);
+//private:
+//    void changeEvent(QEvent *e);
 
 private:
     Identity::IdentityEditorWidget *m_identity;
-    Ui::UserViewer_ContactUI *ui;
-    QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
     QString m_parentId;
 };
