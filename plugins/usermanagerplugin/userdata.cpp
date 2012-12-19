@@ -213,30 +213,30 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value)
 {
     Q_ASSERT(field>=DATAS_ID && field <= DATA_TRACE_ID);
     switch (field) {
-            case DATAS_ID : d->m_Id = value.toInt(); break;
-            case DATA_USER_UUID : d->m_UserUuid = value.toString(); break;
-            case DATA_DATANAME: setName(value.toString()); break;
-            case DATA_LANGUAGE: d->m_Language = value.toString(); break;
-            case DATA_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
-            case DATA_TRACE_ID: d->m_Trace = value.toInt(); break;
-            default: // Store the value
-                {
-                    if (value.isNull())
-                        break;
-                    if (value.toString().isEmpty())
-                        break;
-                    if (d->m_Type==ExtraDocument)
-                        d->setDocumentXml(value);
-                    else {
-                        if (value.type() == QVariant::DateTime)
-                            d->m_Type = Date;
-                        else if (value.type() == QVariant::String)
-                            d->m_Type = String;
-                        d->m_Value = value;
-                    }
-                    break;
-                }
-            }
+    case DATAS_ID : d->m_Id = value.toInt(); break;
+    case DATA_USER_UUID : d->m_UserUuid = value.toString(); break;
+    case DATA_DATANAME: setName(value.toString()); break;
+    case DATA_LANGUAGE: d->m_Language = value.toString(); break;
+    case DATA_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
+    case DATA_TRACE_ID: d->m_Trace = value.toInt(); break;
+    default: // Store the value
+    {
+        if (value.isNull())
+            break;
+        if (value.toString().isEmpty())
+            break;
+        if (d->m_Type==ExtraDocument)
+            d->setDocumentXml(value);
+        else {
+            if (value.type() == QVariant::DateTime)
+                d->m_Type = Date;
+            else if (value.type() == QVariant::String)
+                d->m_Type = String;
+            d->m_Value = value;
+        }
+        break;
+    }
+    }
     d->m_IsNull = false;
 }
 
@@ -827,6 +827,18 @@ QString UserData::title() const
 QString UserData::gender() const
 {
     return Trans::ConstantTranslations::genders().at(genderIndex());
+}
+
+/** Defines the photo of the user */
+void UserData::setPhoto(const QPixmap &pix)
+{
+    setDynamicDataValue(USER_DATA_PHOTO, Utils::pixmapToBase64(pix));
+}
+
+/** Defines the photo of the user */
+QPixmap UserData::photo() const
+{
+    return Utils::pixmapFromBase64(dynamicDataValue(USER_DATA_PHOTO).toByteArray());
 }
 
 /**

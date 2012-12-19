@@ -162,8 +162,11 @@ public:
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
     void  setMail(const QVariant &val)                { setValue(Table_USERS, USER_MAIL, val); }
 
+    void  setPhoto(const QPixmap &pix);
+
     void  setAddress(const QVariant &val)             { setDynamicDataValue(USER_DATA_ADDRESS , val); }
     void  setZipcode(const QVariant &val)             { setDynamicDataValue(USER_DATA_ZIPCODE , val); }
+    void  setStateProvince(const QVariant &val)       { setDynamicDataValue(USER_DATA_STATEPROVINCE , val); }
     void  setCity(const QVariant &val)                { setDynamicDataValue(USER_DATA_CITY , val); }
     void  setCountry(const QVariant &val)             { setDynamicDataValue(USER_DATA_COUNTRY , val); }
     void  setCountryIso(const QVariant &val)          { setDynamicDataValue(USER_DATA_COUNTRY , val); }
@@ -202,7 +205,6 @@ public:
     QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toAscii())); }
     QString decryptedLogin() const       { return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
-//    QString lastLogin() const;
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName() const;
     QString title() const;
@@ -212,12 +214,15 @@ public:
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
     QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
     QString firstname() const            { return value(Table_USERS, USER_FIRSTNAME).toString(); }
-    QString languageIso() const         { return value(Table_USERS, USER_LANGUAGE).toString(); }
+    QString languageIso() const          { return value(Table_USERS, USER_LANGUAGE).toString(); }
     QLocale::Language localeLanguage() const {return QLocale(languageIso()).language(); }
     QString mail() const                 { return value(Table_USERS, USER_MAIL).toString(); }
 
+    QPixmap photo() const;
+
     QString address() const              { return dynamicDataValue(USER_DATA_ADDRESS).toString(); }
     QString zipcode() const              { return dynamicDataValue(USER_DATA_ZIPCODE).toString(); }
+    QString stateProvince() const        { return dynamicDataValue(USER_DATA_STATEPROVINCE).toString(); }
     QString city() const                 { return dynamicDataValue(USER_DATA_CITY).toString(); }
     QString country() const              { return dynamicDataValue(USER_DATA_COUNTRY).toString(); }
     QString countryIso() const           { return dynamicDataValue(USER_DATA_COUNTRY).toString(); }

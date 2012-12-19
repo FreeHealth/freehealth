@@ -42,8 +42,10 @@ namespace Constants {
     const char * const USER_DB_VERSION              = "0.4";
 
     // constants for DATA table represent DATANAME field
+    const char * const USER_DATA_PHOTO             = "identity.photo";
     const char * const USER_DATA_ADDRESS           = "identity.adress";
     const char * const USER_DATA_ZIPCODE           = "identity.zip";
+    const char * const USER_DATA_STATEPROVINCE     = "identity.state";
     const char * const USER_DATA_CITY              = "identity.city";
     const char * const USER_DATA_COUNTRY           = "identity.country";
     const char * const USER_DATA_TEL1              = "identity.tel1";
