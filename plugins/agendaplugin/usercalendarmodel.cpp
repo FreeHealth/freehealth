@@ -394,7 +394,7 @@ public:
         bold.setBold(true);
         // Create one item foreach week of day
         QVector<QStandardItem *> days;
-        for(int i = Qt::Monday; i <= Qt::Friday; ++i) {
+        for(int i = Qt::Monday; i <= Qt::Sunday; ++i) {
             QStandardItem *day = new QStandardItem(QDate::longDayName(i));
             day->setFont(bold);
             day->setData(i, WeekDayRole),

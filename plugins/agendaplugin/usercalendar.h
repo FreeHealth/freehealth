@@ -67,7 +67,7 @@ public:
 
     void setWeekDay(const int weekDay)
     {
-        Q_ASSERT(weekDay >= Qt::Monday && weekDay <= Qt::Friday);
+        Q_ASSERT((weekDay >= Qt::Monday && weekDay <= Qt::Sunday));
         m_WeekDay = weekDay;
     }
     int weekDay() const {return m_WeekDay;}
