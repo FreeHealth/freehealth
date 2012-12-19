@@ -62,53 +62,6 @@ class UserViewer_RightsUI;
 class UserViewer_ProfessionalUI;
 }
 
-class DefaultUserIdentityWidget : public UserPlugin::IUserViewerWidget
-{
-    Q_OBJECT
-public:
-    DefaultUserIdentityWidget(QWidget *parent = 0);
-    ~DefaultUserIdentityWidget();
-
-    void setParentPageId(const QString &id) {m_parentId=id;}
-    const QString &parentUserViewerPageId() const {return m_parentId;}
-
-    void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
-
-    void clear();
-    bool submit();
-
-private Q_SLOTS:
-    void on_but_changePassword_clicked();
-    void on_but_viewHistory_clicked();
-
-private:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::UserViewer_IdentityUI *ui;
-    QDataWidgetMapper *m_Mapper;
-    UserModel *m_Model;
-    QString m_parentId;
-};
-
-class DefaultUserIdentityPage : public IUserViewerPage
-{
-    Q_OBJECT
-public:
-    DefaultUserIdentityPage(QObject *parent = 0);
-    ~DefaultUserIdentityPage();
-
-    QString id() const;
-    QString displayName() const;
-    QString category() const;
-    QString title() const;
-    int sortIndex() const;
-
-    QWidget *createPage(QWidget *parent);
-};
-
-
 class DefaultUserContactWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
