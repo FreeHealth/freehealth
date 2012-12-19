@@ -453,7 +453,7 @@ public:
         ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toAscii()));
 
         ui->zipcodesWidget->setStreet(tags.value(::XML_STREET));
-        ui->zipcodesWidget->setCountry(tags.value(::XML_COUNTRY));
+        ui->zipcodesWidget->setCountryIso(tags.value(::XML_COUNTRY));
         ui->zipcodesWidget->setCity(tags.value(::XML_CITY));
         ui->zipcodesWidget->setZipCode(tags.value(::XML_ZIPCODE));
         ui->zipcodesWidget->setStateProvince(tags.value(::XML_PROVINCE));

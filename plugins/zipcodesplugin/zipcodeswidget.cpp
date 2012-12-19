@@ -156,6 +156,15 @@ public:
         }
     }
 
+    void connectPropertiesNotifier()
+    {
+        QObject::connect(_street, SIGNAL(textChanged(QString)), q, SIGNAL(streetChanged(QString)));
+        QObject::connect(_city, SIGNAL(textChanged(QString)), q, SIGNAL(cityChanged(QString)));
+        QObject::connect(_stateCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(stateProvinceChanged(QString)));
+        QObject::connect(_zip, SIGNAL(textChanged(QString)), q, SIGNAL(zipCodeChanged(QString)));
+        QObject::connect(_country, SIGNAL(currentIsoCountryChanged(QString)), q, SIGNAL(countryIsoChanged(QString)));
+    }
+
     void setTabOrder()
     {
         QWidget::setTabOrder(_street, _city);
@@ -262,7 +271,7 @@ void ZipCodesWidget::setStateProvince(const QString &state)
     d->_zipCompleter->checkData();
 }
 
-void ZipCodesWidget::setCountry(const QString &twoCharIsoCode)
+void ZipCodesWidget::setCountryIso(const QString &twoCharIsoCode)
 {
     d->_country->setCurrentIsoCountry(twoCharIsoCode);
     d->_zipCompleter->checkData();

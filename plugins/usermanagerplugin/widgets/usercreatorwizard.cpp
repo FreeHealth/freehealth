@@ -418,17 +418,15 @@ UserContactPage::UserContactPage(QWidget *parent) :
 
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    ui->zipCodesWidget->initialize(ZipCodes::ZipCodesWidget::GridLayout);
 
-//    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
-//    c->setCountryComboBox(ui->comboBox);
-//    c->setZipLineEdit(ui->zipcode);
-//    c->setCityLineEdit(ui->city);
     const QRegExp emailRegExp = QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive);
     ui->mail->setValidator(new QRegExpValidator(emailRegExp,this));
-    registerField("Address", ui->address, "plainText");
-    registerField("City", ui->city, "text");
-    registerField("Zipcode", ui->zipcode, "text");
-    registerField("Country", ui->comboBox, "currentIsoCountry");
+    registerField("Address", ui->zipCodesWidget, "street");
+    registerField("City", ui->zipCodesWidget, "city");
+    registerField("Zipcode", ui->zipCodesWidget, "zipCode");
+    registerField("Country", ui->zipCodesWidget, "countryIso");
+    registerField("State", ui->zipCodesWidget, "stateProvince");
 
     registerField("Tel1", ui->tel1, "text");
     registerField("Tel2", ui->tel2, "text");
