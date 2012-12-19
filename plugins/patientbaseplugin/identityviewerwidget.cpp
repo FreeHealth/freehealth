@@ -657,9 +657,9 @@ public:
 
         // TODO: ¿¿¿¿ install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184 ????
 
-        QPixmap photo = patient()->data(Core::IPatient::Photo_64x64).value<QPixmap>();
+        QPixmap photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         if (photo.isNull()) {
-            const int gender = patient()->data(Core::IPatient::GenderIndex).toInt();
+            const int gender = m_PatientModel->index(row, Core::IPatient::GenderIndex).data().toInt();
             photo = theme()->defaultGenderPixmap(gender);
         }
         viewUi->photoLabel->setPixmap(photo);
