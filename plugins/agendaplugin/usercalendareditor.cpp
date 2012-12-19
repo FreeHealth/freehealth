@@ -33,7 +33,7 @@
 #include "usercalendareditor.h"
 #include "usercalendarmodel.h"
 #include "usercalendar.h"
-#include "availabilitycreatordialog.h"
+#include "availabilityeditdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -129,7 +129,7 @@ void UserCalendarEditorWidget::addAvailability()
         return;
     if (!m_AvailabilityModel)
         return;
-    AvailabilityCreatorDialog dlg(this);
+    AvailabilityEditDialog dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
         // save availabilities to the userCalendar or cache them
         const QList<DayAvailability> &av = dlg.getAvailability();
@@ -171,6 +171,17 @@ void UserCalendarEditorWidget::removeAvailabilities()
         }
         m_AvailabilityModel->removeAvailability(idx);
     }
+}
+
+void UserCalendarEditorWidget::modifyAvailability(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+    QList<DayAvailability> list;
+
+    AvailabilityEditDialog dlg(this);
+
+    //TODO: code
 }
 
 

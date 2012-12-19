@@ -394,7 +394,7 @@ public:
         bold.setBold(true);
         // Create one item foreach week of day
         QVector<QStandardItem *> days;
-        for(int i = 1; i < 8; ++i) {
+        for(int i = Qt::Monday; i <= Qt::Friday; ++i) {
             QStandardItem *day = new QStandardItem(QDate::longDayName(i));
             day->setFont(bold);
             day->setData(i, WeekDayRole),
@@ -483,8 +483,9 @@ void DayAvailabilityModel::addAvailability(const DayAvailability &availability)
         dayItem->setData(availability.weekDay(), WeekDayRole);
         dayItem->setFont(bold);
 
-        // Find where to insert the item to keep the sort order clean without reseting the model
+        // Find where to insert the item to keep the sort order clean without resetting the model
         int after = -1;
+        // BUG!!! child(0) is not there always
         if (invisibleRootItem()->child(0)->data(Qt::DisplayRole).toString() == tkTr(Trans::Constants::NO_AVAILABILITY)) {
             clear();
         } else {

@@ -6,18 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
-    <height>388</height>
+    <width>533</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticcalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -308,7 +308,6 @@
  <tabstops>
   <tabstop>description</tabstop>
   <tabstop>selectIconButton</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>defaultDuration</tabstop>
   <tabstop>defaultLocationEdit</tabstop>
   <tabstop>passwordEdit</tabstop>

@@ -19,72 +19,40 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
- *       Guillaume Denry <guillaume.denry@gmail.com>                       *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDAREDITOR_H
-#define USERCALENDAREDITOR_H
+#ifndef AVAILABILITYCREATORDIALOG_H
+#define AVAILABILITYCREATORDIALOG_H
 
-#include <agendaplugin/agenda_exporter.h>
-
-#include <QWidget>
-#include <QDataWidgetMapper>
-
-/**
- * \file usercalendareditor.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 18 Nov 2011
-*/
-
-namespace Calendar {
-class AbstractCalendarModel;
-}
+#include <QDialog>
+#include <QList>
+#include <agendaplugin/usercalendar.h>
 
 namespace Agenda {
-class UserCalendar;
-class UserCalendarModel;
-class DayAvailabilityModel;
-
 namespace Ui {
-class UserCalendarEditorWidget;
+    class AvailabilityCreatorDialog;
 }
 
-class AGENDA_EXPORT UserCalendarEditorWidget : public QWidget
+class AvailabilityEditDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit UserCalendarEditorWidget(QWidget *parent = 0);
-    ~UserCalendarEditorWidget();
+    explicit AvailabilityEditDialog(QWidget *parent = 0);
+    ~AvailabilityEditDialog();
 
-    void clear();
+    QList<DayAvailability> getAvailability() const;
 
-    void setUserCalendarModel(UserCalendarModel *model);
-
-public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &index);
-    void addAvailability();
-    void removeAvailabilities();
-    void modifyAvailability(const QModelIndex &index);
-    void clearAvailabilities();
-    void submit();
-    void revert();
-
-protected:
-    void changeEvent(QEvent *e);
+private Q_SLOTS:
+    void on_startTime_timeChanged(const QTime &from);
 
 private:
-    Ui::UserCalendarEditorWidget *ui;
-    UserCalendarModel *m_UserCalendarModel;
-    DayAvailabilityModel *m_AvailabilityModel;
-    QDataWidgetMapper *m_Mapper;
+    Ui::AvailabilityCreatorDialog *ui;
 };
 
 }  // End namespace Agenda
 
-
-#endif // USERCALENDAREDITOR_H
+#endif // AVAILABILITYCREATORDIALOG_H

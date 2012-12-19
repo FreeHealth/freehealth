@@ -19,72 +19,61 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
- *       Guillaume Denry <guillaume.denry@gmail.com>                       *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDAREDITOR_H
-#define USERCALENDAREDITOR_H
+#include "availabilityeditdialog.h"
+#include "ui_availabilityeditdialog.h"
 
-#include <agendaplugin/agenda_exporter.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
+#include <translationutils/trans_current.h>
 
-#include <QWidget>
-#include <QDataWidgetMapper>
+#include <QDate>
 
-/**
- * \file usercalendareditor.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 18 Nov 2011
-*/
+using namespace Agenda;
+using namespace Trans::ConstantTranslations;
 
-namespace Calendar {
-class AbstractCalendarModel;
-}
-
-namespace Agenda {
-class UserCalendar;
-class UserCalendarModel;
-class DayAvailabilityModel;
-
-namespace Ui {
-class UserCalendarEditorWidget;
-}
-
-class AGENDA_EXPORT UserCalendarEditorWidget : public QWidget
+AvailabilityEditDialog::AvailabilityEditDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::AvailabilityCreatorDialog)
 {
-    Q_OBJECT
+    ui->setupUi(this);
+    for(int i=1; i < 8;++i)
+        ui->dayCombo->addItem(QDate::longDayName(i));
+    ui->dayCombo->addItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(QDate::longDayName(1)).arg(QDate::longDayName(5)));
+}
 
-public:
-    explicit UserCalendarEditorWidget(QWidget *parent = 0);
-    ~UserCalendarEditorWidget();
+AvailabilityEditDialog::~AvailabilityEditDialog()
+{
+    delete ui;
+}
 
-    void clear();
+void AvailabilityEditDialog::on_startTime_timeChanged(const QTime &from)
+{
+    ui->endTime->setMinimumTime(from);
+}
 
-    void setUserCalendarModel(UserCalendarModel *model);
-
-public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &index);
-    void addAvailability();
-    void removeAvailabilities();
-    void modifyAvailability(const QModelIndex &index);
-    void clearAvailabilities();
-    void submit();
-    void revert();
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::UserCalendarEditorWidget *ui;
-    UserCalendarModel *m_UserCalendarModel;
-    DayAvailabilityModel *m_AvailabilityModel;
-    QDataWidgetMapper *m_Mapper;
-};
-
-}  // End namespace Agenda
-
-
-#endif // USERCALENDAREDITOR_H
+QList<DayAvailability> AvailabilityEditDialog::getAvailability() const
+{
+    QList<DayAvailability> toReturn;
+    int id = ui->dayCombo->currentIndex();
+    if (id < 7) {
+        // One day only
+        DayAvailability av;
+        av.setWeekDay(id+1);
+        av.addTimeRange(ui->startTime->time(), ui->endTime->time());
+        toReturn << av;
+    } else if (id == 7) {
+        // From monday to friday
+        for(int i=1; i < 6; ++i) {
+            DayAvailability av;
+            av.setWeekDay(i);
+            av.addTimeRange(ui->startTime->time(), ui->endTime->time());
+            toReturn << av;
+        }
+    }
+    return toReturn;
+}
