@@ -394,6 +394,7 @@ public:
         case IdentityEditorWidget::GenderIndex:
         case IdentityEditorWidget::Gender: return ui->genderCombo;
         case IdentityEditorWidget::Language_QLocale: return ui->language;
+        case IdentityEditorWidget::LanguageIso: return ui->language;
         case IdentityEditorWidget::DateOfBirth: return ui->dob;
         case IdentityEditorWidget::DateOfDeath: return 0; //TODO: ui->dod;
         case IdentityEditorWidget::Photo: return ui->photoButton;
@@ -419,6 +420,8 @@ public:
 //        case IdentityEditorWidget::Photo: return "pixmap";
         case IdentityEditorWidget::Language_QLocale:
             return "currentLanguage";
+        case IdentityEditorWidget::LanguageIso:
+            return "currentLanguageIso";
         default: break;
         }
         return "";
@@ -576,7 +579,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     d->ui->birthName->setEnabled(widgets & BirthName);
     d->ui->secondName->setEnabled(widgets & SecondName);
     d->ui->firstname->setEnabled(widgets & FirstName);
-    d->ui->language->setEnabled(widgets & Language_QLocale);
+    d->ui->language->setEnabled(widgets & Language_QLocale || widgets & LanguageIso);
     d->ui->dob->setEnabled(widgets & DateOfBirth);
     //d->ui->dod->setEnabled(widgets & DateOfDeath);
     d->ui->photoButton->setEnabled(widgets & Photo);
