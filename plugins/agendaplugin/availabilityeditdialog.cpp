@@ -79,3 +79,13 @@ QList<DayAvailability> AvailabilityEditDialog::getAvailability() const
     }
     return toReturn;
 }
+
+void AvailabilityEditDialog::setAvailability(const QList<DayAvailability> &availabilities)
+{
+    //TODO: code
+}
+
+void AvailabilityEditDialog::setAvailability(const DayAvailability &availability)
+{
+    //TODO: code
+}

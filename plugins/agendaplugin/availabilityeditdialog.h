@@ -45,6 +45,8 @@ public:
     ~AvailabilityEditDialog();
 
     QList<DayAvailability> getAvailability() const;
+    void setAvailability(const QList<DayAvailability> &availabilities);
+    void setAvailability(const DayAvailability &availability);
 
 private Q_SLOTS:
     void on_startTime_timeChanged(const QTime &from);
