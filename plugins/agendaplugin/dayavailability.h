@@ -108,9 +108,6 @@ public:
     void addAvailability(const DayAvailability &availability);
     void removeAvailability(const QModelIndex &index);
 
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
 public Q_SLOTS:
     bool submit();
 

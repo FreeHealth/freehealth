@@ -243,19 +243,19 @@ void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
     }
 }
 
-bool DayAvailabilityModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    // TODO: code here
-    qWarning() << Q_FUNC_INFO << row << count << parent;
-    return true;
-}
+//bool DayAvailabilityModel::insertRows(int row, int count, const QModelIndex &parent)
+//{
+//    // TODO: code here
+//    qWarning() << Q_FUNC_INFO << row << count << parent;
+//    return true;
+//}
 
-bool DayAvailabilityModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    // TODO: code here
-    qWarning() << Q_FUNC_INFO << row << count << parent;
-    return true;
-}
+//bool DayAvailabilityModel::removeRows(int row, int count, const QModelIndex &parent)
+//{
+//    // TODO: code here
+//    qWarning() << Q_FUNC_INFO << row << count << parent;
+//    return true;
+//}
 
 bool DayAvailabilityModel::submit()
 {
