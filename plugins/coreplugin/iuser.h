@@ -63,13 +63,14 @@ public:
         LocaleLanguage, /*!< \brief Language index from Core::Translators::availableLanguages() */  //12
 
         // ORDER CAN CHANGE
+        DateOfBirth,
         ClearLogin,
         ClearPassword,
         LocaleCodedLanguage,
         PersonalLinkId,
         FullName,
         GenderIndex, TitleIndex, Gender, Title,
-        Address, Zipcode, City, Country, IsoCountry,
+        Address, Zipcode, City, StateProvince, Country, IsoCountry,
         FullHtmlAddress,
         Tel1, Tel2, Tel3, Fax, PractitionerId,
         FullHtmlContact,
