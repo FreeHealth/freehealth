@@ -4,7 +4,10 @@ FreeMedForms
 
   * New form items:
     * detailswidget
-    * moderndate
+    * modern date
+  * Refactoring all identity UI
+  * Refactoring the usermanager
+  * Ability to edit agenda day availabilities
   * New languages available (translations undone)
 
 ===== Bug correction =====
