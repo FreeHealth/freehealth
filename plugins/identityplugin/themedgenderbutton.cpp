@@ -88,7 +88,6 @@ ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
 /** Return the current pixmap of the button */
 QPixmap ThemedGenderButton::pixmap() const
 {
-    qWarning() << "pixmap"<<m_pixmap.size();
     return m_pixmap;
 }
 
@@ -132,9 +131,6 @@ void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
     setIcon(QIcon(pixmap));
     m_pixmap = pixmap;
     m_deletePhotoAction->setEnabled(!pixmap.isNull());
-
-    qWarning() << "SetPixmap"<<m_pixmap.size();
-
     Q_EMIT pixmapChanged(pixmap);
 }
 
