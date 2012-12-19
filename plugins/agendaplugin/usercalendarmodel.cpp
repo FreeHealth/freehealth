@@ -223,7 +223,7 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
     return false;
 }
 
-/** Create new Agenda::UserCalendar by inserting new model rows. */
+/** Creates a new Agenda::UserCalendar by inserting new model rows. */
 bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row+count);
@@ -238,7 +238,7 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
     return true;
 }
 
-/** Remove Agenda::UserCalendar by removing model rows. */
+/** Removes Agenda::UserCalendar by removing model rows. */
 bool UserCalendarModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row+count);
@@ -252,7 +252,7 @@ bool UserCalendarModel::removeRows(int row, int count, const QModelIndex &parent
     return true;
 }
 
-/** Return the Agenda::UserCalendar at the index \e row. Pointer must not be deleted. */
+/** Returns the Agenda::UserCalendar at the index \e row. Pointer must not be deleted. */
 UserCalendar *UserCalendarModel::userCalendarAt(const int row) const
 {
     if (row < 0 || row >= d->m_UserCalendars.count())
@@ -260,7 +260,7 @@ UserCalendar *UserCalendarModel::userCalendarAt(const int row) const
     return d->m_UserCalendars.at(row);
 }
 
-/** Return the default Agenda::UserCalendar or the first Agenda::UserCalendar or 0 if no Agenda::UserCalendar are available. The pointer must not be deleted. */
+/** Returns the default Agenda::UserCalendar or the first Agenda::UserCalendar or 0 if no Agenda::UserCalendar are available. The pointer must not be deleted. */
 UserCalendar *UserCalendarModel::defaultUserCalendar() const
 {
     for(int i = 0; i < d->m_UserCalendars.count(); ++i) {
@@ -274,7 +274,7 @@ UserCalendar *UserCalendarModel::defaultUserCalendar() const
     return 0;
 }
 
-/** Return the QModelIndex for the default Agenda::UserCalendar or the first Agenda::UserCalendar or 0 if no Agenda::UserCalendar are available. The pointer must not be deleted. */
+/** Returns the QModelIndex for the default Agenda::UserCalendar or the first Agenda::UserCalendar or 0 if no Agenda::UserCalendar are available. The pointer must not be deleted. */
 QModelIndex UserCalendarModel::defaultUserCalendarModelIndex() const
 {
     for(int i = 0; i < d->m_UserCalendars.count(); ++i) {
@@ -288,7 +288,7 @@ QModelIndex UserCalendarModel::defaultUserCalendarModelIndex() const
     return QModelIndex();
 }
 
-/** Update models if UserCalendar was modified outside of the model. The calendar will be saved to the database. */
+/** Updates models if UserCalendar was modified outside of the model. The calendar will be saved to the database. */
 void UserCalendarModel::updateUserCalendarChanged(const int row)
 {
     Q_UNUSED(row);
@@ -296,7 +296,7 @@ void UserCalendarModel::updateUserCalendarChanged(const int row)
     // TODO: update availabities model
 }
 
-/** Return the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index . You have to delete the returned pointer. */
+/** Returns the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index. You have to delete the returned object. */
 DayAvailabilityModel *UserCalendarModel::availabilityModel(const QModelIndex &index, QObject *parent) const
 {
     if (!index.isValid())
@@ -304,7 +304,7 @@ DayAvailabilityModel *UserCalendarModel::availabilityModel(const QModelIndex &in
     return availabilityModel(index.row(), parent);
 }
 
-/** Return the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index . You have to delete the returned pointer. */
+/** Returns the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index. You have to delete the returned object. */
 DayAvailabilityModel *UserCalendarModel::availabilityModel(const int index, QObject *parent) const
 {
     if (index < 0 || index >= d->m_UserCalendars.count())
@@ -317,7 +317,7 @@ DayAvailabilityModel *UserCalendarModel::availabilityModel(const int index, QObj
     return model;
 }
 
-/** Set the full list of user delegates to UserCalendars. */
+/** Sets the full list of user delegates to UserCalendars. */
 void UserCalendarModel::setPeopleList(const int row, const QList<Calendar::People> &peoples)
 {
     if (row < 0 || row >= d->m_UserCalendars.count())
@@ -326,7 +326,7 @@ void UserCalendarModel::setPeopleList(const int row, const QList<Calendar::Peopl
     u->setPeopleList(peoples);
 }
 
-/** Add user delegates to UserCalendars. The only allowed type of Calendar::People is Calendar::People::PeopleUserDelegate. */
+/** Adds user delegates to UserCalendars. The only allowed type of Calendar::People is Calendar::People::PeopleUserDelegate. */
 void UserCalendarModel::addPeople(const int row, const Calendar::People &people)
 {
     if (row < 0 || row >= d->m_UserCalendars.count())
@@ -335,7 +335,7 @@ void UserCalendarModel::addPeople(const int row, const Calendar::People &people)
     u->addPeople(people);
 }
 
-/** Remove one UserDelegate to the UserCalendar. \sa  addPeople() */
+/** Removes one UserDelegate to the UserCalendar. \sa  addPeople() */
 void UserCalendarModel::removePeople(const int row, const QString &uid)
 {
     if (row < 0 || row >= d->m_UserCalendars.count())
@@ -344,7 +344,7 @@ void UserCalendarModel::removePeople(const int row, const QString &uid)
     u->removePeople(uid);
 }
 
-/** Submit all modifications to the database. */
+/** Submits all modifications to the database. */
 bool UserCalendarModel::submit()
 {
     bool ok = true;
@@ -359,7 +359,7 @@ bool UserCalendarModel::submit()
     return ok;
 }
 
-/** Revert all modifications. */
+/** Reverts all modifications. */
 void UserCalendarModel::revert()
 {
     d->getUserCalendars();
