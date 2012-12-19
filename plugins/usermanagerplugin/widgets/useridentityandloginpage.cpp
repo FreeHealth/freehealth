@@ -99,6 +99,7 @@ UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 //    delete ui;
 }
 
+/** Check the current login. Return \e true if it can be used otherwise return false*/
 bool UserIdentityAndLoginPage::checkLogin() const
 {
     // user login must be unique in the FreeMedForms database
