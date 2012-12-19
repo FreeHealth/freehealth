@@ -27,6 +27,11 @@
 /***************************************************************************
  *   Code adapted from the Qxt Librairy (LGPL 2.1)                         *
  ***************************************************************************/
+/**
+ * \class Utils::LanguageComboBox
+ * Displays a combobox populate with all available Qt languages.
+ */
+
 #include "languagecombobox.h"
 
 #include <translationutils/constants.h>
@@ -58,7 +63,6 @@ static QStringList findQmFiles(const QString &pathToTranslations)
     }
     return fileNames;
 }
-
 
 class Language
 {
@@ -236,8 +240,6 @@ private:
 }  // End namespace Internal
 }  // End namespace Utils
 
-
-
 LanguageComboBox::LanguageComboBox(QWidget* parent) :
         QComboBox(parent), d(new LanguageComboBoxPrivate(this))
 {
@@ -254,19 +256,27 @@ LanguageComboBox::~LanguageComboBox()
     d = 0;
 }
 
+/**
+ * Define the absolute path \e absFullPath to translations
+ */
 void LanguageComboBox::setTranslationsPath(const QString &absFullPath)
 {
     d->m_TrPath = absFullPath;
     d->reset();
 }
 
+/**
+ * Define the absolute path \e absFullPath to flags icons
+ */
 void LanguageComboBox::setFlagsIconPath(const QString &absFullPath)
 {
     d->m_IconPath = QDir::cleanPath(absFullPath);
     d->reset();
 }
 
-/** \brief Return the current selected language.*/
+/**
+ * Returns the current selected language.
+ */
 QLocale::Language LanguageComboBox::currentLanguage() const
 {
     if (!d->m_Model)
@@ -277,24 +287,34 @@ QLocale::Language LanguageComboBox::currentLanguage() const
     return currentLang;
 }
 
-/** \brief Return the human readable name of the current selected language.*/
+/**
+ * Returns the human readable name of the current selected language.
+ */
 QString LanguageComboBox::currentLanguageName() const
 {
     return currentText();
 }
 
-/** \brief Return the ISO name of the current selected language.*/
+/**
+ * Returns the ISO name of the current selected language.
+ */
 QString LanguageComboBox::currentLanguageIsoName() const
 {
     return QLocale(currentLanguage()).name().left(2);
 }
 
+/**
+ * Defines the current language of the combo using the two char ISO code
+ */
 void LanguageComboBox::setCurrentIsoLanguage(const QString &languageIsoCode)
 {
     QLocale::Language language = QLocale(languageIsoCode).language();
     setCurrentLanguage(language);
 }
 
+/**
+ * Defines the current language of the combo
+ */
 void LanguageComboBox::setCurrentLanguage(QLocale::Language language)
 {
     if (!d->m_Model)
@@ -307,20 +327,35 @@ void LanguageComboBox::setCurrentLanguage(QLocale::Language language)
     comboBoxCurrentIndexChanged(0);
 }
 
-/** \brief the display mode of the widget. */
+/**
+ * Defines the display mode of the widget.
+ * \sa displayMode(), Utils::LanguageComboBox::DisplayMode
+*/
 void LanguageComboBox::setDisplayMode(DisplayMode mode)
 {
     d->setDisplayMode(mode);
 }
 
+/**
+ * Returns the current displaymode
+ * \sa setDisplayMode(), Utils::LanguageComboBox::DisplayMode
+ */
 LanguageComboBox::DisplayMode LanguageComboBox::displayMode() const
 {
     return d->m_DisplayMode;
 }
 
+/**
+ * \internal
+ * On current language changed, emit signals:
+ * - currentLanguageChanged
+ * - currentLanguageNameChanged
+ * - currentLanguageIsoChanged
+ */
 void LanguageComboBox::comboBoxCurrentIndexChanged(int)
 {
     Q_EMIT currentLanguageChanged(currentLanguage());
     Q_EMIT currentLanguageNameChanged(currentLanguageName());
+    Q_EMIT currentLanguageIsoChanged(currentLanguageIsoName());
 }
 
