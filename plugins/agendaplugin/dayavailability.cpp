@@ -58,17 +58,26 @@ void DayAvailability::addTimeRange(const TimeRange &tr)
     timeRanges.append(tr);
 }
 
-TimeRange DayAvailability::timeRange(const int index) const
+TimeRange DayAvailability::timeRangeAt(const int index) const
 {
     if (IN_RANGE(index, 0, timeRanges.count()))
         return timeRanges.at(index);
     return TimeRange();
 }
+
 void DayAvailability::removeTimeRangeAt(const int index)
 {
     if (index > timeRanges.count())
         return;
     timeRanges.remove(index);
+}
+
+void DayAvailability::removeTimeRanges(const TimeRange &timeRange)
+{
+    foreach(const TimeRange &tr, timeRanges) {
+        if(timeRange == tr)
+            timeRanges.remove(timeRanges.indexOf(tr));
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,40 +95,40 @@ public:
         q(parent)
     {}
 
-    void refreshModel()
+    void resetModel()
     {
         q->clear();
         QFont bold;
         bold.setBold(true);
-        // Create one item foreach week of day
-        QVector<QStandardItem *> days;
-        for(int i = Qt::Monday; i <= Qt::Sunday; ++i) {
-            QStandardItem *day = new QStandardItem(QDate::longDayName(i));
-            day->setFont(bold);
-            day->setData(i, WeekDayRole),
-            days << day;
+        // Create one item for each day of week
+        for(int day = Qt::Monday; day <= Qt::Sunday; ++day) {
+            QStandardItem *dayItem = new QStandardItem(QDate::longDayName(day));
+            dayItem->setFont(bold);
+            dayItem->setData(day, WeekDayRole);
             // Add availabilities to items
-            const QVector<DayAvailability> &avail = m_UserCalendar->availabilities(i);
-            for(int j = 0; j < avail.count(); ++j) {
-                for(int k = 0; k < avail.at(j).timeRangeCount(); ++k) {
-                    TimeRange range = avail.at(j).timeRange(k);
+            const QVector<DayAvailability> &avail = m_UserCalendar->availabilities(day);
+            for(int availabilityId = 0; availabilityId < avail.count(); ++availabilityId) {
+                for(int timeRangeId = 0; timeRangeId < avail.at(availabilityId).timeRangeCount(); ++timeRangeId) {
+                    TimeRange range = avail.at(availabilityId).timeRangeAt(timeRangeId);
                     QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
+                    time->setData(day, WeekDayRole);
                     time->setData(range.from, HourFromRole);
                     time->setData(range.to, HourToRole);
-                    time->setData(k, TimeRangeIdRole);
-                    time->setData(j, AvailIdRole);
+                    time->setData(timeRangeId, TimeRangeIdRole);
+                    time->setData(availabilityId, AvailIdRole);
                     time->setToolTip(time->text());
-                    day->appendRow(time);
+                    dayItem->appendRow(time);
                 }
             }
-            if (day->rowCount()) {
-                day->sortChildren(0);
-                q->invisibleRootItem()->appendRow(day);
+            if (dayItem->rowCount()) {
+                dayItem->sortChildren(0);
+            } else {
+                QStandardItem *item = new QStandardItem(QObject::tr("not available"));
+                item->setData(day, WeekDayRole);
+                item->setData(-1, AvailIdRole);
+                dayItem->appendRow(item);
             }
-        }
-        if (!q->invisibleRootItem()->rowCount()) {
-            QStandardItem *item = new QStandardItem(tkTr(Trans::Constants::NO_AVAILABILITY));
-            q->invisibleRootItem()->appendRow(item);
+            q->invisibleRootItem()->appendRow(dayItem);
         }
     }
 
@@ -156,70 +165,45 @@ void DayAvailabilityModel::clearAvailabilities()
 void DayAvailabilityModel::setUserCalendar(UserCalendar *calendar)
 {
     d->m_UserCalendar = calendar;
-    d->refreshModel();
+    d->resetModel();
     reset();
 }
 
 void DayAvailabilityModel::addAvailability(const DayAvailability &availability)
 {
     Q_ASSERT(d->m_UserCalendar);
+    Q_ASSERT(IN_RANGE(availability.weekDay(), Qt::Monday, Qt::Sunday));
+
     d->m_UserCalendar->addAvailabilities(availability);
 
     // find the day item
     QStandardItem *dayItem = 0;
     for(int i = 0; i < invisibleRootItem()->rowCount(); ++i) {
-        if (invisibleRootItem()->child(i)->data(WeekDayRole).toInt()==availability.weekDay()) {
+        if (invisibleRootItem()->child(i)->data(WeekDayRole).toInt() == availability.weekDay()) {
             dayItem = invisibleRootItem()->child(i);
             break;
         }
     }
 
-    if (!dayItem) {
-        // Create the day item
-        QFont bold;
-        bold.setBold(true);
-        dayItem = new QStandardItem(QDate::longDayName(availability.weekDay()));
-        dayItem->setData(availability.weekDay(), WeekDayRole);
-        dayItem->setFont(bold);
+    // at this point there MUST be a valid dayItem. If not, something really bad happened.
+    Q_ASSERT(dayItem);
 
-        // Find where to insert the item to keep the sort order clean without resetting the model
-        int after = -1;
-        // BUG!!! child(0) is not there always
-        if (invisibleRootItem()->child(0)->data(Qt::DisplayRole).toString() == tkTr(Trans::Constants::NO_AVAILABILITY)) {
-            clear();
-        } else {
-            for(int i = 0; i < invisibleRootItem()->rowCount(); ++i) {
-                if (invisibleRootItem()->child(i)->data(WeekDayRole).toInt() < availability.weekDay()) {
-                    after = i;
-                } else {
-                    break;
-                }
-            }
-            ++after;
-        }
+    // delete the placeholder item, if exists
+    if (dayItem->hasChildren() && dayItem->child(0)->data(AvailIdRole).toInt() == -1)
+        dayItem->removeRow(0);
 
-        // Add the time ranges
-        for(int i = 0; i < availability.timeRangeCount(); ++i) {
-            TimeRange range = availability.timeRange(i);
-            QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
-            time->setData(range.from, HourFromRole);
-            time->setToolTip(time->text());
-            dayItem->appendRow(time);
-        }
-
-        // Insert the Day item to the root item
-        insertRow(after, dayItem);
-    } else {
-        // Insert the TimeRanges
-        for(int i = 0; i < availability.timeRangeCount(); ++i) {
-            TimeRange range = availability.timeRange(i);
-            QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
-            time->setData(range.from, HourFromRole);
-            time->setToolTip(time->text());
-            dayItem->appendRow(time);
-        }
-        dayItem->sortChildren(0);
+    // Insert the TimeRanges
+    for(int i = 0; i < availability.timeRangeCount(); ++i) {
+        TimeRange range = availability.timeRangeAt(i);
+        QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
+        time->setData(availability.weekDay(), WeekDayRole);
+        time->setData(range.from, HourFromRole);
+        time->setData(range.to, HourToRole);
+        time->setToolTip(time->text());
+        dayItem->appendRow(time);
     }
+    dayItem->sortChildren(0);
+
 }
 
 void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
@@ -243,22 +227,9 @@ void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
     }
 }
 
-//bool DayAvailabilityModel::insertRows(int row, int count, const QModelIndex &parent)
-//{
-//    // TODO: code here
-//    qWarning() << Q_FUNC_INFO << row << count << parent;
-//    return true;
-//}
-
-//bool DayAvailabilityModel::removeRows(int row, int count, const QModelIndex &parent)
-//{
-//    // TODO: code here
-//    qWarning() << Q_FUNC_INFO << row << count << parent;
-//    return true;
-//}
-
 bool DayAvailabilityModel::submit()
 {
     // TODO: code here
-    return true;
+    qDebug() << "DayAvailabilityModel::submit() is a stub.";
+    return false;
 }

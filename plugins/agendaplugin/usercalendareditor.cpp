@@ -38,12 +38,14 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
 #include "ui_usercalendareditor.h"
 
 #include <QDebug>
 
 using namespace Agenda;
+using namespace Trans::ConstantTranslations;
 
 UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     QWidget(parent),
@@ -59,8 +61,14 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
 //    connect(ui->clearAvail, SIGNAL(clicked()), this, SLOT(clearAvailabilities()));
-    connect(ui->removeAvail, SIGNAL(clicked()), this, SLOT(removeAvailabilities()));
-    connect(ui->addAvailability, SIGNAL(clicked()), this, SLOT(addAvailability()));
+    connect(ui->removeAvailabilityButton, SIGNAL(clicked()), this, SLOT(removeAvailabilities()));
+    connect(ui->addAvailabilityButton, SIGNAL(clicked()), this, SLOT(addAvailability()));
+    connect(ui->editAvailabilityButton, SIGNAL(clicked()), this, SLOT(editAvailability()));
+
+    connect(ui->availabilityView, SIGNAL(activated(QModelIndex)), this, SLOT(editAvailability(QModelIndex)));
+    connect(ui->availabilityView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateUi(QModelIndex)));
+
+    updateUi();
 }
 
 UserCalendarEditorWidget::~UserCalendarEditorWidget()
@@ -119,6 +127,7 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
     }
     m_AvailabilityModel = m_UserCalendarModel->availabilityModel(index, this);
     ui->availabilityView->setModel(m_AvailabilityModel);
+    ui->availabilityView->expandAll();
 
     // Set delegates
     ui->userCalendarDelegatesWidget->setUserCalendarIndex(index.row());
@@ -131,9 +140,12 @@ void UserCalendarEditorWidget::addAvailability()
     if (!m_AvailabilityModel)
         return;
     AvailabilityEditDialog dlg(this);
+    const QModelIndex &index= ui->availabilityView->currentIndex();
+    if (index.isValid())
+        dlg.setDayOfWeek(index.data(WeekDayRole).toInt());
     if (dlg.exec() == QDialog::Accepted) {
         // save availabilities to the userCalendar or cache them
-        const QList<DayAvailability> &av = dlg.getAvailability();
+        const QList<DayAvailability> &av = dlg.getAvailabilities();
         for(int i = 0 ; i < av.count(); ++i) {
             m_AvailabilityModel->addAvailability(av.at(i));
         }
@@ -174,15 +186,34 @@ void UserCalendarEditorWidget::removeAvailabilities()
     }
 }
 
-void UserCalendarEditorWidget::modifyAvailability(const QModelIndex &index)
+void UserCalendarEditorWidget::editAvailability()
 {
-    if (!index.isValid())
+    editAvailability(ui->availabilityView->currentIndex());
+}
+
+void UserCalendarEditorWidget::editAvailability(const QModelIndex &index)
+{
+    // don't process top level items (Day names) or when no item is selected
+    if (!index.isValid() || !index.parent().isValid() || index.data(AvailIdRole).toInt() == -1)
         return;
-    QList<DayAvailability> list;
-
+    QStandardItem *item = m_AvailabilityModel->itemFromIndex(index);
     AvailabilityEditDialog dlg(this);
+    dlg.setAvailability(item->data(WeekDayRole).toInt(),
+                        item->data(HourFromRole).toTime(),
+                        item->data(HourToRole).toTime());
+    dlg.disableDayChange();
 
-    //TODO: code
+    if (dlg.exec() == QDialog::Accepted) {
+        // save availabilities to the userCalendar or cache them
+        const QList<DayAvailability> &avList = dlg.getAvailabilities();
+        Q_ASSERT(avList.count() == 1);
+        Q_ASSERT(avList.first().timeRangeCount() == 1);
+
+        const TimeRange &tr = avList.first().timeRangeAt(0);
+        m_AvailabilityModel->setData(index, tr.from, HourFromRole);
+        m_AvailabilityModel->setData(index, tr.to, HourToRole);
+        m_AvailabilityModel->setData(index, tkTr(Trans::Constants::FROM_1_TO_2).arg(tr.from.toString(), tr.to.toString()), Qt::DisplayRole);
+    }
 }
 
 
@@ -201,6 +232,20 @@ void UserCalendarEditorWidget::revert()
 {
     if (m_Mapper)
         m_Mapper->revert();
+}
+
+/*!
+ * \brief Updates the UI according to the actual state.
+ *
+ * Sets the enabled status of buttons dependant of the current active item in the view.
+ */
+void UserCalendarEditorWidget::updateUi(const QModelIndex &index)
+{
+    const bool canEditDelete = index.isValid()
+            && index.parent().isValid()
+            && index.data(AvailIdRole).toInt() != -1;
+    ui->removeAvailabilityButton->setEnabled(canEditDelete);
+    ui->editAvailabilityButton->setEnabled(canEditDelete);
 }
 
 void UserCalendarEditorWidget::changeEvent(QEvent *e)

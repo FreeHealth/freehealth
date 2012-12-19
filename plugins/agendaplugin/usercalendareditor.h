@@ -32,6 +32,7 @@
 
 #include <QWidget>
 #include <QDataWidgetMapper>
+#include <QModelIndex>
 
 /**
  * \file usercalendareditor.h
@@ -69,10 +70,12 @@ public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &index);
     void addAvailability();
     void removeAvailabilities();
-    void modifyAvailability(const QModelIndex &index);
+    void editAvailability();
+    void editAvailability(const QModelIndex &index);
     void clearAvailabilities();
     void submit();
     void revert();
+    void updateUi(const QModelIndex &index = QModelIndex());
 
 protected:
     void changeEvent(QEvent *e);

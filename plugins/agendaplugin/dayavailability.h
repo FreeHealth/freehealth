@@ -46,7 +46,7 @@ enum DayAvailabilityRoles {
 
 struct AGENDA_EXPORT TimeRange {
     TimeRange() : id(-1) {}
-
+    inline bool operator== (const TimeRange &other) const { return (id == other.id) && (from == other.from) && (to == other.to);}
     // the id is used for database accesses and should be modified
     int id;
     QTime from, to;
@@ -77,12 +77,13 @@ public:
     void setTimeRanges(const QVector<TimeRange> &ranges) {timeRanges = ranges;}
 
     int timeRangeCount() const {return timeRanges.count();}
-    TimeRange timeRange(const int index) const;
+    TimeRange timeRangeAt(const int index) const;
     void removeTimeRangeAt(const int index);
+    void removeTimeRanges(const TimeRange &timeRangeAt);
 
 private:
     int m_id;
-    int m_WeekDay;
+    int m_WeekDay; // == Qt::DayOfWeek
     bool m_isAvailable;
     QVector<TimeRange> timeRanges;
 };

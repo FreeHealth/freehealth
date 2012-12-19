@@ -7,73 +7,56 @@
     <x>0</x>
     <y>0</y>
     <width>224</width>
-    <height>141</height>
+    <height>115</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Day availability editor</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
+   <property name="fieldGrowthPolicy">
+    <enum>QFormLayout::ExpandingFieldsGrow</enum>
+   </property>
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
+    <widget class="QLabel" name="dayOfWeekLabel">
      <property name="text">
-      <string>Day availability editor</string>
+      <string>&amp;Day of week:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="buddy">
+      <cstring>dayCombo</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="dayCombo"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="startTimeLabel">
+     <property name="text">
+      <string>&amp;Start time:</string>
+     </property>
+     <property name="buddy">
+      <cstring>startTime</cstring>
      </property>
     </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QTimeEdit" name="startTime"/>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="endTimeLabel">
      <property name="text">
-      <string>Day of week</string>
+      <string>&amp;End time:</string>
+     </property>
+     <property name="buddy">
+      <cstring>endTime</cstring>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QComboBox" name="dayCombo"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Start time</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QTimeEdit" name="startTime"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>End time</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
     <widget class="QTimeEdit" name="endTime"/>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item row="3" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
