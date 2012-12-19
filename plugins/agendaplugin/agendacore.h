@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDACORE_H
-#define AGENDACORE_H
+#ifndef AGENDA_AGENDACORE_H
+#define AGENDA_AGENDACORE_H
 
 #include <QObject>
 
@@ -76,4 +76,4 @@ private:
 
 }  // End namespace Agenda
 
-#endif // AGENDACORE_H
+#endif // AGENDA_AGENDACORE_H

@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDARWIZARDCREATORPAGE_H
-#define USERCALENDARWIZARDCREATORPAGE_H
+#ifndef AGENDA_USERCALENDARWIZARDCREATORPAGE_H
+#define AGENDA_USERCALENDARWIZARDCREATORPAGE_H
 
 #include <usermanagerplugin/iuserwizardpage.h>
 
@@ -99,4 +99,4 @@ private:
 }  // End namespace Agenda
 
 
-#endif // USERCALENDARWIZARDCREATORPAGE_H
+#endif // AGENDA_USERCALENDARWIZARDCREATORPAGE_H

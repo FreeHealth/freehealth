@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AVAILABILITYCREATORDIALOG_H
-#define AVAILABILITYCREATORDIALOG_H
+#ifndef AGENDA_AVAILABILITYCREATORDIALOG_H
+#define AGENDA_AVAILABILITYCREATORDIALOG_H
 
 #include <QDialog>
 #include <QList>
@@ -57,4 +57,4 @@ private:
 
 }  // End namespace Agenda
 
-#endif // AVAILABILITYCREATORDIALOG_H
+#endif // AGENDA_AVAILABILITYCREATORDIALOG_H

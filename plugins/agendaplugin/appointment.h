@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef APPOINTMENT_H
-#define APPOINTMENT_H
+#ifndef AGENDA_APPOINTMENT_H
+#define AGENDA_APPOINTMENT_H
 
 #include <agendaplugin/constants.h>
 #include <calendar/modelanditem/calendar_people.h>
@@ -97,4 +97,4 @@ private:
 QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment &c);
 QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment *c);
 
-#endif // APPOINTMENT_H
+#endif // AGENDA_APPOINTMENT_H

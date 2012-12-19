@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UserCalendarModelFullEditorWidget_H
-#define UserCalendarModelFullEditorWidget_H
+#ifndef AGENDA_UserCalendarModelFullEditorWidget_H
+#define AGENDA_UserCalendarModelFullEditorWidget_H
 
 #include <QWidget>
 #include <QModelIndex>
@@ -72,4 +72,4 @@ private:
 
 }  // End namespace Agenda
 
-#endif // UserCalendarModelFullEditorWidget_H
+#endif // AGENDA_UserCalendarModelFullEditorWidget_H

@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDAREDITOR_H
-#define USERCALENDAREDITOR_H
+#ifndef AGENDA_USERCALENDAREDITOR_H
+#define AGENDA_USERCALENDAREDITOR_H
 
 #include <agendaplugin/agenda_exporter.h>
 
@@ -87,4 +87,4 @@ private:
 }  // End namespace Agenda
 
 
-#endif // USERCALENDAREDITOR_H
+#endif // AGENDA_USERCALENDAREDITOR_H

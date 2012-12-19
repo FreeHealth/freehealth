@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDAWIDGETMANAGER_H
-#define AGENDAWIDGETMANAGER_H
+#ifndef AGENDA_AGENDAWIDGETMANAGER_H
+#define AGENDA_AGENDAWIDGETMANAGER_H
 
 #include <agendaplugin/agenda_exporter.h>
 
@@ -109,4 +109,4 @@ private:
 
 }  // End Agenda
 
-#endif // AGENDAWIDGETMANAGER_H
+#endif // AGENDA_AGENDAWIDGETMANAGER_H

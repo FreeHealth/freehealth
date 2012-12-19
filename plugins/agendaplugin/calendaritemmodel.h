@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CALENDARITEMMODEL_H
-#define CALENDARITEMMODEL_H
+#ifndef AGENDA_CALENDARITEMMODEL_H
+#define AGENDA_CALENDARITEMMODEL_H
 
 #include <agendaplugin/agenda_exporter.h>
 #include <calendar/modelanditem/abstract_calendar_model.h>
@@ -106,4 +106,4 @@ private:
 
 }  // End namespace Agenda
 
-#endif // CALENDARITEMMODEL_H
+#endif // AGENDA_CALENDARITEMMODEL_H

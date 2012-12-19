@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDATPLUGIN_H
-#define AGENDATPLUGIN_H
+#ifndef AGENDA_AGENDAPLUGIN_H
+#define AGENDA_AGENDAPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -65,4 +65,4 @@ private:
 
 }  // End namespace Agenda
 
-#endif  // End AGENDATPLUGIN_H
+#endif  // End AGENDA_AGENDAPLUGIN_H

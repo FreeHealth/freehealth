@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDARDELEGATESMAPPER_H
-#define USERCALENDARDELEGATESMAPPER_H
+#ifndef AGENDA_USERCALENDARDELEGATESMAPPER_H
+#define AGENDA_USERCALENDARDELEGATESMAPPER_H
 
 #include <calendar/icalendaritemdatawidget.h>
 
@@ -93,5 +93,5 @@ private:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // USERCALENDARDELEGATESMAPPER_H
+#endif // AGENDA_USERCALENDARDELEGATESMAPPER_H
 

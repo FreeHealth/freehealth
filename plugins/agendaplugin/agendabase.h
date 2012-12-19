@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AGENDABASE_H
-#define AGENDABASE_H
+#ifndef AGENDA_AGENDABASE_H
+#define AGENDA_AGENDABASE_H
 
 #include <utils/database.h>
 #include <agendaplugin/usercalendar.h>
@@ -174,4 +174,4 @@ private:
 }  // End namespace Internal
 }  // End namespace UserPlugin
 
-#endif // AGENDABASE_H
+#endif // AGENDA_AGENDABASE_H

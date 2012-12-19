@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDARVIEWER_H
-#define USERCALENDARVIEWER_H
+#ifndef AGENDA_USERCALENDARVIEWER_H
+#define AGENDA_USERCALENDARVIEWER_H
 
 #include <QWidget>
 QT_BEGIN_NAMESPACE
@@ -90,4 +90,4 @@ private:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // USERCALENDARVIEWER_H
+#endif // AGENDA_USERCALENDARVIEWER_H

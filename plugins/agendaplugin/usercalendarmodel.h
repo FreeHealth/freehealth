@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERCALENDARMODEL_H
-#define USERCALENDARMODEL_H
+#ifndef AGENDA_USERCALENDARMODEL_H
+#define AGENDA_USERCALENDARMODEL_H
 
 #include <calendar/modelanditem/calendar_people.h>
 
@@ -110,4 +110,4 @@ private:
 
 } // End namespace Agenda
 
-#endif // USERCALENDARMODEL_H
+#endif // AGENDA_USERCALENDARMODEL_H
