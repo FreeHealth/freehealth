@@ -203,8 +203,10 @@ public:
         case Core::IUser::LanguageISO : toReturn = user->languageIso(); break;
         case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
 
+        case Core::IUser::PhotoPixmap : toReturn = user->photo(); break;
         case Core::IUser::Address : toReturn = user->address(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
+        case Core::IUser::StateProvince : toReturn = user->stateProvince(); break;
         case Core::IUser::City : toReturn = user->city(); break;
         case Core::IUser::Country : toReturn = user->country(); break;
         case Core::IUser::IsoCountry : toReturn = user->countryIso(); break;
@@ -905,13 +907,17 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     // set data directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
         // prepare SQL update
-        if (!d->m_Sql->setData(item, value, role)) {
+        QModelIndex sqlIndex = d->m_Sql->index(item.row(), item.column());
+        if (!d->m_Sql->setData(sqlIndex, value, role)) {
            LOG_ERROR(QString("enable to setData to SqlModel. Row %1, col %2, data %3")
-                             .arg(item.row()).arg(item.column()).arg(value.toString()));
+                             .arg(sqlIndex.row()).arg(sqlIndex.column()).arg(value.toString()));
             return false;
         }
         // poursue to feed UserData (need to know if it is modified)
     }
+
+    QList<int> colsToEmit;
+    colsToEmit << item.column();
 
     switch (item.column())
     {
@@ -930,23 +936,70 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     }
     case Core::IUser::Password :  user->setCryptedPassword(value); break;
     case Core::IUser::LastLogin :  user->setLastLogin(value); break;
-    case Core::IUser::GenderIndex : user->setGenderIndex(value); break;
-    case Core::IUser::TitleIndex : user->setTitleIndex(value); break;
-    case Core::IUser::Name :  user->setName(value); break;
-    case Core::IUser::SecondName :  user->setSecondName(value); break;
-    case Core::IUser::Firstname :  user->setFirstname(value); break;
+    case Core::IUser::GenderIndex :
+        colsToEmit << Core::IUser::Gender << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        user->setGenderIndex(value);
+        break;
+    case Core::IUser::TitleIndex :
+        colsToEmit << Core::IUser::Title << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        user->setTitleIndex(value);
+        break;
+    case Core::IUser::Name:
+        colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        user->setName(value);
+        break;
+    case Core::IUser::SecondName :
+        colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        user->setSecondName(value);
+        break;
+    case Core::IUser::Firstname :
+        colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
+        user->setFirstname(value);
+        break;
     case Core::IUser::Mail :  user->setMail(value); break;
     case Core::IUser::LanguageISO :  user->setLanguageIso(value); break;
     case Core::IUser::LocaleCodedLanguage: user->setLocaleLanguage(QLocale::Language(value.toInt())); break;
-    case Core::IUser::Address :  user->setAddress(value); break;
-    case Core::IUser::Zipcode :  user->setZipcode(value); break;
-    case Core::IUser::City :  user->setCity(value); break;
-    case Core::IUser::Country :  user->setCountry(value); break;
-    case Core::IUser::IsoCountry : user->setCountryIso(value); break;
-    case Core::IUser::Tel1 :  user->setTel1(value); break;
-    case Core::IUser::Tel2 :  user->setTel2(value); break;
-    case Core::IUser::Tel3 :  user->setTel3(value); break;
-    case Core::IUser::Fax :  user->setFax(value); break;
+    case Core::IUser::PhotoPixmap: user->setPhoto(value.value<QPixmap>()); break;
+    case Core::IUser::Address:
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setAddress(value);
+        break;
+    case Core::IUser::Zipcode:
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setZipcode(value);
+        break;
+    case Core::IUser::StateProvince:
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setStateProvince(value);
+        break;
+    case Core::IUser::City :
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setCity(value);
+        break;
+    case Core::IUser::Country :
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setCountry(value);
+        break;
+    case Core::IUser::IsoCountry :
+        colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
+        user->setCountryIso(value);
+        break;
+    case Core::IUser::Tel1 :
+        colsToEmit << Core::IUser::FullHtmlContact;
+        user->setTel1(value);
+        break;
+    case Core::IUser::Tel2 :
+        colsToEmit << Core::IUser::FullHtmlContact;
+        user->setTel2(value);
+        break;
+    case Core::IUser::Tel3 :
+        colsToEmit << Core::IUser::FullHtmlContact;
+        user->setTel3(value);
+        break;
+    case Core::IUser::Fax :
+        colsToEmit << Core::IUser::FullHtmlContact;
+        user->setFax(value);
+        break;
     case Core::IUser::PractitionerId :  user->setPractitionerIdentifiant(value.toStringList()); break;
     case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
     case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
@@ -985,7 +1038,8 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     default : return false;
     };
 
-    Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), Core::IUser::NumberOfColumns));
+    for(int i=0; i < colsToEmit.count(); ++i)
+        Q_EMIT dataChanged(index(item.row(), i), index(item.row(), i));
 
     return true;
 }
@@ -1062,7 +1116,8 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     else if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         // From internal SQL?
         if ((item.column() < Core::IUser::LocaleLanguage)) {
-            return d->m_Sql->data(item, role);
+            QModelIndex sqlIndex = d->m_Sql->index(item.row(), item.column());
+            return d->m_Sql->data(sqlIndex, role);
         }
 
         // From complete UserData ?
@@ -1265,6 +1320,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
     }
     filter.chop(5);
     d->m_Sql->setFilter(filter);
+    d->m_Sql->select();
     reset();
 //    qWarning() << filter;
     d->checkNullUser();
