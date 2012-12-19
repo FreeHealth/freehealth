@@ -152,7 +152,7 @@ PatientBar::PatientBar(QWidget *parent) :
     setObjectName("PatientBar");
     d->ui->setupUi(this);
 //    d->setUi();
-    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
+    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onPatientDataChanged(QModelIndex, QModelIndex)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
@@ -174,8 +174,9 @@ void PatientBar::onCurrentPatientChanged()
 }
 
 /** Update the view when a data of the patient model is changed */
-void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &bottom)
+void PatientBar::onPatientDataChanged(const QModelIndex &top, const QModelIndex &bottom)
 {
+    // Test identity "strings" and "dates"
     QList<int> test;
     test << Core::IPatient::DateOfBirth
          << Core::IPatient::Age
@@ -186,6 +187,17 @@ void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &b
     foreach(int ref, test) {
         if (IN_RANGE(ref, top.column(), bottom.column())) {
             d->updateUi();
+            break;
+        }
+    }
+
+    // Test photo
+    test.clear();
+    test << Core::IPatient::Photo_32x32
+         << Core::IPatient::Photo_64x64;
+    foreach(int ref, test) {
+        if (IN_RANGE(ref, top.column(), bottom.column())) {
+            d->updatePatientPhoto();
             break;
         }
     }

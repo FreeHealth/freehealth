@@ -62,7 +62,7 @@ public:
 
 private Q_SLOTS:
     void onCurrentPatientChanged();
-    void patientDataChanged(const QModelIndex &top, const QModelIndex &bottom);
+    void onPatientDataChanged(const QModelIndex &top, const QModelIndex &bottom);
 
 protected:
     void paintEvent(QPaintEvent *);
