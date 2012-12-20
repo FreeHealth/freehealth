@@ -137,7 +137,9 @@ const char * const  TABLE_MERGECELLS_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "
 const char * const  TABLE_SPLITCELLS_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Split cells");
 
 const char * const  ABOUT_TEXT            = QT_TRANSLATE_NOOP("tkConstants", "&About...");
+const char * const  MAC_ABOUT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "About");
 const char * const  ABOUTPLUGINS_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "About &plugins...");
+const char * const  MAC_ABOUTPLUGINS_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "About plugins");
 const char * const  ABOUTQT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "About &Qt...");
 const char * const  ABOUTFORM_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "About this &form...");
 const char * const  APPLICATIONHELP_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "&Help");

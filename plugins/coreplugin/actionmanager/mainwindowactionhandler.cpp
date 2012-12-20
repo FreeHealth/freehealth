@@ -399,7 +399,10 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setIcon(theme()->icon(Constants::ICONABOUT));
         a->setMenuRole(QAction::AboutRole);
         cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
-        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
+        if (Utils::isRunningOnMac())
+            cmd->setTranslations(Trans::Constants::MAC_ABOUT_TEXT);
+        else
+            cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
         menu->addAction(cmd, group);
     }
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
@@ -407,7 +410,10 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setIcon(theme()->icon(Constants::ICONPLUGIN));
         a->setMenuRole(QAction::AboutRole);
         cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
-        cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
+        if (Utils::isRunningOnMac())
+            cmd->setTranslations(Trans::Constants::MAC_ABOUTPLUGINS_TEXT);
+        else
+            cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
         menu->addAction(cmd, group);
     }
     if (actions & Core::MainWindowActions::A_AppHelp) {
