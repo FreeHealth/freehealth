@@ -336,6 +336,11 @@ void QButtonLineEdit::setRoundedCorners()
                           "}").arg(objectName()));
 }
 
+/**
+ * Set the placeholder to use instead of the calculated placeHolder. By
+ * default, the placeholder is computed from the left button defaultaction.
+ * @param placeholder
+ */
 void QButtonLineEdit::setEditorPlaceholderText(const QString &placeholder)
 {
     d_qble->_placeHolder = placeholder;
