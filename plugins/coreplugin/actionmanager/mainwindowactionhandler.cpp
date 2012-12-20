@@ -408,7 +408,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aGeneralPlugsAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONPLUGIN));
-        a->setMenuRole(QAction::AboutRole);
+//        a->setMenuRole(QAction::AboutRole);
         cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
         if (Utils::isRunningOnMac())
             cmd->setTranslations(Trans::Constants::MAC_ABOUTPLUGINS_TEXT);
