@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "zipcodesplugin.h"
+#include "zipcore.h"
 
 #include <utils/log.h>
 
@@ -35,6 +36,7 @@
 #include <QDebug>
 
 using namespace ZipCodes;
+using namespace Internal;
 
 ZipCodesPlugin::ZipCodesPlugin()
 {
@@ -42,6 +44,7 @@ ZipCodesPlugin::ZipCodesPlugin()
         qWarning() << "creating ZipCodesPlugin";
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
+    _core = new ZipCore(this);
 }
 
 ZipCodesPlugin::~ZipCodesPlugin()
@@ -65,6 +68,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorStri
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
+    _core->initialize();
 
     return true;
 }

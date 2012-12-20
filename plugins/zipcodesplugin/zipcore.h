@@ -19,44 +19,65 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ZIPCODES_PLUGIN_H
-#define ZIPCODES_PLUGIN_H
+#ifndef ZIPCODES_ZIPCORE_H
+#define ZIPCODES_ZIPCORE_H
 
-#include <extensionsystem/iplugin.h>
-
-#include <QtCore/QObject>
+#include <zipcodesplugin/zipcodes_exporter.h>
+#include <QObject>
+#include <QSqlDatabase>
 
 /**
- * \file zipcodesplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file zipcore.h
+ * \author Eric Maeker
  * \version 0.8.0
  * \date 20 Dec 2012
 */
 
-namespace ZipCodes {
-class ZipCore;
-namespace Internal {
+namespace DataPack {
+class Pack;
+}
 
-class ZipCodesPlugin : public ExtensionSystem::IPlugin
+namespace ZipCodes {
+namespace Internal {
+class ZipCodesPlugin;
+class ZipCorePrivate;
+} // namespace Internal
+
+class ZIPCODES_EXPORT ZipCore : public QObject
 {
     Q_OBJECT
-public:
-    ZipCodesPlugin();
-    ~ZipCodesPlugin();
+    friend class ZipCodes::Internal::ZipCodesPlugin;
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+protected:
+    explicit ZipCore(QObject *parent = 0);
+    bool initialize();
+
+public:
+    static ZipCore &instance();
+    ~ZipCore();
+
+    bool isDatabaseAvailable() const;
+    QSqlDatabase &database() const;
+    
+Q_SIGNALS:
+    void databaseRefreshed();
+
+public Q_SLOTS:
+    
+private Q_SLOTS:
+    void packChanged(const DataPack::Pack &pack);
 
 private:
-    ZipCore *_core;
+    Internal::ZipCorePrivate *d;
+    static ZipCore *_instance;
 };
 
-} // namespace Internal
 } // namespace ZipCodes
 
-#endif  // End ZIPCODES_PLUGIN_H
+#endif  // ZIPCODES_ZIPCORE_H
+

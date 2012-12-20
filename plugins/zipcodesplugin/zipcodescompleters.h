@@ -51,10 +51,6 @@ QT_END_NAMESPACE
  * \date 08 Dec 2012
 */
 
-namespace DataPack {
-class Pack;
-}
-
 namespace ZipCodes {
 namespace Internal {
 class ZipStateProvinceModel;
@@ -70,11 +66,12 @@ public:
         ExtraCode,
         Country,
         ZipCity,
+        CityZip,
         Province,
         NumberOfColumn
     };
 
-    ZipCountryModel(QObject *parent, QSqlDatabase db);
+    ZipCountryModel(QObject *parent);
 
     int columnCount(const QModelIndex &) const {return NumberOfColumn;}
 
@@ -82,8 +79,6 @@ public:
 
     bool isCountryAvailable(const QLocale::Country country) const;
     bool exists(const QString &countryIso, const QString &city, const QString &zip, const QString &province) const;
-
-    ZipStateProvinceModel *provinceModel() const;
 
 public Q_SLOTS:
     void setCountryFilter(const QString &iso);
@@ -95,9 +90,7 @@ private:
     void refreshQuery();
 
 private:
-    QSqlDatabase _db;
     QString _sqlQuery, _countryIso, _zip, _province, _city;
-    ZipStateProvinceModel *_provinceModel;
 };
 
 class ZipStateProvinceModel : public QSqlQueryModel
@@ -108,12 +101,21 @@ public:
         Province = 0
     };
 
-    ZipStateProvinceModel(QObject *parent, QSqlDatabase db);
+    ZipStateProvinceModel(QObject *parent);
     int columnCount(const QModelIndex &) const {return 1;}
     QVariant data(const QModelIndex &index, int role) const;
 
+public Q_SLOTS:
+    void setCountryFilter(const QString &iso);
+    void setCityFilter(const QString &city);
+    void setZipFilter(const QString &zip);
+
 private:
-    QSqlDatabase _db;
+    QString currentFilter() const;
+    void refreshQuery();
+
+private:
+    QString _sqlQuery, _countryIso, _zip, _province, _city;
 };
 }  // End namespace Internal
 
@@ -129,7 +131,6 @@ public:
     void setCityLineEdit(Utils::QButtonLineEdit *country);
     void setZipLineEdit(Utils::QButtonLineEdit *zip);
     void checkData();
-    QAbstractItemModel *completionModel() const {return m_Model;}
 
 private Q_SLOTS:
     void onCompleterIndexActivated(const QModelIndex &index);
@@ -137,7 +138,7 @@ private Q_SLOTS:
     void zipTextChanged();
     void cityTextChanged();
     void setStateProvinceFilter(int);
-    void packChanged(const DataPack::Pack &pack);
+    void onDatabaseRefreshed();
 
 private:
     void createModel();
@@ -146,7 +147,8 @@ private:
     Utils::QButtonLineEdit *m_cityEdit, *m_zipEdit;
     Utils::CountryComboBox *m_countryCombo;
     QComboBox *m_provinceCombo;
-    Internal::ZipCountryModel *m_Model;
+    Internal::ZipCountryModel *m_ZipModel, *m_CityModel;
+    Internal::ZipStateProvinceModel *m_ProvinceModel;
     QToolButton *m_ZipButton, *m_CityButton;
     bool m_DbAvailable;
 };
