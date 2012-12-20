@@ -18,57 +18,152 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Christian A Reiter, Eric Maeker                     *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+/**
+ * \class Utils::BugReportDialog
+ * Simple bug report sender dialog.
+ */
 
 #include "bugreportdialog.h"
-#include "ui_bugreportdialog.h"
 
+#include <utils/global.h>
 #include <utils/emailvalidator.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QPushButton>
+#include <QDateTime>
+#include <QDesktopServices>
+#include <QUrl>
+
+#include <QDebug>
+
+#include "ui_bugreportdialog.h"
 
 using namespace Utils;
 using namespace Internal;
 
+namespace Utils {
+namespace Internal {
+class BugReportDialogPrivate
+{
+public:
+    BugReportDialogPrivate(BugReportDialog *parent):
+        q(parent)
+    {}
+
+    ~BugReportDialogPrivate()
+    {
+        if (ui)
+            delete ui;
+    }
+
+    void createUi()
+    {
+        ui = new Ui::BugReportDialog;
+        ui->setupUi(q);
+        ui->emailEdit->setValidator(new EmailValidator(q));
+        _sendButton = new QPushButton(q);
+        ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);
+    }
+
+    void connectUi()
+    {
+        QObject::connect(_sendButton, SIGNAL(clicked()), q, SLOT(sendBugReport()));
+    }
+
+    void getReportInformation()
+    {
+        ui->applicationValue->setText(qApp->applicationName() + " - " + qApp->applicationVersion());
+        ui->dateValue->setText(QLocale().toString(QDateTime::currentDateTime()));
+        ui->osValue->setText(Utils::uname());
+        ui->severityCombo->addItem(QString(Trans::Constants::HIGH).toUpper());
+        ui->severityCombo->addItem(QString(Trans::Constants::MEDIUM).toUpper());
+        ui->severityCombo->addItem(QString(Trans::Constants::LOW).toUpper());
+        ui->severityCombo->setCurrentIndex(1);
+    }
+
+    QStringList prepareBugReport()
+    {
+        QStringList lines;
+        typedef QPair<QString, QString> pairs;
+        QList<pairs> report;
+        report << pairs(ui->emailLabel->text().remove(":").remove("&"), ui->emailEdit->text());
+        report << pairs(ui->dateLabel->text().remove(":").remove("&"), ui->dateValue->text());
+        report << pairs(ui->applicationLabel->text().remove(":").remove("&"), ui->applicationValue->text());
+        report << pairs(ui->osLabel->text().remove(":").remove("&"), ui->osValue->text());
+        report << pairs(ui->severityLabel->text().remove(":").remove("&"), ui->severityCombo->currentText());
+        report << pairs("---", "");
+        report << pairs(ui->catLabel->text().remove(":").remove("&"), ui->categoryCombo->currentText());
+        report << pairs(ui->descrLabel->text().remove(":").remove("&"), ui->descrEdit->toPlainText());
+        // find the max length
+        int max = 0;
+        foreach(const pairs &pair, report) {
+            max = qMax(max, pair.first.length());
+        }
+        // justify test && create line
+        foreach(const pairs &pair, report) {
+            if (pair.first == "---") {
+                lines << "-------------------------";
+                continue;
+            }
+            QString second = " " + pair.second;
+            second = second.replace("\n", "\n" + QString().fill(' ', max+2));
+            lines << "  " + pair.first.leftJustified(max+2, QLatin1Char('.')) + second;
+        }
+        return lines;
+    }
+
+public:
+    Ui::BugReportDialog *ui;
+    QPushButton *_sendButton;
+
+private:
+    BugReportDialog *q;
+};
+} // namespace Internal
+} // namespace Utils
+
 BugReportDialog::BugReportDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::BugReportDialog)
+    d(new BugReportDialogPrivate(this))
 {
-    ui->setupUi(this);
-    ui->emailEdit->setValidator(new EmailValidator(this));
-
-    ui->gmailAccountCheck->setVisible(false);
-
-    m_sendReportButton = new QPushButton(tr("&Send report"), this);
-    m_sendReportButton->setDisabled(true);
-    ui->buttonBox->addButton(m_sendReportButton, QDialogButtonBox::ActionRole);
-    connect(m_sendReportButton, SIGNAL(clicked()), this, SLOT(sendBugReport()));
-
-    // if current user has a valid email address, use it
-//    QString email = user()->value(Core::IUser::Mail).toString();
-//    int pos = 0;
-//    if (ui->emailEdit->validator()->validate(email, pos) == QValidator::Acceptable)
-//        ui->emailEdit->setText(email);
+    d->createUi();
+    d->connectUi();
+    d->getReportInformation();
+    d->_sendButton->setText(tr("&Send report"));
 }
 
 BugReportDialog::~BugReportDialog()
 {
-    delete ui;
+    if (d)
+        delete d;
+    d = 0;
 }
 
-void BugReportDialog::on_emailEdit_textChanged(const QString &text)
+/** Define the bug categories for the ui combobox */
+void BugReportDialog::setBugCategories(const QStringList &cat)
 {
-    // use GMail if it appears to be a valid gmail address
-    const bool isValidGMailAddress = text.endsWith("gmail.com");
-    const bool isValidEmailAddress = ui->emailEdit->hasAcceptableInput();
-
-    ui->gmailAccountCheck->setVisible(isValidEmailAddress && isValidGMailAddress);
-    ui->bugReportEdit->setEnabled(isValidEmailAddress);
-    m_sendReportButton->setEnabled(isValidEmailAddress);
+    d->ui->categoryCombo->clear();
+    d->ui->categoryCombo->addItems(cat);
+    d->ui->categoryCombo->setCurrentIndex(-1);
 }
 
+/**
+ * \internal
+ * Prepare and send the bug report.
+ */
 void BugReportDialog::sendBugReport()
 {
     // TODO: code
+    QDesktopServices::openUrl(QString("mailto:freemedforms-dev@googlegroups.com?subject=%1&body=%2")
+            .arg("Bug Report: " + qApp->applicationName() + qApp->applicationVersion())
+            .arg("\n\n" + d->prepareBugReport().join("\n")));
 }
 
 void BugReportDialog::changeEvent(QEvent *e)
@@ -76,7 +171,9 @@ void BugReportDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
+        if (d->_sendButton)
+            d->_sendButton->setText(tr("&Send report"));
         break;
     default:
         break;

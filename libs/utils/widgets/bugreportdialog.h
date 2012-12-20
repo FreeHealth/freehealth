@@ -30,10 +30,6 @@
 #include <utils/global_exporter.h>
 #include <QDialog>
 
-QT_BEGIN_NAMESPACE
-class QPushButton;
-QT_END_NAMESPACE
-
 /**
  * \file bugreportdialog.h
  * \author Christian A Reiter, Eric Maeker
@@ -43,9 +39,7 @@ QT_END_NAMESPACE
 
 namespace Utils {
 namespace Internal {
-namespace Ui {
-class BugReportDialog;
-}
+class BugReportDialogPrivate;
 } // namespace Internal
 
 class UTILS_EXPORT BugReportDialog : public QDialog
@@ -56,16 +50,18 @@ public:
     explicit BugReportDialog(QWidget *parent = 0);
     ~BugReportDialog();
 
-public slots:
-    void on_emailEdit_textChanged(const QString &text);
+    void setBugCategories(const QStringList &cat);
+
+
+private Q_SLOTS:
+//    void on_emailEdit_textChanged(const QString &text);
     void sendBugReport();
 
-protected:
+private:
     void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::BugReportDialog *ui;
-    QPushButton *m_sendReportButton;
+    Internal::BugReportDialogPrivate *d;
 };
 
 } // namespace Utils
