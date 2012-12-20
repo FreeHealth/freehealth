@@ -1313,9 +1313,21 @@ bool MainWindowActionHandler::checkUpdate()
     return true;
 }
 
+/** Starts the Utils::BugReportDialog with the correct categories */
 bool MainWindowActionHandler::reportBug()
 {
     Utils::BugReportDialog dlg;
+    QStringList categories;
+    categories << tr("General comment");
+    categories << tr("Forms management");
+    categories << tr("Patient management");
+    categories << tr("User management");
+    categories << tr("Drugs management");
+    categories << tr("Agenda management");
+    categories << tr("Printings");
+    categories << tr("Installation");
+    categories << tr("Configuration");
+    dlg.setBugCategories(categories);
     int result = dlg.exec();
     Q_UNUSED(result);
     return true;
