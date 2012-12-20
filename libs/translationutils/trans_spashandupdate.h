@@ -64,7 +64,7 @@ const char* const EACH_QUARTER                      = QT_TRANSLATE_NOOP("tkConst
 const char* const NEVER_AUTOMATICALLY               = QT_TRANSLATE_NOOP("tkConstants", "never automatically");
 
 // Bug Reports
-const char* const BUG_REPORT                        = QT_TRANSLATE_NOOP("tkConstants", "&Report application error...");
+const char* const BUG_REPORT                        = QT_TRANSLATE_NOOP("tkConstants", "&Report a problem...");
 
 // Sender and Updater
 const char* const START_MESSAGE_SENDING              = QT_TRANSLATE_NOOP("tkConstants", "Starting to send message.");
