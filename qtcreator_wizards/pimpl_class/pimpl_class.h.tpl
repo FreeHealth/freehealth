@@ -80,9 +80,9 @@ public Q_SLOTS:
 @if "%PIMPL%" == "true"
 private:
 @if "%Internal%" == "true"
-    Internal::%ClassName:c%Private *d;
-@else
     %ClassName:c%Private *d;
+@else
+    Internal::%ClassName:c%Private *d;
 @endif
 @endif
 @if "%Singleton%" == "true"
