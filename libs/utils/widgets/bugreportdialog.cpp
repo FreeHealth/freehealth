@@ -22,13 +22,12 @@
 #include "bugreportdialog.h"
 #include "ui_bugreportdialog.h"
 
-#include <coreplugin/iuser.h>
-#include <coreplugin/icore.h>
 #include <utils/emailvalidator.h>
 
 #include <QPushButton>
 
-static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+using namespace Utils;
+using namespace Internal;
 
 BugReportDialog::BugReportDialog(QWidget *parent) :
     QDialog(parent),
@@ -45,10 +44,10 @@ BugReportDialog::BugReportDialog(QWidget *parent) :
     connect(m_sendReportButton, SIGNAL(clicked()), this, SLOT(sendBugReport()));
 
     // if current user has a valid email address, use it
-    QString email = user()->value(Core::IUser::Mail).toString();
-    int pos = 0;
-    if (ui->emailEdit->validator()->validate(email, pos) == QValidator::Acceptable)
-        ui->emailEdit->setText(email);
+//    QString email = user()->value(Core::IUser::Mail).toString();
+//    int pos = 0;
+//    if (ui->emailEdit->validator()->validate(email, pos) == QValidator::Acceptable)
+//        ui->emailEdit->setText(email);
 }
 
 BugReportDialog::~BugReportDialog()

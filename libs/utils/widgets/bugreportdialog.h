@@ -18,21 +18,37 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Christian A Reiter, Eric Maeker                     *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+#ifndef UTILS_BUGREPORTDIALOG_H
+#define UTILS_BUGREPORTDIALOG_H
 
-#ifndef BUGREPORTDIALOG_H
-#define BUGREPORTDIALOG_H
-
+#include <utils/global_exporter.h>
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
 QT_END_NAMESPACE
 
+/**
+ * \file bugreportdialog.h
+ * \author Christian A Reiter, Eric Maeker
+ * \version 0.8.0
+ * \date 20 Dec 2012
+*/
+
+namespace Utils {
+namespace Internal {
 namespace Ui {
 class BugReportDialog;
 }
+} // namespace Internal
 
-class BugReportDialog : public QDialog
+class UTILS_EXPORT BugReportDialog : public QDialog
 {
     Q_OBJECT
 
@@ -48,8 +64,10 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::BugReportDialog *ui;
+    Internal::Ui::BugReportDialog *ui;
     QPushButton *m_sendReportButton;
 };
 
-#endif // BUGREPORTDIALOG_H
+} // namespace Utils
+
+#endif // UTILS_BUGREPORTDIALOG_H

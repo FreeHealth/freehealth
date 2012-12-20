@@ -71,7 +71,9 @@ HEADERS += global_exporter.h \
     stringutils.h \
     widgets/timecombobox.h \
     httpdownloader_p.h \
-    emailvalidator.h
+    emailvalidator.h \
+    widgets/bugreportdialog.h
+
 
 SOURCES += global.cpp \
     database.cpp \
@@ -127,7 +129,8 @@ SOURCES += global.cpp \
     proxyaction.cpp \
     stringutils.cpp \
     widgets/timecombobox.cpp \
-    emailvalidator.cpp
+    emailvalidator.cpp \
+    widgets/bugreportdialog.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
@@ -144,7 +147,9 @@ FORMS += \
     widgets/genericupdateinformationeditor.ui \
     widgets/genericinformationeditordialog.ui \
     widgets/loginwidget.ui \
-    widgets/basiclogindialog.ui
+    widgets/basiclogindialog.ui \
+    widgets/bugreportdialog.ui
+
 
 # include translations
 TRANSLATION_NAME = utils

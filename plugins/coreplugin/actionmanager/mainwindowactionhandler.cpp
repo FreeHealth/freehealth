@@ -37,6 +37,7 @@
 #include "actioncontainer.h"
 #include "mainwindowactions.h"
 
+#include <utils/global.h>
 #include <utils/updatechecker.h>
 #include <translationutils/constanttranslations.h>
 
@@ -54,17 +55,11 @@
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
-#include <coreplugin/dialogs/bugreportdialog.h>
 
 #include <utils/log.h>
+#include <utils/widgets/bugreportdialog.h>
 
 #include <QAction>
-//#include <QToolBar>
-//#include <QMenuBar>
-//#include <QWidget>
-//#include <QDebug>
-//#include <QKeySequence>
-//#include <QLocale>
 #include <QStatusBar>
 #include <QLabel>
 #include <QDesktopServices>
@@ -1314,7 +1309,7 @@ bool MainWindowActionHandler::checkUpdate()
 
 bool MainWindowActionHandler::reportBug()
 {
-    BugReportDialog dlg;
+    Utils::BugReportDialog dlg;
     int result = dlg.exec();
     Q_UNUSED(result);
     return true;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BugReportDialog</class>
- <widget class="QDialog" name="BugReportDialog">
+ <class>Utils::Internal::BugReportDialog</class>
+ <widget class="QDialog" name="Utils::Internal::BugReportDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -111,7 +111,7 @@ What is the expected output? What do you see instead?
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>BugReportDialog</receiver>
+   <receiver>Utils::Internal::BugReportDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -127,7 +127,7 @@ What is the expected output? What do you see instead?
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>BugReportDialog</receiver>
+   <receiver>Utils::Internal::BugReportDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
