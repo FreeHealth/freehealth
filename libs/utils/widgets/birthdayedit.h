@@ -40,12 +40,15 @@ QT_END_NAMESPACE
 
 /**
  * \file birthdayedit.h
- * \author Christian A. Reiter, <christian.a.reiter@gmail.com>, Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.5
+ * \author Christian A. Reiter, Eric MAEKER
+ * \version 0.8.2
  * \date 26 Jun 2012
 */
 
 namespace Utils {
+namespace Internal {
+class BirthDayEditPrivate;
+}
 class DateValidator;
 
 class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
@@ -88,13 +91,7 @@ private:
     void changeEvent(QEvent *e);
 
 private:
-    QDate m_date;
-    QDate m_maximumDate;
-    QDate m_minimumDate;
-    QToolButton *_rightButton, *_leftButton;
-    QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay;
-    DateValidator *_validator;
-    QString _defaultEditingFormat;
+    Internal::BirthDayEditPrivate *d_de;
 };
 
 } // end Utils
