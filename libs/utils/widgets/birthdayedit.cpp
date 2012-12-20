@@ -73,7 +73,10 @@ public:
         if (!_rightButton) {
             _rightButton = new QToolButton(q);
             _rightButton->setFocusPolicy(Qt::ClickFocus);
+            _rightButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
             _rightButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            q->retranslate();
+            _rightButton->resize(20, 20);
             q->setRightButton(_rightButton);
             QObject::connect(_rightButton, SIGNAL(clicked()), q, SLOT(clear()));
         }
@@ -84,9 +87,8 @@ public:
     {
         if (!_leftButton) {
             _leftButton = new QToolButton(q);
-            _leftButton->setFocusPolicy(Qt::ClickFocus);
+//            _leftButton->setFocusPolicy(Qt::ClickFocus);
             _leftButton->setPopupMode(QToolButton::InstantPopup);
-            _leftButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
             // Create the menu
             aShortDisplay = new QAction(q);
             aLongDisplay = new QAction(q);
@@ -94,8 +96,10 @@ public:
             _leftButton->addAction(aLongDisplay);
             _leftButton->addAction(aShortDisplay);
             _leftButton->addAction(aNumericDisplay);
-            q->setLeftButton(_leftButton);
             _leftButton->setDefaultAction(aLongDisplay);
+            q->retranslate();
+            _leftButton->setIcon(QIcon(fullAbsPath));
+            q->setLeftButton(_leftButton);
             QObject::connect(_leftButton, SIGNAL(triggered(QAction*)), q, SLOT(formatActionTriggered(QAction*)));
         }
         _leftButton->setIcon(QIcon(fullAbsPath));
@@ -160,19 +164,21 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
 void BirthDayEdit::setClearIcon(const QString &fullAbsPath)
 {
     d_de->createRightButton(fullAbsPath);
-    retranslate();
 }
 
 /** Define the absolute path \e fullAbsPath to the 'date' icon */
 void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
 {
     d_de->createLeftButton(fullAbsPath);
-    retranslate();
 }
 
 /** Sets the internal date of the widget to date */
 void BirthDayEdit::setDate(const QDate &date)
 {
+    if (date.isNull()) {
+        clear();
+        return;
+    }
     QDate oldDate = d_de->m_date;
     d_de->m_date = date;
     d_de->_validator->setDate(date);

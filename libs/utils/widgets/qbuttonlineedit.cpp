@@ -106,34 +106,37 @@ public:
     // Updates placeHolderText of the LineEdit to the text of the current QAction that was last called.
     void updatePlaceholderText()
     {
-        if (_leftButton && _leftButton->defaultAction()) {
-            QString t = QString("%1 %2")
+        QString placeHolder;
+        if (!_placeHolder.isEmpty()) {
+            placeHolder = _placeHolder;
+        } else if (_leftButton && _leftButton->defaultAction()) {
+            placeHolder = QString("%1 %2")
                     .arg(cleanString(_leftButton->defaultAction()->text()))
                     .arg(QApplication::translate("Utils::QButtonLineEdit", "(press Alt up/down cursor to cycle)"));
-            q->setPlaceholderText(t);
-
-            QString e;
-            if (!_extraToolTipContext.isEmpty() && !_extraToolTipTr.isEmpty()) {
-                e = QString("%1<br />").arg(QApplication::translate(_extraToolTipContext.toUtf8(), _extraToolTipTr.toUtf8()));
-            }
-
-            if (!_extraToolTipNonTr.isEmpty())
-                e += QString("%1<br />").arg(_extraToolTipNonTr);
-
-            t = t.replace(" ", "&nbsp;");
-            if (!e.contains("<br />"))
-                t = QString("<p>%1%2</p>").arg(e, t.replace(" ", "&nbsp;"));
-            else
-                t.prepend(e);
-
-            q->setToolTip(t);
         }
+        q->setPlaceholderText(placeHolder);
+
+        QString e;
+        if (!_extraToolTipContext.isEmpty() && !_extraToolTipTr.isEmpty()) {
+            e = QString("%1<br />").arg(QApplication::translate(_extraToolTipContext.toUtf8(), _extraToolTipTr.toUtf8()));
+        }
+
+        if (!_extraToolTipNonTr.isEmpty())
+            e += QString("%1<br />").arg(_extraToolTipNonTr);
+
+        placeHolder = placeHolder.replace(" ", "&nbsp;");
+        if (!e.contains("<br />"))
+            placeHolder = QString("<p>%1%2</p>").arg(e, placeHolder.replace(" ", "&nbsp;"));
+        else
+            placeHolder.prepend(e);
+
+        q->setToolTip(placeHolder);
     }
 
 public:
     QToolButton *_leftButton;
     QToolButton *_rightButton;
-    QString _extraToolTipContext, _extraToolTipTr, _extraToolTipNonTr, _extraCss;
+    QString _extraToolTipContext, _extraToolTipTr, _extraToolTipNonTr, _extraCss, _placeHolder;
     QTimer *_timer;
     bool _delayed;
     int _rightPadding, _leftPadding;
@@ -331,6 +334,12 @@ void QButtonLineEdit::setRoundedCorners()
                           "border-width: 1px;"
                           "border-radius: 6px;"
                           "}").arg(objectName()));
+}
+
+void QButtonLineEdit::setEditorPlaceholderText(const QString &placeholder)
+{
+    d_qble->_placeHolder = placeholder;
+    d_qble->updatePlaceholderText();
 }
 
 void QButtonLineEdit::setTranslatableExtraToolTip(const QString &trContext, const QString &translatable)

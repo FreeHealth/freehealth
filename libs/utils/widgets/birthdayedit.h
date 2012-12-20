@@ -53,6 +53,7 @@ class DateValidator;
 
 class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 {
+    friend class Utils::Internal::BirthDayEditPrivate;
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
 //    Q_PROPERTY(bool calendarPopup READ calendarPopup WRITE setCalendarPopup)
@@ -87,8 +88,10 @@ private:
     void updatePlaceHolder();
     void focusOutEvent(QFocusEvent *event);
     void focusInEvent(QFocusEvent *event);
-    void retranslate();
     void changeEvent(QEvent *e);
+
+protected:
+    void retranslate();
 
 private:
     Internal::BirthDayEditPrivate *d_de;

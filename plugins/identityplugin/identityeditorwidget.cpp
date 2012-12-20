@@ -533,6 +533,7 @@ public:
             ui->birthName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Birth Name"));
             ui->secondName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Second Name"));
             ui->firstname->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Firstname"));
+            ui->dob->setEditorPlaceholderText(QApplication::translate("IdentityEditorWidget", "Birthday"));
         }
     }
 

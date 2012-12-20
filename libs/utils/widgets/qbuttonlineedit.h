@@ -55,9 +55,13 @@ public:
     ~QButtonLineEdit();
 
     void setDelayedSignals(bool state);
+
     void setLeftButton(QToolButton *button);
     void setRightButton(QToolButton *button);
     void setRoundedCorners();
+
+    void setEditorPlaceholderText(const QString &placeholder);
+
     void setTranslatableExtraToolTip(const QString &trContext, const QString &translatable);
     void setExtraToolTip(const QString &nonTranslatable);
     void setExtraStyleSheet(const QString &extraCss);
