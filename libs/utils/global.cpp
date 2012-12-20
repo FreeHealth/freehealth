@@ -411,15 +411,19 @@ QString uname()
         system = "Linux";
     else if (isRunningOnFreebsd())
         system = "FreeBSD";
+    else if (isRunningOnWin())
+        system = "Windows";
     if (system.isEmpty())
         return QString();
+    system += ": ";
     QProcess uname;
     uname.start("uname", QStringList() << "-a");
     if (!uname.waitForStarted())
         LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
     if (!uname.waitForFinished())
         LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
-    return uname.readAll();
+    system += uname.readAll();
+    return system.remove("\n");
 }
 QString osName()
 {
