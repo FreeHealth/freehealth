@@ -87,32 +87,28 @@ void IUser::registerUserTokens() const
 #else
     // Create and register namespaces
     TokenNamespace userNs(Constants::TOKEN_USER_NAMESPACE);
-    userNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     userNs.setUntranslatedHumanReadableName(Trans::Constants::USER);
     userNs.setUntranslatedHelpText(::NAMESPACE_DESCRIPTION);
     userNs.setUntranslatedTooltip(::NAMESPACE_DESCRIPTION);
 
     TokenNamespace userIdentNs("Identity");
-    userIdentNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     userIdentNs.setUntranslatedHumanReadableName(Trans::Constants::IDENTITY_TEXT);
 
     TokenNamespace userAgeNs("Age");
-    userAgeNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     userAgeNs.setUntranslatedHumanReadableName(Trans::Constants::AGE);
 
     TokenNamespace userContactNs("Contact");
-    userContactNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     userContactNs.setUntranslatedHumanReadableName(Trans::Constants::CONTACT);
 
     TokenNamespace userProfNs("Professional");
-    userProfNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     userProfNs.setUntranslatedHumanReadableName(Trans::Constants::PROFESSIONAL);
 
     userNs.addChild(userIdentNs);
     userNs.addChild(userAgeNs);
     userNs.addChild(userContactNs);
     userNs.addChild(userProfNs);
-    tokenPool()->registerNamespace(userNs);
+    if (tokenPool())
+        tokenPool()->registerNamespace(userNs);
 
     // Create tokens
     Core::IToken *t;
@@ -133,9 +129,9 @@ void IUser::registerUserTokens() const
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
     _tokens << t;
 
-    //    t = new UserToken(Constants::TOKEN_USERDATEOFBIRTH, Age);
-    //    t->setUntranslatedHumanReadableName(Trans::Constants::);
-    //    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERDATEOFBIRTH, DateOfBirth);
+    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
     //    t = new UserToken(Constants::TOKEN_USERYEARSOLD, YearsOld);
 //    t->setUntranslatedHumanReadableName(Trans::Constants::);
