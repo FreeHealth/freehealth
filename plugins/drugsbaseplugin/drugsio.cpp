@@ -220,6 +220,27 @@ public:
     void populateTokens()
     {
 #ifdef WITH_PAD
+        // Create and register namespaces
+        Core::TokenNamespace prescrNs("Prescription");
+        prescrNs.setTrContext(DrugsDB::Constants::DRUGSBASE_TR_CONTEXT);
+        prescrNs.setUntranslatedHumanReadableName(DrugsDB::Constants::TOKEN_TEXT_PRESCRIPTION);
+        prescrNs.setUntranslatedHelpText(DrugsDB::Constants::TOKEN_TOOLTIP_PRESCRIPTION);
+        prescrNs.setUntranslatedTooltip(DrugsDB::Constants::TOKEN_TOOLTIP_PRESCRIPTION);
+
+        Core::TokenNamespace prescrDrugNs("Drug");
+        prescrDrugNs.setTrContext(DrugsDB::Constants::DRUGSBASE_TR_CONTEXT);
+        prescrDrugNs.setUntranslatedHumanReadableName(DrugsDB::Constants::TOKEN_TEXT_DRUG);
+
+        Core::TokenNamespace prescrProtoNs("Protocol");
+        prescrProtoNs.setTrContext(DrugsDB::Constants::DRUGSBASE_TR_CONTEXT);
+        prescrProtoNs.setUntranslatedHumanReadableName(DrugsDB::Constants::TOKEN_TEXT_PROTOCOL);
+
+        prescrNs.addChild(prescrDrugNs);
+        prescrNs.addChild(prescrProtoNs);
+        if (padTools() && padTools()->tokenPool()) {
+            padTools()->tokenPool()->registerNamespace(prescrNs);
+        }
+
         Core::IToken *t = 0;
         t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_DRUGNAME, Drug::Denomination);
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
