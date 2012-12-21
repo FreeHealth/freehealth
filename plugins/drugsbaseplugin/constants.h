@@ -258,11 +258,32 @@ namespace Constants {
     const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions");
 
     // Tokens translations
-    const char * const  TOKEN_TEXT_PRESCRIPTION = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
-    const char * const  TOKEN_TEXT_DRUG = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug");
-    const char * const  TOKEN_TEXT_PROTOCOL = QT_TRANSLATE_NOOP("mfDrugsConstants", "Protocol");
-    const char * const  TOKEN_TOOLTIP_PRESCRIPTION = QT_TRANSLATE_NOOP("mfDrugsConstants", "This token namespace contains all prescription's' related tokens.\n"
+    const char * const  TOKEN_TEXT_PRESCRIPTION     = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
+    const char * const  TOKEN_TEXT_DRUG             = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug");
+    const char * const  TOKEN_TEXT_PROTOCOL         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Protocol");
+    const char * const  TOKEN_TOOLTIP_PRESCRIPTION  = QT_TRANSLATE_NOOP("mfDrugsConstants", "This token namespace contains all prescription's' related tokens.\n"
                                                                        "It includes the drug brand name and all the items of your protocol.");
+    const char * const  TOKEN_TEXT_DRUGNAME         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug brand name");
+    const char * const  TOKEN_TEXT_Q_FROM           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Quantity (from)");
+    const char * const  TOKEN_TEXT_Q_TO             = QT_TRANSLATE_NOOP("mfDrugsConstants", "Quantity (to)");
+    const char * const  TOKEN_TEXT_Q_SCHEME         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Quantity (scheme)");
+    const char * const  TOKEN_TEXT_Q_FULL           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Quantity (complete)");
+    const char * const  TOKEN_TEXT_MEAL             = QT_TRANSLATE_NOOP("mfDrugsConstants", "Meal relation");
+    const char * const  TOKEN_TEXT_P_VALUE          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Period (value)");
+    const char * const  TOKEN_TEXT_P_SCHEME         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Period (scheme)");
+    const char * const  TOKEN_TEXT_P_FULL           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Period (complete)");
+    const char * const  TOKEN_TEXT_D_FROM           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Duration (from)");
+    const char * const  TOKEN_TEXT_D_TO             = QT_TRANSLATE_NOOP("mfDrugsConstants", "Duration (to)");
+    const char * const  TOKEN_TEXT_D_SCHEME         = QT_TRANSLATE_NOOP("mfDrugsConstants", "Duration (scheme)");
+    const char * const  TOKEN_TEXT_D_FULL           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Duration (complete)");
+    const char * const  TOKEN_TEXT_ROUTE            = QT_TRANSLATE_NOOP("mfDrugsConstants", "Route");
+    const char * const  TOKEN_TEXT_DISTRIB          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Daily distribution");
+    const char * const  TOKEN_TEXT_REPEAT           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Repeated ditribution");
+    const char * const  TOKEN_TEXT_MININTERV_FULL   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Minimum interval between intakes (complete)");
+    const char * const  TOKEN_TEXT_MININTERV_VALUE  = QT_TRANSLATE_NOOP("mfDrugsConstants", "Minimum interval between intakes (value)");
+    const char * const  TOKEN_TEXT_MININTERV_SCHEME = QT_TRANSLATE_NOOP("mfDrugsConstants", "Minimum interval between intakes (scheme)");
+    const char * const  TOKEN_TEXT_REFILL           = QT_TRANSLATE_NOOP("mfDrugsConstants", "Refill");
+    const char * const  TOKEN_TEXT_NOTE             = QT_TRANSLATE_NOOP("mfDrugsConstants", "Note");
 
      /*: This is the short name of the drug-drug interactions engine. */
     const char * const  DDI_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "DDI");
