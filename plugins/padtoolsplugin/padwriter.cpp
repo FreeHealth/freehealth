@@ -76,16 +76,17 @@ public:
         ui(0),
         _tokenModel(0),
         _pad(0),
-        _followedItem(0),
-        _cursorHighlighTimer(0),
         _toolBar(0),
         q(parent)
     {
-        _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
-        _followedCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+    }
 
-        _cursorHighlighTimer = new QTimer(q);
-        _cursorHighlighTimer->setSingleShot(true);
+    void createUi()
+    {
+        ui = new Internal::Ui::PadWriter;
+        ui->setupUi(this);
+        ui->tokenTreeLayout->setMargin(0);
+        ui->tokenTreeLayout->setSpacing(0);
     }
 
     void registerContext()
@@ -101,7 +102,7 @@ public:
         contextManager()->removeContextObject(_context);
     }
 
-    void createActions(QToolButton *button)
+    void createActions()
     {
         // TEST
         QAction *a = aTest1 = new QAction(q);
@@ -171,10 +172,6 @@ public:
     TokenModel *_tokenModel;
     QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_pad;
-    PadFragment *_followedItem; // should not be deleted
-    QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
-    QTextCharFormat _followedCharFormat;
-    QTimer *_cursorHighlighTimer;
     QToolBar *_toolBar;
 
 private:
@@ -195,11 +192,10 @@ PadWriter::PadWriter(QWidget *parent) :
     Core::IPadWriter(parent),
     d(new Internal::PadWriterPrivate(this))
 {
-    d->ui = new Internal::Ui::PadWriter;
-    d->ui->setupUi(this);
-    d->ui->tokenTreeLayout->setMargin(0);
-    d->ui->tokenTreeLayout->setSpacing(0);
-
+    d->createUi();
+    d->createActions();
+    d->connectActions();
+    d->createToolBar();
     d->registerContext();
 
     // Create TokenModel
@@ -214,11 +210,6 @@ PadWriter::PadWriter(QWidget *parent) :
     d->_pad = new PadDocument();
     d->ui->wysiwyg->setPadDocument(d->_pad);
     connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
-
-    // Add options action
-    d->createActions(d->ui->optionsButton);
-    d->connectActions();
-    d->createToolBar();
 
 //    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
 //    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
