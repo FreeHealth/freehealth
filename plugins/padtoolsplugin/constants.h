@@ -40,6 +40,11 @@
 namespace PadTools {
 namespace Constants {
 
+// Menus && Actions
+const char * const M_PLUGIN_PADTOOLS = "mPadTools";
+const char * const C_PADTOOLS_PLUGINS = "cPadTools";
+const char * const A_PADTOOLS_SETDEFAULTVALUES = "aPTDefaultValues";
+
 const char * const TOKENVALUE_MIME = "freepad/token/value";
 const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
 const char * const TOKENNAME_MIME = "freepad/token/name";

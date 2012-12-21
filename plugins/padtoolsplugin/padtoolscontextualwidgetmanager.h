@@ -19,95 +19,74 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main Developers:                                                      *
+ *       Eric Maeker                                                       *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PADTOOLS_PADWRITER_H
-#define PADTOOLS_PADWRITER_H
+#ifndef PADTOOLS_INTERNAL_PADTOOLSCONTEXTUALWIDGETMANAGER_H
+#define PADTOOLS_INTERNAL_PADTOOLSCONTEXTUALWIDGETMANAGER_H
 
-#include <coreplugin/ipadtools.h>
 #include <coreplugin/contextmanager/icontext.h>
-
-QT_BEGIN_NAMESPACE
-class QTextCursor;
-QT_END_NAMESPACE
+#include <QObject>
+#include <QPointer>
 
 /**
- * \file padwriter.h
+ * \file padtoolscontextualwidget.h
  * \author Eric Maeker
- * \version 0.8.2
+ * \version 0.8.0
  * \date 21 Dec 2012
 */
+
+namespace Core {
+class IContext;
+}
 
 namespace PadTools {
 namespace Internal {
 class PadWriter;
-class PadFragment;
-class PadWriterPrivate;
+class PadToolsActionHandler;
+class PadToolsContextualWidget;
 
-class PadWriterContext : public Core::IContext
+class PadToolsActionHandler : public QObject
 {
     Q_OBJECT
 public:
-    PadWriterContext(PadWriter *w);
+    PadToolsActionHandler(QObject *parent = 0);
+    virtual ~PadToolsActionHandler() {}
+
+    void setCurrentView(PadWriter *view);
+
+private Q_SLOTS:
+    void clear();
+    void showDatabaseInformation();
+
+private Q_SLOTS:
+    void updateActions();
+
+protected:
+    QAction *aClear;
+    QAction *aSetDefaultValues;
+
+    QPointer<PadWriter> m_CurrentView;
 };
 
-class PadWriter : public Core::IPadWriter
+class PadToolsContextualWidgetManager : public PadToolsActionHandler
 {
     Q_OBJECT
     
 public:
-    explicit PadWriter(QWidget *parent = 0);
-    ~PadWriter();
-
-public Q_SLOTS:
-    // Core::IPadWriter interface
-    void setPlainTextSource(const QString &plainText);
-    void setHtmlSource(const QString &html);
-    void filterTokenPool(const QString &tokenNamespace);
-    void filterTokenPool(const QStringList &tokenNamespaces);
-
-public:
-    // Core::IPadWriter interface
-    QString outputToPlainText() const;
-    QString outputToHtml() const;
-    QString rawSourceToPlainText() const;
-    QString rawSourceToHtml() const;
-
-public Q_SLOTS:
-    void highlightCursor();
-
-private:
-    void findCursorPositionInOutput();
-
+    explicit PadToolsContextualWidgetManager(QObject *parent = 0);
+    ~PadToolsContextualWidgetManager();
+    
+    PadWriter *currentView() const;
+    
 private Q_SLOTS:
-    void wysiwygCursorChanged();
-    void rawSourceCursorChanged();
-    void changeRawSourceScenario(QAction*);
-
-    void expandTokenTreeView();
-    void analyseRawSource();
-    void outputToRaw();
-
-    void viewErrors();
-    void setAutoUpdateOfResult(bool state);
-    void setTestValues(bool state);
-    void onPadFragmentChanged(PadFragment *fragment);
-
-//private:
-//    bool event(QEvent *event);
-
-//private:
-//    bool eventFilter(QObject *obj, QEvent *event);
-//    void mouseMoveEvent(QMouseEvent *e);
-
-private:
-    Internal::PadWriterPrivate *d;
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
-}  // namespace Internal
-}  // namespace PadTools
+} // namespace Internal
+} // namespace PadTools
 
-#endif // PADTOOLS_PADWRITER_H
+#endif // PADTOOLS_INTERNAL_PADTOOLSCONTEXTUALWIDGETMANAGER_H
+

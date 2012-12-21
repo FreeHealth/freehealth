@@ -44,6 +44,7 @@
 #include <coreplugin/ipadtools.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/contextmanager/contextmanager.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -59,6 +60,7 @@ using namespace PadTools;
 using namespace Internal;
 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
@@ -69,6 +71,7 @@ class PadWriterPrivate
 {
 public:
     PadWriterPrivate(PadWriter *parent) :
+        _context(0),
         ui(0),
         _tokenModel(0),
         _pad(0),
@@ -84,43 +87,29 @@ public:
         _cursorHighlighTimer->setSingleShot(true);
     }
 
+    void registerContext()
+    {
+        _context = new PadWriterContext(q);
+        Core::Context context(Constants::C_PADWRITER_CONTEXT);
+        _context->setContext(context);
+        contextManager()->addContextObject(_context);
+    }
+
+    void removeContext()
+    {
+        contextManager()->removeContextObject(_context);
+    }
+
     void createActions(QToolButton *button)
     {
-        // FIXME: move this in single instance object
         // Add options action
-        Core::Context context(Core::Constants::C_GLOBAL);
-        QAction *a;
         Core::Command *cmd;
 
-        aFindCursor = a = new QAction(q);
-        a->setObjectName("PadWriter.aFindCursor");
-    //    a->setIcon(theme()->icon(icon));
-        a->setCheckable(true);
-        a->setChecked(false);
-        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
-        cmd->setTranslations(Constants::FIND_CURSOR_IN_RESULT, Constants::FIND_CURSOR_IN_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
-        button->addAction(cmd->action());
-
-        aAutoUpdate = a = new QAction(q);
-        a->setObjectName("PadWriter.aAutoUpdate");
-    //    a->setIcon(theme()->icon(icon));
-        a->setCheckable(true);
-        a->setChecked(false);
-        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
-        cmd->setTranslations(Constants::AUTO_UPDATE_RESULT, Constants::AUTO_UPDATE_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
-        button->addAction(cmd->action());
-
-        aSetDefaultValues = a = new QAction(q);
-        a->setObjectName("PadWriter.aSetDefaultValues");
-    //    a->setIcon(theme()->icon(icon));
-        a->setCheckable(true);
-        a->setChecked(false);
-        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
-        cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
+        cmd = actionManager()->command(Constants::A_PADTOOLS_SETDEFAULTVALUES);
         button->addAction(cmd->action());
 
         // TEST
-        a = aTest1 = new QAction(q);
+        QAction *a = aTest1 = new QAction(q);
         a->setText("Tokens and strings");
         a->setIcon(theme()->icon(Core::Constants::ICONHELP));
 
@@ -147,9 +136,9 @@ public:
 
     void connectActions()
     {
-        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
-        QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
-        QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
+//        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
+//        QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
+//        QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
         QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
 //        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
 //        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
@@ -176,9 +165,10 @@ public:
     }
 
 public:
+    PadWriterContext *_context;
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
-    QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
+//    QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
     QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_pad;
     PadFragment *_followedItem; // should not be deleted
@@ -193,12 +183,21 @@ private:
 }  // Internal
 }  // PadTools
 
+PadWriterContext::PadWriterContext(PadWriter *w) :
+    Core::IContext(w)
+{
+    setObjectName("PadWriterContext");
+    setWidget(w);
+}
+
 PadWriter::PadWriter(QWidget *parent) :
     Core::IPadWriter(parent),
     d(new Internal::PadWriterPrivate(this))
 {
     d->ui = new Internal::Ui::PadWriter;
     d->ui->setupUi(this);
+
+    d->registerContext();
 
     // Create TokenModel
     d->_tokenModel = new TokenModel(this);
@@ -231,6 +230,7 @@ PadWriter::PadWriter(QWidget *parent) :
 
 PadWriter::~PadWriter()
 {
+    d->removeContext();
     if (d) {
         delete d;
         d = 0;

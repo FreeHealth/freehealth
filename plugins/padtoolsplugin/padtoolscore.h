@@ -38,20 +38,22 @@
 
 namespace PadTools {
 namespace Internal {
+class PadToolsPlugin;
 class PadToolsCorePrivate;
 
 class PadToolsCore : public QObject
 {
     Q_OBJECT
+    friend class PadTools::Internal::PadToolsPlugin;
 
 protected:
     explicit PadToolsCore(QObject *parent = 0);
+    bool initialize();
 
 public:
     static PadToolsCore &instance();
     ~PadToolsCore();
     
-    bool initialize();
     
 Q_SIGNALS:
     

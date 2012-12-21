@@ -43,6 +43,7 @@ class ITokenPool;
 namespace PadTools {
 namespace Internal {
 class TokenPool;
+class PadToolsCore;
 
 class PadToolsImpl : public Core::IPadTools
 {
@@ -59,6 +60,7 @@ public:
     Core::IPadWriter *createWriter(QWidget *parent = 0);
 
 private:
+    PadToolsCore *_core;
     TokenPool *_pool;
 };
 

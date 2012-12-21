@@ -26,34 +26,54 @@
  ***************************************************************************/
 /*!
  * \class PadTools::Internal::PadToolsCore
- * \brief short description of class
- *
- * Long description of class
- * \sa PadTools::
+ * Central place for the PadTools plugin.
  */
 
 #include "padtoolscore.h"
+#include "padtoolsimpl.h"
+#include "padtoolscontextualwidgetmanager.h"
 
+#include <coreplugin/icore.h>
+
+#include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 
 #include <QDebug>
+
+enum {CreateTestingTokens=false};
 
 using namespace PadTools;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+namespace {
+class TestingToken : public Core::IToken
+{
+public:
+    TestingToken(const QString &name, const QVariant &value) :
+        IToken(name),
+        _value(value)
+    {
+    }
+
+    QVariant testValue() const {return "TEST";}
+    QVariant value() const {return _value;}
+
+private:
+     QVariant _value;
+};
+
+}
+
 namespace PadTools {
 namespace Internal {
-/*!
- * \class PadTools::Internal::PadToolsCorePrivate
- * \brief Private implementation of the PadTools::PadToolsCore class.
- *
- * documentation here
- */
 class PadToolsCorePrivate
 {
 public:
     PadToolsCorePrivate(PadToolsCore *parent) :
+        _impl(0),
+        _widgetManager(0),
         q(parent)
     {
     }
@@ -61,10 +81,45 @@ public:
     ~PadToolsCorePrivate()
     {
     }
-    
+
+    void registerTestingTokens()
+    {
+        // Register testing tokens (A, B, C, D)
+        Core::IToken *t;
+        QVector<Core::IToken *> _tokens;
+
+        t = new TestingToken("test.A", "Token A");
+        t->setSortIndex(0);
+        t->setUntranslatedHumanReadableName("TokenA");
+        _tokens << t;
+
+        t = new TestingToken("test.B", "Token B");
+        t->setSortIndex(1);
+        t->setUntranslatedHumanReadableName("TokenB");
+        _tokens << t;
+
+        t = new TestingToken("test.C", "Token C");
+        t->setSortIndex(2);
+        t->setUntranslatedHumanReadableName("TokenC");
+        _tokens << t;
+
+        t = new TestingToken("test.D", "Token D");
+        t->setSortIndex(3);
+        t->setUntranslatedHumanReadableName("TokenD");
+        _tokens << t;
+
+        if (_impl->tokenPool()) {
+            LOG_FOR(q, "Registering  testing tokens");
+            _impl->tokenPool()->addTokens(_tokens);
+        } else {
+            LOG_FOR(q, "PadTools object is not available, can not register the testing tokens");
+        }
+    }
+
 public:
-    // Put your data here
-    
+    PadToolsImpl* _impl;
+    PadToolsContextualWidgetManager *_widgetManager;
+
 private:
     PadToolsCore *q;
 };
@@ -78,7 +133,7 @@ PadToolsCore *PadToolsCore::_instance = 0;
  * Singleton access. This object creates its instance in the Ctor. So you should never
  * request the ctor more than once.
  */
-PadTools::PadToolsCore &PadTools::PadToolsCore::instance() // static
+PadTools::Internal::PadToolsCore &PadTools::Internal::PadToolsCore::instance() // static
 {
     Q_ASSERT(_instance);
     return *_instance;
@@ -95,6 +150,7 @@ PadToolsCore::PadToolsCore(QObject *parent) :
 /*! Destructor of the PadTools::Internal::PadToolsCore class */
 PadToolsCore::~PadToolsCore()
 {
+    Core::ICore::instance()->setPadTools(0);
     _instance = 0;
     if (d)
         delete d;
@@ -104,6 +160,14 @@ PadToolsCore::~PadToolsCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool PadToolsCore::initialize()
 {
+    d->_impl = new PadToolsImpl(this);
+    Core::ICore::instance()->setPadTools(d->_impl);
+
+    d->_widgetManager = new PadToolsContextualWidgetManager(this);
+
+    if (!Utils::isReleaseCompilation() && CreateTestingTokens)
+        d->registerTestingTokens();
+
     return true;
 }
 

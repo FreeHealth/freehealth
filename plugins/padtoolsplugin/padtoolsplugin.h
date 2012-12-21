@@ -40,6 +40,7 @@
 
 namespace PadTools {
 namespace Internal {
+class PadToolsCore;
 class PadToolsImpl;
 
 class PadToolsPlugin : public ExtensionSystem::IPlugin
@@ -54,6 +55,7 @@ public:
     ShutdownFlag aboutToShutdown();
 
 private:
+    PadToolsCore *_core;
     PadToolsImpl *_impl;
 };
 
