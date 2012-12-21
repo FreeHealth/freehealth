@@ -45,6 +45,7 @@ namespace PadTools {
 namespace Internal {
 class PadWriter;
 class PadFragment;
+class PadToolsActionHandler;
 class PadWriterPrivate;
 
 class PadWriterContext : public Core::IContext
@@ -57,7 +58,8 @@ public:
 class PadWriter : public Core::IPadWriter
 {
     Q_OBJECT
-    
+    friend class PadTools::Internal::PadToolsActionHandler;
+
 public:
     explicit PadWriter(QWidget *parent = 0);
     ~PadWriter();
@@ -83,8 +85,8 @@ private:
     void findCursorPositionInOutput();
 
 private Q_SLOTS:
-    void wysiwygCursorChanged();
-    void rawSourceCursorChanged();
+//    void wysiwygCursorChanged();
+//    void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
 
     void expandTokenTreeView();
@@ -93,8 +95,12 @@ private Q_SLOTS:
 
     void viewErrors();
     void setAutoUpdateOfResult(bool state);
-    void setTestValues(bool state);
     void onPadFragmentChanged(PadFragment *fragment);
+
+protected:
+    // ActionHandler connections
+    void onDefaultValuesRequested();
+    void onShowSourceRequested();
 
 //private:
 //    bool event(QEvent *event);

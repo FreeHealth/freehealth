@@ -172,7 +172,7 @@ PadWriter *PadToolsContextualWidgetManager::currentView() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     QObject(parent),
-    aClear(0),
+    aShowSource(0),
     aSetDefaultValues(0),
     m_CurrentView(0)
 {
@@ -215,6 +215,15 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     //    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
     //    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
     
+    aShowSource = createAction(this, "aShowSource", Core::Constants::ICONHELP,
+                               Constants::A_PADTOOLS_SHOWSOURCE,
+                               ctx,
+                               Constants::SHOW_SOURCE, Constants::PADWRITER_TRANS_CONTEXT,
+                               cmd,
+                               0, "",
+                               QKeySequence::UnknownKey, false);
+    connect(aShowSource, SIGNAL(triggered()), this, SLOT(onShowSourceRequested()));
+
     aSetDefaultValues = createAction(this, "aSetDefaultValues", Core::Constants::ICONHELP,
                                      Constants::A_PADTOOLS_SETDEFAULTVALUES,
                                      ctx,
@@ -224,18 +233,6 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
                                      QKeySequence::UnknownKey, false);
     connect(aSetDefaultValues, SIGNAL(triggered()), this, SLOT(onDefaultValuesRequested()));
 
-//    // Example: register your own actions: db info in the help menu
-//    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-//    aShowDatabaseInformation = createAction(this, "aShowDatabaseInformation", Core::Constants::ICONHELP,
-//                                            Constants::A_SHOWPATIENTLASTEPISODES,
-//                                            allContexts,
-//                                            Trans::Constants::PADTOOLS_DATABASE_INFORMATION, "",
-//                                            cmd,
-//                                            hmenu, Core::Constants::G_HELP_DATABASES,
-//                                            QKeySequence::UnknownKey, false);
-//    aShowDatabaseInformation->setEnabled(false);
-//    connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
-    
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 }
@@ -281,33 +278,17 @@ void PadToolsActionHandler::updateActions()
     // Proceed actions dis/enableing
 }
 
-// Eg of action interacting with the currentview
-void PadToolsActionHandler::clear()
-{
-    // TODO:void PadToolsActionHandler::clear()
-//    if (m_CurrentView) {
-//        m_CurrentView->clear();
-//    }
-}
-
 void PadToolsActionHandler::onDefaultValuesRequested()
 {
     qWarning() << "PadToolsActionHandler::onDefaultValuesRequested";
-    if (m_CurrentView) {
+    if (m_CurrentView)
         m_CurrentView->onDefaultValuesRequested();
-    }
 }
 
-void PadToolsActionHandler::showDatabaseInformation()
+void PadToolsActionHandler::onShowSourceRequested()
 {
-//    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-//    QGridLayout lay(&dlg);
-//    QTreeWidget tree(&dlg);
-//    tree.setColumnCount(2);
-//    tree.header()->hide();
-//    lay.addWidget(&tree);
-//    Utils::resizeAndCenter(&dlg);
-//    dlg.exec();
+    if (m_CurrentView)
+        m_CurrentView->onShowSourceRequested();
 }
 
 

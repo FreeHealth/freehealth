@@ -91,8 +91,8 @@ public:
     void registerContext()
     {
         _context = new PadWriterContext(q);
-        Core::Context context(Constants::C_PADWRITER_CONTEXT);
-        _context->setContext(context);
+        ui->wysiwyg->addContext(_context->context());
+        ui->rawSource->addContext(_context->context());
         contextManager()->addContextObject(_context);
     }
 
@@ -103,12 +103,6 @@ public:
 
     void createActions(QToolButton *button)
     {
-        // Add options action
-        Core::Command *cmd;
-
-        cmd = actionManager()->command(Constants::A_PADTOOLS_SETDEFAULTVALUES);
-        button->addAction(cmd->action());
-
         // TEST
         QAction *a = aTest1 = new QAction(q);
         a->setText("Tokens and strings");
@@ -135,33 +129,38 @@ public:
         a->setIcon(theme()->icon(Core::Constants::ICONHELP));
     }
 
-    // FIXME: actions should be connected by the actionhandler
     void connectActions()
     {
-//        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
-//        QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
-//        QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
         QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
-//        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
-//        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
         QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
     }
 
     void createToolBar()
     {
         _toolBar = new QToolBar(q);
-        QToolButton *scenariTester = new QToolButton(q);
-        scenariTester->setIcon(theme()->icon(Core::Constants::ICONHELP));
-        scenariTester->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        scenariTester->setPopupMode(QToolButton::InstantPopup);
-        scenariTester->addAction(aTest1);
-        scenariTester->addAction(aTest2);
-        scenariTester->addAction(aTest3);
-        scenariTester->addAction(aTest4);
-        scenariTester->addAction(aTest5);
-        scenariTester->addAction(aTest6);
-        scenariTester->setDefaultAction(aTest1);
-        _toolBar->addWidget(scenariTester);
+        _toolBar->setFocusPolicy(Qt::ClickFocus);
+        if (!Utils::isReleaseCompilation()) {
+            QToolButton *scenariTester = new QToolButton(q);
+            scenariTester->setIcon(theme()->icon(Core::Constants::ICONHELP));
+            scenariTester->setToolButtonStyle(Qt::ToolButtonIconOnly);
+            scenariTester->setPopupMode(QToolButton::InstantPopup);
+            scenariTester->addAction(aTest1);
+            scenariTester->addAction(aTest2);
+            scenariTester->addAction(aTest3);
+            scenariTester->addAction(aTest4);
+            scenariTester->addAction(aTest5);
+            scenariTester->addAction(aTest6);
+            scenariTester->setDefaultAction(aTest1);
+            _toolBar->addWidget(scenariTester);
+        }
+        // Add options action
+        Core::Command *cmd;
+        cmd = actionManager()->command(Constants::A_PADTOOLS_SETDEFAULTVALUES);
+        _toolBar->addAction(cmd->action());
+
+        cmd = actionManager()->command(Constants::A_PADTOOLS_SHOWSOURCE);
+        _toolBar->addAction(cmd->action());
+
         ui->toolbarLayout->addWidget(_toolBar);
         aTest1->trigger();
     }
@@ -170,7 +169,6 @@ public:
     PadWriterContext *_context;
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
-//    QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
     QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_pad;
     PadFragment *_followedItem; // should not be deleted
@@ -190,6 +188,7 @@ PadWriterContext::PadWriterContext(PadWriter *w) :
 {
     setObjectName("PadWriterContext");
     setWidget(w);
+    setContext(Core::Context(PadTools::Constants::C_PADTOOLS_PLUGINS));
 }
 
 PadWriter::PadWriter(QWidget *parent) :
@@ -216,21 +215,13 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->wysiwyg->setPadDocument(d->_pad);
     connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
 
-    // Create PadHighlighter
-//    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
-
     // Add options action
     d->createActions(d->ui->optionsButton);
     d->connectActions();
     d->createToolBar();
 
-    // TEST
-
-    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
-    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
-//    d->ui->wysiwyg->textEdit()->setCursorWidth(3);
-//    d->ui->rawSource->textEdit()->setCursorWidth(3);
-    // END TEST
+//    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
+//    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
 }
 
 PadWriter::~PadWriter()
@@ -242,62 +233,73 @@ PadWriter::~PadWriter()
     }
 }
 
+/** Set the plain text raw source to analyze */
 void PadWriter::setPlainTextSource(const QString &plainText)
 {
     d->ui->rawSource->setPlainText(plainText);
     analyseRawSource();
 }
 
+/** Set the rich text (HTML) raw source to analyze */
 void PadWriter::setHtmlSource(const QString &html)
 {
     d->ui->rawSource->setHtml(html);
     analyseRawSource();
 }
 
+/** Filter available namespaces with the \e tokenNamespace */
 void PadWriter::filterTokenPool(const QString &tokenNamespace)
 {
     Q_UNUSED(tokenNamespace)
     // TODO: here
 }
 
+/** Filter available namespaces with the \e tokenNamespaces */
 void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
 {
     Q_UNUSED(tokenNamespaces)
     // TODO: here
 }
 
+/** Returns the token output constructed document to plain text (does include the tokens not their values) */
 QString PadWriter::outputToPlainText() const
 {
     return d->ui->wysiwyg->toPlainText();
 }
 
+/** Returns the token output constructed document to rich text (does include the tokens not their values) */
 QString PadWriter::outputToHtml() const
 {
     return d->ui->wysiwyg->toHtml();
 }
 
+/** Returns the token raw source document to plain text (does include the tokens not their values) */
 QString PadWriter::rawSourceToPlainText() const
 {
     return d->ui->rawSource->toPlainText();
 }
 
+/** Returns the token raw source document to rich text (does include the tokens not their values) */
 QString PadWriter::rawSourceToHtml() const
 {
     return d->ui->rawSource->toHtml();
 }
 
-void PadWriter::wysiwygCursorChanged()
-{
-    QTextCursor c = d->ui->wysiwyg->textEdit()->textCursor();
-    d->ui->ouputPos->setValue(c.position());
-}
+//void PadWriter::wysiwygCursorChanged()
+//{
+//    QTextCursor c = d->ui->wysiwyg->textEdit()->textCursor();
+//    d->ui->ouputPos->setValue(c.position());
+//}
 
-void PadWriter::rawSourceCursorChanged()
-{
-    QTextCursor c = d->ui->rawSource->textEdit()->textCursor();
-    d->ui->rawPos->setValue(c.position());
-}
+//void PadWriter::rawSourceCursorChanged()
+//{
+//    QTextCursor c = d->ui->rawSource->textEdit()->textCursor();
+//    d->ui->rawPos->setValue(c.position());
+//}
 
+/**
+ * In \b debug \b mode some "testing scenari" are available through a button,
+ * apply the selected scenrio */
 void PadWriter::changeRawSourceScenario(QAction *a)
 {
     QString source;
@@ -374,6 +376,7 @@ void PadWriter::expandTokenTreeView()
         d->ui->treeView->expand(d->_tokenModel->index(i,0));
 }
 
+/** Analyze the current token raw source and create the token output document */
 void PadWriter::analyseRawSource()
 {
     // clear PadDocument && views
@@ -385,6 +388,8 @@ void PadWriter::analyseRawSource()
     d->_pad->setTokenModel(d->_tokenModel);
 //    d->_pad->run(d->_tokenModel->tokens());
     d->_pad->toOutput(d->_tokenModel->tokenPool());
+
+    d->ui->computedOutput->setDocument(d->_pad->outputDocument());
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {
@@ -501,11 +506,6 @@ void PadWriter::setAutoUpdateOfResult(bool state)
     }
 }
 
-void PadWriter::setTestValues(bool /*state*/)
-{
-    analyseRawSource();
-}
-
 void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 {
     if (!d->_followedItem)
@@ -518,10 +518,12 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 //    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
 
-//bool PadWriter::event(QEvent *event)
-//{
-//    if (event->type()==QEvent::ToolTip) {
+void PadWriter::onDefaultValuesRequested()
+{
+    analyseRawSource();
+}
 
-//    }
-//    return Core::IPadWriter::event(event);
-//}
+void PadWriter::onShowSourceRequested()
+{
+    outputToRaw();
+}

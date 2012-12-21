@@ -57,15 +57,14 @@ public:
     void setCurrentView(PadWriter *view);
 
 private Q_SLOTS:
-    void clear();
     void onDefaultValuesRequested();
-    void showDatabaseInformation();
+    void onShowSourceRequested();
 
 private Q_SLOTS:
     void updateActions();
 
 protected:
-    QAction *aClear;
+    QAction *aShowSource;
     QAction *aSetDefaultValues;
 
     QPointer<PadWriter> m_CurrentView;

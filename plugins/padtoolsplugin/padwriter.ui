@@ -138,6 +138,7 @@
         </layout>
        </widget>
        <widget class="PadTools::Internal::TokenOutputDocument" name="wysiwyg"/>
+       <widget class="QTextEdit" name="computedOutput"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
        <property name="toolTip">
