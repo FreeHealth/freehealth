@@ -22,7 +22,8 @@ HEADERS +=  \
     $${PWD}/tokeneditor.h \
     $${PWD}/tokenoutputdocument.h \
     $${PWD}/tokentreeview.h \
-    $${PWD}/tokenpool.h
+    $${PWD}/tokenpool.h \
+    padtoolscore.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -40,7 +41,8 @@ SOURCES += \
     $${PWD}/tokeneditor.cpp \
     $${PWD}/tokenoutputdocument.cpp \
     $${PWD}/tokentreeview.cpp \
-    $${PWD}/tokenpool.cpp
+    $${PWD}/tokenpool.cpp \
+    padtoolscore.cpp
 
 FORMS += \
     $${PWD}/padwriter.ui \
