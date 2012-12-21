@@ -157,12 +157,13 @@ UTILS_EXPORT QString countryToIso(QLocale::Country country);
 UTILS_EXPORT QString countryIsoToName(const QString &country);
 UTILS_EXPORT QLocale::Country countryIsoToCountry(const QString &country);
 
-// Some functions for HTML work
+// Some functions for QString/HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
 UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
 UTILS_EXPORT QString toHtmlAccent(const QString &html);
 UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
 UTILS_EXPORT QString removeAccents(const QString &text);
+UTILS_EXPORT QString lineWrapString(const QString &in, int lineLength);
 
 // Some functions for XML Handling
 UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &data, const int indent = 0, const bool valueToBase64 = false );

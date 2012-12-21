@@ -1486,6 +1486,53 @@ QString removeAccents(const QString &text)
     return toReturn;
 }
 
+static inline bool isLineSplitter(const QChar &c)
+{
+    return (c == ' '
+            || c =='/'
+            || c ==','
+            || c ==';'
+            || c =='.'
+            || c =='?'
+            || c ==':'
+            || c =='-');
+}
+
+/** Split a string to multiple lines, with a max \e lineLength char per lines */
+QString lineWrapString(const QString &in, int lineLength)
+{
+    QString tempStr = in;
+    int len = in.length();
+    int pos = lineLength;
+
+    while (pos < len-1) {
+        // Here we are at the supposed linebreak
+        int tempPos = pos;
+
+        // Find line breaker char (space, divider, coma...) going backward
+        while (!isLineSplitter(tempStr.at(tempPos)) && tempPos > 0) {
+            tempPos--;
+        }
+
+        // Update the current position
+        if (tempPos > 0)
+            pos=tempPos;
+
+        // Cut the string
+        if (tempStr.at(tempPos)==' ') {
+            tempStr.replace(tempPos, 1, '\n');
+        } else {
+            tempStr.insert(tempPos, '\n');
+            ++len;
+        }
+
+        // Go to next supposed linebreak
+        pos+=lineLength;
+    }
+
+    return tempStr;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////   XML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
