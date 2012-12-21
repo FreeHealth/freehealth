@@ -67,7 +67,42 @@
          <property name="spacing">
           <number>0</number>
          </property>
-         <item row="3" column="3">
+         <item row="2" column="2">
+          <widget class="QToolButton" name="viewResult">
+           <property name="text">
+            <string>raw to output</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QToolButton" name="scenari">
+           <property name="text">
+            <string>Scenari</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3" colspan="2">
+          <widget class="QToolButton" name="outputToRaw">
+           <property name="text">
+            <string>output to raw</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="5">
+          <layout class="QVBoxLayout" name="toolbarLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+         <item row="2" column="1">
+          <widget class="QToolButton" name="optionsButton">
+           <property name="text">
+            <string>Options</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
           <widget class="QSpinBox" name="ouputPos">
            <property name="toolTip">
             <string>OUTPUT</string>
@@ -77,21 +112,14 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="7">
-          <widget class="QToolButton" name="outputToRaw">
-           <property name="text">
-            <string>output to raw</string>
+         <item row="1" column="0" colspan="5">
+          <widget class="PadTools::Internal::DragDropTextEdit" name="rawSource">
+           <property name="toolTip">
+            <string>Raw source</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="3">
-          <widget class="QToolButton" name="optionsButton">
-           <property name="text">
-            <string>Options</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
+         <item row="3" column="0">
           <widget class="QSpinBox" name="rawPos">
            <property name="toolTip">
             <string>RAW</string>
@@ -100,61 +128,6 @@
             <number>16777215</number>
            </property>
           </widget>
-         </item>
-         <item row="2" column="6">
-          <widget class="QToolButton" name="viewResult">
-           <property name="text">
-            <string>raw to output</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="9">
-          <widget class="PadTools::Internal::DragDropTextEdit" name="rawSource">
-           <property name="toolTip">
-            <string>Raw source</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="4">
-          <widget class="QToolButton" name="scenari">
-           <property name="text">
-            <string>Scenari</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="5">
-          <widget class="QToolButton" name="findCursor">
-           <property name="text">
-            <string>Find cursor</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="viewError">
-           <property name="text">
-            <string>View errors</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="9">
-          <layout class="QVBoxLayout" name="toolbarLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-          </layout>
          </item>
         </layout>
        </widget>
