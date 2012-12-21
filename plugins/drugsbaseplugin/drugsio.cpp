@@ -165,7 +165,8 @@ namespace Internal {
 class DrugsIOPrivate
 {
 public:
-    DrugsIOPrivate()
+    DrugsIOPrivate(DrugsIO *parent):
+        q(parent)
     {
     }
 
@@ -559,6 +560,9 @@ public:
     QHash<QString,QString> m_Data;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString> m_PrescriptionXmlTags;
     QVector<Core::IToken *> _tokens;
+
+private:
+    DrugsIO *q;
 };
 }  // namespace Internal
 }  // namespace DrugsDB
@@ -569,7 +573,7 @@ DrugsIO::DrugsIO(QObject *parent) :
     d(0)
 {
     setObjectName("DrugsIO");
-    d = new Internal::DrugsIOPrivate();
+    d = new Internal::DrugsIOPrivate(this);
 }
 
 /** \brief Destructor */
