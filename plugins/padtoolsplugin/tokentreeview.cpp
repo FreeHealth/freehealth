@@ -24,6 +24,12 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class PadTools::Internal::TokenTreeView
+ * Tree view for the token model that correctly manages
+ * drag'n drop feature.
+ */
+
 #include "tokentreeview.h"
 
 #include <QMimeData>
@@ -36,6 +42,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 TokenTreeView::TokenTreeView(QWidget *parent) :
     QTreeView(parent)

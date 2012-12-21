@@ -37,6 +37,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 
 class TokenTreeView : public QTreeView
 {
@@ -53,6 +54,7 @@ private:
 
 };
 
+} // namespace Internal
 } // namespace PadTools
 
 #endif // PADTOOLS_TOKENTREEVIEW_H
