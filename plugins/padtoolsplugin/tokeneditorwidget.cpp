@@ -41,6 +41,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 TokenEditorWidget::TokenEditorWidget(QWidget *parent) :

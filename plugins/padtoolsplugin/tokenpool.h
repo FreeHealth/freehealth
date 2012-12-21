@@ -26,7 +26,6 @@
 #ifndef PADTOOLS_TOKENPOOL_H
 #define PADTOOLS_TOKENPOOL_H
 
-#include <padtoolsplugin/padtools_exporter.h>
 #include <coreplugin/ipadtools.h>
 
 #include <QString>
@@ -42,9 +41,8 @@
 namespace PadTools {
 namespace Internal {
 class TokenPoolPrivate;
-}
 
-class PADTOOLS_EXPORT TokenPool : public Core::ITokenPool
+class TokenPool : public Core::ITokenPool
 {
     Q_OBJECT
 public:
@@ -71,6 +69,7 @@ private:
     Internal::TokenPoolPrivate *d;
 };
 
+} // namespace Internal
 } // namespace PadTools
 
 #endif // PADTOOLS_TOKENPOOL_H

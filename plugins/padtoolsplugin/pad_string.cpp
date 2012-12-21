@@ -31,6 +31,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 void PadString::debug(int indent) const
 {

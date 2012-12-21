@@ -43,6 +43,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 PadToolsImpl::PadToolsImpl(QObject *parent) :
     Core::IPadTools(parent)

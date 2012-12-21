@@ -28,6 +28,7 @@
 #include "constants.h"
 
 using namespace PadTools;
+using namespace Internal;
 
 void BlockData::eatClosePad() {
 	int offset = -1;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PadTools::TokenEditorWidget</class>
- <widget class="QWidget" name="PadTools::TokenEditorWidget">
+ <class>PadTools::Internal::TokenEditorWidget</class>
+ <widget class="QWidget" name="PadTools::Internal::TokenEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

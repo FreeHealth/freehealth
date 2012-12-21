@@ -42,6 +42,7 @@
 
 
 namespace PadTools {
+namespace Internal {
 class PadDocument;
 
 struct PadDelimiter {
@@ -142,6 +143,7 @@ private:
     QList<PadDelimiter> _delimiters;
 };
 
-}  // PadTools
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_ITEM

@@ -46,7 +46,6 @@ class IToken;
 namespace PadTools {
 namespace Internal {
 class TokenModelPrivate;
-}  // namesapce Internal
 
 class TokenModel : public QStandardItemModel
 {
@@ -83,6 +82,7 @@ private:
     Internal::TokenModelPrivate *d;
 };
 
+}  // namespace Internal
 } // namespace PadTools
 
 #endif // PADTOOLS_TOKENMODEL_H

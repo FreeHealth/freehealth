@@ -38,8 +38,8 @@
  * \date 05 May 2012
 */
 
-
 namespace PadTools {
+namespace Internal {
 class PadDocument;
 
 class PadString : public PadFragment
@@ -59,7 +59,7 @@ public:
 private:
 	QString _string;
 };
-
-}  // PadTools
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_STRING

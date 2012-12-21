@@ -41,9 +41,8 @@ QT_END_NAMESPACE
 */
 
 namespace PadTools {
-class PadFragment;
-
 namespace Internal {
+class PadFragment;
 class PadWriterPrivate;
 namespace Ui {
 class PadWriter;

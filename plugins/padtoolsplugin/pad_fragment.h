@@ -42,6 +42,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 class PadDocument;
 
 class PadFragment
@@ -117,6 +118,7 @@ private:
     QString _toolTip;
 };
 
-}  // PadTools
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_FRAGMENT

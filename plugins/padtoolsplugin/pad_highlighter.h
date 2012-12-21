@@ -39,6 +39,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 
 struct BlockData : public QTextBlockUserData
 {
@@ -83,7 +84,7 @@ private:
 	void init();
 };
 
-}  // PadTools
-
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_HIGHLIGHTER

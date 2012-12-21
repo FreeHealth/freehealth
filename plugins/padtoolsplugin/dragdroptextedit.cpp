@@ -30,6 +30,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
     Editor::TextEditor(parent, DragDropTextEdit::Full)

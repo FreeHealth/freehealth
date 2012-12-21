@@ -42,6 +42,7 @@ QT_END_NAMESPACE
 
 
 namespace PadTools {
+namespace Internal {
 class TokenModel;
 class PadItem;
 
@@ -80,6 +81,7 @@ private:
     TokenModel *_model;
 };
 
+} // namespace Internal
 } // namespace PadTools
 
 #endif // PADTOOLS_TOKENEDITORWIDGET_H

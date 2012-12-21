@@ -38,6 +38,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 class TokenModel;
 class PadItem;
 
@@ -71,6 +72,7 @@ private:
     Ui::TokenEditor *ui;
 };
 
+} // namespace Internal
 } // namespace PadTools
 
 #endif // PADTOOLS_TOKENEDITOR_H

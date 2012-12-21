@@ -39,7 +39,6 @@
 using namespace PadTools;
 using namespace Internal;
 
-
 namespace PadTools {
 namespace Internal {
 class TokenPoolPrivate

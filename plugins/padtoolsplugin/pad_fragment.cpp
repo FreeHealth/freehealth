@@ -122,9 +122,11 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
+
 enum { WarnOutputPosChangedDebugging = false };
 
-QList<PadFragment *> PadTools::PadFragment::_fragmentsToDelete;
+QList<PadFragment *> PadTools::Internal::PadFragment::_fragmentsToDelete;
 
 PadFragment::PadFragment(PadFragment *parent) :
     _start(-1), _end(-1),

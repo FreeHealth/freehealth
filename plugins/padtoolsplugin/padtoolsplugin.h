@@ -39,6 +39,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 class PadToolsImpl;
 
 class PadToolsPlugin : public ExtensionSystem::IPlugin
@@ -56,6 +57,7 @@ private:
     PadToolsImpl *_impl;
 };
 
-}
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLSPLUGIN_H

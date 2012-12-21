@@ -52,6 +52,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 // TODO: documentation */
 PadPositionTranslator::PadPositionTranslator()

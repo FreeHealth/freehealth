@@ -32,6 +32,7 @@
 #include "ui_tokeneditor.h"
 
 using namespace PadTools;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 TokenEditor::TokenEditor(QWidget *parent) :

@@ -44,6 +44,7 @@
 */
 
 namespace PadTools {
+namespace Internal {
 class TokenModel;
 
 class PadPositionTranslator
@@ -143,7 +144,7 @@ private:
     PadPositionTranslator _posTrans;
 };
 
-}  // PadTools
-
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_DOCUMENT_H

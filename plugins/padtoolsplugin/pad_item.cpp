@@ -45,6 +45,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 PadConditionnalSubItem::PadConditionnalSubItem(TokenCoreCondition cond, Place place, PadFragment *parent) :
     PadFragment(parent), _coreCond(cond), _place(place)

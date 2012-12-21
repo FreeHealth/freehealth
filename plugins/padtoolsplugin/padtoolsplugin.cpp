@@ -49,6 +49,7 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
 namespace {
 class TestingToken : public Core::IToken

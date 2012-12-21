@@ -36,7 +36,7 @@
 */
 
 namespace PadTools {
-
+namespace Internal {
 class DragDropTextEdit : public Editor::TextEditor
 {
 public:
@@ -51,6 +51,7 @@ private:
 
 };
 
-}  // PadTools
+} // namespace Internal
+} // namespace PadTools
 
 #endif // PADTOOLS_DRAGDROPTEXTEDIT_H

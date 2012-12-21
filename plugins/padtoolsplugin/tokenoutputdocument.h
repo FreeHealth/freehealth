@@ -36,9 +36,8 @@
 */
 
 namespace PadTools {
-class PadDocument;
-
 namespace Internal {
+class PadDocument;
 class TokenOutputDocumentPrivate;
 
 class TokenOutputDocument : public Editor::TextEditor

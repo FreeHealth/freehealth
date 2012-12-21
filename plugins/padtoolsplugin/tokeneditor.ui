@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PadTools::TokenEditor</class>
- <widget class="QDialog" name="PadTools::TokenEditor">
+ <class>PadTools::Internal::TokenEditor</class>
+ <widget class="QDialog" name="PadTools::Internal::TokenEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -44,7 +44,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="PadTools::TokenEditorWidget" name="tokenEditor" native="true">
+    <widget class="PadTools::Internal::TokenEditorWidget" name="tokenEditor" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -67,7 +67,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PadTools::TokenEditorWidget</class>
+   <class>PadTools::Internal::TokenEditorWidget</class>
    <extends>QWidget</extends>
    <header location="global">padtoolsplugin/tokeneditorwidget.h</header>
    <container>1</container>
@@ -78,7 +78,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>PadTools::TokenEditor</receiver>
+   <receiver>PadTools::Internal::TokenEditor</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -94,7 +94,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>PadTools::TokenEditor</receiver>
+   <receiver>PadTools::Internal::TokenEditor</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

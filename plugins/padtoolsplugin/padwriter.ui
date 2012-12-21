@@ -109,7 +109,7 @@
           </widget>
          </item>
          <item row="1" column="0" colspan="9">
-          <widget class="PadTools::DragDropTextEdit" name="rawSource">
+          <widget class="PadTools::Internal::DragDropTextEdit" name="rawSource">
            <property name="toolTip">
             <string>Raw source</string>
            </property>
@@ -172,7 +172,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PadTools::DragDropTextEdit</class>
+   <class>PadTools::Internal::DragDropTextEdit</class>
    <extends>QTextEdit</extends>
    <header location="global">padtoolsplugin/dragdroptextedit.h</header>
   </customwidget>

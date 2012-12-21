@@ -45,11 +45,9 @@
 */
 
 namespace PadTools {
-class PadDocument;
-
 namespace Internal {
+class PadDocument;
 class PadAnalyzerPrivate;
-}
 
 class PadAnalyzer : public QObject
 {
@@ -67,6 +65,7 @@ private:
     Internal::PadAnalyzerPrivate *d;
 };
 
-} // PadTools
+} // namespace Internal
+} // namespace PadTools
 
 #endif  // PADTOOLS_PAD_ANALYZER
