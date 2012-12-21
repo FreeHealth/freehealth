@@ -43,10 +43,11 @@
 */
 
 /**
-  \fn virtual QSyntaxHighlighter *Core::IPadTools::createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens)
-  Returns a syntax highlighter which can be used in text editors
-  \todo +++OBSOLETE+++
-*/
+ * \class Core::TokenDescription
+ * Encapsulate token description. By default the translation context is
+ * the one from the translationutils lib.
+ * \sa Trans::Constants::CONSTANTS_TR_CONTEXT
+ */
 
 #include <coreplugin/icore.h>
 
@@ -66,6 +67,7 @@ TokenDescription::TokenDescription(const QString &uid) :
 {
 }
 
+/** Returns the human readable name of the token translated to the current application language */
 QString TokenDescription::humanReadableName() const
 {
     if (!_trContext.isEmpty())
@@ -109,6 +111,7 @@ QString IToken::tooltip() const
     return tooltip;
 }
 
+/** Returns the human readable tooltip of the token translated to the current application language */
 QString TokenDescription::tooltip() const
 {    
     if (!_trContext.isEmpty())
@@ -116,6 +119,7 @@ QString TokenDescription::tooltip() const
     return QApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, _tooltip.toUtf8());;
 }
 
+/** Returns the human readable help text of the token translated to the current application language */
 QString TokenDescription::helpText() const
 {
     if (!_trContext.isEmpty())
@@ -123,6 +127,7 @@ QString TokenDescription::helpText() const
     return QApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, _help.toUtf8());;
 }
 
+/** Returns the human readable short description Html text of the token translated to the current application language */
 QString TokenDescription::shortHtmlDescription() const
 {
     if (!_trContext.isEmpty())
@@ -158,3 +163,65 @@ void TokenNamespace::clearChildren()
  * The pointer pool is deleted by this manager, so you must not delete your registered pointers.
  */
 
+/**
+ * \fn virtual void Core::ITokenPool::registerNamespace(const Core::TokenNamespace &ns) = 0;
+ * Register a token namespace. You must register namespace separately to tokens.
+ */
+
+/**
+ * \fn virtual int Core::ITokenPool::rootNamespaceCount() const = 0;
+ * Returns the root namespace count.
+ */
+
+/**
+ * \fn virtual const Core::TokenNamespace &Core::ITokenPool::rootNamespaceAt(int index) const = 0;
+ * Returns the root namespace at \e index.
+ * \sa Core::ITokenPool::rootNamespaceCount()
+ */
+
+/**
+ * \fn virtual Core::TokenNamespace Core::ITokenPool::getTokenNamespace(const QString &name) const = 0;
+ */
+
+/**
+ * \fn virtual void Core::ITokenPool::addToken(Core::IToken *token) = 0;
+ * Register a \e token. Emits the Core::ITokenPool::tokenAdded() signal.
+ */
+
+/**
+ * \fn virtual void Core::ITokenPool::addTokens(QVector<Core::IToken *> &tokens) = 0;
+ * Register a list of \e tokens. Emits the Core::ITokenPool::tokenAdded() signal.
+ */
+
+/**
+ * \fn virtual Core::IToken *Core::ITokenPool::token(const QString &name) = 0;
+ * Return the token with the uuid \e name.
+ */
+
+/**
+ * \fn virtual void Core::ITokenPool::removeToken(Core::IToken *token) = 0;
+ * Removes a registered token. Emit the Core::ITokenPool::tokenRemoved() signal.
+ */
+
+/**
+ * \fn virtual QVector<Core::IToken *> Core::ITokenPool::tokens() const = 0;
+ * Returns all registered tokens.
+ */
+
+/**
+ * \fn virtual QVariant Core::ITokenPool::tokenTestingValue(const QString &name) = 0;
+ */
+
+/**
+ * \fn virtual QVariant Core::ITokenPool::tokenCurrentValue(const QString &name) = 0;
+ */
+
+/**
+ * \fn void Core::ITokenPool::tokenAdded(Core::IToken *token);
+ * Signal emitted when a token is registered.
+ */
+
+/**
+ * \fn void Core::ITokenPool::tokenRemoved(Core::IToken *token);
+ * Signal emitted when a token is removed.
+ */
