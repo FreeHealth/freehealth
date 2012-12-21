@@ -137,11 +137,24 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 {
     QStyleOptionViewItemV4 options = option;
     initStyleOption(&options, index);
+    QStyle *style = options.widget? options.widget->style() : QApplication::style();
 
     QTextDocument doc;
     doc.setHtml(options.text);
+
+    QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &options);
+    plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
+
+    // TextRect includes the decoration + item data. On treeview it does not include the branch.
+    QRect textRect = options.rect;
+    textRect.setTop(plainTextRect.center().y() - doc.size().height() / 2);
+    textRect.setHeight(doc.size().height());
+    textRect = textRect.adjusted(1,1,-1,-1);
+    QRect htmlRect = textRect.translated(-textRect.topLeft());
+
+    doc.setTextWidth(htmlRect.width());
 //   doc.setTextWidth(options.rect.width()); does not work (the rect width is way too small, I don't know why) but the idea is interesting, TODO: improve it later
-	return QSize(doc.idealWidth(), doc.size().height());
+    return QSize(doc.size().width(), doc.size().height());
 }
 
 } // namespace Utils
