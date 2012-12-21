@@ -582,7 +582,7 @@ void PadItem::toRaw(PadDocument *doc)
     int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
     doc->positionTranslator().addRawTranslation(_start, s);
 
-    doc->positionTranslator().debug();
+//    doc->positionTranslator().debug();
 
     PadCore *core = getCore();
     Q_ASSERT(core);
@@ -590,7 +590,7 @@ void PadItem::toRaw(PadDocument *doc)
         return;
     core->toRaw(doc);
 
-    doc->positionTranslator().debug();
+//    doc->positionTranslator().debug();
 
     setEnd(doc->positionTranslator().outputToRaw(_outputEnd));
     raw.setPosition(_end);
