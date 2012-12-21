@@ -134,6 +134,7 @@ public:
         a->setIcon(theme()->icon(Core::Constants::ICONHELP));
     }
 
+    // FIXME: actions should be connected by the actionhandler
     void connectActions()
     {
 //        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
@@ -196,13 +197,14 @@ PadWriter::PadWriter(QWidget *parent) :
 {
     d->ui = new Internal::Ui::PadWriter;
     d->ui->setupUi(this);
+    d->ui->tokenTreeLayout->setMargin(0);
+    d->ui->tokenTreeLayout->setSpacing(0);
 
     d->registerContext();
 
     // Create TokenModel
     d->_tokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->_tokenModel);
-    d->ui->treeView->hideColumn(1);
     expandTokenTreeView();
     connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 

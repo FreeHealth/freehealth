@@ -14,13 +14,19 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
-    <widget class="QSplitter" name="splitter_3">
+    <widget class="Utils::MiniSplitter" name="splitter_3">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="tokenTreeLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLineEdit" name="search"/>
        </item>
@@ -158,6 +164,12 @@
    <class>PadTools::Internal::TokenTreeView</class>
    <extends>QTreeView</extends>
    <header location="global">padtoolsplugin/tokentreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

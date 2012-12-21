@@ -91,9 +91,9 @@ public:
             item->setToolTip(ns.tooltip());
         parent->appendRow(item);
         _tokensNamespaceToItem.insert(fullNs, item);
-        foreach(const Core::TokenNamespace &child, ns.children()) {
+
+        foreach(const Core::TokenNamespace &child, ns.children())
             createNamespace(child, item);
-        }
     }
 
     void createTree()
