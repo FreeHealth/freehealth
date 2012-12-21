@@ -24,89 +24,126 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-/** \class PadTools::PadFragment
-  * Represents a fragment of the raw/output source
+/**
+ * \class PadTools::PadFragment
+ * Represents a fragment of the raw/output source
 */
 
 /** \fn virtual void PadTools::PadFragment::setParent(PadFragment *parent)
-  Define the parent of the fragment */
+ * Define the parent of the fragment
+ */
 
 /** \fn virtual PadFragment *PadTools::PadFragment::parent() const
-  Return the parent of the fragment */
+ * Return the parent of the fragment
+ */
 
 /** \fn virtual void PadTools::PadFragment::debug(int indent = 0) const = 0;
-  Debug to console */
+ * Debug to console
+ */
 
 /** \fn virtual int PadTools::PadFragment::id() const
-  Returns the start position in the raw source string/document */
+ * Returns the id of the fragment
+ */
 
 /** \fn virtual void PadTools::PadFragment::setId(int id)
-  Defines the start position in the raw source string/document */
+ * Defines the id of the fragment
+ */
 
 /** \fn int PadTools::PadFragment::start() const { return _start; }
-  Returns the start position in the raw source string/document */
+ * Returns the start position in the raw source string/document
+ */
 
-/** \fn void PadTools::PadFragment::setStart(int start) { _start = start; }
-  Defines the start position in the raw source string/document */
+/** \fn void PadTools::PadFragment::setStart(int start)
+ * Defines the start position in the raw source string/document
+ */
 
-/** \fn int PadTools::PadFragment::end() const { return _end; }
- Returns the end position in the raw source string/document */
+/** \fn int PadTools::PadFragment::end() const
+ * Returns the end position in the raw source string/document
+ */
 
-/** \fn void PadTools::PadFragment::setEnd(int end) { _end = end; }
-  Defines the end position in the raw source string/document */
+/** \fn void PadTools::PadFragment::setEnd(int end)
+ * Defines the end position in the raw source string/document
+ */
 
-/** \fn int PadTools::PadFragment::rawLength() const {return _end - _start;}
-  Return the length of the fragment in the raw source string/document */
+/** \fn int PadTools::PadFragment::rawLength() const
+ * Return the length of the fragment in the raw source string/document
+ */
 
-/** \fn int PadTools::PadFragment::outputLength() const {return _outputEnd - _outputStart;}
-  Return the length of the fragment in the output string/document */
+/** \fn int PadTools::PadFragment::outputLength() const
+ * Return the length of the fragment in the output string/document
+ */
 
 /** \fn void PadTools::PadFragment::move(int nbChars);
-  */
+ * Moves the fragment of \e nbChars (if \e nbChars is negative, go backward).
+ * Modifies fragment begin and end tags.
+ */
 
 /** \fn void PadTools::PadFragment::moveEnd(int nbOfChars);
-  */
+ * Moves the end of the fragment of \e nbOfChars. The length is modified.
+ */
 
 /** \fn void PadTools::PadFragment::setOutputStart(const int pos)
-  */
+ * Defines the position of the fragment in the token output document.
+ */
 
 /** \fn void PadTools::PadFragment::setOutputEnd(const int pos)
-  */
+ * Defines the position of the fragment in the token output document.
+ */
 
 /** \fn int PadTools::PadFragment::outputStart() const
-  Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+ * Returns the start position in the output QTextDocument.
+ * This is processed by the toOutput() member.
+ */
 
 /** \fn int PadTools::PadFragment::outputEnd() const
-  Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+ * Returns the end position in the output QTextDocument.
+ * This is processed by the toOutput() member.
+ */
 
-/** \fn void PadTools::PadFragment::resetOutputRange() {_outputStart=-1; _outputEnd=-1; foreach(PadFragment*f,_fragments) f->resetOutputRange();}
-  Removes (set to -1) all output limits to the object and its children. */
+/** \fn void PadTools::PadFragment::resetOutputRange()
+ * Removes (set to -1) all output limits to the object and its children.
+ */
 
-/** \fn bool PadTools::PadFragment::containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
-  Contains raw source \e position */
+/** \fn bool PadTools::PadFragment::containsRawPosition(const int pos) const
+ * Returns true if the fragment contains raw source \e position (position in the raw document).
+ */
 
-/** \fn bool PadTools::PadFragment::containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
-  Contains output \e position */
+/** \fn bool PadTools::PadFragment::containsOutputPosition(const int pos) const
+ * Returns true idf the fragment contains the output \e position
+ */
 
 /** \fn void PadTools::PadFragment::setToolTip(const QString &tooltip)
-  */
+ * Define the tooltip of the fragment
+ */
 
 /** \fn const QString &PadTools::PadFragment::toolTip() const
-  */
+ * Returns the tooltip of the fragment
+ */
 
 /** \fn void PadTools::PadFragment::setUserData(const QString &key, const QVariant &value)
-  */
+ * Stores some user data with a specific \e key related to a \e value.
+ */
 
 /** \fn QVariant PadTools::PadFragment::userData(const QString &key) const
-  */
+ * Returns the user date.
+ */
 
 /** \fn virtual void PadTools::PadFragment::run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
-  Run this fragment over some tokens inside the output QTextDocument (which is initially a clone of the source). */
+ * \obsolete
+ * Run this fragment over some tokens inside the output QTextDocument (which is initially a clone of the source).
+ */
+
+/** \fn virtual void toOutput(Core::ITokenPool *pool, PadDocument *document) = 0;
+ * Replaces the tokens from the \e pool in a PadDocument.
+ */
+
+/** \fn virtual void toRaw(PadDocument *doc) = 0;
+ * Transform a PadDocument to a pure raw source.
+ */
 
 /** \fn virtual QList<PadFragment*> PadTools::PadFragment::children() const
-   Returns the list of PadTools::PadFragment children */
-
-
+ * Returns the list of PadTools::PadFragment children
+ */
 
 #include "pad_fragment.h"
 
