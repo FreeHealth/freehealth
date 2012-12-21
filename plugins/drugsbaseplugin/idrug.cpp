@@ -544,28 +544,28 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     switch (fieldref)
     {
     case Prescription::IntakesTo :
-        {
-            if (!d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
-                return QVariant();
-            break;
-        }
+    {
+        if (!d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
+            return QVariant();
+        break;
+    }
     case Prescription::DurationTo :
-        {
-            if (!d_pres->m_PrescriptionValues.value(Prescription::DurationUsesFromTo,false).toBool())
-                return QVariant();
-            break;
-        }
+    {
+        if (!d_pres->m_PrescriptionValues.value(Prescription::DurationUsesFromTo,false).toBool())
+            return QVariant();
+        break;
+    }
     case Prescription::Route :
-        {
-            // TODO: code here
-//            QString lang = QLocale().name().left(2);
-//            typedef QPair<QString, QString> pair;
-//            foreach(const pair &p, d_pres->m_Routes.values(d->m_PrescriptionValues.value(Prescription::Route,-1).toInt())) {
-//                if (p.first == lang)
-//                    return p.second;
-//            }
-            break;
-        }
+    {
+        // TODO: code here
+        //            QString lang = QLocale().name().left(2);
+        //            typedef QPair<QString, QString> pair;
+        //            foreach(const pair &p, d_pres->m_Routes.values(d->m_PrescriptionValues.value(Prescription::Route,-1).toInt())) {
+        //                if (p.first == lang)
+        //                    return p.second;
+        //            }
+        break;
+    }
     }
     return d_pres->m_PrescriptionValues.value(fieldref);
 }
