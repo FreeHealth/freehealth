@@ -43,10 +43,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
-
-#include <accountbaseplugin/constants.h>
 
 #include <QCompleter>
 #include <QDir>
@@ -80,7 +78,10 @@ MedicalProcedurePage::~MedicalProcedurePage()
 QString MedicalProcedurePage::id() const { return objectName(); }
 QString MedicalProcedurePage::displayName() const { return tkTr(Trans::Constants::MEDICAL_PROCEDURES); }
 QString MedicalProcedurePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int MedicalProcedurePage::sortIndex() const {return 70;}
+int MedicalProcedurePage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 70;
+}
 
 void MedicalProcedurePage::resetToDefaults()
 {

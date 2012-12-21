@@ -32,6 +32,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -59,7 +60,10 @@ QString ProtocolPreferencesPage::id() const { return objectName(); }
 QString ProtocolPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROTOCOLS); }
 QString ProtocolPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString ProtocolPreferencesPage::title() const {return tr("Drug's protocole preferences");}
-int ProtocolPreferencesPage::sortIndex() const {return 70;}
+int ProtocolPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_DRUGS + 70;
+}
 
 void ProtocolPreferencesPage::resetToDefaults()
 {

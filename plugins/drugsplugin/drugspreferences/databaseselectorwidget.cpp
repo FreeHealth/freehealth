@@ -39,6 +39,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -76,7 +77,10 @@ QString DrugsDatabaseSelectorPage::id() const { return objectName(); }
 QString DrugsDatabaseSelectorPage::displayName() const { return tr("Database selector"); }
 QString DrugsDatabaseSelectorPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsDatabaseSelectorPage::title() const {return tr("Drug database selector");}
-int DrugsDatabaseSelectorPage::sortIndex() const {return 20;}
+int DrugsDatabaseSelectorPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_DRUGS + 10;
+}
 
 void DrugsDatabaseSelectorPage::resetToDefaults()
 {

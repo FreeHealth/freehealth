@@ -31,6 +31,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -151,7 +152,10 @@ QString DrugEnginesPreferencesPage::id() const { return objectName(); }
 QString DrugEnginesPreferencesPage::displayName() const { return tr("Interaction engines"); }
 QString DrugEnginesPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugEnginesPreferencesPage::title() const {return tr("Interaction engines");}
-int DrugEnginesPreferencesPage::sortIndex() const {return 30;}
+int DrugEnginesPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_DRUGS + 20;
+}
 
 void DrugEnginesPreferencesPage::resetToDefaults()
 {

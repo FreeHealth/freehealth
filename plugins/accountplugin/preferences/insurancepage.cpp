@@ -43,7 +43,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
 #include "ui_insurancepage.h"
@@ -82,7 +82,10 @@ InsurancePage::~InsurancePage()
 QString InsurancePage::id() const { return objectName(); }
 QString InsurancePage::displayName() const { return tkTr(Trans::Constants::INSURANCE); }
 QString InsurancePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int InsurancePage::sortIndex() const {return 60;}
+int InsurancePage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 60;
+}
 
 void InsurancePage::resetToDefaults()
 {

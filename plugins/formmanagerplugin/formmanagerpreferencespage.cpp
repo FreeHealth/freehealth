@@ -36,6 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <translationutils/constanttranslations.h>
 
@@ -74,7 +75,7 @@ QString FormPreferencesFileSelectorPage::category() const { return tkTr(Trans::C
 QString FormPreferencesFileSelectorPage::title() const {return tr("Patient file form selector");}
 int FormPreferencesFileSelectorPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_FORMS;
 }
 
 void FormPreferencesFileSelectorPage::resetToDefaults()
@@ -173,7 +174,7 @@ QString FormPreferencesPage::category() const { return tkTr(Trans::Constants::FO
 QString FormPreferencesPage::title() const {return tr("Form and episode tree viewer");}
 int FormPreferencesPage::sortIndex() const
 {
-    return 10;
+    return Core::Constants::OPTIONINDEX_FORMS + 10;
 }
 
 void FormPreferencesPage::resetToDefaults()

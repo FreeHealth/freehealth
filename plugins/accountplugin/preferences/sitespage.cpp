@@ -44,7 +44,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
 #include "ui_sitespage.h"
@@ -82,7 +82,10 @@ SitesPage::~SitesPage()
 QString SitesPage::id() const { return objectName(); }
 QString SitesPage::displayName() const { return tkTr(Trans::Constants::SITES); }
 QString SitesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int SitesPage::sortIndex() const {return 80;}
+int SitesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 80;
+}
 
 void SitesPage::resetToDefaults()
 {

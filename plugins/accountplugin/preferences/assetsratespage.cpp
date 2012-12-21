@@ -47,6 +47,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_menus.h>
 
 #include <coreplugin/constants_icons.h>
 
@@ -86,7 +87,10 @@ AssetsRatesPage::~AssetsRatesPage()
 QString AssetsRatesPage::id() const { return objectName(); }
 QString AssetsRatesPage::displayName() const { return tkTr(Trans::Constants::ASSETSRATES); }
 QString AssetsRatesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int AssetsRatesPage::sortIndex() const {return 20;}
+int AssetsRatesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 10;
+}
 
 void AssetsRatesPage::resetToDefaults()
 {

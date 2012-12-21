@@ -40,6 +40,7 @@
 #include <coreplugin/theme.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 using namespace Trans::ConstantTranslations;
 using namespace Core;
@@ -127,7 +128,10 @@ QString ApplicationGeneralPreferencesPage::category() const
     return tkTr(Trans::Constants::GENERAL_PREFERENCES).remove("&");
 }
 
-int ApplicationGeneralPreferencesPage::sortIndex() const {return 0;}
+int ApplicationGeneralPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_MAIN;
+}
 
 void ApplicationGeneralPreferencesPage::resetToDefaults()
 {

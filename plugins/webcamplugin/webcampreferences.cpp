@@ -27,15 +27,16 @@
 #include "webcampreferences.h"
 #include "ui_webcampreferences.h"
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/constants_menus.h>
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <extensionsystem/pluginmanager.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <extensionsystem/pluginmanager.h>
 
 #include <QTextStream>
 
@@ -61,8 +62,6 @@ struct CamProperties {
 };
 
 /* ----------------------  Preferences Widget ---------------------- */
-
-
 /*! Creates a new preferences widget with a given parent. */
 WebcamPreferencesWidget::WebcamPreferencesWidget(QWidget *parent) :
     QWidget(parent),
@@ -79,7 +78,6 @@ WebcamPreferencesWidget::~WebcamPreferencesWidget()
 /*! Sets data of a changed data model to the ui's widgets. */
 void WebcamPreferencesWidget::setDataToUi()
 {
-
 }
 
 QString WebcamPreferencesWidget::searchKeywords() const
@@ -176,7 +174,7 @@ QString WebcamPreferencesPage::category() const
 
 int WebcamPreferencesPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_WEBCAM;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
@@ -238,8 +236,3 @@ QWidget *WebcamPreferencesPage::createPage(QWidget *parent)
         m_searchKeywords = m_Widget->searchKeywords();
     return m_Widget;
 }
-
-
-
-
-

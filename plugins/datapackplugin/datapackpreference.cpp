@@ -30,6 +30,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
 #include <translationutils/constants.h>
@@ -76,7 +77,10 @@ QString DataPackPreferencePage::id() const { return objectName(); }
 QString DataPackPreferencePage::displayName() const { return tkTr(Trans::Constants::DATAPACK_MANAGER); }
 QString DataPackPreferencePage::category() const { return tkTr(Trans::Constants::DATAPACK); }
 QString DataPackPreferencePage::title() const {return tkTr(Trans::Constants::DATAPACK_MANAGER); }
-int DataPackPreferencePage::sortIndex() const {return 0;}
+int DataPackPreferencePage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_MAIN + 20;
+}
 
 void DataPackPreferencePage::resetToDefaults()
 {

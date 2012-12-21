@@ -34,7 +34,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/theme.h>
 #include <coreplugin/constants_tokensandsettings.h>
-
+#include <coreplugin/constants_menus.h>
 
 // TODO: create a virtual user creator
 
@@ -62,7 +62,7 @@ QString VirtualPatientBasePage::category() const { return tkTr(Trans::Constants:
 QString VirtualPatientBasePage::title() const {return tr("Virtual database");}
 int VirtualPatientBasePage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_PATIENTS;
 }
 
 void VirtualPatientBasePage::finish() { delete m_Widget; }

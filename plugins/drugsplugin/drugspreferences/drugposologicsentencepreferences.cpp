@@ -44,6 +44,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipadtools.h>
+#include <coreplugin/constants_menus.h>
 
 #include <QPixmap>
 
@@ -282,7 +283,10 @@ QString DrugPosologicSentencePage::id() const { return objectName(); }
 QString DrugPosologicSentencePage::displayName() const { return tr("Posologic sentence"); }
 QString DrugPosologicSentencePage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugPosologicSentencePage::title() const {return tr("Posologic sentence");}
-int DrugPosologicSentencePage::sortIndex() const {return 30;}
+int DrugPosologicSentencePage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_DRUGS + 30;
+}
 
 void DrugPosologicSentencePage::resetToDefaults()
 {

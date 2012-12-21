@@ -33,6 +33,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <QDebug>
 
@@ -77,7 +78,7 @@ QString AgendaPreferencesPage::title() const
 
 int AgendaPreferencesPage::sortIndex() const
 {
-    return 1000;
+    return Core::Constants::OPTIONINDEX_AGENDA;
 }
 
 

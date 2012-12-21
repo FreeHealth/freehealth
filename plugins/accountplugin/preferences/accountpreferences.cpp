@@ -47,6 +47,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_menus.h>
 
 #include <texteditorplugin/texteditor.h>
 
@@ -78,7 +79,10 @@ AccountUserOptionsPage::~AccountUserOptionsPage()
 QString AccountUserOptionsPage::id() const { return objectName(); }
 QString AccountUserOptionsPage::displayName() const { return tkTr(Trans::Constants::USER); }
 QString AccountUserOptionsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int AccountUserOptionsPage::sortIndex() const {return 0;}
+int AccountUserOptionsPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 1;
+}
 
 void AccountUserOptionsPage::resetToDefaults()
 {
@@ -199,7 +203,10 @@ AccountDatabaseDefaultsPage::~AccountDatabaseDefaultsPage()
 QString AccountDatabaseDefaultsPage::id() const { return objectName(); }
 QString AccountDatabaseDefaultsPage::displayName() const { return tkTr(Trans::Constants::DEFAULTS); }
 QString AccountDatabaseDefaultsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int AccountDatabaseDefaultsPage::sortIndex() const {return 10;}
+int AccountDatabaseDefaultsPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 10;
+}
 
 void AccountDatabaseDefaultsPage::resetToDefaults()
 {

@@ -35,7 +35,6 @@
 #include <accountbaseplugin/bankaccountmodel.h>
 #include <accountbaseplugin/constants.h>
 
-
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
@@ -45,6 +44,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 enum { WarnDebugMessage = false };
 
@@ -73,7 +73,10 @@ BankDetailsPage::~BankDetailsPage()
 QString BankDetailsPage::id() const { return objectName(); }
 QString BankDetailsPage::displayName() const { return tkTr(Trans::Constants::BANK_DETAILS); }
 QString BankDetailsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int BankDetailsPage::sortIndex() const {return 40;}
+int BankDetailsPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 40;
+}
 
 void BankDetailsPage::resetToDefaults()
 {

@@ -38,6 +38,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/iphotoprovider.h>
+#include <coreplugin/constants_menus.h>
 
 using namespace Patients;
 using namespace Internal;
@@ -75,7 +76,7 @@ QString PatientBasePreferencesPage::title() const {
 
 int PatientBasePreferencesPage::sortIndex() const
 {
-    return 10;
+    return Core::Constants::OPTIONINDEX_PATIENTS + 10;
 }
 
 void PatientBasePreferencesPage::resetToDefaults()

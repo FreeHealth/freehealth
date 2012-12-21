@@ -31,6 +31,7 @@
 #include <coreplugin/theme.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
 #include <utils/serializer.h>
@@ -167,7 +168,10 @@ QString ProxyPreferencesPage::id() const { return objectName(); }
 QString ProxyPreferencesPage::displayName() const { return tkTr(Trans::Constants::PROXY); }
 QString ProxyPreferencesPage::title() const {return tkTr(Trans::Constants::INTERNET_CONNECTION_PREFERENCES);}
 QString ProxyPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
-int ProxyPreferencesPage::sortIndex() const {return 1;}
+int ProxyPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_MAIN + 10;
+}
 
 void ProxyPreferencesPage::resetToDefaults()
 {

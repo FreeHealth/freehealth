@@ -309,6 +309,7 @@ const char * const MODE_ACCOUNT           = "account";
 const char * const MODE_AGENDA            = "agenda";
 const char * const MODE_USERMANAGER       = "usermanager";
 
+// Mode priorities
 const int          P_MODE_PATIENT_SEARCH  = 1000;
 const int          P_MODE_AGENDA          = 900;
 const int          P_MODE_PATIENT_HISTORY = 800;
@@ -316,6 +317,19 @@ const int          P_MODE_PATIENT_DRUGS   = 600;
 const int          P_MODE_PATIENT_FILE    = 400;
 const int          P_MODE_USERMANAGER     = 300;
 const int          P_MODE_ACCOUNT         = 200;
+
+// Options page sortIndex (per categories)
+const int          OPTIONINDEX_MAIN         = 0;
+const int          OPTIONINDEX_PRINT        = 1000;
+const int          OPTIONINDEX_AGENDA       = 2000;
+const int          OPTIONINDEX_PATIENTS     = 3000;
+const int          OPTIONINDEX_ALERTS       = 4000;
+const int          OPTIONINDEX_PMHX         = 5000;
+const int          OPTIONINDEX_FORMS        = 6000;
+const int          OPTIONINDEX_DRUGS        = 7000;
+const int          OPTIONINDEX_TEMPLATES    = 8000;
+const int          OPTIONINDEX_WEBCAM       = 9000;
+const int          OPTIONINDEX_ACCOUNT      = 10000;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";

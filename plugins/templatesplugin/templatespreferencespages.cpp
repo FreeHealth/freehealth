@@ -31,6 +31,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -63,7 +64,10 @@ QString TemplatesPreferencesPage::id() const { return objectName(); }
 QString TemplatesPreferencesPage::displayName() const { return tkTr(Trans::Constants::TEMPLATES); }
 QString TemplatesPreferencesPage::category() const { return tkTr(Trans::Constants::TEMPLATES); }
 QString TemplatesPreferencesPage::title() const {return tr("Templates preferences"); }
-int TemplatesPreferencesPage::sortIndex() const {return 0;}
+int TemplatesPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_TEMPLATES;
+}
 
 void TemplatesPreferencesPage::resetToDefaults()
 {

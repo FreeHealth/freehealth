@@ -34,6 +34,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <QPrinterInfo>
 #include <QFileDialog>
@@ -60,7 +61,10 @@ QString PrinterPreferencesPage::id() const { return objectName(); }
 QString PrinterPreferencesPage::displayName() const { return tkTr(Trans::Constants::DEFAULTS); }
 QString PrinterPreferencesPage::category() const { return tkTr(Trans::Constants::PRINTING); }
 QString PrinterPreferencesPage::title() const {return tr("Printer preferences");}
-int PrinterPreferencesPage::sortIndex() const {return 0;}
+int PrinterPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_PRINT;
+}
 
 void PrinterPreferencesPage::resetToDefaults()
 {

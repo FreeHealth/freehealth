@@ -32,6 +32,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -67,7 +68,7 @@ QString PmhPreferencesPage::category() const { return tkTr(Trans::Constants::PMH
 QString PmhPreferencesPage::title() const {return tkTr(Trans::Constants::PMHX_PREFERENCES);}
 int PmhPreferencesPage::sortIndex() const
 {
-    return 10;
+    return Core::Constants::OPTIONINDEX_PMHX + 10;
 }
 
 void PmhPreferencesPage::resetToDefaults()

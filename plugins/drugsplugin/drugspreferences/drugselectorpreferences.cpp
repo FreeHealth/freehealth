@@ -42,6 +42,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_menus.h>
 
 #include <texteditorplugin/texteditor.h>
 
@@ -145,7 +146,10 @@ QString DrugsSelectorOptionsPage::id() const { return objectName(); }
 QString DrugsSelectorOptionsPage::displayName() const { return tr("Selector"); }
 QString DrugsSelectorOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsSelectorOptionsPage::title() const {return tr("Drug's selector preferences");}
-int DrugsSelectorOptionsPage::sortIndex() const {return 40;}
+int DrugsSelectorOptionsPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_DRUGS + 40;
+}
 
 void DrugsSelectorOptionsPage::resetToDefaults()
 {

@@ -43,7 +43,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
 #include <QFile>
@@ -80,7 +80,10 @@ DistanceRulesPage::~DistanceRulesPage()
 QString DistanceRulesPage::id() const { return objectName(); }
 QString DistanceRulesPage::displayName() const { return tkTr(Trans::Constants::DISTRULES); }
 QString DistanceRulesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int DistanceRulesPage::sortIndex() const {return 50;}
+int DistanceRulesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 50;
+}
 
 void DistanceRulesPage::resetToDefaults()
 {

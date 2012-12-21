@@ -43,7 +43,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
 #include <QFile>
@@ -78,7 +78,10 @@ PercentagesPage::~PercentagesPage()
 QString PercentagesPage::id() const { return objectName(); }
 QString PercentagesPage::displayName() const { return tkTr(Trans::Constants::PERCENT); }
 QString PercentagesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int PercentagesPage::sortIndex() const {return 70;}
+int PercentagesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 70;
+}
 
 void PercentagesPage::resetToDefaults()
 {

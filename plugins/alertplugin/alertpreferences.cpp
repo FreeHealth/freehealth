@@ -33,6 +33,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 using namespace Alert;
 using namespace Internal;
@@ -126,7 +127,7 @@ QString AlertPreferencesPage::category() const
 
 int AlertPreferencesPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_ALERTS;
 }
 
 

@@ -124,13 +124,15 @@ void PageWidget::setupUi(bool sortCategoryView)
     }
 
     // sort pages
-    qSort(m_pages.begin(), m_pages.end(), Core::IGenericPage::lessThan);
+    qSort(m_pages.begin(), m_pages.end(), Core::IGenericPage::sortIndexLessThan);
 
     QMap<QString, QTreeWidgetItem *> categories;
     QFont bold;
     bold.setBold(true);
     int index = 0;
     foreach(IGenericPage *page, m_pages) {
+        qWarning() << page->category() << page->displayName() << page->sortIndex();
+
         PageData pageData;
         pageData.index = index;
         pageData.category = page->category();

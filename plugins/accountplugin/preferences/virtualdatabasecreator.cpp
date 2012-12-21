@@ -46,6 +46,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_menus.h>
 
 #include <QProgressDialog>
 
@@ -178,7 +179,10 @@ QString VirtualDatabaseCreatorPage::id() const { return objectName(); }
 QString VirtualDatabaseCreatorPage::displayName() const { return tr("Virtual database creator"); }
 QString VirtualDatabaseCreatorPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
 QString VirtualDatabaseCreatorPage::title() const {return tr("Accountancy virtual database creator");}
-int VirtualDatabaseCreatorPage::sortIndex() const {return 1000;}
+int VirtualDatabaseCreatorPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 90;
+}
 
 void VirtualDatabaseCreatorPage::resetToDefaults()
 {

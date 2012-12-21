@@ -28,13 +28,15 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace BaseWidgets;
-using namespace BaseWidgets::Internal;
+using namespace Internal;
 
 namespace {
     const char *const SETTINGS_COMPACTVIEW_SPACING = "BaseFormWidgets/CompactView/Spacing";
@@ -98,7 +100,7 @@ QString BaseFormWidgetsOptionsPage::category() const
 
 int BaseFormWidgetsOptionsPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_FORMS;
 }
 
 void BaseFormWidgetsOptionsPage::resetToDefaults()

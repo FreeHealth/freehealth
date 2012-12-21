@@ -43,6 +43,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 
 #include <QDir>
 #include <QFile>
@@ -74,7 +75,10 @@ AvailableMovementPage::~AvailableMovementPage()
 QString AvailableMovementPage::id() const { return objectName(); }
 QString AvailableMovementPage::displayName() const { return tkTr(Trans::Constants::AVAILABLE_MOVEMENTS); }
 QString AvailableMovementPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
-int AvailableMovementPage::sortIndex() const {return 30;}
+int AvailableMovementPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_ACCOUNT + 30;
+}
 
 void AvailableMovementPage::resetToDefaults()
 {
