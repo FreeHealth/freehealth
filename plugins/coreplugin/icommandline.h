@@ -53,6 +53,7 @@ public:
         ResetUserPreferences,
         UserClearLogin,
         UserClearPassword,
+        CheckFormUpdates,
         MaxParam
     };
 

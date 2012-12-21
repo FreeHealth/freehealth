@@ -59,6 +59,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/iscriptmanager.h>
+#include <coreplugin/icommandline.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
@@ -102,6 +103,7 @@ using namespace Form::Internal;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
@@ -687,6 +689,9 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
 
 void FormManager::checkFormUpdates()
 {
+    if (!commandLine()->value(Core::ICommandLine::CheckFormUpdates).toBool())
+        return;
+
     // get all form readers (IFormIO)
     QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
     if (list.isEmpty()) {

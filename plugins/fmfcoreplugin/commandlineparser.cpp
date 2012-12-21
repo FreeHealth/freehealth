@@ -46,6 +46,7 @@ CommandLine::CommandLine() : ICommandLine()
     ref.insert(ResetUserPreferences, "--reset-users-preferences");
     ref.insert(UserClearLogin,       "--user-clear-log");
     ref.insert(UserClearPassword,    "--user-clear-password");
+    ref.insert(CheckFormUpdates,     "--dont-check-form-update");
 
     // set default values
     params.insert(Chrono, false);
@@ -56,6 +57,7 @@ CommandLine::CommandLine() : ICommandLine()
     params.insert(ResetUserPreferences, false);
     params.insert(UserClearLogin, QVariant());
     params.insert(UserClearPassword, QVariant());
+    params.insert(CheckFormUpdates, true);
 
     // read command line params
     QStringList args = qApp->arguments();
@@ -77,6 +79,7 @@ CommandLine::CommandLine() : ICommandLine()
         case ResetUserPreferences : params.insert(ResetUserPreferences, true); break;
         case UserClearLogin: params.insert(CommandLine::UserClearLogin, a.mid(a.indexOf("=")+1).remove("\"")); break;
         case UserClearPassword: params.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
+        case CheckFormUpdates: params.insert(CommandLine::CheckFormUpdates, false); break;
         default : break;
         }
     }
