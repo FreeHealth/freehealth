@@ -118,9 +118,12 @@ public:
     virtual ~IToken() {}
 
     virtual QString tooltip() const;
+    virtual int sortIndex() const {return 0;}
 
     virtual QVariant testValue() const = 0;
     virtual QVariant value() const = 0;
+
+    static bool sortIndexLessThan(IToken *one, IToken *two) {return one->sortIndex() < two->sortIndex();}
 };
 
 class CORE_EXPORT ITokenPool : public QObject
