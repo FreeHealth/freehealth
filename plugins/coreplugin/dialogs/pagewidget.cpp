@@ -131,8 +131,6 @@ void PageWidget::setupUi(bool sortCategoryView)
     bold.setBold(true);
     int index = 0;
     foreach(IGenericPage *page, m_pages) {
-        qWarning() << page->category() << page->displayName() << page->sortIndex();
-
         PageData pageData;
         pageData.index = index;
         pageData.category = page->category();
