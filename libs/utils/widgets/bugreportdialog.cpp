@@ -97,11 +97,11 @@ public:
         report << pairs(ui->emailLabel->text().remove(":").remove("&"), ui->emailEdit->text());
         report << pairs(ui->dateLabel->text().remove(":").remove("&"), ui->dateValue->text());
         report << pairs(ui->applicationLabel->text().remove(":").remove("&"), ui->applicationValue->text());
-        report << pairs(ui->osLabel->text().remove(":").remove("&"), ui->osValue->text());
+        report << pairs(ui->osLabel->text().remove(":").remove("&"), Utils::lineWrapString(ui->osValue->text(), 50));
         report << pairs(ui->severityLabel->text().remove(":").remove("&"), ui->severityCombo->currentText());
         report << pairs("---", "");
         report << pairs(ui->catLabel->text().remove(":").remove("&"), ui->categoryCombo->currentText());
-        report << pairs(ui->descrLabel->text().remove(":").remove("&"), ui->descrEdit->toPlainText());
+        report << pairs(ui->descrLabel->text().remove(":").remove("&"), Utils::lineWrapString(ui->descrEdit->toPlainText(), 50));
         // find the max length
         int max = 0;
         foreach(const pairs &pair, report) {
@@ -114,7 +114,7 @@ public:
                 continue;
             }
             QString second = " " + pair.second;
-            second = second.replace("\n", "\n" + QString().fill(' ', max+2));
+            second = second.replace("\n", "\n" + QString().fill(' ', max+5));
             lines << "  " + pair.first.leftJustified(max+2, QLatin1Char('.')) + second;
         }
         return lines;
@@ -162,10 +162,8 @@ void BugReportDialog::setBugCategories(const QStringList &cat)
  */
 void BugReportDialog::sendBugReport()
 {
-    // TODO: code
     QString fullmsg = "\n\n" + d->prepareBugReport().join("\n");
     fullmsg += "\n\n" + Utils::Log::toString("");
-
     QDesktopServices::openUrl(QString("mailto:freemedforms-dev@googlegroups.com?subject=%1&body=%2")
             .arg("Bug Report: " + qApp->applicationName() + qApp->applicationVersion())
             .arg(fullmsg));

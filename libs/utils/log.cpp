@@ -42,6 +42,7 @@
 */
 
 #include "log.h"
+#include "global.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
@@ -226,51 +227,34 @@ QString Log::saveLog(const QString &fileName)
 /** \brief Transforms log to a readable wiki string. */
 QString Log::toString(const QString &settingsLog)
 {
-    QString tmp;
-    tmp = "===== ";
-    tmp += QCoreApplication::translate("Log", "LOG");
-    tmp += "=====\n\n";
-
-    // add logs
-    tmp.append("====");
-    tmp.append(QCoreApplication::translate("Log", "ERRORS"));
-    tmp.append("====\n");
-    QString prec;
-
-    tmp += "\n^ Object ^ Message ^ Date ^";
+    Q_UNUSED(settingsLog);
+    // Get all errors
+    typedef QPair<QString, QString> pairs;
+    QList<pairs> report;
     foreach(const LogData &v, m_Messages) {
         if (v.isError()) {
-            if (v.object!=prec) {
-                tmp += "\n| " + v.object + " |";
-                prec = v.object;
-            } else {
-                tmp += "\n| ::: |";
-            }
-            tmp += "<nowiki>" + v.message + "</nowiki> |" + v.date.toString("dd/MM/yyyy hh:mm:ss:ms") + "|";
-        }
-    }
-    tmp.append("\n====");
-    tmp.append(QCoreApplication::translate("Log", "MESSAGES"));
-    tmp.append("====\n");
-    prec.clear();
-
-    tmp += "\n^ Object ^ Message ^ Date ^";
-    foreach(const LogData &v, m_Messages) {
-        if (!v.isError()) {
-            if (v.object!=prec) {
-                tmp += "\n| " + v.object + " |";
-                prec = v.object;
-            } else {
-                tmp += "\n| ::: |";
-            }
-            tmp += "<nowiki>" + v.message + "</nowiki> |" + v.date.toString("dd/MM/yyyy hh:mm:ss:ms") + "|";
+            report << pairs(v.object, Utils::lineWrapString(v.message, 50));
         }
     }
 
-    // add settings
-    tmp += "\n\n\n" + settingsLog + "\n";
-
-    return tmp;
+    // find the max length
+    int max = 0;
+    foreach(const pairs &pair, report) {
+        max = qMax(max, pair.first.length());
+    }
+    // justify test && create line
+    QStringList lines;
+    lines << QCoreApplication::translate("Log", "*****  Registered Errors  *****\n");
+    foreach(const pairs &pair, report) {
+        if (pair.first == "---") {
+            lines << "-------------------------";
+            continue;
+        }
+        QString second = " " + pair.second;
+        second = second.replace("\n", "\n" + QString().fill(' ', max+5));
+        lines << "  " + pair.first.leftJustified(max+2, QLatin1Char('.')) + second;
+    }
+    return lines.join("\n");
 }
 
 /**
