@@ -680,7 +680,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString version;
     if (needUpdate) {
         version = versionUpdater().xmlVersion(xmlContent);
-        LOG_FOR(q, "Reading old prescription file: version " + version);
+        LOG("Reading old prescription file: version " + version);
         xml = versionUpdater().updateXmlIOContent(xmlContent);
     }
 
@@ -758,7 +758,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     Q_EMIT m->numberOfRowsChanged();
 
     // small debug information
-    LOG_FOR(q, tr("Xml prescription successfully read."));
+    LOG(tr("Xml prescription successfully read."));
     return true;
 }
 
