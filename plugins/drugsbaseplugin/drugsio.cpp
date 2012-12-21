@@ -294,7 +294,7 @@ public:
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
         _tokens << t;
         if (padTools() && padTools()->tokenPool()) {
-            LOG_FOR("DrugsIO", "Adding prescription tokens");
+            LOG_FOR(q, "Adding prescription tokens");
             padTools()->tokenPool()->addTokens(_tokens);
         }
 #endif
@@ -680,7 +680,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString version;
     if (needUpdate) {
         version = versionUpdater().xmlVersion(xmlContent);
-        LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file: version " + version);
+        LOG_FOR(q, "Reading old prescription file: version " + version);
         xml = versionUpdater().updateXmlIOContent(xmlContent);
     }
 
@@ -758,7 +758,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     Q_EMIT m->numberOfRowsChanged();
 
     // small debug information
-    LOG_FOR("DrugsIO", tr("Xml prescription successfully read."));
+    LOG_FOR(q, tr("Xml prescription successfully read."));
     return true;
 }
 
