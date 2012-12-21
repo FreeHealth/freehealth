@@ -61,19 +61,11 @@ class %PluginName%Context : public Core::IContext
     Q_OBJECT
 public:
     %PluginName%Context(%PluginName%ContextualWidget *w) :
-        Core::IContext(w), wgt(w)
+        Core::IContext(w)
     {
         setObjectName("%PluginName%Context");
+        setWidget(w);
     }
-
-    void setContext(QList<int> c) { ctx = c; }
-    void addContext(QList<int> c) { ctx.append(c); }
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-
-private:
-    %PluginName%ContextualWidget *wgt;
-    QList<int> ctx;
 };
 
 } // namespace Internal

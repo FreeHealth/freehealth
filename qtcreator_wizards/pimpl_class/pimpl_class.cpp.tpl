@@ -99,7 +99,11 @@ private:
  * Singleton access. This object creates its instance in the Ctor. So you should never
  * request the ctor more than once.
  */
+@if "%Internal%" == "true"
+%PluginNamespace:c%::Internal::%ClassName:c% &%PluginNamespace:c%::Internal::%ClassName:c%::instance() // static
+@else
 %PluginNamespace:c%::%ClassName:c% &%PluginNamespace:c%::%ClassName:c%::instance() // static
+@endif
 {
     Q_ASSERT(_instance);
     return *_instance;

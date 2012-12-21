@@ -47,21 +47,6 @@ namespace Internal {
 class %PluginName%ActionHandler;
 class %PluginName%ContextualWidget;
 
-class %PluginName%ContextualWidgetManager : public %PluginName%ActionHandler
-{
-    Q_OBJECT
-
-public:
-    explicit %PluginName%ContextualWidgetManager(QObject *parent = 0);
-    ~%PluginName%ContextualWidgetManager();
-
-    %PluginName%ContextualWidget *currentView() const;
-
-private Q_SLOTS:
-    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
-};
-
-
 class %PluginName%ActionHandler : public QObject
 {
     Q_OBJECT
@@ -83,6 +68,20 @@ protected:
     QAction *aShowDatabaseInformation;
 
     QPointer<%PluginName%ContextualWidget> m_CurrentView;
+};
+
+class %PluginName%ContextualWidgetManager : public %PluginName%ActionHandler
+{
+    Q_OBJECT
+
+public:
+    explicit %PluginName%ContextualWidgetManager(QObject *parent = 0);
+    ~%PluginName%ContextualWidgetManager();
+
+    %PluginName%ContextualWidget *currentView() const;
+
+private Q_SLOTS:
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
 } // namespace Internal

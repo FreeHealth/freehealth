@@ -49,6 +49,7 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
 
+#include <QAction>
 #include <QDialog>
 #include <QGridLayout>
 #include <QTreeWidget>
@@ -174,13 +175,10 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object, 
     m_CurrentView(0)
 {
     setObjectName("%PluginName%ActionHandler");
-
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(%PluginName%::Constants::C_%PluginName:u%_PLUGINS);
-    QList<int> allContexts = QList<int>() << uid->uniqueIdentifier(Form::Constants::C_FORM_PLUGINS) << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(%PluginName%::Constants::C_%PluginName:u%_PLUGINS);
+    Core::Context global(Core::Constants::C_GLOBAL);
 
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(%PluginName%::Constants::M_PLUGIN_%PluginName:u%);
