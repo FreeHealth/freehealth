@@ -94,9 +94,6 @@ public:
                                       "<span style=\"color:gray;font-size:small\">%2</span>")
                               .arg(ns.humanReadableName())
                               .arg(ns.tooltip().replace("/n", "<br />")));
-
-                qWarning() << item->text();
-
             }
         } else {
             item->setText(ns.humanReadableName());
