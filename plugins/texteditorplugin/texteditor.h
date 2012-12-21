@@ -43,13 +43,15 @@ class QMenu;
 
 /**
  * \file texteditor.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 13 Apr 2012
+ * \author Eric MAEKER
+ * \version 0.8.2
+ * \date 21 Dec 2012
 */
 
+namespace Core {
+class Context;
+}
 namespace Editor {
-
 namespace Internal {
 class TextEditorPrivate;
 class EditorActionHandler;
@@ -90,6 +92,8 @@ public:
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();
     void setTypes(Types type);
+
+    void addContext(const Core::Context &context);
 
     virtual QTextEdit *textEdit() const;
 

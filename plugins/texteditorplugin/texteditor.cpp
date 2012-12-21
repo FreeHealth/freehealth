@@ -369,6 +369,15 @@ void TextEditor::setTypes(Types type)
     Core::ICore::instance()->contextManager()->updateContext();
 }
 
+/** Adds a Core::Context to this contextual widget */
+void TextEditor::addContext(const Core::Context &context)
+{
+    Core::Context ctx = d->m_Context->context();
+    ctx.add(context);
+    d->m_Context->setContext(ctx);
+    Core::ICore::instance()->contextManager()->updateContext();
+}
+
 /** Creates the context menu for the Editor::TextEditor according to its Editor::TextEditor::Type. The menu is not executed. */
 QMenu *TextEditor::getContextMenu()
 {
