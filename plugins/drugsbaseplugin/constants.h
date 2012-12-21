@@ -257,6 +257,13 @@ namespace Constants {
     const char * const  MANAGEMENT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Management");
     const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions");
 
+    // Tokens translations
+    const char * const  TOKEN_TEXT_PRESCRIPTION = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
+    const char * const  TOKEN_TEXT_DRUG = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug");
+    const char * const  TOKEN_TEXT_PROTOCOL = QT_TRANSLATE_NOOP("mfDrugsConstants", "Protocol");
+    const char * const  TOKEN_TOOLTIP_PRESCRIPTION = QT_TRANSLATE_NOOP("mfDrugsConstants", "This token namespace contains all prescription's' related tokens.\n"
+                                                                       "It includes the drug brand name and all the items of your protocol.");
+
      /*: This is the short name of the drug-drug interactions engine. */
     const char * const  DDI_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "DDI");
 
