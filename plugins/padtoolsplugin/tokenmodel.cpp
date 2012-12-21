@@ -111,8 +111,9 @@ public:
 
         // Add tokens to namespaces
         _tokens = tokenPool()->tokens();
-        for(int i=0; i < _tokens.count(); ++i) {
-            Core::IToken *token = _tokens.at(i);
+        qSort(_tokens.begin(), _tokens.end(), Core::IToken::sortIndexLessThan);
+
+        foreach(Core::IToken *token, _tokens) {
             QStringList ns = tokenNamespaces(token->uid());
             QString name;
             token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
@@ -149,7 +150,7 @@ public:
 
 public:
     QMap<QString, QVariant> m_Tokens;
-    QVector<Core::IToken *> _tokens;
+    QList<Core::IToken *> _tokens;
     QHash<Core::IToken *, QStandardItem *> _tokensToItem;
     QHash<QString, QStandardItem *> _tokensNamespaceToItem;
 
