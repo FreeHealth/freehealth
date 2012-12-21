@@ -86,6 +86,7 @@ public:
 
     void createActions(QToolButton *button)
     {
+        // FIXME: move this in single instance object
         // Add options action
         Core::Context context(Core::Constants::C_GLOBAL);
         QAction *a;
@@ -150,8 +151,8 @@ public:
         QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
         QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
         QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
-        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
-        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
+//        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
+//        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
         QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
     }
 
