@@ -91,33 +91,26 @@ void IPatient::registerPatientTokens()
 #else
     // Create and register namespaces
     TokenNamespace patientNs("Patient");
-    patientNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientNs.setUntranslatedHumanReadableName(Trans::Constants::PATIENT);
     patientNs.setUntranslatedHelpText(::NAMESPACE_DESCRIPTION);
     patientNs.setUntranslatedTooltip(::NAMESPACE_DESCRIPTION);
 
     TokenNamespace patientIdentNs("Identity");
-    patientIdentNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientIdentNs.setUntranslatedHumanReadableName(Trans::Constants::IDENTITY_TEXT);
 
     TokenNamespace patientAgeNs("Age");
-    patientAgeNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientAgeNs.setUntranslatedHumanReadableName(Trans::Constants::AGE);
 
     TokenNamespace patientAddressNs("Address");
-    patientAddressNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientAddressNs.setUntranslatedHumanReadableName(Trans::Constants::ADDRESS);
 
     TokenNamespace patientContactNs("Contact");
-    patientContactNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientContactNs.setUntranslatedHumanReadableName(Trans::Constants::CONTACT);
 
     TokenNamespace patientMetricsNs("Metrics");
-    patientMetricsNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientMetricsNs.setUntranslatedHumanReadableName(Trans::Constants::METRICS);
 
     TokenNamespace patientBioNs("Biology");
-    patientBioNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
     patientBioNs.setUntranslatedHumanReadableName(Trans::Constants::BIOLOGY);
 
     patientNs.addChild(patientIdentNs);
