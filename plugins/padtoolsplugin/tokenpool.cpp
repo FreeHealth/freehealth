@@ -25,7 +25,8 @@
  ***************************************************************************/
 /**
  * \class PadTools::TokenPool
- * Manage the token. Deletes all registered token in dtor
+ * Manage the token. Deletes all registered token in dtor.
+ * \sa Core::ITokenPool
  */
 
 #include "tokenpool.h"
@@ -48,7 +49,7 @@ public:
     ~TokenPoolPrivate() {}
 
 public:
-    QVector<Core::IToken*> _tokens;
+    QList<Core::IToken*> _tokens;
     QList<Core::TokenNamespace*> _namespace;
     Core::TokenNamespace nullNamespace;
 };
@@ -175,10 +176,10 @@ Core::IToken *TokenPool::token(const QString &name)
 void TokenPool::removeToken(Core::IToken *token)
 {
     if (d->_tokens.contains(token))
-        d->_tokens.remove(d->_tokens.indexOf(token));
+        d->_tokens.removeAll(token);
 }
 
-QVector<Core::IToken *> TokenPool::tokens() const
+QList<Core::IToken *> TokenPool::tokens() const
 {
     return d->_tokens;
 }

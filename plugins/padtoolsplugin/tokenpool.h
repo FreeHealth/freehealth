@@ -59,7 +59,7 @@ public:
     Core::IToken *token(const QString &name);
     void removeToken(Core::IToken *token);
 
-    QVector<Core::IToken *> tokens() const;
+    QList<Core::IToken *> tokens() const;
 
     QVariant tokenTestingValue(const QString &name);
     QVariant tokenCurrentValue(const QString &name);
