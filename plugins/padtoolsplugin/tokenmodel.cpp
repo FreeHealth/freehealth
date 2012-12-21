@@ -51,9 +51,7 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
-
 const int TOKEN_UID = Qt::UserRole + 1;
-
 }
 
 namespace PadTools {
@@ -128,11 +126,17 @@ public:
             }
             // get NS item
             ns.takeLast();
-            QStandardItem *nsItem = _tokensNamespaceToItem.value(ns.join("."));
+            QStandardItem *nsItem = 0;
+            while (nsItem==0 && ns.count()>1) {
+                nsItem = _tokensNamespaceToItem.value(ns.join("."), 0);
+                if (!nsItem)
+                    ns.takeLast();
+            }
             if (!nsItem) {
                 LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
                 nsItem = q->invisibleRootItem();
             }
+
             // create token item
             token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
             QStandardItem *item = new QStandardItem(name);
