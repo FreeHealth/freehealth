@@ -145,6 +145,7 @@ PadToolsCore::PadToolsCore(QObject *parent) :
     d(new PadToolsCorePrivate(this))
 {
     _instance = this;
+    setObjectName("PadToolsCore");
 }
 
 /*! Destructor of the PadTools::Internal::PadToolsCore class */

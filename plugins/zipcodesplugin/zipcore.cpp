@@ -146,6 +146,7 @@ ZipCore::ZipCore(QObject *parent) :
     d(new Internal::ZipCorePrivate(this))
 {
     _instance = this;
+    setObjectName("ZipCore");
 }
 
 /*! Destructor of the ZipCodes::ZipCore class */
