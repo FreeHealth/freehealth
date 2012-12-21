@@ -51,6 +51,8 @@ public:
     static void setPrescriptionModel(DrugsDB::DrugsModel *model) {_model = model;}
     static void setPrescriptionModelRow(int row) {_row = row;}
 
+    int sortIndex() const {return _row;}
+
     QVariant testValue() const;
     QVariant value() const;
 

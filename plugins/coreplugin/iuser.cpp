@@ -67,6 +67,8 @@ public:
     QVariant testValue() const {return uid();}
     QVariant value() const {return user()->value(_ref);}
 
+    int sortIndex() const {return _ref;}
+
 private:
     int _ref;
 };

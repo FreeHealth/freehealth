@@ -72,6 +72,8 @@ public:
     QVariant testValue() const {return uid();}
     QVariant value() const {return patient()->data(_ref);}
 
+    int sortIndex() const {return _ref;}
+
 private:
     int _ref;
 };
