@@ -654,6 +654,7 @@ void MainWindowActionHandler::createPluginsMenu()
     confmenu->appendGroup(Id(Constants::G_PLUGINS_FORM));
     confmenu->appendGroup(Id(Constants::G_PLUGINS_DRUGS));
     confmenu->appendGroup(Id(Constants::G_PLUGINS_CALENDAR));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_PADTOOLS));
     confmenu->appendGroup(Id(Constants::G_PLUGINS_ACCOUNT));
     confmenu->appendGroup(Id(Constants::G_PLUGINS_OTHERS));
 }
