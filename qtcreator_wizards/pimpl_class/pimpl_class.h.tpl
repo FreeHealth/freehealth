@@ -60,9 +60,11 @@ class %ClassName:c% : public QObject
 @endif
 {
     Q_OBJECT
+
 @if "%Singleton%" == "true"
 protected:
     explicit %ClassName:c%(QObject *parent = 0);
+
 public:
     static %ClassName:c% &instance();
 @else
