@@ -371,21 +371,24 @@ namespace Prescription
         UsedDosage,
         Pack_UID,
         OnlyForTest,
+        IntakesFullString,  // READ ONLY
         IntakesFrom,
         IntakesTo,
         IntakesScheme,
         IntakesUsesFromTo,
-        IntakesFullString,
         Route,            // Textual translated route
         RouteId,          // Route Id from drugs database
         DurationFrom,
+        DurationFullString,  // READ ONLY
         DurationTo,
         DurationScheme,
         DurationUsesFromTo,
+        PeriodFullString,  // READ ONLY
         Period,
         PeriodScheme,
         SerializedDailyScheme,
         MealTimeSchemeIndex,
+        IntakesIntervalFullString,
         IntakesIntervalOfTime,
         IntakesIntervalSchemeIndex,
         Note,

@@ -147,18 +147,22 @@ const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
 // For Prescriptions
 #ifdef WITH_PAD
 const char * const  TOKEN_PRESC_DRUGNAME             = "Prescription.Drug.brandname";
+const char * const  TOKEN_PRESC_Q_FULL               = "Prescription.Protocol.Quantity.Full";
 const char * const  TOKEN_PRESC_Q_FROM               = "Prescription.Protocol.Quantity.From";
 const char * const  TOKEN_PRESC_Q_TO                 = "Prescription.Protocol.Quantity.to";
 const char * const  TOKEN_PRESC_Q_SCHEME             = "Prescription.Protocol.Quantity.Scheme";
 const char * const  TOKEN_PRESC_MEAL                 = "Prescription.Protocol.Meal";
+const char * const  TOKEN_PRESC_PERIOD_FULL          = "Prescription.Protocol.Period.Full";
 const char * const  TOKEN_PRESC_PERIOD_VALUE         = "Prescription.Protocol.Period.Value";
 const char * const  TOKEN_PRESC_PERIOD_SCHEME        = "Prescription.Protocol.Period.Scheme";
+const char * const  TOKEN_PRESC_D_FULL               = "Prescription.Protocol.Duration.Full";
 const char * const  TOKEN_PRESC_D_FROM               = "Prescription.Protocol.Duration.From";
 const char * const  TOKEN_PRESC_D_TO                 = "Prescription.Protocol.Duration.To";
 const char * const  TOKEN_PRESC_D_SCHEME             = "Prescription.Protocol.Duration.Scheme";
 const char * const  TOKEN_PRESC_ROUTE                = "Prescription.Protocol.Route";
 const char * const  TOKEN_PRESC_DISTRIB_DAILYSCHEME  = "Prescription.Protocol.DailyScheme.Distributed";
 const char * const  TOKEN_PRESC_REPEATED_DAILYSCHEME = "Prescription.Protocol.DailyScheme.Repeated";
+const char * const  TOKEN_PRESC_MININTERVAL_FULL     = "Prescription.Protocol.Quantity.MinInterval.Full";
 const char * const  TOKEN_PRESC_MININTERVAL_VALUE    = "Prescription.Protocol.Quantity.MinInterval.Value";
 const char * const  TOKEN_PRESC_MININTERVAL_SCHEME   = "Prescription.Protocol.Quantity.MinInterval.Scheme";
 const char * const  TOKEN_PRESC_REFILL               = "Prescription.Protocol.Refill";

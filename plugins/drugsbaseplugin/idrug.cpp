@@ -98,9 +98,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
-#include <translationutils/constanttranslations.h>
 #include <utils/global.h>
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QVector>
 #include <QLocale>
@@ -111,6 +112,7 @@
 
 using namespace DrugsDB;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
@@ -543,6 +545,52 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     using namespace DrugsDB::Constants;
     switch (fieldref)
     {
+    case Prescription::IntakesFullString:
+    {
+        QString full;
+        const QString &from = d_pres->m_PrescriptionValues.value(Prescription::IntakesFrom).toString();
+        const QString &to = d_pres->m_PrescriptionValues.value(Prescription::IntakesTo).toString();
+        const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesScheme).toString();
+        bool fromTo = d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo).toBool();
+        if (fromTo) {
+            full = tkTr(Trans::Constants::FROM_1_TO_2).arg(from).arg(to);
+        } else {
+            full = from;
+        }
+        full += " " + scheme;
+        return full;
+    }
+    case Prescription::DurationFullString:
+    {
+        QString full;
+        const QString &from = d_pres->m_PrescriptionValues.value(Prescription::DurationFrom).toString();
+        const QString &to = d_pres->m_PrescriptionValues.value(Prescription::DurationTo).toString();
+        const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::DurationScheme).toString();
+        bool fromTo = d_pres->m_PrescriptionValues.value(Prescription::DurationUsesFromTo).toBool();
+        if (fromTo) {
+            full = tkTr(Trans::Constants::FROM_1_TO_2).arg(from).arg(to);
+        } else {
+            full = from;
+        }
+        full += " " + scheme;
+        return full;
+    }
+    case Prescription::PeriodFullString:
+    {
+        QString full;
+        const QString &val = d_pres->m_PrescriptionValues.value(Prescription::Period).toString();
+        const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::PeriodScheme).toString();
+        full = val + " " + scheme;
+        return full;
+    }
+    case Prescription::IntakesIntervalFullString:
+    {
+        QString full;
+        const QString &val = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalOfTime).toString();
+        const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalSchemeIndex).toString();
+        full = val + " " + scheme;
+        return full;
+    }
     case Prescription::IntakesTo :
     {
         if (!d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
