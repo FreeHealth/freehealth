@@ -204,8 +204,9 @@ void TokenNamespace::clearChildren()
  */
 
 /**
- * \fn virtual QVector<Core::IToken *> Core::ITokenPool::tokens() const = 0;
- * Returns all registered tokens.
+ * \fn virtual QList<Core::IToken *> Core::ITokenPool::tokens() const = 0;
+ * Returns all registered tokens (unsorted).
+ * \sa Core::IToken::sortIndex(), Core::IToken::setSortIndex(), Core::IToken::sortIndexLessThan()
  */
 
 /**

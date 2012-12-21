@@ -114,16 +114,20 @@ private:
 class CORE_EXPORT IToken : public TokenDescription
 {
 public:
-    IToken(const QString &fullName) : TokenDescription(fullName) {}
+    IToken(const QString &fullName) : TokenDescription(fullName), _sort(0) {}
     virtual ~IToken() {}
 
+    void setSortIndex(int index) {_sort=index;}
+    virtual int sortIndex() const {return _sort;}
+
     virtual QString tooltip() const;
-    virtual int sortIndex() const {return 0;}
 
     virtual QVariant testValue() const = 0;
     virtual QVariant value() const = 0;
 
     static bool sortIndexLessThan(IToken *one, IToken *two) {return one->sortIndex() < two->sortIndex();}
+private:
+    int _sort;
 };
 
 class CORE_EXPORT ITokenPool : public QObject
@@ -149,7 +153,7 @@ public:
     virtual Core::IToken *token(const QString &name) = 0;
     virtual void removeToken(Core::IToken *token) = 0;
 
-    virtual QVector<Core::IToken *> tokens() const = 0;
+    virtual QList<Core::IToken *> tokens() const = 0;
 
     // Get token values
     virtual QVariant tokenTestingValue(const QString &name) = 0;
