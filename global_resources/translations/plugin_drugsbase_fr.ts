@@ -57,7 +57,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     </message>
     <message>
         <source>Asking for a drug without UID</source>
-        <translation>Requête d&apos;un médicament sant UID</translation>
+        <translation>Requête d&apos;un médicament sans UID</translation>
     </message>
     <message>
         <source>Unable to find drug with DID %1</source>
