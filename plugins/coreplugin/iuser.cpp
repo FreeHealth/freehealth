@@ -130,7 +130,7 @@ void IUser::registerUserTokens() const
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERDATEOFBIRTH, DateOfBirth);
-    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_BIRTH);
     _tokens << t;
 
     //    t = new UserToken(Constants::TOKEN_USERYEARSOLD, YearsOld);
