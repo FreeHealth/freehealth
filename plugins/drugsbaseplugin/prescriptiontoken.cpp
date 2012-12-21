@@ -54,6 +54,15 @@ PrescriptionToken::PrescriptionToken(const QString &name, const int ref) :
     _isDistributedDailyScheme = (name==Core::Constants::TOKEN_PRESC_DISTRIB_DAILYSCHEME);
     _isRepeatedDailyScheme = (name==Core::Constants::TOKEN_PRESC_REPEATED_DAILYSCHEME);
     _isMeal = (ref==DrugsDB::Constants::Prescription::MealTimeSchemeIndex);
+    using namespace DrugsDB::Constants;
+    if (ref==-1) {
+        if (_isDistributedDailyScheme || _isRepeatedDailyScheme)
+            setSortIndex(Prescription::SerializedDailyScheme);
+        else if (_isMeal)
+            setSortIndex(Prescription::MealTimeSchemeIndex);
+    } else {
+        setSortIndex(ref);
+    }
 }
 
 PrescriptionToken::~PrescriptionToken() {}
