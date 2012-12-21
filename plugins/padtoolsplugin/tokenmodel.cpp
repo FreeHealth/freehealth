@@ -85,10 +85,22 @@ public:
             parent = q->invisibleRootItem();
         QString fullNs = parent->data(TOKEN_UID).toString();
         fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
-        QStandardItem *item = new QStandardItem(ns.humanReadableName());
+        QStandardItem *item = new QStandardItem;
         item->setData(fullNs, TOKEN_UID);
-        if (!ns.tooltip().isEmpty())
+        if (!ns.tooltip().isEmpty()) {
             item->setToolTip(ns.tooltip());
+            if (parent == q->invisibleRootItem()) {
+                item->setText(QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
+                                      "<span style=\"color:gray;font-size:small\">%2</span>")
+                              .arg(ns.humanReadableName())
+                              .arg(ns.tooltip().replace("/n", "<br />")));
+
+                qWarning() << item->text();
+
+            }
+        } else {
+            item->setText(ns.humanReadableName());
+        }
         parent->appendRow(item);
         _tokensNamespaceToItem.insert(fullNs, item);
 

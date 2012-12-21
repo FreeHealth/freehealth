@@ -48,6 +48,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/htmldelegate.h>
 
 #include <QTimer>
 #include <QToolBar>
@@ -205,6 +206,8 @@ PadWriter::PadWriter(QWidget *parent) :
     // Create TokenModel
     d->_tokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->_tokenModel);
+    d->ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
+    d->ui->treeView->setUniformRowHeights(false);
     expandTokenTreeView();
     connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 
