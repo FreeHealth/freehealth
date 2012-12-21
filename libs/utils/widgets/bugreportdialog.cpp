@@ -31,6 +31,7 @@
 
 #include "bugreportdialog.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/emailvalidator.h>
 #include <translationutils/constants.h>
@@ -162,9 +163,12 @@ void BugReportDialog::setBugCategories(const QStringList &cat)
 void BugReportDialog::sendBugReport()
 {
     // TODO: code
+    QString fullmsg = "\n\n" + d->prepareBugReport().join("\n");
+    fullmsg += "\n\n" + Utils::Log::toString("");
+
     QDesktopServices::openUrl(QString("mailto:freemedforms-dev@googlegroups.com?subject=%1&body=%2")
             .arg("Bug Report: " + qApp->applicationName() + qApp->applicationVersion())
-            .arg("\n\n" + d->prepareBugReport().join("\n")));
+            .arg(fullmsg));
 }
 
 void BugReportDialog::changeEvent(QEvent *e)

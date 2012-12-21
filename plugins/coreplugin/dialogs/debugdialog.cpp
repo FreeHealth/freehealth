@@ -68,6 +68,11 @@ DebugDialog::DebugDialog(QWidget *parent) :
     m_ui->widget->setupUi();
     m_ui->widget->expandAllCategories();
 
+    // Now we have a special bug report dialog (Utils::BugReportDialog)
+    // So we don't want to use redondant code --> disable the send button
+    // FIXME: remove the send button
+    m_ui->butSend->setEnabled(false);
+
     // resize and center windows
     Utils::resizeAndCenter(this);
 }
