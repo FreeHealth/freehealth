@@ -119,7 +119,8 @@ void IPatient::registerPatientTokens()
     patientNs.addChild(patientContactNs);
     patientNs.addChild(patientMetricsNs);
     patientNs.addChild(patientBioNs);
-    tokenPool()->registerNamespace(patientNs);
+    if (tokenPool())
+        tokenPool()->registerNamespace(patientNs);
 
     // Create tokens
     Core::IToken *t;
