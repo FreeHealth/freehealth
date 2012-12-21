@@ -133,21 +133,22 @@ void PadToolsContextualWidgetManager::updateContext(Core::IContext *object, cons
     //    if (object)
     //        qWarning() << "PadToolsContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
     
-    PadWriter *view = 0;
+    PadTools::Internal::PadWriter *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-            
-            //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
-        view = qobject_cast<PadWriter *>(object->widget());
+        QWidget *testParents = object->widget();
+        while (!view && testParents) {
+            view = qobject_cast<PadTools::Internal::PadWriter *>(testParents);
+            if (!view)
+                testParents = testParents->parentWidget();
+        }
         if (!view) {
             if (!m_CurrentView)
                 return;
-            
-            //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
         
@@ -156,9 +157,9 @@ void PadToolsContextualWidgetManager::updateContext(Core::IContext *object, cons
         }
         
     } while (false);
-    if (view) {
+
+    if (view)
         PadToolsActionHandler::setCurrentView(view);
-    }
 }
 
 PadWriter *PadToolsContextualWidgetManager::currentView() const
@@ -177,10 +178,10 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
 {
     setObjectName("PadToolsActionHandler");
         
-    QAction *a = 0;
+//    QAction *a = 0;
     Core::Command *cmd = 0;
     Core::Context ctx(PadTools::Constants::C_PADTOOLS_PLUGINS);
-    Core::Context global(Core::Constants::C_GLOBAL);
+//    Core::Context global(Core::Constants::C_GLOBAL);
 
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(PadTools::Constants::M_PLUGIN_PADTOOLS);
@@ -203,8 +204,8 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     Q_ASSERT(menu);
     
     // Example: register an existing Core action
-    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
-    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+    //    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
+    //    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
     
     //    a = aClear = new QAction(this);
     //    a->setObjectName("PadTools.aClear");
@@ -221,6 +222,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
                                      cmd,
                                      0, "",
                                      QKeySequence::UnknownKey, false);
+    connect(aSetDefaultValues, SIGNAL(triggered()), this, SLOT(onDefaultValuesRequested()));
 
 //    // Example: register your own actions: db info in the help menu
 //    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
@@ -236,12 +238,12 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
-    //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
 }
 
 /** Define the current view, update and connect actions */
 void PadToolsActionHandler::setCurrentView(PadWriter *view)
 {
+    qWarning() << "SET CURRENT " << view;
     Q_ASSERT(view);
     if (!view) { // this should never be the case
         LOG_ERROR("setCurrentView: no view");
@@ -288,16 +290,24 @@ void PadToolsActionHandler::clear()
 //    }
 }
 
+void PadToolsActionHandler::onDefaultValuesRequested()
+{
+    qWarning() << "PadToolsActionHandler::onDefaultValuesRequested";
+    if (m_CurrentView) {
+        m_CurrentView->onDefaultValuesRequested();
+    }
+}
+
 void PadToolsActionHandler::showDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    lay.addWidget(&tree);
-    Utils::resizeAndCenter(&dlg);
-    dlg.exec();
+//    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+//    QGridLayout lay(&dlg);
+//    QTreeWidget tree(&dlg);
+//    tree.setColumnCount(2);
+//    tree.header()->hide();
+//    lay.addWidget(&tree);
+//    Utils::resizeAndCenter(&dlg);
+//    dlg.exec();
 }
 
 

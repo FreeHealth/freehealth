@@ -45,7 +45,6 @@ class IContext;
 namespace PadTools {
 namespace Internal {
 class PadWriter;
-class PadToolsActionHandler;
 class PadToolsContextualWidget;
 
 class PadToolsActionHandler : public QObject
@@ -59,6 +58,7 @@ public:
 
 private Q_SLOTS:
     void clear();
+    void onDefaultValuesRequested();
     void showDatabaseInformation();
 
 private Q_SLOTS:
