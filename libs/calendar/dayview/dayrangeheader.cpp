@@ -126,8 +126,8 @@ public:
         int scaleHeight = getScaleHeight();
         int widgetHeight = DayWidget::staticSizeHint().height();
 
-        int firstIndex = qMax(0, q->firstDate().daysTo(firstDay));
-        int lastIndex = qMin(m_rangeWidth - 1, q->firstDate().daysTo(lastDay));
+        int firstIndex = qMax(qint64(0), q->firstDate().daysTo(firstDay));
+        int lastIndex = qMin(qint64(m_rangeWidth - 1), q->firstDate().daysTo(lastDay));
 
         int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
         return QRect(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + depth * (widgetHeight + 1)), QSize(w, widgetHeight));
