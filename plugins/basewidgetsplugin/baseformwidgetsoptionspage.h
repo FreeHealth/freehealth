@@ -27,8 +27,7 @@
 #define BASEFORMWIDGETSOPTIONSPAGE_H
 
 #include <coreplugin/ioptionspage.h>
-#include <QtCore/QObject>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <QPointer>
 

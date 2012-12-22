@@ -29,7 +29,7 @@
 
 #include <templatesplugin/templates_exporter.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
 

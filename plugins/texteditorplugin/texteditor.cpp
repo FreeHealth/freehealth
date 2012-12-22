@@ -82,6 +82,7 @@
 #include <QStringList>
 #include <QFontDialog>
 #include <QPointer>
+#include <QMimeData>
 
 using namespace Editor;
 using namespace Editor::Internal;

@@ -29,7 +29,7 @@
 
 #include <drugsplugin/drugs_exporter.h>
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QString>
 
 namespace DrugsWidget {

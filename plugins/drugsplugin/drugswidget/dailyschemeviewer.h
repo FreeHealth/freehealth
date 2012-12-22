@@ -27,8 +27,7 @@
 #ifndef DAILYSCHEMEVIEWER_H
 #define DAILYSCHEMEVIEWER_H
 
-#include <QtGui/QWidget>
-#include <QObject>
+#include <QWidget>
 
 /**
  * \file dailyschemeviewer.h

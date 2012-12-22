@@ -31,7 +31,7 @@
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QVariant>
 
 QT_BEGIN_NAMESPACE

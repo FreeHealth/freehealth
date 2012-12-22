@@ -37,11 +37,11 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <QApplication>
 
 using namespace Core;
