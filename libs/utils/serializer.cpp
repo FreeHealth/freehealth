@@ -224,7 +224,7 @@ const QString toString( const QStringList &list, bool base64Protection )
         return list.join( Serializer::separator() );
     QString tmp;
     foreach( const QString & s, list ) {
-        tmp += s.toAscii().toBase64() + Serializer::separator();
+        tmp += s.toUtf8().toBase64() + Serializer::separator();
     }
     if (!tmp.isEmpty())
         tmp.chop(Serializer::separator().length());
@@ -243,7 +243,7 @@ const QStringList toStringList( const QString &serialized, bool base64Protection
         return serialized.split( Serializer::separator() );
     QStringList toReturn;
     foreach( const QString &s, serialized.split(Serializer::separator()) ) {
-        toReturn << QByteArray::fromBase64(s.toAscii());
+        toReturn << QByteArray::fromBase64(s.toUtf8());
     }
     return toReturn;
 }
@@ -268,7 +268,7 @@ const QString toString( const QHash<int,QString> &hash, bool base64Protection )
     QString val;
     foreach( int i, hash.keys() ) {
         val = hash.value(i);
-        tmp += QString::number(i) + separator() + val.toAscii().toBase64() + separator();
+        tmp += QString::number(i) + separator() + val.toUtf8().toBase64() + separator();
     }
     return tmp;
 }
@@ -292,15 +292,15 @@ const QHash<int,QString> toHash( const QString & serialized, bool base64Protecti
     QString k;
     if (base64Protection) {
         while (it.hasNext()) {
-            val = it.next().toAscii();
+            val = it.next().toUtf8();
             if (it.hasNext()) {
                 k = it.next();
-                toReturn.insert( val.toInt(), QByteArray::fromBase64( k.toAscii() ) );
+                toReturn.insert( val.toInt(), QByteArray::fromBase64( k.toUtf8() ) );
             }
         }
     } else {
         while (it.hasNext()) {
-            val = it.next().toAscii();
+            val = it.next().toUtf8();
             if (it.hasNext()) {
                 k = it.next();
                 toReturn.insert( val.toInt(), k );
@@ -329,7 +329,7 @@ const QString toString(const QHash<int,QVariant> &hash, bool base64Protection)
     QString val;
     foreach( int i, hash.keys() ) {
         val = variantToString(hash.value(i));
-        tmp += openParenthese() + QString::number(i) + separator() + val.toAscii().toBase64() + closeParenthese();
+        tmp += openParenthese() + QString::number(i) + separator() + val.toUtf8().toBase64() + closeParenthese();
     }
     return tmp;
 }
@@ -354,14 +354,14 @@ const QHash<int,QVariant> toVariantHash( const QString &serialized, bool base64P
             QStringList content = s.split(separator(), QString::KeepEmptyParts);
             val = content.at(1);
             val = val.remove(closeParenthese());
-            toReturn.insert(content.at(0).toInt(), stringToVariant(QByteArray::fromBase64(val.toAscii())));
+            toReturn.insert(content.at(0).toInt(), stringToVariant(QByteArray::fromBase64(val.toUtf8())));
         }
     } else {
         foreach(const QString s, list) {
             QStringList content = s.split(separator(), QString::KeepEmptyParts);
             val = content.at(1);
             val = val.remove(closeParenthese());
-            toReturn.insert(content.at(0).toInt(), stringToVariant(val.toAscii()));
+            toReturn.insert(content.at(0).toInt(), stringToVariant(val.toUtf8()));
         }
     }
     return toReturn;
@@ -387,7 +387,7 @@ const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, boo
         QString val;
         foreach( const QString &i, hash.keys() ) {
             val = hash.value(i);
-            tmp += i + separator() + val.toAscii().toBase64() + separator();
+            tmp += i + separator() + val.toUtf8().toBase64() + separator();
         }
     }
     return tmp;
@@ -414,12 +414,12 @@ const QHash<QString,QString> threeCharKeyHashToHash( const QString & serialized,
             val = it.next();
             if (it.hasNext()) {
                 k = it.next();
-                toReturn.insert( val, QByteArray::fromBase64( k.toAscii() ) );
+                toReturn.insert( val, QByteArray::fromBase64( k.toUtf8() ) );
             }
         }
     } else {
         while (it.hasNext()) {
-            val = it.next().toAscii();
+            val = it.next().toUtf8();
             if (it.hasNext()) {
                 k = it.next();
                 toReturn.insert( val, k );
@@ -444,7 +444,7 @@ QString serializeProxy(const QNetworkProxy &proxy)
 
 bool deserializeProxy(const QString &serializedString, QNetworkProxy &proxy)
 {
-    QString t = Utils::decrypt(serializedString.toAscii(), "ProXySeTtInGs");
+    QString t = Utils::decrypt(serializedString.toUtf8(), "ProXySeTtInGs");
     QStringList l = t.split(::SERIALIZER_SEPARATOR);
     if (l.count() != 5)
         return false;

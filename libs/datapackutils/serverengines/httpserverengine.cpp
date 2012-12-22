@@ -548,7 +548,7 @@ QNetworkRequest HttpServerEngine::createRequest(const QString &url)
     QNetworkRequest request(url);
     request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
                          .arg(qApp->applicationName())
-                         .arg(qApp->applicationVersion()).toAscii());
+                         .arg(qApp->applicationVersion()).toUtf8());
     return request;
 }
 

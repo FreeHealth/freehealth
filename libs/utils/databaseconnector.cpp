@@ -223,7 +223,7 @@ QString DatabaseConnector::forSettings() const
 void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
-    QString tmp = Utils::decrypt(value.toAscii());
+    QString tmp = Utils::decrypt(value.toUtf8());
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() != 5) {
         LOG_ERROR_FOR("DatabaseConnector", "Decrypt error");

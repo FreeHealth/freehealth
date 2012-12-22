@@ -1565,7 +1565,7 @@ QString createXml(const QString &mainTag, const QHash<QString,QString> &data, co
             QDomElement dataElement  = doc.createElement(k);
             main.appendChild(dataElement);
             if (!data.value(k).isEmpty()) {
-                QDomText dataText = doc.createTextNode(data.value(k).toAscii().toBase64());
+                QDomText dataText = doc.createTextNode(data.value(k).toUtf8().toBase64());
                 dataElement.appendChild(dataText);
             }
         }
@@ -1606,7 +1606,7 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
-            readData.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toAscii()));
+            readData.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toUtf8()));
             paramElem = paramElem.nextSiblingElement();
         }
     } else {
@@ -1615,7 +1615,7 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
-            readData.insert(paramElem.tagName(), paramElem.text().trimmed().toAscii());
+            readData.insert(paramElem.tagName(), paramElem.text().trimmed().toUtf8());
             paramElem = paramElem.nextSiblingElement();
         }
     }
@@ -1836,13 +1836,13 @@ QString testInternetConnection()
 QString cryptPassword(const QString &toCrypt)
 {
     QCryptographicHash crypter( QCryptographicHash::Sha1 );
-    crypter.addData( toCrypt.toAscii() );
+    crypter.addData( toCrypt.toUtf8() );
     return crypter.result().toBase64();
 }
 
 /** Crypt a clear login. */
 QString loginForSQL(const QString &log)
-{ return log.toAscii().toBase64(); }
+{ return log.toUtf8().toBase64(); }
 
 /** Decrypt a crypted login. */
 QString loginFromSQL(const QVariant &sql)
@@ -1850,7 +1850,7 @@ QString loginFromSQL(const QVariant &sql)
 
 /** Decrypt a crypted login. */
 QString loginFromSQL(const QString &sql)
-{ return QByteArray::fromBase64(sql.toAscii()); }
+{ return QByteArray::fromBase64(sql.toUtf8()); }
 
 /**
  * Non-destructive string encryption.
@@ -1858,11 +1858,11 @@ QString loginFromSQL(const QString &sql)
 */
 QByteArray crypt(const QString &text, const QString &key)
 {
-    QByteArray texteEnBytes = text.toAscii();
+    QByteArray texteEnBytes = text.toUtf8();
     QString k = key;
     if (key.isEmpty())
-        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toAscii(), QCryptographicHash::Sha1);
-    QByteArray cle = k.toAscii().toBase64();
+        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toUtf8().toBase64();
     QByteArray codeFinal;
     int tailleCle = cle.length();
     for (int i = 0; i < texteEnBytes.length(); ++i) {
@@ -1881,8 +1881,8 @@ QString decrypt(const QByteArray &texte, const QString &key)
     QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));
     QString k = key;
     if (key.isEmpty())
-        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toAscii(), QCryptographicHash::Sha1);
-    QByteArray cle = k.toAscii().toBase64();
+        k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toUtf8(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toUtf8().toBase64();
     QByteArray codeFinal;
     int tailleCle = cle.length();
     for (int i = 0; i < texteEnBytes.length(); ++i) {
