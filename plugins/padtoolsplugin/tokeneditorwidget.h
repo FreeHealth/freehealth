@@ -64,7 +64,7 @@ public Q_SLOTS:
     void clear();
 
     void setCurrentIndex(const QModelIndex &index);
-    void setTokenName(const QString &name);
+    void setTokenUid(const QString &uid);
 
     void setConditionnalBeforeHtml(const QString &html);
     void setConditionnalAfterHtml(const QString &html);
@@ -77,7 +77,7 @@ public Q_SLOTS:
 
 private:
     Ui::TokenEditorWidget *ui;
-    QString _tokenName;
+    QString _tokenUid;
     TokenModel *_model;
 };
 

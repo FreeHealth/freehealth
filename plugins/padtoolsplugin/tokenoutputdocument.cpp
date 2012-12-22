@@ -96,9 +96,9 @@ public:
         PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
         if (!core)
             return false;
-        bool yes = Utils::yesNoMessageBox(QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, "Remove token “<b>%1</b>”?").arg(core->name()),
+        bool yes = Utils::yesNoMessageBox(QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, "Remove token “<b>%1</b>”?").arg(core->uid()),
                                           QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, "You are about to remove token: “<b>%1</b>”. "
-                                                                  "Do you really want to continue?").arg(core->name()));
+                                                                  "Do you really want to continue?").arg(core->uid()));
         return yes;
     }
 
@@ -311,7 +311,7 @@ void TokenOutputDocument::editTokenUnderCursor()
         /** manage nested tokens */
         TokenEditor editor(this);
         PadCore *core = item->getCore();
-        editor.setTokenName(core->name());
+        editor.setTokenUid(core->uid());
         PadFragment *bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
         PadFragment *aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
         editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
@@ -443,7 +443,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
 
         // start token editor dialog
         TokenEditor editor(this);
-        editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
+        editor.setTokenUid(event->mimeData()->data(Constants::TOKENUID_MIME));
         int r = editor.exec();
         if (r == QDialog::Accepted) {
 
@@ -489,7 +489,7 @@ bool TokenOutputDocument::event(QEvent *event)
         int position = cursorForPosition(helpEvent->pos()).position();
         PadItem *item = d->_pad->padItemForOutputPosition(position);
         if (item) {
-            Core::IToken *token = tokenPool()->token(item->getCore()->name());
+            Core::IToken *token = tokenPool()->token(item->getCore()->uid());
             if (token) {
                 QToolTip::showText(helpEvent->globalPos(), token->tooltip());
                 return Editor::TextEditor::event(event);

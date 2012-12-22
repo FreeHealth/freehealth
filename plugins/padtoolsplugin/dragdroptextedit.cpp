@@ -82,7 +82,7 @@ void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
     if (textEdit()->underMouse()) {
         TokenEditor editor(this);
-        editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
+        editor.setTokenUid(event->mimeData()->data(Constants::TOKENUID_MIME));
         if (editor.exec() == QDialog::Accepted) {
             setFocus();
             QTextCursor cursor = cursorForPosition(event->pos());

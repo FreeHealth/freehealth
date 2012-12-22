@@ -67,9 +67,9 @@ void TokenEditor::setCurrentIndex(const QModelIndex &index)
     ui->tokenEditor->setCurrentIndex(index);
 }
 
-void TokenEditor::setTokenName(const QString &name)
+void TokenEditor::setTokenUid(const QString &uid)
 {
-    ui->tokenEditor->setTokenName(name);
+    ui->tokenEditor->setTokenUid(uid);
 }
 
 void TokenEditor::setConditionnalHtml(const QString &before, const QString &after)

@@ -52,7 +52,7 @@ class TokenModel : public QStandardItemModel
     Q_OBJECT
 public:
     enum DataRepresentation {
-        TokenName = 0,
+        TokenUid = 0,
 //        TokenValue,
         ColumnCount
     };

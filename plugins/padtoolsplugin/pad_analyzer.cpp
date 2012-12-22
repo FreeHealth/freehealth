@@ -335,7 +335,7 @@ PadCore *PadAnalyzerPrivate::nextCore()
 	// first, we expect string (or not)
 	lex = nextLexem();
 	if (lex.type == Lexem_String) {
-        core->setName(lex.value);
+        core->setUid(lex.value);
 		lex = nextLexem();
 	}
 
@@ -350,7 +350,7 @@ PadCore *PadAnalyzerPrivate::nextCore()
 		return 0;
 	}
     core->setEnd(_curPos);
-    core->setName(getStringAt(core->start() + size, _sourceDocument, core->rawLength() - (size*2)));
+    core->setUid(getStringAt(core->start() + size, _sourceDocument, core->rawLength() - (size*2)));
     return core;
 }
 

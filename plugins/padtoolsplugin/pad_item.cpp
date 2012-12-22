@@ -88,7 +88,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         return;
     }
 
-    const QString &value = tokens.value(item->getCore()->name()).toString();
+    const QString &value = tokens.value(item->getCore()->uid()).toString();
 
 //    const QString &value = tokens[_name].toString();
     bool removeMe = false;
@@ -151,8 +151,8 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
         return;
     }
 
-//    const QString &value = tokens.value(item->getCore()->name()).toString();
-    const QString &value = pool->tokenCurrentValue(item->getCore()->name()).toString();
+//    const QString &value = tokens.value(item->getCore()->uid()).toString();
+    const QString &value = pool->tokenCurrentValue(item->getCore()->uid()).toString();
 
 //    const QString &value = tokens[_name].toString();
     bool removeMe = false;
@@ -248,7 +248,7 @@ void PadCore::debug(int indent) const
     str += QString("[padCore:Source(%1;%2);Output(%3;%4)]: %5")
             .arg(start()).arg(end())
             .arg(outputStart()).arg(outputEnd())
-            .arg(_name);
+            .arg(_uid);
     qDebug("%s", qPrintable(str));
 }
 
@@ -256,7 +256,7 @@ void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
 //    qWarning() << "run Core";
     // PadItem calls run on the Core only if core value is defined
-    const QString &value = tokens[_name].toString();
+    const QString &value = tokens[_uid].toString();
     if (value.isEmpty()) {
         // Define output range
         LOG_ERROR_FOR("PadCore", "token run without value? Check PadItem.");
@@ -291,8 +291,8 @@ void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document)
 {
 //    qWarning() << "run Core";
     // PadItem calls run on the Core only if core value is defined
-//    const QString &value = tokens[_name].toString();
-    const QString &value = pool->tokenCurrentValue(_name).toString();
+//    const QString &value = tokens[_uid].toString();
+    const QString &value = pool->tokenCurrentValue(_uid).toString();
     if (value.isEmpty()) {
         // Define output range
         LOG_ERROR_FOR("PadCore", "token run without value? Check PadItem.");
@@ -339,8 +339,8 @@ void PadCore::toRaw(PadDocument *doc)
     raw.setPosition(_start);
     raw.setPosition(_end, QTextCursor::KeepAnchor);
     raw.removeSelectedText();
-    raw.insertText(_name);
-    int newLength = _name.size();
+    raw.insertText(_uid);
+    int newLength = _uid.size();
     doc->positionTranslator().addRawTranslation(_start, newLength-oldLength);
     doc->positionTranslator().addRawTranslation(_start, s);
 
@@ -455,7 +455,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 
     // if core value is null -> remove it from the output
     if (core) {
-        coreValue = tokens.value(core->name()).toString();
+        coreValue = tokens.value(core->uid()).toString();
 
         if (coreValue.isEmpty()) {
             // No value -> Remove the entire PadItem from the text output and add a translation
@@ -517,8 +517,8 @@ void PadItem::toOutput(Core::ITokenPool *pool, PadDocument *document)
 
     // if core value is null -> remove it from the output
     if (core) {
-//        coreValue = tokens.value(core->name()).toString();
-        coreValue = pool->tokenCurrentValue(core->name()).toString();
+//        coreValue = tokens.value(core->uid()).toString();
+        coreValue = pool->tokenCurrentValue(core->uid()).toString();
 
         if (coreValue.isEmpty()) {
             // No value -> Remove the entire PadItem from the text output and add a translation

@@ -57,7 +57,7 @@ public:
     void setTokenModel(TokenModel *model);
     void setCurrentIndex(const QModelIndex &index);
 
-    void setTokenName(const QString &name);
+    void setTokenUid(const QString &uid);
 
     void setConditionnalHtml(const QString &before, const QString &after);
     void setConditionnalPlainText(const QString &before, const QString &after);

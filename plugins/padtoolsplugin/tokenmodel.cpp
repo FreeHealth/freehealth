@@ -220,7 +220,7 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
     //    if (role==Qt::DisplayRole || role==Qt::EditRole) {
     //        const QString &k = d->m_Tokens.keys().at(index.row());
     //        switch (index.column()) {
-    //        case TokenName: return k;
+    //        case TokenUid: return k;
     //        case TokenValue: return d->m_Tokens.value(k);
     //        }
     //    }
@@ -284,7 +284,7 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
     QString name = token->uid(); // d->m_Tokens.keys().at(indexes.at(0).row());
     const QVariant &value = token->value();
     mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
-    mimeData->setData(Constants::TOKENNAME_MIME, name.toUtf8());
+    mimeData->setData(Constants::TOKENUID_MIME, name.toUtf8());
     name = QString("%1%2%3%2%4")
             .arg(Constants::TOKEN_OPEN_DELIMITER)
             .arg(Constants::TOKEN_CORE_DELIMITER)

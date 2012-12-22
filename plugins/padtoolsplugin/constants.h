@@ -48,7 +48,7 @@ const char * const A_PADTOOLS_SHOWSOURCE = "aPTShowSource";
 
 const char * const TOKENVALUE_MIME = "freepad/token/value";
 const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
-const char * const TOKENNAME_MIME = "freepad/token/name";
+const char * const TOKENUID_MIME = "freepad/token/uid";
 
 const char * const TOKEN_CORE_DELIMITER  = "~";
 const char * const TOKEN_OPEN_DELIMITER  = "{{";

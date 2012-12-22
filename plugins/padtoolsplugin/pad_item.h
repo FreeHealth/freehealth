@@ -91,8 +91,8 @@ class PadCore : public PadFragment
 public:
     PadCore() : PadFragment() {}
 
-    const QString &name() const { return _name; }
-    void setName(const QString &name) { _name = name; }
+    const QString &uid() const { return _uid; }
+    void setUid(const QString &uid) { _uid = uid; }
 
     bool containsOutputPosition(const int pos) const;
     bool isBeforeOutputPosition(const int pos) const;
@@ -105,7 +105,7 @@ public:
     void toRaw(PadDocument *doc);
 
 private:
-    QString _name;
+    QString _uid;
 };
 
 class PadItem : public PadFragment

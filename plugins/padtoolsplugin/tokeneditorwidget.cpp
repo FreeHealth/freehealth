@@ -90,18 +90,18 @@ void TokenEditorWidget::setCurrentIndex(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    _tokenName = index.data().toString();
+    _tokenUid = index.data().toString();
     ui->tokenGroup->setTitle(tkTr(Trans::Constants::TOKEN));
     ui->currentTokenValue->setText(tkTr(Trans::Constants::UNDEFINED));
     ui->testTokenValue->setText(tkTr(Trans::Constants::UNDEFINED));
-    ui->tokenValueFormatting->setPlainText(_tokenName);
+    ui->tokenValueFormatting->setPlainText(_tokenUid);
 }
 
-void TokenEditorWidget::setTokenName(const QString &name)
+void TokenEditorWidget::setTokenUid(const QString &uid)
 {
-    _tokenName=name;
+    _tokenUid=uid;
     ui->tokenValueFormatting->clear();
-    ui->tokenValueFormatting->setPlainText(_tokenName);
+    ui->tokenValueFormatting->setPlainText(_tokenUid);
 }
 
 void TokenEditorWidget::setConditionnalBeforeHtml(const QString &html)
@@ -139,7 +139,7 @@ QString TokenEditorWidget::toRawSourceHtml() const
     cursor.movePosition(QTextCursor::End);
 
     // TODO: insert charFormat for the token value */
-    cursor.insertText(_tokenName);
+    cursor.insertText(_tokenUid);
     cursor.movePosition(QTextCursor::End);
 
     cursor.insertText(Constants::TOKEN_CORE_DELIMITER);
@@ -175,10 +175,10 @@ void TokenEditorWidget::getOutput(QString &html, PadItem &item, int startingOutp
     // Insert PadCore (id ?)
     previousPosition = cursor.position();
     PadCore *core = new PadCore;
-    core->setName(_tokenName);
+    core->setUid(_tokenUid);
     core->setOutputStart(startingOutputPos);
     // TODO: insert charFormat for the token value */
-    cursor.insertText(_tokenName);
+    cursor.insertText(_tokenUid);
     cursor.movePosition(QTextCursor::End);
     startingOutputPos += cursor.position() - previousPosition;
     core->setOutputEnd(startingOutputPos);
