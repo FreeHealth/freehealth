@@ -1198,6 +1198,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>labelLineEdit</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>fromToIntakesCheck</tabstop>
   <tabstop>intakesFromSpin</tabstop>
   <tabstop>intakesToSpin</tabstop>
@@ -1205,11 +1206,18 @@
   <tabstop>userformsButton</tabstop>
   <tabstop>periodSpin</tabstop>
   <tabstop>periodSchemeCombo</tabstop>
+  <tabstop>routeCombo</tabstop>
   <tabstop>fromToDurationCheck</tabstop>
   <tabstop>durationFromSpin</tabstop>
   <tabstop>durationToSpin</tabstop>
   <tabstop>durationCombo</tabstop>
+  <tabstop>refillSpin</tabstop>
+  <tabstop>dosageForAllInnCheck</tabstop>
+  <tabstop>aldCheck</tabstop>
+  <tabstop>hourlyTableWidget</tabstop>
+  <tabstop>minIntervalIntakesSpin</tabstop>
   <tabstop>intervalTimeSchemeCombo</tabstop>
+  <tabstop>mealTimeCombo</tabstop>
   <tabstop>minAgeSpin</tabstop>
   <tabstop>minAgeCombo</tabstop>
   <tabstop>maxAgeSpin</tabstop>
@@ -1222,9 +1230,10 @@
   <tabstop>groupBox_9</tabstop>
   <tabstop>groupBox_3</tabstop>
   <tabstop>groupBox_4</tabstop>
+  <tabstop>noteTextEdit</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox</tabstop>
-  <tabstop>noteTextEdit</tabstop>
+  <tabstop>monographButton</tabstop>
  </tabstops>
  <resources/>
  <connections>
