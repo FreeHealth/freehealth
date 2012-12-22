@@ -57,6 +57,10 @@ int GoogleTranslator::setProxy(const QString & host, int port, const QString & u
     return 0;
 }
 
+#if QT_VERSION >= 0x050000
+#include <QUrlQuery>
+#endif
+
 /**
   Starts a translation from the language \e from to the language \e to of the \e text.
   You can define an unique identifier for your request. Use the \e uid param.\n
@@ -66,11 +70,21 @@ int GoogleTranslator::setProxy(const QString & host, int port, const QString & u
 void GoogleTranslator::startTranslation(const QString &from, const QString &to, const QString &text, const QString &uid)
 {
     QUrl url("http://ajax.googleapis.com/", QUrl::TolerantMode);
+#if QT_VERSION < 0x050000
     url.setEncodedPath("/ajax/services/language/translate");
     url.addEncodedQueryItem("v","1.0");
     url.addQueryItem("q", text);
     url.addEncodedQueryItem("langpair",QString("%1|%2").arg(from).arg(to).toUtf8());
 //    qWarning() << "Trans" << text;
+#else
+    // Qt5
+    QUrlQuery query;
+    url.setPath("/ajax/services/language/translate");
+    query.addQueryItem("v","1.0");
+    query.addQueryItem("q", text);
+    query.addQueryItem("langpair",QString("%1|%2").arg(from).arg(to).toUtf8());
+    url.setQuery(query);
+#endif
     if (!uid.isEmpty())
         uidToUrl.insert(uid, url);
     manager->get(QNetworkRequest(url));
