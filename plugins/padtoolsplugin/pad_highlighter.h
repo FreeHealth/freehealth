@@ -61,7 +61,7 @@ class PadHighlighter : public QSyntaxHighlighter
 public:
 	PadHighlighter(QObject *parent) : QSyntaxHighlighter(parent) { init(); }
 	PadHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) { init(); }
-	PadHighlighter(QTextEdit *parent) : QSyntaxHighlighter(parent) { init(); }
+//	PadHighlighter(QTextEdit *parent) : QSyntaxHighlighter(parent) { init(); }
 
 protected:
     void highlightBlock(const QString &text);

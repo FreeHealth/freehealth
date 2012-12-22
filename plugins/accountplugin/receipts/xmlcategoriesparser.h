@@ -34,6 +34,7 @@
 
 #include <accountplugin/account_exporter.h>
 
+#include <QObject>
 #include <QList>
 #include <QString>
 #include <QHash>

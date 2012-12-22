@@ -50,6 +50,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QToolTip>
+#include <QMimeData>
 
 #include <QDebug>
 

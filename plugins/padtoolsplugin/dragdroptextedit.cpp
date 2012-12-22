@@ -27,6 +27,7 @@
 #include "constants.h"
 #include "tokeneditor.h"
 
+#include <QMimeData>
 #include <QDebug>
 
 using namespace PadTools;

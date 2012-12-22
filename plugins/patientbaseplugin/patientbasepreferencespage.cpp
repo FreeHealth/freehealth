@@ -99,7 +99,7 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_SELECTOR_FIELDSTOSHOW, PatientSelector::Default);
     defaultvalues.insert(Constants::S_SELECTOR_USEGENDERCOLORS, true);
-    defaultvalues.insert(Constants::S_PATIENTBARCOLOR, Qt::white);
+    defaultvalues.insert(Constants::S_PATIENTBARCOLOR, int(Qt::white));
     defaultvalues.insert(Core::Constants::S_PATIENTCHANGEONCREATION, true);
     defaultvalues.insert(Constants::S_SEARCHWHILETYPING, true);
 
@@ -181,7 +181,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     //    qWarning() << "---------> writedefaults";
     LOG_FOR("PatientBasePreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("Patient preferences"));
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
-    s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
+    s->setValue(Constants::S_PATIENTBARCOLOR, int(Qt::white));
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
     s->setValue(Constants::S_SEARCHWHILETYPING, true);
 
