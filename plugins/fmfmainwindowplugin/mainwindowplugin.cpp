@@ -40,12 +40,15 @@
 #include <QDebug>
 
 using namespace MainWin;
+using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0), virtualBasePage(0)
+    m_MainWindow(0),
+    prefPage(0),
+    virtualBasePage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEMEDFORMS::MainWinPlugin";

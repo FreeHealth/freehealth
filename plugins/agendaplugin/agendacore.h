@@ -44,13 +44,13 @@ class CalendarItemModel;
 namespace Internal {
 class AgendaCorePrivate;
 class AgendaBase;
+class AgendaPlugin;
 }  // End namespace Internal
-
 
 class AgendaCore : public QObject
 {
     Q_OBJECT
-    friend class AgendaPlugin;
+    friend class Agenda::Internal::AgendaPlugin;
 
 public:
     static AgendaCore &instance();

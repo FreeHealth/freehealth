@@ -119,7 +119,7 @@ ExtensionSystem::IPlugin::ShutdownFlag PrinterPlugin::aboutToShutdown()
 }
 
 #if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Printer::Internal::PmhPlugin, "org.freemedforms.FreeMedForms.PrinterPlugin")
+Q_DECLARE_INTERFACE(Print::Internal::PrinterPlugin, "org.freemedforms.FreeMedForms.PrinterPlugin")
 #else
 Q_EXPORT_PLUGIN(PrinterPlugin)
 #endif

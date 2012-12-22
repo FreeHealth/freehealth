@@ -39,8 +39,8 @@
 
 namespace Agenda {
 class UserCalendar;
-namespace Internal {
 class AgendaCore;
+namespace Internal {
 
 class AgendaPlugin : public ExtensionSystem::IPlugin
 {

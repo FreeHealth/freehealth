@@ -28,7 +28,7 @@
 
 #include <extensionsystem/iplugin.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 /**
  * \file icdplugin.h
@@ -51,16 +51,11 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
-    static QString pluginVersion() {return m_PlugVersion;}
-
 private Q_SLOTS:
     void postCoreInitialization();
-
-private:
-    static QString m_PlugVersion;
 };
 
-}
-}  // End namespace ICD
+} // namespace Internal
+} // namespace ICD
 
 #endif  // End ICD_PLUGIN_H
