@@ -36,9 +36,14 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
 
-#include <QPrinterInfo>
 #include <QFileDialog>
 #include <QDir>
+
+#if QT_VERSION < 0x050000
+#include <QPrinterInfo>
+#else
+#include <QtPrintSupport/QPrinterInfo>
+#endif
 
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;

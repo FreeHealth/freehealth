@@ -33,10 +33,14 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QTextDocument>
-#include <QPrinter>
 #include <QFont>
 #include <QColor>
 #include <QVariant>
+#if QT_VERSION < 0x050000
+#include <QPrinter>
+#else
+#include <QtPrintSupport/QPrinter>
+#endif
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;

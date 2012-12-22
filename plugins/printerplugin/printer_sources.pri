@@ -14,6 +14,7 @@ HEADERS = $${PWD}/printerplugin.h \
     $${PWD}/printerpreferences.h \
     $${PWD}/documentprinter.h \
     $${PWD}/printdialog.h
+
 SOURCES = $${PWD}/printerplugin.cpp \
     $${PWD}/printer.cpp \
     $${PWD}/printerpreviewer_p.cpp \
@@ -21,6 +22,7 @@ SOURCES = $${PWD}/printerplugin.cpp \
     $${PWD}/printerpreferences.cpp \
     $${PWD}/documentprinter.cpp \
     $${PWD}/printdialog.cpp
+
 FORMS = $${PWD}/printerpreviewer_p.ui \
     $${PWD}/printerpreferences.ui \
     $${PWD}/printdialog.ui

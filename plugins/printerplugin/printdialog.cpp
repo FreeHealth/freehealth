@@ -40,14 +40,19 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <QPrinter>
-#include <QPrinterInfo>
 #include <QPainter>
 #include <QPicture>
 #include <QPushButton>
 #include <QDir>
 #include <QDateTime>
 #include <QFileDialog>
+#if QT_VERSION < 0x050000
+#include <QPrinterInfo>
+#include <QPrinter>
+#else
+#include <QtPrintSupport/QPrinterInfo>
+#include <QtPrintSupport/QPrinter>
+#endif
 
 #include <QDebug>
 

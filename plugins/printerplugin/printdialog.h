@@ -23,7 +23,11 @@
 
 #include <QDialog>
 #include <QList>
+#if QT_VERSION < 0x050000
 #include <QPrinterInfo>
+#else
+#include <QtPrintSupport/QPrinterInfo>
+#endif
 
 /**
  * \file printdialog.h

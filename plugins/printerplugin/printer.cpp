@@ -43,10 +43,6 @@
 #include <QSizeF>
 #include <QRectF>
 #include <QRect>
-#include <QPrinter>
-#include <QPrinterInfo>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
 #include <QSizeF>
 #include <QTextBlock>
 #include <QAbstractTextDocumentLayout>
@@ -55,6 +51,18 @@
 #include <QTextTable>
 #include <QPointer>
 #include <QFileInfo>
+
+#if QT_VERSION < 0x050000
+#include <QPrinterInfo>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#else
+#include <QtPrintSupport/QPrinterInfo>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrintPreviewDialog>
+#endif
 
 // For test
 #include <QTextBrowser>
