@@ -96,9 +96,9 @@ public:
                 QLocale::Language l = static_cast<QLocale::Language>(idx);
                 if (l == QLocale::LastLanguage)
                     continue;
-                // obsolete - NorwegianNynorsk is used instead
-                if (l == QLocale::Nynorsk)
-                    continue;
+//                // obsolete - NorwegianNynorsk is used instead
+//                if (l == QLocale::Nynorsk)
+//                    continue;
                 if (l == QLocale::C)
                     continue;
                 m_AllLanguages.push_back(Language(l));
