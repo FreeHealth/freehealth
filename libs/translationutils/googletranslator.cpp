@@ -38,6 +38,10 @@
 #include <QNetworkReply>
 #include <QStringList>
 
+#if QT_VERSION >= 0x050000
+#include <QUrlQuery>
+#endif
+
 using namespace Utils;
 
 /** Create a Google translator object. */
@@ -56,10 +60,6 @@ int GoogleTranslator::setProxy(const QString & host, int port, const QString & u
     manager->setProxy(prox);
     return 0;
 }
-
-#if QT_VERSION >= 0x050000
-#include <QUrlQuery>
-#endif
 
 /**
   Starts a translation from the language \e from to the language \e to of the \e text.
