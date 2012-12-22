@@ -136,10 +136,11 @@ bool QAbstractXmlTreeModel::setSubMainTag(const QString &childToMainTag)
 {
     if (childToMainTag.isEmpty())
         return false;
+    beginResetModel();
     dqaxtm->m_RootNode = dqaxtm->m_RootNode.firstChildElement(childToMainTag);
     delete  dqaxtm->m_RootItem;
     dqaxtm->m_RootItem = new DomItem(dqaxtm->m_RootNode, 0);
-    reset();
+    endResetModel();
     return true;
 }
 

@@ -104,6 +104,7 @@ public:
 
     void addStringList(const QStringList &strings, const QVariant &userData = QVariant())
     {
+        beginResetModel();
         foreach(const QString &str, strings) {
             if (str.isEmpty())
                 continue;
@@ -112,7 +113,7 @@ public:
             s.userData = userData;
             m_List << s;
         }
-        reset();
+        endResetModel();
     }
 
     QStringList stringList(const QVariant &userData = QVariant()) const
