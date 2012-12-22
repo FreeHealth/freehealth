@@ -471,7 +471,7 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!layout.isEmpty()) {
         // Find layout
-        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        QLayout *lay = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
         if (lay) {
             lay->addWidget(m_NSS);
         } else {

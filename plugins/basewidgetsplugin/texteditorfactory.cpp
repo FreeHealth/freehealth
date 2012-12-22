@@ -47,7 +47,7 @@ static inline QLabel *findLabel(Form::FormItem *item)
     // Find label
     const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
     if (!lbl.isEmpty()) {
-        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        l = item->parentFormMain()->formWidget()->findChild<QLabel*>(lbl);
         if (l) {
             l->setText(item->spec()->label());
         } else {
@@ -109,7 +109,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!layout.isEmpty()) {
         // Find layout
-        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        QLayout *lay = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
         if (lay) {
             hb = lay;
         } else {

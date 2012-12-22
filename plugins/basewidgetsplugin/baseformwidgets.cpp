@@ -553,7 +553,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QGroupBox *grp = qFindChild<QGroupBox*>(formItem->parentFormMain()->formWidget(), widget);
+        QGroupBox *grp = formItem->parentFormMain()->formWidget()->findChild<QGroupBox*>(widget);
         if (grp) {
             m_Group = grp;
         } else {
@@ -830,7 +830,7 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QCheckBox *chk = qFindChild<QCheckBox*>(formItem->parentFormMain()->formWidget(), widget);
+        QCheckBox *chk = formItem->parentFormMain()->formWidget()->findChild<QCheckBox*>(widget);
         if (chk) {
             m_Check = chk;
         } else {
@@ -1013,7 +1013,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!layout.isEmpty()) {
         // Find widget
-        radioLayout = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        radioLayout = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
         if (!radioLayout) {
             radioLayout = new QHBoxLayout(this);
         }
@@ -1314,7 +1314,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
     if (!widget.isEmpty()) {
         // Find widget
         if (shortText) {
-            QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+            QLineEdit *le = formItem->parentFormMain()->formWidget()->findChild<QLineEdit*>(widget);
             if (le) {
                 m_Line = le;
             } else {
@@ -1323,7 +1323,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
                 m_Line = new QLineEdit(this);
             }
         } else {
-            QTextEdit *te = qFindChild<QTextEdit*>(formItem->parentFormMain()->formWidget(), widget);
+            QTextEdit *te = formItem->parentFormMain()->formWidget()->findChild<QTextEdit*>(widget);
             if (te) {
                 m_Text = te;
             } else {
@@ -1537,7 +1537,7 @@ BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
     const QString &label = formItem->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QLabel *le = qFindChild<QLabel*>(formItem->parentFormMain()->formWidget(), widget);
+        QLabel *le = formItem->parentFormMain()->formWidget()->findChild<QLabel*>(widget);
         if (le) {
             m_Label = le;
         } else {
@@ -1596,7 +1596,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QListView *le = qFindChild<QListView*>(formItem->parentFormMain()->formWidget(), widget);
+        QListView *le = formItem->parentFormMain()->formWidget()->findChild<QListView*>(widget);
         if (le) {
             m_List = le;
         } else {
@@ -1828,7 +1828,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QComboBox *cbx = qFindChild<QComboBox*>(formItem->parentFormMain()->formWidget(), widget);
+        QComboBox *cbx = formItem->parentFormMain()->formWidget()->findChild<QComboBox*>(widget);
         if (cbx) {
             m_Combo = cbx;
         } else {
@@ -2010,7 +2010,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QDateTimeEdit *le = qFindChild<QDateTimeEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        QDateTimeEdit *le = formItem->parentFormMain()->formWidget()->findChild<QDateTimeEdit*>(widget);
         if (le) {
             m_Date = le;
         } else {
@@ -2205,7 +2205,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     if (!widget.isEmpty()) {
         // Find widget
         if (doubleSpin) {
-            QDoubleSpinBox *dbl = qFindChild<QDoubleSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
+            QDoubleSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QDoubleSpinBox*>(widget);
             if (dbl) {
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
@@ -2219,7 +2219,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
                 m_Spin = new QDoubleSpinBox(this);
             }
         } else {
-            QSpinBox *dbl = qFindChild<QSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
+            QSpinBox *dbl = formItem->parentFormMain()->formWidget()->findChild<QSpinBox*>(widget);
             if (dbl) {
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
@@ -2442,7 +2442,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QPushButton *le = qFindChild<QPushButton*>(formItem->parentFormMain()->formWidget(), widget);
+        QPushButton *le = formItem->parentFormMain()->formWidget()->findChild<QPushButton*>(widget);
         if (le) {
             m_Button = le;
         } else {

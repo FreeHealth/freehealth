@@ -64,7 +64,7 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
     // Create the global layout
     const QString &uiLayout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
     if (!uiLayout.isEmpty()) {
-        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), uiLayout);
+        QLayout *lay = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(uiLayout);
         if (lay) {
             lay->addWidget(_dateEdit);
         } else {

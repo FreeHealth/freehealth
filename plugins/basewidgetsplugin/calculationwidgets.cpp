@@ -92,7 +92,7 @@ static inline QLabel *findLabel(Form::FormItem *item)
     // Find label
     const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
     if (!lbl.isEmpty()) {
-        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        l = item->parentFormMain()->formWidget()->findChild<QLabel*>(lbl);
         if (l) {
             l->setText(item->spec()->label());
         } else {
@@ -192,7 +192,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        QLineEdit *le = formItem->parentFormMain()->formWidget()->findChild<QLineEdit*>(widget);
         if (le) {
             line = le;
         } else {
@@ -372,7 +372,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        QLineEdit *le = formItem->parentFormMain()->formWidget()->findChild<QLineEdit*>(widget);
         if (le) {
             line = le;
         } else {
@@ -388,7 +388,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
             m_Editor->setObjectName("ScriptWidgetTextEditor_" + m_FormItem->uuid());
             m_Editor->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
             // Find widget
-            QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+            QLayout *lay = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layout);
             if (lay) {
                 lay->addWidget(m_Editor);
             } else {

@@ -53,7 +53,7 @@ inline static QLabel *findLabel(Form::FormItem *item)
     // Find label
     const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
     if (!lbl.isEmpty()) {
-        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        l = item->parentFormMain()->formWidget()->findChild<QLabel*>(lbl);
         if (l) {
             l->setText(item->spec()->label());
         } else {
