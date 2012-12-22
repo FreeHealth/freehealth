@@ -29,6 +29,9 @@
 #include <utils/global_exporter.h>
 
 #include <QObject>
+QT_BEGIN_NAMESPACE
+class QNetworkReply;
+QT_END_NAMESPACE
 
 /**
  * \file messagesender.h
@@ -77,7 +80,7 @@ Q_SIGNALS:
     void sent();
 
 private Q_SLOTS:
-    void httpDone(bool error);
+    void httpFinished(QNetworkReply*reply);
 
 private:
     Internal::MessageSenderPrivate *d;

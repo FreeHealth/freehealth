@@ -36,9 +36,9 @@
 #include <translationutils/trans_spashandupdate.h>
 #include <translationutils/trans_msgerror.h>
 
-#include <QHttp>
-#include <QtNetwork>
+#include <QNetworkAccessManager>
 #include <QBuffer>
+#include <QNetworkReply>
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -59,17 +59,17 @@ class MessageSenderPrivate
 public:
     MessageSenderPrivate() :
         m_Parent(0),
-        m_Buffer(0),
         m_ShowMsgBox(false),
         m_IsSending(false),
         m_type(MessageSender::InformationToDeveloper)
     {}
-    ~MessageSenderPrivate() { delete m_Buffer; }
+
+    ~MessageSenderPrivate()
+    {}
 
     QUrl     url;
-    QHttp    http;
+    QNetworkAccessManager _nam;
     QWidget *m_Parent;
-    QBuffer *m_Buffer;
     QString  m_User, m_Msg;
     bool     m_ShowMsgBox;
     QString  m_LastResult;
@@ -79,13 +79,12 @@ public:
 }
 }
 
-
 /** \brief Constructor */
 MessageSender::MessageSender(QObject *parent)
-             : QObject(parent), d(new MessageSenderPrivate())
+    : QObject(parent), d(new MessageSenderPrivate())
 {
     setObjectName("MessageSender");
-    connect(&d->http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+    connect(&d->_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(httpFinished(QNetworkReply*)));
 }
 
 /**
@@ -94,7 +93,8 @@ MessageSender::MessageSender(QObject *parent)
 */
 MessageSender::~MessageSender()
 {
-    if (d) delete d;
+    if (d)
+        delete d;
     d=0;
 }
 
@@ -155,13 +155,14 @@ bool MessageSender::postMessage()
     if (d->m_Msg.isEmpty())
         return false;
 
-    LOG(tkTr(Trans::Constants::STARTING_TASK_1).arg(tkTr(Trans::Constants::POST_TO_1).arg(d->url.toString())));
+    LOG(tkTr(Trans::Constants::STARTING_TASK_1)
+        .arg(tkTr(Trans::Constants::POST_TO_1)
+             .arg(d->url.toString())));
 
-    d->http.setHost(d->url.host(), d->url.port(80));
-
-    QHttpRequestHeader header("POST", d->url.path());
-    header.setValue("Host", d->url.host());
-    header.setContentType("application/x-www-form-urlencoded");
+    QNetworkRequest request;
+    request.setUrl(d->url);
+    request.setRawHeader("User-Agent", QString(qApp->applicationName()+" " +qApp->applicationVersion()).toUtf8());
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QString s = "";
     if (d->m_User.isEmpty())
@@ -173,43 +174,41 @@ bool MessageSender::postMessage()
     else
         s.append("&msg=" + d->m_Msg);
 
-    d->http.setHost(d->url.host());
-    d->m_Buffer = new QBuffer(qApp);
-    d->m_Buffer->open(QBuffer::ReadWrite);
-    d->http.request(header, s.toUtf8(), d->m_Buffer);
+    d->_nam.post(request, s.toUtf8());
     d->m_IsSending = true;
     return true;
 }
 
 /**
-  \brief Slot connected to the http object.
-  If the message is sent successfully, a message box shows the result sent by the server (see showResultingMessageBox()). \n
-  Then the signal sent() is emitted.
-*/
-void MessageSender::httpDone(bool error)
+ * \internal
+ * \brief Slot connected to the Network access manager object.
+ * If the message is sent successfully, a message box shows the result
+ * sent by the server (see showResultingMessageBox()). \n
+ * Then the signal sent() is emitted.
+ */
+void MessageSender::httpFinished(QNetworkReply *reply)
 {
     QString ret = "";
-    if (!error) {
+    if (reply->error() == QNetworkReply::NoError) {
         ret = tkTr(Trans::Constants::MESSAGE_SENT_OK);
         LOG(ret);
-        LOG(d->m_Buffer->data());
+        LOG(reply->readAll());
     } else {
-        ret = tkTr(Trans::Constants::ERROR_1_OCCURED_WHILE_2).arg(tkTr(Trans::Constants::POST_TO_1).arg(d->http.errorString()));
+        ret = tkTr(Trans::Constants::ERROR_1_OCCURED_WHILE_2)
+                .arg(tkTr(Trans::Constants::POST_TO_1)
+                     .arg(reply->errorString()));
         LOG_ERROR(ret);
-        LOG_ERROR(d->m_Buffer->data());
+        LOG_ERROR(reply->readAll());
     }
 
-    d->m_LastResult = QString(d->m_Buffer->errorString());
+    d->m_LastResult = QString(reply->errorString());
 
     // Show information
     if (d->m_ShowMsgBox) {
-        Utils::informativeMessageBox(ret , tkTr(Trans::Constants::INFORMATIVE_MESSAGE_1).arg(d->m_LastResult), "");
+        Utils::informativeMessageBox(ret,
+                                     tkTr(Trans::Constants::INFORMATIVE_MESSAGE_1)
+                                     .arg(d->m_LastResult), "");
     }
-
-    if (d->m_Buffer)
-        delete d->m_Buffer;
-    d->m_Buffer = 0;
     d->m_IsSending = false;
-
     Q_EMIT sent();
 }
