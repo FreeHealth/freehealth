@@ -38,6 +38,7 @@
 */
 
 namespace Views {
+namespace Internal {
 
 class ListViewPlugin : public ExtensionSystem::IPlugin
 {
@@ -52,7 +53,7 @@ public:
 
 };
 
-
+}
 } // End Views
 
 #endif

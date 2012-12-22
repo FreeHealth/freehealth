@@ -42,6 +42,7 @@
 */
 
 namespace Webcam {
+namespace Internal {
 
 class WebcamPlugin : public ExtensionSystem::IPlugin
 {
@@ -65,6 +66,7 @@ private:
     Internal::WebcamPreferencesPage *m_prefPage;
 };
 
+}
 } // namespace Webcam
 
 #endif // WEBCAM_H

@@ -38,6 +38,7 @@
 */
 
 namespace Category {
+namespace Internal {
 
 class CategoryPlugin : public ExtensionSystem::IPlugin
 {
@@ -52,7 +53,7 @@ public:
 
 };
 
-
+}
 } // End Category
 
 #endif  // CATEGORYPLUGIN_H

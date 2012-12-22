@@ -40,7 +40,6 @@
 namespace Gir {
 namespace Internal{
 class GirWidgetFactory;
-}
 
 class GirPlugin : public ExtensionSystem::IPlugin
 {
@@ -57,7 +56,7 @@ private:
     Internal::GirWidgetFactory *m_Factory;
 };
 
-
+}
 } // End AGGIRTPLUGIN_H
 
 #endif

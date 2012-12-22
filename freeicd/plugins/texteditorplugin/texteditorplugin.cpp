@@ -27,11 +27,12 @@
 #include <coreplugin/translators.h>
 
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include <QDebug>
 
 using namespace Editor;
+using namespace Internal;
 
 /**
   \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
@@ -68,5 +69,8 @@ void TextEditorPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Editor::Internal::MainWinPlugin, "org.freemedforms.FreeIcd.TextEditorPlugin")
+#else
 Q_EXPORT_PLUGIN(TextEditorPlugin)
+#endif

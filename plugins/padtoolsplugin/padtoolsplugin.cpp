@@ -108,4 +108,8 @@ ExtensionSystem::IPlugin::ShutdownFlag PadToolsPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(PadTools::Internal::PadToolsPlugin, "org.freemedforms.FreeMedForms.PadToolsPlugin")
+#else
 Q_EXPORT_PLUGIN(PadToolsPlugin)
+#endif

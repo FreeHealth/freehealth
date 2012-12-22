@@ -42,7 +42,6 @@ namespace MainWin {
 namespace Internal {
 class MainWindowPreferencesPage;
 class VirtualPatientBasePage;
-} // End Internal
 
 class MainWindow;
 
@@ -63,7 +62,7 @@ private:
     Internal::VirtualPatientBasePage *virtualBasePage;
 };
 
-
+} // End Internal
 }  // End MainWin
 
 #endif  // End MAINWIN_PLUGIN_H

@@ -30,11 +30,12 @@
 
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include <QDebug>
 
 using namespace MainWin;
+using namespace Internal;
 
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0)
@@ -96,4 +97,8 @@ ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(MainWin::Internal::MainWinPlugin, "org.freemedforms.FreePad.MainWinPlugin")
+#else
 Q_EXPORT_PLUGIN(MainWinPlugin)
+#endif

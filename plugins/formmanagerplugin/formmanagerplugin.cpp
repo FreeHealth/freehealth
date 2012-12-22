@@ -173,4 +173,8 @@ ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Form::Internal::FormManagerPlugin, "org.freemedforms.FreeMedForms.FormManagerPlugin")
+#else
 Q_EXPORT_PLUGIN(FormManagerPlugin)
+#endif

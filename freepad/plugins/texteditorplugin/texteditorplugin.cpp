@@ -26,12 +26,12 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
-
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include <QDebug>
 
 using namespace Editor;
+using namespace Internal;
 
 /**
   \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
@@ -79,4 +79,8 @@ ExtensionSystem::IPlugin::ShutdownFlag TextEditorPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Editor::Internal::TextEditorPlugin, "org.freemedforms.FreePad.TextEditorPlugin")
+#else
 Q_EXPORT_PLUGIN(TextEditorPlugin)
+#endif

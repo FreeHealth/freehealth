@@ -55,7 +55,7 @@ class PercentagesPage;
 class DistanceRulesPage;
 class AssetsRatesPage;
 class AccountDatabaseDefaultsPage;
-
+namespace Internal {
 class AccountPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
@@ -84,7 +84,7 @@ private:
     AccountDatabaseDefaultsPage *m_DefaultPage;
 };
 
-
+} // namespace Internal
 }  // End namespace Account
 
 #endif    // End ACCOUNT_PLUGIN_H

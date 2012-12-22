@@ -160,4 +160,8 @@ ExtensionSystem::IPlugin::ShutdownFlag AlertPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Alert::Internal::AlertPlugin, "org.freemedforms.FreeMedForms.AlertPlugin")
+#else
 Q_EXPORT_PLUGIN(AlertPlugin)
+#endif

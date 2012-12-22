@@ -287,5 +287,8 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(DataPackPlugin::Internal::DataPackPluginIPlugin, "org.freemedforms.FreeMedForms.DataPackPluginIPlugin")
+#else
 Q_EXPORT_PLUGIN(DataPackPluginIPlugin)
+#endif

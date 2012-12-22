@@ -235,4 +235,8 @@ ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Drugs::Internal::DrugsPlugin, "org.freemedforms.FreeMedForms.DrugsPlugin")
+#else
 Q_EXPORT_PLUGIN(DrugsPlugin)
+#endif

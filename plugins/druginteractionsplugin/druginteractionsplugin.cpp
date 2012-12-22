@@ -116,4 +116,8 @@ ExtensionSystem::IPlugin::ShutdownFlag DrugInteractionsPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(DrugInteractions::Internal::DrugInteractionsPlugin, "org.freemedforms.FreeMedForms.DrugInteractionsPlugin")
+#else
 Q_EXPORT_PLUGIN(DrugInteractionsPlugin)
+#endif

@@ -28,7 +28,7 @@
 
 #include <extensionsystem/iplugin.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 /**
  * \file portplugin.h
@@ -38,6 +38,7 @@
 */
 
 namespace Port {
+namespace Internal {
 
 class PortPlugin : public ExtensionSystem::IPlugin
 {
@@ -50,7 +51,7 @@ public:
     void extensionsInitialized();
 };
 
-
+} // namespace Internal
 }  // End Editor
 
 #endif // End PORTPLUGIN_H

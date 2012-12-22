@@ -450,4 +450,8 @@ ExtensionSystem::IPlugin::ShutdownFlag AgendaPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Agenda::Internal::AgendaPlugin, "org.freemedforms.FreeMedForms.AgendaPlugin")
+#else
 Q_EXPORT_PLUGIN(AgendaPlugin)
+#endif

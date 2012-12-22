@@ -68,5 +68,8 @@ void TextEditorPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Editor::Internal::TextEditorPlugin, "org.freemedforms.FreePort.TextEditorPlugin")
+#else
 Q_EXPORT_PLUGIN(TextEditorPlugin)
+#endif

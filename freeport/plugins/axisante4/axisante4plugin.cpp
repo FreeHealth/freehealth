@@ -181,5 +181,9 @@ void Axisante4Plugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-Q_EXPORT_PLUGIN2(Axisante4, Axisante4Plugin)
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Axisante4::Internal::Axisante4Plugin, "org.freemedforms.FreePort.Axisante4Plugin")
+#else
+Q_EXPORT_PLUGIN(Axisante4Plugin)
+#endif
 

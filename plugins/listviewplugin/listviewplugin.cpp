@@ -29,10 +29,11 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace Views;
+using namespace Internal;
 
 ListViewPlugin::ListViewPlugin()
 {
@@ -74,4 +75,8 @@ ExtensionSystem::IPlugin::ShutdownFlag ListViewPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Views::Internal::ListViewPlugin, "org.freemedforms.FreeMedForms.ListViewPlugin")
+#else
 Q_EXPORT_PLUGIN(ListViewPlugin)
+#endif

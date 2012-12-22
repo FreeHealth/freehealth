@@ -126,4 +126,8 @@ ExtensionSystem::IPlugin::ShutdownFlag CorePlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Core::Internal::CorePlugin, "org.freemedforms.FreeToolBox.CorePlugin")
+#else
 Q_EXPORT_PLUGIN(CorePlugin)
+#endif

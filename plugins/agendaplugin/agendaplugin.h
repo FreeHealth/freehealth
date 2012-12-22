@@ -39,7 +39,7 @@
 
 namespace Agenda {
 class UserCalendar;
-
+namespace Internal {
 class AgendaCore;
 
 class AgendaPlugin : public ExtensionSystem::IPlugin
@@ -62,7 +62,7 @@ private:
     AgendaCore *m_Core;
 };
 
-
+} // namespace Internal
 }  // End namespace Agenda
 
 #endif  // End AGENDA_AGENDAPLUGIN_H

@@ -45,7 +45,6 @@ namespace Internal {
 class BaseFormWidgetsOptionsPage;
 class CalculationWidgetsFactory;
 class BaseWidgetsFactory;
-}
 
 class BaseWidgetsPlugin : public ExtensionSystem::IPlugin
 {
@@ -64,7 +63,7 @@ private:
     QPointer<Internal::BaseFormWidgetsOptionsPage> m_OptionsPage;
 };
 
-
-} // End BASEFORMWIDGETSPLUGIN_H
+} // namespace Internal
+} // End BaseWidgets
 
 #endif

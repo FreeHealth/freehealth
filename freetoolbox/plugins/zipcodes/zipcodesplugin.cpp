@@ -93,4 +93,8 @@ ExtensionSystem::IPlugin::ShutdownFlag ZipCodesPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(ZipCodes::Internal::ZipCodesPlugin, "org.freemedforms.FreeToolBox.ZipCodesPlugin")
+#else
 Q_EXPORT_PLUGIN(ZipCodesPlugin)
+#endif

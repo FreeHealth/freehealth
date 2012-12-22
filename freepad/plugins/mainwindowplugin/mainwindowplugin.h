@@ -40,6 +40,7 @@
 
 namespace MainWin {
 class MainWindow;
+namespace Internal {
 
 class MainWinPlugin : public ExtensionSystem::IPlugin
 {
@@ -56,7 +57,7 @@ private:
     MainWindow *m_MainWindow;
 };
 
-
+} // namespace Internal
 }  // End MainWin
 
 #endif  // End FREEPAD_MAINWIN_PLUGIN_H

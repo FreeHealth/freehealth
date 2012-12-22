@@ -36,6 +36,7 @@
 #include <QDebug>
 
 using namespace SaveRestore;
+using namespace Internal;
 
 SaveRestorePlugin::SaveRestorePlugin() :
         page(0)
@@ -76,5 +77,8 @@ void SaveRestorePlugin::extensionsInitialized()
     addObject(page);
 }
 
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(SaveRestore::Internal::SaveRestorePlugin, "org.freemedforms.FreeMedForms.SaveRestorePlugin")
+#else
 Q_EXPORT_PLUGIN(SaveRestorePlugin)
+#endif

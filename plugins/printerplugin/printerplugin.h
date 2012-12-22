@@ -41,7 +41,6 @@ namespace Print {
 namespace Internal {
 class PrinterPreferencesPage;
 class DocumentPrinter;
-}
 
 class PrinterPlugin : public ExtensionSystem::IPlugin
 {
@@ -59,7 +58,7 @@ private:
     Internal::DocumentPrinter *docPrinter;
 };
 
-
+}
 } // End Print
 
 #endif  // PRINTERTPLUGIN_H

@@ -85,4 +85,8 @@ ExtensionSystem::IPlugin::ShutdownFlag Icd10DbPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Icd10Db::Internal::Icd10DbPlugin, "org.freemedforms.FreeToolBox.Icd10DbPlugin")
+#else
 Q_EXPORT_PLUGIN(Icd10DbPlugin)
+#endif

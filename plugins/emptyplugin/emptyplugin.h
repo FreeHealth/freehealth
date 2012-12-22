@@ -38,6 +38,7 @@
 */
 
 namespace Empty {
+namespace Internal {
 
 class EmptyPlugin : public ExtensionSystem::IPlugin
 {
@@ -54,7 +55,7 @@ private Q_SLOTS:
     void coreAboutToClose();
 };
 
-
+}
 }  // End namespace Empty
 
 #endif  // End EMPTYTPLUGIN_H

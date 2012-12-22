@@ -41,7 +41,7 @@
 #include <coreplugin/dialogs/applicationgeneralpreferences.h>
 #include <coreplugin/dialogs/networkpreferences.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 using namespace Core;
 using namespace Internal;
@@ -141,4 +141,8 @@ void CorePlugin::remoteArgument(const QString& arg)
 //    }
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Core::Internal::CorePlugin, "org.freemedforms.FreeMedForms.CorePlugin")
+#else
 Q_EXPORT_PLUGIN(CorePlugin)
+#endif

@@ -39,7 +39,7 @@
 
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace BaseWidgets;
@@ -116,4 +116,8 @@ ExtensionSystem::IPlugin::ShutdownFlag BaseWidgetsPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(BaseWidgets::Internal::BaseWidgetsPlugin, "org.freemedforms.FreeMedForms.BaseWidgetsPlugin")
+#else
 Q_EXPORT_PLUGIN(BaseWidgetsPlugin)
+#endif

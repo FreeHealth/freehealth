@@ -39,6 +39,7 @@
 */
 
 namespace Editor {
+namespace Internal {
 
 class TextEditorPlugin : public ExtensionSystem::IPlugin
 {
@@ -51,7 +52,7 @@ public:
     void extensionsInitialized();
 };
 
-
+} // namespace Internal
 }  // End Editor
 
 #endif // End TEXTEDITORTPLUGIN_H

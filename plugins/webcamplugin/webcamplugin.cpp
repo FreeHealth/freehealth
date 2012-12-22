@@ -218,5 +218,8 @@ void WebcamPlugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-Q_EXPORT_PLUGIN2(Webcam, WebcamPlugin)
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Webcam::Internal::WebcamPlugin, "org.freemedforms.FreeMedForms.WebcamPlugin")
+#else
+Q_EXPORT_PLUGIN(WebcamPlugin)
+#endif

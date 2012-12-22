@@ -38,9 +38,8 @@
 */
 
 namespace SaveRestore {
-namespace Internal {
-}
 class SaveRestorePage;
+namespace Internal {
 
 class SaveRestorePlugin : public ExtensionSystem::IPlugin
 {
@@ -56,7 +55,7 @@ private:
     SaveRestorePage *page;
 };
 
-
+}
 } // End SaveRestore
 
 #endif  // SAVERESTORETPLUGIN_H

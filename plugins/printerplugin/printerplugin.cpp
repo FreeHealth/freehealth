@@ -35,12 +35,17 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
+#if QT_VERSION < 0x050000
 #include <QPrinterInfo>
+#else
+#include <QtPrintSupport/QPrinterInfo>
+#endif
 
 #include <QDebug>
 
 using namespace Print;
+using namespace Internal;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
@@ -113,4 +118,8 @@ ExtensionSystem::IPlugin::ShutdownFlag PrinterPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Printer::Internal::PmhPlugin, "org.freemedforms.FreeMedForms.PrinterPlugin")
+#else
 Q_EXPORT_PLUGIN(PrinterPlugin)
+#endif

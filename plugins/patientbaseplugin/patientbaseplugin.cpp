@@ -182,4 +182,8 @@ ExtensionSystem::IPlugin::ShutdownFlag PatientBasePlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Patients::Internal::PatientBasePlugin, "org.freemedforms.FreeMedForms.PatientBasePlugin")
+#else
 Q_EXPORT_PLUGIN(PatientBasePlugin)
+#endif

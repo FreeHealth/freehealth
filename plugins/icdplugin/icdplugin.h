@@ -38,6 +38,7 @@
 */
 
 namespace ICD {
+namespace Internal {
 
 class IcdPlugin : public ExtensionSystem::IPlugin
 {
@@ -59,7 +60,7 @@ private:
     static QString m_PlugVersion;
 };
 
-
+}
 }  // End namespace ICD
 
 #endif  // End ICD_PLUGIN_H

@@ -173,4 +173,8 @@ void %PluginName%Plugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-Q_EXPORT_PLUGIN2(%PluginName%, %PluginName%Plugin)
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(%PluginName%::Internal::%PluginName%Plugin, "org.freemedforms.FreeMedForms.%PluginName%Plugin")
+#else
+Q_EXPORT_PLUGIN(%PluginName%Plugin)
+#endif

@@ -84,4 +84,8 @@ ExtensionSystem::IPlugin::ShutdownFlag BiblioPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Biblio::Internal::BiblioPlugin, "org.freemedforms.FreeToolBox.BiblioPlugin")
+#else
 Q_EXPORT_PLUGIN(BiblioPlugin)
+#endif

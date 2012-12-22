@@ -32,7 +32,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace ZipCodes;
@@ -96,5 +96,8 @@ ExtensionSystem::IPlugin::ShutdownFlag ZipCodesPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(ZipCodes::Internal::ZipCodesPlugin, "org.freemedforms.FreeMedForms.ZipCodesPlugin")
+#else
 Q_EXPORT_PLUGIN(ZipCodesPlugin)
+#endif

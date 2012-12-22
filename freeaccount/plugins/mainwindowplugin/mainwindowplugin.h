@@ -55,7 +55,6 @@
 namespace MainWin {
 namespace Internal {
 class MainWindowPreferencesPage;
-} // End Internal
 
 class MainWindow;
 
@@ -74,7 +73,7 @@ private:
     Internal::MainWindowPreferencesPage *prefPage;
 };
 
-
+} // End Internal
 }  // End MainWin
 
 #endif  // End FDMAINWIN_PLUGIN_H

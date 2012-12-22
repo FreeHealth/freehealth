@@ -35,7 +35,7 @@
 
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include <QDebug>
 
@@ -90,4 +90,8 @@ ExtensionSystem::IPlugin::ShutdownFlag GirPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#if QT_VERSION >= 0x050000
+Q_DECLARE_INTERFACE(Gir::Internal::GirPlugin, "org.freemedforms.FreeMedForms.GirPlugin")
+#else
 Q_EXPORT_PLUGIN(GirPlugin)
+#endif
