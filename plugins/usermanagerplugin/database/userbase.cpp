@@ -1229,7 +1229,7 @@ bool UserBase::deleteUser(const QString &uuid)
     case Utils::Database::MySQL:
         {
             // drop a MySQL user
-            QString clearLog = QString(QByteArray::fromBase64(getLogin64(uuid).toAscii()));
+            QString clearLog = QString(QByteArray::fromBase64(getLogin64(uuid).toUtf8()));
             if (!dropMySQLUser(clearLog))
                 return false;
             break;

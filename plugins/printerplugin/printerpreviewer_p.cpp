@@ -396,7 +396,7 @@ void PrinterPreviewerPrivate::changeEvent(QEvent *e)
             }
             QLabel *l = this->findChild<QLabel*>(id);
             if (l) {
-                l->setText(tkTr(id.toAscii()));
+                l->setText(tkTr(id.toUtf8()));
             }
         }
         break;

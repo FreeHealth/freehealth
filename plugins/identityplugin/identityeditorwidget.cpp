@@ -482,7 +482,7 @@ public:
         ui->language->setCurrentIsoLanguage(tags.value(::XML_LANG));
         ui->dob->setDate(QDate::fromString(tags.value(::XML_DOB), Qt::ISODate));
         //ui->dod->setText(tags.value(::XML_DOD));
-        ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toAscii()));
+        ui->photoButton->setPixmap(Utils::pixmapFromBase64(tags.value(::XML_PHOTO).toUtf8()));
 
         ui->zipcodesWidget->setStreet(tags.value(::XML_STREET));
         ui->zipcodesWidget->setCountryIso(tags.value(::XML_COUNTRY));

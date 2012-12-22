@@ -218,7 +218,7 @@ bool IcdDownloader::populateDatabaseWithRawSources()
             if (!f.open(QFile::WriteOnly | QFile::Text)) {
                 continue;
             }
-            f.write(content.toAscii());
+            f.write(content.toUtf8());
         }
 
         // import files

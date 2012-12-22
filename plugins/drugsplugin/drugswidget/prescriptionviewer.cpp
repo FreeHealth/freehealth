@@ -334,12 +334,12 @@ void PrescriptionViewer::changeDuration()
     QList<int> quantity = QList<int>() << 31 << 15 << 12 << 4;
     int i = 0;
     foreach(const QString &s, subs) {
-        QMenu *submenu = new QMenu(tkTr(s.toAscii()), root);
+        QMenu *submenu = new QMenu(tkTr(s.toUtf8()), root);
         root->addMenu(submenu);
         int j = quantity[i];
         for(int z=0; z<j;++z) {
             QAction *a = submenu->addAction(QString::number(z+1));
-            a->setObjectName(tkTr(s.toAscii())+":"+QString::number(z+1)+senderTag);
+            a->setObjectName(tkTr(s.toUtf8())+":"+QString::number(z+1)+senderTag);
             connect(a,SIGNAL(triggered()), this, SLOT(changeDurationTo()));
         }
         ++i;

@@ -203,7 +203,7 @@ public:
     bool isVirtual() const               { return value(Table_USERS, USER_ISVIRTUAL).toBool(); }
     bool    locker() const               { return value(Table_USERS, USER_LOCKER).toBool(); }
     QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
-    QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toAscii())); }
+    QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toUtf8())); }
     QString decryptedLogin() const       { return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }

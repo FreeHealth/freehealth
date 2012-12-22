@@ -548,7 +548,7 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
     // Create pixmap
     QPixmap pix;
     if (!content.isEmpty())
-        pix.loadFromData(QByteArray::fromBase64(content.toAscii()));
+        pix.loadFromData(QByteArray::fromBase64(content.toUtf8()));
     return pix;
 }
 

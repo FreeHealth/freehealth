@@ -927,7 +927,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Uuid :  user->setUuid(value.toString()); break;
     case Core::IUser::Validity :  user->setValidity(value); break;
     case Core::IUser::Login64 :  user->setLogin64(value); break;
-    case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toAscii().toBase64()); break;
+    case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toUtf8().toBase64()); break;
     case Core::IUser::ClearPassword :
     {
         if (user->clearPassword()==value.toString())

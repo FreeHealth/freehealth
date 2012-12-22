@@ -111,7 +111,7 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
     cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
     if (!key.isEmpty())
-        cmd->setDefaultKeySequence(QKeySequence::fromString(tkTr(key.toAscii())));
+        cmd->setDefaultKeySequence(QKeySequence::fromString(tkTr(key.toUtf8())));
     menu->addAction(cmd, Core::Id(group));
     return a;
 }
