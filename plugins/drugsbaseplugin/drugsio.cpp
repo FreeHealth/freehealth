@@ -981,7 +981,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
 //                         .arg(QString(prescriptionToXml(m))));
-                     .arg(QString(xmldPrescription.toAscii().toBase64())));
+                     .arg(QString(xmldPrescription.toUtf8().toBase64())));
 
 //    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 

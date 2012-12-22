@@ -432,9 +432,9 @@ void MenuActionContainer::retranslate()
 {
     if (m_menu) {
         if (m_trContext.isEmpty())
-            m_menu->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toAscii()));
+            m_menu->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toUtf8()));
         else
-            m_menu->setTitle(QCoreApplication::translate(m_trContext.toAscii(), m_trLabel.toAscii()));
+            m_menu->setTitle(QCoreApplication::translate(m_trContext.toUtf8(), m_trLabel.toUtf8()));
     }
 }
 
@@ -593,8 +593,8 @@ bool MenuBarActionContainer::canBeAddedToMenu() const
 //{
 //    if (m_menuBar) {
 //        if (m_trContext.isEmpty())
-//            m_menuBar->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toAscii()));
+//            m_menuBar->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toUtf8()));
 //        else
-//            m_menuBar->setTitle(QCoreApplication::translate(m_trContext.toAscii(), m_trLabel.toAscii()));
+//            m_menuBar->setTitle(QCoreApplication::translate(m_trContext.toUtf8(), m_trLabel.toUtf8()));
 //    }
 //}

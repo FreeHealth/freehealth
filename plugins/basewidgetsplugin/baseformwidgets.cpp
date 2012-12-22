@@ -228,7 +228,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         // Create the Ui using the QtUi file
         QUiLoader loader;
         QBuffer buf;
-        buf.setData(uiContent.toAscii());
+        buf.setData(uiContent.toUtf8());
         mainWidget = loader.load(&buf, this);
 
         // Manage options

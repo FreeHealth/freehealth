@@ -574,9 +574,9 @@ void Action::retranslate()
             context = Trans::Constants::CONSTANTS_TR_CONTEXT;
         bool block = a->blockSignals(true);
         if (!m_trLabel.isEmpty())
-            a->setText(QCoreApplication::translate(context.toAscii(), m_trLabel.toAscii()));
+            a->setText(QCoreApplication::translate(context.toUtf8(), m_trLabel.toUtf8()));
         if (!m_trTooltip.isEmpty())
-            a->setToolTip(stringWithAppendedShortcut(QCoreApplication::translate(context.toAscii(), m_trTooltip.toAscii())));
+            a->setToolTip(stringWithAppendedShortcut(QCoreApplication::translate(context.toUtf8(), m_trTooltip.toUtf8())));
         else
             a->setToolTip(stringWithAppendedShortcut(a->text()));
         a->blockSignals(block);

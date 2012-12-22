@@ -70,7 +70,7 @@ public:
         if (_trContext.isEmpty())
             _periodMenu->setTitle(_trTitle);
         else
-            _periodMenu->setTitle(QApplication::translate(_trContext.toAscii(), _trTitle.toAscii()));
+            _periodMenu->setTitle(QApplication::translate(_trContext.toUtf8(), _trTitle.toUtf8()));
         for(int i = _startPeriod; i < periods().count(); ++i) {
             QAction *a = _periodMenu->addMenu(valueMenu(_periodMenu, i));
             a->setText(Utils::firstLetterUpperCase(periods().at(i)));
@@ -111,7 +111,7 @@ void PeriodSelectorToolButton::setMainMenuTitle(const QString &translatableTitle
     d->_trTitle = translatableTitle;
     d->_trContext = translationContext;
     if (d->_periodMenu)
-        d->_periodMenu->setTitle(QApplication::translate(d->_trContext.toAscii(), d->_trTitle.toAscii()));
+        d->_periodMenu->setTitle(QApplication::translate(d->_trContext.toUtf8(), d->_trTitle.toUtf8()));
 }
 
 void PeriodSelectorToolButton::setStartPeriodsAt(const int transConstantsTimeEnumValue)
