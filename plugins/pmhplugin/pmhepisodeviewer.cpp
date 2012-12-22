@@ -108,9 +108,16 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
     ui->tableView->hideColumn(PmhEpisodeModel::IcdXml);
     ui->tableView->hideColumn(PmhEpisodeModel::Contact);
     ui->tableView->hideColumn(PmhEpisodeModel::EmptyColumn);
+#if QT_VERSION < 0x050000
     ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
+#else
+    // Qt5
+    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::Label, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateEnd, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
+#endif
 }
 
 void PmhEpisodeViewer::clear()

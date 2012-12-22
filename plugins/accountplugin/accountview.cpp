@@ -152,8 +152,14 @@ void AccountView::setHeadersOfTable(){
           m_Model->fetchMore();
         }
     m_ui->tableView->setModel(m_Model);
+#if QT_VERSION < 0x050000
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#else
+    // Qt5
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    m_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#endif
     m_ui->tableView->show();
 }
 

@@ -155,8 +155,16 @@ void ControlReceipts::search(){
     ui->tableView->setColumnHidden(ACCOUNT_INSURANCE_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_MEDICALPROCEDURE_XML,true);
     ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
+
+#if QT_VERSION < 0x050000
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#else
+    // Qt5
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#endif
+
     ui->tableView->horizontalHeader()->setCascadingSectionResizes (true);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     //ui->tableView->resizeColumnsToContents();
@@ -395,8 +403,16 @@ void ControlReceipts::refreshFilter(const QString & filter){
     ui->tableView->setColumnHidden(ACCOUNT_INSURANCE_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_MEDICALPROCEDURE_XML,true);
     ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
+
+#if QT_VERSION < 0x050000
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#else
+    // Qt5
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#endif
+
 }
 
 void ControlReceipts::closeAction(){

@@ -704,8 +704,16 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->verticalHeader()->setStretchLastSection ( false );
+
+#if QT_VERSION < 0x050000
     //ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+#else
+    // Qt5
+    //ui->amountsView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->amountsView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+#endif
+
     ui->amountsView->horizontalHeader()->setMinimumSectionSize(100);
     //ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
     //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );

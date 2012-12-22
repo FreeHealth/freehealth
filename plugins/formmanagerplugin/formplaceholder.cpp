@@ -326,11 +326,20 @@ public:
         ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
+#if QT_VERSION < 0x050000
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
+#else
+    // Qt5
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
+        ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
+#endif
         QFont small;
         if (Utils::isRunningOnWin())
             small.setPointSize(small.pointSize() - 1);

@@ -126,7 +126,12 @@ void CategoryDialog::setCategoryModel(ICategoryModelHelper *model, const int lab
     }
     d->ui->treeView->showColumn(labelColumn);
     d->ui->treeView->header()->setStretchLastSection(false);
+#if QT_VERSION < 0x050000
     d->ui->treeView->header()->setResizeMode(labelColumn, QHeaderView::Stretch);
+#else
+    // Qt5
+    d->ui->treeView->header()->setSectionResizeMode(labelColumn, QHeaderView::Stretch);
+#endif
     connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(editItem(QModelIndex, QModelIndex)));
     d->ui->treeView->setCurrentIndex(d->m_CategoryModel->index(0,0));
