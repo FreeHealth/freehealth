@@ -132,12 +132,12 @@ SOURCES += global.cpp \
     emailvalidator.cpp \
     widgets/bugreportdialog.cpp
 
-macx {
-    OBJECTIVE_SOURCES += iconbadgealert.mm
-    LIBS += -framework Carbon -framework AppKit
-} else {
+#macx {
+#    OBJECTIVE_SOURCES += iconbadgealert.mm
+#    LIBS += -framework Carbon -framework AppKit
+#} else {
     SOURCES += iconbadgealert.cpp
-}
+#}
 
 # resources
 #RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
