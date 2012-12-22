@@ -84,7 +84,7 @@ public:
     void createUi()
     {
         ui = new Internal::Ui::PadWriter;
-        ui->setupUi(this);
+        ui->setupUi(q);
         ui->tokenTreeLayout->setMargin(0);
         ui->tokenTreeLayout->setSpacing(0);
     }
@@ -499,10 +499,10 @@ void PadWriter::setAutoUpdateOfResult(bool state)
 
 void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 {
-    if (!d->_followedItem)
-        return;
-    if (d->_followedItem!=fragment)
-        return;
+//    if (!d->_followedItem)
+//        return;
+//    if (d->_followedItem!=fragment)
+//        return;
 //    // The followed fragment was modified
 //    QTextDocument *doc = d->ui->wysiwyg->document();
 //    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
