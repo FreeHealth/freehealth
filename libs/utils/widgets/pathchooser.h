@@ -32,8 +32,8 @@
 
 #include <utils/global_exporter.h>
 
-#include <QtGui/QWidget>
-#include <QtGui/QAbstractButton>
+#include <QWidget>
+#include <QAbstractButton>
 
 namespace Utils {
 
