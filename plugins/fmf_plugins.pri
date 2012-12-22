@@ -39,3 +39,5 @@ include(../libs/rpath.pri)
 #    QMAKE_RPATHDIR =
 #}
 
+# Manage Qt >= 5
+greaterThan(QT_MAJOR_VERSION, 4): QT *= widgets

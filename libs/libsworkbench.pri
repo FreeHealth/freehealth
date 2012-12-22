@@ -10,3 +10,6 @@ DESTDIR  = $${BUILD_LIB_PATH}
 
 # manage pre tag translations
 PRE_TRANSLATION  = lib
+
+# Manage Qt >= 5
+greaterThan(QT_MAJOR_VERSION, 4): QT *= widgets
