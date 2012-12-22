@@ -4,4 +4,8 @@ include( ../formmanagerplugin/formmanagerplugin.pri )
 include( ../patientbaseplugin/patientbaseplugin.pri )
 include( ../identityplugin/identityplugin.pri )
 QT *= script
-CONFIG *= uitools
+isEqual(QT_MAJOR_VERSION, 5) {
+    QT *= uitools
+} else {
+    CONFIG *= uitools
+}
