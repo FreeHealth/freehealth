@@ -103,6 +103,21 @@ void HttpDownloader::setUrl(const QUrl &url)
 //    d->m_Url.setAuthority();
 }
 
+/**
+ * Instead of downloading the content into a file, keep the content in a buffer.
+ * To retrieve the content, use getBufferContent(). \n
+ * \note By default, set to false.
+ */
+void HttpDownloader::setStoreInBuffer(bool store)
+{
+   d->_useBuffer = store;
+}
+
+QByteArray HttpDownloader::getBufferContent() const
+{
+    return d->_stringBuffer;
+}
+
 /** Sets the download output path (absolute path only) */
 void HttpDownloader::setOutputPath(const QString &absolutePath)
 {
@@ -200,6 +215,7 @@ HttpDownloaderPrivate::HttpDownloaderPrivate(HttpDownloader *parent) :
     httpGetId(-1),
     httpRequestAborted(false),
     networkError(QNetworkReply::NoError),
+    _useBuffer(false),
     q(parent)
 {
     setObjectName("HttpDownloaderPrivate");
@@ -243,24 +259,28 @@ bool HttpDownloaderPrivate::startDownload()
 /** Prepare the Http download */
 bool HttpDownloaderPrivate::downloadFile()
 {
-    QString fileName = q->outputAbsoluteFileName();
+    if (!_useBuffer) {
+        QString fileName = q->outputAbsoluteFileName();
 
-    if (QFile::exists(fileName)) {
-        // FIXME: No direct GUI access from a non-GUI class!!!
-        if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
-                                       "the current directory. Overwrite?").arg(fileName), ""))
+        if (QFile::exists(fileName)) {
+            // FIXME: No direct GUI access from a non-GUI class!!!
+            if (!Utils::yesNoMessageBox(tr("There already exists a file called %1 in "
+                                           "the current directory. Overwrite?").arg(fileName), ""))
+                return false;
+            QFile::remove(fileName);
+        }
+
+        file = new QFile(fileName);
+        if (!file->open(QIODevice::WriteOnly)) {
+            // FIXME: No direct GUI access from a non-GUI class!!!
+            Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
+                                     .arg(fileName).arg(file->errorString()), "");
+            delete file;
+            file = 0;
             return false;
-        QFile::remove(fileName);
-    }
-
-    file = new QFile(fileName);
-    if (!file->open(QIODevice::WriteOnly)) {
-        // FIXME: No direct GUI access from a non-GUI class!!!
-        Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
-                                 .arg(fileName).arg(file->errorString()), "");
-        delete file;
-        file = 0;
-        return false;
+        }
+    } else {
+        _stringBuffer.clear();
     }
 
     if (progressBar) {
@@ -298,6 +318,7 @@ void HttpDownloaderPrivate::cancelDownload()
     reply->deleteLater();
     networkError = QNetworkReply::OperationCanceledError;
     lastError = tr("Download canceled.");
+    _stringBuffer.clear();
 }
 
 /** Slot called when the downloading is finished (with or without error) */
@@ -332,12 +353,15 @@ void HttpDownloaderPrivate::httpFinished()
         }
     }
 
-    file->flush();
-    file->close();
+    if (!_useBuffer) {
+        file->flush();
+        file->close();
+    }
 
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (networkError) {
-        file->remove();
+        if (!_useBuffer)
+            file->remove();
         Utils::informativeMessageBox(tr("Download failed: %1.")
                                      .arg(reply->errorString()), "", "", tr("HTTP"));
     } else if (!redirectionTarget.isNull()) {
@@ -347,8 +371,10 @@ void HttpDownloaderPrivate::httpFinished()
                                    "", tr("HTTP"))) {
             m_Url = newUrl;
             reply->deleteLater();
-            file->open(QIODevice::WriteOnly);
-            file->resize(0);
+            if (!_useBuffer) {
+                file->open(QIODevice::WriteOnly);
+                file->resize(0);
+            }
             startRequest(m_Url);
             return;
         }
@@ -359,7 +385,8 @@ void HttpDownloaderPrivate::httpFinished()
 
     reply->deleteLater();
     reply = 0;
-    delete file;
+    if (file)
+        delete file;
     file = 0;
 
     Q_EMIT q->downloadFinished();
@@ -372,8 +399,10 @@ void HttpDownloaderPrivate::httpReadyRead()
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
     // signal of the QNetworkReply
-    if (file)
+    if (!_useBuffer && file)
         file->write(reply->readAll());
+    else
+        _stringBuffer += reply->readAll();
 }
 
 /**

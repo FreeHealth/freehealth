@@ -89,6 +89,8 @@ public:
     QHash<QString, int> m_AuthTimes;
     QString lastError;
     QNetworkReply::NetworkError networkError;
+    bool _useBuffer;
+    QByteArray _stringBuffer;
 
 private:
     HttpDownloader *q;

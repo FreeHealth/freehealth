@@ -61,6 +61,9 @@ public:
 
     void setUrl(const QUrl &url);
 
+    void setStoreInBuffer(bool store);
+    QByteArray getBufferContent() const;
+
     void setOutputPath(const QString &absolutePath);
     void setOutputFileName(const QString &fileName);
     QString outputFileName() const;
