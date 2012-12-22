@@ -56,7 +56,9 @@ class IcdSearchModelPrivate
 {
 public:
     IcdSearchModelPrivate(IcdSearchModel *parent) :
-            m_IcdMaster(0), m_SearchMode(IcdSearchModel::SearchByLabel), q(parent)
+        m_IcdMaster(0),
+        m_SearchMode(IcdSearchModel::SearchByLabel),
+        q(parent)
     {
         // Master -> valid=1, level=4, code like '%search%'
         // Libelle -> XX_OMS like 'search', valid=1
@@ -254,17 +256,18 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
     if (WarnFilter)
         qWarning() << req;
 
+    beginResetModel();
     d->m_IcdMaster->setQuery(req, icdBase()->database());
-
-    reset();
+    endResetModel();
 }
 
 void IcdSearchModel::refreshDatabase()
 {
+    beginResetModel();
     delete d->m_IcdMaster;
     d->m_IcdMaster = 0;
     init();
-    reset();
+    endResetModel();
 }
 
 void IcdSearchModel::languageChanged()

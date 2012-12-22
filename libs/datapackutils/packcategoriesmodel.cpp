@@ -376,21 +376,24 @@ QString PackCategoriesModel::vendor(const QModelIndex &index) const
 /** Refresh the model. */
 void PackCategoriesModel::updateModel()
 {
+    beginResetModel();
     d->checkAvailablePack();
-    reset();
+    endResetModel();
 }
 
 /** Manage model when a server is added to the server manager */
 void PackCategoriesModel::onServerAdded(const int index)
 {
+    beginResetModel();
     d->serverAdded(index);
-    reset();
+    endResetModel();
 }
 
 /** Manage model when a server is about to be removed from the server manager */
 void PackCategoriesModel::onServerRemoved(const int index)
 {
+    beginResetModel();
     d->serverRemoved(index);
-    reset();
+    endResetModel();
 }
 

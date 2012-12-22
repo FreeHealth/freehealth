@@ -117,13 +117,14 @@ void DailySchemeModel::setMethod(Method method)
 {
     if (method==d->m_Method)
         return;
+    beginResetModel();
     if (method==Distribute) {
         d->m_DailySchemes.clear();
     }
     d->m_Method = method;
     d->dailySum();
     Q_EMIT methodChanged();
-    reset();
+    endResetModel();
 }
 
 DailySchemeModel::Method DailySchemeModel::method() const
@@ -149,6 +150,7 @@ QString DailySchemeModel::serializedContent() const
 
 void DailySchemeModel::setSerializedContent(const QString &content)
 {
+    beginResetModel();
     d->m_DailySchemes.clear();
     const QStringList &schemes = Trans::ConstantTranslations::dailySchemeXmlTagList();
     QString tmp = content;
@@ -166,7 +168,7 @@ void DailySchemeModel::setSerializedContent(const QString &content)
     } else {
         setMethod(Distribute);
     }
-    reset();
+    endResetModel();
 }
 
 void DailySchemeModel::setScored(bool isScored)
@@ -177,9 +179,10 @@ void DailySchemeModel::setScored(bool isScored)
 /** \brief Define the total maximum and minimum quantity for the full day. */
 void DailySchemeModel::setMaximumDay(double max)
 {
+    beginResetModel();
     d->m_Max = max;
     d->dailySum();
-    reset();
+    endResetModel();
     // TODO: recalculate daily scheme and manage errors ?
 }
 

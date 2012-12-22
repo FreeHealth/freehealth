@@ -41,8 +41,9 @@ EbmModel::~EbmModel()
 
 void EbmModel::clear()
 {
+    beginResetModel();
     m_Ebms.clear();
-    reset();
+    endResetModel();
 }
 
 QVariant EbmModel::data(const QModelIndex &index, int role) const
@@ -92,7 +93,8 @@ Qt::ItemFlags EbmModel::flags(const QModelIndex &index) const
 
 void EbmModel::setEbmData(const QVector<EbmData *> &ebms)
 {
+    beginResetModel();
     m_Ebms = ebms;
-    reset();
+    endResetModel();
 }
 

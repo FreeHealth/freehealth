@@ -900,9 +900,10 @@ bool PatientModel::submit()
 
 bool PatientModel::refreshModel()
 {
+    beginResetModel();
     d->refreshFilter();
     d->m_SqlPatient->select();
-    reset();
+    endResetModel();
     return true;
 }
 

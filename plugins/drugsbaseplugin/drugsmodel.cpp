@@ -489,9 +489,10 @@ bool DrugsModel::submit()
 /** Reset the model */
 void DrugsModel::resetModel()
 {
+    beginResetModel();
     d->_posologicSentence.clear();
     d->m_IsDirty = false;
-    reset();
+    endResetModel();
 }
 
 /**
@@ -629,12 +630,13 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
 /** Add a textual drug to the prescription. \sa DrugsWidget::TextualPrescriptionDialog, DrugsWidget::Internal::DrugSelector */
 int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &drugNote)
 {
+    beginResetModel();
     ITextualDrug *drug = new ITextualDrug();
     drug->setDenomination(drugLabel);
     drug->setPrescriptionValue(Constants::Prescription::Note, drugNote);
     d->m_DrugsList << drug;
-    reset();
     d->m_IsDirty = true;
+    endResetModel();
     Q_EMIT numberOfRowsChanged();
     return d->m_DrugsList.indexOf(drug);
 }
@@ -686,6 +688,7 @@ int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractio
 /** Clear the prescription. Clear all interactions too. Calling this causes a model reset. */
 void DrugsModel::clearDrugsList()
 {
+    beginResetModel();
     d->m_LastDrugRequiered = 0;
     qDeleteAll(d->m_DrugsList);
     d->m_DrugsList.clear();
@@ -695,8 +698,8 @@ void DrugsModel::clearDrugsList()
     d->m_InteractionResult->clear();
     d->_posologicSentence.clear();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
-    reset();
     d->m_IsDirty = true;
+    endResetModel();
     Q_EMIT numberOfRowsChanged();
 }
 
@@ -773,8 +776,9 @@ bool DrugsModel::prescriptionHasAllergies()
 /** Sort the drugs inside prescription. \sa DrugsDB::lessThan(). Calling this causes a model reset. */
 void DrugsModel::sort(int, Qt::SortOrder)
 {
+    beginResetModel();
     qSort(d->m_DrugsList.begin(), d->m_DrugsList.end(), IDrug::lessThan);
-    reset();
+    endResetModel();
 }
 
 /** Moves a drug up. Calling this causes a model reset. */
@@ -784,8 +788,9 @@ bool DrugsModel::moveUp(const QModelIndex &item)
         return false;
 
     if (item.row() >= 1) {
+        beginResetModel();
         d->m_DrugsList.move(item.row(), item.row()-1);
-        reset();
+        endResetModel();
         return true;
     }
     return false;
@@ -798,8 +803,9 @@ bool DrugsModel::moveDown(const QModelIndex &item)
         return false;
 
     if (item.row() < (rowCount()-1)) {
+        beginResetModel();
         d->m_DrugsList.move(item.row(), item.row()+1);
-        reset();
+        endResetModel();
         return true;
     }
     return false;
@@ -835,8 +841,9 @@ bool DrugsModel::testingDrugsAreVisible() const
 
 void DrugsModel::setSelectionOnlyMode(bool b)
 {
+    beginResetModel();
     d->m_SelectionOnlyMode = b;
-    reset();
+    endResetModel();
 }
 
 bool DrugsModel::isSelectionOnlyMode() const
@@ -917,14 +924,16 @@ int DrugsModel::removeLastInsertedDrug()
 void DrugsModel::checkInteractions()
 {
     if (!d->m_ComputeInteraction) {
-        reset();
+        beginResetModel();
+        endResetModel();
         return;
     }
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
+    beginResetModel();
     d->m_InteractionResult = interactionManager().checkInteractions(*d->m_InteractionQuery, this);
-    reset();
     d->m_IsDirty = true;
+    endResetModel();
 }
 
 /** \brief Transform a prescription (one drug) to a readable output.

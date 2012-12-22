@@ -84,10 +84,12 @@ public:
             where.insertMulti(AccountDB::Constants::ACTS_DATE, QString("<='%1'").arg( m_EndDate.toString(Qt::ISODate)));
         }
         where.insert(AccountDB::Constants::ACTS_USER_UID, QString("='%1'").arg(m_UserUid));
+
+        q->beginResetModel();
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Acts, where));
         if (WarnFilter)
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
-        q->reset();
+        q->endResetModel();
     }
 
 public:

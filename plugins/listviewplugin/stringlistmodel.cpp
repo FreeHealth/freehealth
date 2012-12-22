@@ -87,14 +87,16 @@ void StringListModel::setReadOnly(bool state)
 
 void StringListModel::setCheckable( bool state )
 {
+    beginResetModel();
     d->m_Checkable = state;
-    reset();
+    endResetModel();
 }
 
 void StringListModel::setStringEditable( bool state )
 {
+    beginResetModel();
     d->m_StringEditable = state;
-    reset();
+    endResetModel();
 }
 
 
@@ -129,6 +131,7 @@ QStringList StringListModel::getCheckedItems() const
 
 void StringListModel::setCheckedItems( const QStringList & list )
 {
+    beginResetModel();
     QList<StringListModelPrivate::Data>::iterator i;
     for (i = d->m_StringList.begin(); i != d->m_StringList.end(); ++i) {
        if ( list.indexOf( (*i).str ) != -1 )
@@ -136,7 +139,7 @@ void StringListModel::setCheckedItems( const QStringList & list )
        else
            (*i).checked = Qt::Unchecked;
     }
-    reset();
+    endResetModel();
 }
 
 int StringListModel::rowCount( const QModelIndex & parent) const
@@ -223,8 +226,9 @@ bool StringListModel::moveUp( const QModelIndex & item )
         return false;
 
     if (item.row() >= 1) {
+        beginResetModel();
         d->m_StringList.move( item.row(), item.row()-1);
-        reset();
+        endResetModel();
         return true;
     }
     return false;
@@ -236,8 +240,9 @@ bool StringListModel::moveDown( const QModelIndex & item )
         return false;
 
     if (item.row() < (rowCount()-1)) {
+        beginResetModel();
         d->m_StringList.move( item.row(), item.row()+1);
-        reset();
+        endResetModel();
         return true;
     }
     return false;

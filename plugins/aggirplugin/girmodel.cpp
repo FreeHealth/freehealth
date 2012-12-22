@@ -226,19 +226,21 @@ GirModel::~GirModel()
 
 void GirModel::clearGirScore()
 {
+    beginResetModel();
     m_GirScore->clear();
-    reset();
+    endResetModel();
 }
 
 void GirModel::setStringfiedGirScore(const QString &score)
 {
+    beginResetModel();
     if (m_GirScore) {
         m_GirScore->setSerializedScore(score);
         int gir = m_GirScore->resultingGir();
         if (gir > 0)
             Q_EMIT girCalculated(gir);
     }
-    reset();
+    endResetModel();
 }
 
 QString GirModel::stringfiedGirScore() const

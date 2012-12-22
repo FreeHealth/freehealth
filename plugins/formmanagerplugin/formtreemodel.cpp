@@ -251,9 +251,10 @@ void FormTreeModel::initialize()
 
 void FormTreeModel::refreshFormTree()
 {
+    beginResetModel();
     d->createFormTree();
     setColumnCount(MaxData);
-    reset();
+    endResetModel();
 }
 
 static QString formTooltip(Form::FormMain *form)
@@ -362,8 +363,9 @@ void FormTreeModel::clearSubForms()
 /** Add a subform to the model according the \e insertionPoint */
 bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
 {
+    beginResetModel();
     bool ok = d->addSubForm(insertionPoint);
-    reset();
+    endResetModel();
     return ok;
 }
 
@@ -406,7 +408,8 @@ bool FormTreeModel::updateFormCount()
 
 void FormTreeModel::onPatientFormsLoaded()
 {
+    beginResetModel();
     d->createFormTree();
     setColumnCount(MaxData);
-    reset();
+    endResetModel();
 }

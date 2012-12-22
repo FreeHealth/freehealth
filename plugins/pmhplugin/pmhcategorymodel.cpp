@@ -514,6 +514,7 @@ void PmhCategoryModel::refreshFromDatabase()
 {
     if (!patient())
         return;
+    beginResetModel();
     qDeleteAll(d->_pmh);
     d->_pmh.clear();
     d->_categoryToMultiPmh.clear();
@@ -524,7 +525,7 @@ void PmhCategoryModel::refreshFromDatabase()
     d->_htmlSynthesis.clear();
     d->clearTree();
     d->getDataFromDatabase();
-    reset();
+    endResetModel();
 }
 
 QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &parent) const
@@ -1247,6 +1248,7 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 /** Update the model when the current patient changes. */
 void PmhCategoryModel::onCurrentPatientChanged()
 {
+    beginResetModel();
     qDeleteAll(d->_pmh);
     d->_pmh.clear();
     d->_categoryToMultiPmh.clear();
@@ -1266,7 +1268,7 @@ void PmhCategoryModel::onCurrentPatientChanged()
         d->getCategories(false);
         d->getPmh();
     }
-    reset();
+    endResetModel();
 }
 
 /** Update the category label (retranslate for eg) */

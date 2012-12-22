@@ -705,9 +705,10 @@ QModelIndex UserModel::currentUserIndex() const
  */
 void UserModel::forceReset()
 {
+    beginResetModel();
     d->clearCache();
     d->m_Sql->select();
-    reset();
+    endResetModel();
 }
 
 /** Clears the content of the model. Silently save users if needed. */
@@ -726,12 +727,13 @@ void UserModel::clear()
 
 void UserModel::refresh()
 {
+    beginResetModel();
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO;
     d->checkNullUser();
     clear();
     d->m_Sql->select();
-    reset();
+    endResetModel();
 }
 
 /** Check login/password validity. \sa UserBase::checkLogin(). */
@@ -797,8 +799,10 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
         }
     }
     endRemoveRows();
+
+    beginResetModel();
     d->m_Sql->select();
-    reset();
+    endResetModel();
     Q_EMIT memoryUsageChanged();
     d->checkNullUser();
     return noError;
@@ -1273,8 +1277,10 @@ bool UserModel::revertAll()
     int i = 0;
     for(i=0; i < rowCount() ; i++)
         revertRow(i);
+
+    beginResetModel();
     d->m_Sql->select();
-    reset();
+    endResetModel();
     d->checkNullUser();
     return true;
 }
@@ -1282,6 +1288,7 @@ bool UserModel::revertAll()
 /** Revert a row */
 void UserModel::revertRow(int row)
 {
+    beginResetModel();
     d->checkNullUser();
     QString uuid = d->m_Sql->index(row, USER_UUID).data().toString();
     if (WarnAllProcesses)
@@ -1293,7 +1300,7 @@ void UserModel::revertRow(int row)
         deleteme = 0;
         d->m_Uuid_UserList.remove(uuid);
     }
-    reset();
+    endResetModel();
     Q_EMIT memoryUsageChanged();
     d->checkNullUser();
 }
@@ -1322,9 +1329,10 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
         filter += QString("(`%1` %2) AND\n").arg(baseField, conditions.value(r));
     }
     filter.chop(5);
+    beginResetModel();
     d->m_Sql->setFilter(filter);
     d->m_Sql->select();
-    reset();
+    endResetModel();
 //    qWarning() << filter;
     d->checkNullUser();
 }

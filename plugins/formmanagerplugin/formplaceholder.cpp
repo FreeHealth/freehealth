@@ -894,8 +894,13 @@ void FormPlaceHolder::onFormTreeModelReset()
     tree->setColumnHidden(FormTreeModel::EmptyColumn1, false);
     tree->header()->hide();
     tree->header()->setStretchLastSection(false);
+#if QT_VERSION < 0x050000
     tree->header()->setResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
     tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
+#else
+    tree->header()->setSectionResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
+    tree->header()->setSectionResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
+#endif
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
     d->selectAndActivateFirstForm();

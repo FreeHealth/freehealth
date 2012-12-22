@@ -236,12 +236,13 @@ bool CategoryLabelsModel::submit()
 // Data
 bool CategoryLabelsModel::setCategoryItem(CategoryItem *cat)
 {
+    beginResetModel();
     d->m_Cat = cat;
     d->m_Labels.clear();
     foreach(const QString &l, cat->allLanguagesForLabel()) {
         d->m_Labels.append(Language(l, cat->label(l)));
     }
-    reset();
+    endResetModel();
     return true;
 }
 

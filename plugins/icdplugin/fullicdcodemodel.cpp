@@ -250,10 +250,11 @@ SimpleIcdModel *FullIcdCodeModel::dagStarModel()
 
 void FullIcdCodeModel::updateTranslations()
 {
+    beginResetModel();
     // Create code tree model according to the language
     d->createCodeTreeModel(d->m_SID);
 
     // Add stringlists to model according to the language
     d->m_Include->setStringList(icdBase()->getIncludedLabels(d->m_SID));
-    reset();
+    endResetModel();
 }

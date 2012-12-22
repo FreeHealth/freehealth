@@ -293,8 +293,9 @@ QModelIndex UserCalendarModel::defaultUserCalendarModelIndex() const
 void UserCalendarModel::updateUserCalendarChanged(const int row)
 {
     Q_UNUSED(row);
-    reset();
+    beginResetModel();
     // TODO: update availabities model
+    endResetModel();
 }
 
 /** Returns the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index. You have to delete the returned object. */
@@ -363,6 +364,7 @@ bool UserCalendarModel::submit()
 /** Reverts all modifications. */
 void UserCalendarModel::revert()
 {
+    beginResetModel();
     d->getUserCalendars();
-    reset();
+    endResetModel();
 }

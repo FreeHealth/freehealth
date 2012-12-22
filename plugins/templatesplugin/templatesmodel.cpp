@@ -296,7 +296,8 @@ public:
     void allInstancesReset() const
     {
         foreach(TemplatesModelPrivate *pr, m_Handles) {
-            pr->q->reset();
+            pr->q->beginResetModel();
+            pr->q->endResetModel();
         }
     }
 
@@ -794,8 +795,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
-    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-
+    // TODO: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -812,9 +812,10 @@ TemplatesModel::~TemplatesModel()
 
 void TemplatesModel::onCoreDatabaseServerChanged()
 {
+    beginResetModel();
     d->m_ModelDataRetreived = false;
     d->setupModelData();
-    reset();
+    endResetModel();
 }
 
 bool TemplatesModel::isDirty() const
@@ -1256,8 +1257,9 @@ bool TemplatesModel::isTemplate(const QModelIndex &index) const
 void TemplatesModel::categoriesOnly()
 {
     if (!d->m_ShowOnlyCategories) {
+        beginResetModel();
         d->m_ShowOnlyCategories = true;
-        reset();
+        endResetModel();
     }
 }
 

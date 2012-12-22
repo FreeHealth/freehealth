@@ -320,15 +320,17 @@ PackModel::~PackModel()
 /** When setting the installChecker feature to \e on, the model computes the packages dependencies. */
 void PackModel::setInstallChecker(const bool onOff)
 {
+    beginResetModel();
     d->m_InstallChecking = onOff;
-    reset();
+    endResetModel();
 }
 
 /** Allow user to check package (for installation/desinstallation). */
 void PackModel::setPackCheckable(const bool checkable)
 {
+    beginResetModel();
     d->m_PackCheckable = checkable;
-    reset();
+    endResetModel();
 }
 
 /** Return true is the model contains user modifications. */
@@ -485,20 +487,22 @@ QList<Pack> PackModel::packageToRemove() const
 /** Refresh the model. */
 void PackModel::updateModel()
 {
+    beginResetModel();
     d->m_Items.clear();
     d->m_AvailPacks.clear();
     d->createPackItem();
-    reset();
+    endResetModel();
 }
 
 /** Filter the model using the \e vendor name and the Pack::DataType \e types. An empty /e vendor name and a empty \e types removes the filter. */
 void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types)
 {
+    beginResetModel();
     d->rowToItem.clear();
     if (types.isEmpty() && vendor.isEmpty()) {
         d->_filterVendor.clear();
         d->_filterDataType = types;
-        reset();
+        endResetModel();
         return;
     }
 
@@ -509,7 +513,7 @@ void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types
     }
     d->_filterVendor = vendor;
     d->_filterDataType = types;
-    reset();
+    endResetModel();
 }
 
 /** Manage model when a server is added to the server manager */

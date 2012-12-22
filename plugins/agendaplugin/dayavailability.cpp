@@ -161,9 +161,10 @@ void DayAvailabilityModel::clearAvailabilities()
 
 void DayAvailabilityModel::setUserCalendar(UserCalendar *calendar)
 {
+    beginResetModel();
     d->m_UserCalendar = calendar;
     d->resetModel();
-    reset();
+    endResetModel();
 }
 
 void DayAvailabilityModel::addAvailability(const DayAvailability &availability)

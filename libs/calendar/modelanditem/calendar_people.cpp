@@ -189,8 +189,9 @@ int CalendarPeopleModel::columnCount(const QModelIndex &) const
 
 void CalendarPeopleModel::clear()
 {
+    beginResetModel();
     m_People.clear();
-    reset();
+    endResetModel();
 }
 
 QVariant CalendarPeopleModel::data(const QModelIndex &idx, int role) const
@@ -255,8 +256,9 @@ bool CalendarPeopleModel::removeRows(int row, int count, const QModelIndex &pare
 
 void CalendarPeopleModel::addPeople(const Calendar::People &people)
 {
+    beginResetModel();
     m_People.append(people);
-    reset();
+    endResetModel();
 }
 
 void CalendarPeopleModel::removePeople(const QString &uid)
@@ -269,8 +271,9 @@ void CalendarPeopleModel::removePeople(const QString &uid)
 
 void CalendarPeopleModel::setPeopleList(const QList<Calendar::People> &list)
 {
+    beginResetModel();
     m_People = list;
-    reset();
+    endResetModel();
 }
 
 QList<Calendar::People> CalendarPeopleModel::peopleList() const

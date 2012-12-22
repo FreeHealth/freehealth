@@ -125,10 +125,11 @@ public:
     void getTree()
     {
         if (!drugsBase().actualDatabaseInformation() || !drugsBase().actualDatabaseInformation()->atcCompatible) {
+            q->beginResetModel();
             if (m_Root)
                 delete m_Root;
             m_Root = 0;
-            q->reset();
+            q->endResetModel();
             return;
         }
 
@@ -136,6 +137,8 @@ public:
 //            qWarning() << "atc tree not rebuilded";
             return;
         }
+
+        q->beginResetModel();
         // ATC tree is available for en, fr and de
         m_Language = QLocale().name().left(2);
         if (!(m_Language=="fr" || m_Language=="de" || m_Language=="en"))
@@ -196,7 +199,7 @@ public:
 //            last = item;
             parent = 0;
         }
-        q->reset();
+        q->endResetModel();
     }
 
     AtcItem *getItem(const QModelIndex &index) const

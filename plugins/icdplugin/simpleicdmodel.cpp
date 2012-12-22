@@ -173,8 +173,9 @@ void SimpleIcdModel::setUseDagDependencyWithSid(const QVariant &SID)
 
 void SimpleIcdModel::setCheckable(bool state)
 {
+    beginResetModel();
     d->m_Checkable = state;
-    reset();
+    endResetModel();
 }
 
 int SimpleIcdModel::rowCount(const QModelIndex &parent) const
@@ -342,6 +343,7 @@ int SimpleIcdModel::numberOfCheckedItems() const
 
  void SimpleIcdModel::updateTranslations()
  {
+     beginResetModel();
      // Translate codes labels
      foreach(Internal::SimpleCode *code, d->m_Codes) {
          code->systemLabel = icdBase()->getSystemLabel(code->sid);
@@ -372,6 +374,5 @@ int SimpleIcdModel::numberOfCheckedItems() const
          }
          model->setStringList(list);
      }
-
-     reset();
+     endResetModel();
  }
