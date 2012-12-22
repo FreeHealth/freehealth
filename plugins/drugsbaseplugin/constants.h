@@ -378,8 +378,8 @@ namespace Prescription
         IntakesUsesFromTo,
         Route,            // Textual translated route
         RouteId,          // Route Id from drugs database
-        DurationFrom,
         DurationFullString,  // READ ONLY
+        DurationFrom,
         DurationTo,
         DurationScheme,
         DurationUsesFromTo,
