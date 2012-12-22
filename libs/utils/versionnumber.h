@@ -30,6 +30,12 @@
 
 #include <QString>
 
+/**
+ * \file versionnumber.h
+ * \author Eric MAEKER
+ * \version 0.7.6
+ * \date 19 Jun 2012
+*/
 
 namespace Utils {
 
