@@ -42,17 +42,17 @@ class Pack;
 }
 
 namespace ICD {
-class IcdPlugin;
 
 namespace Internal {
 class IcdDatabasePrivate;
+class IcdPlugin;
 class IcdAssociation;
 }
 
 class ICD_EXPORT IcdDatabase : public QObject, public Utils::Database
 {
     Q_OBJECT
-    friend class ICD::IcdPlugin;
+    friend class ICD::Internal::IcdPlugin;
     IcdDatabase(QObject *parent = 0);
 
 public:
