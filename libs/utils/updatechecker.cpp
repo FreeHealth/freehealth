@@ -39,8 +39,9 @@
 
 #include "updatechecker.h"
 #include "updatechecker_p.h"
-#include <utils/log.h>
 
+#include <utils/log.h>
+#include <utils/httpdownloader.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_spashandupdate.h>
 
@@ -52,69 +53,54 @@
 #include <QLabel>
 #include <QFrame>
 #include <QDate>
-
+#include <QSettings>
 
 using namespace Utils;
-using namespace Utils::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
-
 
 namespace Utils {
 namespace Internal {
 
 UpdateCheckerPrivate::UpdateCheckerPrivate( QObject *parent )
-          : QObject(parent), m_ProgressBar(0)
+    : QObject(parent), m_ProgressBar(0)
 {
-    setObjectName( "UpdateChecker" );
-    m_Http = new QHttp(this);
-    connect(m_Http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
-    connect(m_Http, SIGNAL(dataReadProgress(int, int)),
-            this, SLOT(updateDataReadProgress(int, int)));
-    m_FileRetreived = false;
+    setObjectName("UpdateChecker");
+    _downloader = new Utils::HttpDownloader(this);
+    _downloader->setStoreInBuffer(true);
+    connect(_downloader, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()));
 }
 
 UpdateCheckerPrivate::~UpdateCheckerPrivate()
 {
-    disconnect(m_Http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
-    disconnect(m_Http, SIGNAL(dataReadProgress(int, int)),
-            this, SLOT(updateDataReadProgress(int, int)));
+    _downloader->cancelDownload();
 }
 
-bool UpdateCheckerPrivate::getFile( const QUrl &url )
+bool UpdateCheckerPrivate::getFile(const QUrl &url)
 {
     LOG("getFile");
     if ((!url.isValid()) || (url.scheme() != "http") || (url.path().isEmpty())) {
-        Q_EMIT static_cast<UpdateChecker*>(parent())->done(false);
+        Q_EMIT qobject_cast<UpdateChecker*>(parent())->done(false);
         return false;
     }
     m_Url = url;
-    m_Http->setHost(m_Url.host(), m_Url.port(80));
-    m_Http->get(m_Url.path(), &m_Buffer);
-    m_Http->close();
+    _downloader->setUrl(m_Url);
     return true;
 }
 
-void UpdateCheckerPrivate::updateDataReadProgress(int bytesRead, int totalBytes)
+void UpdateCheckerPrivate::onDownloadFinished()
 {
-//    if (httpRequestAborted)
-//        return;
-    if (m_ProgressBar) {
-        m_ProgressBar->setMaximum(totalBytes);
-        m_ProgressBar->setValue(bytesRead);
-    }
-}
+    bool error = _downloader->networkError() != QNetworkReply::NoError;
 
-void UpdateCheckerPrivate::httpDone(bool error)
-{
     Q_EMIT static_cast<UpdateChecker*>(parent())->done(error);
     if (error) {
         LOG_ERROR(tr( "Error %1 while retreiving update file %2" )
-                         .arg(m_Http->errorString())
+                         .arg(_downloader->lastErrorString())
                          .arg(m_Url.toString()));
         return;
     }
 
-    QString update = QString::fromUtf8(m_Buffer.data());
+    QString update = QString::fromUtf8(_downloader->getBufferContent());
     QString forLog = "";
     m_UpdateText.clear();
     m_LastVersion.clear();
@@ -124,12 +110,15 @@ void UpdateCheckerPrivate::httpDone(bool error)
     int idLast = 0;
     while (true) {
         idLast = update.indexOf( "version=", idLast );
-        if ( idLast == -1 )
+        if (idLast == -1)
             break;
         idLast += 8;
-        QString lastVersion = update.mid( idLast, update.indexOf("\n", idLast) - idLast );
+        QString lastVersion = update.mid(idLast, update.indexOf("\n", idLast) - idLast);
+
+        // TODO: Use Utils::VersionNumber
+
         // If necessary keep changelog into update and emit updateFound with the changelog
-        if ( qApp->applicationVersion() < lastVersion ) {
+        if (qApp->applicationVersion() < lastVersion) {
             int begin = update.indexOf( "{", idLast ) + 1;
             int end = update.indexOf( "}", begin );
             m_UpdateText.append( tr( "* Updates of version: %1" ).arg( lastVersion ) );
@@ -154,7 +143,7 @@ void UpdateCheckerPrivate::httpDone(bool error)
 /** \brief Abort the download */
 void UpdateCheckerPrivate::cancelDownload()
 {
-    m_Http->abort();
+    _downloader->cancelDownload();
 }
 
 } // End Internal
@@ -192,9 +181,12 @@ bool UpdateChecker::needsUpdateChecking(QSettings *settings) const
     return false;
 }
 
+/** \todo Code  this */
 bool UpdateChecker::isChecking() const
 {
-    return (d->m_Http->currentId() != 0);
+    // TODO: code here
+    return false;
+//    return (d->_downloader-
 }
 
 /**
@@ -270,7 +262,6 @@ void UpdateChecker::emitSignals()
     Q_EMIT updateFound(d->m_UpdateText);
     Q_EMIT updateFound();
 }
-
 
 /**
   \brief Opens a dialog window that show all the update text available

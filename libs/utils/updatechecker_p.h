@@ -27,12 +27,12 @@
 #define UPDATECHECKERPRIVATE_H
 
 #include <QObject>
-#include <QtNetwork>
-#include <QBuffer>
 #include <QProgressBar>
 #include <QPointer>
+#include <QUrl>
 
 namespace Utils {
+class HttpDownloader;
 namespace Internal {
 
 class UpdateCheckerPrivate : public QObject
@@ -44,15 +44,13 @@ public:
 
     void cancelDownload();
     bool getFile(const QUrl &url);
-    void updateFound( const QString & );
+    void updateFound(const QString &);
 
 private Q_SLOTS:
-    void httpDone(bool error);
-    void updateDataReadProgress(int bytesRead, int totalBytes);
+    void onDownloadFinished();
 
 public:
-    QHttp *m_Http;
-    QBuffer m_Buffer;
+    HttpDownloader *_downloader;
     QUrl m_Url;
     QString m_UpdateText;
     QString m_LastVersion;
