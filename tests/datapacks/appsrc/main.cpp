@@ -31,7 +31,7 @@
 
 #include <utils/global.h>
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QDesktopWidget>
 #include <QDebug>
 
