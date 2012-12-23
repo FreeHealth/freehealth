@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
+    <name>MainWin::Internal::MainWinPlugin</name>
+    <message>
+        <source>Initializing main window plugin...</source>
+        <translation type="unfinished">Initialisation du plugin fenêtre principale...</translation>
+    </message>
+</context>
+<context>
     <name>MainWin::Internal::VirtualDatabasePreferences</name>
     <message>
         <source>Virtual patients</source>
@@ -49,13 +56,6 @@
     <message>
         <source>Virtual database</source>
         <translation>Bases de données virtuelles</translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::MainWinPlugin</name>
-    <message>
-        <source>Initializing main window plugin...</source>
-        <translation>Initialisation du plugin fenêtre principale...</translation>
     </message>
 </context>
 <context>

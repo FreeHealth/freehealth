@@ -146,13 +146,6 @@
     </message>
 </context>
 <context>
-    <name>ICD::IcdPlugin</name>
-    <message>
-        <source>Initializing ICD10 plugin...</source>
-        <translation>Initialisation du plugin CIM10...</translation>
-    </message>
-</context>
-<context>
     <name>ICD::IcdViewer</name>
     <message>
         <source>CODE</source>
@@ -177,6 +170,13 @@
     <message>
         <source>TextLabel</source>
         <translation>Libellé</translation>
+    </message>
+</context>
+<context>
+    <name>ICD::Internal::IcdPlugin</name>
+    <message>
+        <source>Initializing ICD10 plugin...</source>
+        <translation type="unfinished">Initialisation du plugin CIM10...</translation>
     </message>
 </context>
 </TS>

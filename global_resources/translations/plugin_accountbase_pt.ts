@@ -57,12 +57,12 @@
 <context>
     <name>AccountDB::ActsModel</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="181"/>
+        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="183"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="182"/>
+        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="184"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>

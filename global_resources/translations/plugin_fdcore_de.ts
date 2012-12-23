@@ -9,51 +9,6 @@
     </message>
 </context>
 <context>
-    <name>BugReportDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>yourname@gmail.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Problem description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>What steps are needed to reproduce the problem?
-1.
-2.
-3.
-
-What is the expected output? What do you see instead?
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;We are using &lt;a href=&quot;http://code.google.com/p/freemedforms/issues/list&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Google Code&lt;/span&gt;&lt;/a&gt; as issue tracker. If you have a &lt;a href=&quot;https://accounts.google.com/SignUp&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;GMail account&lt;/span&gt;&lt;/a&gt;, you can use it for creating issues here. If you use a non-GMail address, a normal mail is sent to the developers instead of creating an issue on Google Code.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>I want to use this GMail account for creating an issue at the issue tracker</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Send report</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>CommandLine</name>
     <message>
         <source>Passing exchange in file : %1</source>
@@ -251,6 +206,42 @@ Using Url: %1
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
         <source>Ctrl+,</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forms management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drugs management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Agenda management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

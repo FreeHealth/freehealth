@@ -9,41 +9,29 @@
     </message>
 </context>
 <context>
-    <name>Agenda::AgendaPlugin</name>
+    <name>Agenda::AvailabilityCreatorDialog</name>
     <message>
-        <source>Initializing agenda plugin...</source>
-        <translation>Initialisation du plugin agenda...</translation>
+        <source>Day availability editor</source>
+        <translation>Éditeur de disponibilités</translation>
     </message>
     <message>
-        <source>Creating agenda base...</source>
-        <translation>Création de la base de données agenda...</translation>
+        <source>&amp;Day of week:</source>
+        <translation>&amp;Jour de la semaine :</translation>
     </message>
     <message>
-        <source>Please wait</source>
-        <translation>Veuillez patienter</translation>
+        <source>&amp;Start time:</source>
+        <translation>&amp;Heure de début :</translation>
+    </message>
+    <message>
+        <source>&amp;End time:</source>
+        <translation>&amp;Heure de &amp;fin :</translation>
     </message>
 </context>
 <context>
-    <name>Agenda::AvailabilityCreatorDialog</name>
+    <name>Agenda::AvailabilityEditDialog</name>
     <message>
-        <source>Day availability creator</source>
-        <translation>Création de disponibilités</translation>
-    </message>
-    <message>
-        <source>Day of week</source>
-        <translation>Jour de la semaine</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation>Heure de départ</translation>
-    </message>
-    <message>
-        <source>End time</source>
-        <translation>Heure de fin</translation>
-    </message>
-    <message>
-        <source>Dialog</source>
-        <translation></translation>
+        <source>The end start time cannot be before the end time.</source>
+        <translation>L&apos;heure de fin ne peut pas être antérieure à l&apos;heure de début.</translation>
     </message>
 </context>
 <context>
@@ -58,6 +46,21 @@
     <message>
         <source>Agenda</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Agenda::Internal::AgendaPlugin</name>
+    <message>
+        <source>Initializing agenda plugin...</source>
+        <translation>Initialisation du plugin agenda...</translation>
+    </message>
+    <message>
+        <source>Creating agenda base...</source>
+        <translation>Création de la base de données agenda...</translation>
+    </message>
+    <message>
+        <source>Please wait</source>
+        <translation>Veuillez patienter</translation>
     </message>
 </context>
 <context>
@@ -210,35 +213,35 @@
     </message>
     <message>
         <source>Agenda</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Create an agenda for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer un agenda pour cet utilisateur</translation>
     </message>
     <message>
         <source>Quick parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètrage rapide</translation>
     </message>
     <message>
         <source>&amp;Title</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Titre</translation>
     </message>
     <message>
         <source>&amp;Description</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Default &amp;appointment duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Duréé par défaut des &amp;rendez-vous</translation>
     </message>
     <message>
         <source> minutes</source>
-        <translation type="unfinished">minutes</translation>
+        <translation>minutes</translation>
     </message>
     <message>
         <source>Default &amp;location</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Localisation par défaut</translation>
     </message>
 </context>
 <context>
@@ -267,32 +270,12 @@
 <context>
     <name>Agenda::UserCalendarEditorWidget</name>
     <message>
-        <source>Label</source>
-        <translation>Libellé</translation>
-    </message>
-    <message>
         <source>Icon</source>
         <translation>Icône</translation>
     </message>
     <message>
-        <source>General</source>
-        <translation>Général</translation>
-    </message>
-    <message>
-        <source>Default event duration</source>
-        <translation>Durée par défaut des rendez-vous</translation>
-    </message>
-    <message>
-        <source>Default location</source>
-        <translation>Localisation par défaut</translation>
-    </message>
-    <message>
         <source> minutes</source>
         <translation>minutes</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Mot de passe</translation>
     </message>
     <message>
         <source>Agenda is the default agenda</source>
@@ -301,14 +284,6 @@
     <message>
         <source>Agenda is private</source>
         <translation>L&apos;agenda est privé</translation>
-    </message>
-    <message>
-        <source>Shared</source>
-        <translation>Partagé</translation>
-    </message>
-    <message>
-        <source>Availabilities</source>
-        <translation>Disponibilités</translation>
     </message>
     <message>
         <source>Add</source>
@@ -343,8 +318,40 @@
         <translation></translation>
     </message>
     <message>
-        <source>Description</source>
-        <translation></translation>
+        <source>&amp;General information</source>
+        <translation>Informations &amp;générales</translation>
+    </message>
+    <message>
+        <source>Default event duration:</source>
+        <translation>Durée par défaut des rendez-vous :</translation>
+    </message>
+    <message>
+        <source>Default &amp;location:</source>
+        <translation>&amp;Localisation par défaut :</translation>
+    </message>
+    <message>
+        <source>&amp;Password:</source>
+        <translation>Mot de &amp;passe :</translation>
+    </message>
+    <message>
+        <source>&amp;Name:</source>
+        <translation>&amp;Nom :</translation>
+    </message>
+    <message>
+        <source>&amp;Description:</source>
+        <translation>&amp;Description :</translation>
+    </message>
+    <message>
+        <source>&amp;Shared</source>
+        <translation>Pa&amp;rtagé</translation>
+    </message>
+    <message>
+        <source>&amp;Availabilities</source>
+        <translation>D&amp;isponibilités</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Éditer</translation>
     </message>
 </context>
 <context>

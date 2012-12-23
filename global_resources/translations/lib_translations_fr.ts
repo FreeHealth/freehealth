@@ -356,10 +356,6 @@
         <translation>Afficher/cacher les textes d&apos;aide des formulaires</translation>
     </message>
     <message>
-        <source>User manager</source>
-        <translation>Gestionnaire de utilisateurs</translation>
-    </message>
-    <message>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
@@ -2286,27 +2282,39 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>&amp;General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Report application error...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Général</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;A propos...</translation>
     </message>
     <message>
         <source>About &amp;plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos des &amp;greffons...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos de &amp;Qt...</translation>
     </message>
     <message>
         <source>About this &amp;form...</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos de ce &amp;formulaire...</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>À propos</translation>
+    </message>
+    <message>
+        <source>About plugins</source>
+        <translation>À propos des greffons</translation>
+    </message>
+    <message>
+        <source>&amp;User manager</source>
+        <translation>Gestionnaire des &amp;utilisateurs</translation>
+    </message>
+    <message>
+        <source>&amp;Report a problem...</source>
+        <translation>&amp;Signaler un problème...</translation>
     </message>
 </context>
 </TS>

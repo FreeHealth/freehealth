@@ -36,14 +36,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Find cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>View errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Errors</source>
         <translation type="unfinished"></translation>
     </message>
@@ -57,7 +49,7 @@
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditor</name>
+    <name>PadTools::Internal::TokenEditor</name>
     <message>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
@@ -68,7 +60,7 @@
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditorWidget</name>
+    <name>PadTools::Internal::TokenEditorWidget</name>
     <message>
         <source>Form</source>
         <translation type="unfinished"></translation>
@@ -138,6 +130,10 @@
     </message>
     <message>
         <source>Nested token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show source</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

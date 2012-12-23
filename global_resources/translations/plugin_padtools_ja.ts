@@ -9,68 +9,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="73"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="114"/>
         <source>OUTPUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="83"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="93"/>
         <source>output to raw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="90"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="107"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="97"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="131"/>
         <source>RAW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="107"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="79"/>
         <source>raw to output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="114"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="124"/>
         <source>Raw source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="121"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="86"/>
         <source>Scenari</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="141"/>
-        <source>Find cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="148"/>
-        <source>View errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="165"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="145"/>
         <source>Errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="387"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="395"/>
         <source>Unexpected &apos;%1&apos; found at pos %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="390"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="398"/>
         <source>Expected &apos;%1&apos; at pos %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditor</name>
+    <name>PadTools::Internal::TokenEditor</name>
     <message>
         <location filename="../../plugins/padtoolsplugin/tokeneditor.ui" line="14"/>
         <source>Dialog</source>
@@ -83,7 +73,7 @@
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditorWidget</name>
+    <name>PadTools::Internal::TokenEditorWidget</name>
     <message>
         <location filename="../../plugins/padtoolsplugin/tokeneditorwidget.ui" line="14"/>
         <source>Form</source>
@@ -128,47 +118,52 @@
 <context>
     <name>PadWriter</name>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="59"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="63"/>
         <source>Follow cursor in result output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="60"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="64"/>
         <source>Find cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="61"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="65"/>
         <source>Automatic update of results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="62"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="66"/>
         <source>Set a test value to all available tokens</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="65"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="67"/>
+        <source>Show source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="70"/>
         <source>Inside conditional before text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="66"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="71"/>
         <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="67"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="72"/>
         <source>Before the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="68"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="73"/>
         <source>After the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="69"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="74"/>
         <source>Nested token</source>
         <translation type="unfinished"></translation>
     </message>

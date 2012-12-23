@@ -145,13 +145,6 @@
     </message>
 </context>
 <context>
-    <name>ICD::IcdPlugin</name>
-    <message>
-        <source>Initializing ICD10 plugin...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ICD::IcdViewer</name>
     <message>
         <source>Form</source>
@@ -175,6 +168,13 @@
     </message>
     <message>
         <source>Excludes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ICD::Internal::IcdPlugin</name>
+    <message>
+        <source>Initializing ICD10 plugin...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

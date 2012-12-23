@@ -55,7 +55,7 @@ Number of items of the translation (%3) are wrong.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.cpp" line="91"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.cpp" line="93"/>
         <source>Base Forms Widgets</source>
         <translation type="unfinished"></translation>
     </message>

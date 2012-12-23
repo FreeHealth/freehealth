@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
+    <name>MainWin::Internal::MainWinPlugin</name>
+    <message>
+        <source>Initializing main window plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWin::Internal::VirtualDatabasePreferences</name>
     <message>
         <source>Form</source>
@@ -48,13 +55,6 @@
     <name>MainWin::Internal::VirtualPatientBasePage</name>
     <message>
         <source>Virtual database</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::MainWinPlugin</name>
-    <message>
-        <source>Initializing main window plugin...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

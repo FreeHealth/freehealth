@@ -2,6 +2,15 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="pl_PL">
 <context>
+    <name>MainWin::Internal::MainWinPlugin</name>
+    <message>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="82"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="93"/>
+        <source>Initializing main window plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWin::Internal::VirtualDatabasePreferences</name>
     <message>
         <location filename="../../plugins/fmfmainwindowplugin/virtualbasepage.ui" line="14"/>
@@ -41,18 +50,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="82"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="84"/>
         <source>Creating %1 virtual patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="82"/>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="157"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="84"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="159"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="157"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="159"/>
         <source>Creating %1 virtual episodes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -67,23 +76,14 @@
     </message>
 </context>
 <context>
-    <name>MainWin::MainWinPlugin</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="79"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="90"/>
-        <source>Initializing main window plugin...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="146"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="142"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="393"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="415"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

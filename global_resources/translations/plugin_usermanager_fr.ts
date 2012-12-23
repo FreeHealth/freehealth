@@ -27,6 +27,72 @@
     </message>
 </context>
 <context>
+    <name>UserContactPage</name>
+    <message>
+        <source>Provide your address.</source>
+        <translation type="unfinished">Veuillez saisir votre adresse.</translation>
+    </message>
+    <message>
+        <source>Please enter your complete, professional address.</source>
+        <translation type="unfinished">Veuillez saisir votre adresse professionnelle complète.</translation>
+    </message>
+</context>
+<context>
+    <name>UserLastPage</name>
+    <message>
+        <source>User creation</source>
+        <translation type="unfinished">Création d&apos;utilisateur</translation>
+    </message>
+    <message>
+        <source>The user will be created.</source>
+        <translation type="unfinished">L&apos;utilisateur suivant va être créé.</translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation type="unfinished">Contact</translation>
+    </message>
+    <message>
+        <source>City</source>
+        <translation type="unfinished">Ville</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fax</source>
+        <translation type="unfinished">Fax</translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished">Courriel</translation>
+    </message>
+    <message>
+        <source>Specialties</source>
+        <translation type="unfinished">Spécialités</translation>
+    </message>
+    <message>
+        <source>Qualifications</source>
+        <translation type="unfinished">Qualifications</translation>
+    </message>
+    <message>
+        <source>Professionnal identifiers</source>
+        <translation type="unfinished">Identifiants professionnels</translation>
+    </message>
+</context>
+<context>
     <name>UserManagerPlugin</name>
     <message>
         <source>You can proceed with this user or connect with another one.</source>
@@ -83,34 +149,6 @@
     <message>
         <source>Contact</source>
         <translation>Contact</translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::Internal::DefaultUserIdentityPage</name>
-    <message>
-        <source>User identity</source>
-        <translation>Identité de l&apos;utilisateur</translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::Internal::DefaultUserIdentityWidget</name>
-    <message>
-        <source>Password saved</source>
-        <translation>Mot de passe sauvegardé</translation>
-    </message>
-    <message>
-        <source>Password successfully modified and saved into database.</source>
-        <translation>Mot de passe correctement modifié et sauvegardé dans la base de données.</translation>
-    </message>
-    <message>
-        <source>User %1
-Last connection: %2</source>
-        <translation>Utilisateur %1
-Dernière connexion : %2</translation>
-    </message>
-    <message>
-        <source>Login history.</source>
-        <translation>Historique des connexions.</translation>
     </message>
 </context>
 <context>
@@ -206,64 +244,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserIdentityAndLoginPage</name>
     <message>
-        <source>Identity</source>
-        <translation>Identité</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation>Prénom</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Langage</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>Titre</translation>
-    </message>
-    <message>
-        <source>Second name</source>
-        <translation>Nom marital</translation>
-    </message>
-    <message>
-        <source>Gender</source>
-        <translation>Genre</translation>
-    </message>
-    <message>
-        <source>Database connection</source>
-        <translation>Identifiants de connexion</translation>
-    </message>
-    <message>
-        <source>Login</source>
-        <translation>Login</translation>
-    </message>
-    <message>
-        <source>minimum: 5 characters</source>
-        <translation>5 caratères minimum</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Mot de passe</translation>
-    </message>
-    <message>
-        <source>Confirm password</source>
-        <translation>Confirmation du mot de passe</translation>
-    </message>
-    <message>
-        <source>minimum: 6 characters</source>
-        <translation>6 caractères minimum</translation>
-    </message>
-    <message>
-        <source>minimum: 6 characters
-only characters and digits allowed</source>
-        <translation>6 caractères minimum
-seul les nombres et les lettres sont autorisées</translation>
-    </message>
-    <message>
         <source>Create a new user</source>
         <translation>Créer un nouvel utilisateur</translation>
     </message>
@@ -272,64 +252,12 @@ seul les nombres et les lettres sont autorisées</translation>
         <translation>Veuillez saisir votre identité.</translation>
     </message>
     <message>
-        <source>Forbidden anonymous user.</source>
-        <translation>Connexion anonyme interdite.</translation>
+        <source>Login error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All users must have at least a name and a first name.
-You can not proceed with an anonymous user.</source>
-        <translation>Tous les utilisateurs doivent avoir au moins un nom et un prénom.
-Vous ne pouvez pas continuer avec un utilisateur anonyme.</translation>
-    </message>
-    <message>
-        <source>Password confirmation error.</source>
-        <translation>Erreur lors de la confirmation du mot de passe.</translation>
-    </message>
-    <message>
-        <source>You must correctly confirm your password to go through this page.</source>
-        <translation>Vous devez correctement confirmer votre mot de passe pour continuer.</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation>Mauvais mot de passe</translation>
-    </message>
-    <message>
-        <source>Login error.</source>
-        <translation>Erreur de login.</translation>
-    </message>
-    <message>
-        <source>You must specify a valid login. An empty login is forbidden.</source>
-        <translation>Vous devez spécifier un identifiant valide. Les identifiants vides sont interdits.</translation>
-    </message>
-    <message>
-        <source>Wrong login</source>
-        <translation>Mauvais login</translation>
-    </message>
-    <message>
-        <source>You must specify a valid login. Login must be more than 6 characters.</source>
-        <translation>Vous devez spécifier un identifiant valide (au moins 6 caractères).</translation>
-    </message>
-    <message>
-        <source>Login and password already used</source>
-        <translation>Mot de passe et login déjà utilisés</translation>
-    </message>
-    <message>
-        <source>The users&apos; database already contains the same login/password couple.
-You must specify a different login/password.</source>
-        <translation>La base de données utilisateur contient déjà le couple login/mot de passe saisi.
-Vous devez en utiliser un différent.</translation>
-    </message>
-    <message>
-        <source>Login/Password already used</source>
-        <translation>Login/mot de passe déjà utilisé</translation>
-    </message>
-    <message>
-        <source>WizardPage</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Login in use. Please select another login</source>
-        <translation>Identifiant déjà utilisé. Veuillez sélectionner un autre identifiant</translation>
+        <source>Login already in use. Please select another login</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -373,6 +301,13 @@ Vous devez en utiliser un différent.</translation>
     <message>
         <source>TextLabel</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::UserManagerModel</name>
+    <message>
+        <source>Last login: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -466,6 +401,10 @@ L&apos;application va s&apos;arrêter.</translation>
         <source>Form</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Modification correctly cleared</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserPasswordDialog</name>
@@ -488,6 +427,22 @@ L&apos;application va s&apos;arrêter.</translation>
     <message>
         <source>Dialog</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Password must have at least 5 chars.</source>
+        <translation type="unfinished">Le mot de passe doit avoir au moins 5 caractères.</translation>
+    </message>
+    <message>
+        <source>The old password is not correct. Please retry with the correct password.</source>
+        <translation type="unfinished">L&apos;ancien mot de passe est erroné. Veuillez réessayer.</translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation.</source>
+        <translation type="unfinished">Mauvaise confirmation du mot de passe.</translation>
+    </message>
+    <message>
+        <source>Password can not be change.</source>
+        <translation type="unfinished">Le mot de passe ne peut pas être modifier.</translation>
     </message>
 </context>
 <context>
@@ -588,69 +543,6 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::Internal::UserViewer_IdentityUI</name>
-    <message>
-        <source>Database identification</source>
-        <translation>Identifiants de la base de données</translation>
-    </message>
-    <message>
-        <source>Login</source>
-        <translation>Identifiant</translation>
-    </message>
-    <message>
-        <source>Date and time of the last connection</source>
-        <translation>Date et heure de la dernière connexion</translation>
-    </message>
-    <message>
-        <source>Last login</source>
-        <translation>Dernière connection</translation>
-    </message>
-    <message>
-        <source>Unique identifier</source>
-        <translation>Identifiant unique</translation>
-    </message>
-    <message>
-        <source>View login history</source>
-        <translation>Voir l&apos;historique des connexions</translation>
-    </message>
-    <message>
-        <source>Change password</source>
-        <translation>Modifier le mot de passe</translation>
-    </message>
-    <message>
-        <source>Identity</source>
-        <translation>Identité</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <source>Second name</source>
-        <translation>Nom marital</translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation>Prénom</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>Titre</translation>
-    </message>
-    <message>
-        <source>Gender</source>
-        <translation>Genre</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Langage</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::Internal::UserViewer_ProfessionalUI</name>
     <message>
         <source>Specialty</source>
@@ -707,18 +599,6 @@ L&apos;application va s&apos;arrêter.</translation>
         <translation>Adresse</translation>
     </message>
     <message>
-        <source>City</source>
-        <translation>Ville</translation>
-    </message>
-    <message>
-        <source>Zipcode</source>
-        <translation>Code postal</translation>
-    </message>
-    <message>
-        <source>Country</source>
-        <translation>Pays</translation>
-    </message>
-    <message>
         <source>Telephone and mail</source>
         <translation>Téléphone et courriel</translation>
     </message>
@@ -744,17 +624,6 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserContactPage</name>
-    <message>
-        <source>Provide your address.</source>
-        <translation>Veuillez saisir votre adresse.</translation>
-    </message>
-    <message>
-        <source>Please enter your complete, professional address.</source>
-        <translation>Veuillez saisir votre adresse professionnelle complète.</translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
@@ -762,58 +631,42 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserLastPage</name>
+    <name>UserPlugin::UserCreatorWizard</name>
     <message>
-        <source>User creation</source>
-        <translation>Création d&apos;utilisateur</translation>
+        <source>User Creator Wizard</source>
+        <translation type="unfinished">Assistant de création des utilisateurs</translation>
     </message>
     <message>
-        <source>The user will be created.</source>
-        <translation>L&apos;utilisateur suivant va être créé.</translation>
+        <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
+        <translation type="unfinished">ATTENTION ! Vous n&apos;avez pas sauvegardé cet utilisateur. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
     </message>
     <message>
-        <source>Contact</source>
-        <translation>Contact</translation>
+        <source>Do you really want to close this dialog?</source>
+        <translation type="unfinished">Voulez-vous réellement fermer ce dialogue ?</translation>
     </message>
     <message>
-        <source>City</source>
-        <translation>Ville</translation>
+        <source>User not saved</source>
+        <translation type="unfinished">Utilisateur non sauvegarder</translation>
     </message>
     <message>
-        <source>Country</source>
-        <translation>Pays</translation>
+        <source>An error occured during database access.</source>
+        <translation type="unfinished">Une erreur est survenue pendant l&apos;accès aux données.</translation>
     </message>
     <message>
-        <source>Fax</source>
-        <translation>Fax</translation>
+        <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
+        <translation type="unfinished">Les erreurs sont listées et sauvegardées. Veuillez vous référer à %1 pour gérer les erreurs.</translation>
     </message>
     <message>
-        <source>Mail</source>
-        <translation>Courriel</translation>
+        <source>Error during database access</source>
+        <translation type="unfinished">Erreur durant l&apos;accès aux données</translation>
     </message>
     <message>
-        <source>Specialties</source>
-        <translation>Spécialités</translation>
+        <source>User successfully saved into database.</source>
+        <translation type="unfinished">Utilisateur correctement sauvegardé dans la base de données.</translation>
     </message>
     <message>
-        <source>Qualifications</source>
-        <translation>Qualifications</translation>
-    </message>
-    <message>
-        <source>Professionnal identifiers</source>
-        <translation>Identifiants professionnels</translation>
-    </message>
-    <message>
-        <source>Tel1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Tel2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Tel3</source>
-        <translation></translation>
+        <source>The user was successfully created and saved into database.</source>
+        <translation type="unfinished">L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
     </message>
 </context>
 <context>
@@ -852,141 +705,72 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserPasswordDialog</name>
-    <message>
-        <source>Password must have at least 5 chars.</source>
-        <translation>Le mot de passe doit avoir au moins 5 caractères.</translation>
-    </message>
-    <message>
-        <source>The old password is not correct. Please retry with the correct password.</source>
-        <translation>L&apos;ancien mot de passe est erroné. Veuillez réessayer.</translation>
-    </message>
-    <message>
-        <source>Wrong password confirmation.</source>
-        <translation>Mauvaise confirmation du mot de passe.</translation>
-    </message>
-    <message>
-        <source>Password can not be change.</source>
-        <translation>Le mot de passe ne peut pas être modifier.</translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserProfilePage</name>
+    <name>UserProfilePage</name>
     <message>
         <source>Select a profile</source>
-        <translation>Sélectionnez un profile</translation>
+        <translation type="unfinished">Sélectionnez un profile</translation>
     </message>
     <message>
         <source>FreeMedForms allows you to create users using predefined profiles. Select your profile and options.</source>
-        <translation>FreeMedForms vous permet de créer des utilisateurs en utilisant des profils prédéfinis. Sélectionnez votre profil et vos options.</translation>
+        <translation type="unfinished">FreeMedForms vous permet de créer des utilisateurs en utilisant des profils prédéfinis. Sélectionnez votre profil et vos options.</translation>
     </message>
     <message>
         <source>Select advanced rights in the next step</source>
-        <translation>Sélectionnez le droits lors de la prochaine étape</translation>
+        <translation type="unfinished">Sélectionnez le droits lors de la prochaine étape</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserRightsPage</name>
+    <name>UserRightsPage</name>
     <message>
         <source>Define user&apos;s rights.</source>
-        <translation>Définir les droits de l&apos;utilisateur.</translation>
+        <translation type="unfinished">Définir les droits de l&apos;utilisateur.</translation>
     </message>
     <message>
         <source>Role by role, define the user&apos;s rights.</source>
-        <translation>Rôle par rôle, définir les droits de l&apos;utilisateur.</translation>
+        <translation type="unfinished">Rôle par rôle, définir les droits de l&apos;utilisateur.</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation>Utilisateurs</translation>
+        <translation type="unfinished">Utilisateurs</translation>
     </message>
     <message>
         <source>Drugs</source>
-        <translation>Médicaments</translation>
+        <translation type="unfinished">Médicaments</translation>
     </message>
     <message>
         <source>Medicals</source>
-        <translation>Médicaux</translation>
+        <translation type="unfinished">Médicaux</translation>
     </message>
     <message>
         <source>Paramedicals</source>
-        <translation>Para-médicaux</translation>
+        <translation type="unfinished">Para-médicaux</translation>
     </message>
     <message>
         <source>Administrative</source>
-        <translation>Administratifs</translation>
+        <translation type="unfinished">Administratifs</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserSpecialiesQualificationsPage</name>
+    <name>UserSpecialiesQualificationsPage</name>
     <message>
         <source>Define user&apos;s specialties and qualifications.</source>
-        <translation>Définir les spécialités et qualifications.</translation>
+        <translation type="unfinished">Définir les spécialités et qualifications.</translation>
     </message>
     <message>
         <source>Use the context menu to add, remove, move up or down items.</source>
-        <translation>Utilisez le menu contextuel pour ajouter, effacer et/ou déplace les items.</translation>
+        <translation type="unfinished">Utilisez le menu contextuel pour ajouter, effacer et/ou déplace les items.</translation>
     </message>
     <message>
         <source>Specialities</source>
-        <translation>Spécialités</translation>
-    </message>
-    <message>
-        <source>Identifiers</source>
-        <translation>Identifiants</translation>
+        <translation type="unfinished">Spécialités</translation>
     </message>
     <message>
         <source>Qualifications</source>
-        <translation>Qualifications</translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserViewer</name>
-    <message>
-        <source>You can not access to these data.</source>
-        <translation>Vous ne pouvez pas accéder à ces données.</translation>
+        <translation type="unfinished">Qualifications</translation>
     </message>
     <message>
-        <source>You don&apos;t have access rights.</source>
-        <translation>Vous ne disposez pas des droits suffisants.</translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserWizard</name>
-    <message>
-        <source>User Creator Wizard</source>
-        <translation>Assistant de création des utilisateurs</translation>
-    </message>
-    <message>
-        <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
-        <translation>ATTENTION ! Vous n&apos;avez pas sauvegardé cet utilisateur. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
-    </message>
-    <message>
-        <source>Do you really want to close this dialog?</source>
-        <translation>Voulez-vous réellement fermer ce dialogue ?</translation>
-    </message>
-    <message>
-        <source>User not saved</source>
-        <translation>Utilisateur non sauvegarder</translation>
-    </message>
-    <message>
-        <source>An error occured during database access.</source>
-        <translation>Une erreur est survenue pendant l&apos;accès aux données.</translation>
-    </message>
-    <message>
-        <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
-        <translation>Les erreurs sont listées et sauvegardées. Veuillez vous référer à %1 pour gérer les erreurs.</translation>
-    </message>
-    <message>
-        <source>Error during database access</source>
-        <translation>Erreur durant l&apos;accès aux données</translation>
-    </message>
-    <message>
-        <source>User successfully saved into database.</source>
-        <translation>Utilisateur correctement sauvegardé dans la base de données.</translation>
-    </message>
-    <message>
-        <source>The user was successfully created and saved into database.</source>
-        <translation>L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
+        <source>Identifiers</source>
+        <translation type="unfinished">Identifiants</translation>
     </message>
 </context>
 <context>

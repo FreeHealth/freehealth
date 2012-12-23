@@ -15,14 +15,23 @@
     </message>
 </context>
 <context>
+    <name>Webcam::Internal::WebcamPlugin</name>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="114"/>
+        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="153"/>
+        <source>Initializing Webcam...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Webcam::Internal::WebcamPreferencesPage</name>
     <message>
-        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="168"/>
+        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="166"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="174"/>
+        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="172"/>
         <source>Webcam</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,14 +148,6 @@
     <message>
         <location filename="../../plugins/webcamplugin/webcamphotoprovider.cpp" line="88"/>
         <source>Take photo with %1...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Webcam::WebcamPlugin</name>
-    <message>
-        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="150"/>
-        <source>Initializing Webcam...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

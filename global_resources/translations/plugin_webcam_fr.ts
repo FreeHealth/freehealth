@@ -13,6 +13,13 @@
     </message>
 </context>
 <context>
+    <name>Webcam::Internal::WebcamPlugin</name>
+    <message>
+        <source>Initializing Webcam...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Webcam::Internal::WebcamPreferencesPage</name>
     <message>
         <source>General</source>
@@ -113,13 +120,6 @@
     </message>
     <message>
         <source>Take photo with %1...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Webcam::WebcamPlugin</name>
-    <message>
-        <source>Initializing Webcam...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

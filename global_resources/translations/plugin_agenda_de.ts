@@ -9,41 +9,28 @@
     </message>
 </context>
 <context>
-    <name>Agenda::AgendaPlugin</name>
+    <name>Agenda::AvailabilityCreatorDialog</name>
     <message>
-        <source>Initializing agenda plugin...</source>
-        <translation>Agenda-Plugin wird initialisiert...</translation>
-    </message>
-    <message>
-        <source>Creating agenda base...</source>
+        <source>Day availability editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please wait</source>
+        <source>&amp;Day of week:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Start time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;End time:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>Agenda::AvailabilityCreatorDialog</name>
+    <name>Agenda::AvailabilityEditDialog</name>
     <message>
-        <source>Day availability creator</source>
-        <translatorcomment>skipped &quot;creator&quot;, translated only &quot;Day availability&quot;</translatorcomment>
-        <translation>Tagesverfügbarkeit</translation>
-    </message>
-    <message>
-        <source>Day of week</source>
-        <translation>Wochentag</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation>Startzeit</translation>
-    </message>
-    <message>
-        <source>End time</source>
-        <translation>Endzeit</translation>
-    </message>
-    <message>
-        <source>Dialog</source>
+        <source>The end start time cannot be before the end time.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -59,6 +46,21 @@
     <message>
         <source>Agenda</source>
         <translation>Agenda</translation>
+    </message>
+</context>
+<context>
+    <name>Agenda::Internal::AgendaPlugin</name>
+    <message>
+        <source>Initializing agenda plugin...</source>
+        <translation type="unfinished">Agenda-Plugin wird initialisiert...</translation>
+    </message>
+    <message>
+        <source>Creating agenda base...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please wait</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -271,41 +273,8 @@
 <context>
     <name>Agenda::UserCalendarEditorWidget</name>
     <message>
-        <source>Description</source>
-        <translation>Beschreibung</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Bezeichnung</translation>
-    </message>
-    <message>
         <source>Icon</source>
         <translation>Symbol</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation>Allgemein</translation>
-    </message>
-    <message>
-        <source>Default event duration</source>
-        <translation>Standard-Ereignisdauer</translation>
-    </message>
-    <message>
-        <source>Default location</source>
-        <translatorcomment>&quot;Ort&quot; is maybe a bit bad translated. check needed.</translatorcomment>
-        <translation>Standard-Ort</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Passwort</translation>
-    </message>
-    <message>
-        <source>Shared</source>
-        <translation>Gemeiname Benutzung</translation>
-    </message>
-    <message>
-        <source>Availabilities</source>
-        <translation>Verfügbarkeiten</translation>
     </message>
     <message>
         <source>Add</source>
@@ -349,6 +318,42 @@
     </message>
     <message>
         <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;General information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default event duration:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Description:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shared</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Availabilities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

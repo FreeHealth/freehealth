@@ -24,6 +24,72 @@
     </message>
 </context>
 <context>
+    <name>UserContactPage</name>
+    <message>
+        <source>Provide your address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter your complete, professional address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserLastPage</name>
+    <message>
+        <source>User creation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The user will be created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tel3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specialties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qualifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Professionnal identifiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserManagerPlugin</name>
     <message>
         <source>You can proceed with this user or connect with another one.</source>
@@ -79,33 +145,6 @@
     <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
         <source>Contact</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::Internal::DefaultUserIdentityPage</name>
-    <message>
-        <source>User identity</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::Internal::DefaultUserIdentityWidget</name>
-    <message>
-        <source>Password saved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password successfully modified and saved into database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login history.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User %1
-Last connection: %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -197,75 +236,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserIdentityAndLoginPage</name>
     <message>
-        <source>WizardPage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Identity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Second name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Gender</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>minimum: 5 characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Confirm password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>minimum: 6 characters
-only characters and digits allowed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>minimum: 6 characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You must specify a valid login. Login must be more than 6 characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login in use. Please select another login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create a new user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,49 +244,11 @@ only characters and digits allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Forbidden anonymous user.</source>
+        <source>Login error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All users must have at least a name and a first name.
-You can not proceed with an anonymous user.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password confirmation error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You must correctly confirm your password to go through this page.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You must specify a valid login. An empty login is forbidden.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login and password already used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The users&apos; database already contains the same login/password couple.
-You must specify a different login/password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login/Password already used</source>
+        <source>Login already in use. Please select another login</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -360,6 +292,13 @@ You must specify a different login/password.</source>
     </message>
     <message>
         <source>Quit User Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::UserManagerModel</name>
+    <message>
+        <source>Last login: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -453,6 +392,10 @@ Application will stop.</source>
         <source>Search user</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Modification correctly cleared</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserPasswordDialog</name>
@@ -474,6 +417,22 @@ Application will stop.</source>
     </message>
     <message>
         <source>Confirm new password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password must have at least 5 chars.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The old password is not correct. Please retry with the correct password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password confirmation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password can not be change.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -575,69 +534,6 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::Internal::UserViewer_IdentityUI</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database identification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date and time of the last connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unique identifier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>View login history</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Identity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Second name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Gender</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::Internal::UserViewer_ProfessionalUI</name>
     <message>
         <source>Form</source>
@@ -698,18 +594,6 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>City</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Zipcode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Country</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Telephone and mail</source>
         <translation type="unfinished"></translation>
     </message>
@@ -731,17 +615,6 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserContactPage</name>
-    <message>
-        <source>Provide your address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter your complete, professional address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
@@ -749,57 +622,41 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserLastPage</name>
+    <name>UserPlugin::UserCreatorWizard</name>
     <message>
-        <source>User creation</source>
+        <source>User Creator Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The user will be created.</source>
+        <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Contact</source>
+        <source>Do you really want to close this dialog?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>City</source>
+        <source>User not saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Country</source>
+        <source>An error occured during database access.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tel1</source>
+        <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tel2</source>
+        <source>Error during database access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tel3</source>
+        <source>User successfully saved into database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specialties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Qualifications</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Professionnal identifiers</source>
+        <source>The user was successfully created and saved into database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -839,26 +696,7 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserPasswordDialog</name>
-    <message>
-        <source>Password must have at least 5 chars.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The old password is not correct. Please retry with the correct password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong password confirmation.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password can not be change.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserProfilePage</name>
+    <name>UserProfilePage</name>
     <message>
         <source>Select a profile</source>
         <translation type="unfinished"></translation>
@@ -873,7 +711,7 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserRightsPage</name>
+    <name>UserRightsPage</name>
     <message>
         <source>Define user&apos;s rights.</source>
         <translation type="unfinished"></translation>
@@ -904,7 +742,7 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserSpecialiesQualificationsPage</name>
+    <name>UserSpecialiesQualificationsPage</name>
     <message>
         <source>Define user&apos;s specialties and qualifications.</source>
         <translation type="unfinished"></translation>
@@ -923,56 +761,6 @@ Application will stop.</source>
     </message>
     <message>
         <source>Identifiers</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserViewer</name>
-    <message>
-        <source>You can not access to these data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You don&apos;t have access rights.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::UserWizard</name>
-    <message>
-        <source>User Creator Wizard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want to close this dialog?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User not saved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>An error occured during database access.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error during database access</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User successfully saved into database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user was successfully created and saved into database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

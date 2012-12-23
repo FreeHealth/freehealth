@@ -45,13 +45,6 @@
     </message>
 </context>
 <context>
-    <name>Account::AccountPlugin</name>
-    <message>
-        <source>Initializing accountancy plugin...</source>
-        <translation>Initialisation du plugin de comptabilité...</translation>
-    </message>
-</context>
-<context>
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
@@ -229,6 +222,13 @@ Then parametrize your user, sites, bank and so on.</source>
     <message>
         <source>Do not show this message again</source>
         <translation>Ne pas montrer ce message à nouveau.</translation>
+    </message>
+</context>
+<context>
+    <name>Account::Internal::AccountPlugin</name>
+    <message>
+        <source>Initializing accountancy plugin...</source>
+        <translation type="unfinished">Initialisation du plugin de comptabilité...</translation>
     </message>
 </context>
 <context>
@@ -1315,6 +1315,109 @@ Autrement le résultat sera faux!</translation>
     <message>
         <source>Clear all.</source>
         <translation>Effacer tout.</translation>
+    </message>
+</context>
+<context>
+    <name>ControlReceipts</name>
+    <message>
+        <source>Euros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a line.</source>
+        <translation type="unfinished">Sélectionnez une ligne.</translation>
+    </message>
+    <message>
+        <source>Line deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Banking</source>
+        <translation type="unfinished">Virement</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished">Autres</translation>
+    </message>
+    <message>
+        <source>Dues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Date</translation>
+    </message>
+    <message>
+        <source>Acts</source>
+        <translation type="unfinished">Actes</translation>
+    </message>
+    <message>
+        <source>Comment</source>
+        <translation type="unfinished">Commentaire</translation>
+    </message>
+    <message>
+        <source>Checks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insurance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Due</source>
+        <translation type="unfinished">Du</translation>
+    </message>
+    <message>
+        <source>by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Valid</source>
+        <translation type="unfinished">Valider</translation>
+    </message>
+    <message>
+        <source>Check</source>
+        <translation type="unfinished">Chèques</translation>
+    </message>
+    <message>
+        <source>Due by</source>
+        <translation type="unfinished">Du par</translation>
+    </message>
+    <message>
+        <source>Extract of receipts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credit Cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TOTAL</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -12,10 +12,6 @@
         <translation>Erreurs</translation>
     </message>
     <message>
-        <source>View errors</source>
-        <translation>Voir les erreurs</translation>
-    </message>
-    <message>
         <source>Scenari</source>
         <translation>Scénari</translation>
     </message>
@@ -26,10 +22,6 @@
     <message>
         <source>output to raw</source>
         <translation>Sortie vers source</translation>
-    </message>
-    <message>
-        <source>Find cursor</source>
-        <translation>Trouver le curseur</translation>
     </message>
     <message>
         <source>Form</source>
@@ -57,41 +49,33 @@
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditor</name>
+    <name>PadTools::Internal::TokenEditor</name>
     <message>
         <source>Dialog</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Token editor</source>
-        <translation>Éditeur d&apos;étiquette</translation>
+        <translation type="unfinished">Éditeur d&apos;étiquette</translation>
     </message>
 </context>
 <context>
-    <name>PadTools::TokenEditorWidget</name>
+    <name>PadTools::Internal::TokenEditorWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Token</source>
-        <translation>Étiquette</translation>
+        <translation type="unfinished">Étiquette</translation>
     </message>
     <message>
         <source>Current value</source>
-        <translation>Valeur courante</translation>
-    </message>
-    <message>
-        <source>Before</source>
-        <translation>Avant</translation>
-    </message>
-    <message>
-        <source>After</source>
-        <translation>Après</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation></translation>
+        <translation type="unfinished">Valeur courante</translation>
     </message>
     <message>
         <source>Text value</source>
-        <translation>Valeur du texte</translation>
+        <translation type="unfinished">Valeur du texte</translation>
     </message>
     <message>
         <source>Block formatting of the token value</source>
@@ -99,7 +83,15 @@
     </message>
     <message>
         <source>Conditional texts</source>
-        <translation>Textes conditionnels</translation>
+        <translation type="unfinished">Textes conditionnels</translation>
+    </message>
+    <message>
+        <source>Before</source>
+        <translation type="unfinished">Avant</translation>
+    </message>
+    <message>
+        <source>After</source>
+        <translation type="unfinished">Après</translation>
     </message>
 </context>
 <context>
@@ -139,6 +131,10 @@
     <message>
         <source>Nested token</source>
         <translation>Étiquettes imbriquées</translation>
+    </message>
+    <message>
+        <source>Show source</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

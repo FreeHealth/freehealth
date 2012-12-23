@@ -102,12 +102,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="261"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="266"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="263"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="268"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,7 +188,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesPage</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="62"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="68"/>
         <source>Printer preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,7 +196,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="124"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="133"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -205,17 +205,17 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="152"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="161"/>
         <source>Always use system default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="156"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="165"/>
         <source>Always ask user for the printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="227"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="236"/>
         <source>Select a directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,47 +267,47 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="829"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="79"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
         <source>Each Pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="80"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
         <source>First page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="81"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
         <source>Second page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="82"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
         <source>Last page only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="87"/>
         <source>All pages but first</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="88"/>
         <source>Odd pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="89"/>
         <source>Even pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
+        <location filename="../../plugins/printerplugin/printer.h" line="90"/>
         <source>Duplicates only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -315,7 +315,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="649"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="657"/>
         <source>No content to preview (simpleDraw).</source>
         <translation type="unfinished"></translation>
     </message>

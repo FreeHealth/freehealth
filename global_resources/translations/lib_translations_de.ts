@@ -364,10 +364,6 @@
         <translation>Anzeige der Formularhilfe ein/aus</translation>
     </message>
     <message>
-        <source>User manager</source>
-        <translation>Benutzerverwaltung</translation>
-    </message>
-    <message>
         <source>Preferences</source>
         <translation>Einstellungen</translation>
     </message>
@@ -2294,10 +2290,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Report application error...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;About...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2311,6 +2303,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>About this &amp;form...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;User manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Report a problem...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -387,5 +387,106 @@ Minimum interval between intakes: [MIN_INTERVAL]][
         <extracomment>This is the short name of the potentially inappropriate medications engine.</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Prescription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This token namespace contains all prescription&apos;s&apos; related tokens.
+It includes the drug brand name and all the items of your protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drug brand name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity (from)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity (to)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity (scheme)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantity (complete)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Meal relation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Period (value)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Period (scheme)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Period (complete)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duration (from)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duration (to)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duration (scheme)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duration (complete)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Route</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Daily distribution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeated ditribution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum interval between intakes (complete)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum interval between intakes (value)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum interval between intakes (scheme)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

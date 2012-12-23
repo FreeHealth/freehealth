@@ -169,7 +169,7 @@
 <context>
     <name>Patients::Internal::PatientBasePreferencesPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="73"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="74"/>
         <source>Patient database preferences</source>
         <translation type="unfinished"></translation>
     </message>

@@ -61,42 +61,34 @@
 <context>
     <name>Log</name>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="110"/>
+        <location filename="../../libs/utils/log.cpp" line="111"/>
         <source>SQL Error: 
      * %1
      * %2
      * %3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="129"/>
+        <location filename="../../libs/utils/log.cpp" line="130"/>
         <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
         <translation>%1 : %2 - Erreur SQL : pilote %3,hôte %4, port %5, Utilisateur %6, Pass %7</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="143"/>
+        <location filename="../../libs/utils/log.cpp" line="144"/>
         <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="216"/>
+        <location filename="../../libs/utils/log.cpp" line="217"/>
         <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/log.cpp" line="231"/>
-        <source>LOG</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/log.cpp" line="236"/>
-        <source>ERRORS</source>
-        <translation>ERREURS</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/log.cpp" line="253"/>
-        <source>MESSAGES</source>
-        <translation></translation>
+        <location filename="../../libs/utils/log.cpp" line="247"/>
+        <source>*****  Registered Errors  *****
+</source>
+        <translation>*****  Erreurs engistrées  *****
+</translation>
     </message>
 </context>
 <context>
@@ -130,107 +122,107 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="610"/>
-        <location filename="../../libs/utils/global.cpp" line="615"/>
-        <location filename="../../libs/utils/global.cpp" line="630"/>
+        <location filename="../../libs/utils/global.cpp" line="614"/>
+        <location filename="../../libs/utils/global.cpp" line="619"/>
+        <location filename="../../libs/utils/global.cpp" line="634"/>
         <source>Error %1 while trying to save file %2</source>
         <translation>Erreur %1 en tentant de sauvegarder le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="646"/>
+        <location filename="../../libs/utils/global.cpp" line="650"/>
         <source>Save to file</source>
         <translation>Sauvegarde dans le fichier</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="419"/>
-        <location filename="../../libs/utils/global.cpp" line="421"/>
+        <location filename="../../libs/utils/global.cpp" line="422"/>
+        <location filename="../../libs/utils/global.cpp" line="424"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation>Erreur en récupérant les données de uname sous %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="566"/>
+        <location filename="../../libs/utils/global.cpp" line="570"/>
         <source>%1: %2 does not exist. Trying to create it.</source>
         <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="569"/>
+        <location filename="../../libs/utils/global.cpp" line="573"/>
         <source>Unable to create the %1: %2.</source>
         <translation>Impossible de créer %1 : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="574"/>
+        <location filename="../../libs/utils/global.cpp" line="578"/>
         <source>%1: %2 does not exist.</source>
         <translation>%1 : %2 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="605"/>
+        <location filename="../../libs/utils/global.cpp" line="609"/>
         <source>File %1 already exists. Do you want de replace it?</source>
         <translation>Fichier %1 existe déjà. Voulez-vous le remplacer ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="622"/>
-        <location filename="../../libs/utils/global.cpp" line="634"/>
+        <location filename="../../libs/utils/global.cpp" line="626"/>
+        <location filename="../../libs/utils/global.cpp" line="638"/>
         <source>%1 successfully saved</source>
         <translation>%1 correctement sauvegardé</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="624"/>
+        <location filename="../../libs/utils/global.cpp" line="628"/>
         <source>Save file aborted by user (file already exists): </source>
         <translation>Sauvegarde annulée par l&apos;utilisateur (le fichier existe déjà) : </translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="680"/>
+        <location filename="../../libs/utils/global.cpp" line="684"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation>Le fichier %1 n&apos;existe pas ou n&apos;est pas lisible.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="686"/>
+        <location filename="../../libs/utils/global.cpp" line="690"/>
         <source>Error %1 while trying to open file %2</source>
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="910"/>
+        <location filename="../../libs/utils/global.cpp" line="914"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1001"/>
+        <location filename="../../libs/utils/global.cpp" line="1005"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1002"/>
+        <location filename="../../libs/utils/global.cpp" line="1006"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1063"/>
+        <location filename="../../libs/utils/global.cpp" line="1067"/>
         <source>Do you agree these terms?</source>
         <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1043"/>
-        <location filename="../../libs/utils/global.cpp" line="1044"/>
+        <location filename="../../libs/utils/global.cpp" line="1047"/>
+        <location filename="../../libs/utils/global.cpp" line="1048"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1055"/>
+        <location filename="../../libs/utils/global.cpp" line="1059"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1133"/>
+        <location filename="../../libs/utils/global.cpp" line="1137"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1138"/>
+        <location filename="../../libs/utils/global.cpp" line="1142"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1721"/>
+        <location filename="../../libs/utils/global.cpp" line="1776"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -241,6 +233,20 @@
         <location filename="../../libs/utils/widgets/basiclogindialog.ui" line="14"/>
         <source>Dialog</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::BugReportDialog</name>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="140"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="179"/>
+        <source>&amp;Send report</source>
+        <translation>&amp;Envoyer le rapport</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="141"/>
+        <source>Problem reporting dialog</source>
+        <translation>Signaler un problème</translation>
     </message>
 </context>
 <context>
@@ -357,6 +363,69 @@
         <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="76"/>
         <source>Update text</source>
         <translation>Texte de mise à jour</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::Internal::BugReportDialog</name>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="23"/>
+        <source>First step</source>
+        <translation>Première étape</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="38"/>
+        <source>&amp;Email:</source>
+        <translation>&amp;Courriel :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="54"/>
+        <source>yourname@gmail.com</source>
+        <translation>votrenom@hote.com</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="67"/>
+        <source>Date:</source>
+        <translation>Date :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="90"/>
+        <source>Application:</source>
+        <translation>Application :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="107"/>
+        <source>OS:</source>
+        <translation>Système :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="130"/>
+        <source>Severity:</source>
+        <translation>Sévérité :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="150"/>
+        <source>Current problem</source>
+        <translation>Problème courant</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="159"/>
+        <source>Category</source>
+        <translation>Catégorie</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="169"/>
+        <source>Description</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="192"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lorsque vous cliquez sur &lt;span style=&quot; font-style:italic;&quot;&gt;Envoyer&lt;/span&gt;, des informations de déboggage sont collectées pour être envoyer avec le rapport.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -531,82 +600,82 @@
 <context>
     <name>Utils::Internal::HttpDownloaderPrivate</name>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="234"/>
-        <source>Initialization of the download</source>
-        <translation type="unfinished">Initialisation du téléchargement</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="250"/>
+        <source>Initialization of the download</source>
+        <translation>Initialisation du téléchargement</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="267"/>
         <source>There already exists a file called %1 in the current directory. Overwrite?</source>
-        <translation type="unfinished">Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
+        <translation>Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="259"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="276"/>
         <source>Unable to save the file %1: %2.</source>
-        <translation type="unfinished">Impossible de sauvegarder le fichier %1 : %2.</translation>
+        <translation>Impossible de sauvegarder le fichier %1 : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="281"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="301"/>
         <source>Start downloading: %1 to %2</source>
-        <translation type="unfinished">Début du téléchargement : %1 à %2</translation>
+        <translation>Début du téléchargement : %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="300"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="322"/>
         <source>Download canceled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Téléchargement annulé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="327"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="350"/>
         <source>Download finished with an error: %1.</source>
-        <translation type="unfinished">Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
+        <translation>Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="331"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="354"/>
         <source>Download finished.</source>
-        <translation type="unfinished">Téléchargement terminé.</translation>
+        <translation>Téléchargement terminé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="341"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="367"/>
         <source>Download failed: %1.</source>
-        <translation type="unfinished">Le téléchargement a échoué %1.</translation>
+        <translation>Le téléchargement a échoué %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="342"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="347"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="368"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="373"/>
         <source>HTTP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="345"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="346"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="371"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="372"/>
         <source>Redirect to %1?</source>
-        <translation type="unfinished">Redirigé vers %1 ?</translation>
+        <translation>Redirigé vers %1 ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="357"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="385"/>
         <source>Downloaded %1 to current directory.</source>
-        <translation type="unfinished">Téléchargement terminé de %1 dans le répertoire courant.</translation>
+        <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="410"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="441"/>
         <source>Server authentication required</source>
-        <translation type="unfinished"></translation>
+        <translation>Authentification requise par le serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="437"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="468"/>
         <source>Proxy authentication required</source>
-        <translation type="unfinished"></translation>
+        <translation>Authentification requise par le pare-feu</translation>
     </message>
 </context>
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="111"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="97"/>
         <source>Error %1 while retreiving update file %2</source>
         <translation>Erreur %1 lors du rapatriement du fichier de mise à jour %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="135"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="124"/>
         <source>* Updates of version: %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>
@@ -680,7 +749,7 @@
 <context>
     <name>Utils::QButtonLineEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="112"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="115"/>
         <source>(press Alt up/down cursor to cycle)</source>
         <translation>(appuyez sur Alt et haut/bas pour faire défiler)</translation>
     </message>
@@ -688,7 +757,7 @@
 <context>
     <name>Utils::UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="284"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="275"/>
         <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation>Une mise à jour est disponible. Veuillez vérifier sur le site internet de l&apos;application : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>

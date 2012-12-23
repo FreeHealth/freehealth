@@ -10,60 +10,6 @@
     </message>
 </context>
 <context>
-    <name>BugReportDialog</name>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="20"/>
-        <source>&amp;Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="30"/>
-        <source>yourname@gmail.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="37"/>
-        <source>&amp;Problem description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="46"/>
-        <source>What steps are needed to reproduce the problem?
-1.
-2.
-3.
-
-What is the expected output? What do you see instead?
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="72"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="82"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;We are using &lt;a href=&quot;http://code.google.com/p/freemedforms/issues/list&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Google Code&lt;/span&gt;&lt;/a&gt; as issue tracker. If you have a &lt;a href=&quot;https://accounts.google.com/SignUp&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;GMail account&lt;/span&gt;&lt;/a&gt;, you can use it for creating issues here. If you use a non-GMail address, a normal mail is sent to the developers instead of creating an issue on Google Code.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.ui" line="95"/>
-        <source>I want to use this GMail account for creating an issue at the issue tracker</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/bugreportdialog.cpp" line="42"/>
-        <source>&amp;Send report</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>CommandLine</name>
     <message>
         <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="190"/>
@@ -261,24 +207,24 @@ What is the expected output? What do you see instead?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="109"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
         <source>Sending debugging information to the development team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="110"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="115"/>
         <source>Trying to send information to the development team.
 Using URL: %1
 Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="131"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="136"/>
         <source>Debugging information successfully sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="133"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="138"/>
         <source>Debugging information successfully sent to the development team.
 Using Url: %1
 %2</source>
@@ -301,9 +247,54 @@ Using Url: %1
 <context>
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="376"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1013"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="371"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1015"/>
         <source>Ctrl+,</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1322"/>
+        <source>General comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1323"/>
+        <source>Forms management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1324"/>
+        <source>Patient management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1325"/>
+        <source>User management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1326"/>
+        <source>Drugs management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1327"/>
+        <source>Agenda management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1328"/>
+        <source>Printings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1329"/>
+        <source>Installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1330"/>
+        <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

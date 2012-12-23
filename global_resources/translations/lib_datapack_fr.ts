@@ -190,7 +190,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="326"/>
         <source>Please wait until all packs are downloaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez attendre pendant le téléchagement des paquets.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="452"/>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="689"/>
         <source>All Pack(s) processed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les paquets ont été traités.</translation>
     </message>
 </context>
 <context>
@@ -262,7 +262,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="234"/>
         <source>&amp;Accept all license terms</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Accepter les termes des licences</translation>
     </message>
 </context>
 <context>

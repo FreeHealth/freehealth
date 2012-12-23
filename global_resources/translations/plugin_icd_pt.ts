@@ -176,15 +176,6 @@
     </message>
 </context>
 <context>
-    <name>ICD::IcdPlugin</name>
-    <message>
-        <location filename="../../plugins/icdplugin/icdplugin.cpp" line="85"/>
-        <location filename="../../plugins/icdplugin/icdplugin.cpp" line="97"/>
-        <source>Initializing ICD10 plugin...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ICD::IcdViewer</name>
     <message>
         <location filename="../../plugins/icdplugin/icdviewer.ui" line="14"/>
@@ -214,6 +205,15 @@
     <message>
         <location filename="../../plugins/icdplugin/icdviewer.ui" line="107"/>
         <source>Excludes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ICD::Internal::IcdPlugin</name>
+    <message>
+        <location filename="../../plugins/icdplugin/icdplugin.cpp" line="84"/>
+        <location filename="../../plugins/icdplugin/icdplugin.cpp" line="94"/>
+        <source>Initializing ICD10 plugin...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
