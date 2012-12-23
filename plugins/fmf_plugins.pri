@@ -54,8 +54,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     pluginspec2json.CONFIG += no_link
     moc_header.depends += $$pluginspec2json.output
     QMAKE_EXTRA_COMPILERS += pluginspec2json
-
-message($$XMLPATTERNS -no-format -output $$pluginspec2json.output $$SOURCES_PLUGINS_PATH/pluginjsonmetadata.xsl $$PLUGINSPEC)
 }
 
 #macx {
