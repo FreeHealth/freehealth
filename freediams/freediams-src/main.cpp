@@ -133,8 +133,11 @@ int main( int argc, char *argv[] )
     LOG_FOR("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
     Utils::Database::logAvailableDrivers();
 
-    QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
-    QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
+#if QT_VERSION < 0x050000
+     // Removed in Qt5
+     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+#endif
 
     app.setApplicationName( QString("%1").arg(BINARY_NAME));
     app.setOrganizationName(BINARY_NAME);
