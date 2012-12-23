@@ -304,7 +304,7 @@ void BaseForm::createActions()
     m_PriorityButton->addAction(aHigh);
     m_PriorityButton->addAction(aMedium);
     m_PriorityButton->addAction(aLow);
-    m_PriorityButton->setDefaultAction(aLow);
+    m_PriorityButton->setDefaultAction(aMedium);
 //    connect(m_PriorityButton, SIGNAL(triggered(QAction*)), this, SLOT(priorityActionTriggered(QAction*)));
 }
 
