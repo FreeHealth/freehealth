@@ -118,8 +118,4 @@ ExtensionSystem::IPlugin::ShutdownFlag XmlFormIOPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(XmlForms::Internal::XmlFormIOPlugin, "org.freemedforms.FreeMedForms.XmlFormIOPlugin")
-#else
 Q_EXPORT_PLUGIN(XmlFormIOPlugin)
-#endif

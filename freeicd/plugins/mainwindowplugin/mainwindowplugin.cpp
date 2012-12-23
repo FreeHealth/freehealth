@@ -76,8 +76,4 @@ void MainWinPlugin::extensionsInitialized()
     m_MainWindow->extensionsInitialized();
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(MainWin::Internal::MainWinPlugin, "org.freemedforms.FreeIcd.MainWinPlugin")
-#else
 Q_EXPORT_PLUGIN(MainWinPlugin)
-#endif

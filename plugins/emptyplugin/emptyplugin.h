@@ -43,6 +43,8 @@ namespace Internal {
 class EmptyPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.EmptyPlugin" FILE "Empty.json")
+
 public:
     EmptyPlugin();
     ~EmptyPlugin();

@@ -58,6 +58,8 @@ class ProxyPreferencesPage;
 class CorePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.CorePlugin" FILE "Core.json")
+
 public:
     CorePlugin();
     ~CorePlugin();

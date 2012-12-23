@@ -49,6 +49,8 @@ namespace Internal {
 class CorePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeIcd.CorePlugin" FILE "Core.json")
+
 public:
     CorePlugin();
     ~CorePlugin();

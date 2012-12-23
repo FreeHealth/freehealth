@@ -44,7 +44,8 @@ namespace Internal {
 class IdentityPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.IdentityPlugin" FILE "Identity.json")
+
 public:
     IdentityPlugin();
     ~IdentityPlugin();

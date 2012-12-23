@@ -99,8 +99,4 @@ ExtensionSystem::IPlugin::ShutdownFlag CategoryPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Category::Internal::CategoryPlugin, "org.freemedforms.FreeMedForms.CategoryPlugin")
-#else
 Q_EXPORT_PLUGIN(CategoryPlugin)
-#endif

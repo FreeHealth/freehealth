@@ -188,8 +188,4 @@ ExtensionSystem::IPlugin::ShutdownFlag AccountPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Account::Internal::AccountPlugin, "org.freemedforms.FreeMedForms.AccountPlugin")
-#else
 Q_EXPORT_PLUGIN(AccountPlugin)
-#endif

@@ -63,8 +63,4 @@ void PortPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Port::Internal::PortPlugin, "org.freemedforms.FreePort.PortPlugin")
-#else
 Q_EXPORT_PLUGIN(PortPlugin)
-#endif

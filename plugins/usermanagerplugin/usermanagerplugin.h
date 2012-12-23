@@ -50,6 +50,8 @@ class UserManagerMode;
 class UserManagerPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.UserManagerPlugin" FILE "UserManager.json")
+
 public:
     UserManagerPlugin();
     ~UserManagerPlugin();

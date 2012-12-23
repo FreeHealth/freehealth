@@ -44,6 +44,8 @@ class GirWidgetFactory;
 class GirPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.GirPlugin" FILE "Gir.json")
+
 public:
     GirPlugin();
     ~GirPlugin();

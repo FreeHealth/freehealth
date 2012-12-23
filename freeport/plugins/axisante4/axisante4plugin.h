@@ -34,7 +34,8 @@ namespace Internal {
 class Axisante4Plugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreePort.AxiSante4Plugin" FILE "AxiSante4.json")
+
 public:
     Axisante4Plugin();
     ~Axisante4Plugin();

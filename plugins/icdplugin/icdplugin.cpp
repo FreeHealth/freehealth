@@ -126,8 +126,4 @@ ExtensionSystem::IPlugin::ShutdownFlag IcdPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(ICD::Internal::IcdPlugin, "org.freemedforms.FreeMedForms.IcdPlugin")
-#else
 Q_EXPORT_PLUGIN(IcdPlugin)
-#endif

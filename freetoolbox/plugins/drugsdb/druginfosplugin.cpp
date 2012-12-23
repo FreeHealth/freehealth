@@ -73,8 +73,4 @@ void DrugInfosPlugin::extensionsInitialized()
         qWarning() << "DrugInfosPlugin::extensionsInitialized";
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(DrugInfos::Internal::DrugInfosPlugin, "org.freemedforms.FreeToolBox.DrugInfosPlugin")
-#else
 Q_EXPORT_PLUGIN(DrugInfosPlugin)
-#endif

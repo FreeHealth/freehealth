@@ -55,10 +55,13 @@ class PercentagesPage;
 class DistanceRulesPage;
 class AssetsRatesPage;
 class AccountDatabaseDefaultsPage;
+
 namespace Internal {
 class AccountPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.AccountPlugin" FILE "Account.json")
+
 public:
     AccountPlugin();
     ~AccountPlugin();

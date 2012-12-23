@@ -43,6 +43,8 @@ namespace Internal {
 class PortPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreePort.PortPlugin" FILE "Port.json")
+
 public:
     PortPlugin();
     ~PortPlugin();

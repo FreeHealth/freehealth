@@ -46,6 +46,8 @@ class PatientSearchMode;
 class PatientBasePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.PatientBasePlugin" FILE "PatientBase.json")
+
 public:
     PatientBasePlugin();
     ~PatientBasePlugin();

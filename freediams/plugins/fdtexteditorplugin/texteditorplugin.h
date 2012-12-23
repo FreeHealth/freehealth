@@ -43,6 +43,8 @@ namespace Editor {
 class TextEditorPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeDiams.TextEditorPlugin" FILE "TextEditor.json")
+
 public:
     TextEditorPlugin();
     ~TextEditorPlugin();

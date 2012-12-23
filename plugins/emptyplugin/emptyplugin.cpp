@@ -38,6 +38,7 @@
 #include <QDebug>
 
 using namespace Empty;
+using namespace Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -115,8 +116,4 @@ void EmptyPlugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Empty::Internal::EmptyPlugin, "org.freemedforms.FreeMedForms.EmptyPlugin")
-#else
 Q_EXPORT_PLUGIN(EmptyPlugin)
-#endif

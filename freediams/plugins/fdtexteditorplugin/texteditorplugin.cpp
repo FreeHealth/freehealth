@@ -68,5 +68,4 @@ void TextEditorPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
-
 Q_EXPORT_PLUGIN(TextEditorPlugin)

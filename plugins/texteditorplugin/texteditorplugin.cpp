@@ -104,8 +104,4 @@ ExtensionSystem::IPlugin::ShutdownFlag TextEditorPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Editor::Internal::TextEditorPlugin, "org.freemedforms.FreeMedForms.TextEditorPlugin")
-#else
 Q_EXPORT_PLUGIN(TextEditorPlugin)
-#endif

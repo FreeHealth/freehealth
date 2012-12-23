@@ -46,6 +46,8 @@ class PmhPreferencesPage;
 class PmhPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.PMHPlugin" FILE "PMH.json")
+
 public:
     PmhPlugin();
     ~PmhPlugin();

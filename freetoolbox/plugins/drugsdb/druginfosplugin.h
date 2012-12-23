@@ -42,6 +42,8 @@ namespace Internal {
 class DrugInfosPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeToolBox.DrugInfosPlugin" FILE "DrugInfos.json")
+
 public:
     DrugInfosPlugin();
     ~DrugInfosPlugin();

@@ -103,8 +103,4 @@ void CorePlugin::remoteArgument(const QString &arg)
 //    }
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Core::Internal::CorePlugin, "org.freemedforms.FreeIcd.CorePlugin")
-#else
 Q_EXPORT_PLUGIN(CorePlugin)
-#endif

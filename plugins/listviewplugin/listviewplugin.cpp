@@ -75,8 +75,4 @@ ExtensionSystem::IPlugin::ShutdownFlag ListViewPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-#if QT_VERSION >= 0x050000
-Q_DECLARE_INTERFACE(Views::Internal::ListViewPlugin, "org.freemedforms.FreeMedForms.ListViewPlugin")
-#else
 Q_EXPORT_PLUGIN(ListViewPlugin)
-#endif

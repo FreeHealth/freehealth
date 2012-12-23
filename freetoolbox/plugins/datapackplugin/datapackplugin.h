@@ -41,6 +41,8 @@ namespace Internal {
 class DataPackIPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeToolBox.DataPackPlugin" FILE "DataPackPlugin.json")
+
 public:
     DataPackIPlugin();
     ~DataPackIPlugin();

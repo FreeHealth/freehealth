@@ -45,6 +45,8 @@ namespace Internal {
 class MainWinPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreePort.MainWindowPlugin" FILE "MainWindow.json")
+
 public:
     MainWinPlugin();
     ~MainWinPlugin();

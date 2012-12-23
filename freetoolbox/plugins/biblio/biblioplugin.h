@@ -41,6 +41,8 @@ namespace Internal {
 class BiblioPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeToolBox.BiblioPlugin" FILE "Biblio.json")
+
 public:
     BiblioPlugin();
     ~BiblioPlugin();
