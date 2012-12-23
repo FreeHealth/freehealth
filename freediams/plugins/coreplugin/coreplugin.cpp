@@ -52,15 +52,8 @@ CorePlugin::CorePlugin() :
 
 CorePlugin::~CorePlugin()
 {
-    qWarning() << "CorePlugin::~CorePlugin()";
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
-    if (proxyPage) {
-        removeObject(proxyPage);
-        delete proxyPage; proxyPage=0;
-    }
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -115,6 +108,26 @@ void CorePlugin::remoteArgument(const QString &arg)
 //    } else {
 //        m_mainWindow->openFiles(QStringList(arg));
 //    }
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag CorePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
+    if (proxyPage) {
+        removeObject(proxyPage);
+        delete proxyPage; proxyPage=0;
+    }
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(CorePlugin)

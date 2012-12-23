@@ -39,7 +39,7 @@ using namespace SaveRestore;
 using namespace Internal;
 
 SaveRestorePlugin::SaveRestorePlugin() :
-        page(0)
+    page(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating SaveRestorePlugin";
@@ -47,11 +47,8 @@ SaveRestorePlugin::SaveRestorePlugin() :
 
 SaveRestorePlugin::~SaveRestorePlugin()
 {
-    if (page) {
-        removeObject(page);
-        delete page;
-        page = 0;
-    }
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool SaveRestorePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -75,6 +72,24 @@ void SaveRestorePlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     page = new SaveRestorePage(this);
     addObject(page);
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag SaveRestorePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+
+    if (page) {
+        removeObject(page);
+        delete page;
+        page = 0;
+    }
+
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(SaveRestorePlugin)

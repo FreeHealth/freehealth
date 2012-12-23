@@ -63,7 +63,6 @@ PadToolsPlugin::PadToolsPlugin() :
 
     // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
     _core = new  PadToolsCore(this);
-    _core->initialize();
 }
 
 PadToolsPlugin::~PadToolsPlugin()
@@ -80,11 +79,6 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-#ifdef FREEPAD
-    Core::ICore::instance()->patient()->registerPatientTokens();
-    Core::ICore::instance()->user()->registerUserTokens();
-#endif
-
     return true;
 }
 
@@ -93,6 +87,12 @@ void PadToolsPlugin::extensionsInitialized()
 	qDebug("PadToolsPlugin::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
+
+    _core->initialize();
+#ifdef FREEPAD
+    Core::ICore::instance()->patient()->registerPatientTokens();
+    Core::ICore::instance()->user()->registerUserTokens();
+#endif
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
@@ -105,6 +105,9 @@ ExtensionSystem::IPlugin::ShutdownFlag PadToolsPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
+
+    Core::ICore::instance()->setPadTools(0);
+
     return SynchronousShutdown;
 }
 

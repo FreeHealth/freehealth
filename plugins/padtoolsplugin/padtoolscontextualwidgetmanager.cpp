@@ -36,6 +36,10 @@
 #include "constants.h"
 #include "padwriter.h"
 
+#ifdef FREEDIAMS
+#   include <drugsplugin/constants.h>
+#endif
+
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_menus.h>
@@ -195,10 +199,14 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
         //        menu->setTranslations(PadTools::Constants::DRUGSMENU_TEXT);
         
         // Add the menu to the menubar or to the plugin menu
-#ifndef FREEMEDFORMS
-        actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
+#ifdef FREEDIAMS
+        actionManager()->actionContainer(Core::Id(DrugsWidget::Constants::M_PLUGINS_DRUGS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
 #else
-        actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
+#   ifdef FREEMEDFORMS
+        actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);
+#   else
+        actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
+#   endif
 #endif
     }
     Q_ASSERT(menu);

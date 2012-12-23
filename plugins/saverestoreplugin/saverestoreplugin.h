@@ -44,12 +44,16 @@ namespace Internal {
 class SaveRestorePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.SaveRestorePlugin" FILE "SaveRestore.json")
+
 public:
     SaveRestorePlugin();
     ~SaveRestorePlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
 
 private:
     SaveRestorePage *page;

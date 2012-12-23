@@ -46,10 +46,6 @@ MainWinPlugin::~MainWinPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::~MainWinPlugin()";
-    if (m_MainWindow) {
-        delete m_MainWindow;
-        m_MainWindow = 0;
-    }
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -84,6 +80,12 @@ ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
     // Remove preferences pages to plugins manager object pool
     if (m_MainWindow->isVisible())
         m_MainWindow->hide();
+
+    if (m_MainWindow) {
+        delete m_MainWindow;
+        m_MainWindow = 0;
+    }
+//    Core::ICore::instance()->setMainWindow(0);
 
     // m_MainWindow is deleted by Core
     return SynchronousShutdown;

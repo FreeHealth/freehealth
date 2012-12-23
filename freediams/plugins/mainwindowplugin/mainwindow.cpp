@@ -292,6 +292,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
         pmenu->appendGroup(Core::Id(G_PLUGINS_SEARCH));
         pmenu->appendGroup(Core::Id(G_PLUGINS_DRUGS));
         pmenu->appendGroup(Core::Id(G_PLUGINS_INTERACTIONS));
+        pmenu->appendGroup(Core::Id(Core::Constants::G_PLUGINS_PADTOOLS));
         pmenu->setTranslations(DRUGSMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
     }
     Q_ASSERT(pmenu);

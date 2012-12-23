@@ -151,7 +151,6 @@ PadToolsCore::PadToolsCore(QObject *parent) :
 /*! Destructor of the PadTools::Internal::PadToolsCore class */
 PadToolsCore::~PadToolsCore()
 {
-    Core::ICore::instance()->setPadTools(0);
     _instance = 0;
     if (d)
         delete d;
