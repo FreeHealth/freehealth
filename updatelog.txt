@@ -6,8 +6,11 @@ FreeMedForms
     * detailswidget
     * modern date
   * Refactoring all identity UI
-  * Refactoring the usermanager
+  * Refactoring the
+    * User manager
+    * User creation wizard
   * Ability to edit agenda day availabilities
+  * All applications are ported to Qt5.0 (but not to qml yet)
   * New languages available (translations undone)
 
 ===== Bug correction =====
