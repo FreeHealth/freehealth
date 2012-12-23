@@ -32,10 +32,16 @@ DEPENDPATH += \
     $${SOURCES_CONTRIBS_PATH} \
     $${SOURCES_CONTRIBS_PATH}/quazip
 
+CONFIG += depend_includepath
+
 LIBS *= -L$${BUILD_PLUGIN_PATH} -L$${BUILD_LIB_PATH}
 
 # build mode
 CONFIG *= qt warn_on thread x11 windows
+
+DEFINES += QT_NO_CAST_TO_ASCII
+!macx:DEFINES += QT_USE_FAST_OPERATOR_PLUS QT_USE_FAST_CONCATENATION
+
 CONFIG(debug, debug|release) {
 #  message( Building $${BINARY_TARGET} in DEBUG )
   DEFINES  *= DEBUG
@@ -48,6 +54,12 @@ CONFIG(debug, debug|release) {
 #  DEFINES  *= QT_NO_DEBUG_OUTPUT \
 #              QT_NO_WARNING_OUTPUT \
 #              QT_NO_DEBUG
+}
+
+qt:greaterThan(QT_MAJOR_VERSION, 4) {
+    contains(QT, core): QT += concurrent
+    contains(QT, gui): QT += widgets
+    DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x040900
 }
 
 TARGET   = $${BINARY_TARGET}
