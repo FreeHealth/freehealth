@@ -203,6 +203,12 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->treeView->setModel(d->_tokenModel);
     d->ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
     d->ui->treeView->setUniformRowHeights(false);
+#if QT_VERSION < 0x050000
+    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+#else
+    // Qt5
+    d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+#endif
     expandTokenTreeView();
     connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 

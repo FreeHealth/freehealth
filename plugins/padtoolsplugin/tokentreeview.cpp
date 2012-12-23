@@ -48,12 +48,6 @@ TokenTreeView::TokenTreeView(QWidget *parent) :
     QTreeView(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
-#if QT_VERSION < 0x050000
-    header()->setResizeMode(0, QHeaderView::Stretch);
-#else
-    // Qt5
-    header()->setSectionResizeMode(0, QHeaderView::Stretch);
-#endif
 }
 
 QPixmap TokenTreeView::renderToPixmap(const QModelIndexList &indexes, QRect *r)

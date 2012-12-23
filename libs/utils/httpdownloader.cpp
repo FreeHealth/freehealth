@@ -314,8 +314,10 @@ bool HttpDownloaderPrivate::startRequest(const QUrl &url)
 void HttpDownloaderPrivate::cancelDownload()
 {
     httpRequestAborted = true;
-    reply->abort();
-    reply->deleteLater();
+    if (reply) {
+        reply->abort();
+        reply->deleteLater();
+    }
     networkError = QNetworkReply::OperationCanceledError;
     lastError = tr("Download canceled.");
     _stringBuffer.clear();
