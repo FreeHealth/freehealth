@@ -49,8 +49,10 @@ QT_END_NAMESPACE
 */
 
 namespace PadTools {
+namespace Internal {
 class TokenModel;
 class PadWriter;
+}
 }
 
 namespace MainWin {
@@ -93,7 +95,7 @@ public Q_SLOTS:
 
     bool applicationPreferences();
 
-    void updateCheckerEnd();
+    void updateCheckerEnd(bool error);
 
     void aboutToShowRecentFiles();
     void openRecentFile();
@@ -113,8 +115,8 @@ protected:
 
 private:
 //	Core::IPadTools *m_padTools;
-    PadTools::TokenModel *m_TokenModel;
-    PadTools::PadWriter *m_Writer;
+    PadTools::Internal::TokenModel *m_TokenModel;
+    PadTools::Internal::PadWriter *m_Writer;
 
 	void refreshTokens();
 };

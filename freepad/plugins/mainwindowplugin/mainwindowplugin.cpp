@@ -80,7 +80,6 @@ void MainWinPlugin::extensionsInitialized()
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-//    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));
 
     m_MainWindow->extensionsInitialized();
 }

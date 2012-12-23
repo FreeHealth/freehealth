@@ -37,6 +37,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
@@ -66,6 +67,7 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QMenu>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -85,9 +87,10 @@ static inline Core::FileManager *fileManager() { return Core::ICore::instance()-
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
-
-MainWindow::MainWindow( QWidget * parent ) :
-    Core::IMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) :
+    Core::IMainWindow(parent),
+    m_TokenModel(0),
+    m_Writer(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -149,12 +152,16 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     return true;
 }
 
-/** \brief Before MainWindow is shown.
+/**
+ * \brief Before MainWindow is shown.
 */
 void MainWindow::extensionsInitialized()
 {
-    m_Writer = new PadTools::PadWriter(this);
+    // FIXME: PadWriter is not exported for Win32 and should be purely internal to PadTools Plugin
+    // FIXME: connect this to postCoreInitialization
+    m_Writer = new PadTools::Internal::PadWriter(this);
     setCentralWidget(m_Writer);
+    // END
 
     finishSplash(this);
     readSettings();
@@ -279,8 +286,9 @@ void MainWindow::openRecentFile()
     }
 }
 
-void MainWindow::updateCheckerEnd()
+void MainWindow::updateCheckerEnd(bool error)
 {
+    Q_UNUSED(error);
     // this code avoid deletion of the resizer corner of the mainwindow
     delete statusBar();
     statusBar()->hide();
