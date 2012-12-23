@@ -146,6 +146,8 @@ PadToolsCore::PadToolsCore(QObject *parent) :
 {
     _instance = this;
     setObjectName("PadToolsCore");
+    d->_impl = new PadToolsImpl(this);
+    Core::ICore::instance()->setPadTools(d->_impl);
 }
 
 /*! Destructor of the PadTools::Internal::PadToolsCore class */
@@ -160,9 +162,6 @@ PadToolsCore::~PadToolsCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool PadToolsCore::initialize()
 {
-    d->_impl = new PadToolsImpl(this);
-    Core::ICore::instance()->setPadTools(d->_impl);
-
     d->_widgetManager = new PadToolsContextualWidgetManager(this);
 
     if (!Utils::isReleaseCompilation() && CreateTestingTokens)
