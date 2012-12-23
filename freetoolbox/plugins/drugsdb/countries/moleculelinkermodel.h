@@ -36,7 +36,7 @@ namespace DrugsDB {
 class DrugsDBCore;
 namespace Internal {
 class DrugBaseEssentials;
-class MoleculeLinkData;
+struct MoleculeLinkData;
 class MoleculeLinkerModelPrivate;
 }  // namespace Internal
 

@@ -42,7 +42,7 @@ namespace Internal {
 class Icd10DbPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeToolBox.ICD10Plugin" FILE "Icd10.json")
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeToolBox.ICD10Plugin" FILE "Icd10DB.json")
 
 public:
     Icd10DbPlugin();

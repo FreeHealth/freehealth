@@ -386,7 +386,7 @@ bool DataPackCore::createServer(const QString &serverUid)
 
     // Zip XML files
     // Create a tmp server only with XML files
-    QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid();
+    QString tmp = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator() + QUuid::createUuid().toString().remove("-").remove("{").remove("}");
     Utils::checkDir(tmp, true, objectName());
     QDir serverdir(server.outputServerAbsolutePath());
     // Get files from versionned server

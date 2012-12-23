@@ -33,6 +33,7 @@
 #include <QHash>
 #include <QMultiHash>
 #include <QVector>
+#include <QVariant>
 QT_BEGIN_NAMESPACE
 class QProgressDialog;
 class QSqlDatabase;

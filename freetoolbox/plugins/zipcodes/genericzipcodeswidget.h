@@ -26,7 +26,7 @@
 #ifndef GENERICZIPCODESWIDGET_H
 #define GENERICZIPCODESWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "genericzipcodesstep.h"
 
 QT_BEGIN_NAMESPACE
