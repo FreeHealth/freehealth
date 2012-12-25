@@ -91,11 +91,10 @@ void AlertPreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
-
 /*! Creates a new preferences page with a given parent. */
 AlertPreferencesPage::AlertPreferencesPage(QObject *parent) :
-        IOptionsPage(parent),
-        m_Widget(0)
+    IOptionsPage(parent),
+    m_Widget(0)
 {
     setObjectName("AlertPreferencesPage");
 }
