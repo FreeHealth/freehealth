@@ -57,7 +57,7 @@ public:
     void setCurrentView(PadWriter *view);
 
 private Q_SLOTS:
-    void onDefaultValuesRequested();
+    void onViewOutputRequested();
     void onShowSourceRequested();
 
 private Q_SLOTS:
@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 protected:
     QAction *aShowSource;
-    QAction *aSetDefaultValues;
+    QAction *aViewOutput;
 
     QPointer<PadWriter> m_CurrentView;
 };

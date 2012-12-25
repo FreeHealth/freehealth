@@ -43,7 +43,7 @@ namespace Constants {
 // Menus && Actions
 const char * const M_PLUGIN_PADTOOLS = "mPadTools";
 const char * const C_PADTOOLS_PLUGINS = "cPadTools";
-const char * const A_PADTOOLS_SETDEFAULTVALUES = "aPTDefaultValues";
+const char * const A_PADTOOLS_VIEWOUTPUT = "aPTViewOutPut";
 const char * const A_PADTOOLS_SHOWSOURCE = "aPTShowSource";
 
 const char * const TOKENVALUE_MIME = "freepad/token/value";
@@ -63,7 +63,7 @@ const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
 const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
 const char * const FIND_CURSOR_IN_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Find cursor");
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
-const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
+const char * const VIEW_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "View output");
 const char * const SHOW_SOURCE = QT_TRANSLATE_NOOP("PadWriter", "Show source");
 
 // Translations used for the TokenOutputDocument drag'n drop

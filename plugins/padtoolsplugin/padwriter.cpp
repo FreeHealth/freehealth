@@ -156,7 +156,7 @@ public:
         }
         // Add options action
         Core::Command *cmd;
-        cmd = actionManager()->command(Constants::A_PADTOOLS_SETDEFAULTVALUES);
+        cmd = actionManager()->command(Constants::A_PADTOOLS_VIEWOUTPUT);
         _toolBar->addAction(cmd->action());
 
         cmd = actionManager()->command(Constants::A_PADTOOLS_SHOWSOURCE);

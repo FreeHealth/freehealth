@@ -177,7 +177,7 @@ PadWriter *PadToolsContextualWidgetManager::currentView() const
 PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     QObject(parent),
     aShowSource(0),
-    aSetDefaultValues(0),
+    aViewOutput(0),
     m_CurrentView(0)
 {
     setObjectName("PadToolsActionHandler");
@@ -232,14 +232,14 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
                                QKeySequence::UnknownKey, false);
     connect(aShowSource, SIGNAL(triggered()), this, SLOT(onShowSourceRequested()));
 
-    aSetDefaultValues = createAction(this, "aSetDefaultValues", Core::Constants::ICONHELP,
-                                     Constants::A_PADTOOLS_SETDEFAULTVALUES,
+    aViewOutput = createAction(this, "aViewOutput", Core::Constants::ICONHELP,
+                                     Constants::A_PADTOOLS_VIEWOUTPUT,
                                      ctx,
-                                     Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT,
+                                     Constants::VIEW_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT,
                                      cmd,
                                      0, "",
                                      QKeySequence::UnknownKey, false);
-    connect(aSetDefaultValues, SIGNAL(triggered()), this, SLOT(onDefaultValuesRequested()));
+    connect(aViewOutput, SIGNAL(triggered()), this, SLOT(onDefaultValuesRequested()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -285,10 +285,10 @@ void PadToolsActionHandler::updateActions()
     // Proceed actions dis/enableing
 }
 
-void PadToolsActionHandler::onDefaultValuesRequested()
+void PadToolsActionHandler::onViewOutputRequested()
 {
     if (m_CurrentView)
-        m_CurrentView->onDefaultValuesRequested();
+        m_CurrentView->onViewOutputRequested();
 }
 
 void PadToolsActionHandler::onShowSourceRequested()
