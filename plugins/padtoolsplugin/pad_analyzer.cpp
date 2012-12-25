@@ -138,7 +138,9 @@ PadAnalyzer::~PadAnalyzer()
     }
 }
 
-/** Analyzes a mask \e text and return a \e PadTools::PadDocument pointer. */
+/**
+ * Converts a tokened document \e source to a PadTools::Internal::PadDocument pointer.
+ */
 PadDocument *PadAnalyzer::analyze(const QString &source)
 {
     if (d->_sourceDocument && d->_sourceDocument->parent()==this) {
@@ -150,6 +152,10 @@ PadDocument *PadAnalyzer::analyze(const QString &source)
     return d->startAnalyze();
 }
 
+/**
+ * Converts a tokened document extracted from a QTextDocument) \e source
+ * to a PadTools::Internal::PadDocument pointer.
+ */
 PadDocument *PadAnalyzer::analyze(QTextDocument *source, PadDocument *padDocument)
 {
     if (d->_sourceDocument && d->_sourceDocument->parent()==this) {
@@ -160,11 +166,16 @@ PadDocument *PadAnalyzer::analyze(QTextDocument *source, PadDocument *padDocumen
     return d->startAnalyze(padDocument);
 }
 
+/** Returns the last recorded errors. Not yet implemented */
 const QList<Core::PadAnalyzerError> PadAnalyzer::lastErrors() const
 {
     return d->_lastErrors;
 }
 
+/**
+ * Analyze a PadTools::Internal::PadDocument.
+ * Find tokens without any text replacement.
+ */
 PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 {
     Lexem lex;
@@ -176,7 +187,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 
 	PadFragment *fragment;
 	int pos;
-	QMap<QString,QVariant> errorTokens;
+    QMap<QString, QVariant> errorTokens;
 
 	_curPos = 0;
 	_lastErrors.clear();
@@ -322,7 +333,10 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
 	return 0;
 }
 
-/** Extracts the core of a token: '~CORE~'. This member is called when analyzer finds a starting core delimiter. */
+/**
+ * Extracts the core of a token (it's uuid): '~CORE~'.
+ * This member is called when analyzer finds a starting core delimiter.
+ */
 PadCore *PadAnalyzerPrivate::nextCore()
 {
 	Lexem lex;
