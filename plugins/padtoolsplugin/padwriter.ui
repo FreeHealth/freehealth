@@ -47,8 +47,8 @@
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
-         <property name="uniformRowHeights">
-          <bool>true</bool>
+         <property name="indentation">
+          <number>10</number>
          </property>
          <attribute name="headerVisible">
           <bool>false</bool>
@@ -73,72 +73,24 @@
          <property name="spacing">
           <number>0</number>
          </property>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="viewResult">
-           <property name="text">
-            <string>raw to output</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QToolButton" name="scenari">
-           <property name="text">
-            <string>Scenari</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3" colspan="2">
-          <widget class="QToolButton" name="outputToRaw">
-           <property name="text">
-            <string>output to raw</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="5">
+         <item row="0" column="0" colspan="2">
           <layout class="QVBoxLayout" name="toolbarLayout">
            <property name="spacing">
             <number>0</number>
            </property>
           </layout>
          </item>
-         <item row="2" column="1">
-          <widget class="QToolButton" name="optionsButton">
-           <property name="text">
-            <string>Options</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="ouputPos">
-           <property name="toolTip">
-            <string>OUTPUT</string>
-           </property>
-           <property name="maximum">
-            <number>16777215</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="5">
+         <item row="1" column="0" colspan="2">
           <widget class="PadTools::Internal::DragDropTextEdit" name="rawSource">
            <property name="toolTip">
             <string>Raw source</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
-          <widget class="QSpinBox" name="rawPos">
-           <property name="toolTip">
-            <string>RAW</string>
-           </property>
-           <property name="maximum">
-            <number>16777215</number>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
-       <widget class="PadTools::Internal::TokenOutputDocument" name="wysiwyg"/>
-       <widget class="QTextEdit" name="computedOutput"/>
+       <widget class="PadTools::Internal::TokenOutputDocument" name="dropTextEditor"/>
+       <widget class="QTextEdit" name="outputTextEditor"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
        <property name="toolTip">

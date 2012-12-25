@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers :                                                      *
+ *      Eric Maeker                                                        *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
@@ -28,14 +28,29 @@
 /**
  * \class PadTools::PadWriter
  * To avoid dependencies to the pad plugin, the PadTools::PadWriter can be created
- * by the Core::IPadTools::createWriter().
+ * by the Core::IPadTools::createWriter().\n
+ * The pad writer presents:
+ * - a tool bar with some useful actions (show source, show output)
+ * - a token tree view (shows all registered tokens of the central PadTools::Internal::TokenPool)
+ * - a token's drop text editor that allow user to write comfortably any tokened document.
+ * - a tokened document source
+ * - and the potential output of the tokened document.
+ *
+ * Under the hood:
+ * The pad writer gets the raw source tokened document using setPlainTextSource() or
+ * setHtmlSource(). From this starting point, it analyzes the raw source and creates
+ * the token drop text editor. This text editor is the central user interaction interface.\n
+ * A tool bar allow user to request: source of the document, a pre-computation of the tokened
+ * document. \n
+ * When edition is done, you can get the raw source tokened document using rawSourceToPlainText()
+ * or rawSourceToHtml(). And get the output document with outputToPlainText() or
+ * outputToHtml().
 */
 
 #include "padwriter.h"
 #include "tokenmodel.h"
 #include "constants.h"
 #include "pad_analyzer.h"
-//#include "pad_highlighter.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -52,6 +67,7 @@
 
 #include <QTimer>
 #include <QToolBar>
+#include <QToolButton>
 
 #include "ui_padwriter.h"
 
@@ -75,7 +91,8 @@ public:
         _context(0),
         ui(0),
         _tokenModel(0),
-        _pad(0),
+        _padForEditor(0),
+        _padForViewer(0),
         _toolBar(0),
         q(parent)
     {
@@ -87,12 +104,15 @@ public:
         ui->setupUi(q);
         ui->tokenTreeLayout->setMargin(0);
         ui->tokenTreeLayout->setSpacing(0);
+        ui->listWidgetErrors->hide();
+        ui->rawSource->hide();
+        ui->outputTextEditor->setReadOnly(true);
     }
 
     void registerContext()
     {
         _context = new PadWriterContext(q);
-        ui->wysiwyg->addContext(_context->context());
+        ui->dropTextEditor->addContext(_context->context());
         ui->rawSource->addContext(_context->context());
         contextManager()->addContextObject(_context);
     }
@@ -132,8 +152,8 @@ public:
 
     void connectActions()
     {
-        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
-        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
+//        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyzeRawSource()));
+//        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
     }
 
     void createToolBar()
@@ -166,12 +186,51 @@ public:
         aTest1->trigger();
     }
 
+    void manageModelAndView()
+    {
+        // Create TokenModel
+        _tokenModel = new TokenModel(q);
+        ui->treeView->setModel(_tokenModel);
+        ui->treeView->setItemDelegate(new Utils::HtmlDelegate(q));
+        ui->treeView->setUniformRowHeights(false);
+    #if QT_VERSION < 0x050000
+        ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    #else
+        // Qt5
+        ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    #endif
+        QObject::connect(_tokenModel, SIGNAL(modelReset()), q, SLOT(expandTokenTreeView()));
+    }
+
+    void createPadDocument()
+    {
+        // Create PadDocument for the editor
+        _padForEditor = new PadDocument();
+        ui->dropTextEditor->setPadDocument(_padForEditor);
+        // Create PadDocument for the viewer (showing the token replacement result)
+        _padForViewer = new PadDocument();
+    }
+
+    // Show the raw source of the document + output
+    void switchToRawSourceEdition()
+    {
+        ui->dropTextEditor->setVisible(false);
+        ui->rawSource->setVisible(true);
+    }
+
+    // Show the text editor of the document + output
+    void switchToDropTextEdition()
+    {
+        ui->dropTextEditor->setVisible(true);
+        ui->rawSource->setVisible(false);
+    }
+
 public:
     PadWriterContext *_context;
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
     QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
-    PadDocument *_pad;
+    PadDocument *_padForEditor, *_padForViewer;
     QToolBar *_toolBar;
 
 private:
@@ -188,6 +247,7 @@ PadWriterContext::PadWriterContext(PadWriter *w) :
     setContext(Core::Context(PadTools::Constants::C_PADTOOLS_PLUGINS));
 }
 
+/** Creates a PadTools::Internal::PadWriter in text edition mode */
 PadWriter::PadWriter(QWidget *parent) :
     Core::IPadWriter(parent),
     d(new Internal::PadWriterPrivate(this))
@@ -198,29 +258,18 @@ PadWriter::PadWriter(QWidget *parent) :
     d->createToolBar();
     d->registerContext();
 
-    // Create TokenModel
-    d->_tokenModel = new TokenModel(this);
-    d->ui->treeView->setModel(d->_tokenModel);
-    d->ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
-    d->ui->treeView->setUniformRowHeights(false);
-#if QT_VERSION < 0x050000
-    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-#else
-    // Qt5
-    d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-#endif
+    d->manageModelAndView();
+    d->createPadDocument();
+
+    d->switchToDropTextEdition();
+
     expandTokenTreeView();
-    connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 
-    // Create PadDocument object
-    d->_pad = new PadDocument();
-    d->ui->wysiwyg->setPadDocument(d->_pad);
-    connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
-
-//    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
+//    connect(d->ui->dropTextEditor->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(dropTextEditorCursorChanged()));
 //    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
 }
 
+/** Dtor */
 PadWriter::~PadWriter()
 {
     d->removeContext();
@@ -234,14 +283,14 @@ PadWriter::~PadWriter()
 void PadWriter::setPlainTextSource(const QString &plainText)
 {
     d->ui->rawSource->setPlainText(plainText);
-    analyseRawSource();
+    analyzeRawSource();
 }
 
 /** Set the rich text (HTML) raw source to analyze */
 void PadWriter::setHtmlSource(const QString &html)
 {
     d->ui->rawSource->setHtml(html);
-    analyseRawSource();
+    analyzeRawSource();
 }
 
 /** Filter available namespaces with the \e tokenNamespace */
@@ -258,45 +307,41 @@ void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
     // TODO: here
 }
 
-/** Returns the token output constructed document to plain text (does include the tokens not their values) */
+/**
+ * Returns the token output constructed document to plain text
+ * (does include the tokens but their values)
+ */
 QString PadWriter::outputToPlainText() const
 {
-    return d->ui->wysiwyg->toPlainText();
+    return d->ui->dropTextEditor->toPlainText();
 }
 
-/** Returns the token output constructed document to rich text (does include the tokens not their values) */
+/**
+ * Returns the token output constructed document to rich text
+ * (does include the tokens but their values)
+ */
 QString PadWriter::outputToHtml() const
 {
-    return d->ui->wysiwyg->toHtml();
+    return d->ui->dropTextEditor->toHtml();
 }
 
-/** Returns the token raw source document to plain text (does include the tokens not their values) */
+/** Returns the token raw source document to plain text */
 QString PadWriter::rawSourceToPlainText() const
 {
     return d->ui->rawSource->toPlainText();
 }
 
-/** Returns the token raw source document to rich text (does include the tokens not their values) */
+/** Returns the token raw source document to rich text */
 QString PadWriter::rawSourceToHtml() const
 {
     return d->ui->rawSource->toHtml();
 }
 
-//void PadWriter::wysiwygCursorChanged()
-//{
-//    QTextCursor c = d->ui->wysiwyg->textEdit()->textCursor();
-//    d->ui->ouputPos->setValue(c.position());
-//}
-
-//void PadWriter::rawSourceCursorChanged()
-//{
-//    QTextCursor c = d->ui->rawSource->textEdit()->textCursor();
-//    d->ui->rawPos->setValue(c.position());
-//}
-
 /**
+ * \internal
  * In \b debug \b mode some "testing scenari" are available through a button,
- * apply the selected scenrio */
+ * apply the selected scenrio
+ */
 void PadWriter::changeRawSourceScenario(QAction *a)
 {
     QString source;
@@ -359,167 +404,76 @@ void PadWriter::changeRawSourceScenario(QAction *a)
         source = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/prescription/padtoolsstyle_fr.txt");
     }
 
-//    if (d->_pad) {
-//        delete d->_pad;
-//        d->_pad = 0;
+//    if (d->_padForEditor) {
+//        delete d->_padForEditor;
+//        d->_padForEditor = 0;
 //    }
     d->ui->rawSource->setHtml(source);
-    analyseRawSource();
+    analyzeRawSource();
 }
 
+/**
+ * \internal
+ * Expand all root branches of the token treeView
+ */
 void PadWriter::expandTokenTreeView()
 {
     for(int i=0; i < d->_tokenModel->rowCount(); ++i)
         d->ui->treeView->expand(d->_tokenModel->index(i,0));
 }
 
-/** Analyze the current token raw source and create the token output document */
-void PadWriter::analyseRawSource()
+/**
+ * \internal
+ * Analyze the current token raw source document
+ * and create the tokened output document
+ */
+void PadWriter::analyzeRawSource()
 {
     // clear PadDocument && views
-    QList<Core::PadAnalyzerError> errors;
-    d->_pad->clear();
+    d->_padForEditor->clear();
 
-    // Start analyze && token replacement
-    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
-    d->_pad->setTokenModel(d->_tokenModel);
-//    d->_pad->run(d->_tokenModel->tokens());
-    d->_pad->toOutput(d->_tokenModel->tokenPool());
+    // Start analyze && token replacement (for the editor)
+    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
+    d->_padForEditor->setTokenModel(d->_tokenModel);
+    d->_padForEditor->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenDisplayName);
+    // TODO: manage PadAnalyzer errors
+//    d->ui->dropTextEditor->setDocument(d->_padForEditor->outputDocument());
 
-    d->ui->computedOutput->setDocument(d->_pad->outputDocument());
-
-    d->ui->listWidgetErrors->clear();
-    foreach (const Core::PadAnalyzerError &error, errors) {
-        switch (error.errorType()) {
-        case Core::PadAnalyzerError::Error_UnexpectedChar:
-            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
-            break;
-        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
-            break;
-        }
-    }
+    // Start analyze && token replacement (for the viewer)
+    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForViewer);
+    d->_padForViewer->setTokenModel(d->_tokenModel);
+    d->_padForViewer->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenValue);
+    // TODO: manage PadAnalyzer errors
+    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
 }
 
+/**
+ * \internal
+ * Analyze the current token edited document (in the rich texteditor)
+ * and create the tokened raw source document
+ */
 void PadWriter::outputToRaw()
 {
-    // clear PadDocument && views
-//    QList<Core::PadAnalyzerError> errors;
-//    d->_pad->clear();
-
     // Start raw source composition
-    d->_pad->toRaw();
-
-//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
-//    d->_pad->setTokenModel(d->_tokenModel);
-//    d->_pad->run(d->_tokenModel->tokens());
-
-//    d->ui->listWidgetErrors->clear();
-//    foreach (const Core::PadAnalyzerError &error, errors) {
-//        switch (error.errorType()) {
-//        case Core::PadAnalyzerError::Error_UnexpectedChar:
-//            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
-//            break;
-//        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-//            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
-//            break;
-//        }
-//    }
+    d->_padForEditor->toRaw();
 }
 
-void PadWriter::viewErrors()
+/**
+ * \internal
+ * Switch to the rich text tokened edition (using the drag'n drop feature).
+ * This is the default viewing mode of the pad writer.
+ * \sa onShowSourceRequested()
+ */
+void PadWriter::onViewOutputRequested()
 {
+    analyzeRawSource();
 }
 
-void PadWriter::highlightCursor()
-{
-//    int cursorPos;
-//    // highlight cursor in output textdocument
-//    cursorPos = d->ui->wysiwyg->textEdit()->textCursor().position();
-//    PadFragment *outputFragment = d->_pad->padFragmentForOutputPosition(cursorPos);
-
-//    // highlight cursor in source textdocument
-//    cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-//    PadFragment *rawFragment = d->_pad->padFragmentForSourcePosition(cursorPos);
-
-//    QTextDocument *doc = d->ui->wysiwyg->document();
-//    if (!item) {
-//        if (d->_followedItem) {
-//            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-//            d->_followedItem = 0;
-//        }
-//        return;
-//    }
-
-//    if (d->_followedItem) {
-//        if (d->_followedItem == item)
-//            return;
-//        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-//        d->_followedItem = item;
-//    } else {
-//        d->_followedItem = item;
-//    }
-//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
-
-    // set timer
-}
-
-void PadWriter::findCursorPositionInOutput()
-{
-    if (!d->_pad)
-        return;
-
-//    // Find corresponding fragment Id
-//    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-////    PadItem *item = d->_pad->padItemForSourcePosition(cursorPos);
-//    PadFragment *item = d->_pad->padFragmentForSourcePosition(cursorPos);
-//    QTextDocument *doc = d->ui->wysiwyg->document();
-//    if (!item) {
-//        if (d->_followedItem) {
-//            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-//            d->_followedItem = 0;
-//        }
-//        return;
-//    }
-
-//    if (d->_followedItem) {
-//        if (d->_followedItem == item)
-//            return;
-//        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-//        d->_followedItem = item;
-//    } else {
-//        d->_followedItem = item;
-//    }
-//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
-}
-
-void PadWriter::setAutoUpdateOfResult(bool state)
-{
-    if (state) {
-        connect(d->ui->rawSource->textEdit(), SIGNAL(textChanged()), this, SLOT(analyseRawSource()));
-        analyseRawSource();
-    } else {
-        disconnect(d->ui->rawSource->textEdit(), SIGNAL(textChanged()), this, SLOT(analyseRawSource()));
-    }
-}
-
-void PadWriter::onPadFragmentChanged(PadFragment *fragment)
-{
-//    if (!d->_followedItem)
-//        return;
-//    if (d->_followedItem!=fragment)
-//        return;
-//    // The followed fragment was modified
-//    QTextDocument *doc = d->ui->wysiwyg->document();
-//    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
-}
-
-void PadWriter::onDefaultValuesRequested()
-{
-    analyseRawSource();
-}
-
+/**
+ * \internal
+ * Switch to the raw source tokened edition (using the drag'n drop feature).
+ * \sa onViewOutputRequested()
+ */
 void PadWriter::onShowSourceRequested()
 {
     outputToRaw();

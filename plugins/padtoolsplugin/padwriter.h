@@ -38,7 +38,7 @@ QT_END_NAMESPACE
  * \file padwriter.h
  * \author Eric Maeker
  * \version 0.8.2
- * \date 21 Dec 2012
+ * \date 25 Dec 2012
 */
 
 namespace PadTools {
@@ -78,28 +78,15 @@ public:
     QString rawSourceToPlainText() const;
     QString rawSourceToHtml() const;
 
-public Q_SLOTS:
-    void highlightCursor();
-
-private:
-    void findCursorPositionInOutput();
-
 private Q_SLOTS:
-//    void wysiwygCursorChanged();
-//    void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
-
     void expandTokenTreeView();
-    void analyseRawSource();
+    void analyzeRawSource();
     void outputToRaw();
-
-    void viewErrors();
-    void setAutoUpdateOfResult(bool state);
-    void onPadFragmentChanged(PadFragment *fragment);
 
 protected:
     // ActionHandler connections
-    void onDefaultValuesRequested();
+    void onViewOutputRequested();
     void onShowSourceRequested();
 
 //private:
