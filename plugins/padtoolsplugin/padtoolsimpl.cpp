@@ -59,7 +59,10 @@ Core::ITokenPool *PadToolsImpl::tokenPool() const
     return _pool;
 }
 
-/** Process a \e plainText pad document and return a plaintext string. */
+/**
+ * Process a \e plainText tokened document, analyze it,
+ * replace tokens by their values and return the resulting plaintext string.
+ */
 QString PadToolsImpl::processPlainText(const QString &plainText)
 {
     QTime chr;
