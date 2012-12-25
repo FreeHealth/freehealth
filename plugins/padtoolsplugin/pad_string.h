@@ -34,8 +34,8 @@
 /**
  * \file pad_string.h
  * \author Eric Maeker, Guillaume Denry
- * \version 0.8.0
- * \date 05 May 2012
+ * \version 0.8.2
+ * \date 25 Dec 2012
 */
 
 namespace PadTools {
@@ -53,7 +53,7 @@ public:
 	void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
-    void toOutput(Core::ITokenPool *pool, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod);
     void toRaw(PadDocument *document);
 
 private:

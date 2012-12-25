@@ -37,8 +37,8 @@
 /**
  * \file pad_fragment.h
  * \author Eric Maeker, Guillaume Denry
- * \version 0.8.0
- * \date 05 May 2012
+ * \version 0.8.2
+ * \date 25 Dec 2012
 */
 
 namespace PadTools {
@@ -48,6 +48,13 @@ class PadDocument;
 class PadFragment
 {
 public:
+    enum TokenReplacementMethod {
+        ReplaceWithTokenDisplayName = 0,
+        ReplaceWithTokenTestingValue,
+        ReplaceWithTokenValue,
+        ReplaceWithTokenUuid
+    };
+
     PadFragment(PadFragment *parent = 0);
     virtual ~PadFragment();
 
@@ -87,7 +94,7 @@ public:
     const QString &toolTip() const {return _toolTip;}
 
     virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
-    virtual void toOutput(Core::ITokenPool *pool, PadDocument *document) = 0;
+    virtual void toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method = ReplaceWithTokenValue) = 0;
     virtual void toRaw(PadDocument *doc) = 0;
 
     virtual void addChild(PadFragment *fragment);

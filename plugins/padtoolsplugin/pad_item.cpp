@@ -73,7 +73,7 @@ void PadConditionnalSubItem::debug(int indent) const
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//    qWarning() << "run PadConditionnalSubItem";
+//qWarning() << "run PadConditionnalSubItem";
     // Get parent PadItem
     PadFragment *f = parent();
     PadItem *item = 0;
@@ -90,7 +90,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
 
     const QString &value = tokens.value(item->getCore()->uid()).toString();
 
-//    const QString &value = tokens[_name].toString();
+//const QString &value = tokens[_name].toString();
     bool removeMe = false;
     if (value.isEmpty()) {
         // Keep Type::Undefined / Before && After
@@ -113,10 +113,10 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         return;
     } else {
-//         Remove only delimiters
+// Remove only delimiters
         foreach(const PadDelimiter &delim, _delimiters) {
 
-//            qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+//qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
             QTextCursor cursor(document->outputDocument());
             int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -134,9 +134,9 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
     setOutputEnd(document->positionTranslator().rawToOutput(end()));
 }
 
-void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *document)
+void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method)
 {
-//    qWarning() << "run PadConditionnalSubItem";
+//qWarning() << "run PadConditionnalSubItem";
     // Get parent PadItem
     PadFragment *f = parent();
     PadItem *item = 0;
@@ -150,11 +150,19 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
         LOG_ERROR_FOR("PadConditionnalSubItem", "No PadItem parent");
         return;
     }
+    if (!item->getCore()) {
+        LOG_ERROR_FOR("PadConditionnalSubItem", "No PadCore parent");
+        return;
+    }
 
-//    const QString &value = tokens.value(item->getCore()->uid()).toString();
-    const QString &value = pool->tokenCurrentValue(item->getCore()->uid()).toString();
-
-//    const QString &value = tokens[_name].toString();
+    QString value;
+    switch (method) {
+    case ReplaceWithTokenDisplayName: value = pool->token(item->getCore()->uid())->humanReadableName(); break;
+    case ReplaceWithTokenTestingValue: value = pool->token(item->getCore()->uid())->testValue().toString(); break;
+    case ReplaceWithTokenUuid: value = item->getCore()->uid();  break;
+    default: // ReplaceWithTokenValue
+        value = pool->token(item->getCore()->uid())->value().toString();
+    }
     bool removeMe = false;
     if (value.isEmpty()) {
         // Keep Type::Undefined / Before && After
@@ -177,10 +185,10 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
         document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         return;
     } else {
-//         Remove only delimiters
+// Remove only delimiters
         foreach(const PadDelimiter &delim, _delimiters) {
 
-//            qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+            // qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
             QTextCursor cursor(document->outputDocument());
             int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -193,7 +201,7 @@ void PadConditionnalSubItem::toOutput(Core::ITokenPool *pool, PadDocument *docum
 
         // Run nested fragments
         foreach(PadFragment *frag, _fragments)
-            frag->toOutput(pool, document);
+            frag->toOutput(pool, document, method);
     }
     setOutputEnd(document->positionTranslator().rawToOutput(end()));
 }
@@ -254,7 +262,7 @@ void PadCore::debug(int indent) const
 
 void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//    qWarning() << "run Core";
+//qWarning() << "run Core";
     // PadItem calls run on the Core only if core value is defined
     const QString &value = tokens[_uid].toString();
     if (value.isEmpty()) {
@@ -287,13 +295,13 @@ void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     document->positionTranslator().addOutputTranslation(outputStart(), delta);
 }
 
-void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document)
+void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method)
 {
-//    qWarning() << "run Core";
+    Q_UNUSED(method);
+    // qWarning() << "run Core";
     // PadItem calls run on the Core only if core value is defined
-//    const QString &value = tokens[_uid].toString();
-    const QString &value = pool->tokenCurrentValue(_uid).toString();
-    if (value.isEmpty()) {
+    const QString &coreValue = tokenValue(pool, method);
+    if (coreValue.isEmpty()) {
         // Define output range
         LOG_ERROR_FOR("PadCore", "token run without value? Check PadItem.");
         return;
@@ -301,21 +309,21 @@ void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document)
     // Compute output positions
     setOutputStart(document->positionTranslator().rawToOutput(start()));
 
-    // Replace core source
+    // Replace the core token by its value
     QTextCursor cursor(document->outputDocument());
     cursor.setPosition(outputStart());
     cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
     QTextCharFormat format = cursor.charFormat();
     cursor.removeSelectedText();
-    if (Qt::mightBeRichText(value)) {
-        cursor.insertHtml(value);
+    if (Qt::mightBeRichText(coreValue)) {
+        cursor.insertHtml(coreValue);
         setOutputEnd(cursor.selectionEnd());
         cursor.setPosition(outputStart());
         cursor.setPosition(outputEnd(), QTextCursor::KeepAnchor);
         cursor.mergeCharFormat(format);
     } else {
-        cursor.insertText(value, format);
-        setOutputEnd(outputStart() + value.size());
+        cursor.insertText(coreValue, format);
+        setOutputEnd(outputStart() + coreValue.size());
     }
 
     // Add translation to document
@@ -325,8 +333,8 @@ void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document)
 
 void PadCore::toRaw(PadDocument *doc)
 {
-//    qWarning() << "core start";
-//    debug(2);
+    // qWarning() << "core start";
+    // debug(2);
     QTextCursor raw(doc->rawSourceDocument());
     int oldLength = _end - _start;
 
@@ -353,12 +361,23 @@ void PadCore::toRaw(PadDocument *doc)
     raw.setPosition(_end);
     raw.insertText(Constants::TOKEN_CORE_DELIMITER);
     setEnd(_end + s);
-//    qWarning() << "core end";
-//    debug(2);
-//    doc->positionTranslator().debug();
+    // qWarning() << "core end";
+    // debug(2);
+    // doc->positionTranslator().debug();
 }
 
-
+/** Return the PadCore value according to the token replacement method */
+QString PadCore::tokenValue(Core::ITokenPool *pool, TokenReplacementMethod method) const
+{
+    switch (method) {
+    case ReplaceWithTokenDisplayName: return pool->token(uid())->humanReadableName();
+    case ReplaceWithTokenTestingValue: return pool->token(uid())->testValue().toString();
+    case ReplaceWithTokenUuid: return uid();
+    default: // ReplaceWithTokenValue
+        return pool->token(uid())->value().toString();
+    }
+    return QString::null;
+}
 
 /**
  * \class PadTools::PadItem
@@ -449,7 +468,7 @@ PadConditionnalSubItem *PadItem::subItem(const PadConditionnalSubItem::TokenCore
 
 void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//    qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
+//qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
     PadCore *core = getCore();
     QString coreValue;
 
@@ -469,11 +488,11 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
         } else {
             // Remove delimiters before the core
             foreach(const PadDelimiter &delim, _delimiters) {
-//                qWarning() << delim.rawPos << core->start();
+//qWarning() << delim.rawPos << core->start();
                 if (delim.rawPos >= core->start())
                     continue;
 
-//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+//qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
                 QTextCursor cursor(document->outputDocument());
                 int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -493,7 +512,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
                 if (delim.rawPos < core->end())
                     continue;
 
-//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+//qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
                 QTextCursor cursor(document->outputDocument());
                 int pos = document->positionTranslator().rawToOutput(delim.rawPos);
@@ -509,66 +528,64 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     }
 }
 
-void PadItem::toOutput(Core::ITokenPool *pool, PadDocument *document)
+void PadItem::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method)
 {
-//    qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
+    // qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
     PadCore *core = getCore();
-    QString coreValue;
+    if (!core) {
+        LOG_ERROR_FOR("PadItem", "No Core.");
+        return;
+    }
+    // Replace core by its value
+    const QString &coreValue = core->tokenValue(pool, method);
+    if (coreValue.isEmpty()) {
+        // No value -> Remove the entire PadItem from the text output and add a translation
+        QTextCursor cursor(document->outputDocument());
+        setOutputStart(document->positionTranslator().rawToOutput(start()));
+        cursor.setPosition(outputStart());
+        cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+        setOutputEnd(outputStart());
+        document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
+    } else {
+        // Remove delimiters before the core
+        foreach(const PadDelimiter &delim, _delimiters) {
+            // qWarning() << delim.rawPos << core->start();
+            if (delim.rawPos >= core->start())
+                continue;
 
-    // if core value is null -> remove it from the output
-    if (core) {
-//        coreValue = tokens.value(core->uid()).toString();
-        coreValue = pool->tokenCurrentValue(core->uid()).toString();
+            // qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
-        if (coreValue.isEmpty()) {
-            // No value -> Remove the entire PadItem from the text output and add a translation
             QTextCursor cursor(document->outputDocument());
-            setOutputStart(document->positionTranslator().rawToOutput(start()));
-            cursor.setPosition(outputStart());
-            cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
+            int pos = document->positionTranslator().rawToOutput(delim.rawPos);
+            cursor.setPosition(pos);
+            cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
-            setOutputEnd(outputStart());
-            document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
-        } else {
-            // Remove delimiters before the core
-            foreach(const PadDelimiter &delim, _delimiters) {
-//                qWarning() << delim.rawPos << core->start();
-                if (delim.rawPos >= core->start())
-                    continue;
-
-//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
-
-                QTextCursor cursor(document->outputDocument());
-                int pos = document->positionTranslator().rawToOutput(delim.rawPos);
-                cursor.setPosition(pos);
-                cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
-                cursor.removeSelectedText();
-                document->positionTranslator().addOutputTranslation(pos, -delim.size);
-            }
-
-            // Value -> run fragments
-            foreach(PadFragment *f, _fragments) {
-                f->toOutput(pool, document);
-            }
-
-            // Remove delimiters after the core
-            foreach(const PadDelimiter &delim, _delimiters) {
-                if (delim.rawPos < core->end())
-                    continue;
-
-//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
-
-                QTextCursor cursor(document->outputDocument());
-                int pos = document->positionTranslator().rawToOutput(delim.rawPos);
-                cursor.setPosition(pos);
-                cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
-                cursor.removeSelectedText();
-                document->positionTranslator().addOutputTranslation(pos, -delim.size);
-            }
-
-            setOutputStart(document->positionTranslator().rawToOutput(start()));
-            setOutputEnd(document->positionTranslator().rawToOutput(end()));
+            document->positionTranslator().addOutputTranslation(pos, -delim.size);
         }
+
+        // Token has a value -> run its children fragments
+        foreach(PadFragment *f, _fragments) {
+            f->toOutput(pool, document, method);
+        }
+
+        // Remove delimiters after the core
+        foreach(const PadDelimiter &delim, _delimiters) {
+            if (delim.rawPos < core->end())
+                continue;
+
+            // qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+
+            QTextCursor cursor(document->outputDocument());
+            int pos = document->positionTranslator().rawToOutput(delim.rawPos);
+            cursor.setPosition(pos);
+            cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+            document->positionTranslator().addOutputTranslation(pos, -delim.size);
+        }
+
+        setOutputStart(document->positionTranslator().rawToOutput(start()));
+        setOutputEnd(document->positionTranslator().rawToOutput(end()));
     }
 }
 
@@ -582,7 +599,7 @@ void PadItem::toRaw(PadDocument *doc)
     int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
     doc->positionTranslator().addRawTranslation(_start, s);
 
-//    doc->positionTranslator().debug();
+    // doc->positionTranslator().debug();
 
     PadCore *core = getCore();
     Q_ASSERT(core);
@@ -590,7 +607,7 @@ void PadItem::toRaw(PadDocument *doc)
         return;
     core->toRaw(doc);
 
-//    doc->positionTranslator().debug();
+    // doc->positionTranslator().debug();
 
     setEnd(doc->positionTranslator().outputToRaw(_outputEnd));
     raw.setPosition(_end);
@@ -602,7 +619,7 @@ void PadItem::toRaw(PadDocument *doc)
         if (f!=core)
             f->toRaw(doc);
     }
-//    qWarning() << "end";
-//    doc->positionTranslator().debug();
-//    debug();
+    // qWarning() << "end";
+    // doc->positionTranslator().debug();
+    // debug();
 }

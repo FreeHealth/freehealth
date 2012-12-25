@@ -36,8 +36,8 @@
 /**
  * \file pad_item.h
  * \author Eric Maeker, Guillaume Denry
- * \version 0.8.0
- * \date 05 May 2012
+ * \version 0.8.2
+ * \date 25 Dec 2012
 */
 
 
@@ -75,7 +75,7 @@ public:
     bool isAfterOutputPosition(const int pos) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
-    void toOutput(Core::ITokenPool *pool, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method);
     void toRaw(PadDocument *doc);
 
     void debug(int indent = 0) const;
@@ -101,8 +101,10 @@ public:
     void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
-    void toOutput(Core::ITokenPool *pool, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method);
     void toRaw(PadDocument *doc);
+
+    QString tokenValue(Core::ITokenPool *pool, TokenReplacementMethod method) const;
 
 private:
     QString _uid;
@@ -132,7 +134,7 @@ public:
     void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
-    void toOutput(Core::ITokenPool *pool, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method);
     void toRaw(PadDocument *doc);
 
     QList<PadFragment*> children() const;

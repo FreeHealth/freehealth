@@ -39,8 +39,8 @@
 /**
  * \file itoken.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 05 May 2012
+ * \version 0.8.2
+ * \date 15 Dec 2012
 */
 
 namespace PadTools {
@@ -108,9 +108,10 @@ public:
     void outputPosChanged(const int oldPos, const int newPos);
 
     // Start replacement of tokens  (raw to output)
+    // These methods should never be used directly
     void run(QMap<QString,QVariant> &, PadDocument *) {Q_ASSERT(false);/* Should never be used*/}
-    void toOutput(Core::ITokenPool *pool, PadDocument *document) {Q_UNUSED(pool); Q_UNUSED(document);Q_ASSERT(false);/* Should never be used*/}
-    void toOutput(Core::ITokenPool *pool);
+    void toOutput(Core::ITokenPool *, PadDocument *, TokenReplacementMethod) {Q_ASSERT(false);}
+    void toOutput(Core::ITokenPool *pool, TokenReplacementMethod method = ReplaceWithTokenValue);
     void run(QMap<QString,QVariant> &tokens);
 
     // Start token creation  (output to raw)

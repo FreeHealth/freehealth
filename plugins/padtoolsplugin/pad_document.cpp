@@ -397,7 +397,7 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
 }
 
 /** Starts the replacement of tokens. This function will recreate the output QTextDocument. This one will be cleared. */
-void PadDocument::toOutput(Core::ITokenPool *pool)
+void PadDocument::toOutput(Core::ITokenPool *pool, TokenReplacementMethod method)
 {
     Q_ASSERT(_docSource);
     if (!_docSource)
@@ -416,7 +416,7 @@ void PadDocument::toOutput(Core::ITokenPool *pool)
 
     // run tokens on fragments
     foreach (PadFragment *fragment, _fragments)
-        fragment->toOutput(pool, this);
+        fragment->toOutput(pool, this, method);
 
     //    positionTranslator().debug();
 //    debug();

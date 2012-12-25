@@ -133,11 +133,13 @@
  * Run this fragment over some tokens inside the output QTextDocument (which is initially a clone of the source).
  */
 
-/** \fn virtual void toOutput(Core::ITokenPool *pool, PadDocument *document) = 0;
- * Replaces the tokens from the \e pool in a PadDocument.
+/** \fn virtual void PadTools::PadFragment::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenReplacementMethod method) = 0;
+ * Replaces the tokens from the \e pool in a PadDocument. Use the
+ * \e method to define the way tokens are replaced.
+ * \sa PadTools::PadFragment::TokenReplacementMethod
  */
 
-/** \fn virtual void toRaw(PadDocument *doc) = 0;
+/** \fn virtual void PadTools::PadFragment::toRaw(PadDocument *doc) = 0;
  * Transform a PadDocument to a pure raw source.
  */
 
