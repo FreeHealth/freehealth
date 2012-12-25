@@ -308,55 +308,56 @@ void TokenOutputDocument::editTokenUnderCursor()
 
     int position = textCursor().position();
     PadItem *item = d->_pad->padItemForOutputPosition(position);
-    if (item) {
-        /** manage nested tokens */
-        TokenEditor editor(this);
-        PadCore *core = item->getCore();
-        editor.setTokenUid(core->uid());
-        PadFragment *bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
-        PadFragment *aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
-        editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
-        if (editor.exec()==QDialog::Accepted) {
-            // Remove old PadItem positions
-            textEdit()->document()->blockSignals(true);
-            QTextCursor cursor = textCursor();
-            cursor.setPosition(item->outputStart());
-            cursor.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
+    if (!item)
+        return;
 
-            // Save parent && id of the item
-            PadFragment *parent = item->parent();
-            if (parent)
-                parent->removeChild(item);
-            int id = item->id();
+    // TODO: manage nested tokens
+    TokenEditor editor(this);
+    PadCore *core = item->getCore();
+    editor.setTokenUid(core->uid());
+    PadFragment *bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
+    PadFragment *aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
+    editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
+    if (editor.exec()==QDialog::Accepted) {
+        // Remove old PadItem positions
+        textEdit()->document()->blockSignals(true);
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(item->outputStart());
+        cursor.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
 
-            // Modify output position for all subitemfragments
-            int oldLength = item->outputLength();
-            int oldStart = item->outputStart();
+        // Save parent && id of the item
+        PadFragment *parent = item->parent();
+        if (parent)
+            parent->removeChild(item);
+        int id = item->id();
 
-            QString html;
-            editor.getOutput(html, *item, item->outputStart());
-            bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
-            aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
+        // Modify output position for all subitemfragments
+        int oldLength = item->outputLength();
+        int oldStart = item->outputStart();
 
-            // insert token length to the PadDocument
-            int deltaLength = (item->outputLength() - oldLength);
-            d->_pad->outputPosChanged(oldStart, oldStart + deltaLength);
+        QString html;
+        editor.getOutput(html, *item, item->outputStart());
+        bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
+        aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
 
-            // insert html
-            cursor.setPosition(item->outputStart());
-            cursor.insertHtml(html);
-            textEdit()->document()->blockSignals(false);
+        // insert token length to the PadDocument
+        int deltaLength = (item->outputLength() - oldLength);
+        d->_pad->outputPosChanged(oldStart, oldStart + deltaLength);
 
-            item->setParent(parent);
-            if (parent) {
-                parent->addChild(item);
-                parent->sortChildren();
-            }
-            item->setId(id);
+        // insert html
+        cursor.setPosition(item->outputStart());
+        cursor.insertHtml(html);
+        textEdit()->document()->blockSignals(false);
 
-            onDocumentAnalyzeReset();
+        item->setParent(parent);
+        if (parent) {
+            parent->addChild(item);
+            parent->sortChildren();
         }
+        item->setId(id);
+
+        onDocumentAnalyzeReset();
     }
 }
 
@@ -492,12 +493,15 @@ bool TokenOutputDocument::event(QEvent *event)
         if (item) {
             Core::IToken *token = tokenPool()->token(item->getCore()->uid());
             if (token) {
-                QToolTip::showText(helpEvent->globalPos(), token->tooltip());
+                QRect rect(QPoint(helpEvent->globalPos().x() -10, helpEvent->globalPos().y() -10),
+                           QPoint(helpEvent->globalPos().x() +10, helpEvent->globalPos().y() +10));
+                QToolTip::showText(helpEvent->globalPos(), token->tooltip(), this, rect);
                 return Editor::TextEditor::event(event);
             }
         }
         QToolTip::hideText();
         event->ignore();
+        return true;
     }
     return Editor::TextEditor::event(event);
 }
@@ -520,6 +524,7 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
+        // FIXME: missing HoverLeave
         if (e->type()==QEvent::HoverMove) {
             // TODO: improve PadCore highlighting
             QHoverEvent *me = static_cast<QHoverEvent*>(e);
