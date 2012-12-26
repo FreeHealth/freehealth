@@ -443,7 +443,7 @@ bool TokenHighlighterEditor::isPadCore(int textEditorPos)
 /** Highlight a pad item in the editor */
 void TokenHighlighterEditor::hightlight(PadItem *item)
 {
-    qWarning() << "HIGHLIGHT: last" << d_th->_lastHoveredItem << "; new:" << item << "; from" << this->objectName();
+//    qWarning() << "HIGHLIGHT: last" << d_th->_lastHoveredItem << "; new:" << item << "; from" << this->objectName();
     if (!item) {
         d_th->_tokenExtraSelection.clear();
         d_th->_lastHoveredItem = 0;
@@ -471,12 +471,12 @@ void TokenHighlighterEditor::hightlight(PadItem *item)
         textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(item));
     } else {
         // item comes from a mirrored PadDocument (find matching the rawSource start/end)
-        qWarning() << "MIRRORED";
+//        qWarning() << "MIRRORED";
         foreach(PadItem *it, padDocument()->padItems()) {
             if (it->rawLength() == item->rawLength()
                     && it->start() == item->start()
                     && it->end() == item->end()) {
-                qWarning() << "FOUND" << it << it->outputStart() << it->outputEnd();
+//                qWarning() << "FOUND" << it << it->outputStart() << it->outputEnd();
                 textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(it));
                 break;
             }
