@@ -31,43 +31,74 @@
 /**
  * \file tokenoutputdocument.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 25 Apr 2012
+ * \version 0.8.2
+ * \date 26 Dec 2012
 */
 
 namespace PadTools {
 namespace Internal {
 class PadDocument;
+class PadItem;
+class PadFragment;
+class TokenHighlighterEditorPrivate;
 class TokenOutputDocumentPrivate;
 
-class TokenOutputDocument : public Editor::TextEditor
+class TokenHighlighterEditor : public Editor::TextEditor
 {
     Q_OBJECT
+
 public:
-    TokenOutputDocument(QWidget *parent = 0);
-    ~TokenOutputDocument();
+    TokenHighlighterEditor(QWidget *parent = 0);
+    ~TokenHighlighterEditor();
 
-    void setPadDocument(PadDocument *pad);
-    void setChangeCursorOnPadItemHover(bool ChangeCursor);
+    virtual void setPadDocument(PadDocument *pad);
+    PadDocument *padDocument() const;
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void onPadCleared();
     void onDocumentAnalyzeReset();
-    void contextMenu(const QPoint &pos);
-    void editTokenUnderCursor();
     void cursorPositionChanged();
     void connectPadDocument();
     void disconnectPadDocument();
     void connectOutputDocumentChanges();
     void disconnectOutputDocumentChanges();
     void contentChanged(const int pos, const int rm, const int ins);
+    void onPadFragmentAboutToRemoved(PadFragment *fragment);
+
+public Q_SLOTS:
+    void hightlight(PadItem *item);
+
+protected:
+    bool isPadItem(int textEditorPos);
+    bool isPadCore(int textEditorPos);
+    virtual bool event(QEvent *event);
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
+Q_SIGNALS:
+    void highlighting(PadItem *item);
+
+private:
+    TokenHighlighterEditorPrivate *d_th;
+};
+
+class TokenOutputDocument : public TokenHighlighterEditor
+{
+    Q_OBJECT
+    friend class TokenOutputDocumentPrivate;
+
+public:
+    TokenOutputDocument(QWidget *parent = 0);
+    ~TokenOutputDocument();
+
+private Q_SLOTS:
+    void contextMenu(const QPoint &pos);
+    void editTokenUnderCursor();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *event);
     void dropEvent(QDropEvent *event);
-    bool event(QEvent *event);
     bool eventFilter(QObject *o, QEvent *e);
 
 private:
