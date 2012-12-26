@@ -41,6 +41,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/stylehelper.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -71,8 +72,17 @@ public:
         _lastUnderCursorItem(0),
         q(parent)
     {
-        _coreFormat.setBackground(QBrush(QColor(Qt::yellow)));//"#FFF8C6"))); //("#dedeff")));
-        _tokenFormat.setBackground(QBrush(QColor(Qt::lightGray)));//"#FDEEF4"))); //"#efefef")));
+        // Using gnome palette: http://openclipart.org/detail/25332/gnome-color-palette-by-anonymous-25332
+        QColor core("#E0C39E");
+        _coreFormat.setBackground(core);
+        _coreFormat.setUnderlineStyle(QTextCharFormat::DashUnderline);
+        _coreFormat.setUnderlineColor(QColor(Qt::darkRed));
+        _coreFormat.setFontOverline(true);
+
+        QColor token("#EFE0CD");
+        _tokenFormat.setBackground(Utils::StyleHelper::highlightColor(true));//QBrush(QColor(Qt::lightGray)));//"#FDEEF4"))); //"#efefef")));
+        _tokenFormat.setUnderlineStyle(QTextCharFormat::DashUnderline);
+        _tokenFormat.setUnderlineColor(QColor(Qt::darkBlue));
     }
 
     ~TokenHighlighterEditorPrivate()
@@ -202,44 +212,6 @@ public:
         return pos;
     }
 
-//    void itemToExtraSelection(PadItem *item)
-//    {
-//        QTextEdit::ExtraSelection sel;
-//        // get token's core
-//        PadCore *core = item->getCore();
-//        if (core) {
-//            if (item->outputStart() == item->outputEnd())
-//                return;
-//            QTextCursor c1(q->padDocument()->outputDocument());
-//            c1.setPosition(item->outputStart());
-//            c1.setPosition(core->outputStart(), QTextCursor::KeepAnchor);
-//            sel.cursor = c1;
-//            sel.format = _tokenFormat;
-//            _tokenExtraSelection.insertMulti(item, sel);
-
-//            QTextCursor c2(q->padDocument()->outputDocument());
-//            c2.setPosition(core->outputStart());
-//            c2.setPosition(core->outputEnd(), QTextCursor::KeepAnchor);
-//            sel.cursor = c2;
-//            sel.format = _coreFormat;
-//            _tokenExtraSelection.insertMulti(item, sel);
-
-//            QTextCursor c3(q->padDocument()->outputDocument());
-//            c3.setPosition(core->outputEnd());
-//            c3.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
-//            sel.cursor = c3;
-//            sel.format = _tokenFormat;
-//            _tokenExtraSelection.insertMulti(item, sel);
-//        } else {
-//            QTextCursor c(q->padDocument()->outputDocument());
-//            c.setPosition(item->outputStart());
-//            c.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
-//            sel.cursor = c;
-//            sel.format = _tokenFormat;
-//            _tokenExtraSelection.insertMulti(item, sel);
-//        }
-//    }
-
     bool isNavigationKey(QKeyEvent *k)
     {
         switch (k->key()) {
@@ -309,7 +281,11 @@ void TokenHighlighterEditor::onPadCleared()
     d_th->_lastUnderCursorItem = 0;
 }
 
-/** Reset view when Padtools::PadDocument reset its token analyze. \sa PadTools::PadDocument::documentAnalyzeReset() */
+/**
+ * \internal
+ * Reset view when Padtools::PadDocument reset its token analyze.
+ * \sa PadTools::PadDocument::documentAnalyzeReset()
+ */
 void TokenHighlighterEditor::onDocumentAnalyzeReset()
 {
     // Create extraSelections for the tokens
@@ -443,41 +419,31 @@ bool TokenHighlighterEditor::isPadCore(int textEditorPos)
 /** Highlight a pad item in the editor */
 void TokenHighlighterEditor::hightlight(PadItem *item)
 {
-//    qWarning() << "HIGHLIGHT: last" << d_th->_lastHoveredItem << "; new:" << item << "; from" << this->objectName();
-    if (!item) {
-        d_th->_tokenExtraSelection.clear();
+    // No item or item zero length
+    if (!item || (item->outputLength() == 0)) {
         d_th->_lastHoveredItem = 0;
         d_th->_lastUnderCursorItem = 0;
         return;
     }
 
+    // same as last one ? -> exit
     if (d_th->_lastHoveredItem) {
-        // same as last one ? -> exit
         if (d_th->_lastHoveredItem == item)
             return;
-        // clear old selections
-        textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-        d_th->_lastHoveredItem = item;
-    } else {
-        d_th->_lastHoveredItem = item;
     }
-//        if (d_th->_changeCursor) {
-//            if ((qApp->overrideCursor() && qApp->overrideCursor()->shape() != Qt::PointingHandCursor) ||
-//                    !qApp->overrideCursor())
-//                qApp->setOverrideCursor(QCursor(Qt::PointingHandCursor));
-//        }
+    d_th->_lastHoveredItem = item;
+
     if (padDocument()->padItems().contains(item)) {
         // item comes from the same PadDocument
         textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(item));
     } else {
         // item comes from a mirrored PadDocument (find matching the rawSource start/end)
-//        qWarning() << "MIRRORED";
         foreach(PadItem *it, padDocument()->padItems()) {
             if (it->rawLength() == item->rawLength()
                     && it->start() == item->start()
                     && it->end() == item->end()) {
-//                qWarning() << "FOUND" << it << it->outputStart() << it->outputEnd();
                 textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(it));
+                d_th->_lastHoveredItem = it;
                 break;
             }
         }

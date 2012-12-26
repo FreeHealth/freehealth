@@ -153,6 +153,7 @@ public:
     void connectActionsAndUi()
     {
         QObject::connect(ui->dropTextEditor, SIGNAL(highlighting(PadItem*)), ui->outputTextEditor, SLOT(hightlight(PadItem*)));
+        QObject::connect(ui->outputTextEditor, SIGNAL(highlighting(PadItem*)), ui->dropTextEditor, SLOT(hightlight(PadItem*)));
 //        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyzeRawSource()));
 //        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
     }
