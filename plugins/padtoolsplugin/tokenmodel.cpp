@@ -165,7 +165,8 @@ public:
                 if (!nsItem)
                     ns.takeLast();
             }
-            if (!nsItem) {
+
+            if (!nsItem && _filterNs.isEmpty()) {
                 LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
                 nsItem = q->invisibleRootItem();
             }
@@ -203,16 +204,25 @@ private:
 }  // PadTools
 
 /**
- * Create a pre-populated model model with the
- * PadTools::Internal::TokenPool registered tokens
- * \sa PadTools::Internal::PadToolsImpl::tokenPool()
+ * Create an empty model.
+ * \sa initiliaze(), setNamespacesFilter()
  */
 TokenModel::TokenModel(QObject *parent) :
     QStandardItemModel(parent),
     d(new Internal::TokenModelPrivate(this))
 {
     Q_ASSERT(tokenPool());
+}
+
+/**
+ * Populates the model with the PadTools::Internal::TokenPool registered tokens
+ * using the namespace filter defined (if one is defined).
+ * \sa PadTools::Internal::PadToolsImpl::tokenPool(), setNamespacesFilter()
+ */
+bool TokenModel::initialize()
+{
     d->createTree();
+    return true;
 }
 
 Core::ITokenPool *TokenModel::tokenPool() //static

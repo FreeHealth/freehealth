@@ -58,6 +58,7 @@ public:
     };
 
     explicit TokenModel(QObject *parent = 0);
+    bool initialize();
 
     static Core::ITokenPool *tokenPool();
     void addToken(Core::IToken *token);

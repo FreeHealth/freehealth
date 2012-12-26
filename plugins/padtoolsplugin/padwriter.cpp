@@ -192,6 +192,7 @@ public:
     {
         // Create TokenModel
         _tokenModel = new TokenModel(q);
+        _tokenModel->initialize();
         ui->treeView->setModel(_tokenModel);
         ui->treeView->setItemDelegate(new Utils::HtmlDelegate(q));
         ui->treeView->setUniformRowHeights(false);
