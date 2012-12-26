@@ -51,9 +51,12 @@ TokenEditorWidget::TokenEditorWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tokenValueFormatting->setTypes(Editor::TextEditor::CharFormat);
-    ui->tokenValueFormatting->toogleToolbar(true);
+    ui->tokenValueFormatting->toogleToolbar(false);
+    ui->tokenValueFormatting->setReadOnly(true);
+
     ui->before->setTypes(Editor::TextEditor::Simple);
     ui->before->toogleToolbar(true);
+
     ui->after->setTypes(Editor::TextEditor::Simple);
     ui->after->toogleToolbar(true);
 
