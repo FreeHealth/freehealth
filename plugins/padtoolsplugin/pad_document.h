@@ -128,6 +128,7 @@ Q_SIGNALS:
     void aboutToClear();
     void cleared();
     void padFragmentChanged(PadFragment *fragment);
+    void padFragmentAboutToRemoved(PadFragment *fragment);
     void rawSourceAnalyzeStarted();
     void rawSourceAnalyseFinished();
     void beginTokenReplacement();

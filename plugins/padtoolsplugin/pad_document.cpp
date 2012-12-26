@@ -242,6 +242,7 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
     PadItem *item = dynamic_cast<PadItem*>(fragment);
     if (item)
         _items.removeAll(item);
+    Q_EMIT padFragmentAboutToRemoved(item);
     PadFragment::removeAndDeleteFragment(fragment);
 }
 
