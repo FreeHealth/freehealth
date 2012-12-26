@@ -337,18 +337,22 @@ void TokenHighlighterEditor::cursorPositionChanged()
             d_th->_lastUnderCursorItem = item;
             if (d_th->_lastUnderCursorItem) {
                 textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(d_th->_lastUnderCursorItem));
+                Q_EMIT highlighting(item);
             } else {
                 textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+                Q_EMIT highlighting(0);
             }
         } else {
             if (d_th->_lastUnderCursorItem && d_th->_lastUnderCursorItem != item) {
                 d_th->_lastUnderCursorItem = item;
                 textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(d_th->_lastUnderCursorItem));
+                Q_EMIT highlighting(item);
             }
         }
     } else {
         d_th->_lastUnderCursorItem = 0;
         textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+        Q_EMIT highlighting(0);
     }
 }
 
@@ -439,6 +443,7 @@ bool TokenHighlighterEditor::isPadCore(int textEditorPos)
 /** Highlight a pad item in the editor */
 void TokenHighlighterEditor::hightlight(PadItem *item)
 {
+    qWarning() << "HIGHLIGHT: last" << d_th->_lastHoveredItem << "; new:" << item << "; from" << this->objectName();
     if (!item) {
         d_th->_tokenExtraSelection.clear();
         d_th->_lastHoveredItem = 0;
@@ -461,7 +466,22 @@ void TokenHighlighterEditor::hightlight(PadItem *item)
 //                    !qApp->overrideCursor())
 //                qApp->setOverrideCursor(QCursor(Qt::PointingHandCursor));
 //        }
-    textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(item));
+    if (padDocument()->padItems().contains(item)) {
+        // item comes from the same PadDocument
+        textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(item));
+    } else {
+        // item comes from a mirrored PadDocument (find matching the rawSource start/end)
+        qWarning() << "MIRRORED";
+        foreach(PadItem *it, padDocument()->padItems()) {
+            if (it->rawLength() == item->rawLength()
+                    && it->start() == item->start()
+                    && it->end() == item->end()) {
+                qWarning() << "FOUND" << it << it->outputStart() << it->outputEnd();
+                textEdit()->setExtraSelections(d_th->_tokenExtraSelection.values(it));
+                break;
+            }
+        }
+    }
     Q_EMIT highlighting(item);
 }
 
@@ -499,13 +519,13 @@ bool TokenHighlighterEditor::eventFilter(QObject *o, QEvent *e)
     switch (e->type()) {
     case QEvent::HoverEnter:
     {
-        qWarning() << "HoverLeave";
+//        qWarning() << "HoverLeave";
         // TODO: code QEvent::HoverEnter?
         return QWidget::eventFilter(o, e);
     }
     case QEvent::HoverMove:
     {
-        qWarning() << "HoverMove";
+//        qWarning() << "HoverMove";
         // TODO: improve PadCore highlighting
         QHoverEvent *me = static_cast<QHoverEvent*>(e);
         // compute pos
@@ -528,7 +548,7 @@ bool TokenHighlighterEditor::eventFilter(QObject *o, QEvent *e)
 //                if (d_th->_changeCursor)
 //                    qApp->restoreOverrideCursor();
             }
-            highlighting(0);
+            Q_EMIT highlighting(0);
             return QWidget::eventFilter(o, e);
         }
 
@@ -539,13 +559,13 @@ bool TokenHighlighterEditor::eventFilter(QObject *o, QEvent *e)
     }
     case QEvent::HoverLeave :
     {
-        qWarning() << "HoverLeave";
+//        qWarning() << "HoverLeave";
         if (d_th->_lastHoveredItem) {
             textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
             d_th->_lastHoveredItem = 0;
 //            if (d_th->_changeCursor)
 //                qApp->restoreOverrideCursor();
-            highlighting(0);
+            Q_EMIT highlighting(0);
             e->accept();
             return true;
         }

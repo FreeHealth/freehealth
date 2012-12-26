@@ -90,7 +90,7 @@
         </layout>
        </widget>
        <widget class="PadTools::Internal::TokenOutputDocument" name="dropTextEditor"/>
-       <widget class="QTextEdit" name="outputTextEditor"/>
+       <widget class="PadTools::Internal::TokenHighlighterEditor" name="outputTextEditor"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
        <property name="toolTip">
@@ -123,6 +123,11 @@
    <extends>QSplitter</extends>
    <header location="global">utils/widgets/minisplitter.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PadTools::Internal::TokenHighlighterEditor</class>
+   <extends>QTextEdit</extends>
+   <header location="global">padtoolsplugin/tokenoutputdocument.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

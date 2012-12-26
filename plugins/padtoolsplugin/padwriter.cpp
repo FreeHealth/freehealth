@@ -150,8 +150,9 @@ public:
         a->setIcon(theme()->icon(Core::Constants::ICONHELP));
     }
 
-    void connectActions()
+    void connectActionsAndUi()
     {
+        QObject::connect(ui->dropTextEditor, SIGNAL(highlighting(PadItem*)), ui->outputTextEditor, SLOT(hightlight(PadItem*)));
 //        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyzeRawSource()));
 //        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
     }
@@ -209,6 +210,7 @@ public:
         ui->dropTextEditor->setPadDocument(_padForEditor);
         // Create PadDocument for the viewer (showing the token replacement result)
         _padForViewer = new PadDocument();
+        ui->outputTextEditor->setPadDocument(_padForViewer);
     }
 
     // Show the raw source of the document + output
@@ -254,7 +256,7 @@ PadWriter::PadWriter(QWidget *parent) :
 {
     d->createUi();
     d->createActions();
-    d->connectActions();
+    d->connectActionsAndUi();
     d->createToolBar();
     d->registerContext();
 
@@ -431,6 +433,7 @@ void PadWriter::analyzeRawSource()
 {
     // clear PadDocument && views
     d->_padForEditor->clear();
+    d->_padForViewer->clear();
 
     // Start analyze && token replacement (for the editor)
     PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
@@ -444,7 +447,7 @@ void PadWriter::analyzeRawSource()
     d->_padForViewer->setTokenModel(d->_tokenModel);
     d->_padForViewer->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenValue);
     // TODO: manage PadAnalyzer errors
-    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
+//    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
 }
 
 /**
