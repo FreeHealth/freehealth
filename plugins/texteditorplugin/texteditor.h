@@ -98,6 +98,7 @@ public:
     virtual QTextEdit *textEdit() const;
 
     // some QTextEdit wrappers for code simplification
+    void setDocument(QTextDocument *doc) {textEdit()->setDocument(doc);}
     QTextDocument *document() const {return textEdit()->document();}
     void setTextCursor(const QTextCursor &cursor) {textEdit()->setTextCursor(cursor);}
     QTextCursor textCursor() const {return textEdit()->textCursor();}
