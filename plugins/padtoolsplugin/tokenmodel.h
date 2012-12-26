@@ -59,8 +59,7 @@ public:
 
     explicit TokenModel(QObject *parent = 0);
 
-    Core::ITokenPool *tokenPool() const;
-
+    static Core::ITokenPool *tokenPool();
     void addToken(Core::IToken *token);
     void addTokens(const QVector<Core::IToken *> &token);
 
@@ -74,6 +73,8 @@ public:
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
+
+    void setNamespacesFilter(const QStringList &ns);
 
 Q_SIGNALS:
     void tokenChanged(const QString &token, const QString &value);

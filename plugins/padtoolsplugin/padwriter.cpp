@@ -297,17 +297,17 @@ void PadWriter::setHtmlSource(const QString &html)
 }
 
 /** Filter available namespaces with the \e tokenNamespace */
-void PadWriter::filterTokenPool(const QString &tokenNamespace)
+void PadWriter::setNamespaceFilter(const QString &tokenNamespace)
 {
     Q_UNUSED(tokenNamespace)
-    // TODO: here
+    setNamespacesFilter(QStringList() << tokenNamespace);
 }
 
 /** Filter available namespaces with the \e tokenNamespaces */
-void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
+void PadWriter::setNamespacesFilter(const QStringList &tokenNamespaces)
 {
     Q_UNUSED(tokenNamespaces)
-    // TODO: here
+    d->_tokenModel->setNamespacesFilter(tokenNamespaces);
 }
 
 /**

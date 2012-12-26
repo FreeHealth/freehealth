@@ -79,13 +79,36 @@ public:
         return ns;
     }
 
+    // Return true if we need to include the Namespace to the tree
+    bool isFiltered(const Core::TokenNamespace &ns, const QString &parentUid)
+    {
+        // FIXME: improve filtering (eg: filter only "Prescription" -> bug, filter "Prescription.Drug" -> Ok
+        QString testNs;
+        parentUid.isEmpty() ? testNs = ns.uid() : testNs = parentUid+"."+ns.uid();
+//        qWarning() << "isFiltered" << testNs;
+        foreach(const QString &filter, _filterNs) {
+            if (filter.startsWith(testNs)) {
+//                qWarning() << "     true";
+                return true;
+            }
+        }
+        return false;
+    }
+
     void createNamespace(const Core::TokenNamespace &ns, QStandardItem *parent = 0)
     {
         if (!parent)
             parent = q->invisibleRootItem();
+
+        // Recreate the full uuid (ns + separator + name) using the parent item
         QString fullNs = parent->data(TOKEN_UID).toString();
-        fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
+
+        // Check if the ns uuid is included in the filter
+        if (!isFiltered(ns, fullNs))
+            return;
+
         QStandardItem *item = new QStandardItem;
+        fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
         item->setData(fullNs, TOKEN_UID);
         if (!ns.tooltip().isEmpty()) {
             item->setToolTip(ns.tooltip());
@@ -156,12 +179,22 @@ public:
         }
     }
 
+    // Parse the ns and reformat them for a correct integration. Store in _filterNs
+    void setFilteringNamespace(const QStringList &ns)
+    {
+        _filterNs.clear();
+        foreach(const QString &n, ns) {
+            _filterNs << tokenNamespaces(n).join(".");
+        }
+        qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxx" << _filterNs;
+    }
 
 public:
     QMap<QString, QVariant> m_Tokens;
     QList<Core::IToken *> _tokens;
     QHash<Core::IToken *, QStandardItem *> _tokensToItem;
     QHash<QString, QStandardItem *> _tokensNamespaceToItem;
+    QStringList _filterNs;
 
 private:
     TokenModel *q;
@@ -169,7 +202,11 @@ private:
 }  // Internal
 }  // PadTools
 
-
+/**
+ * Create a pre-populated model model with the
+ * PadTools::Internal::TokenPool registered tokens
+ * \sa PadTools::Internal::PadToolsImpl::tokenPool()
+ */
 TokenModel::TokenModel(QObject *parent) :
     QStandardItemModel(parent),
     d(new Internal::TokenModelPrivate(this))
@@ -178,16 +215,18 @@ TokenModel::TokenModel(QObject *parent) :
     d->createTree();
 }
 
-Core::ITokenPool *TokenModel::tokenPool() const
+Core::ITokenPool *TokenModel::tokenPool() //static
 {
     return ::tokenPool();
 }
 
+/** Add a token that is not included in the token pool to the model */
 void TokenModel::addToken(Core::IToken *token)
 {
     d->_tokens.append(token);
 }
 
+/** Add a list of tokens that are not included in the token pool to the model */
 void TokenModel::addTokens(const QVector<Core::IToken*> &tokens)
 {
     for(int i=0; i<tokens.count();++i)
@@ -292,4 +331,17 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
             .arg(Constants::TOKEN_CLOSE_DELIMITER);
     mimeData->setData(Constants::TOKENRAWSOURCE_MIME, name.toUtf8());
     return mimeData;
+}
+
+/**
+ * Filter the model using the namespaces \e ns.
+ * This member will totally recreate the token tree and reset.
+ */
+void TokenModel::setNamespacesFilter(const QStringList &ns)
+{
+    beginResetModel();
+    clear();
+    d->setFilteringNamespace(ns);
+    d->createTree();
+    endResetModel();
 }

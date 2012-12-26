@@ -708,7 +708,6 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
         editor.setTokenUid(event->mimeData()->data(Constants::TOKENUID_MIME));
         int r = editor.exec();
         if (r == QDialog::Accepted) {
-
             // get the content of the editor
             setFocus();
             QString html;

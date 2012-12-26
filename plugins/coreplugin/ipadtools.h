@@ -178,8 +178,8 @@ public:
 public Q_SLOTS:
     virtual void setPlainTextSource(const QString &plainText) = 0;
     virtual void setHtmlSource(const QString &html) = 0;
-    virtual void filterTokenPool(const QString &tokenNamespace) = 0;
-    virtual void filterTokenPool(const QStringList &tokenNamespaces) = 0;
+    virtual void setNamespaceFilter(const QString &tokenNamespace) = 0;
+    virtual void setNamespacesFilter(const QStringList &tokenNamespaces) = 0;
 
 public:
     virtual QString outputToPlainText() const = 0;

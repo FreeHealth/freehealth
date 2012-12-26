@@ -68,8 +68,8 @@ public Q_SLOTS:
     // Core::IPadWriter interface
     void setPlainTextSource(const QString &plainText);
     void setHtmlSource(const QString &html);
-    void filterTokenPool(const QString &tokenNamespace);
-    void filterTokenPool(const QStringList &tokenNamespaces);
+    void setNamespaceFilter(const QString &tokenNamespace);
+    void setNamespacesFilter(const QStringList &tokenNamespaces);
 
 public:
     // Core::IPadWriter interface

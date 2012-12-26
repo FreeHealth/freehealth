@@ -201,7 +201,10 @@ DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPrefe
     // create the ui by hand
     QGridLayout *lay = new QGridLayout(this);
     setLayout(lay);
+
+    // Create PadWriter & filtered it
     _writer = padTools()->createWriter(this);
+    _writer->setNamespacesFilter(QStringList() << "Prescription.Drug" << "Prescription.Protocole");
     lay->addWidget(_writer);
 
     // Manage prescription tokens
