@@ -157,7 +157,7 @@ public:
                 q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 continue;
             }
-            // get NS item
+            // get namespace of the item
             ns.takeLast();
             QStandardItem *nsItem = 0;
             while (nsItem==0 && ns.count()>1) {
@@ -166,9 +166,14 @@ public:
                     ns.takeLast();
             }
 
-            if (!nsItem && _filterNs.isEmpty()) {
-                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
-                nsItem = q->invisibleRootItem();
+            if (!nsItem) {
+//                if (_filterNs.isEmpty()) {
+                    LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
+                    nsItem = q->invisibleRootItem();
+//                } else {
+                    // Filtered item
+//                    return;
+//                }
             }
 
             // create token item
