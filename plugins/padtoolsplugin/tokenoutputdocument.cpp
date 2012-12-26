@@ -77,10 +77,10 @@ public:
         _coreFormat.setBackground(core);
         _coreFormat.setUnderlineStyle(QTextCharFormat::DashUnderline);
         _coreFormat.setUnderlineColor(QColor(Qt::darkRed));
-        _coreFormat.setFontOverline(true);
+//        _coreFormat.setFontOverline(true);
 
         QColor token("#EFE0CD");
-        _tokenFormat.setBackground(Utils::StyleHelper::highlightColor(true));//QBrush(QColor(Qt::lightGray)));//"#FDEEF4"))); //"#efefef")));
+        _tokenFormat.setBackground(token);
         _tokenFormat.setUnderlineStyle(QTextCharFormat::DashUnderline);
         _tokenFormat.setUnderlineColor(QColor(Qt::darkBlue));
     }
@@ -448,6 +448,7 @@ void TokenHighlighterEditor::hightlight(PadItem *item)
             }
         }
     }
+
     Q_EMIT highlighting(item);
 }
 
