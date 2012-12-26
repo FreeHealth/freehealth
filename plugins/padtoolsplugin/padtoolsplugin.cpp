@@ -89,7 +89,7 @@ void PadToolsPlugin::extensionsInitialized()
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
     _core->initialize();
-#ifdef FREEPAD
+#if defined(WITH_PAD) || defined(FREEPAD)
     Core::ICore::instance()->patient()->registerPatientTokens();
     Core::ICore::instance()->user()->registerUserTokens();
 #endif
