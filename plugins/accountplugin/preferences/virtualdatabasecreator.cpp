@@ -70,7 +70,7 @@ static inline void createBankAccount(const QString &userUid, Utils::Randomizer *
     query.bindValue(AccountDB::Constants::BANKDETAILS_DEFAULT, QVariant());
     query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, random->getRandomString(15));
     query.bindValue(AccountDB::Constants::BANKDETAILS_ID, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, random->getRandomName() + " " + random->getRandomFirstname(1));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QString("%1 %2").arg(random->getRandomName()).arg(random->getRandomFirstname(1)));
     query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, random->getRandomFrenchCity().second);
     query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->getRandomString(50));
     query.bindValue(AccountDB::Constants::BANKDETAILS_USER_UID, userUid);

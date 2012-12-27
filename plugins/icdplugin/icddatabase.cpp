@@ -606,7 +606,8 @@ QString IcdDatabase::getHumanReadableIcdDaget(const QVariant &SID)
 
 QVariant IcdDatabase::getIcdCodeWithDagStar(const QVariant &SID)
 {
-    return getIcdCode(SID).toString() + getHumanReadableIcdDaget(SID);
+    QString tmp = getIcdCode(SID).toString() + getHumanReadableIcdDaget(SID);
+    return QVariant(tmp);
 }
 
 QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)

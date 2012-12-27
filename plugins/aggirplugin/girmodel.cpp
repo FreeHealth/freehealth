@@ -369,9 +369,9 @@ QVariant GirModel::data(const QModelIndex &index, int role) const
     if (role==Qt::ToolTipRole) {
         if (index.column() >= Column_S && index.column() <= Column_H) {
             if (index.data(Qt::CheckStateRole).toInt()==Qt::Checked) {
-                return "Ne fait pas " + QStandardItemModel::data(index, role).toString();
+                return QString("Ne fait pas " + QStandardItemModel::data(index, role).toString());
             } else {
-                return "Fait " + QStandardItemModel::data(index, role).toString();
+                return QString("Fait " + QStandardItemModel::data(index, role).toString());
             }
         }
     }

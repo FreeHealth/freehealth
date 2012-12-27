@@ -245,7 +245,7 @@ QVariant IComponent::data(const int ref, const QString &lang) const
             QString strength = data(Strength, language).toString() + data(StrengthUnit, language).toString();
             QString refDose = data(Dose, language).toString() + data(DoseUnit, language).toString();
             if (!refDose.isEmpty())
-                return strength + "/" + refDose;
+                return QString(strength + "/" + refDose);
             return strength;
         }
     case MainAtcId:
@@ -320,7 +320,8 @@ QVariant IComponent::data(const int ref, const QString &lang) const
             tmp += ";\n      mainInnName:" + mainInnName() + ";\n      mainInnAtcId:" + QString::number(mainInnCode());
             tmp += ";\n      mainInnDosage:" + mainInnDosage();
             tmp += ";\n      interactingClasses:" + interactingClasses().join(",");
-            return tmp + ")\n";
+            tmp += ")\n";
+            return tmp;
         }
     default: return d_component->m_Content.value(ref).value(language);
     }

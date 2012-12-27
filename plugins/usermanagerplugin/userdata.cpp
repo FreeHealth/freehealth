@@ -857,9 +857,10 @@ void UserData::setCryptedPassword(const QVariant &val)
 void UserData::addLoginToHistory()
 {
     setDynamicDataValue(USER_DATA_LOGINHISTORY,
-                        dynamicDataValue(USER_DATA_LOGINHISTORY).toString() +
-                        QCoreApplication::translate("tkUser", "User logged at %1\n")
-                        .arg(lastLogin().toString(Qt::DefaultLocaleLongDate))
+                        QString("%1 %2")
+                        .arg(dynamicDataValue(USER_DATA_LOGINHISTORY).toString())
+                        .arg(QCoreApplication::translate("tkUser", "User logged at %1\n")
+                             .arg(lastLogin().toString(Qt::DefaultLocaleLongDate)))
               );
     setModified(true);
 }

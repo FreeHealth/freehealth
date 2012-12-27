@@ -216,7 +216,7 @@ QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case SID_Code: return code->sid;
             case ICD_Code: return code->code;
-            case ICD_CodeWithDagetAndStar: return code->code + code->dag;
+            case ICD_CodeWithDagetAndStar: return QString(code->code + code->dag);
             case Daget: return code->dag;
             case Label: return code->systemLabel;
             }
@@ -227,10 +227,10 @@ QVariant SimpleIcdModel::data(const QModelIndex &index, int role) const
     } else if (role==Qt::ToolTipRole) {
         if (d->m_UseDagDepend) {
             const Internal::IcdAssociation &asso = d->m_Associations.at(index.row());
-            return asso.associatedCodeWithDagStar() + " - " + asso.associatedLabel();
+            return QString(asso.associatedCodeWithDagStar() + " - " + asso.associatedLabel());
         } else {
             Internal::SimpleCode *code = d->m_Codes.at(index.row());
-            return code->code + code->dag + " - " + code->systemLabel;
+            return QString(code->code + code->dag + " - " + code->systemLabel);
         }
     }
 

@@ -267,7 +267,7 @@ public:
                     return QVariant();
                 if (pres->prescriptionValue(Prescription::OnlyForTest).toBool() || m_SelectionOnlyMode) {
                     if (pres->prescriptionValue(Prescription::IsINNPrescription).toBool())
-                        return pres->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
+                        return QString("%1 [%2]").arg(pres->innComposition()).arg(tkTr(Trans::Constants::INN));
                     else return pres->brandName();
                 }
                 return q->getFullPrescription(drug, false);

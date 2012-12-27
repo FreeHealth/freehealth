@@ -305,7 +305,7 @@ QVariant AtcTreeModel::data(const QModelIndex & item, int role) const
         }
     case Qt::ToolTipRole :
         {
-            return it->data(ATC_Label) + ": " + it->data(ATC_Code);
+            return QString("%1: %2").arg(it->data(ATC_Label)).arg(it->data(ATC_Code));
         }
     case Qt::ForegroundRole :
         {

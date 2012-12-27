@@ -176,7 +176,8 @@ static void addResultToEpisodeLabel(Form::FormMain *parent, QLabel *label, const
         episodeLabel.insert(begin, add);
         parent->itemData()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel);
     } else {
-        parent->itemData()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel + "; " + add);
+        QString tmp = episodeLabel + "; " + add;
+        parent->itemData()->setData(Form::IFormItemData::ID_EpisodeLabel, tmp);
     }
 }
 
