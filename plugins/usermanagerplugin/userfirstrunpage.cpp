@@ -89,7 +89,8 @@ void UserCreationPage::userManager()
 
 void UserCreationPage::userWizard()
 {
-    UserCreatorWizard wiz;
+    UserCreatorWizard wiz(this);
+    Utils::resizeAndCenter(&wiz, this);
     wiz.exec();
 }
 

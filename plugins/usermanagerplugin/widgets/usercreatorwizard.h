@@ -87,6 +87,7 @@ public:
     static int userRights(const int role);
 
 protected Q_SLOTS:
+    void initializePage(int id);
     void done(int r);
 
 private:

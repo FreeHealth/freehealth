@@ -291,6 +291,12 @@ UserCreatorWizard::~UserCreatorWizard()
     d = 0;
 }
 
+void UserCreatorWizard::initializePage(int id)
+{
+    QWizard::initializePage(id);
+    Utils::resizeAndCenter(this, parentWidget());
+}
+
 /**
  * Check the current user rights for the creation of new users.
  * Return \e true if user can create a new user, otherwise returns false.

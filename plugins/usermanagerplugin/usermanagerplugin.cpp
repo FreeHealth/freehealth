@@ -357,8 +357,9 @@ void UserManagerPlugin::postCoreInitialization()
 /** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */
 void UserManagerPlugin::createUser()
 {
-    UserCreatorWizard wiz;
-//    wiz.createUser(true);
+    UserCreatorWizard wiz(Core::ICore::instance()->mainWindow());
+    wiz.show();
+    Utils::resizeAndCenter(&wiz, Core::ICore::instance()->mainWindow());
     wiz.exec();
 }
 
@@ -404,7 +405,7 @@ void UserManagerPlugin::updateActions()
 void UserManagerPlugin::showUserManager()
 {
     UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
-    dlg.setModal(true);
+//    dlg.setModal(true);
     dlg.initialize();
     dlg.show();
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
