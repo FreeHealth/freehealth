@@ -69,9 +69,12 @@ static inline Patients::PatientCore *patientCore() {return Patients::PatientCore
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
     QWizard(parent)
 {
+    setWindowTitle(tr("New Patient"));
+//    setModal(true);
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
+
     m_Page = new IdentityPage(this);
     addPage(m_Page);
-    setWindowTitle(tr("New Patient"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
@@ -123,7 +126,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity->setModel(m_Model);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
-    QGridLayout *layout = new QGridLayout;
+    QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
     layout->addWidget(m_Identity, 0, 0);

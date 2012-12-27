@@ -160,6 +160,8 @@ UserManagerDialog::UserManagerDialog(QWidget *parent) :
     QDialog(parent)
 {
     Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
+
     if (!userModel()->hasCurrentUser())
         return;
 //    setAttribute(Qt::WA_DeleteOnClose);
@@ -196,7 +198,6 @@ void UserManagerDialog::done(int r)
 void UserManagerDialog::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
-    Utils::centerWidget(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -247,10 +247,13 @@ QHash<int, int> UserCreatorWizardPrivate::m_Rights;
  * UserPlugin::IUserWizardPage from the plugin manager object pool.
  */
 UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
-        QWizard(parent),
-        d(new UserCreatorWizardPrivate(this))
+    QWizard(parent),
+    d(new UserCreatorWizardPrivate(this))
 {
     setObjectName("UserCreatorWizard");
+//    setModal(true);
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
+
     setPage(IdentityAndLoginPage, new UserIdentityAndLoginPage(this));
     setPage(ContactPage, new UserContactPage(this));
     setPage(ProfilPage, new UserProfilePage(this));
@@ -264,6 +267,15 @@ UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
     }
 
     setPage(LastPage, new UserLastPage(this));
+
+    QList<QWizard::WizardButton> layout;
+    layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
+            << QWizard::NextButton << QWizard::FinishButton;
+    setButtonLayout(layout);
+
+    QPixmap pix = QPixmap(theme()->iconFullPath(Core::Constants::ICONUSERMANAGER, Core::ITheme::BigIcon));
+    setPixmap(QWizard::BackgroundPixmap, pix);
+    setPixmap(QWizard::WatermarkPixmap, pix);
 
     setWindowTitle(tr("User Creator Wizard"));
     setOptions(options() | QWizard::HaveHelpButton);
@@ -407,7 +419,7 @@ int UserCreatorWizard::userRights(const int role)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////    UserIdentityPage    ////////////////////////////////////
+//////////////////////////////    UserContactPage    ////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 UserContactPage::UserContactPage(QWidget *parent) :
     QWizardPage(parent),
@@ -440,7 +452,9 @@ UserContactPage::~UserContactPage()
     delete ui;
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////    UserProfilePage    ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserProfilePage::UserProfilePage(QWidget *parent) :
         QWizardPage(parent)
 {
@@ -521,6 +535,9 @@ bool UserProfilePage::validatePage()
     return true;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////    UserSpecialiesQualificationsPage    ///////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *parent)
         : QWizardPage(parent)
 {
@@ -551,6 +568,9 @@ UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *pare
     setLayout(layout);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////    UserRightsPage    ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserRightsPage::UserRightsPage(QWidget *parent)
     : QWizardPage(parent)
 {
@@ -596,6 +616,9 @@ bool UserRightsPage::validatePage()
     return true;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////    UserLastPage    /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
 {
     setTitle(tr("User creation"));
