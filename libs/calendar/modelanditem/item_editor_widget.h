@@ -77,7 +77,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void on_selectIconButton_clicked();
     void on_durationCombo_currentIndexChanged(int index);
-    void onDateTimeChanged(QDateTime dateTime);
+    void onDateTimeChanged(const QDateTime &);
     void changeDuration(const int comboIndex);
 
 protected:

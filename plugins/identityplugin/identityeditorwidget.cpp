@@ -548,7 +548,6 @@ public:
     Core::IPhotoProvider *m_requestedProvider;
 
 private:
-    QAction *m_deletePhotoAction;
     IdentityEditorWidget *q;
 };
 
@@ -747,7 +746,7 @@ bool IdentityEditorWidget::addMapping(AvailableWidget widget, int modelIndex)
             case Province: zipMapping = ZipCodes::ZipCodesWidget::StateProvincePlainText; break;
             case Country_TwoCharIso: zipMapping = ZipCodes::ZipCodesWidget::CountryIso; break;
             case Country_QLocale: zipMapping = ZipCodes::ZipCodesWidget::CountryLocale; break;
-            default: break;
+            default: zipMapping = ZipCodes::ZipCodesWidget::StreetPlainText; break;
             }
             d->ui->zipcodesWidget->addMapping(d->m_Mapper, modelIndex, zipMapping);
         } else {

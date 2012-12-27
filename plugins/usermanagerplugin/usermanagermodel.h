@@ -74,9 +74,9 @@ public:
 
 Q_SIGNALS:
     
-private Q_SLOTS:
-    void pluginManagerObjectAdded(QObject *o);
-    void pluginManagerObjectRemoved(QObject *o);
+//private Q_SLOTS:
+//    void pluginManagerObjectAdded(QObject *o);
+//    void pluginManagerObjectRemoved(QObject *o);
 
 private:
     Internal::UserManagerModelPrivate *d;

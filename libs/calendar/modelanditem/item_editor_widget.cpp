@@ -152,7 +152,6 @@ private:
 }
 }
 
-
 ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     QWidget(parent),
     d(new Internal::ItemEditorWidgetPrivate(this))
@@ -313,7 +312,7 @@ void ItemEditorWidget::on_durationCombo_currentIndexChanged(int index)
     d->ui->endTimeEdit->setTime(endTime);
 }
 
-void ItemEditorWidget::onDateTimeChanged(QDateTime dateTime)
+void ItemEditorWidget::onDateTimeChanged(const QDateTime &)
 {
 //    qDebug() << "onDateTimeChanged: called from" << sender()->objectName() << dateTime ;
     QDateTime startDateTime = QDateTime(d->ui->startDateEdit->date(), d->ui->startTimeEdit->time());

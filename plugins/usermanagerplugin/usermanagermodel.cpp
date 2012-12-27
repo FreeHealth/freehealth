@@ -358,8 +358,8 @@ int UserManagerModel::pageIndexFromIndex(const QModelIndex &index) const
     return -1;
 }
 
-void UserManagerModel::pluginManagerObjectAdded(QObject *o)
-{
+//void UserManagerModel::pluginManagerObjectAdded(QObject *o)
+//{
 //    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
 //    if (page) {
 //        d->m_pages << page;
@@ -375,10 +375,10 @@ void UserManagerModel::pluginManagerObjectAdded(QObject *o)
 //        }
 //        d->m_Widget->expandAllCategories();
 //    }
-}
+//}
 
-void UserManagerModel::pluginManagerObjectRemoved(QObject *o)
-{
+//void UserManagerModel::pluginManagerObjectRemoved(QObject *o)
+//{
 //    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
 //    if (page) {
 //        if (d->m_pages.contains(page)) {
@@ -396,4 +396,4 @@ void UserManagerModel::pluginManagerObjectRemoved(QObject *o)
 //        }
 //        d->m_Widget->expandAllCategories();
 //    }
-}
+//}

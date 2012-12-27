@@ -96,7 +96,7 @@ private:
 
 private:
     QString m_OriginalFileName;
-    bool m_Sha1Checked, m_Md5Checked;
+//    bool m_Sha1Checked, m_Md5Checked;
     PackDescription m_descr;
     PackDependencies m_depends;
     mutable int m_type;

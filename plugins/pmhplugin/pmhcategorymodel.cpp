@@ -83,6 +83,7 @@ static inline Category::CategoryCore *categoryCore() {return Category::CategoryC
 
 namespace {
 
+    // FIXME: use a QStandardItemModel
     class TreeItem
     {
     public:
@@ -92,7 +93,7 @@ namespace {
 
         TreeItem(TreeItem *parent = 0) :
                 m_Parent(parent),
-                m_IsModified(false),
+//                m_IsModified(false),
                 m_Cat(0),
                 m_Pmh(0),
                 m_Form(0),
@@ -218,7 +219,7 @@ namespace {
         QString m_Label;
         QIcon m_Icon;
         QVector<int> m_DirtyRows;
-        bool m_IsModified;
+//        bool m_IsModified;
         Category::CategoryItem *m_Cat;
         PmhData *m_Pmh;
         Form::FormMain *m_Form;

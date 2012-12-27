@@ -50,7 +50,7 @@ const char *const TAG_PACKDEPENDENCIES = "PackDependencies";
 }
 
 Pack::Pack() :
-    m_Sha1Checked(false), m_Md5Checked(false),
+//    m_Sha1Checked(false), m_Md5Checked(false),
     m_type(-1)
 {
 }

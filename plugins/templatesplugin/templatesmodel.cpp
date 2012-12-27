@@ -127,7 +127,7 @@ private:
     Templates::TemplatesModel *m_Model;
 };
 
-
+// FIXME: use a QStandardItemModel instead of an internal specific pointer model
 class TreeItem : public Templates::ITemplate
 {
 public:
@@ -275,7 +275,6 @@ public:
             m_ShowOnlyCategories(false),
             m_ReadOnly(false)
     {
-        q->setObjectName("TemplatesModel");
         m_Handles.insert(this);
         m_RootItem = m_Tree;
     }
@@ -293,6 +292,8 @@ public:
         }
     }
 
+    // FIXME: create a Core to manage all these members
+    // FIXME: reset -> split into beginResetModel && endResetModel
     void allInstancesReset() const
     {
         foreach(TemplatesModelPrivate *pr, m_Handles) {
@@ -795,7 +796,10 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 {
     setObjectName("TemplatesModel");
     d->setupModelData();
-    // TODO: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+    // FIXME: Qt5 porting: CHECK THIS -> setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+#if QT_VERSION < 0x050000
+    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+#endif
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -1022,6 +1026,7 @@ Qt::DropActions TemplatesModel::supportedDropActions() const
 
 bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
 {
+    // TODO: wrong code
     if (d->m_ReadOnly)
         return false;
 
@@ -1030,7 +1035,7 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
     if (!parent)
         return false;
     // insertRow in parentIndex
-    QModelIndex parentIndex = d->findIndex(parent->id());
+//    QModelIndex parentIndex = d->findIndex(parent->id());
     // setData of newly created row
 //    Internal::TreeItem *parentItem = d->getItem(item)->parent();
 //    // TODO: manage user

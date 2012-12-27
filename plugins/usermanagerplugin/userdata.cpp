@@ -272,7 +272,7 @@ void UserDynamicData::setValue(const QVariant &value)
 */
 Print::TextDocumentExtra *UserDynamicData::extraDocument() const
 {
-    if (!d->m_Type==ExtraDocument)
+    if (d->m_Type != ExtraDocument)
         return 0;
     if (!d->m_Doc)
         d->m_Doc = Print::TextDocumentExtra::fromXml(d->m_Value.toString());

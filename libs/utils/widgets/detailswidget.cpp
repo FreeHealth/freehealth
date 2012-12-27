@@ -151,7 +151,7 @@ QPixmap DetailsWidgetPrivate::cacheBackground(const QSize &size, bool expanded)
     p.fillRect(fullRect, QColor(255, 255, 255, 40));
 
     QColor highlight = q->palette().highlight().color();
-    highlight.setAlpha(0.5);
+    highlight.setAlphaF(0.5);
     if (expanded)
         p.fillRect(topRect, highlight);
 
