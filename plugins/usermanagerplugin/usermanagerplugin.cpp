@@ -132,7 +132,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing user manager plugin..."));
 
-    if (!userCore().initia                          lize())
+    if (!userCore().initialize())
         return false;
 
     if (!userBase()->isInitialized()) {
