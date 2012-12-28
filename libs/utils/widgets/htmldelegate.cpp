@@ -36,12 +36,35 @@
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
 #include <QTreeView>
+#include <QMap>
+#include <QTimer>
 
 #include <QDebug>
 
 enum { DrawDelegateRect = false };
 
 namespace Utils {
+namespace Internal {
+class HtmlDelegatePrivate
+{
+public:
+    HtmlDelegatePrivate(HtmlDelegate *parent) :
+        q(parent)
+    {}
+
+    ~HtmlDelegatePrivate()
+    {
+    }
+
+public:
+    QTextDocument document;
+    QMap<QPersistentModelIndex, int> heights;
+    QTimer timer;
+
+private:
+    HtmlDelegate *q;
+};
+} // namespace Internal
 
 static QString changeColors(const QStyleOptionViewItem &option, QString text)
 {
@@ -56,8 +79,18 @@ static QString changeColors(const QStyleOptionViewItem &option, QString text)
 }
 
 HtmlDelegate::HtmlDelegate(QObject *parent) :
-    QStyledItemDelegate(parent)
+    QStyledItemDelegate(parent),
+    d_html(new Internal::HtmlDelegatePrivate(this))
 {
+    d_html->timer.setInterval(250);
+    d_html->timer.setSingleShot(true);
+}
+
+HtmlDelegate::~HtmlDelegate()
+{
+    if (d_html)
+        delete d_html;
+    d_html = 0;
 }
 
 void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -66,8 +99,8 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     initStyleOption(&optionV4, index);
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
 
-    QTextDocument doc;
-    doc.setHtml(changeColors(option, optionV4.text));
+    d_html->document.setHtml(changeColors(option, optionV4.text));
+//    document.setTextWidth( view->viewport()->width() -view->iconSize().width() -( iconMargin *2 ) );
 
     // Painting item without text
     QString backupText = optionV4.text;
@@ -87,10 +120,12 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
     plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
 
+    //d_html->document.setTextWidth(plainTextRect.width());
+
     // TextRect includes the decoration + item data. On treeview it does not include the branch.
     QRect textRect = optionV4.rect;
-    textRect.setTop(plainTextRect.center().y() - doc.size().height() / 2);
-    textRect.setHeight(doc.size().height());
+    textRect.setTop(plainTextRect.center().y() - d_html->document.size().height() / 2);
+    textRect.setHeight(d_html->document.size().height());
     textRect = textRect.adjusted(1,1,-1,-1);
 
     QPen pen;
@@ -108,6 +143,10 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
     QRect htmlRect = textRect.translated(-textRect.topLeft());
     painter->translate(plainTextRect.left(), 0);
+
+    // Connect timer
+    //QAbstractItemView *view = qobject_cast<QAbstractItemView*>(const_cast<QWidget*>(optionV4.widget));
+    //QObject::connect(&d_html->timer, SIGNAL(timeout()), view->model(), SLOT(update()), Qt::UniqueConnection);
 
     // Manage indentation?
     QTreeView *treeview = qobject_cast<QTreeView*>(const_cast<QWidget*>(optionV4.widget));
@@ -127,34 +166,41 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->drawRoundedRect(htmlRect.adjusted(2,2,-2,-2), 5, 5);
     }
 
-    doc.setTextWidth(htmlRect.width());
-    doc.drawContents(painter, htmlRect);
+    d_html->document.setTextWidth(htmlRect.width());
+    d_html->document.drawContents(painter, htmlRect);
     painter->translate(-plainTextRect.left(), 0);
     painter->restore();
 }
 
 QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    qWarning() << "SIZEHINT";
     QStyleOptionViewItemV4 options = option;
     initStyleOption(&options, index);
     QStyle *style = options.widget? options.widget->style() : QApplication::style();
 
-    QTextDocument doc;
-    doc.setHtml(options.text);
+    d_html->document.setHtml(options.text);
 
     QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &options);
     plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
 
     // TextRect includes the decoration + item data. On treeview it does not include the branch.
     QRect textRect = options.rect;
-    textRect.setTop(plainTextRect.center().y() - doc.size().height() / 2);
-    textRect.setHeight(doc.size().height());
+    textRect.setTop(plainTextRect.center().y() - d_html->document.size().height() / 2);
+    textRect.setHeight(d_html->document.size().height());
     textRect = textRect.adjusted(1,1,-1,-1);
     QRect htmlRect = textRect.translated(-textRect.topLeft());
 
-    doc.setTextWidth(htmlRect.width());
-//   doc.setTextWidth(options.rect.width()); does not work (the rect width is way too small, I don't know why) but the idea is interesting, TODO: improve it later
-    return QSize(doc.size().width(), doc.size().height());
+//    if (d_html->heights.value(index, 0) != d_html->document.size().height()) {
+//        d_html->heights[index] = d_html->document.size().height();
+//        d_html->timer.start();
+//    }
+
+//    qWarning() << d_html->heights;
+
+    d_html->document.setTextWidth(htmlRect.width());
+    //   d_html->document.setTextWidth(options.rect.width()); does not work (the rect width is way too small, I don't know why) but the idea is interesting, TODO: improve it later
+    return QSize(d_html->document.size().width(), d_html->document.size().height());
 }
 
 } // namespace Utils

@@ -38,15 +38,22 @@
 */
 
 namespace Utils {
+namespace Internal {
+class HtmlDelegatePrivate;
+} // namespace Internal
 
 class UTILS_EXPORT HtmlDelegate : public QStyledItemDelegate
 {
 public:
     explicit HtmlDelegate(QObject *parent = 0);
+    ~HtmlDelegate();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    Internal::HtmlDelegatePrivate *d_html;
 };
 
 } // namespace Utils
