@@ -226,6 +226,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
         AppConfigWizard wizard;
+        m_Theme->splashScreen()->finish(&wizard);
         if (wizard.exec()==QDialog::Rejected) {
             return false;
         }
@@ -253,6 +254,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 //                Utils::LicenseTerms::GPLv3 ))
 //            return false;
 //#endif
+        m_Theme->createSplashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN);
     }
 
     return true;
