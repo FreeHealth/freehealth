@@ -110,6 +110,9 @@ UserManagerPlugin::UserManagerPlugin() :
     Core::ICore::instance()->translators()->addNewTranslator("plugin_usermanager");
 
     new UserCore(this);
+    // is Core initialized ?
+    if (!userCore().initialize())
+        LOG_ERROR("UserCore can not initialize");
 
     addObject(m_FirstCreation);
 }
@@ -129,8 +132,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing user manager plugin..."));
 
-    // is Core initialized ?
-    if (!userCore().initialize())
+    if (!userCore().initia                          lize())
         return false;
 
     if (!userBase()->isInitialized()) {
