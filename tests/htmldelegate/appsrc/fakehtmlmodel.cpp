@@ -14,21 +14,21 @@ const char *const PIX32 = "/../../global_resources/pixmap/32x32/identity.png";
 FakeHtmlModel::FakeHtmlModel(QObject *parent) :
     QStandardItemModel(parent)
 {
-    setColumnCount(1);
+    setColumnCount(2);
     QStandardItem *test = new QStandardItem;
-    test->setText("<b>This is Multiline</b><br />html code");
+    test->setText("<b>This is Multiline</b><br />html code asjkh lasdjkfh jfh jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
     invisibleRootItem()->appendRow(test);
     test = new QStandardItem;
-    test->setText("<b>This is Multiline</b><br />html code <br />without decoration");
+    test->setText("<b>This is Multiline</b><br />html code <br />without decoration asjkh lasdjkfh jfh  jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
     invisibleRootItem()->appendRow(test);
     QStandardItem *test2 = new QStandardItem;
-    test2->setText("<b>This is Child</b><br />html code <br />with decoration");
+    test2->setText("<b>This is Child</b><br />html code <br />with decoration asjkh lasdjkfh jfh  jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
     test->appendRow(test2);
 }
 
 QVariant FakeHtmlModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.column() == 1)
         return QVariant();
     switch (role) {
     case Qt::DecorationRole:
