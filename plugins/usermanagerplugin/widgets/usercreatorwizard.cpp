@@ -294,7 +294,7 @@ UserCreatorWizard::~UserCreatorWizard()
 void UserCreatorWizard::initializePage(int id)
 {
     QWizard::initializePage(id);
-    Utils::resizeAndCenter(this, parentWidget());
+    //Utils::resizeAndCenter(this, parentWidget());
 }
 
 /**
