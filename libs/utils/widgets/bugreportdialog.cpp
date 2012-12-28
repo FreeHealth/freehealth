@@ -139,6 +139,7 @@ BugReportDialog::BugReportDialog(QWidget *parent) :
     d->getReportInformation();
     d->_sendButton->setText(tr("&Send report"));
     setWindowTitle(tr("Problem reporting dialog"));
+    Utils::centerWidget(this, parent);
 }
 
 BugReportDialog::~BugReportDialog()
