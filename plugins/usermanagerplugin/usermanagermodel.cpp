@@ -250,14 +250,15 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
         QModelIndex title = d->_sqlModel->index(i, Title);
         QModelIndex lastLogin = d->_sqlModel->index(i, LastLogin);
         QString titleString = Trans::ConstantTranslations::titles().at(d->_sqlModel->data(title).toInt());
+        if (!titleString.isEmpty())
+            titleString = titleString.replace(" ", "&nbsp;") + "<br />";
         QString fullname;
         if (!secondname.isEmpty())
-            fullname = name.data().toString() + " - " + secondname + " " + firstname.data().toString();
+            fullname = titleString + name.data().toString() + " - " + secondname + " " + firstname.data().toString();
         else
-            fullname = name.data().toString() + " " + firstname.data().toString();
-        QString html = QString("<span style=\"font-weight:bold;color:black\">%1<br />%2</span><br />"
+            fullname = titleString + name.data().toString() + " " + firstname.data().toString();
+        QString html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
                                "<span style=\"font-size:small;color:gray\">%3</span>")
-                .arg(titleString.replace(" ", "&nbsp;"))
                 .arg(fullname)
                 .arg(tr("Last login: %1").arg(d->_sqlModel->data(lastLogin).toString()));
         return html;
