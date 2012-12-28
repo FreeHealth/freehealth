@@ -113,6 +113,11 @@ UserCore::~UserCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool UserCore::initialize()
 {
+    // Already initialized?
+    if (d->_model)
+        return true;
+
+    // Start initialization
     if (!d->_base->initialize())
         return false;
 
