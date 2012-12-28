@@ -67,6 +67,9 @@
 
 #include <QDebug>
 
+// Note: we can also use the sizeHintChanged(index); signal to force view to
+// update.
+
 enum { DrawDelegateRect = false };
 
 using namespace Utils;
