@@ -44,6 +44,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QProgressDialog>
+#include <QDesktopWidget>
 
 #include "ui_firstrunusercreationwidget.h"
 
@@ -58,7 +59,8 @@ static inline UserPlugin::Internal::UserBase *userBase() {return userCore().user
 
 UserCreationPage::UserCreationPage(QWidget *parent) :
     QWizardPage(parent),
-    ui(new Ui::FirstRunUserCreationWidget)
+    ui(new Ui::FirstRunUserCreationWidget),
+    _userManagerDialog(0)
 {
     ui->setupUi(this);
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
@@ -82,9 +84,14 @@ UserCreationPage::~UserCreationPage()
 
 void UserCreationPage::userManager()
 {
-    UserManagerDialog dlg(this);
-    dlg.initialize();
-    dlg.exec();
+    if (!_userManagerDialog) {
+        _userManagerDialog = new UserManagerDialog(this);
+        _userManagerDialog->initialize();
+    }
+    QSize size = QDesktopWidget().availableGeometry(_userManagerDialog).size();
+    _userManagerDialog->resize(size*0.75);
+    _userManagerDialog->show();
+    Utils::centerWidget(_userManagerDialog, this->wizard());
 }
 
 void UserCreationPage::userWizard()
@@ -126,6 +133,12 @@ void UserCreationPage::initializePage()
 
 bool UserCreationPage::validatePage()
 {
+    if (_userManagerDialog && _userManagerDialog->isVisible()) {
+        _userManagerDialog->setVisible(false);
+        _userManagerDialog->close();
+        delete _userManagerDialog;
+        _userManagerDialog = 0;
+    }
     // TODO: code here
     // Are there user created ? no -> can not validate
     // disconnected user database ?
