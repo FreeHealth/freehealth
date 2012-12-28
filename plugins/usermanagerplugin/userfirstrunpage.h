@@ -33,6 +33,7 @@
 
 namespace UserPlugin {
 class UserManagerDialog;
+class UserCreatorWizard;
 
 namespace Ui {
     class FirstRunUserCreationWidget;
@@ -60,6 +61,7 @@ private Q_SLOTS:
 private:
     Ui::FirstRunUserCreationWidget *ui;
     UserManagerDialog *_userManagerDialog;
+    UserCreatorWizard *_userWizard;
 };
 
 class FirstRun_UserCreation : public Core::IFirstConfigurationPage

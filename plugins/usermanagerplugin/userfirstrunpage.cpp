@@ -60,7 +60,8 @@ static inline UserPlugin::Internal::UserBase *userBase() {return userCore().user
 UserCreationPage::UserCreationPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::FirstRunUserCreationWidget),
-    _userManagerDialog(0)
+    _userManagerDialog(0),
+    _userWizard(0)
 {
     ui->setupUi(this);
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
@@ -96,9 +97,11 @@ void UserCreationPage::userManager()
 
 void UserCreationPage::userWizard()
 {
-    UserCreatorWizard wiz(this);
-    Utils::resizeAndCenter(&wiz, this);
-    wiz.exec();
+    if (!_userWizard) {
+        _userWizard = new UserCreatorWizard(this);
+        Utils::resizeAndCenter(_userWizard, this->wizard());
+    }
+    _userWizard->show();
 }
 
 void UserCreationPage::initializePage()
@@ -138,6 +141,11 @@ bool UserCreationPage::validatePage()
         _userManagerDialog->close();
         delete _userManagerDialog;
         _userManagerDialog = 0;
+    }
+    if (_userWizard) {
+        _userWizard->close();
+        delete _userWizard;
+        _userWizard = 0;
     }
     // TODO: code here
     // Are there user created ? no -> can not validate
