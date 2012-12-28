@@ -16,13 +16,13 @@ FakeHtmlModel::FakeHtmlModel(QObject *parent) :
 {
     setColumnCount(2);
     QStandardItem *test = new QStandardItem;
-    test->setText("<b>This is Multiline</b><br />html code asjkh lasdjkfh jfh jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
+    test->setText("<b>This is Multiline</b><br />html code<br />Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore ");
     invisibleRootItem()->appendRow(test);
     test = new QStandardItem;
-    test->setText("<b>This is Multiline</b><br />html code <br />without decoration asjkh lasdjkfh jfh  jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
+    test->setText("<b>This is Multiline</b><br />html code<br />without decoration.<br />Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore ");
     invisibleRootItem()->appendRow(test);
     QStandardItem *test2 = new QStandardItem;
-    test2->setText("<b>This is Child</b><br />html code <br />with decoration asjkh lasdjkfh jfh  jhl fkhakls hfljkhsgjhsg kjhasg dlfjkhajklshjk dfasdghf gsdhfg jsghf kjsghdfkjsghfk jhgsd fkjhgas dfkjhgas fkjhg");
+    test2->setText("<b>This is Child</b><br />html code<br />with decoration<br />Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore ");
     test->appendRow(test2);
 }
 
