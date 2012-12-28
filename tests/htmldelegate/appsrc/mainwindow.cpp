@@ -40,19 +40,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->listView->setItemDelegate(new Utils::HtmlDelegate(this));
-    ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
-    ui->treeView->setIndentation(10);
-    ui->tableView->setItemDelegate(new Utils::HtmlDelegate(this));
-
-//    ui->listView->setItemDelegate(new AnnouncementItemDelegate(ui->listView));
-//    ui->treeView->setItemDelegate(new AnnouncementItemDelegate(ui->treeView));
-//    ui->tableView->setItemDelegate(new AnnouncementItemDelegate(ui->tableView));
-
     QStandardItemModel *model = new FakeHtmlModel(this);
+
     ui->listView->setModel(model);
+    ui->listView->setItemDelegate(new Utils::HtmlDelegate(this));
+    ui->listView->setUniformItemSizes(false);
+    ui->listView->setResizeMode(QListView::Adjust);
+//    ui->listView->setTextElideMode(Qt::ElideRight);
+
     ui->treeView->setModel(model);
+    ui->treeView->setItemDelegate(new Utils::HtmlDelegate(this));
+    ui->treeView->setUniformRowHeights(false);
+    ui->treeView->setIndentation(10);
+
     ui->tableView->setModel(model);
+    ui->tableView->setItemDelegate(new Utils::HtmlDelegate(this));
 
     resize(900,600);
 }

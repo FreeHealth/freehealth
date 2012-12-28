@@ -24,6 +24,30 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Utils::HtmlDelegate
+ * Allow to use Html inside any QAbstractItemView.
+ *
+ * HTML Composition requirements: \n
+ * For best adjustement of colors,
+ * use <em><span style="color:..."></em> everywhere around your text with color \b names:
+ * "gray", "black", "blue", "red", "maroon". These are correctly managed
+ * when the item is selected.
+ *
+ * All view type: \n
+ * The textElideMode is not managed yet. The cells will resize automatically but QTableView.
+ *
+ * For QListView: \n
+ * Ensure the the listview resizemode is set to adjust and uniform size are
+ * disabled.
+ * Code:
+ * - QListView::setResizeMode(QListView::Adjust);
+ * - QListView::setUniformItemSizes(false);
+ *
+ * For QTreeView: \n
+ * Just QTreeView::setUniformItemSizes() to false.
+ */
+
 #include "htmldelegate.h"
 
 #include <QPainter>
@@ -38,10 +62,15 @@
 #include <QTreeView>
 #include <QMap>
 #include <QTimer>
+#include <QListView>
+#include <QTableView>
 
 #include <QDebug>
 
 enum { DrawDelegateRect = false };
+
+using namespace Utils;
+using namespace Internal;
 
 namespace Utils {
 namespace Internal {
@@ -56,34 +85,109 @@ public:
     {
     }
 
+    QString changeColors(const QStyleOptionViewItem &option, QString text)
+    {
+        if (option.state & QStyle::State_Selected) {
+            text.replace("color:gray", "color:lightgray", Qt::CaseInsensitive);
+            text.replace("color:black", "color:white", Qt::CaseInsensitive);
+            text.replace("color:blue", "color:lightcyan", Qt::CaseInsensitive);
+            text.replace("color:red", "color:bisque", Qt::CaseInsensitive);
+            text.replace("color:maroon", "color:#F2E6E6", Qt::CaseInsensitive);
+        }
+        return text;
+    }
+
+    void setHtml(const QModelIndex &index, const QStyleOptionViewItemV4 &optionV4)
+    {
+        QTextDocument *doc;
+        if (_documents.contains(index)) {
+            doc = _documents.value(index);
+        } else {
+            doc = new QTextDocument(q);
+            _documents.insert(index, doc);
+        }
+        doc->setHtml(changeColors(optionV4, optionV4.text));
+    }
+
+    void setDocumentWidth(const QModelIndex &index, const QStyleOptionViewItemV4 &optionV4)
+    {
+        QTextDocument *doc = _documents.value(index);
+        if (!doc) {
+            qWarning() << "No Doc?" << index;
+            return;
+        }
+        doc->setTextWidth(getMaxWidth(optionV4));
+    }
+
+    QSize documentSize(const QModelIndex &index)
+    {
+        QTextDocument *doc = _documents.value(index);
+        if (!doc) {
+            qWarning() << "No Doc?" << index;
+            return QSize(1,1);
+        }
+        return QSize(doc->textWidth(), doc->size().height());
+    }
+
+    void drawDocument(QPainter *painter, const QModelIndex &index, const QRect &rect)
+    {
+        QTextDocument *doc = _documents.value(index, 0);
+        if (!doc) {
+            qWarning() << "  **** No doc" << index;
+            return;
+        }
+        doc->drawContents(painter, rect);
+    }
+
+    int getMaxWidth(const QStyleOptionViewItemV4 &optionV4)
+    {
+        int max = optionV4.rect.width();
+
+        // List view -> take viewport
+        QListView *view = qobject_cast<QListView*>(const_cast<QWidget*>(optionV4.widget));
+        if (view)
+            max = qMin(max, view->viewport()->width());
+
+        // Treeview -> Manage indentation (only for the first shown column)
+        QTreeView *treeview = qobject_cast<QTreeView*>(const_cast<QWidget*>(optionV4.widget));
+        if (treeview) {
+            QModelIndex idx = optionV4.index;
+            max = treeview->columnWidth(idx.column());
+            int indent = treeview->indentation();
+            while (idx.parent().isValid()) {
+                idx = idx.parent();
+                indent += treeview->indentation();
+            }
+            max -= indent;
+        }
+
+        // Manage decoration
+        if (!optionV4.decorationSize.isNull() && !optionV4.icon.isNull()) {
+            max -= optionV4.decorationSize.width();
+        }
+
+        return max;
+    }
+
 public:
-    QTextDocument document;
-    QMap<QPersistentModelIndex, int> heights;
+    QMap<QPersistentModelIndex, QTextDocument*> _documents;
     QTimer timer;
+    QMultiMap<QTreeView *, QPersistentModelIndex> _treeViewDataChanged;
 
 private:
     HtmlDelegate *q;
 };
 } // namespace Internal
+} // namespace Utils
 
-static QString changeColors(const QStyleOptionViewItem &option, QString text)
-{
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray", Qt::CaseInsensitive);
-        text.replace("color:black", "color:white", Qt::CaseInsensitive);
-        text.replace("color:blue", "color:lightcyan", Qt::CaseInsensitive);
-        text.replace("color:red", "color:bisque", Qt::CaseInsensitive);
-        text.replace("color:maroon", "color:#F2E6E6", Qt::CaseInsensitive);
-    }
-    return text;
-}
 
 HtmlDelegate::HtmlDelegate(QObject *parent) :
     QStyledItemDelegate(parent),
-    d_html(new Internal::HtmlDelegatePrivate(this))
+    d_html(new HtmlDelegatePrivate(this))
 {
-    d_html->timer.setInterval(250);
+    d_html->timer.setInterval(75);
     d_html->timer.setSingleShot(true);
+    this->connect(&d_html->timer, SIGNAL(timeout()), this, SLOT(treeView_indexDataChanged()));
 }
 
 HtmlDelegate::~HtmlDelegate()
@@ -99,8 +203,26 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     initStyleOption(&optionV4, index);
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
 
-    d_html->document.setHtml(changeColors(option, optionV4.text));
-//    document.setTextWidth( view->viewport()->width() -view->iconSize().width() -( iconMargin *2 ) );
+//    qWarning() << "paint" << index;
+
+    // Force any treeview using this delegate to resize the items
+    QTreeView *treeview = qobject_cast<QTreeView*>(const_cast<QWidget*>(optionV4.widget));
+    if (treeview) {
+        if (d_html->getMaxWidth(optionV4) != d_html->documentSize(index).width()) {
+            if (!d_html->_treeViewDataChanged.values(treeview).contains(index)) {
+                d_html->_treeViewDataChanged.insertMulti(treeview, index);
+                d_html->timer.start();
+            }
+        }
+    }
+
+    // Manage QTableView which do not call sizeHint() of the delegate
+    QTableView *tableview = qobject_cast<QTableView*>(const_cast<QWidget*>(optionV4.widget));
+    if (tableview) {
+        d_html->setHtml(index, optionV4);
+        d_html->setDocumentWidth(index, optionV4);
+    }
+
 
     // Painting item without text
     QString backupText = optionV4.text;
@@ -120,12 +242,9 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
     plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
 
-    //d_html->document.setTextWidth(plainTextRect.width());
-
     // TextRect includes the decoration + item data. On treeview it does not include the branch.
     QRect textRect = optionV4.rect;
-    textRect.setTop(plainTextRect.center().y() - d_html->document.size().height() / 2);
-    textRect.setHeight(d_html->document.size().height());
+    textRect.setTop(plainTextRect.top());
     textRect = textRect.adjusted(1,1,-1,-1);
 
     QPen pen;
@@ -144,12 +263,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QRect htmlRect = textRect.translated(-textRect.topLeft());
     painter->translate(plainTextRect.left(), 0);
 
-    // Connect timer
-    //QAbstractItemView *view = qobject_cast<QAbstractItemView*>(const_cast<QWidget*>(optionV4.widget));
-    //QObject::connect(&d_html->timer, SIGNAL(timeout()), view->model(), SLOT(update()), Qt::UniqueConnection);
-
-    // Manage indentation?
-    QTreeView *treeview = qobject_cast<QTreeView*>(const_cast<QWidget*>(optionV4.widget));
+    // Manage indentation (only for the first shown column)
     if (treeview) {
         QModelIndex idx = index;
         int indent = treeview->indentation();
@@ -166,41 +280,44 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->drawRoundedRect(htmlRect.adjusted(2,2,-2,-2), 5, 5);
     }
 
-    d_html->document.setTextWidth(htmlRect.width());
-    d_html->document.drawContents(painter, htmlRect);
+    // redefine html rect width
+    htmlRect.setWidth(d_html->getMaxWidth(optionV4));
+
+    // Adapt document width & draw it
+    d_html->drawDocument(painter, index, htmlRect);
     painter->translate(-plainTextRect.left(), 0);
     painter->restore();
 }
 
 QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    //qWarning() << "SIZEHINT";
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-    QStyle *style = options.widget? options.widget->style() : QApplication::style();
+    QStyleOptionViewItemV4 optionV4 = option;
+    initStyleOption(&optionV4, index);
 
-    d_html->document.setHtml(options.text);
+    d_html->setHtml(index, optionV4);
+    d_html->setDocumentWidth(index, optionV4);
 
-    QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &options);
-    plainTextRect = plainTextRect.adjusted(1,1,-1,-1);
-
-    // TextRect includes the decoration + item data. On treeview it does not include the branch.
-    QRect textRect = options.rect;
-    textRect.setTop(plainTextRect.center().y() - d_html->document.size().height() / 2);
-    textRect.setHeight(d_html->document.size().height());
-    textRect = textRect.adjusted(1,1,-1,-1);
-    QRect htmlRect = textRect.translated(-textRect.topLeft());
-
-//    if (d_html->heights.value(index, 0) != d_html->document.size().height()) {
-//        d_html->heights[index] = d_html->document.size().height();
-//        d_html->timer.start();
+//    if (option.textElideMode != Qt::ElideNone) {
+//        qWarning() << option.rect.size();
+//        return option.rect.size();
 //    }
 
-//    qWarning() << d_html->heights;
 
-    d_html->document.setTextWidth(htmlRect.width());
-    //   d_html->document.setTextWidth(options.rect.width()); does not work (the rect width is way too small, I don't know why) but the idea is interesting, TODO: improve it later
-    return QSize(d_html->document.size().width(), d_html->document.size().height());
+//    qWarning() << "\nsizeHint";
+//    qWarning() << "  index: "<< index << "docSize:" << d_html->documentSize(index);
+//    qWarning() << "  html:" << optionV4.text.length();
+
+    return d_html->documentSize(index);
+
 }
 
-} // namespace Utils
+// Force any treeview using this delegate to resize the items
+void HtmlDelegate::treeView_indexDataChanged()
+{
+    foreach(QTreeView *tree, d_html->_treeViewDataChanged.keys()) {
+        foreach(const QPersistentModelIndex &index, d_html->_treeViewDataChanged.values(tree)) {
+            tree->dataChanged(index, index);
+        }
+    }
+    d_html->_treeViewDataChanged.clear();
+}

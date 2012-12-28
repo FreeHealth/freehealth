@@ -33,8 +33,8 @@
 /**
  * \file htmldelegate.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 14 Dec 2011
+ * \version 0.8.2
+ * \date 28 Dec 2011
 */
 
 namespace Utils {
@@ -44,6 +44,7 @@ class HtmlDelegatePrivate;
 
 class UTILS_EXPORT HtmlDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
     explicit HtmlDelegate(QObject *parent = 0);
     ~HtmlDelegate();
@@ -51,6 +52,9 @@ public:
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private Q_SLOTS:
+    void treeView_indexDataChanged();
 
 private:
     Internal::HtmlDelegatePrivate *d_html;
