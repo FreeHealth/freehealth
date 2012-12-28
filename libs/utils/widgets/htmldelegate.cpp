@@ -174,7 +174,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qWarning() << "SIZEHINT";
+    //qWarning() << "SIZEHINT";
     QStyleOptionViewItemV4 options = option;
     initStyleOption(&options, index);
     QStyle *style = options.widget? options.widget->style() : QApplication::style();
