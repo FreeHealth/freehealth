@@ -34,18 +34,18 @@
  * "gray", "black", "blue", "red", "maroon". These are correctly managed
  * when the item is selected.
  *
- * All view type: \n
- * The textElideMode is not managed yet. The cells will resize automatically but QTableView.
+ * All view types: \n
+ * The textElideMode is not managed yet. The cells will resize automatically everywhere except in QTableView.
  *
  * For QListView: \n
- * Ensure the the listview resizemode is set to adjust and uniform size are
- * disabled.
- * Code:
- * - QListView::setResizeMode(QListView::Adjust);
- * - QListView::setUniformItemSizes(false);
+ * Ensure that the resizeMode is set to \e Adjust and uniformItemSizes is \e false.
+ * \code
+ * QListView::setResizeMode(QListView::Adjust);
+ * QListView::setUniformItemSizes(false);
+ * \endcode
  *
  * For QTreeView: \n
- * Just QTreeView::setUniformItemSizes() to false.
+ * Just set uniformItemSizes to false.
  */
 
 #include "htmldelegate.h"
