@@ -1215,7 +1215,7 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
     if (toFileName.isEmpty())
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
-                                      tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
+                                      tr(Core::Constants::FREEDIAMS_FILEFILTER));
     else
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
