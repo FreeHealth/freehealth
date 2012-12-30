@@ -235,7 +235,7 @@ public:
     QString fax() const                  { return dynamicDataValue(USER_DATA_FAX).toString(); }
 
 
-    QStringList practitionerId() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_PRACTIDENTIFIANT).toString()); }
+    QStringList professionalIdentifiants() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_PRACTIDENTIFIANT).toString()); }
     QStringList specialty() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_SPECIALTY).toString());  }
     QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_QUALIFICATION).toString()); }
 

@@ -193,7 +193,7 @@ void DefaultUserProfessionalWidget::setUserModel(UserModel *model)
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     m_Mapper->addMapping(ui->specialtyListView, Core::IUser::Specialities, "stringList");
     m_Mapper->addMapping(ui->qualificationsListView, Core::IUser::Qualifications, "stringList");
-    m_Mapper->addMapping(ui->practIdsListView, Core::IUser::PractitionerId, "stringList");
+    m_Mapper->addMapping(ui->practIdsListView, Core::IUser::ProfessionalIdentifiants, "stringList");
 }
 
 void DefaultUserProfessionalWidget::setUserIndex(const int index)

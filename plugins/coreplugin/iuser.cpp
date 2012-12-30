@@ -151,7 +151,7 @@ void IUser::registerUserTokens() const
     t->setUntranslatedHumanReadableName(Trans::Constants::SPECIALTIES);
     _tokens << t;
 
-    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, PractitionerId);
+    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, ProfessionalIdentifiants);
     t->setUntranslatedHumanReadableName(Trans::Constants::IDENTIFIANTS);
     _tokens << t;
 
@@ -209,7 +209,7 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTITLE,      value(IUser::Title).toString() );
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERAGE,        value(IUser::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSPECIALITIES, value(IUser::Specialities).toStringList().join("<br />") );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::PractitionerId).toStringList().join("<br />") );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::ProfessionalIdentifiants).toStringList().join("<br />") );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERQUALIFICATIONS, value(IUser::Qualifications).toStringList().join("<br />") );
 
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERADDRESS,   value(IUser::Address).toString());
