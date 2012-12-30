@@ -502,6 +502,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 
 bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    qWarning() << "setData" << d->_readOnly << index.isValid();
     if (d->_readOnly)
         return false;
 

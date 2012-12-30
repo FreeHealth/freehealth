@@ -146,6 +146,7 @@ XmlFormContentReader::XmlFormContentReader() :
 XmlFormContentReader::~XmlFormContentReader()
 {}
 
+/** Clear internal cache */
 void XmlFormContentReader::clearCache()
 {
     m_ReadableForms.clear();
@@ -311,40 +312,36 @@ Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString
     root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
     toReturn = readXmlDescription(root, formUidOrFullAbsPath);
 
-    // get screenshots if requiered
+    // has screenshots?
     XmlFormName form(formUidOrFullAbsPath);
-    if (query.getScreenShots()) {
-        if (query.forceFileReading()) {
-            // Get from local files
-            QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
-            QStringList lang;
-            lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
-            bool found = false;
-            foreach(const QString &l, lang) {
-                if (QDir(shotPath + l).exists()) {
-                    found = true;
-                    shotPath = shotPath + l;
-                    break;
-                }
+    if (query.forceFileReading()) {
+        // Get from local files
+        QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
+        QStringList lang;
+        lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
+        bool found = false;
+        foreach(const QString &l, lang) {
+            if (QDir(shotPath + l).exists()) {
+                found = true;
+                shotPath = shotPath + l;
+                break;
             }
-            if (found) {
-                QDir dir(shotPath);
-                //            qWarning() << "Trying to read shots" << dir.absolutePath();
-                foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
-                    QPixmap pix(file.absoluteFilePath());
-                    toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
-                }
-            }
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        } else {
-            // Get from database
-            QHash<QString, QPixmap> pix = base()->getScreenShots(form.uid, QLocale().name().left(2).toLower());
-//            qWarning() << "xxxxxxxx FROMBASE" << formUidOrFullAbsPath << pix.keys();
-            foreach(const QString &k, pix.keys()) {
-                toReturn->addScreenShot(k, pix.value(k));
-            }
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+        if (found) {
+            QDir dir(shotPath);
+            qWarning() << "Trying to read shots" << dir.absolutePath();
+            toReturn->setData(Form::FormIODescription::HasScreenShot, true);
+            // foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
+            //     QPixmap pix(file.absoluteFilePath());
+            //     toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
+            // }
+        }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    } else {
+        // Get from database
+        // qWarning() << "Trying to read shots from database";
+        toReturn->setData(Form::FormIODescription::HasScreenShot, base()->hasScreenShots(form.uid));
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
     return toReturn;
 }

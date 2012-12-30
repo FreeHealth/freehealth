@@ -399,19 +399,15 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
             if (descr) {
                 descr->setData(Form::FormIODescription::Category, descr->data(Form::FormIODescription::Category).toString(), QLocale().name().left(2));
                 descr->setData(Form::FormIODescription::FromDatabase, true);
-
-                if (formQuery.getScreenShots()) {
-                    QHash<QString, QPixmap> pix = getScreenShots(query.value(0).toString(), QLocale().name().left(2).toLower());
-                    foreach(const QString &k, pix.keys()) {
-                        descr->addScreenShot(k, pix.value(k));
-                    }
-                }
+                descr->setData(Form::FormIODescription::HasScreenShot, hasScreenShots(descr->data(Form::FormIODescription::UuidOrAbsPath).toString()));
                 toReturn << descr;
             }
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
+        return toReturn;
     }
     query.finish();
     DB.commit();
@@ -553,6 +549,65 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
 }
 
 /**
+ * Returns \e true if the database contains a screenshot for the for \e formUid and
+ * the language \e lang, otherwise return \e false.\n
+ * This member can be called inside or outside a database transaction. If it is called
+ * inside a transaction it does not call neither QSqlDatabase::commit(), nor
+ * QSqlDatabase::rollback().
+*/
+bool XmlIOBase::hasScreenShots(const QString &formUid, const QString &lang)
+{
+    // can be accessed within ou without a transaction
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    bool insideTransaction = true;
+    if (!_transaction) {
+        DB.transaction();
+        _transaction = true;
+        insideTransaction = false;
+    }
+    QSqlQuery query(DB);
+    QString req;
+    Utils::FieldList gets;
+    gets << Utils::Field(Constants::Table_FORMS, Constants::FORM_ID);
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
+    Utils::FieldList conds;
+    conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
+    if (!lang.isEmpty()) {
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
+        req = select(gets, joins, conds);
+    } else {
+        req = select(gets, joins, conds);
+        conds.clear();
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(QLocale().name().left(2)));
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE 'xx/%'"));
+        req += " AND " + getWhereClause(conds, OR);
+    }
+    bool hasShot = false;
+    if (query.exec(req)) {
+        if (query.next())
+            hasShot = true;
+    } else {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        if (!insideTransaction) {
+            DB.rollback();
+            _transaction = false;
+        }
+    }
+    if (!insideTransaction) {
+        query.finish();
+        DB.commit();
+        _transaction = false;
+    }
+    return hasShot;
+}
+
+/**
  * Returns the shots for the language \e lang associated to the form \e formUid.\n
  * The returned QHash contains the shot uuid as key and the shot pixmap as value.\n
  * This member can be called inside or outside a database transaction. If it is called
@@ -573,6 +628,7 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
         insideTransaction = false;
     }
     QSqlQuery query(DB);
+    QString req;
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
@@ -582,11 +638,16 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
-    if (!lang.isEmpty())
+    if (!lang.isEmpty()) {
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
-    else
+        req = select(gets, joins, conds);
+    } else {
+        req = select(gets, joins, conds);
+        conds.clear();
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(QLocale().name().left(2)));
-    QString req = select(gets, joins, conds);
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE 'xx/%'"));
+        req += " AND " + getWhereClause(conds, OR);
+    }
 
     int nbShotRead = 0;
     if (query.exec(req)) {
@@ -871,7 +932,7 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
         return false;
     }
     Utils::Log::logTimeElapsed(chr, "---", "save categories");
-    qWarning() << "END";
+//    qWarning() << "END";
     return true;
 }
 
