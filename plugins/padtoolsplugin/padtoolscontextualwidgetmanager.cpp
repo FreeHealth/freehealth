@@ -239,7 +239,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
                                      cmd,
                                      0, "",
                                      QKeySequence::UnknownKey, false);
-    connect(aViewOutput, SIGNAL(triggered()), this, SLOT(onDefaultValuesRequested()));
+    connect(aViewOutput, SIGNAL(triggered()), this, SLOT(onViewOutputRequested()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
