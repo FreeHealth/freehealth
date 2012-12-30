@@ -28,7 +28,8 @@ SUBDIRS = \
     account \
     agenda \
     script \
-    mainwin
+    mainwin \
+    tools
 
 
 # root plugin
@@ -184,6 +185,10 @@ patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
 patientbase.depends += identity
+
+tools.subdir   = ../../plugins/toolsplugin
+tools.depends += core
+
 
 # manage non free content
 #include(../buildspecs/config.pri)
