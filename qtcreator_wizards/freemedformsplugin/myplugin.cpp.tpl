@@ -64,7 +64,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
 
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
@@ -185,4 +185,4 @@ void %PluginName%Plugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
-Q_EXPORT_PLUGIN2(%PluginName%, %PluginName%Plugin)
+Q_EXPORT_PLUGIN(%PluginName%Plugin)
