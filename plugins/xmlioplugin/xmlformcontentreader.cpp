@@ -746,7 +746,9 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         basetype = XmlIOBase::UiFile;
     else if (fileName.endsWith(".html", Qt::CaseInsensitive))
         basetype = XmlIOBase::HtmlFile;
-//    else if (fileName.endsWith(".qml", Qt::CaseInsensitive))
+    else if (fileName.endsWith(".pdf", Qt::CaseInsensitive))
+        basetype = XmlIOBase::PdfFile;
+    //    else if (fileName.endsWith(".qml", Qt::CaseInsensitive))
 //        basetype = XmlIOBase::QmlContent;
 
     QString content = base()->getFormContent(form.uid, basetype, fileName);

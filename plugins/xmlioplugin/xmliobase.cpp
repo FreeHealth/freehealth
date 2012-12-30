@@ -760,6 +760,15 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         return false;
     }
 
+    // Save PDF
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    if (!saveFiles(form, "pdf", "pdf", XmlIOBase::PdfFile)) {
+        LOG_ERROR("Unable to save PDF files");
+        database().rollback();
+        _transaction = false;
+        return false;
+    }
+
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     database().commit();
     _transaction = false;

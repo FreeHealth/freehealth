@@ -75,7 +75,8 @@ public:
         HtmlFile,
 //        Forms,
         PmhCategories,
-        ExtraFiles
+        ExtraFiles,
+        PdfFile
     };
 
     // Constructor
