@@ -412,12 +412,9 @@ bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const
     return true;
 }
 
-
 QList<QPixmap> XmlFormIO::screenShots(const QString &uuidOrAbsPath) const
 {
-    Q_UNUSED(uuidOrAbsPath);
-    QList<QPixmap> toReturn;
-    return toReturn;
+    return base()->getScreenShots(uuidOrAbsPath).values();
 }
 
 QPixmap XmlFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name) const

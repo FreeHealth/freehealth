@@ -553,7 +553,8 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
 }
 
 /**
- * Returns the shots for the language \e lang associated to the form \e formUid
+ * Returns the shots for the language \e lang associated to the form \e formUid.\n
+ * The returned QHash contains the shot uuid as key and the shot pixmap as value.\n
  * This member can be called inside or outside a database transaction. If it is called
  * inside a transaction it does not call neither QSqlDatabase::commit(), nor
  * QSqlDatabase::rollback().
@@ -581,7 +582,10 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
+    if (!lang.isEmpty())
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
+    else
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(QLocale().name().left(2)));
     QString req = select(gets, joins, conds);
 
     int nbShotRead = 0;
