@@ -63,6 +63,7 @@
 #include <QScriptSyntaxCheckResult>
 
 #include <QDebug>
+enum {WarnTabOrder = true};
 
 using namespace XmlForms;
 using namespace Internal;
@@ -868,27 +869,36 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
     QDomElement tabs = root.firstChildElement(Constants::TAG_TABSTOPS);
     if (tabs.isNull())
         return true;
-//    qWarning() << "SETABS" << rootForm->uuid();
+    if (WarnTabOrder)
+        qWarning() << "SETABS" << rootForm->uuid();
 //    QString ns = root.attribute("ns");
 //    if (!ns.isEmpty())
 //        ns.append("::");
     const QList<Form::FormItem *> &items = rootForm->flattenFormItemChildren();
-    QWidget *first = 0;
-    QWidget *second = 0;
+    Form::IFormWidget *first = 0;
+    Form::IFormWidget *second = 0;
     QDomElement element = tabs.firstChildElement(Constants::TAG_TABSTOP);
+    QString warn;
     while (!element.isNull()) {
         const QString &widgetName = element.text();
-//        qWarning() << "Tab" << widgetName;
         foreach(Form::FormItem *item, items) {
             if (item->uuid().endsWith(widgetName)) {
                 // get it
                 if (!first) {
+                    if (WarnTabOrder)
+                        qWarning() << "---------------------------- first" << item->uuid();
                     first = item->formWidget();
+                    warn = "    first: " + item->uuid() + "\n";
                 } else {
+                    warn += "   second: " + item->uuid() + "\n";
                     second = item->formWidget();
-//                    qWarning() << "  setTabOrder" << first << second;
-                    QWidget::setTabOrder(first, second);
+                    if (WarnTabOrder) {
+                        qWarning() << QString("  setTabOrder\n" + warn);
+                        qWarning() << "    " << first->focusableWidget() << "\n    " << second->focusableWidget() << "\n\n";
+                    }
+                    QWidget::setTabOrder(first->focusableWidget(), second->focusableWidget());
                     first = second;
+                    warn = "    first: " + item->uuid() + "\n";
                     second = 0;
                 }
                 break;

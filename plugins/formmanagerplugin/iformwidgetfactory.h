@@ -99,6 +99,8 @@ public:
 
     virtual void setFormItem(Form::FormItem *link) { m_FormItem = link; }
     virtual Form::FormItem *formItem() { return m_FormItem; }
+    QWidget *focusableWidget() const {return _focusableWidget;}
+    void setFocusableWidget(QWidget *widget) {_focusableWidget = widget;}
 
     // Printing
     virtual QString printableHtml(bool withValues = true) const {Q_UNUSED(withValues); return QString();}
@@ -110,6 +112,7 @@ public:
     QLabel *m_Label;
     Form::FormItem *m_FormItem;
     QString m_OldTrans;
+    QWidget *_focusableWidget;
 };
 
 } // namespace Form

@@ -823,7 +823,8 @@ void BaseGroupData::onValueChanged()
 //--------------------------------------------- BaseCheck ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_Check(0)
+    Form::IFormWidget(formItem,parent),
+    m_Check(0)
 {
     setObjectName("BaseCheck");
     // QtUi Loaded ?
@@ -845,6 +846,8 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
         m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
         hb->addWidget(m_Check);
     }
+
+    setFocusableWidget(m_Check);
 
     // Check options
     if (formItem->getOptions().contains("onright", Qt::CaseInsensitive)) {
@@ -1067,6 +1070,9 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
     }
+
+    if (m_RadioList.count() >= 1)
+        setFocusableWidget(m_RadioList.at(0));
 
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
@@ -1306,7 +1312,9 @@ void BaseRadioData::onValueChanged()
 //------------------------------------------- BaseSimpleText -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText) :
-    Form::IFormWidget(formItem,parent), m_Line(0), m_Text(0)
+    Form::IFormWidget(formItem,parent),
+    m_Line(0),
+    m_Text(0)
 {
     setObjectName("BaseSimpleText");
     // QtUi Loaded ?
@@ -1354,6 +1362,11 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
             hb->addWidget(m_Text);
         }
     }
+
+    if (m_Text)
+        setFocusableWidget(m_Text);
+    else if (m_Line)
+        setFocusableWidget(m_Line);
 
     // Create the FormItemData
     BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
@@ -1629,6 +1642,8 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
         hb->addWidget(m_List);
     }
 
+    setFocusableWidget(m_List);
+
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
     data->setBaseList(this);
@@ -1828,10 +1843,8 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
         // Find widget
-        QComboBox *cbx = formItem->parentFormMain()->formWidget()->findChild<QComboBox*>(widget);
-        if (cbx) {
-            m_Combo = cbx;
-        } else {
+        m_Combo = formItem->parentFormMain()->formWidget()->findChild<QComboBox*>(widget);
+        if (!m_Combo) {
             LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
             // To avoid segfaulting create a fake combo
             m_Combo = new QComboBox(this);
@@ -1849,6 +1862,8 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_Combo);
     }
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
+
+    setFocusableWidget(m_Combo);
 
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
@@ -2032,6 +2047,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_Date);
     }
     m_Date->setDisplayFormat(Constants::getDateFormat(m_FormItem));
+    setFocusableWidget(m_Date);
 
     // Manage options
     const QStringList &options = formItem->getOptions();
@@ -2196,7 +2212,6 @@ void BaseDateData::onValueChanged()
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
-    setObjectName("BaseSpin");
     // create FormItemData
     BaseSpinData *data = new BaseSpinData(m_FormItem);
 
@@ -2262,6 +2277,8 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         m_Spin->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
         hb->addWidget(m_Spin);
     }
+    setObjectName("BaseSpin_" + m_FormItem->uuid());
+    setFocusableWidget(m_Spin);
 
     // manage options
     data->setBaseSpin(this);
@@ -2467,6 +2484,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
         m_Button->setIcon(QIcon(icon));
     }
     m_Button->setText(m_FormItem->spec()->label());
+    setFocusableWidget(m_Button);
     connect(m_Button, SIGNAL(clicked()) , this , SLOT(buttonClicked()));
 }
 
