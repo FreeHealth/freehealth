@@ -177,54 +177,55 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
     return true;
 }
 
-bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
-{
-//    XmlFormName form(query.formUuid());
-    XmlFormName &form = formName(query.formUuid(), m_FormNames);
-//    qWarning() << Q_FUNC_INFO << query.formUuid() << form.uid << form.absFileName << form.modeName;
+// UNUSED
+//bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
+//{
+////    XmlFormName form(query.formUuid());
+//    XmlFormName &form = formName(query.formUuid(), m_FormNames);
+////    qWarning() << Q_FUNC_INFO << query.formUuid() << form.uid << form.absFileName << form.modeName;
 
-    if (m_ReadableForms.keys().contains(form.absFileName)) {
-        return m_ReadableForms.value(form.absFileName);
-    }
-    m_Error.clear();
-    m_AbsFileName.clear();
-    QFileInfo scriptFile(form.absFileName);
+//    if (m_ReadableForms.keys().contains(form.absFileName)) {
+//        return m_ReadableForms.value(form.absFileName);
+//    }
+//    m_Error.clear();
+//    m_AbsFileName.clear();
+//    QFileInfo scriptFile(form.absFileName);
 
-    QString content;
-    if (!query.forceFileReading()) {
-        // Get it from database
-        if (!base()->isFormExists(form, XmlIOBase::ScriptFile, form.modeName)) {
-            base()->saveForm(form);
-        }
-        content = base()->getFormContent(form.uid, XmlIOBase::ScriptFile, form.modeName);
-    } else {
-        if (!scriptFile.exists()) {
-            LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(scriptFile.absoluteFilePath()));
-            m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(scriptFile.absoluteFilePath()));
-            return false;
-        }
-        if (scriptFile.suffix().toLower()=="js")
-            content = Utils::readTextFile(scriptFile.absoluteFilePath(), Utils::DontWarnUser);
-    }
+//    QString content;
+//    if (!query.forceFileReading()) {
+//        // Get it from database
+//        if (!base()->isFormExists(form, XmlIOBase::ScriptFile, form.modeName)) {
+//            base()->saveForm(form);
+//        }
+//        content = base()->getFormContent(form.uid, XmlIOBase::ScriptFile, form.modeName);
+//    } else {
+//        if (!scriptFile.exists()) {
+//            LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(scriptFile.absoluteFilePath()));
+//            m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(scriptFile.absoluteFilePath()));
+//            return false;
+//        }
+//        if (scriptFile.suffix().toLower()=="js")
+//            content = Utils::readTextFile(scriptFile.absoluteFilePath(), Utils::DontWarnUser);
+//    }
 
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    // check form content
-    if (!reader()->checkFileContent(scriptFile.absoluteFilePath(), content)) {
-        LOG_ERROR(tr("Invalid script file detected: %1").arg(scriptFile.absoluteFilePath()));
-        Utils::warningMessageBox(tr("Invalid file detected."),
-                                 tr("An invalid file was found. Please contact your software administrator.\n"
-                                    "Wrong file: %1\n"
-                                    "Error: %2")
-                                 .arg(form.absFileName)
-                                 .arg(reader()->lastError()));
-        m_ReadableScripts.insert(form.absFileName, false);
-        return false;
-    }
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    m_AbsFileName = form.absFileName;
-    m_ReadableScripts.insert(form.absFileName, true);
-    return true;
-}
+//    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+//    // check form content
+//    if (!reader()->checkFileContent(scriptFile.absoluteFilePath(), content)) {
+//        LOG_ERROR(tr("Invalid script file detected: %1").arg(scriptFile.absoluteFilePath()));
+//        Utils::warningMessageBox(tr("Invalid file detected."),
+//                                 tr("An invalid file was found. Please contact your software administrator.\n"
+//                                    "Wrong file: %1\n"
+//                                    "Error: %2")
+//                                 .arg(form.absFileName)
+//                                 .arg(reader()->lastError()));
+//        m_ReadableScripts.insert(form.absFileName, false);
+//        return false;
+//    }
+//    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+//    m_AbsFileName = form.absFileName;
+//    m_ReadableScripts.insert(form.absFileName, true);
+//    return true;
+//}
 
 Form::FormIODescription *XmlFormIO::readFileInformation(const QString &uuidOrAbsPath) const
 {
