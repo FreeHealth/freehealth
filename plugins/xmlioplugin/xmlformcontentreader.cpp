@@ -63,7 +63,7 @@
 #include <QScriptSyntaxCheckResult>
 
 #include <QDebug>
-enum {WarnTabOrder = true};
+enum {WarnTabOrder = false};
 
 using namespace XmlForms;
 using namespace Internal;
@@ -819,8 +819,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     }
 
     // does requested widget exist in the plugins ?
-    factory = m_PlugsFactories.value(requestedWidget);
-    if (!m_PlugsFactories.keys().contains(requestedWidget)) {
+    if (!factory) {
         LOG_ERROR_FOR("XmlFormContentReader", QString("Form error in item '%1': Requested widget '%2' does not exist in plugin's widgets list.").arg(item->uuid()).arg(requestedWidget));
         // Add a default widget for the error log
         factory = m_PlugsFactories.value("helptext");
@@ -830,7 +829,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     }
 
     // get the widget
-    w = factory->createWidget(requestedWidget, item);
+    w = factory->createWidget(requestedWidget, item, parent);
     if (w->isContainer()) {
         foreach(Form::FormItem *child, item->formItemChildren()) {
 //            Form::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
@@ -839,6 +838,8 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
             createItemWidget(child, w);
         }
     }
+
+    // FIXME: With QtUi forms we should not do this
     Form::IFormWidget *p = qobject_cast<Form::IFormWidget*>(parent);
     if (p)
         p->addWidgetToContainer(w);
