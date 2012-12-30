@@ -23,8 +23,8 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_%CppHeaderSuffix:u%
-#define %PluginName:u%_%CppHeaderSuffix:u%
+#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
 
 #include <extensionsystem/iplugin.h>
 
@@ -53,4 +53,4 @@ private Q_SLOTS:
 } // namespace Internal
 } // namespace %PluginName%
 
-#endif // %PluginName:u%_%CppHeaderSuffix:u%
+#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
