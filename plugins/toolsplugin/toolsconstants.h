@@ -19,38 +19,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#ifndef TOOLSCONSTANTS_H
+#define TOOLSCONSTANTS_H
 
-#include <extensionsystem/iplugin.h>
+namespace Tools {
+namespace Constants {
 
-namespace %PluginName% {
-namespace Internal {
+const char * const ACTION_ID = "Tools.Action";
+const char * const MENU_ID = "Tools.Menu";
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
+} // namespace Tools
+} // namespace Constants
 
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+#endif // TOOLSCONSTANTS_H
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%

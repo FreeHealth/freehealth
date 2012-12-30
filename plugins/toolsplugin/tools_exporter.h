@@ -19,38 +19,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#ifndef TOOLS_EXPORTER_H
+#define TOOLS_EXPORTER_H
 
-#include <extensionsystem/iplugin.h>
+#include <QtCore/QtGlobal>
 
-namespace %PluginName% {
-namespace Internal {
+#if defined(TOOLS_LIBRARY)
+#  define TOOLSSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define TOOLSSHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
+#endif // TOOLS_EXPORTER_H
 
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%

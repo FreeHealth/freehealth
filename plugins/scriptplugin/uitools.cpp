@@ -70,6 +70,7 @@ void UiTools::printQObjectChildrenList(QObject *obj)
     }
 }
 
+/** Add item to QComboBox / QListWidget */
 bool UiTools::addItem(QWidget *widget, const QString &item)
 {
     // QListWidget
@@ -87,6 +88,7 @@ bool UiTools::addItem(QWidget *widget, const QString &item)
     return false;
 }
 
+/** Add items to QComboBox / QListWidget */
 bool UiTools::addItems(QWidget *widget, const QStringList &items)
 {
     // QListWidget
@@ -148,6 +150,11 @@ bool UiTools::clear(QWidget *widget)
     return false;
 }
 
+/**
+ * Return the list of the selected items in a list that can be represented by:
+ * - QComboBox / FormItem Combobox
+ * - QAbstractItemView / FormItem lists
+ */
 QStringList UiTools::selectedItems(QWidget *widget)
 {
     QStringList toReturn;
@@ -183,6 +190,10 @@ QStringList UiTools::selectedItems(QWidget *widget)
     return toReturn;
 }
 
+/**
+ * Get and show the screenshot for the FormMain \e formUid with the
+ * filename \e fileName
+ */
 void UiTools::showScreenshot(const QString &formUid, const QString &fileName) const
 {
     QPixmap pix = formManager().getScreenshot(formUid, fileName);

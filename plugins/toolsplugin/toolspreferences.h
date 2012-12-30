@@ -19,38 +19,83 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
- *   Contributors:                                                         *
+ *   Main Developpers:                                                     *
+ *       Eric Maeker <eric.maeker@gmail.com>                             *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#ifndef TOOLS_INTERNAL_TOOLSPREFERENCES_H
+#define TOOLS_INTERNAL_TOOLSPREFERENCES_H
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/ioptionspage.h>
 
-namespace %PluginName% {
+#include <QWidget>
+#include <QPointer>
+
+namespace Core {
+class ISettings;
+}
+
+namespace Tools {
 namespace Internal {
+namespace Ui {
+class ToolsPreferencesWidget;
+}
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+class ToolsPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
-
+    
 public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
+    explicit ToolsPreferencesWidget(QWidget *parent = 0);
+    ~ToolsPreferencesWidget();
+    
+    void setDataToUi();
+    QString searchKeywords() const;
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+    
+private:
+    Ui::ToolsPreferencesWidget *ui;
 };
 
-} // namespace Internal
-} // namespace %PluginName%
 
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+class ToolsPreferencesPage : public Core::IOptionsPage
+{
+public:
+    ToolsPreferencesPage(QObject *parent = 0);
+    ~ToolsPreferencesPage();
+    
+    QString id() const;
+    QString displayName() const;
+    QString category() const;
+    QString title() const {return displayName();}
+    int sortIndex() const;
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void apply();
+    void finish();
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {ToolsPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
+private:
+    QPointer<Internal::ToolsPreferencesWidget> m_Widget;
+};
+
+
+} // namespace Internal
+} // namespace Tools
+#endif // TOOLS_INTERNAL_TOOLSPREFERENCES_H
+

@@ -19,38 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#ifndef TOOLS_INTERNAL_PDFTKWRAPPER_H
+#define TOOLS_INTERNAL_PDFTKWRAPPER_H
 
-#include <extensionsystem/iplugin.h>
+#include <QObject>
 
-namespace %PluginName% {
+/**
+ * \file pdftkwrapper.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 2012-12-30
+*/
+
+namespace Tools {
 namespace Internal {
+class PdfTkWrapperPrivate;
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+class PdfTkWrapper : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
-
 public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+    explicit PdfTkWrapper(QObject *parent = 0);
+    ~PdfTkWrapper();
+    
+    bool initialize();
+    
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    bool isAvailable() const;
+    QString fillPdfWithFdf(const QString &absFileName, const QString &fdfContent);
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
+private:
+    Internal::PdfTkWrapperPrivate *d;
 };
 
 } // namespace Internal
-} // namespace %PluginName%
+} // namespace Tools
 
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#endif // TOOLS_INTERNAL_PDFTKWRAPPER_H
+

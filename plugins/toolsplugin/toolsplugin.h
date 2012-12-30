@@ -19,38 +19,45 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#ifndef TOOLS_IPLUGIN_H
+#define TOOLS_IPLUGIN_H
+
+#include "tools_exporter.h"
+#include "toolspreferences.h"
 
 #include <extensionsystem/iplugin.h>
 
-namespace %PluginName% {
+namespace Tools {
 namespace Internal {
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+class ToolsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
 
 public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
-
+    ToolsPlugin();
+    ~ToolsPlugin();
+    
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
-
+    
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
-//    void triggerAction();
+    //    void triggerAction();
+    
+private:
+    ToolsPreferencesPage *m_prefPage;
 };
 
 } // namespace Internal
-} // namespace %PluginName%
+} // namespace Tools
 
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#endif // TOOLS_IPLUGIN_H
+

@@ -19,38 +19,83 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+/*!
+ * \class Tools::Internal::PdfTkWrapper
+ */
 
-#include <extensionsystem/iplugin.h>
+#include "pdftkwrapper.h"
 
-namespace %PluginName% {
+#include <translationutils/constants.h>
+
+#include <QDebug>
+
+using namespace Tools;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
+
+namespace Tools {
 namespace Internal {
-
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+class PdfTkWrapperPrivate
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
-
 public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+    PdfTkWrapperPrivate(PdfTkWrapper *parent) :
+        _initialized(false),
+        q(parent)
+    {
+    }
+    
+    ~PdfTkWrapperPrivate()
+    {
+    }
+    
+public:
+    // Put your data here
+    bool _initialized;
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
+private:
+    PdfTkWrapper *q;
 };
-
 } // namespace Internal
-} // namespace %PluginName%
+} // end namespace Tools
 
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+
+/*! Constructor of the Tools::Internal::PdfTkWrapper class */
+PdfTkWrapper::PdfTkWrapper(QObject *parent) :
+    QObject(parent),
+    d(new PdfTkWrapperPrivate(this))
+{
+}
+
+/*! Destructor of the Tools::Internal::PdfTkWrapper class */
+PdfTkWrapper::~PdfTkWrapper()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+/*! Initializes the object with the default values. Return true if initialization was completed. */
+bool PdfTkWrapper::initialize()
+{
+    if (d->_initialized)
+        return true;
+    // Check if a pdftk binary exists
+    // TODO: Security assessment: Check bin MD5
+    return true;
+}
+
+/** Check that everything is Ok with this binary wrapper */
+bool PdfTkWrapper::isAvailable() const
+{
+    return d->_initialized;
+}
+
+QString PdfTkWrapper::fillPdfWithFdf(const QString &absFileName, const QString &fdfContent)
+{
+
+}

@@ -17,10 +17,12 @@ FreeMedForms
 
   * FreeMedForms
     * Faster start of the app
+    * Episode creation corrected
     * Patient selector corrections
     * Bug report sending improvements
     * Managing state/province in address (using the zipcodes datapacks)
     * Don't show forms with the 'noepsiode' option, show its first children instead
+    * Correctly set the taborder in forms
   * FreeDiams
   * FreeAccount
   * FreeToolBox
