@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.0</fmfv>
+    <fmfv>0.8.2</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-12-12</lmdate>
     <icon>__theme__/identity.png</icon>
@@ -238,6 +238,36 @@
                 <label lang="fr">Identité</label>
                 <options>with-address;xml</options>
             </Item>
+
+          <Item type="shorttext" name="Mail">
+            <uilink label="mailLabel" widget="mail"/>
+            <label lang="xx">E-Mail</label>
+            <label lang="fr">Courriel</label>
+            <tooltip lang="xx">Semicolon separated list</tooltip>
+            <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
+            <options>DontPrintEmptyValues</options>
+            <patientdata>Mails</patientdata>
+          </Item>
+
+          <Item type="shorttext" name="Tels">
+            <uilink label="telLabel" widget="tel"/>
+            <label lang="xx">Telephone numbers</label>
+            <label lang="fr">Numéros de téléphone</label>
+            <tooltip lang="xx">Semicolon separated list</tooltip>
+            <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
+            <options>DontPrintEmptyValues</options>
+            <patientdata>Tels</patientdata>
+          </Item>
+
+          <Item type="shorttext" name="MobileTel">
+            <uilink label="mobileLabel" widget="mobile"/>
+            <label lang="xx">Mobile phone</label>
+            <label lang="fr">Numéros de mobile</label>
+            <tooltip lang="xx">Inform the mobile phone number</tooltip>
+            <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
+            <options>DontPrintEmptyValues</options>
+            <patientdata>MobilePhone</patientdata>
+          </Item>
 
         </Item>
       </MedForm>

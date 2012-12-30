@@ -135,6 +135,7 @@ namespace {
 AppConfigWizard::AppConfigWizard(QWidget *parent) :
     QWizard(parent)
 {
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
     // create pages
     QList<IFirstConfigurationPage *> pages = pluginManager()->getObjects<IFirstConfigurationPage>();
     pages << new ::CoreFirstRunPage(this);

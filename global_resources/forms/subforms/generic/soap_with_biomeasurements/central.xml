@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.0</fmfv>
+    <fmfv>0.8.2</fmfv>
     <cdate>2012-10-13</cdate>
     <lmdate>2012-09-12</lmdate>
     <icon>__theme__/soap.png</icon>
@@ -16,15 +16,15 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="fr">POMR</description>
-    <description lang="xx">SOAP</description>
+    <description lang="fr">POMR avec biométrie</description>
+    <description lang="xx">SOAP with biometrics</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
     <specialties lang="fr">Outils</specialties>
     <specialties lang="xx">Tools</specialties>
 
     <updateinfo>
-      <updateversion from="" to="0.8.0">
+      <updateversion from="" to="0.8.2">
         <text lang="fr">Première version</text>
         <text lang="xx">First version</text>
       </updateversion>
@@ -35,8 +35,8 @@
   <file type="script" name="onload">./scripts/xx/script.js</file>
 
   <MedForm name="Subs::Tools::SOAP::WithBio" uifilename="./ui/xx/soapbio.ui">
-    <label lang="xx">SOAP</label>
-    <label lang="fr">POMR</label>
+    <label lang="xx">SOAP with biometrics</label>
+    <label lang="fr">POMR avec biométrie</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/soap.png</icon>
 

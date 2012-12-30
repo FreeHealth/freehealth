@@ -78,6 +78,8 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
         layout->addWidget(_dateEdit);
     }
 
+    setFocusableWidget(_dateEdit);
+
     // create itemdata
 //    BaseDateCompleterData *data = new BaseDateCompleterData(formItem);
 //    data->setDateEditor(this);

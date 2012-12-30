@@ -491,6 +491,8 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     connect(patient(), SIGNAL(currentPatientChanged()), m_NSS, SLOT(populateWithPatientData()));
     m_NSS->populateWithPatientData();
 
+    setFocusableWidget(m_NSS);
+
     // create itemdata
     m_ItemData = new FrenchSocialNumberFormData(formItem);
     m_ItemData->setWidget(m_NSS);

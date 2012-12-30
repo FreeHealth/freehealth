@@ -75,7 +75,8 @@ public:
         HtmlFile,
 //        Forms,
         PmhCategories,
-        ExtraFiles
+        ExtraFiles,
+        PdfFile
     };
 
     // Constructor
@@ -95,7 +96,8 @@ public:
     QString getFormContent(const QString &formUid, const int type, const QString &modeName = QString::null);
 
     QPixmap getScreenShot(const QString &formUid, const QString &shotName);
-    QHash<QString, QPixmap> getScreenShots(const QString &formUid, const QString &lang);
+    bool hasScreenShots(const QString &formUid, const QString &lang = QString::null);
+    QHash<QString, QPixmap> getScreenShots(const QString &formUid, const QString &lang = QString::null);
 
     // Setters
     bool saveForm(XmlFormName &form);

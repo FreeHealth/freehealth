@@ -131,6 +131,19 @@
  * Called anytime the widget needs to be translated.
  */
 
+/**
+ * \fn QWidget *Form::IFormWidget::focusableWidget() const
+ * When dynamically loading the forms (using a QtUi file), the formItemWidget is not included
+ * in the view, but only its internal widget. To allow the definition of tab orders you must
+ * define the widget that will get the focus (and the one that is in the view, so in the
+ * QtUi file).
+ * \sa Form::IFormWidget::setFocusableWidget()
+ */
+
+/**
+ * \fn void Form::IFormWidget::setFocusableWidget(QWidget *widget)
+ * \sa Form::IFormWidget::focusableWidget()
+ */
 
 #include <QLocale>
 #include <QEvent>
@@ -141,7 +154,8 @@ using namespace Form;
 IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     QWidget(parent),
     m_Label(0),
-    m_FormItem(formItem)
+    m_FormItem(formItem),
+    _focusableWidget(0)
 {
     m_FormItem->setFormWidget(this);
 }

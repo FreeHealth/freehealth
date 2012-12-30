@@ -135,9 +135,7 @@ FormIOQuery::FormIOQuery() :
     m_type(CompleteForms),
     m_ForceFile(false),
     m_AllForms(false),
-    m_AllDescr(false),
-//    m_Local(true),
-    m_GetShots(true)
+    m_AllDescr(false)
 {
 }
 
@@ -148,10 +146,10 @@ namespace Form {
 namespace Internal {
 struct FormIODescriptionPrivate
 {
-    FormIODescriptionPrivate() : m_reader(0) {}
+    FormIODescriptionPrivate() : m_reader(0), _hasScreenShot(false) {}
 
     IFormIO *m_reader;
-    QHash<QString, QPixmap> m_Shots;
+    bool _hasScreenShot;
 };
 }
 }
@@ -203,22 +201,13 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
 
 bool FormIODescription::hasScreenShots() const
 {
-    return (!d_formIO->m_Shots.isEmpty());
+    return data(HasScreenShot).toBool();
 }
 
-void FormIODescription::addScreenShot(const QString &name, const QPixmap &shot)
-{
-    d_formIO->m_Shots.insert(name, shot);
-}
-
+/** Returns all the screenshots available for the current language */
 QList<QPixmap> FormIODescription::screenShots() const
 {
-    return d_formIO->m_Shots.values();
-}
-
-QPixmap FormIODescription::screenShot(const QString &name) const
-{
-    return d_formIO->m_Shots.value(name);
+    return d_formIO->m_reader->screenShots(data(UuidOrAbsPath).toString());
 }
 
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const
@@ -235,8 +224,6 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LICENSE) << data(FormIODescription::LicenseName).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
-    const QStringList &keys = d_formIO->m_Shots.keys();
-    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::SCREENSHOTS) << keys.join(";"));
     new QTreeWidgetItem(general, QStringList() << QString("Extracted from database") << data(FormIODescription::FromDatabase).toString());
 
     QTreeWidgetItem *version = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::VERSION));

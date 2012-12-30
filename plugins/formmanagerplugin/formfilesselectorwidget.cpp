@@ -40,6 +40,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <utils/global.h>
 #include <utils/widgets/imageviewer.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -128,16 +129,16 @@ public:
             query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
         else if (m_Type==FormFilesSelectorWidget::SubForms)
             query.setTypeOfForms(Form::FormIOQuery::SubForms);
-        query.setGetScreenShots(true);
         switch (m_Type) {
         case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms);break;
         case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
         case FormFilesSelectorWidget::SubForms: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
 //        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
+        default: break;
         }
-        foreach(Form::IFormIO *io, ios) {
+
+        foreach(Form::IFormIO *io, ios)
             m_FormDescr = io->getFormFileDescriptions(query);
-        }
     }
 
     void createTreeModel(const int treeItemReference, bool forceUpdate = false)
@@ -303,14 +304,12 @@ void FormFilesSelectorWidget::onDescriptionSelected(const QModelIndex &index, co
     }
     // get the FormIODescription
     int id = d->ui->formsTreeView->currentIndex().data(IndexRole).toInt();
-    if (id >= 0 && id < d->m_FormDescr.count()) {
+    if (IN_RANGE_STRICT_MAX(id, 0, d->m_FormDescr.count())) {
         Form::FormIODescription *descr = d->m_FormDescr.at(id);
-//        descr->toTreeWidget(d->ui->treeWidget);
         d->ui->screenshotsButton->setEnabled(descr->hasScreenShots());
         d->ui->textBrowser->setHtml(descr->toHtml());
     } else {
         d->ui->textBrowser->clear();
-//        d->ui->treeWidget->clear();
     }
 }
 

@@ -63,6 +63,7 @@
 #include <QScriptSyntaxCheckResult>
 
 #include <QDebug>
+enum {WarnTabOrder = false};
 
 using namespace XmlForms;
 using namespace Internal;
@@ -146,6 +147,7 @@ XmlFormContentReader::XmlFormContentReader() :
 XmlFormContentReader::~XmlFormContentReader()
 {}
 
+/** Clear internal cache */
 void XmlFormContentReader::clearCache()
 {
     m_ReadableForms.clear();
@@ -311,40 +313,36 @@ Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString
     root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
     toReturn = readXmlDescription(root, formUidOrFullAbsPath);
 
-    // get screenshots if requiered
+    // has screenshots?
     XmlFormName form(formUidOrFullAbsPath);
-    if (query.getScreenShots()) {
-        if (query.forceFileReading()) {
-            // Get from local files
-            QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
-            QStringList lang;
-            lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
-            bool found = false;
-            foreach(const QString &l, lang) {
-                if (QDir(shotPath + l).exists()) {
-                    found = true;
-                    shotPath = shotPath + l;
-                    break;
-                }
+    if (query.forceFileReading()) {
+        // Get from local files
+        QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
+        QStringList lang;
+        lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
+        bool found = false;
+        foreach(const QString &l, lang) {
+            if (QDir(shotPath + l).exists()) {
+                found = true;
+                shotPath = shotPath + l;
+                break;
             }
-            if (found) {
-                QDir dir(shotPath);
-                //            qWarning() << "Trying to read shots" << dir.absolutePath();
-                foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
-                    QPixmap pix(file.absoluteFilePath());
-                    toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
-                }
-            }
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        } else {
-            // Get from database
-            QHash<QString, QPixmap> pix = base()->getScreenShots(form.uid, QLocale().name().left(2).toLower());
-//            qWarning() << "xxxxxxxx FROMBASE" << formUidOrFullAbsPath << pix.keys();
-            foreach(const QString &k, pix.keys()) {
-                toReturn->addScreenShot(k, pix.value(k));
-            }
-            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+        if (found) {
+            QDir dir(shotPath);
+            qWarning() << "Trying to read shots" << dir.absolutePath();
+            toReturn->setData(Form::FormIODescription::HasScreenShot, true);
+            // foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
+            //     QPixmap pix(file.absoluteFilePath());
+            //     toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
+            // }
+        }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    } else {
+        // Get from database
+        // qWarning() << "Trying to read shots from database";
+        toReturn->setData(Form::FormIODescription::HasScreenShot, base()->hasScreenShots(form.uid));
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
     return toReturn;
 }
@@ -746,7 +744,9 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         basetype = XmlIOBase::UiFile;
     else if (fileName.endsWith(".html", Qt::CaseInsensitive))
         basetype = XmlIOBase::HtmlFile;
-//    else if (fileName.endsWith(".qml", Qt::CaseInsensitive))
+    else if (fileName.endsWith(".pdf", Qt::CaseInsensitive))
+        basetype = XmlIOBase::PdfFile;
+    //    else if (fileName.endsWith(".qml", Qt::CaseInsensitive))
 //        basetype = XmlIOBase::QmlContent;
 
     QString content = base()->getFormContent(form.uid, basetype, fileName);
@@ -819,8 +819,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     }
 
     // does requested widget exist in the plugins ?
-    factory = m_PlugsFactories.value(requestedWidget);
-    if (!m_PlugsFactories.keys().contains(requestedWidget)) {
+    if (!factory) {
         LOG_ERROR_FOR("XmlFormContentReader", QString("Form error in item '%1': Requested widget '%2' does not exist in plugin's widgets list.").arg(item->uuid()).arg(requestedWidget));
         // Add a default widget for the error log
         factory = m_PlugsFactories.value("helptext");
@@ -830,7 +829,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     }
 
     // get the widget
-    w = factory->createWidget(requestedWidget, item);
+    w = factory->createWidget(requestedWidget, item, parent);
     if (w->isContainer()) {
         foreach(Form::FormItem *child, item->formItemChildren()) {
 //            Form::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
@@ -839,6 +838,8 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
             createItemWidget(child, w);
         }
     }
+
+    // FIXME: With QtUi forms we should not do this
     Form::IFormWidget *p = qobject_cast<Form::IFormWidget*>(parent);
     if (p)
         p->addWidgetToContainer(w);
@@ -869,27 +870,36 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
     QDomElement tabs = root.firstChildElement(Constants::TAG_TABSTOPS);
     if (tabs.isNull())
         return true;
-//    qWarning() << "SETABS" << rootForm->uuid();
+    if (WarnTabOrder)
+        qWarning() << "SETABS" << rootForm->uuid();
 //    QString ns = root.attribute("ns");
 //    if (!ns.isEmpty())
 //        ns.append("::");
     const QList<Form::FormItem *> &items = rootForm->flattenFormItemChildren();
-    QWidget *first = 0;
-    QWidget *second = 0;
+    Form::IFormWidget *first = 0;
+    Form::IFormWidget *second = 0;
     QDomElement element = tabs.firstChildElement(Constants::TAG_TABSTOP);
+    QString warn;
     while (!element.isNull()) {
         const QString &widgetName = element.text();
-//        qWarning() << "Tab" << widgetName;
         foreach(Form::FormItem *item, items) {
             if (item->uuid().endsWith(widgetName)) {
                 // get it
                 if (!first) {
+                    if (WarnTabOrder)
+                        qWarning() << "---------------------------- first" << item->uuid();
                     first = item->formWidget();
+                    warn = "    first: " + item->uuid() + "\n";
                 } else {
+                    warn += "   second: " + item->uuid() + "\n";
                     second = item->formWidget();
-//                    qWarning() << "  setTabOrder" << first << second;
-                    QWidget::setTabOrder(first, second);
+                    if (WarnTabOrder) {
+                        qWarning() << QString("  setTabOrder\n" + warn);
+                        qWarning() << "    " << first->focusableWidget() << "\n    " << second->focusableWidget() << "\n\n";
+                    }
+                    QWidget::setTabOrder(first->focusableWidget(), second->focusableWidget());
                     first = second;
+                    warn = "    first: " + item->uuid() + "\n";
                     second = 0;
                 }
                 break;

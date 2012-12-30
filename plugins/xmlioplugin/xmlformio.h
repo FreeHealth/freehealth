@@ -70,7 +70,7 @@ public:
 
     bool canReadForms(const QString &uuidOrAbsPath) const;
     bool canReadForms(const Form::FormIOQuery &query) const;
-    bool canReadScripts(const Form::FormIOQuery &query) const;
+//    bool canReadScripts(const Form::FormIOQuery &query) const;
 
     Form::FormIODescription *readFileInformation(const QString &uuidOrAbsPath) const;
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query) const;

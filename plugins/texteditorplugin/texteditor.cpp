@@ -318,6 +318,8 @@ TextEditor::TextEditor(QWidget *parent, Types type) :
 
     vb->addWidget(d->m_ToolBar);
     vb->addWidget(d->textEdit);
+
+    setFocusProxy(d->textEdit);
 }
 
 TextEditor::~TextEditor()

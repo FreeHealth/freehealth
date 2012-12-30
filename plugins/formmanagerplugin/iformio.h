@@ -44,9 +44,9 @@
 
 /**
  * \file iformio.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 06 Jan 2012
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 29 Dec 2012
 */
 
 namespace Utils {
@@ -97,14 +97,11 @@ public:
     void setGetAllAvailableFormDescriptions(bool state) {m_AllDescr=state;}
     bool getAllAvailableFormDescriptions() const {return m_AllDescr;}
 
-    void setGetScreenShots(bool get) {m_GetShots=get;}
-    bool getScreenShots() const {return m_GetShots;}
-
 private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
-    bool m_ForceFile, m_AllForms, m_AllDescr, m_GetShots;
+    bool m_ForceFile, m_AllForms, m_AllDescr;
 };
 
 }
@@ -126,6 +123,7 @@ public:
         IsPage,
         ScreenShotsPath,
         FromDatabase,
+        HasScreenShot,
         MaxParam
     };
 
@@ -140,9 +138,7 @@ public:
 
     // Manage screenshots
     bool hasScreenShots() const;
-    void addScreenShot(const QString &name, const QPixmap &shot);
     QList<QPixmap> screenShots() const;
-    QPixmap screenShot(const QString &name) const;
 
     void toTreeWidget(QTreeWidget *tree) const;
     QString toHtml() const;

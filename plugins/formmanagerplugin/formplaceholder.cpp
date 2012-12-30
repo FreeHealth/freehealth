@@ -316,6 +316,7 @@ public:
             delete _proxyModel;
         _proxyModel = new QSortFilterProxyModel(q);
         _proxyModel->setSourceModel(_currentEpisodeModel);
+        _proxyModel->setDynamicSortFilter(true);
         ui->episodeView->setModel(_proxyModel);
 
         // set the view columns
@@ -665,14 +666,20 @@ bool FormPlaceHolder::createEpisode()
 
     // get the form
     QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
-    if (d->_formTreeModel->isNoEpisode(index))
+    if (d->_formTreeModel->isNoEpisode(index)) {
+        LOG_ERROR("Can not create an episode on NoEpisode forms");
         return false;
-    if (d->_formTreeModel->isUniqueEpisode(index))
+    }
+
+    // Unique episode is automatically created by the episodeModel --> raise error
+    if (d->_formTreeModel->isUniqueEpisode(index)) {
+        LOG_ERROR("Can not create an episode on IsUniqueEpisode forms");
         return false;
+    }
     setCurrentEditingFormItem(index);
 
     // create a new episode the selected form and its children
-    if (!d->_currentEpisodeModel->insertRow(0)) {
+    if (!d->_currentEpisodeModel->insertRow(d->_currentEpisodeModel->rowCount())) {
         LOG_ERROR("Unable to create new episode");
         return false;
     }
@@ -680,6 +687,7 @@ bool FormPlaceHolder::createEpisode()
     // activate the newly created main episode
     QModelIndex source = d->_currentEpisodeModel->index(d->_currentEpisodeModel->rowCount() - 1, EpisodeModel::Label);
     QModelIndex proxy = d->_proxyModel->mapFromSource(source);
+
     d->ui->episodeView->selectRow(proxy.row());
     d->ui->formDataMapper->setCurrentEpisode(source);
 
