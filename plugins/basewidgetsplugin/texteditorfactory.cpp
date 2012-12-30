@@ -149,8 +149,9 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         m_Text->textEdit()->setTabChangesFocus(true);
     }
 
-    setFocusableWidget(m_Text);
-    setFocusProxy(m_Text);
+//    setFocusPolicy(Qt::StrongFocus);
+    setFocusableWidget(m_Text->textEdit());
+    setFocusProxy(m_Text->textEdit());
 
     // create item data
     TextEditorData *data = new TextEditorData(formItem);
