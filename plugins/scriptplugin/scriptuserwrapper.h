@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SCRIPTPATIENTWRAPPER_H
-#define SCRIPTPATIENTWRAPPER_H
+#ifndef SCRIPTUSERWRAPPER_H
+#define SCRIPTUSERWRAPPER_H
 
 #include <QObject>
 #include <QDate>
@@ -93,6 +93,6 @@ public Q_SLOTS:
 };
 
 }  // namespace Internal
-}  //  End namespace Script
+}  // namespace Script
 
-#endif // SCRIPTPATIENTWRAPPER_H
+#endif // SCRIPTUSERWRAPPER_H
