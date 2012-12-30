@@ -33,22 +33,20 @@
 
 /**
  * \file scriptmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 24 Aug 2012
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 30 Dec 2012
 */
-
-// TODO: everything should be in the internal namespace
 
 namespace Script {
 namespace Internal {
-
 class UiTools;
 class ScriptPatientWrapper;
+class ScriptUserWrapper;
 class FormManagerScriptWrapper;
 class Tools;
 
-class SCRIPT_EXPORT ScriptManager : public Core::IScriptManager
+class ScriptManager : public Core::IScriptManager
 {
     Q_OBJECT
 
@@ -68,11 +66,11 @@ private Q_SLOTS:
 private:
     static ScriptManager *m_Instance;
     QScriptEngine *m_Engine;
-    // wrappers
-    Internal::ScriptPatientWrapper *patient;
-    Internal::FormManagerScriptWrapper *forms;
+    ScriptPatientWrapper *patient;
+    ScriptUserWrapper *user;
+    FormManagerScriptWrapper *forms;
     UiTools *uitools;
-    Internal::Tools *tools;
+    Tools *tools;
 };
 
 }  // namespace Internal
