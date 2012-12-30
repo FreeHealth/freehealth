@@ -57,6 +57,7 @@ public:
 
     QScriptValue evaluate(const QString &script);
     QScriptValue addScriptObject(QObject *object);
+//    QScriptValue addScriptObject(QObject *object, const QString &objectNamespace, const QString &objectScriptName);
 
     QScriptEngine *engine() {return m_Engine;}
 

@@ -190,6 +190,10 @@ QScriptValue ScriptManager::addScriptObject(QObject *object)
     return m_Engine->newQObject(object);
 }
 
+//QScriptValue ScriptManager::addScriptObject(QObject *object, const QString &objectNamespace, const QString &objectScriptName)
+//{
+//}
+
 void ScriptManager::onAllFormsLoaded()
 {
     // Is equivalent to onCurrentPatientChanged (because all forms are reloaded when patient changed)
