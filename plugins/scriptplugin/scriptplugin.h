@@ -28,13 +28,16 @@
 
 #include <extensionsystem/iplugin.h>
 
-#include <QtCore/QObject>
+#include <QObject>
+QT_BEGIN_NAMESPACE
+class QAction;
+QT_END_NAMESPACE
 
 /**
  * \file scriptplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 25 July 2012
+ * \version 0.8.2
+ * \date 30 Dec 2012
 */
 
 namespace Script {
@@ -57,9 +60,11 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void patientSelected();
+    void onScriptDialogTriggered();
 
 private:
     ScriptManager *m_Manager;
+    QAction *aScriptDialog;
 };
 
 }  // namespace Internal

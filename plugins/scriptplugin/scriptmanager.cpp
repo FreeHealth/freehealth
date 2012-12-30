@@ -164,9 +164,6 @@ ScriptManager::ScriptManager(QObject *parent) :
     QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("tools", toolsValue);
 
-    // Register to Core::ICore
-    Core::ICore::instance()->setScriptManager(this);
-
     // Connect to formmanager
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
     connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
