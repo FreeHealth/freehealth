@@ -81,10 +81,13 @@ public:
     {
         aReadFile = new QAction(q);
         aSaveFile = new QAction(q);
+        aExecute = new QAction(q);
         aReadFile->setText(tkTr(Trans::Constants::FILEOPEN_TEXT));
         aSaveFile->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
+        aExecute->setText("Execute");
         aReadFile->setToolTip(aReadFile->text());
         aSaveFile->setToolTip(aSaveFile->text());
+        aExecute->setToolTip(aExecute->text());
     }
 
     void createToolBar()
