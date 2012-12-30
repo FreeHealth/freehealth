@@ -200,6 +200,8 @@ public:
 
     void checkModelContent()
     {
+        // Automatically create the unique episode for UniqueEpisode forms
+        // Check the rowCount of NoEpisode forms
         if (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode) {
             if (_sqlModel->rowCount() < 1) {
                 q->insertRow(0);
@@ -598,10 +600,11 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &)
 void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
 {
     Q_UNUSED(row);
-    for(int i = 1; i < record.count(); ++i) {
-        record.setNull(i);
+    record.clearValues();
+    for(int i = 0; i < d->_sqlModel->columnCount(); ++i)
         record.setGenerated(i, true);
-    }
+    // We need to force the EPISODES_ID in the record (we can not let the db chose the ID value)
+    record.setValue(Constants::EPISODES_ID, episodeBase()->max(Constants::Table_EPISODES, Constants::EPISODES_ID).toInt() + 1);
     record.setValue(Constants::EPISODES_LABEL, tr("New episode"));
     record.setValue(Constants::EPISODES_FORM_PAGE_UID, d->_formMain->uuid());
     record.setValue(Constants::EPISODES_USERCREATOR, user()->uuid());
