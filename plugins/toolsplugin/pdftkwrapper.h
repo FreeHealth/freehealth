@@ -43,6 +43,8 @@ class PdfTkWrapperPrivate;
 class PdfTkWrapper : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool isAvailable READ isAvailable())
+
 public:
     explicit PdfTkWrapper(QObject *parent = 0);
     ~PdfTkWrapper();
@@ -52,8 +54,20 @@ public:
 Q_SIGNALS:
     
 public Q_SLOTS:
+    // Checker
     bool isAvailable() const;
-    QString fillPdfWithFdf(const QString &absFileName, const QString &fdfContent);
+
+    // FDF creation helpers
+    void beginFdfEncoding();
+    void addFdfValue(const QString &fieldName, const QString &value);
+    void endFdfEncoding(const QString &filename);
+    QString getFdfContent();
+
+    // PDF creation
+    bool fillPdfWithFdf(const QString &absPdfFile, const QString &fdfContent, const QString &absFileNameOut, const QString &isoEncoding);
+
+private Q_SLOTS:
+    void onProcessFinished(int exitCode);
 
 private:
     Internal::PdfTkWrapperPrivate *d;

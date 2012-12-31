@@ -25,12 +25,14 @@
  ***************************************************************************/
 #include "toolsplugin.h"
 #include "toolsconstants.h"
+#include "pdftkwrapper.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/iscriptmanager.h>
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
@@ -41,6 +43,7 @@
 
 using namespace Tools::Internal;
 
+static inline Core::IScriptManager *scriptManager()  { return Core::ICore::instance()->scriptManager(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -135,6 +138,12 @@ void ToolsPlugin::extensionsInitialized()
     
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
     
+    // Add Tools to ScriptManager
+    PdfTkWrapper *pdf = new PdfTkWrapper(this);
+    pdf->initialize();
+    QScriptValue pdfValue = scriptManager()->addScriptObject(pdf);
+    scriptManager()->evaluate("namespace.com.freemedforms").setProperty("pdf", pdfValue);
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -145,28 +154,13 @@ void ToolsPlugin::postCoreInitialization()
     // DataPacks are checked
 }
 
-// aboutToShutdown does not exist in the old QtCreator code.
-// we have to wait until FMF is updatet to a newer QtCreator source
- ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
+ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
  {
      // Save settings
      // Disconnect from signals that are not needed during shutdown
      // Hide UI (if you add UI that is not in the main window directly)
      return SynchronousShutdown;
  }
-
-// void ToolsPlugin::triggerAction()
-// {
-//     QMessageBox::information(Core::ICore::instance()->mainWindow(),
-//                              tr("Action triggered"),
-//                              tr("This is an action from Tools."));
-// }
-
-void ToolsPlugin::coreAboutToClose()
-{
-    // Core is about to close
-    // ICore::user() is still available
-}
 
 Q_EXPORT_PLUGIN(ToolsPlugin)
 

@@ -46,11 +46,9 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
-    
+
 private Q_SLOTS:
     void postCoreInitialization();
-    void coreAboutToClose();
-    //    void triggerAction();
     
 private:
     ToolsPreferencesPage *m_prefPage;
