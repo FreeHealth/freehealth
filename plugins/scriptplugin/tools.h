@@ -45,9 +45,8 @@ public:
     explicit Tools(QObject *parent = 0);
     
 public Q_SLOTS:
+    QString dateToString(const QDate &date, const QString &format);
     void openUrl(const QString &url);
-
-
 };
 
 } // namespace Internal

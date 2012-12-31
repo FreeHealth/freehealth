@@ -39,6 +39,11 @@ Tools::Tools(QObject *parent) :
     setObjectName("Script::Tools");
 }
 
+QString Tools::dateToString(const QDate &date, const QString &format)
+{
+    return date.toString(format);
+}
+
 void Tools::openUrl(const QString &url)
 {
     if (!QDesktopServices::openUrl(QUrl(url)))
