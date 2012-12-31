@@ -19,85 +19,67 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, MD <eric.maeker@gmail.com>              *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FRENCHSOCIALNUMBER_H
-#define FRENCHSOCIALNUMBER_H
-
-#include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/iformitemdata.h>
+#ifndef BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
+#define BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
 
 #include <QWidget>
-#include <QVariant>
-QT_BEGIN_NAMESPACE
-class QLineEdit;
-QT_END_NAMESPACE
 
 /**
- * \file frenchsocialnumber.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.2
- * \date 30 Dec 2012
+ * \file frenchsocialnumberwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 2012-12-31
 */
 
 namespace BaseWidgets {
 namespace Internal {
-class FrenchSocialNumberWidget;
-}  // End namespace Internal
+class FrenchSocialNumberWidgetPrivate;
 
-class FrenchSocialNumberFormData;
-
-class FrenchSocialNumberFormWidget: public Form::IFormWidget
+class FrenchSocialNumberWidget : public QWidget
 {
     Q_OBJECT
 public:
-    FrenchSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
-    ~FrenchSocialNumberFormWidget();
+    explicit FrenchSocialNumberWidget(QWidget *parent = 0);
+    ~FrenchSocialNumberWidget();
+    bool initialize();
 
-    QString printableHtml(bool withValues = true) const;
+    void setNumberWithControlKey(const QString &number);
+    void setNumberWithoutControlKey(const QString &number);
 
-    void addWidgetToContainer(Form::IFormWidget *) {}
-    bool isContainer() const {return false;}
+    bool isValid() const;
+    bool isValid(const QString &number, const QString &key) const;
+    int controlKey(const QString &number) const;
+
+    QString numberWithControlKey() const;
+    QString numberWithoutControlKey() const;
+
+    QString emptyHtmlMask() const;
+    QString toHtml() const;
 
 public Q_SLOTS:
-    void retranslate();
+//    void populateWithPatientData();
 
 private:
-    FrenchSocialNumberFormData *m_ItemData;
-    Internal::FrenchSocialNumberWidget *m_NSS;
-};
+    void populateLineEdits(QString number = QString::null);
+    void addChar(const QString &c, int currentLineEditId, int pos);
+    void removeChar(int currentLineEditId, int pos);
+    void setCursorPosition(int currentLineEditId, int pos);
+    void checkControlKey();
 
-class FrenchSocialNumberFormData : public Form::IFormItemData
-{
-public:
-    FrenchSocialNumberFormData(Form::FormItem *item);
-    ~FrenchSocialNumberFormData();
-
-    void setWidget(Internal::FrenchSocialNumberWidget *w) {m_Widget = w; clear();}
-    void clear();
-    void populateWithPatientData();
-
-    Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const;
-    void setModified(bool modified);
-
-    // Use setData/Data for episode data
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
-
-    void setStorableData(const QVariant &);
-    QVariant storableData() const;
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
 
 private:
-    Form::FormItem *m_FormItem;
-    Internal::FrenchSocialNumberWidget *m_Widget;
-    QString m_OriginalValue;
+    Internal::FrenchSocialNumberWidgetPrivate *d;
 };
 
-}  // End namespace BaseWidgets
+} // namespace Internal
+} // namespace BaseWidgets
 
+#endif // BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
 
-#endif // FRENCHSOCIALNUMBER_H
