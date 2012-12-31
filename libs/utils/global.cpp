@@ -583,11 +583,27 @@ bool checkDir(const QString &absPath, bool createIfNotExist, const QString &logD
     return true;
 }
 
-/** \brief Save the string to a text file. You can choose to warn the user or not is an error is encountered. Return true if all gone good. **/
+/**
+ * Save the string \e toSave to a text file \e toFile.
+ * You can choose to warn the user or not is an error
+ * is encountered. Return true if all gone good. By default,
+ * all files managed by FreeMedForms are saved in UTF8 encoding.
+ */
 bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent)
 {
+    return saveStringToEncodedFile(toSave, toFile, "UTF-8", iomode, warnUser, parent);
+}
+
+/**
+ * Save the string \e toSave to a text file \e toFile.
+ * You can choose to warn the user or not is an error
+ * is encountered. Return true if all gone good. \n
+ * Set the file string encoding using the \e forceEncoding (see QTextCodec)
+ */
+bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, const QString &forceEncoding, IOMode iomode, const Warn warnUser, QWidget *parent)
+{
     if (toFile.isEmpty()) {
-        LOG_ERROR_FOR("Utils", "saveStringToFile(): fileName is empty");
+        LOG_ERROR_FOR("Utils", "saveStringToEncodedFile(): fileName is empty");
         return false;
     }
     QWidget *wgt = parent;
@@ -606,9 +622,9 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
     QFile file(info.absoluteFilePath());
     if (info.exists() && (info.isWritable() && warnUser == WarnUser)) {
         if (QMessageBox::warning(wgt, qApp->applicationName(),
-                                   QCoreApplication::translate("Utils" ,
-                                                                "File %1 already exists. Do you want de replace it?").arg(info.fileName()),
-                                   QMessageBox::Cancel | QMessageBox::Ok) == QMessageBox::Ok) {
+                                 QCoreApplication::translate("Utils" ,
+                                                             "File %1 already exists. Do you want de replace it?").arg(info.fileName()),
+                                 QMessageBox::Cancel | QMessageBox::Ok) == QMessageBox::Ok) {
             if (iomode == Overwrite) {
                 if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
                     LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
@@ -622,8 +638,23 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
             } else {
                 return false;
             }
-            file.write(toSave.toUtf8());
+
+            if (forceEncoding.compare("UTF-8")!=0) {
+                QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
+                if (!codec) {
+                    LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
+                    // fallback to UTF8
+                    file.write(toSave.toUtf8());
+                } else {
+                    file.write(codec->fromUnicode(toSave));
+                }
+            } else {
+                file.write(toSave.toUtf8());
+            }
+            file.close();
+
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
+
         } else {
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists): ") + file.fileName());
             return false;
@@ -634,7 +665,21 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
             LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(),file.errorString()));
             return false;
         }
-        file.write(toSave.toUtf8());
+
+        if (forceEncoding.compare("UTF-8")!=0) {
+            QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
+            if (!codec) {
+                LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
+                // fallback to UTF8
+                file.write(toSave.toUtf8());
+            } else {
+                file.write(codec->fromUnicode(toSave));
+            }
+        } else {
+            file.write(toSave.toUtf8());
+        }
+        file.close();
+
         LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
     }
     return true;
