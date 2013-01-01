@@ -53,9 +53,15 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace {
+// For version 1.45
 const char * const MAC_MD5     = "9008ff30f6b0319a066a62796de5479c";
 const char * const MAC_SHA1    = "04f5b73d0fef8aac91c95b3fa23c1b15ee627040";
 const char * const MAC_SHA256  = "b8eea6f0d13de3950f1e979b3b559415775c46edf5da34ef48a376cc261d2ff2";
+
+const char * const XP_MD5      = "8fb7e026f51b8924cbecdf5fa9d1cce3";
+const char * const XP_SHA1     = "37d45dfb7ecc00018b141512a88e2c6085cc3072";
+const char * const XP_SHA256   = "8826a1ab95375e6960b6b8692f71254dadb75ca580c4769a608337f3cc43a1d1";
+
 } // anonymous namespace
 
 namespace Tools {
@@ -118,11 +124,24 @@ bool PdfTkWrapper::initialize()
     if (!QFileInfo(d->pdkTkPath()).exists())
         return false;
 
-    // TODO: Security assessment: Check bin MD5
-    if (Utils::md5(d->pdkTkPath()) != ::MAC_MD5
-            || Utils::sha1(d->pdkTkPath()) != ::MAC_SHA1) {
-        LOG_ERROR("Wrong pdftk binary");
-        return false;
+    // Security assessment: check bin checksums
+    if (Utils::isRunningOnMac()) {
+        if (Utils::md5(d->pdkTkPath()) != ::MAC_MD5
+                || Utils::sha1(d->pdkTkPath()) != ::MAC_SHA1
+                || Utils::sha256(d->pdkTkPath()) != ::MAC_SHA256) {
+            LOG_ERROR("Wrong pdftk binary");
+            return false;
+        }
+    } else if (Utils::isRunningOnWin()) {
+        // TODO: may be XP / Win7/ Win8 checksum are different?
+        if (Utils::md5(d->pdkTkPath()) != ::XP_MD5
+                || Utils::sha1(d->pdkTkPath()) != ::XP_SHA1
+                || Utils::sha256(d->pdkTkPath()) != ::XP_SHA256) {
+            LOG_ERROR("Wrong pdftk binary");
+            return false;
+        }
+    } else {
+        // TODO: check linux/freebsd binaries
     }
 
     d->_initialized = true;
@@ -211,7 +230,6 @@ bool PdfTkWrapper::fillPdfWithFdf(const QString &absPdfFile, const QString &fdfC
     // Check private process
     if (d->_process) {
         // ensure process is finished
-        qWarning() << d->_process->state();
         d->_process->close();
         delete d->_process;
         d->_process = 0;
@@ -254,8 +272,6 @@ void PdfTkWrapper::onProcessFinished(int exitCode)
     // Destroy the process
     d->_process->close();
     d->_process->deleteLater();
-//    delete d->_process;
-//    d->_process = 0;
 }
 
 
