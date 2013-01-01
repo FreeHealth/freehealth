@@ -192,15 +192,21 @@ BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget
     m_StringListView->setObjectName("StringListView_" + m_FormItem->uuid());
     m_StringListView->setAlternatingRowColors(true);
     m_StringListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    // Get options
-    if (m_FormItem->extraData().keys().contains("maxrow")) {
-        m_StringListView->setMaximumRows(m_FormItem->extraData().value("maxrow").toInt());
-    }
-
-    layout->addWidget(m_StringListView);
 
     Views::StringListModel *model = new Views::StringListModel(this, true, false);
     m_StringListView->setModel(model);
+    // Get options
+    if (m_FormItem->extraData().keys().contains("maxrow")) {
+        model->setStringList(QStringList() << "sizeme");
+        int max = m_FormItem->extraData().value("maxrow").toInt();
+        m_StringListView->setMaximumRows(max);
+        // resize the itemview
+        int rowHeight = m_StringListView->itemView()->sizeHintForRow(0);
+        m_StringListView->itemView()->setMaximumHeight(rowHeight * (max + 0.5));
+        model->setStringList(QStringList());
+    }
+
+    layout->addWidget(m_StringListView);
 
     setFocusableWidget(m_StringListView);
 
