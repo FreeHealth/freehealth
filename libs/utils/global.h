@@ -144,6 +144,7 @@ UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
 UTILS_EXPORT QByteArray md5(const QString &fileName);
 UTILS_EXPORT QByteArray sha1(const QString &fileName);
+UTILS_EXPORT QByteArray sha256(const QString &fileName);
 
 // Some useful widgets specific functions
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
