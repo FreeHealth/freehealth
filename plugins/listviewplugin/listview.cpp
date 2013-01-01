@@ -214,8 +214,9 @@ void ListView::addItem()
     if (d->m_MaxRows > 0) {
         if (model()->rowCount() >= d->m_MaxRows) {
             // FIXME: improve tooltip position & rect
-            QToolTip::showText(itemView()->rect().bottomLeft() - QPoint(0,22),
-                               tr("Unable to add a new line, you have reached"
+            QPoint pos = itemView()->mapToGlobal(itemView()->rect().bottomLeft());
+            QToolTip::showText(pos - QPoint(0,32),
+                               tr("Unable to add a new line, you have reached "
                                   "the maximum autorized lines."),
                                itemView());
             add = false;
