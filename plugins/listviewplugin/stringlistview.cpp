@@ -87,19 +87,30 @@ QVariant StringListView::getCheckedStringList() const
     return m->getCheckedItems();
 }
 
+/** Set the checked items */
 void StringListView::setCheckedStringList(const QVariant &list)
 {
-    Q_ASSERT_X( qobject_cast<StringListModel*>(this->model()), "StringListView::setCheckedStringList()",
+    Q_ASSERT_X(qobject_cast<StringListModel*>(this->model()), "StringListView::setCheckedStringList()",
                 "This member can only be used if the model is a tkStringListModel.");
-    StringListModel * m = qobject_cast<StringListModel*>(this->model());
+    StringListModel *m = qobject_cast<StringListModel*>(this->model());
     if (!m)
-        return ;
+        return;
     m->setCheckedItems(list.toStringList());
 }
 
+/** Set the itemview to be checkable */
 void StringListView::setItemsCheckable(bool state)
 {
     StringListModel *m = qobject_cast<StringListModel*>(this->model());
     if (m)
         m->setCheckable(state);
+}
+
+/** Returns \e true if the itemview is checkable */
+bool StringListView::isItemCheckable() const
+{
+    StringListModel *m = qobject_cast<StringListModel*>(this->model());
+    if (m)
+        return m->isCheckable();
+    return false;
 }
