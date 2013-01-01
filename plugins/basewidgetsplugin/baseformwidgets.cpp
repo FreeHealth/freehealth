@@ -85,10 +85,11 @@ namespace {
         Type_Form,
         Type_Radio,
         Type_Check,
-        Type_Combo,
         Type_MultiCheck,
+        Type_Combo,
         Type_UniqueList,
         Type_MultiList,
+        Type_EditableList,
         Type_Spin,
         Type_DoubleSpin,
         Type_ShortText,
@@ -107,10 +108,12 @@ namespace {
 
     // names must be sync with the type enum
     static const QStringList widgetsName =
-            QStringList() << "undef" << "form" << "radio" << "check" << "combo"
-            << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
-            << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "moderndate" << "button" << "detailswidget" << "frenchnss" << "austriansvnr";
+            QStringList() << "undef" << "form" << "radio" << "check" << "multicheck"
+                          << "combo" << "uniquelist" << "multilist" << "editablelist"
+                          << "spin" << "doublespin"
+                          << "shorttext" << "longtext" << "helptext" << "file" << "group"
+                          << "date" << "moderndate" << "button" << "detailswidget"
+                          << "frenchnss" << "austriansvnr";
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
@@ -165,6 +168,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_HelpText : return new BaseHelpText(formItem,parent);
     case ::Type_MultiList : return new BaseList(formItem,parent,false);
     case ::Type_UniqueList : return new BaseList(formItem,parent,true);
+    case ::Type_EditableList : return new BaseEditableStringList(formItem,parent);
     case ::Type_Combo : return new BaseCombo(formItem,parent);
     case ::Type_Date : return new BaseDate(formItem,parent);
     case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem,parent);

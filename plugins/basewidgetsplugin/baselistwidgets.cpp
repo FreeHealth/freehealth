@@ -29,6 +29,9 @@
 
 #include <formmanagerplugin/iformitem.h>
 
+#include <listviewplugin/stringlistview.h>
+#include <listviewplugin/stringlistmodel.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 
@@ -156,9 +159,88 @@ void BaseList::retranslate()
     }
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////   BaseEditableStringList   /////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent),
+    m_StringListView(0)
+{
+    setObjectName("BaseEditableStringList");
+    QLayout *layout = 0;
+    // QtUi Loaded ?
+    const QString &layoutName = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!layoutName.isEmpty()) {
+        // Find widget
+        layout = formItem->parentFormMain()->formWidget()->findChild<QLayout*>(layoutName);
+        if (!layout) {
+            LOG_ERROR("QtUi: Layout not found: " + layoutName);
+            layout = new QHBoxLayout(this);
+            setLayout(layout);
+        }
+        m_Label = Constants::findLabel(formItem);
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+        layout = hb;
+    }
+
+    // Add List and manage size
+    m_StringListView = new Views::StringListView(this);
+    m_StringListView->setObjectName("StringListView_" + m_FormItem->uuid());
+    m_StringListView->setAlternatingRowColors(true);
+    m_StringListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // Get options
+    if (m_FormItem->extraData().keys().contains("maxrow")) {
+        m_StringListView->setMaximumRows(m_FormItem->extraData().value("maxrow").toInt());
+    }
+
+    layout->addWidget(m_StringListView);
+
+    Views::StringListModel *model = new Views::StringListModel(this, true, false);
+    m_StringListView->setModel(model);
+
+    setFocusableWidget(m_StringListView);
+
+    // create FormItemData
+    BaseListData *data = new BaseListData(m_FormItem);
+    data->setBaseStringListView(this);
+    m_FormItem->setItemData(data);
+}
+
+BaseEditableStringList::~BaseEditableStringList()
+{
+}
+
+QString BaseEditableStringList::printableHtml(bool withValues) const
+{
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
+        return QString();
+
+    if (withValues) {
+        QString content;
+        content += "<ul>";
+        content += "<li> " + m_StringListView->getStringList().toStringList().join("</li><li>") + "</li>";
+        content += "</ul>";
+        return content;
+    }
+    return QString::null;
+}
+
+void BaseEditableStringList::retranslate()
+{
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
+}
+
+
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseListData::BaseListData(Form::FormItem *item) :
-        m_FormItem(item), m_List(0)
+    m_FormItem(item),
+    m_List(0),
+    m_EditableList(0)
 {
 }
 
@@ -168,23 +250,32 @@ BaseListData::~BaseListData()
 
 void BaseListData::setSelectedItems(const QString &s)
 {
-    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
-    selModel->clearSelection();
+    QItemSelectionModel *selModel = 0;
+    if (m_List)
+        selModel = m_List->m_List->selectionModel();
+    else if (m_EditableList && m_EditableList->m_StringListView)
+        selModel = m_EditableList->m_StringListView->selectionModel();
+    if (selModel)
+        selModel->clearSelection();
     if (s.isEmpty())
         return;
 
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    if (s.contains("`@`")) {
-        // multilist
-        foreach(const QString &i, s.split("`@`", QString::SkipEmptyParts)) {
-            int row = uuids.lastIndexOf(i);
+    if (m_List) {
+        const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+        if (s.contains("`@`")) {
+            // multilist
+            foreach(const QString &i, s.split("`@`", QString::SkipEmptyParts)) {
+                int row = uuids.lastIndexOf(i);
+                QModelIndex idx = m_List->m_Model->index(row, 0);
+                selModel->select(idx, QItemSelectionModel::Select);
+            }
+        } else {
+            int row = uuids.lastIndexOf(s);
             QModelIndex idx = m_List->m_Model->index(row, 0);
             selModel->select(idx, QItemSelectionModel::Select);
         }
-    } else {
-        int row = uuids.lastIndexOf(s);
-        QModelIndex idx = m_List->m_Model->index(row, 0);
-        selModel->select(idx, QItemSelectionModel::Select);
+    } else if (m_EditableList && m_EditableList->m_StringListView->isItemCheckable()) {
+        m_EditableList->m_StringListView->setCheckedStringList(s.split("`@`", QString::SkipEmptyParts));
     }
     onValueChanged();
 }
@@ -218,37 +309,33 @@ bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseListData::data(const int ref, const int role) const
 {
-//    if (role==Form::IFormItemData::CalculationsRole) {
-//        // return selected value::numerical (if exists)
-//        QString selectedUid;
-//        foreach(QRadioButton *but, m_Radio->m_RadioList) {
-//            if (but->isChecked()) {
-//                selectedUid = but->property("id").toString();
-//                break;
-//            }
-//        }
-//        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
-//        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-//        if (id < vals.count() && id >= 0)
-//            return vals.at(id);
-//    } else
     if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
-        QStringList selected;
-        QItemSelectionModel *selModel = m_List->m_List->selectionModel();
-        if (!selModel->hasSelection())
-            return QVariant();
-        if (ref==Form::IFormItemData::ID_CurrentUuid) {
-            const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-                selected.append(uuids.at(idx.row()));
+        if (m_List) {
+            QStringList selected;
+            QItemSelectionModel *selModel = m_List->m_List->selectionModel();
+            if (!selModel->hasSelection())
+                return QVariant();
+            if (ref==Form::IFormItemData::ID_CurrentUuid) {
+                const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+                foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+                    selected.append(uuids.at(idx.row()));
+                }
+            } else {
+                foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+                    selected.append(idx.data().toString());
+                }
             }
-        } else {
-            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-                selected.append(idx.data().toString());
-            }
+            return selected;
+        } else if (m_EditableList) {
+            return m_EditableList->m_StringListView->getStringList();
         }
-        return selected;
     }
+    // TODO: code something like this:
+//    else if (role==Qt::CheckStateRole) {
+//        if (m_EditableList) {
+//            return m_EditableList->m_StringListView->getCheckedStringList();
+//        }
+//    }
     return QVariant();
 }
 
@@ -262,18 +349,23 @@ void BaseListData::setStorableData(const QVariant &data)
 /** Storable data of a List is the uuids of the selected items sorted in alphabetic order. */
 QVariant BaseListData::storableData() const
 {
-    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
+    if (m_List) {
+        QItemSelectionModel *selModel = m_List->m_List->selectionModel();
 
-    if (!selModel->hasSelection())
-        return QVariant();
+        if (!selModel->hasSelection())
+            return QVariant();
 
-    QStringList selected;
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-        selected.append(uuids.at(idx.row()));
+        QStringList selected;
+        const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+        foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+            selected.append(uuids.at(idx.row()));
+        }
+        qSort(selected);
+        return selected.join("`@`");
+    } else if (m_EditableList) {
+        return m_EditableList->m_StringListView->getStringList();
     }
-    qSort(selected);
-    return selected.join("`@`");
+    return QVariant();
 }
 
 void BaseListData::onValueChanged()
@@ -281,6 +373,7 @@ void BaseListData::onValueChanged()
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
+
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseCombo --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------

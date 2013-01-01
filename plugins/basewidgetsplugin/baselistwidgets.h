@@ -48,6 +48,10 @@ QT_END_NAMESPACE
  * \date 01 Jan 2013
 */
 
+namespace Views {
+class StringListView;
+}
+
 namespace BaseWidgets {
 namespace Internal {
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,6 +74,22 @@ public:
      QStringListModel *m_Model;
 };
 
+class BaseEditableStringList : public Form::IFormWidget
+{
+     Q_OBJECT
+public:
+     BaseEditableStringList(Form::FormItem *linkedObject, QWidget *parent = 0);
+     ~BaseEditableStringList();
+
+     QString printableHtml(bool withValues = true) const;
+
+public Q_SLOTS:
+     void retranslate();
+
+public:
+     Views::StringListView *m_StringListView;
+};
+
 class BaseListData : public Form::IFormItemData
 {
     Q_OBJECT
@@ -78,6 +98,7 @@ public:
     ~BaseListData();
 
     void setBaseList(BaseList* list) {m_List = list; clear();}
+    void setBaseStringListView(BaseEditableStringList* list) {m_EditableList = list; clear();}
     void setSelectedItems(const QString &s);
 
     void clear();
@@ -98,6 +119,7 @@ private Q_SLOTS:
 private:
     Form::FormItem *m_FormItem;
     BaseList* m_List;
+    BaseEditableStringList *m_EditableList;
     QStringList m_OriginalValue;
 };
 
