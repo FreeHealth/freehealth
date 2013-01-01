@@ -51,11 +51,12 @@ class ScriptUserWrapper : public QObject  //, public QScriptClass
     Q_PROPERTY(QString  firstName   READ firstName())
     Q_PROPERTY(QString  fullName    READ fullName())
 
-    Q_PROPERTY(QString  street     READ street())
-    Q_PROPERTY(QString  city       READ city())
-    Q_PROPERTY(QString  zipcode    READ zipcode())
-    Q_PROPERTY(QString  state      READ state())
-    Q_PROPERTY(QString  country    READ country())
+    Q_PROPERTY(QString  street      READ street())
+    Q_PROPERTY(QString  city        READ city())
+    Q_PROPERTY(QString  zipcode     READ zipcode())
+    Q_PROPERTY(QString  state       READ state())
+    Q_PROPERTY(QString  country     READ country())
+    Q_PROPERTY(QString  fullAddress READ fullAddress())
 
     Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
     Q_PROPERTY(bool     isMale      READ isMale())
@@ -81,6 +82,7 @@ public Q_SLOTS:
     QString zipcode() const;
     QString state() const;
     QString country() const;
+    QString fullAddress() const;
 
     QDate dateOfBirth() const;
     bool isMale() const;

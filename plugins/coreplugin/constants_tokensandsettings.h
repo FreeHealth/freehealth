@@ -142,6 +142,8 @@ const char * const  TOKEN_USERTEL3           = "User.Contact.Tel3";
 const char * const  TOKEN_USERFAX            = "User.Contact.Fax";
 const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
 const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
+const char * const  TOKEN_USERFULLADDRESS_HTML  = "User.Contact.FullAddress.Html";
+const char * const  TOKEN_USERFULLCONTACT_HTML  = "User.Contact.FullContact.Html";
 #endif
 
 // For Prescriptions

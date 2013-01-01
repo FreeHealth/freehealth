@@ -223,6 +223,18 @@ public:
                         .arg(user->country()).simplified();
             break;
         }
+        case Core::IUser::FullAddress :
+        {
+            QString t;
+            if (!user->address().isEmpty())
+                toReturn = QString("%1\n%2 %3/n%4\n%5")
+                        .arg(user->address())
+                        .arg(user->zipcode())
+                        .arg(user->city())
+                        .arg(user->stateProvince())
+                        .arg(user->country()).simplified();
+            break;
+        }
 
         case Core::IUser::Tel1 : toReturn = user->tels().at(0); break;
         case Core::IUser::Tel2 : toReturn = user->tels().at(1); break;
