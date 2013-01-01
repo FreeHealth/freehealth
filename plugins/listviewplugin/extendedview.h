@@ -64,7 +64,7 @@ public:
     void setCurrentIndex(const QModelIndex &index) {itemView()->setCurrentIndex(index);}
     QModelIndex currentIndex() const {return itemView()->currentIndex();}
     void setModel(QAbstractItemModel *model) {itemView()->setModel(model);}
-    QItemSelectionModel *selectionModel() const {return itemView()->selectionModel();}
+    QItemSelectionModel *selectionModel() const {if (itemView()) return itemView()->selectionModel(); return 0;}
     QAbstractItemModel *model() const {return itemView()->model();}
     void setEditTriggers(QAbstractItemView::EditTriggers trig) {itemView()->setEditTriggers(trig);}
     QModelIndex indexAt(const QPoint &point) const {return itemView()->indexAt(point);}
