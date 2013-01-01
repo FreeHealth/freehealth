@@ -60,14 +60,14 @@ public:
 }  // End Internal
 }  // End Views
 
-
 using namespace Views;
 using namespace Views::Internal;
 
-StringListModel::StringListModel( QObject *parent,
-                                      const bool stringEditable,
-                                      const bool checkStateEditable ) :
-    QAbstractListModel(parent), d(new StringListModelPrivate)
+StringListModel::StringListModel(QObject *parent,
+                                 const bool stringEditable,
+                                 const bool checkStateEditable) :
+    QAbstractListModel(parent),
+    d(new StringListModelPrivate)
 {
     setObjectName("StringListModel");
     d->m_Checkable = checkStateEditable;
@@ -76,7 +76,8 @@ StringListModel::StringListModel( QObject *parent,
 
 StringListModel::~StringListModel()
 {
-    if (d) delete d;
+    if (d)
+        delete d;
     d=0;
 }
 
@@ -85,22 +86,25 @@ void StringListModel::setReadOnly(bool state)
     setStringEditable(!state);
 }
 
-void StringListModel::setCheckable( bool state )
+void StringListModel::setCheckable(bool state)
 {
     beginResetModel();
     d->m_Checkable = state;
     endResetModel();
 }
 
-void StringListModel::setStringEditable( bool state )
+bool StringListModel::isCheckable() const
+{
+    return d->m_Checkable;
+}
+void StringListModel::setStringEditable(bool state)
 {
     beginResetModel();
     d->m_StringEditable = state;
     endResetModel();
 }
 
-
-void StringListModel::setStringList( const QStringList & strings )
+void StringListModel::setStringList(const QStringList &strings)
 {
      d->m_StringList.clear();
      foreach( const QString & s, strings ) {
@@ -114,11 +118,10 @@ void StringListModel::setStringList( const QStringList & strings )
 QStringList StringListModel::getStringList() const
 {
     QStringList list;
-    foreach( const StringListModelPrivate::Data & dt, d->m_StringList )
+    foreach( const StringListModelPrivate::Data &dt, d->m_StringList )
         list << dt.str;
     return list;
 }
-
 
 QStringList StringListModel::getCheckedItems() const
 {
@@ -129,12 +132,12 @@ QStringList StringListModel::getCheckedItems() const
     return list;
 }
 
-void StringListModel::setCheckedItems( const QStringList & list )
+void StringListModel::setCheckedItems(const QStringList &list)
 {
     beginResetModel();
     QList<StringListModelPrivate::Data>::iterator i;
     for (i = d->m_StringList.begin(); i != d->m_StringList.end(); ++i) {
-       if ( list.indexOf( (*i).str ) != -1 )
+       if ( list.indexOf((*i).str) != -1)
            (*i).checked = Qt::Checked;
        else
            (*i).checked = Qt::Unchecked;
@@ -142,10 +145,11 @@ void StringListModel::setCheckedItems( const QStringList & list )
     endResetModel();
 }
 
-int StringListModel::rowCount( const QModelIndex & parent) const
+int StringListModel::rowCount(const QModelIndex &parent) const
 {
     // prevent trees
-    if (parent.isValid()) return 0;
+    if (parent.isValid())
+        return 0;
 
     return d->m_StringList.count();
 }
@@ -161,40 +165,40 @@ Qt::ItemFlags StringListModel::flags(const QModelIndex &index) const
     return f;
 }
 
-bool StringListModel::setData( const QModelIndex & index, const QVariant & value, int role )
+bool StringListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if ( ! index.isValid() )
         return false;
     if ( index.row() > rowCount() )
         return false;
 
-    if ( ( role == Qt::EditRole ) && (d->m_StringEditable) ){
+    if ((role == Qt::EditRole) && (d->m_StringEditable)) {
         d->m_StringList[ index.row() ].str = value.toString();
-    } else if ( role == Qt::CheckStateRole ) {
-        d->m_StringList[ index.row() ].checked = value.toInt();
+    } else if (role == Qt::CheckStateRole && (d->m_Checkable)) {
+        d->m_StringList[index.row()].checked = value.toInt();
     }
     return true;
 }
 
-QVariant StringListModel::data( const QModelIndex & index, int role ) const
+QVariant StringListModel::data(const QModelIndex &index, int role) const
 {
-    if ( ! index.isValid() )
+    if (!index.isValid())
         return QVariant();
-    if ( index.row() > rowCount() )
+    if (index.row() > rowCount())
         return QVariant();
 
-    if ( role == Qt::CheckStateRole ) {
+    if (role == Qt::CheckStateRole && d->m_Checkable) {
         return d->m_StringList.at(index.row()).checked;
-    } else if ( role == Qt::DisplayRole ) {
+    } else if (role == Qt::DisplayRole) {
         return d->m_StringList.at(index.row()).str;
-    } else if ( role == Qt::EditRole ) {
+    } else if (role == Qt::EditRole) {
         if (d->m_StringEditable)
             return d->m_StringList.at(index.row()).str;
     }
     return QVariant();
 }
 
-bool StringListModel::insertRows ( int row, int count, const QModelIndex & parent )
+bool StringListModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent,row,row+count);
     int i;
@@ -208,7 +212,7 @@ bool StringListModel::insertRows ( int row, int count, const QModelIndex & paren
     return true;
 }
 
-bool StringListModel::removeRows ( int row, int count, const QModelIndex & parent )
+bool StringListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent,row,row+count);
     int i;
@@ -220,7 +224,7 @@ bool StringListModel::removeRows ( int row, int count, const QModelIndex & paren
     return true;
 }
 
-bool StringListModel::moveUp( const QModelIndex & item )
+bool StringListModel::moveUp(const QModelIndex &item)
 {
     if ( !item.isValid() )
         return false;
@@ -234,7 +238,7 @@ bool StringListModel::moveUp( const QModelIndex & item )
     return false;
 }
 
-bool StringListModel::moveDown( const QModelIndex & item )
+bool StringListModel::moveDown(const QModelIndex &item)
 {
     if ( !item.isValid() )
         return false;
