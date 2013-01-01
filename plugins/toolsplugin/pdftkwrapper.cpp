@@ -168,9 +168,13 @@ void PdfTkWrapper::beginFdfEncoding()
  * Adds a value to the started FDF encoding
  * \sa beginFdfEncoding(), endFdfEncoding(), getFdfContent()
 */
-void PdfTkWrapper::addFdfValue(const QString &fieldName, const QString &value)
+void PdfTkWrapper::addFdfValue(const QString &fieldName, const QString &value, bool toUpper)
 {
-    QString val = value.toUpper();
+    QString val;
+    if (toUpper)
+        val = value.toUpper();
+    else
+        val = value;
     val = val.simplified();
     val = val.replace("<BR>","");
     val = val.replace("<BR />","");
