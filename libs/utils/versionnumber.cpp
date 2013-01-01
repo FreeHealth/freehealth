@@ -60,30 +60,32 @@ VersionNumber::VersionNumber(const QString &version) :
     int dot = 0;
     int nextDot = 0;
     bool ok;
-    if (dotCount<1) {
-        LOG_ERROR_FOR("VersionNumber", "Unknown/invalid version number detected: " + version);
-    } else {
-        dot = version.indexOf(".");
-        m_Major = version.left(dot).toInt(&ok);
-        if (!ok)
-            LOG_ERROR_FOR("VersionNumber", "Invalid major version detected: " + version.left(dot));
-        ++dot;
-        nextDot = version.indexOf(".", dot);
-        m_Minor = version.mid(dot,nextDot-dot).toInt(&ok);
-        if (!ok)
-            LOG_ERROR_FOR("VersionNumber", "Invalid minor version detected: "+ version.mid(dot,nextDot-dot));
-        dot = nextDot + 1;
-        // get next non-digit character
-        nextDot = version.indexOf(QRegExp("\\D"), dot);
-        if (nextDot!=-1) {
-            // there is a non-digit character in the string
-            m_Debug = version.mid(dot,nextDot-dot).toInt(&ok);
-            if (!ok)
-                LOG_ERROR_FOR("VersionNumber", "Invalid debug version detected: " + version.mid(dot,nextDot-dot));
+    if (version.compare("test", Qt::CaseInsensitive) != 0 && !version.isEmpty()) {
+        if (dotCount<1) {
+            LOG_ERROR_FOR("VersionNumber", "Unknown/invalid version number detected: " + version);
         } else {
-            // only digits
-            m_Debug = version.mid(dot).toInt();
-            nextDot = dot;
+            dot = version.indexOf(".");
+            m_Major = version.left(dot).toInt(&ok);
+            if (!ok)
+                LOG_ERROR_FOR("VersionNumber", "Invalid major version detected: " + version.left(dot));
+            ++dot;
+            nextDot = version.indexOf(".", dot);
+            m_Minor = version.mid(dot,nextDot-dot).toInt(&ok);
+            if (!ok)
+                LOG_ERROR_FOR("VersionNumber", "Invalid minor version detected: "+ version.mid(dot,nextDot-dot));
+            dot = nextDot + 1;
+            // get next non-digit character
+            nextDot = version.indexOf(QRegExp("\\D"), dot);
+            if (nextDot!=-1) {
+                // there is a non-digit character in the string
+                m_Debug = version.mid(dot,nextDot-dot).toInt(&ok);
+                if (!ok)
+                    LOG_ERROR_FOR("VersionNumber", "Invalid debug version detected: " + version.mid(dot,nextDot-dot));
+            } else {
+                // only digits
+                m_Debug = version.mid(dot).toInt();
+                nextDot = dot;
+            }
         }
     }
     if (version.contains(QRegExp("alpha\\d*", Qt::CaseInsensitive))) {
