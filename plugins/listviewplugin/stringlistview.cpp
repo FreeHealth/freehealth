@@ -25,15 +25,17 @@
  ***************************************************************************/
 
 /**
-  \class Views::StringListView
-  \brief Provides a stringlist view to use with tkUserViewer. For eg with the specialties, qualifications... of users.
-  - Property stringList is used for QDataWidgetMapper.
-  - Holds the mecanism for add, remove, move up and down for all items using a contextmenu.
-  - Set and get the model stringList using getStringList() and setStringList().
-
-  - You can use it with the tkStringListModel and set items to be checkable. Then populate the stringlist with the
-  setStringList() and manage checked items with property checkedStringList. The getCheckedStringList() and
-  setItemsCheckable() only work if the model of the view is a tkStringListModel.
+ * \class Views::StringListView
+ * Provides a stringlist view to use with tkUserViewer. For eg with
+ * the specialties, qualifications... of users.
+ * - Property stringList is used for QDataWidgetMapper.
+ * - Holds the mecanism for add, remove, move up and down for all items using a contextmenu.
+ * - Set and get the model stringList using getStringList() and setStringList().
+ *
+ * - You can use it with the Views::StringListModel and set items to be checkable.
+ * Then populate the stringlist with the setStringList() and manage checked items
+ * with property checkedStringList. The getCheckedStringList() and
+ * setItemsCheckable() only work if the model of the view is a Views::StringListModel.
 */
 
 #include "stringlistview.h"
@@ -56,6 +58,7 @@ StringListView::~StringListView()
 {
 }
 
+/** Returns the stringlist content */
 QVariant StringListView::getStringList() const
 {
     QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
@@ -65,6 +68,7 @@ QVariant StringListView::getStringList() const
     return QVariant();
 }
 
+/** Set the stringlist content */
 void StringListView::setStringList(const QVariant &list)
 {
     QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
@@ -72,6 +76,7 @@ void StringListView::setStringList(const QVariant &list)
         model->setStringList(list.toStringList());
 }
 
+/** Returns the checked items */
 QVariant StringListView::getCheckedStringList() const
 {
     Q_ASSERT_X( qobject_cast<StringListModel*>(this->model()), "StringListView::getCheckedStringList()",

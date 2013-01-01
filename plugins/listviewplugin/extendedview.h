@@ -39,6 +39,13 @@ class QPoint;
 class QToolBar;
 QT_END_NAMESPACE
 
+/**
+ * \file iview.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 01 Jan 2013
+*/
+
 namespace Views {
 namespace Internal {
 class ExtendedViewPrivate;
