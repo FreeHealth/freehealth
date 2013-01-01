@@ -19,8 +19,9 @@ HEADERS += basewidgetsplugin.h \
     frenchsocialnumber.h \
     basedetailswidget.h \
     basedatecompleterwidget.h \
-#    basezipcodeswidget.h
+    baselistwidgets.h \
     frenchsocialnumberwidget.h
+#    basezipcodeswidget.h
 
 SOURCES += basewidgetsplugin.cpp \
     constants.cpp \
@@ -32,8 +33,9 @@ SOURCES += basewidgetsplugin.cpp \
     calculationwidgets.cpp \
     basedetailswidget.cpp \
     basedatecompleterwidget.cpp \
-#    basezipcodeswidget.cpp
+    baselistwidgets.cpp \
     frenchsocialnumberwidget.cpp
+#    basezipcodeswidget.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \
     baseformwidget.ui \
