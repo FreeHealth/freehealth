@@ -26,7 +26,54 @@
  ***************************************************************************/
 #include "genericdatapackcreator.h"
 
+using namespace DataPackPlugin;
+
+/**
+  <datapack description="">
+    <content type=""></content>
+  </datapack>
+ */
+
 GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
     Core::IFullReleaseStep(parent)
 {
+}
+
+GenericDataPackCreator::Steps GenericDataPackCreator::stepNumber() const
+{
+}
+
+bool GenericDataPackCreator::createTemporaryStorage()
+{
+    return true;
+}
+
+bool GenericDataPackCreator::cleanTemporaryStorage()
+{
+    return true;
+}
+
+bool GenericDataPackCreator::startDownload()
+{
+    return true;
+}
+
+bool GenericDataPackCreator::postDownloadProcessing()
+{
+    return true;
+}
+
+bool GenericDataPackCreator::process()
+{
+    return true;
+}
+
+bool GenericDataPackCreator::registerDataPack()
+{
+    return true;
+}
+
+QString GenericDataPackCreator::processMessage() const
+{
+    return QString::null;
 }

@@ -29,16 +29,37 @@
 
 #include <coreplugin/ifullreleasestep.h>
 
+/**
+ * \file datapackwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 20 Nov 2012
+*/
+
+namespace DataPackPlugin {
+
 class GenericDataPackCreator : public Core::IFullReleaseStep
 {
     Q_OBJECT
 public:
     explicit GenericDataPackCreator(QObject *parent = 0);
     
-signals:
-    
-public slots:
-    
+    virtual QString id() const {return objectName();}
+    virtual Steps stepNumber() const;
+
+    virtual bool createTemporaryStorage();
+    virtual bool cleanTemporaryStorage();
+
+    virtual bool startDownload();
+    virtual bool postDownloadProcessing();
+    virtual bool process();
+
+    virtual bool registerDataPack();
+
+    virtual QString processMessage() const;
+
 };
+
+} // namespace DataPackPlugin
 
 #endif // GENERICDATAPACKCREATOR_H
