@@ -102,6 +102,7 @@ void PatientCreatorWizard::done(int r)
     } else if (r == QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
+        patientCore()->refreshAllPatientModel();
         if (settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool()) {
             QString uid = m_Page->lastInsertedUuid();
             if (!patientCore()->setCurrentPatientUuid(uid))
@@ -117,6 +118,9 @@ IdentityPage::IdentityPage(QWidget *parent) :
     setObjectName("IdentityPage");
     setTitle(tr("Please enter the patient's identity."));
     m_Identity = new Identity::IdentityEditorWidget(this);
+    m_Identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity |
+                                    Identity::IdentityEditorWidget::Photo |
+                                    Identity::IdentityEditorWidget::FullAddress);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
     m_Model->emitPatientCreationOnSubmit(true);
@@ -124,6 +128,19 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
     m_Identity->setModel(m_Model);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IPatient::TitleIndex);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::BirthName, Core::IPatient::BirthName);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::FirstName, Core::IPatient::Firstname);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::SecondName, Core::IPatient::SecondName);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IPatient::GenderIndex);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IPatient::DateOfBirth);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::DateOfDeath, Core::IPatient::DateOfDeath);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IPatient::Photo_64x64);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IPatient::Street);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::City, Core::IPatient::City);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Zipcode, Core::IPatient::ZipCode);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IPatient::StateProvince);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IPatient::Country);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout(this);
@@ -191,6 +208,7 @@ bool IdentityPage::validatePage()
     bool ok = true;
     connect(m_Model, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {
+        m_Model->submit();
         patientCore()->refreshAllPatientModel();
         LOG("Patient successfully created");
     } else {

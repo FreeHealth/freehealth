@@ -39,59 +39,13 @@ QT_END_NAMESPACE
 /**
  * \file frenchsocialnumber.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 15 Sept 2011
+ * \version 0.8.2
+ * \date 30 Dec 2012
 */
 
 namespace BaseWidgets {
 namespace Internal {
-
-namespace Ui {
-    class FrenchSocialNumber;
-}  // End namespace Ui
-
-class FrenchSocialNumber : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit FrenchSocialNumber(QWidget *parent = 0);
-    ~FrenchSocialNumber();
-
-    void setNumberWithControlKey(const QString &number);
-    void setNumberWithoutControlKey(const QString &number);
-
-    bool isValid() const;
-    bool isValid(const QString &number, const QString &key) const;
-    int controlKey(const QString &number) const;
-
-    QString numberWithControlKey() const;
-    QString numberWithoutControlKey() const;
-
-    QString emptyHtmlMask() const;
-    QString toHtml() const;
-
-public Q_SLOTS:
-    void populateWithPatientData();
-
-private:
-    void populateLineEdits(QString number = QString::null);
-    void addChar(const QString &c, int currentLineEditId, int pos);
-    void removeChar(int currentLineEditId, int pos);
-    void setCursorPosition(int currentLineEditId, int pos);
-    void checkControlKey();
-
-protected:
-    bool eventFilter(QObject *o, QEvent *e);
-
-private:
-    Ui::FrenchSocialNumber *ui;
-    QList<QLineEdit *> m_Edits;
-    QList<int> m_NbChars;
-    QString m_FullNumber;
-    int m_CursorPos;
-};
-
+class FrenchSocialNumberWidget;
 }  // End namespace Internal
 
 class FrenchSocialNumberFormData;
@@ -113,7 +67,7 @@ public Q_SLOTS:
 
 private:
     FrenchSocialNumberFormData *m_ItemData;
-    Internal::FrenchSocialNumber *m_NSS;
+    Internal::FrenchSocialNumberWidget *m_NSS;
 };
 
 class FrenchSocialNumberFormData : public Form::IFormItemData
@@ -122,8 +76,9 @@ public:
     FrenchSocialNumberFormData(Form::FormItem *item);
     ~FrenchSocialNumberFormData();
 
-    void setWidget(Internal::FrenchSocialNumber *w) {m_Widget = w; clear();}
+    void setWidget(Internal::FrenchSocialNumberWidget *w) {m_Widget = w; clear();}
     void clear();
+    void populateWithPatientData();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
@@ -138,7 +93,7 @@ public:
 
 private:
     Form::FormItem *m_FormItem;
-    Internal::FrenchSocialNumber *m_Widget;
+    Internal::FrenchSocialNumberWidget *m_Widget;
     QString m_OriginalValue;
 };
 

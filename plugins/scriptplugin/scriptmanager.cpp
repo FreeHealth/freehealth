@@ -26,6 +26,7 @@
 #include "scriptmanager.h"
 #include "scriptwrappers.h"
 #include "scriptpatientwrapper.h"
+#include "scriptuserwrapper.h"
 #include "uitools.h"
 #include "tools.h"
 
@@ -126,6 +127,7 @@ ScriptManager::ScriptManager(QObject *parent) :
     Core::IScriptManager(parent),
     m_Engine(new QScriptEngine(this)),
     patient(0),
+    user(0),
     forms(0),
     uitools(0),
     tools(0)
@@ -138,6 +140,11 @@ ScriptManager::ScriptManager(QObject *parent) :
     patient = new ScriptPatientWrapper(this);
     QScriptValue patientValue = m_Engine->newQObject(patient, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("patient", patientValue);
+
+    // Add the user
+    user = new ScriptUserWrapper(this);
+    QScriptValue userValue = m_Engine->newQObject(user, QScriptEngine::QtOwnership);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("user", userValue);
 
     // Add the form manager
     forms = new FormManagerScriptWrapper(this);
@@ -156,9 +163,6 @@ ScriptManager::ScriptManager(QObject *parent) :
     tools = new Internal::Tools(this);
     QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("tools", toolsValue);
-
-    // Register to Core::ICore
-    Core::ICore::instance()->setScriptManager(this);
 
     // Connect to formmanager
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
@@ -189,6 +193,10 @@ QScriptValue ScriptManager::addScriptObject(QObject *object)
 {
     return m_Engine->newQObject(object);
 }
+
+//QScriptValue ScriptManager::addScriptObject(QObject *object, const QString &objectNamespace, const QString &objectScriptName)
+//{
+//}
 
 void ScriptManager::onAllFormsLoaded()
 {

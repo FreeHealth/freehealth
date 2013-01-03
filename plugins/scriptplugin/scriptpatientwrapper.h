@@ -34,8 +34,8 @@
 /**
  * \file scriptpatientwrapper.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 01 Jun 2012
+ * \version 0.8.2
+ * \date 30 Dec 2012
 */
 
 namespace Script {
@@ -45,7 +45,17 @@ class ScriptPatientWrapper : public QObject  //, public QScriptClass
 {
     Q_OBJECT
     Q_PROPERTY(bool     isActive    READ isActive())
+    Q_PROPERTY(QString  birthName   READ birthName())
+    Q_PROPERTY(QString  secondName  READ secondName())
+    Q_PROPERTY(QString  firstName   READ firstName())
     Q_PROPERTY(QString  fullName    READ fullName())
+
+    Q_PROPERTY(QString  street     READ street())
+    Q_PROPERTY(QString  city       READ city())
+    Q_PROPERTY(QString  zipcode    READ zipcode())
+    Q_PROPERTY(QString  state      READ state())
+    Q_PROPERTY(QString  country    READ country())
+
     Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
     Q_PROPERTY(int      yearsOld    READ yearsOld())
     Q_PROPERTY(bool     isMale      READ isMale())
@@ -65,7 +75,18 @@ public:
 
 public Q_SLOTS:
     bool isActive() const;
+
     QString fullName() const;
+    QString birthName() const;
+    QString secondName() const;
+    QString firstName() const;
+
+    QString street() const;
+    QString city() const;
+    QString zipcode() const;
+    QString state() const;
+    QString country() const;
+
     QDate dateOfBirth() const;
     int yearsOld() const;
     bool isMale() const;

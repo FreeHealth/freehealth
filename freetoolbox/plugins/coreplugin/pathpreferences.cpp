@@ -82,10 +82,10 @@ void PathPreferencesPage::checkSettingsValidity()
         appName = appName.left(appName.indexOf(" "));
 
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
-    defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
-    defaultvalues.insert(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
-    defaultvalues.insert(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
+    defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    defaultvalues.insert(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    defaultvalues.insert(Constants::S_TMP_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp"));
     defaultvalues.insert(Constants::S_GITFILES_PATH, QString());
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -178,10 +178,10 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     if (appName.contains(" "))
         appName = appName.left(appName.indexOf(" "));
 
-    set->setValue(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
-    set->setValue(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
-    set->setValue(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
-    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
+    set->setValue(Constants::S_FILEOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    set->setValue(Constants::S_DBOUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
+    set->setValue(Constants::S_TMP_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp"));
+    set->setValue(Constants::S_DATAPACK_SERVER_OUTPUT_PATH, QString(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName));
     set->setValue(Constants::S_GITFILES_PATH, QString());
     set->sync();
 }

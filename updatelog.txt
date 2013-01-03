@@ -12,6 +12,7 @@ FreeMedForms
   * Ability to edit agenda day availabilities
   * All applications are ported to Qt5.0 (but not to qml yet)
   * New languages available (translations undone)
+  * Autocompletion of PDF using scripts in forms
 
 ===== Bug correction =====
 

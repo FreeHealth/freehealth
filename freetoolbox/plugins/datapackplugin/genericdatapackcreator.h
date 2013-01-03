@@ -19,43 +19,47 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#ifndef GENERICDATAPACKCREATOR_H
+#define GENERICDATAPACKCREATOR_H
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <coreplugin/ifullreleasestep.h>
 
-#include <extensionsystem/iplugin.h>
+/**
+ * \file datapackwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 20 Nov 2012
+*/
 
-namespace Tools {
-namespace Internal {
+namespace DataPackPlugin {
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+class GenericDataPackCreator : public Core::IFullReleaseStep
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
-
 public:
-    ToolsPlugin();
-    ~ToolsPlugin();
+    explicit GenericDataPackCreator(QObject *parent = 0);
     
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+    virtual QString id() const {return objectName();}
+    virtual Steps stepNumber() const;
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    
-private:
-    ToolsPreferencesPage *m_prefPage;
+    virtual bool createTemporaryStorage();
+    virtual bool cleanTemporaryStorage();
+
+    virtual bool startDownload();
+    virtual bool postDownloadProcessing();
+    virtual bool process();
+
+    virtual bool registerDataPack();
+
+    virtual QString processMessage() const;
+
 };
 
-} // namespace Internal
-} // namespace Tools
+} // namespace DataPackPlugin
 
-#endif // TOOLS_IPLUGIN_H
-
+#endif // GENERICDATAPACKCREATOR_H

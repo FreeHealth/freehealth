@@ -31,6 +31,7 @@ icd.depends += datapack
 
 zip.subdir = zipcodes
 zip.depends += core
+zip.depends += datapack
 
 listview.subdir = listviewplugin
 listview.depends += core

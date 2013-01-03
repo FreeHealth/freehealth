@@ -245,7 +245,7 @@ public:
             break;
         }
 
-        case Core::IUser::PractitionerId : toReturn = user->practitionerId(); break;
+        case Core::IUser::ProfessionalIdentifiants : toReturn = user->professionalIdentifiants(); break;
         case Core::IUser::Specialities : toReturn = user->specialty(); break;
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
 
@@ -1007,7 +1007,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         colsToEmit << Core::IUser::FullHtmlContact;
         user->setFax(value);
         break;
-    case Core::IUser::PractitionerId :  user->setPractitionerIdentifiant(value.toStringList()); break;
+    case Core::IUser::ProfessionalIdentifiants :  user->setPractitionerIdentifiant(value.toStringList()); break;
     case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
     case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
     case Core::IUser::Preferences :  user->setPreferences(value); break;

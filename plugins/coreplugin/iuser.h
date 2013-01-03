@@ -75,9 +75,10 @@ public:
         Gender, Title,
         Address, Zipcode, City, StateProvince, Country, IsoCountry,
         FullHtmlAddress,
-        Tel1, Tel2, Tel3, Fax, PractitionerId,
+        Tel1, Tel2, Tel3, Fax,
         FullHtmlContact,
-        Specialities, Qualifications, Preferences,  // 33
+        Specialities, Qualifications, ProfessionalIdentifiants,
+        Preferences,  // 33
 
         GenericHeader,
         GenericFooter,

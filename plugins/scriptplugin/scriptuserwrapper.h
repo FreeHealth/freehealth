@@ -19,62 +19,80 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_INTERNAL_PDFTKWRAPPER_H
-#define TOOLS_INTERNAL_PDFTKWRAPPER_H
+#ifndef SCRIPTUSERWRAPPER_H
+#define SCRIPTUSERWRAPPER_H
 
 #include <QObject>
+#include <QDate>
+#include <QVariant>
+#include <QString>
+#include <QStringList>
 
 /**
- * \file pdftkwrapper.h
+ * \file scriptuserwrapper.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 2012-12-30
+ * \version 0.8.2
+ * \date 30 Dec 2012
 */
 
-namespace Tools {
+namespace Script {
 namespace Internal {
-class PdfTkWrapperPrivate;
 
-class PdfTkWrapper : public QObject
+class ScriptUserWrapper : public QObject  //, public QScriptClass
 {
     Q_OBJECT
-    Q_PROPERTY(bool isAvailable READ isAvailable())
+    Q_PROPERTY(bool     isActive    READ isActive())
+    Q_PROPERTY(QString  birthName   READ birthName())
+    Q_PROPERTY(QString  secondName  READ secondName())
+    Q_PROPERTY(QString  firstName   READ firstName())
+    Q_PROPERTY(QString  fullName    READ fullName())
+
+    Q_PROPERTY(QString  street     READ street())
+    Q_PROPERTY(QString  city       READ city())
+    Q_PROPERTY(QString  zipcode    READ zipcode())
+    Q_PROPERTY(QString  state      READ state())
+    Q_PROPERTY(QString  country    READ country())
+
+    Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
+    Q_PROPERTY(bool     isMale      READ isMale())
+    Q_PROPERTY(bool     isFemale    READ isFemale())
+
+    Q_PROPERTY(QStringList specialties READ specialties())
+    Q_PROPERTY(QStringList qualifications READ qualifications())
+    Q_PROPERTY(QStringList identifiants READ identifiants())
 
 public:
-    explicit PdfTkWrapper(QObject *parent = 0);
-    ~PdfTkWrapper();
-    
-    bool initialize();
-    
-Q_SIGNALS:
-    
+    ScriptUserWrapper(QObject *parent);
+
 public Q_SLOTS:
-    // Checker
-    bool isAvailable() const;
+    bool isActive() const;
 
-    // FDF creation helpers
-    void beginFdfEncoding();
-    void addFdfValue(const QString &fieldName, const QString &value);
-    void endFdfEncoding(const QString &filename);
-    QString getFdfContent();
+    QString fullName() const;
+    QString birthName() const;
+    QString secondName() const;
+    QString firstName() const;
 
-    // PDF creation
-    bool fillPdfWithFdf(const QString &absPdfFile, const QString &fdfContent, const QString &absFileNameOut, const QString &isoEncoding);
+    QString street() const;
+    QString city() const;
+    QString zipcode() const;
+    QString state() const;
+    QString country() const;
 
-private Q_SLOTS:
-    void onProcessFinished(int exitCode);
+    QDate dateOfBirth() const;
+    bool isMale() const;
+    bool isFemale() const;
 
-private:
-    Internal::PdfTkWrapperPrivate *d;
+    QStringList specialties() const;
+    QStringList qualifications() const;
+    QStringList identifiants() const;
+
 };
 
-} // namespace Internal
-} // namespace Tools
+}  // namespace Internal
+}  // namespace Script
 
-#endif // TOOLS_INTERNAL_PDFTKWRAPPER_H
-
+#endif // SCRIPTUSERWRAPPER_H

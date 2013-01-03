@@ -46,6 +46,47 @@ QString ScriptPatientWrapper::fullName() const
 {
     return patient()->data(Core::IPatient::FullName).toString();
 }
+
+QString ScriptPatientWrapper::birthName() const
+{
+    return patient()->data(Core::IPatient::BirthName).toString();
+}
+
+QString ScriptPatientWrapper::secondName() const
+{
+    return patient()->data(Core::IPatient::SecondName).toString();
+}
+
+QString ScriptPatientWrapper::firstName() const
+{
+    return patient()->data(Core::IPatient::Firstname).toString();
+}
+
+QString ScriptPatientWrapper::street() const
+{
+    return patient()->data(Core::IPatient::Street).toString();
+}
+
+QString ScriptPatientWrapper::city() const
+{
+    return patient()->data(Core::IPatient::City).toString();
+}
+
+QString ScriptPatientWrapper::zipcode() const
+{
+    return patient()->data(Core::IPatient::ZipCode).toString();
+}
+
+QString ScriptPatientWrapper::state() const
+{
+    return patient()->data(Core::IPatient::StateProvince).toString();
+}
+
+QString ScriptPatientWrapper::country() const
+{
+    return patient()->data(Core::IPatient::Country).toString();
+}
+
 QDate ScriptPatientWrapper::dateOfBirth() const
 {
     return patient()->data(Core::IPatient::DateOfBirth).toDate();

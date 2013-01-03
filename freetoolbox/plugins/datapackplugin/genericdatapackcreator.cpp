@@ -19,43 +19,67 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#include "genericdatapackcreator.h"
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+using namespace DataPackPlugin;
 
-#include <extensionsystem/iplugin.h>
+/**
+  <datapack description="">
+    <content type=""></content>
+  </datapack>
+ */
 
-namespace Tools {
-namespace Internal {
-
-class ToolsPlugin : public ExtensionSystem::IPlugin
+GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
+    Core::IFullReleaseStep(parent)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
+}
 
-public:
-    ToolsPlugin();
-    ~ToolsPlugin();
-    
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+GenericDataPackCreator::Steps GenericDataPackCreator::stepNumber() const
+{
+    return Extras;
+}
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    
-private:
-    ToolsPreferencesPage *m_prefPage;
-};
+bool GenericDataPackCreator::createTemporaryStorage()
+{
+    return true;
+}
 
-} // namespace Internal
-} // namespace Tools
+bool GenericDataPackCreator::cleanTemporaryStorage()
+{
+    return true;
+}
 
-#endif // TOOLS_IPLUGIN_H
+bool GenericDataPackCreator::startDownload()
+{
+    Q_EMIT downloadFinished();
+    return true;
+}
 
+bool GenericDataPackCreator::postDownloadProcessing()
+{
+    Q_EMIT postDownloadProcessingFinished();
+    return true;
+}
+
+bool GenericDataPackCreator::process()
+{
+    Q_EMIT processFinished();
+    return true;
+}
+
+bool GenericDataPackCreator::registerDataPack()
+{
+    // Read XML file
+    // Create pack foreach registered XMLpack
+    return true;
+}
+
+QString GenericDataPackCreator::processMessage() const
+{
+    return QString::null;
+}

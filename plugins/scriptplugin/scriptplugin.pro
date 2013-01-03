@@ -10,15 +10,19 @@ HEADERS = scriptplugin.h script_exporter.h \
     scriptwrappers.h \
     scriptmanager.h \
     scriptpatientwrapper.h \
+    scriptuserwrapper.h \
     uitools.h \
-    tools.h
+    tools.h \
+    scriptwriterdialog.h
 
 SOURCES = scriptplugin.cpp \
     scriptwrappers.cpp \
     scriptmanager.cpp \
     scriptpatientwrapper.cpp \
+    scriptuserwrapper.cpp \
     uitools.cpp \
-    tools.cpp
+    tools.cpp \
+    scriptwriterdialog.cpp
 
 OTHER_FILES = Script.pluginspec \
     $${SOURCES_GLOBAL_RESOURCES}/test.js
@@ -26,3 +30,6 @@ OTHER_FILES = Script.pluginspec \
 # include translations
 TRANSLATION_NAME = script
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
+
+FORMS += \
+    scriptwriterdialog.ui

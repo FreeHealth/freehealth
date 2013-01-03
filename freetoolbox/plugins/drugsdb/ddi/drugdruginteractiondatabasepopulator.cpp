@@ -629,7 +629,7 @@ bool DrugDrugInteractionDatabasePopulator::saveAtcClassification(DrugsDB::Intern
                 if (!DrugsDB::Tools::createAtc(database, "ZXX" + n, labels, classId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
                     return false;
                 di->setData(CLASS_OR_MOL_ID, classId);
-                di->setData(FREEMEDFORMS_ATC_CODE, "ZXX" + n);
+                di->setData(FREEMEDFORMS_ATC_CODE, QString("ZXX" + n));
             } else {
                 ++molId;
                 QString n = QString::number(molId-100000);
@@ -637,7 +637,7 @@ bool DrugDrugInteractionDatabasePopulator::saveAtcClassification(DrugsDB::Intern
                 if (!DrugsDB::Tools::createAtc(database, "Z01AA" + n, labels, molId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
                     return false;
                 di->setData(CLASS_OR_MOL_ID, molId);
-                di->setData(FREEMEDFORMS_ATC_CODE, "Z01AA" + n);
+                di->setData(FREEMEDFORMS_ATC_CODE, QString("Z01AA" + n));
             }
         }
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);

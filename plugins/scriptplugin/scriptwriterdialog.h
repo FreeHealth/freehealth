@@ -19,43 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#ifndef SCRIPT_INTERNAL_SCRIPTWRITERDIALOG_H
+#define SCRIPT_INTERNAL_SCRIPTWRITERDIALOG_H
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <QDialog>
 
-#include <extensionsystem/iplugin.h>
+/**
+ * \file scriptwriterdialog.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 2012-12-30
+*/
 
-namespace Tools {
+namespace Script {
 namespace Internal {
+class ScriptWriterDialogPrivate;
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+class ScriptWriterDialog : public QDialog
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
-
 public:
-    ToolsPlugin();
-    ~ToolsPlugin();
+    explicit ScriptWriterDialog(QWidget *parent = 0);
+    ~ScriptWriterDialog();
+    bool initialize();
     
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    void onReadFileTriggered();
+    void onSaveFileTriggered();
+    void onExecuteScriptTriggered();
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    
 private:
-    ToolsPreferencesPage *m_prefPage;
+    Internal::ScriptWriterDialogPrivate *d;
 };
 
 } // namespace Internal
-} // namespace Tools
+} // namespace Script
 
-#endif // TOOLS_IPLUGIN_H
+#endif // SCRIPT_INTERNAL_SCRIPTWRITERDIALOG_H
 

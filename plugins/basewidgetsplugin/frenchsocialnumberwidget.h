@@ -19,43 +19,67 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#ifndef BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
+#define BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <QWidget>
 
-#include <extensionsystem/iplugin.h>
+/**
+ * \file frenchsocialnumberwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 2012-12-31
+*/
 
-namespace Tools {
+namespace BaseWidgets {
 namespace Internal {
+class FrenchSocialNumberWidgetPrivate;
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+class FrenchSocialNumberWidget : public QWidget
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
-
 public:
-    ToolsPlugin();
-    ~ToolsPlugin();
-    
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+    explicit FrenchSocialNumberWidget(QWidget *parent = 0);
+    ~FrenchSocialNumberWidget();
+    bool initialize();
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    
+    void setNumberWithControlKey(const QString &number);
+    void setNumberWithoutControlKey(const QString &number);
+
+    bool isValid() const;
+    bool isValid(const QString &number, const QString &key) const;
+    int controlKey(const QString &number) const;
+
+    QString numberWithControlKey() const;
+    QString numberWithoutControlKey() const;
+
+    QString emptyHtmlMask() const;
+    QString toHtml() const;
+
+public Q_SLOTS:
+//    void populateWithPatientData();
+
 private:
-    ToolsPreferencesPage *m_prefPage;
+    void populateLineEdits(QString number = QString::null);
+    void addChar(const QString &c, int currentLineEditId, int pos);
+    void removeChar(int currentLineEditId, int pos);
+    void setCursorPosition(int currentLineEditId, int pos);
+    void checkControlKey();
+
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
+
+private:
+    Internal::FrenchSocialNumberWidgetPrivate *d;
 };
 
 } // namespace Internal
-} // namespace Tools
+} // namespace BaseWidgets
 
-#endif // TOOLS_IPLUGIN_H
+#endif // BASEWIDGETS_INTERNAL_FRENCHSOCIALNUMBERWIDGET_H
 

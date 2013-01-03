@@ -240,4 +240,5 @@ void PatientCore::refreshAllPatientModel() const
     d->_patientModels.removeAll(0);
     foreach(PatientModel *model, d->_patientModels)
         model->refreshModel();
+    d->_patientModelWrapper->patientModel()->refreshModel();
 }
