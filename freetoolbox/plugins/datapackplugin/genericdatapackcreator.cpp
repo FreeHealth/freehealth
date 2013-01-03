@@ -27,6 +27,6 @@
 #include "genericdatapackcreator.h"
 
 GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
-    QCore::IFullReleaseStep(parent)
+    Core::IFullReleaseStep(parent)
 {
 }
