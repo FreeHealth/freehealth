@@ -48,6 +48,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_current.h>
 
 #include <QStringList>
 #include <QGroupBox>
