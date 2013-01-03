@@ -30,7 +30,7 @@
 #include <formmanagerplugin/formmanager_exporter.h>
 
 #include <coreplugin/idebugpage.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 
 #include <QObject>
 #include <QString>
@@ -40,14 +40,10 @@
 #include <QPointer>
 #include <QHash>
 
-
-#include <QDebug>
-
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QTreeWidgetItem;
 QT_END_NAMESPACE
-
 
 /**
  * \file iformitemvalues.h
