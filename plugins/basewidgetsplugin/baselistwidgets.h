@@ -151,6 +151,8 @@ public:
 
     void setBaseCombo(BaseCombo* combo) {m_Combo = combo; clear();}
     int selectedItem(const QString &s);
+    void setDefaultIndex(int index);
+    int defaultIndex() const;
 
     void clear();
 
@@ -171,6 +173,7 @@ private:
     Form::FormItem *m_FormItem;
     BaseCombo* m_Combo;
     int m_OriginalValue;
+    int m_DefaultIndex;
 };
 
 }  // End namespace Internal

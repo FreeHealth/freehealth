@@ -35,8 +35,8 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
-//#include <translationutils/constants.h>
-//#include <translationutils/trans_menu.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
 //#include <translationutils/trans_filepathxml.h>
 
 #include <QStringList>
@@ -48,7 +48,7 @@
 
 using namespace BaseWidgets;
 using namespace Internal;
-//using namespace Trans::ConstantTranslations;
+using namespace Trans::ConstantTranslations;
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   BaseList   ////////////////////////////////////
@@ -380,9 +380,9 @@ void BaseListData::onValueChanged()
     Q_EMIT dataChanged(0);
 }
 
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseCombo --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////
+////////////////////////////   BaseCombo   ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Combo(0)
 {
@@ -413,10 +413,91 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
 
     setFocusableWidget(m_Combo);
 
+    // Manage options
+    int defaultId = -1;
+    if (m_FormItem->getOptions().contains("PopulateWithPeriods")) {
+        Form::FormItemValues *vals = m_FormItem->valueReferences();
+        QString defaultVal = m_FormItem->extraData().value("default");
+        int i = 0;
+        QString uid = "second";
+        QString p = tkTr(Trans::Constants::SECOND_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "minute";
+        p = tkTr(Trans::Constants::MINUTE_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "hour";
+        p = tkTr(Trans::Constants::HOUR_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "day";
+        p = tkTr(Trans::Constants::DAY_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "week";
+        p = tkTr(Trans::Constants::WEEK_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "month";
+        p = tkTr(Trans::Constants::MONTH_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "quarter";
+        p = tkTr(Trans::Constants::QUARTER_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "year";
+        p = tkTr(Trans::Constants::YEAR_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+        ++i;
+        uid = "decade";
+        p = tkTr(Trans::Constants::DECADE_S);
+        vals->setValue(Form::FormItemValues::Value_Uuid, i, uid);
+        vals->setValue(Form::FormItemValues::Value_Possible, i, p);
+        m_Combo->addItem(p);
+        if (defaultVal.compare(uid, Qt::CaseInsensitive)==0)
+            defaultId = i;
+    }
+
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
     data->setBaseCombo(this);
+    data->setDefaultIndex(defaultId);
     m_FormItem->setItemData(data);
+    data->clear();
 
     connect(m_Combo, SIGNAL(currentIndexChanged(int)), data, SLOT(onValueChanged()));
 }
@@ -475,7 +556,8 @@ void BaseCombo::retranslate()
 BaseComboData::BaseComboData(Form::FormItem *item) :
     m_FormItem(item),
     m_Combo(0),
-    m_OriginalValue(-1)
+    m_OriginalValue(-1),
+    m_DefaultIndex(-1)
 {
 }
 
@@ -495,10 +577,26 @@ int BaseComboData::selectedItem(const QString &s)
     return row;
 }
 
+void BaseComboData::setDefaultIndex(int index)
+{
+    m_DefaultIndex = index;
+}
+
+int BaseComboData::defaultIndex() const
+{
+    if (m_DefaultIndex != -1)
+        return m_DefaultIndex;
+
+    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+    return uuids.lastIndexOf(m_FormItem->valueReferences()->defaultValue().toString());
+}
+
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseComboData::clear()
 {
-    selectedItem(m_FormItem->valueReferences()->defaultValue().toString());
+    m_OriginalValue = -1;
+    m_Combo->m_Combo->setCurrentIndex(-1);
+    m_Combo->m_Combo->setCurrentIndex(defaultIndex());
 }
 
 bool BaseComboData::isModified() const
