@@ -50,6 +50,7 @@ public:
         PimDatabase,
         PregnancyDatabase,
         ZipCodes,
+        Extras,
         DataPackProcessing,
         TmpCleaning
     };

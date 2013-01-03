@@ -41,6 +41,7 @@ GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
 
 GenericDataPackCreator::Steps GenericDataPackCreator::stepNumber() const
 {
+    return Extras;
 }
 
 bool GenericDataPackCreator::createTemporaryStorage()
@@ -55,21 +56,26 @@ bool GenericDataPackCreator::cleanTemporaryStorage()
 
 bool GenericDataPackCreator::startDownload()
 {
+    Q_EMIT downloadFinished();
     return true;
 }
 
 bool GenericDataPackCreator::postDownloadProcessing()
 {
+    Q_EMIT postDownloadProcessingFinished();
     return true;
 }
 
 bool GenericDataPackCreator::process()
 {
+    Q_EMIT processFinished();
     return true;
 }
 
 bool GenericDataPackCreator::registerDataPack()
 {
+    // Read XML file
+    // Create pack foreach registered XMLpack
     return true;
 }
 
