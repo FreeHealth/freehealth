@@ -280,7 +280,7 @@ bool PimDatabaseCreator::savePim(DrugsDB::Internal::DrugBaseEssentials *database
         level = 1;
     }
     if (!level) {
-        LOG_ERROR("PIM level is wrong: " + levelString + " line: " + element.lineNumber());
+        LOG_ERROR(QString("PIM level is wrong: %1; line: %2").arg(levelString).arg(element.lineNumber()));
         return false;
     }
 

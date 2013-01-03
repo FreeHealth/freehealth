@@ -304,7 +304,7 @@ public:
         Drug *drug = new Drug;
         drug->setData(Drug::Uid1, uid1);
         drug->setData(Drug::Uid2, uid2);
-        drug->setData(Drug::OldUid, uid1 + uid2);
+        drug->setData(Drug::OldUid, QString(uid1 + uid2));
         drug->setData(Drug::Name, name);
         drug->setData(Drug::Forms, form);
         drug->setData(Drug::Routes, route.split(","));
