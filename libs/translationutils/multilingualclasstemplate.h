@@ -40,32 +40,30 @@
  * \date 15 Mar 2011
 */
 
-
 namespace Trans {
-
 /**
-  \brief This template can be used to manage a multilingual data class.
-  It manages a default set for all language, and one for each languages.
-
-  \code
-// Declare a class
-class MyMultiLingualClass : public Trans::MultiLingualClass<OneDataPerLangClass>
-{
-public:
-    MyMultiLingualClass() {}
-    ~MyMultiLingualClass() {}
-
-    QString categoryForTreeWiget() const {return QString("My Text to show for the debug dialog");}
-};
-
-// Then is the MyMultiLingualClass find your data by lang name
-// lang should be 2 char locale
-if (d->hasLanguage(lang))
-    s = d->getLanguage(lang);
-else
-    s = d->createLanguage(lang);
-  \endcode
-*/
+ * \brief This template can be used to manage a multilingual data class.
+ * It manages a default set for all language, and one for each languages.
+ *
+ * \code
+ * // Declare a class
+ * class MyMultiLingualClass : public Trans::MultiLingualClass<OneDataPerLangClass>
+ * {
+ * public:
+ *   MyMultiLingualClass() {}
+ *   ~MyMultiLingualClass() {}
+ *
+ *   QString categoryForTreeWiget() const {return QString("My Text to show for the debug dialog");}
+ * };
+ *
+ * // Then is the MyMultiLingualClass find your data by lang name
+ * // lang should be 2 char locale
+ * if (d->hasLanguage(lang))
+ *   s = d->getLanguage(lang);
+ * else
+ *   s = d->createLanguage(lang);
+ * \endcode
+ */
 template <typename T>
 class MultiLingualClass
 {
@@ -107,6 +105,7 @@ public:
         }
         return 0;
     }
+
 
     /** Return a pointer to the data class for one unique \e language. If \e language doesnot exists it is created. */
     T *createLanguage(const QString &lang)
