@@ -134,7 +134,7 @@ QVariant PimTreeModel::data(const QModelIndex &index, int role) const
                 return attributeMap.namedItem(XML_ATTRIB_RISK_VALUE).nodeValue();
             }
             if (node.toElement().tagName()==XML_TAG_PIM) {
-                return attributeMap.namedItem(XML_ATTRIB_PIM_LEVEL).nodeValue() .toUpper() + " Level PIM";
+                return QString(attributeMap.namedItem(XML_ATTRIB_PIM_LEVEL).nodeValue().toUpper() + " Level PIM");
             }
             if (attributeMap.contains("name"))
                 return attributeMap.namedItem("name").nodeValue();

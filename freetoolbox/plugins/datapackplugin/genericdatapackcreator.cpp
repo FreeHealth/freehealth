@@ -19,71 +19,67 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IFULLRELEASESTEP_H
-#define IFULLRELEASESTEP_H
+#include "genericdatapackcreator.h"
 
-#include <coreplugin/core_exporter.h>
-#include <QObject>
+using namespace DataPackPlugin;
 
 /**
- * \file ifullreleasestep.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 10 Nov 2012
-*/
+  <datapack description="">
+    <content type=""></content>
+  </datapack>
+ */
 
-namespace Core {
-
-class CORE_EXPORT IFullReleaseStep : public QObject
+GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
+    Core::IFullReleaseStep(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    enum Steps {
-        InteractionDatabase = 0,
-        DrugsDatabase,
-        IcdDatabase,
-        PimDatabase,
-        PregnancyDatabase,
-        ZipCodes,
-        Extras,
-        DataPackProcessing,
-        TmpCleaning
-    };
+GenericDataPackCreator::Steps GenericDataPackCreator::stepNumber() const
+{
+    return Extras;
+}
 
-    explicit IFullReleaseStep(QObject *parent = 0) : QObject(parent) {}
-    virtual QString id() const = 0;
-    virtual Steps stepNumber() const = 0;
+bool GenericDataPackCreator::createTemporaryStorage()
+{
+    return true;
+}
 
-    virtual bool createTemporaryStorage() = 0;
-    virtual bool cleanTemporaryStorage() = 0;
+bool GenericDataPackCreator::cleanTemporaryStorage()
+{
+    return true;
+}
 
-    virtual bool startDownload() = 0;
-    virtual bool postDownloadProcessing();
-    virtual bool process() = 0;
+bool GenericDataPackCreator::startDownload()
+{
+    Q_EMIT downloadFinished();
+    return true;
+}
 
-    virtual bool registerDataPack() = 0;
+bool GenericDataPackCreator::postDownloadProcessing()
+{
+    Q_EMIT postDownloadProcessingFinished();
+    return true;
+}
 
-    virtual QString processMessage() const = 0;
-    virtual QStringList errors() const = 0;
+bool GenericDataPackCreator::process()
+{
+    Q_EMIT processFinished();
+    return true;
+}
 
-    static bool lessThan(const IFullReleaseStep *s1, const IFullReleaseStep *s2) {return s1->stepNumber() < s2->stepNumber();}
+bool GenericDataPackCreator::registerDataPack()
+{
+    // Read XML file
+    // Create pack foreach registered XMLpack
+    return true;
+}
 
-Q_SIGNALS:
-    void downloadFinished();
-    void postDownloadProcessingFinished();
-    void processFinished();
-
-    // Progress dialog management when threaded
-    void progressLabelChanged(const QString &label);
-    void progress(int value);
-    void progressRangeChanged(int min, int max);
-};
-
-} //  End namespace Core
-
-#endif // IFULLRELEASESTEP_H
+QString GenericDataPackCreator::processMessage() const
+{
+    return QString::null;
+}

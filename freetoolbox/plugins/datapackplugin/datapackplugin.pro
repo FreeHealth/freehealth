@@ -16,7 +16,8 @@ SOURCES += \
     datapackresult.cpp \
     datapackserverquery.cpp \
     datapackpage.cpp \
-    datapackwidget.cpp
+    datapackwidget.cpp \
+    genericdatapackcreator.cpp
 #    servertoolwidget.cpp
 
 
@@ -27,7 +28,8 @@ HEADERS  += \
     datapackresult.h \
     datapackserverquery.h \
     datapackpage.h \
-    datapackwidget.h
+    datapackwidget.h \
+    genericdatapackcreator.h
 #    servertoolwidget.h
 
 FORMS += \
