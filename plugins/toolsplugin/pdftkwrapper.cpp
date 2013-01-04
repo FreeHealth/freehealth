@@ -84,6 +84,7 @@ public:
     bool _initialized;
     QString _buildedFdf;
     QPointer<QProcess> _process;
+    QHash<int, QString> _processOutputFile, _processTmpFile;
 
 private:
     PdfTkWrapper *q;
@@ -226,6 +227,8 @@ bool PdfTkWrapper::fillPdfWithFdf(const QString &absPdfFile, const QString &fdfC
          << absFileNameOut;
     d->_process = new QProcess(this);
     d->_process->start(d->pdkTkPath(), args);
+    d->_processOutputFile.insert(d->_process->pid(), absFileNameOut);
+    d->_processTmpFile.insert(d->_process->pid(), tmpFdf);
     connect(d->_process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
 
     return true;
@@ -242,17 +245,19 @@ void PdfTkWrapper::onProcessFinished(int exitCode)
     }
 
     // Start the desktop PDF viewer
-    if (d->_process->arguments().count() >= 4) {
-        qWarning() << "file://" + d->_process->arguments().at(4);
-        QDesktopServices::openUrl(QUrl("file://"+d->_process->arguments().at(4)));
+    if (d->_process) {
+        qWarning() << "file://" + d->_processOutputFile.value(d->_process->pid());
+        QDesktopServices::openUrl(QUrl("file://"+d->_processOutputFile.value(d->_process->pid())));
 
         // Removes tmp file
-        if (!QFile(d->_process->arguments().at(2)).remove())
-            LOG_ERROR("Unable to remove tmp file: " + d->_process->arguments().at(2));
+        if (!QFile(d->_processTmpFile.value(d->_process->pid())).remove())
+            LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(d->_process->pid()));
+        d->_processOutputFile.remove(d->_process->pid());
+        d->_processTmpFile.remove(d->_process->pid());
     }
 
     // Destroy the process
-    d->_process->close();
+    d->_process->kill();
     d->_process->deleteLater();
 //    delete d->_process;
 //    d->_process = 0;
