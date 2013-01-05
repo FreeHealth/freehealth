@@ -81,7 +81,7 @@ void StringListView::setStringList(const QVariant &list)
     } else {
         Views::StringListModel *model = qobject_cast<Views::StringListModel*>(this->model());
         if (model)
-            return model->setStringList(list.toStringList());
+            model->setStringList(list.toStringList());
     }
 }
 
