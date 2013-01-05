@@ -64,6 +64,10 @@ QVariant StringListView::getStringList() const
     QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
     if (model) {
         return model->stringList();
+    } else {
+        Views::StringListModel *model = qobject_cast<Views::StringListModel*>(this->model());
+        if (model)
+            return model->getStringList();
     }
     return QVariant();
 }
@@ -72,8 +76,13 @@ QVariant StringListView::getStringList() const
 void StringListView::setStringList(const QVariant &list)
 {
     QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
-    if (model)
+    if (model) {
         model->setStringList(list.toStringList());
+    } else {
+        Views::StringListModel *model = qobject_cast<Views::StringListModel*>(this->model());
+        if (model)
+            return model->setStringList(list.toStringList());
+    }
 }
 
 /** Returns the checked items */

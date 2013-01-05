@@ -334,8 +334,8 @@ bool DataPackCore::createServer(const QString &serverUid)
         // Update & install datapack description file next to the content file
         descr.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate());
         descr.setData(DataPack::PackDescription::Size, QFileInfo(path).size());
-        descr.setData(DataPack::PackDescription::Md5, Utils::md5(path));
-        descr.setData(DataPack::PackDescription::Sha1, Utils::sha1(path));
+        descr.setData(DataPack::PackDescription::Md5, Utils::fileMd5(path));
+        descr.setData(DataPack::PackDescription::Sha1, Utils::fileSha1(path));
         if (query.autoVersion()) {
             QString version = QString(PACKAGE_VERSION);
             QString versionnedFileName = descr.data(DataPack::ServerDescription::AbsFileName).toString();

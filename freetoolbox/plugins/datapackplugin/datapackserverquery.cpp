@@ -92,8 +92,8 @@ bool DataPackServerQuery::createDirs() const
 //    pack.setSourceFileName(query.descriptionFileAbsolutePath());
 //    pack.setData(DataPack::PackDescription::AbsFileName, query.originalContentFileAbsolutePath());
 //    pack.setData(DataPack::PackDescription::Size, contentFile.size());
-//    pack.setData(DataPack::PackDescription::Md5, Utils::md5(query.originalContentFileAbsolutePath()));
-//    pack.setData(DataPack::PackDescription::Sha1, Utils::sha1(query.originalContentFileAbsolutePath()));
+//    pack.setData(DataPack::PackDescription::Md5, Utils::fileMd5(query.originalContentFileAbsolutePath()));
+//    pack.setData(DataPack::PackDescription::Sha1, Utils::fileSha1(query.originalContentFileAbsolutePath()));
 //    pack.setData(DataPack::PackDescription::LastModificationDate, QDate::currentDate().toString(Qt::ISODate));
 //    result.setPackDescriptionXmlContent(pack.toXml());
 //    return result;
