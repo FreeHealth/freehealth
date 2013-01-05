@@ -690,11 +690,13 @@ bool EpisodeModel::removeEpisode(const QModelIndex &index)
 {
     if (!index.isValid())
         return false;
+    beginResetModel();
     QModelIndex uidIndex = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
     const QVariant &uid = d->_sqlModel->data(uidIndex);
     bool ok = episodeBase()->removeEpisode(uid);
+    d->updateFilter(patient()->uuid());
+    endResetModel();
     // TODO: add a trace in the episode db
-    removeRow(index.row());
     return ok;
 }
 
