@@ -106,13 +106,15 @@ void StringListModel::setStringEditable(bool state)
 
 void StringListModel::setStringList(const QStringList &strings)
 {
-     d->m_StringList.clear();
-     foreach( const QString & s, strings ) {
-         StringListModelPrivate::Data dt;
-         dt.str = s;
-         dt.checked = Qt::Unchecked;
-         d->m_StringList << dt;
-     }
+    beginResetModel();
+    d->m_StringList.clear();
+    foreach( const QString &s, strings) {
+        StringListModelPrivate::Data dt;
+        dt.str = s;
+        dt.checked = Qt::Unchecked;
+        d->m_StringList << dt;
+    }
+    endResetModel();
 }
 
 QStringList StringListModel::getStringList() const
@@ -173,9 +175,11 @@ bool StringListModel::setData(const QModelIndex &index, const QVariant &value, i
         return false;
 
     if ((role == Qt::EditRole) && (d->m_StringEditable)) {
-        d->m_StringList[ index.row() ].str = value.toString();
+        d->m_StringList[index.row()].str = value.toString();
+        Q_EMIT dataChanged(index, index);
     } else if (role == Qt::CheckStateRole && (d->m_Checkable)) {
         d->m_StringList[index.row()].checked = value.toInt();
+        Q_EMIT dataChanged(index, index);
     }
     return true;
 }
