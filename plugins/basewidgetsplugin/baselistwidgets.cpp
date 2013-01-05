@@ -280,8 +280,8 @@ void BaseListData::setSelectedItems(const QString &s)
             QModelIndex idx = m_List->m_Model->index(row, 0);
             selModel->select(idx, QItemSelectionModel::Select);
         }
-    } else if (m_EditableList && m_EditableList->m_StringListView->isItemCheckable()) {
-        m_EditableList->m_StringListView->setCheckedStringList(s.split("`@`", QString::SkipEmptyParts));
+    } else if (m_EditableList) {
+        m_EditableList->m_StringListView->setStringList(s.split("`@`", QString::SkipEmptyParts));
     }
     onValueChanged();
 }
@@ -369,7 +369,7 @@ QVariant BaseListData::storableData() const
         qSort(selected);
         return selected.join("`@`");
     } else if (m_EditableList) {
-        return m_EditableList->m_StringListView->getStringList();
+        return m_EditableList->m_StringListView->getStringList().toStringList().join("`@`");
     }
     return QVariant();
 }
