@@ -80,7 +80,7 @@ bool ToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString)
     
     if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "creating Tools";
+        qWarning() << "Tools::initialize";
     }
     
     // Register objects in the plugin manager's object pool
