@@ -128,17 +128,23 @@ bool PdfTkWrapper::initialize()
 
     // Security assessment: check bin checksums
     if (Utils::isRunningOnMac()) {
-        if (Utils::md5(d->pdkTkPath()) != ::MAC_MD5
-                || Utils::sha1(d->pdkTkPath()) != ::MAC_SHA1
-                || Utils::sha256(d->pdkTkPath()) != ::MAC_SHA256) {
+        if (Utils::fileMd5(d->pdkTkPath()) != ::MAC_MD5
+                || Utils::fileSha1(d->pdkTkPath()) != ::MAC_SHA1
+        #if QT_VERSION >= 0x050000
+                || Utils::fileSha256(d->pdkTkPath()) != ::MAC_SHA256
+        #endif
+                ) {
             LOG_ERROR("Wrong pdftk binary");
             return false;
         }
     } else if (Utils::isRunningOnWin()) {
         // TODO: may be XP / Win7/ Win8 checksum are different?
-        if (Utils::md5(d->pdkTkPath()) != ::XP_MD5
-                || Utils::sha1(d->pdkTkPath()) != ::XP_SHA1
-                || Utils::sha256(d->pdkTkPath()) != ::XP_SHA256) {
+        if (Utils::fileMd5(d->pdkTkPath()) != ::XP_MD5
+                || Utils::fileSha1(d->pdkTkPath()) != ::XP_SHA1
+        #if QT_VERSION >= 0x050000
+                || Utils::fileSha256(d->pdkTkPath()) != ::XP_SHA256
+        #endif
+                ) {
             LOG_ERROR("Wrong pdftk binary");
             return false;
         }
