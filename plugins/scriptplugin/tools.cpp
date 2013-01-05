@@ -26,6 +26,7 @@
 #include "tools.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QDesktopServices>
 #include <QUrl>
@@ -50,4 +51,9 @@ void Tools::openUrl(const QString &url)
         LOG_ERROR("When requested openUrl with " + url);
     else
         LOG("URL opened: " + url);
+}
+
+QString Tools::lineWrapString(const QString &text, int lineLength)
+{
+   return Utils::lineWrapString(text, lineLength);
 }

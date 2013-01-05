@@ -50,6 +50,8 @@ public:
 public Q_SLOTS:
     QString dateToString(const QDate &date, const QString &format);
     void openUrl(const QString &url);
+    QString lineWrapString(const QString &text, int lineLength);
+
 };
 
 } // namespace Internal
