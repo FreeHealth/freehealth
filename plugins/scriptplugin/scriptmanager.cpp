@@ -29,6 +29,7 @@
 #include "scriptuserwrapper.h"
 #include "uitools.h"
 #include "tools.h"
+#include "scriptlog.h"
 
 #include <coreplugin/icore.h>
 
@@ -130,7 +131,8 @@ ScriptManager::ScriptManager(QObject *parent) :
     user(0),
     forms(0),
     uitools(0),
-    tools(0)
+    tools(0),
+    _log(0)
 {
     // Inject default scripts
     evaluate(SCRIPT_NAMESPACE);
@@ -163,6 +165,11 @@ ScriptManager::ScriptManager(QObject *parent) :
     tools = new Internal::Tools(this);
     QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("tools", toolsValue);
+
+    // Add logger
+    _log = new ScriptLog(this);
+    QScriptValue logValue = m_Engine->newQObject(_log, QScriptEngine::QtOwnership);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("log", logValue);
 
     // Connect to formmanager
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));

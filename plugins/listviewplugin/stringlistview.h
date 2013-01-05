@@ -33,9 +33,9 @@
 
 /**
  * \file stringlistview.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 06 Apr 2012
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 01 Jan 2013
 */
 
 namespace Views {
@@ -54,12 +54,12 @@ public:
     void setStringList(const QVariant &list);
 
     void setItemsCheckable(bool state);
+    bool isItemCheckable() const;
     QVariant getCheckedStringList() const;
     void setCheckedStringList(const QVariant &list);
 
 Q_SIGNALS:
     void stringListChanged();
-
 };
 
 }  // End Views

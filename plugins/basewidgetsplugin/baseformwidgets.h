@@ -51,13 +51,10 @@ class QCheckBox;
 class QRadioButton;
 class QLineEdit;
 class QTextEdit;
-class QListView;
-class QComboBox;
 class QDateTimeEdit;
 class QAbstractSpinBox;
 class QPushButton;
 class QAbstractButton;
-class QStringListModel;
 QT_END_NAMESPACE
 
 namespace BaseWidgets {
@@ -378,107 +375,6 @@ public:
 
 public Q_SLOTS:
      void retranslate();
-};
-
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- BaseList implementation ---------------------------------------
-//--------------------------------------------------------------------------------------------------------
-class BaseList : public Form::IFormWidget
-{
-     Q_OBJECT
-public:
-     BaseList(Form::FormItem *linkedObject, QWidget *parent = 0, bool uniqueList = true);
-     ~BaseList();
-
-     QString printableHtml(bool withValues = true) const;
-
-public Q_SLOTS:
-     void retranslate();
-
-public:
-     QListView *m_List;
-     QStringListModel *m_Model;
-};
-
-class BaseListData : public Form::IFormItemData
-{
-    Q_OBJECT
-public:
-    BaseListData(Form::FormItem *item);
-    ~BaseListData();
-
-    void setBaseList(BaseList* list) {m_List = list; clear();}
-    void setSelectedItems(const QString &s);
-
-    void clear();
-
-    Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const;
-    void setModified(bool modified);
-
-    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
-    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
-
-    void setStorableData(const QVariant &data);
-    QVariant storableData() const;
-
-private Q_SLOTS:
-    void onValueChanged();
-
-private:
-    Form::FormItem *m_FormItem;
-    BaseList* m_List;
-    QStringList m_OriginalValue;
-};
-
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- BaseCombo implementation --------------------------------------
-//--------------------------------------------------------------------------------------------------------
-class BaseCombo : public Form::IFormWidget
-{
-     Q_OBJECT
-public:
-     BaseCombo(Form::FormItem *linkedObject, QWidget *parent = 0);
-     ~BaseCombo();
-
-     QString printableHtml(bool withValues = true) const;
-
-public Q_SLOTS:
-     void retranslate();
-
-public:
-     QComboBox *m_Combo;
-};
-
-class BaseComboData : public Form::IFormItemData
-{
-    Q_OBJECT
-public:
-    BaseComboData(Form::FormItem *item);
-    ~BaseComboData();
-
-    void setBaseCombo(BaseCombo* combo) {m_Combo = combo; clear();}
-    int selectedItem(const QString &s);
-
-    void clear();
-
-    Form::FormItem *parentItem() const {return m_FormItem;}
-    bool isModified() const;
-    void setModified(bool modified);
-
-    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
-    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
-
-    void setStorableData(const QVariant &data);
-    QVariant storableData() const;
-
-private Q_SLOTS:
-    void onValueChanged();
-
-private:
-    Form::FormItem *m_FormItem;
-    BaseCombo* m_Combo;
-    int m_OriginalValue;
 };
 
 //--------------------------------------------------------------------------------------------------------

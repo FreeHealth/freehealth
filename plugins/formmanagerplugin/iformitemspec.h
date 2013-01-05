@@ -39,8 +39,6 @@
 #include <QPointer>
 #include <QHash>
 
-#include <QDebug>
-
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QTreeWidgetItem;

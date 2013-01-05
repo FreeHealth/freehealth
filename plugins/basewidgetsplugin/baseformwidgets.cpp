@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "baseformwidgets.h"
+#include "baselistwidgets.h"
 #include "frenchsocialnumber.h"
 #include "basedetailswidget.h"
 #include "basedatecompleterwidget.h"
@@ -47,6 +48,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_current.h>
 
 #include <QStringList>
 #include <QGroupBox>
@@ -84,10 +86,11 @@ namespace {
         Type_Form,
         Type_Radio,
         Type_Check,
-        Type_Combo,
         Type_MultiCheck,
+        Type_Combo,
         Type_UniqueList,
         Type_MultiList,
+        Type_EditableList,
         Type_Spin,
         Type_DoubleSpin,
         Type_ShortText,
@@ -106,10 +109,12 @@ namespace {
 
     // names must be sync with the type enum
     static const QStringList widgetsName =
-            QStringList() << "undef" << "form" << "radio" << "check" << "combo"
-            << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
-            << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "moderndate" << "button" << "detailswidget" << "frenchnss" << "austriansvnr";
+            QStringList() << "undef" << "form" << "radio" << "check" << "multicheck"
+                          << "combo" << "uniquelist" << "multilist" << "editablelist"
+                          << "spin" << "doublespin"
+                          << "shorttext" << "longtext" << "helptext" << "file" << "group"
+                          << "date" << "moderndate" << "button" << "detailswidget"
+                          << "frenchnss" << "austriansvnr";
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
@@ -164,6 +169,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_HelpText : return new BaseHelpText(formItem,parent);
     case ::Type_MultiList : return new BaseList(formItem,parent,false);
     case ::Type_UniqueList : return new BaseList(formItem,parent,true);
+    case ::Type_EditableList : return new BaseEditableStringList(formItem,parent);
     case ::Type_Combo : return new BaseCombo(formItem,parent);
     case ::Type_Date : return new BaseDate(formItem,parent);
     case ::Type_ModernDate : return new BaseDateCompleterWidget(formItem,parent);
@@ -1598,422 +1604,6 @@ void BaseHelpText::retranslate()
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseLists --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
-    Form::IFormWidget(formItem,parent), m_List(0)
-{
-    setObjectName("BaseList");
-    // QtUi Loaded ?
-    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
-    if (!widget.isEmpty()) {
-        // Find widget
-        QListView *le = formItem->parentFormMain()->formWidget()->findChild<QListView*>(widget);
-        if (le) {
-            m_List = le;
-        } else {
-            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
-            // To avoid segfaulting create a fake combo
-            m_List = new QListView(this);
-        }
-        // Find Label
-        m_Label = Constants::findLabel(formItem);
-    } else {
-        // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-        hb->addWidget(m_Label);
-
-        // Add List and manage size
-        m_List = new QListView(this);
-        m_List->setObjectName("List_" + m_FormItem->uuid());
-        m_List->setUniformItemSizes(true);
-        m_List->setAlternatingRowColors(true);
-        m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
-        if (uniqueList)
-            m_List->setSelectionMode(QAbstractItemView::SingleSelection);
-        else
-            m_List->setSelectionMode(QAbstractItemView::MultiSelection);
-
-        const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        m_Model = new QStringListModel(possibles, this);
-        m_List->setModel(m_Model);
-
-        hb->addWidget(m_List);
-    }
-
-    setFocusableWidget(m_List);
-
-    // create FormItemData
-    BaseListData *data = new BaseListData(m_FormItem);
-    data->setBaseList(this);
-    m_FormItem->setItemData(data);
-
-    connect(m_List->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), data, SLOT(onValueChanged()));
-}
-
-BaseList::~BaseList()
-{
-}
-
-QString BaseList::printableHtml(bool withValues) const
-{
-    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
-        return QString();
-
-    QString content;
-    if (!withValues) {
-        foreach(const QString &v, m_Model->stringList()) {
-            content += "<li>" + v + "</li>";
-        }
-    } else {
-        QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
-        if (Constants::dontPrintEmptyValues(m_FormItem) && indexes.isEmpty())
-            return QString();
-        qSort(indexes);
-        foreach(const QModelIndex &i, indexes) {
-            content += "<li>" + i.data().toString() + "</li>";
-        }
-    }
-    if (!content.isEmpty()) {
-        content.prepend("<ul>");
-        content.append("</ul>");
-    }
-    return content;
-}
-
-void BaseList::retranslate()
-{
-    if (m_Label)
-        m_Label->setText(m_FormItem->spec()->label());
-    if (m_List) {
-        const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        if (list.count() != m_Model->rowCount()) {
-            Utils::warningMessageBox(
-                    tr("Wrong form's translations"),
-                    tr("You asked to change the language of the form to %1.\n"
-                       "But this an error while reading translation of %2.\n"
-                       "Number of items of the translation (%3) are wrong.")
-                    .arg(QLocale().name(), m_FormItem->spec()->label()).arg(list.count()));
-            return;
-        }
-        // keep selection
-        QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
-        m_Model->setStringList(list);
-        foreach(const QModelIndex &i, indexes) {
-            m_List->selectionModel()->select(i, QItemSelectionModel::Select);
-        }
-        m_List->setToolTip(m_FormItem->spec()->tooltip());
-    }
-}
-
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
-BaseListData::BaseListData(Form::FormItem *item) :
-        m_FormItem(item), m_List(0)
-{
-}
-
-BaseListData::~BaseListData()
-{
-}
-
-void BaseListData::setSelectedItems(const QString &s)
-{
-    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
-    selModel->clearSelection();
-    if (s.isEmpty())
-        return;
-
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    if (s.contains("`@`")) {
-        // multilist
-        foreach(const QString &i, s.split("`@`", QString::SkipEmptyParts)) {
-            int row = uuids.lastIndexOf(i);
-            QModelIndex idx = m_List->m_Model->index(row, 0);
-            selModel->select(idx, QItemSelectionModel::Select);
-        }
-    } else {
-        int row = uuids.lastIndexOf(s);
-        QModelIndex idx = m_List->m_Model->index(row, 0);
-        selModel->select(idx, QItemSelectionModel::Select);
-    }
-    onValueChanged();
-}
-
-/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
-void BaseListData::clear()
-{
-    setSelectedItems(m_FormItem->valueReferences()->defaultValue().toString());
-}
-
-bool BaseListData::isModified() const
-{
-    QStringList actual = storableData().toStringList();
-    return actual != m_OriginalValue;
-}
-
-void BaseListData::setModified(bool modified)
-{
-    if (!modified)
-        m_OriginalValue = storableData().toStringList();
-}
-
-bool BaseListData::setData(const int ref, const QVariant &data, const int role)
-{
-    Q_UNUSED(ref);
-    if (role!=Qt::EditRole) {
-        setSelectedItems(data.toStringList().join("`@`"));
-    }
-    return true;
-}
-
-QVariant BaseListData::data(const int ref, const int role) const
-{
-//    if (role==Form::IFormItemData::CalculationsRole) {
-//        // return selected value::numerical (if exists)
-//        QString selectedUid;
-//        foreach(QRadioButton *but, m_Radio->m_RadioList) {
-//            if (but->isChecked()) {
-//                selectedUid = but->property("id").toString();
-//                break;
-//            }
-//        }
-//        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
-//        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-//        if (id < vals.count() && id >= 0)
-//            return vals.at(id);
-//    } else
-    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
-        QStringList selected;
-        QItemSelectionModel *selModel = m_List->m_List->selectionModel();
-        if (!selModel->hasSelection())
-            return QVariant();
-        if (ref==Form::IFormItemData::ID_CurrentUuid) {
-            const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-                selected.append(uuids.at(idx.row()));
-            }
-        } else {
-            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-                selected.append(idx.data().toString());
-            }
-        }
-        return selected;
-    }
-    return QVariant();
-}
-
-void BaseListData::setStorableData(const QVariant &data)
-{
-    setSelectedItems(data.toString());
-    m_OriginalValue = data.toStringList();
-    qSort(m_OriginalValue);
-}
-
-/** Storable data of a List is the uuids of the selected items sorted in alphabetic order. */
-QVariant BaseListData::storableData() const
-{
-    QItemSelectionModel *selModel = m_List->m_List->selectionModel();
-
-    if (!selModel->hasSelection())
-        return QVariant();
-
-    QStringList selected;
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
-        selected.append(uuids.at(idx.row()));
-    }
-    qSort(selected);
-    return selected.join("`@`");
-}
-
-void BaseListData::onValueChanged()
-{
-    Constants::executeOnValueChangedScript(m_FormItem);
-    Q_EMIT dataChanged(0);
-}
-//--------------------------------------------------------------------------------------------------------
-//----------------------------------------- BaseCombo --------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_Combo(0)
-{
-    setObjectName("BaseCombo");
-    // QtUi Loaded ?
-    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
-    if (!widget.isEmpty()) {
-        // Find widget
-        m_Combo = formItem->parentFormMain()->formWidget()->findChild<QComboBox*>(widget);
-        if (!m_Combo) {
-            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
-            // To avoid segfaulting create a fake combo
-            m_Combo = new QComboBox(this);
-        }
-        // Find label
-        m_Label = Constants::findLabel(formItem);
-    } else {
-        // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-        hb->addWidget(m_Label);
-
-        // Add List and manage size
-        m_Combo = new QComboBox(this);
-        m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
-        hb->addWidget(m_Combo);
-    }
-    m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
-
-    setFocusableWidget(m_Combo);
-
-    // create FormItemData
-    BaseComboData *data = new BaseComboData(m_FormItem);
-    data->setBaseCombo(this);
-    m_FormItem->setItemData(data);
-
-    connect(m_Combo, SIGNAL(currentIndexChanged(int)), data, SLOT(onValueChanged()));
-}
-
-BaseCombo::~BaseCombo()
-{
-}
-
-QString BaseCombo::printableHtml(bool withValues) const
-{
-    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
-        return QString();
-
-    QString content;
-    if (!withValues) {
-        for(int i = 0; i < m_Combo->count(); ++i) {
-            content += "<li>" + m_Combo->itemData(i).toString() + "</li>";
-        }
-    } else {
-        if (m_Combo->currentIndex()==-1)
-            return QString();
-        content += "<li>" + m_Combo->currentText() + "</li>";
-    }
-    if (!content.isEmpty()) {
-        content.prepend("<ul>");
-        content.append("</ul>");
-    }
-    return content;
-}
-
-void BaseCombo::retranslate()
-{
-    if (m_Label)
-        m_Label->setText(m_FormItem->spec()->label());
-    if (m_Combo) {
-        const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        if (list.count() != m_Combo->count()) {
-            Utils::warningMessageBox(
-                    tr("Wrong form's translations"),
-                    tr("You asked to change the language of the form to %1.\n"
-                       "But this an error while reading translation of %2.\n"
-                       "Number of items of the translation (%3) are wrong.")
-                    .arg(QLocale().name(), m_FormItem->spec()->label()).arg(list.count()));
-            return;
-        }
-        // refresh combo items
-        int id = m_Combo->currentIndex();
-        m_Combo->clear();
-        m_Combo->addItems(list);
-        m_Combo->setCurrentIndex(id);
-        m_Combo->setToolTip(m_FormItem->spec()->tooltip());
-    }
-}
-
-////////////////////////////////////////// ItemData /////////////////////////////////////////////
-BaseComboData::BaseComboData(Form::FormItem *item) :
-    m_FormItem(item),
-    m_Combo(0),
-    m_OriginalValue(-1)
-{
-}
-
-BaseComboData::~BaseComboData()
-{
-}
-
-int BaseComboData::selectedItem(const QString &s)
-{
-    m_Combo->m_Combo->setCurrentIndex(-1);
-    if (s.isEmpty())
-        return -1;
-
-    const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
-    int row = uuids.lastIndexOf(s);
-    m_Combo->m_Combo->setCurrentIndex(row);
-    return row;
-}
-
-/** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
-void BaseComboData::clear()
-{
-    selectedItem(m_FormItem->valueReferences()->defaultValue().toString());
-}
-
-bool BaseComboData::isModified() const
-{
-    return m_OriginalValue != m_Combo->m_Combo->currentIndex();
-}
-
-void BaseComboData::setModified(bool modified)
-{
-    if (!modified)
-        m_OriginalValue = m_Combo->m_Combo->currentIndex();
-}
-
-bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
-{
-    if (role!=Qt::EditRole)
-        return false;
-    if (ref==Form::IFormItemData::ID_CurrentUuid) {
-        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data.toString());
-        m_Combo->m_Combo->setCurrentIndex(id);
-        onValueChanged();
-    }
-    return true;
-}
-
-QVariant BaseComboData::data(const int ref, const int role) const
-{
-    int id = m_Combo->m_Combo->currentIndex();
-    if (ref==Form::IFormItemData::ID_CurrentUuid) {
-        if (id>=0)
-            return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
-
-    }
-    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
-        return m_Combo->m_Combo->currentText();
-    }
-    if (role==Form::IFormItemData::CalculationsRole) {
-        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
-        if (id < vals.count() && id >= 0)
-            return vals.at(id);
-    }
-    return QVariant();
-}
-
-void BaseComboData::setStorableData(const QVariant &data)
-{
-    m_OriginalValue = selectedItem(data.toString());
-}
-
-QVariant BaseComboData::storableData() const
-{
-    int row = m_Combo->m_Combo->currentIndex();
-    if (row < 0 || row >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
-        return QVariant();
-    return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(row);
-}
-
-void BaseComboData::onValueChanged()
-{
-//    WARN_FUNC;
-    Constants::executeOnValueChangedScript(m_FormItem);
-    Q_EMIT dataChanged(Form::IFormItemData::ID_CurrentUuid);
-}
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------

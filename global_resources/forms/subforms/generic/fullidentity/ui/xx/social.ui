@@ -26,8 +26,18 @@
    </item>
    <item row="1" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <spacer name="horizontalSpacer">
+     <item row="1" column="2">
+      <widget class="QLabel" name="ownerLabel">
+       <property name="text">
+        <string>Owner</string>
+       </property>
+       <property name="buddy">
+        <cstring>ownerEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -42,8 +52,18 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="0">
-      <spacer name="horizontalSpacer_2">
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="ownerEdit"/>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QCheckBox" name="isSINOwnerCheck">
+       <property name="text">
+        <string>isOwner</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -74,25 +94,25 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="ownerLabel">
-       <property name="text">
-        <string>Owner</string>
+    </layout>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="buddy">
-        <cstring>ownerEdit</cstring>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-      </widget>
+      </spacer>
      </item>
-     <item row="1" column="3">
-      <widget class="QLineEdit" name="ownerEdit"/>
-     </item>
-     <item row="0" column="1" colspan="3">
-      <widget class="QCheckBox" name="isSINOwnerCheck">
-       <property name="text">
-        <string>isOwner</string>
-       </property>
-      </widget>
+     <item>
+      <widget class="QPushButton" name="declaration"/>
      </item>
     </layout>
    </item>

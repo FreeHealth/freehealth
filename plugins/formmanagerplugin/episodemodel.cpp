@@ -63,6 +63,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <extensionsystem/pluginmanager.h>
 

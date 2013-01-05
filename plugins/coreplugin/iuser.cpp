@@ -159,12 +159,16 @@ void IUser::registerUserTokens() const
     t->setUntranslatedHumanReadableName(Trans::Constants::QUALIFICATIONS);
     _tokens << t;
 
-    t = new UserToken(Constants::TOKEN_USERFULLCONTACT, FullHtmlContact);
+    t = new UserToken(Constants::TOKEN_USERFULLCONTACT_HTML, FullHtmlContact);
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLCONTACT_HTML);
     _tokens << t;
 
-    t = new UserToken(Constants::TOKEN_USERFULLADDRESS, FullHtmlAddress);
+    t = new UserToken(Constants::TOKEN_USERFULLADDRESS_HTML, FullHtmlAddress);
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLADDRESS_HTML);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERFULLADDRESS, FullAddress);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FULLADDRESS);
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERADDRESS, Address);

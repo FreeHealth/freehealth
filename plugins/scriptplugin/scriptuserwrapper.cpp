@@ -87,6 +87,11 @@ QString ScriptUserWrapper::country() const
     return user()->value(Core::IUser::Country).toString();
 }
 
+QString ScriptUserWrapper::fullAddress() const
+{
+    return user()->value(Core::IUser::FullAddress).toString();
+}
+
 QDate ScriptUserWrapper::dateOfBirth() const
 {
     return user()->value(Core::IUser::DateOfBirth).toDate();

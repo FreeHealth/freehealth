@@ -59,7 +59,7 @@ public Q_SLOTS:
 
     // FDF creation helpers
     void beginFdfEncoding();
-    void addFdfValue(const QString &fieldName, const QString &value);
+    void addFdfValue(const QString &fieldName, const QString &value, bool toUpper = true);
     void endFdfEncoding(const QString &filename);
     QString getFdfContent();
 

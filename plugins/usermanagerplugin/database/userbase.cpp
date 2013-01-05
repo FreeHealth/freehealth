@@ -774,10 +774,10 @@ bool UserBase::createDefaultUser()
     user->setLocaleLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAddress(DEFAULT_USER_ADDRESS);
-    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
-    user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
-    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
-    user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
+    user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::AllRights);
+    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::AllRights);
+    user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::AllRights);
     user->setPersonalLkId(1);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);

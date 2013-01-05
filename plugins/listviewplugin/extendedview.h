@@ -39,6 +39,13 @@ class QPoint;
 class QToolBar;
 QT_END_NAMESPACE
 
+/**
+ * \file iview.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 01 Jan 2013
+*/
+
 namespace Views {
 namespace Internal {
 class ExtendedViewPrivate;
@@ -57,7 +64,7 @@ public:
     void setCurrentIndex(const QModelIndex &index) {itemView()->setCurrentIndex(index);}
     QModelIndex currentIndex() const {return itemView()->currentIndex();}
     void setModel(QAbstractItemModel *model) {itemView()->setModel(model);}
-    QItemSelectionModel *selectionModel() const {return itemView()->selectionModel();}
+    QItemSelectionModel *selectionModel() const {if (itemView()) return itemView()->selectionModel(); return 0;}
     QAbstractItemModel *model() const {return itemView()->model();}
     void setEditTriggers(QAbstractItemView::EditTriggers trig) {itemView()->setEditTriggers(trig);}
     QModelIndex indexAt(const QPoint &point) const {return itemView()->indexAt(point);}

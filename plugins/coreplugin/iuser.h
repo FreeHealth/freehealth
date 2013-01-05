@@ -74,7 +74,7 @@ public:
         FullName,
         Gender, Title,
         Address, Zipcode, City, StateProvince, Country, IsoCountry,
-        FullHtmlAddress,
+        FullHtmlAddress, FullAddress,
         Tel1, Tel2, Tel3, Fax,
         FullHtmlContact,
         Specialities, Qualifications, ProfessionalIdentifiants,

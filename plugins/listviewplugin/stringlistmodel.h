@@ -33,10 +33,10 @@
 class QStringList;
 
 /**
- * \file tkStringListModel.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 25 April 2009
+ * \file stringlistmodel.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 01 Jan 2013
 */
 
 namespace Views {
@@ -48,30 +48,31 @@ class LISTVIEW_EXPORT StringListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    StringListModel( QObject *parent = 0,
-                       const bool stringEditable = false,
-                       const bool checkStateEditable = true );
+    StringListModel(QObject *parent = 0,
+                    const bool stringEditable = false,
+                    const bool checkStateEditable = true );
     ~StringListModel();
 
-    virtual int rowCount(const QModelIndex & parent = QModelIndex() ) const;
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-    virtual QVariant data( const QModelIndex & index, int role ) const;
-    virtual bool insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
-    virtual bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     void setReadOnly(bool state);
-    void setCheckable( bool state );
-    void setStringEditable( bool state );
-    void setStringList( const QStringList & strings );
+    void setCheckable(bool state);
+    bool isCheckable() const;
+    void setStringEditable(bool state);
+    void setStringList(const QStringList &strings);
     QStringList getStringList() const;
 
     QStringList getCheckedItems() const;
-    void setCheckedItems( const QStringList & list );
+    void setCheckedItems(const QStringList &list);
 
-    bool moveUp( const QModelIndex & item );
-    bool moveDown( const QModelIndex & item );
+    bool moveUp(const QModelIndex &item);
+    bool moveDown(const QModelIndex &item);
 
 private:
     Internal::StringListModelPrivate *d;

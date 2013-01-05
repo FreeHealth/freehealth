@@ -56,6 +56,7 @@
 #include <QStringListModel>
 #include <QToolButton>
 #include <QToolBar>
+#include <QToolTip>
 
 using namespace Views;
 using namespace Internal;
@@ -77,7 +78,8 @@ public:
         m_ListView(0),
         m_Actions(actions),
         m_Context(0),
-        m_ExtView(0)
+        m_ExtView(0),
+        m_MaxRows(-1)
     {
     }
 
@@ -108,6 +110,7 @@ public:
     QToolBar *m_ToolBar;
     QString m_ContextName;
     ExtendedView *m_ExtView;
+    int m_MaxRows;
 };
 
 }  // End Internal
@@ -116,8 +119,8 @@ public:
 
 /** \brief Constructor */
 ListView::ListView(QWidget *parent, Constants::AvailableActions actions) :
-        IView(parent),
-        d(0)
+    IView(parent),
+    d(0)
 {
     static int handler = 0;
     ++handler;
@@ -193,13 +196,38 @@ void ListView::useContextMenu(bool state)
     d->m_ExtView->useContextMenu(state);
 }
 
+/** Limit the number of row (the user can add to the view/model). */
+void ListView::setMaximumRows(int max)
+{
+    d->m_MaxRows = max;
+}
+
+int ListView::maximumRows() const
+{
+    return d->m_MaxRows;
+}
+
 void ListView::addItem()
 {
-    Q_EMIT addRequested();
-    Q_EMIT aboutToAddItem();
     setFocus();
-    d->m_ExtView->addItem();
-    Q_EMIT itemAdded();
+    bool add = true;
+    if (d->m_MaxRows > 0) {
+        if (model()->rowCount() >= d->m_MaxRows) {
+            // FIXME: improve tooltip position & rect
+            QPoint pos = itemView()->mapToGlobal(itemView()->rect().bottomLeft());
+            QToolTip::showText(pos - QPoint(0,32),
+                               tr("Unable to add a new line, you have reached "
+                                  "the maximum autorized lines."),
+                               itemView());
+            add = false;
+        }
+    }
+    if (add) {
+        Q_EMIT addRequested();
+        Q_EMIT aboutToAddItem();
+        d->m_ExtView->addItem();
+        Q_EMIT itemAdded();
+    }
 }
 
 void ListView::removeItem()

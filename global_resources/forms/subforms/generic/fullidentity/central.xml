@@ -28,6 +28,9 @@
         <text lang="fr">
         Ajout du formulaire de la personne de confiance&lt;br />
         Utilisation des DetailsWidget pour limiter la taille de la vue&lt;br />
+        Ajout de l'auto-remplissage du formulaire de déclaration du médecin traitant.
+        Cette fonctionnalité nécessite l'installation d'un paquet de données
+        disponible auprès de l'association asso.freemedforms.com&lt;br />
         </text>
         <text lang="xx">
         Adding new trusted person subform&lt;br />
@@ -112,6 +115,25 @@
             <label lang="xx">Social number owner</label>
             <label lang="fr">Propriétaire</label>
             <options>DontPrintEmptyValues</options>
+          </Item>
+
+          <Item type="button" name="FrGroup::CreateDeclaration">
+            <uilink widget="declaration"/>
+            <label lang="xx">Formulaire Médecin Traitant</label>
+            <ToolTip lang="xx">Formulaire Médecin Traitant</ToolTip>
+            <icon>__theme__/carte_vitale.png</icon>
+            <script>
+              <onload>
+                // Enabled this button only is the FreeMedForms PDF object is available
+                freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
+                var item = freemedforms.forms.item("FrGroup::CreateDeclaration");
+                if (!item.isValid) {
+                    print("Error in identity form");
+                    return;
+                }
+                item.enabled = freemedforms.pdf.isAvailable;
+              </onload>
+            </script>
           </Item>
         </Item>
 

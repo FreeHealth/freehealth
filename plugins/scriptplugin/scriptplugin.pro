@@ -13,7 +13,8 @@ HEADERS = scriptplugin.h script_exporter.h \
     scriptuserwrapper.h \
     uitools.h \
     tools.h \
-    scriptwriterdialog.h
+    scriptwriterdialog.h \
+    scriptlog.h
 
 SOURCES = scriptplugin.cpp \
     scriptwrappers.cpp \
@@ -22,7 +23,8 @@ SOURCES = scriptplugin.cpp \
     scriptuserwrapper.cpp \
     uitools.cpp \
     tools.cpp \
-    scriptwriterdialog.cpp
+    scriptwriterdialog.cpp \
+    scriptlog.cpp
 
 OTHER_FILES = Script.pluginspec \
     $${SOURCES_GLOBAL_RESOURCES}/test.js

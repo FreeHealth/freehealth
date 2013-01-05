@@ -74,6 +74,9 @@ public:
     void showButtons();
     void useContextMenu(bool state = true);
 
+    void setMaximumRows(int max);
+    int maximumRows() const;
+
 public Q_SLOTS:
     virtual void addItem();
     virtual void removeItem();

@@ -27,6 +27,9 @@
 #define SCRIPT_INTERNAL_TOOLS_H
 
 #include <QObject>
+QT_BEGIN_NAMESPACE
+class QDate;
+QT_END_NAMESPACE
 
 /**
  * \file tools.h

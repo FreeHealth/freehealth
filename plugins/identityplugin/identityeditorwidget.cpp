@@ -990,8 +990,10 @@ bool IdentityEditorWidget::submit()
     if (d->m_xmlOnly)
         return true;
     if (d->m_Mapper) {
-        if (!d->m_Mapper->submit())
+        if (!d->m_Mapper->submit()) {
+            LOG_ERROR("Mapper can not submit to model");
             return false;
+        }
         // BUG: QPixmap from the themedGenderButton is not correctly submitted
         // So do this by hand
         int index = d->m_Mapper->mappedSection(d->ui->photoButton);
