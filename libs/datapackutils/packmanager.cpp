@@ -218,7 +218,7 @@ void PackManager::packDownloadDone(const DataPack::Pack &pack, const DataPack::S
 
 bool PackManager::checkCachedPackFileIntegrity(const Pack &pack)
 {
-    QByteArray downloadedMd5 = Utils::md5(pack.persistentlyCachedZipFileName());
+    QByteArray downloadedMd5 = Utils::fileMd5(pack.persistentlyCachedZipFileName());
     return (downloadedMd5 == pack.md5ControlChecksum());
 }
 

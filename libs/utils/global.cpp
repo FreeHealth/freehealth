@@ -762,7 +762,7 @@ QString isFileExists(const QString &absPath)
 }
 
 /** \brief Returns the MD5 checksum of a file. */
-QByteArray md5(const QString &fileName)
+QByteArray fileMd5(const QString &fileName)
 {
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
@@ -774,7 +774,7 @@ QByteArray md5(const QString &fileName)
 }
 
 /** \brief Returns the SHA1 checksum of a file. */
-QByteArray sha1(const QString &fileName)
+QByteArray fileSha1(const QString &fileName)
 {
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
@@ -785,8 +785,9 @@ QByteArray sha1(const QString &fileName)
     return QByteArray();
 }
 
+#if QT_VERSION >= 0x050000
 /** \brief Returns the SHA256 checksum of a file. */
-QByteArray sha256(const QString &fileName)
+QByteArray fileSha256(const QString &fileName)
 {
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
@@ -796,6 +797,7 @@ QByteArray sha256(const QString &fileName)
     }
     return QByteArray();
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////

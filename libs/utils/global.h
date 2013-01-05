@@ -142,9 +142,11 @@ UTILS_EXPORT QString readTextFile( const QString &toRead, const QString &encoder
 UTILS_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
 UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
-UTILS_EXPORT QByteArray md5(const QString &fileName);
-UTILS_EXPORT QByteArray sha1(const QString &fileName);
-UTILS_EXPORT QByteArray sha256(const QString &fileName);
+UTILS_EXPORT QByteArray fileMd5(const QString &fileName);
+UTILS_EXPORT QByteArray fileSha1(const QString &fileName);
+#if QT_VERSION >= 0x050000
+UTILS_EXPORT QByteArray fileSha256(const QString &fileName);
+#endif
 
 // Some useful widgets specific functions
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
