@@ -19,63 +19,43 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SCRIPT_SCRIPTMANAGER_H
-#define SCRIPT_SCRIPTMANAGER_H
+/*!
+ * \class Script::Internal::ScriptLog
+ * Script wrapper over the Utils::Log static class
+ * \sa Utils::Log
+ */
 
-#include <scriptplugin/script_exporter.h>
-#include <coreplugin/iscriptmanager.h>
+#include "scriptlog.h"
 
-#include <QScriptEngine>
+#include <utils/log.h>
 
-/**
- * \file scriptmanager.h
- * \author Eric Maeker
- * \version 0.8.2
- * \date 30 Dec 2012
-*/
+#include <QDebug>
 
-namespace Script {
-namespace Internal {
-class UiTools;
-class ScriptPatientWrapper;
-class ScriptUserWrapper;
-class FormManagerScriptWrapper;
-class Tools;
-class ScriptLog;
+using namespace Script;
+using namespace Internal;
 
-class ScriptManager : public Core::IScriptManager
+/*! Constructor of the Script::Internal::ScriptLog class */
+ScriptLog::ScriptLog(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    ScriptManager(QObject *parent);
+/*! Destructor of the Script::Internal::ScriptLog class */
+ScriptLog::~ScriptLog()
+{
+}
 
-    QScriptValue evaluate(const QString &script);
-    QScriptValue addScriptObject(QObject *object);
-//    QScriptValue addScriptObject(QObject *object, const QString &objectNamespace, const QString &objectScriptName);
+void ScriptLog::message(const QString &owner, const QString &message)
+{
+    LOG_FOR(owner, message);
+}
 
-    QScriptEngine *engine() {return m_Engine;}
-
-private Q_SLOTS:
-    void onAllFormsLoaded();
-    void onSubFormLoaded(const QString &subFormUuid);
-
-private:
-    static ScriptManager *m_Instance;
-    QScriptEngine *m_Engine;
-    ScriptPatientWrapper *patient;
-    ScriptUserWrapper *user;
-    FormManagerScriptWrapper *forms;
-    UiTools *uitools;
-    Tools *tools;
-    ScriptLog *_log;
-};
-
-}  // namespace Internal
-}  // namespace Script
-
-#endif // SCRIPT_SCRIPTMANAGER_H
+void ScriptLog::error(const QString &owner, const QString &message)
+{
+    LOG_ERROR_FOR(owner, message);
+}
