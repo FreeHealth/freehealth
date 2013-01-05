@@ -89,8 +89,9 @@ public:
     // Put your data here
     bool _initialized;
     QString _buildedFdf;
+    QHash<QString, QString> _fieldValue;
     QPointer<QProcess> _process;
-    QHash<int, QString> _processOutputFile, _processTmpFile;
+    QHash<QProcess *, QString> _processOutputFile, _processTmpFile;
 
 private:
     PdfTkWrapper *q;
@@ -162,7 +163,7 @@ bool PdfTkWrapper::isAvailable() const
 void PdfTkWrapper::beginFdfEncoding()
 {
     d->_buildedFdf.clear();
-    d->_buildedFdf = "%FDF-1.2\n%âãÏÓ\n1 0 obj\n<<\n/FDF\n<<\n/Fields [\n";
+    d->_fieldValue.clear();
 }
 
 /**
@@ -182,8 +183,13 @@ void PdfTkWrapper::addFdfValue(const QString &fieldName, const QString &value, b
     val = val.replace("(","_");
     val = val.replace(")","_");
     val = val.replace("\t","    ");
-    d->_buildedFdf += QString("<< /T (%1) /V (%2) >>\n").arg(fieldName).arg(val);
+    d->_fieldValue.insert(fieldName, val);
 }
+
+//void PdfTkWrapper::addFdfValueFromFormItem(const QString &fieldName, const QString &itemUuid, bool toUpper)
+//{
+//    // get item from scriptengine
+//}
 
 /**
  * Stops the started FDF encoding.
@@ -192,6 +198,16 @@ void PdfTkWrapper::addFdfValue(const QString &fieldName, const QString &value, b
 */
 void PdfTkWrapper::endFdfEncoding(const QString &filename)
 {
+    // Header
+    d->_buildedFdf = "%FDF-1.2\n%âãÏÓ\n1 0 obj\n<<\n/FDF\n<<\n/Fields [\n";
+    // Fields
+    QHashIterator<QString, QString> i(d->_fieldValue);
+    while (i.hasNext()) {
+        i.next();
+        d->_buildedFdf += QString("<< /T (%1) /V (%2) >>\n")
+                .arg(i.key()).arg(i.value());
+    }
+    // Footer
     d->_buildedFdf += "]/F (" + filename + ")\n";
     d->_buildedFdf += "  >>\n>>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF";
 }
@@ -249,8 +265,9 @@ bool PdfTkWrapper::fillPdfWithFdf(const QString &absPdfFile, const QString &fdfC
          << absFileNameOut;
     d->_process = new QProcess(this);
     d->_process->start(d->pdkTkPath(), args);
-    d->_processOutputFile.insert(d->_process->pid(), absFileNameOut);
-    d->_processTmpFile.insert(d->_process->pid(), tmpFdf);
+    d->_processOutputFile.insert(d->_process, absFileNameOut);
+    d->_processTmpFile.insert(d->_process, tmpFdf);
+    qWarning()<<d->_processOutputFile;
     connect(d->_process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
 
     return true;
@@ -258,24 +275,31 @@ bool PdfTkWrapper::fillPdfWithFdf(const QString &absPdfFile, const QString &fdfC
 
 void PdfTkWrapper::onProcessFinished(int exitCode)
 {
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    Q_ASSERT(process);
+    if (!process)
+        return;
     if (exitCode) {
         Utils::warningMessageBox(tr("pdftk error"),
                                  tr("The pdftk process ends with the exit code: %1\n"
                                     "%2")
                                  .arg(exitCode)
-                                 .arg(QString(d->_process->readAllStandardError())));
+                                 .arg(QString(process->readAllStandardError())));
     }
 
     // Start the desktop PDF viewer
-    if (d->_process) {
-        qWarning() << "file://" + d->_processOutputFile.value(d->_process->pid());
-        QDesktopServices::openUrl(QUrl("file://"+d->_processOutputFile.value(d->_process->pid())));
+    if (process) {
+        qWarning() << "file://" + d->_processOutputFile.value(process);
+
+        qWarning()<<d->_processOutputFile << process->pid();
+
+        QDesktopServices::openUrl(QUrl("file://"+d->_processOutputFile.value(d->_process)));
 
         // Removes tmp file
-        if (!QFile(d->_processTmpFile.value(d->_process->pid())).remove())
-            LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(d->_process->pid()));
-        d->_processOutputFile.remove(d->_process->pid());
-        d->_processTmpFile.remove(d->_process->pid());
+        if (!QFile(d->_processTmpFile.value(d->_process)).remove())
+            LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(d->_process));
+        d->_processOutputFile.remove(d->_process);
+        d->_processTmpFile.remove(d->_process);
     }
 
     // Destroy the process
