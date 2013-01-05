@@ -760,6 +760,8 @@ bool FormPlaceHolder::removeCurrentEpisode()
         return false;
     bool ok = d->_currentEpisodeModel->removeEpisode(d->currentEditingEpisodeIndex());
     d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+    d->ui->formDataMapper->clear();
+    d->ui->formDataMapper->setEnabled(false);
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
