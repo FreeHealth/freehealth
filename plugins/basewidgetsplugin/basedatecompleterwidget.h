@@ -28,6 +28,7 @@
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
+#include <QDate>
 
 /**
  * \file basedatecompleterwidget.h
@@ -74,7 +75,7 @@ public:
     ~BaseDateCompleterData();
 
     void setBaseDate(BaseDateCompleterWidget* date) {m_Date = date; clear();}
-    void setDate(const QString &s);
+    void setDate(const QDate &date);
 
     void clear();
 
@@ -94,7 +95,7 @@ private Q_SLOTS:
 private:
     Form::FormItem *m_FormItem;
     BaseDateCompleterWidget* m_Date;
-    QString m_OriginalValue;
+    QDate m_OriginalValue;
 };
 
 } // namespace Internal

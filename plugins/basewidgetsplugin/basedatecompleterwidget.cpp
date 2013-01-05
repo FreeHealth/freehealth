@@ -81,12 +81,11 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
     setFocusableWidget(_dateEdit);
 
     // create itemdata
-//    BaseDateCompleterData *data = new BaseDateCompleterData(formItem);
-//    data->setDateEditor(this);
-//    formItem->setItemData(data);
+    BaseDateCompleterData *data = new BaseDateCompleterData(formItem);
+    data->setBaseDate(this);
+    formItem->setItemData(data);
 
     retranslate();
-
 }
 
 BaseDateCompleterWidget::~BaseDateCompleterWidget()
@@ -161,29 +160,34 @@ BaseDateCompleterData::~BaseDateCompleterData()
 {
 }
 
-void BaseDateCompleterData::setDate(const QString &s)
+void BaseDateCompleterData::setDate(const QDate &date)
 {
     m_Date->_dateEdit->clear();
-    m_Date->_dateEdit->setDate(QDate::fromString(s, Qt::ISODate));
+    m_Date->_dateEdit->setDate(date);
     onValueChanged();
 }
 
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
 void BaseDateCompleterData::clear()
 {
-    m_OriginalValue = m_FormItem->valueReferences()->defaultValue().toString();
-    setDate(m_OriginalValue);
+    const QStringList &options = m_FormItem->getOptions();
+    QDate date;
+    if (options.contains("now")
+            || options.contains("today")) {
+        date = QDate::currentDate();
+    }
+    setDate(date);
 }
 
 bool BaseDateCompleterData::isModified() const
 {
-    return m_OriginalValue != m_Date->_dateEdit->date().toString(Qt::ISODate);
+    return m_OriginalValue != m_Date->_dateEdit->date();
 }
 
 void BaseDateCompleterData::setModified(bool modified)
 {
     if (!modified)
-        m_OriginalValue = m_Date->_dateEdit->date().toString(Qt::ISODate);
+        m_OriginalValue = m_Date->_dateEdit->date();
 }
 
 bool BaseDateCompleterData::setData(const int ref, const QVariant &data, const int role)
@@ -210,8 +214,13 @@ QVariant BaseDateCompleterData::data(const int ref, const int role) const
 
 void BaseDateCompleterData::setStorableData(const QVariant &data)
 {
-    setDate(data.toString());
-    m_OriginalValue = data.toString();
+    clear();
+    if (data.isNull()) {
+        m_OriginalValue = QDate();
+    } else {
+        m_OriginalValue = QDate::fromString(data.toString(), Qt::ISODate);
+        setDate(m_OriginalValue);
+    }
 }
 
 QVariant BaseDateCompleterData::storableData() const
