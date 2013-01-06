@@ -45,7 +45,6 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
 
-#include <QDataWidgetMapper>
 #include <QHBoxLayout>
 
 //#include "ui_agendauserviewerwidget.h"

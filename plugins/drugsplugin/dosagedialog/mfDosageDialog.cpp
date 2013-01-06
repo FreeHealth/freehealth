@@ -44,7 +44,6 @@
 #include <QCheckBox>
 #include <QTableWidget>
 #include <QSpinBox>
-#include <QDataWidgetMapper>
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;

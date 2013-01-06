@@ -44,7 +44,6 @@
 #include <QPicture>
 #include <QVBoxLayout>
 #include <QAction>
-#include <QStatusBar>
 #include <QStyle>
 #include <QStyleOption>
 #include <QMouseEvent>
