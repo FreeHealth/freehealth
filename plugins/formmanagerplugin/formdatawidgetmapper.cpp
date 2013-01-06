@@ -250,11 +250,10 @@ bool FormDataWidgetMapper::isDirty() const
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
-        if (it->itemData() && it->itemData()->isModified()) {
-            if (WarnDirty)
-                qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
+        if (WarnDirty && it->itemData())
+            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
+        if (it->itemData() && it->itemData()->isModified())
             return true;
-        }
     }
     if (WarnDirty)
         qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
