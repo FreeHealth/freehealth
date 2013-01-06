@@ -88,11 +88,12 @@ public:
     void checkForUpdates() const;
     // End Form::IForm interface
 
+    QList<Utils::GenericUpdateInformation> &availableUpdates();
+
 private:
 //    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list) const;
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const;
 
-public:
     bool checkDatabaseFormFileForUpdates() const;
 
 private:
@@ -108,6 +109,10 @@ private:
 
      // Form UUID cache
      mutable QHash<QString, XmlFormName> m_FormNames;
+
+     // Form updates cache
+     mutable bool alreadyCheckedForUpdates;
+     mutable QList<Utils::GenericUpdateInformation> m_FormUpdatesList;
 };
 
 }  // End namespace Internal
