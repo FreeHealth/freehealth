@@ -86,6 +86,7 @@ public:
     QString lastError() const {return m_Error.join("\n");}
 
     void checkForUpdates() const;
+    bool updateForms();
     // End Form::IForm interface
 
     QList<Utils::GenericUpdateInformation> & availableUpdates();
@@ -113,6 +114,7 @@ private:
      // Form updates cache
      mutable bool alreadyCheckedForUpdates;
      mutable QList<Utils::GenericUpdateInformation> m_FormUpdatesList;
+     mutable QList<XmlFormName> formsToUpdate;
 };
 
 }  // End namespace Internal

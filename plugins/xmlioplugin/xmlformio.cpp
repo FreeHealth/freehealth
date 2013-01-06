@@ -438,6 +438,24 @@ QList<Utils::GenericUpdateInformation> & XmlFormIO::availableUpdates()
     return m_FormUpdatesList;
 }
 
+bool XmlFormIO::updateForms()
+{
+    if (!alreadyCheckedForUpdates)
+        checkForUpdates();
+    if (formsToUpdate.empty())
+        return false;
+
+    foreach(XmlFormName form, formsToUpdate) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        if (!base()->saveForm(form)) {
+            LOG_ERROR("Unable to update form database. Form: " + form.uid + " " + form.absFileName);
+        } else {
+            LOG("Form updated: "  + form.uid + " " + form.absFileName);
+        }
+    }
+    return true;
+}
+
 /** Check the database form version and try to update them with the local files. */
 bool XmlFormIO::checkDatabaseFormFileForUpdates() const
 {
@@ -453,8 +471,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Test all database forms for an update and populate a list
-    QList<XmlFormName> formsToUpdate;
-    bool readError = false;
     QStringList msg;
 
     // iterate through all FormIO descriptions in database
@@ -500,24 +516,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    if (!readError && !formsToUpdate.isEmpty()) {
-        // Ask user for update
-        bool yes = Utils::yesNoMessageBox(tr("Form update detected."),
-                                          tr("A form update has been detected. Do you want to update the forms?"),
-                                          msg.join("<br /><br />"));
-        if (yes) {
-            // Update all checked forms
-            for(int i = 0; i < formsToUpdate.count(); ++i) {
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-                XmlFormName &form = formsToUpdate[i];
-                if (!base()->saveForm(form)) {
-                    LOG_ERROR("Unable to update form database. Form: " + form.uid + " " + form.absFileName);
-                } else {
-                    LOG("Form updated: "  + form.uid + " " + form.absFileName);
-                }
-            }
-        }
-    }
 
     // Clear cache
     m_ReadableForms.clear();

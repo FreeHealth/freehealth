@@ -705,6 +705,12 @@ void FormManager::checkFormUpdates()
     // Check form update
     foreach(Form::IFormIO *io, list) {
         io->checkForUpdates();
+
+        //TODO: manage update information from FormIO
+
+        if (Utils::yesNoMessageBox(tr("Form update detected."),
+                                   tr("A form update has been detected. Do you want to update the forms?"), "") == true)
+            io->updateForms();
     }
 }
 
@@ -724,6 +730,8 @@ void FormManager::packChanged(const DataPack::Pack &pack)
     // Check form update
     foreach(Form::IFormIO *io, list) {
         io->checkForUpdates();
+        //TODO: manage user interaction
+        io->updateForms();
     }
 
     // Force patient files reloading
