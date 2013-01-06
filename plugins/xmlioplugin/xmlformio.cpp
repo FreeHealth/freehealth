@@ -441,44 +441,55 @@ QList<Utils::GenericUpdateInformation> & XmlFormIO::availableUpdates()
 /** Check the database form version and try to update them with the local files. */
 bool XmlFormIO::checkDatabaseFormFileForUpdates() const
 {
-    QList<Form::FormIODescription *> filesDescList;
-    QList<Form::FormIODescription *> dbDescList;
+    QList<Form::FormIODescription *> fileDescriptionList;
+    QList<Form::FormIODescription *> dbDescriptionList;
     LOG("Checking for form update");
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // get all available descriptions from database
     Form::FormIOQuery querydb;
     querydb.setGetAllAvailableFormDescriptions(true);
-    dbDescList = base()->getFormDescription(querydb);
+    dbDescriptionList = base()->getFormDescription(querydb);
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Test all database forms for an update and populate a list
     QList<XmlFormName> formsToUpdate;
     bool readError = false;
     QStringList msg;
-    foreach(Form::FormIODescription *dbDescription, dbDescList) {
+
+    // iterate through all FormIO descriptions in database
+    foreach(Form::FormIODescription *dbDescription, dbDescriptionList) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        qDeleteAll(filesDescList);
-        filesDescList.clear();
+        qDeleteAll(fileDescriptionList);
+        fileDescriptionList.clear();
+
         Form::FormIOQuery query;
         query.setFormUuid(dbDescription->data(Form::FormIODescription::UuidOrAbsPath).toString());
         query.setForceFileReading(true);
+
+        // get actual version number of a form in database
         Utils::VersionNumber dbVersion(dbDescription->data(Form::FormIODescription::Version).toString());
-        filesDescList = getFormFileDescriptions(query);
-        foreach(Form::FormIODescription *descFile , filesDescList) {
-            // check version number of forms
-            Utils::VersionNumber file(descFile->data(Form::FormIODescription::Version).toString());
-            if (file.versionString()=="test" || file>dbVersion) {
+
+        // get file description list of that form and iterate through this list
+        fileDescriptionList = getFormFileDescriptions(query);
+        foreach(Form::FormIODescription *fileDescription, fileDescriptionList) {
+
+            // check version number of forms in the file
+            Utils::VersionNumber fileVersion(fileDescription->data(Form::FormIODescription::Version).toString());
+
+            if (fileVersion.versionString() == "test" || fileVersion > dbVersion) {
+
                 // update database
-                XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
+                XmlFormName &form = formName(fileDescription->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
+
                 // Construct the detailed text of the user's question messagebox
                 QString html;
                 html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br />&nbsp;&nbsp;•&nbsp;%3<br />")
-                        .arg(tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString())
-                        .arg(tr("New version: %1").arg(file.versionString()))
+                        .arg(tr("Form: ") + fileDescription->data(Form::FormIODescription::ShortDescription).toString())
+                        .arg(tr("New version: %1").arg(fileVersion.versionString()))
                         .arg(tr("Database version: %1").arg(dbVersion.versionString()))
                         ;
-                foreach(const Utils::GenericUpdateInformation &u, descFile->updateInformationForVersion(dbVersion)) {
+                foreach(const Utils::GenericUpdateInformation &u, fileDescription->updateInformationForVersion(dbVersion)) {
                     html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;:<br /> " + u.text() + "<br />";
                 }
                 msg << html;
@@ -513,9 +524,9 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     reader()->clearCache();
 
     // Clear pointers
-    qDeleteAll(filesDescList);
-    filesDescList.clear();
-    qDeleteAll(dbDescList);
-    dbDescList.clear();
+    qDeleteAll(fileDescriptionList);
+    fileDescriptionList.clear();
+    qDeleteAll(dbDescriptionList);
+    dbDescriptionList.clear();
     return true;
 }

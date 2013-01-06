@@ -88,7 +88,7 @@ public:
     void checkForUpdates() const;
     // End Form::IForm interface
 
-    QList<Utils::GenericUpdateInformation> &availableUpdates();
+    QList<Utils::GenericUpdateInformation> & availableUpdates();
 
 private:
 //    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list) const;
