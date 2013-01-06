@@ -33,9 +33,9 @@ QT_END_NAMESPACE
 
 /**
  * \file tools.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 24 Aug 2012
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 06 Jan 2012
 */
 
 namespace Script {
