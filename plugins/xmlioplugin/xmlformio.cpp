@@ -422,6 +422,46 @@ QPixmap XmlFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name)
     return base()->getScreenShot(uuidOrAbsPath, name);
 }
 
+QString XmlFormIO::extractFileToTmpPath(const QString &uuidOrAbsPath, const QString &name) const
+{
+    // Get the extension of the requested file
+    QFileInfo info(name);
+    int type = XmlIOBase::ExtraFiles;
+    if (info.suffix().compare("pdf", Qt::CaseInsensitive) == 0) {
+        type = XmlIOBase::PdfFile;
+    } else if ((info.suffix().compare("html", Qt::CaseInsensitive) == 0)
+               || (info.suffix().compare("htm", Qt::CaseInsensitive) == 0)) {
+        type = XmlIOBase::HtmlFile;
+    }
+
+    // Get the file content
+    QString content = base()->getFormContent(uuidOrAbsPath, type, name);
+    if (content.isEmpty())
+        return QString::null;
+
+    // Create output absolutefilepath
+    QString output = settings()->path(Core::ISettings::ApplicationTempPath) + QDir::separator();
+    output += XmlIOBase::createUid() + "." + info.suffix();
+
+    // Save the content to a tmp path
+    if (type == XmlIOBase::PdfFile) {
+        QByteArray save = QByteArray::fromBase64(content.toAscii());
+        QFile file(output);
+        if (!file.open(QFile::WriteOnly)) {
+            LOG_ERROR("Unable to open file: " + output);
+            return QString::null;
+        }
+        file.write(save);
+        file.close();
+    } else {
+        if (!Utils::saveStringToFile(content, output, Utils::Overwrite, Utils::DontWarnUser)) {
+            LOG_ERROR("Unable to open file: " + output);
+            return QString::null;
+        }
+    }
+    return output;
+}
+
 void XmlFormIO::checkForUpdates() const
 {
     reader()->clearCache();

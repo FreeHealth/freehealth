@@ -81,6 +81,8 @@ public:
     QList<QPixmap> screenShots(const QString &uuidOrAbsPath) const;
     QPixmap screenShot(const QString &uuidOrAbsPath, const QString &name) const;
 
+    QString extractFileToTmpPath(const QString &uuidOrAbsPath, const QString &name) const;
+
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     QString lastError() const {return m_Error.join("\n");}

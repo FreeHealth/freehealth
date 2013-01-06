@@ -144,6 +144,8 @@ public Q_SLOTS:
     QString namespaceInUse() const {return m_NS;}
 
     QScriptValue item(const QString &uuid);
+    QString extractFormFile(const QString &uuid, const QString &fileName);
+
 //    FormMainScriptWrapper form(const QString &uuid) const;
 
 Q_SIGNALS:

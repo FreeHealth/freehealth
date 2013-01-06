@@ -146,6 +146,10 @@ QScriptValue FormManagerScriptWrapper::item(const QString &uuid)
     return m_Items.value(fullUuid, QScriptValue(QString("No item found")));
 }
 
+QString FormManagerScriptWrapper::extractFormFile(const QString &uuid, const QString &fileName)
+{
+    return formManager().extractFormFileToTmpPath(uuid, fileName);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////    FORMITEMS    /////////////////////////////////////////

@@ -99,6 +99,16 @@
   * \e uuidOrAbsPath with a filename like \e name
 */
 
+/** \fn virtual QString Form::IFormIO::extractFileToTmpPath(const QString &uuidOrAbsPath, const QString &name) const = 0;
+ * Extract a specific file from the form uuid \e uuidOrAbsPath and the filename \e name.
+ * The file is extracted to the temporary path and the absolute full path is returned.
+ * In case of an error the return QString is empty.\n
+ * This can be used with the "extra" files of the forms like:
+ * - pdf files
+ * - html files
+ * - icon files
+ */
+
 /** \fn virtual bool Form::IFormIO::saveForm(QObject *treeRoot) = 0;
   * Not yet implemented.
 */

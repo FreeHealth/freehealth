@@ -93,9 +93,10 @@
 
 #include <QDebug>
 
-enum { WarnFormCreation = false };
-
-enum { ManageDuplicates = true };
+enum { WarnFormCreation = false,
+       ManageDuplicates = true,
+       LogChronos       = true
+     };
 
 using namespace Form;
 using namespace Form::Internal;
@@ -567,20 +568,30 @@ bool FormManager::loadPatientFile()
 
 bool FormManager::onCurrentPatientChanged()
 {
+    QTime chrono;
+    if (LogChronos)
+        chrono.start();
+
     if (d->getMainFormCollection()) {
         LOG("Central patient file loaded");
     } else {
         LOG_ERROR("PatientChanged: Unable to load central patient file");
         return false;
     }
+    if (LogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "onCurrentPatientChanged::get form collections");
 
     // reinitialize all formtreemodels
     foreach(FormTreeModel *model, d->_formTreeModels.values()) {
         model->refreshFormTree();
     }
+    if (LogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "onCurrentPatientChanged::refresh formtreemodels");
 
     // load subforms
     d->loadPatientSubForms();
+    if (LogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "onCurrentPatientChanged::load subforms");
 
     Q_EMIT patientFormsLoaded();
     return true;
@@ -672,6 +683,34 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
             return pix;
     }
     return pix;
+}
+
+/**
+ * Extract a specific file base on its \e fileName from the the form \e formUid
+ * and return the absolute filepath of the extracted file.
+*/
+QString FormManager::extractFormFileToTmpPath(const QString &formUid, const QString &fileName)
+{
+    if (formUid.isEmpty()) {
+        LOG_ERROR("No formUid...");
+        return QString::null;
+    }
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return QString::null;
+    }
+
+    // Load root forms
+    QString output;
+    foreach(Form::IFormIO *io, list) {
+        output = io->extractFileToTmpPath(formUid, fileName);
+        if (!output.isNull())
+            return output;
+    }
+    return QString::null;
 }
 
 ///** Execute all OnLoad scripts of the \e emptyRootForm */

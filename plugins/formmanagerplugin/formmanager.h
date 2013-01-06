@@ -108,6 +108,7 @@ public:
     Form::FormMain *identityRootForm() const;
     Form::FormMain *identityRootFormDuplicate() const;
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
+    QString extractFormFileToTmpPath(const QString &formUid, const QString &fileName);
 
 public Q_SLOTS:
     // Form management
