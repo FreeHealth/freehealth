@@ -1027,10 +1027,28 @@ bool XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
             QString fp = f.absoluteFilePath();
             QString mode = fp;
             mode = "." + mode.remove(form.absPath);
-            if (!saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode)) {
-                DB.rollback();
-                _transaction = false;
-                return false;
+            if (type == PdfFile) {
+                // Save base64
+                QFile file(fp);
+                if (!file.open(QFile::ReadOnly)) {
+                    LOG_ERROR("Unable to open file: " + fp);
+                    DB.rollback();
+                    _transaction = false;
+                    return false;
+                }
+                QString content = file.readAll().toBase64();
+                if (!saveContent(form.uid, content, type, mode)) {
+                    DB.rollback();
+                    _transaction = false;
+                    return false;
+                }
+            } else {
+                // Save qstring content
+                if (!saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode)) {
+                    DB.rollback();
+                    _transaction = false;
+                    return false;
+                }
             }
         }
 
