@@ -25,19 +25,30 @@
  ***************************************************************************/
 #include "tools.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDir>
 
 using namespace Script;
 using namespace Internal;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 Tools::Tools(QObject *parent) :
     QObject(parent)
 {
     setObjectName("Script::Tools");
+}
+
+QString Tools::userDocumentPath()
+{
+    return QString(settings()->path(Core::ISettings::UserResourcesPath) + QDir::separator());
 }
 
 QString Tools::dateToString(const QDate &date, const QString &format)

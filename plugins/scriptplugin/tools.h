@@ -44,10 +44,14 @@ namespace Internal {
 class Tools : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString userDocumentPath READ userDocumentPath)
+
 public:
     explicit Tools(QObject *parent = 0);
     
 public Q_SLOTS:
+    QString userDocumentPath();
+
     QString dateToString(const QDate &date, const QString &format);
     void openUrl(const QString &url);
     QString lineWrapString(const QString &text, int lineLength);
