@@ -119,7 +119,7 @@ namespace {
     const char* const ATTRIB_LANGUAGE                 = "lang";
 }
 
-/** Read the update inforamtion xml block and return a list of items. */
+/** Read the update information xml block and return a list of items. */
 QList<GenericUpdateInformation> GenericUpdateInformation::fromXml(const QDomElement &xml)
 {
     // read update information
