@@ -125,6 +125,8 @@ ScriptWriterDialog::ScriptWriterDialog(QWidget *parent) :
     QDialog(parent),
     d(new ScriptWriterDialogPrivate(this))
 {
+    setObjectName("ScriptWriterDialog");
+    setWindowTitle(tr("Script writer"));
 }
 
 /*! Destructor of the Script::Internal::ScriptWriterDialog class */
