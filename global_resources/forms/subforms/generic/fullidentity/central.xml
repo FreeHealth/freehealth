@@ -133,6 +133,88 @@
                 }
                 item.enabled = freemedforms.pdf.isAvailable;
               </onload>
+              <onclicked>
+                  // get the fremedforms pdf worker
+                  var pdf = freemedforms.pdf;
+                  if (!pdf.isAvailable) {
+                      print("pdftk not available");
+                      return;
+                  }
+
+                  // process data
+                  var patient = freemedforms.patient;
+                  if (!patient.isActive) {
+                      print("not active patient");
+                      return;
+                  }
+
+                  pdf.beginFdfEncoding();
+
+                  freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
+                  var isNssOwner = freemedforms.forms.item("FrGroup::IsNSSOwner");
+                  if (!isNssOwner.isValid) {
+                      print("isNSSOwner not available");
+                      return;
+                  }
+                  var nss = freemedforms.forms.item("FrGroup::NSS");
+                  if (!nss.isValid) {
+                      print("NSS not available");
+                      return;
+                  }
+
+                  pdf.addFdfValue("nom", patient.birthName + " " + patient.secondName);
+                  pdf.addFdfValue("prénom", patient.firstName);
+                  pdf.addFdfValue("date naissance", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
+                  // TODO: split street into 2 max lines if required
+
+                  var street = patient.street;
+                  if (street.search("\n")) {
+                      var splitter = street.split("\n");
+                      pdf.addFdfValue("adresse1", splitter.shift());
+                      pdf.addFdfValue("adresse2", splitter.join(" ; "));
+                  } else {
+                      pdf.addFdfValue("adresse1", patient.street);
+                  }
+                  pdf.addFdfValue("adresse3", patient.city + " " + patient.zipcode + " " + patient.state);
+
+                  if (!isNssOwner.checked) {
+                      var owner = freemedforms.forms.item("FrGroup::OwnerName");
+                      if (!owner.isValid) {
+                          print("NSS owner not available");
+                          return;
+                      }
+                      pdf.addFdfValue("nom ben", owner.currentText);
+                      //pdf.addFdfValue("prénom ben", nss.currentText);
+                  }
+
+                  print(nss.currentText);
+
+                  if (nss.currentText.length == 15) {
+                      pdf.addFdfValue("n° immatriculation", nss.currentText.substring(0, 13));
+                      pdf.addFdfValue("clé immatric", nss.currentText.substring(13,15));
+                  }
+
+                  var user = freemedforms.user;
+                  if (user.isValid) {
+                      print("No valid user");
+                      //return;
+                  }
+
+                  pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
+                  pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
+                  pdf.addFdfValue("prénom médecin", user.firstName);
+                  pdf.addFdfValue("identif  medecin", user.fullAddress);
+
+                  pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
+
+                  var filename = freemedforms.forms.extractFormFile("__subForms__/generic/fullidentity", "./pdf/fr/declaration.pdf");
+                  pdf.endFdfEncoding(filename);
+
+                  var output = freemedforms.tools.userDocumentPath + "declaration_" + patient.birthName + " " + patient.secondName + " " + patient.firstName + ".pdf";
+                  output = output.replace("  ", " ");
+                  output = output.replace(" ", "_");
+                  pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), output, "ISO-8859-1");
+              </onclicked>
             </script>
           </Item>
         </Item>
