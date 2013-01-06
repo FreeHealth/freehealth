@@ -32,6 +32,7 @@ object_script.*
 *.o
 moc_*
 *plugins/*/*.json
+free*/*plugins/*/*.json
 
 # Non Free content
 global_resources/pixmap/*.svg
