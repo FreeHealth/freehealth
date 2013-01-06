@@ -26,15 +26,14 @@
  ***************************************************************************/
 /*!
  * \class BaseWidgets::Internal::FrenchSocialNumberWidget
- * \brief short description of class
- *
- * Long description of class
- * \sa BaseWidgets::
+ * French social numbering helper widget.
  */
 
 #include "frenchsocialnumberwidget.h"
 
-#include <QKeyEvent>
+#include <QLineEdit>
+#include <QRegExpValidator>
+
 #include <QDebug>
 
 #include "ui_frenchsocialnumber.h"
@@ -62,7 +61,6 @@ class FrenchSocialNumberWidgetPrivate
 public:
     FrenchSocialNumberWidgetPrivate(FrenchSocialNumberWidget *parent) :
         ui(new Ui::FrenchSocialNumber),
-        m_CursorPos(0),
         q(parent)
     {
     }
@@ -73,46 +71,27 @@ public:
     }
     
     void setupUi()
-    {
+    {        
         ui->setupUi(q);
+        ui->nss->setValidator(new QRegExpValidator(QRegExp("^[1-2]\\d{0,5}[0-9AB]\\d{0,6}$")));
+        ui->nss->setInputMask("0 00 00 0N 000 000");
+        ui->nss->setMaximumWidth(ui->nss->fontMetrics().width(QString().fill('9', 18)));
+        //ui->nss->setMinimumWidth(ui->nss->fontMetrics().width(QString().fill('9', 18)));
+        //ui->nss->setMinimumHeight(ui->nss->fontMetrics().height() + 10);
 
-        // m_Edits is used to manage focus change between line edits
-        m_Edits << ui->sex << ui->year << ui->month << ui->departement << ui->commune << ui->birthCode << ui->controlKey;
-        m_NbChars << 1     << 2        << 2         << 2               << 3           << 3             << 2;
+        ui->key->setReadOnly(true);
+        ui->key->setMaximumWidth(ui->key->fontMetrics().width(QString().fill('9', 4)));
+        //ui->key->setMinimumWidth(ui->key->fontMetrics().width(QString().fill('9', 2)));
+        //ui->key->setMinimumHeight(ui->key->fontMetrics().height() + 10);
+    }
 
-        // resize lineEdits according to the max length
-        for(int i = 0; i < m_Edits.count(); ++i) {
-            QLineEdit *l = m_Edits.at(i);
-            int frameWidth = l->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            int top, left, right, bottom;
-            l->getTextMargins(&left,&top,&right,&bottom);
-            QFontMetrics fm = l->fontMetrics();
-            int w = fm.boundingRect(QString().fill('0', m_NbChars.at(i)+1)).width();
-            l->setMinimumWidth(w + frameWidth*2 + left + right);
-            l->setMaximumWidth(w + frameWidth*2 + left + right);
-            l->resize(w + frameWidth*2 + left + right, l->height());
-        }
-        // add validators to lineEdits
-        ui->sex->setValidator(new QRegExpValidator(QRegExp("^\\d{0,1}$"), q));
-        ui->year->setValidator(new QRegExpValidator(QRegExp("^\\d{1,2}$"), q));
-        ui->month->setValidator(new QRegExpValidator(QRegExp("^\\d{1,2}$"), q));
-        ui->departement->setValidator(new QRegExpValidator(QRegExp("^\\d{1,2}$"), q));
-        ui->commune->setValidator(new QRegExpValidator(QRegExp("^\\d[0-9AB]?$"), q));
-        ui->birthCode->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}$"), q));
-        ui->controlKey->setValidator(new QRegExpValidator(QRegExp("^\\d{1,3}$"), q));
-
-        // add eventFilter to all lineEdits
-        for(int i=0;i<m_Edits.count();++i) {
-            m_Edits.at(i)->installEventFilter(q);
-        }
+    QString nss()
+    {
+        return ui->nss->text().remove(" ");
     }
 
 public:
     Ui::FrenchSocialNumber *ui;
-    QList<QLineEdit *> m_Edits;
-    QList<int> m_NbChars;
-    QString m_FullNumber, _lastPressedKey;
-    int m_CursorPos;
 
 private:
     FrenchSocialNumberWidget *q;
@@ -127,13 +106,7 @@ FrenchSocialNumberWidget::FrenchSocialNumberWidget(QWidget *parent) :
     d(new FrenchSocialNumberWidgetPrivate(this))
 {
     d->setupUi();
-
-//    if (d->m_FullNumber.isEmpty())
-//        populateWithPatientData();
-
-//    m_FullNumber = "299082B234349";
-//    populateLineEdits();
-//    checkControlKey();
+    connect(d->ui->nss, SIGNAL(textChanged(QString)), this, SLOT(checkControlKey()));
 }
 
 /*! Destructor of the BaseWidgets::Internal::FrenchSocialNumberWidget class */
@@ -152,25 +125,23 @@ bool FrenchSocialNumberWidget::initialize()
 
 void FrenchSocialNumberWidget::setNumberWithControlKey(const QString &number)
 {
-    d->m_FullNumber = number;
-//    if (d->m_FullNumber.isEmpty())
-//        populateWithPatientData();
-    populateLineEdits();
+    QString s = number;
+    s = s.remove(" ");
+    d->ui->nss->setText(s.left(13));
     checkControlKey();
 }
 
 void FrenchSocialNumberWidget::setNumberWithoutControlKey(const QString &number)
 {
-    d->m_FullNumber = number;
-//    if (d->m_FullNumber.isEmpty())
-//        populateWithPatientData();
-    populateLineEdits();
+    QString s = number;
+    s = s.remove(" ");
+    d->ui->nss->setText(s.left(13));
     checkControlKey();
 }
 
 bool FrenchSocialNumberWidget::isValid() const
 {
-    return isValid(d->m_FullNumber, d->ui->controlKey->text());
+    return isValid(d->nss(), d->ui->key->text());
 }
 
 bool FrenchSocialNumberWidget::isValid(const QString &number, const QString &key) const
@@ -208,297 +179,44 @@ int FrenchSocialNumberWidget::controlKey(const QString &number) const
 
 QString FrenchSocialNumberWidget::numberWithControlKey() const
 {
-    return QString(d->m_FullNumber + d->ui->controlKey->text());
+    return QString(d->nss() + d->ui->key->text());
 }
 
 QString FrenchSocialNumberWidget::numberWithoutControlKey() const
 {
-    return d->m_FullNumber;
+    return d->nss();
 }
 
 QString FrenchSocialNumberWidget::emptyHtmlMask() const
 {
-    QStringList html;
-    for(int i = 0; i < d->m_NbChars.count(); ++i) {
-        html << QString().fill('_', d->m_NbChars.at(i));
-    }
-    return html.join("&nbsp;");
+    return QString("_&nbsp;__&nbsp;__&nbsp;__&nbsp;___&nbsp;___&nbsp;__");
 }
 
 QString FrenchSocialNumberWidget::toHtml() const
 {
-    QStringList html;
-    for(int i = 0; i < d->m_Edits.count(); ++i) {
-        html << d->m_Edits.at(i)->text();
-    }
-    return html.join("&nbsp;");
+//    QStringList html;
+//    for(int i = 0; i < d->m_Edits.count(); ++i) {
+//        html << d->m_Edits.at(i)->text();
+//    }
+//    return html.join("&nbsp;");
+    return numberWithControlKey().replace(" ", "&nbsp;");
 }
 
-/** Calculate the control key and
-  - populate the control key line edit or
-  - check the control key
+/**
+ * Calculate the control key and
+ * - populate the control key line edit or
+ * - check the control key
 */
 void FrenchSocialNumberWidget::checkControlKey()
 {
-    int cKey = controlKey(d->m_FullNumber);
+    int cKey = controlKey(d->nss());
     if (cKey==-1) {
+        d->ui->key->setText("");
         return;
     }
-    if (d->ui->controlKey->text().isEmpty()) {
-        d->ui->controlKey->setText(QString::number(cKey));
-    } else if (d->ui->controlKey->text() != QString::number(cKey)) {
-        // TODO
+    if (d->ui->key->text().isEmpty()) {
+        d->ui->key->setText(QString::number(cKey));
+    } else if (d->ui->key->text() != QString::number(cKey)) {
+        d->ui->key->setText(QString::number(cKey));
     }
 }
-
-void FrenchSocialNumberWidget::populateLineEdits(QString number)
-{
-    if (number.isEmpty()) {
-        number = d->m_FullNumber;
-    }
-    int start = 0;
-    int nb = 0;
-    for(int i=0; i < d->m_Edits.count(); ++i) {
-        nb = d->m_NbChars.at(i);
-        d->m_Edits.at(i)->setText(number.mid(start, nb));
-        start += nb;
-    }
-}
-
-void FrenchSocialNumberWidget::addChar(const QString &c, int currentLineEditId, int pos)
-{
-    qWarning() << "add" << c << currentLineEditId << pos;
-    int fullPos = pos;
-    for(int i = 0; i < currentLineEditId; ++i) {
-        fullPos += d->m_NbChars.at(i);
-    }
-    if (fullPos <= d->m_FullNumber.size() && d->m_FullNumber.size() < 13) {
-        d->m_FullNumber.insert(fullPos, c);
-        populateLineEdits();
-        setCursorPosition(currentLineEditId, pos+1);
-    } else if (fullPos == d->m_FullNumber.size() && d->m_FullNumber.size() < 13) {
-        d->m_FullNumber.append(c);
-        populateLineEdits();
-        setCursorPosition(currentLineEditId, pos+1);
-    }
-    if (d->m_FullNumber.size()==13) {
-        checkControlKey();
-    }
-}
-
-void FrenchSocialNumberWidget::removeChar(int currentLineEditId, int pos)
-{
-    qWarning()<<"remove" << currentLineEditId << pos;
-    if (currentLineEditId==0 && pos==0)
-        return;
-    --pos;
-    for(int i = 0; i < currentLineEditId; ++i) {
-        pos += d->m_NbChars.at(i);
-    }
-    if (pos < d->m_FullNumber.size()) {
-        d->m_FullNumber.remove(pos, 1);
-    }
-    populateLineEdits();
-}
-
-
-void FrenchSocialNumberWidget::setCursorPosition(int currentLineEditId, int pos)
-{
-    qWarning() << "setPos" << currentLineEditId << pos;
-    if (pos==-1 && currentLineEditId > 0) {
-        QLineEdit *l = d->m_Edits.at(currentLineEditId-1);
-        l->setFocus();
-        l->setCursorPosition(l->text().size());
-    } else if (pos > d->m_NbChars.at(currentLineEditId)) {
-        if (currentLineEditId+1 < d->m_Edits.count()) {
-            QLineEdit *l = d->m_Edits.at(currentLineEditId+1);
-            l->setFocus();
-            l->setCursorPosition(pos - d->m_NbChars.at(currentLineEditId));
-        }
-    } else {
-        QLineEdit *l = d->m_Edits.at(currentLineEditId);
-        l->setFocus();
-        l->setCursorPosition(pos);
-    }
-}
-
-/** Filter the Keyboard events of QLineEdit composing the widget. */
-bool FrenchSocialNumberWidget::eventFilter(QObject *o, QEvent *e)
-{
-    if (e->type()!=QEvent::KeyPress && e->type()!=QEvent::KeyRelease)
-        return false;
-
-    QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
-    if (!kevent)
-        return false;
-
-    QLineEdit *l = static_cast<QLineEdit*>(o);
-    if (!l)
-        return false;
-
-    int currentId = d->m_Edits.indexOf(l);
-    if (currentId==-1)
-        return false;
-    int nextTab = -1;
-
-    // only key release events
-    if (kevent->type()==QKeyEvent::KeyPress) {
-        if (WarnKeyPressed)
-            qWarning() << "KeyPress"  << kevent;
-        switch (kevent->key()) {
-        case Qt::Key_0:
-        case Qt::Key_1:
-        case Qt::Key_2:
-        case Qt::Key_3:
-        case Qt::Key_4:
-        case Qt::Key_5:
-        case Qt::Key_6:
-        case Qt::Key_7:
-        case Qt::Key_8:
-        case Qt::Key_9:
-        case Qt::Key_A:
-        case Qt::Key_B:
-            d->_lastPressedKey = kevent->text();
-            // no management of auto-repeat
-            e->ignore();
-            return true;
-        case Qt::Key_Left:
-            // Manage autoRepeat keys
-            if (l->cursorPosition()==0)
-                setCursorPosition(currentId, -1);
-            break;
-        case Qt::Key_Right:  // Ok
-            if (l->cursorPosition() == d->m_NbChars.at(currentId)) {
-                nextTab = currentId+1;
-                if (nextTab >= d->m_Edits.count())
-                    return true;
-                setCursorPosition(nextTab, 0);
-                return true;
-            }
-            break;
-        case Qt::Key_Backspace:
-        {
-            if (kevent->isAutoRepeat()) {
-                int pos = l->cursorPosition();
-                removeChar(currentId, pos);
-                --pos;
-                if (pos==0) --pos;
-                setCursorPosition(currentId, pos);
-            }
-            e->ignore();
-            return true;
-            break;
-        }
-        case Qt::Key_Delete:
-            if (kevent->isAutoRepeat()) {
-                int pos = l->cursorPosition();
-                ++pos;
-                removeChar(currentId, pos);
-                setCursorPosition(currentId, pos-1);
-            }
-            e->ignore();
-            return true;
-        default: return false;
-        }
-    } else if (kevent->type()==QKeyEvent::KeyRelease) {
-        if (WarnKeyPressed)
-            qWarning() << "KeyReleased" << kevent;
-
-        switch (kevent->key()) {
-        case Qt::Key_0:
-        case Qt::Key_1:
-        case Qt::Key_2:
-        case Qt::Key_3:
-        case Qt::Key_4:
-        case Qt::Key_5:
-        case Qt::Key_6:
-        case Qt::Key_7:
-        case Qt::Key_8:
-        case Qt::Key_9:
-        {
-            addChar(d->_lastPressedKey, currentId, l->cursorPosition());
-            d->_lastPressedKey.clear();
-            return true;
-            break;
-        }
-        case Qt::Key_A:
-        case Qt::Key_B:
-        {
-            // only departement 2ndchar
-            if (currentId==3 && l->cursorPosition()==1) {
-                addChar(kevent->text(), currentId, l->cursorPosition());
-                return true;
-            }
-            break;
-        }
-        case Qt::Key_Home:
-            nextTab = 0;
-            break;
-        case Qt::Key_End:
-            nextTab = d->m_Edits.count()-2;
-            break;
-        case Qt::Key_Left:
-//            if (l->cursorPosition()==0) {
-//                setCursorPosition(currentId, -1);
-                return true;
-//            }
-            break;
-        case Qt::Key_Right:
-            return true;
-            break;
-        case Qt::Key_Delete:
-        {
-            // remove char at
-            int pos = l->cursorPosition();
-            ++pos;
-            removeChar(currentId, pos);
-            setCursorPosition(currentId, pos-1);
-            return true;
-        }
-        case Qt::Key_Backspace:
-        {
-            // remove char at
-            int pos = l->cursorPosition();
-            removeChar(currentId, pos);
-            --pos;
-            if (pos==0) --pos;
-            setCursorPosition(currentId, pos);
-            return true;
-        }
-        default: return false;
-        }
-    }
-
-    return false;
-}
-
-//void FrenchSocialNumberWidget::populateWithPatientData()
-//{
-//    if (!m_FullNumber.isEmpty())
-//        return;
-
-//    m_FullNumber.fill(' ', 13);
-
-//    // Add patient default values
-//    if (patient()->data(Core::IPatient::Gender).toString()=="M") {
-//        m_FullNumber[0] = '1';
-//    } else if (patient()->data(Core::IPatient::Gender).toString()=="F") {
-//        m_FullNumber[0] = '2';
-//    }
-
-//    // Birth date
-//    QModelIndex idx = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
-//    QDate birth = patient()->data(idx, Qt::EditRole).toDate();
-//    if (birth.isValid()) {
-//        // year
-//        m_FullNumber = m_FullNumber.left(1) + QString::number(birth.year()).right(2) + m_FullNumber.mid(3);
-//        // month
-//        QString month = QString::number(birth.month());
-//        if (month.size()==1)
-//            month.prepend("0");
-//        m_FullNumber = m_FullNumber.left(3) + month + m_FullNumber.mid(5);
-//    }
-
-//    m_FullNumber = m_FullNumber.simplified();
-////    qWarning() << "AUTO" << m_FullNumber;
-//}

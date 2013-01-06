@@ -61,18 +61,8 @@ public:
     QString emptyHtmlMask() const;
     QString toHtml() const;
 
-public Q_SLOTS:
-//    void populateWithPatientData();
-
-private:
-    void populateLineEdits(QString number = QString::null);
-    void addChar(const QString &c, int currentLineEditId, int pos);
-    void removeChar(int currentLineEditId, int pos);
-    void setCursorPosition(int currentLineEditId, int pos);
+private Q_SLOTS:
     void checkControlKey();
-
-protected:
-    bool eventFilter(QObject *o, QEvent *e);
 
 private:
     Internal::FrenchSocialNumberWidgetPrivate *d;

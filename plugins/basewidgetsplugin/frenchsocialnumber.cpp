@@ -127,8 +127,7 @@ FrenchSocialNumberFormData::~FrenchSocialNumberFormData()
 
 void FrenchSocialNumberFormData::clear()
 {
-    const QString &s = m_FormItem->valueReferences()->defaultValue().toString();
-    m_Widget->setNumberWithControlKey(s);
+    populateWithPatientData();
 }
 
 void FrenchSocialNumberFormData::populateWithPatientData()
@@ -161,7 +160,7 @@ void FrenchSocialNumberFormData::populateWithPatientData()
 
     fullNumber = fullNumber.simplified();
     m_Widget->setNumberWithoutControlKey(fullNumber);
-    qWarning() << "AUTO" << fullNumber;
+    //qWarning() << "AUTO" << fullNumber;
 }
 
 bool FrenchSocialNumberFormData::isModified() const
