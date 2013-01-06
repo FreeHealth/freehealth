@@ -148,7 +148,7 @@ bool PdfTkWrapper::initialize()
             LOG_ERROR("Wrong pdftk binary");
             return false;
         }
-    } else {
+    } else if (Utils::isRunningOnLinux()) {
         // TODO: check linux/freebsd binaries
     }
 
