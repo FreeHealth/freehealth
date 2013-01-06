@@ -363,7 +363,7 @@ void MainWindow::onCurrentPatientChanged()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     LOG("Closing MainWindow");
-    // Set focus to enshure that QDataWidgetMapper will send their last changes to their models
+    // Set focus to ensure that QDataWidgetMapper will send their last changes to their models
     setFocus();
     writeSettings();
     QList<Core::ICoreListener *> listeners = pluginManager()->getObjects<Core::ICoreListener>();

@@ -81,6 +81,7 @@ void FirstRunFormManagerWizardPage::initializePage()
         if (!list.isEmpty()) {
             foreach(Form::IFormIO *io, list) {
                 io->checkForUpdates();
+                //TODO: manage user interaction & update
             }
         }
 

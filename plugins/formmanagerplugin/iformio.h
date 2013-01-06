@@ -176,6 +176,7 @@ public:
     virtual QString lastError() const = 0;
 
     virtual void checkForUpdates() const = 0;
+    virtual bool updateForms() = 0;
 };
 
 } // end Form

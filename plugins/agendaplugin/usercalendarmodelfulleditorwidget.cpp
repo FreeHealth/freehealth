@@ -49,8 +49,6 @@
 
 #include "ui_usercalendarmodelfulleditorwidget.h"
 
-#include <QDataWidgetMapper>
-
 using namespace Agenda;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
