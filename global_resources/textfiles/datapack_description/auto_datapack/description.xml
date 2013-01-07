@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <!--
+  * You can easily create new datapacks using FreeToolBox and this description file.
+  * Just register your datapacks description file and content in this file.
+  *
   * Available servers:
   * - Free Community: comm_free
   * - Non-free Community : comm_nonfree
