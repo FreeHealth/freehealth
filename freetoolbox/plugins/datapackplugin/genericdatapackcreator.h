@@ -37,6 +37,7 @@
 */
 
 namespace DataPackPlugin {
+namespace Internal {
 
 class GenericDataPackCreator : public Core::IFullReleaseStep
 {
@@ -58,8 +59,10 @@ public:
 
     virtual QString processMessage() const;
 
+    virtual QStringList errors() const;
 };
 
+} // namespace Internal
 } // namespace DataPackPlugin
 
 #endif // GENERICDATAPACKCREATOR_H
