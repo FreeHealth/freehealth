@@ -48,6 +48,7 @@ public:
         UserDocuments,
         Accountancy,
         AlertPacks,
+        Binaries,
         UnknownType
     };
 
