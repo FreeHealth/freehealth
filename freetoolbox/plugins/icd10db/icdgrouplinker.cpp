@@ -53,6 +53,7 @@
 #include <QUrl>
 #include <QClipboard>
 
+using namespace Icd10;
 
 //#define MODEL_PREFETCH 100
 
@@ -232,6 +233,7 @@ private:
 
 }  // End anonymous namespace
 
+namespace Icd10 {
 class IcdGroupLinkerModelPrivate
 {
 public:
@@ -267,7 +269,7 @@ public:
 private:
     IcdGroupLinkerModel *q;
 };
-
+} // namespace Icd10
 
 IcdGroupLinkerModel *IcdGroupLinkerModel::m_Instance = 0;
 IcdGroupLinkerModel *IcdGroupLinkerModel::instance(QObject *parent)

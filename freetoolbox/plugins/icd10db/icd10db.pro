@@ -1,5 +1,6 @@
 TEMPLATE = lib
 TARGET = Icd10DB
+DEFINE += ICD10DB_LIBRARY
 
 include(../../../plugins/fmf_plugins.pri)
 include(icd10db_dependencies.pri)
@@ -16,6 +17,7 @@ SOURCES += \
     icd10step.cpp
 
 HEADERS  += \
+    icd10_exporter.h \
     icd10databasecreator.h \
     icd10dbplugin.h \
     icdgrouplinker.h \

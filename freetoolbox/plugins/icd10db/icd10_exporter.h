@@ -18,60 +18,16 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- ***************************************************************************/
-#ifndef FREETOOLBOX_BIBLIO_CORE_H
-#define FREETOOLBOX_BIBLIO_CORE_H
+#ifndef FREETOOLBOX_ICDPLUGIN_EXPORTER_H
+#define FREETOOLBOX_ICDPLUGIN_EXPORTER_H
 
-#include <biblio/biblio_exporter.h>
-#include <QObject>
-#include <QStringList>
+#include <qglobal.h>
 
-/**
- * \file bibliocore.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 14 Oct 2011
-*/
+// DEFINE EXPORTER
+#if defined(ICD10DB_LIBRARY)
+#define ICD10DB_EXPORT Q_DECL_EXPORT
+#else
+#define ICD10DB_EXPORT Q_DECL_IMPORT
+#endif
 
-namespace Utils {
-class PubMedDownloader;
-}
-
-namespace Biblio {
-namespace Internal {
-class BiblioPlugin;
-class BiblioBase;
-}
-
-class BIBLIO_EXPORT BiblioCore : public QObject
-{
-    Q_OBJECT
-    friend class Biblio::Internal::BiblioPlugin;
-
-protected:
-    explicit BiblioCore(QObject *parent = 0);
-
-public:
-    static BiblioCore *instance() {return m_Instance;}
-
-    void downloadPubMedData(const QStringList &pmids);
-
-    QString xml(const QString &pmid);
-
-private Q_SLOTS:
-    void downloadNext();
-
-private:
-    static BiblioCore *m_Instance;
-    Internal::BiblioBase *m_Base;
-    Utils::PubMedDownloader *m_dld;
-    QStringList m_ToDownload;
-};
-
-}  // End namespace Biblio
-
-#endif // FREETOOLBOX_BIBLIO_CORE_H
+#endif  // FREETOOLBOX_ICDPLUGIN_EXPORTER_H

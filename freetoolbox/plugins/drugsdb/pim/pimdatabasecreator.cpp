@@ -363,7 +363,7 @@ bool PimDatabaseCreator::savePim(DrugsDB::Internal::DrugBaseEssentials *database
     }
 
     // add related ICD10
-    IcdGroupLinkerModel *icdModel = IcdGroupLinkerModel::instance();
+    Icd10::IcdGroupLinkerModel *icdModel = Icd10::IcdGroupLinkerModel::instance();
     if (icdModel->databaseAvailable()) {
         LOG("Adding ICD related PIMs");
         QDomElement icd = element.firstChildElement(Constants::XML_TAG_DISEASES);
