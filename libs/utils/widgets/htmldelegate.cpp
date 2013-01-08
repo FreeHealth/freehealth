@@ -136,7 +136,7 @@ public:
     {
         QTextDocument *doc = _documents.value(index, 0);
         if (!doc) {
-            qWarning() << "  **** No doc" << index;
+            qWarning() << "  **** HtmlDelegate: No doc registered for index:" << index;
             return;
         }
         doc->drawContents(painter, rect);
@@ -304,7 +304,6 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 //        qWarning() << option.rect.size();
 //        return option.rect.size();
 //    }
-
 
 //    qWarning() << "\nsizeHint";
 //    qWarning() << "  index: "<< index << "docSize:" << d_html->documentSize(index);
