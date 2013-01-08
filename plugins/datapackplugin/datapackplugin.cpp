@@ -72,7 +72,7 @@ DataPackPluginIPlugin::DataPackPluginIPlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_datapack");
-    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_datapack");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
