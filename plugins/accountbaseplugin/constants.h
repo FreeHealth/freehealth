@@ -333,78 +333,14 @@ namespace Constants {
     const char* const   REVENUES_TEXT           = QT_TRANSLATE_NOOP("Account", "Revenues");
     const char* const   EXPENSES_TEXT           = QT_TRANSLATE_NOOP("Account", "Expenses");
 
+    // Payment methods
     const char* const   CASH                    = QT_TRANSLATE_NOOP("Account", "Cash");
     const char* const   CHEQUES                 = QT_TRANSLATE_NOOP("Account", "Cheques");
-    // TODO: VISA is just one of many credit cards. Shouldn't we consider a general aproach 'CreditCard'?
-    // Visa, MasterCard, DinersClub
-    const char* const   VISA                    = QT_TRANSLATE_NOOP("Account", "VISA");
+    const char* const   CREDITCARD              = QT_TRANSLATE_NOOP("Account", "Credit card");
     const char* const   MONEY                   = QT_TRANSLATE_NOOP("Account", "Money");
     const char* const   DUE                     = QT_TRANSLATE_NOOP("Account", "Due");
     const char* const   INSURANCE               = QT_TRANSLATE_NOOP("Account", "Insurance");
     const char* const   OTHER                   = QT_TRANSLATE_NOOP("Account", "Other");
-
-//    approche par les dépenses   n f spending-based approach
-//    calendrier des dépenses   n m spending schedule
-//    chiffre des dépenses en construction   n m construction spending figure
-//    compression des dépenses   n f cut in spending
-//    comptabilité recettes/dépenses   n f cash basis accounting
-//    compte de recettes et de dépenses   n m income and expenditure account
-//    dépenses alimentaires   n pl.f. food spending
-//    dépenses budgétaires   n pl.f. budgetary expenditure
-//    dépenses courantes   n pl.f. running costs
-//    dépenses d'exploitation   n pl.f. operating expenses
-//    dépenses d'investissement   n pl.f. investment expenditure
-//    dépenses d'équipement   n pl.f. equipment spending
-//    dépenses d'établissement   n pl.f. capital outlay
-//    dépenses de fonctionnement   n pl.f. operational expenses
-//    dépenses de l'Etat   n pl.f. Government expenditure
-//    dépenses de la maison   n pl.f. household expenses
-//    dépenses des ménages   n pl.f. household expenditure
-//    dépenses et les recettes   n pl.f. expenditures and revenue
-//    dépenses et recettes   n pl.f. expenditures and revenue
-//    dépenses imprévues   n pl.f. contingencies
-//    dépenses marketing   n pl.f. marketing expenses
-//    dépenses militaires   n pl.f. military expenditures
-//    dépenses prévues au budget   n pl.f. budgeted expenses
-//    dépenses sociales   n pl.f. welfare expenditure
-//    détail des dépenses   n m breakdown of expenses
-//    famille de dépenses   n f family of expenses
-//    frais et dépenses   n pl.m. costs and expenses
-//    habitude de dépenses   n f spending habit
-//    habitudes de dépenses   n
-//    a f spending habit
-//    b f spending habits
-//    c pl.m. spending habits
-//    d m spending habit
-//    e pl.f. spending habits
-//    responsable de famille de dépenses   n
-//    a m expense family manager
-//    b f expense family manager
-//
-//    Traduction dictionnaire Business Finance Francais - Anglais
-//     Dictionnaire Collaboratif     Français-Anglais
-//    dépenses	 n.	1) spending (pl.f.), 2) expenses (pl.f.)	 Reverso General Dictionary
-//    dépense courante	 n.	running expense	 ~
-//    dépense déductible	 n.	allowable expense	 ~
-//    dépense d'investissement	 n.	capital spending	 ~
-//    dépense publicitaire	 nm.	advertising spending	 Reverso General Dictionary
-//    dépense de publicité	 n.	advertising expenditure	 ~
-//    dépense en capital	 n.	capital expenditure	 ~
-//    dépenses de consommation	 nmpl.	consumer spending	 Reverso General Dictionary
-//    habitude de dépenses	 nm.	spending habit	 Reverso General Dictionary
-//    plan de dépense	 n.	spending plan	 ~
-//    poste de dépense	 n.	expense item	 ~
-//    prévision de dépense	 n.	cost estimate	 ~
-//    dépenses de consommation des ménages	 nmpl.	household consumer spending	 Reverso General Dictionary
-
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-//    const char* const   _TEXT   = QT_TRANSLATE_NOOP("Account", "");
-
 
     // Settings names
     const char * const  S_GROUP                  = "Account";                              /*!< \brief Key for settings. */
