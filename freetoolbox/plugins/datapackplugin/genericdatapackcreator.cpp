@@ -67,6 +67,7 @@ const char * const XML_TYPE_DIR = "dir";
 GenericDataPackCreator::GenericDataPackCreator(QObject *parent) :
     Core::IFullReleaseStep(parent)
 {
+    setObjectName("GenericDataPackCreator");
 }
 
 GenericDataPackCreator::Steps GenericDataPackCreator::stepNumber() const
@@ -104,7 +105,6 @@ bool GenericDataPackCreator::process()
 
 bool GenericDataPackCreator::registerDataPack()
 {
-    WARN_FUNC;
     // Get XML file from the git path
     QString descriptionFile = QString("%1/%2/%3")
             .arg(settings()->value(Core::Constants::S_GITFILES_PATH).toString())
@@ -134,9 +134,6 @@ bool GenericDataPackCreator::registerDataPack()
         QFileInfo packDescrFile(packDescr);
         if (packDescrFile.isRelative())
             packDescrFile.setFile(descriptionFilePath + packDescr);
-
-        qWarning() << "  - pack:" << packDescrFile.absoluteFilePath() << packDescrFile.exists();
-
         if (!packDescrFile.exists()) {
             LOG_ERROR("Pack does not exists: " + packDescrFile.absoluteFilePath());
             packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
@@ -145,8 +142,6 @@ bool GenericDataPackCreator::registerDataPack()
 
         // Get server
         QString server = packElement.attribute(::XML_DATAPACK_SERVER_ATTRIB);
-
-        qWarning() << "    . server" << server;
 
         // Prepare pack
         DataPackQuery query;
@@ -181,8 +176,6 @@ bool GenericDataPackCreator::registerDataPack()
                     query.setOriginalContentFileAbsolutePath(content.text());
             }
         }
-
-        qWarning() << "    . content" << query.originalContentFileAbsolutePath();
 
         if (!datapackCore()->registerDataPack(query, server)) {
             LOG_ERROR("Datapack not registered: " + query.descriptionFileAbsolutePath());
