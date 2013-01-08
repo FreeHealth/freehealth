@@ -148,6 +148,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 #endif
 
     if (xmlConfig.isEmpty()) {
+        LOG("No datapack server configuration available. Using the default");
         // read default servers
         QString content = Utils::readTextFile(defaultServerFile(), Utils::DontWarnUser);
         if (!content.isEmpty()) {
@@ -176,9 +177,9 @@ void DataPackPluginIPlugin::extensionsInitialized()
         // Always unsure that the freemedforms datapack server is available
         DataPack::Server http("http://packs.freemedforms.com");
         http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+        // FIXME: missing server version to avoid duplicates
         core.serverManager()->addServer(http);
     }
-
 
     // TODO: Check for package update -> thread this
 
