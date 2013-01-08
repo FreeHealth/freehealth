@@ -61,7 +61,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
     Q_ASSERT_X(QDir(outputPath).exists() , "Function unzipFile()",
                qPrintable(QString("Dir %1 does not exist").arg(outputPath)));
 
-    qWarning() << "QuaZip try to unzip" << QDir::cleanPath(fileName) << outputPath;
+//    qWarning() << "QuaZip try to unzip" << QDir::cleanPath(fileName) << outputPath;
 
     QuaZip zip(QDir::cleanPath(fileName));
     if (!zip.open(QuaZip::mdUnzip)) {
@@ -107,7 +107,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
         out.setFileName(outputPath + QDir::separator() + name);
 
         // inform user
-        qWarning() << QString("Zip: extracting: %1").arg(out.fileName());
+//        qWarning() << QString("Zip: extracting: %1").arg(out.fileName());
 
         // create path if not exists
         if (!QDir(QFileInfo(out).absolutePath()).exists())
