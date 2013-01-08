@@ -67,9 +67,6 @@ public Q_SLOTS:
     bool submitChanges();
 
 private:
-    void createActions();
-    void createToolbar();
-//    void createServerDataWidgetMapper();
     void populatePackView(const int packId);
     void populateServerView(const int serverId);
 

@@ -107,7 +107,7 @@ namespace Internal {
 class ServerPackEditorPrivate
 {
 public:
-    ServerPackEditorPrivate() :
+    ServerPackEditorPrivate(ServerPackEditor *parent) :
         ui(new Ui::ServerPackEditor),
         m_PackModel(0),
         m_PackCategoriesModel(0),
@@ -117,8 +117,72 @@ public:
         m_ToolBarPacks(0),
         m_ServerMapper(0),
         _segmented(0), _segPack(0), _segServer(0),
-        _toolbarCurrentMode(-1)
+        _toolbarCurrentMode(-1),
+        q(parent)
     {}
+
+    void createActions()
+    {
+        // Create server actions
+        QActionGroup *srvgr = new QActionGroup(q);
+        QAction *a = aServerRefresh = new QAction(q);
+        a->setObjectName("aServerRefresh");
+        a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
+        a = aServerEdit = new QAction(q);
+        a->setObjectName("aServerEdit");
+        a->setIcon(icon(::ICON_SERVER_EDIT, DataPack::DataPackCore::MediumPixmaps));
+        a = aServerAdd = new QAction(q);
+        a->setObjectName("aInstall");
+        a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
+        a = aServerRemove = new QAction(q);
+        a->setObjectName("aServerRemove");
+        a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
+        QObject::connect(srvgr, SIGNAL(triggered(QAction*)), q, SLOT(serverActionTriggered(QAction *)));
+
+        // Create pack actions
+        a = aPackRefresh = new QAction(q);
+        a->setObjectName("aPackRefresh");
+        a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
+        a = aPackApply = new QAction(q);
+        a->setObjectName("aPackApply");
+        a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
+        QObject::connect(aPackRefresh, SIGNAL(triggered()), q, SLOT(refreshPacks()));
+        QObject::connect(aPackApply, SIGNAL(triggered()), q, SLOT(processPacks()));
+    }
+
+    void createToolbar()
+    {
+        m_ToolBarPacks = new QToolBar(q);
+
+        // Create the segmented button with server/pack
+        bServer = new QPushButton(q);
+        bServer->setCheckable(true);
+        bPack = new QPushButton(q);
+        bPack->setCheckable(true);
+        _segmented = new Utils::SegmentedButton(q);
+        _segmented->setFirstButton(bServer);
+        _segmented->setLastButton(bPack);
+        _segmented->setAutoExclusive(true);
+        QWidget *w1 = new QWidget(q);
+        w1->setMinimumSize(20,20);
+        w1->setMaximumSize(20,20);
+        m_ToolBarPacks->addWidget(w1);
+        m_ToolBarPacks->addWidget(_segmented);
+        w1 = new QWidget(q);
+        w1->setMinimumSize(20,20);
+        w1->setMaximumSize(20,20);
+        m_ToolBarPacks->addWidget(w1);
+        m_ToolBarPacks->addSeparator();
+
+        processToolBar(::PACK_MODE);
+
+        m_ToolBarPacks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        ui->toolbarLayout->addWidget(m_ToolBarPacks);
+
+        QObject::connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), q, SLOT(serverActionTriggered(QAction*)));
+        QObject::connect(bPack, SIGNAL(clicked()), q, SLOT(switchToPackView()));
+        QObject::connect(bServer, SIGNAL(clicked()), q, SLOT(switchToServerView()));
+    }
 
     void processToolBar(int mode)
     {
@@ -152,13 +216,16 @@ public:
     QDataWidgetMapper *m_ServerMapper;
     Utils::SegmentedButton *_segmented, *_segPack, *_segServer;
     int _toolbarCurrentMode;
+
+private:
+    ServerPackEditor *q;
 };
 } // Internal
 } // DataPack
 
 ServerPackEditor::ServerPackEditor(QWidget *parent) :
     QWidget(parent),
-    d(new Internal::ServerPackEditorPrivate)
+    d(new Internal::ServerPackEditorPrivate(this))
 {
     setObjectName("ServerPackEditor");
     d->ui->setupUi(this);
@@ -193,19 +260,23 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     d->ui->packCategoriesView->setStyleSheet(::CSS);
     connect(d->ui->packCategoriesView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackCategoriesChanged(QModelIndex, QModelIndex)));
 
-    Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
-    d->ui->packView->setItemDelegate(delegate);
+    Utils::HtmlDelegate *packdelegate = new Utils::HtmlDelegate(this);
+    d->ui->packView->setItemDelegate(packdelegate);
     d->ui->packView->setStyleSheet(::CSS);
     //    d->ui->packView->header()->hide();
     d->ui->packView->setAlternatingRowColors(true);
+    d->ui->packView->setUniformItemSizes(false);
 
 //    // server page
+    Utils::HtmlDelegate *serverdelegate = new Utils::HtmlDelegate(this);
     d->m_serverModel = new ServerModel(this);
     d->ui->serverListView->setModel(d->m_serverModel);
     d->ui->serverListView->setModelColumn(ServerModel::HtmlLabel);
-    d->ui->serverListView->setItemDelegate(delegate);
+    d->ui->serverListView->setItemDelegate(serverdelegate);
     d->ui->serverListView->setStyleSheet(::CSS);
     d->ui->serverListView->setAlternatingRowColors(true);
+    d->ui->serverListView->setResizeMode(QListView::Adjust);
+    d->ui->serverListView->setUniformItemSizes(false);
 
     // Manage central view
     QFont bold;
@@ -216,8 +287,8 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     d->ui->serverName->setFont(bold);
     d->ui->serverName->setStyleSheet(::TITLE_CSS);
 
-    createActions();
-    createToolbar();
+    d->createActions();
+    d->createToolbar();
     switchToPackView();
 //    createServerDataWidgetMapper();
     retranslate();
@@ -243,12 +314,12 @@ bool ServerPackEditor::refreshServerContent()
     if (serverManager()->serverCount() == 0)
         return true;
     QProgressDialog dlg(this);
-    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(close()));
-    QProgressBar *bar = new QProgressBar;
+    QProgressBar *bar = new QProgressBar(&dlg);
     dlg.setLabelText(tr("Updating server information"));
     dlg.setModal(true);
     dlg.setBar(bar);
     dlg.show();
+    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(deleteLater()));
     connect(&dlg, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
     // TODO: Connect the cancel button
     serverManager()->getAllDescriptionFile(bar);
@@ -261,68 +332,6 @@ bool ServerPackEditor::submitChanges()
     return true;
 }
 
-void ServerPackEditor::createActions()
-{
-    // Create server actions
-    QActionGroup *srvgr = new QActionGroup(this);
-    QAction *a = d->aServerRefresh = new QAction(this);
-    a->setObjectName("aServerRefresh");
-    a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
-    a = d->aServerEdit = new QAction(this);
-    a->setObjectName("aServerEdit");
-    a->setIcon(icon(::ICON_SERVER_EDIT, DataPack::DataPackCore::MediumPixmaps));
-    a = d->aServerAdd = new QAction(this);
-    a->setObjectName("aInstall");
-    a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
-    a = d->aServerRemove = new QAction(this);
-    a->setObjectName("aServerRemove");
-    a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
-    connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
-
-    // Create pack actions
-    a = d->aPackRefresh = new QAction(this);
-    a->setObjectName("aPackRefresh");
-    a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
-    a = d->aPackApply = new QAction(this);
-    a->setObjectName("aPackApply");
-    a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
-    connect(d->aPackRefresh, SIGNAL(triggered()), this, SLOT(refreshPacks()));
-    connect(d->aPackApply, SIGNAL(triggered()), this, SLOT(processPacks()));
-}
-
-void ServerPackEditor::createToolbar()
-{
-    d->m_ToolBarPacks = new QToolBar(this);
-
-    // Create the segmented button with server/pack
-    d->bServer = new QPushButton(this);
-    d->bServer->setCheckable(true);
-    d->bPack = new QPushButton(this);
-    d->bPack->setCheckable(true);
-    d->_segmented = new Utils::SegmentedButton(this);
-    d->_segmented->setFirstButton(d->bServer);
-    d->_segmented->setLastButton(d->bPack);
-    d->_segmented->setAutoExclusive(true);
-    QWidget *w1 = new QWidget(this);
-    w1->setMinimumSize(20,20);
-    w1->setMaximumSize(20,20);
-    d->m_ToolBarPacks->addWidget(w1);
-    d->m_ToolBarPacks->addWidget(d->_segmented);
-    w1 = new QWidget(this);
-    w1->setMinimumSize(20,20);
-    w1->setMaximumSize(20,20);
-    d->m_ToolBarPacks->addWidget(w1);
-    d->m_ToolBarPacks->addSeparator();
-
-    d->processToolBar(::PACK_MODE);
-
-    d->m_ToolBarPacks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    d->ui->toolbarLayout->addWidget(d->m_ToolBarPacks);
-
-    connect(d->m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-    connect(d->bPack, SIGNAL(clicked()), this, SLOT(switchToPackView()));
-    connect(d->bServer, SIGNAL(clicked()), this, SLOT(switchToServerView()));
-}
 
 //void ServerPackEditor::createServerDataWidgetMapper()
 //{
