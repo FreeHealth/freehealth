@@ -88,9 +88,9 @@ public:
 
     QString sqlMasterFileAbsPath() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql";}
 
-    QString multiCountryDefinitionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/textfiles/datapack_description/zipcodes/geonames/multi.csv";}
+    QString multiCountryDefinitionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/multi.csv");}
 
-    QString genericDatapackDescriptionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/textfiles/datapack_description/zipcodes/geonames/packdescription.xml";}
+    QString genericDatapackDescriptionFile() const {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString("%1/%2").arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES).arg("/geonames/packdescription.xml");}
 
     bool connectRawDatabase()
     {
