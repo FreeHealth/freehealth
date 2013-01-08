@@ -38,6 +38,7 @@ QT_END_NAMESPACE
 #include <QVector>
 #include <QMultiHash>
 #include <QString>
+#include <QPointer>
 
 /**
  * \file servermanager.h
@@ -131,7 +132,7 @@ private:
     QVector<DataPack::IServerEngine *> m_WorkingEngines;
 //    FtpServerEngine *m_FtpEngine;
 
-    QProgressBar *m_ProgressBar;
+    QPointer<QProgressBar> m_ProgressBar;
 };
 
 }  // End namespace Internal

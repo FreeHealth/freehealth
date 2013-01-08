@@ -67,7 +67,8 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
-    IServerManager(parent), m_ProgressBar(0)
+    IServerManager(parent),
+    m_ProgressBar(0)
 {
     setObjectName("ServerManager");
 }
