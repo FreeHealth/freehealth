@@ -50,6 +50,9 @@ public:
     const ServerEngineStatus &lastStatus(const Pack &pack);
     const ServerEngineStatus &lastStatus(const Server &server);
 
+private Q_SLOTS:
+    void emitQueueDowloaded();
+
 private:
     QList<ServerEngineQuery> m_queue;
     QHash<QString, ServerEngineStatus> m_ServerStatus, m_PackStatus;
