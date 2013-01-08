@@ -144,7 +144,7 @@ public:
         _categories.value(vendor+"/forms/subforms")->setData(Trans::Constants::FORMS_SUBFORMS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/documents")->setData(Trans::Constants::USER_DOCUMENTS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/zipcodes")->setData(Trans::Constants::ZIP_CODES, ::UnTranslatedNameRole);
-        _categories.value(vendor+"/alerpacks")->setData(Trans::Constants::ALERT_PACKS, ::UnTranslatedNameRole);
+        _categories.value(vendor+"/alertpacks")->setData(Trans::Constants::ALERT_PACKS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/binaries")->setData(Trans::Constants::BINARY_PACKS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/various")->setData(Trans::Constants::VARIOUS, ::UnTranslatedNameRole);
 
@@ -154,7 +154,7 @@ public:
         _categories.value(vendor+"/forms")->setIcon(icon("forms.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/documents")->setIcon(icon("user.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/zipcodes")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
-        _categories.value(vendor+"/alerpacks")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
+        _categories.value(vendor+"/alertpacks")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/binaries")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/various")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
 
