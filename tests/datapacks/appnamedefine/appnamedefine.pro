@@ -1,2 +1,2 @@
 CAMELCASE_APPNAME=DataPack
-include(../../buildspecs/define_appname.pri)
+include(../../../buildspecs/define_appname.pri)
