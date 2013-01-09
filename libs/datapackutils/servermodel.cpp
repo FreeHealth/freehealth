@@ -190,7 +190,7 @@ void ServerModel::serverAdded(int row)
 void ServerModel::serverRemoved(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
-    endInsertRows();
+    endRemoveRows();
 }
 
 void ServerModel::allServerDescriptionAvailable()
