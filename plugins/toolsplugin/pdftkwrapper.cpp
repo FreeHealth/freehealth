@@ -82,7 +82,28 @@ public:
 
     QString pdkTkPath()
     {
-        return "/opt/pdflabs/pdftk/bin/pdftk";
+        // Find the binary according to the current OS
+        if (Utils::isRunningOnMac()) {
+            // Mac -> check datapacks
+            QString path;
+            path = settings()->dataPackApplicationInstalledPath() + "/pdfcompletion/mac/bin/pdftk";
+            if (QFileInfo(path).exists())
+                return path;
+            path = settings()->dataPackInstallPath() + "/pdfcompletion/mac/bin/pdftk";
+            return path;
+        } else if (Utils::isRunningOnWin()) {
+            // Win -> check datapacks
+            QString path;
+            path = settings()->dataPackApplicationInstalledPath() + "/pdfcompletion/win/bin/pdftk.exe";
+            if (QFileInfo(path).exists())
+                return path;
+            path = settings()->dataPackInstallPath() + "/pdfcompletion/win/bin/pdftk.exe";
+            return path;
+        } else {
+            // Other (mainly unices like linux/freebsd)
+            return "/usr/bin/pdftk";
+        }
+        return QString::null;
     }
     
 public:
@@ -138,7 +159,7 @@ bool PdfTkWrapper::initialize()
             return false;
         }
     } else if (Utils::isRunningOnWin()) {
-        // TODO: may be XP / Win7/ Win8 checksum are different?
+        // FIXME: may be XP / Win7/ Win8 checksum are different?
         if (Utils::fileMd5(d->pdkTkPath()) != ::XP_MD5
                 || Utils::fileSha1(d->pdkTkPath()) != ::XP_SHA1
         #if QT_VERSION >= 0x050000
@@ -398,5 +419,291 @@ function franceDeclarationMedTraitant()
 }
 
 franceDeclarationMedTraitant();
+
+
+function franceDeclarationAld()
+{
+    // get the pdftkwrapper
+    var pdf = freemedforms.pdf;
+    if (!pdf.isAvailable) {
+        freemedforms.log("ALD form", "Error in french specific ALD form");
+        return;
+    }
+
+    // process data
+    var patient = freemedforms.patient;
+    if (!patient.isActive) {
+        freemedforms.log("ALD form", "patient is not active");
+        return;
+    }
+
+    var checked = "Oui";
+    var unchecked = "non";
+
+    pdf.beginFdfEncoding();
+
+    // NSS / NSS Owner
+    freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
+    var isNssOwner = freemedforms.forms.item("FrGroup::IsNSSOwner");
+    if (!isNssOwner.isValid) {
+        freemedforms.log("ALD form", "isNSSOwner not available");
+        return;
+    }
+    var nss = freemedforms.forms.item("FrGroup::NSS");
+    if (!nss.isValid) {
+        freemedforms.log("ALD form", "NSS not available");
+        return;
+    }
+
+    pdf.addFdfValue("nom prénom", patient.birthName + " " + patient.secondName + " " + patient.firstName);
+    pdf.addFdfValue("date naiss", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
+
+    // ADDRESS: 2 lines
+    var street = patient.street;
+    var adresse = "";
+    if (street.search("\n")) {
+        var splitter = street.split("\n");
+        adresse = splitter.join(" ; ");
+    } else {
+        adresse = patient.street;
+    }
+    adresse += "\n" + patient.city + " " + patient.zipcode + " " + patient.state;
+    pdf.addFdfValue("adresse", adresse);
+
+    // NSS / NSS Owner
+    if (!isNssOwner.checked) {
+        var owner = freemedforms.forms.item("FrGroup::OwnerName");
+        if (!owner.isValid) {
+            freemedforms.log("ALD form", "NSS owner not available");
+            return;
+        }
+        pdf.addFdfValue("nom prénom ass", owner.currentText);
+        if (nss.currentText.length == 15) {
+            pdf.addFdfValue("immat ass", nss.currentText.substring(0, 13));
+            pdf.addFdfValue("clé ass", nss.currentText.substring(13,15));
+        }
+    } else {
+        if (nss.currentText.length == 15) {
+            pdf.addFdfValue("immat", nss.currentText.substring(0, 13));
+            pdf.addFdfValue("clé", nss.currentText.substring(13,15));
+        }
+    }
+
+    // diagnostic(s) de l'(des) affection(s) de longue durée motivant la demande et sa (leurs) date(s) présumée(s) de début
+    item = freemedforms.forms.item("Diagnostic1::Label");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic1::Label not available");
+        return;
+    }
+    pdf.addFdfValue("diag1", item.currentText);
+
+    item = freemedforms.forms.item("Diagnostic2::Label");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic2::Label not available");
+        return;
+    }
+    pdf.addFdfValue("diag2", item.currentText);
+
+    item = freemedforms.forms.item("Diagnostic3::Label");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic3::Label not available");
+        return;
+    }
+    pdf.addFdfValue("diag3", item.currentText);
+
+    item = freemedforms.forms.item("Diagnostic1::Date");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic1::Date not available");
+        return;
+    }
+    pdf.addFdfValue("date diag1", item.currentText);
+
+    item = freemedforms.forms.item("Diagnostic2::Date");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic2::Date not available");
+        return;
+    }
+    pdf.addFdfValue("date diag2", freemedforms.tools.dateToString(item.currentValue.toDate(), "ddMMyyyy"));
+
+    item = freemedforms.forms.item("Diagnostic3::Date");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Diagnostic3::Date not available");
+        return;
+    }
+    pdf.addFdfValue("date diag3", freemedforms.tools.dateToString(item.currentValue.toDate(), "ddMMyyyy"));
+
+    item = freemedforms.forms.item("Arguments");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "Arguments not available");
+        return;
+    }
+    pdf.addFdfValue("arguments", item.currentText);  // Max 9 Lines
+
+    item = freemedforms.forms.item("PropositionDetails");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "PropositionDetails not available");
+        return;
+    }
+    pdf.addFdfValue("ALD1", unchecked, false); // "ALD non exonérante"
+    pdf.addFdfValue("ALD2", unchecked, false); // "ALD 30"
+    pdf.addFdfValue("ALD3", unchecked, false); // "ALD hors-liste"
+    pdf.addFdfValue("ALD4", unchecked, false); // "Poly-pathologie"
+    pdf.addFdfValue("ALD5", unchecked, false); // "ALD autres"
+    if (item.currentUuid == "nonExo") {
+        pdf.addFdfValue("ALD1", checked, false); // "ALD non exonérante"
+    } else if (item.currentUuid == "ald30") {
+        pdf.addFdfValue("ALD2", checked, false); // "ALD 30"
+    } else if (item.currentUuid == "horsListe") {
+        pdf.addFdfValue("ALD3", checked, false); // "ALD hors-liste"
+    } else if (item.currentUuid == "polyPatho") {
+        pdf.addFdfValue("ALD4", checked, false); // "Poly-pathologie"
+    } else if (item.currentUuid == "autres") {
+        pdf.addFdfValue("ALD5", checked, false); // "ALD autres"
+    }
+
+    // suivi biologique prévu (type d'actes)
+    item = freemedforms.forms.item("SuiviBio");
+    if (!item.isValid) {
+        freemedforms.log("ALD form", "SuiviBio not available");
+        return;
+    }
+    var list = item.currentValue;
+    print("SuiviBio:" + list);
+
+    pdf.addFdfValue("suivi bio1", list[0]);
+    pdf.addFdfValue("suivi bio2", list[1]);
+    pdf.addFdfValue("suivi bio3", list[2]);
+
+    // recours à des professionnels de santé para-médicaux
+    pdf.addFdfValue("rec pro1", "rec pro1");
+    pdf.addFdfValue("rec pro2", "rec pro2");
+    pdf.addFdfValue("rec pro3", "rec pro3");
+
+    // recours à des spécialistes (préciser la spécialité et le type d'acte spécialisé prévu)
+    pdf.addFdfValue("rec spé1", "rec spé1");
+    pdf.addFdfValue("rec spé2", "rec spé2");
+    pdf.addFdfValue("rec spé3", "rec spé3");
+
+    // spécialités pharmaceutiques ou classes thérapeutiques ou dispositifs médicaux
+    pdf.addFdfValue("spé phar1", "spé phar1");
+    pdf.addFdfValue("spé phar2", "spé phar2");
+    pdf.addFdfValue("spé phar3", "spé phar3");
+    pdf.addFdfValue("spé phar4", "spé phar4");
+    pdf.addFdfValue("spé phar5", "spé phar5");
+    pdf.addFdfValue("spé phar6", "spé phar6");
+    pdf.addFdfValue("spé phar7", "spé phar7");
+    pdf.addFdfValue("spé phar8", "spé phar8");
+    pdf.addFdfValue("spé phar9", "spé phar9");
+    pdf.addFdfValue("spé phar10", "spé phar10");
+    pdf.addFdfValue("spé phar11", "spé phar11");
+    pdf.addFdfValue("spé phar12", "spé phar12");
+
+    // Information(s) concernant la maladie (pour le patient)
+    pdf.addFdfValue("infos mal", "infos mal"); // Max 8 lines
+    pdf.addFdfValue("infos mal2", "infos mal2"); // Max 3 lines
+
+    // durée prévisible de l'arrêt de travail, s'il y a lieu :
+    pdf.addFdfValue("durée arrêt", "durée arrêt");
+    // durée prévisible des soins :
+    pdf.addFdfValue("durée soins", "durée soins");
+
+    // "Case à cocher"
+    pdf.addFdfValue("Case à cocher1", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher2", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher3", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher4", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher5", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher6", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher7", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher8", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher9", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher10", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher11", unchecked, false); // spé phar 1 check
+    pdf.addFdfValue("Case à cocher12", unchecked, false); // spé phar 1 check
+
+    pdf.addFdfValue("Case à cocher13", unchecked, false);   // suivi bio1 check
+    pdf.addFdfValue("Case à cocher14", unchecked, false);   // suivi bio2 check
+    pdf.addFdfValue("Case à cocher15", unchecked, false);   // suivi bio3 check
+
+    pdf.addFdfValue("Case à cocher16", unchecked, false);   // rec spé1 check
+    pdf.addFdfValue("Case à cocher17", checked, false);   // rec spé2 check
+    pdf.addFdfValue("Case à cocher18", unchecked, false);   // rec spé3 check
+
+    pdf.addFdfValue("Case à cocher19", checked, false);   // rec pro1 check
+    pdf.addFdfValue("Case à cocher20", unchecked, false);   // rec pro2 check
+    pdf.addFdfValue("Case à cocher21", checked, false);   // rec pro3 check
+
+    // demande de rémunération
+    pdf.addFdfValue("date examen", "date examen"); // date d el'examen
+
+    // signature et cachet du médecin traitant
+    pdf.addFdfValue("IDENTIF MEDECIN", "IDENTIF MEDECIN");
+    // cachet de l'établissement ou du centre de référence
+    pdf.addFdfValue("IDENTIF ETABLT", "IDENTIF ETABLT");
+
+    // reclassement professionnel envisagé
+    pdf.addFdfValue("Recl pro", unchecked, false); // Oui
+
+    // identification du médecin traitant établissant le protocole
+    pdf.addFdfValue("ident méd", "ident méd");
+    pdf.addFdfValue("ident méd2", "ident méd2");
+    pdf.addFdfValue("num ident méd", "num ident méd");
+
+    // identification de l'établissement
+    pdf.addFdfValue("nom étab", "nom étab");
+    pdf.addFdfValue("adress étab", "adress étab");
+    pdf.addFdfValue("nom chef serv", "nom chef serv");
+    pdf.addFdfValue("num finess", "num finess");
+    pdf.addFdfValue("date entrée", "date entrée"); // si le malade est hospitalisé, date d'entrée
+    pdf.addFdfValue("act", checked, false); // activité privée
+
+    ///////////////////////////////////////////////////////
+    // Unmatched fields
+    // pdf.addFdfValue("att", checked, false);
+    // pdf.addFdfValue("exam", checked, false);
+    // pdf.addFdfValue("règlem", checked, false);
+    // pdf.addFdfValue("REF", checked, false);
+    ///////////////////////////////////////////////////////
+
+    // décision du médecin conseil
+    pdf.addFdfValue("acc1", "acc1");
+    pdf.addFdfValue("acc2", "acc2");
+    pdf.addFdfValue("acc3", "acc3");
+    pdf.addFdfValue("mal1", "mal1");
+    pdf.addFdfValue("mal2", "mal2");
+    pdf.addFdfValue("mal3", "mal3");
+    pdf.addFdfValue("date acc1", "date acc1");
+    pdf.addFdfValue("date acc2", "date acc2");
+    pdf.addFdfValue("date acc3", "date acc3");
+    pdf.addFdfValue("date val1", "date val1");
+    pdf.addFdfValue("date val2", "date val2");
+    pdf.addFdfValue("date val3", "date val3");
+    pdf.addFdfValue("motif refus", "motif refus");
+    pdf.addFdfValue("motif refus2", "motif refus2");
+    pdf.addFdfValue("date pro", "date pro"); // décision du médecin conseil: date
+    pdf.addFdfValue("date val pro", "date val pro"); // décision du médecin conseil: protocole valable jusqu'au
+
+
+//    var user = freemedforms.user;
+//    if (user.isValid) {
+//        freemedforms.log("ALD form", "No valid user");
+//        //return;
+//    }
+
+//    pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
+//    pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
+//    pdf.addFdfValue("prénom médecin", user.firstName);
+//    pdf.addFdfValue("identif  medecin", user.identifiants.join("; "));
+
+//    pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
+
+    var filename = "/Volumes/HDD/ald.pdf"
+    pdf.endFdfEncoding(filename);
+
+    print(pdf.getFdfContent());
+    pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), "/Volumes/HDD/test_ald.pdf", "ISO-8859-1");
+}
+
+franceDeclarationAld();
 
 */
