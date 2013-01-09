@@ -154,8 +154,8 @@ MainWindow::MainWindow(QWidget *parent) :
     core.registerPathTag("__userDocuments__", QDir::homePath() + "/datapacks/user/");
 
     // Check internet connection
-    if (!core.isInternetConnexionAvailable())
-        qWarning() << "********* NO INTERNET CONNECTION FOUND *********";
+//    if (!core.isInternetConnexionAvailable())
+//        qWarning() << "********* NO INTERNET CONNECTION FOUND *********";
 
 #ifdef Q_OS_MAC
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
