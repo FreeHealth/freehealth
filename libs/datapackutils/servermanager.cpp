@@ -224,6 +224,11 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
     }
 
     m_Packs.clear();
+    // Clear engine download queue
+    for(int j = 0; j < m_WorkingEngines.count(); ++j) {
+        m_WorkingEngines[j]->stopJobsAndClearQueue();
+    }
+
     // Populate all server engine
     int workingTasks = 0;
     for(int i=0; i < m_Servers.count(); ++i) {
