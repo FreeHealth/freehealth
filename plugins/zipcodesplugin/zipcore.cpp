@@ -103,8 +103,6 @@ public:
             if (QFileInfo(databaseFileName()).exists()) {
                 _db.setDatabaseName(databaseFileName());
                 _dbAvailable = true;
-            } else {
-                _dbAvailable = false;
             }
         }
         if (_dbAvailable) {
