@@ -271,13 +271,17 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEMEDFORMS
-    if (user())
+    if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+        user()->saveChanges();
+    }
 #endif
 
 #ifdef FREEACCOUNT
-    if (user())
+    if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+        user()->saveChanges();
+    }
 #endif
 
 #ifdef FREEDIAMS
