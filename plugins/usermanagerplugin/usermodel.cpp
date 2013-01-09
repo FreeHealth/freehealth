@@ -262,7 +262,7 @@ public:
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
 
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
-        case Core::IUser::DataPackConfig: userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG); break;
+        case Core::IUser::DataPackConfig: toReturn = userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG); break;
 
         case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
         case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
