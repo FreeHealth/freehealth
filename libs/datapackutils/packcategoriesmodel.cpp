@@ -92,6 +92,8 @@ public:
                       << "forms/fullsets" << "forms/subforms"
                       << "documents"
                       << "zipcodes"
+                      << "alertpacks"
+                      << "binaries"
                       << "various";
 
         QStandardItem *main = new QStandardItem(vendor);
@@ -142,6 +144,8 @@ public:
         _categories.value(vendor+"/forms/subforms")->setData(Trans::Constants::FORMS_SUBFORMS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/documents")->setData(Trans::Constants::USER_DOCUMENTS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/zipcodes")->setData(Trans::Constants::ZIP_CODES, ::UnTranslatedNameRole);
+        _categories.value(vendor+"/alertpacks")->setData(Trans::Constants::ALERT_PACKS, ::UnTranslatedNameRole);
+        _categories.value(vendor+"/binaries")->setData(Trans::Constants::BINARY_PACKS, ::UnTranslatedNameRole);
         _categories.value(vendor+"/various")->setData(Trans::Constants::VARIOUS, ::UnTranslatedNameRole);
 
         _categories.value(vendor+"/account")->setIcon(icon("freeaccount.png", DataPackCore::SmallPixmaps));
@@ -150,6 +154,8 @@ public:
         _categories.value(vendor+"/forms")->setIcon(icon("forms.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/documents")->setIcon(icon("user.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/zipcodes")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
+        _categories.value(vendor+"/alertpacks")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
+        _categories.value(vendor+"/binaries")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
         _categories.value(vendor+"/various")->setIcon(icon("package.png", DataPackCore::SmallPixmaps));
 
         _categories.value(vendor+"/account")->setData(Pack::Accountancy, ::PackDataTypeRole);
@@ -160,6 +166,8 @@ public:
         _categories.value(vendor+"/forms/subforms")->setData(Pack::SubForms, ::PackDataTypeRole);
         _categories.value(vendor+"/documents")->setData(Pack::UserDocuments, ::PackDataTypeRole);
         _categories.value(vendor+"/zipcodes")->setData(Pack::ZipCodes, ::PackDataTypeRole);
+        _categories.value(vendor+"/alertpacks")->setData(Pack::AlertPacks, ::PackDataTypeRole);
+        _categories.value(vendor+"/binaries")->setData(Pack::Binaries, ::PackDataTypeRole);
         _categories.value(vendor+"/various")->setData(Pack::UnknownType, ::PackDataTypeRole);
 
         QFont bold;
@@ -170,6 +178,8 @@ public:
         _categories.value(vendor+"/forms")->setFont(bold);
         _categories.value(vendor+"/documents")->setFont(bold);
         _categories.value(vendor+"/zipcodes")->setFont(bold);
+        _categories.value(vendor+"/alertpacks")->setFont(bold);
+        _categories.value(vendor+"/binaries")->setFont(bold);
         _categories.value(vendor+"/various")->setFont(bold);
     }
 
@@ -198,6 +208,8 @@ public:
         case Pack::UserDocuments: vendor += "/documents"; break;
         case Pack::ZipCodes: vendor += "/zipcodes"; break;
         case Pack::ICD: vendor += "/diseases/icd10"; break;
+        case Pack::AlertPacks: vendor += "/alertpacks"; break;
+        case Pack::Binaries: vendor += "/binaries"; break;
         default: vendor += "/various"; break;
         }
         return _categories.value(vendor, q->invisibleRootItem());

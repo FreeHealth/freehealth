@@ -35,6 +35,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProgressBar>
+#include <QTimer>
 
 #include <QDebug>
 
@@ -151,7 +152,7 @@ bool LocalServerEngine::startDownloadQueue()
         }
     }
     m_queue.clear();
-    Q_EMIT queueDowloaded();
+    QTimer::singleShot(100, this, SLOT(emitQueueDowloaded()));
     return true;
 }
 
@@ -176,4 +177,9 @@ const ServerEngineStatus &LocalServerEngine::lastStatus(const Server &server)
 {
     const QString &key = statusKey(server);
     return m_ServerStatus[key];
+}
+
+void LocalServerEngine::emitQueueDowloaded()
+{
+    Q_EMIT queueDowloaded();
 }

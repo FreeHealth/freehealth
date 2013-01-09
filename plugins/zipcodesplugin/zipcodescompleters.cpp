@@ -130,8 +130,11 @@ bool ZipCountryModel::isCountryAvailable(const QLocale::Country country) const
     if (!zipCore().isDatabaseAvailable())
         return false;
 
+    QString iso = Utils::countryToIso(country).toUpper();
+    if (iso.isEmpty())
+        return false;
     QString req = QString("SELECT DISTINCT COUNT(`COUNTRY`) FROM `IMPORT` WHERE `COUNTRY`=\"%1\"")
-            .arg(Utils::countryToIso(country).toUpper());
+            .arg(iso);
     QSqlQuery query(zipCore().database());
     if (query.exec(req)) {
         if (query.next())

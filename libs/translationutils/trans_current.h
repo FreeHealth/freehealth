@@ -137,6 +137,7 @@ const char* const FORMS_SUBFORMS                    = QT_TRANSLATE_NOOP("tkConst
 const char* const DISEASES_ICD                      = QT_TRANSLATE_NOOP("tkConstants", "International classification of diseases");
 const char* const DISEASES_CLASSIFICATIONS          = QT_TRANSLATE_NOOP("tkConstants", "Diseases classifications");
 const char* const ALERT_PACKS                       = QT_TRANSLATE_NOOP("tkConstants", "Alert packs");
+const char* const BINARY_PACKS                      = QT_TRANSLATE_NOOP("tkConstants", "Binary packs");
 const char* const VARIOUS                           = QT_TRANSLATE_NOOP("tkConstants", "Various");
 
 } // end Constants

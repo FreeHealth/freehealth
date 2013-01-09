@@ -72,7 +72,7 @@ DataPackPluginIPlugin::DataPackPluginIPlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_datapack");
-    Core::ICore::instance()->translators()->addNewTranslator("datapackplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("lib_datapack");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
@@ -148,6 +148,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 #endif
 
     if (xmlConfig.isEmpty()) {
+        LOG("No datapack server configuration available. Using the default");
         // read default servers
         QString content = Utils::readTextFile(defaultServerFile(), Utils::DontWarnUser);
         if (!content.isEmpty()) {
@@ -176,9 +177,9 @@ void DataPackPluginIPlugin::extensionsInitialized()
         // Always unsure that the freemedforms datapack server is available
         DataPack::Server http("http://packs.freemedforms.com");
         http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+        // FIXME: missing server version to avoid duplicates
         core.serverManager()->addServer(http);
     }
-
 
     // TODO: Check for package update -> thread this
 
@@ -270,13 +271,17 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEMEDFORMS
-    if (user())
+    if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+        user()->saveChanges();
+    }
 #endif
 
 #ifdef FREEACCOUNT
-    if (user())
+    if (user()) {
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+        user()->saveChanges();
+    }
 #endif
 
 #ifdef FREEDIAMS

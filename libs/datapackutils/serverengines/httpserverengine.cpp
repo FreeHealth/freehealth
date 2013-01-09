@@ -127,6 +127,9 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
     // Connect authentication request
     connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
     connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
+#if QT_VERSION >= 0x050000
+    m_NetworkAccessManager->clearAccessCache();
+#endif
 }
 
 HttpServerEngine::~HttpServerEngine()

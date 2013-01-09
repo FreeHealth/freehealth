@@ -1,5 +1,6 @@
 TEMPLATE = lib
 TARGET = Biblio
+DEFINE += BIBLIO_LIBRARY
 
 include(../../../plugins/fmf_plugins.pri)
 include(biblio_dependencies.pri)
@@ -16,6 +17,7 @@ SOURCES += \
 
 
 HEADERS  += \
+    biblio_exporter.h \
     biblioplugin.h \
     bibliocore.h \
     bibliobase.h

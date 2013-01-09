@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IcdGroupLinkerWidget</class>
- <widget class="QWidget" name="IcdGroupLinkerWidget">
+ <class>Icd10::IcdGroupLinkerWidget</class>
+ <widget class="QWidget" name="Icd10::IcdGroupLinkerWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -26,6 +26,7 @@
 #include "datapackplugin.h"
 #include "datapackcore.h"
 #include "datapackpage.h"
+#include "genericdatapackcreator.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -66,6 +67,7 @@ bool DataPackIPlugin::initialize(const QStringList &arguments, QString *errorMes
 
     // add pages
     addAutoReleasedObject(new DataPackPage(this));
+    addAutoReleasedObject(new GenericDataPackCreator(this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     return true;

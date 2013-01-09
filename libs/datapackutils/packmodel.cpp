@@ -52,7 +52,6 @@
 
 #include <QDebug>
 
-
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
@@ -81,6 +80,7 @@ struct PackItem {
     Qt::CheckState userCheckState;
 };
 
+// Return the HTML pack label
 static QString packToHtml(const PackItem &item)
 {
     QString inst, color;
@@ -117,6 +117,7 @@ static QString packToHtml(const PackItem &item)
             .arg(inst);
 }
 
+// Return the HTML pack tooltip
 static QString packTooltip(const PackItem &item)
 {
     const PackDescription &descr = item.pack.description();

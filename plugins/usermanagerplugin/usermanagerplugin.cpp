@@ -203,7 +203,7 @@ void UserManagerPlugin::extensionsInitialized()
     messageSplash(tr("Initializing user manager plugin..."));
 
     // add UserPreferences page
-    addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
+//    addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
 
     // add UserManager toogler action to plugin menu
 #ifdef FREEMEDFORMS

@@ -26,6 +26,7 @@
 #ifndef ICDGROUPLINKER_H
 #define ICDGROUPLINKER_H
 
+#include <icd10db/icd10_exporter.h>
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/ftb_constants.h>
 
@@ -33,9 +34,11 @@
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 
+namespace Icd10 {
 
-class IcdGroupLinkerPage : public Core::IToolPage
+class ICD10DB_EXPORT IcdGroupLinkerPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     IcdGroupLinkerPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("IcdGroupLinkerPage"); }
 
@@ -73,11 +76,9 @@ private:
     QSortFilterProxyModel *proxyModel;
 };
 
-
-
 class IcdGroupLinkerModelPrivate;
 
-class IcdGroupLinkerModel : public QAbstractTableModel
+class ICD10DB_EXPORT IcdGroupLinkerModel : public QAbstractTableModel
 {
     Q_OBJECT
     explicit IcdGroupLinkerModel(QObject *parent = 0);
@@ -132,8 +133,8 @@ public Q_SLOTS:
 private:
     static IcdGroupLinkerModel *m_Instance;
     IcdGroupLinkerModelPrivate *d;
-
 };
 
+} // namespace Icd10
 
 #endif // ICDGROUPLINKER_H

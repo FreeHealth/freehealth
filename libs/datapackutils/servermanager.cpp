@@ -67,7 +67,8 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
-    IServerManager(parent), m_ProgressBar(0)
+    IServerManager(parent),
+    m_ProgressBar(0)
 {
     setObjectName("ServerManager");
 }
@@ -260,6 +261,7 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
 void ServerManager::checkServerUpdates()
 {
     WARN_FUNC << m_Servers.count();
+    // TODO: code this void ServerManager::checkServerUpdates()
     // Get installed packs uuid && version
 
     // Compare installed pack versions with server description
@@ -294,7 +296,7 @@ void ServerManager::engineDescriptionDownloadDone()
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
         IServerEngine *engine = m_WorkingEngines.at(i);
         if (engine->downloadQueueCount() > 0) {
-            qWarning() << engine->objectName() << engine->downloadQueueCount();
+//            qWarning() << engine->objectName() << engine->downloadQueueCount();
             __emit = false;
         } else {
             disconnect(engine, SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
