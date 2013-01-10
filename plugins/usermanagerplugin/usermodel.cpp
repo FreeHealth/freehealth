@@ -528,7 +528,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     }
 
     // 4. Connect new user
-    LOG(tr("Setting current user uuid to \t\t\t %1").arg(uuid));
+    LOG(tr("Setting current user uuid to %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         // save user preferences
         Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
