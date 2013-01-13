@@ -254,7 +254,7 @@ public:
         for(int i = m_AvailPacks.count()-1; i >= 0; --i) {
             const Pack &p = m_AvailPacks.at(i);
             Utils::VersionNumber packCompatVersion(p.description().data(appId).toString());
-            if (appVersion < packCompatVersion)
+            if (appVersion >= packCompatVersion)
                 m_AvailPacks.removeAt(i);
         }
 
