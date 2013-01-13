@@ -28,9 +28,11 @@
 #define DATAPACK_INTERNAL_HTTPSERVERENGINE_H
 
 #include <datapackutils/iserverengine.h>
+#include <QProgressBar>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPointer>
 
 namespace DataPack {
 namespace Internal {
@@ -43,7 +45,7 @@ struct ReplyData {
 
     QNetworkReply *reply;
     Server *server;
-    QProgressBar *bar;
+    QPointer<QProgressBar> bar;
     Pack pack;
     QByteArray response;
     Server::FileRequested fileType; // a configuration file? a pack file? etc

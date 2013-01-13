@@ -38,14 +38,13 @@
 
 #include <QDir>
 #include <QFile>
-#include <QProgressBar>
 #include <QNetworkProxyQuery>
 #include <QAuthenticator>
 #include <QHash>
 
 #include <QDebug>
 
-// Zip Command Line: zip serverconf.zip server.conf.xml icd10/icd10.xml drugs/drugs.xml
+// Create datapacks with FreeToolBox
 
 using namespace DataPack;
 using namespace Internal;
@@ -68,7 +67,8 @@ namespace {
 
 }
 
-ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar) {
+ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar)
+{
     this->reply = reply;
     this->server = server;
     this->fileType = fileType;
