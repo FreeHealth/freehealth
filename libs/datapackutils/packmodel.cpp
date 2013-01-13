@@ -206,7 +206,7 @@ public:
     void createPackItem()
     {
         // Get all packages from servers
-        QList<Pack> installedPacks = packManager()->installedPack();
+        const QList<Pack> &installedPacks = packManager()->installedPack();
         for(int i=0; i < serverManager()->serverCount(); ++i) {
             scanServerPack(i);
         }
