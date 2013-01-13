@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = datapacks
+TARGET = DataPackTester
 
 QT += xml network core gui
 
