@@ -177,11 +177,13 @@ bool VersionNumber::operator!=(const VersionNumber &b) const
 
 QDebug operator<<(QDebug dbg, const Utils::VersionNumber &c)
 {
-    QString t = QString("VersionNumber(maj:%1; min%2; deb:%3").arg(c.majorNumber()).arg(c.minorNumber()).arg(c.debugNumber());
+    QString t = QString("VersionNumber(%1.%2.%3").arg(c.majorNumber()).arg(c.minorNumber()).arg(c.debugNumber());
     if (c.isAlpha())
-        t += "; alpha:" + QString::number(c.alphaNumber());
+        t += "-alpha:" + QString::number(c.alphaNumber());
     if (c.isBeta())
-        t += "; beta:" + QString::number(c.betaNumber());
+        t += "-beta:" + QString::number(c.betaNumber());
+    if (c.isRC())
+        t += "-RC:" + QString::number(c.rcNumber());
     t += ")";
     dbg.nospace() << t;
     return dbg.space();
