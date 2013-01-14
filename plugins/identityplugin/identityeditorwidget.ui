@@ -85,7 +85,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Second name</string>
+        <string>Second name:</string>
        </property>
        <property name="buddy">
         <cstring>secondName</cstring>
@@ -141,7 +141,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Gender</string>
+        <string>Gender:</string>
        </property>
       </widget>
      </item>
@@ -170,7 +170,7 @@
         </size>
        </property>
        <property name="text">
-        <string>First name</string>
+        <string>First name:</string>
        </property>
        <property name="buddy">
         <cstring>firstname</cstring>
@@ -218,7 +218,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Language</string>
+        <string>Language:</string>
        </property>
       </widget>
      </item>
@@ -237,7 +237,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Date of birth</string>
+        <string>Date of birth:</string>
        </property>
        <property name="buddy">
         <cstring>dob</cstring>
