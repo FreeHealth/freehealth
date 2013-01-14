@@ -169,16 +169,15 @@ public:
     // Get all packs available from a server (avoid duplicates) : populate m_AvailPacks list
     void scanServerPack(const int index)
     {
-        //        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
+        // qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
         foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
-            //            qWarning() << "   ?? " << p.uuid() << p.version();
+            // qWarning() << "   ?? " << p.uuid() << p.version();
             // Add to the package list if not already included
             if (!p.isValid())
                 continue;
-            //            qWarning() << "   valid " << p.uuid() << p.version();
             if (m_AvailPacks.contains(p))
                 continue;
-            //            qWarning() << "   adding" << p.uuid() << p.version();
+            // qWarning() << "   adding" << p.uuid() << p.version();
             m_AvailPacks << p;
         }
     }
@@ -492,14 +491,17 @@ void PackModel::updateModel()
     d->m_Items.clear();
     d->m_AvailPacks.clear();
     d->createPackItem();
+    filter(d->_filterVendor, d->_filterDataType);
     endResetModel();
 }
 
 /** Filter the model using the \e vendor name and the Pack::DataType \e types. An empty /e vendor name and a empty \e types removes the filter. */
 void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types)
 {
+    // Begin reset
     beginResetModel();
     d->rowToItem.clear();
+    // Clear filter ?
     if (types.isEmpty() && vendor.isEmpty()) {
         d->_filterVendor.clear();
         d->_filterDataType = types;
@@ -507,6 +509,7 @@ void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types
         return;
     }
 
+    // Check rows/items
     for(int i=0; i < d->m_Items.count(); ++i) {
         const PackItem &item = d->m_Items.at(i);
         if (item.pack.vendor() == vendor && (types.contains(item.pack.dataType())))
@@ -514,6 +517,8 @@ void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types
     }
     d->_filterVendor = vendor;
     d->_filterDataType = types;
+
+    // Reset
     endResetModel();
 }
 
@@ -531,4 +536,3 @@ void PackModel::onServerRemoved(const int index)
     d->serverRemoved(index);
     filter(d->_filterVendor, d->_filterDataType);
 }
-
