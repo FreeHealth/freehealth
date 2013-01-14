@@ -66,6 +66,9 @@ public Q_SLOTS:
     bool refreshServerContent();
     bool submitChanges();
 
+private Q_SLOTS:
+    void onRefreshServerDone();
+
 private:
     void populatePackView(const int packId);
     void populateServerView(const int serverId);

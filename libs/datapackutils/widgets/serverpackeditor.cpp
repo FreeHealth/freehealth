@@ -118,6 +118,7 @@ public:
         m_ServerMapper(0),
         _segmented(0), _segPack(0), _segServer(0),
         _toolbarCurrentMode(-1),
+        _progressDialog(0),
         q(parent)
     {}
 
@@ -216,6 +217,7 @@ public:
     QDataWidgetMapper *m_ServerMapper;
     Utils::SegmentedButton *_segmented, *_segPack, *_segServer;
     int _toolbarCurrentMode;
+    QProgressDialog *_progressDialog; // used for server content refreshing
 
 private:
     ServerPackEditor *q;
@@ -313,18 +315,35 @@ bool ServerPackEditor::refreshServerContent()
 {
     if (serverManager()->serverCount() == 0)
         return true;
-    QProgressDialog dlg(this);
-    QProgressBar *bar = new QProgressBar(&dlg);
-    dlg.setLabelText(tr("Updating server information"));
-    dlg.setModal(true);
-    dlg.setBar(bar);
-    dlg.show();
-    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(deleteLater()));
-    connect(&dlg, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
+    if (d->_progressDialog) {
+        delete d->_progressDialog;
+        d->_progressDialog = 0;
+    }
+    d->_progressDialog = new QProgressDialog(this);
+    QProgressBar *bar = new QProgressBar(d->_progressDialog);
+    bar->setValue(0);
+    bar->setRange(0, 0);
+    d->_progressDialog->setBar(bar);
+    d->_progressDialog->setLabelText(tr("Updating server information"));
+    d->_progressDialog->setModal(true);
+    d->_progressDialog->show();
+    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(onRefreshServerDone()), Qt::UniqueConnection);
+    connect(d->_progressDialog, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
     // TODO: Connect the cancel button
     serverManager()->getAllDescriptionFile(bar);
 //    dlg.exec();
     return true;
+}
+
+void ServerPackEditor::onRefreshServerDone()
+{
+    qWarning() << "onRefreshServerDone" << d->_progressDialog;
+    if (!d->_progressDialog)
+        return;
+    d->_progressDialog->setValue(d->_progressDialog->maximum());
+    delete d->_progressDialog;
+    d->_progressDialog = 0;
+    d->aServerRefresh->setEnabled(true);
 }
 
 bool ServerPackEditor::submitChanges()
@@ -462,6 +481,7 @@ void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QMod
 void ServerPackEditor::serverActionTriggered(QAction *a)
 {
     if (a==d->aServerRefresh) {
+        d->aServerRefresh->setEnabled(false);
         refreshServerContent();
     } if (a==d->aServerAdd) {
         AddServerDialog dlg(this);
