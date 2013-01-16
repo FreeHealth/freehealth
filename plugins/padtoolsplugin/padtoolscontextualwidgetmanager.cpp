@@ -205,7 +205,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
 #   ifdef FREEMEDFORMS
         actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);
 #   else
-        actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
+        actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
 #   endif
 #endif
     }
