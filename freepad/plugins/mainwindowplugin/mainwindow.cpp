@@ -28,6 +28,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/translators.h>
@@ -81,6 +82,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
+static inline Core::IPadTools *padTools() { return Core::ICore::instance()->padTools(); }
 //static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 // SplashScreen Messagers
@@ -157,12 +159,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 */
 void MainWindow::extensionsInitialized()
 {
-    // FIXME: PadWriter is not exported for Win32 and should be purely internal to PadTools Plugin
-    // FIXME: connect this to postCoreInitialization
-    m_Writer = new PadTools::Internal::PadWriter(this);
-    setCentralWidget(m_Writer);
-    // END
-
     finishSplash(this);
     readSettings();
     show();
@@ -214,6 +210,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::postCoreInitialization()
 {
+    m_Writer = padTools()->createWriter(this);
+    setCentralWidget(m_Writer);
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 

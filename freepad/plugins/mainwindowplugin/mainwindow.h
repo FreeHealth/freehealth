@@ -48,6 +48,10 @@ QT_END_NAMESPACE
  * \date 03 Jan 2011
 */
 
+namespace Core {
+class IPadWriter;
+}
+
 namespace PadTools {
 namespace Internal {
 class TokenModel;
@@ -114,9 +118,8 @@ protected:
 //    Internal::Ui::MainWindow *m_ui;
 
 private:
-//	Core::IPadTools *m_padTools;
     PadTools::Internal::TokenModel *m_TokenModel;
-    PadTools::Internal::PadWriter *m_Writer;
+    Core::IPadWriter *m_Writer;
 
 	void refreshTokens();
 };
