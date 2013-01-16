@@ -204,8 +204,7 @@ void MainWindow::refreshTokens()
 
 MainWindow::~MainWindow()
 {
-//**    delete m_ui->padTextEdit;
-//**    delete m_ui;
+    delete m_Writer; // Avoid a segfaulting when trying to access ICore::contextManager()
 }
 
 void MainWindow::postCoreInitialization()
