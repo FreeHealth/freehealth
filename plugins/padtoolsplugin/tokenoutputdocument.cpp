@@ -670,7 +670,7 @@ void TokenOutputDocument::dragMoveEvent(QDragMoveEvent *event)
         QTextCursor cursor = cursorForPosition(event->pos());
         setTextCursor(cursor);
         ensureCursorVisible();
-        // if event pos y <=10 scroll up
+        // if event pos y <= 10 scroll up
         event->acceptProposedAction();
         event->accept();
     } else {
