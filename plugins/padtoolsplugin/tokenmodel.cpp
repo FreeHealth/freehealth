@@ -27,6 +27,14 @@
 /**
  * \class PadTools::TokenModel
  * Transform the Core::ITokenPool to a QStandardItemModel (tree model).
+ *
+ * Filtering / Sorting:
+ * The model can not be directly filtered, use instead a QSortFilterProxyModel
+ * over it and apply a QRegExp on the Uuid column or the Html label column.
+ * If you want to filter multiple token namespaces just use the OR ('|') in your
+ * your QRegExp (ex: QRegExp("^Pat*|^User") will filter all patient & user namespace/tokens).
+ *
+ * \sa PadTools::Constants::TokenModelDataRepresentation
  */
 
 #include "tokenmodel.h"
@@ -59,7 +67,9 @@ namespace Internal {
 class TokenModelPrivate
 {
 public:
-    TokenModelPrivate(TokenModel *parent) : q(parent) {}
+    TokenModelPrivate(TokenModel *parent) :
+        _initialized(false),
+        q(parent) {}
 
     QStringList tokenNamespaces(const QString &token)
     {
@@ -79,22 +89,6 @@ public:
         return ns;
     }
 
-    // Return true if we need to include the Namespace to the tree
-    bool isFiltered(const Core::TokenNamespace &ns, const QString &parentUid)
-    {
-        // FIXME: improve filtering (eg: filter only "Prescription" -> bug, filter "Prescription.Drug" -> Ok
-        QString testNs;
-        parentUid.isEmpty() ? testNs = ns.uid() : testNs = parentUid+"."+ns.uid();
-//        qWarning() << "isFiltered" << testNs;
-        foreach(const QString &filter, _filterNs) {
-            if (filter.startsWith(testNs)) {
-//                qWarning() << "     true";
-                return true;
-            }
-        }
-        return false;
-    }
-
     void createNamespace(const Core::TokenNamespace &ns, QStandardItem *parent = 0)
     {
         if (!parent)
@@ -102,10 +96,6 @@ public:
 
         // Recreate the full uuid (ns + separator + name) using the parent item
         QString fullNs = parent->data(TOKEN_UID).toString();
-
-        // Check if the ns uuid is included in the filter
-        if (!isFiltered(ns, fullNs))
-            return;
 
         QStandardItem *item = new QStandardItem;
         fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
@@ -154,7 +144,7 @@ public:
             if (ns.count()==1) {
                 QStandardItem *item = new QStandardItem(name);
                 _tokensToItem.insert(token, item);
-                q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
+                q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem(token->uid()));
                 continue;
             }
             // get namespace of the item
@@ -167,13 +157,8 @@ public:
             }
 
             if (!nsItem) {
-//                if (_filterNs.isEmpty()) {
-                    LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
-                    nsItem = q->invisibleRootItem();
-//                } else {
-                    // Filtered item
-//                    return;
-//                }
+                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
+                nsItem = q->invisibleRootItem();
             }
 
             // create token item
@@ -181,21 +166,12 @@ public:
             QStandardItem *item = new QStandardItem(name);
             item->setToolTip(token->tooltip());
             _tokensToItem.insert(token, item);
-            nsItem->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
+            nsItem->appendRow(QList<QStandardItem*>() << item << new QStandardItem(token->uid()));
         }
-    }
-
-    // Parse the ns and reformat them for a correct integration. Store in _filterNs
-    void setFilteringNamespace(const QStringList &ns)
-    {
-        _filterNs.clear();
-        foreach(const QString &n, ns) {
-            _filterNs << tokenNamespaces(n).join(".");
-        }
-        qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxx" << _filterNs;
     }
 
 public:
+    bool _initialized;
     QMap<QString, QVariant> m_Tokens;
     QList<Core::IToken *> _tokens;
     QHash<Core::IToken *, QStandardItem *> _tokensToItem;
@@ -217,6 +193,7 @@ TokenModel::TokenModel(QObject *parent) :
     d(new Internal::TokenModelPrivate(this))
 {
     Q_ASSERT(tokenPool());
+    setColumnCount(Constants::TokenModel_ColumnCount);
 }
 
 /**
@@ -226,7 +203,12 @@ TokenModel::TokenModel(QObject *parent) :
  */
 bool TokenModel::initialize()
 {
-    d->createTree();
+    if (!d->_initialized) {
+        beginResetModel();
+        d->createTree();
+        endResetModel();
+    }
+    d->_initialized = true;
     return true;
 }
 
@@ -246,6 +228,11 @@ void TokenModel::addTokens(const QVector<Core::IToken*> &tokens)
 {
     for(int i=0; i<tokens.count();++i)
         d->_tokens.append(tokens.at(i));
+}
+
+int TokenModel::columnCount(const QModelIndex &index) const
+{
+    return QStandardItemModel::columnCount(index);
 }
 
 QVariant TokenModel::data(const QModelIndex &index, int role) const
@@ -269,34 +256,11 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
     }
 
     return QStandardItemModel::data(index, role);
-    //    if (!index.isValid())
-    //        return QVariant();
-    //    if (role==Qt::DisplayRole || role==Qt::EditRole) {
-    //        const QString &k = d->m_Tokens.keys().at(index.row());
-    //        switch (index.column()) {
-    //        case TokenUid: return k;
-    //        case TokenValue: return d->m_Tokens.value(k);
-    //        }
-    //    }
-    //    return QVariant();
 }
 
 bool TokenModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     return QStandardItemModel::setData(index, value, role);
-    //    if (!index.isValid())
-    //        return false;
-    //    if (role==Qt::EditRole) {
-    //        const QString &k = d->m_Tokens.keys().at(index.row());
-    //        switch (index.column()) {
-    //        case TokenName: break;
-    //        case TokenValue: d->m_Tokens.insert(k, value); break;
-    //        }
-
-    //        Q_EMIT dataChanged(index, index);
-    //        Q_EMIT tokenChanged(k, value.toString());
-    //    }
-    //    return true;
 }
 
 Qt::ItemFlags TokenModel::flags(const QModelIndex &index) const
@@ -346,17 +310,4 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
             .arg(Constants::TOKEN_CLOSE_DELIMITER);
     mimeData->setData(Constants::TOKENRAWSOURCE_MIME, name.toUtf8());
     return mimeData;
-}
-
-/**
- * Filter the model using the namespaces \e ns.
- * This member will totally recreate the token tree and reset.
- */
-void TokenModel::setNamespacesFilter(const QStringList &ns)
-{
-    beginResetModel();
-    clear();
-    d->setFilteringNamespace(ns);
-    d->createTree();
-    endResetModel();
 }

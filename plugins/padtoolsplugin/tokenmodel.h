@@ -35,8 +35,8 @@
 /**
  * \file tokenmodel.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 05 May 2012
+ * \version 0.8.2
+ * \date 16 Jan 2013
 */
 
 namespace Core {
@@ -51,11 +51,7 @@ class TokenModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    enum DataRepresentation {
-        TokenUid = 0,
-//        TokenValue,
-        ColumnCount
-    };
+    // DataRepresentation. See PadTools::Constants::TokenModelDataRepresentation
 
     explicit TokenModel(QObject *parent = 0);
     bool initialize();
@@ -64,8 +60,7 @@ public:
     void addToken(Core::IToken *token);
     void addTokens(const QVector<Core::IToken *> &token);
 
-//    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &) const {return ColumnCount;}
+    int columnCount(const QModelIndex &) const;
 
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
@@ -75,8 +70,6 @@ public:
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
 
-    void setNamespacesFilter(const QStringList &ns);
-
 Q_SIGNALS:
     void tokenChanged(const QString &token, const QString &value);
 
@@ -85,6 +78,6 @@ private:
 };
 
 }  // namespace Internal
-} // namespace PadTools
+}  // namespace PadTools
 
 #endif // PADTOOLS_TOKENMODEL_H
