@@ -54,6 +54,7 @@ const char* const STREET            = QT_TRANSLATE_NOOP("tkConstants", "Street")
 const char* const CITY              = QT_TRANSLATE_NOOP("tkConstants", "City");
 const char* const ZIPCODE           = QT_TRANSLATE_NOOP("tkConstants", "Zipcode");
 const char* const COUNTRY           = QT_TRANSLATE_NOOP("tkConstants", "Country");
+const char* const STATE             = QT_TRANSLATE_NOOP("tkConstants", "State/Province");
 const char* const EMAILS            = QT_TRANSLATE_NOOP("tkConstants", "E-Mails");
 const char* const EMAIL             = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
 const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");

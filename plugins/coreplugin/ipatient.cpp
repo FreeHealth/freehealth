@@ -172,6 +172,9 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_ZIP, ZipCode);
     t->setUntranslatedHumanReadableName(Trans::Constants::ZIPCODE);
     _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_STATE, StateProvince);
+    t->setUntranslatedHumanReadableName(Trans::Constants::STATE);
+    _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_COUNTRY, Country);
     t->setUntranslatedHumanReadableName(Trans::Constants::COUNTRY);
     _tokens << t;
