@@ -73,6 +73,7 @@ const char * const BEFORE_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Before the tok
 const char * const AFTER_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "After the token");
 const char * const NESTED_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Nested token");
 
+/** Column representation for the token model */
 enum TokenModelDataRepresentation {
     TokenModel_HtmlLabelColumn = 0,
     TokenModel_UuidColumn,
