@@ -174,8 +174,16 @@ void PadDocument::clear()
 /** Defines the source to use as a QTextDocument \e source */
 void PadDocument::setSource(QTextDocument *source)
 {
+    Q_ASSERT(source);
     clear();
     _docSource = source;
+}
+
+/** Defines the output document to use */
+void PadDocument::setOutput(QTextDocument *output)
+{
+    Q_ASSERT(output);
+    _docOutput = output;
 }
 
 /**
@@ -459,11 +467,11 @@ void PadDocument::toRaw(PadDocument *doc)
     _docSource->setHtml(_docOutput->toHtml());
 
     // sync raw && output ranges of all fragments
-    foreach (PadFragment *fragment, _fragments)
+    foreach(PadFragment *fragment, _fragments)
         syncRawRange(fragment);
 
     // run tokens on fragments
-    foreach (PadFragment *fragment, _fragments)
+    foreach(PadFragment *fragment, _fragments)
         fragment->toRaw(this);
 }
 

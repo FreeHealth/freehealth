@@ -83,6 +83,7 @@ public:
     // Manage data source
     void clear();
     void setSource(QTextDocument *source);
+    void setOutput(QTextDocument *output);
     void setTokenPool(Core::ITokenPool *pool);
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}

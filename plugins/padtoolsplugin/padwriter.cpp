@@ -261,9 +261,14 @@ public:
         // Create PadDocument for the editor
         _padForEditor = new PadDocument();
         ui->dropTextEditor->setPadDocument(_padForEditor);
+        _padForEditor->setSource(ui->rawSource->document());
+        _padForEditor->setOutput(ui->dropTextEditor->document());
+
         // Create PadDocument for the viewer (showing the token replacement result)
         _padForViewer = new PadDocument();
         ui->outputTextEditor->setPadDocument(_padForViewer);
+        _padForViewer->setSource(ui->rawSource->document());
+        _padForViewer->setOutput(ui->outputTextEditor->document());
     }
 
     // Show the raw source of the document + output
@@ -472,10 +477,6 @@ void PadWriter::changeRawSourceScenario(QAction *a)
         source = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/prescription/padtoolsstyle_fr.txt");
     }
 
-//    if (d->_padForEditor) {
-//        delete d->_padForEditor;
-//        d->_padForEditor = 0;
-//    }
     d->ui->rawSource->setHtml(source);
     analyzeRawSource();
 }
@@ -486,8 +487,6 @@ void PadWriter::changeRawSourceScenario(QAction *a)
  */
 void PadWriter::expandTokenTreeView()
 {
-//    for(int i=0; i < d->ui->_tokenModel->rowCount(); ++i)
-//        d->ui->treeView->expand(d->_tokenModel->index(i,0));
     for(int i=0; i < d->_filteredTokenModel->rowCount(); ++i)
         d->ui->treeView->expand(d->_filteredTokenModel->index(i,0));
 }
@@ -505,18 +504,16 @@ void PadWriter::analyzeRawSource()
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Start analyze && token replacement (for the editor)
-//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
-//    d->_padForEditor->setTokenModel(d->_tokenModel);
-//    d->_padForEditor->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenDisplayName);
-//    // TODO: manage PadAnalyzer errors
-////    d->ui->dropTextEditor->setDocument(d->_padForEditor->outputDocument());
+    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
+    d->_padForEditor->toOutput(padCore().tokenPool(), PadFragment::ReplaceWithTokenDisplayName);
+    // TODO: manage PadAnalyzer errors
+//    d->ui->dropTextEditor->setDocument(d->_padForEditor->outputDocument());
 
-//    // Start analyze && token replacement (for the viewer)
-//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForViewer);
-//    d->_padForViewer->setTokenModel(d->_tokenModel);
-//    d->_padForViewer->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenValue);
-//    // TODO: manage PadAnalyzer errors
-////    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
+    // Start analyze && token replacement (for the viewer)
+    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForViewer);
+    d->_padForViewer->toOutput(padCore().tokenPool(), PadFragment::ReplaceWithTokenValue);
+    // TODO: manage PadAnalyzer errors
+//    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
 }
 
 /**
@@ -528,6 +525,7 @@ void PadWriter::outputToRaw()
 {
     // Start raw source composition
     d->_padForEditor->toRaw();
+    d->switchToRawSourceEdition();
 }
 
 /**
