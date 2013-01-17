@@ -40,12 +40,15 @@
  * \file itoken.h
  * \author Eric Maeker
  * \version 0.8.2
- * \date 15 Dec 2012
+ * \date 17 Jan 2013
 */
+
+namespace Core {
+class ITokenPool;
+}
 
 namespace PadTools {
 namespace Internal {
-class TokenModel;
 
 class PadPositionTranslator
 {
@@ -80,7 +83,7 @@ public:
     // Manage data source
     void clear();
     void setSource(QTextDocument *source);
-    void setTokenModel(TokenModel *model);
+    void setTokenPool(Core::ITokenPool *pool);
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
 
@@ -141,7 +144,7 @@ public Q_SLOTS:
 private:
     QList<PadItem*> _items;
     mutable QTextDocument *_docSource, *_docOutput;
-    TokenModel *_tokenModel;
+    Core::ITokenPool *_tokenPool;
     QTimer *_timer;
     PadPositionTranslator _posTrans;
 };

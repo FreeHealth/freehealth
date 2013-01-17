@@ -39,7 +39,8 @@
 #include "pad_item.h"
 #include "pad_string.h"
 #include "pad_analyzer.h"
-#include "tokenmodel.h"
+#include "tokenpool.h"
+#include "padtoolscore.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -53,6 +54,8 @@
 
 using namespace PadTools;
 using namespace Internal;
+
+static inline PadTools::Internal::PadToolsCore &padCore() {return PadTools::Internal::PadToolsCore::instance();}
 
 // TODO: documentation */
 PadPositionTranslator::PadPositionTranslator()
@@ -132,7 +135,7 @@ PadDocument::PadDocument(QTextDocument *source, QObject *parent) :
     QObject(parent),
     _docSource(source),
     _docOutput(new QTextDocument(this)),
-    _tokenModel(0),
+    _tokenPool(padCore().tokenPool()),
     _timer(0)
 {
 }
@@ -145,7 +148,7 @@ PadDocument::PadDocument(QObject *parent) :
     QObject(parent),
     _docSource(0),
     _docOutput(new QTextDocument(this)),
-    _tokenModel(0),
+    _tokenPool(padCore().tokenPool()),
     _timer(0)
 {
 }
@@ -175,10 +178,14 @@ void PadDocument::setSource(QTextDocument *source)
     _docSource = source;
 }
 
-/** Set the PadTools::TokenModel to use in this object. The model is mainly used by reset(). */
-void PadDocument::setTokenModel(TokenModel *model)
+/**
+ * Set the PadTools::TokenPool to use in this object. By default, the document uses
+ * the core token pool.
+ * \sa PadTools::Internal::PadToolsCore::tokenPool()
+*/
+void PadDocument::setTokenPool(Core::ITokenPool *pool)
 {
-    _tokenModel = model;
+    _tokenPool = pool;
 }
 
 /** Returns the raw content of a fragment (extracted from the raw source). */
@@ -475,8 +482,8 @@ void PadDocument::softReset()
     PadAnalyzer a;
     a.analyze(_docSource, this);
     // TODO: use ITokenPool */
-    if (_tokenModel)
-        toOutput(_tokenModel->tokenPool());
+    if (_tokenPool)
+        toOutput(_tokenPool);
 
     Utils::Log::logTimeElapsed(c, "PadTools::PadDocument", "reset");
 }
