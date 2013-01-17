@@ -40,6 +40,10 @@ QT_END_NAMESPACE
  * \date 15 Jan 2013
 */
 
+namespace Core {
+class ITokenPool;
+}
+
 namespace PadTools {
 namespace Internal {
 class PadToolsPlugin;
@@ -59,6 +63,7 @@ public:
     ~PadToolsCore();
     
     QAbstractItemModel *tokenModel() const;
+    Core::ITokenPool *tokenPool() const;
 
 private Q_SLOTS:
     void postCoreInitalization();

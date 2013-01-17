@@ -184,3 +184,8 @@ QAbstractItemModel *PadToolsCore::tokenModel() const
 {
     return d->_tokenModel;
 }
+
+Core::ITokenPool *PadToolsCore::tokenPool() const
+{
+    return d->_impl->tokenPool();
+}
