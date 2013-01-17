@@ -45,11 +45,15 @@
  * When edition is done, you can get the raw source tokened document using rawSourceToPlainText()
  * or rawSourceToHtml(). And get the output document with outputToPlainText() or
  * outputToHtml().
+ *
+ * Token filtering:
+ * You can filter the token view using the setNamespacesFilter() or the setNamespaceFilter().
+ * The PadTools::Internal::PadWriter owns its own proxy model over the central token model.
 */
 
 #include "padwriter.h"
-#include "tokenmodel.h"
 #include "constants.h"
+#include "padtoolscore.h"
 #include "pad_analyzer.h"
 
 #include <coreplugin/icore.h>
@@ -68,6 +72,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
+#include <QSortFilterProxyModel>
 
 #include "ui_padwriter.h"
 
@@ -81,16 +86,55 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
+static inline PadTools::Internal::PadToolsCore &padCore() {return PadTools::Internal::PadToolsCore::instance();}
 
 namespace PadTools {
 namespace Internal {
+class TreeProxyModel : public QSortFilterProxyModel
+{
+public:
+    TreeProxyModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
+    {
+        setFilterCaseSensitivity(Qt::CaseInsensitive);
+    }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+    {
+        if (filterRegExp().isEmpty())
+            return true;
+
+        // Force to cycle throw the first column, because other columns does not have children
+        QModelIndex currentParent(sourceModel()->index(sourceRow, 0, sourceParent));
+        QModelIndex currentToFilter(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
+
+        if (sourceModel()->hasChildren(currentParent)) {
+            bool atLeastOneValidChild = false;
+            int i = 0;
+            while(!atLeastOneValidChild) {
+                const QModelIndex child(currentParent.child(i, currentParent.column()));
+                if (!child.isValid())
+                    // No valid child
+                    break;
+
+                atLeastOneValidChild = filterAcceptsRow(i, currentParent);
+                i++;
+            }
+            return atLeastOneValidChild;
+        }
+
+        return sourceModel()->data(currentToFilter).toString().contains(filterRegExp());
+    }
+};
+
 class PadWriterPrivate
 {
 public:
     PadWriterPrivate(PadWriter *parent) :
         _context(0),
         ui(0),
-        _tokenModel(0),
+        _filteredTokenModel(0),
         _padForEditor(0),
         _padForViewer(0),
         _toolBar(0),
@@ -191,18 +235,25 @@ public:
     void manageModelAndView()
     {
         // Create TokenModel
-        _tokenModel = new TokenModel(q);
-        _tokenModel->initialize();
-        ui->treeView->setModel(_tokenModel);
+        _filteredTokenModel = new TreeProxyModel(q);
+        _filteredTokenModel->setSourceModel(padCore().tokenModel());
+        _filteredTokenModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        _filteredTokenModel->setDynamicSortFilter(true);
+        _filteredTokenModel->setFilterKeyColumn(Constants::TokenModel_UuidColumn);
+
+        ui->treeView->setModel(_filteredTokenModel);
         ui->treeView->setItemDelegate(new Utils::HtmlDelegate(q));
+        for(int i=0; i < _filteredTokenModel->columnCount(); ++i)
+            ui->treeView->setColumnHidden(i, true);
+        ui->treeView->setColumnHidden(Constants::TokenModel_HtmlLabelColumn, false);
         ui->treeView->setUniformRowHeights(false);
     #if QT_VERSION < 0x050000
-        ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+        ui->treeView->header()->setResizeMode(Constants::TokenModel_HtmlLabelColumn, QHeaderView::Stretch);
     #else
         // Qt5
-        ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+        ui->treeView->header()->setSectionResizeMode(Constants::TokenModel_HtmlLabelColumn, QHeaderView::Stretch);
     #endif
-        QObject::connect(_tokenModel, SIGNAL(modelReset()), q, SLOT(expandTokenTreeView()));
+        QObject::connect(_filteredTokenModel, SIGNAL(modelReset()), q, SLOT(expandTokenTreeView()));
     }
 
     void createPadDocument()
@@ -232,7 +283,7 @@ public:
 public:
     PadWriterContext *_context;
     Ui::PadWriter *ui;
-    TokenModel *_tokenModel;
+    TreeProxyModel *_filteredTokenModel;
     QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_padForEditor, *_padForViewer;
     QToolBar *_toolBar;
@@ -266,8 +317,11 @@ PadWriter::PadWriter(QWidget *parent) :
     d->createPadDocument();
 
     d->switchToDropTextEdition();
-
+    setNamespaceFilter("");
     expandTokenTreeView();
+
+    // TODO: connect the search line edit to the proxy model but on the html label or both label and uuid
+//    connect(d->ui->search, SIGNAL(textChanged(QString)), this, SLOT(setNamespaceFilter(QString)));
 
 //    connect(d->ui->dropTextEditor->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(dropTextEditorCursorChanged()));
 //    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
@@ -300,15 +354,25 @@ void PadWriter::setHtmlSource(const QString &html)
 /** Filter available namespaces with the \e tokenNamespace */
 void PadWriter::setNamespaceFilter(const QString &tokenNamespace)
 {
-    Q_UNUSED(tokenNamespace)
     setNamespacesFilter(QStringList() << tokenNamespace);
 }
 
 /** Filter available namespaces with the \e tokenNamespaces */
 void PadWriter::setNamespacesFilter(const QStringList &tokenNamespaces)
 {
-    Q_UNUSED(tokenNamespaces)
-    d->_tokenModel->setNamespacesFilter(tokenNamespaces);
+    // Apply some correction on the namespace list
+    QStringList corrected(tokenNamespaces);
+    corrected.removeAll("");
+
+    // Filter the proxy model
+    if (corrected.isEmpty()) {
+        d->_filteredTokenModel->invalidate();
+        return;
+    }
+    QString regexp = corrected.join("*|") + "*";
+    regexp = regexp.remove("**").remove("||");
+    QRegExp reg(regexp, Qt::CaseInsensitive);
+    d->_filteredTokenModel->setFilterRegExp(reg);
 }
 
 /**
@@ -422,8 +486,10 @@ void PadWriter::changeRawSourceScenario(QAction *a)
  */
 void PadWriter::expandTokenTreeView()
 {
-    for(int i=0; i < d->_tokenModel->rowCount(); ++i)
-        d->ui->treeView->expand(d->_tokenModel->index(i,0));
+//    for(int i=0; i < d->ui->_tokenModel->rowCount(); ++i)
+//        d->ui->treeView->expand(d->_tokenModel->index(i,0));
+    for(int i=0; i < d->_filteredTokenModel->rowCount(); ++i)
+        d->ui->treeView->expand(d->_filteredTokenModel->index(i,0));
 }
 
 /**
@@ -437,19 +503,20 @@ void PadWriter::analyzeRawSource()
     d->_padForEditor->clear();
     d->_padForViewer->clear();
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
     // Start analyze && token replacement (for the editor)
-    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
-    d->_padForEditor->setTokenModel(d->_tokenModel);
-    d->_padForEditor->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenDisplayName);
-    // TODO: manage PadAnalyzer errors
-//    d->ui->dropTextEditor->setDocument(d->_padForEditor->outputDocument());
+//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForEditor);
+//    d->_padForEditor->setTokenModel(d->_tokenModel);
+//    d->_padForEditor->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenDisplayName);
+//    // TODO: manage PadAnalyzer errors
+////    d->ui->dropTextEditor->setDocument(d->_padForEditor->outputDocument());
 
-    // Start analyze && token replacement (for the viewer)
-    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForViewer);
-    d->_padForViewer->setTokenModel(d->_tokenModel);
-    d->_padForViewer->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenValue);
-    // TODO: manage PadAnalyzer errors
-//    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
+//    // Start analyze && token replacement (for the viewer)
+//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_padForViewer);
+//    d->_padForViewer->setTokenModel(d->_tokenModel);
+//    d->_padForViewer->toOutput(d->_tokenModel->tokenPool(), PadFragment::ReplaceWithTokenValue);
+//    // TODO: manage PadAnalyzer errors
+////    d->ui->outputTextEditor->setDocument(d->_padForViewer->outputDocument());
 }
 
 /**
