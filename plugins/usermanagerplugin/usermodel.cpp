@@ -206,7 +206,7 @@ public:
         case Core::IUser::PhotoPixmap : toReturn = user->photo(); break;
         case Core::IUser::DateOfBirth : toReturn = user->dob(); break;
 
-        case Core::IUser::Address : toReturn = user->address(); break;
+        case Core::IUser::Street : toReturn = user->street(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::StateProvince : toReturn = user->stateProvince(); break;
         case Core::IUser::City : toReturn = user->city(); break;
@@ -215,9 +215,9 @@ public:
         case Core::IUser::FullHtmlAddress :
         {
             QString t;
-            if (!user->address().isEmpty())
+            if (!user->street().isEmpty())
                 toReturn = QString("%1<br />%2 %3, %4")
-                        .arg(user->address())
+                        .arg(user->street())
                         .arg(user->zipcode())
                         .arg(user->city())
                         .arg(user->country()).simplified();
@@ -226,9 +226,9 @@ public:
         case Core::IUser::FullAddress :
         {
             QString t;
-            if (!user->address().isEmpty())
+            if (!user->street().isEmpty())
                 toReturn = QString("%1\n%2 %3/n%4\n%5")
-                        .arg(user->address())
+                        .arg(user->street())
                         .arg(user->zipcode())
                         .arg(user->city())
                         .arg(user->stateProvince())
@@ -979,9 +979,9 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::LocaleCodedLanguage: user->setLocaleLanguage(QLocale::Language(value.toInt())); break;
     case Core::IUser::PhotoPixmap: user->setPhoto(value.value<QPixmap>()); break;
     case Core::IUser::DateOfBirth : user->setDob(value); break;
-    case Core::IUser::Address:
+    case Core::IUser::Street:
         colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;
-        user->setAddress(value);
+        user->setStreet(value);
         break;
     case Core::IUser::Zipcode:
         colsToEmit << Core::IUser::FullHtmlAddress << Core::IUser::FullHtmlContact;

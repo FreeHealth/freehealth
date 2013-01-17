@@ -344,7 +344,7 @@ void UserCreatorWizard::done(int r)
         d->m_User->setFirstname(field("Firstname"));
         d->m_User->setTitleIndex(field("Title"));
         d->m_User->setGenderIndex(field("Gender"));
-        d->m_User->setAddress(field("Address"));
+        d->m_User->setStreet(field("Address"));
         d->m_User->setZipcode(field("Zipcode"));
         d->m_User->setCity(field("City"));
         d->m_User->setCountry(field("Country"));

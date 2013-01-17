@@ -773,7 +773,7 @@ bool UserBase::createDefaultUser()
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLocaleLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
-    user->setAddress(DEFAULT_USER_ADDRESS);
+    user->setStreet(DEFAULT_USER_ADDRESS);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::AllRights);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::AllRights);

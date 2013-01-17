@@ -78,7 +78,7 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     qWarning() << "DefaultUserContactWidget::setUserModel" << model;
     m_Model = model;
     m_identity->setModel(model);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Address);
+    m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Street);
     m_identity->addMapping(Identity::IdentityEditorWidget::Province, Core::IUser::StateProvince);
     m_identity->addMapping(Identity::IdentityEditorWidget::City, Core::IUser::City);
     m_identity->addMapping(Identity::IdentityEditorWidget::Country_TwoCharIso, Core::IUser::Country);

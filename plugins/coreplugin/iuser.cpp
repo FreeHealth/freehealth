@@ -171,8 +171,24 @@ void IUser::registerUserTokens() const
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLADDRESS);
     _tokens << t;
 
-    t = new UserToken(Constants::TOKEN_USERADDRESS, Address);
-    t->setUntranslatedHumanReadableName(Trans::Constants::FULLADDRESS);
+    t = new UserToken(Constants::TOKEN_USERSTREET, Street);
+    t->setUntranslatedHumanReadableName(Trans::Constants::STREET);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERZIP, Zipcode);
+    t->setUntranslatedHumanReadableName(Trans::Constants::ZIPCODE);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERCITY, City);
+    t->setUntranslatedHumanReadableName(Trans::Constants::CITY);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERSTATE, StateProvince);
+    t->setUntranslatedHumanReadableName(Trans::Constants::STATE);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERCOUNTRY, Country);
+    t->setUntranslatedHumanReadableName(Trans::Constants::COUNTRY);
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERMAIL, Mail);
@@ -216,7 +232,7 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::ProfessionalIdentifiants).toStringList().join("<br />") );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERQUALIFICATIONS, value(IUser::Qualifications).toStringList().join("<br />") );
 
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERADDRESS,   value(IUser::Address).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLADDRESS,   value(IUser::FullAddress).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERMAIL,   value(IUser::Mail).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTEL1,   value(IUser::Tel1).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTEL2,   value(IUser::Tel2).toString());

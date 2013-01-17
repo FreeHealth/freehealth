@@ -64,7 +64,7 @@ QString ScriptUserWrapper::firstName() const
 
 QString ScriptUserWrapper::street() const
 {
-    return user()->value(Core::IUser::Address).toString();
+    return user()->value(Core::IUser::Street).toString();
 }
 
 QString ScriptUserWrapper::city() const

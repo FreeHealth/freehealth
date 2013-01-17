@@ -73,7 +73,7 @@ public:
         PersonalLinkId,
         FullName,
         Gender, Title,
-        Address, Zipcode, City, StateProvince, Country, IsoCountry,
+        Street, Zipcode, City, StateProvince, Country, IsoCountry,
         FullHtmlAddress, FullAddress,
         Tel1, Tel2, Tel3, Fax,
         FullHtmlContact,

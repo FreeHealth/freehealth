@@ -80,6 +80,7 @@ const char * const  TOKEN_PATIENTFULLADDRESS         = "Patient.Address.FullAddr
 const char * const  TOKEN_PATIENTADDRESS_STREET      = "Patient.Address.Street";
 const char * const  TOKEN_PATIENTADDRESS_CITY        = "Patient.Address.City";
 const char * const  TOKEN_PATIENTADDRESS_ZIP         = "Patient.Address.Zip";
+const char * const  TOKEN_PATIENTADDRESS_STATE       = "Patient.Address.State";
 const char * const  TOKEN_PATIENTADDRESS_COUNTRY     = "Patient.Address.Country";
 const char * const  TOKEN_PATIENTCONTACT_EMAIL       = "Patient.Contact.Email";
 const char * const  TOKEN_PATIENTCONTACT_TELS        = "Patient.Contact.Tels";
@@ -111,7 +112,7 @@ const char * const  TOKEN_USERFIRSTNAME      = "USERFIRSTNAME";
 const char * const  TOKEN_USERSPECIALITIES   = "USERSPECIALITIES";
 const char * const  TOKEN_USERIDENTIFIER     = "USERIDENTIFIANTS";
 const char * const  TOKEN_USERQUALIFICATIONS = "USERQUALIFICATIONS";
-const char * const  TOKEN_USERADDRESS        = "USERADDRESS";
+const char * const  TOKEN_USERSTREET         = "USERADDRESS";
 const char * const  TOKEN_USERMAIL           = "USERMAIL";
 const char * const  TOKEN_USERTEL1           = "USERTEL1";
 const char * const  TOKEN_USERTEL2           = "USERTEL2";
@@ -134,7 +135,6 @@ const char * const  TOKEN_USERFIRSTNAME      = "User.Identity.FirstName";
 const char * const  TOKEN_USERSPECIALITIES   = "User.Professional.Specialties";
 const char * const  TOKEN_USERIDENTIFIER     = "User.Professional.Identifiants";
 const char * const  TOKEN_USERQUALIFICATIONS = "User.Professional.Qualifications";
-const char * const  TOKEN_USERADDRESS        = "User.Contact.Address";
 const char * const  TOKEN_USERMAIL           = "User.Contact.Mail";
 const char * const  TOKEN_USERTEL1           = "User.Contact.Tel1";
 const char * const  TOKEN_USERTEL2           = "User.Contact.Tel2";
@@ -144,6 +144,12 @@ const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
 const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
 const char * const  TOKEN_USERFULLADDRESS_HTML  = "User.Contact.FullAddress.Html";
 const char * const  TOKEN_USERFULLCONTACT_HTML  = "User.Contact.FullContact.Html";
+const char * const  TOKEN_USERSTREET         = "User.Contact.Street";
+const char * const  TOKEN_USERZIP            = "User.Contact.Zipcode";
+const char * const  TOKEN_USERCITY           = "User.Contact.City";
+const char * const  TOKEN_USERSTATE          = "User.Contact.State";
+const char * const  TOKEN_USERCOUNTRY        = "User.Contact.Country";
+
 #endif
 
 // For Prescriptions
