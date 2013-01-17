@@ -29,11 +29,15 @@
 
 #include <QObject>
 
+QT_BEGIN_NAMESPACE
+class QAbstractItemModel;
+QT_END_NAMESPACE
+
 /**
  * \file padtoolscore.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 21 Dec 2012
+ * \version 0.8.2
+ * \date 15 Jan 2013
 */
 
 namespace PadTools {
@@ -54,11 +58,11 @@ public:
     static PadToolsCore &instance();
     ~PadToolsCore();
     
-    
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+    QAbstractItemModel *tokenModel() const;
+
+private Q_SLOTS:
+    void postCoreInitalization();
+
 private:
     Internal::PadToolsCorePrivate *d;
     static PadToolsCore *_instance;

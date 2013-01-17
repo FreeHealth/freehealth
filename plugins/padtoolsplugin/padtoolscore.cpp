@@ -31,6 +31,7 @@
 
 #include "padtoolscore.h"
 #include "padtoolsimpl.h"
+#include "tokenmodel.h"
 #include "padtoolscontextualwidgetmanager.h"
 
 #include <coreplugin/icore.h>
@@ -63,7 +64,6 @@ public:
 private:
      QVariant _value;
 };
-
 }
 
 namespace PadTools {
@@ -74,6 +74,7 @@ public:
     PadToolsCorePrivate(PadToolsCore *parent) :
         _impl(0),
         _widgetManager(0),
+        _tokenModel(0),
         q(parent)
     {
     }
@@ -119,6 +120,7 @@ public:
 public:
     PadToolsImpl* _impl;
     PadToolsContextualWidgetManager *_widgetManager;
+    TokenModel *_tokenModel;
 
 private:
     PadToolsCore *q;
@@ -163,10 +165,22 @@ PadToolsCore::~PadToolsCore()
 bool PadToolsCore::initialize()
 {
     d->_widgetManager = new PadToolsContextualWidgetManager(this);
+    d->_tokenModel = new TokenModel(this);
 
     if (!Utils::isReleaseCompilation() && CreateTestingTokens)
         d->registerTestingTokens();
 
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitalization()), Qt::UniqueConnection);
     return true;
 }
 
+/** Post core initialization */
+void PadToolsCore::postCoreInitalization()
+{
+    d->_tokenModel->initialize();
+}
+
+QAbstractItemModel *PadToolsCore::tokenModel() const
+{
+    return d->_tokenModel;
+}
