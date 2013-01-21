@@ -1,1 +1,1 @@
-include(printer_sources.pri)
+include(shared_sources.pri)
