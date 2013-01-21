@@ -337,7 +337,6 @@ bool ServerPackEditor::refreshServerContent()
 
 void ServerPackEditor::onRefreshServerDone()
 {
-    qWarning() << "onRefreshServerDone" << d->_progressDialog;
     if (!d->_progressDialog)
         return;
     d->_progressDialog->setValue(d->_progressDialog->maximum());
