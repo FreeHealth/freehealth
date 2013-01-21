@@ -61,7 +61,9 @@ Pack::~Pack()
 
 bool Pack::isValid() const
 {
-    return (!uuid().isEmpty() && !version().isEmpty() && !m_descr.data(PackDescription::Label).toString().isEmpty());
+    return (!uuid().isEmpty() &&
+            !version().isEmpty() &&
+            !m_descr.data(PackDescription::Label).toString().isEmpty());
 }
 
 QString Pack::uuid() const
@@ -272,19 +274,17 @@ void Pack::fromXml(const QString &fullPackConfigXml)
     m_depends.fromDomElement(dep);
 }
 
+/** Return the XML code corresponding to this pack */
 QString Pack::toXml() const
 {
-    QString xml;
-    // Header
-    xml = "<?xml version='1.0' encoding='UTF-8'?>\n";
-    xml += "<!DOCTYPE FreeMedForms>\n";
-    xml += QString("<%1>\n").arg(::TAG_ROOT);
-    xml += m_descr.toXml();
-    xml += m_depends.toXml();
-    xml += QString("</%1>\n").arg(::TAG_ROOT);
-    QDomDocument doc;
-    doc.setContent(xml);
-    return doc.toString(2);
+    QDomDocument doc("FreeMedForms");
+    QDomElement element = doc.createElement(::TAG_ROOT);
+    doc.appendChild(element);
+    if (!m_descr.toDomElement(&element, &doc))
+        LOG_ERROR_FOR("Pack", "Unable to write PackDescription XML content to QDomDocument");
+    if (!m_depends.toDomElement(&element, &doc))
+        LOG_ERROR_FOR("Pack", "Unable to write PackDependencies XML content to QDomDocument");
+    return QString("<?xml version='1.0' encoding='UTF-8'?>\n" + doc.toString(2));
 }
 
 /** Check equality between two Pack */
