@@ -307,6 +307,8 @@ PackModel::PackModel(QObject *parent) :
     //    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
     connect(serverManager(), SIGNAL(serverAboutToBeRemoved(int)), this, SLOT(onServerRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(onPackInstalled(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(onPackRemoved(DataPack::Pack)));
 }
 
 PackModel::~PackModel()
@@ -439,7 +441,7 @@ Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 }
 
 /** Return the package at row \e index */
-const Pack & PackModel::packageAt(const int index) const
+const Pack &PackModel::packageAt(const int index) const
 {
     // Manage filter
     int row = index;
@@ -535,4 +537,29 @@ void PackModel::onServerRemoved(const int index)
     Q_UNUSED(index);
     d->serverRemoved(index);
     filter(d->_filterVendor, d->_filterDataType);
+}
+
+/** Manage pack installation: update the model */
+void PackModel::onPackInstalled(const DataPack::Pack &pack)
+{
+    for(int i=0; i < d->m_Items.count(); ++i) {
+        PackItem &item = d->m_Items[i];
+        if (item.pack != pack)
+            continue;
+        item.isInstalled = true;
+        item.isAnUpdate = false;
+        Q_EMIT dataChanged(index(i, Label), index(i, IsInstalled));
+        break;
+    }
+}
+
+/** Manage pack removal: remove it from the model */
+void PackModel::onPackRemoved(const DataPack::Pack &pack)
+{
+    for(int i=0; i < d->m_Items.count(); ++i) {
+        PackItem &item = d->m_Items[i];
+        if (item.pack != pack)
+            continue;
+        // removeRow(i);
+    }
 }

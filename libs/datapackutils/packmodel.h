@@ -83,6 +83,8 @@ private Q_SLOTS:
     void onServerAdded(const int index);
     void onServerRemoved(const int index);
 //    void onServerDescriptionAvailable();
+    void onPackInstalled(const DataPack::Pack &pack);
+    void onPackRemoved(const DataPack::Pack &pack);
 
 private:
     Internal::PackModelPrivate *d;
