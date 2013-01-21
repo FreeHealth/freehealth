@@ -242,13 +242,14 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     Q_ASSERT(doc);
     if (!root || !doc)
         return false;
+    QDomElement toRoot = *root;
     if (root->tagName().compare(m_RootTag, Qt::CaseInsensitive) != 0) {
         QDomElement element = doc->createElement(m_RootTag);
         root->appendChild(element);
-        root = &element;
+        toRoot = element;
     }
     QDomComment comment = doc->createComment("Non translatable values");
-    root->appendChild(comment);
+    toRoot.appendChild(comment);
 
     // Set non translatable items
     QHash<int, QString> elements;
@@ -259,7 +260,7 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
         if (data(i.key()).toString().isEmpty())
             continue;
         QDomElement e = doc->createElement(i.value());
-        root->appendChild(e);
+        toRoot.appendChild(e);
         e.setNodeValue(data(i.key()).toString());
         QDomText t = doc->createTextNode(data(i.key()).toString());
         e.appendChild(t);
@@ -267,7 +268,7 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
 
     // Set translatable contents
     comment = doc->createComment("Translatable values");
-    root->appendChild(comment);
+    toRoot.appendChild(comment);
     elements.clear();
     elements = translatableTagsDataReference();
     i = elements;
@@ -279,7 +280,7 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
                 continue;
             QDomElement e = doc->createElement(i.value());
             e.setAttribute(ATTRIB_LANG, l);
-            root->appendChild(e);
+            toRoot.appendChild(e);
             QDomText t = doc->createTextNode(tmp);
             e.appendChild(t);
         }
@@ -288,9 +289,9 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     // Add update information
     if (m_UpdateInfos.count() > 0) {
         comment = doc->createComment("Update information");
-        root->appendChild(comment);
+        toRoot.appendChild(comment);
         QDomElement e = doc->createElement(GenericUpdateInformation::xmlTagName());
-        root->appendChild(e);
+        toRoot.appendChild(e);
         for(int i=0; i < m_UpdateInfos.count(); ++i) {
             m_UpdateInfos.at(i).toDomElement(&e, doc);
         }
