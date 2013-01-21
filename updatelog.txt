@@ -10,9 +10,12 @@ FreeMedForms
     * User manager
     * User creation wizard
   * Ability to edit agenda day availabilities
-  * All applications are ported to Qt5.0 (but not to qml yet)
+  * All applications are compatible with Qt 4.8 & 5.0
   * New languages available (translations undone)
   * Autocompletion of PDF using scripts in forms
+  * New plugin: PadTools
+    * Better management of tokened templates
+    * Specific UI for tokened templates edition
 
 ===== Bug correction =====
 
@@ -25,6 +28,7 @@ FreeMedForms
     * Don't show forms with the 'noepsiode' option, show its first children instead
     * Correctly set the taborder in forms
   * FreeDiams
+    * Using the padtools for the posologic sentence edition
   * FreeAccount
   * FreeToolBox
     * UI update, workflow simplified
@@ -37,6 +41,10 @@ FreeMedForms
   * Agenda:
   * DataPack manager
     * Correcting crash when download dialog is cancelled
+    * Avoid multi-clicks on toolbar actions
+    * Correctly manages versions of available datapacks
+    * Improving the view (text uncut)
+    * Improving communication with the servers
   * Forms
     * Identity sub-form updated with detaileswidget and a trusted person information
   * Debian specific
