@@ -570,15 +570,16 @@ FormItem::~FormItem()
  *
  * The data in \e value is saved as \e key-value pairs using a QHash<QString, QString>. If the key
  * already exists, the \e value is appended to that \e key with a ";" as delimiter.
+ * Keys are \b lowered.
  * \sa extraData(), clearExtraData()
  */
 void FormItem::addExtraData(const QString &key, const QString &value)
 {
-    if (m_ExtraData.keys().indexOf(key, Qt::CaseInsensitive) != -1) {
-        const QString add = m_ExtraData.value(key) + ";" + value;
-        m_ExtraData.insert(key, add);
+    if (m_ExtraData.keys().indexOf(key.toLower()) != -1) {
+        QString add = m_ExtraData.value(key.toLower()) + ";" + value;
+        m_ExtraData.insert(key.toLower(), add);
     } else {
-        m_ExtraData.insert(key,value);
+        m_ExtraData.insert(key.toLower(),value);
     }
 }
 
