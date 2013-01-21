@@ -176,6 +176,8 @@ const char * const  ICONABOUT =        "freepad.png";
 const char * const  ICONABOUT =        "freeicd.png";
 #elif defined(FREETOOLBOX)
 const char * const  ICONABOUT =        "freetoolbox.png";
+#else
+const char * const  ICONABOUT =        "about.png";
 #endif
 
 // menu Extras
