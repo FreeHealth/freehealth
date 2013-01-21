@@ -13,7 +13,7 @@ include(../../../plugins/texteditorplugin/texteditorplugin_dependencies.pri )
 
 OTHER_FILES = TextEditor.pluginspec
 
-include(../../../plugins/texteditorplugin/texteditor_sources.pri)
+include(../../../plugins/texteditorplugin/shared_sources.pri)
 
 HEADERS += texteditorplugin.h \
 #../../../plugins/texteditorplugin/texteditorwidgetfactory.h

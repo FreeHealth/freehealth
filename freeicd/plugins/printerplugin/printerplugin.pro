@@ -1,3 +1,3 @@
-include(../../../plugins/printerplugin/printer_sources.pri)
+include(../../../plugins/printerplugin/shared_sources.pri)
 
 OTHER_FILES += Printer.pluginspec
