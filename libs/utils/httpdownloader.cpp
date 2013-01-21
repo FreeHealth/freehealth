@@ -34,6 +34,10 @@
  * If you are using a proxy, you must register it with the QNetworkProxy::setApplicationProxy()
  * before starting any downloads.
  * If the user and password are not defined, a dialog will ask the user for its log & pass.
+ *
+ * Using progress bar: \n
+ * You can connect the downloadProgressPermille() signal which is emitted each time the
+ * permille of the download changes. Remember to set your progress bar range to (0, 1000).
 */
 
 #include "httpdownloader.h"
