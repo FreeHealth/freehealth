@@ -118,6 +118,8 @@ public:
 
     PackDescription();
 
+    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
+
     QString toXml() const;
 
 };

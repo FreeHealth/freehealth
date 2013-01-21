@@ -192,6 +192,17 @@ PackDescription::PackDescription() :
     addNonTranslatableExtraData(InstalledFiles, "instfiles");
 }
 
+bool PackDescription::setData(const int ref, const QVariant &value, const QString &lang)
+{
+    // Unusure the UUID is correct
+    if (ref == Uuid) {
+        QRegExp reg("[^a-zA-Z0-9._]");
+        QString uuid = value.toString();
+        return Utils::GenericDescription::setData(ref, uuid.replace(reg, "_"), lang);
+    }
+    return Utils::GenericDescription::setData(ref, value, lang);
+}
+
 QString PackDescription::toXml() const
 {
     QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
