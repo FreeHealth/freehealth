@@ -18,17 +18,19 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+#ifndef UTILS_EMAILVALIDATOR_H
+#define UTILS_EMAILVALIDATOR_H
 
-#ifndef EMAILVALIDATOR_H
-#define EMAILVALIDATOR_H
-
+#include <utils/global_exporter.h>
 #include <QValidator>
 
 QT_BEGIN_NAMESPACE
 class QRegExp;
 QT_END_NAMESPACE
 
-class EmailValidator : public QValidator
+namespace Utils {
+
+class UTILS_EXPORT EmailValidator : public QValidator
 {
     Q_OBJECT
 public:
@@ -40,5 +42,7 @@ private:
     const QRegExp m_validMailRegExp;
     const QRegExp m_intermediateMailRegExp;
 };
+
+}
 
 #endif // EMAILVALIDATOR_H
