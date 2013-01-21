@@ -229,7 +229,9 @@ QString GenericDescription::toXml() const
     // Create the main description tag
     QDomElement root = doc.createElement(m_RootTag);
     doc.appendChild(root);
-    toDomElement(&root, &doc);
+    if (!toDomElement(&root, &doc)) {
+        LOG_ERROR_FOR("GenericDescription", "Unable to generate XML code");
+    }
     return doc.toString(2);
 }
 
@@ -240,6 +242,11 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     Q_ASSERT(doc);
     if (!root || !doc)
         return false;
+    if (root->tagName().compare(m_RootTag, Qt::CaseInsensitive) != 0) {
+        QDomElement element = doc->createElement(m_RootTag);
+        root->appendChild(element);
+        root = &element;
+    }
     QDomComment comment = doc->createComment("Non translatable values");
     root->appendChild(comment);
 
