@@ -91,6 +91,7 @@ public:
     QString toXml() const;
 
     bool operator==(const Pack &other) const;
+    bool operator!=(const Pack &other) const {return (!operator==(other));}
 
 private:
     void fromXml(const QString &fullPackConfigXml);
