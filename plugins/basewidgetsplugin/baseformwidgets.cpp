@@ -42,8 +42,9 @@
 
 #include <formmanagerplugin/iformitem.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/emailvalidator.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
@@ -1358,8 +1359,6 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
             m_Line = new QLineEdit(this);
             m_Line->setObjectName("Line_" + m_FormItem->uuid());
             m_Line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-            //          m_Line->setInputMask(mfo(m_FormItem)->mask());
-            //          m_Line->setCursorPosition(0);
             hb->addWidget(m_Line);
         } else {
             m_Text = new QTextEdit(this);
@@ -1369,10 +1368,30 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
         }
     }
 
-    if (m_Text)
+    if (m_Text) {
         setFocusableWidget(m_Text);
-    else if (m_Line)
+    } else if (m_Line) {
         setFocusableWidget(m_Line);
+        // Read options
+        // validator
+        if (formItem->extraData().contains(Constants::EXTRAS_LINEEDIT_VALIDATOR)) {
+            const QString &value = formItem->extraData().value(Constants::EXTRAS_LINEEDIT_VALIDATOR);
+            if (value.compare("email", Qt::CaseInsensitive)==0
+                    || value.compare("mail", Qt::CaseInsensitive)==0
+                    || value.compare("e-mail", Qt::CaseInsensitive)==0) {
+                m_Line->setValidator(Utils::EmailValidator(m_Line));
+            } else if (!value.isEmpty()) {
+                m_Line->setValidator(QRegExpValidator(QRegExp(value), this));
+            }
+        }
+        // inputmask
+        if (formItem->extraData().contains(Constants::EXTRAS_LINEEDIT_MASK)) {
+            m_Line->setInputMask(formItem->extraData().value(Constants::EXTRAS_LINEEDIT_MASK));
+        }
+        // manage placeholder
+        if (!formItem->spec()->placeHolder().isEmpty())
+            m_Line->setPlaceholderText(formItem->spec()->placeHolder());
+    }
 
     // Create the FormItemData
     BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);

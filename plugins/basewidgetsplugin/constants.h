@@ -39,6 +39,8 @@
 namespace BaseWidgets {
 namespace Constants {
 
+// Extra-keys must be lowered +++
+// See FormItem::addExtraData()
 const char * const  EXTRAS_COUNTRY          = "country";
 const char * const  EXTRAS_KEY              = "option";
 const char * const  EXTRAS_KEY2             = "options";
@@ -50,6 +52,8 @@ const char * const  EXTRAS_GROUP_EXPANDED   = "expanded";
 const char * const  EXTRAS_GROUP_CHECKED    = "checked";
 const char * const  EXTRAS_ALIGN_VERTICAL   = "vertical";
 const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
+const char * const  EXTRAS_LINEEDIT_VALIDATOR = "validator";
+const char * const  EXTRAS_LINEEDIT_MASK      = "mask";
 
 // Date options
 const char * const  DATE_EXTRAS_KEY         = "dateformat";
