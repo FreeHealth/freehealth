@@ -5,7 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
-    <uuid>AlertPacks::Test::Alpha</uuid>
+    <uuid>AlertPacks.Test.Alpha</uuid>
     <authors>Eric Maeker, MD</authors>
     <version>0.0.1</version>
     <fmfv>0.8.0</fmfv>
