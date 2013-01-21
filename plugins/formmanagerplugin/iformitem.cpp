@@ -177,6 +177,9 @@
  * \var Form::FormItemSpec::Spec_Tooltip
  * Translatable tooltip of the item.
  *
+ * \var Form::FormItemSpec::Spec_PlaceHolder
+ * Translatable placeHolder (for line edits for eg)
+ *
  * \var Form::FormItemSpec::Spec_IsIdentityForm
  * Boolean value. By default, set to false.\n
  * Only set for Form::FormMain. \n

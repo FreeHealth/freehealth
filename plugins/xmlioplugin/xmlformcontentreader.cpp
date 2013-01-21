@@ -135,6 +135,7 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
    m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_PLACEHOLDER, Form::FormItemSpec::Spec_PlaceHolder);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
 
    m_PatientData.clear();

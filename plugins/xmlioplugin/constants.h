@@ -115,6 +115,7 @@ const char* const TAG_SPEC_COMPTAVERSION= "compatversion";
 const char* const TAG_SPEC_WEBLINK      = "weblink";
 const char* const TAG_SPEC_ICON         = "icon";
 const char* const TAG_SPEC_TOOLTIP      = "tooltip";
+const char* const TAG_SPEC_PLACEHOLDER  = "placeholder";
 const char* const TAG_SPEC_PRIORITY      = "priority";
 const char* const TAG_SPEC_EXTRA        = "extra";
 const char* const TAG_SPEC_UPDATEINFO   = "updateinfo";

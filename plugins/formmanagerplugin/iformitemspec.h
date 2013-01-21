@@ -79,6 +79,7 @@ public:
         Spec_UiInsertIntoLayout,
         Spec_IconFileName,
         Spec_Tooltip,
+        Spec_PlaceHolder,
         Spec_IsIdentityForm
     };
     FormItemSpec();
@@ -103,6 +104,7 @@ public:
     QString pluginName(const QString &lang = QString::null) const {return value(Spec_Plugin,lang).toString();}
     QString iconFileName(const QString &lang = QString::null) const {return value(Spec_IconFileName,lang).toString();}
     QString tooltip(const QString &lang = QString::null) const {return value(Spec_Tooltip,lang).toString();}
+    QString placeHolder(const QString &lang = QString::null) const {return value(Spec_PlaceHolder,lang).toString();}
 
     void setEquivalentUuid(const QStringList &list);
     QStringList equivalentUuid() const;
