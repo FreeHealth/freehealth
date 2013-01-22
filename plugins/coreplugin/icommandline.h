@@ -23,12 +23,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ICOMMANDLINE_H
-#define ICOMMANDLINE_H
+#ifndef CORE_ICOMMANDLINE_H
+#define CORE_ICOMMANDLINE_H
 
 #include <coreplugin/core_exporter.h>
 
+#include <QObject>
 #include <QVariant>
+
 /**
  * \file icommandline.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
@@ -43,6 +45,7 @@ namespace Core {
 class CORE_EXPORT ICommandLine : public QObject
 {
     Q_OBJECT
+
 public:
     enum Params {
         Chrono = 1000,
@@ -66,4 +69,4 @@ public:
 
 } // end Core
 
-#endif // ITHEME_H
+#endif // CORE_ICOMMANDLINE_H
