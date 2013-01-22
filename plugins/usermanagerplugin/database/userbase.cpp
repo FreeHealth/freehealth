@@ -300,8 +300,10 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
         while (query.next()) {
             int i = 0;
             QByteArray id = query.value(RIGHTS_ROLE).toByteArray();
-            for (i = 0; i < RIGHTS_MaxParam; ++i)
+            for (i = 0; i < RIGHTS_MaxParam; ++i) {
                 toReturn->addRightsFromDatabase(id , i , query.value(i));
+                // qWarning() << "Right" << id << toReturn->rightsValue(id, RIGHTS_RIGHTS);
+            }
         }
     } else {
         LOG_QUERY_ERROR(query);
