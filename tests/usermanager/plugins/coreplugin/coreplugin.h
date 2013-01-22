@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEICD_COREPLUGIN_H
-#define FREEICD_COREPLUGIN_H
+#ifndef USERMANAGER_COREPLUGIN_H
+#define USERMANAGER_COREPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -36,12 +36,11 @@
 */
 
 namespace Core {
-    class ApplicationGeneralPreferencesPage;
+class ApplicationGeneralPreferencesPage;
 namespace Internal {
-    class CoreImpl;
+class CoreImpl;
 }
 }
-
 
 namespace Core {
 namespace Internal {
@@ -49,6 +48,8 @@ namespace Internal {
 class CorePlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.UserManagerTester.CorePlugin" FILE "Core.json")
+
 public:
     CorePlugin();
     ~CorePlugin();
@@ -67,4 +68,4 @@ private:
 } // namespace Internal
 } // namespace Core
 
-#endif // FREEICD_COREPLUGIN_H
+#endif // USERMANAGER_COREPLUGIN_H

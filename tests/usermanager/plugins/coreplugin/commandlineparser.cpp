@@ -18,65 +18,93 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 #include "commandlineparser.h"
 
-#include <coreplugin/ipatient.h>
-#include <coreplugin/icommandline.h>
-
-#include <utils/global.h>
 #include <utils/log.h>
-#include <translationutils/constants.h>
-#include <translationutils/trans_filepathxml.h>
-#include <translationutils/trans_msgerror.h>
+#include <utils/global.h>
 
 #include <QApplication>
-#include <QStringList>
-#include <QFile>
-#include <QDir>
-#include <QDomElement>
-#include <QDomDocument>
-
 #include <QDebug>
 
 using namespace Core;
 using namespace Internal;
 
-CommandLine::CommandLine() :
-        Core::ICommandLine()
-//    d(new CommandLinePrivate)
+CommandLine::CommandLine(QObject *parent) :
+    ICommandLine(parent)
 {
-//    d->parseCommandLine();
+    // known command line params
+    ref.insert(Chrono, "--chrono");
+    ref.insert(ConfigFile, "--config");
+    ref.insert(RunningUnderWine, "--wine");
+    ref.insert(ClearUserDatabases, "--clear-user-databases");
+    ref.insert(CreateVirtuals, "--create-virtuals");
+    ref.insert(ResetUserPreferences, "--reset-users-preferences");
+    ref.insert(UserClearLogin,       "--user-clear-log");
+    ref.insert(UserClearPassword,    "--user-clear-password");
+    ref.insert(CheckFormUpdates,     "--dont-check-form-update");
+
+    // set default values
+    params.insert(Chrono, false);
+    params.insert(RunningUnderWine, false);
+    params.insert(ClearUserDatabases, false);
+    params.insert(CreateVirtuals, false);
+    params.insert(ResetUserPreferences, false);
+    params.insert(UserClearLogin, QVariant());
+    params.insert(UserClearPassword, QVariant());
+    params.insert(CheckFormUpdates, true);
+
+    // read command line params
+    QStringList args = qApp->arguments();
+    foreach(const QString &a, args) {
+        LOG_FOR("CommandLine", a);
+        QString k = a;
+        if (k.contains(" "))
+            k = k.left(k.indexOf(" "));
+        if (a.contains("="))
+            k = k.left(k.indexOf("="));
+        switch (ref.key(k,-1))
+        {
+        case Chrono : params.insert(Chrono, true); break;
+        case ConfigFile : params.insert(ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+        case RunningUnderWine : params.insert(RunningUnderWine, true); break;
+        case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
+        case CreateVirtuals : params.insert(CreateVirtuals, true); break;
+        case ResetUserPreferences : params.insert(ResetUserPreferences, true); break;
+        case UserClearLogin: params.insert(CommandLine::UserClearLogin, a.mid(a.indexOf("=")+1).remove("\"")); break;
+        case UserClearPassword: params.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
+        case CheckFormUpdates: params.insert(CommandLine::CheckFormUpdates, false); break;
+        default : break;
+        }
+    }
+
+    if (Utils::isReleaseCompilation()) {
+        params.insert(ClearUserDatabases, false);
+//        params.insert(CreateVirtuals, false);
+    }
 }
 
 CommandLine::~CommandLine()
-{
-//    if (d)
-//        delete d;
-//    d=0;
-}
-
-void CommandLine::feedPatientDatas(Core::IPatient *patient)
-{
-    Q_UNUSED(patient);
-//    d->feedPatientDatas(patient);
-}
+{}
 
 QVariant CommandLine::value(int param, const QVariant &def) const
 {
-    Q_UNUSED(param);
-    Q_UNUSED(def);
-    // TODO: code heree */
-    return QVariant();
-//    return d->value.value(param,def);
+    return params.value(param,def);
+}
+
+void CommandLine::setValue(int ref, const QVariant &value)
+{
+    params.insert(ref, value);
 }
 
 QString CommandLine::paramName(int param) const
 {
-    Q_UNUSED(param);
-    // TODO: code heree */
-//    if (d->params.keys().contains(param))
-//        return d->params.value(param);
-//    else
-//        return QString::number(param);
-    return QString::null;
+    if (ref.keys().contains(param))
+        return ref.value(param);
+    return QString::number(param);
 }

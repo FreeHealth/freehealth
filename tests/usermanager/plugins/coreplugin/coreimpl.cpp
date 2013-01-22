@@ -64,9 +64,8 @@ namespace Internal {
 } // namespace Internal
 } // namespace Core
 
-
 using namespace Core;
-using namespace Core::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 ICore* ICore::instance()
@@ -87,7 +86,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
-    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEICD_UPDATE_URL);
+//    m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEICD_UPDATE_URL);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
@@ -97,7 +96,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 
 //    m_Script = new FakeScriptManager(this);
 
-    setMainWindow(new MainWindow);
+//    setMainWindow(new MainWindow);
 
     QTime chrono;
     chrono.start();
@@ -105,8 +104,8 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
-    m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEICD_SPLASHSCREEN);
-    m_Theme->createSplashScreen(Constants::FREEICD_SPLASHSCREEN);
+//    m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEICD_SPLASHSCREEN);
+    m_Theme->createSplashScreen("");
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
@@ -131,16 +130,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
-
-    // WINE compatibility (only for testing under ubuntu when crosscompiling)
-//#ifdef Q_OS_WIN
-//    // For WINE testings
-//    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
-//        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
-//        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
-//        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
-//    }
-//#endif
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
         LOG(tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));

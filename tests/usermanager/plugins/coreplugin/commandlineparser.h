@@ -23,44 +23,41 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEICD_COMMANDLINEPARSER_H
-#define FREEICD_COMMANDLINEPARSER_H
+#ifndef USERMANAGER_COMMANDLINEPARSER_H
+#define USERMANAGER_COMMANDLINEPARSER_H
 
 #include <coreplugin/icommandline.h>
-
-#include <QString>
-#include <QVariant>
+#include <QObject>
+#include <QHash>
 
 /**
  * \file commandlineparser.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 06 Aug 2011
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 22 Jan 2013
 */
 
 namespace Core {
-    class IPatient;
-    class Patient;
-
 namespace Internal {
-class CommandLinePrivate;
 
 class CommandLine  : public Core::ICommandLine
 {
+    Q_OBJECT
+
 public:
-    CommandLine();
+    CommandLine(QObject *parent = 0);
     ~CommandLine();
 
     QVariant value(int param, const QVariant &def = QVariant()) const;
+    void setValue(int ref, const QVariant &value);
     QString paramName(int param) const;
 
-    void feedPatientDatas(Core::IPatient *patient);
-
 private:
-    CommandLinePrivate *d;
+    QHash<int,QVariant> params;
+    QHash<int, QString> ref;
 };
 
 }  // End namespace Internal
 }  // End namespace Core
 
-#endif // FREEICD_COMMANDLINEPARSER_H
+#endif // USERMANAGER_COMMANDLINEPARSER_H

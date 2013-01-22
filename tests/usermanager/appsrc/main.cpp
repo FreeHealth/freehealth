@@ -19,8 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include <QtPlugin>
@@ -35,23 +36,22 @@
 #include <extensionsystem/iplugin.h>
 
 #include <utils/log.h>
-#include <utils/database.h>
 
 #include <iostream>
 
-enum { WarnAllPluginSpecs = false };
+enum { WarnAllPluginSpecs=false };
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
-
-
-static const char * COREPLUGINSNAME = "Core";
-static const char * USERMANAGERPLUGINSNAME = "UserManager";
-
-static const QString HELP_MESSAGE =
-        QString("");
+static const char* COREPLUGINSNAME = "Core";
+static const char* USERPLUGINSNAME = "UserManager";
 
 static const QString VERSION_MESSAGE =
-        QString("FreeICD %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        QString("FreeMedForms\n"
+                "     Version: %1 (%2 compilation)\n"
+                "     Built on %3 %4\n"
+                "     GIT revision: %5\n"
+                "     Compiled with Qt: %6\n"
+                "     Running with Qt: %7\n")
         .arg(PACKAGE_VERSION)
 #ifdef LINUX_INTEGRATED
 #  ifdef DEBUG
@@ -67,20 +67,57 @@ static const QString VERSION_MESSAGE =
 #  endif
 #endif
         .arg(__DATE__, __TIME__)
-#ifdef FULLAPPLICATION_BUILD
-        .arg("Full application")
-#else
-        .arg("SVN application")
-#endif
+        .arg(GIT_REVISION_HASH)
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 
+static const QString HELP_MESSAGE =
+        QString("FreeMedForms %1 (%2%3 compilation)\n"
+                "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
+                "                    [--version,-version,-v] [--help,-help,-h]\n\n"
+                "FreeMedForms is free and open source an Electronic Medical Record manager.\n\n"
+                "Options:\n"
+                "  -h, -help, --help:         show this message\n"
+                "  -v, -version, --version:   show the version\n"
+                "  --config=/path/to/config.ini, --config=../../relative/path/config.ini\n"
+                "                             Define the configuration file to use.\n"
+                "                             In the case the specified file is found, in debug\n"
+                "                             mode, the application resources will be located\n"
+                "                             next to it (pixmaps, forms, user databases...)\n"
+                "  --clear-user-databases:    only available with debug compilations,\n"
+                "                             removes all user databases and recreate them. All\n"
+                "                             data will be lost.\n"
+                "  --create-virtuals:         create virtual data to ease tests only available\n"
+                "                             with debug compilation.\n"
+                "  --wine                     obsolete, ensure compatibility with wine\n"
+                )
+        .arg(PACKAGE_VERSION)
+#ifdef LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug (Linux Integrated)")
+#  else
+        .arg("Release (Linux Integrated)")
+#  endif
+#else  // NOT LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug")
+#  else
+        .arg("Release")
+#  endif
+#endif  // LINUX_INTEGRATED
 
+#ifdef DEBUG_WITHOUT_INSTALL
+        .arg("-debug_without_install")
+#else
+        .arg("")
+#endif
+
+    ;
 static inline QString getPluginPaths()
 {
     QString app = qApp->applicationDirPath();
 
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
 #    ifdef Q_OS_MAC
         app = QDir::cleanPath(app+"/../../../");
 #    endif
@@ -88,43 +125,42 @@ static inline QString getPluginPaths()
     return app;
 #endif
 
-#ifdef RELEASE
 #ifdef LINUX_INTEGRATED
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(QString(BINARY_NAME).toLower());
+    app = QString(BINARY_NAME).remove("_debug").toLower();
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(app);
 #endif
 
-
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../"+"/plugins/");
+    app = QDir::cleanPath(app+"/../plugins/");
     return app;
 #  endif
 
-// TODO: Add FreeBSD pluginPath */
+// TODO: Add FreeBSD pluginPath
 
 #  ifdef Q_OS_WIN
     app = QDir::cleanPath(app + "/plugins/");
     return app;
 #  endif
 
-#endif
     return QDir::cleanPath(app + "/plugins/");
 }
 
-inline static void defineLibraryPaths()
+static inline void defineLibraryPaths()
 {
 #ifdef LINUX_INTEGRATED
     qApp->addLibraryPath(getPluginPaths());
 #else
-#  ifndef DEBUG
+#  ifndef DEBUG_WITHOUT_INSTALL
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
 #endif
 }
 
-
-int main( int argc, char *argv[] )
+#include <QDebug>
+#include <QLocale>
+int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+     QApplication app(argc, argv);
 
 #if QT_VERSION < 0x050000
      // Removed in Qt5
@@ -132,17 +168,24 @@ int main( int argc, char *argv[] )
      QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
-    app.setApplicationName( QString("%1").arg(BINARY_NAME));
-    app.setOrganizationName(BINARY_NAME);
-    app.setApplicationVersion(PACKAGE_VERSION);
+     app.setApplicationName(BINARY_NAME);
+     app.setOrganizationName(BINARY_NAME);
+     app.setApplicationVersion(PACKAGE_VERSION);
 
-    QStringList args = qApp->arguments();
-    if (args.contains("--version") ||
-        args.contains("-version") ||
-        args.contains("-v")) {
-        std::cout << qPrintable(VERSION_MESSAGE);
-        return 0;
-    }
+     QStringList args = qApp->arguments();
+     if (args.contains("--version") ||
+         args.contains("-version") ||
+         args.contains("-v")) {
+         std::cout << qPrintable(VERSION_MESSAGE);
+         return 0;
+     }
+
+     if (args.contains("--help") ||
+         args.contains("-help") ||
+         args.contains("-h")) {
+         std::cout << qPrintable(HELP_MESSAGE);
+         return 0;
+     }
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
@@ -150,20 +193,21 @@ int main( int argc, char *argv[] )
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
-    // Add some debugging informations
-    Utils::Database::logAvailableDrivers();
-
+    // Add some debugging information
 #ifdef DEBUG
-    Utils::Log::addMessage("Main", "Running debug version");
+#   ifdef DEBUG_WITHOUT_INSTALL
+        LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
+#   else
+        LOG_FOR("Main", "Running debug installed version");
+#   endif
 #else
-    Utils::Log::addMessage("Main", "Running release version");
+    LOG_FOR("Main", "Running release version");
 #endif
 #ifdef LINUX_INTEGRATED
-    Utils::Log::addMessage("Main", "Linux Integrated");
+    LOG_FOR("Main", "Linux Integrated");
 #endif
-
     defineLibraryPaths();
-    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
+    LOG_FOR("Main","looking for libraries in path: " + qApp->libraryPaths().join(";"));
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;
@@ -188,7 +232,6 @@ int main( int argc, char *argv[] )
 
     const PluginSpecSet plugins = pluginManager.plugins();
     ExtensionSystem::PluginSpec *coreplugin = 0;
-    ExtensionSystem::PluginSpec *usermanagerplugin = 0;
 
     if (WarnAllPluginSpecs) {
         foreach (ExtensionSystem::PluginSpec *spec, plugins) {
@@ -199,21 +242,63 @@ int main( int argc, char *argv[] )
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
-        } else if (spec->name() == QString(USERMANAGERPLUGINSNAME)) {
-            usermanagerplugin = spec;
+            break;
         }
     }
+
+    ExtensionSystem::PluginSpec *userplugin = 0;
+    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+        if (spec->name() == QString(USERPLUGINSNAME)) {
+            userplugin = spec;
+            break;
+        }
+    }
+
     if (!coreplugin) {
-    const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
         qWarning() << reason;
 //        displayError(msgCoreLoadFailure(reason));
         return 1;
     }
+    if (!userplugin) {
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'UserManager.pluginspec' in %1").arg(pluginPaths);
+        qWarning() << reason;
+//        displayError(msgCoreLoadFailure(reason));
+        return 1;
+    }
+
+
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
 //        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 1;
     }
+
+    if (userplugin->hasError()) {
+        qWarning() << userplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
+        return 1;
+    }
+
+//    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
+//        printVersion(coreplugin, pluginManager);
+//        return 0;
+//    }
+//    if (foundAppOptions.contains(QLatin1String(HELP_OPTION1))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION2))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION3))
+//            || foundAppOptions.contains(QLatin1String(HELP_OPTION4))) {
+//        printHelp(QFileInfo(app.applicationFilePath()).baseName(), pluginManager);
+//        return 0;
+//    }
+
+//    const bool isFirstInstance = !app.isRunning();
+//    if (!isFirstInstance && foundAppOptions.contains(QLatin1String(CLIENT_OPTION)))
+//        return sendArguments(app, pluginManager.arguments()) ? 0 : -1;
+
+//    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
+//        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
+//    }
 
     pluginManager.loadPlugins();
     if (WarnAllPluginSpecs) {
@@ -221,11 +306,26 @@ int main( int argc, char *argv[] )
             qWarning() << "PluginSpecs :::"<< spec->name() << "hasError:" << spec->hasError() << spec->errorString();
         }
     }
+
     if (coreplugin->hasError()) {
-        qWarning() << "main" << coreplugin->errorString();
+        qWarning() << coreplugin->errorString();
+        return 1;
+    }
+    if (userplugin->hasError()) {
+        qWarning() << userplugin->errorString();
+//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 1;
     }
 
+
+//    if (isFirstInstance) {
+//        // Set up lock and remote arguments for the first instance only.
+//        // Silently fallback to unconnected instances for any subsequent
+//        // instances.
+//        app.initialize();
+//        QObject::connect(&app, SIGNAL(messageReceived(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
+//    }
+//    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
 
     // shutdown plugin manager on the exit
     QObject::connect(&app, SIGNAL(aboutToQuit()), &pluginManager, SLOT(shutdown()));

@@ -1,13 +1,7 @@
 TEMPLATE = lib
 TARGET = Core
 
-DEFINES += PREVENTION
-#PREVENTION = 1
-
-BUILD_PATH_POSTFIXE = Prevention
-
 include(../../../../plugins/coreplugin/common_core.pri)
-
 
 INCLUDEPATH += ../
 DEPENDPATH += ../

@@ -38,14 +38,14 @@
 
 
 namespace Core {
-    class Patient;
+class Patient;
 
 namespace Internal {
-    class CommandLine;
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
+class CommandLine;
+class ThemePrivate;
+class ActionManagerPrivate;
+class ContextManagerPrivate;
+class SettingsPrivate;
 }  // End Internal
 }  // End Core
 
