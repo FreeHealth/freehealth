@@ -41,7 +41,6 @@ HEADERS += \
     $${PWD}/widgets/useridentifier.h \
     $${PWD}/widgets/usermanager.h \
     $${PWD}/widgets/usermanager_p.h \
-    $${PWD}/widgets/userpassworddialog.h \
     $${PWD}/widgets/userrightswidget.h \
     $${PWD}/widgets/usercreatorwizard.h \
     $${PWD}/widgets/userlineeditcompletersearch.h
@@ -53,7 +52,6 @@ SOURCES += \
     $${PWD}/widgets/userviewer.cpp \
     $${PWD}/widgets/useridentifier.cpp \
     $${PWD}/widgets/usermanager.cpp \
-    $${PWD}/widgets/userpassworddialog.cpp \
     $${PWD}/widgets/userrightswidget.cpp \
     $${PWD}/widgets/usercreatorwizard.cpp \
     $${PWD}/widgets/userlineeditcompletersearch.cpp
@@ -62,7 +60,6 @@ SOURCES += \
 FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/useridentifier.ui \
     $${PWD}/widgets/usermanager.ui \
-    $${PWD}/widgets/userpassworddialog.ui \
     $${PWD}/widgets/currentuserpreferenceswidget.ui \
     $${PWD}/widgets/firstrunusercreationwidget.ui \
     $${PWD}/widgets/usermanagerwidget.ui \

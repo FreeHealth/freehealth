@@ -35,6 +35,7 @@ namespace Constants {
 const char *const DATABASE_DRIVER_1_NOT_AVAILABLE           = QT_TRANSLATE_NOOP("tkConstants", "The %1 driver is not available.");
 const char *const DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL    = QT_TRANSLATE_NOOP("tkConstants", "The %1 database driver is not installed or can not be found. Please report this error to the developer.");
 const char *const DATABASE_1_SCHEMA_ERROR                   = QT_TRANSLATE_NOOP("tkConstants", "Database %1: Schema error.");
+const char* const SET_PASSWORD                              = QT_TRANSLATE_NOOP("tkConstants", "Set password");
 const char *const CHANGE_PASSWORD                           = QT_TRANSLATE_NOOP("tkConstants", "Change password");
 const char *const LOGIN                                     = QT_TRANSLATE_NOOP("tkConstants", "Login");
 const char *const PASSWORD                                  = QT_TRANSLATE_NOOP("tkConstants", "Password");

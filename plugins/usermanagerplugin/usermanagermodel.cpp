@@ -145,8 +145,9 @@ public:
                                  << Constants::USER_UUID
                                  << Constants::USER_TITLE
                                  << Constants::USER_LASTLOG
-                                 << Constants::USER_GENDER) +
-                QString(" WHERE (%1)").arg(f);
+                                 << Constants::USER_GENDER);
+        if (!f.isEmpty())
+            sql += QString(" WHERE (%1)").arg(f);
         return sql;
     }
     

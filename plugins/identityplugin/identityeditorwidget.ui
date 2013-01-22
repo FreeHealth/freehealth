@@ -20,7 +20,10 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
+   <item row="1" column="0">
+    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
+   </item>
+   <item row="3" column="0">
     <widget class="QGroupBox" name="loginGroup">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -64,9 +67,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
@@ -292,6 +292,9 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="0">
+    <widget class="Identity::Internal::PasswordWidget" name="passwordWidget" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -320,6 +323,12 @@
    <class>Utils::LineEditEchoSwitcher</class>
    <extends>QLineEdit</extends>
    <header location="global">utils/widgets/lineeditechoswitcher.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Identity::Internal::PasswordWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">identityplugin/passwordwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

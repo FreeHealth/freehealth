@@ -411,6 +411,8 @@ public:
         case IdentityEditorWidget::DateOfBirth: return ui->dob;
         case IdentityEditorWidget::DateOfDeath: return 0; //TODO: ui->dod;
         case IdentityEditorWidget::Photo: return ui->photoButton;
+        case IdentityEditorWidget::Extra_Login: return ui->passwordWidget->loginEditor();
+        case IdentityEditorWidget::Extra_Password: return ui->passwordWidget;
         default: break;
         }
         return 0;
@@ -426,12 +428,13 @@ public:
         case IdentityEditorWidget::BirthName:
         case IdentityEditorWidget::SecondName:
         case IdentityEditorWidget::FirstName:
+        case IdentityEditorWidget::Extra_Login:
             return "text";
+        case IdentityEditorWidget::Extra_Password:
+            return "cryptedPassword";
         case IdentityEditorWidget::DateOfBirth:
         case IdentityEditorWidget::DateOfDeath:
             return "date";
-//        case IdentityEditorWidget::Photo:
-//            return "pixmap";
         case IdentityEditorWidget::Language_QLocale:
             return "currentLanguage";
         case IdentityEditorWidget::LanguageIso:
@@ -566,7 +569,7 @@ IdentityEditorWidget::IdentityEditorWidget(QWidget *parent) :
     QWidget(parent),
     d(new Internal::IdentityEditorWidgetPrivate(this))
 {
-    setObjectName("Patient::IdentityEditorWidget");
+    setObjectName("IdentityEditorWidget");
     d->setupUi();
     d->connectPropertiesNotifier();
 
@@ -798,6 +801,8 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 {
 //    qWarning() << modelIndex << (modelIndex.model() == d->m_Mapper->model());
     if (modelIndex.model() == d->m_Mapper->model()) {
+        d->ui->passwordWidget->clear();
+        d->ui->zipcodesWidget->clear();
         d->m_Mapper->setCurrentIndex(modelIndex.row());
         d->populatePixmap();
         updateGenderImage();

@@ -19,28 +19,68 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IDENTITYCONSTANTS_H
-#define IDENTITYCONSTANTS_H
+#ifndef IDENTITY_INTERNAL_PASSWORDWIDGET_H
+#define IDENTITY_INTERNAL_PASSWORDWIDGET_H
+
+#include <utils/widgets/detailswidget.h>
+
+QT_BEGIN_NAMESPACE
+class QLineEdit;
+QT_END_NAMESPACE
+
+/**
+ * \file passwordwidget.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 22 Jan 2013
+*/
 
 namespace Identity {
-namespace Constants {
+namespace Internal {
+class PasswordWidgetPrivate;
 
-const char * const ACTION_ID = "Identity.Action";
-const char * const MENU_ID = "Identity.Menu";
+class PasswordWidget : public Utils::DetailsWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QString uncryptedPassword READ uncryptedPassword WRITE setUncryptedPassword RESET resetUncryptedPassword NOTIFY uncryptedPasswordChanged)
+    Q_PROPERTY(QString cryptedPassword READ cryptedPassword WRITE setCryptedPassword RESET resetCryptedPassword NOTIFY cryptedPasswordChanged)
 
-const char* const PASSWORD_SUMMARY_NOLOGIN_NOPASSWORD = QT_TRANSLATE_NOOP("UserPlugin", "Please define login and password");
-const char* const PASSWORD_SUMMARY_LOGIN_NOPASSWORD   = QT_TRANSLATE_NOOP("UserPlugin", "Login defined but not the password");
-const char* const PASSWORD_SUMMARY_LOGIN_PASSWORD     = QT_TRANSLATE_NOOP("UserPlugin", "Login and password are defined");
+public:
+    explicit PasswordWidget(QWidget *parent = 0);
+    ~PasswordWidget();
+    bool initialize();
+    
+    QLineEdit *loginEditor() const;
 
-const char* const UNCRYPTED_PASSWORD_AVAILABLE        = QT_TRANSLATE_NOOP("UserPlugin", "Uncrypted password available");
-const char* const CRYPTED_PASSWORD_AVAILABLE          = QT_TRANSLATE_NOOP("UserPlugin", "Crypted password defined");
+Q_SIGNALS:
+    void uncryptedPasswordChanged(const QString &password);
+    void cryptedPasswordChanged(const QString &password);
 
+public Q_SLOTS:
+    void clear();
+
+    void resetUncryptedPassword();
+    QString uncryptedPassword() const;
+    void setUncryptedPassword(const QString &password);
+
+    void resetCryptedPassword();
+    QString cryptedPassword() const;
+    void setCryptedPassword(const QString &password);
+
+private Q_SLOTS:
+    void onChangeOrSetPasswordClicked();
+
+private:
+    Internal::PasswordWidgetPrivate *d;
+};
+
+} // namespace Internal
 } // namespace Identity
-} // namespace Constants
 
-#endif // IDENTITYCONSTANTS_H
+#endif // IDENTITY_INTERNAL_PASSWORDWIDGET_H
 
