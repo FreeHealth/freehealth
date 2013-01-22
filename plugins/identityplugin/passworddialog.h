@@ -24,56 +24,57 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERPASSWORDDIALOG_H
-#define USERPASSWORDDIALOG_H
+#ifndef IDENTITY_PASSWORDDIALOG_H
+#define IDENTITY_PASSWORDDIALOG_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
 
 #include <QDialog>
 
 /**
- * \file userpassworddialog.h
+ * \file passworddialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.2
- * \date 16 Dec 2012
+ * \date 22 Jan 2013
 */
 
-namespace UserPlugin {
-class UserModel;
-
+namespace Identity {
 namespace Internal {
 namespace Ui {
-class  UserPasswordDialog;
-}  // End ui
+class  PasswordDialog;
+}  // namespace ui
 
-class USER_EXPORT UserPasswordDialog : public QDialog
+class USER_EXPORT PasswordDialog : public QDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserPasswordDialog)
+    Q_DISABLE_COPY(PasswordDialog)
 
 public:
-    explicit UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent = 0);
+    explicit PasswordDialog(QWidget *parent = 0);
 
-    void changeTitle(const QString &title);
+    void setOldCryptedPassword(const QString &crypted);
+
     bool canGetNewPassword() const;
     QString cryptedPassword() const;
-    QString clearPassword() const;
+    QString uncryptedPassword() const;
 
-    bool applyChanges(UserModel *model, int userRow) const;
+//    bool applyChanges(UserModel *model, int userRow) const;
 
 private Q_SLOTS:
     void checkControlPassword(const QString &text);
     void checkNewPassword(const QString &text);
-    void accept();
 
 private:
-    Internal::Ui::UserPasswordDialog *m_ui;
+    void done(int result);
+
+private:
+    Internal::Ui::PasswordDialog *m_ui;
     bool m_AllIsGood;
-    QString m_ActualPass;
+    QString m_OldCryptedPass;
     QString m_CryptedNewPass;
-    QDialog * m_Parent;
+    QDialog *m_Parent;
 };
 }  // namespace Internal
 }  // namespace UserPlugin
 
-#endif // USERPASSWORDDIALOG_H
+#endif // IDENTITY_PASSWORDDIALOG_H

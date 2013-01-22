@@ -26,83 +26,80 @@
  ***************************************************************************/
 
 /**
- * \class UserPlugin::Internal::UserPasswordDialog
- * \brief Dialog for password changing.
+ * \class Identity::Internal::PasswordDialog
+ * \brief Dialog for password changing / setting.
  * With this dialog, user can change its password. He's asked of the actual
  * password once, and of the new password twice. When user accept the dialog
- * a verification is done, no changes are saved into database or users' model. \n
+ * a verification is done. \n
  * - canGetNewPassword() return the verification state. If it's true, all
  * is good: old password was verified, and new password was confirmed correctly.
  * - cryptedPassword() return the crypted new password to use.
  * - clearPassword() return the new password (non crypted).
- * - applyChanges() call it after dialog validation to submit the new password
- * to the database and server.
- * You have to send the new password to the user model by yourself.
 */
 
-#include "userpassworddialog.h"
+#include "passworddialog.h"
 
-#include <usermanagerplugin/usercore.h>
-#include <usermanagerplugin/usermodel.h>
-#include <usermanagerplugin/database/userbase.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
 #include <translationutils/constanttranslations.h>
 
-#include "ui_userpassworddialog.h"
+#include "ui_passworddialog.h"
 
 #include <QDebug>
 
-using namespace UserPlugin;
+using namespace Identity;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
-static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
-UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent) :
-    QDialog(parent)
+PasswordDialog::PasswordDialog(QWidget *parent) :
+    QDialog(parent),
+    m_ui(new Internal::Ui::PasswordDialog()),
+    m_AllIsGood(false)
 {
-   Q_ASSERT_X(!actualCryptedPassword.isEmpty(), "UserPasswordDialog", "actualCryptedPassword cannot be empty.");
-   if (actualCryptedPassword.isEmpty())
-       return;
-   m_ui = new Internal::Ui::UserPasswordDialog();
-   m_ui->setupUi(this);
+    m_ui->setupUi(this);
+    m_ui->newPass->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    m_ui->newControl->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    m_ui->oldPass->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    m_ui->newPass->toogleEchoMode();
+    m_ui->newControl->toogleEchoMode();
+    m_ui->oldPass->toogleEchoMode();
 
-   changeTitle(Trans::Constants::CHANGE_PASSWORD);
+    // connect buttons
+    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    m_ui->oldPass->setFocus();
 
-   m_ActualPass = actualCryptedPassword;
-   m_ui->newPass->toogleEchoMode();
-   m_ui->newControl->toogleEchoMode();
-   m_ui->oldPass->toogleEchoMode();
-   m_AllIsGood = false;
+    // Set title
+    m_ui->label->setText(tkTr(Trans::Constants::SET_PASSWORD));
+    setWindowTitle(tkTr(Trans::Constants::SET_PASSWORD));
 
-   // connect buttons
-   connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-   m_ui->oldPass->setFocus();
+    // Switch to set password only
+    m_ui->oldLabel->hide();
+    m_ui->oldPass->hide();
+    m_ui->newControl->hide();
+    m_ui->labelControlPassword->hide();
 
-   connect(m_ui->newControl, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-   connect(m_ui->newPass, SIGNAL(textChanged(QString)), this, SLOT(checkNewPassword(QString)));
-   checkNewPassword("");
+    connect(m_ui->newControl, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+    connect(m_ui->newPass, SIGNAL(textChanged(QString)), this, SLOT(checkNewPassword(QString)));
+    checkNewPassword("");
 }
 
-void UserPasswordDialog::changeTitle(const QString &title)
+void PasswordDialog::checkControlPassword(const QString &text)
 {
-    m_ui->label->setText(title);
-}
-
-void UserPasswordDialog::checkControlPassword(const QString &text)
-{
-    if (text==m_ui->newPass->text()) {
+    if (text == m_ui->newPass->text()) {
         m_ui->labelControlPassword->setStyleSheet("color:black");
     } else {
         m_ui->labelControlPassword->setStyleSheet("color:red");
     }
 }
 
-void UserPasswordDialog::checkNewPassword(const QString &text)
+void PasswordDialog::checkNewPassword(const QString &text)
 {
     if (text.size() >= 5) {
         m_ui->labelNewPassword->setStyleSheet("color:black");
@@ -116,14 +113,30 @@ void UserPasswordDialog::checkNewPassword(const QString &text)
     checkControlPassword(m_ui->newControl->text());
 }
 
+/** Define the old crypted password when you want to change the password and not only set the password */
+void PasswordDialog::setOldCryptedPassword(const QString &crypted)
+{
+    m_OldCryptedPass = crypted;
+    // Set title
+    m_ui->label->setText(tkTr(Trans::Constants::CHANGE_PASSWORD));
+    setWindowTitle(tkTr(Trans::Constants::CHANGE_PASSWORD));
+    // Manage ui
+    m_ui->oldLabel->show();
+    m_ui->labelNewPassword->show();
+    m_ui->labelControlPassword->show();
+    m_ui->oldPass->show();
+    m_ui->newPass->show();
+    m_ui->newControl->show();
+}
+
 /** \brief Return the state of verification. Verification is done when user accepts the dialog. */
-bool UserPasswordDialog::canGetNewPassword() const
+bool PasswordDialog::canGetNewPassword() const
 {
     return m_AllIsGood;
 }
 
 /** Returns the crypted new password. The dialog must be accepted before. */
-QString UserPasswordDialog::cryptedPassword() const
+QString PasswordDialog::cryptedPassword() const
 {
     if (m_AllIsGood)
         return m_CryptedNewPass;
@@ -131,45 +144,56 @@ QString UserPasswordDialog::cryptedPassword() const
 }
 
 /** Returns the clear new password. The dialog must be accepted before. */
-QString UserPasswordDialog::clearPassword() const
+QString PasswordDialog::uncryptedPassword() const
 {
     if (m_AllIsGood)
         return m_ui->newPass->text();
     return QString();
 }
 
-bool UserPasswordDialog::applyChanges(UserModel *model, int userRow) const
-{
-    Q_ASSERT(m_AllIsGood);
-    if (!m_AllIsGood) {
-        LOG_ERROR("Dialog must be validated before");
-        return false;
-    }
-    return model->setData(model->index(userRow, Core::IUser::ClearPassword), clearPassword());
-}
+//bool PasswordDialog::applyChanges(UserModel *model, int userRow) const
+//{
+//    Q_ASSERT(m_AllIsGood);
+//    if (!m_AllIsGood) {
+//        LOG_ERROR("Dialog must be validated before");
+//        return false;
+//    }
+//    return model->setData(model->index(userRow, Core::IUser::ClearPassword), clearPassword());
+//}
 
-void UserPasswordDialog::accept()
+void PasswordDialog::done(int result)
 {
-    if (m_ui->newPass->text().size()<5) {
+    if (result == Rejected) {
+        m_ui->newPass->text().clear();
+        QDialog::done(Rejected);
         return;
     }
-    const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
-    const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->text());
 
-    if ((oldPass == m_ActualPass) &&
-        (m_ui->newPass->text() == m_ui->newControl->text())) {
-        m_AllIsGood = true;
-        m_CryptedNewPass = cryptedNewPass;
-        QDialog::accept();
+    if (m_ui->newPass->text().size() < 5)
+        return;
+
+    // Set password mode ?
+    if (m_OldCryptedPass.isEmpty()) {
+        QDialog::done(result);
     } else {
-        m_AllIsGood = false;
-        QString info;
-        if (oldPass != m_ActualPass)
-             info = tr("The old password is not correct. Please retry with the correct password.");
-        else
-            info = tr("Wrong password confirmation.");
-        Utils::warningMessageBox(tr("Password can not be change."),
-                                 info, "", windowTitle());
-        QDialog::reject();
+        const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
+        const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->text());
+
+        if ((oldPass == m_OldCryptedPass) &&
+                (m_ui->newPass->text() == m_ui->newControl->text())) {
+            m_AllIsGood = true;
+            m_CryptedNewPass = cryptedNewPass;
+            QDialog::done(result);
+        } else {
+            m_AllIsGood = false;
+            QString info;
+            if (oldPass != m_OldCryptedPass)
+                info = tr("The old password is not correct. Please retry with the correct password.");
+            else
+                info = tr("Wrong password confirmation.");
+            Utils::warningMessageBox(tr("Password can not be change."),
+                                     info, "", windowTitle());
+            QDialog::done(Rejected);
+        }
     }
 }
