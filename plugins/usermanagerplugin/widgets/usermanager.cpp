@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class UserPlugin::UserManager
+ * \class UserPlugin::UserManagerMainWindow
  * This is the Users' Manager of FreeMedForms. \n
  * You can use it as main app or secondary mainWindow.\n
  * You only need to instanciate the UserModel and define a current user
@@ -55,6 +55,8 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/mainwindowactions.h>
 
 #include <usermanagerplugin/usercore.h>
 #include <usermanagerplugin/usermodel.h>
@@ -83,6 +85,7 @@
 #include <QDialogButtonBox>
 #include <QCloseEvent>
 #include <QPainter>
+#include <QDesktopWidget>
 
 #include "ui_usermanagerwidget.h"
 #include "ui_userviewer_treedelegate.h"
@@ -91,7 +94,8 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ContextManager *contextManager() {return  Core::ICore::instance()->contextManager();}
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -119,12 +123,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////   UserManager   ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-UserManager::UserManager(QWidget * parent) :
-    QMainWindow(parent)
+UserManagerMainWindow::UserManagerMainWindow(QWidget * parent) :
+    Core::IMainWindow(parent)
 {
-    Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
-    if (!userModel()->hasCurrentUser())
-        return;
     setAttribute(Qt::WA_DeleteOnClose);
     m_Widget = new UserManagerWidget(this);
     setCentralWidget(m_Widget);
@@ -132,19 +133,78 @@ UserManager::UserManager(QWidget * parent) :
 }
 
 /** Destructor */
-UserManager::~UserManager()
+UserManagerMainWindow::~UserManagerMainWindow()
 {
 }
 
 /** Initialize the mainwindow */
-bool UserManager::initialize()
+bool UserManagerMainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
-    m_Widget->initialize();
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
+    Q_ASSERT_X(userModel()->hasCurrentUser(), "UserManagerMainWindow", "NO CURRENT USER");
+    if (!userModel()->hasCurrentUser())
+        return false;
+
+    Q_ASSERT(actionManager());
+    Q_ASSERT(contextManager());
+
+    // create menus
+    createFileMenu();
+    createEditMenu();
+    createFormatMenu();
+    createConfigurationMenu();
+    createHelpMenu();
+
+    Core::MainWindowActions actions;
+    actions.setFileActions(
+            Core::MainWindowActions::A_FilePrint |
+            Core::MainWindowActions::A_FilePrintPreview |
+            Core::MainWindowActions::A_FileQuit
+            );
+
+    actions.setConfigurationActions(
+            Core::MainWindowActions::A_AppPreferences |
+//            Core::MainWindowActions::A_AppConfigurator |
+            Core::MainWindowActions::A_PluginsPreferences |
+            Core::MainWindowActions::A_LanguageChange
+            );
+
+    actions.setHelpActions(
+            Core::MainWindowActions::A_AppAbout |
+            Core::MainWindowActions::A_PluginsAbout |
+            Core::MainWindowActions::A_AppHelp |
+            Core::MainWindowActions::A_DebugDialog |
+            Core::MainWindowActions::A_AppGoToWebSite |
+            Core::MainWindowActions::A_BugReport
+            );
+
+    actions.createEditActions(true);
+    createActions(actions);
+    if (!m_Widget->initialize())
+        return false;
     return true;
 }
 
+void UserManagerMainWindow::extensionsInitialized()
+{
+    // Connect actions
+    connectFileActions();
+    connectGeneralActions();
+    connectConfigurationActions();
+    connectHelpActions();
+
+    contextManager()->updateContext();
+    actionManager()->retranslateMenusAndActions();
+
+    Utils::resizeAndCenter(this, qApp->desktop());
+    raise();
+    show();
+    setFocus();
+}
+
 /** Close the usermanager. Check if modifications have to be saved and ask user. */
-void UserManager::closeEvent(QCloseEvent *event)
+void UserManagerMainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_Widget->canCloseParent()) {
         event->accept();

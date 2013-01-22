@@ -28,7 +28,8 @@
 #define USERMANAGER_MAINWINDOW_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
-#include <QMainWindow>
+#include <coreplugin/imainwindow.h>
+
 #include <QDialog>
 #include <QStyledItemDelegate>
 
@@ -36,7 +37,7 @@
  * \file usermanager.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 16 Dec 2012
+ * \date 21 Jan 2013
 */
 
 namespace UserPlugin {
@@ -45,18 +46,19 @@ class UserManagerModel;
 class UserManagerWidget;
 namespace Ui{
 class UserViewerTreeDelegateWidget;
-}
-}  // End Internal
+}  // namespace Ui
+}  // namespace Internal
 
-class USER_EXPORT UserManager : public QMainWindow
+class USER_EXPORT UserManagerMainWindow : public Core::IMainWindow
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserManager)
+    Q_DISABLE_COPY(UserManagerMainWindow)
 public:
-    explicit UserManager(QWidget *parent = 0); // work with tkUserModel
-    ~UserManager();
+    explicit UserManagerMainWindow(QWidget *parent = 0);
+    ~UserManagerMainWindow();
 
-    virtual bool initialize();
+    virtual bool initialize(const QStringList &arguments = QStringList(), QString *errorString = 0);
+    virtual void extensionsInitialized();
 
 protected:
     void closeEvent(QCloseEvent *event);
