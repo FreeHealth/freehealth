@@ -92,7 +92,8 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     m_identity->addMapping(Identity::IdentityEditorWidget::LanguageIso, Core::IUser::LanguageISO);
     m_identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IUser::DateOfBirth);
     m_identity->addMapping(Identity::IdentityEditorWidget::Photo, Core::IUser::PhotoPixmap);
-    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::Login64);
+
+    m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Login, Core::IUser::ClearLogin);
     m_identity->addMapping(Identity::IdentityEditorWidget::Extra_Password, Core::IUser::Password);
 }
 
