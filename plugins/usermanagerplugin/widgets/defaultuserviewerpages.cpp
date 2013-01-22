@@ -25,7 +25,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "defaultuserviewerpages.h"
-#include "userpassworddialog.h"
 #include <usermanagerplugin/usermodel.h>
 
 #include <coreplugin/icore.h>
@@ -75,7 +74,7 @@ DefaultUserContactWidget::~DefaultUserContactWidget()
 
 void DefaultUserContactWidget::setUserModel(UserModel *model)
 {
-    qWarning() << "DefaultUserContactWidget::setUserModel" << model;
+//    qWarning() << "DefaultUserContactWidget::setUserModel" << model;
     m_Model = model;
     m_identity->setModel(model);
     m_identity->addMapping(Identity::IdentityEditorWidget::Street, Core::IUser::Street);
