@@ -78,7 +78,8 @@
 
 enum { WithUserMode = false };
 
-using namespace UserPlugin::Internal;
+using namespace UserPlugin;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
@@ -100,7 +101,8 @@ UserManagerPlugin::UserManagerPlugin() :
     aUserManager(0),
     aAboutDatabase(0),
     m_FirstCreation(new FirstRun_UserCreation(this)),
-    m_Mode(0)
+    m_Mode(0),
+    m_UserManagerMainWin(0)
 {
     setObjectName("UserManagerPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -115,6 +117,13 @@ UserManagerPlugin::UserManagerPlugin() :
         LOG_ERROR("UserCore can not initialize");
 
     addObject(m_FirstCreation);
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+
+#ifdef USERMANAGERTESTER
+    // Here we only use the UserManagerMainWindow
+    m_UserManagerMainWin = new UserManagerMainWindow;
+    Core::ICore::instance()->setMainWindow(m_UserManagerMainWin);
+#endif
 }
 
 UserManagerPlugin::~UserManagerPlugin()
@@ -192,6 +201,13 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         return false;
     }
 
+    if (m_UserManagerMainWin) {
+        if (!m_UserManagerMainWin->initialize()) {
+            LOG_ERROR("Main window not initialized");
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -204,6 +220,12 @@ void UserManagerPlugin::extensionsInitialized()
 
     // add UserPreferences page
 //    addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
+
+#ifdef USERMANAGERTESTER
+    // Nothing to do with the tester as we only need a usermanager mainwindow
+    if (m_UserManagerMainWin)
+        m_UserManagerMainWin->extensionsInitialized();
+#endif
 
     // add UserManager toogler action to plugin menu
 #ifdef FREEMEDFORMS
@@ -282,8 +304,6 @@ void UserManagerPlugin::extensionsInitialized()
     // create the mode
     if (WithUserMode)
         m_Mode = new Internal::UserManagerMode(this);
-
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 bool UserManagerPlugin::identifyUser()

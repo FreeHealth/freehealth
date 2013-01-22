@@ -44,6 +44,7 @@ namespace UserPlugin {
 class UserManagerDialog;
 class FirstRun_UserConnection;
 class FirstRun_UserCreation;
+class UserManagerMainWindow;
 namespace Internal {
 class UserManagerMode;
 
@@ -78,8 +79,8 @@ private:
     QAction *aAboutDatabase;
 
     FirstRun_UserCreation *m_FirstCreation;
-
     Internal::UserManagerMode *m_Mode;
+    UserManagerMainWindow *m_UserManagerMainWin;
 };
 
 } // namespace Internal
