@@ -342,7 +342,7 @@ public:
         ui->episodeView->horizontalHeader()->setSectionResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
 #endif
         QFont small;
-        if (Utils::isRunningOnWin())
+        if (Utils::isRunningOnWin() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
             small.setPointSize(small.pointSize() - 1);
         else
             small.setPointSize(small.pointSize() - 4);
