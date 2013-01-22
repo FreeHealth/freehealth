@@ -88,7 +88,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
-    m_CommandLine = new CommandLine();
+    m_CommandLine = new CommandLine(this);
 
     QTime chrono;
     chrono.start();
@@ -159,8 +159,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     Q_EMIT coreAboutToClose();
-    if (m_CommandLine)
-        delete m_CommandLine;
     if (m_ModeManager)
         delete m_ModeManager;
     if (m_MainWindow)

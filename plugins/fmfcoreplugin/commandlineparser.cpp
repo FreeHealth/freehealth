@@ -34,7 +34,8 @@
 
 using namespace Core;
 
-CommandLine::CommandLine() : ICommandLine()
+CommandLine::CommandLine(QObject *parent) :
+    ICommandLine(parent)
 {
     // known command line params
     ref.insert(Chrono, "--chrono");

@@ -63,7 +63,7 @@ public:
         CL_TransmitDosage = 0
     };
 
-    CommandLine();
+    CommandLine(QObject *parent = 0);
     QVariant value(int param, const QVariant &def = QVariant()) const;
     void setValue(int ref, const QVariant &value);
     QString paramName(int param) const;
