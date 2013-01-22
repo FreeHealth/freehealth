@@ -91,6 +91,9 @@ CommandLine::CommandLine(QObject *parent) :
     }
 }
 
+CommandLine::~CommandLine()
+{}
+
 QVariant CommandLine::value(int param, const QVariant &def) const
 {
     return params.value(param,def);

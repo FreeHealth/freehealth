@@ -64,6 +64,8 @@ public:
     };
 
     CommandLine(QObject *parent = 0);
+    ~CommandLine();
+
     QVariant value(int param, const QVariant &def = QVariant()) const;
     void setValue(int ref, const QVariant &value);
     QString paramName(int param) const;
