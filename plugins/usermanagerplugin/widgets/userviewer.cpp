@@ -96,7 +96,6 @@ public:
         m_stackedWidgets(0),
         m_Listener(0),
         m_CurrentRow(-1),
-        m_identityPageIndex(-1),
         m_CanRead(false),
         m_userManagerModel(0),
         q(parent)
@@ -181,7 +180,7 @@ public:
     QStackedWidget *m_stackedWidgets;
     QList<IUserViewerWidget *> m_widgets;
     UserViewerModelCoreListener *m_Listener;
-    int m_CurrentRow, m_identityPageIndex;
+    int m_CurrentRow;
     bool m_CanRead;
     UserManagerModel *m_userManagerModel;
     QString m_currentUserUuid;
