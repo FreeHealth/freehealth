@@ -1379,9 +1379,9 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
             if (value.compare("email", Qt::CaseInsensitive)==0
                     || value.compare("mail", Qt::CaseInsensitive)==0
                     || value.compare("e-mail", Qt::CaseInsensitive)==0) {
-                m_Line->setValidator(Utils::EmailValidator(m_Line));
+                m_Line->setValidator(new Utils::EmailValidator(m_Line));
             } else if (!value.isEmpty()) {
-                m_Line->setValidator(QRegExpValidator(QRegExp(value), this));
+                m_Line->setValidator(new QRegExpValidator(QRegExp(value), this));
             }
         }
         // inputmask
