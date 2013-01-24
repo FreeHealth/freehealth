@@ -141,15 +141,16 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing user manager plugin..."));
 
-    if (!userCore().initialize())
-        return false;
-
-    if (!userBase()->isInitialized()) {
-        Utils::warningMessageBox(tr("Unable to connect to the user database."),
-                                 tr("The user database is not reachable. Please check your configuration.\n"
-                                    "Application will stop."));
-        LOG_ERROR(settings()->databaseConnector().toString());
-        return false;
+    if (!userCore().initialize()
+            || !userBase()->isInitialized()) {
+        LOG_ERROR("Unable to initialize user core/base. Starting the configuration dialog.");
+        if (!Core::ICore::instance()->applicationConfigurationDialog()) {
+            Utils::warningMessageBox(tr("Unable to connect to the user database."),
+                                     tr("The user database is not reachable. Please check your configuration.\n"
+                                        "Application will stop."));
+            LOG_ERROR(settings()->databaseConnector().toString());
+            return false;
+        }
     }
 
     // manage virtual user creation

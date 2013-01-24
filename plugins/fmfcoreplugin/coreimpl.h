@@ -65,7 +65,6 @@ namespace Internal {
 }
 }
 
-
 namespace Core {
 namespace Internal {
 
@@ -75,6 +74,8 @@ class CoreImpl : public Core::ICore
 public:
     CoreImpl(QObject *parent);
     ~CoreImpl();
+
+    bool applicationConfigurationDialog() const;
 
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;

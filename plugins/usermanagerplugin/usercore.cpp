@@ -127,9 +127,24 @@ bool UserCore::initialize()
     d->_coreUserModelWrapper = new CoreUserModelWrapper(this);
     d->_coreUserModelWrapper->initialize(d->_model);
     Core::ICore::instance()->setUser(d->_coreUserModelWrapper);
-    connect(settings(), SIGNAL(userSettingsSynchronized()), d->_model, SLOT(updateUserPreferences()));
+    connect(settings(), SIGNAL(userSettingsSynchronized()), d->_model, SLOT(updateUserPreferences()), Qt::UniqueConnection);
 
     return true;
+}
+
+/**
+ * If the first initialization gone wrong, you can force a new initialization of the user core
+ * after the problem was corrected.
+ */
+bool UserCore::forceReInitialization()
+{
+    delete d->_model;
+    d->_model = 0;
+    delete d->_coreUserModelWrapper;
+    d->_coreUserModelWrapper = 0;
+    Core::ICore::instance()->setUser(0);
+    d->_base->onCoreDatabaseServerChanged(); // force a re-initialization of the database
+    return initialize();
 }
 
 /**

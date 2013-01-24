@@ -54,6 +54,7 @@ class USER_EXPORT UserCore : public QObject
 protected:
     explicit UserCore(QObject *parent = 0);
     bool initialize();
+    bool forceReInitialization();
     bool postCoreInitialization();
 
 public:

@@ -39,11 +39,10 @@ QT_END_NAMESPACE
 
 /**
  * \file icore.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 26 Apr 2012
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 24 Jan 2013
 */
-
 
 namespace Utils {
 class UpdateChecker;
@@ -80,8 +79,9 @@ public:
     // Some information
     virtual bool updatePreferences() const {return m_UpdatePreferences;}
 
-    // Alpha dialog
+    // Dialogs
     virtual bool alphaDialog() const;
+    virtual bool applicationConfigurationDialog() const { return true; }
 
     // Action manager, ContextManager, ModeManager, FileManager
     virtual ActionManager *actionManager() const = 0;

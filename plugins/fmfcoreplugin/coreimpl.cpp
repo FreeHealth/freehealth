@@ -179,6 +179,16 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
 }
 
+bool CoreImpl::applicationConfigurationDialog() const
+{
+    AppConfigWizard wizard;
+    if (m_Theme->splashScreen())
+        m_Theme->splashScreen()->finish(&wizard);
+    if (wizard.exec()==QDialog::Rejected)
+        return false;
+    return true;
+}
+
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
@@ -223,11 +233,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
-        AppConfigWizard wizard;
-        m_Theme->splashScreen()->finish(&wizard);
-        if (wizard.exec()==QDialog::Rejected) {
+        if (!applicationConfigurationDialog())
             return false;
-        }
         m_Settings->noMoreFirstTimeRunning();
         // TODO: code here: if alpha -> delete old configuration && databases
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
