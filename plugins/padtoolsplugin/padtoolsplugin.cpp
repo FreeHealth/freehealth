@@ -51,6 +51,8 @@
 using namespace PadTools;
 using namespace Internal;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
 PadToolsPlugin::PadToolsPlugin() :
     ExtensionSystem::IPlugin(),
     _core(0),
@@ -87,6 +89,11 @@ void PadToolsPlugin::extensionsInitialized()
 	qDebug("PadToolsPlugin::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
+
+#if defined(FREEMEDFORMS) || defined(FREEACCOUNT)
+    if (!user())
+        return;
+#endif
 
     _core->initialize();
 #if defined(WITH_PAD) || defined(FREEPAD)
