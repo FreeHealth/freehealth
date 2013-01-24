@@ -70,7 +70,7 @@ public:
     }
 
     QVariant testValue() const {return uid();}
-    QVariant value() const {return patient()->data(_ref);}
+    QVariant value() const {if (patient()) return patient()->data(_ref); return QVariant();}
 
     int sortIndex() const {return _ref;}
 

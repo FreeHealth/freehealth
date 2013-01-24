@@ -140,6 +140,8 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 */
 QVariant PatientModelWrapper::data(int column) const
 {
+    if (!m_Model)
+        return QVariant();
     QModelIndex idx = m_Model->index(m_Model->currentPatient().row(), column);
     return this->data(idx);
 }
