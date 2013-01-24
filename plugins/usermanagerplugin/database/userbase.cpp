@@ -455,6 +455,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             m_LastPass = query.value(2).toString();
         } else {
             LOG_ERROR("No FreeMedForms user. Unable to connect user.");
+            qWarning() << settings()->databaseConnector();
             DB.rollback();
             return false;
         }
