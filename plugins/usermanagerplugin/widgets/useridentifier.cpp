@@ -108,6 +108,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
         m_ui->groupServer->hide();
     }
     adjustSize();
+    layout()->setSizeConstraint(QLayout::SetFixedSize);
     Utils::centerWidget(this);
 }
 
