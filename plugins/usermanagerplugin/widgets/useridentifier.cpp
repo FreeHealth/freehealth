@@ -84,12 +84,12 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     m_ui->loginWidget->setToggleViewIcon(theme()->iconFullPath(Core::Constants::ICONEYES));
     m_ui->loginWidget->togglePasswordEcho(false);
 
+    // Get splash & resize
     QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::Splashscreen));
-    if (splash.size().width() > 400 || splash.size().height() >200) {
-        splash = splash.scaled(QSize(400,200),Qt::KeepAspectRatio);
-    }
-    m_ui->lblAppName->setPixmap(splash);
+    if (splash.size().width() > 300)
+        splash = splash.scaledToWidth(300);
     m_ui->lblAppName->setMinimumSize(splash.size() + QSize(10,10));
+    m_ui->lblAppName->setPixmap(splash);
     m_NumberOfTries = 0;
     setWindowTitle(qApp->applicationName());
     if (userBase()->isNewlyCreated()) {
