@@ -426,14 +426,18 @@ void ServerPackEditor::populatePackView(const int packId)
     QString zipPath = descr.data(PackDescription::UnzipToPath).toString();
     if (core().containsPathTag(zipPath))
         zipPath = core().replacePathTag(zipPath);
+    Server server = serverManager()->getServerForPack(pack);
     QString file = QString("<span style=\"font-weight:bold\">%1</span><br />"
                            "<table border=1 cellpadding=0 cellspacing=0 width=100%>"
                            "<tr><td>%2</td><td>%3</td></tr>"
-                           "<tr><td>MD5</td><td>%4</td></tr>"
-                           "<tr><td>SHA1</td><td>%5</td></tr>"
-                           "<tr><td>%6</td><td>%7</td></tr>"
+                           "<tr><td>%4</td><td>%5</td></tr>"
+                           "<tr><td>MD5</td><td>%6</td></tr>"
+                           "<tr><td>SHA1</td><td>%7</td></tr>"
+                           "<tr><td>%8</td><td>%9</td></tr>"
                            "</table>")
             .arg(tr("File specification"))
+            .arg(tkTr(Trans::Constants::SERVER))
+            .arg(server.url())
             .arg(tr("File name or URL:"))
             .arg(descr.data(PackDescription::AbsFileName).toString())
             .arg(descr.data(PackDescription::Md5).toString())
@@ -526,6 +530,7 @@ void ServerPackEditor::processPacks()
     if (dlg.exec()==QDialog::Rejected) {
         return;
     }
+    // Refresh the cached installed pack list from the packmanager
     packManager()->installedPack(true);
     d->m_PackModel->updateModel();
 }
