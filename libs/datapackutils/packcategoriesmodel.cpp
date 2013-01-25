@@ -245,16 +245,17 @@ public:
 
         // Keep only application compatible Packs
         int appId = PackDescription::FreeMedFormsCompatVersion;
-        if (qApp->applicationName().contains("freediams")) {
+        if (qApp->applicationName().contains("freediams", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeDiamsCompatVersion;
-        } else if (qApp->applicationName().contains("freeaccount")) {
+        } else if (qApp->applicationName().contains("freeaccount", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeAccountCompatVersion;
         }
         Utils::VersionNumber appVersion(qApp->applicationVersion());
         for(int i = m_AvailPacks.count()-1; i >= 0; --i) {
             const Pack &p = m_AvailPacks.at(i);
             Utils::VersionNumber packCompatVersion(p.description().data(appId).toString());
-            if (appVersion >= packCompatVersion)
+            // qWarning() << "pack version" << packCompatVersion << "app" << appVersion << "keep" << p.uuid() << (appVersion >= packCompatVersion);
+            if (appVersion < packCompatVersion) // appVersion >= packVersion -> keep it
                 m_AvailPacks.removeAt(i);
         }
 

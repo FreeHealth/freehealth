@@ -202,7 +202,7 @@ public:
         return id;
     }
 
-    void createPackItem()
+    void createModelContent()
     {
         // Get all packages from servers
         const QList<Pack> &installedPacks = packManager()->installedPack();
@@ -219,16 +219,17 @@ public:
 
         // Keep only application compatible Packs
         int appId = PackDescription::FreeMedFormsCompatVersion;
-        if (qApp->applicationName().contains("freediams")) {
+        if (qApp->applicationName().contains("freediams", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeDiamsCompatVersion;
-        } else if (qApp->applicationName().contains("freeaccount")) {
+        } else if (qApp->applicationName().contains("freeaccount", Qt::CaseInsensitive)) {
             appId = PackDescription::FreeAccountCompatVersion;
         }
         Utils::VersionNumber appVersion(qApp->applicationVersion());
         for(int i = m_AvailPacks.count()-1; i >= 0; --i) {
             const Pack &p = m_AvailPacks.at(i);
             Utils::VersionNumber packCompatVersion(p.description().data(appId).toString());
-            if (appVersion >= packCompatVersion)
+            // qWarning() << "pack version" << packCompatVersion << "app" << appVersion << "keep" << p.uuid() << (appVersion >= packCompatVersion);
+            if (appVersion < packCompatVersion) // appVersion >= packVersion -> keep it
                 m_AvailPacks.removeAt(i);
         }
 
@@ -273,7 +274,7 @@ public:
         Q_UNUSED(index);
         m_Items.clear();
         m_AvailPacks.clear();
-        createPackItem();
+        createModelContent();
     }
 
     void serverRemoved(const int index)
@@ -282,7 +283,7 @@ public:
         Q_UNUSED(index);
         m_Items.clear();
         m_AvailPacks.clear();
-        createPackItem();
+        createModelContent();
     }
 
 public:
@@ -303,7 +304,7 @@ PackModel::PackModel(QObject *parent) :
     d(new Internal::PackModelPrivate)
 {
     setObjectName("DataPack::PackModel");
-    d->createPackItem();
+    d->createModelContent();
     //    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
     connect(serverManager(), SIGNAL(serverAboutToBeRemoved(int)), this, SLOT(onServerRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));
@@ -492,7 +493,7 @@ void PackModel::updateModel()
     beginResetModel();
     d->m_Items.clear();
     d->m_AvailPacks.clear();
-    d->createPackItem();
+    d->createModelContent();
     filter(d->_filterVendor, d->_filterDataType);
     endResetModel();
 }
