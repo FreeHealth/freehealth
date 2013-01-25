@@ -444,7 +444,6 @@ void PackDownloadPage::packDownloaded(const DataPack::Pack &pack, const DataPack
     QLabel *processLabel = m_PackProcessing.value(k);
     m_PackDownloaded.append(k);
 
-//    WARN_FUNC << k;
     // Correctly manage errors
     if (status.hasError || !status.isSuccessful) {
         processLabel->setPixmap(QPixmap(iconFullPath("warning.png", DataPackCore::SmallPixmaps)));
@@ -458,13 +457,12 @@ void PackDownloadPage::packDownloaded(const DataPack::Pack &pack, const DataPack
 
     // Start next download
     int id = m_DownloadPacks.indexOf(pack) + 1;
-    if (id!=m_DownloadPacks.count()) {
+    if (id != m_DownloadPacks.count()) {
         packManager()->downloadPack(m_DownloadPacks.at(id), m_PackBar.value(k));
     } else {
         allDownloadFinished();
     }
 }
-
 
 void PackDownloadPage::allDownloadFinished()
 {
