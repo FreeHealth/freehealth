@@ -145,7 +145,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
     if (isPackInPersistentCache(pack)) {
 //        qWarning() << "IN CACHE" << pack.name() << pack.version();
         if (checkCachedPackFileIntegrity(pack)) {
-//            qWarning() << "PACK ALREDAY DOWNLOADED" << pack.persistentlyCachedZipFileName();
+            LOG("Pack already downloaded. Using the cached pack: " + pack.persistentlyCachedZipFileName()) ;
             if (bar) {
                 bar->setRange(0,1);
                 bar->setValue(1);
