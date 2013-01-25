@@ -180,6 +180,7 @@ bool HttpServerEngine::startDownloadQueue()
             // Create a network request for the server config
             QNetworkRequest request = createRequest(s->url(Server::ServerConfigurationFile));
             ++m_DownloadCount_Server;
+            qWarning() << "Downloading server config" << s->url(Server::ServerConfigurationFile);
 
             // Create a status for the server
             ServerEngineStatus status;
@@ -191,6 +192,7 @@ bool HttpServerEngine::startDownloadQueue()
         } else if (query.downloadPackFile) {
             // Create a network request for the pack file
             QNetworkRequest request = createRequest(s->url(Server::PackFile, query.pack->serverFileName()));
+            qWarning() << "Downloading pack" << s->url(Server::PackFile, query.pack->serverFileName());
 
             // Create a status for the pack
             ServerEngineStatus status;
@@ -261,15 +263,30 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
     LOG("Server authentication required: " +  reply->url().toString());
+    // Already achieved the max tries ?
     const QString &host = reply->url().toString();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
         LOG_ERROR("Server authentication max tries achieved. " +  host);
         return;
     }
+    // Get the related server
+    const ReplyData &data = m_replyToData.value(reply);
+    const Server *server = data.server;
+    Q_ASSERT(server);
+    if (!server)
+        return;
+    // Create the login dialog
     Utils::BasicLoginDialog dlg;
     dlg.setModal(true);
-    dlg.setTitle(tr("Server authentication required"));
+    QString serverName = server->url();
+    if (!server->name().isEmpty())
+        serverName += " - " + server->name();
+    dlg.setTitle(tr("Server %1\nrequires an authentication").arg(serverName));
+    QString html = QString("<p style=\"text-align: center\">Host: %1 <br /><span style=\"font-weight:bold; color:darkred\">%2</span></p>")
+            .arg(reply->url().host())
+            .arg(tr("If you don't have any login just cancel the dialog"));
+    dlg.setHtmlExtraInformation(html);
     dlg.setToggleViewIcon(core().icon(ICONEYES));
     if (dlg.exec()==QDialog::Accepted) {
         authenticator->setUser(dlg.login());
@@ -315,8 +332,8 @@ void HttpServerEngine::serverReadyRead()
 /** An error occured during the network access. */
 void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 {
-    WARN_FUNC << error;
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    qWarning() << "serverError" << reply->url().toString() << error;
     ReplyData &data = m_replyToData[reply];
     reply->deleteLater(); // we don't need reply anymore
     ServerEngineStatus *status = getStatus(data);
