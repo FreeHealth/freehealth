@@ -154,6 +154,7 @@ public:
     void createToolbar()
     {
         m_ToolBarPacks = new QToolBar(q);
+        m_ToolBarPacks->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
         // Create the segmented button with server/pack
         bServer = new QPushButton(q);
