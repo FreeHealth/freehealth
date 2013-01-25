@@ -29,6 +29,10 @@
 
 #include <utils/global_exporter.h>
 #include <QDialog>
+QT_BEGIN_NAMESPACE
+class QPushButton;
+class QTextBrowser;
+QT_END_NAMESPACE
 
 namespace Utils {
 namespace Ui {
@@ -45,13 +49,18 @@ public:
 
     void setTitle(const QString &title);
     void setToggleViewIcon(const QString &fullAbsPath);
+    void setHtmlExtraInformation(const QString &html);
     void focusLogin();
-
     QString login() const;
     QString password() const;
 
+private Q_SLOTS:
+    void onMoreClicked();
+
 private:
     Ui::BasicLoginDialog *ui;
+    QPushButton *_more;
+    QTextBrowser *_moreBrowser;
 };
 
 

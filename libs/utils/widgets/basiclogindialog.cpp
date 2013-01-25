@@ -27,11 +27,20 @@
 #include "basiclogindialog.h"
 #include "ui_basiclogindialog.h"
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
+#include <QPushButton>
+#include <QTextBrowser>
+
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 BasicLoginDialog::BasicLoginDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::BasicLoginDialog)
+    ui(new Ui::BasicLoginDialog),
+    _more(0),
+    _moreBrowser(0)
 {
     ui->setupUi(this);
     ui->loginWidget->togglePasswordEcho(false);
@@ -54,6 +63,17 @@ void BasicLoginDialog::setToggleViewIcon(const QString &fullAbsPath)
     ui->loginWidget->setToggleViewIcon(fullAbsPath);
 }
 
+void BasicLoginDialog::setHtmlExtraInformation(const QString &html)
+{
+    // Add a 'more information' button
+    _more = ui->buttonBox->addButton(tkTr(Trans::Constants::MORE_INFORMATION), QDialogButtonBox::ActionRole);
+    _moreBrowser = new QTextBrowser(this);
+    _moreBrowser->setHtml(html);
+    _moreBrowser->setHidden(true);
+    layout()->addWidget(_moreBrowser);
+    connect(_more, SIGNAL(clicked()), this, SLOT(onMoreClicked()));
+}
+
 void BasicLoginDialog::focusLogin()
 {
     ui->loginWidget->focusLogin();
@@ -67,4 +87,12 @@ QString BasicLoginDialog::login() const
 QString BasicLoginDialog::password() const
 {
     return ui->loginWidget->password();
+}
+
+void BasicLoginDialog::onMoreClicked()
+{
+    if (!_moreBrowser)
+        return;
+    _moreBrowser->setVisible(!_moreBrowser->isVisible());
+    adjustSize();
 }
