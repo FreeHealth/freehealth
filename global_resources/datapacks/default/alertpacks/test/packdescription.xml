@@ -13,6 +13,10 @@
     <cdate>2012-07-11</cdate>
     <lmdate></lmdate>
     <icon>__theme__/warning.png</icon>
+    <file>alertpacks/test/test_001.zip</file>
+    <unziptopath>alertpacks</unziptopath>
+    <size>1167</size>
+    <md5>e23ff6b56d609de887635e39e9577167</md5>
     <weblink></weblink>
     <bibliography/>
     <datatype>AlertPack</datatype>
