@@ -88,27 +88,35 @@ QString Pack::vendor() const
         return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
     return v;
 }
+
+/** Return the filename of the datapack content file (mainly the zip file to unzip and install) */
 QString Pack::serverFileName() const
 {
+    if (m_descr.data(PackDescription::AbsFileName).toString().isEmpty())
+        LOG_ERROR_FOR("Pack", "Pack does not have a defined server filename. Xml tag 'file' missing");
     return m_descr.data(PackDescription::AbsFileName).toString();
 }
 
+/** Return the server filename that contains the license terms */
 QString Pack::serverLicenseFileName() const
 {
 //    return m_descr.data(PackDescription::LicenseFileName).toString();
     return QString();
 }
 
+/** Return the expected MD5 checksum of the datapack file content */
 QString Pack::md5ControlChecksum() const
 {
     return m_descr.data(PackDescription::Md5).toString();
 }
 
+/** Return the expected SHA1 checksum of the datapack file content */
 QString Pack::sha1ControlChecksum() const
 {
     return m_descr.data(PackDescription::Sha1).toString();
 }
 
+/** Not implemented */
 bool Pack::isSha1Checked() const
 {
     // TODO
@@ -116,6 +124,7 @@ bool Pack::isSha1Checked() const
     return false;
 }
 
+/** Not implemented */
 bool Pack::isMd5Checked() const
 {
     // TODO
