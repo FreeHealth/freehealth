@@ -97,10 +97,12 @@ DatabaseInformationDialog::DatabaseInformationDialog(QWidget *parent) :
     d->_headerTree->setColumnCount(2);
     d->_headerTree->header()->hide();
     d->_headerTree->hide();
+    d->_headerTree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     d->_contentTree = new QTreeWidget(this);
     d->_contentTree->setColumnCount(2);
     d->_contentTree->header()->hide();
+    d->_contentTree->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     QDialogButtonBox *box = new QDialogButtonBox(this);
     box->setStandardButtons(QDialogButtonBox::Ok);

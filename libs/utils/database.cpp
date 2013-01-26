@@ -2519,6 +2519,7 @@ void Database::toTreeWidget(QTreeWidget *tree) const
     // General information
     QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "General information");
     db->setFont(0, bold);
+    db->setFirstColumnSpanned(true);
     new QTreeWidgetItem(db, QStringList() << "Connection Name" << d_database->m_ConnectionName);
     new QTreeWidgetItem(db, QStringList() << "Database Name" << DB.databaseName());
     if (DB.isOpenError()) {
@@ -2531,6 +2532,7 @@ void Database::toTreeWidget(QTreeWidget *tree) const
     // Driver / Connection // ConnectionError
     QTreeWidgetItem *drv = new QTreeWidgetItem(tree, QStringList() << "Driver information");
     drv->setFont(0, bold);
+    drv->setFirstColumnSpanned(true);
     new QTreeWidgetItem(drv, QStringList() << "Qt Driver" << DB.driverName());
     if (DB.driverName()=="QSQLITE") {
         new QTreeWidgetItem(drv, QStringList() << "Driver" << "SQLite");
@@ -2557,6 +2559,7 @@ void Database::toTreeWidget(QTreeWidget *tree) const
     // Grants
     QTreeWidgetItem *grants = new QTreeWidgetItem(tree, QStringList() << "Grants");
     grants->setFont(0, bold);
+    grants->setFirstColumnSpanned(true);
     Database::Grants g = d_database->m_Grants.value(d_database->m_ConnectionName);
     if (g & Database::Grant_All) {
         new QTreeWidgetItem(grants, QStringList() << "ALL PRIVILEGES");

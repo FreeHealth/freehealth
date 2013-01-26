@@ -117,6 +117,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     if (!fileName.isEmpty()) {
         QTreeWidgetItem *file = new QTreeWidgetItem(tree, QStringList() << "File name and identifiant");
         file->setFont(0, bold);
+        file->setFirstColumnSpanned(true);
         if (fileName == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT) {
             new QTreeWidgetItem(file, QStringList() << "File" << Trans::Constants::DEFAULTS);
         } else {
@@ -134,17 +135,19 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     }
 
     if (!connectionName.isEmpty()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(tree, QStringList() << "Connection Name");
+        QTreeWidgetItem *item = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::CONNECTION_NAME));
         item->setFont(0, bold);
-        new QTreeWidgetItem(item, QStringList() << "Connection" << connectionName);
+        item->setFirstColumnSpanned(true);
+        new QTreeWidgetItem(item, QStringList() << tkTr(Trans::Constants::CONNECTION) << connectionName);
     }
 
-    QTreeWidgetItem *namesItem = new QTreeWidgetItem(tree, QStringList() << "Names");
+    QTreeWidgetItem *namesItem = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::NAME));
     namesItem->setFont(0, bold);
+    namesItem->setFirstColumnSpanned(true);
     foreach(const QString &k, names.keys()) {
         QString l = k;
         if (l == "xx") {
-            l.replace("xx", "All languages");
+            l.replace("xx", tkTr(Trans::Constants::ALL_LANGUAGE_TEXT));
         } else {
             QLocale loc(k);
             l = QLocale::languageToString(loc.language());
@@ -152,39 +155,42 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
         new QTreeWidgetItem(namesItem, QStringList() << l << names.value(k));
     }
 
-    QTreeWidgetItem *countryItem = new QTreeWidgetItem(tree, QStringList() << "Country");
+    QTreeWidgetItem *countryItem = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::COUNTRY));
     countryItem->setFont(0, bold);
+    countryItem->setFirstColumnSpanned(true);
     if (lang_country.isEmpty()) {
-        new QTreeWidgetItem(countryItem, QStringList() << "Not specific");
+        new QTreeWidgetItem(countryItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Not specific"));
     } else {
         QLocale l(lang_country);
-        new QTreeWidgetItem(countryItem, QStringList() << "Language Specific" << QLocale::languageToString(l.language()));
-        new QTreeWidgetItem(countryItem, QStringList() << "Country Specific" << QLocale::countryToString(l.country()));
+        new QTreeWidgetItem(countryItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Language Specific") << QLocale::languageToString(l.language()));
+        new QTreeWidgetItem(countryItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Country Specific") << QLocale::countryToString(l.country()));
     }
 
-    QTreeWidgetItem *authorItem = new QTreeWidgetItem(tree,QStringList() << "Provider, Author and License");
+    QTreeWidgetItem *authorItem = new QTreeWidgetItem(tree,QStringList() << QApplication::translate("DrugDatabaseInfo", "Provider, Author and License"));
     authorItem->setFont(0, bold);
+    authorItem->setFirstColumnSpanned(true);
     new QTreeWidgetItem(authorItem, QStringList() << tkTr(Trans::Constants::PROVIDER) << provider);
     new QTreeWidgetItem(authorItem, QStringList() << "Sources link" << weblink);
     new QTreeWidgetItem(authorItem, QStringList() << tkTr(Trans::Constants::AUTHOR) << author);
-    new QTreeWidgetItem(authorItem, QStringList() << "License" << license);
+    new QTreeWidgetItem(authorItem, QStringList() << tkTr(Trans::Constants::LICENSE) << license);
     // TODO: put a link instead of the content for licenseTerms
-    new QTreeWidgetItem(authorItem, QStringList() << "License terms" << licenseTerms);
+    new QTreeWidgetItem(authorItem, QStringList() << tkTr(Trans::Constants::LICENSE_TERMS) << licenseTerms);
 
-    QTreeWidgetItem *validItem = new QTreeWidgetItem(tree,QStringList() << "Validity");
+    QTreeWidgetItem *validItem = new QTreeWidgetItem(tree,QStringList() << QApplication::translate("DrugDatabaseInfo", "Declared validity"));
     validItem->setFont(0, bold);
+    validItem->setFirstColumnSpanned(true);
     new QTreeWidgetItem(validItem, QStringList() << tkTr(Trans::Constants::VERSION) << version);
-    new QTreeWidgetItem(validItem, QStringList() << "Compatible FreeDiams Version" << compatVersion);
-    new QTreeWidgetItem(validItem, QStringList() << "Date of release" << date.toString(Qt::DefaultLocaleLongDate));
+    new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "FreeDiams compatible version") << compatVersion);
+    new QTreeWidgetItem(validItem, QStringList() << tkTr(Trans::Constants::DATE_OF_RELEASE) << date.toString(Qt::DefaultLocaleLongDate));
     if (atcCompatible)
-        new QTreeWidgetItem(validItem, QStringList() << "ATC validity" << tkTr(Trans::Constants::AVAILABLE));
+        new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "ATC validity") << tkTr(Trans::Constants::AVAILABLE));
     else
-        new QTreeWidgetItem(validItem, QStringList() << "ATC validity" << tkTr(Trans::Constants::UNAVAILABLE));
+        new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "ATC validity") << tkTr(Trans::Constants::UNAVAILABLE));
     if (iamCompatible)
-        new QTreeWidgetItem(validItem, QStringList() << "Interaction engine validity" << tkTr(Trans::Constants::AVAILABLE));
+        new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Interaction engine validity") << tkTr(Trans::Constants::AVAILABLE));
     else
-        new QTreeWidgetItem(validItem, QStringList() << "Interaction engine validity" <<tkTr(Trans::Constants::UNAVAILABLE));
-    new QTreeWidgetItem(validItem, QStringList() << "Interaction engine completion" << QString("%1 %").arg(moleculeLinkCompletion));
+        new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Interaction engine validity") <<tkTr(Trans::Constants::UNAVAILABLE));
+    new QTreeWidgetItem(validItem, QStringList() << QApplication::translate("DrugDatabaseInfo", "Interaction engine completion") << QString("%1 %").arg(moleculeLinkCompletion));
     new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR" << drugsNameConstructor);
     new QTreeWidgetItem(validItem, QStringList() << "DRUGS_NAME_CONSTRUCTOR (filter)" << drugsNameConstructorSearchFilter);
 
