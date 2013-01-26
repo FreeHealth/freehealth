@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IPATIENT_H
-#define IPATIENT_H
+#ifndef CORE_IPATIENT_H
+#define CORE_IPATIENT_H
 
 #include <coreplugin/core_exporter.h>
 
@@ -44,6 +44,7 @@
 
 namespace Core {
 class IToken;
+class IPatientBar;
 
 class CORE_EXPORT IPatient : public QAbstractListModel
 {
@@ -163,9 +164,12 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
+    // Remove this and create a Core::IPatientBar
+    virtual Core::IPatientBar *patientBar() const = 0;
     virtual void hidePatientBar() = 0;
     virtual void showPatientBar() = 0;
     virtual bool isPatientBarVisible() const = 0;
+    // End
 
     virtual QHash<QString, QString> fullPatientName(const QString &uuid) const {Q_UNUSED(uuid); return QHash<QString, QString>();}
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const {Q_UNUSED(uuids); return QHash<QString, QString>();}

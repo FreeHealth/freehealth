@@ -24,19 +24,18 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTBAR_H
-#define PATIENTBAR_H
+#ifndef PATIENTBASE_PATIENTBAR_H
+#define PATIENTBASE_PATIENTBAR_H
 
-#include <patientbaseplugin/patientbase_exporter.h>
+#include <coreplugin/ipatientbar.h>
 
-#include <QWidget>
 #include <QModelIndex>
 
 /**
  * \file patientbar.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 06 Dec 2012
+ * \version 0.8.2
+ * \date 25 Jan 2013
 */
 
 namespace Patients {
@@ -47,7 +46,7 @@ namespace Internal {
 class PatientBarPrivate;
 }
 
-class PATIENT_EXPORT PatientBar : public QWidget
+class PatientBar : public Core::IPatientBar
 {
     Q_OBJECT
     friend class Patients::PatientCore;
@@ -74,4 +73,4 @@ private:
 
 }  // End namespace Patients
 
-#endif // PATIENTBAR_H
+#endif // PATIENTBASE_PATIENTBAR_H

@@ -31,6 +31,7 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/iscriptmanager.h \
     $${PWD}/constants_colors.h \
     $${PWD}/id.h \
+    $${PWD}/ipatientbar.h
 
 SOURCES += \
     $${PWD}/icore.cpp \

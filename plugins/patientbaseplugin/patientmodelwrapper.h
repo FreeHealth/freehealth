@@ -70,6 +70,7 @@ public:
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 
+    Core::IPatientBar *patientBar() const;
     virtual void hidePatientBar();
     virtual void showPatientBar();
     virtual bool isPatientBarVisible() const;

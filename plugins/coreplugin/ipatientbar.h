@@ -19,62 +19,38 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEDIAMS_PATIENT_H
-#define FREEDIAMS_PATIENT_H
+#ifndef CORE_IPATIENTBAR_H
+#define CORE_IPATIENTBAR_H
 
 #include <coreplugin/core_exporter.h>
-#include <coreplugin/ipatient.h>
-
-#include <QVariant>
-#include <QModelIndex>
+#include <QWidget>
 
 /**
- * \file patient.h
+ * \file ipatientbar.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 26 Feb 2011
+ * \version 0.8.2
+ * \date 24 Jan 2013
 */
-namespace Core {
-namespace Internal {
-class PatientPrivate;
-}
 
-class CORE_EXPORT Patient : public IPatient
+namespace Core {
+
+class CORE_EXPORT IPatientBar : public QWidget
 {
     Q_OBJECT
+
 public:
-    Patient(QObject *parent = 0);
-    ~Patient();
+    explicit IPatientBar(QWidget *parent = 0) : QWidget(parent) {}
+    virtual ~IPatientBar() {}
 
-    void clear();
-    bool has(const int ref) const;
+    virtual void addBottomWidget(QWidget *widget) = 0;
 
-    QModelIndex currentPatientIndex() const {return index(0,0);}
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QVariant data(int column) const;
-
-    /** \todo remove this and use setData instead **/
-    bool setValue(int ref, const QVariant &value);
-
-    QString toXml() const;
-    bool fromXml(const QString &xml);
-
-    Core::IPatientBar *patientBar() const {return 0;}
-    void hidePatientBar() {}
-    void showPatientBar() {}
-    bool isPatientBarVisible() const {return false;}
-
-private:
-    Internal::PatientPrivate *d;
 };
 
-}  // End Core
+} // namespace Core
 
-#endif // FREEDIAMS_PATIENT_H
+#endif // CORE_IPATIENTBAR_H
