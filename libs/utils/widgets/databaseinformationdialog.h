@@ -19,52 +19,51 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef XMLIOTPLUGIN_H
-#define XMLIOTPLUGIN_H
+#ifndef UTILS_DATABASEINFORMATIONDIALOG_H
+#define UTILS_DATABASEINFORMATIONDIALOG_H
 
-#include <extensionsystem/iplugin.h>
-
-#include <QtCore/QObject>
+#include <utils/global_exporter.h>
+#include <QDialog>
+QT_BEGIN_NAMESPACE
+class QTreeWidget;
+QT_END_NAMESPACE
 
 /**
- * \file xmlioplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file databaseinformationdialog.h
+ * \author Eric Maeker
  * \version 0.8.0
- * \date 25 July 2012
+ * \date 26 Jan 2013
 */
 
-namespace XmlForms {
+namespace Utils {
+class Database;
 namespace Internal {
-class XmlFormIO;
-class XmlFormContentReader;
+class DatabaseInformationDialogPrivate;
+} // namespace Internal
 
-class XmlFormIOPlugin : public ExtensionSystem::IPlugin
+class UTILS_EXPORT DatabaseInformationDialog : public QDialog
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.XmlIOPlugin" FILE "XmlIO.json")
-
 public:
-    XmlFormIOPlugin();
-    ~XmlFormIOPlugin();
+    explicit DatabaseInformationDialog(QWidget *parent = 0);
+    ~DatabaseInformationDialog();
+    
+    void setTitle(const QString &title);
+    bool setDatabase(const Utils::Database &database);
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void showDatabaseInformation();
-
+    QTreeWidget *getHeaderTreeWidget();
+    QTreeWidget *getDescriptionTreeWidget();
+    
 private:
-    Internal::XmlFormContentReader *m_XmlReader;
-    Internal::XmlFormIO *m_FormIo;
+    Internal::DatabaseInformationDialogPrivate *d;
 };
 
-}  // namespace Internal
-}  // namespace XmlForms
+} // namespace Utils
 
-#endif  // End XMLIOTPLUGIN_H
+#endif  // UTILS_DATABASEINFORMATIONDIALOG_H
+

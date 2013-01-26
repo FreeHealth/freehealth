@@ -27,11 +27,14 @@
 #include "constants.h"
 #include "icddownloader.h"
 #include "icdcentralwidget.h"
+#include "icddatabase.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_database.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -380,13 +383,9 @@ void IcdActionHandler::recreateDatabase()
 
 void IcdActionHandler::showDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::ICD_DATABASE_INFORMATION));
+    dlg.setDatabase(*IcdDatabase::instance());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

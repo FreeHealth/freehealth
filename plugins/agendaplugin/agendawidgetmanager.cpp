@@ -25,10 +25,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "agendawidgetmanager.h"
+#include "agendacore.h"
 #include <agendaplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/constants_icons.h>
@@ -56,6 +58,7 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -331,13 +334,9 @@ void AgendaActionHandler::printPreviewSelection()
 
 void AgendaActionHandler::showAgendaDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::AGENDA_DATABASE_INFORMATION));
+    dlg.setDatabase(agendaCore().agendaBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

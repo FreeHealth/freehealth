@@ -47,6 +47,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
@@ -436,13 +437,9 @@ void FormActionHandler::onPrintFormRequested()
 
 void FormActionHandler::showDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    episodeBase()->toTreeWidget(&tree);
-    tree.header()->hide();
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::FORM_DATABASE_INFORMATION));
+    dlg.setDatabase(*episodeBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

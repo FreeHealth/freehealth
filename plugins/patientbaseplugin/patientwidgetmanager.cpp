@@ -37,9 +37,11 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_database.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -277,13 +279,9 @@ void PatientActionHandler::printPatientsInformation()
 
 void PatientActionHandler::showPatientDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::WindowFlags(Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint));
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    PatientBase::instance()->toTreeWidget(&tree);
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::PATIENT_DATABASE_INFORMATION));
+    dlg.setDatabase(*PatientBase::instance());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

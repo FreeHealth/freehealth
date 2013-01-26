@@ -45,8 +45,9 @@
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/constants.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/constants.h>
@@ -63,6 +64,7 @@
 #include <QTreeWidget>
 
 using namespace DrugsWidget;
+using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -260,35 +262,23 @@ void DrugsCentralWidget::showDrugsDatabaseInformation()
     const DrugsDB::DatabaseInfos *info = drugsBase().actualDatabaseInformation();
     if (!info)
         return;
-    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree2(&dlg);
-    tree2.setColumnCount(2);
-    tree2.header()->hide();
-    info->toTreeWidget(&tree2);
 
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
     drugsBase().setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
-    drugsBase().toTreeWidget(&tree);
 
-    lay.addWidget(&tree);
-    lay.addWidget(&tree2);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::DRUGS_DATABASE_INFORMATION));
+    dlg.setDatabase(drugsBase());
+    info->toTreeWidget(dlg.getHeaderTreeWidget());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }
 
 void DrugsCentralWidget::showDosagesDatabaseInformation()
 {
-    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
     drugsBase().setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
-    drugsBase().toTreeWidget(&tree);
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::DRUGS_DATABASE_INFORMATION));
+    dlg.setDatabase(drugsBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

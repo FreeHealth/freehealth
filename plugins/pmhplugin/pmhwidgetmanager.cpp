@@ -36,6 +36,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_menu.h>
@@ -226,13 +227,9 @@ void PmhActionHandler::onCurrentPatientChanged()
 
 void PmhActionHandler::showPmhDatabaseInformation()
 {
-    QDialog dlg(mainWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    pmhBase()->toTreeWidget(&tree);
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::PMH_DATABASE_INFORMATION));
+    dlg.setDatabase(*pmhBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

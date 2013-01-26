@@ -72,7 +72,8 @@ HEADERS += global_exporter.h \
     widgets/timecombobox.h \
     httpdownloader_p.h \
     emailvalidator.h \
-    widgets/bugreportdialog.h
+    widgets/bugreportdialog.h \
+    widgets/databaseinformationdialog.h
 
 
 SOURCES += global.cpp \
@@ -130,7 +131,8 @@ SOURCES += global.cpp \
     stringutils.cpp \
     widgets/timecombobox.cpp \
     emailvalidator.cpp \
-    widgets/bugreportdialog.cpp
+    widgets/bugreportdialog.cpp \
+    widgets/databaseinformationdialog.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm

@@ -40,14 +40,18 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
-#include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_menu.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -60,7 +64,7 @@
 #include <QDebug>
 
 using namespace Templates;
-using namespace Templates::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -309,13 +313,9 @@ void TemplatesViewActionHandler::lock()
 
 void TemplatesViewActionHandler::databaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    templateBase()->toTreeWidget(&tree);
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.setTitle(tkTr(Trans::Constants::TEMPLATE_DATABASE_INFORMATION));
+    dlg.setDatabase(*templateBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }

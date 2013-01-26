@@ -35,19 +35,27 @@
 #include "xmlformcontentreader.h"
 #include "xmliobase.h"
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QAction>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace XmlForms;
 using namespace Internal;
 
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 
 XmlFormIOPlugin::XmlFormIOPlugin() :
@@ -97,6 +105,21 @@ void XmlFormIOPlugin::extensionsInitialized()
 
     // initialize database
     Internal::XmlIOBase::instance()->initialize();
+
+    // add help menu action
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
+    QAction *a = new QAction(this);
+    a->setObjectName("aXmlFormIOPlugin.showDatabaseInformation");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id("aXmlFormIOPlugin.showDatabaseInformation"), globalcontext);
+    cmd->setTranslations(Trans::Constants::XMLIO_DATABASE_INFORMATION);
+    cmd->retranslate();
+    if (hmenu) {
+        hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
+    }
+    connect(a, SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
@@ -116,6 +139,15 @@ ExtensionSystem::IPlugin::ShutdownFlag XmlFormIOPlugin::aboutToShutdown()
         removeObject(m_FormIo);
     }
     return SynchronousShutdown;
+}
+
+void XmlFormIOPlugin::showDatabaseInformation()
+{
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::XMLIO_DATABASE_INFORMATION));
+    dlg.setDatabase(*Internal::XmlIOBase::instance());
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }
 
 Q_EXPORT_PLUGIN(XmlFormIOPlugin)

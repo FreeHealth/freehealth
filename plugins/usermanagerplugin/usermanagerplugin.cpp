@@ -61,10 +61,12 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
-#include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/databaseconnector.h>
+#include <utils/widgets/databaseinformationdialog.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -437,13 +439,9 @@ void UserManagerPlugin::showUserManager()
 
 void UserManagerPlugin::showDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    userBase()->toTreeWidget(&tree);
-    tree.header()->hide();
-    lay.addWidget(&tree);
+    Utils::DatabaseInformationDialog dlg(this);
+    dlg.setTitle(tkTr(Trans::Constants::TEMPLATE_DATABASE_INFORMATION));
+    dlg.setDatabase(*userBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }
