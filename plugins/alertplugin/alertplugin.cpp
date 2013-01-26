@@ -37,9 +37,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
-
-#include <patientbaseplugin/patientcore.h>
-#include <patientbaseplugin/patientbar.h>
+#include <coreplugin/ipatientbar.h>
 
 #include <QtPlugin>
 #include <QDebug>
@@ -49,7 +47,7 @@ using namespace Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 AlertPlugin::AlertPlugin() :
@@ -123,7 +121,8 @@ void AlertPlugin::extensionsInitialized()
     LOG("Creating patient alert placeholder");
     _patientPlaceHolder = new PatientBarAlertPlaceHolder(this);
     addObject(_patientPlaceHolder);
-    patientCore()->patientBar()->addBottomWidget(_patientPlaceHolder->createWidget(patientCore()->patientBar()));
+    if (patient()->patientBar())
+        patient()->patientBar()->addBottomWidget(_patientPlaceHolder->createWidget(patientCore()->patientBar()));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
