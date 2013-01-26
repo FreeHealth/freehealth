@@ -40,6 +40,7 @@ const char* const DESCRIPTION                        = QT_TRANSLATE_NOOP("tkCons
 const char* const AUTHOR                             = QT_TRANSLATE_NOOP("tkConstants", "Author");
 const char* const VENDOR                             = QT_TRANSLATE_NOOP("tkConstants", "Vendor");
 const char* const PROVIDER                           = QT_TRANSLATE_NOOP("tkConstants", "Provider");
+const char* const NOT_DEFINED                        = QT_TRANSLATE_NOOP("tkConstants", "Not defined");
 const char* const UNKNOWN                            = QT_TRANSLATE_NOOP("tkConstants", "Unknown");
 const char* const READY                              = QT_TRANSLATE_NOOP("tkConstants", "Ready");
 const char* const AVAILABLE                          = QT_TRANSLATE_NOOP("tkConstants", "Available");

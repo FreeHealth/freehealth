@@ -141,6 +141,10 @@ const char* const SHOW_NUMERIC_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show
 const char* const ENTER_DATE            = QT_TRANSLATE_NOOP("tkConstants", "Enter a date");
 const char* const ENTER_DATE_FORMAT_1   = QT_TRANSLATE_NOOP("tkConstants", "Enter a date using the formats:<br/>%1");
 
+const char* const DATE_OF_RELEASE    = QT_TRANSLATE_NOOP("tkConstants", "Date of release");
+const char* const DATE_OF_CREATION   = QT_TRANSLATE_NOOP("tkConstants", "Date of creation");
+const char* const DATE_LAST_UPDATE   = QT_TRANSLATE_NOOP("tkConstants", "Last update");
+
 } // end Constants
 } // end TranslationUtils
 
