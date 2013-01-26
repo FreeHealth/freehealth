@@ -86,7 +86,10 @@ public:
 
     QAbstractItemModel *precautionModel() const {return 0;}
 
+    QString engineDataReport() const;
+
     // Private hidden part
+    QString getDrugDrugInteractionLevelStatistics() const;
     bool checkDrugInteraction(DrugsDB::IDrug *drug, const QVector<DrugsDB::IDrug *> &drugsList);
     QVector<DrugsDB::IDrugInteraction *> getInteractionsFromDatabase(DrugsDB::IDrugInteraction *fromFirstPassInteraction);
 

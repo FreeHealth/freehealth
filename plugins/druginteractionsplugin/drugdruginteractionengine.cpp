@@ -101,6 +101,36 @@ namespace  {
                 "<tr><td>%2</td></tr>\n"
                 "</table>\n";
 
+static inline DrugDrugInteractionEngine::TypesOfIAM getLevels(const QString &t)
+{
+    DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
+    if (t.contains("A"))
+        r |= DrugDrugInteractionEngine::DrugDuplication;
+    if (t.contains("U"))
+        r |= DrugDrugInteractionEngine::InnDuplication;
+    if (t.contains("Z"))
+        r |= DrugDrugInteractionEngine::ClassDuplication;
+    if (t.contains("P"))
+        r |= DrugDrugInteractionEngine::Precaution;
+    if (t.contains("C"))
+        r |= DrugDrugInteractionEngine::ContreIndication;
+    if (t.contains("D"))
+        r |= DrugDrugInteractionEngine::Deconseille;
+    if (t.contains("T"))
+        r |= DrugDrugInteractionEngine::APrendreEnCompte;
+    if (t.contains("450"))
+        r |= DrugDrugInteractionEngine::P450;
+    if (t.contains("I"))
+        r |= DrugDrugInteractionEngine::Information;
+    if (t.contains("Y"))
+        r |= DrugDrugInteractionEngine::GPG;
+
+    if (r == DrugDrugInteractionEngine::NoIAM)
+        qWarning() << "DRUG DRUG INTERACTION LEVEL NOT RECOGNIZED" << t;
+
+    return r;
+}
+
 class DrugsInteraction : public IDrugInteraction
 {
 public:
@@ -133,27 +163,7 @@ public:
     {
         if (ref == DI_TypeId) {
             QString t = value.toString();
-            DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
-            if (t.contains("A"))
-                r |= DrugDrugInteractionEngine::DrugDuplication;
-            if (t.contains("U"))
-                r |= DrugDrugInteractionEngine::InnDuplication;
-            if (t.contains("Z"))
-                r |= DrugDrugInteractionEngine::ClassDuplication;
-            if (t.contains("P"))
-                r |= DrugDrugInteractionEngine::Precaution;
-            if (t.contains("C"))
-                r |= DrugDrugInteractionEngine::ContreIndication;
-            if (t.contains("D"))
-                r |= DrugDrugInteractionEngine::Deconseille;
-            if (t.contains("T"))
-                r |= DrugDrugInteractionEngine::APrendreEnCompte;
-            if (t.contains("450"))
-                r |= DrugDrugInteractionEngine::P450;
-            if (t.contains("I"))
-                r |= DrugDrugInteractionEngine::Information;
-            if (t.contains("Y"))
-                r |= DrugDrugInteractionEngine::GPG;
+            DrugDrugInteractionEngine::TypesOfIAM r = getLevels(t);
             m_Infos.insert(ref, int(r));
         } else {
             m_Infos.insert(ref, value);
@@ -381,6 +391,12 @@ public:
               tmp << tkTr(Trans::Constants::CLASS_DUPLICATION);
          if (r & DrugDrugInteractionEngine::Information)
               tmp << tkTr(Trans::Constants::INFORMATION);
+         if (r & DrugDrugInteractionEngine::Unknown)
+              tmp << tkTr(Trans::Constants::UNKNOWN);
+         if (tmp.isEmpty()) {
+             tmp << tkTr(Trans::Constants::NOT_DEFINED);
+             qWarning() << "DRUG DRUG INTERACTION LEVEL NOT RECOGNIZED" << t;
+         }
          return tmp.join(", ");
     }
 
@@ -826,7 +842,7 @@ class DrugDrugInteractionEnginePrivate
 public:
     QVector<IDrug *> m_TestedDrugs;
     QVector<IDrugInteraction *> m_FirstPassInteractions, m_Interactions;
-    QMap<int, int> m_InteractionsIDs;        /*!<  All possible interactions based on ATC IDs*/
+    QMultiMap<int, int> m_InteractionsIDs;        /*!<  All possible interactions based on ATC IDs*/
     QMultiMap<int, int> m_DDIFound;               /*!< modified by checkDrugInteraction() */
     QVector<int> m_DoNotWarnAtcDuplicates;
     bool m_LogChrono;
@@ -840,7 +856,6 @@ DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
     setObjectName("DrugDrugInteractionEngine");
     m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::DDI_ENGINE_UID);
     d->m_LogChrono = false;
-    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(drugsBaseChanged()));
 }
 
 DrugDrugInteractionEngine::~DrugDrugInteractionEngine()
@@ -852,6 +867,7 @@ DrugDrugInteractionEngine::~DrugDrugInteractionEngine()
 
 void DrugDrugInteractionEngine::drugsBaseChanged()
 {
+    qWarning() << "DrugDrugInteractionEngine::drugsBaseChanged()";
     init();
 }
 
@@ -859,6 +875,7 @@ bool DrugDrugInteractionEngine::init()
 {
     // get all interactions ids and mol <-> atc links
     d->m_InteractionsIDs.clear();
+    d->m_DDIFound.clear();
     QList<int> fields;
     fields << Constants::INTERACTIONS_ATC_ID1 << Constants::INTERACTIONS_ATC_ID2;
     QString req = drugsBase().select(Constants::Table_INTERACTIONS, fields);
@@ -893,6 +910,8 @@ bool DrugDrugInteractionEngine::init()
         LOG_QUERY_ERROR(query);
     }
     db.commit();
+
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(drugsBaseChanged()), Qt::UniqueConnection);
     return true;
 }
 
@@ -1241,6 +1260,113 @@ QVector<IDrugInteractionAlert *> DrugDrugInteractionEngine::getAllAlerts(DrugInt
     QVector<IDrugInteractionAlert *> alerts;
     alerts << new Alert(addToResult, this);
     return alerts;
+}
+
+QString DrugDrugInteractionEngine::engineDataReport() const
+{
+    return getDrugDrugInteractionLevelStatistics();
+}
+
+/**
+ * Check the content of the database. Extract all available drug-drug interactions (DDI)
+ * and compute their level repartition. The returned hash as for key the Readable Level
+ * of interaction and for value the percent of this DDI level.
+ */
+QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
+{
+    QTime chrono;
+    chrono.start();
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return QString::null;
+        }
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+
+    int total = 0;
+    QMap<DrugDrugInteractionEngine::TypeOfIAM, int> levelStatistics;
+    QList<DrugDrugInteractionEngine::TypeOfIAM> recordedLevels;
+    recordedLevels << NoIAM
+            << Unknown
+            << Information
+            << DrugDuplication
+            << InnDuplication
+            << ClassDuplication
+            << Precaution
+            << APrendreEnCompte
+            << P450
+            << GPG
+            << Deconseille
+            << ContreIndication;
+
+    // Get all DDI from database
+    Utils::Field get(Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_TYPE);
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_IAID, Constants::Table_IA_IAK, Constants::INTERACTIONS_IAID);
+    joins << Utils::Join(Constants::Table_IA_IAK, Constants::IA_IAK_IAKID, Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_IAKID);
+    Utils::FieldList where;
+    for(int i=0; i < d->m_InteractionsIDs.uniqueKeys().count(); ++i) {
+        int firstId = d->m_InteractionsIDs.uniqueKeys().at(i);
+        int firstCount = 1;
+        if (drugsBase().isInteractingClass(firstId))
+            firstCount = drugsBase().interactingClassSingleAtcCount(firstId);
+        const QList<int> &second = d->m_InteractionsIDs.values(firstId);
+        for(int j=0; j < second.count(); ++j) {
+            int secondId = second.at(j);
+            int n = 0; // n represents the total of computable interactions for the couple
+            int secondCount = 1;
+            if (drugsBase().isInteractingClass(secondId))
+                secondCount = drugsBase().interactingClassSingleAtcCount(secondId);
+            n = firstCount * secondCount;
+
+            // get levels of the ddi
+            where.clear();
+            where << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID1, QString("='%1'").arg(firstId));
+            where << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID2, QString("='%1'").arg(secondId));
+            QString req = drugsBase().select(get, joins, where);
+
+            QString level;
+            if (query.exec(req)) {
+                while (query.next()) {
+                    level += query.value(0).toString();
+                }
+            }
+
+            // analyze levels (split)
+            DrugDrugInteractionEngine::TypesOfIAM r = getLevels(level);
+            foreach(DrugDrugInteractionEngine::TypeOfIAM type, recordedLevels) {
+                if (r.testFlag(type))
+                    levelStatistics.insert(type, levelStatistics.value(type, 0) + n);
+            }
+            total += n;
+        }
+    }
+
+    QString out = tr("Data extracted from database") + "\n";
+    QMapIterator<DrugDrugInteractionEngine::TypeOfIAM, int> it(levelStatistics);
+    it.toBack();
+    while (it.hasPrevious()) {
+        it.previous();
+        out += QString("%1 %2 %3%\n")
+                .arg(DrugsInteraction::typeToString(it.key()).leftJustified(50, '.'))
+                .arg(QString::number(it.value()).leftJustified(7))
+                .arg(QString::number(it.value()*100/total, 'G', 2));
+    }
+    out += QString("\n%1 %2 100%\n")
+            .arg(QString("Total DDI per INN").leftJustified(50, '.'))
+            .arg(QString::number(total).leftJustified(7));
+    out += QString("%1 %2 100%\n")
+            .arg(QString("Cached in memory (pairs)").leftJustified(50, '.'))
+            .arg(QString::number(d->m_InteractionsIDs.count()).leftJustified(7));
+    out += QString("%1 %2 100%\n")
+            .arg(QString("Cached in memory (unique first interactor)").leftJustified(50, '.'))
+            .arg(QString::number(d->m_InteractionsIDs.uniqueKeys().count()).leftJustified(7));
+    qWarning() << out;
+    Utils::Log::logTimeElapsed(chrono, "DrugDrugInteractionEngine", "Creating report");
+    return out;
 }
 
 void DrugDrugInteractionEngine::setActive(bool activate)

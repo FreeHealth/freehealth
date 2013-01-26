@@ -103,6 +103,9 @@ public:
     /** Return a model with all synthesis information to use with a treeview/listview. */
     virtual QAbstractItemModel *precautionModel() const = 0;
 
+    /** Return a report on the engine data (for eg the number of available interactions...) */
+    virtual QString engineDataReport() const {return QString();}
+
 public Q_SLOTS:
     /** Define the state of activity of the engine. \sa isActive() */
     virtual void setActive(bool state) {m_IsActive = state;}
