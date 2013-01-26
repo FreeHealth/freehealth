@@ -83,7 +83,7 @@ namespace Constants {
     const char *const XML_ATTRIB_FORMAT           = "format";
 }
 
-inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
+static inline void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
 {
     LOG_ERROR_FOR("CommandLine",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +

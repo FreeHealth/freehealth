@@ -47,7 +47,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 using namespace BaseWidgets;
 using namespace Internal;
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label

@@ -110,7 +110,7 @@ static inline QString getPluginPaths()
     return QDir::cleanPath(app + "/plugins/");
 }
 
-inline static void defineLibraryPaths()
+static inline void defineLibraryPaths()
 {
 #ifdef LINUX_INTEGRATED
     qApp->addLibraryPath(getPluginPaths());

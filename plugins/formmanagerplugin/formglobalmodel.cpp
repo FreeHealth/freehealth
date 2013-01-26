@@ -52,9 +52,9 @@ using namespace Form;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-inline static ExtensionSystem::PluginManager *pm() {return ExtensionSystem::PluginManager::instance();}
-inline static void refreshPlugsFactories()
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline ExtensionSystem::PluginManager *pm() {return ExtensionSystem::PluginManager::instance();}
+static inline void refreshPlugsFactories()
 {
     ::m_PlugsFactories.clear();
     foreach(Form::IFormItemDataFactory *fact, pm()->getObjects<Form::IFormItemDataFactory>()) {
@@ -64,7 +64,7 @@ inline static void refreshPlugsFactories()
     }
 }
 
-inline static Form::IFormItemData *getItemData(const QModelIndex &idx)
+static inline Form::IFormItemData *getItemData(const QModelIndex &idx)
 {
     if (!idx.isValid())
         return 0;
@@ -72,7 +72,7 @@ inline static Form::IFormItemData *getItemData(const QModelIndex &idx)
     return static_cast<Form::IFormItemData*>(idx.internalPointer());
 }
 
-inline static Form::FormItem *getItem(const QModelIndex &idx)
+static inline Form::FormItem *getItem(const QModelIndex &idx)
 {
     Form::IFormItemData *dt = getItemData(idx);
 //    qWarning() << "getItem" << idx.data() << dt->parentItem()->uuid();
@@ -81,7 +81,7 @@ inline static Form::FormItem *getItem(const QModelIndex &idx)
     return 0;
 }
 
-inline static QList<Form::IFormItemData *> itemDatas(Form::FormItem *item)
+static inline QList<Form::IFormItemData *> itemDatas(Form::FormItem *item)
 {
     QList<Form::IFormItemData *> list;
     if (!item)
@@ -95,11 +95,11 @@ inline static QList<Form::IFormItemData *> itemDatas(Form::FormItem *item)
     return list;
 }
 
-inline static int itemDatasCount(Form::FormItem *item)
+static inline int itemDatasCount(Form::FormItem *item)
 {
     return itemDatas(item).count();
 }
-inline static int itemDatasCount(const QModelIndex &idx)
+static inline int itemDatasCount(const QModelIndex &idx)
 {
     return itemDatas(getItem(idx)).count();
 }
