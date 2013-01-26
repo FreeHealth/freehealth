@@ -36,8 +36,9 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-#include <coreplugin/translators.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/ipatientbar.h>
+#include <coreplugin/translators.h>
 
 #include <QtPlugin>
 #include <QDebug>
@@ -122,7 +123,7 @@ void AlertPlugin::extensionsInitialized()
     _patientPlaceHolder = new PatientBarAlertPlaceHolder(this);
     addObject(_patientPlaceHolder);
     if (patient()->patientBar())
-        patient()->patientBar()->addBottomWidget(_patientPlaceHolder->createWidget(patientCore()->patientBar()));
+        patient()->patientBar()->addBottomWidget(_patientPlaceHolder->createWidget(patient()->patientBar()));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
