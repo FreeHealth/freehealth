@@ -50,6 +50,7 @@
 #include <utils/global.h>
 #include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
@@ -63,10 +64,12 @@
 
 #include "ui_drugscentralwidget.h"
 #include <QTreeWidget>
+#include <QProgressDialog>
 
 using namespace DrugsWidget;
 using namespace Trans::ConstantTranslations;
 
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
@@ -233,16 +236,19 @@ void DrugsCentralWidget::changeFontTo(const QFont &font)
     m_ui->m_PrescriptionView->listview()->setFont(font);
 }
 
+/** Print the prescription */
 bool DrugsCentralWidget::printPrescription()
 {
     return drugsIo().printPrescription(m_CurrentDrugModel);
 }
 
+/** Preview the printing of the prescription */
 void DrugsCentralWidget::printPreview()
 {
     drugsIo().prescriptionPreview(m_CurrentDrugModel);
 }
 
+/** Create a template using the current prescription */
 bool DrugsCentralWidget::createTemplate()
 {
     if (m_CurrentDrugModel->rowCount() == 0)
@@ -259,18 +265,37 @@ bool DrugsCentralWidget::createTemplate()
     return true;
 }
 
+/** Show the database information dialog with all DrugsDB::IDrugEngine report */
 void DrugsCentralWidget::showDrugsDatabaseInformation()
 {
     const DrugsDB::DatabaseInfos *info = drugsBase().actualDatabaseInformation();
     if (!info)
         return;
 
-    drugsBase().setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
+    QProgressDialog progress(this);
+    progress.setLabelText(tr("Preparing database and drug engines report"));
+    progress.setRange(0, 0);
+    progress.setValue(0);
+    progress.show();
 
+    drugsBase().setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
     Utils::DatabaseInformationDialog dlg(this);
     dlg.setTitle(tkTr(Trans::Constants::DRUGS_DATABASE_INFORMATION));
     dlg.setDatabase(drugsBase());
     info->toTreeWidget(dlg.getHeaderTreeWidget());
+
+    // add drug engines report
+    QList<DrugsDB::IDrugEngine*> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
+    QFont bold;
+    bold.setBold(true);
+    foreach(DrugsDB::IDrugEngine *engine, engines) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(dlg.getHeaderTreeWidget(), QStringList() << tr("Drug engine report: %1").arg(engine->name()));
+        item->setFont(0, bold);
+        item->setFirstColumnSpanned(true);
+        new QTreeWidgetItem(item, QStringList() << tkTr(Trans::Constants::ENGINE_REPORT) << engine->engineDataReport());
+    }
+
+    progress.close();
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }
