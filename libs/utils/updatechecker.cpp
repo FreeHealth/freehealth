@@ -85,7 +85,7 @@ bool UpdateCheckerPrivate::getFile(const QUrl &url)
     }
     m_Url = url;
     _downloader->setUrl(m_Url);
-    return true;
+    return _downloader->startDownload();
 }
 
 void UpdateCheckerPrivate::onDownloadFinished()
