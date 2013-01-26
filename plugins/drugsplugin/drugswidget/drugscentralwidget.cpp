@@ -28,6 +28,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
@@ -72,6 +73,7 @@ static inline Core::ContextManager *contextManager() {return Core::ICore::instan
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 //static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 
@@ -275,10 +277,9 @@ void DrugsCentralWidget::showDrugsDatabaseInformation()
 
 void DrugsCentralWidget::showDosagesDatabaseInformation()
 {
-    drugsBase().setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
     Utils::DatabaseInformationDialog dlg(this);
     dlg.setTitle(tkTr(Trans::Constants::DRUGS_DATABASE_INFORMATION));
-    dlg.setDatabase(drugsBase());
+    dlg.setDatabase(protocolsBase());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
 }
