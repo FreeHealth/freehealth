@@ -442,10 +442,6 @@ int DrugBaseEssentials::getSourceId(const QString &drugsDbUid)
     return -1;
 }
 
-//QStringList getAllDistinctAvailableMoleculeName(const QString &drugDbUid)
-//{
-//}
-
 bool DrugBaseEssentials::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
