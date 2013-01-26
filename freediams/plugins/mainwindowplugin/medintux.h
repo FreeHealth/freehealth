@@ -24,7 +24,7 @@
 namespace MainWin {
 namespace Internal {
 
-    const void configureMedinTux();
+void configureMedinTux();
 
 }  // End Internal
 }  // End MainWin

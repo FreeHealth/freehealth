@@ -84,7 +84,7 @@ namespace Internal {
             "</body></html>";
 
 
-    const void configureMedinTux()
+    void configureMedinTux()
     {
         QString finalMsg;
         bool error = false;
