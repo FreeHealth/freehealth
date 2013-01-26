@@ -49,6 +49,7 @@ const char* const DATABASE_USER_1_CORRECTLY_CREATED         = QT_TRANSLATE_NOOP(
 const char* const DATABASE_1_CANNOT_BE_CREATED_ERROR_2      = QT_TRANSLATE_NOOP("tkConstants", "Database %1 can not be created. Error: %2.");
 const char* const SEARCHING_DATABASE_1_IN_PATH_2            = QT_TRANSLATE_NOOP("tkConstants", "Searching database %1 in path %2");
 
+const char* const DATABASE_INFORMATION                = QT_TRANSLATE_NOOP("tkConstants", "Database information");
 const char* const DRUGS_DATABASE_INFORMATION          = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
 const char* const DOSAGES_DATABASE_INFORMATION        = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
 const char* const INTERACTIONS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
