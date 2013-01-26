@@ -1364,7 +1364,7 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
     out += QString("%1 %2 100%\n")
             .arg(QString("Cached in memory (unique first interactor)").leftJustified(50, '.'))
             .arg(QString::number(d->m_InteractionsIDs.uniqueKeys().count()).leftJustified(7));
-    qWarning() << out;
+
     Utils::Log::logTimeElapsed(chrono, "DrugDrugInteractionEngine", "Creating report");
     return out;
 }
