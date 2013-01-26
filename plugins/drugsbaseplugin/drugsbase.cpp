@@ -217,6 +217,7 @@ public:
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
         }
+        LOG_FOR(q, QString("Retrieving %1 interacting classes").arg(m_ClassToAtcs.uniqueKeys().count()));
     }
 
     void getSearchEngine()
