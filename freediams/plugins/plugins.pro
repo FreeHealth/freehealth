@@ -64,6 +64,12 @@ with-pad {
     padtools.depends += core
 }
 
+with-alerts {
+    SUBDIRS += alerts
+    alerts.subdir = alertplugin
+    alerts.depends += core
+}
+
 # manage non free content
 #include(../../buildspecs/config.pri)
 #!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)

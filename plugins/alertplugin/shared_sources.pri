@@ -10,8 +10,8 @@ DEFINES += ALERT_LIBRARY
 
 QT *= sql
 
-include(../fmf_plugins.pri)
-include(alertplugin_dependencies.pri)
+include($${PWD}/../fmf_plugins.pri)
+include($${PWD}/alertplugin_dependencies.pri)
 
 HEADERS += \
     $${PWD}/constants.h \
