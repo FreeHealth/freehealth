@@ -148,7 +148,7 @@ public:
 
     void retreiveLinkTables()
     {
-        if ((!m_AtcToMol.isEmpty()) && (!m_ClassToAtcs.isEmpty()))
+        if (!m_AtcToMol.isEmpty())
             return;
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         if (query.exec(q->select(Constants::Table_LK_MOL_ATC))) {
@@ -206,6 +206,7 @@ public:
 
     void getInteractingClassTree()
     {
+        m_ClassToAtcs.clear();
         // Retreive Interacting classes (1) ---> (n) ATC tree
         QString req = q->select(Constants::Table_IAM_TREE, QList<int>() << Constants::IAM_TREE_ID_CLASS << Constants::IAM_TREE_ID_ATC);
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
@@ -335,8 +336,8 @@ public:
     DatabaseInfos *m_ActualDBInfos;
     bool m_initialized, m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase, m_UseRoutes, m_IsDefaultDB;
 
-    QMultiHash<int, int> m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
-    QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
+    QMultiHash<int, int> m_AtcToMol;      /*!< Link ATC code to Molecule Code */
+    QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ATC Class to ATC Id (content of the class) */
     QCache<int, AtcLabel> m_AtcLabelCache;
     QHash<QString, int> m_DbUids;
     // TODO: improve memory usage here
@@ -1649,6 +1650,39 @@ QVector<int> DrugsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &cod
         while (q.next())
             atcIds << q.value(0).toInt();
     return getLinkedMoleculeCodes(atcIds);
+}
+
+/** Return true if the ATC id correspond to an interacting class */
+bool DrugsBase::isInteractingClass(int atcId)
+{
+    return d->m_ClassToAtcs.uniqueKeys().contains(atcId);
+}
+
+/**
+ * Return the interacting class content (take care that class content can
+ * include interacting classes).
+ */
+QList<int> DrugsBase::interactingClassContent(int classId)
+{
+    return d->m_ClassToAtcs.values(classId);
+}
+
+/**
+ * Return the interacting class content count in pure simple ATC only
+ * (all classes are expanded).
+ */
+int DrugsBase::interactingClassSingleAtcCount(int classId)
+{
+    int n = 0;
+    const QList<int> &content = interactingClassContent(classId);
+    for(int i=0; i < content.count(); ++i) {
+        int id = content.at(i);
+        if (isInteractingClass(id))
+            n += interactingClassSingleAtcCount(classId);
+        else
+            ++n;
+    }
+    return n;
 }
 
 QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QList<int> &allInnAndInteractingClassesIds)

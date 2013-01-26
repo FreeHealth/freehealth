@@ -108,23 +108,12 @@ public:
     QHash<QString, QString> getDrugFullComposition(const QVariant &drugId, const QString &lang = QString::null);
     QStringList getDrugMolecularComposition(const QVariant &drugId, const QString &lang = QString::null);
 
-    // Manage Dosages
-//    void checkDosageDatabaseVersion();
-//    static QString dosageCreateTableSqlQuery();
-//    QHash<QString, QString> getDosageToTransmit();
-//    bool markAllDosageTransmitted(const QStringList &dosageUuids);
-//    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
-//    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
-
     // Manage drug classification
     int getAtcCodeForMoleculeId(const int molId) const;
     QString getAtcLabel(const int atcId) const;
     QString getAtcLabel(const QString &code) const;
     QString getAtcCode(const int atcId) const;
     QString getInnDenominationFromSubstanceCode(const int molId) const;
-
-//    QStringList getIamClassDenomination(const int molId);
-//    QVector<int> getAllInnAndIamClassesIndex(const int molId);
 
     QVector<int> getLinkedMoleculeCodes(QVector<int> &atc_ids) const;
     QVector<int> getLinkedMoleculeCodes(const int atc_id) const;
@@ -133,6 +122,11 @@ public:
     QVector<int> getLinkedAtcIds(const int mid) const;
 
     QVector<int> getAllMoleculeCodeWithAtcStartingWith(const QString &code) const;
+
+    // Interacting classes
+    bool isInteractingClass(int atcId);
+    QList<int> interactingClassContent(int classId);
+    int interactingClassSingleAtcCount(int classId);
 
     QVector<MedicalUtils::EbmData *> getAllBibliographyFromTree(const QList<int> &allInnAndInteractingClassesIds);
 
