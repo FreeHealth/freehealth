@@ -49,14 +49,12 @@ QT_END_NAMESPACE
  * \date 01 Aug 2011
 */
 
-
 namespace Utils {
 class DatabaseConnector;
 
 namespace Internal {
 class DatabasePrivate;
 }
-
 
 struct Field {
     Field() : table(-1), field(-1), type(-1), orCondition(false) {}
@@ -85,7 +83,6 @@ struct Field {
     QString whereCondition;
     bool orCondition;
 };
-
 typedef QList<Field> FieldList;
 
 struct Join {
@@ -109,9 +106,7 @@ struct Join {
     Field field2;
     int type;
 };
-
 typedef QList<Join> JoinList;
-
 
 class UTILS_EXPORT Database
 {
@@ -355,7 +350,7 @@ public:
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QString *error = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
-    virtual void toTreeWidget(QTreeWidget *tree);
+    virtual void toTreeWidget(QTreeWidget *tree) const;
 
     virtual void setConnectionName(const QString &c);
 

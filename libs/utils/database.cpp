@@ -2508,7 +2508,7 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
 }
 
 /**  Used for debugging and information purpose. */
-void Database::toTreeWidget(QTreeWidget *tree)
+void Database::toTreeWidget(QTreeWidget *tree) const
 {
     QFont bold;
     bold.setBold(true);
