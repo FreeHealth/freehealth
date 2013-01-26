@@ -21,7 +21,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace DrugInteractions;
