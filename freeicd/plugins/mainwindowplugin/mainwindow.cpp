@@ -238,14 +238,9 @@ void MainWindow::extensionsInitialized()
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
-        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-        statusBar()->addWidget(updateChecker()->progressBar(this),1);
-        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEICD_UPDATE_URL);
-        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEICD_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
 //    createDockWindows();
@@ -363,7 +358,7 @@ void MainWindow::openRecentFile()
     }
 }
 
-void MainWindow::updateCheckerEnd()
+void MainWindow::updateCheckerEnd(bool error)
 {
     // this code avoid deletion of the resizer corner of the mainwindow
     delete statusBar();

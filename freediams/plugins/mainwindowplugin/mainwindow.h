@@ -101,7 +101,7 @@ public Q_SLOTS:
 
     bool configureMedintux();
 
-    void updateCheckerEnd();
+    void updateCheckerEnd(bool error);
 
     void aboutToShowRecentFiles();
     void openRecentFile();

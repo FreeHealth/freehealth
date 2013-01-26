@@ -90,7 +90,7 @@ public Q_SLOTS:
 
     bool applicationPreferences();
 
-    void updateCheckerEnd();
+    void updateCheckerEnd(bool error);
 
     void aboutToShowRecentFiles();
     void openRecentFile();

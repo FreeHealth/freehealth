@@ -179,12 +179,9 @@ bool MainWindow::initialize(const QStringList &, QString *)
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
-        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
-        updateChecker()->check(Utils::Constants::FREETOOLBOX_UPDATE_URL);
-        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREETOOLBOX_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
     connect(ui->pageTree, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),

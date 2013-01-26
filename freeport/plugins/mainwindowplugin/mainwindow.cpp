@@ -169,6 +169,12 @@ void MainWindow::postCoreInitialization()
 
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEPAD));
+
+//    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
+//        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEPORT_UPDATE_URL);
+//        if (checkUpdate())
+//            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+//    }
 }
 
 
@@ -236,7 +242,7 @@ void MainWindow::openRecentFile()
     }
 }
 
-void MainWindow::updateCheckerEnd()
+void MainWindow::updateCheckerEnd(bool error)
 {
     // this code avoid deletion of the resizer corner of the mainwindow
     delete statusBar();

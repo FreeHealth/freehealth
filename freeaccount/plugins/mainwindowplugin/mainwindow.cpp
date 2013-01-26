@@ -208,14 +208,9 @@ void MainWindow::extensionsInitialized()
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
-        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-        statusBar()->addWidget(updateChecker()->progressBar(this),1);
-        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEACCOUNT_UPDATE_URL);
-        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
     userChanged();
