@@ -112,11 +112,22 @@ struct DbIndex {
 class DatabasePrivate
 {
 public:
-    DatabasePrivate() :
+    enum ExtraCommand {
+        NoExtra = 0,
+        Count,
+        Distinct,
+        CountDistinct,
+        Max,
+        Total,
+        Min
+    };
+
+    DatabasePrivate(Database *parent) :
         m_initialized(false),
         _transaction(false),
         m_LastCorrectLogin(-1),
-        m_Driver(Database::SQLite)
+        m_Driver(Database::SQLite),
+        q(parent)
     {
     }
     ~DatabasePrivate() {}
@@ -184,6 +195,82 @@ public:
         return g;
     }
 
+    QString getSelectCommand(const FieldList &select, const JoinList &joins, const FieldList &conditions, ExtraCommand command = NoExtra) const
+    {
+        FieldList get, cond;
+        JoinList jns;
+        QString fields, from;
+        QStringList tables;
+        // check fields and joins on fieldName and tableName
+        for(int i=0; i < select.count(); ++i) {
+            get << select.at(i);
+            if (get.at(i).tableName.isEmpty() || get.at(i).fieldName.isEmpty()) {
+                get[i].tableName = q->table(select.at(i).table);
+                get[i].fieldName = q->fieldName(select.at(i).table, select.at(i).field);
+            }
+        }
+        for(int i=0; i < conditions.count(); ++i) {
+            cond << conditions.at(i);
+            if (cond.at(i).tableName.isEmpty() || cond.at(i).fieldName.isEmpty()) {
+                cond[i].tableName = q->table(cond.at(i).table);
+                cond[i].fieldName = q->fieldName(cond.at(i).table, cond.at(i).field);
+            }
+        }
+        for(int i=0; i < joins.count(); ++i) {
+            Field f1 = q->field(joins.at(i).field1.table, joins.at(i).field1.field);
+            Field f2 = q->field(joins.at(i).field2.table, joins.at(i).field2.field);
+            jns << Join(f1, f2);
+        }
+
+        // calculate fields
+        for(int i=0; i < get.count(); ++i) {
+            fields += QString("`%1`.`%2`, ").arg(get.at(i).tableName).arg(get.at(i).fieldName);
+            tables << get.at(i).tableName;
+        }
+        tables.removeDuplicates();
+
+        if (fields.isEmpty())
+            return QString();
+        fields.chop(2);
+
+        // Calculate conditions
+        QString w;
+        if (cond.count() > 0) {
+            w = "\nWHERE " + q->getWhereClause(cond);
+            for(int i=0; i < cond.count(); ++i) {
+                tables << cond.at(i).tableName;
+            }
+            tables.removeDuplicates();
+        }
+
+        // Calculate joins
+        QString j;
+        for(int i=0; i < jns.count(); ++i) {
+            j += q->joinToSql(jns.at(i)) + "\n";
+            tables.removeAll(jns.at(i).field1.tableName);
+        }
+        tables.removeDuplicates();
+
+        // Add tables
+        foreach(const QString &tab, tables) {
+            from += QString("`%1`, ").arg(tab);
+        }
+        from.chop(2);
+
+        // Manage extra command
+        switch (command) {
+        case Count: fields = QString("count(%1)").arg(fields); break;
+        case CountDistinct: fields = QString("count(distinct %1)").arg(fields); break;
+        case Distinct: fields = QString("distinct(%1)").arg(fields); break;
+        case Max: fields = QString("max(%1)").arg(fields); break;
+        case Min: fields = QString("min(%1)").arg(fields); break;
+        case Total: fields = QString("total(%1)").arg(fields); break;
+        default: break;
+        }
+
+        return QString("SELECT %1 FROM %2\n%3%4").arg(fields, from, j, w);
+    }
+
 public:
     QHash<int, QString>        m_Tables;         // tables are not sorted
     QMultiHash<int, int>       m_Tables_Fields;  // links are not sorted
@@ -197,6 +284,9 @@ public:
     Database::AvailableDrivers m_Driver;
     QMultiHash<int,int> m_PrimKeys; // K=table, V=field
     QVector<DbIndex> m_DbIndexes;
+
+private:
+    Database *q;
 };
 }
 }
@@ -215,9 +305,8 @@ void Database::logAvailableDrivers()
 
 
 Database::Database() :
-    d_database(0)
+    d_database(new DatabasePrivate(this))
 {
-    d_database = new DatabasePrivate();
 }
 
 Database::~Database()
@@ -1450,67 +1539,7 @@ QString Database::select(const FieldList &select, const JoinList &joins) const
 */
 QString Database::select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
 {
-    FieldList get, cond;
-    JoinList jns;
-    QString fields, from;
-    QStringList tables;
-    // check fields and joins on fieldName and tableName
-    for(int i=0; i < select.count(); ++i) {
-        get << select.at(i);
-        if (get.at(i).tableName.isEmpty() || get.at(i).fieldName.isEmpty()) {
-            get[i].tableName = table(select.at(i).table);
-            get[i].fieldName = fieldName(select.at(i).table, select.at(i).field);
-        }
-    }
-    for(int i=0; i < conditions.count(); ++i) {
-        cond << conditions.at(i);
-        if (cond.at(i).tableName.isEmpty() || cond.at(i).fieldName.isEmpty()) {
-            cond[i].tableName = table(cond.at(i).table);
-            cond[i].fieldName = fieldName(cond.at(i).table, cond.at(i).field);
-        }
-    }
-    for(int i=0; i < joins.count(); ++i) {
-        Field f1 = field(joins.at(i).field1.table, joins.at(i).field1.field);
-        Field f2 = field(joins.at(i).field2.table, joins.at(i).field2.field);
-        jns << Join(f1, f2);
-    }
-
-    // calculate fields
-    for(int i=0; i < get.count(); ++i) {
-        fields += QString("`%1`.`%2`, ").arg(get.at(i).tableName).arg(get.at(i).fieldName);
-        tables << get.at(i).tableName;
-    }
-    tables.removeDuplicates();
-
-    if (fields.isEmpty())
-        return QString();
-    fields.chop(2);
-
-    // Calculate conditions
-    QString w;
-    if (cond.count() > 0) {
-        w = "\nWHERE " + getWhereClause(cond);
-        for(int i=0; i < cond.count(); ++i) {
-            tables << cond.at(i).tableName;
-        }
-        tables.removeDuplicates();
-    }
-
-    // Calculate joins
-    QString j;
-    for(int i=0; i < jns.count(); ++i) {
-        j += joinToSql(jns.at(i)) + "\n";
-        tables.removeAll(jns.at(i).field1.tableName);
-    }
-    tables.removeDuplicates();
-
-    // Add tables
-    foreach(const QString &tab, tables) {
-        from += QString("`%1`, ").arg(tab);
-    }
-    from.chop(2);
-
-    return QString("SELECT %1 FROM %2\n%3%4").arg(fields, from, j, w);
+    return d_database->getSelectCommand(select, joins, conditions);
 }
 
 QString Database::select(const FieldList &select, const JoinList &joins, const Field &condition) const
@@ -1640,6 +1669,41 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
     } else {
         LOG_QUERY_ERROR_FOR("Database", query);
     }
+    query.finish();
+    (count==-1) ? DB.rollback() : DB.commit();
+    return count;
+}
+
+/**
+ * \brief returns amount if database records matching given filter
+ *
+ * Executes a COUNT complex SQL command.
+ * Creates its own transaction.
+ * \return int The counted items, -1 in case of an error.
+ * \sa select(), count()
+*/
+int Database::count(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
+{
+    int count = -1;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return count;
+    DB.transaction();
+
+    QString req = d_database->getSelectCommand(select, joins, conditions, DatabasePrivate::Count);
+//    if (WarnSqlCommands)
+        qWarning() << req;
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            count = query.value(0).toInt();
+        } else {
+            LOG_QUERY_ERROR_FOR("Database", query);
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", query);
+    }
+    query.finish();
     (count==-1) ? DB.rollback() : DB.commit();
     return count;
 }

@@ -44,9 +44,9 @@ QT_END_NAMESPACE
 
 /**
  * \file database.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 01 Aug 2011
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 27 Jan 2013
 */
 
 namespace Utils {
@@ -319,6 +319,7 @@ public:
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 
     virtual int count(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
+    virtual int count(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QVariant max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual QVariant max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
     virtual QVariant min(const int &tableref, const int &fieldref, const QString &filter) const;
