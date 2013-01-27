@@ -203,7 +203,5 @@ bool DatabaseInformationDialog::saveContent()
     for(int i=0; i < d->_contentTree->invisibleRootItem()->childCount(); ++i)
         report += d->getTreeItemText(d->_contentTree->invisibleRootItem()->child(i));
 
-    qWarning() << report;
-
     return Utils::saveStringToFile(report, file, Utils::Overwrite, Utils::WarnUser, this);
 }
