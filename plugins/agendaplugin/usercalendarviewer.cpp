@@ -154,10 +154,8 @@ public:
 private:
     UserCalendarViewer *q;
 };
-
 }  // End namespace Internal
 }  // End namespace Agenda
-
 
 UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     QWidget(parent),
