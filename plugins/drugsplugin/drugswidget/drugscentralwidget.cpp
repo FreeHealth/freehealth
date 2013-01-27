@@ -294,8 +294,12 @@ void DrugsCentralWidget::showDrugsDatabaseInformation()
         QTreeWidgetItem *item = new QTreeWidgetItem(dlg.getHeaderTreeWidget(), QStringList() << tr("Drug engine report: %1").arg(engine->name()));
         item->setFont(0, bold);
         item->setFirstColumnSpanned(true);
-        QTreeWidgetItem *report = new QTreeWidgetItem(item, QStringList() << engine->engineDataReport());
+        QString reportText = engine->engineDataReport();
+        QTreeWidgetItem *report = new QTreeWidgetItem(item, QStringList() << reportText);
         report->setFont(0, mono);
+        report->setFirstColumnSpanned(true);
+        if (!reportText.isEmpty())
+            item->setExpanded(true);
     }
 
     progress.close();
