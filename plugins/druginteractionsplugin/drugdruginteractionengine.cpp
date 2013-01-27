@@ -1309,8 +1309,9 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
     joins << Utils::Join(Table_INTERACTIONS, INTERACTIONS_IAID, Table_IA_IAK, INTERACTIONS_IAID);
     joins << Utils::Join(Table_IA_IAK, IA_IAK_IAKID, Table_IAKNOWLEDGE, IAKNOWLEDGE_IAKID);
     Utils::FieldList where;
-    for(int i=0; i < d->m_InteractionsIDs.uniqueKeys().count(); ++i) {
-        int firstId = d->m_InteractionsIDs.uniqueKeys().at(i);
+    const QList<int> &ids = d->m_InteractionsIDs.uniqueKeys();
+    for(int i=0; i < ids.count(); ++i) {
+        int firstId = ids.at(i);
         int firstCount = 1;
         if (drugsBase().isInteractingClass(firstId))
             firstCount = drugsBase().interactingClassSingleAtcCount(firstId);
@@ -1334,7 +1335,10 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
                 while (query.next()) {
                     level += query.value(0).toString();
                 }
+            } else {
+                LOG_QUERY_ERROR(query);
             }
+            query.finish();
 
             // analyze levels (split)
             DrugDrugInteractionEngine::TypesOfIAM r = getLevels(level);
