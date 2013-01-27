@@ -288,11 +288,14 @@ void DrugsCentralWidget::showDrugsDatabaseInformation()
     QList<DrugsDB::IDrugEngine*> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
     QFont bold;
     bold.setBold(true);
+    QFont mono("monospace");
+    mono.setStyleHint(QFont::Monospace);
     foreach(DrugsDB::IDrugEngine *engine, engines) {
         QTreeWidgetItem *item = new QTreeWidgetItem(dlg.getHeaderTreeWidget(), QStringList() << tr("Drug engine report: %1").arg(engine->name()));
         item->setFont(0, bold);
         item->setFirstColumnSpanned(true);
-        new QTreeWidgetItem(item, QStringList() << tkTr(Trans::Constants::ENGINE_REPORT) << engine->engineDataReport());
+        QTreeWidgetItem *report = new QTreeWidgetItem(item, QStringList() << engine->engineDataReport());
+        report->setFont(0, mono);
     }
 
     progress.close();
