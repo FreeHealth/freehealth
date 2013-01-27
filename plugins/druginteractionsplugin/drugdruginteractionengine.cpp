@@ -1303,10 +1303,11 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
             << ContreIndication;
 
     // Get all DDI from database
-    Utils::Field get(Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_TYPE);
+    using namespace DrugsDB::Constants;
+    Utils::Field get(Table_IAKNOWLEDGE, IAKNOWLEDGE_TYPE);
     Utils::JoinList joins;
-    joins << Utils::Join(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_IAID, Constants::Table_IA_IAK, Constants::INTERACTIONS_IAID);
-    joins << Utils::Join(Constants::Table_IA_IAK, Constants::IA_IAK_IAKID, Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_IAKID);
+    joins << Utils::Join(Table_INTERACTIONS, INTERACTIONS_IAID, Table_IA_IAK, INTERACTIONS_IAID);
+    joins << Utils::Join(Table_IA_IAK, IA_IAK_IAKID, Table_IAKNOWLEDGE, IAKNOWLEDGE_IAKID);
     Utils::FieldList where;
     for(int i=0; i < d->m_InteractionsIDs.uniqueKeys().count(); ++i) {
         int firstId = d->m_InteractionsIDs.uniqueKeys().at(i);
@@ -1324,8 +1325,8 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
 
             // get levels of the ddi
             where.clear();
-            where << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID1, QString("='%1'").arg(firstId));
-            where << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID2, QString("='%1'").arg(secondId));
+            where << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID1, QString("='%1'").arg(firstId));
+            where << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID2, QString("='%1'").arg(secondId));
             QString req = drugsBase().select(get, joins, where);
 
             QString level;
