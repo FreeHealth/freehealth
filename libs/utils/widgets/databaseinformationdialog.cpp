@@ -42,6 +42,8 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QFrame>
+#include <QPushButton>
+#include <QFileDialog>
 
 #include <QDebug>
 
@@ -63,6 +65,24 @@ public:
     
     ~DatabaseInformationDialogPrivate()
     {
+    }
+
+    QString getTreeItemText(QTreeWidgetItem *item, int indent = 0)
+    {
+        if (!item)
+            return QString::null;
+        QString text;
+        if (item->columnCount() == 2) {
+            text = QString("%1%2\n%3\n")
+                    .arg(QString().fill(' ', indent))
+                    .arg(item->text(0).leftJustified(35, ' '))
+                    .arg(Utils::indentString(item->text(1), 10+indent));
+        } else {
+            text = Utils::indentString(item->text(0), indent) + "\n";
+        }
+        for(int i=0; i < item->childCount(); ++i)
+            text += getTreeItemText(item->child(i), indent + 4);
+        return text;
     }
     
 public:
@@ -106,7 +126,9 @@ DatabaseInformationDialog::DatabaseInformationDialog(QWidget *parent) :
 
     QDialogButtonBox *box = new QDialogButtonBox(this);
     box->setStandardButtons(QDialogButtonBox::Ok);
+    QPushButton *save = box->addButton(tr("Save this report"), QDialogButtonBox::ActionRole);
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(save, SIGNAL(clicked()), this, SLOT(saveContent()));
 
     setTitle(tkTr(Trans::Constants::DATABASE_INFORMATION));
 
@@ -162,4 +184,26 @@ QTreeWidget *DatabaseInformationDialog::getHeaderTreeWidget()
 QTreeWidget *DatabaseInformationDialog::getDescriptionTreeWidget()
 {
     return d->_contentTree;
+}
+
+/**
+ * Save the content of the treewidgets into a single textual file.
+ * The user is asked for the place and name of the report file name.
+ */
+bool DatabaseInformationDialog::saveContent()
+{
+    QString file = QFileDialog::getSaveFileName(this, tr("Save the current report"),
+                                                QDir::homePath(), "*.txt");
+    if (file.isEmpty())
+        return false;
+    QString report;
+    for(int i=0; i < d->_headerTree->invisibleRootItem()->childCount(); ++i)
+        report += d->getTreeItemText(d->_headerTree->invisibleRootItem()->child(i));
+    report += "\n\n";
+    for(int i=0; i < d->_contentTree->invisibleRootItem()->childCount(); ++i)
+        report += d->getTreeItemText(d->_contentTree->invisibleRootItem()->child(i));
+
+    qWarning() << report;
+
+    return Utils::saveStringToFile(report, file, Utils::Overwrite, Utils::WarnUser, this);
 }

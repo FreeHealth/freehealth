@@ -59,6 +59,9 @@ public:
     QTreeWidget *getHeaderTreeWidget();
     QTreeWidget *getDescriptionTreeWidget();
     
+public Q_SLOTS:
+    bool saveContent();
+
 private:
     Internal::DatabaseInformationDialogPrivate *d;
 };
