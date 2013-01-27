@@ -639,7 +639,7 @@ bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, cons
                 return false;
             }
 
-            QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toLatin1());
+            QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
             if (!codec) {
                 LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
                 // fallback to UTF8
@@ -659,7 +659,7 @@ bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, cons
             return false;
         }
 
-        QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toLatin1());
+        QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
         if (!codec) {
             LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
             // fallback to UTF8
