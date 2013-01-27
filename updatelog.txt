@@ -13,6 +13,7 @@ FreeMedForms
   * All applications are compatible with Qt 4.8 & 5.0
   * New languages available (translations undone)
   * Autocompletion of PDF using scripts in forms
+  * Adding drug-drug interaction engine report in menu: Help / About databases / Drugs database
   * New plugin: PadTools
     * Better management of tokened templates
     * Specific UI for tokened templates edition
@@ -27,8 +28,10 @@ FreeMedForms
     * Managing state/province in address (using the zipcodes datapacks)
     * Don't show forms with the 'noepsiode' option, show its first children instead
     * Correctly set the taborder in forms
+    * Episode view header font were too small on Linux
   * FreeDiams
     * Using the padtools for the posologic sentence edition
+    * DDI engine error when detecting some DDI
   * FreeAccount
   * FreeToolBox
     * UI update, workflow simplified
@@ -43,10 +46,11 @@ FreeMedForms
     * Correcting crash when download dialog is cancelled
     * Avoid multi-clicks on toolbar actions
     * Correctly manages versions of available datapacks
-    * Improving the view (text uncut)
+    * Improving the view
     * Improving communication with the servers
   * Forms
     * Identity sub-form updated with detaileswidget and a trusted person information
+    * New formitems and options available, see the XML form specifications in documentation
   * Debian specific
   * Under the hood
 
