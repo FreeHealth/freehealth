@@ -1639,8 +1639,6 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 }
 
 /**
- * \brief returns amount if database records matching given filter
- *
  * Executes a COUNT SQL command on the table \e tableref, field \e fieldref
  * with the filter \e filter. Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
@@ -1675,12 +1673,10 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
 }
 
 /**
- * \brief returns amount if database records matching given filter
- *
  * Executes a COUNT complex SQL command.
  * Creates its own transaction.
  * \return int The counted items, -1 in case of an error.
- * \sa select(), count()
+ * \sa select(), count(), countDistinct()
 */
 int Database::count(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
 {
@@ -1691,7 +1687,39 @@ int Database::count(const FieldList &select, const JoinList &joins, const FieldL
     DB.transaction();
 
     QString req = d_database->getSelectCommand(select, joins, conditions, DatabasePrivate::Count);
-//    if (WarnSqlCommands)
+    if (WarnSqlCommands)
+        qWarning() << req;
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            count = query.value(0).toInt();
+        } else {
+            LOG_QUERY_ERROR_FOR("Database", query);
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", query);
+    }
+    query.finish();
+    (count==-1) ? DB.rollback() : DB.commit();
+    return count;
+}
+
+/**
+ * Executes a COUNT complex SQL command with a distinct clause on the field to retrieve.
+ * Creates its own transaction.
+ * \return int The counted items, -1 in case of an error.
+ * \sa select(), count()
+*/
+int Database::countDistinct(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
+{
+    int count = -1;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return count;
+    DB.transaction();
+
+    QString req = d_database->getSelectCommand(select, joins, conditions, DatabasePrivate::CountDistinct);
+    if (WarnSqlCommands)
         qWarning() << req;
     QSqlQuery query(DB);
     if (query.exec(req)) {

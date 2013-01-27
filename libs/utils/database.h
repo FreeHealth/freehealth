@@ -320,6 +320,7 @@ public:
 
     virtual int count(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual int count(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
+    virtual int countDistinct(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QVariant max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual QVariant max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
     virtual QVariant min(const int &tableref, const int &fieldref, const QString &filter) const;
