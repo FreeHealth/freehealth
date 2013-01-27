@@ -33,6 +33,7 @@
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
 #include <drugsbaseplugin/idrug.h>
+#include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -1308,7 +1309,7 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
     Utils::JoinList joins;
     joins << Utils::Join(Table_INTERACTIONS, INTERACTIONS_IAID, Table_IA_IAK, INTERACTIONS_IAID);
     joins << Utils::Join(Table_IA_IAK, IA_IAK_IAKID, Table_IAKNOWLEDGE, IAKNOWLEDGE_IAKID);
-    Utils::FieldList where;
+    Utils::FieldList conds;
     const QList<int> &ids = d->m_InteractionsIDs.uniqueKeys();
     for(int i=0; i < ids.count(); ++i) {
         int firstId = ids.at(i);
@@ -1325,10 +1326,10 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
             n = firstCount * secondCount;
 
             // get levels of the ddi
-            where.clear();
-            where << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID1, QString("='%1'").arg(firstId));
-            where << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID2, QString("='%1'").arg(secondId));
-            QString req = drugsBase().select(get, joins, where);
+            conds.clear();
+            conds << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID1, QString("='%1'").arg(firstId));
+            conds << Utils::Field(Table_INTERACTIONS, INTERACTIONS_ATC_ID2, QString("='%1'").arg(secondId));
+            QString req = drugsBase().select(get, joins, conds);
 
             QString level;
             if (query.exec(req)) {
@@ -1361,16 +1362,50 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
                 .arg(QString::number(it.value()*100/total, 'G', 2));
     }
     out += QString("\n%1 %2 100%\n")
-            .arg(QString("Total DDI per INN").leftJustified(50, '.'))
+            .arg(tr("Total DDI per INN").leftJustified(50, '.'))
             .arg(QString::number(total).leftJustified(7));
+
+    get = Utils::Field(Table_MASTER, MASTER_DID);
+    Utils::Join j1(Table_COMPO, COMPO_DID, Table_MASTER, MASTER_DID);
+//    Utils::Join j2(Table_MOLS, MOLS_MID, Table_COMPO, COMPO_MID);
+    Utils::Join j3(Table_LK_MOL_ATC, LK_MID, Table_COMPO, COMPO_MID);
+    joins.clear();
+    joins << j1 << j3;
+
+    QHash<int, QString> where;
+    conds.clear();
+    if (drugsBase().actualDatabaseInformation()) {
+        conds << Utils::Field(Table_MASTER, MASTER_SID, QString("='%1'").arg(drugsBase().actualDatabaseInformation()->sid));
+        where.insert(MASTER_SID, QString("='%1'").arg(drugsBase().actualDatabaseInformation()->sid));
+    } else {
+        conds << Utils::Field(Table_MASTER, MASTER_SID, QString("='%1'").arg(1));
+        where.insert(MASTER_SID, QString("='%1'").arg(1));
+    }
+    conds << Utils::Field(Table_LK_MOL_ATC, LK_ATC_ID, QString("IS NOT NULL"));
+
+    int analyzableDrugs = drugsBase().countDistinct(Utils::FieldList() << get, joins, conds);
+    int totalDrugs = drugsBase().count(Table_MASTER, MASTER_DID, drugsBase().getWhereClause(Table_MASTER, where));
+
+    out += QString("\n%1 %2\n")
+            .arg(tr("Total number of drugs").leftJustified(50, '.'))
+            .arg(QString::number(totalDrugs).leftJustified(7));
+    out += QString("%1 %2 %3%\n")
+            .arg(tr("Analyzable drugs").leftJustified(50, '.'))
+            .arg(QString::number(analyzableDrugs).leftJustified(7))
+            .arg(QString::number(analyzableDrugs*100/totalDrugs, 'G', 2));
+
+    out += "\n" + tr("Memory usage (partial data)");
     out += QString("%1 %2 100%\n")
-            .arg(QString("Cached in memory (pairs)").leftJustified(50, '.'))
+            .arg(tr("Cached in memory (pairs of integers)").leftJustified(50, '.'))
             .arg(QString::number(d->m_InteractionsIDs.count()).leftJustified(7));
     out += QString("%1 %2 100%\n")
-            .arg(QString("Cached in memory (unique first interactor)").leftJustified(50, '.'))
+            .arg(tr("Cached in memory (unique first interactor)").leftJustified(50, '.'))
             .arg(QString::number(d->m_InteractionsIDs.uniqueKeys().count()).leftJustified(7));
 
-    Utils::Log::logTimeElapsed(chrono, "DrugDrugInteractionEngine", "Creating report");
+    out += QString("\n%1 %2ms\n")
+            .arg(tr("Report generation time").leftJustified(50, '.'))
+            .arg(chrono.elapsed());
+
     return out;
 }
 
