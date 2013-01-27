@@ -639,22 +639,15 @@ bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, cons
                 return false;
             }
 
-            if (forceEncoding.compare("UTF-8")!=0) {
-                QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
-                if (!codec) {
-                    LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
-                    // fallback to UTF8
-                    file.write(toSave.toUtf8());
-                } else {
-                    file.write(codec->fromUnicode(toSave));
-                }
-            } else {
-                file.write(toSave.toUtf8());
+            QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toLatin1());
+            if (!codec) {
+                LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
+                // fallback to UTF8
+                codec = QTextCodec::codecForName("UTF-8");
             }
+            file.write(codec->fromUnicode(toSave));
             file.close();
-
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
-
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
         } else {
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists): ") + file.fileName());
             return false;
@@ -666,21 +659,15 @@ bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, cons
             return false;
         }
 
-        if (forceEncoding.compare("UTF-8")!=0) {
-            QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toUtf8());
-            if (!codec) {
-                LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
-                // fallback to UTF8
-                file.write(toSave.toUtf8());
-            } else {
-                file.write(codec->fromUnicode(toSave));
-            }
-        } else {
-            file.write(toSave.toUtf8());
+        QTextCodec *codec = QTextCodec::codecForName(forceEncoding.toLatin1());
+        if (!codec) {
+            LOG_ERROR_FOR("Utils", "Codec not found: " + forceEncoding);
+            // fallback to UTF8
+            codec = QTextCodec::codecForName("UTF-8");
         }
+        file.write(codec->fromUnicode(toSave));
         file.close();
-
-        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
+        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved (%2)").arg(file.fileName()).arg(forceEncoding));
     }
     return true;
 }
@@ -1590,6 +1577,16 @@ QString lineWrapString(const QString &in, int lineLength)
     }
 
     return tempStr;
+}
+
+/** Indent a string of \e lineIndent spaces */
+QString indentString(const QString &in, int lineIndent)
+{
+    QString indent;
+    indent = indent.fill(' ', lineIndent);
+    QString correctedIn = in;
+    correctedIn = correctedIn.replace("\n", QString("\n"+indent));
+    return QString("%1%2").arg(indent).arg(correctedIn);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

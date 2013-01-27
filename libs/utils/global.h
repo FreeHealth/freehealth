@@ -168,6 +168,7 @@ UTILS_EXPORT QString toHtmlAccent(const QString &html);
 UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
 UTILS_EXPORT QString removeAccents(const QString &text);
 UTILS_EXPORT QString lineWrapString(const QString &in, int lineLength);
+UTILS_EXPORT QString indentString(const QString &in, int lineIndent);
 
 // Some functions for XML Handling
 UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &data, const int indent = 0, const bool valueToBase64 = false );
