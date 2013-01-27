@@ -1390,22 +1390,22 @@ QString DrugDrugInteractionEngine::getDrugDrugInteractionLevelStatistics() const
             .arg(tr("Total number of drugs").leftJustified(50, '.'))
             .arg(QString::number(totalDrugs).leftJustified(7));
     out += QString("%1 %2 %3%\n")
-            .arg(tr("Analyzable drugs").leftJustified(50, '.'))
+            .arg(tr("Analyzable drugs*").leftJustified(50, '.'))
             .arg(QString::number(analyzableDrugs).leftJustified(7))
             .arg(QString::number(analyzableDrugs*100/totalDrugs, 'G', 2));
 
-    out += "\n" + tr("Memory usage (partial data)");
-    out += QString("%1 %2 100%\n")
+    out += "\n" + tr("Memory usage (partial data)") + "\n";
+    out += QString("%1 %2\n")
             .arg(tr("Cached in memory (pairs of integers)").leftJustified(50, '.'))
             .arg(QString::number(d->m_InteractionsIDs.count()).leftJustified(7));
-    out += QString("%1 %2 100%\n")
+    out += QString("%1 %2\n")
             .arg(tr("Cached in memory (unique first interactor)").leftJustified(50, '.'))
             .arg(QString::number(d->m_InteractionsIDs.uniqueKeys().count()).leftJustified(7));
 
-    out += QString("\n%1 %2ms\n")
+    out += QString("\n%1 %2ms\n\n")
             .arg(tr("Report generation time").leftJustified(50, '.'))
             .arg(chrono.elapsed());
-
+    out += Utils::lineWrapString(tr("*: analyzable drugs have one or more of their components recognized by the engine. Warning: Some of these drugs can have one or more molecule not recognized by the engine."), 70);
     return out;
 }
 
