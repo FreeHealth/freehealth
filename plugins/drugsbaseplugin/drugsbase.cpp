@@ -207,6 +207,7 @@ public:
     void getInteractingClassTree()
     {
         m_ClassToAtcs.clear();
+        m_ClassesId.clear();
         // Retreive Interacting classes (1) ---> (n) ATC tree
         QString req = q->select(Constants::Table_IAM_TREE, QList<int>() << Constants::IAM_TREE_ID_CLASS << Constants::IAM_TREE_ID_ATC);
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
@@ -217,6 +218,7 @@ public:
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
         }
+        m_ClassesId = m_ClassToAtcs.uniqueKeys();
         LOG_FOR(q, QString("Retrieving %1 interacting classes").arg(m_ClassToAtcs.uniqueKeys().count()));
     }
 
@@ -339,6 +341,7 @@ public:
 
     QMultiHash<int, int> m_AtcToMol;      /*!< Link ATC code to Molecule Code */
     QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ATC Class to ATC Id (content of the class) */
+    QList<int> m_ClassesId;
     QCache<int, AtcLabel> m_AtcLabelCache;
     QHash<QString, int> m_DbUids;
     // TODO: improve memory usage here
@@ -1656,7 +1659,7 @@ QVector<int> DrugsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &cod
 /** Return true if the ATC id correspond to an interacting class */
 bool DrugsBase::isInteractingClass(int atcId)
 {
-    return d->m_ClassToAtcs.uniqueKeys().contains(atcId);
+    return d->m_ClassesId.contains(atcId);
 }
 
 /**
@@ -1675,11 +1678,11 @@ QList<int> DrugsBase::interactingClassContent(int classId)
 int DrugsBase::interactingClassSingleAtcCount(int classId)
 {
     int n = 0;
-    const QList<int> &content = interactingClassContent(classId);
+    const QList<int> &content = d->m_ClassToAtcs.values(classId);
     for(int i=0; i < content.count(); ++i) {
         int id = content.at(i);
         if (isInteractingClass(id))
-            n += interactingClassSingleAtcCount(classId);
+            n += interactingClassSingleAtcCount(id);
         else
             ++n;
     }
