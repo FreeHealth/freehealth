@@ -2124,7 +2124,7 @@ void AlertBase::onCoreFirstRunCreationRequested()
 }
 
 /** For debugging purpose */
-void AlertBase::toTreeWidget(QTreeWidget *tree)
+void AlertBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
     tree->expandAll();

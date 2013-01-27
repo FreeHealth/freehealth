@@ -128,7 +128,7 @@ public:
     AlertPackDescription getAlertPackDescription(const QString &uuid);
 
     // For debugging purpose
-    void toTreeWidget(QTreeWidget *tree);
+    void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
