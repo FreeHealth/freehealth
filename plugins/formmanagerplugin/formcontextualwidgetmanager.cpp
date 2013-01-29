@@ -39,6 +39,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
@@ -437,7 +438,7 @@ void FormActionHandler::onPrintFormRequested()
 
 void FormActionHandler::showDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::FORM_DATABASE_INFORMATION));
     dlg.setDatabase(*episodeBase());
     Utils::resizeAndCenter(&dlg);

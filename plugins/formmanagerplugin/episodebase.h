@@ -170,7 +170,7 @@ private:
     bool saveEpisodeModifications(Internal::EpisodeData *episode);
 
 public:
-    void toTreeWidget(QTreeWidget *tree);
+    void toTreeWidget(QTreeWidget *tree) const;
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

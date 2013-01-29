@@ -43,11 +43,12 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
 
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -279,7 +280,7 @@ void PatientActionHandler::printPatientsInformation()
 
 void PatientActionHandler::showPatientDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::PATIENT_DATABASE_INFORMATION));
     dlg.setDatabase(*PatientBase::instance());
     Utils::resizeAndCenter(&dlg);

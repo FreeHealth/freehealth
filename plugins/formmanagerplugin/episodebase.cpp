@@ -1246,7 +1246,7 @@ int EpisodeBase::getNumberOfEpisodes(const QString &formUid)
     return count(Constants::Table_EPISODES, Constants::EPISODES_ID, getWhereClause(Constants::Table_EPISODES, where));
 }
 
-void EpisodeBase::toTreeWidget(QTreeWidget *tree)
+void EpisodeBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
     QString uuid = user()->uuid();
