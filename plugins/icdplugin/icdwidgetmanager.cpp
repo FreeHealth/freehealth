@@ -36,11 +36,12 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -383,7 +384,7 @@ void IcdActionHandler::recreateDatabase()
 
 void IcdActionHandler::showDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::ICD_DATABASE_INFORMATION));
     dlg.setDatabase(*IcdDatabase::instance());
     Utils::resizeAndCenter(&dlg);

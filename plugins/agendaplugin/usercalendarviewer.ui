@@ -24,7 +24,7 @@
        <item>
         <widget class="QGroupBox" name="availableAgendasGroup">
          <property name="title">
-          <string notr="true">Agendas of Joh Doe</string>
+          <string notr="true">Your agendas</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">

@@ -146,7 +146,7 @@ private:
  * The unique instance is available in Patients::PatientCore::patientBar()
  */
 PatientBar::PatientBar(QWidget *parent) :
-    QWidget(parent),
+    Core::IPatientBar(parent),
     d(new Internal::PatientBarPrivate(this))
 {
     setObjectName("PatientBar");

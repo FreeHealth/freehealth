@@ -232,7 +232,7 @@ bool UserBase::isNewlyCreated() const
 }
 
 /** Return the current version of the database */
-QString UserBase::getCurrentVersion()
+QString UserBase::getCurrentVersion() const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__)) {
@@ -1518,7 +1518,7 @@ bool UserBase::updateMaxLinkId(const int max)
     return true;
 }
 
-void UserBase::toTreeWidget(QTreeWidget *tree)
+void UserBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
     if (!tree)

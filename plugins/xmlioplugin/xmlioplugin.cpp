@@ -37,6 +37,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -46,6 +48,8 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 
 #include <QAction>
 #include <QtPlugin>
@@ -53,10 +57,12 @@
 
 using namespace XmlForms;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 XmlFormIOPlugin::XmlFormIOPlugin() :
     ExtensionSystem::IPlugin(),
@@ -111,8 +117,8 @@ void XmlFormIOPlugin::extensionsInitialized()
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     QAction *a = new QAction(this);
     a->setObjectName("aXmlFormIOPlugin.showDatabaseInformation");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Core::Id("aXmlFormIOPlugin.showDatabaseInformation"), globalcontext);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    Core::Command *cmd = actionManager()->registerAction(a, Core::Id("aXmlFormIOPlugin.showDatabaseInformation"), globalcontext);
     cmd->setTranslations(Trans::Constants::XMLIO_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
@@ -143,7 +149,7 @@ ExtensionSystem::IPlugin::ShutdownFlag XmlFormIOPlugin::aboutToShutdown()
 
 void XmlFormIOPlugin::showDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::XMLIO_DATABASE_INFORMATION));
     dlg.setDatabase(*Internal::XmlIOBase::instance());
     Utils::resizeAndCenter(&dlg);

@@ -458,7 +458,7 @@ void PatientBase::onCoreFirstRunCreationRequested()
 
 
 /** For debugging purpose */
-void PatientBase::toTreeWidget(QTreeWidget *tree)
+void PatientBase::toTreeWidget(QTreeWidget *tree) const
 {
     Database::toTreeWidget(tree);
     QString uuid = user()->uuid();

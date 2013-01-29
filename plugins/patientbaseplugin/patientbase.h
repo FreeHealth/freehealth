@@ -82,7 +82,7 @@ public:
 
 //    bool mergePatients(const QString &uuid1, const QString &uuid2);
 
-    void toTreeWidget(QTreeWidget *tree);
+    void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

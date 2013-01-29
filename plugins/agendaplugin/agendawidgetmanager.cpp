@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "agendawidgetmanager.h"
 #include "agendacore.h"
+#include "agendabase.h"
 #include <agendaplugin/constants.h>
 
 #include <utils/log.h>
@@ -33,12 +34,13 @@
 #include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constanttranslations.h>
 
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -334,7 +336,7 @@ void AgendaActionHandler::printPreviewSelection()
 
 void AgendaActionHandler::showAgendaDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::AGENDA_DATABASE_INFORMATION));
     dlg.setDatabase(agendaCore().agendaBase());
     Utils::resizeAndCenter(&dlg);

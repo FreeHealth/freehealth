@@ -71,7 +71,7 @@ public:
     bool isInitialized() const;
     bool checkDatabaseVersion();
     bool isNewlyCreated() const;
-    QString getCurrentVersion();
+    QString getCurrentVersion() const;
 
     bool createDefaultUser();
     bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
@@ -108,7 +108,7 @@ public:
     int getMaxLinkId();
     bool updateMaxLinkId(const int max);
 
-    void toTreeWidget(QTreeWidget *tree);
+    void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

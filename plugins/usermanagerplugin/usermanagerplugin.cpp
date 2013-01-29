@@ -50,11 +50,12 @@
 #include "widgets/usermanager.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/constants.h>
-#include <coreplugin/translators.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/icommandline.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -67,6 +68,9 @@
 #include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
+#include <translationutils/trans_titles.h>
+#include <translationutils/trans_user.h>
+#include <translationutils/trans_menu.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -439,7 +443,7 @@ void UserManagerPlugin::showUserManager()
 
 void UserManagerPlugin::showDatabaseInformation()
 {
-    Utils::DatabaseInformationDialog dlg(this);
+    Utils::DatabaseInformationDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.setTitle(tkTr(Trans::Constants::TEMPLATE_DATABASE_INFORMATION));
     dlg.setDatabase(*userBase());
     Utils::resizeAndCenter(&dlg);
