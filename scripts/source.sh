@@ -165,6 +165,7 @@ freetoolbox \
 
 PLUGINS_SOURCES="\
 plugins/fmf_plugins.pri \
+plugins/pluginjsonmetadata.xsl \
 plugins/accountbaseplugin \
 plugins/accountplugin \
 plugins/agendaplugin \
@@ -182,6 +183,7 @@ plugins/fmfcoreplugin \
 plugins/fmfmainwindowplugin \
 plugins/formmanagerplugin \
 plugins/icdplugin \
+plugins/identityplugin \
 plugins/listviewplugin \
 plugins/padtoolsplugin \
 plugins/patientbaseplugin
@@ -191,9 +193,10 @@ plugins/saverestoreplugin \
 plugins/scriptplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
+plugins/toolsplugin \
 plugins/usermanagerplugin \
-plugins/xmlioplugin \
 plugins/webcamplugin \
+plugins/xmlioplugin \
 plugins/zipcodesplugin \
 "
 
