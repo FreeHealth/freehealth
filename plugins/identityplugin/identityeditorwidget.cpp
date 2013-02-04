@@ -236,6 +236,8 @@ public:
 
         ui->genderCombo->addItems(genders());
         ui->titleCombo->addItems(titles());
+        ui->titleCombo->setFocusPolicy(Qt::StrongFocus);
+        ui->genderCombo->setFocusPolicy(Qt::StrongFocus);
 
         ui->language->setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath));
         ui->language->setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
@@ -600,6 +602,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     QWidget::setTabOrder(d->ui->firstname, d->ui->secondName);
     QWidget::setTabOrder(d->ui->secondName, d->ui->dob);
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
+
     QWidget *lastTab = d->ui->genderCombo;
     bool showAddress = (widgets.testFlag(Street)
             || widgets.testFlag(City)
