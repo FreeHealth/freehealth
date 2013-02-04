@@ -32,6 +32,7 @@ FreeMedForms
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI
+    * Corrected prescription printing using HTML posologic sentence instead of the non-HTML one
   * FreeAccount
   * FreeToolBox
     * UI update, workflow simplified
