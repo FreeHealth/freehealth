@@ -153,6 +153,8 @@ bool UserCore::forceReInitialization()
  */
 bool UserCore::postCoreInitialization()
 {
+    if (!user())
+        return false;
     d->_model->checkUserPreferencesValidity();
     // be sure everyone is informed of the currently connected user
     d->_model->emitUserConnected();
