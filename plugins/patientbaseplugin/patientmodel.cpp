@@ -241,6 +241,7 @@ PatientModel::PatientModel(QObject *parent) :
     onCoreDatabaseServerChanged();
     d->m_RefreshModelOnCoreDatabaseServerChanged = true;
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+//    connect(d->m_SqlPatient, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(onPrimeInsert(int,QSqlRecord&)));
 }
 
 PatientModel::~PatientModel()
@@ -264,6 +265,27 @@ void PatientModel::changeUserUuid()
 
     d->refreshFilter();
 }
+
+//void PatientModel::onPrimeInsert(int row, QSqlRecord &record)
+//{
+//    // find an unused uuid
+//    bool findUuid = false;
+//    QString uuid;
+//    while (!findUuid) {
+//        // TODO: Take care to inifinite looping...
+//        uuid = Utils::Database::createUid();
+//        QString f = QString("%1='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
+//        findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);
+//    }
+//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
+//        ok = false;
+//        LOG_ERROR("Unable to setData to newly created patient.");
+//    }
+//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+//        ok = false;
+//        LOG_ERROR("Unable to setData to newly created patient.");
+//    }
+//}
 
 void PatientModel::onCoreDatabaseServerChanged()
 {
@@ -830,7 +852,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
     for(int i=0; i < count; ++i) {
         if (!d->m_SqlPatient->insertRow(row+i, parent)) {
             ok = false;
-            Utils::Log::addError(this, "Unable to create a new patient. PatientModel::insertRows()");
+            LOG_ERROR("Unable to create a new patient. PatientModel::insertRows()");
             continue;
         }
         // find an unused uuid

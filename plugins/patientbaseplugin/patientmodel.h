@@ -30,12 +30,15 @@
 #include <patientbaseplugin/patientbase_exporter.h>
 
 #include <QAbstractTableModel>
+QT_BEGIN_NAMESPACE
+class QSqlRecord;
+QT_END_NAMESPACE
 
 /**
  * \file patientmodel.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 06 Dec 2012
+ * \version 0.8.2
+ * \date 04 Feb 2013
 */
 
 namespace Patients {
@@ -110,6 +113,7 @@ protected Q_SLOTS:
     void changeUserUuid();
 
 private Q_SLOTS:
+//    void onPrimeInsert(int row, QSqlRecord &record);
     void onCoreDatabaseServerChanged();
 
 private:
