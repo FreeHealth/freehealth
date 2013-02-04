@@ -127,6 +127,7 @@ FrenchSocialNumberFormData::~FrenchSocialNumberFormData()
 
 void FrenchSocialNumberFormData::clear()
 {
+    m_Widget->clear();
     populateWithPatientData();
 }
 

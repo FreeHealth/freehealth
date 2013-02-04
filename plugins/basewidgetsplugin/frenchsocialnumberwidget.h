@@ -47,6 +47,7 @@ public:
     explicit FrenchSocialNumberWidget(QWidget *parent = 0);
     ~FrenchSocialNumberWidget();
     bool initialize();
+    void clear();
 
     void setNumberWithControlKey(const QString &number);
     void setNumberWithoutControlKey(const QString &number);

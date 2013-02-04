@@ -123,6 +123,13 @@ bool FrenchSocialNumberWidget::initialize()
     return true;
 }
 
+/** Clear the widget content and cache */
+void FrenchSocialNumberWidget::clear()
+{
+    d->ui->nss->clear();
+    d->ui->key->clear();
+}
+
 void FrenchSocialNumberWidget::setNumberWithControlKey(const QString &number)
 {
     QString s = number;
