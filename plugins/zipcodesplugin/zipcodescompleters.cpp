@@ -89,6 +89,7 @@ const char* const SELECT_LIMIT  = "LIMIT 0, 50";
 ZipCountryModel::ZipCountryModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
+    setObjectName("ZipCountryModel");
 }
 
 QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
