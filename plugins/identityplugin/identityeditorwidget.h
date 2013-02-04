@@ -143,11 +143,6 @@ public:
     QDate currentDateOfBirth() const;
     QString currentLanguage() const;
 
-    // Login / Password part
-    void setMinimalLoginLength(int length);
-    void setMinimalPasswordLength(int length);
-    void setCheckPasswordConfirmation(bool check);
-
     QString currentClearLogin() const;
     QString currentClearPassword() const;
     bool isPasswordCompleted() const;
@@ -185,9 +180,6 @@ private:
 private Q_SLOTS:
     void photoButton_clicked();
     void onCurrentPatientChanged();
-    void checkLoginLength(const QString &login);
-    void checkPasswordLength(const QString &password);
-    void checkPasswordConfirmation(const QString &);
     void onPhotoPixmapChanged();
     void onPhotoProviderRequested();
     void onPhotoProviderPhotoReady(const QPixmap &pixmap);

@@ -54,7 +54,8 @@ public:
     explicit PasswordWidget(QWidget *parent = 0);
     ~PasswordWidget();
     bool initialize();
-    
+    bool isPasswordValidAndConfirmed();
+    void setReadOnly(bool readonly);
     QLineEdit *loginEditor() const;
 
 Q_SIGNALS:
