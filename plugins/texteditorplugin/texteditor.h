@@ -34,6 +34,7 @@
 
 #include <texteditorplugin/texteditor_exporter.h>
 #include <texteditorplugin/tableeditor.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <QObject>
 #include <QWidget>
@@ -92,6 +93,9 @@ public:
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();
     void setTypes(Types type);
+    void setUserDocumentForPrintingProcess(Core::IDocumentPrinter::PapersToUse papers);
+    void setAlwaysPrintDuplicata(bool printDuplicata);
+    void setDocumentTitle(const QString &title);
 
     void addContext(const Core::Context &context);
 
@@ -122,6 +126,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void fileOpen();
     void saveAs();
+    void print();
 
 //    void undo();
 //    void redo();

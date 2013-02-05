@@ -50,15 +50,18 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_filepathxml.h>
 
-#include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
-#include <coreplugin/constants_menus.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QLocale>
 #include <QAction>
@@ -91,6 +94,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace Editor {
 namespace Internal {
@@ -164,7 +168,9 @@ public:
         m_Context(0),
         textEdit(0),
         m_Parent(parent),
-        m_ToolBarIsVisible(false)
+        m_ToolBarIsVisible(false),
+        _papers(Core::IDocumentPrinter::Papers_Generic_User),
+        _alwaysPrintDuplicata(false)
     {
         textEdit = new TextEditorWithControl(m_Parent);
         //textEdit = new TextEditorHtmlPaster(m_Parent);
@@ -280,6 +286,10 @@ public:
     //TextEditorHtmlPaster *textEdit;
     QWidget *m_Parent;
     bool m_ToolBarIsVisible;
+
+    Core::IDocumentPrinter::PapersToUse _papers;
+    bool _alwaysPrintDuplicata;
+    QString _docTitle;
 };
 
 }  // End Internal
@@ -370,6 +380,28 @@ void TextEditor::setTypes(Types type)
     // update toolbar
     d->populateToolbar();
     Core::ICore::instance()->contextManager()->updateContext();
+}
+
+/**
+ * Define the papers for the document. Papers are header, footer and watermark.
+ * By default, set to Core::IDocumentPrinter::Papers_Generic_User.
+ * \sa Core::IDocumentPrinter
+ */
+void TextEditor::setUserDocumentForPrintingProcess(Core::IDocumentPrinter::PapersToUse papers)
+{
+    d->_papers = papers;
+}
+
+/** Define the duplicata printing. By default, set to false. */
+void TextEditor::setAlwaysPrintDuplicata(bool printDuplicata)
+{
+    d->_alwaysPrintDuplicata = printDuplicata;
+}
+
+/** Define the document title to use for the print process (token content) */
+void TextEditor::setDocumentTitle(const QString &title)
+{
+    d->_docTitle = title;
 }
 
 /** Adds a Core::Context to this contextual widget */
@@ -554,6 +586,7 @@ void TextEditor::fileOpen()
     }
 }
 
+/** Save the content of the text editor */
 void TextEditor::saveAs()
 {
     QAction *a = qobject_cast<QAction *>(sender());
@@ -588,6 +621,16 @@ void TextEditor::saveAs()
         }
 
     }
+}
+
+void TextEditor::print()
+{
+    Core::IDocumentPrinter *print = printer();
+    print->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, d->_docTitle);
+    print->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    print->print(d->textEdit->document(), d->_papers, d->_alwaysPrintDuplicata);
 }
 
 //--------------------------------------------------------------------------------------------------------
