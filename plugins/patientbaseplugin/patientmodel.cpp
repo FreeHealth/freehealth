@@ -933,12 +933,21 @@ bool PatientModel::submit()
     return ok;
 }
 
+/** Refresh the model. Reset the filter and reselect the database. */
 bool PatientModel::refreshModel()
 {
+    // Keep the current patient persistent index in cache
+    QModelIndex currentPatient = d->m_CurrentPatientIndex;
+    // Reset the model
     beginResetModel();
     d->refreshFilter();
-    d->m_SqlPatient->select();
     endResetModel();
+    // Redefine the current patient index
+    d->m_CurrentPatientIndex = currentPatient;
+    if (index(d->m_CurrentPatientIndex.row(), Core::IPatient::Uid).data().toString() != d->m_CurrentPatientUuid) {
+        LOG_ERROR("After refreshing the patient model, the current patient uuid is wrong");
+        return false;
+    }
     return true;
 }
 
