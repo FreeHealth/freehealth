@@ -931,11 +931,11 @@ bool Printer::preparePages()
         return false;
 
     if (d->isSimple()) {
-        Utils::Log::addMessage(this, "Printing using simpleDraw method.");
+        LOG("Printing using simpleDraw method.");
         return d->simpleDraw();
     }
     else {
-        Utils::Log::addMessage(this, "WARNING: Printing using complexDraw method (should be buggy).");
+        LOG("WARNING: Printing using complexDraw method (should be buggy).");
         return d->complexDraw();
     }
 }
