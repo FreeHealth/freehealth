@@ -341,6 +341,10 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
     // Same patient as the current one?
     const QString &patientUuid = this->patientUuid(index);
+    if (patientUuid.isEmpty()) {
+        LOG_ERROR(QString("Empty patient Uuid. Index(%1,%2,%3)").arg(index.row()).arg(index.column()).arg(index.model()->objectName()));
+        return;
+    }
     if (patientUuid == d->m_CurrentPatientUuid) {
         return;
     }
