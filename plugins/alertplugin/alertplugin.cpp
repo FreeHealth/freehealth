@@ -58,6 +58,7 @@ AlertPlugin::AlertPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AlertPlugin";
+    setObjectName("AlertPlugin");
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_alert");
