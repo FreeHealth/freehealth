@@ -38,8 +38,9 @@
 #include "patientbar.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/log.h>
 #include <translationutils/constants.h>
@@ -55,6 +56,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 namespace Patients {
 
@@ -208,10 +210,13 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
 {
     // Take the Core:IPatient internal PatientModel
     PatientModel *patientModel = d->_patientModelWrapper->patientModel();
+    LOG("Changing the current patient. Actual current patient: " + patientModel->index(patientModel->currentPatient().row(), Core::IPatient::Uid).data().toString());
 
     // Start changing the current patient
-    if (!patientModel->beginChangeCurrentPatient())
+    if (!patientModel->beginChangeCurrentPatient()) {
+        LOG_ERROR("Unable to change the current patient. Start process wrong.");
         return false;
+    }
 
     // Update the filter to the correct uuid
     patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
@@ -227,6 +232,7 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
     // Finish the current patient modification process
     patientModel->endChangeCurrentPatient();
 
+    LOG("Current patient changed to: " + patient()->uuid());
     return true;
 }
 
@@ -237,8 +243,13 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
  */
 void PatientCore::refreshAllPatientModel() const
 {
+    // Clear deleted models
     d->_patientModels.removeAll(0);
+
+    // Ask all created models to refresh their content
     foreach(PatientModel *model, d->_patientModels)
         model->refreshModel();
+
+    // Refresh the central patient model wrapper
     d->_patientModelWrapper->patientModel()->refreshModel();
 }
