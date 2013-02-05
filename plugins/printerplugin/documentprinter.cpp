@@ -56,7 +56,6 @@
 
 #include <QDebug>
 
-
 using namespace Print::Internal;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
