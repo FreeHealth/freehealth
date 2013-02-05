@@ -844,6 +844,11 @@ void PatientModel::emitPatientCreationOnSubmit(bool state)
     }
 }
 
+/**
+ * Creates new patient in the model (but not submitted to the database).
+ * Each UUID is defined by default.
+ * All created patient are active and not virtual.
+ */
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "PatientModel::insertRows" << row << count << parent;
@@ -869,6 +874,14 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
             LOG_ERROR("Unable to setData to newly created patient.");
         }
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+            ok = false;
+            LOG_ERROR("Unable to setData to newly created patient.");
+        }
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_ISACTIVE), 1)) {
+            ok = false;
+            LOG_ERROR("Unable to setData to newly created patient.");
+        }
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_ISVIRTUAL), 0)) {
             ok = false;
             LOG_ERROR("Unable to setData to newly created patient.");
         }
