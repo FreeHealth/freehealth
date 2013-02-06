@@ -27,13 +27,14 @@
 #ifndef TOOLS_INTERNAL_PDFTKWRAPPER_H
 #define TOOLS_INTERNAL_PDFTKWRAPPER_H
 
+#include <QProcess>
 #include <QObject>
 
 /**
  * \file pdftkwrapper.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 2012-12-30
+ * \date 07 Feb 2013
 */
 
 namespace Tools {
@@ -68,6 +69,7 @@ public Q_SLOTS:
     bool fillPdfWithFdf(const QString &absPdfFile, const QString &fdfContent, const QString &absFileNameOut, const QString &isoEncoding);
 
 private Q_SLOTS:
+    void onProcessError(QProcess::ProcessError);
     void onProcessFinished(int exitCode);
 
 private:

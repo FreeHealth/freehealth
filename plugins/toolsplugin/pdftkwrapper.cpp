@@ -32,10 +32,12 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QDesktopServices>
 #include <QDir>
@@ -43,6 +45,7 @@
 #include <QProcess>
 #include <QUrl>
 #include <QPointer>
+#include <QProgressDialog>
 
 #include <QDebug>
 
@@ -80,7 +83,7 @@ public:
     {
     }
 
-    QString pdkTkPath()
+    QString pdfTkPath()
     {
         // Find the binary according to the current OS
         if (Utils::isRunningOnMac()) {
@@ -105,6 +108,19 @@ public:
         }
         return QString::null;
     }
+
+    void clearCache(QProcess *process)
+    {
+        _processOutputFile.remove(process);
+        _processTmpFile.remove(process);
+        QProgressDialog *dialog = _progressDialog.value(process, 0);
+        if (dialog) {
+            dialog->close();
+            delete dialog;
+            dialog = 0;
+        }
+        _progressDialog.remove(process);
+    }
     
 public:
     // Put your data here
@@ -113,6 +129,7 @@ public:
     QHash<QString, QString> _fieldValue;
     QPointer<QProcess> _process;
     QHash<QProcess *, QString> _processOutputFile, _processTmpFile;
+    QHash<QProcess *, QProgressDialog *> _progressDialog;
 
 private:
     PdfTkWrapper *q;
@@ -144,15 +161,16 @@ bool PdfTkWrapper::initialize()
         return true;
 
     // Check if a pdftk binary exists
-    if (!QFileInfo(d->pdkTkPath()).exists())
+    if (!QFileInfo(d->pdfTkPath()).exists())
         return false;
 
     // Security assessment: check bin checksums
+    QString pdfTk = d->pdfTkPath();
     if (Utils::isRunningOnMac()) {
-        if (Utils::fileMd5(d->pdkTkPath()) != ::MAC_MD5
-                || Utils::fileSha1(d->pdkTkPath()) != ::MAC_SHA1
+        if (Utils::fileMd5(pdfTk) != ::MAC_MD5
+                || Utils::fileSha1(pdfTk) != ::MAC_SHA1
         #if QT_VERSION >= 0x050000
-                || Utils::fileSha256(d->pdkTkPath()) != ::MAC_SHA256
+                || Utils::fileSha256(pdfTk) != ::MAC_SHA256
         #endif
                 ) {
             LOG_ERROR("Wrong pdftk binary");
@@ -160,10 +178,10 @@ bool PdfTkWrapper::initialize()
         }
     } else if (Utils::isRunningOnWin()) {
         // FIXME: may be XP / Win7/ Win8 checksum are different?
-        if (Utils::fileMd5(d->pdkTkPath()) != ::XP_MD5
-                || Utils::fileSha1(d->pdkTkPath()) != ::XP_SHA1
+        if (Utils::fileMd5(pdfTk) != ::XP_MD5
+                || Utils::fileSha1(pdfTk) != ::XP_SHA1
         #if QT_VERSION >= 0x050000
-                || Utils::fileSha256(d->pdkTkPath()) != ::XP_SHA256
+                || Utils::fileSha256(pdfTk) != ::XP_SHA256
         #endif
                 ) {
             LOG_ERROR("Wrong pdftk binary");
@@ -173,6 +191,18 @@ bool PdfTkWrapper::initialize()
         // TODO: check linux/freebsd binaries
     }
 
+    // Check file permission
+    QFile file(pdfTk);
+    if (Utils::isRunningOnMac()) {
+        // Mac & Win are using the datapack binary, but QuaZip does not correctly handle file permissions
+        // So test permissions are reset if needed
+        if (!file.permissions().testFlag(QFile::ExeOwner)
+                || !file.permissions().testFlag(QFile::ExeGroup)
+                || !file.permissions().testFlag(QFile::ExeUser)
+                || !file.permissions().testFlag(QFile::ExeOther)) {
+            file.setPermissions(QFile::ReadOwner | QFile::ExeOwner | QFile::ReadUser | QFile::ExeUser | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther |  QFile::ExeOther);
+        }
+    }
     d->_initialized = true;
     return true;
 }
@@ -291,17 +321,56 @@ bool PdfTkWrapper::fillPdfWithFdf(const QString &absPdfFile, const QString &fdfC
          << "output"
          << absFileNameOut;
     d->_process = new QProcess(this);
-    d->_process->start(d->pdkTkPath(), args);
     d->_processOutputFile.insert(d->_process, absFileNameOut);
     d->_processTmpFile.insert(d->_process, tmpFdf);
-    qWarning()<<d->_processOutputFile;
-    connect(d->_process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
 
+    // Create the progress dialog
+    QProgressDialog *dialog = new QProgressDialog(Core::ICore::instance()->mainWindow());
+    dialog->setLabelText(tr("Starting PDF completion. Please wait..."));
+    dialog->setRange(0, 2);
+    dialog->show();
+    d->_progressDialog.insert(d->_process, dialog);
+
+    connect(d->_process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
+    connect(d->_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onProcessError(QProcess::ProcessError)));
+    d->_process->start(d->pdfTkPath(), args);
+    LOG("PDF completion process started.");
     return true;
+}
+
+void PdfTkWrapper::onProcessError(QProcess::ProcessError)
+{
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    Q_ASSERT(process);
+    if (!process)
+        return;
+
+    // Inform user
+    Utils::warningMessageBox(tr("PDF Completion error"),
+                             tr("The PDF completion process raised the following error:<br />"
+                                "<b>%1</b>\n"
+                                "%2")
+                             .arg(process->errorString())
+                             .arg(tkTr(Trans::Constants::CONSTANTS_TRANSLATOR_NAME)),
+                             "",
+                             tr("PDF Completion error"));
+
+    // Log error
+    LOG_ERROR("Unable to complete the PDF completion process. Error: " + process->errorString());
+
+    // Removes tmp file
+    if (!QFile(d->_processTmpFile.value(process)).remove())
+        LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(process));
+
+    // Delete the process
+    d->clearCache(process);
+    delete process;
+    process = 0;
 }
 
 void PdfTkWrapper::onProcessFinished(int exitCode)
 {
+    LOG("PDF Completion finished with exitcode: " + QString::number(exitCode));
     QProcess *process = qobject_cast<QProcess*>(sender());
     Q_ASSERT(process);
     if (!process)
@@ -316,22 +385,26 @@ void PdfTkWrapper::onProcessFinished(int exitCode)
 
     // Start the desktop PDF viewer
     if (process) {
-        qWarning() << "file://" + d->_processOutputFile.value(process);
+        QProgressDialog *dialog = d->_progressDialog.value(process, 0);
+        if (dialog) {
+            dialog->setLabelText(tr("Opening completed PDF file"));
+            dialog->setValue(1);
+        }
 
-        qWarning()<<d->_processOutputFile << process->pid();
-
-        QDesktopServices::openUrl(QUrl("file://"+d->_processOutputFile.value(d->_process)));
+        if (!QDesktopServices::openUrl(QUrl("file://" + d->_processOutputFile.value(process))))
+            LOG_ERROR("Unable to launch the PDF viewer for the following file: " + d->_processOutputFile.value(d->_process));
 
         // Removes tmp file
-        if (!QFile(d->_processTmpFile.value(d->_process)).remove())
-            LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(d->_process));
-        d->_processOutputFile.remove(d->_process);
-        d->_processTmpFile.remove(d->_process);
+        if (!QFile(d->_processTmpFile.value(process)).remove())
+            LOG_ERROR("Unable to remove tmp file: " + d->_processTmpFile.value(process));
+
+        // Clean cache
+        d->clearCache(process);
     }
 
     // Destroy the process
-    d->_process->kill();
-    d->_process->deleteLater();
+    process->kill();
+    process->deleteLater();
 }
 
 
