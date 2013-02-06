@@ -111,12 +111,14 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
         {
             const QString &zip = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::ZIP_COL)).toString();
             const QString &city = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::CITY_COL)).toString();
+            //: %1 = zip code, %2 = city
             return QString(tr("%1, %2").arg(zip, city));
         }
         case CityZip:
         {
             const QString &zip = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::ZIP_COL)).toString();
             const QString &city = QSqlQueryModel::data(QSqlQueryModel::index(index.row(), ::CITY_COL)).toString();
+            //: %1 = city, %2 = zip
             return QString(tr("%1, %2").arg(city, zip));
         }
         } // switch
