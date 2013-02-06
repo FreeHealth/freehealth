@@ -123,6 +123,17 @@ bool PasswordWidget::initialize()
     return true;
 }
 
+bool PasswordWidget::isPasswordValidAndConfirmed()
+{
+    return (!d->_cachedCryptedPassword.isEmpty() || !d->_cachedUncryptedPassword.isEmpty());
+}
+
+void PasswordWidget::setReadOnly(bool readonly)
+{
+    d->ui->login->setReadOnly(readonly);
+    d->ui->changePassword->setEnabled(!readonly);
+}
+
 QLineEdit *PasswordWidget::loginEditor() const
 {
     return d->ui->login;

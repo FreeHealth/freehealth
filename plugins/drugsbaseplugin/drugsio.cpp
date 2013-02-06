@@ -889,7 +889,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     case MedinTuxVersion :
         {
             for(i=0; i < m->rowCount(); ++i) {
-                tmp = "<li>" + m->index(i, Prescription::ToHtml).data().toString();
+                tmp = "<li>" + m->data(m->index(i, Prescription::ToHtml)).toString();
                 if (lineBreak)
                     tmp += "<span style=\"font-size:4pt\"><br /></span>";
                 tmp += "</li>";
@@ -1001,21 +1001,22 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 {
     QString tmp;
     if (mask.isEmpty()) {
-        if (!toHtml)
-            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
-        else
+        if (toHtml)
             tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_HTML).toString();
+        else
+            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
     } else {
         tmp = mask;
     }
-#ifdef WITH_PAD
-    PrescriptionToken::setPrescriptionModel(model);
-    PrescriptionToken::setPrescriptionModelRow(drugRow);
-    if (toHtml) {
-        return padTools()->processHtml(tmp);
-    }
-    return padTools()->processPlainText(tmp);
-#else
+
+//#ifdef WITH_PAD
+//    PrescriptionToken::setPrescriptionModel(model);
+//    PrescriptionToken::setPrescriptionModelRow(drugRow);
+//    if (toHtml) {
+//        return padTools()->processHtml(tmp);
+//    }
+//    return padTools()->processPlainText(tmp);
+//#else
     QHash<QString, QString> tokens_value;
     tokens_value.insert("DRUG", QString());
     tokens_value.insert("NOTE", QString());
@@ -1157,7 +1158,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);
     return tmp;
-#endif
+//#endif
 }
 
 /**
@@ -1250,7 +1251,6 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     p->clearTokens();
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
-    // TODO: add EPISODE_DATE token for FMF
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     // TODO: add more options for the user : select papers, print duplicatas...
     return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),

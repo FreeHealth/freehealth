@@ -165,6 +165,7 @@ freetoolbox \
 
 PLUGINS_SOURCES="\
 plugins/fmf_plugins.pri \
+plugins/pluginjsonmetadata.xsl \
 plugins/accountbaseplugin \
 plugins/accountplugin \
 plugins/agendaplugin \
@@ -182,6 +183,7 @@ plugins/fmfcoreplugin \
 plugins/fmfmainwindowplugin \
 plugins/formmanagerplugin \
 plugins/icdplugin \
+plugins/identityplugin \
 plugins/listviewplugin \
 plugins/padtoolsplugin \
 plugins/patientbaseplugin
@@ -191,9 +193,10 @@ plugins/saverestoreplugin \
 plugins/scriptplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
+plugins/toolsplugin \
 plugins/usermanagerplugin \
-plugins/xmlioplugin \
 plugins/webcamplugin \
+plugins/xmlioplugin \
 plugins/zipcodesplugin \
 "
 
@@ -220,7 +223,7 @@ tar -cf $PACKPATH/sources.tar \
 --exclude 'rushes' --exclude 'doxygen' \
 --exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
---exclude '*.tgz' --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
+--exclude '*.app' --exclude '*.zip' --exclude '*.a' \
 --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \
 --exclude 'global_resources/databases' \
 --exclude 'sources.tar' \

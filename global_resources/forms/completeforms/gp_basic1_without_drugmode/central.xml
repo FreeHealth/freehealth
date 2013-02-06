@@ -6,9 +6,9 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.8.0</version>
-    <fmfv>0.8.0</fmfv>
-    <lmdate>2012-09-12</lmdate>
+    <version>0.8.2</version>
+    <fmfv>0.8.2</fmfv>
+    <lmdate>2013-02-05</lmdate>
     <cdate>2011-03-15</cdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
@@ -23,6 +23,10 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+    <updateversion from="0.8.0" to="0.8.2">
+      <text lang="fr">Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.</text>
+      <text lang="en">Defining user documents to use for the print process of the textual prescription text editor.</text>
+    </updateversion>
     <updateversion from="0.7.2" to="0.8.0">
       <text lang="fr">Compatibilité avec FreeMedForms 0.8.0.</text>
       <text lang="en">Compatibility with FreeMedForms 0.8.0.</text>
@@ -145,7 +149,8 @@
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
         <label lang="de">Verschreibung</label>
-        <options>FullEditor;DontPrintEmptyValues</options>
+        <options>FullEditor;DontPrintEmptyValues;PrintDuplicata</options>
+        <papers>Prescription</papers>
       </Item>
     </MedForm>
 

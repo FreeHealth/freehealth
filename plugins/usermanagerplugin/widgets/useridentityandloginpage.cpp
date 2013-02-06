@@ -100,9 +100,6 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     _identity = new Identity::IdentityEditorWidget(this);
     _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
-    _identity->setCheckPasswordConfirmation(true);
-    _identity->setMinimalLoginLength(6);
-    _identity->setMinimalPasswordLength(6);
     layout->addWidget(_identity);
 
     registerField("Name*", _identity, "birthName");

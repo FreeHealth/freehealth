@@ -205,6 +205,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         if (!errorString)
             errorString = new QString();
         errorString->append(tr("User is not identified."));
+        Core::ICore::instance()->setUser(0);
         return false;
     }
 

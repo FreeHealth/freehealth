@@ -136,14 +136,19 @@ FormPlaceHolderCoreListener::FormPlaceHolderCoreListener(FormPlaceHolder *parent
         _formPlaceHolder(parent)
 {
     Q_ASSERT(parent);
+    setObjectName("FormPlaceHolderCoreListener");
 }
+
 FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
 
 bool FormPlaceHolderCoreListener::coreAboutToClose()
 {
-//        qWarning() << Q_FUNC_INFO;
-    if (_formPlaceHolder->isDirty())
-        return _formPlaceHolder->saveCurrentEpisode();
+    if (_formPlaceHolder->isDirty()) {
+        bool ok = _formPlaceHolder->saveCurrentEpisode();
+        if (!ok)
+            LOG_ERROR("Unable to save current episode");
+        return ok;
+    }
     return true;
 }
 
@@ -152,14 +157,19 @@ FormPlaceHolderPatientListener::FormPlaceHolderPatientListener(FormPlaceHolder *
         _formPlaceHolder(parent)
 {
     Q_ASSERT(parent);
+    setObjectName("FormPlaceHolderPatientListener");
 }
+
 FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
 
 bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
 {
-//        qWarning() << Q_FUNC_INFO;
-    if (_formPlaceHolder->isDirty())
-        return _formPlaceHolder->saveCurrentEpisode();
+    if (_formPlaceHolder->isDirty()) {
+        bool ok = _formPlaceHolder->saveCurrentEpisode();
+        if (!ok)
+            LOG_ERROR("Unable to save current episode");
+        return ok;
+    }
     return true;
 }
 

@@ -31,6 +31,7 @@
 #include <QUrl>
 #include <QHash>
 #include <QNetworkReply>
+#include <QPointer>
 
 QT_BEGIN_NAMESPACE
 class QFile;
@@ -80,7 +81,7 @@ public:
     QString m_Path, m_OutputFileName, m_LabelText;
     QUrl m_Url;
     QNetworkAccessManager qnam;
-    QNetworkReply *reply;
+    QPointer<QNetworkReply> reply;
     QFile *file;
     QProgressDialog *progressDialog;
     QProgressBar *progressBar;

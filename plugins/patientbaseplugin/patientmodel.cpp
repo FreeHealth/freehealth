@@ -241,6 +241,7 @@ PatientModel::PatientModel(QObject *parent) :
     onCoreDatabaseServerChanged();
     d->m_RefreshModelOnCoreDatabaseServerChanged = true;
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+//    connect(d->m_SqlPatient, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(onPrimeInsert(int,QSqlRecord&)));
 }
 
 PatientModel::~PatientModel()
@@ -264,6 +265,27 @@ void PatientModel::changeUserUuid()
 
     d->refreshFilter();
 }
+
+//void PatientModel::onPrimeInsert(int row, QSqlRecord &record)
+//{
+//    // find an unused uuid
+//    bool findUuid = false;
+//    QString uuid;
+//    while (!findUuid) {
+//        // TODO: Take care to inifinite looping...
+//        uuid = Utils::Database::createUid();
+//        QString f = QString("%1='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
+//        findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);
+//    }
+//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
+//        ok = false;
+//        LOG_ERROR("Unable to setData to newly created patient.");
+//    }
+//    if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+//        ok = false;
+//        LOG_ERROR("Unable to setData to newly created patient.");
+//    }
+//}
 
 void PatientModel::onCoreDatabaseServerChanged()
 {
@@ -319,6 +341,10 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
     // Same patient as the current one?
     const QString &patientUuid = this->patientUuid(index);
+    if (patientUuid.isEmpty()) {
+        LOG_ERROR(QString("Empty patient Uuid. Index(%1,%2,%3)").arg(index.row()).arg(index.column()).arg(index.model()->objectName()));
+        return;
+    }
     if (patientUuid == d->m_CurrentPatientUuid) {
         return;
     }
@@ -822,6 +848,11 @@ void PatientModel::emitPatientCreationOnSubmit(bool state)
     }
 }
 
+/**
+ * Creates new patient in the model (but not submitted to the database).
+ * Each UUID is defined by default.
+ * All created patient are active and not virtual.
+ */
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {
 //    qWarning() << "PatientModel::insertRows" << row << count << parent;
@@ -830,7 +861,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
     for(int i=0; i < count; ++i) {
         if (!d->m_SqlPatient->insertRow(row+i, parent)) {
             ok = false;
-            Utils::Log::addError(this, "Unable to create a new patient. PatientModel::insertRows()");
+            LOG_ERROR("Unable to create a new patient. PatientModel::insertRows()");
             continue;
         }
         // find an unused uuid
@@ -847,6 +878,14 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
             LOG_ERROR("Unable to setData to newly created patient.");
         }
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
+            ok = false;
+            LOG_ERROR("Unable to setData to newly created patient.");
+        }
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_ISACTIVE), 1)) {
+            ok = false;
+            LOG_ERROR("Unable to setData to newly created patient.");
+        }
+        if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_ISVIRTUAL), 0)) {
             ok = false;
             LOG_ERROR("Unable to setData to newly created patient.");
         }
@@ -898,12 +937,21 @@ bool PatientModel::submit()
     return ok;
 }
 
+/** Refresh the model. Reset the filter and reselect the database. */
 bool PatientModel::refreshModel()
 {
+    // Keep the current patient persistent index in cache
+    QModelIndex currentPatient = d->m_CurrentPatientIndex;
+    // Reset the model
     beginResetModel();
     d->refreshFilter();
-    d->m_SqlPatient->select();
     endResetModel();
+    // Redefine the current patient index
+    d->m_CurrentPatientIndex = currentPatient;
+    if (index(d->m_CurrentPatientIndex.row(), Core::IPatient::Uid).data().toString() != d->m_CurrentPatientUuid) {
+        LOG_ERROR("After refreshing the patient model, the current patient uuid is wrong");
+        return false;
+    }
     return true;
 }
 

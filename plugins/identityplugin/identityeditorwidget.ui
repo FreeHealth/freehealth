@@ -20,54 +20,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
-    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="loginGroup">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Login and password</string>
-     </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="loginLabel">
-        <property name="text">
-         <string>Login</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="passwordLabel">
-        <property name="text">
-         <string>Password</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="password2Label">
-        <property name="text">
-         <string>Confirm password</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="login"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="password"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="password2"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="3" column="1">
@@ -295,6 +247,9 @@
    <item row="2" column="0">
     <widget class="Identity::Internal::PasswordWidget" name="passwordWidget" native="true"/>
    </item>
+   <item row="1" column="0">
+    <widget class="ZipCodes::ZipCodesWidget" name="zipcodesWidget" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -320,11 +275,6 @@
    <header location="global">utils/widgets/languagecombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>Utils::LineEditEchoSwitcher</class>
-   <extends>QLineEdit</extends>
-   <header location="global">utils/widgets/lineeditechoswitcher.h</header>
-  </customwidget>
-  <customwidget>
    <class>Identity::Internal::PasswordWidget</class>
    <extends>QWidget</extends>
    <header location="global">identityplugin/passwordwidget.h</header>
@@ -339,9 +289,6 @@
   <tabstop>dob</tabstop>
   <tabstop>genderCombo</tabstop>
   <tabstop>language</tabstop>
-  <tabstop>login</tabstop>
-  <tabstop>password</tabstop>
-  <tabstop>password2</tabstop>
  </tabstops>
  <resources/>
  <connections/>

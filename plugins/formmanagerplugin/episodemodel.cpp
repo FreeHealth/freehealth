@@ -503,7 +503,6 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 
 bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qWarning() << "setData" << d->_readOnly << index.isValid();
     if (d->_readOnly)
         return false;
 
@@ -775,8 +774,10 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 bool EpisodeModel::submit()
 {
     // No active patient ?
-    if (patient()->uuid().isEmpty())
+    if (patient()->uuid().isEmpty()) {
+        LOG_ERROR("No patient uuid. Unable to submit EpisodeModel.");
         return false;
+    }
 
     // Signal all dirty indexes
     foreach(const QModelIndex &index, d->_dirtyIndexes)

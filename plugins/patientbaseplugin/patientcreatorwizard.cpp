@@ -56,6 +56,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QUuid>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -69,6 +70,7 @@ static inline Patients::PatientCore *patientCore() {return Patients::PatientCore
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
     QWizard(parent)
 {
+    setObjectName("PatientCreatorWizard");
     setWindowTitle(tr("New Patient"));
 //    setModal(true);
     setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
@@ -100,14 +102,23 @@ void PatientCreatorWizard::done(int r)
             patientCore()->refreshAllPatientModel();
         }
     } else if (r == QDialog::Accepted) {
-        if (!validateCurrentPage())
+        // When the page is validated the new patient is saved into database and models are refreshed
+        // Else log an error
+        if (!validateCurrentPage()) {
+            LOG_ERROR("Unable to validate current page");
             return;
-        patientCore()->refreshAllPatientModel();
+        }
+
+        // Change current patient ?
         if (settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool()) {
             QString uid = m_Page->lastInsertedUuid();
             if (!patientCore()->setCurrentPatientUuid(uid))
-                LOG_ERROR("Unable to set the current patient");
+                LOG_ERROR("Unable to set the current patient to uuid: " + uid);
         }
+
+        // Refresh all registered patient models
+        patientCore()->refreshAllPatientModel();
+
         QDialog::done(r);
     }
 }
@@ -122,8 +133,11 @@ IdentityPage::IdentityPage(QWidget *parent) :
                                     Identity::IdentityEditorWidget::Photo |
                                     Identity::IdentityEditorWidget::FullAddress);
     m_Model = new PatientModel(this);
-    m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
+    m_Model->setObjectName("PatientModelForWizardCreator");
+    // Ensure the model is empty using a fake uuid
+    m_Model->setFilter("", "", QUuid::createUuid().toString() + "__FAKE", PatientModel::FilterOnUuid);
     m_Model->emitPatientCreationOnSubmit(true);
+    // Create a new patient and get its uuid
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
@@ -204,12 +218,12 @@ bool IdentityPage::validatePage()
         delete model;
     }
 
-    // submit the new patient
+    // submit the new patient data to the model
     bool ok = true;
-    connect(m_Model, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)));
+    connect(m_Model, SIGNAL(patientCreated(QString)), patient(), SIGNAL(patientCreated(QString)), Qt::UniqueConnection);
     if (m_Identity->submit()) {
+        // Submit the model to the database
         m_Model->submit();
-        patientCore()->refreshAllPatientModel();
         LOG("Patient successfully created");
     } else {
         LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");

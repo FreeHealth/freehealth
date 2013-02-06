@@ -39,9 +39,7 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/iuser.h>
-#include <coreplugin/idocumentprinter.h>
 
-#include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 
 #include <QAction>
@@ -56,7 +54,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
-static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
 {
@@ -550,15 +547,8 @@ void EditorActionHandler::toogleToolbar()
 
 void EditorActionHandler::print()
 {
-    if (m_CurrentEditor) {
-        Core::IDocumentPrinter *p = printer();
-        p->clearTokens();
-        QHash<QString, QVariant> tokens;
-        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, "");
-        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-        // TODO: add more options for the user : select papers, print duplicatas...
-        p->print(m_CurrentEditor->textEdit()->document(), Core::IDocumentPrinter::Papers_Generic_User, false);
-    }
+    if (m_CurrentEditor)
+        m_CurrentEditor->print();
 }
 
 void EditorActionHandler::fileOpen()

@@ -139,6 +139,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     }
     m_Text = new Editor::TextEditor(this, t);
     m_Text->setObjectName("TextEditor_" + m_FormItem->uuid());
+    m_Text->setDocumentTitle(m_FormItem->spec()->label());
     hb->addWidget(m_Text);
     if (options.contains("expanded", Qt::CaseInsensitive)) {
         // TODO: add a filterEvent and resize the textEditor to the maximum of the parent's scroolbar content.
@@ -148,8 +149,19 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     if (!options.contains("TabKeepsFocus", Qt::CaseInsensitive)) {
         m_Text->textEdit()->setTabChangesFocus(true);
     }
+    if ( options.contains("PrintDuplicata", Qt::CaseInsensitive)) {
+        m_Text->setAlwaysPrintDuplicata(true);
+    }
+    const QString &papers = formItem->extraData().value("papers");
+    if (!papers.isEmpty()) {
+        if (papers.compare("Generic", Qt::CaseInsensitive)==0)
+            m_Text->setUserDocumentForPrintingProcess(Core::IDocumentPrinter::Papers_Generic_User);
+        else if (papers.compare("Administrative", Qt::CaseInsensitive)==0)
+            m_Text->setUserDocumentForPrintingProcess(Core::IDocumentPrinter::Papers_Administrative_User);
+        else if (papers.compare("Prescription", Qt::CaseInsensitive)==0)
+            m_Text->setUserDocumentForPrintingProcess(Core::IDocumentPrinter::Papers_Prescription_User);
+    }
 
-//    setFocusPolicy(Qt::StrongFocus);
     setFocusableWidget(m_Text->textEdit());
     setFocusProxy(m_Text->textEdit());
 

@@ -841,7 +841,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 /** Save the raw XML episode content. Does not manage modification traces. */
 bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
 {
-    qWarning() << "saveEpisodeContent" << uid << xml.length();
+    qWarning() << "EpisodeBase::saveEpisodeContent" << uid.toString() << xml.length();
     if (!uid.isValid())
         return false;
     if (uid.toInt() < 0)
@@ -884,6 +884,7 @@ bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
         query.finish();
         DB.commit();
     }
+    qWarning() << "     correctly saved";
     return true;
 }
 
