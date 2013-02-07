@@ -420,10 +420,10 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Id:            col = Constants::IDENTITY_ID;         break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;       break;
-        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
-        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;           break;
-        case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;  break;
+        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME; break;
+        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;  break;
+        case IPatient::Gender:        col = Constants::IDENTITY_GENDER;     break;
         case IPatient::GenderIndex:
             {
             // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
