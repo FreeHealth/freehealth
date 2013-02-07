@@ -993,6 +993,7 @@ void IdentityEditorWidget::photoButton_clicked()
 /** Force UI to update with the new current patient data */
 void IdentityEditorWidget::onCurrentPatientChanged()
 {
+    clear();
     // With XML editing we do not follow the Core::IPatient
     if (d->m_xmlOnly)
         return;
