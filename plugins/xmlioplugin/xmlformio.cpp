@@ -471,7 +471,7 @@ void XmlFormIO::checkForUpdates() const
     alreadyCheckedForUpdates = true;
 }
 
-QList<Utils::GenericUpdateInformation> & XmlFormIO::availableUpdates()
+const QList<Form::FormIODescription> &XmlFormIO::availableUpdates() const
 {
     if (!alreadyCheckedForUpdates)
         checkForUpdates();
@@ -499,6 +499,7 @@ bool XmlFormIO::updateForms()
 /** Check the database form version and try to update them with the local files. */
 bool XmlFormIO::checkDatabaseFormFileForUpdates() const
 {
+    m_FormUpdatesList.clear();
     QList<Form::FormIODescription *> fileDescriptionList;
     QList<Form::FormIODescription *> dbDescriptionList;
     LOG("Checking for form update");
@@ -511,8 +512,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Test all database forms for an update and populate a list
-    QStringList msg;
-
     // iterate through all FormIO descriptions in database
     foreach(Form::FormIODescription *dbDescription, dbDescriptionList) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -534,23 +533,13 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
             Utils::VersionNumber fileVersion(fileDescription->data(Form::FormIODescription::Version).toString());
 
             if (fileVersion.versionString() == "test" || fileVersion > dbVersion) {
-
                 // update database
                 XmlFormName &form = formName(fileDescription->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
-
-                // Construct the detailed text of the user's question messagebox
-                QString html;
-                html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br />&nbsp;&nbsp;•&nbsp;%3<br />")
-                        .arg(tr("Form: ") + fileDescription->data(Form::FormIODescription::ShortDescription).toString())
-                        .arg(tr("New version: %1").arg(fileVersion.versionString()))
-                        .arg(tr("Database version: %1").arg(dbVersion.versionString()))
-                        ;
-                foreach(const Utils::GenericUpdateInformation &u, fileDescription->updateInformationForVersion(dbVersion)) {
-                    html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;:<br /> " + u.text() + "<br />";
-                }
-                msg << html;
-                if (!formsToUpdate.contains(form))
+                if (!formsToUpdate.contains(form)) {
                     formsToUpdate << form;
+                    fileDescription->setData(Form::FormIODescription::UpdateAvailable_OldVersion, dbVersion.versionString());
+                    m_FormUpdatesList << Form::FormIODescription(*fileDescription);
+                }
             }
         }
     }
