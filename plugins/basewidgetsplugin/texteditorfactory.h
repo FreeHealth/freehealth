@@ -105,6 +105,7 @@ private:
     Form::FormItem *m_FormItem;
     Editor::TextEditor* m_Editor;
     QString m_OriginalValue;
+    bool m_ForceModified;
 };
 
 }  // End namespace BaseWidgets
