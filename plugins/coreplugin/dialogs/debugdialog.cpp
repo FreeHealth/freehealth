@@ -42,6 +42,7 @@
 #include <QStackedLayout>
 #include <QHeaderView>
 #include <QMainWindow>
+#include <QFileDialog>
 
 #include "ui_debugdialog.h"
 
@@ -84,7 +85,14 @@ DebugDialog::~DebugDialog()
 bool DebugDialog::saveLogToFile()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-    QString fileName = s->path(Core::ISettings::UserResourcesPath) + "/logs.txt" ;
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save log to..."),
+                                                    s->path(Core::ISettings::UserDocumentsPath),
+                                                    "*.txt");
+    if (fileName.isEmpty())
+        return false;
+    if (QFileInfo(fileName).completeSuffix().isEmpty())
+        fileName += ".txt";
     LOG(tkTr(Trans::Constants::SAVING_FILE_1).arg(fileName));
     if (Utils::saveStringToFile(Utils::Log::toString(), fileName)) {
         Utils::informativeMessageBox(tr("Log correctly saved"),

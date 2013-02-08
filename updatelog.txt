@@ -36,6 +36,8 @@ FreeMedForms
     * Don't show forms with the 'noepsiode' option, show its first children instead
     * Correctly set the taborder in forms
     * Episode view header font were too small on Linux
+    * Avoid identity data duplication from one patient to another
+    * Improving the debug dialog and the log saving
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI
