@@ -44,14 +44,12 @@ using namespace Internal;
 enum { WarnKeyPressed = false };
 
 namespace {
-
 const QString controlKey1 = "154012A111185";  // clé 82
 const QString controlKey2 = "1111111111111";  // clé 20
 const QString controlKey3 = "1111111111034";  // clé 97
 const QString controlKey4 = "278112b050002";  // clé 86
 const QString controlKey5 = "1540250025005";  // clé 22
 const QString controlKey6 = "299082B234349";  // clé 29
-
 }
 
 namespace BaseWidgets {
@@ -158,7 +156,7 @@ bool FrenchSocialNumberWidget::isValid(const QString &number, const QString &key
     if (cKey==-1) {
         return false;
     }
-    return key==QString::number(cKey);
+    return key == QString::number(cKey);
 }
 
 int FrenchSocialNumberWidget::controlKey(const QString &number) const
@@ -216,14 +214,14 @@ QString FrenchSocialNumberWidget::toHtml() const
 */
 void FrenchSocialNumberWidget::checkControlKey()
 {
+    d->ui->key->setText("");
     int cKey = controlKey(d->nss());
-    if (cKey==-1) {
-        d->ui->key->setText("");
+    if (cKey==-1)
         return;
-    }
+    QString key = QString::number(cKey).rightJustified(2, '0');
     if (d->ui->key->text().isEmpty()) {
-        d->ui->key->setText(QString::number(cKey));
-    } else if (d->ui->key->text() != QString::number(cKey)) {
-        d->ui->key->setText(QString::number(cKey));
+        d->ui->key->setText(key);
+    } else if (d->ui->key->text() != key) {
+        d->ui->key->setText(key);
     }
 }
