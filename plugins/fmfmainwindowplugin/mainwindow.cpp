@@ -365,6 +365,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     QList<Core::ICoreListener *> listeners = pluginManager()->getObjects<Core::ICoreListener>();
     for(int i = 0; i < listeners.count(); ++i) {
         if (!listeners.at(i)->coreAboutToClose()) {
+            const QString &msg = listeners.at(i)->errorMessage();
+            if (!msg.isEmpty()) {
+                Utils::warningMessageBox(tr("Unable to close window"),
+                                         tr("Unable to close the application, error message: <br/><b>%1</b>").arg(msg),
+                                         "", tr("Unable to close window"));
+            }
             event->ignore();
             return;
         }
