@@ -75,6 +75,8 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/ipackmanager.h>
 #include <datapackutils/pack.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -99,7 +101,8 @@ enum { WarnFormCreation = false,
      };
 
 using namespace Form;
-using namespace Form::Internal;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
@@ -738,17 +741,31 @@ void FormManager::checkFormUpdates()
         return;
     }
 
-//    QProgressDialog dlg(qApp->activeWindow());
-//    dlg.setModal(true);
-//    dlg.exec();
     // Check form update
     foreach(Form::IFormIO *io, list) {
         io->checkForUpdates();
+        // No update ?
+        if (io->availableUpdates().isEmpty())
+            continue;
 
-        //TODO: manage update information from FormIO
+        // Has update. Construct the detailed text of the user's question messagebox
+        QStringList msg;
+        foreach(const Form::FormIODescription &descr, io->availableUpdates()) {
+            QString html;
+            html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br /><br />")
+                    .arg(tr("Form: ") + descr.data(Form::FormIODescription::ShortDescription).toString())
+                    .arg(tr("New version: %1").arg(descr.data(Form::FormIODescription::Version).toString()))
+                    .arg(tr("Database version: %1").arg(descr.data(Form::FormIODescription::UpdateAvailable_OldVersion).toString()))
+                    ;
+            foreach(const Utils::GenericUpdateInformation &u, descr.updateInformationForVersion(descr.data(Form::FormIODescription::UpdateAvailable_OldVersion).toString())) {
+                html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;:<br /> " + u.text() + "<br />";
+            }
+            msg << html;
+        }
 
         if (Utils::yesNoMessageBox(tr("Form update detected."),
-                                   tr("A form update has been detected. Do you want to update the forms?"), "") == true)
+                                   tr("A form update has been detected. Do you want to update the forms?"),
+                                   msg.join("<br />")) == true)
             io->updateForms();
     }
 }
