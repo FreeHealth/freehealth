@@ -124,6 +124,7 @@ public:
         ScreenShotsPath,
         FromDatabase,
         HasScreenShot,
+        UpdateAvailable_OldVersion,
         MaxParam
     };
 
@@ -144,7 +145,8 @@ public:
     QString toHtml() const;
 
 private:
-    Internal::FormIODescriptionPrivate *d_formIO;
+    IFormIO *m_reader;
+    bool _hasScreenShot;
 };
 
 class FORM_EXPORT IFormIO : public QObject
@@ -176,6 +178,7 @@ public:
     virtual QString lastError() const = 0;
 
     virtual void checkForUpdates() const = 0;
+    virtual const QList<Form::FormIODescription> &availableUpdates() const = 0;
     virtual bool updateForms() = 0;
 };
 
