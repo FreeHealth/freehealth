@@ -148,7 +148,7 @@ public:
 
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);
-    int getNumberOfEpisodes(const QString &formUid);
+    int getNumberOfEpisodes(const QString &formUid, const QStringList &equivalents);
     QString getEpisodeContent(const QVariant &uid);
     QList<EpisodeValidationData *> getEpisodeValidations(const QVariant &uid);
 

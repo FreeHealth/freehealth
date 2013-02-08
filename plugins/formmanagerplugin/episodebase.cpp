@@ -1237,14 +1237,28 @@ QList<EpisodeValidationData *> EpisodeBase::getEpisodeValidations(const QVariant
     return toReturn;
 }
 
-/** Return the total number of episodes recorded for one Form identified by its \e formUid */
-int EpisodeBase::getNumberOfEpisodes(const QString &formUid)
+/**
+ * Returns the total number of episodes recorded for one Form identified by its \e formUid for the current patient.
+ * Counts also all form equivalents.
+ */
+int EpisodeBase::getNumberOfEpisodes(const QString &formUid, const QStringList &equivalents)
 {
+    // Filter the form uuid (and equivalents)
+    Utils::FieldList uuid;
+    uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(formUid));
+    if (!equivalents.isEmpty()) {
+        foreach(const QString &eq, equivalents)
+            uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(eq));
+    }
+
+    // Filter valid episodes
     QHash<int, QString> where;
+    where.insert(Constants::EPISODES_ISVALID, "=1");
     where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patient()->uuid()));
-    where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(formUid));
-    where.insert(Constants::EPISODES_ISVALID, QString("=1"));
-    return count(Constants::Table_EPISODES, Constants::EPISODES_ID, getWhereClause(Constants::Table_EPISODES, where));
+
+    QString filter = getWhereClause(Constants::Table_EPISODES, where).remove("WHERE") +
+            " AND (" + getWhereClause(uuid, Utils::Database::OR) + ")";
+    return count(Constants::Table_EPISODES, Constants::EPISODES_ID, filter);
 }
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree) const

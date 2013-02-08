@@ -100,7 +100,7 @@ public:
     QString formLabelWithEpisodeCount(Form::FormMain *form)
     {
         QString label = form->spec()->label();
-        int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
+        int nb = episodeBase()->getNumberOfEpisodes(form->uuid(), form->spec()->equivalentUuid());
         if (nb>0)
             label += QString(" (%1)").arg(nb);
         return label;
