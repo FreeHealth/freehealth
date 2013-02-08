@@ -349,6 +349,8 @@ void ZipCountryCompleters::createModel()
         m_ProvinceModel = 0;
     }
     // Is db available create new modelss
+    if (!zipCore().initialize())
+        return;
     if (!zipCore().isDatabaseAvailable())
         return;
     m_ZipModel = new ZipCountryModel(this);

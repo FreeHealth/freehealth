@@ -61,6 +61,7 @@ class ZipCorePrivate
 {
 public:
     ZipCorePrivate(ZipCore *parent) :
+        _initialized(false),
         _dbAvailable(false),
         q(parent)
     {
@@ -117,7 +118,7 @@ public:
 
 public:
     QSqlDatabase _db;
-    bool _dbAvailable;
+    bool _initialized, _dbAvailable;
     
 private:
     ZipCore *q;
@@ -159,12 +160,14 @@ ZipCore::~ZipCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool ZipCore::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->checkDatabase();
-
     // Manage datapacks
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    d->_initialized = true;
     return true;
 }
 

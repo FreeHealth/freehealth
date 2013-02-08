@@ -43,6 +43,7 @@ class Pack;
 }
 
 namespace ZipCodes {
+class ZipCountryCompleters;
 namespace Internal {
 class ZipCodesPlugin;
 class ZipCorePrivate;
@@ -52,6 +53,7 @@ class ZIPCODES_EXPORT ZipCore : public QObject
 {
     Q_OBJECT
     friend class ZipCodes::Internal::ZipCodesPlugin;
+    friend class ZipCodes::ZipCountryCompleters;
 
 protected:
     explicit ZipCore(QObject *parent = 0);
