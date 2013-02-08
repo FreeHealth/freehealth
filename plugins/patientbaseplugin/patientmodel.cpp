@@ -923,9 +923,15 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 
 bool PatientModel::submit()
 {
+    // Nothing to do ?
+    if (!d->m_SqlPatient->isDirty())
+        return true;
+    // Submit the model to the database
     bool ok = true;
     if (!d->m_SqlPatient->submitAll()) {
-        LOG_ERROR("Model not submitted. " + d->m_SqlPatient->lastError().text());
+        LOG_ERROR(QString("Model not submitted. Error n° %1; %2")
+                  .arg(d->m_SqlPatient->lastError().number())
+                  .arg(d->m_SqlPatient->lastError().text()));
         ok = false;
     } else {
         // emit created uids
