@@ -924,23 +924,23 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 bool PatientModel::submit()
 {
     // Nothing to do ?
-#if QT_VERSION >= 0x05000
-    if (!d->m_SqlPatient->isDirty())
-        return true;
-#else
-    bool isDirty = false;
-    for(int i = 0; i<d->m_SqlPatient->rowCount(); ++i) {
-        for(int j = 0; j < d->m_SqlPatient->columnCount(); ++j) {
-            QModelIndex index = d->m_SqlPatient->index(i, j);
-            if (d->m_SqlPatient->isDirty(index)) {
-                isDirty = true;
-                break;
-            }
-        }
-    }
-    if (!isDirty)
-        return true;
-#endif
+//#if QT_VERSION >= 0x05000
+//    if (!d->m_SqlPatient->isDirty())
+//        return true;
+//#else
+//    bool isDirty = false;
+//    for(int i = 0; i < d->m_SqlPatient->rowCount(); ++i) {
+//        for(int j = 0; j < d->m_SqlPatient->columnCount(); ++j) {
+//            QModelIndex index = d->m_SqlPatient->index(i, j);
+//            if (d->m_SqlPatient->isDirty(index)) {
+//                isDirty = true;
+//                break;
+//            }
+//        }
+//    }
+//    if (!isDirty)
+//        return true;
+//#endif
     // Submit the model to the database
     bool ok = true;
     if (!d->m_SqlPatient->submitAll()) {
