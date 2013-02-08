@@ -24,8 +24,14 @@
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
     <updateversion from="0.8.0" to="0.8.2">
-      <text lang="fr">Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.</text>
-      <text lang="en">Defining user documents to use for the print process of the textual prescription text editor.</text>
+      <text lang="fr">
+      Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
+      Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
+      </text>
+      <text lang="en">
+      Defining user documents to use for the print process of the textual prescription text editor.
+      Adding basic biometric measurements in the SOAP form (using a sub-form).
+      </text>
     </updateversion>
       <updateversion from="0.8.0" to="0.7.2">
         <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
@@ -35,44 +41,25 @@
 
   </formdescription>
 
-  <fieldsupdate>
-    <field old="GP::Basic::IdentityForm" new="Subs::Tools::Identity" setInVersion=""/>
-    <field old="GP::Basic::IdentityItem" new="Subs::Tools::Identity::IdentityWidget" setInVersion=""/>
-    <field old="GP::Basic::Identity::ExtraFrench" new="Subs::Tools::Identity::FrGroup" setInVersion=""/>
-    <field old="GP::Basic::Identity::NSS" new="Subs::Tools::Identity::FrGroup::NSS" setInVersion=""/>
-    <field old="GP::Basic::Identity::IsNSSOwner" new="Subs::Tools::Identity::FrGroup::IsNSSOwner" setInVersion=""/>
-    <field old="GP::Basic::Identity::ContactGroup" new="Subs::Tools::Identity::ContactGroup" setInVersion=""/>
-    <field old="GP::Basic::Identity::ContactGroup::Tels" new="Subs::Tools::Identity::ContactGroup::Tels" setInVersion=""/>
-    <field old="GP::Basic::Identity::ContactGroup::Fax" new="Subs::Tools::Identity::ContactGroup::Fax" setInVersion=""/>
-    <field old="GP::Basic::Identity::ContactGroup::Mail" new="Subs::Tools::Identity::ContactGroup::Mail" setInVersion=""/>
-  </fieldsupdate>
+  <fieldequivalence>
+    <equivalent old="GP::Basic::IdentityForm" new="Subs::Tools::Identity" setInVersion=""/>
+    <equivalent old="GP::Basic::IdentityItem" new="Subs::Tools::Identity::IdentityWidget" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::ExtraFrench" new="Subs::Tools::Identity::FrGroup" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::NSS" new="Subs::Tools::Identity::FrGroup::NSS" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::IsNSSOwner" new="Subs::Tools::Identity::FrGroup::IsNSSOwner" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::ContactGroup" new="Subs::Tools::Identity::ContactGroup" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::ContactGroup::Tels" new="Subs::Tools::Identity::ContactGroup::Tels" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::ContactGroup::Fax" new="Subs::Tools::Identity::ContactGroup::Fax" setInVersion=""/>
+    <equivalent old="GP::Basic::Identity::ContactGroup::Mail" new="Subs::Tools::Identity::ContactGroup::Mail" setInVersion=""/>
 
-  <MedForm name="GP::Basic::SOAP">
-    <label>SOAP</label>
-    <icon>__theme__/edit.png</icon>
-    <options>DontPrintEmptyValues</options>
-    <Item type="texteditor" name="GP::Basic::SOAP::S">
-      <label lang="xx">Subjective</label>
-      <label lang="fr">Subjectif</label>
-      <options>FullEditor;DontPrintEmptyValues</options>
-    </Item>
-    <Item type="texteditor" name="GP::Basic::SOAP::O">
-      <label lang="xx">Objective</label>
-      <label lang="fr">Objectif</label>
-      <options>FullEditor;DontPrintEmptyValues</options>
-    </Item>
-    <Item type="texteditor" name="GP::Basic::SOAP::A">
-      <label lang="xx">Assessment</label>
-      <label lang="fr">Appréciation clinique</label>
-      <options>FullEditor;DontPrintEmptyValues</options>
-    </Item>
-    <Item type="texteditor" name="GP::Basic::SOAP::P">
-      <label lang="xx">Plan</label>
-      <label lang="fr">Prise en charge</label>
-      <options>FullEditor;DontPrintEmptyValues</options>
-    </Item>
+    <equivalent old="GP::Basic::SOAP" new="Subs::Tools::SOAP::WithBio" setInVersion=""/>
+    <equivalent old="GP::Basic::SOAP::S" new="Subs::Tools::SOAP::WithBio::SubjectiveGroup::Subjective" setInVersion=""/>
+    <equivalent old="GP::Basic::SOAP::O" new="Subs::Tools::SOAP::WithBio::ObjectiveGroup::Objective" setInVersion=""/>
+    <equivalent old="GP::Basic::SOAP::A" new="Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Assessment" setInVersion=""/>
+    <equivalent old="GP::Basic::SOAP::P" new="Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Plan" setInVersion=""/>
+  </fieldequivalence>
 
-  </MedForm>
+  <file>__subForms__/generic/soap_with_biomeasurements/central.xml</file>
 
   <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
