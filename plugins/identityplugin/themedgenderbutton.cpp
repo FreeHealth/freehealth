@@ -68,7 +68,8 @@ ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
     m_pixmap(QPixmap()),
     m_deletePhotoAction(0),
     m_separator(0),
-    m_defaultAction(0)
+    m_defaultAction(0),
+    m_isDefaultGender(false)
 {
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -129,6 +130,7 @@ QAction *ThemedGenderButton::deletePhotoAction() const
 void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
 {
     setIcon(QIcon(pixmap));
+    m_isDefaultGender = false;
     m_pixmap = pixmap;
     m_deletePhotoAction->setEnabled(!pixmap.isNull());
     Q_EMIT pixmapChanged(pixmap);
@@ -149,13 +151,10 @@ void ThemedGenderButton::setGenderImage(int genderIndex)
 {
     // check if there is a has a real pixmap
     // if there is a pixmap, DON'T change the photo!
-    if (m_pixmap.isNull()) {
-        // if null, set default gendered icon
-        QPixmap genderPix;
-        //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
-        genderPix = theme()->defaultGenderPixmap(genderIndex);
-
-        //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
-        setPixmap(genderPix);
-    }
+    if (!m_pixmap.isNull() && !m_isDefaultGender)
+        return;
+    QPixmap genderPix;
+    genderPix = theme()->defaultGenderPixmap(genderIndex);
+    setPixmap(genderPix);
+    m_isDefaultGender = true;
 }

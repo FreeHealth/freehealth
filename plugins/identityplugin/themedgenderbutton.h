@@ -64,6 +64,7 @@ private:
     QAction* m_deletePhotoAction;
     QAction *m_separator;
     QAction *m_defaultAction;
+    bool m_isDefaultGender;
 };
 
 } // namespace Internal
