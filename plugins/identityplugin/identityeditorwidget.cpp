@@ -760,14 +760,15 @@ QString IdentityEditorWidget::toXml() const
  */
 void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 {
-//    qWarning() << modelIndex << (modelIndex.model() == d->m_Mapper->model());
-    if (modelIndex.model() == d->m_Mapper->model()) {
-        d->ui->passwordWidget->clear();
-        d->ui->zipcodesWidget->clear();
-        d->m_Mapper->setCurrentIndex(modelIndex.row());
-        d->populatePixmap();
-        updateGenderImage();
+    if (modelIndex.model() != d->m_Mapper->model()) {
+        LOG_ERROR("Unable to setCurrentIndex in mapper. Models do not match.");
+        return;
     }
+    d->ui->passwordWidget->clear();
+    d->ui->zipcodesWidget->clear();
+    d->m_Mapper->setCurrentIndex(modelIndex.row());
+    d->populatePixmap();
+    updateGenderImage();
 }
 
 /**
