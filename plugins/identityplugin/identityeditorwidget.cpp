@@ -314,6 +314,7 @@ public:
         m_Mapper = new IsDirtyDataWidgetMapper(q);
         m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
         m_Mapper->setModel(patient());
+        m_Model = patient();
         addMapperMapping();
     }
 
@@ -504,7 +505,7 @@ public:
 public:
     Ui::IdentityWidget *ui;
     IsDirtyDataWidgetMapper *m_Mapper;
-    QAbstractItemModel *m_Model;
+    QAbstractItemModel *m_Model;       // This pointer should never be deleted
     QPixmap m_Photo;
     bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation;
     QString m_lastXml;
