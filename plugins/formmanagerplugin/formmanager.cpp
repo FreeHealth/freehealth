@@ -752,7 +752,7 @@ void FormManager::checkFormUpdates()
         QStringList msg;
         foreach(const Form::FormIODescription &descr, io->availableUpdates()) {
             QString html;
-            html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br /><br />")
+            html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br />%3<br />")
                     .arg(tr("Form: ") + descr.data(Form::FormIODescription::ShortDescription).toString())
                     .arg(tr("New version: %1").arg(descr.data(Form::FormIODescription::Version).toString()))
                     .arg(tr("Database version: %1").arg(descr.data(Form::FormIODescription::UpdateAvailable_OldVersion).toString()))
