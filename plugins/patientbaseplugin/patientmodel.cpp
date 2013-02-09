@@ -751,7 +751,6 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             QModelIndex idx = this->index(index.row(), colsToEmit.at(i), index.parent());
             Q_EMIT dataChanged(idx, idx);
         }
-        return true;
     }
     return true;
 }
@@ -942,20 +941,18 @@ bool PatientModel::submit()
 //        return true;
 //#endif
     // Submit the model to the database
-    bool ok = true;
-    if (!d->m_SqlPatient->submitAll()) {
+    bool ok = d->m_SqlPatient->submitAll();
+    if (!ok && d->m_SqlPatient->lastError().number() != -1) {
         LOG_ERROR(QString("Model not submitted. Error n° %1; %2")
                   .arg(d->m_SqlPatient->lastError().number())
                   .arg(d->m_SqlPatient->lastError().text()));
-        ok = false;
-    } else {
-        // emit created uids
-        for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
-            Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
-        }
-        d->m_CreatedPatientUid.clear();
     }
-    return ok;
+    // emit created uids
+    for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
+        Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
+    }
+    d->m_CreatedPatientUid.clear();
+    return true;
 }
 
 /** Refresh the model. Reset the filter and reselect the database. */
