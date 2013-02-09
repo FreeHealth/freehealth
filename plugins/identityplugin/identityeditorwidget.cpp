@@ -926,18 +926,26 @@ bool IdentityEditorWidget::submit()
     if (d->m_xmlOnly)
         return true;
     if (d->m_Mapper) {
+        // BUG: QPixmap from the themedGenderButton is not correctly submitted
+        // So do this by hand
+        int photoColumn = d->m_Mapper->mappedSection(d->ui->photoButton);
+        if (photoColumn > -1) {
+            QModelIndex modelIndex;
+            if (d->m_Model)
+                modelIndex = d->m_Model->index(d->m_Mapper->currentIndex(), photoColumn);
+            else
+                modelIndex = d->m_Mapper->model()->index(d->m_Mapper->currentIndex(), photoColumn);
+            if (!d->m_Mapper->model()->setData(modelIndex, d->ui->photoButton->pixmap())) {
+                LOG_ERROR("Mapper can not submit the patient photo.");
+                return false;
+            }
+        }
+
         if (!d->m_Mapper->submit()) {
             LOG_ERROR("Mapper can not submit to model");
             return false;
         }
-        // BUG: QPixmap from the themedGenderButton is not correctly submitted
-        // So do this by hand
-        int index = d->m_Mapper->mappedSection(d->ui->photoButton);
-        if (index > -1) {
-            QModelIndex modelIndex = d->m_Mapper->model()->index(d->m_Mapper->currentIndex(), index);
-            if (!d->m_Mapper->model()->setData(modelIndex, d->ui->photoButton->pixmap()))
-                return false;
-        }
+
         d->m_Mapper->onModelSubmitted();
     }
     return true;
