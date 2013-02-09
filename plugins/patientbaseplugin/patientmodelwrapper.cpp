@@ -55,7 +55,7 @@ using namespace Patients;
 using namespace Internal;
 
 PatientModelWrapper::PatientModelWrapper(QObject *parent) :
-        Core::IPatient(parent), m_Model(0)
+    Core::IPatient(parent), m_Model(0)
 {
 }
 
