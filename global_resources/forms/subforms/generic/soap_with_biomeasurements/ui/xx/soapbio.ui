@@ -113,12 +113,16 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="weightUnit"/>
+           <widget class="QComboBox" name="weightUnit">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="hLabel">
           <property name="text">
            <string>H</string>
           </property>
@@ -137,9 +141,27 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="heightUnit"/>
+           <widget class="QComboBox" name="heightUnit">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+           </widget>
           </item>
          </layout>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="bmiLabel">
+          <property name="text">
+           <string>BMI</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="bmiValue">
+          <property name="text">
+           <string>BMI</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

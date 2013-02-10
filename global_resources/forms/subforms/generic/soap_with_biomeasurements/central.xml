@@ -98,44 +98,39 @@
           <options>DontPrintEmptyValues</options>
         </Item>
 
-        <Item type="doublespin" name="ObjectiveGroup::Weight::Value">
-          <uilink label="wLabel" widget="weight" layout=""/>
+        <Item type="measurement" name="ObjectiveGroup::Weight::Value">
+          <uilink label="wLabel" widget="weight;weightUnit" layout=""/>
           <label lang="xx">Weight</label>
           <label lang="fr">Poids</label>
           <tooltip lang="xx">Weight</tooltip>
           <tooltip lang="fr">Poids</tooltip>
-          <options>DontPrintEmptyValues</options>
+          <options>DontPrintEmptyValues;Weight</options>
+          <default>kilogram</default>
           <patientdata>Weight</patientdata>
         </Item>
 
-        <Item type="combo" name="ObjectiveGroup::Weight::Unit">
-          <uilink label="" widget="weightUnit" layout=""/>
-          <tooltip lang="xx">Weight unit measurement</tooltip>
-          <tooltip lang="fr">Unité de mesure du poids</tooltip>
-          <options>DontPrintEmptyValues</options>
-          <patientdata>WeightUnit</patientdata>
-        </Item>
-
-        <Item type="doublespin" name="ObjectiveGroup::Height::Value">
-          <uilink label="hLabel" widget="height" layout=""/>
+        <Item type="measurement" name="ObjectiveGroup::Height::Value">
+          <uilink label="hLabel" widget="height;heightUnit" layout=""/>
           <label lang="xx">Height</label>
           <label lang="fr">Taille</label>
           <tooltip lang="xx">Height</tooltip>
           <tooltip lang="fr">Taille</tooltip>
-          <options>DontPrintEmptyValues</options>
+          <options>DontPrintEmptyValues;Length</options>
+          <default>centimeter</default>
           <patientdata>Height</patientdata>
         </Item>
 
-        <Item type="combo" name="ObjectiveGroup::Height::Unit">
-          <uilink label="" widget="heightUnit" layout=""/>
-          <tooltip lang="xx">Height unit measurement</tooltip>
-          <tooltip lang="fr">Unité de mesure de la taille</tooltip>
+        <Item type="helptext" name="ObjectiveGroup::BMI::Label">
+          <uilink widget="bmiLabel"/>
+          <label lang="xx">BMI</label>
+          <label lang="fr">IMC</label>
+          <tooltip lang="xx">Body Mass Index (kg/m2)&lt;br />BMI=Height (cm) / (Weight (kg) ^2)</tooltip>
+          <tooltip lang="fr">Index de masse corporelle (kg/m2)&lt;br />BMI=Taille (cm) / (Poids (kg) ^2)</tooltip>
           <options>DontPrintEmptyValues</options>
-          <patientdata>HeightUnit</patientdata>
         </Item>
 
-        <Item type="helptext" name="BMILabel">
-          <uilink widget="bmiLabel"/>
+        <Item type="helptext" name="ObjectiveGroup::BMI::Value">
+          <uilink widget="bmiValue"/>
           <label lang="xx">BMI</label>
           <label lang="fr">IMC</label>
           <tooltip lang="xx">Body Mass Index (kg/m2)&lt;br />BMI=Height (cm) / (Weight (kg) ^2)</tooltip>
@@ -172,8 +167,8 @@
      <tabstop>ObjectiveGroup::BloodPressure::Syst</tabstop>
      <tabstop>ObjectiveGroup::BloodPressure::Diast</tabstop>
      <tabstop>ObjectiveGroup::Weight::Value</tabstop>
-     <tabstop>ObjectiveGroup::Height::Value</tabstop>
      <tabstop>ObjectiveGroup::Weight::Unit</tabstop>
+     <tabstop>ObjectiveGroup::Height::Value</tabstop>
      <tabstop>ObjectiveGroup::Height::Unit</tabstop>
      <tabstop>ObjectiveGroup::Objective</tabstop>
      <tabstop>AssessmentPlanGroup::Assessment</tabstop>
