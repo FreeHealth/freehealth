@@ -605,18 +605,20 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
 
     QWidget *lastTab = d->ui->genderCombo;
+
+    // Manage address
     bool showAddress = (widgets.testFlag(Street)
             || widgets.testFlag(City)
             || widgets.testFlag(Zipcode)
             || widgets.testFlag(Province)
             || widgets.testFlag(Country_TwoCharIso)
             || widgets.testFlag(Country_QLocale));
+    d->ui->zipcodesWidget->setEnabled(showAddress);
+    d->ui->zipcodesWidget->setVisible(showAddress);
     if (showAddress) {
-        d->ui->zipcodesWidget->setEnabled(showAddress);
         QWidget::setTabOrder(d->ui->genderCombo, d->ui->zipcodesWidget);
         lastTab = d->ui->zipcodesWidget;
     }
-
     QWidget::setTabOrder(lastTab, d->ui->language);
     QWidget::setTabOrder(d->ui->language, d->ui->passwordWidget);
 
@@ -624,8 +626,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
             || widgets.testFlag(Extra_Password)
             || widgets.testFlag(Extra_ConfirmPassword));
     d->ui->passwordWidget->setVisible(showLog);
-
-    d->ui->zipcodesWidget->setVisible(d->ui->zipcodesWidget->isEnabled());
+    d->ui->passwordWidget->setEnabled(showLog);
     d->m_availaibleSet = true;
 }
 
