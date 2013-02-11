@@ -93,22 +93,24 @@ public:
     // Populates the _dbAvailable and create/open _db
     void checkDatabase()
     {
-        _db = QSqlDatabase();
         _dbAvailable = false;
+        if (!QFileInfo(databaseFileName()).exists())
+            return;
+        _db = QSqlDatabase();
         if (QSqlDatabase::connectionNames().contains("ZIPS")) {
             _db = QSqlDatabase::database("ZIPS");
             _dbAvailable = true;
         } else {
             LOG_FOR(q, QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
             _db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
-            if (QFileInfo(databaseFileName()).exists()) {
-                _db.setDatabaseName(databaseFileName());
-                _dbAvailable = true;
-            }
+            _db.setDatabaseName(databaseFileName());
+            _dbAvailable = true;
         }
         if (_dbAvailable) {
             if (!_db.open()) {
                 LOG_ERROR_FOR(q, "Unable to open Zip database");
+                QSqlDatabase::removeDatabase("ZIPS");
+                _db = QSqlDatabase();
                 _dbAvailable = false;
             } else {
                 LOG_FOR(q, tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg("zipcodes").arg("sqlite"));
