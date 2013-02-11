@@ -5,6 +5,7 @@ FreeMedForms
   * New form items:
     * detailswidget
     * modern date
+    * measurement widget (a set of two widgets one for the value, one for the measurement unit)
   * New form item options
     * Rich texteditor
       * can set print duplicata
