@@ -401,7 +401,7 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
 
     // button
     m_CityButton = new QToolButton(m_cityEdit);
-    m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+    m_CityButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
     m_cityEdit->setRightButton(m_CityButton);
 }
 
@@ -422,7 +422,7 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
 
     // button
     m_ZipButton = new QToolButton(m_zipEdit);
-    m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+    m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
     m_zipEdit->setRightButton(m_ZipButton);
 }
 
