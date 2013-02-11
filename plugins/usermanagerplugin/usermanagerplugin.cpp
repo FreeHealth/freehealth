@@ -436,6 +436,7 @@ void UserManagerPlugin::showUserManager()
     dlg.initialize();
     dlg.show();
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
+    dlg.initializeAfterShowing();
     dlg.exec();
 }
 
