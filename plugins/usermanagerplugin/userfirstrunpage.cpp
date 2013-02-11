@@ -87,11 +87,13 @@ void UserCreationPage::userManager()
 {
     if (!_userManagerDialog) {
         _userManagerDialog = new UserManagerDialog(this);
+        _userManagerDialog->setModal(true);
         _userManagerDialog->initialize();
     }
     QSize size = QDesktopWidget().availableGeometry(_userManagerDialog).size();
     _userManagerDialog->resize(size*0.75);
     _userManagerDialog->show();
+    _userManagerDialog->initializeAfterShowing();
     Utils::centerWidget(_userManagerDialog, this->wizard());
 }
 
@@ -99,7 +101,9 @@ void UserCreationPage::userWizard()
 {
     if (!_userWizard) {
         _userWizard = new UserCreatorWizard(this);
-        Utils::resizeAndCenter(_userWizard, this->wizard());
+        _userWizard->setModal(true);
+//        _userWizard->adjustSize();
+//        Utils::centerWidget(_userWizard, this->wizard());
     }
     _userWizard->show();
 }
@@ -107,7 +111,9 @@ void UserCreationPage::userWizard()
 void UserCreationPage::initializePage()
 {
     // Create the user database
-    userBase()->initialize();
+    if (!userCore().initialize()
+            || !userBase()->isInitialized())
+        LOG_ERROR("Unable to initialize user core or database");
 
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
     if (db.driver()==Utils::Database::SQLite) {

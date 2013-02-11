@@ -33,12 +33,13 @@
 /**
  * \file usercore.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 16 Dec 2012
+ * \version 0.8.2
+ * \date 11 Feb 2013
 */
 
 namespace UserPlugin {
 class UserModel;
+class UserCreationPage;
 
 namespace Internal {
 class UserCorePrivate;
@@ -50,6 +51,7 @@ class USER_EXPORT UserCore : public QObject
 {
     Q_OBJECT
     friend class UserPlugin::Internal::UserManagerPlugin;
+    friend class UserPlugin::UserCreationPage;
 
 protected:
     explicit UserCore(QObject *parent = 0);

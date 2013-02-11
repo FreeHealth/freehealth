@@ -118,9 +118,6 @@ UserManagerPlugin::UserManagerPlugin() :
     Core::ICore::instance()->translators()->addNewTranslator("plugin_usermanager");
 
     new UserCore(this);
-    // is Core initialized ?
-    if (!userCore().initialize())
-        LOG_ERROR("UserCore can not initialize");
 
     addObject(m_FirstCreation);
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));

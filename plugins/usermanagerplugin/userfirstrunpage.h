@@ -73,8 +73,6 @@ public:
     QWizardPage *createPage(QWidget *parent) {return new UserPlugin::UserCreationPage(parent);}
 };
 
-
 }  // End namespace UserPlugin
-
 
 #endif // USERFIRSTRUNPAGE_H
