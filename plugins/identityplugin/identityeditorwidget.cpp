@@ -280,6 +280,8 @@ public:
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
         QObject::connect(ui->photoButton, SIGNAL(pixmapChanged(QPixmap)), q, SLOT(onPhotoPixmapChanged()));
+        QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
+        QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(passwordConfirmed()));
     }
 
     void connectPropertiesNotifier()
@@ -777,31 +779,35 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
  * test the content of the firstname, birthname, gender & DOB.
  * When subclassing, if you return false, the object can not submit to the model.
  */
-bool IdentityEditorWidget::isIdentityValid() const
+bool IdentityEditorWidget::isIdentityValid(bool warnUser) const
 {
     if (d->ui->birthName->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a birthname."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a birthname."),
                                  tr("You can not create a patient without a birthname"),
                                  "", tr("No birthname"));
         d->ui->birthName->setFocus();
         return false;
     }
     if (d->ui->firstname->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a first name."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a first name."),
                                  tr("You can not create a patient without a first name"),
                                  "", tr("No firstname"));
         d->ui->firstname->setFocus();
         return false;
     }
     if (d->ui->dob->date().isNull()) {
-        Utils::warningMessageBox(tr("You must specify a date of birth."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a date of birth."),
                                  tr("You can not create a patient without a date of birth"),
                                  "", tr("No date of birth"));
         d->ui->dob->setFocus();
         return false;
     }
     if (d->ui->genderCombo->currentIndex() == -1) {
-        Utils::warningMessageBox(tr("You must specify a gender."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a gender."),
                                  tr("You can not create a patient without a gender"),
                                  "", tr("No gender"));
         d->ui->genderCombo->setFocus();

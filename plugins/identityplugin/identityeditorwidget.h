@@ -131,7 +131,7 @@ public:
     bool isXmlInOut() const;
     QString toXml() const;
 
-    virtual bool isIdentityValid() const;
+    virtual bool isIdentityValid(bool warnUser = true) const;
     bool isModified() const;
 
     QString currentTitle() const;

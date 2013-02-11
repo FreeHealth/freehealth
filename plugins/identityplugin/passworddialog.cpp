@@ -172,10 +172,13 @@ void PasswordDialog::done(int result)
     if (m_ui->newPass->text().size() < 5)
         return;
 
-    // Set password mode ?
     if (m_OldCryptedPass.isEmpty()) {
+        // Set password mode
+        m_AllIsGood = true;
+        m_CryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
         QDialog::done(result);
     } else {
+        // Change password mode
         const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
         const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->text());
 

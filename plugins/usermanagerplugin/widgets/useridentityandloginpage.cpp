@@ -114,8 +114,18 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     registerField("Login*", _identity, "clearLogin");
     registerField("Password*", _identity, "clearPassword");
 
-    connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkLoginAfterEdition()));
-    connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(onPasswordConfirmed()));
+    connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(titleChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(birthNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(secondNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(firstNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(dateOfBirthChanged(QDate)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(genderIndexChanged(int)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(genderChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(languageChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(clearLoginChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(checkCompleteState()));
 
 //    Utils::resizeAndCenter(this, parent);
 }
@@ -143,12 +153,11 @@ bool UserIdentityAndLoginPage::checkLogin() const
     return true;
 }
 
-void UserIdentityAndLoginPage::checkLoginAfterEdition()
+void UserIdentityAndLoginPage::checkCompleteState()
 {
-    if (checkLogin())
+    if (checkLogin() && _identity->isIdentityValid(false)) {
         Q_EMIT completeChanged();
-
-    _showErrorLabels = true;
+    }
 }
 
 /**
@@ -190,6 +199,13 @@ void UserIdentityAndLoginPage::initializePage()
 
 bool UserIdentityAndLoginPage::isComplete() const
 {
+//    qWarning() << "isComplete" <<
+//                  !_identity->currentBirthName().isEmpty()
+//               << !_identity->currentFirstName().isEmpty()
+//               << !_identity->currentGender().isEmpty()
+//               << !_identity->currentLanguage().isEmpty()
+//               << checkLogin()
+//               << _identity->isPasswordCompleted();
     return (!_identity->currentBirthName().isEmpty()
             && !_identity->currentFirstName().isEmpty()
             && !_identity->currentGender().isEmpty()

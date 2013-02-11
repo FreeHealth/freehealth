@@ -61,7 +61,7 @@ public:
     bool validatePage();
 
 private Q_SLOTS:
-    void checkLoginAfterEdition();
+    void checkCompleteState();
     void onPasswordConfirmed();
 //    void onNamesEditionFinished();
 

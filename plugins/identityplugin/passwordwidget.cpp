@@ -199,6 +199,7 @@ void PasswordWidget::onChangeOrSetPasswordClicked()
     if (dlg.exec() == QDialog::Accepted) {
         // Emit password changed
         d->_cachedCryptedPassword = dlg.cryptedPassword();
+        d->_cachedUncryptedPassword = dlg.uncryptedPassword();
         Q_EMIT cryptedPasswordChanged(dlg.cryptedPassword());
         Q_EMIT uncryptedPasswordChanged(dlg.uncryptedPassword());
     }
