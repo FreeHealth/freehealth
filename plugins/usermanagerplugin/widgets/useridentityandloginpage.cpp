@@ -92,15 +92,16 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
 
     // Create the layout
     QHBoxLayout *layout = new QHBoxLayout(this);
-    setLayout(layout);
+    layout->setSizeConstraint(QLayout::SetDefaultConstraint);
     layout->setMargin(0);
     layout->setSpacing(0);
 
     // Create the identity widget
     _identity = new Identity::IdentityEditorWidget(this);
-    _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     layout->addWidget(_identity);
+    setLayout(layout);
 
     registerField("Name*", _identity, "birthName");
     registerField("Firstname*", _identity, "firstName");
@@ -116,13 +117,14 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkLoginAfterEdition()));
     connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(onPasswordConfirmed()));
 
-    Utils::resizeAndCenter(this, parent);
+//    Utils::resizeAndCenter(this, parent);
 }
 
 UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 {
 //    delete ui;
 }
+
 
 /** Check the current login. Return \e true if it can be used otherwise return false*/
 bool UserIdentityAndLoginPage::checkLogin() const
@@ -164,10 +166,26 @@ void UserIdentityAndLoginPage::changeEvent(QEvent *e)
         retranslate();
 }
 
+QSize UserIdentityAndLoginPage::sizeHint() const
+{
+    return _identity->sizeHint();
+}
+
+QSize UserIdentityAndLoginPage::minimumSizeHint() const
+{
+    return _identity->minimumSizeHint();
+}
+
 void UserIdentityAndLoginPage::retranslate()
 {
     setTitle(tr("Create a new user"));
     setSubTitle(tr("Please enter your identity."));
+}
+
+void UserIdentityAndLoginPage::initializePage()
+{
+    //FIXME: layout problematic in UserCreatorWizard: identity page does not correctly resize
+    wizard()->resize(_identity->sizeHint() + QSize(100, 50));
 }
 
 bool UserIdentityAndLoginPage::isComplete() const
