@@ -78,6 +78,7 @@ public:
     ~UserManagerDialog();
 
     virtual bool initialize();
+    virtual bool initializeAfterShowing();
 
 protected:
     void done(int r);

@@ -247,6 +247,12 @@ bool UserManagerDialog::initialize()
     return true;
 }
 
+bool UserManagerDialog::initializeAfterShowing()
+{
+    Q_ASSERT(m_Widget);
+    m_Widget->resizeSplitter();
+}
+
 /** Close the usermanager. Check if modifications have to be saved and ask user. */
 void UserManagerDialog::done(int r)
 {
@@ -501,9 +507,18 @@ bool UserManagerWidget::initialize()
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     d->analyzeCurrentUserRights();
     retranslate();
+    return true;
+}
+
+/**
+ * Resize splitter to 1/4 - 3/4  of the current widget width. Call this member after
+ * the widget is set to visible.
+ */
+void UserManagerWidget::resizeSplitter()
+{
+    Q_ASSERT(d->ui);
     int width = size().width();
     d->ui->splitter->setSizes(QList<int>() << width/4 << width*3/4);
-    return true;
 }
 
 /**
