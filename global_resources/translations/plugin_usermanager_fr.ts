@@ -673,7 +673,7 @@ L&apos;application va s&apos;arrêter.</translation>
     <name>UserPlugin::UserModel</name>
     <message>
         <source>Unable to retreive user into the model using login and password.</source>
-        <translation>Impossible de récupérer les utilisateur avec l&apos;identifiant et le mot de passe.</translation>
+        <translation>Impossible de récupérer l'utilisateur avec l&apos;identifiant et le mot de passe.</translation>
     </message>
     <message>
         <source>Database server administrator</source>
