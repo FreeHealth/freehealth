@@ -626,6 +626,7 @@ FormPage::FormPage(QObject *parent):
     if (spec())
         _mode->setId(spec()->uuid().toUtf8());
     _mode->setPatientBarVisibility(true);
+    _mode->setEnabledOnlyWithCurrentPatient(true);
     _mode->setWidget(_placeHolder);
     languageChanged();
 

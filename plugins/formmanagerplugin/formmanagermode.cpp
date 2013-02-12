@@ -71,6 +71,7 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     setPriority(Core::Constants::P_MODE_PATIENT_FILE);
     setId(Core::Constants::MODE_PATIENT_FILE);
     setPatientBarVisibility(true);
+    setEnabledOnlyWithCurrentPatient(true);
 
     m_Holder = new FormPlaceHolder;
     m_Holder->setObjectName("EpisodesFormPlaceHolder");

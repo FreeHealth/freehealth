@@ -380,6 +380,7 @@ PmhMode::PmhMode(QObject *parent) :
     setPriority(Core::Constants::P_MODE_PATIENT_HISTORY);
     setId(Core::Constants::MODE_PATIENT_HISTORY);
     setPatientBarVisibility(true);
+    setEnabledOnlyWithCurrentPatient(true);
 
 //    const QList<int> &context;
 //    setContext();

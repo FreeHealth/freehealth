@@ -11,6 +11,8 @@ FreeMedForms
       * can set print duplicata
       * can set papers to use for the print (header, footer, watermark)
       * define the document title (used by the token engine)
+  * New forms
+    * Creating a SOAP with biometrics value (weight, height, blood pressure)
   * Refactoring all identity UI
   * Refactoring the
     * User manager
@@ -39,6 +41,8 @@ FreeMedForms
     * Episode view header font were too small on Linux
     * Avoid identity data duplication from one patient to another
     * Improving the debug dialog and the log saving
+    * When no patient is selected, disable some modes (that require a current patient to be defined)
+    * Removing empty menu in menubar
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI
@@ -52,6 +56,7 @@ FreeMedForms
     * Many bug fixes
   * Installation && configuration / databases
   * PMHx
+    * Correcting Pmhx ICD button enabled state when installing the ICD10 datapack
   * Agenda:
   * DataPack manager
     * Correcting crash when download dialog is cancelled

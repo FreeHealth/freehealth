@@ -30,13 +30,27 @@
 **
 **************************************************************************/
 
+/**
+ * \fn bool Core::IMode::setEnabledOnlyWithCurrentPatient(bool enablewithcurrentpatient)
+ * If set to true, the mode will be enabled only when a current patient is defined and
+ * disabled if no current patient is defined. By default, set to false (always enabled).
+ */
+
+/**
+ * \fn void Core::IMode::setPatientBarVisibility(bool visible)
+ * Define is the patient bar should be visible or not inside this mode. By default, set to true.
+ * If you set to false, the patient bar will not be presented in the UI of the mode.
+ * \sa Core::IPatientBar, Core::IPatient
+ */
+
 #include "imode.h"
 
 using namespace Core;
 IMode::IMode(QObject *parent)
     : IContext(parent),
     m_isEnabled(true),
-    m_isPatientBarVisible(true)
+    m_isPatientBarVisible(true),
+    m_onlyWithCurrentPatient(false)
 {
 }
 
@@ -45,7 +59,7 @@ void IMode::setEnabled(bool enabled)
     if (m_isEnabled == enabled)
         return;
     m_isEnabled = enabled;
-    emit enabledStateChanged(m_isEnabled);
+    Q_EMIT enabledStateChanged(m_isEnabled);
 }
 
 bool IMode::isEnabled() const

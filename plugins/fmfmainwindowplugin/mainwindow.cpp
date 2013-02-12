@@ -283,13 +283,14 @@ void MainWindow::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+
     // Manage current user and patient
     onCurrentUserChanged();
     pluginManager()->addObject(m_UserListener = new MainWindowUserListener(this));
-    connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
-    connect(user(), SIGNAL(userDataChanged(int)), this, SLOT(onUserDataChanged(int)));
-    connect(user(), SIGNAL(reset()), this, SLOT(onCurrentUserChanged()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()), Qt::UniqueConnection);
+    connect(user(), SIGNAL(userDataChanged(int)), this, SLOT(onUserDataChanged(int)), Qt::UniqueConnection);
+    connect(user(), SIGNAL(reset()), this, SLOT(onCurrentUserChanged()), Qt::UniqueConnection);
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()), Qt::UniqueConnection);
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -299,6 +300,7 @@ void MainWindow::postCoreInitialization()
 
     theme()->finishSplashScreen(this);
 
+    manageIModeEnabledState();
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
 
     raise();
@@ -342,6 +344,9 @@ void MainWindow::onUserDataChanged(int id)
  */
 void MainWindow::onCurrentPatientChanged()
 {
+    // Manage mode enabled state
+    manageIModeEnabledState();
+
     // Activate Patient files mode
     formCore().activatePatientFileCentralMode();
 
@@ -353,6 +358,15 @@ void MainWindow::onCurrentPatientChanged()
     aboutToShowRecentPatients();
 
     endProcessingSpinner();
+}
+
+void MainWindow::manageIModeEnabledState()
+{
+    QList<Core::IMode*> modes = pluginManager()->getObjects<Core::IMode>();
+    foreach(Core::IMode *mode, modes) {
+        if (mode->isEnabledOnlyWithCurrentPatient())
+            mode->setEnabled(patient()->currentPatientIndex().isValid());
+    }
 }
 
 /** \brief Close the main window and the application */
