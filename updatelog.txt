@@ -43,6 +43,7 @@ FreeMedForms
     * Improving the debug dialog and the log saving
     * When no patient is selected, disable some modes (that require a current patient to be defined)
     * Removing empty menu in menubar
+    * In Form selector preferences, only show Complete forms (no sub-forms)
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI
@@ -58,6 +59,7 @@ FreeMedForms
   * PMHx
     * Correcting Pmhx ICD button enabled state when installing the ICD10 datapack
   * Agenda:
+    * Adding a manual refreshing of the view
   * DataPack manager
     * Correcting crash when download dialog is cancelled
     * Avoid multi-clicks on toolbar actions
@@ -70,6 +72,7 @@ FreeMedForms
     * Updating 'textual prescriptions': print with prescription papers and duplicata
   * Debian specific
   * Under the hood
+  * Various unloggued bug corrected
 
 ===== Packaging and documentation ====
 
