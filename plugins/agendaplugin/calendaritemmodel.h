@@ -57,7 +57,7 @@ public:
     ~CalendarItemModel();
 
     Calendar::CalendarItem getItemByUid(const QString &uid) const;
-    QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
+    QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to);
 
     int count() const;
 

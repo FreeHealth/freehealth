@@ -41,6 +41,8 @@
 #include <QMenu>
 #include <QComboBox>
 
+#include <QDebug>
+
 using namespace Calendar;
 using namespace Trans::ConstantTranslations;
 
@@ -57,7 +59,7 @@ static inline Calendar::CalendarTheme *theme() {return Calendar::CalendarTheme::
 */
 
 CalendarNavbar::CalendarNavbar(QWidget *parent) :
-        QWidget(parent)
+    QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setAutoFillBackground(true);
@@ -71,15 +73,18 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
     layout->addWidget(createCurrentDateViewButton());
     layout->addStretch();
     layout->addWidget(createNavigationModeButton());
+    layout->addWidget(createRefreshModelButton());
 
     // signal/slot connections
     connect(m_todayButton, SIGNAL(clicked()), this, SLOT(todayPage()));
     connect(m_previousPageButton, SIGNAL(clicked()), this, SLOT(previousPage()));
     connect(m_nextPageButton, SIGNAL(clicked()), this, SLOT(nextPage()));
     connect(m_viewModeNav, SIGNAL(triggered(QAction*)), this, SLOT(changeViewMode(QAction*)));
+    connect(aForceModelRefresh, SIGNAL(triggered()), this, SIGNAL(forceModelRefresh()));
 }
 
-QWidget *CalendarNavbar::createNavigationButtons() {
+QWidget *CalendarNavbar::createNavigationButtons()
+{
     QWidget *w = new QWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(w);
     layout->setSpacing(0);
@@ -109,7 +114,8 @@ QWidget *CalendarNavbar::createNavigationButtons() {
     return w;
 }
 
-QToolButton *CalendarNavbar::createNavigationModeButton() {
+QToolButton *CalendarNavbar::createNavigationModeButton()
+{
     QString icon;
     m_viewModeNav = new QToolButton(this);
     icon = theme()->iconFileName(CalendarTheme::NavigationViewMode);
@@ -134,7 +140,21 @@ QToolButton *CalendarNavbar::createNavigationModeButton() {
     return m_viewModeNav;
 }
 
-QToolButton *CalendarNavbar::createTodayButton() {
+QToolButton *CalendarNavbar::createRefreshModelButton()
+{
+    QToolButton *but = new QToolButton(this);
+    aForceModelRefresh = new QAction(this);
+    const QString &icon = theme()->iconFileName(CalendarTheme::NavigationForceModelRefreshing);
+    if (!icon.isEmpty())
+        aForceModelRefresh->setIcon(QIcon(icon));
+    but->addAction(aForceModelRefresh);
+    but->setDefaultAction(aForceModelRefresh);
+    connect(aForceModelRefresh, SIGNAL(triggered()), this, SLOT(refreshModel()));
+    return but;
+}
+
+QToolButton *CalendarNavbar::createTodayButton()
+{
     QToolButton *button = new QToolButton(this);
     QString icon = theme()->iconFileName(CalendarTheme::NavigationBookmarks);
     if (icon.isEmpty())
@@ -167,7 +187,8 @@ QToolButton *CalendarNavbar::createTodayButton() {
     return button;
 }
 
-QToolButton *CalendarNavbar::createCurrentDateViewButton() {
+QToolButton *CalendarNavbar::createCurrentDateViewButton()
+{
     m_currentDateViewButton = new QToolButton(this);
     QString icon = theme()->iconFileName(CalendarTheme::NavigationCurrentDateView);
     if (!icon.isEmpty()) {
@@ -220,7 +241,8 @@ QToolButton *CalendarNavbar::createCurrentDateViewButton() {
     return m_currentDateViewButton;
 }
 
-void CalendarNavbar::setViewType(ViewType viewType) {
+void CalendarNavbar::setViewType(ViewType viewType)
+{
 	if (viewType == m_viewType)
 		return;
 
@@ -231,7 +253,8 @@ void CalendarNavbar::setViewType(ViewType viewType) {
 	emit viewTypeChanged();
 }
 
-void CalendarNavbar::setDate(const QDate &date) {
+void CalendarNavbar::setDate(const QDate &date)
+{
 	QDate firstDate = getFirstDateByRandomDate(m_viewType, date);
 	if (firstDate == m_firstDate)
 		return;
@@ -241,7 +264,8 @@ void CalendarNavbar::setDate(const QDate &date) {
 	emit firstDateChanged();
 }
 
-void CalendarNavbar::setDayGranularity(const int durationInMinutes) {
+void CalendarNavbar::setDayGranularity(const int durationInMinutes)
+{
     Q_UNUSED(durationInMinutes);
 //    // Find the index (every 5 minutes)
 //    int index = -1;
@@ -252,7 +276,8 @@ void CalendarNavbar::setDayGranularity(const int durationInMinutes) {
 //    m_granularity->setCurrentIndex(index);
 }
 
-void CalendarNavbar::refreshInfos() {
+void CalendarNavbar::refreshInfos()
+{
 	// TODO (refresh label, etc...)
 	switch (m_viewType){
 	case View_Day:
@@ -271,39 +296,47 @@ void CalendarNavbar::refreshInfos() {
 	}
 }
 
-void CalendarNavbar::todayPage() {
+void CalendarNavbar::todayPage()
+{
 	setDate(QDate::currentDate());
 }
 
-void CalendarNavbar::yesterdayPage() {
+void CalendarNavbar::yesterdayPage()
+{
 	setDate(QDate::currentDate().addDays(-1));
 }
 
-void CalendarNavbar::tomorrowPage() {
+void CalendarNavbar::tomorrowPage()
+{
 	setDate(QDate::currentDate().addDays(1));
 }
 
-void CalendarNavbar::currentWeekPage() {
+void CalendarNavbar::currentWeekPage()
+{
     setViewType(View_Week);
     setDate(QDate::currentDate());
 }
 
-void CalendarNavbar::nextWeekPage() {
+void CalendarNavbar::nextWeekPage()
+{
     setViewType(View_Week);
     setDate(QDate::currentDate().addDays(7));
 }
 
-void CalendarNavbar::currentMonthPage() {
+void CalendarNavbar::currentMonthPage()
+{
     setViewType(View_Month);
     setDate(QDate::currentDate());
 }
 
-void CalendarNavbar::nextMonthPage() {
+void CalendarNavbar::nextMonthPage()
+{
     setViewType(View_Month);
     setDate(QDate::currentDate().addDays(QDate::currentDate().daysInMonth()));
 }
 
-void CalendarNavbar::previousPage() {
+void CalendarNavbar::previousPage()
+{
 	switch (m_viewType) {
 	case View_Day:
 		setDate(m_firstDate.addDays(-1));
@@ -319,7 +352,8 @@ void CalendarNavbar::previousPage() {
 	}
 }
 
-void CalendarNavbar::nextPage() {
+void CalendarNavbar::nextPage()
+{
 	switch (m_viewType) {
 	case View_Day:
 		setDate(m_firstDate.addDays(1));
@@ -335,7 +369,8 @@ void CalendarNavbar::nextPage() {
 	}
 }
 
-void CalendarNavbar::changeViewMode(QAction *action) {
+void CalendarNavbar::changeViewMode(QAction *action)
+{
     if (action==aDayView)
         dayMode();
     else if (action==aWeekView)
@@ -344,7 +379,8 @@ void CalendarNavbar::changeViewMode(QAction *action) {
         monthMode();
 }
 
-void CalendarNavbar::changeMonths(QAction *action) {
+void CalendarNavbar::changeMonths(QAction *action)
+{
     QDate monday = QDate(QDate::currentDate().year(), action->data().toInt(), 1);
     if (monday.dayOfWeek() != 1) {
         monday = monday.addDays(8 - monday.dayOfWeek());
@@ -353,29 +389,35 @@ void CalendarNavbar::changeMonths(QAction *action) {
     setDate(monday);
 }
 
-void CalendarNavbar::changeWeek(QAction *action) {
+void CalendarNavbar::changeWeek(QAction *action)
+{
     QDate monday = action->data().toDate();
     setViewType(View_Week);
     setDate(monday);
 }
 
-void CalendarNavbar::dayMode() {
+void CalendarNavbar::dayMode()
+{
 	setViewType(Calendar::View_Day);
 }
 
-void CalendarNavbar::weekMode() {
+void CalendarNavbar::weekMode()
+{
 	setViewType(Calendar::View_Week);
 }
 
-void CalendarNavbar::monthMode() {
+void CalendarNavbar::monthMode()
+{
 	setViewType(Calendar::View_Month);
 }
 
-void CalendarNavbar::changeGranularity(QAction *action) {
+void CalendarNavbar::changeGranularity(QAction *action)
+{
     Q_EMIT granularityChanged(action->data().toInt()*5);
 }
 
-QString CalendarNavbar::getDateIntervalString() {
+QString CalendarNavbar::getDateIntervalString()
+{
 	QDate lastDate;
 	switch (m_viewType) {
 	case View_Day:
@@ -399,6 +441,13 @@ QString CalendarNavbar::getDateIntervalString() {
 	default: // should never happend
 		return "";
 	}
+}
+
+void CalendarNavbar::refreshModel()
+{
+    QDate save = m_firstDate;
+    setDate(QDate());
+    setDate(save);
 }
 
 void CalendarNavbar::changeEvent(QEvent *e)

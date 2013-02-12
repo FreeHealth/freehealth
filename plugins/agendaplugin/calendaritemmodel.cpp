@@ -86,13 +86,19 @@ Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
 }
 
 /** Return the filtred items between specified dates \e from and \e to. This function uses the default Agenda::UserCalendar or the first available. */
-QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to) const
+QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to)
 {
     Q_ASSERT_X(from <= to, "CalendarItemModel::getItemsBetween", "<from> is strictly greater than <to>");
 
+    QList<Calendar::CalendarItem> list;
+    if (from.isNull() || to.isNull()) {
+        return list;
+    }
+
+    // qWarning() << "getItemsBetween" << from << to;
+
     getItemFromDatabase(from, to, -1);
 
-    QList<Calendar::CalendarItem> list;
     QMap<Appointment *, bool> added;
 
     int pivot = searchForIntersectedItem(m_sortedByBeginList, from, to, 0, m_sortedByBeginList.count() - 1);
@@ -417,7 +423,7 @@ void CalendarItemModel::clearAll()
     m_sortedByEndList.clear();
     m_RetrievedDates.clear();
     if (m_propagateEvents)
-            Q_EMIT reset();
+        Q_EMIT reset();
 }
 
 bool CalendarItemModel::submitAll()

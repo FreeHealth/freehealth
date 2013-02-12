@@ -133,7 +133,8 @@ void CalendarWidget::setModel(AbstractCalendarModel *model) {
 		m_d->m_body->setModel(model);
 }
 
-void CalendarWidget::firstDateChanged() {
+void CalendarWidget::firstDateChanged()
+{
     Q_ASSERT(m_d->m_header);
     Q_ASSERT(m_d->m_body);
     m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());

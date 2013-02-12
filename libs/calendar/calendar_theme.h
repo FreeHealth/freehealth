@@ -60,7 +60,8 @@ public:
         NavigationViewMode,
         NavigationDayViewMode,
         NavigationWeekViewMode,
-        NavigationMonthViewMode
+        NavigationMonthViewMode,
+        NavigationForceModelRefreshing
     };
 
     enum IconSize {

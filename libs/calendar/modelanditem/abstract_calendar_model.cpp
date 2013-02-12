@@ -37,7 +37,7 @@
 */
 
 /**
-  \fn QList<CalendarItem> Calendar::AbstractCalendarModel::getItemsBetween(const QDate &from, const QDate &to) const
+  \fn QList<CalendarItem> Calendar::AbstractCalendarModel::getItemsBetween(const QDate &from, const QDate &to)
   Returns all calendar items between two days
 */
 

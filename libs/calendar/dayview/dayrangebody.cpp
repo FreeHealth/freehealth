@@ -762,7 +762,7 @@ void DayRangeBody::itemModified(const Calendar::CalendarItem &oldItem, const Cal
 void DayRangeBody::resetItemWidgets()
 {
     deleteAllWidgets();
-    if (model()) {
+    if (model() && firstDate().isValid()) {
         for (int i = 0; i < d_body->m_rangeWidth; i++)
             d_body->refreshDayWidgets(firstDate().addDays(i));
     }
