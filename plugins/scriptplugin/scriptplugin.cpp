@@ -25,28 +25,27 @@
  ***************************************************************************/
 #include "scriptplugin.h"
 #include "scriptmanager.h"
+#include "scriptwriterdialog.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
-
-#include <QtPlugin>
-#include <QDebug>
-
-// TEST
-#include "scriptwriterdialog.h"
-#include <coreplugin/constants.h>
 #include <coreplugin/modemanager/modemanager.h>
-#include <coreplugin/ipatient.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
-#include <coreplugin/imainwindow.h>
-#include <utils/global.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
+
+#include <QtPlugin>
 #include <QAction>
+#include <QDebug>
+
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
@@ -81,7 +80,6 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 //        menu->addAction(cmd, Core::Id(group));
     return a;
 }
-// END
 
 using namespace Script;
 using namespace Internal;
@@ -145,21 +143,21 @@ void ScriptPlugin::postCoreInitialization()
         qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
 
-    // TEST
-
-    Core::Context ctx(Core::Constants::C_GLOBAL);
-    Core::Command *cmd = 0;
-    aScriptDialog = createAction(this, "aScriptDialog", Core::Constants::ICONSPINNER,
-                                 "script.aScriptDialog",
-                                 ctx,
-                                 "", "",
-                                 cmd,
-                                 0, "",
-                                 QKeySequence::UnknownKey, false);
-    aScriptDialog->setText("Script Dialog");
-    connect(aScriptDialog, SIGNAL(triggered()), this, SLOT(onScriptDialogTriggered()));
-    modeManager()->addAction(aScriptDialog, 0);
-    // END
+    // In debug mode, add the script dialog
+    if (!Utils::isReleaseCompilation()) {
+        Core::Context ctx(Core::Constants::C_GLOBAL);
+        Core::Command *cmd = 0;
+        aScriptDialog = createAction(this, "aScriptDialog", Core::Constants::ICONPROCESS,
+                                     "script.aScriptDialog",
+                                     ctx,
+                                     "", "",
+                                     cmd,
+                                     0, "",
+                                     QKeySequence::UnknownKey, false);
+        aScriptDialog->setText("Script Dialog");
+        connect(aScriptDialog, SIGNAL(triggered()), this, SLOT(onScriptDialogTriggered()));
+        modeManager()->addAction(aScriptDialog, 0);
+    }
 }
 
 void ScriptPlugin::patientSelected()
