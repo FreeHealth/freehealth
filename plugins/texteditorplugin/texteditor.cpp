@@ -74,7 +74,6 @@
 #include <QFontComboBox>
 #include <QFontDatabase>
 #include <QMenu>
-#include <QMenuBar>
 #include <QTextCodec>
 #include <QTextEdit>
 #include <QToolBar>
