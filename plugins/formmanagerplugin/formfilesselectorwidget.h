@@ -72,7 +72,7 @@ public:
     void setFormType(FormType type);
     void setSelectionType(SelectionType type);
     void expandAllItems() const;
-    void setIncludeLocalFles(bool includeLocal);
+    void setIncludeLocalFiles(bool includeLocal);
 
     QList<Form::FormIODescription *> selectedForms() const;
 

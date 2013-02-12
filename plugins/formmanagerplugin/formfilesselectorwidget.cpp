@@ -266,7 +266,7 @@ void FormFilesSelectorWidget::expandAllItems() const
  * included in the form selector.
  * If you set this value you must redefine the FormType using setFormType().
  */
-void FormFilesSelectorWidget::setIncludeLocalFles(bool includeLocal)
+void FormFilesSelectorWidget::setIncludeLocalFiles(bool includeLocal)
 {
     d->m_GetLocal = includeLocal;
 }
