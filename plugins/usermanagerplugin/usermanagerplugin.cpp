@@ -434,8 +434,8 @@ void UserManagerPlugin::showUserManager()
     UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
 //    dlg.setModal(true);
     dlg.initialize();
-    dlg.show();
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
+    dlg.show();
     dlg.initializeAfterShowing();
     dlg.exec();
 }
