@@ -67,7 +67,7 @@ FreeMedForms
   * Forms
     * Identity sub-form updated with detaileswidget and a trusted person information
     * New formitems and options available, see the XML form specifications in documentation
-    * Updating 'textual prescriptions': print with prescription papers, with duplicata
+    * Updating 'textual prescriptions': print with prescription papers and duplicata
   * Debian specific
   * Under the hood
 
