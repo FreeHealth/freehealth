@@ -30,7 +30,6 @@
  */
 
 #include "patientcreatorwizard.h"
-#include "identityeditorwidget.h"
 #include "patientcore.h"
 #include "patientmodel.h"
 #include "patientbase.h"
