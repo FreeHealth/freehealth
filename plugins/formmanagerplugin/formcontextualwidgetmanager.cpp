@@ -225,10 +225,10 @@ FormActionHandler::FormActionHandler(QObject *parent) :
         //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_SEARCH));
         //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_DRUGS));
         //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_INTERACTIONS));
-        //        menu->setTranslations(Form::Constants::DRUGSMENU_TEXT);
+        menu->setTranslations(Form::Constants::M_FORM_TEXT);
 
         // Add the menu to the menubar or to the plugin menu
-#ifndef FREEMEDFORMS
+#ifdef FREEMEDFORMS
         actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_FORM);
 #else
         actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);

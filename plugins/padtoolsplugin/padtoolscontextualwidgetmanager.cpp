@@ -196,14 +196,14 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
         //        menu->appendGroup(PadTools::Constants::G_PLUGINS_SEARCH);
         //        menu->appendGroup(PadTools::Constants::G_PLUGINS_DRUGS);
         //        menu->appendGroup(PadTools::Constants::G_PLUGINS_INTERACTIONS);
-        //        menu->setTranslations(PadTools::Constants::DRUGSMENU_TEXT);
+        menu->setTranslations(PadTools::Constants::PADTOOLS_TEXT);
         
         // Add the menu to the menubar or to the plugin menu
 #ifdef FREEDIAMS
         actionManager()->actionContainer(Core::Id(DrugsWidget::Constants::M_PLUGINS_DRUGS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
 #else
 #   ifdef FREEMEDFORMS
-        actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);
+        actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
 #   else
         actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
 #   endif

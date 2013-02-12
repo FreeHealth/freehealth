@@ -115,6 +115,7 @@ namespace Constants {
     const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 
     const char * const FORM_TR_CONTEXT = "Forms";
+    const char * const M_FORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Forms");
     const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Episode");
     const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Validate Episode");
     const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Form");
