@@ -694,7 +694,7 @@ void DrugsActionHandler::clear()
 {
     if (m_CurrentView) {
         Q_ASSERT(m_CurrentView->prescriptionView());
-        m_CurrentView->prescriptionView()->clearTriggered();
+        m_CurrentView->prescriptionView()->clear();
     }
 }
 

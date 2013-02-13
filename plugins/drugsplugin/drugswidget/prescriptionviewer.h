@@ -38,9 +38,9 @@
 
 /**
  * \file prescriptionviewer.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 03 Apr 2010
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 13 Feb 2013
 */
 
 namespace DrugsDB {
@@ -61,6 +61,7 @@ class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::Pr
 public:
     explicit PrescriptionViewer(QWidget *parent = 0);
     void initialize();
+
     QListView *listview();
     void setModel(DrugsDB::DrugsModel *model);
     void setListViewPadding(const int pad);
@@ -75,7 +76,7 @@ public Q_SLOTS:
     bool savePrescription();
     bool saveAsPrescription();
 
-    void clearTriggered();
+    void clear();
     void removeTriggered();
     void moveUp();
     void moveDown();
@@ -93,6 +94,7 @@ private Q_SLOTS:
 
 private:
     QToolBar *m_ToolBar;
+    DrugsDB::DrugsModel *m_DrugsModel;
 };
 
 }  // End DrugsWidget

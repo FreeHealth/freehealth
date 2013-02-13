@@ -63,14 +63,14 @@ using namespace DrugsWidget;
 using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
-static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 /** \brief Constructor. You must call initialize() after instanciation */
 PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
-        QWidget(parent),
-        m_ToolBar(0)
+    QWidget(parent),
+    m_ToolBar(0),
+    m_DrugsModel(0)
 {
     setObjectName("PrescriptionViewer");
     setupUi(this);
@@ -99,6 +99,7 @@ void PrescriptionViewer::initialize()
 void PrescriptionViewer::setModel(DrugsDB::DrugsModel *model)
 {
     Q_ASSERT_X(model, "PrescriptionViewer::setModel", "Model must be set correctly");
+    m_DrugsModel = model;
     listView->setModel(model);
     listView->setModelColumn(DrugsDB::Constants::Drug::FullPrescription);
 }
@@ -167,7 +168,10 @@ void PrescriptionViewer::createActionsAndToolbar()
 /** \brief create the context menu on the precription listView */
 void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
 {
-    if (!drugModel()->rowCount())
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    if (!m_DrugsModel->rowCount())
         return;
 
     QMenu *pop = new QMenu(this);
@@ -189,29 +193,43 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
     pop = 0;
 }
 
+/** Save the prescription */
 bool PrescriptionViewer::savePrescription()
 {
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return false;
     QHash<QString, QString> extra;
-    return drugsIo().savePrescription(drugModel(), extra);
+    return drugsIo().savePrescription(m_DrugsModel, extra);
 }
 
+/** Save the prescription, asking a filename to the user */
 bool PrescriptionViewer::saveAsPrescription()
 {
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return false;
     QHash<QString, QString> extra;
-    return drugsIo().savePrescription(drugModel(), extra);
+    return drugsIo().savePrescription(m_DrugsModel, extra);
 }
 
-/** \brief Clears the prescription */
-void PrescriptionViewer::clearTriggered()
+/** Clears the prescription (remove all drugs in the drugs model) */
+void PrescriptionViewer::clear()
 {
-    Q_ASSERT_X(static_cast<DrugsDB::DrugsModel*>(listView->model()), "PrescriptionViewer", "model is not a DrugsModel*");
-    static_cast<DrugsDB::DrugsModel*>(listView->model())->clearDrugsList();
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    m_DrugsModel->clearDrugsList();
 }
 
-/** \brief Remove the selected drug from the prescription.*/
+/** Removes the selected drug from the prescription.*/
 void PrescriptionViewer::removeTriggered()
 {
-    Q_ASSERT_X(static_cast<DrugsDB::DrugsModel*>(listView->model()), "PrescriptionViewer", "model is not a DrugsModel*");
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    if (!listView->selectionModel())
+        return;
     if (!listView->selectionModel()->hasSelection())
         return;
     const QModelIndexList &list = listView->selectionModel()->selectedRows(0);
@@ -223,29 +241,34 @@ void PrescriptionViewer::removeTriggered()
 /** \brief Moves the selected drug up. */
 void PrescriptionViewer::moveUp()
 {
-    Q_ASSERT_X(static_cast<DrugsDB::DrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    DrugsDB::DrugsModel *m = static_cast<DrugsDB::DrugsModel*>(listView->model());
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
     int row = listView->currentIndex().row();
-    m->moveUp(listView->currentIndex());
-    listView->setCurrentIndex(m->index(row-1,0));
-//    checkMovableItem(m->index(row-1,0));
+    m_DrugsModel->moveUp(listView->currentIndex());
+    listView->setCurrentIndex(m_DrugsModel->index(row-1,0));
+//    checkMovableItem(m_DrugsModel->index(row-1,0));
 }
 
 /** \brief Move the selected drug down. */
 void PrescriptionViewer::moveDown()
 {
-    Q_ASSERT_X(static_cast<DrugsDB::DrugsModel*>(listView->model()), "mfPrescriptionViewer", "model is not a mfDrugsModel*");
-    DrugsDB::DrugsModel *m = static_cast<DrugsDB::DrugsModel*>(listView->model());
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
     int row = listView->currentIndex().row();
-    m->moveDown(listView->currentIndex());
-    listView->setCurrentIndex(m->index(row+1,0));
-//     checkMovableItem(m->index(row+1,0));
+    m_DrugsModel->moveDown(listView->currentIndex());
+    listView->setCurrentIndex(m_DrugsModel->index(row+1,0));
+//     checkMovableItem(m_DrugsModel->index(row+1,0));
 }
 
 /** \brief Sorts the drugs of the prescription. \sa mfDrugsModel::sort() */
 void PrescriptionViewer::sortDrugs()
 {
-    listView->model()->sort(0);
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    m_DrugsModel->sort(0);
 }
 
 /** \brief Opens the drug information dialog. \sa mfDrugInfo */
@@ -258,7 +281,10 @@ void PrescriptionViewer::showDrugInfo(const QModelIndex &item)
 /** \brief Opens the mfDosageDialog for the selected drug. */
 void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 {
-    if (drugModel()->isSelectionOnlyMode())
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    if (m_DrugsModel->isSelectionOnlyMode())
         return;
 
     int row;
@@ -269,18 +295,18 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
     if (row < 0)
         return;
 
-    const QVariant &drugUid = drugModel()->index(row, DrugsDB::Constants::Drug::DrugId).data();
-    bool isTextual = drugModel()->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
+    const QVariant &drugUid = m_DrugsModel->index(row, DrugsDB::Constants::Drug::DrugId).data();
+    bool isTextual = m_DrugsModel->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
     if (isTextual) {
         TextualPrescriptionDialog dlg(this);
-        dlg.setDrugLabel(drugModel()->index(row,DrugsDB::Constants::Drug::Denomination).data().toString());
-        dlg.setDrugNote(drugModel()->index(row,DrugsDB::Constants::Prescription::Note).data().toString());
-        dlg.setALD(drugModel()->index(row,DrugsDB::Constants::Prescription::IsALD).data().toBool());
+        dlg.setDrugLabel(m_DrugsModel->index(row,DrugsDB::Constants::Drug::Denomination).data().toString());
+        dlg.setDrugNote(m_DrugsModel->index(row,DrugsDB::Constants::Prescription::Note).data().toString());
+        dlg.setALD(m_DrugsModel->index(row,DrugsDB::Constants::Prescription::IsALD).data().toBool());
         int r = dlg.exec();
         if (r==QDialog::Accepted) {
-            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Drug::Denomination), dlg.drugLabel());
-            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::Note), dlg.drugNote());
-            drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
+            m_DrugsModel->setData(m_DrugsModel->index(row, DrugsDB::Constants::Drug::Denomination), dlg.drugLabel());
+            m_DrugsModel->setData(m_DrugsModel->index(row, DrugsDB::Constants::Prescription::Note), dlg.drugNote());
+            m_DrugsModel->setData(m_DrugsModel->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
         }
     } else if (drugUid.toInt()!=-1 && !drugUid.isNull()) {
         Internal::DosageDialog dlg(this);
@@ -294,7 +320,10 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
 /** \brief Opens the InteractionDialog. */
 void PrescriptionViewer::viewInteractions()
 {
-    InteractionSynthesisDialog dlg(drugModel(), this);
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    InteractionSynthesisDialog dlg(m_DrugsModel, this);
     Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
     dlg.exec();
 
@@ -351,6 +380,9 @@ void PrescriptionViewer::changeDuration()
 /*! \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
 void PrescriptionViewer::changeDurationTo()
 {
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
     QAction *a = qobject_cast<QAction*>(sender());
     if (!a)
         return;
@@ -366,16 +398,16 @@ void PrescriptionViewer::changeDurationTo()
         nb = i + 1;
     } else {
         i = 0;
-        nb = drugModel()->rowCount();
+        nb = m_DrugsModel->rowCount();
     }
 
     for(int j = i ; j<nb ; ++j) {
-        QModelIndex idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationScheme);
-        drugModel()->setData(idx, scheme);
-        idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationFrom);
-        drugModel()->setData(idx, duration);
-        idx = drugModel()->index(j, DrugsDB::Constants::Prescription::DurationUsesFromTo);
-        drugModel()->setData(idx, false);
+        QModelIndex idx = m_DrugsModel->index(j, DrugsDB::Constants::Prescription::DurationScheme);
+        m_DrugsModel->setData(idx, scheme);
+        idx = m_DrugsModel->index(j, DrugsDB::Constants::Prescription::DurationFrom);
+        m_DrugsModel->setData(idx, duration);
+        idx = m_DrugsModel->index(j, DrugsDB::Constants::Prescription::DurationUsesFromTo);
+        m_DrugsModel->setData(idx, false);
     }
 }
 
@@ -388,6 +420,11 @@ void PrescriptionViewer::openProtocolPreferencesDialog()
 
 void PrescriptionViewer::copyPrescriptionItem()
 {
+    Q_ASSERT(m_DrugsModel);
+    if (!m_DrugsModel)
+        return;
+    if (!listView->selectionModel())
+        return;
     if (!listView->selectionModel()->hasSelection())
         return;
     QModelIndexList list = listView->selectionModel()->selectedRows();
@@ -395,7 +432,7 @@ void PrescriptionViewer::copyPrescriptionItem()
     QString html;
     for(int i=0; i < list.count() ; ++i) {
         int row = list.at(i).row();
-        QModelIndex idx = drugModel()->index(row, DrugsDB::Constants::Prescription::ToHtml);
+        QModelIndex idx = m_DrugsModel->index(row, DrugsDB::Constants::Prescription::ToHtml);
         html += idx.data().toString();
     }
     QMimeData *data = new QMimeData;
