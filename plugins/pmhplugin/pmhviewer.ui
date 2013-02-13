@@ -233,7 +233,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Past Medical History for PATIENT NAME</string>
+      <string notr="true">Past Medical History for PATIENT NAME</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
