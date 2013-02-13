@@ -22,10 +22,10 @@
 #include "druginfo_p.h"
 
 /**
-  \class DrugInfo
-  \brief Show a dialog with drugs information and interactions found.
-  This dialog allows user to send debugging data.
-  \ingroup freediams drugswidget
+ * \class DrugInfo
+ * \brief Show a dialog with drugs information and interactions found.
+ * This dialog allows user to send debugging data. The dialog uses the
+ * current drugs view drugsmodel as current drugs model.
 */
 
 #include <coreplugin/isettings.h>
@@ -51,7 +51,7 @@ static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidget
 //static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 
 DrugInfo::DrugInfo(const QVariant &drugUid,  QWidget *parent)
-          : QDialog (parent), d(0)
+    : QDialog (parent), d(0)
 {
     d = new DrugInfoPrivate(this);
     setDrug(drugUid);
