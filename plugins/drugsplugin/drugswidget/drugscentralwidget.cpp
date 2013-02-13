@@ -123,6 +123,16 @@ bool DrugsCentralWidget::initialize(bool hideSelector)
     return true;
 }
 
+/**
+ * Clear the view
+ * \sa DrugsWidget::Internal::DrugSelector::clear(), DrugWidget::PrescriptionViewer::clear()
+ */
+void DrugsCentralWidget::clear()
+{
+    m_ui->m_DrugSelector->clear();
+    m_ui->m_PrescriptionView->clear();
+}
+
 QListView *DrugsCentralWidget::prescriptionListView()
 {
     if (!m_ui)

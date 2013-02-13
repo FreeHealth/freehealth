@@ -35,10 +35,9 @@
 
 /**
  * \file drugscentralwidget.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 23 Sept 2010
- * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 13 Feb 2013
 */
 
 namespace DrugsDB {
@@ -69,6 +68,7 @@ public:
     ~DrugsCentralWidget();
 
     bool initialize(bool hideSelector = false);
+    void clear();
 
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;
