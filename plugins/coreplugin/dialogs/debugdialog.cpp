@@ -42,6 +42,7 @@
 #include <QStackedLayout>
 #include <QHeaderView>
 #include <QMainWindow>
+#include <QFileDialog>
 
 #include "ui_debugdialog.h"
 
@@ -68,10 +69,7 @@ DebugDialog::DebugDialog(QWidget *parent) :
     m_ui->widget->setupUi();
     m_ui->widget->expandAllCategories();
 
-    // Now we have a special bug report dialog (Utils::BugReportDialog)
-    // So we don't want to use redondant code --> disable the send button
-    // FIXME: remove the send button
-    m_ui->butSend->setEnabled(false);
+    connect(m_ui->butSave, SIGNAL(clicked()), this, SLOT(saveLogToFile()));
 
     // resize and center windows
     Utils::resizeAndCenter(this);
@@ -83,64 +81,26 @@ DebugDialog::~DebugDialog()
     delete m_ui;
 }
 
-void DebugDialog::on_butSend_clicked()
-{
-    LOG(tkTr(Trans::Constants::START_MESSAGE_SENDING));
-
-    QString msg;
-
-    msg += "{{tag>bugreport}}\n\n";
-    msg += "====== BUG REPORT ======\n\n";
-    msg += "  * Date of report: $<%DATE%>$\n";
-    msg += "  * User: " + user()->value(Core::IUser::FullName).toString() + "\n";
-    msg += "  * User Uid: " + user()->uuid() + "\n";
-
-    msg += "===== USER OUTPUT =====\n\n";
-    msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
-    msg += "\n";
-    msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::YOUR_MAIL_ADDRESS));
-
-    // get full log including settings and logs
-    msg += "\n\n" + Utils::Log::toString( Core::ICore::instance()->settings()->toString() );
-
-    // send information
-    connect(&m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
-    m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDeveloper );
-    m_sender.setMessage(msg);
-    if (m_sender.postMessage()) {
-        m_sending = true;
-        // showing a messagebox
-        m_infoMessageBox = new QMessageBox(this);
-        m_infoMessageBox->setText( tr( "Sending debugging information to the development team") );
-        m_infoMessageBox->setInformativeText( tr("Trying to send information to the development team.\n"
-                                                 "Using URL: %1\n"
-                                                 "Please wait..." ).arg( m_sender.usedUrl() ) );
-        m_infoMessageBox->setWindowTitle( qApp->applicationName() );
-        m_infoMessageBox->setStandardButtons( QMessageBox::Ok );
-        m_infoMessageBox->show();
-    } else {
-        m_sending = false;
-    }
-}
-
-bool DebugDialog::on_butSave_clicked()
+/** Save the current log to a log file in the Core::ISettings::UserResourcesPath */
+bool DebugDialog::saveLogToFile()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-    QString fileName = s->path( Core::ISettings::UserResourcesPath ) + "/logs.txt" ;
-    Utils::Log::addMessage( this, tkTr(Trans::Constants::SAVING_FILE_1).arg(fileName));
-    return Utils::saveStringToFile( Utils::Log::toString(), fileName );
-}
-
-void DebugDialog::onSendMessage_done()
-{
-    LOG(tr("Debugging information successfully sent."));
-    if (m_infoMessageBox) {
-        m_infoMessageBox->setInformativeText( tr("Debugging information successfully sent to the development team.\n"
-                                             "Using Url: %1\n"
-                                             "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );
-        m_infoMessageBox->exec();
-        delete m_infoMessageBox;
-        m_infoMessageBox=0;
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save log to..."),
+                                                    s->path(Core::ISettings::UserDocumentsPath),
+                                                    "*.txt");
+    if (fileName.isEmpty())
+        return false;
+    if (QFileInfo(fileName).completeSuffix().isEmpty())
+        fileName += ".txt";
+    LOG(tkTr(Trans::Constants::SAVING_FILE_1).arg(fileName));
+    if (Utils::saveStringToFile(Utils::Log::toString(), fileName)) {
+        Utils::informativeMessageBox(tr("Log correctly saved"),
+                                     tr("The log was correctly saved into<br />"
+                                        "%1").arg(fileName),
+                                     "",
+                                     tr("Saving log"));
+        return true;
     }
-    m_sending = false;
+    return false;
 }

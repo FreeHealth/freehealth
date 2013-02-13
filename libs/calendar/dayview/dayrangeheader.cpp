@@ -107,7 +107,7 @@ public:
 
     QList<CalendarItem> getItems() const
     {
-        if (!q->model())
+        if (!q->model() || !q->firstDate().isValid())
             return QList<CalendarItem>();
         // optimization : do not compute items every time...
         QList<CalendarItem> items = q->model()->getItemsBetween(q->firstDate(), q->firstDate().addDays(m_rangeWidth - 1));

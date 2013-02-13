@@ -65,7 +65,7 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     Q_UNUSED(mode);
 
     ui->setupUi(this);
-    ui->formSelector->setIncludeLocalFles(true);
+    ui->formSelector->setIncludeLocalFiles(true);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 
     ui->treeView->setModel(model);

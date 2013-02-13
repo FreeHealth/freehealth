@@ -22,7 +22,6 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    identityeditorwidget.h \
     identityviewerwidget.h \
     patientmodelwrapper.h \
     filephotoprovider.h \
@@ -40,7 +39,6 @@ SOURCES = patientbaseplugin.cpp \
     patientbasepreferencespage.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
-    identityeditorwidget.cpp \
     identityviewerwidget.cpp \
     patientmodelwrapper.cpp \
     filephotoprovider.cpp \

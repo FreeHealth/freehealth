@@ -88,10 +88,9 @@ public:
     QString lastError() const {return m_Error.join("\n");}
 
     void checkForUpdates() const;
+    const QList<Form::FormIODescription> &availableUpdates() const;
     bool updateForms();
     // End Form::IForm interface
-
-    QList<Utils::GenericUpdateInformation> & availableUpdates();
 
 private:
 //    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list) const;
@@ -115,7 +114,7 @@ private:
 
      // Form updates cache
      mutable bool alreadyCheckedForUpdates;
-     mutable QList<Utils::GenericUpdateInformation> m_FormUpdatesList;
+     mutable QList<Form::FormIODescription> m_FormUpdatesList;
      mutable QList<XmlFormName> formsToUpdate;
 };
 

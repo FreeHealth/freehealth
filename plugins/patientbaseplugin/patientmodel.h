@@ -122,5 +122,4 @@ private:
 
 }  // End namespace Patients
 
-
 #endif // PATIENTS_PATIENTMODEL_H

@@ -48,7 +48,10 @@ QStringList availableStatus() {
                ;
 }
 
-QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate) {
+QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate)
+{
+    if (randomDate.isNull())
+        return randomDate;
     switch (viewType) {
     case View_Day:
         return randomDate;

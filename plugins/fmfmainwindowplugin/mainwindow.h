@@ -135,6 +135,7 @@ public Q_SLOTS:
     void openRecentPatient();
 
 protected:
+    void manageIModeEnabledState();
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
 

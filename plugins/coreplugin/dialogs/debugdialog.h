@@ -64,9 +64,7 @@ public:
     ~DebugDialog();
 
 private Q_SLOTS:
-    void on_butSend_clicked();
-    void onSendMessage_done();
-    bool on_butSave_clicked();
+    bool saveLogToFile();
 
 private:
     Ui::DebugDialog *m_ui;

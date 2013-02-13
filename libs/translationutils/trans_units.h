@@ -22,43 +22,55 @@
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_IDENTITYEDITORWIDGET_H
-#define PATIENTS_IDENTITYEDITORWIDGET_H
+#ifndef CONSTANTTRANSLATIONS_UNITS_H
+#define CONSTANTTRANSLATIONS_UNITS_H
 
-#include <patientbaseplugin/patientbase_exporter.h>
-#include <identityplugin/identityeditorwidget.h>
+namespace Trans {
+namespace Constants {
 
-/**
- * \file identityeditorwidget.h
- * \author Eric Maeker
- * \version 0.8.0
- * \date 12 Dec 2012
-*/
-
-namespace Patients {
-class PatientModel;
-
-namespace Internal {
-class IdentityEditorWidgetPrivate;
-
-class PATIENT_EXPORT IdentityEditorWidget : public Identity::IdentityEditorWidget
-{
-    Q_OBJECT
-    friend class Internal::IdentityEditorWidgetPrivate;
-
-public:
-    explicit IdentityEditorWidget(QWidget *parent = 0);
-    ~IdentityEditorWidget();
-
-    bool isIdentityValid() const;
-
-private:
-    Internal::IdentityEditorWidgetPrivate *d;
+enum Length {
+    Millimeter = 0,
+    Centimeter,
+    Decimeter,
+    Meter,
+    Kilometer,
+    Inch,
+    Foot,
+    Yard,
+    Mile
 };
 
-}  // End namespace Internal
-}  // End namespace Patients
+const char * const MILLIMETER_S = QT_TRANSLATE_NOOP("tkConstants", "Millimeter(s)");
+const char * const CENTIMETER_S = QT_TRANSLATE_NOOP("tkConstants", "Centimeter(s)");
+const char * const DECIMETER_S = QT_TRANSLATE_NOOP("tkConstants", "Decimeter(s)");
+const char * const METER_S = QT_TRANSLATE_NOOP("tkConstants", "Meter(s)");
+const char * const KILOMETER_S = QT_TRANSLATE_NOOP("tkConstants", "Kilometer(s)");
 
-#endif // PATIENTS_IDENTITYEDITORWIDGET_H
+const char * const INCH_S = QT_TRANSLATE_NOOP("tkConstants", "Inch(es)");
+const char * const FOOT_S = QT_TRANSLATE_NOOP("tkConstants", "Foot(s)");
+const char * const YARD_S = QT_TRANSLATE_NOOP("tkConstants", "Yard(s)");
+const char * const MILE_S = QT_TRANSLATE_NOOP("tkConstants", "Mile(s)");
+
+enum Weight {
+    Milligram = 0,
+    Centigram,
+    Decigram,
+    Kilogram,
+    Ounce,
+    Pound
+};
+
+const char * const MILLIGRAM_S = QT_TRANSLATE_NOOP("tkConstants", "Milligram(s)");
+const char * const CENTIGRAM_S = QT_TRANSLATE_NOOP("tkConstants", "Centigram(s)");
+const char * const DECIGRAM_S = QT_TRANSLATE_NOOP("tkConstants", "Decigram(s)");
+const char * const GRAM_S = QT_TRANSLATE_NOOP("tkConstants", "Gram(s)");
+const char * const KILOGRAM_S = QT_TRANSLATE_NOOP("tkConstants", "Kilogram(s)");
+
+const char * const OUNCE_S = QT_TRANSLATE_NOOP("tkConstants", "Ounce(s)");
+const char * const POUND_S = QT_TRANSLATE_NOOP("tkConstants", "Pound(s)");
+
+} // namespace Constants
+} // namespace TranslationUtils
+
+#endif // CONSTANTTRANSLATIONS_UNITS_H

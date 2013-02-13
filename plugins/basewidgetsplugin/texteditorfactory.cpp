@@ -238,7 +238,9 @@ void TextEditorForm::retranslate()
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 TextEditorData::TextEditorData(Form::FormItem *item) :
-        m_FormItem(item), m_Editor(0)
+    m_FormItem(item),
+    m_Editor(0),
+    m_ForceModified(false)
 {}
 
 TextEditorData::~TextEditorData()
@@ -252,6 +254,8 @@ void TextEditorData::clear()
 
 bool TextEditorData::isModified() const
 {
+    if (m_ForceModified)
+        return true;
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
@@ -259,6 +263,8 @@ void TextEditorData::setModified(bool modified)
 {
     if (!modified)
         m_OriginalValue = m_Editor->textEdit()->toHtml();
+    else
+        m_ForceModified = modified;
 }
 
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
@@ -289,6 +295,7 @@ void TextEditorData::setStorableData(const QVariant &data)
         m_OriginalValue = data.toString();
         m_Editor->setHtml(m_OriginalValue);
     }
+    m_ForceModified = false;
 }
 
 QVariant TextEditorData::storableData() const

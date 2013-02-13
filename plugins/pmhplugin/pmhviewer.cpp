@@ -119,6 +119,9 @@ public:
         }
 
         // Populate Link viewer
+
+        // Manage ICD availability
+        ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
     }
 
     void populatePmhWithUi()
@@ -149,6 +152,8 @@ public:
         ui->statusCombo->clear();
         ui->categoryTreeView->setModel(0);
         ui->episodeViewer->clear();
+        // Manage ICD availability
+        ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
     }
 
 public:
@@ -246,7 +251,6 @@ void PmhViewer::setPmhData(Internal::PmhData *pmh)
             return;
     }
     d->populateUiWithPmh(pmh);
-    d->ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
 }
 
 void PmhViewer::setCategoryForPmh(Category::CategoryItem *category)

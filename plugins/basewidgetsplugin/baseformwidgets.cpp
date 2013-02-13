@@ -29,6 +29,7 @@
 #include "frenchsocialnumber.h"
 #include "basedetailswidget.h"
 #include "basedatecompleterwidget.h"
+#include "measurementwidget.h"
 //#include "austriansocialnumber.h"
 #include "constants.h"
 
@@ -103,6 +104,7 @@ namespace {
         Type_ModernDate,
         Type_Button,
         Type_DetailsWidget,
+        Type_Measurement,
         Type_FrenchNSS,
         Type_AustrianSVNR,
         Type_MaxType
@@ -115,7 +117,7 @@ namespace {
                           << "spin" << "doublespin"
                           << "shorttext" << "longtext" << "helptext" << "file" << "group"
                           << "date" << "moderndate" << "button" << "detailswidget"
-                          << "frenchnss" << "austriansvnr";
+                          << "measurement" << "frenchnss" << "austriansvnr";
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
@@ -178,6 +180,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
     case ::Type_DetailsWidget: return new BaseDetailsWidget(formItem, parent);
+    case ::Type_Measurement: return new MeasurementWidget(formItem, parent);
     case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
 //    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
     default: return 0;

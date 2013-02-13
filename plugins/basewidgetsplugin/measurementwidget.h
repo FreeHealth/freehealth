@@ -22,57 +22,89 @@
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERFIRSTRUNPAGE_H
-#define USERFIRSTRUNPAGE_H
+#ifndef MEASUREMENTWIDGET_H
+#define MEASUREMENTWIDGET_H
 
-#include <coreplugin/ifirstconfigurationpage.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
-#include <QWizardPage>
+QT_BEGIN_NAMESPACE
+class QComboBox;
+class QDoubleSpinBox;
+QT_END_NAMESPACE
 
-namespace UserPlugin {
-class UserManagerDialog;
-class UserCreatorWizard;
+/**
+ * \file measurementwidget.h
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 10 Feb 2013
+*/
 
-namespace Ui {
-    class FirstRunUserCreationWidget;
-}
+namespace BaseWidgets {
+class MeasurementWidgetData;
 
-class UserCreationPage : public QWizardPage
+class MeasurementWidget : public Form::IFormWidget
 {
     Q_OBJECT
+    friend class BaseWidgets::MeasurementWidgetData;
 
 public:
-    explicit UserCreationPage(QWidget *parent = 0);
-    ~UserCreationPage();
+    MeasurementWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
+    ~MeasurementWidget();
 
-    void initializePage();
-    bool validatePage();
+    void addWidgetToContainer(Form::IFormWidget *) {}
+    bool isContainer() const {return false;}
 
-protected:
+    QString printableHtml(bool withValues = true) const;
+
+public Q_SLOTS:
     void retranslate();
-    void changeEvent(QEvent *e);
-
-private Q_SLOTS:
-    void userManager();
-    void userWizard();
 
 private:
-    Ui::FirstRunUserCreationWidget *ui;
-    UserManagerDialog *_userManagerDialog;
-    UserCreatorWizard *_userWizard;
+    void populateWithLength();
+    void populateWithWeight();
+
+protected:
+    QComboBox *m_units;
+    QDoubleSpinBox *m_value;
+    int m_defaultUnitId;
 };
 
-class FirstRun_UserCreation : public Core::IFirstConfigurationPage
+class MeasurementWidgetData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
-    FirstRun_UserCreation(QObject *parent = 0) : Core::IFirstConfigurationPage(parent) {}
-    ~FirstRun_UserCreation() {}
-    int id() const {return Core::IFirstConfigurationPage::UserCreation;}
-    QWizardPage *createPage(QWidget *parent) {return new UserPlugin::UserCreationPage(parent);}
+    MeasurementWidgetData(Form::FormItem *item);
+    ~MeasurementWidgetData();
+
+    void setMeasurementWidget(MeasurementWidget *widget) {m_Measurement = widget; clear();}
+    void setDefaultUnitIndex(int index) {m_defaultUnitId = index;}
+    void setSelectedUnit(const QString &uuid);
+    QString selectedUnitUuid() const;
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+    void setModified(bool modified);
+
+    bool setData(const int ref, const QVariant &data, const int role);
+    QVariant data(const int ref, const int role) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+public Q_SLOTS:
+    void onValueChanged();
+
+private:
+    Form::FormItem *m_FormItem;
+    MeasurementWidget *m_Measurement;
+    int m_defaultUnitId;
+    QString m_OriginalValue;
 };
 
-}  // End namespace UserPlugin
+}  // End namespace BaseWidgets
 
-#endif // USERFIRSTRUNPAGE_H
+#endif // MEASUREMENTWIDGET_H

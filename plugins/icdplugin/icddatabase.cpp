@@ -93,7 +93,6 @@ static inline QString fullDatabasePath() {
 namespace ICD {
 namespace Internal {
 
-
 struct Daget {
     int associatedSid;
     QString dag;
@@ -130,7 +129,6 @@ private:
 };
 }  // End Internal
 }  // End ICD
-
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------- Initialization of static members -------------------------------------
@@ -281,6 +279,8 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addField(Table_Version,  VERSION_DATE, "date");
     addField(Table_Version,  VERSION_COMMENT, "expl");
 
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(refreshLanguageDependCache()));
+
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -289,7 +289,8 @@ IcdDatabase::IcdDatabase(QObject *parent) :
 /** \brief Destructor. */
 IcdDatabase::~IcdDatabase()
 {
-    if (d) delete d;
+    if (d)
+        delete d;
     d=0;
 }
 
@@ -348,8 +349,6 @@ bool IcdDatabase::initialize()
      if (!d->m_DownloadAndPopulate)
          m_initialized = true;
 
-     connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(refreshLanguageDependCache()));
-
      if (m_initialized) {
          Q_EMIT databaseInitialized();
      }
@@ -361,6 +360,7 @@ bool IcdDatabase::refreshDatabase()
 {
     WARN_FUNC;
     m_initialized = false;
+    d->m_DownloadAndPopulate = false;
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME))
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     return initialize();

@@ -61,6 +61,7 @@ DrugsMode::DrugsMode(QObject *parent) :
     setPriority(Core::Constants::P_MODE_PATIENT_DRUGS);
     setId(Core::Constants::MODE_PATIENT_DRUGS);
     setPatientBarVisibility(true);
+    setEnabledOnlyWithCurrentPatient(true);
     setWidget(m_Holder);
     onPatientFormsLoaded();
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));

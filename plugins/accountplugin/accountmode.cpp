@@ -112,12 +112,16 @@ void AccountMode::modeActivated(Core::IMode *mode)
         return;
     }
     if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
-        const QString &firstExplanationText = tr("Please read this explanation before using FreeAccount.\n"
+        QString firstExplanationText = QString("<center><span style=\"font-size:x-large;font-weight:bold;color:darkred;font-variant:small-caps\">%1</span></center>")
+                .arg(tr("The account plugin is still is early alpha stage (do not use in "
+                        "day-to-day practice)."));
+        firstExplanationText += "<br /><br />";
+        firstExplanationText += tr("Please read this explanation before using FreeAccount.\n"
                                               "FreeAccount is composed of:\n"
                                               "  - Receipts to get your earnings,\n"
                                               "  - Movements in your accountancy,\n"
                                               "  - Asset for your assets,\n"
-                                              "  - Ledger to analyse your accountancy and produce and print your ledger.");
+                                   "  - Ledger to analyse your accountancy and produce and print your ledger.").replace("\n", "<br />");
         const QString &detail = tr("The shortcuts for those programs are:\n"
                                    "  - for your rapid receipt, CTRL+R,\n"
                                    "  - for the receipts widget, Maj+R,\n"

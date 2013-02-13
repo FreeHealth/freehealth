@@ -92,15 +92,16 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
 
     // Create the layout
     QHBoxLayout *layout = new QHBoxLayout(this);
-    setLayout(layout);
+    layout->setSizeConstraint(QLayout::SetDefaultConstraint);
     layout->setMargin(0);
     layout->setSpacing(0);
 
     // Create the identity widget
     _identity = new Identity::IdentityEditorWidget(this);
-    _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    _identity->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     _identity->setAvailableWidgets(Identity::IdentityEditorWidget::FullIdentity | Identity::IdentityEditorWidget::Photo | Identity::IdentityEditorWidget::FullLogin);
     layout->addWidget(_identity);
+    setLayout(layout);
 
     registerField("Name*", _identity, "birthName");
     registerField("Firstname*", _identity, "firstName");
@@ -113,16 +114,27 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     registerField("Login*", _identity, "clearLogin");
     registerField("Password*", _identity, "clearPassword");
 
-    connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkLoginAfterEdition()));
-    connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(onPasswordConfirmed()));
+    connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(titleChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(birthNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(secondNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(firstNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(dateOfBirthChanged(QDate)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(genderIndexChanged(int)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(genderChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(languageChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(clearLoginChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(checkCompleteState()));
 
-    Utils::resizeAndCenter(this, parent);
+//    Utils::resizeAndCenter(this, parent);
 }
 
 UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 {
 //    delete ui;
 }
+
 
 /** Check the current login. Return \e true if it can be used otherwise return false*/
 bool UserIdentityAndLoginPage::checkLogin() const
@@ -141,12 +153,11 @@ bool UserIdentityAndLoginPage::checkLogin() const
     return true;
 }
 
-void UserIdentityAndLoginPage::checkLoginAfterEdition()
+void UserIdentityAndLoginPage::checkCompleteState()
 {
-    if (checkLogin())
+    if (checkLogin() && _identity->isIdentityValid(false)) {
         Q_EMIT completeChanged();
-
-    _showErrorLabels = true;
+    }
 }
 
 /**
@@ -164,14 +175,37 @@ void UserIdentityAndLoginPage::changeEvent(QEvent *e)
         retranslate();
 }
 
+QSize UserIdentityAndLoginPage::sizeHint() const
+{
+    return _identity->sizeHint();
+}
+
+QSize UserIdentityAndLoginPage::minimumSizeHint() const
+{
+    return _identity->minimumSizeHint();
+}
+
 void UserIdentityAndLoginPage::retranslate()
 {
     setTitle(tr("Create a new user"));
     setSubTitle(tr("Please enter your identity."));
 }
 
+void UserIdentityAndLoginPage::initializePage()
+{
+    //FIXME: layout problematic in UserCreatorWizard: identity page does not correctly resize
+    wizard()->resize(_identity->sizeHint() + QSize(100, 50));
+}
+
 bool UserIdentityAndLoginPage::isComplete() const
 {
+//    qWarning() << "isComplete" <<
+//                  !_identity->currentBirthName().isEmpty()
+//               << !_identity->currentFirstName().isEmpty()
+//               << !_identity->currentGender().isEmpty()
+//               << !_identity->currentLanguage().isEmpty()
+//               << checkLogin()
+//               << _identity->isPasswordCompleted();
     return (!_identity->currentBirthName().isEmpty()
             && !_identity->currentFirstName().isEmpty()
             && !_identity->currentGender().isEmpty()

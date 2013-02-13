@@ -147,6 +147,7 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationMonthViewMode, Constants::I_VIEWMODE);
     th->setIconFileName(Calendar::CalendarTheme::NavigationNext, Core::Constants::ICONNEXT);
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationForceModelRefreshing, Core::Constants::ICONSOFTWAREUPDATEAVAILABLE);
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         QList<Calendar::People> peoples;

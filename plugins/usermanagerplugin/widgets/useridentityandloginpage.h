@@ -56,17 +56,20 @@ public:
     explicit UserIdentityAndLoginPage(QWidget *parent = 0);
     ~UserIdentityAndLoginPage();
 
+    void initializePage();
     bool isComplete() const;
     bool validatePage();
 
 private Q_SLOTS:
-    void checkLoginAfterEdition();
+    void checkCompleteState();
     void onPasswordConfirmed();
 //    void onNamesEditionFinished();
 
 private:
     bool checkLogin() const;
     void changeEvent(QEvent *e);
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
     void retranslate();
 
 private:

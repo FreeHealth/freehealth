@@ -27,7 +27,6 @@
 #define ICDIO_H
 
 #include <icdplugin/icd_exporter.h>
-
 #include <QtGlobal>
 
 QT_BEGIN_NAMESPACE
@@ -40,7 +39,6 @@ QT_END_NAMESPACE
  * \version 0.1.0
  * \date 20 Nov 2010
 */
-
 
 namespace ICD {
 class IcdCollectionModel;
@@ -72,6 +70,5 @@ private:
 };
 
 }  // End namespace ICD
-
 
 #endif // ICDIO_H

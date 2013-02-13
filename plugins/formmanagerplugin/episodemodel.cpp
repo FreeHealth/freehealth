@@ -134,14 +134,23 @@ public:
         _xmlContentCache.clear();
     }
 
+    // Update the SQL filter based on the Form UUID and its equivalents for the patient \e patientUid
     void updateFilter(const QString &patientUid)
     {
         // Filter valid episodes
         QHash<int, QString> where;
+        Utils::FieldList uuid;
+        uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(_formMain->uuid()));
+        if (!_formMain->spec()->equivalentUuid().isEmpty()) {
+            foreach(const QString &eq, _formMain->spec()->equivalentUuid())
+                uuid << Utils::Field(Constants::Table_EPISODES, Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(eq));
+        }
         where.insert(Constants::EPISODES_ISVALID, "=1");
         where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patientUid));
-        where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(_formMain->uuid()));
-        _sqlModel->setFilter(episodeBase()->getWhereClause(Constants::Table_EPISODES, where).remove("WHERE"));
+
+        QString filter = episodeBase()->getWhereClause(Constants::Table_EPISODES, where).remove("WHERE") +
+                " AND (" + episodeBase()->getWhereClause(uuid, Utils::Database::OR) + ")";
+        _sqlModel->setFilter(filter);
         _sqlModel->setSort(Constants::EPISODES_USERDATE, Qt::AscendingOrder);
         _sqlModel->select();
     }
@@ -712,14 +721,9 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     QTime chrono;
     if (WarnLogChronos)
         chrono.start();
-
     d->_formMain->clear();
     d->_formMain->formWidget()->setEnabled(false);
-
     const QString &xml = d->getEpisodeContent(episode);
-
-//    qWarning() << xml;
-
     QHash<QString, FormItem *> items;
     QHash<QString, QString> _data;
     if (!xml.isEmpty()) {
@@ -756,9 +760,29 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         if (!it->itemData())
             continue;
 
-        it->itemData()->setStorableData(_data.value(it->uuid(), QString()));
+        QString value = _data.value(it->uuid(), QString::null);
+        bool setToModified = false;
+        // If the content data is empty, check the equivalents
+        if (value.isEmpty()) {
+            // Find the first equivalent that lead to a value
+            foreach(const QString &eq, it->spec()->equivalentUuid()) {
+                // Does the equivalent uuid leads to a value ?
+                value = _data.value(eq, QString::null);
+                if (!value.isEmpty()) {
+                    // Force item update
+                    setToModified = true;
+                    LOG(QString("Found a field equivalent: %2 -> %1").arg(it->uuid(), eq));
+                    break;
+                }
+            }
+        }
+        it->itemData()->setStorableData(value);
+
         if (feedPatientModel && it->patientDataRepresentation() >= 0)
-                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+            patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+
+        if (setToModified)
+            it->itemData()->setModified(true);
     }
 
     d->_formMain->formWidget()->setEnabled(true);

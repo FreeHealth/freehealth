@@ -159,7 +159,7 @@ void MonthBody::resetItemWidgets() {
 	}
 	qDeleteAll(list);
 
-	if (!model())
+    if (!model() || !firstDate().isValid())
 		return;
 
 	for (QDate day = m_monthBoundingDays.first; day <= m_monthBoundingDays.second; day = day.addDays(1)) {

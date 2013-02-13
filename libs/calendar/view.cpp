@@ -82,8 +82,15 @@ ViewWidget::ViewWidget(QWidget *parent) :
 {
 }
 
+/**
+ * Set the first date of the view and request appointments to the model.
+ * If the date is null, force the model to reset (calling Calendar::AbstractCalendarModel::clearAll).
+ */
 void ViewWidget::setFirstDate(const QDate &firstDate)
 {
+    if (firstDate.isNull() && m_model)
+        m_model->clearAll();
+
 	if (m_firstDate == firstDate)
 		return;
 

@@ -25,12 +25,13 @@
  ***************************************************************************/
 
 /**
-  \class Agenda::UserCalendarViewer
-  Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
-  This widget presents:
-  - a left bar with some usercalendar information, plus automated next availabilities calculation
-  - a central Calendar::CalendarViewer for users to edit appointments
-*/
+ * \class Agenda::UserCalendarViewer
+ * Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
+ *
+ * This widget presents:
+ * - a left bar with some usercalendar information, plus automated next availabilities calculation
+ * - a central Calendar::CalendarViewer for users to edit appointments
+ */
 
 #include "usercalendarviewer.h"
 #include "agendabase.h"
@@ -92,7 +93,9 @@ public:
         m_CalendarItemModel(0),
         m_ItemContextMenu(0),
         m_UserCalendarModel(agendaCore().userCalendarModel(user()->uuid())),
+        aToday(0), aTomorrow(0), aNextWeek(0), aNextMonth(0),
         aSwitchToPatient(0), aEditItem(0), aPrintItem(0), aDeleteItem(0),
+//        aRefreshView(0),
         m_AvailModel(0),
         q(parent)
     {
@@ -109,6 +112,26 @@ public:
 //            delete m_UserCalendarModel;
 //            m_UserCalendarModel = 0;
 //        }
+    }
+
+    void createActions()
+    {
+        aToday = new QAction(q);
+        aTomorrow = new QAction(q);
+        aNextWeek = new QAction(q);
+        aNextMonth = new QAction(q);
+//        aRefreshView = new QAction(q);
+        aToday->setIcon(theme()->icon(Core::Constants::ICONDATE));
+        aTomorrow->setIcon(theme()->icon(Core::Constants::ICONDATE));
+        aNextWeek->setIcon(theme()->icon(Core::Constants::ICONDATE));
+        aNextMonth->setIcon(theme()->icon(Core::Constants::ICONDATE));
+//        aRefreshView->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
+        ui->startDateSelector->addAction(aToday);
+        ui->startDateSelector->addAction(aTomorrow);
+        ui->startDateSelector->addAction(aNextWeek);
+        ui->startDateSelector->addAction(aNextMonth);
+        ui->startDateSelector->setDefaultAction(aToday);
+        QObject::connect(ui->startDateSelector, SIGNAL(triggered(QAction*)), q, SLOT(quickDateSelection(QAction*)));
     }
 
     void populateCalendarWithCurrentWeek(Agenda::UserCalendar *calendar)
@@ -148,7 +171,9 @@ public:
     QHash<QString, int> m_UidToListIndex;
     bool scrollOnShow;
 
-    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem, *aDeleteItem;
+    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth;
+    QAction *aSwitchToPatient, *aEditItem, *aPrintItem, *aDeleteItem;
+//    QAction *aRefreshView;
     QStandardItemModel *m_AvailModel;
 
 private:
@@ -166,21 +191,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     this->layout()->setMargin(0);
     d->ui->startDate->setDate(QDate::currentDate());
     d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-
-    d->aToday = new QAction(this);
-    d->aTomorrow = new QAction(this);
-    d->aNextWeek = new QAction(this);
-    d->aNextMonth = new QAction(this);
-    d->aToday->setIcon(theme()->icon(Core::Constants::ICONDATE));
-    d->aTomorrow->setIcon(theme()->icon(Core::Constants::ICONDATE));
-    d->aNextWeek->setIcon(theme()->icon(Core::Constants::ICONDATE));
-    d->aNextMonth->setIcon(theme()->icon(Core::Constants::ICONDATE));
-    d->ui->startDateSelector->addAction(d->aToday);
-    d->ui->startDateSelector->addAction(d->aTomorrow);
-    d->ui->startDateSelector->addAction(d->aNextWeek);
-    d->ui->startDateSelector->addAction(d->aNextMonth);
-    d->ui->startDateSelector->setDefaultAction(d->aToday);
-    connect(d->ui->startDateSelector, SIGNAL(triggered(QAction*)), this, SLOT(quickDateSelection(QAction*)));
+    d->createActions();
 
     d->ui->refreshAvailabilities->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
     d->ui->refreshAvailabilities->setToolTip(tr("Refresh Availabilities"));
@@ -448,7 +459,7 @@ void UserCalendarViewer::userChanged()
 
     // Scroll the view to now
     if (isVisible()) {
-        d->ui->calendarViewer->scrollToTime(QTime(17,0,0));
+        d->ui->calendarViewer->scrollToTime(QTime::currentTime());
         d->scrollOnShow = false;
     } else {
         d->scrollOnShow = true;

@@ -118,8 +118,14 @@
 */
 
 /** \fn virtual void Form::IFormIO::checkForUpdates() const = 0;
-  * Check all stored form for any update.
+  * Check all stored form for any update. You can get all form that needs an update (with
+  * all the update information) using the Form::IFormIO::availableUpdates() member.
 */
+
+/** \fn virtual const QList<Form::FormIODescription> &Form::IFormIO::availableUpdates() const = 0;
+ * Return the form description that needs an update. This list is built after calling the
+ * Form::IFormIO::checkForUpdates().
+ */
 
 /** \fn virtual void toTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
  * If the file is accessible to the IO device and is readable, read its description and populate a
@@ -152,41 +158,38 @@ FormIOQuery::FormIOQuery() :
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  FormIODescription /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-namespace Form {
-namespace Internal {
-struct FormIODescriptionPrivate
-{
-    FormIODescriptionPrivate() : m_reader(0), _hasScreenShot(false) {}
+//namespace Form {
+//namespace Internal {
+//struct FormIODescriptionPrivate
+//{
+//    FormIODescriptionPrivate() : m_reader(0), _hasScreenShot(false) {}
 
-    IFormIO *m_reader;
-    bool _hasScreenShot;
-};
-}
-}
-
+//};
+//}
+//}
 
 FormIODescription::FormIODescription() :
-    Utils::GenericDescription(),
-    d_formIO(new Internal::FormIODescriptionPrivate)
+    Utils::GenericDescription()
+//    d_formIO(new Internal::FormIODescriptionPrivate)
 {
     setData(FromDatabase, false);
 }
 
 FormIODescription::~FormIODescription()
 {
-    if (d_formIO)
-        delete d_formIO;
-    d_formIO = 0;
+//    if (d_formIO)
+//        delete d_formIO;
+//    d_formIO = 0;
 }
 
 void FormIODescription::setIoFormReader(IFormIO *reader)
 {
-    d_formIO->m_reader=reader;
+    m_reader=reader;
 }
 
 IFormIO *FormIODescription::reader() const
 {
-    return d_formIO->m_reader;
+    return m_reader;
 }
 
 QVariant FormIODescription::data(const int ref, const QString &lang) const
@@ -217,7 +220,7 @@ bool FormIODescription::hasScreenShots() const
 /** Returns all the screenshots available for the current language */
 QList<QPixmap> FormIODescription::screenShots() const
 {
-    return d_formIO->m_reader->screenShots(data(UuidOrAbsPath).toString());
+    return m_reader->screenShots(data(UuidOrAbsPath).toString());
 }
 
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const

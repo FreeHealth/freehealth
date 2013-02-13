@@ -65,8 +65,11 @@ public:
     FormPlaceHolderCoreListener(FormPlaceHolder *parent);
     ~FormPlaceHolderCoreListener();
     bool coreAboutToClose();
+    QString errorMessage() const {return _errorMsg;}
+
 private:
     FormPlaceHolder *_formPlaceHolder;
+    QString _errorMsg;
 };
 
 class FormPlaceHolderPatientListener : public Core::IPatientListener
@@ -76,8 +79,11 @@ public:
     FormPlaceHolderPatientListener(FormPlaceHolder *parent);
     ~FormPlaceHolderPatientListener();
     bool currentPatientAboutToChange();
+    QString errorMessage() const {return _errorMsg;}
+
 private:
     FormPlaceHolder *_formPlaceHolder;
+    QString _errorMsg;
 };
 
 }  // End namespace Internal
@@ -97,6 +103,7 @@ public:
 
     bool enableAction(WidgetAction action) const;
     void setFormTreeModel(FormTreeModel *model);
+    QString currentFormLabel() const;
 
 public Q_SLOTS:
     bool clear();

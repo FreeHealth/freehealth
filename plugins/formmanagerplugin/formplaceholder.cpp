@@ -143,10 +143,14 @@ FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
 
 bool FormPlaceHolderCoreListener::coreAboutToClose()
 {
+    _errorMsg.clear();
     if (_formPlaceHolder->isDirty()) {
         bool ok = _formPlaceHolder->saveCurrentEpisode();
-        if (!ok)
-            LOG_ERROR("Unable to save current episode");
+        if (!ok) {
+            _errorMsg = tr("Unable to save current episode, form: %1")
+                    .arg(_formPlaceHolder->currentFormLabel());
+            LOG_ERROR(_errorMsg);
+        }
         return ok;
     }
     return true;
@@ -164,10 +168,14 @@ FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
 
 bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
 {
+    _errorMsg.clear();
     if (_formPlaceHolder->isDirty()) {
         bool ok = _formPlaceHolder->saveCurrentEpisode();
-        if (!ok)
-            LOG_ERROR("Unable to save current episode");
+        if (!ok) {
+            _errorMsg = tr("Unable to save current episode, form: %1")
+                    .arg(_formPlaceHolder->currentFormLabel());
+            LOG_ERROR(_errorMsg);
+        }
         return ok;
     }
     return true;
@@ -594,6 +602,19 @@ void FormPlaceHolder::setFormTreeModel(FormTreeModel *model)
     connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     connect(d->ui->formView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentSelectedFormChanged(QModelIndex, QModelIndex)));
     Q_EMIT actionsEnabledStateChanged();
+}
+
+/**
+ * Returns the label of the currently selected form (mainly used for debugging purpose).
+ * \sa Forms::Internal::FormPlaceHolderCoreListener
+ */
+QString FormPlaceHolder::currentFormLabel() const
+{
+    if (d->_formTreeModel && d->_currentEditingForm.isValid()) {
+        QModelIndex index = d->_formTreeModel->index(d->_currentEditingForm.row(), FormTreeModel::Label, d->_currentEditingForm.parent());
+        return d->_formTreeModel->data(index).toString();
+    }
+    return QString::null;
 }
 
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */

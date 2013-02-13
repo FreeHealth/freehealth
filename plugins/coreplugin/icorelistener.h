@@ -36,9 +36,9 @@ class QString;
 
 /**
  * \file icorelistener.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.3.0
- * \date 28 Jan 2010
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 08 Feb 2013
 */
 
 /**
@@ -76,6 +76,7 @@ public:
     virtual ~ICoreListener() {}
 
     virtual bool coreAboutToClose() {return true;}
+    virtual QString errorMessage() const {return QString::null;}
 };
 
 } // namespace Core

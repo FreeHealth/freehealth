@@ -420,10 +420,10 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Id:            col = Constants::IDENTITY_ID;         break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;       break;
-        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
-        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;           break;
-        case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;  break;
+        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME; break;
+        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;  break;
+        case IPatient::Gender:        col = Constants::IDENTITY_GENDER;     break;
         case IPatient::GenderIndex:
             {
             // TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
@@ -751,7 +751,6 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             QModelIndex idx = this->index(index.row(), colsToEmit.at(i), index.parent());
             Q_EMIT dataChanged(idx, idx);
         }
-        return true;
     }
     return true;
 }
@@ -923,18 +922,37 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 
 bool PatientModel::submit()
 {
-    bool ok = true;
-    if (!d->m_SqlPatient->submitAll()) {
-        LOG_ERROR("Model not submitted. " + d->m_SqlPatient->lastError().text());
-        ok = false;
-    } else {
-        // emit created uids
-        for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
-            Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
-        }
-        d->m_CreatedPatientUid.clear();
+    // Nothing to do ?
+//#if QT_VERSION >= 0x05000
+//    if (!d->m_SqlPatient->isDirty())
+//        return true;
+//#else
+//    bool isDirty = false;
+//    for(int i = 0; i < d->m_SqlPatient->rowCount(); ++i) {
+//        for(int j = 0; j < d->m_SqlPatient->columnCount(); ++j) {
+//            QModelIndex index = d->m_SqlPatient->index(i, j);
+//            if (d->m_SqlPatient->isDirty(index)) {
+//                isDirty = true;
+//                break;
+//            }
+//        }
+//    }
+//    if (!isDirty)
+//        return true;
+//#endif
+    // Submit the model to the database
+    bool ok = d->m_SqlPatient->submitAll();
+    if (!ok && d->m_SqlPatient->lastError().number() != -1) {
+        LOG_ERROR(QString("Model not submitted. Error n° %1; %2")
+                  .arg(d->m_SqlPatient->lastError().number())
+                  .arg(d->m_SqlPatient->lastError().text()));
     }
-    return ok;
+    // emit created uids
+    for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
+        Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
+    }
+    d->m_CreatedPatientUid.clear();
+    return true;
 }
 
 /** Refresh the model. Reset the filter and reselect the database. */
@@ -959,6 +977,8 @@ bool PatientModel::refreshModel()
 QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
 {
     QHash<QString, QString> names;
+    if (uuids.isEmpty())
+        return names;
     QSqlDatabase DB = patientBase()->database();
     DB.transaction();
     QSqlQuery query(DB);
@@ -969,13 +989,25 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
             continue;
         QHash<int, QString> where;
         where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(u));
-        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_TITLE << Constants::IDENTITY_BIRTHNAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
+        QString req = patientBase()->select(Constants::Table_IDENT,
+                                            QList<int>()
+                                            << Constants::IDENTITY_TITLE
+                                            << Constants::IDENTITY_BIRTHNAME
+                                            << Constants::IDENTITY_SECONDNAME
+                                            << Constants::IDENTITY_FIRSTNAME,
+                                            where);
         if (query.exec(req)) {
             if (query.next()) {
-                if (!query.value(1).toString().isEmpty())
-                    names.insert(u, QString("%1 %2 - %3 %4").arg(titles.at(query.value(0).toInt()), query.value(1).toString(), query.value(2).toString(), query.value(3).toString()).simplified());
-                else
-                    names.insert(u, QString("%1 %3").arg(titles.at(query.value(0).toInt()), query.value(2).toString(), query.value(3).toString()).simplified());
+                QString title;
+                int titleId = query.value(0).toInt();
+                if (IN_RANGE_STRICT_MAX(titleId, 0, titles.count()))
+                    title = titles.at(titleId);
+                const QString &secondName = query.value(2).toString();
+                if (!secondName.isEmpty()) {
+                    names.insert(u, QString("%1 %2 - %3 %4").arg(title, query.value(1).toString(), secondName, query.value(3).toString()).simplified());
+                } else {
+                    names.insert(u, QString("%1 %2 %3").arg(title, query.value(2).toString(), query.value(3).toString()).simplified());
+                }
             }
         } else {
             LOG_QUERY_ERROR_FOR("PatientModel", query);

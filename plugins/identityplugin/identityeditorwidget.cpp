@@ -280,6 +280,8 @@ public:
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
         QObject::connect(ui->photoButton, SIGNAL(pixmapChanged(QPixmap)), q, SLOT(onPhotoPixmapChanged()));
+        QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
+        QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(passwordConfirmed()));
     }
 
     void connectPropertiesNotifier()
@@ -314,6 +316,7 @@ public:
         m_Mapper = new IsDirtyDataWidgetMapper(q);
         m_Mapper->setSubmitPolicy(IsDirtyDataWidgetMapper::ManualSubmit);
         m_Mapper->setModel(patient());
+        m_Model = patient();
         addMapperMapping();
     }
 
@@ -504,7 +507,7 @@ public:
 public:
     Ui::IdentityWidget *ui;
     IsDirtyDataWidgetMapper *m_Mapper;
-    QAbstractItemModel *m_Model;
+    QAbstractItemModel *m_Model;       // This pointer should never be deleted
     QPixmap m_Photo;
     bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation;
     QString m_lastXml;
@@ -604,18 +607,20 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
 
     QWidget *lastTab = d->ui->genderCombo;
+
+    // Manage address
     bool showAddress = (widgets.testFlag(Street)
             || widgets.testFlag(City)
             || widgets.testFlag(Zipcode)
             || widgets.testFlag(Province)
             || widgets.testFlag(Country_TwoCharIso)
             || widgets.testFlag(Country_QLocale));
+    d->ui->zipcodesWidget->setEnabled(showAddress);
+    d->ui->zipcodesWidget->setVisible(showAddress);
     if (showAddress) {
-        d->ui->zipcodesWidget->setEnabled(showAddress);
         QWidget::setTabOrder(d->ui->genderCombo, d->ui->zipcodesWidget);
         lastTab = d->ui->zipcodesWidget;
     }
-
     QWidget::setTabOrder(lastTab, d->ui->language);
     QWidget::setTabOrder(d->ui->language, d->ui->passwordWidget);
 
@@ -623,8 +628,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
             || widgets.testFlag(Extra_Password)
             || widgets.testFlag(Extra_ConfirmPassword));
     d->ui->passwordWidget->setVisible(showLog);
-
-    d->ui->zipcodesWidget->setVisible(d->ui->zipcodesWidget->isEnabled());
+    d->ui->passwordWidget->setEnabled(showLog);
     d->m_availaibleSet = true;
 }
 
@@ -759,14 +763,15 @@ QString IdentityEditorWidget::toXml() const
  */
 void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 {
-//    qWarning() << modelIndex << (modelIndex.model() == d->m_Mapper->model());
-    if (modelIndex.model() == d->m_Mapper->model()) {
-        d->ui->passwordWidget->clear();
-        d->ui->zipcodesWidget->clear();
-        d->m_Mapper->setCurrentIndex(modelIndex.row());
-        d->populatePixmap();
-        updateGenderImage();
+    if (modelIndex.model() != d->m_Mapper->model()) {
+        LOG_ERROR("Unable to setCurrentIndex in mapper. Models do not match.");
+        return;
     }
+    d->ui->passwordWidget->clear();
+    d->ui->zipcodesWidget->clear();
+    d->m_Mapper->setCurrentIndex(modelIndex.row());
+    d->populatePixmap();
+    updateGenderImage();
 }
 
 /**
@@ -774,31 +779,35 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
  * test the content of the firstname, birthname, gender & DOB.
  * When subclassing, if you return false, the object can not submit to the model.
  */
-bool IdentityEditorWidget::isIdentityValid() const
+bool IdentityEditorWidget::isIdentityValid(bool warnUser) const
 {
     if (d->ui->birthName->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a birthname."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a birthname."),
                                  tr("You can not create a patient without a birthname"),
                                  "", tr("No birthname"));
         d->ui->birthName->setFocus();
         return false;
     }
     if (d->ui->firstname->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a first name."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a first name."),
                                  tr("You can not create a patient without a first name"),
                                  "", tr("No firstname"));
         d->ui->firstname->setFocus();
         return false;
     }
     if (d->ui->dob->date().isNull()) {
-        Utils::warningMessageBox(tr("You must specify a date of birth."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a date of birth."),
                                  tr("You can not create a patient without a date of birth"),
                                  "", tr("No date of birth"));
         d->ui->dob->setFocus();
         return false;
     }
     if (d->ui->genderCombo->currentIndex() == -1) {
-        Utils::warningMessageBox(tr("You must specify a gender."),
+        if (warnUser)
+            Utils::warningMessageBox(tr("You must specify a gender."),
                                  tr("You can not create a patient without a gender"),
                                  "", tr("No gender"));
         d->ui->genderCombo->setFocus();
@@ -924,18 +933,26 @@ bool IdentityEditorWidget::submit()
     if (d->m_xmlOnly)
         return true;
     if (d->m_Mapper) {
+        // BUG: QPixmap from the themedGenderButton is not correctly submitted
+        // So do this by hand
+        int photoColumn = d->m_Mapper->mappedSection(d->ui->photoButton);
+        if (photoColumn > -1) {
+            QModelIndex modelIndex;
+            if (d->m_Model)
+                modelIndex = d->m_Model->index(d->m_Mapper->currentIndex(), photoColumn);
+            else
+                modelIndex = d->m_Mapper->model()->index(d->m_Mapper->currentIndex(), photoColumn);
+            if (!d->m_Mapper->model()->setData(modelIndex, d->ui->photoButton->pixmap())) {
+                LOG_ERROR("Mapper can not submit the patient photo.");
+                return false;
+            }
+        }
+
         if (!d->m_Mapper->submit()) {
             LOG_ERROR("Mapper can not submit to model");
             return false;
         }
-        // BUG: QPixmap from the themedGenderButton is not correctly submitted
-        // So do this by hand
-        int index = d->m_Mapper->mappedSection(d->ui->photoButton);
-        if (index > -1) {
-            QModelIndex modelIndex = d->m_Mapper->model()->index(d->m_Mapper->currentIndex(), index);
-            if (!d->m_Mapper->model()->setData(modelIndex, d->ui->photoButton->pixmap()))
-                return false;
-        }
+
         d->m_Mapper->onModelSubmitted();
     }
     return true;
@@ -993,6 +1010,7 @@ void IdentityEditorWidget::photoButton_clicked()
 /** Force UI to update with the new current patient data */
 void IdentityEditorWidget::onCurrentPatientChanged()
 {
+    clear();
     // With XML editing we do not follow the Core::IPatient
     if (d->m_xmlOnly)
         return;

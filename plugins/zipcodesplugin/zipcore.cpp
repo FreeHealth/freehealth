@@ -61,6 +61,7 @@ class ZipCorePrivate
 {
 public:
     ZipCorePrivate(ZipCore *parent) :
+        _initialized(false),
         _dbAvailable(false),
         q(parent)
     {
@@ -92,22 +93,24 @@ public:
     // Populates the _dbAvailable and create/open _db
     void checkDatabase()
     {
-        _db = QSqlDatabase();
         _dbAvailable = false;
+        if (!QFileInfo(databaseFileName()).exists())
+            return;
+        _db = QSqlDatabase();
         if (QSqlDatabase::connectionNames().contains("ZIPS")) {
             _db = QSqlDatabase::database("ZIPS");
             _dbAvailable = true;
         } else {
             LOG_FOR(q, QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
             _db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
-            if (QFileInfo(databaseFileName()).exists()) {
-                _db.setDatabaseName(databaseFileName());
-                _dbAvailable = true;
-            }
+            _db.setDatabaseName(databaseFileName());
+            _dbAvailable = true;
         }
         if (_dbAvailable) {
             if (!_db.open()) {
                 LOG_ERROR_FOR(q, "Unable to open Zip database");
+                QSqlDatabase::removeDatabase("ZIPS");
+                _db = QSqlDatabase();
                 _dbAvailable = false;
             } else {
                 LOG_FOR(q, tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg("zipcodes").arg("sqlite"));
@@ -117,7 +120,7 @@ public:
 
 public:
     QSqlDatabase _db;
-    bool _dbAvailable;
+    bool _initialized, _dbAvailable;
     
 private:
     ZipCore *q;
@@ -159,12 +162,14 @@ ZipCore::~ZipCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool ZipCore::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->checkDatabase();
-
     // Manage datapacks
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    d->_initialized = true;
     return true;
 }
 

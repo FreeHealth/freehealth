@@ -84,7 +84,7 @@ public:
     virtual int count() const = 0;
 
     virtual Calendar::CalendarItem getItemByUid(const QString &uid) const = 0;
-    virtual QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
+    virtual QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) = 0;
 
     virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end) = 0;
     virtual CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;

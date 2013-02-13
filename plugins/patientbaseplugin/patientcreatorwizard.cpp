@@ -30,7 +30,6 @@
  */
 
 #include "patientcreatorwizard.h"
-#include "identityeditorwidget.h"
 #include "patientcore.h"
 #include "patientmodel.h"
 #include "patientbase.h"
@@ -170,8 +169,10 @@ IdentityPage::IdentityPage(QWidget *parent) :
  */
 bool IdentityPage::validatePage()
 {
-    if (!m_Identity->isIdentityValid())
+    if (!m_Identity->isIdentityValid()) {
+        LOG_ERROR("Unable to validate page. Invalid identity.");
         return false;
+    }
 
     // check duplicates
     if (patientBase()->isPatientExists(m_Identity->currentBirthName(),

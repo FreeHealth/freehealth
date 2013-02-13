@@ -57,6 +57,7 @@ public:
     QString type() const { return m_type; }
     bool isEnabled() const;
     bool patientBarVisibility() const {return m_isPatientBarVisible;}
+    bool isEnabledOnlyWithCurrentPatient() const {return m_onlyWithCurrentPatient;}
 
     void setEnabled(bool enabled);
     void setDisplayName(const QString &displayName) { m_displayName = displayName; }
@@ -66,6 +67,7 @@ public:
     void setType(const QString &type) { m_type = type; }
 
     void setPatientBarVisibility(bool visible) {m_isPatientBarVisible=visible;}
+    bool setEnabledOnlyWithCurrentPatient(bool enablewithcurrentpatient) {m_onlyWithCurrentPatient = enablewithcurrentpatient;}
 
 Q_SIGNALS:
     void enabledStateChanged(bool enabled);
@@ -76,7 +78,7 @@ private:
     int m_priority;
     QString m_id;
     QString m_type;
-    bool m_isEnabled, m_isPatientBarVisible;
+    bool m_isEnabled, m_isPatientBarVisible, m_onlyWithCurrentPatient;
 };
 
 } // namespace Core

@@ -47,9 +47,9 @@ QT_END_NAMESPACE
 */
 
 namespace Calendar {
-struct CalendarWidgetPrivate;
 class AbstractCalendarModel;
 class CalendarItem;
+struct CalendarWidgetPrivate;
 
 class CALENDAR_EXPORT CalendarWidget : public QWidget
 {

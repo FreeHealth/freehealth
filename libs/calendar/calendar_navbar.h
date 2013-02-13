@@ -61,6 +61,7 @@ Q_SIGNALS:
     void firstDateChanged();
     void viewTypeChanged();
     void granularityChanged(int);
+    void forceModelRefresh();
 
 private Q_SLOTS:
     void todayPage();
@@ -79,6 +80,7 @@ private Q_SLOTS:
     void weekMode();
     void monthMode();
     void changeGranularity(QAction *action);
+    void refreshModel();
 
 private:
     ViewType m_viewType;
@@ -89,6 +91,7 @@ private:
 
     QAction *aDayView, *aWeekView, *aMonthView;
     QAction *aToday, *aTomorrow, *aYesterday, *aCurrentWeek, *aCurrentMonth, *aNextWeek, *aNextMonth;
+    QAction *aForceModelRefresh;
     QMenu *mViewRange, *mMonths, *mWeeks;
 
     QToolButton *m_viewModeNav;
@@ -100,6 +103,7 @@ private:
     QString getDateIntervalString();
     QWidget *createNavigationButtons();
     QToolButton *createNavigationModeButton();
+    QToolButton *createRefreshModelButton();
     QToolButton *createTodayButton();
     QToolButton *createCurrentDateViewButton();
     void changeEvent(QEvent *e);

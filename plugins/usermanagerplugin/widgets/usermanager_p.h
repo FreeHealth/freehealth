@@ -55,6 +55,7 @@ public:
     explicit UserManagerWidget(QWidget *parent = 0); // work with usermodel
     ~UserManagerWidget();
     bool initialize();
+    void resizeSplitter();
 
     bool canCloseParent();
 

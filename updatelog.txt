@@ -5,11 +5,14 @@ FreeMedForms
   * New form items:
     * detailswidget
     * modern date
+    * measurement widget (a set of two widgets one for the value, one for the measurement unit)
   * New form item options
     * Rich texteditor
       * can set print duplicata
       * can set papers to use for the print (header, footer, watermark)
       * define the document title (used by the token engine)
+  * New forms
+    * Creating a SOAP with biometrics value (weight, height, blood pressure)
   * Refactoring all identity UI
   * Refactoring the
     * User manager
@@ -36,6 +39,10 @@ FreeMedForms
     * Don't show forms with the 'noepsiode' option, show its first children instead
     * Correctly set the taborder in forms
     * Episode view header font were too small on Linux
+    * Avoid identity data duplication from one patient to another
+    * Improving the debug dialog and the log saving
+    * When no patient is selected, disable some modes (that require a current patient to be defined)
+    * Removing empty menu in menubar
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI
@@ -49,6 +56,7 @@ FreeMedForms
     * Many bug fixes
   * Installation && configuration / databases
   * PMHx
+    * Correcting Pmhx ICD button enabled state when installing the ICD10 datapack
   * Agenda:
   * DataPack manager
     * Correcting crash when download dialog is cancelled
@@ -59,7 +67,7 @@ FreeMedForms
   * Forms
     * Identity sub-form updated with detaileswidget and a trusted person information
     * New formitems and options available, see the XML form specifications in documentation
-    * Updating 'textual prescriptions': print with prescription papers, with duplicata
+    * Updating 'textual prescriptions': print with prescription papers and duplicata
   * Debian specific
   * Under the hood
 
