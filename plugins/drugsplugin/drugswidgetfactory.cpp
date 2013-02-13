@@ -266,7 +266,7 @@ void DrugsWidgetData::setDrugsPrescriptorWidget(DrugsPrescriptorWidget *widget)
 
 void DrugsWidgetData::clear()
 {
-    m_Widget->m_PrescriptionModel->clearDrugsList();
+    m_Widget->m_CentralWidget->clear();
 }
 
 bool DrugsWidgetData::isModified() const

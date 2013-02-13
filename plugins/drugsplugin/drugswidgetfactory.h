@@ -102,9 +102,9 @@ private Q_SLOTS:
 
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
+    DrugsWidget::DrugsCentralWidget *m_CentralWidget;
 
 private:
-    DrugsWidget::DrugsCentralWidget *m_CentralWidget;
     QString m_iniPath;
     bool m_WithPrescribing, m_WithPrinting;
     QPushButton *m_AddChronic;
