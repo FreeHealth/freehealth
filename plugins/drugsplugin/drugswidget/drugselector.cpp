@@ -310,6 +310,18 @@ void DrugSelector::updateDrugsViewColumns()
 #endif
 }
 
+/**
+ * Clear the view:
+ * - clear the search line edit,
+ * - keep the search method (brand name, INN, molecule search)
+ * - reset the search filter
+ */
+void DrugSelector::clear()
+{
+    searchLine->clear();
+    updateModelFilter();
+}
+
 void DrugSelector::createINNModelView()
 {
     using namespace DrugsDB::Constants;

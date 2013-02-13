@@ -37,9 +37,9 @@ QT_END_NAMESPACE
 
 /**
  * \file drugselector.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 23 Sept 2010
+ * \author Eric Maeker
+ * \version 0.8.2
+ * \date 13 Feb 2013
  */
 
 namespace DrugsDB {
@@ -58,7 +58,7 @@ class TreeProxyModel;
 class DrugSelector : public QWidget, private Ui::DrugSelector
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DrugSelector);
+    Q_DISABLE_COPY(DrugSelector)
 
 public:
     explicit DrugSelector(QWidget *parent = 0);
@@ -66,6 +66,7 @@ public:
 
     void initialize();
     void updateDrugsViewColumns();
+    void clear();
 
     void setFont(const QFont &font);
     void setFocus(Qt::FocusReason r = Qt::TabFocusReason) { searchLine->setFocus(r); }
