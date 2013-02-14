@@ -305,11 +305,11 @@ Il est parfois nécessaire de clarifier vos arguments.</translation>
     </message>
     <message>
         <source>Label: </source>
-        <translation>Libellé :</translation>
+        <translation>Libellé : </translation>
     </message>
     <message>
         <source>Category: </source>
-        <translation>Catégorie :</translation>
+        <translation>Catégorie : </translation>
     </message>
 </context>
 </TS>
