@@ -40,6 +40,7 @@
  * \fn void Core::IMode::setPatientBarVisibility(bool visible)
  * Define is the patient bar should be visible or not inside this mode. By default, set to true.
  * If you set to false, the patient bar will not be presented in the UI of the mode.
+ * This property is managed by the main window
  * \sa Core::IPatientBar, Core::IPatient
  */
 
