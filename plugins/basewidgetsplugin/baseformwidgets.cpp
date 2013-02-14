@@ -455,10 +455,16 @@ BaseFormData::BaseFormData(Form::FormItem *item) :
 BaseFormData::~BaseFormData()
 {}
 
+void BaseFormData::setForm(BaseForm *form)
+{
+    m_Form = form;
+    clear();
+}
+
 void BaseFormData::clear()
 {
     m_Data.clear();
-    m_Form->m_EpisodeDate->setDateTime(QDateTime::currentDateTime());
+    m_Form->m_EpisodeDate->setDateTime(QDateTime());
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
     m_Form->m_EpisodeDate->setEnabled(false);
@@ -466,13 +472,17 @@ void BaseFormData::clear()
 
 bool BaseFormData::isModified() const
 {
+    // Force modified state
     if (m_Modified)
         return true;
+    // Check values
     QList<int> keys;
     keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
     foreach(int id, keys) {
-        if (data(id) != m_OriginalData.value(id))
+        if (data(id) != m_OriginalData.value(id)) {
+            // qWarning() << "Form Dirty" << id << m_OriginalData.value(id) << data(id);
             return true;
+        }
     }
     return false;
 }

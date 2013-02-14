@@ -122,7 +122,7 @@ public:
     BaseFormData(Form::FormItem *item);
     ~BaseFormData();
 
-    void setForm(BaseForm *form) {m_Form = form; clear();}
+    void setForm(BaseForm *form);
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
