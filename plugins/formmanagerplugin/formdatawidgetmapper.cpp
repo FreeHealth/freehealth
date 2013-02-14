@@ -332,6 +332,10 @@ bool FormDataWidgetMapper::submit()
     d->_episodeModel->setData(prior, d->_formMain->itemData()->data(IFormItemData::ID_Priority));
 
     bool ok = d->_episodeModel->submit();
+    if (ok) {
+        // Ensure that patientmodel was feeded with the save data
+        d->_episodeModel->populateFormWithEpisodeContent(d->_currentEpisode, true);
+    }
     return ok;
 }
 
