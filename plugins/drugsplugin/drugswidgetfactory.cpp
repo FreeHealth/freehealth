@@ -339,6 +339,8 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
 
 void DrugsWidgetData::setStorableData(const QVariant &data)
 {
+    m_Widget->m_CentralWidget->clear();
+    m_Widget->m_PrescriptionModel->setModified(false);
     if (!data.isValid())
         return;
     drugsIo().prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
