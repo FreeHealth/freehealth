@@ -512,11 +512,15 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 
 bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (d->_readOnly)
+    if (d->_readOnly) {
+        qWarning() << "Unable to setData, read-only";
         return false;
+    }
 
-    if (!index.isValid())
+    if (!index.isValid()) {
+        qWarning() << "Unable to setData, invalid index";
         return false;
+    }
 
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
         d->_dirtyIndexes << index;
@@ -794,7 +798,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     return true;
 }
 
-/** Save the whole model. \sa isDirty() */
+/**
+ * Save the whole model, set the Form::IFormItemData to non-modified if the submition gone
+ * right. This does include the root Form::FormMain of this model.
+ * \sa isDirty()
+ */
 bool EpisodeModel::submit()
 {
     // No active patient ?
@@ -813,9 +821,12 @@ bool EpisodeModel::submit()
     bool ok = d->_sqlModel->submit();
 
     // Set all formitemdata to a non-modified state
-    foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
-        if (it->itemData())
-            it->itemData()->setModified(false);
+    if (ok) {
+        foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+            if (it->itemData())
+                it->itemData()->setModified(false);
+        }
+        d->_formMain->itemData()->setModified(false);
     }
     d->_sqlModel->blockSignals(false);
     return ok;
