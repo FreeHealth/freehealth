@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+  <!-- Non translatable values -->
+  <authors>Eric Maeker, MD</authors>
+  <version>test</version>
+  <fmfv>0.8.1</fmfv>
+  <cdate>2013-02-10</cdate>
+  <lmdate>2013-02-10</lmdate>
+  <icon></icon>
+  <weblink></weblink>
+  <bibliography pmid=""></bibliography>
+
+  <!-- Translatable values -->
+  <license>GPLv3</license>
+  <description lang="fr">Test des widgets pour les mesures</description>
+  <description lang="xx">Testing measurement widgets</description>
+  <category lang="xx">Test</category>
+  <category lang="fr">Test</category>
+  <specialties lang="fr">Test</specialties>
+  <specialties lang="xx">Test</specialties>
+
+  </formdescription>
+
+  <MedForm name="Test::Widgets::Measurements::QtUi" uifilename="./measurements.ui">
+    <label>Measurements test with QtUi</label>
+    <icon>__theme__/edit.png</icon>
+    <options>UseFormNameAsNameSpace</options>
+
+    <Item type="measurement" name="Weight">
+      <uilink label="weightLabel" layout="weightLayout" widget=""/>
+      <label lang="xx">Weight (layout)</label>
+      <label lang="fr">Poids (layout)</label>
+      <options>DontPrintEmptyValues;Weight</options>
+      <default>kilogram</default>
+    </Item>
+
+    <Item type="measurement" name="Height">
+      <uilink label="heightLabel" layout="" widget="heightValue;heightUnits"/>
+      <label lang="xx">Height (widgets)</label>
+      <label lang="fr">Taille (widgets)</label>
+      <options>DontPrintEmptyValues;Length</options>
+      <default>meter</default>
+    </Item>
+
+  </MedForm>
+
+  <MedForm name="Test::Widgets::Measurements::NonQtUi">
+    <label>Measurements test without QtUi</label>
+    <icon>__theme__/edit.png</icon>
+    <options>UseFormNameAsNameSpace</options>
+
+    <Item type="measurement" name="Height">
+      <label lang="xx">Height (widgets)</label>
+      <label lang="fr">Taille (widgets)</label>
+      <options>DontPrintEmptyValues;Length</options>
+      <default>meter</default>
+    </Item>
+
+  </MedForm>
+
+</FreeMedForms>
