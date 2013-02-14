@@ -92,7 +92,6 @@ public Q_SLOTS:
     void onDrugsDatabaseChanged();
 
 private Q_SLOTS:
-    void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright) {Q_UNUSED(topleft); Q_UNUSED(bottomright);}
     void updateAllergies();
 
 private:

@@ -298,11 +298,8 @@ GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent)
     d->updateCachedAvailableDosage();
     d->setQueryModelSearchMode(searchMode);
 
-    refreshDrugsPrecautions(patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision), patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision));
-
     connect(&protocolsBase(), SIGNAL(protocolsBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
     connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsDatabaseChanged()));
-    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex, QModelIndex)));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(onDrugsDatabaseChanged()));
     if (d->m_AllergyEngine) {
         connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(updateAllergies()));
