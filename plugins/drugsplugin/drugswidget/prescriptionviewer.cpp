@@ -220,6 +220,7 @@ void PrescriptionViewer::clear()
     if (!m_DrugsModel)
         return;
     m_DrugsModel->clearDrugsList();
+    m_DrugsModel->setModified(false);
 }
 
 /** Removes the selected drug from the prescription.*/
