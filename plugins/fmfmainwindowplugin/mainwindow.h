@@ -57,6 +57,7 @@ class FancyTabWidget;
 
 namespace Core {
 class FileManager;
+class IMode;
 }
 
 namespace MainWin {
@@ -99,8 +100,9 @@ public:
     void writeSettings();
     QStatusBar *statusBar();
 
-public Q_SLOTS:
+private Q_SLOTS:
     void postCoreInitialization();
+    void onCurrentModeChanged(Core::IMode *newMode);
     void onCurrentUserChanged();
     void onUserDataChanged(int);
     void onCurrentPatientChanged();

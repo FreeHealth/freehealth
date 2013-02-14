@@ -143,6 +143,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_QuitOnClose);
     m_RecentPatients = new Core::FileManager(this);
     m_RecentPatients->setSettingsKey(Core::Constants::S_PATIENT_UUID_HISTORY);
+    // Connect post core initialization
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 /**
@@ -257,9 +259,6 @@ void MainWindow::extensionsInitialized()
 //        }
 //        settings()->noMoreFirstTimeRunning();
 //    }
-
-    // Connect post core initialization
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 MainWindow::~MainWindow()
@@ -301,6 +300,7 @@ void MainWindow::postCoreInitialization()
     theme()->finishSplashScreen(this);
 
     manageIModeEnabledState();
+    connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(onCurrentModeChanged(Core::IMode*)), Qt::UniqueConnection);
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
 
     raise();
@@ -308,6 +308,18 @@ void MainWindow::postCoreInitialization()
 
     // clear the focus of the mainwin so that the lineeditbuton show the tooltip
     setFocus();
+}
+
+/** When the current Core::IMode is beeing updated, check the patient visibility */
+void MainWindow::onCurrentModeChanged(Core::IMode *newMode)
+{
+    Q_ASSERT(newMode);
+    if (!newMode)
+        return;
+    if (newMode->patientBarVisibility())
+        patient()->showPatientBar();
+    else
+        patient()->hidePatientBar();
 }
 
 /**
@@ -360,6 +372,7 @@ void MainWindow::onCurrentPatientChanged()
     endProcessingSpinner();
 }
 
+/** Enable/Disable modes according to the Core::IMode::isEnabledOnlyWithCurrentPatient() state */
 void MainWindow::manageIModeEnabledState()
 {
     QList<Core::IMode*> modes = pluginManager()->getObjects<Core::IMode>();

@@ -78,6 +78,7 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
     setId(Core::Constants::MODE_PATIENT_SEARCH);
     Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
     setContext(context);
+    setPatientBarVisibility(false);
 
     // Add the new patient action in the mode manager
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
