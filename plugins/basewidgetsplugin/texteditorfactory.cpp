@@ -100,7 +100,6 @@ Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::Fo
     return new TextEditorForm(formItem, parent);
 }
 
-
 TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         Form::IFormWidget(formItem,parent), m_Text(0)
 {
@@ -256,13 +255,19 @@ bool TextEditorData::isModified() const
 {
     if (m_ForceModified)
         return true;
+    if (m_Editor->textEdit()->toPlainText().isEmpty())
+        return m_OriginalValue.isEmpty();
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
 void TextEditorData::setModified(bool modified)
 {
-    if (!modified)
-        m_OriginalValue = m_Editor->textEdit()->toHtml();
+    if (!modified) {
+        if (m_Editor->textEdit()->toPlainText().isEmpty())
+            m_OriginalValue.clear();
+        else
+            m_OriginalValue = m_Editor->textEdit()->toHtml();
+    }
     else
         m_ForceModified = modified;
 }
@@ -282,6 +287,8 @@ QVariant TextEditorData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     Q_UNUSED(role);
+    if (m_Editor->textEdit()->toPlainText().isEmpty())
+        return QVariant();
     return m_Editor->textEdit()->toHtml();
 }
 
@@ -300,6 +307,8 @@ void TextEditorData::setStorableData(const QVariant &data)
 
 QVariant TextEditorData::storableData() const
 {
+    if (m_Editor->textEdit()->toPlainText().isEmpty())
+        return QVariant();
     return m_Editor->textEdit()->toHtml();
 }
 
