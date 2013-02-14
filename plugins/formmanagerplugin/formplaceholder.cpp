@@ -304,6 +304,7 @@ public:
         if (index==_currentEditingForm)
             return;
         clearFormContents();
+        ui->formDataMapper->setCurrentEpisode(QModelIndex());
 
         // If the current form does not handle episode -> show its first child
         QModelIndex current = index;
@@ -621,6 +622,7 @@ QString FormPlaceHolder::currentFormLabel() const
 bool FormPlaceHolder::clear()
 {
     d->clearFormContents();
+    d->ui->formDataMapper->clear();
 //    d->_currentEditingForm = QModelIndex();
 //    Q_EMIT actionsEnabledStateChanged();
     return true;
