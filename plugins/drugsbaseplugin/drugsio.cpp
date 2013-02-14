@@ -1009,14 +1009,14 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
         tmp = mask;
     }
 
-//#ifdef WITH_PAD
-//    PrescriptionToken::setPrescriptionModel(model);
-//    PrescriptionToken::setPrescriptionModelRow(drugRow);
-//    if (toHtml) {
-//        return padTools()->processHtml(tmp);
-//    }
-//    return padTools()->processPlainText(tmp);
-//#else
+#ifdef WITH_PAD
+    PrescriptionToken::setPrescriptionModel(model);
+    PrescriptionToken::setPrescriptionModelRow(drugRow);
+    if (toHtml) {
+        return padTools()->processHtml(tmp);
+    }
+    return padTools()->processPlainText(tmp);
+#else
     QHash<QString, QString> tokens_value;
     tokens_value.insert("DRUG", QString());
     tokens_value.insert("NOTE", QString());
@@ -1028,6 +1028,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     tokens_value.insert("D_SCHEME", QString());
     tokens_value.insert("PERIOD_SCHEME", QString());
     tokens_value.insert("PERIOD", QString());
+    tokens_value.insert("MEAL", QString());
     tokens_value.insert("REPEATED_DAILY_SCHEME", QString());
     tokens_value.insert("DISTRIBUTED_DAILY_SCHEME", QString());
     tokens_value.insert("DAILY_SCHEME", QString());
