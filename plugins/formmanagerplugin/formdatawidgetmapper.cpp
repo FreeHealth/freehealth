@@ -228,6 +228,7 @@ void FormDataWidgetMapper::clear()
     if (!d->_formMain)
         return;
     d->_formMain->clear();
+    d->_currentEpisode = QModelIndex();
 }
 
 /**
@@ -245,13 +246,13 @@ bool FormDataWidgetMapper::isDirty() const
     // form isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
-            qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
+            qWarning() << "FormDataWidgetMapper::isDirty (form)" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
-        if (WarnDirty && it->itemData())
-            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
+        if (WarnDirty && it->itemData() && it->itemData()->isModified())
+            qWarning() << "FormDataWidgetMapper::isDirty (item)" << it->uuid() << it->itemData()->isModified();
         if (it->itemData() && it->itemData()->isModified())
             return true;
     }
@@ -330,6 +331,7 @@ bool FormDataWidgetMapper::submit()
     d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDate));
     d->_episodeModel->setData(prior, d->_formMain->itemData()->data(IFormItemData::ID_Priority));
 
-    return d->_episodeModel->submit();
+    bool ok = d->_episodeModel->submit();
+    return ok;
 }
 
