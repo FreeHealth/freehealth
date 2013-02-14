@@ -40,8 +40,8 @@
         <translation>Autre</translation>
     </message>
     <message>
-        <source>VISA</source>
-        <translation></translation>
+        <source>Credit card</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

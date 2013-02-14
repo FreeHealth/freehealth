@@ -43,7 +43,7 @@
 <context>
     <name>Agenda::CalendarItemModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="330"/>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="332"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,7 +148,7 @@
 <context>
     <name>Agenda::Internal::UserCalendarPageForUserViewer</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarpageforuserviewer.cpp" line="139"/>
+        <location filename="../../plugins/agendaplugin/usercalendarpageforuserviewer.cpp" line="138"/>
         <source>User agendas</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,55 +186,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="188"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="197"/>
         <source>Refresh Availabilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="403"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="412"/>
         <source>Set back to default: %1 %2</source>
         <extracomment>default agenda duration time, %1 = time, %2 = minutes (fixed)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="416"/>
-        <source>Agendas of %1</source>
-        <extracomment>e.g. Agendas of John Doe</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="472"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="479"/>
         <source>Set back to default: </source>
         <extracomment>default agenda duration time (in minutes)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="544"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="551"/>
         <source>Beginning of next week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="546"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="553"/>
         <source>Beginning of next month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="550"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="557"/>
         <source>Switch to patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="552"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="559"/>
         <source>Edit appointment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="554"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="561"/>
         <source>Print appointment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="556"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="563"/>
         <source>Delete appointment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -443,7 +437,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="125"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="123"/>
         <source>Create a new calendar</source>
         <translation type="unfinished"></translation>
     </message>

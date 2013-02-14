@@ -86,37 +86,37 @@
 <context>
     <name>Patients::IdentityPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="115"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="130"/>
         <source>Please enter the patient&apos;s identity.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="148"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
         <source>Patient already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="149"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="185"/>
         <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="174"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="210"/>
         <source>You are about to create the following  patient: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="176"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="212"/>
         <source>Patients with the same names exist in the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="178"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="214"/>
         <source>Do you really want to create this patient?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="180"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="216"/>
         <source>Patients of the same name exist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,12 +137,12 @@
 <context>
     <name>Patients::Internal::PatientActionHandler</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="148"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="151"/>
         <source>Fatal Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="148"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="151"/>
         <source>%1: Unable to retreive patients menu.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,17 +267,17 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="91"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="96"/>
         <source>WARNING! You did not save this patient. If you continue without saving, all changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="93"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="98"/>
         <source>Do you really want to close this dialog?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="94"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="99"/>
         <source>Patient not saved</source>
         <translation type="unfinished"></translation>
     </message>

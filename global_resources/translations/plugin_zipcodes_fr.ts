@@ -5,30 +5,30 @@
     <name>ZipCodes::Internal::ZipCountryModel</name>
     <message>
         <source>%1, %2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>ZipCodes::ZipCodesWidget</name>
     <message>
         <source>Street</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ville</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays</translation>
     </message>
     <message>
         <source>State/Province</source>
-        <translation type="unfinished"></translation>
+        <translation>Région</translation>
     </message>
     <message>
         <source>Zipcode</source>
-        <translation type="unfinished"></translation>
+        <translation>Code postal</translation>
     </message>
 </context>
 <context>
@@ -48,16 +48,16 @@
     <message>
         <source>Autocompletion of zipcodes for %1 not available</source>
         <extracomment>%1 is a country</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;autocomplétion des codes postaux n&apos;est pas disponible pour le pays : %1</translation>
     </message>
     <message>
         <source>Autocompletion of cities for %1 not available</source>
         <extracomment>%1 is a country</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;autocomplétion des villes n&apos;est pas disponible pour le pays : %1</translation>
     </message>
     <message>
         <source>Zip/city/country information available</source>
-        <translation type="unfinished"></translation>
+        <translation>Les données de codes postaux sont disponibles</translation>
     </message>
 </context>
 </TS>

@@ -17,17 +17,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="154"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="155"/>
         <source>Trying to set the default datapack servers using file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="167"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="168"/>
         <source>Unable to add default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="169"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="170"/>
         <source>Adding default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>

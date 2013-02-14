@@ -52,6 +52,19 @@
     </message>
 </context>
 <context>
+    <name>DrugsWidget::DrugsCentralWidget</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="276"/>
+        <source>Preparing database and drug engines report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="294"/>
+        <source>Drug engine report: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.ui" line="14"/>
@@ -293,7 +306,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageDialog.cpp" line="91"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageDialog.cpp" line="90"/>
         <source>Drug Dosage</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1041,13 +1054,13 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugPosologicSentencePage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="283"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="285"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="286"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="288"/>
         <source>Posologic sentence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="316"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="319"/>
         <source>Updating posologic sentence.</source>
         <translation type="unfinished"></translation>
     </message>

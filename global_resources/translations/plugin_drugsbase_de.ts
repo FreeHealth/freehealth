@@ -26,6 +26,45 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     </message>
 </context>
 <context>
+    <name>DrugDatabaseInfo</name>
+    <message>
+        <source>Not specific</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language Specific</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country Specific</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Provider, Author and License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Declared validity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeDiams compatible version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ATC validity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interaction engine validity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interaction engine completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
         <source>Label</source>

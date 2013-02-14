@@ -398,45 +398,6 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::Internal::UserPasswordDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change your password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type old password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type new password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Confirm new password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password must have at least 5 chars.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The old password is not correct. Please retry with the correct password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong password confirmation.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password can not be change.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::Internal::UserRightsModel</name>
     <message>
         <source>No Rights</source>
@@ -667,10 +628,6 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Setting current user uuid to 			 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Database server administrator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -692,6 +649,10 @@ Application will stop.</source>
     </message>
     <message>
         <source>User can not be deleted from database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Setting current user uuid to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -176,10 +176,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Label:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -213,6 +209,10 @@
     </message>
     <message>
         <source>Past Medical History for PATIENT NAME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label and date</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

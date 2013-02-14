@@ -19,37 +19,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="336"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="337"/>
         <source>Cash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="337"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="338"/>
         <source>Cheques</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="340"/>
-        <source>VISA</source>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="339"/>
+        <source>Credit card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="341"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="340"/>
         <source>Money</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="342"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="341"/>
         <source>Due</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="343"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="342"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="344"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="343"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>

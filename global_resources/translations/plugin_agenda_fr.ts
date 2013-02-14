@@ -169,11 +169,6 @@
         <translation>Re-définir les valeur par défaut : %1 %2</translation>
     </message>
     <message>
-        <source>Agendas of %1</source>
-        <extracomment>e.g. Agendas of John Doe</extracomment>
-        <translation>Agendas de %1</translation>
-    </message>
-    <message>
         <source>Beginning of next week</source>
         <translation>Commencement de la semaine</translation>
     </message>

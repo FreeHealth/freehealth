@@ -4,74 +4,63 @@
 <context>
     <name>Identity::IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="816"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="786"/>
         <source>You must specify a birthname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="817"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="787"/>
         <source>You can not create a patient without a birthname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="818"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="788"/>
         <source>No birthname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="823"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="794"/>
         <source>You must specify a first name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="824"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="795"/>
         <source>You can not create a patient without a first name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="825"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="796"/>
         <source>No firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="830"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="802"/>
         <source>You must specify a date of birth.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="831"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="803"/>
         <source>You can not create a patient without a date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="832"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="804"/>
         <source>No date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="837"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="810"/>
         <source>You must specify a gender.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="838"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="811"/>
         <source>You can not create a patient without a gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="839"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="812"/>
         <source>No gender</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="1040"/>
-        <source>minimum: 6 characters
-only characters and digits allowed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="1041"/>
-        <source>minimum: 6 characters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -99,60 +88,107 @@ only characters and digits allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="88"/>
-        <source>Second name</source>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="46"/>
+        <source>Second name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="144"/>
-        <source>Gender</source>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="102"/>
+        <source>Gender:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="173"/>
-        <source>First name</source>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="131"/>
+        <source>First name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="240"/>
-        <source>Date of birth</source>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="179"/>
+        <source>Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="221"/>
-        <source>Language</source>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="198"/>
+        <source>Date of birth:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="119"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="77"/>
         <source>Click to add/change the photo</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>Identity::Internal::PasswordDialog</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="32"/>
-        <source>Login and password</source>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="14"/>
+        <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="38"/>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="32"/>
+        <source>Change your password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="49"/>
+        <source>Type old password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="56"/>
+        <source>Type new password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="63"/>
+        <source>Confirm new password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="110"/>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="111"/>
+        <source>Password must have at least 5 chars.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="194"/>
+        <source>The old password is not correct. Please retry with the correct password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="196"/>
+        <source>Wrong password confirmation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passworddialog.cpp" line="197"/>
+        <source>Password can not be change.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Identity::Internal::PasswordWidget</name>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.ui" line="38"/>
+        <source>Set password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/passwordwidget.ui" line="50"/>
         <source>Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="45"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="52"/>
-        <source>Confirm password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Identity::Internal::ThemedGenderButton</name>
     <message>
-        <location filename="../../plugins/identityplugin/themedgenderbutton.cpp" line="77"/>
+        <location filename="../../plugins/identityplugin/themedgenderbutton.cpp" line="78"/>
         <source>Delete photo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -160,23 +196,51 @@ only characters and digits allowed</source>
 <context>
     <name>IdentityEditorWidget</name>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="533"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="500"/>
         <source>Birth Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="534"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="501"/>
         <source>Second Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="535"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="502"/>
         <source>Firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="536"/>
+        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="503"/>
         <source>Birthday</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin</name>
+    <message>
+        <location filename="../../plugins/identityplugin/identityconstants.h" line="35"/>
+        <source>Please define login and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityconstants.h" line="36"/>
+        <source>Login defined but not the password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityconstants.h" line="37"/>
+        <source>Login and password are defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityconstants.h" line="39"/>
+        <source>Uncrypted password available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/identityplugin/identityconstants.h" line="40"/>
+        <source>Crypted password defined</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

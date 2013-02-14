@@ -163,31 +163,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Send to development team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending debugging information to the development team</source>
+        <source>Save log to...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Trying to send information to the development team.
-Using URL: %1
-Please wait...</source>
+        <source>Log correctly saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Debugging information successfully sent.</source>
+        <source>The log was correctly saved into&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Debugging information successfully sent to the development team.
-Using Url: %1
-%2</source>
+        <source>Saving log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

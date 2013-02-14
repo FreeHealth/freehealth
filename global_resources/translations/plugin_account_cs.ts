@@ -239,7 +239,12 @@ You have to complete them yourself.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="115"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="116"/>
+        <source>The account plugin is still is early alpha stage (do not use in day-to-day practice).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="119"/>
         <source>Please read this explanation before using FreeAccount.
 FreeAccount is composed of:
   - Receipts to get your earnings,
@@ -249,7 +254,7 @@ FreeAccount is composed of:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="121"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="125"/>
         <source>The shortcuts for those programs are:
   - for your rapid receipt, CTRL+R,
   - for the receipts widget, Maj+R,
@@ -262,12 +267,12 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="133"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="137"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="133"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="137"/>
         <source>Do not show this message again</source>
         <translation type="unfinished"></translation>
     </message>

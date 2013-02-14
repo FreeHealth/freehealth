@@ -1916,7 +1916,7 @@ Emplacement : %2</translation>
     </message>
     <message>
         <source>Assets rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux d&apos;actifs</translation>
     </message>
     <message>
         <source>Agenda</source>
@@ -2315,6 +2315,134 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>&amp;Report a problem...</source>
         <translation>&amp;Signaler un problème...</translation>
+    </message>
+    <message>
+        <source>License terms</source>
+        <translation>Termes de la licence</translation>
+    </message>
+    <message>
+        <source>Engine report</source>
+        <translation>Rapport du moteur d&apos;interaction</translation>
+    </message>
+    <message>
+        <source>Binary packs</source>
+        <translation>Paquets binaires</translation>
+    </message>
+    <message>
+        <source>Set password</source>
+        <translation>Définir le mot de passe</translation>
+    </message>
+    <message>
+        <source>Connection</source>
+        <translation>Connexion</translation>
+    </message>
+    <message>
+        <source>Connection name</source>
+        <translation>Nom de la connexion</translation>
+    </message>
+    <message>
+        <source>Database information</source>
+        <translation>Information de la base de données</translation>
+    </message>
+    <message>
+        <source>ICD database information</source>
+        <translation>Informations de la base de données CIM</translation>
+    </message>
+    <message>
+        <source>Patient database information</source>
+        <translation>Informations de la base de données patients</translation>
+    </message>
+    <message>
+        <source>Template database information</source>
+        <translation>Informations de la base de données modèles</translation>
+    </message>
+    <message>
+        <source>Xml IO form database information</source>
+        <translation>Informations de la base de données des formulaires XML</translation>
+    </message>
+    <message>
+        <source>Date of release</source>
+        <translation>Date de distribution</translation>
+    </message>
+    <message>
+        <source>Date of creation</source>
+        <translation>Date de création</translation>
+    </message>
+    <message>
+        <source>Last update</source>
+        <translation>Dernière mise à jour</translation>
+    </message>
+    <message>
+        <source>Not defined</source>
+        <translation>Non défini</translation>
+    </message>
+    <message>
+        <source>State/Province</source>
+        <translation>Région</translation>
+    </message>
+    <message>
+        <source>Millimeter(s)</source>
+        <translation>Millimètre(s)</translation>
+    </message>
+    <message>
+        <source>Centimeter(s)</source>
+        <translation>Centimètre(s)</translation>
+    </message>
+    <message>
+        <source>Decimeter(s)</source>
+        <translation>Décimètre(s)</translation>
+    </message>
+    <message>
+        <source>Meter(s)</source>
+        <translation>Mètre(s)</translation>
+    </message>
+    <message>
+        <source>Kilometer(s)</source>
+        <translation>Kilomètre(s)</translation>
+    </message>
+    <message>
+        <source>Inch(es)</source>
+        <translation>Pouce(s)</translation>
+    </message>
+    <message>
+        <source>Foot(s)</source>
+        <translation>Pied(s)</translation>
+    </message>
+    <message>
+        <source>Yard(s)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mile(s)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Milligram(s)</source>
+        <translation>Milligramme(s)</translation>
+    </message>
+    <message>
+        <source>Centigram(s)</source>
+        <translation>Centigramme(s)</translation>
+    </message>
+    <message>
+        <source>Decigram(s)</source>
+        <translation>Décigramme(s)</translation>
+    </message>
+    <message>
+        <source>Gram(s)</source>
+        <translation>Gramme(s)</translation>
+    </message>
+    <message>
+        <source>Kilogram(s)</source>
+        <translation>Kilogramme(s)</translation>
+    </message>
+    <message>
+        <source>Ounce(s)</source>
+        <translation>Once(s)</translation>
+    </message>
+    <message>
+        <source>Pound(s)</source>
+        <translation>Livre(s)</translation>
     </message>
 </context>
 </TS>

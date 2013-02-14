@@ -160,7 +160,7 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     </message>
     <message>
         <source>About FreeMedForms</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos de FreeMedForms</translation>
     </message>
 </context>
 <context>
@@ -233,32 +233,12 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
 <context>
     <name>Core::Internal::DebugDialog</name>
     <message>
-        <source>Send to development team</source>
-        <translation>Envoyer à l&apos;équipe de développement</translation>
-    </message>
-    <message>
         <source>Save log</source>
         <translation>Enregistrer le journal</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Sending debugging information to the development team</source>
-        <translation>Envoie d&apos;une information de déboggage à l&apos;équipe de développement</translation>
-    </message>
-    <message>
-        <source>Trying to send information to the development team.
-Using URL: %1
-Please wait...</source>
-        <translation>Essaie d&apos;envoyer d&apos;une information de déboggage à l&apos;équipe de développement.
-Url : %1
-Veuillez patienter...</translation>
-    </message>
-    <message>
-        <source>Debugging information successfully sent.</source>
-        <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -269,10 +249,20 @@ Veuillez patienter...</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Debugging information successfully sent to the development team.
-Using Url: %1
-%2</source>
-        <translation type="unfinished"></translation>
+        <source>Save log to...</source>
+        <translation>Sauvegarder le journal dans...</translation>
+    </message>
+    <message>
+        <source>Log correctly saved</source>
+        <translation>Journal correctement sauvegardé</translation>
+    </message>
+    <message>
+        <source>The log was correctly saved into&lt;br /&gt;%1</source>
+        <translation>Le journale a été correctement sauvegardé dans &lt;br /&gt;%1</translation>
+    </message>
+    <message>
+        <source>Saving log</source>
+        <translation>Sauvegarde du journal</translation>
     </message>
 </context>
 <context>
@@ -294,39 +284,39 @@ Using Url: %1
     </message>
     <message>
         <source>General comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaire général</translation>
     </message>
     <message>
         <source>Forms management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des formulaires</translation>
     </message>
     <message>
         <source>Patient management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des patients</translation>
     </message>
     <message>
         <source>User management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des utilisateurs</translation>
     </message>
     <message>
         <source>Drugs management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des médicaments</translation>
     </message>
     <message>
         <source>Agenda management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des agendas</translation>
     </message>
     <message>
         <source>Printings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impressions</translation>
     </message>
     <message>
         <source>Installation</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

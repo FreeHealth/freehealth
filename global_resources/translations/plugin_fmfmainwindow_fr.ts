@@ -5,7 +5,7 @@
     <name>MainWin::Internal::MainWinPlugin</name>
     <message>
         <source>Initializing main window plugin...</source>
-        <translation type="unfinished">Initialisation du plugin fenêtre principale...</translation>
+        <translation>Initialisation du plugin fenêtre principale...</translation>
     </message>
 </context>
 <context>
@@ -67,6 +67,14 @@
     <message>
         <source>Choose a patient file directory</source>
         <translation>Sélectionnez un répertoire</translation>
+    </message>
+    <message>
+        <source>Unable to close window</source>
+        <translation>Impossible de ferme la fenêtre principale</translation>
+    </message>
+    <message>
+        <source>Unable to close the application, error message: &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Impossible de fermer l&apos;application, message d&apos;erreur : &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 </TS>

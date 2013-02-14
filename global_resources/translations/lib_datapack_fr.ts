@@ -105,59 +105,65 @@
 <context>
     <name>DataPack::Internal::HttpServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="230"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="235"/>
         <source>Abort</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
-        <source>Server authentication required</source>
-        <translation>Le serveur requière une authentification</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="314"/>
         <source>Proxy authentication required</source>
         <translation>Le proxy requière une authentification</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="323"/>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="324"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="343"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="344"/>
         <source>Server error: %1</source>
         <translation>Erreur du serveur : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="416"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="436"/>
         <source>Server description file successfully downloaded.</source>
         <translation>La description du serveur a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="513"/>
         <source>Pack description successfully downloaded.</source>
         <translation>La description du paquet de données a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="500"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="520"/>
         <source>Pack successfully downloaded.</source>
         <translation>Paquet de données correctement téléchargé.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="432"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="452"/>
         <source>Server description file is not readable.</source>
         <translation>Le fichier de description du serveur n&apos;est pas lisible.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="443"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="285"/>
+        <source>Server %1
+requires an authentication</source>
+        <translation>Le serveur %1 requière une authentification</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="288"/>
+        <source>If you don&apos;t have any login just cancel the dialog</source>
+        <translation>Si vous n&apos;avez pas d&apos;identitfiants annuler simplement le dialogue</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="463"/>
         <source>Server description file can not be unzipped.</source>
         <translation>Le fichier de description du serveur ne peut pas être décompressé.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="473"/>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="474"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="494"/>
         <source>Adding pack description file to the download queue.</source>
         <translation>Ajout du fichier descriptif du paquet à la liste des téléchargements.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="523"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="543"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation>Le paquet ne peut pas être créé dans le répertoire de cache persistant.</translation>
     </message>
@@ -165,17 +171,17 @@
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="101"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="102"/>
         <source>Server configuration successfully downloaded.</source>
         <translation>La configuration du serveur a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="126"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="127"/>
         <source>Pack successfully downloaded.</source>
         <translation>Le paquet de données a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="139"/>
         <source>Pack file does not exist.</source>
         <translation>Le fichier de données n&apos;existe pas.</translation>
     </message>
@@ -193,7 +199,7 @@
         <translation>Veuillez attendre pendant le téléchagement des paquets.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="452"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="451"/>
         <source>Download failed</source>
         <translation>Le téléchargement a échoué</translation>
     </message>
@@ -201,7 +207,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="689"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="687"/>
         <source>All Pack(s) processed.</source>
         <translation>Tous les paquets ont été traités.</translation>
     </message>
@@ -209,12 +215,12 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="483"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="481"/>
         <source>Installing pack(s)</source>
         <translation>Installation du(des) paquet(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="484"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="482"/>
         <source>Please wait until all packs are installed.</source>
         <translation>Veuillez attendre durant l&apos;installation des paquets.</translation>
     </message>
@@ -327,12 +333,12 @@
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="613"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="611"/>
         <source>Removing pack(s)</source>
         <translation>Suppression de(s) paquet(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="615"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="613"/>
         <source>Wait until all removal are done.</source>
         <translation>Attendez la fin de la suppression.</translation>
     </message>
@@ -366,72 +372,72 @@
 <context>
     <name>DataPack::ServerPackEditor</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="393"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="421"/>
         <source>Dependencies</source>
         <translation>Dépendances</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="408"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="438"/>
         <source>File specification</source>
         <translation>Spécification du fichier</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="409"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="441"/>
         <source>File name or URL:</source>
         <translation>Nom de fichier ou adresse :</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="248"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="328"/>
         <source>Updating server information</source>
         <translation>Mise à jour des informations du serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="377"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="405"/>
         <source>Update information</source>
         <translation>Informations de mise à jour</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="413"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="445"/>
         <source>Unzip pack to path</source>
         <translation>Décompression du paquet de données dans le répertoire</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="466"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="499"/>
         <source>Downloading server information</source>
         <translation>Téléchargement des informations du serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="530"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="564"/>
         <source>Native URL</source>
         <translation>URL native</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="597"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="631"/>
         <source>Refresh datapack servers</source>
         <translation>Mise à jour des informations des serveurs</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="598"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="632"/>
         <source>Server editor</source>
         <translation>Editeur de serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="599"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="633"/>
         <source>Add a server</source>
         <translation>Ajouter un serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="600"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="634"/>
         <source>Remove a server</source>
         <translation>Supprimer un serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="601"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="635"/>
         <source>Refresh packs</source>
         <translation>Rafraîchir les paquets de données</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="602"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="636"/>
         <source>Apply changes</source>
         <translation>Appliquer les modifications</translation>
     </message>

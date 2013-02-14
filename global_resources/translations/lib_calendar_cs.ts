@@ -4,26 +4,26 @@
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="157"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="427"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="176"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="468"/>
         <source>View range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="387"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="392"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="396"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="428"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="429"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="433"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="437"/>
         <source>d MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="391"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="432"/>
         <source>d MMM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="395"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="436"/>
         <source>d</source>
         <translation type="unfinished"></translation>
     </message>
@@ -57,12 +57,12 @@
 <context>
     <name>Calendar::Internal::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="382"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="388"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="384"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="390"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>

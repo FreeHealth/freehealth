@@ -31,6 +31,45 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     </message>
 </context>
 <context>
+    <name>DrugDatabaseInfo</name>
+    <message>
+        <source>Not specific</source>
+        <translation>Non spécifique</translation>
+    </message>
+    <message>
+        <source>Language Specific</source>
+        <translation>Spécifique au langage</translation>
+    </message>
+    <message>
+        <source>Country Specific</source>
+        <translation>Spécifique au pays</translation>
+    </message>
+    <message>
+        <source>Provider, Author and License</source>
+        <translation>Vendeur, auteur et licence</translation>
+    </message>
+    <message>
+        <source>Declared validity</source>
+        <translation>Validité déclarée</translation>
+    </message>
+    <message>
+        <source>FreeDiams compatible version</source>
+        <translation>Version de FreeDiams compatible</translation>
+    </message>
+    <message>
+        <source>ATC validity</source>
+        <translation>Validité ATC</translation>
+    </message>
+    <message>
+        <source>Interaction engine validity</source>
+        <translation>Validité du moteur d&apos;interaction</translation>
+    </message>
+    <message>
+        <source>Interaction engine completion</source>
+        <translation>Niveau de confiance</translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
         <source>Label</source>
@@ -402,15 +441,15 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
     </message>
     <message>
         <source>Prescription</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Drug</source>
-        <translation type="unfinished"></translation>
+        <translation>Médicament</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protocole</translation>
     </message>
     <message>
         <source>This token namespace contains all prescription&apos;s&apos; related tokens.
@@ -419,87 +458,87 @@ It includes the drug brand name and all the items of your protocol.</source>
     </message>
     <message>
         <source>Drug brand name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom commercial</translation>
     </message>
     <message>
         <source>Quantity (from)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité (de)</translation>
     </message>
     <message>
         <source>Quantity (to)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité (à)</translation>
     </message>
     <message>
         <source>Quantity (scheme)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité (schéma)</translation>
     </message>
     <message>
         <source>Quantity (complete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité (complet)</translation>
     </message>
     <message>
         <source>Meal relation</source>
-        <translation type="unfinished"></translation>
+        <translation>Relation avec le repas</translation>
     </message>
     <message>
         <source>Period (value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Période (valeur)</translation>
     </message>
     <message>
         <source>Period (scheme)</source>
-        <translation type="unfinished"></translation>
+        <translation>Période (schéma)</translation>
     </message>
     <message>
         <source>Period (complete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Période (complet)</translation>
     </message>
     <message>
         <source>Duration (from)</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée (de)</translation>
     </message>
     <message>
         <source>Duration (to)</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée (à)</translation>
     </message>
     <message>
         <source>Duration (scheme)</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée (schéma)</translation>
     </message>
     <message>
         <source>Duration (complete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée (complète)</translation>
     </message>
     <message>
         <source>Route</source>
-        <translation type="unfinished"></translation>
+        <translation>Voie d&apos;administration</translation>
     </message>
     <message>
         <source>Daily distribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribution journalière</translation>
     </message>
     <message>
         <source>Repeated ditribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Distribution répétée</translation>
     </message>
     <message>
         <source>Minimum interval between intakes (complete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervalle minimum entre les prises (complet)</translation>
     </message>
     <message>
         <source>Minimum interval between intakes (value)</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervalle minimum entre les prises (valeur)</translation>
     </message>
     <message>
         <source>Minimum interval between intakes (scheme)</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervalle minimum entre les prises (schéma)</translation>
     </message>
     <message>
         <source>Refill</source>
-        <translation type="unfinished"></translation>
+        <translation>Renouveler</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

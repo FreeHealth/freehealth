@@ -12,12 +12,12 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1895"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="539"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1896"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="540"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -63,12 +63,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseList</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1678"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="145"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1679"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="146"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -78,12 +78,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1162"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1178"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1163"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1179"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -98,37 +98,12 @@ Number of items of the translation (%3) are wrong.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="41"/>
+        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="66"/>
         <source>Sex of the patient (1 for men, 2 for women)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="48"/>
-        <source>Year of birth (last two digits)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="55"/>
-        <source>Month of birth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="62"/>
-        <source>Departement of birth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="69"/>
-        <source>Town code of birth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="76"/>
-        <source>Birth code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="86"/>
         <source>Control key</source>
         <translation type="unfinished"></translation>
     </message>

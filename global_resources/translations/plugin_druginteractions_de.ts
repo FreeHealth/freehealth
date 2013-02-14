@@ -14,6 +14,42 @@
         <source>Detects interaction between drugs</source>
         <translation>Entdeckt Medikamenteninteraktionen</translation>
     </message>
+    <message>
+        <source>Data extracted from database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total DDI per INN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total number of drugs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analyzable drugs*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory usage (partial data)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cached in memory (pairs of integers)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cached in memory (unique first interactor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report generation time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>*: analyzable drugs have one or more of their components recognized by the engine. Warning: Some of these drugs can have one or more molecule not recognized by the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugInteractions::Internal::DrugInteractionsPlugin</name>

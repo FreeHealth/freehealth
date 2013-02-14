@@ -165,11 +165,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Agendas of %1</source>
-        <extracomment>e.g. Agendas of John Doe</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Set back to default: </source>
         <extracomment>default agenda duration time (in minutes)</extracomment>
         <translation type="unfinished"></translation>

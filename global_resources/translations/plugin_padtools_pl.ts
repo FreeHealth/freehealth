@@ -9,53 +9,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="114"/>
-        <source>OUTPUT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="93"/>
-        <source>output to raw</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="107"/>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="131"/>
-        <source>RAW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="79"/>
-        <source>raw to output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="124"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="86"/>
         <source>Raw source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="86"/>
-        <source>Scenari</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="145"/>
+        <location filename="../../plugins/padtoolsplugin/padwriter.ui" line="97"/>
         <source>Errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="395"/>
-        <source>Unexpected &apos;%1&apos; found at pos %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/padtoolsplugin/padwriter.cpp" line="398"/>
-        <source>Expected &apos;%1&apos; at pos %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -134,7 +94,7 @@
     </message>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="66"/>
-        <source>Set a test value to all available tokens</source>
+        <source>View output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

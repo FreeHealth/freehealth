@@ -24,10 +24,6 @@
         <translation>Scheck</translation>
     </message>
     <message>
-        <source>VISA</source>
-        <translation>VISA</translation>
-    </message>
-    <message>
         <source>Money</source>
         <translation>Geld</translation>
     </message>
@@ -43,6 +39,10 @@
     <message>
         <source>Other</source>
         <translation>Anderes</translation>
+    </message>
+    <message>
+        <source>Credit card</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

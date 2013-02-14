@@ -12,40 +12,8 @@
         <translation>Erreurs</translation>
     </message>
     <message>
-        <source>Scenari</source>
-        <translation>Scénari</translation>
-    </message>
-    <message>
-        <source>raw to output</source>
-        <translation>Source vers sortie</translation>
-    </message>
-    <message>
-        <source>output to raw</source>
-        <translation>Sortie vers source</translation>
-    </message>
-    <message>
         <source>Form</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>OUTPUT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>RAW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unexpected &apos;%1&apos; found at pos %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected &apos;%1&apos; at pos %2</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -109,10 +77,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set a test value to all available tokens</source>
-        <translation>Utiliser des valeurs tests pour toutes les étiquettes disponibles</translation>
-    </message>
-    <message>
         <source>Inside conditional before text</source>
         <translation>Dans le texte conditionnel antérieur</translation>
     </message>
@@ -134,6 +98,10 @@
     </message>
     <message>
         <source>Show source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View output</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

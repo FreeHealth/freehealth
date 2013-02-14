@@ -6,7 +6,15 @@
     <message>
         <location filename="../../plugins/listviewplugin/fancytreeview.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Views::ListView</name>
+    <message>
+        <location filename="../../plugins/listviewplugin/listview.cpp" line="219"/>
+        <source>Unable to add a new line, you have reached the maximum autorized lines.</source>
+        <translation>Impossible d&apos;ajouter une nouvelle ligne, vous avez atteint le nombre maximum de lignes autorisées.</translation>
     </message>
 </context>
 </TS>

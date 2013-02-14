@@ -77,6 +77,29 @@
     </message>
 </context>
 <context>
+    <name>Form::FormManager</name>
+    <message>
+        <source>Form: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Form update detected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A form update has been detected. Do you want to update the forms?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Form::FormPlaceHolder</name>
     <message>
         <source>Save episode?</source>
@@ -172,6 +195,20 @@ Do you really want to remove the current episode?</source>
     <name>Form::Internal::FormPlaceHolder</name>
     <message>
         <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPlaceHolderCoreListener</name>
+    <message>
+        <source>Unable to save current episode, form: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPlaceHolderPatientListener</name>
+    <message>
+        <source>Unable to save current episode, form: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

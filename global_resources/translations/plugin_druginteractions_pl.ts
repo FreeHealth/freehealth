@@ -12,8 +12,53 @@
 <context>
     <name>DrugInteractions::Internal::DrugDrugInteractionEngine</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="908"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="928"/>
         <source>Detects interaction between drugs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1354"/>
+        <source>Data extracted from database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1365"/>
+        <source>Total DDI per INN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1390"/>
+        <source>Total number of drugs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1393"/>
+        <source>Analyzable drugs*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1397"/>
+        <source>Memory usage (partial data)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1399"/>
+        <source>Cached in memory (pairs of integers)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1402"/>
+        <source>Cached in memory (unique first interactor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1406"/>
+        <source>Report generation time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1408"/>
+        <source>*: analyzable drugs have one or more of their components recognized by the engine. Warning: Some of these drugs can have one or more molecule not recognized by the engine.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -41,8 +86,8 @@
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1092"/>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1116"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1112"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1136"/>
         <source>FreeDiams Interactions Engine</source>
         <translation type="unfinished"></translation>
     </message>

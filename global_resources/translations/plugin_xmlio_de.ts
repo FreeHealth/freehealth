@@ -18,31 +18,7 @@ Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid script file detected: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No form file name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Form: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New version: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database version: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Form update detected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

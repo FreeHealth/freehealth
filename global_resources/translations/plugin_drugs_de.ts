@@ -43,6 +43,17 @@
     </message>
 </context>
 <context>
+    <name>DrugsWidget::DrugsCentralWidget</name>
+    <message>
+        <source>Preparing database and drug engines report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drug engine report: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <source>Dialog</source>

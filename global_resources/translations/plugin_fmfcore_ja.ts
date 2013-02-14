@@ -12,7 +12,7 @@
 <context>
     <name>Core::AppConfigWizard</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="155"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="156"/>
         <source>Application Configurator Wizard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,22 +20,22 @@
 <context>
     <name>Core::ClientConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="411"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="412"/>
         <source>Network client configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="412"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="413"/>
         <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use your &lt;b&gt;personnal login and password&lt;/b&gt; to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="458"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="459"/>
         <source>No FreeMedForms server configuration detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="459"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="460"/>
         <source>You are trying to configure a network client of FreeMedForms. It is manadatory to connect to a FreeMedForms network server.
 While the host connection is valid, no FreeMedForms configuration was found on this host.
 
@@ -43,12 +43,12 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="470"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="471"/>
         <source>Connecting databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="470"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="471"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,37 +56,37 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::CoreConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="233"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="234"/>
         <source>Welcome to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="234"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="235"/>
         <source>&lt;b&gt;Welcome to %1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;This wizard will help you to configure the base parameters of the application.&lt;br /&gt;At any time, you can cancel this wizard, the default values will be activated for the undefined parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="242"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="243"/>
         <source>Select your language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="243"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="244"/>
         <source>Select the type of installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="246"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="247"/>
         <source>Single computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="248"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="249"/>
         <source>Network (as client)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="249"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="250"/>
         <source>Network (as server)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,12 +94,12 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::CoreDatabaseCreationPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="685"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="686"/>
         <source>Preparing databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="686"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="687"/>
         <source>Preparing databases. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,52 +107,52 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::EndConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="807"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="808"/>
         <source>%1 is now configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="808"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="809"/>
         <source>Please read the user&apos;s manual. If you have any question, you can ask them to the mailing list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="812"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="813"/>
         <source>You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with &lt;b&gt;definitive data loss&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="817"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="818"/>
         <source>Don&apos;t clean databases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="817"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="818"/>
         <source>Clean and recreate database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="820"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="821"/>
         <source>You can create virtual data to test the application. Select the option above.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="823"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="824"/>
         <source>Don&apos;t create virtual data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="823"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="824"/>
         <source>Create virtual data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="825"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="826"/>
         <source>French/english mailing list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="828"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="829"/>
         <source>Application main web site</source>
         <translation type="unfinished"></translation>
     </message>
@@ -283,47 +283,38 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="28"/>
-        <source>Send to development team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="35"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="22"/>
         <source>Save log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="61"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="48"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="74"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="61"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
-        <source>Sending debugging information to the development team</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="89"/>
+        <source>Save log to...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="115"/>
-        <source>Trying to send information to the development team.
-Using URL: %1
-Please wait...</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="98"/>
+        <source>Log correctly saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="136"/>
-        <source>Debugging information successfully sent.</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="99"/>
+        <source>The log was correctly saved into&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="138"/>
-        <source>Debugging information successfully sent to the development team.
-Using Url: %1
-%2</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="102"/>
+        <source>Saving log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -968,12 +959,12 @@ Using Url: %1
 <context>
     <name>Core::ProxyPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="341"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="342"/>
         <source>Proxy definition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="342"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="343"/>
         <source>%1 has detected a network proxy on your computer. 
 Please check and validate the proxy settings.</source>
         <translation type="unfinished"></translation>
@@ -982,66 +973,66 @@ Please check and validate the proxy settings.</source>
 <context>
     <name>Core::ServerConfigPage</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="528"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="529"/>
         <source>Missing files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="529"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="530"/>
         <source>The configuration script is missing. You can not configure the server without this script.
 
 &lt;b&gt;Please contact the developement team.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="538"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="539"/>
         <source>Network server configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="539"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="540"/>
         <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use the &lt;b&gt;server super-administrator login and password&lt;/b&gt; to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="567"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="568"/>
         <source>Connection to the server: User rights inadequate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="568"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="569"/>
         <source>You need to connect with another user that have rights to select, udpate, delete, insert, create, drop, alter and create user.
 Please contact your server administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="595"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="596"/>
         <source>Server already configurated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="595"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="596"/>
         <source>The server is already configurated for FreeMedForms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="601"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="602"/>
         <source>An error occured...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="602"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="603"/>
         <source>An error occured when trying to execute the script configuration script.
 Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="607"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
         <source>Server configurated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="607"/>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
         <source>The server was successfully configurated.</source>
         <translation type="unfinished"></translation>
     </message>

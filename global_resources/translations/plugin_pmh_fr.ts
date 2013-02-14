@@ -169,51 +169,51 @@
     </message>
     <message>
         <source>ICD 10</source>
-        <translation type="unfinished"></translation>
+        <translation>CIM 10</translation>
     </message>
     <message>
         <source>Manage &amp;ICD10 Codes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gérer les codes CIM10</translation>
     </message>
     <message>
         <source>&amp;Label:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Libellé :</translation>
     </message>
     <message>
         <source>&amp;Date:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Date :</translation>
     </message>
     <message>
         <source>This PMHx is &amp;private</source>
-        <translation type="unfinished"></translation>
+        <translation>Cet antécédent est &amp;privé</translation>
     </message>
     <message>
         <source>&amp;Status:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Status :</translation>
     </message>
     <message>
         <source>&amp;Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Type :</translation>
     </message>
     <message>
         <source>unsure</source>
-        <translation type="unfinished"></translation>
+        <translation>incertain</translation>
     </message>
     <message>
         <source>proven</source>
-        <translation type="unfinished"></translation>
+        <translation>prouvé</translation>
     </message>
     <message>
         <source>&amp;Confidence index:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Indice de confiance :</translation>
     </message>
     <message>
         <source>Past Medical History for PATIENT NAME</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label and date</source>
+        <translation>Libellé et date</translation>
     </message>
 </context>
 <context>

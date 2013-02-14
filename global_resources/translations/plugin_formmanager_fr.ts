@@ -77,6 +77,29 @@
     </message>
 </context>
 <context>
+    <name>Form::FormManager</name>
+    <message>
+        <source>Form: </source>
+        <translation>Formulaire : </translation>
+    </message>
+    <message>
+        <source>New version: %1</source>
+        <translation>Nouvelle version : %1</translation>
+    </message>
+    <message>
+        <source>Database version: %1</source>
+        <translation>Version en base : %1</translation>
+    </message>
+    <message>
+        <source>Form update detected.</source>
+        <translation>Mise à jour de formulaires détectée.</translation>
+    </message>
+    <message>
+        <source>A form update has been detected. Do you want to update the forms?</source>
+        <translation>Une mise à jour de formulaires a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
+    </message>
+</context>
+<context>
     <name>Form::FormPlaceHolder</name>
     <message>
         <source>Save episode?</source>
@@ -177,6 +200,20 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
     <message>
         <source>Form</source>
         <translation>Formulaire</translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPlaceHolderCoreListener</name>
+    <message>
+        <source>Unable to save current episode, form: %1</source>
+        <translation>Impossible de sauvegarder l&apos;épisode courant, formulaire : %1</translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPlaceHolderPatientListener</name>
+    <message>
+        <source>Unable to save current episode, form: %1</source>
+        <translation>Impossible de sauvegarder l&apos;épisode courant, formulaire : %1</translation>
     </message>
 </context>
 <context>

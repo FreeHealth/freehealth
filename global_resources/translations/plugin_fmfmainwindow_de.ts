@@ -68,5 +68,13 @@
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to close window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to close the application, error message: &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

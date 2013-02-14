@@ -222,6 +222,10 @@ Then parametrize your user, sites, bank and so on.</source>
         <source>Do not show this message again</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The account plugin is still is early alpha stage (do not use in day-to-day practice).</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Account::Internal::AccountPlugin</name>

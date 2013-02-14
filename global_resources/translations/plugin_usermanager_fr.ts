@@ -30,66 +30,66 @@
     <name>UserContactPage</name>
     <message>
         <source>Provide your address.</source>
-        <translation type="unfinished">Veuillez saisir votre adresse.</translation>
+        <translation>Veuillez saisir votre adresse.</translation>
     </message>
     <message>
         <source>Please enter your complete, professional address.</source>
-        <translation type="unfinished">Veuillez saisir votre adresse professionnelle complète.</translation>
+        <translation>Veuillez saisir votre adresse professionnelle complète.</translation>
     </message>
 </context>
 <context>
     <name>UserLastPage</name>
     <message>
         <source>User creation</source>
-        <translation type="unfinished">Création d&apos;utilisateur</translation>
+        <translation>Création d&apos;utilisateur</translation>
     </message>
     <message>
         <source>The user will be created.</source>
-        <translation type="unfinished">L&apos;utilisateur suivant va être créé.</translation>
+        <translation>L&apos;utilisateur suivant va être créé.</translation>
     </message>
     <message>
         <source>Contact</source>
-        <translation type="unfinished">Contact</translation>
+        <translation>Contact</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="unfinished">Ville</translation>
+        <translation>Ville</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays</translation>
     </message>
     <message>
         <source>Tel1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tél 1</translation>
     </message>
     <message>
         <source>Tel2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tél 2</translation>
     </message>
     <message>
         <source>Tel3</source>
-        <translation type="unfinished"></translation>
+        <translation>Tél 3</translation>
     </message>
     <message>
         <source>Fax</source>
-        <translation type="unfinished">Fax</translation>
+        <translation>Fax</translation>
     </message>
     <message>
         <source>Mail</source>
-        <translation type="unfinished">Courriel</translation>
+        <translation>Courriel</translation>
     </message>
     <message>
         <source>Specialties</source>
-        <translation type="unfinished">Spécialités</translation>
+        <translation>Spécialités</translation>
     </message>
     <message>
         <source>Qualifications</source>
-        <translation type="unfinished">Qualifications</translation>
+        <translation>Qualifications</translation>
     </message>
     <message>
         <source>Professionnal identifiers</source>
-        <translation type="unfinished">Identifiants professionnels</translation>
+        <translation>Identifiants professionnels</translation>
     </message>
 </context>
 <context>
@@ -253,11 +253,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Login error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;identifiant</translation>
     </message>
     <message>
         <source>Login already in use. Please select another login</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;identifiant est déjà utilisé. Veuillez saisir un autre identifiant</translation>
     </message>
 </context>
 <context>
@@ -307,7 +307,7 @@ p, li { white-space: pre-wrap; }
     <name>UserPlugin::Internal::UserManagerModel</name>
     <message>
         <source>Last login: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dernière ouverture de session : %1</translation>
     </message>
 </context>
 <context>
@@ -403,46 +403,7 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
     <message>
         <source>Modification correctly cleared</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPlugin::Internal::UserPasswordDialog</name>
-    <message>
-        <source>Change your password</source>
-        <translation>Modifier votre mot de passe</translation>
-    </message>
-    <message>
-        <source>Type old password</source>
-        <translation>Ancien mot de passe</translation>
-    </message>
-    <message>
-        <source>Type new password</source>
-        <translation>Nouveau mot de passe</translation>
-    </message>
-    <message>
-        <source>Confirm new password</source>
-        <translation>Confirmez le nouveau mot de passe</translation>
-    </message>
-    <message>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Password must have at least 5 chars.</source>
-        <translation type="unfinished">Le mot de passe doit avoir au moins 5 caractères.</translation>
-    </message>
-    <message>
-        <source>The old password is not correct. Please retry with the correct password.</source>
-        <translation type="unfinished">L&apos;ancien mot de passe est erroné. Veuillez réessayer.</translation>
-    </message>
-    <message>
-        <source>Wrong password confirmation.</source>
-        <translation type="unfinished">Mauvaise confirmation du mot de passe.</translation>
-    </message>
-    <message>
-        <source>Password can not be change.</source>
-        <translation type="unfinished">Le mot de passe ne peut pas être modifier.</translation>
+        <translation>Les modifications ont été correctement effacées</translation>
     </message>
 </context>
 <context>
@@ -634,46 +595,46 @@ L&apos;application va s&apos;arrêter.</translation>
     <name>UserPlugin::UserCreatorWizard</name>
     <message>
         <source>User Creator Wizard</source>
-        <translation type="unfinished">Assistant de création des utilisateurs</translation>
+        <translation>Assistant de création des utilisateurs</translation>
     </message>
     <message>
         <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
-        <translation type="unfinished">ATTENTION ! Vous n&apos;avez pas sauvegardé cet utilisateur. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
+        <translation>ATTENTION ! Vous n&apos;avez pas sauvegardé cet utilisateur. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
     </message>
     <message>
         <source>Do you really want to close this dialog?</source>
-        <translation type="unfinished">Voulez-vous réellement fermer ce dialogue ?</translation>
+        <translation>Voulez-vous réellement fermer ce dialogue ?</translation>
     </message>
     <message>
         <source>User not saved</source>
-        <translation type="unfinished">Utilisateur non sauvegarder</translation>
+        <translation>Utilisateur non sauvegarder</translation>
     </message>
     <message>
         <source>An error occured during database access.</source>
-        <translation type="unfinished">Une erreur est survenue pendant l&apos;accès aux données.</translation>
+        <translation>Une erreur est survenue pendant l&apos;accès aux données.</translation>
     </message>
     <message>
         <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
-        <translation type="unfinished">Les erreurs sont listées et sauvegardées. Veuillez vous référer à %1 pour gérer les erreurs.</translation>
+        <translation>Les erreurs sont listées et sauvegardées. Veuillez vous référer à %1 pour gérer les erreurs.</translation>
     </message>
     <message>
         <source>Error during database access</source>
-        <translation type="unfinished">Erreur durant l&apos;accès aux données</translation>
+        <translation>Erreur durant l&apos;accès aux données</translation>
     </message>
     <message>
         <source>User successfully saved into database.</source>
-        <translation type="unfinished">Utilisateur correctement sauvegardé dans la base de données.</translation>
+        <translation>Utilisateur correctement sauvegardé dans la base de données.</translation>
     </message>
     <message>
         <source>The user was successfully created and saved into database.</source>
-        <translation type="unfinished">L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
+        <translation>L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
     </message>
 </context>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
         <source>Unable to retreive user into the model using login and password.</source>
-        <translation>Impossible de récupérer l'utilisateur avec l&apos;identifiant et le mot de passe.</translation>
+        <translation>Impossible de récupérer l&apos;utilisateur avec l&apos;identifiant et le mot de passe.</translation>
     </message>
     <message>
         <source>Database server administrator</source>
@@ -696,11 +657,11 @@ L&apos;application va s&apos;arrêter.</translation>
         <translation>L&apos;utilisateur ne peut pas être effacé de la base de données.</translation>
     </message>
     <message>
-        <source>Setting current user uuid to 			 %1</source>
+        <source>Setting current user uuid to %1 (su)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Setting current user uuid to %1 (su)</source>
+        <source>Setting current user uuid to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -708,69 +669,69 @@ L&apos;application va s&apos;arrêter.</translation>
     <name>UserProfilePage</name>
     <message>
         <source>Select a profile</source>
-        <translation type="unfinished">Sélectionnez un profile</translation>
+        <translation>Sélectionnez un profile</translation>
     </message>
     <message>
         <source>FreeMedForms allows you to create users using predefined profiles. Select your profile and options.</source>
-        <translation type="unfinished">FreeMedForms vous permet de créer des utilisateurs en utilisant des profils prédéfinis. Sélectionnez votre profil et vos options.</translation>
+        <translation>FreeMedForms vous permet de créer des utilisateurs en utilisant des profils prédéfinis. Sélectionnez votre profil et vos options.</translation>
     </message>
     <message>
         <source>Select advanced rights in the next step</source>
-        <translation type="unfinished">Sélectionnez le droits lors de la prochaine étape</translation>
+        <translation>Sélectionnez les droits lors de la prochaine étape</translation>
     </message>
 </context>
 <context>
     <name>UserRightsPage</name>
     <message>
         <source>Define user&apos;s rights.</source>
-        <translation type="unfinished">Définir les droits de l&apos;utilisateur.</translation>
+        <translation>Définir les droits de l&apos;utilisateur.</translation>
     </message>
     <message>
         <source>Role by role, define the user&apos;s rights.</source>
-        <translation type="unfinished">Rôle par rôle, définir les droits de l&apos;utilisateur.</translation>
+        <translation>Rôle par rôle, définir les droits de l&apos;utilisateur.</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation type="unfinished">Utilisateurs</translation>
+        <translation>Utilisateurs</translation>
     </message>
     <message>
         <source>Drugs</source>
-        <translation type="unfinished">Médicaments</translation>
+        <translation>Médicaments</translation>
     </message>
     <message>
         <source>Medicals</source>
-        <translation type="unfinished">Médicaux</translation>
+        <translation>Médicaux</translation>
     </message>
     <message>
         <source>Paramedicals</source>
-        <translation type="unfinished">Para-médicaux</translation>
+        <translation>Para-médicaux</translation>
     </message>
     <message>
         <source>Administrative</source>
-        <translation type="unfinished">Administratifs</translation>
+        <translation>Administratifs</translation>
     </message>
 </context>
 <context>
     <name>UserSpecialiesQualificationsPage</name>
     <message>
         <source>Define user&apos;s specialties and qualifications.</source>
-        <translation type="unfinished">Définir les spécialités et qualifications.</translation>
+        <translation>Définir les spécialités et qualifications.</translation>
     </message>
     <message>
         <source>Use the context menu to add, remove, move up or down items.</source>
-        <translation type="unfinished">Utilisez le menu contextuel pour ajouter, effacer et/ou déplace les items.</translation>
+        <translation>Utilisez le menu contextuel pour ajouter, effacer et/ou déplace les items.</translation>
     </message>
     <message>
         <source>Specialities</source>
-        <translation type="unfinished">Spécialités</translation>
+        <translation>Spécialités</translation>
     </message>
     <message>
         <source>Qualifications</source>
-        <translation type="unfinished">Qualifications</translation>
+        <translation>Qualifications</translation>
     </message>
     <message>
         <source>Identifiers</source>
-        <translation type="unfinished">Identifiants</translation>
+        <translation>Identifiants</translation>
     </message>
 </context>
 <context>

@@ -43,6 +43,17 @@
     </message>
 </context>
 <context>
+    <name>DrugsWidget::DrugsCentralWidget</name>
+    <message>
+        <source>Preparing database and drug engines report</source>
+        <translation>Préparation du rapport sur la base de données et des moteurs d&apos;interaction</translation>
+    </message>
+    <message>
+        <source>Drug engine report: %1</source>
+        <translation>Rapport du moteur d&apos;interaction : %1</translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <source>Drug interaction alert</source>

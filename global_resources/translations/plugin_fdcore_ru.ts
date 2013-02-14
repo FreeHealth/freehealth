@@ -187,47 +187,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="28"/>
-        <source>Send to development team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="35"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="22"/>
         <source>Save log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="61"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="48"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="74"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="61"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
-        <source>Sending debugging information to the development team</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="89"/>
+        <source>Save log to...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="115"/>
-        <source>Trying to send information to the development team.
-Using URL: %1
-Please wait...</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="98"/>
+        <source>Log correctly saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="136"/>
-        <source>Debugging information successfully sent.</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="99"/>
+        <source>The log was correctly saved into&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="138"/>
-        <source>Debugging information successfully sent to the development team.
-Using Url: %1
-%2</source>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="102"/>
+        <source>Saving log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

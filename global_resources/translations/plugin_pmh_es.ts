@@ -188,7 +188,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="42"/>
-        <source>GroupBox</source>
+        <source>Label and date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -275,8 +275,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1227"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1237"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1228"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1238"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>

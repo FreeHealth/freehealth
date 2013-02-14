@@ -2321,5 +2321,133 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>&amp;Report a problem...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>License terms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Binary packs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ICD database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Template database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Xml IO form database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date of release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date of creation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State/Province</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Millimeter(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Centimeter(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decimeter(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Meter(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kilometer(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inch(es)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Foot(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yard(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mile(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Milligram(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Centigram(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decigram(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gram(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kilogram(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ounce(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pound(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

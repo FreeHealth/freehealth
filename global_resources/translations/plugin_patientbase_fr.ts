@@ -148,7 +148,7 @@
     <name>Patients::Internal::PatientBasePreferencesWidget</name>
     <message>
         <source>Patient selector</source>
-        <translation>Sélectionneur de patient</translation>
+        <translation>Sélecteur de patient</translation>
     </message>
     <message>
         <source>Use color to differentiate genders</source>
@@ -181,37 +181,40 @@
     <message>
         <source>When this option is checked, the patient selector updates the search result while you are typing. If you are using FreeMedForms over a network, this can lead to heavy network usage.
 This option is not recommended with big patient database (&gt; 10.000 patients).</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque cette option est activée, le sélecteur de patient met à jour les résultats de la recherche pendant que vous saisissez votre recherche. Si vous utilisez FreeMedForms en réseau, cela peut causer une surcharge de l&apos;utilisation du réseau.
+Cette option n&apos;est pas recommandée pour les bases de données larges (&gt; 10 000 patients).</translation>
     </message>
     <message>
         <source>Search patients while typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher les patients pendant la frappe</translation>
     </message>
     <message>
         <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
 
 Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque vous activez cette option, le sélecteur de patient met à jour les résultats de la recherche durant la frappe. Si vous désactivez cette option, vous devrez appuyer sur la touche &apos;Entrée&apos; pour rafraîchir les résultats de la recherche.
+
+Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surcharge de l&apos;utilisation du réseau. Cette option n&apos;est pas recommandée pour les bases de données larges (&gt; 10 000 patients).</translation>
     </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Adresse :</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Error downloading the file.&lt;br/&gt;Please check the correctness of the URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Une erreur est survenue durant le téléchargement du fichier.&lt;br/&gt;Veuillez vérifier l&apos;adresse du fichier.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Une erreur est survenue durant le téléchargement du fichier.&lt;br/&gt;Veuillez vérifier l&apos;adresse du fichier.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The picture must be in one of the following formats: &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Please be sure that you have the permission to use this picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&apos;image doit être dans un des formats suivants : &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Veuillez vous assurez que vous disposez des permissions adéquates pour utiliser cette image.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&apos;image doit être dans un des formats suivants : &lt;span style=&quot; color:#006400;&quot;&gt;PNG, JPG, GIF&lt;/span&gt;.&lt;br/&gt;Veuillez vous assurez que vous disposez des permissions adéquates pour utiliser cette image.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
