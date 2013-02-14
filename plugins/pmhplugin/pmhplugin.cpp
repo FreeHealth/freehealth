@@ -104,6 +104,9 @@ void PmhPlugin::extensionsInitialized()
     // Initialize Base
     PmhBase::instance()->initialize();
 
+    PmhCore::instance(this);
+    mode = new Internal::PmhMode(this);
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -112,8 +115,6 @@ void PmhPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    PmhCore::instance(this);
-    mode = new Internal::PmhMode(this);
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag PmhPlugin::aboutToShutdown()

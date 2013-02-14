@@ -150,6 +150,12 @@ void DrugsPlugin::extensionsInitialized()
 
 //    messageSplash(tr("Initializing drugs plugin..."));
 
+#ifdef FREEMEDFORMS
+    // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
+    DrugsMode *mode = new DrugsMode(this);
+    Q_UNUSED(mode);
+#endif
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
 
@@ -184,12 +190,6 @@ void DrugsPlugin::postCoreOpened()
         protocolPage->checkSettingsValidity();
         enginePage->checkSettingsValidity();
     }
-
-#ifdef FREEMEDFORMS
-    // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
-    DrugsMode *mode = new DrugsMode(this);
-    Q_UNUSED(mode);
-#endif
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()
