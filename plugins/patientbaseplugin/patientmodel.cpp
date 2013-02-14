@@ -1002,11 +1002,15 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
                 int titleId = query.value(0).toInt();
                 if (IN_RANGE_STRICT_MAX(titleId, 0, titles.count()))
                     title = titles.at(titleId);
+                const QString &birthName = query.value(1).toString();
                 const QString &secondName = query.value(2).toString();
+                const QString &firstName = query.value(3).toString();
                 if (!secondName.isEmpty()) {
-                    names.insert(u, QString("%1 %2 - %3 %4").arg(title, query.value(1).toString(), secondName, query.value(3).toString()).simplified());
+                    names.insert(u, QString("%1 %2 - %3 %4")
+                                 .arg(title, birthName, secondName, firstName).simplified());
                 } else {
-                    names.insert(u, QString("%1 %2 %3").arg(title, query.value(2).toString(), query.value(3).toString()).simplified());
+                    names.insert(u, QString("%1 %2 %3")
+                                 .arg(title, birthName, firstName).simplified());
                 }
             }
         } else {
