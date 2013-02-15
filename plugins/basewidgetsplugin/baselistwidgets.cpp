@@ -44,8 +44,6 @@
 #include <QComboBox>
 #include <QStringListModel>
 
-#include <QtUiTools/QUiLoader>
-
 using namespace BaseWidgets;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
