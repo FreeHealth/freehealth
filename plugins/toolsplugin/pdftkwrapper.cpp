@@ -235,11 +235,12 @@ void PdfTkWrapper::addFdfValue(const QString &fieldName, const QString &value, b
     else
         val = value;
     val = val.simplified();
-    val = val.replace("<BR>","");
-    val = val.replace("<BR />","");
+    val = val.replace("<BR>","", Qt::CaseInsensitive);
+    val = val.replace("<BR />","", Qt::CaseInsensitive);
+    val = val.replace("<BR/>","", Qt::CaseInsensitive);
     val = val.replace("(","_");
     val = val.replace(")","_");
-    val = val.replace("\t","    ");
+    val = val.replace("\t","    ", Qt::CaseInsensitive);
     d->_fieldValue.insert(fieldName, val);
 }
 
