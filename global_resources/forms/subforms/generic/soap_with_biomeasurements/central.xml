@@ -186,9 +186,7 @@
      <tabstop>ObjectiveGroup::BloodPressure::Syst</tabstop>
      <tabstop>ObjectiveGroup::BloodPressure::Diast</tabstop>
      <tabstop>ObjectiveGroup::Weight::Value</tabstop>
-     <tabstop>ObjectiveGroup::Weight::Unit</tabstop>
      <tabstop>ObjectiveGroup::Height::Value</tabstop>
-     <tabstop>ObjectiveGroup::Height::Unit</tabstop>
      <tabstop>ObjectiveGroup::Objective</tabstop>
      <tabstop>AssessmentPlanGroup::Assessment</tabstop>
      <tabstop>AssessmentPlanGroup::Plan</tabstop>
