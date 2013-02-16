@@ -42,260 +42,441 @@
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/labtest.png</icon>
 
-        <Item type="detailswidget" name="IdentityDetails" uifilename="./ui/xx/ident.ui">
+        <Item type="detailswidget" name="Basics" uifilename="./ui/xx/basics.ui">
             <uilink label="" widget="" layout="mainLayout"/>
-            <label lang="xx">Identity and address</label>
-            <label lang="fr">Identité et adresse</label>
-            <label lang="de">Identität und Anschrift</label>
-            <label lang="es">Identidad y dirección</label>
+            <label lang="xx">Basics</label>
+            <label lang="fr">Basique</label>
+            <label lang="de">Wesentliche</label>
+            <label lang="es">Lo esencial</label>
             <options>SummaryFontBold;expanded</options>
 
-            <Item type="identity" name="IdentityWidget">
-                <uilink label="" widget="" layout="identityIncludeLayout"/>
-                <label lang="xx">Full Identity</label>
-                <label lang="fr">Identité</label>
-                <options>with-address;with-photo</options>
-            </Item>
-        </Item>
-
-        <Item type="detailswidget" name="FrDetails" uifilename="./ui/xx/social.ui">
-          <uilink label="" widget="" layout="mainLayout"/>
-          <country>FR</country>
-          <label lang="xx">Social insurance</label>
-          <label lang="fr">Sécurité sociale</label>
-          <extralabel>{Subs::Tools::Identity::FrGroup::NSS}</extralabel>
-          <column>1</column>
-          <options>DontPrintEmptyValues;SummaryFontBold</options>
-
-          <Item type="frenchnss" name="FrGroup::NSS">
-            <uilink label="socialNumberLabel" widget="" layout="socialNumberLayout"/>
-            <label lang="xx">Social insurance number</label>
-            <label lang="fr">Numéro de sécurité sociale</label>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>SocialNumber</patientdata>
-          </Item>
-
-          <Item type="check" name="FrGroup::IsNSSOwner">
-            <uilink widget="isSINOwnerCheck"/>
-            <label lang="xx">Patient is the social insurance number owner</label>
-            <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
-            <options>DontPrintEmptyValues</options>
-            <value><default>1</default></value>
-          </Item>
-
-          <Item type="shorttext" name="FrGroup::OwnerName">
-            <uilink label="ownerLabel" widget="ownerEdit"/>
-            <label lang="xx">Social number owner</label>
-            <label lang="fr">Propriétaire</label>
-            <options>DontPrintEmptyValues</options>
-          </Item>
-
-          <Item type="button" name="FrGroup::CreateDeclaration">
-            <uilink widget="declaration"/>
-            <label lang="xx">Formulaire Médecin Traitant</label>
-            <ToolTip lang="xx">Formulaire Médecin Traitant</ToolTip>
-            <icon>__theme__/carte_vitale.png</icon>
-            <script>
-              <onload>
-                // Enabled this button only is the FreeMedForms PDF object is available
-                freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
-                var item = freemedforms.forms.item("FrGroup::CreateDeclaration");
-                if (!item.isValid) {
-                    print("Error in identity form");
-                    return;
-                }
-                item.enabled = freemedforms.pdf.isAvailable;
-              </onload>
-              <onclicked>
-                  function _identity_france_declaration_med_traitant()
-                  {
-                      // get the fremedforms pdf worker
-                      var pdf = freemedforms.pdf;
-                      if (!pdf.isAvailable) {
-                          print("pdftk not available");
-                          return;
-                      }
-
-                      // process data
-                      var patient = freemedforms.patient;
-                      if (!patient.isActive) {
-                          print("not active patient");
-                          return;
-                      }
-
-                      pdf.beginFdfEncoding();
-
-                      freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
-                      var isNssOwner = freemedforms.forms.item("FrGroup::IsNSSOwner");
-                      if (!isNssOwner.isValid) {
-                          print("isNSSOwner not available");
-                          return;
-                      }
-                      var nss = freemedforms.forms.item("FrGroup::NSS");
-                      if (!nss.isValid) {
-                          print("NSS not available");
-                          return;
-                      }
-
-                      pdf.addFdfValue("nom", patient.birthName + " " + patient.secondName);
-                      pdf.addFdfValue("prénom", patient.firstName);
-                      pdf.addFdfValue("date naissance", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
-                      // TODO: split street into 2 max lines if required
-
-                      var street = patient.street;
-                      if (street.search("\n")) {
-                          var splitter = street.split("\n");
-                          pdf.addFdfValue("adresse1", splitter.shift());
-                          pdf.addFdfValue("adresse2", splitter.join(" ; "));
-                      } else {
-                          pdf.addFdfValue("adresse1", patient.street);
-                      }
-                      pdf.addFdfValue("adresse3", patient.city + " " + patient.zipcode + " " + patient.state);
-
-                      if (!isNssOwner.checked) {
-                          var owner = freemedforms.forms.item("FrGroup::OwnerName");
-                          if (!owner.isValid) {
-                              print("NSS owner not available");
-                              return;
-                          }
-                          pdf.addFdfValue("nom ben", owner.currentText);
-                          //pdf.addFdfValue("prénom ben", nss.currentText);
-                      }
-
-                      print(nss.currentText);
-
-                      if (nss.currentText.length == 15) {
-                          pdf.addFdfValue("n° immatriculation", nss.currentText.substring(0, 13));
-                          pdf.addFdfValue("clé immatric", nss.currentText.substring(13,15));
-                      }
-
-                      var user = freemedforms.user;
-                      if (user.isValid) {
-                          print("No valid user");
-                          //return;
-                      }
-
-                      pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
-                      pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
-                      pdf.addFdfValue("prénom médecin", user.firstName);
-                      pdf.addFdfValue("identif  medecin", user.fullAddress);
-
-                      pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
-
-                      var filename = freemedforms.forms.extractFormFile("__subForms__/generic/fullidentity", "./pdf/fr/declaration.pdf");
-                      pdf.endFdfEncoding(filename);
-
-                      var output = freemedforms.tools.userDocumentPath + "declaration_" + patient.birthName + " " + patient.secondName + " " + patient.firstName + ".pdf";
-                      output = output.replace("  ", " ");
-                      output = output.replace(" ", "_");
-                      pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), output, "ISO-8859-1");
-                  }
-                  _identity_france_declaration_med_traitant();
-              </onclicked>
-            </script>
-          </Item>
-        </Item>
-
-        <Item type="detailswidget" name="ContactDetails" uifilename="./ui/xx/contact.ui">
-          <uilink label="" widget="" layout="mainLayout"/>
-          <label lang="xx">Contact</label>
-          <label lang="fr">Contact</label>
-          <column>1</column>
-          <options>DontPrintEmptyValues;SummaryFontBold</options>
-
-          <Item type="shorttext" name="ContactGroup::Tels">
-            <uilink label="telsLabel" widget="telsEdit"/>
-            <label lang="xx">Telephone numbers</label>
-            <label lang="fr">Numéros de téléphone</label>
-            <tooltip lang="xx">Semicolon separated list</tooltip>
-            <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>Tels</patientdata>
-          </Item>
-
-          <Item type="shorttext" name="ContactGroup::MobileTel">
-            <uilink label="mobileLabel" widget="mobileEdit"/>
-            <label lang="xx">Mobile phone</label>
-            <label lang="fr">Numéros de mobile</label>
-            <tooltip lang="xx">Inform the mobile phone number</tooltip>
-            <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>MobilePhone</patientdata>
-          </Item>
-
-          <Item type="shorttext" name="ContactGroup::Fax">
-            <uilink label="faxLabel" widget="faxEdit"/>
-            <label lang="xx">Fax number</label>
-            <label lang="fr">Numéro de fax</label>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>Faxes</patientdata>
-          </Item>
-
-          <Item type="shorttext" name="ContactGroup::Mail">
-            <uilink label="emailLabel" widget="emailEdit"/>
-            <label lang="xx">E-Mail</label>
-            <label lang="fr">Courriel</label>
-            <tooltip lang="xx">Semicolon separated list</tooltip>
-            <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
-            <options>DontPrintEmptyValues</options>
-            <patientdata>Mails</patientdata>
-          </Item>
-
-          <Item type="button" name="ContactGroup::SendMailButton">
-            <uilink widget="sendMailButton"/>
-            <label lang="xx">Send mail</label>
-            <label lang="fr">Envoyer un courriel</label>
-            <icon>__theme__/mail_new.png</icon>
-            <script>
-              <onclicked>
-              freemedforms.forms.namespaceInUse = "Subs::Tools::Identity::ContactGroup::";
-              var address = freemedforms.forms.item("Mail");
-              if (address.isValid) {
-                  if (address.currentText != "")
-                      freemedforms.tools.openUrl("mailto:" + address.currentText);
-              }
-              </onclicked>
-            </script>
-          </Item>
-
-          <Item type="button" name="ContactGroup::SendSmsButton">
-            <uilink widget="sendSmsButton"/>
-            <label lang="xx">Send SMS</label>
-            <label lang="fr">Envoyer un SMS</label>
-            <icon>__theme__/iphone.png</icon>
-          </Item>
-
-        </Item>
-
-        <Item type="detailswidget" name="ProfDetails" uifilename="./ui/xx/prof.ui">
-            <uilink label="" widget="" layout="mainLayout"/>
-            <label lang="xx">Profession</label>
-            <label lang="fr">Profession</label>
-            <column>1</column>
-            <options>DontPrintEmptyValues;SummaryFontBold</options>
-
-            <Item type="shorttext" name="ProfGroup::Profession">
-              <uilink label="profLabel" widget="profEdit"/>
-              <label lang="xx">Current profession</label>
-              <label lang="fr">Profession actuelle</label>
-              <options>DontPrintEmptyValues</options>
-              <patientdata>Profession</patientdata>
+            <Item type="multilist" name="Basics::Hematology">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Hematology</label>
+                <label lang="fr">Hématologie</label>
+                <value>
+                    <uuid id="0">bloodtype</uuid>
+                    <uuid id="1">bloodcount</uuid>
+                    <uuid id="2">hb</uuid>
+                    <uuid id="3">ht</uuid>
+                    <uuid id="4">mcv</uuid>
+                    <uuid id="5">reticulo</uuid>
+                    <uuid id="6">schizo</uuid>
+                    <uuid id="7">sr</uuid>
+                    <possible id="0">Blood Type Test (ABO Grouping and Rho Typing)</possible>
+                    <possible id="1">Complete Blood Count (CBC)</possible>
+                    <possible id="2">Hemoglobin</possible>
+                    <possible id="3">Hematocrit</possible>
+                    <possible id="4">Mean corpuscular volume (MCV)</possible>
+                    <possible id="5">Reticulocyte Count</possible>
+                    <possible id="6">Schizocyte Count</possible>
+                    <possible id="7">Sedimentation Rate (SR)</possible>
+                    <possible id="0" lang="fr">Groupe sanguin, rhésus et phénotypage</possible>
+                    <possible id="1" lang="fr">NFS</possible>
+                    <possible id="2" lang="fr">Hémoglobine</possible>
+                    <possible id="3" lang="fr">Hématocrite</possible>
+                    <possible id="4" lang="fr">Volume globulaire moyen (VGM)</possible>
+                    <possible id="5" lang="fr">Réticulocyte</possible>
+                    <possible id="6" lang="fr">Schizocyte</possible>
+                    <possible id="7" lang="fr">Vitesse de sédimentation (VS)</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
             </Item>
 
-            <Item type="shorttext" name="ProfGroup::ProfessionSite">
-              <uilink label="profSiteLabel" widget="profSiteEdit"/>
-              <label lang="xx">Site</label>
-              <label lang="fr">Site</label>
-              <options>DontPrintEmptyValues</options>
-              <patientdata>ProfessionalSite</patientdata>
+            <Item type="multilist" name="Basics::Coagulation">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Coagulation</label>
+                <label lang="fr">Coagulation</label>
+                <value>
+                    <uuid id="0">pt</uuid>
+                    <uuid id="1">aptt</uuid>
+                    <uuid id="2">tq</uuid>
+                    <uuid id="3">INR</uuid>
+                    <possible id="0">Prothrombin Time</possible>
+                    <possible id="1">Activated partial thromboplastin time</possible>
+                    <possible id="2">One-stage prothrombin time test</possible>
+                    <possible id="3">INR</possible>
+                    <possible id="0" lang="fr">Temps de Prothrombine</possible>
+                    <possible id="1" lang="fr">TCA</possible>
+                    <possible id="2" lang="fr">Temps de Quick</possible>
+                    <possible id="3" lang="fr">INR</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
             </Item>
 
-            <Item type="shorttext" name="ProfGroup::ProfessionTels">
-              <uilink label="profTelsLabel" widget="profTelsEdit"/>
-              <label lang="xx">Professional tel</label>
-              <label lang="fr">Téléphone professionel</label>
-              <options>DontPrintEmptyValues</options>
-              <patientdata>ProfessionalTels</patientdata>
+            <Item type="multilist" name="Basics::Electrolytes">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Electrolytes</label>
+                <label lang="fr">Électrolytes</label>
+                <value>
+                    <uuid id="0">na</uuid>
+                    <uuid id="1">k</uuid>
+                    <uuid id="2">cl</uuid>
+                    <uuid id="3">ca</uuid>
+                    <uuid id="4">ca_ion</uuid>
+                    <uuid id="5">pho</uuid>
+                    <uuid id="6">osm</uuid>
+                    <uuid id="7">lact</uuid>
+                    <uuid id="8">co2</uuid>
+                    <possible id="0">Sodium (Na) in blood</possible>
+                    <possible id="1">Potassium (K) in blood</possible>
+                    <possible id="2">Chloride (Cl) in blood</possible>
+                    <possible id="3">Calcium (Ca) in blood</possible>
+                    <possible id="4">Ionized calcium in blood</possible>
+                    <possible id="5">Phosphate (P) in blood</possible>
+                    <possible id="6">Serum Osmolality</possible>
+                    <possible id="7">Lactic acid</possible>
+                    <possible id="8">Carbon dioxide (CO2)</possible>
+                    <possible id="0" lang="fr">Natrémie</possible>
+                    <possible id="1" lang="fr">Kaliémie</possible>
+                    <possible id="2" lang="fr">Chlorémie</possible>
+                    <possible id="3" lang="fr">Calcémie</possible>
+                    <possible id="4" lang="fr">Calcium ionisé</possible>
+                    <possible id="5" lang="fr">Phosphatémie</possible>
+                    <possible id="6" lang="fr">Osmolalité plasmatique</possible>
+                    <possible id="7" lang="fr">Lactates</possible>
+                    <possible id="8" lang="fr">Dioxide de Carbone (CO2)</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Kidney">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Kidney lab test</label>
+                <label lang="fr">Fonction rénale</label>
+                <value>
+                    <uuid id="0">uricacid</uuid>
+                    <uuid id="1">bun</uuid>
+                    <uuid id="2">creat</uuid>
+                    <possible id="0">Uric acid in blood</possible>
+                    <possible id="1">Blood urea nitrogen (BUN)</possible>
+                    <possible id="2">Creatinine and creatinine clearance</possible>
+                    <possible id="0" lang="fr">Acide urique</possible>
+                    <possible id="1" lang="fr">Urée</possible>
+                    <possible id="2" lang="fr">Créatinine et calcul de la clearance de la créatinine</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Proteins">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Proteins</label>
+                <label lang="fr">Protéines</label>
+                <value>
+                    <uuid id="0">totalprot</uuid>
+                    <uuid id="1">albumin</uuid>
+                    <uuid id="2">spe</uuid>
+                    <uuid id="3">crp</uuid>
+                    <possible id="0">Total Serum Protein</possible>
+                    <possible id="1">Albumin</possible>
+                    <possible id="2">Serum Protein Electrophoresis (SPE)</possible>
+                    <possible id="3">C-Reactive Protein (CRP)</possible>
+                    <possible id="0" lang="fr">Protéine sérique totale</possible>
+                    <possible id="1" lang="fr">Albumine</possible>
+                    <possible id="2" lang="fr">Électrophorèse des protéines sériques</possible>
+                    <possible id="3" lang="fr">C-Reactive Protein (CRP)</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Liver">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Liver tests</label>
+                <label lang="fr">Fonction hépatique</label>
+                <value>
+                    <uuid id="0">alat</uuid>
+                    <uuid id="1">asat</uuid>
+                    <uuid id="2">ggt</uuid>
+                    <uuid id="3">lipase</uuid>
+                    <uuid id="4">amylase</uuid>
+                    <uuid id="5">bilito</uuid>
+                    <uuid id="6">bilic</uuid>
+                    <uuid id="7">biliu</uuid>
+                    <uuid id="8">nh4</uuid>
+                    <uuid id="9">hep_a_ab</uuid>
+                    <uuid id="10">hep_b_ab</uuid>
+                    <uuid id="11">hep_b_ag</uuid>
+                    <uuid id="12">hep_c_ab</uuid>
+                    <uuid id="13">hep_c_vl</uuid>
+                    <uuid id="14">hep_d_ab</uuid>
+                    <uuid id="15">hep_e_ab</uuid>
+                    <possible id="0">ALAT (TGP)</possible>
+                    <possible id="1">ASAT (TGO)</possible>
+                    <possible id="2">Gamma Glutamyl Transpeptidase (GGT)</possible>
+                    <possible id="3">Lipase</possible>
+                    <possible id="4">Amylase</possible>
+                    <possible id="5">Total Bilirubin</possible>
+                    <possible id="6">Bilirubin Conjugated</possible>
+                    <possible id="7">Bilirubin Unconjugated</possible>
+                    <possible id="8">Ammonia</possible>
+                    <possible id="9">Hepatitis A antibody</possible>
+                    <possible id="10">Hepatitis B antibody</possible>
+                    <possible id="11">Hepatitis B antigen</possible>
+                    <possible id="12">Hepatitis C antibody</possible>
+                    <possible id="13">Hepatitis C viral load</possible>
+                    <possible id="14">Hepatitis D antibody</possible>
+                    <possible id="15">Hepatitis E antibody</possible>
+                    <possible id="0" lang="fr">ALAT (TGP)</possible>
+                    <possible id="1" lang="fr">ASAT (TGO)</possible>
+                    <possible id="2" lang="fr">Gamma Glutamyl Transpeptidase (GGT)</possible>
+                    <possible id="3" lang="fr">Lipase</possible>
+                    <possible id="4" lang="fr">Amylase</possible>
+                    <possible id="5" lang="fr">Bilirubine totale</possible>
+                    <possible id="6" lang="fr">Bilirubine conjuguée</possible>
+                    <possible id="7" lang="fr">Bilirubine libre</possible>
+                    <possible id="8" lang="fr">Ammoniémie</possible>
+                    <possible id="9" lang="fr">Anticorps anti-Hepatite A</possible>
+                    <possible id="10" lang="fr">Anticorps anti-Hépatite B</possible>
+                    <possible id="11" lang="fr">Antigènes anti-Hépatite B S (anti-HBs)</possible>
+                    <possible id="12" lang="fr">Anticorps anti-Hépatite C</possible>
+                    <possible id="13" lang="fr">Charge virale Hépatite C viral load</possible>
+                    <possible id="14" lang="fr">Anticorps anti-Hépatite D</possible>
+                    <possible id="15" lang="fr">Anticorps anti-Hépatite E</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Cancer">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Tumor markers</label>
+                <label lang="fr">Marqueurs tumoraux</label>
+                <value>
+                    <uuid id="0">cea</uuid>
+                    <uuid id="1">afp</uuid>
+                    <uuid id="2">ca125</uuid>
+                    <uuid id="3">ca152</uuid>
+                    <uuid id="4">ca199</uuid>
+                    <uuid id="5">ca2729</uuid>
+                    <uuid id="6">cyfra211</uuid>
+                    <uuid id="7">hcg</uuid>
+                    <possible id="0">CEA</possible>
+                    <possible id="1">AFP</possible>
+                    <possible id="2">CA 125</possible>
+                    <possible id="3">CA 15-3</possible>
+                    <possible id="4">CA 19-9</possible>
+                    <possible id="5">CA 27.29</possible>
+                    <possible id="6">CYFRA 21-1</possible>
+                    <possible id="7">Human Chorionic Gonadotropin (hCG)</possible>
+                    <possible id="0" lang="fr">ACE</possible>
+                    <possible id="1" lang="fr">AFP</possible>
+                    <possible id="2" lang="fr">CA 125</possible>
+                    <possible id="3" lang="fr">CA 15-3</possible>
+                    <possible id="4" lang="fr">CA 19-9</possible>
+                    <possible id="5" lang="fr">CA 27.29</possible>
+                    <possible id="6" lang="fr">CYFRA 21-1</possible>
+                    <possible id="7" lang="fr">bêta HCG</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Metabolic">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Metabolic lab tests</label>
+                <label lang="fr">Métabolisme</label>
+                <value>
+                    <uuid id="0">gluc</uuid>
+                    <uuid id="1">ghb</uuid>
+                    <uuid id="2">hba1c</uuid>
+                    <uuid id="3">cpept</uuid>
+                    <uuid id="4">cholt</uuid>
+                    <uuid id="5">hdl</uuid>
+                    <uuid id="6">ldl</uuid>
+                    <uuid id="7">vldl</uuid>
+                    <uuid id="8">trigly</uuid>
+                    <uuid id="9">lpa</uuid>
+                    <uuid id="10">microalbu</uuid>
+                    <possible id="0">Blood glucose</possible>
+                    <possible id="1">Glycohemoglobin (GHB)</possible>
+                    <possible id="2">HgbA1c (Hemoglobin A1c)</possible>
+                    <possible id="3">C-Peptide, Serum</possible>
+                    <possible id="4">Total Cholesterol</possible>
+                    <possible id="5">HDL Cholesterol</possible>
+                    <possible id="6">LDL Cholesterol</possible>
+                    <possible id="7">VLDL Cholesterol</possible>
+                    <possible id="8">Triglycerides</possible>
+                    <possible id="9">Lipoprotein (a)</possible>
+                    <possible id="10">Random Microalbumin, Urine</possible>
+                    <possible id="0" lang="fr">Glycémie</possible>
+                    <possible id="1" lang="fr">Glycohemoglobin (GHB)</possible>
+                    <possible id="2" lang="fr">Hémoglobine A1c (HbA1C)</possible>
+                    <possible id="3" lang="fr">C-Peptidémie</possible>
+                    <possible id="4" lang="fr">Cholestérol total</possible>
+                    <possible id="5" lang="fr">HDL Cholestérol</possible>
+                    <possible id="6" lang="fr">LDL Cholestérol</possible>
+                    <possible id="7" lang="fr">VLDL Cholestérol</possible>
+                    <possible id="8" lang="fr">Triglycerides</possible>
+                    <possible id="9" lang="fr">Lipoprotéine (a)</possible>
+                    <possible id="10" lang="fr">Microalbuminurie</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Iron">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Iron lab tests</label>
+                <label lang="fr">Bilan martial</label>
+                <value>
+                    <uuid id="0">ferritin</uuid>
+                    <uuid id="1">tibc</uuid>
+                    <uuid id="2">iron</uuid>
+                    <uuid id="3">tst</uuid>
+                    <possible id="0">Ferritin</possible>
+                    <possible id="1">Total iron-binding capacity (TIBC)</possible>
+                    <possible id="2">Serum iron</possible>
+                    <possible id="3">Transferrin saturation; coefficient de saturation de la sidérophiline ??</possible>
+                    <possible id="0" lang="fr">Ferritine</possible>
+                    <possible id="1" lang="fr">Capacité total de fixation du fer (CTF)</possible>
+                    <possible id="2" lang="fr">Fer sérique</possible>
+                    <possible id="3" lang="fr">Coefficient de saturation de la sidérophiline</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Prostate">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Kidney lab test</label>
+                <label lang="fr">Fonction rénale</label>
+                <value>
+                    <uuid id="0">psa</uuid>
+                    <uuid id="1">dht</uuid>
+                    <uuid id="2">pap</uuid>
+                    <possible id="0">Prostate-Specific Antigen (PSA)</possible>
+                    <possible id="1">Dihydrotestosterone (DHT)</possible>
+                    <possible id="2">Prostatic acid phosphatase (PAP)</possible>
+                    <possible id="0" lang="fr">Prostate-Specific Antigen (PSA)</possible>
+                    <possible id="1" lang="fr">Dihydrotestostérone (DHT)</possible>
+                    <possible id="2" lang="fr">Prostatic acid phosphatase (PAP)</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Vitamins">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Kidney lab test</label>
+                <label lang="fr">Fonction rénale</label>
+                <value>
+                    <uuid id="0">b1</uuid>
+                    <uuid id="1">b12</uuid>
+                    <uuid id="2">25d2</uuid>
+                    <uuid id="3">25d1</uuid>
+                    <uuid id="4">frc</uuid>
+                    <uuid id="5">fs</uuid>
+                    <possible id="0">Vitamin B1</possible>
+                    <possible id="1">Vitamin B12</possible>
+                    <possible id="2">Vitamin D, 1, 25 Hydroxy</possible>
+                    <possible id="3">Vitamin D, 25-Hydroxy</possible>
+                    <possible id="4">Folic Acid In red blood cells</possible>
+                    <possible id="5">Folic Acid In plasma</possible>
+                    <possible id="0" lang="fr">Vitamine B1 (thiamine)</possible>
+                    <possible id="1" lang="fr">Vitamine B12 (cyanocobalamine)</possible>
+                    <possible id="2" lang="fr">1, 25 Hydroxy Vitamine D</possible>
+                    <possible id="3" lang="fr">25-Hydroxy Vitamine D</possible>
+                    <possible id="4" lang="fr">Folates érythrocytaires</possible>
+                    <possible id="5" lang="fr">Folates sériques</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Thyroid">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Kidney lab test</label>
+                <label lang="fr">Fonction rénale</label>
+                <value>
+                    <uuid id="0">tsh</uuid>
+                    <uuid id="1">ft3</uuid>
+                    <uuid id="2">ft4</uuid>
+                    <uuid id="2">tpo</uuid>
+                    <uuid id="2">tga</uuid>
+                    <uuid id="2">tbii</uuid>
+                    <uuid id="2">pthi</uuid>
+                    <possible id="0">TSH (Thyroid-Stimulating Hormone)</possible>
+                    <possible id="1">Free T3</possible>
+                    <possible id="2">Free T4</possible>
+                    <possible id="2">Thyroid Peroxidase (TPO) Antibodies</possible>
+                    <possible id="2">Thyroglobulin antibody</possible>
+                    <possible id="2">Thyroid stimulating hormone receptor antibody</possible>
+                    <possible id="2">Thyroid Stimulating Immunoglobulin</possible>
+                    <possible id="2">Parathyroid Hormone (PTH), Intact</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Biermer">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Kidney lab test</label>
+                <label lang="fr">Fonction rénale</label>
+                <value>
+                    <uuid id="0">gastrin</uuid>
+                    <uuid id="1">aaif</uuid>
+                    <uuid id="2">aapcs</uuid>
+                    <uuid id="3">schilling</uuid>
+                    <possible id="0">Gastrin</possible>
+                    <possible id="1">Auto-antibodies intrinsic factor; Anticorps sériques anti-facteur intrinsèque</possible>
+                    <possible id="2">Auto-antibodies against the parietal cells of the stomach; Anticorps anti-cellules pariétales gastriques</possible>
+                    <possible id="3">Schilling Test</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::Serologies">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Serologies</label>
+                <label lang="fr">Sérologies</label>
+                <value>
+                    <uuid id="0"></uuid>
+                    <uuid id="1"></uuid>
+                    <uuid id="2"></uuid>
+                    <uuid id="3"></uuid>
+                    <uuid id="4"></uuid>
+                    <uuid id="5"></uuid>
+                    <uuid id="6"></uuid>
+                    <uuid id="7"></uuid>
+                    <uuid id="8"></uuid>
+                    <uuid id="9"></uuid>
+                    <uuid id="10"></uuid>
+                    <uuid id="11"></uuid>
+                    <uuid id="12"></uuid>
+                    <uuid id="13"></uuid>
+                    <uuid id="14"></uuid>
+                    <uuid id="15"></uuid>
+                    <uuid id="16"></uuid>
+                    <possible id="0">Lyme Disease Antibodies, IgM</possible>
+                    <possible id="1">Lyme Disease, Serum, Western Blot</possible>
+                    <possible id="2">HIV</possible>
+                    <possible id="3">Measles, Mumps, Rubella (MMR) Immunity Profile</possible>
+                    <possible id="4">Hepatitis B Immunity Status</possible>
+                    <possible id="5">Epstein-Barr Virus (EBV), PCR, Qualitative</possible>
+                    <possible id="6">Mononucleosis Test, Qualitative</possible>
+                    <possible id="7">Cytomegalovirus (CMV) Antibodies, IgG</possible>
+                    <possible id="8">Parvovirus B19 (Fifth Disease)</possible>
+                    <possible id="9">Rubella Antibodies, IgG</possible>
+                    <possible id="10">Rubeola Antibodies, IgG</possible>
+                    <possible id="11">Toxoplasma Gondii Antibodies, IgG</possible>
+                    <possible id="12">Tetanus Antibodies Profile</possible>
+                    <possible id="13">Varicella Zoster Virus (VZV) Antibodies, IgG</possible>
+                    <possible id="14">West Nile Virus, PCR</possible>
+                    <possible id="15">Syphilis - Rapid Plasma Reagin (RPR)</possible>
+                    <possible id="16">H. pylori Urea Breath Test</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
+            </Item>
+
+            <Item type="multilist" name="Basics::RhumatoidPolyarth">
+                <uilink label="" widget="" layout=""/>
+                <label lang="xx">Rheumatoid Arthritis</label>
+                <label lang="fr">Polyarthrite rhumatoïde</label>
+                <value>
+                    <uuid id="0">rf</uuid>
+                    <uuid id="1">cpp</uuid>
+                    <uuid id="2">ana</uuid>
+                    <possible id="0">Rheumatoid Factor (RF)</possible>
+                    <possible id="1">Anti−cyclic citrullinated peptide;anti-CCP</possible>
+                    <possible id="2">Antinuclear Antibodies (ANA)</possible>
+                    <possible id="0" lang="fr">Facteur Rhumatoïde (RF)</possible>
+                    <possible id="1" lang="fr">Anticorps anti-CCP</possible>
+                    <possible id="2" lang="fr">Anticorps antinucléaires (AAN)</possible>
+                </value>
+                <options>DontPrintEmptyValue</options>
             </Item>
 
         </Item>
