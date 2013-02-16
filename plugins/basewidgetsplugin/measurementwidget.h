@@ -53,6 +53,7 @@ public:
     MeasurementWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~MeasurementWidget();
 
+    void setTabOrder(bool consoleWarn);
     void addWidgetToContainer(Form::IFormWidget *) {}
     bool isContainer() const {return false;}
 

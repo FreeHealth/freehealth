@@ -122,6 +122,7 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
     }
 
     setFocusableWidget(m_value);
+    setLastTabWidget(m_units);
     setFocusProxy(m_value);
 
     // create item data
@@ -136,6 +137,13 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
 
 MeasurementWidget::~MeasurementWidget()
 {
+}
+
+void MeasurementWidget::setTabOrder(bool consoleWarn)
+{
+    QWidget::setTabOrder(m_value, m_units);
+    if (consoleWarn)
+        qWarning() << "   Measurement: taborder" << m_value << m_units;
 }
 
 void MeasurementWidget::populateWithLength()
