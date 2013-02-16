@@ -40,7 +40,7 @@
   <MedForm name="Subs::Tools::SOAP::WithBio" uifilename="./ui/xx/soapbio.ui">
     <label lang="xx">SOAP with biometrics</label>
     <label lang="fr">POMR avec biométrie</label>
-    <label lang="fr">SOAP mit Biometriedaten</label>
+    <label lang="de">SOAP mit Biometriedaten</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/soap.png</icon>
 
