@@ -136,13 +136,33 @@
  * When dynamically loading the forms (using a QtUi file), the formItemWidget is not included
  * in the view, but only its internal widget. To allow the definition of tab orders you must
  * define the widget that will get the focus (and the one that is in the view, so in the
- * QtUi file).
+ * QtUi file). It is also the first in the taborder
  * \sa Form::IFormWidget::setFocusableWidget()
+ * \sa setLastTabWidget()
  */
 
 /**
  * \fn void Form::IFormWidget::setFocusableWidget(QWidget *widget)
  * \sa Form::IFormWidget::focusableWidget()
+ */
+
+/**
+ * \fn QWidget *Form::IFormWidget::lastTabWidget() const
+ * When the widget contains multiple editors, and when the taborder is defined in the Form description,
+ * The last tab widget correspond to the last widget that recieve the tabFocus.
+ * By default, the widget is concidered as a unique editor and the last tab widget is the
+ * focusable widget.
+ * \sa setFocusableWidget(), addTabOrder()
+ */
+
+/**
+ * \fn void Form::IFormWidget::setLastTabWidget(QWidget *widget)
+ * \sa lastTabWidget(), addTabOrder()
+ */
+
+/**
+ * \fn virtual void Form::IFormWidget::setTabOrder(bool consoleWarn)
+ * If the widget contains multiple editors, overload this member and set the internal taborder.
  */
 
 #include <QLocale>
@@ -155,7 +175,8 @@ IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     QWidget(parent),
     m_Label(0),
     m_FormItem(formItem),
-    _focusableWidget(0)
+    _focusableWidget(0),
+    _lastTabWidget(0)
 {
     m_FormItem->setFormWidget(this);
 }
