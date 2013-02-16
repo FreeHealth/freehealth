@@ -227,7 +227,7 @@ public:
         {
             QString t;
             if (!user->street().isEmpty())
-                toReturn = QString("%1\n%2 %3/n%4\n%5")
+                toReturn = QString("%1\n%2 %3\n%4\n%5")
                         .arg(user->street())
                         .arg(user->zipcode())
                         .arg(user->city())
