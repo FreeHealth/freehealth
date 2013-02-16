@@ -164,7 +164,7 @@
                           return;
                       }
 
-                      pdf.addFdfValue("nom", patient.birthName + " " + patient.secondName);
+                      pdf.addFdfValue("nom", patient.usualName + " " + patient.otherNames);
                       pdf.addFdfValue("prénom", patient.firstName);
                       pdf.addFdfValue("date naissance", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
                       // TODO: split street into 2 max lines if required
@@ -203,7 +203,7 @@
                       }
 
                       pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
-                      pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
+                      pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
                       pdf.addFdfValue("prénom médecin", user.firstName);
                       pdf.addFdfValue("identif  medecin", user.fullAddress);
 
@@ -212,7 +212,7 @@
                       var filename = freemedforms.forms.extractFormFile("__subForms__/generic/fullidentity", "./pdf/fr/declaration.pdf");
                       pdf.endFdfEncoding(filename);
 
-                      var output = freemedforms.tools.userDocumentPath + "declaration_" + patient.birthName + " " + patient.secondName + " " + patient.firstName + ".pdf";
+                      var output = freemedforms.tools.userDocumentPath + "declaration_" + patient.usualName + " " + patient.otherNames + " " + patient.firstName + ".pdf";
                       output = output.replace("  ", " ");
                       output = output.replace(" ", "_");
                       pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), output, "ISO-8859-1");

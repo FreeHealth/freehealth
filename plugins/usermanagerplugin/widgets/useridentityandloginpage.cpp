@@ -31,7 +31,7 @@
  *
  * Wizard fields:
  * Some fields are mandatory:
- * - (birth)name
+ * - (usual)name
  * - firstname
  * - language
  * - login
@@ -46,9 +46,9 @@
  * - login and password are correctly checked.
  *
  * Fields name:
- * - "Name*"
+ * - "UsualName*"
  * - "Firstname*"
- * -"SecondName"
+ * - "OtherName"
  * - "Title"
  * - "GenderIndex"
  * - "Gender"
@@ -103,9 +103,9 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     layout->addWidget(_identity);
     setLayout(layout);
 
-    registerField("Name*", _identity, "birthName");
+    registerField("UsualName*", _identity, "usualName");
     registerField("Firstname*", _identity, "firstName");
-    registerField("SecondName", _identity, "secondName");
+    registerField("OtherNames", _identity, "otherNames");
     registerField("Title", _identity, "title");
     registerField("GenderIndex", _identity, "genderIndex");
     registerField("Gender", _identity, "gender");
@@ -117,8 +117,8 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     connect(_identity, SIGNAL(clearLoginEditionFinished()), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(passwordConfirmed()), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(titleChanged(QString)), this, SLOT(checkCompleteState()));
-    connect(_identity, SIGNAL(birthNameChanged(QString)), this, SLOT(checkCompleteState()));
-    connect(_identity, SIGNAL(secondNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(usualNameChanged(QString)), this, SLOT(checkCompleteState()));
+    connect(_identity, SIGNAL(otherNamesChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(firstNameChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(dateOfBirthChanged(QDate)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(genderIndexChanged(int)), this, SLOT(checkCompleteState()));
@@ -200,13 +200,13 @@ void UserIdentityAndLoginPage::initializePage()
 bool UserIdentityAndLoginPage::isComplete() const
 {
 //    qWarning() << "isComplete" <<
-//                  !_identity->currentBirthName().isEmpty()
+//                  !_identity->currentUsualName().isEmpty()
 //               << !_identity->currentFirstName().isEmpty()
 //               << !_identity->currentGender().isEmpty()
 //               << !_identity->currentLanguage().isEmpty()
 //               << checkLogin()
 //               << _identity->isPasswordCompleted();
-    return (!_identity->currentBirthName().isEmpty()
+    return (!_identity->currentUsualName().isEmpty()
             && !_identity->currentFirstName().isEmpty()
             && !_identity->currentGender().isEmpty()
             && !_identity->currentLanguage().isEmpty()

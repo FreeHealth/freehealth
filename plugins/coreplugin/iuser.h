@@ -54,8 +54,8 @@ public:
         Login64,        /*!< \brief Encrypted login username \sa UserGlobal::loginForSQL() */
         Password,       /*!< \brief Encrypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */
-        Name,           /*!< \brief Lastname */
-        SecondName,     /*!< \brief Second name (name after marriage) */
+        UsualName,      /*!< \brief Lastname */
+        OtherNames,     /*!< \brief Second name (name after marriage) */
         Firstname,      /*!< \brief Firstname, ("Given" name) */
         TitleIndex,     /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::titles() */
         GenderIndex,    /*!< \brief Index of the user title accorging to Trans::ConstantTranslations::genders() */

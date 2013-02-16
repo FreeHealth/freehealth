@@ -121,8 +121,8 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_LOGIN,        "LOGIN",           FieldIsShortText);
     addField(Table_USERS, USER_PASSWORD,     "PASSWORD",        FieldIsShortText);
     addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsDate);
-    addField(Table_USERS, USER_NAME,         "NAME",            FieldIsShortText);
-    addField(Table_USERS, USER_SECONDNAME,   "SECONDNAME",      FieldIsShortText);
+    addField(Table_USERS, USER_USUALNAME,    "NAME",            FieldIsShortText);
+    addField(Table_USERS, USER_OTHERNAMES,   "SECONDNAME",      FieldIsShortText);
     addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
     addField(Table_USERS, USER_TITLE,        "TITLE",           FieldIsInteger);
     addField(Table_USERS, USER_GENDER,       "GENDER",          FieldIsInteger);
@@ -131,8 +131,8 @@ UserBase::UserBase(QObject *parent) :
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
     addIndex(Table_USERS, USER_UUID);
     addIndex(Table_USERS, USER_LOGIN);
-    addIndex(Table_USERS, USER_NAME);
-    addIndex(Table_USERS, USER_SECONDNAME);
+    addIndex(Table_USERS, USER_USUALNAME);
+    addIndex(Table_USERS, USER_OTHERNAMES);
     addIndex(Table_USERS, USER_FIRSTNAME);
 
     addField(Table_DATA, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
@@ -772,7 +772,7 @@ bool UserBase::createDefaultUser()
     user->setClearPassword(DEFAULT_USER_CLEARPASSWORD);
     user->setValidity(true);
     user->setVirtual(false);
-    user->setName(DEFAULT_USER_NAME);
+    user->setUsualName(DEFAULT_USER_NAME);
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLocaleLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
@@ -860,7 +860,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     user->setClearPassword(pass);
     user->setValidity(true);
     user->setVirtual(true);
-    user->setName(name.toUpper());
+    user->setUsualName(name.toUpper());
     user->setFirstname(firstName);
     user->setTitleIndex(title);
     user->setGenderIndex(gender);
@@ -1027,8 +1027,8 @@ bool UserBase::saveUser(UserData *user)
         query.bindValue(USER_LOGIN, user->login64());
         query.bindValue(USER_PASSWORD, user->cryptedPassword());
         query.bindValue(USER_LASTLOG, user->lastLogin());
-        query.bindValue(USER_NAME, user->name());
-        query.bindValue(USER_SECONDNAME, user->secondName());
+        query.bindValue(USER_USUALNAME, user->usualName());
+        query.bindValue(USER_OTHERNAMES, user->otherNames());
         query.bindValue(USER_FIRSTNAME, user->firstname());
         query.bindValue(USER_TITLE, user->titleIndex());
         query.bindValue(USER_GENDER, user->genderIndex());
@@ -1132,9 +1132,9 @@ bool UserBase::saveUser(UserData *user)
         query.bindValue(USER_ISVIRTUAL ,   (int)user->isVirtual());
         query.bindValue(USER_LOGIN ,       user->login64());
         query.bindValue(USER_PASSWORD ,    user->cryptedPassword());
-        query.bindValue(USER_NAME ,        user->name());
+        query.bindValue(USER_USUALNAME ,   user->usualName());
         query.bindValue(USER_FIRSTNAME ,   user->firstname());
-        query.bindValue(USER_SECONDNAME ,  user->secondName());
+        query.bindValue(USER_OTHERNAMES,   user->otherNames());
         query.bindValue(USER_TITLE,        user->titleIndex());
         query.bindValue(USER_GENDER,       user->genderIndex());
         query.bindValue(USER_MAIL ,        user->mail());

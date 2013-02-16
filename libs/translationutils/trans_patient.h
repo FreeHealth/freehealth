@@ -34,11 +34,15 @@ namespace Constants {
 // Patient related
 const char* const PATIENT_NAME                = QT_TRANSLATE_NOOP("tkConstants", "Patient name");
 const char* const PATIENT_BIRTHNAME           = QT_TRANSLATE_NOOP("tkConstants", "Patient birthname");
+const char* const PATIENT_USUALNAME           = QT_TRANSLATE_NOOP("tkConstants", "Patient usual name");
+const char* const PATIENT_OTHERNAMES          = QT_TRANSLATE_NOOP("tkConstants", "Patient other names");
 const char* const PATIENT_SECONDNAME          = QT_TRANSLATE_NOOP("tkConstants", "Patient secondname");
 const char* const PATIENT_FIRSTNAME           = QT_TRANSLATE_NOOP("tkConstants", "Patient firstname");
 const char* const PATIENT_FULLNAME            = QT_TRANSLATE_NOOP("tkConstants", "Patient full name");
 
 const char* const BIRTHNAME                   = QT_TRANSLATE_NOOP("tkConstants", "Birthname");
+const char* const USUALNAME                   = QT_TRANSLATE_NOOP("tkConstants", "Usual name");
+const char* const OTHERNAMES                  = QT_TRANSLATE_NOOP("tkConstants", "Other names");
 const char* const SECONDNAME                  = QT_TRANSLATE_NOOP("tkConstants", "Secondname");
 const char* const FIRSTNAME                   = QT_TRANSLATE_NOOP("tkConstants", "Firstname");
 const char* const FULLNAME                    = QT_TRANSLATE_NOOP("tkConstants", "Full name");

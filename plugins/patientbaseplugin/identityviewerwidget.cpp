@@ -81,10 +81,10 @@ public:
         _grid = new QFormLayout(this);
         _grid->setMargin(0);
         setLayout(_grid);
-        _birthName = new QLabel(this);
-        _birthNameLabel = new QLabel(this);
-        _secondName = new QLabel(this);
-        _secondNameLabel = new QLabel(this);
+        _usualName = new QLabel(this);
+        _usualNameLabel = new QLabel(this);
+        _otherNames = new QLabel(this);
+        _otherNamesLabel = new QLabel(this);
         _firstName = new QLabel(this);
         _firstNameLabel = new QLabel(this);
         _gender = new QLabel(this);
@@ -94,15 +94,15 @@ public:
 
         QFont bold;
         bold.setBold(true);
-        _birthNameLabel->setFont(bold);
-        _secondNameLabel->setFont(bold);
+        _usualNameLabel->setFont(bold);
+        _otherNamesLabel->setFont(bold);
         _firstNameLabel->setFont(bold);
         _genderLabel->setFont(bold);
         _titleLabel->setFont(bold);
 
         _grid->addRow(_titleLabel, _title);
-        _grid->addRow(_birthNameLabel, _birthName);
-        _grid->addRow(_secondNameLabel, _secondName);
+        _grid->addRow(_usualNameLabel, _usualName);
+        _grid->addRow(_otherNamesLabel, _otherNames);
         _grid->addRow(_firstNameLabel, _firstName);
         _grid->addRow(_genderLabel, _gender);
 
@@ -111,30 +111,30 @@ public:
 
     void clear()
     {
-        _birthName->clear();
-        _secondName->clear();
+        _usualName->clear();
+        _otherNames->clear();
         _firstName->clear();
         _gender->clear();
         _title->clear();
     }
 
-    void setBirthName(const QString &txt)
+    void setUsualName(const QString &txt)
     {
-        _birthName->setText(txt);
+        _usualName->setText(txt);
     }
 
-    void setSecondName(const QString &txt)
+    void setOtherNames(const QString &txt)
     {
         if (txt.isEmpty()) {
-            _secondName->setVisible(false);
-            _secondNameLabel->setVisible(false);
-            _grid->removeWidget(_secondName);
-            _grid->removeWidget(_secondNameLabel);
+            _otherNames->setVisible(false);
+            _otherNamesLabel->setVisible(false);
+            _grid->removeWidget(_otherNames);
+            _grid->removeWidget(_otherNamesLabel);
         } else {
-            _grid->insertRow(2, _secondNameLabel, _secondName);
-            _secondName->setVisible(true);
-            _secondNameLabel->setVisible(true);
-            _secondName->setText(txt);
+            _grid->insertRow(2, _otherNamesLabel, _otherNames);
+            _otherNames->setVisible(true);
+            _otherNamesLabel->setVisible(true);
+            _otherNames->setText(txt);
         }
     }
 
@@ -155,8 +155,8 @@ public:
 
     void retranslate()
     {
-        _birthNameLabel->setText(tkTr(Trans::Constants::BIRTHNAME));
-        _secondNameLabel->setText(tkTr(Trans::Constants::SECONDNAME));
+        _usualNameLabel->setText(tkTr(Trans::Constants::USUALNAME));
+        _otherNamesLabel->setText(tkTr(Trans::Constants::OTHERNAMES));
         _firstNameLabel->setText(tkTr(Trans::Constants::FIRSTNAME));
         _genderLabel->setText(tkTr(Trans::Constants::GENDER));
         _titleLabel->setText(tkTr(Trans::Constants::TITLE));
@@ -172,8 +172,8 @@ public:
 private:
     QFormLayout *_grid;
     QLabel *_title, *_titleLabel;
-    QLabel *_birthName, *_birthNameLabel;
-    QLabel *_secondName, *_secondNameLabel;
+    QLabel *_usualName, *_usualNameLabel;
+    QLabel *_otherNames, *_otherNamesLabel;
     QLabel *_firstName, *_firstNameLabel;
     QLabel *_gender, *_genderLabel;
 };
@@ -654,9 +654,6 @@ public:
     void populateReadOnlyWidget(const int row)
     {
         _patientModelIdentityWrapper->setCurrentPatient(row);
-
-        // TODO: ¿¿¿¿ install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184 ????
-
         QPixmap photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         if (photo.isNull()) {
             const int gender = m_PatientModel->index(row, Core::IPatient::GenderIndex).data().toInt();
@@ -670,8 +667,8 @@ public:
         viewUi->identityDetails->setIcon(icon);
         viewUi->identityDetails->setSummaryFontBold(true);
         m_IdentityWidget->clear();
-        m_IdentityWidget->setBirthName(m_PatientModel->index(row, Core::IPatient::BirthName).data().toString());
-        m_IdentityWidget->setSecondName(m_PatientModel->index(row, Core::IPatient::SecondName).data().toString());
+        m_IdentityWidget->setUsualName(m_PatientModel->index(row, Core::IPatient::UsualName).data().toString());
+        m_IdentityWidget->setOtherNames(m_PatientModel->index(row, Core::IPatient::OtherNames).data().toString());
         m_IdentityWidget->setFirstName(m_PatientModel->index(row, Core::IPatient::Firstname).data().toString());
         m_IdentityWidget->setGender(m_PatientModel->index(row, Core::IPatient::Gender).data().toString());
         m_IdentityWidget->setTitle(m_PatientModel->index(row, Core::IPatient::Title).data().toString());

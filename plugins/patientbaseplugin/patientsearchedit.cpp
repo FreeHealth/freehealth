@@ -74,23 +74,23 @@ public:
         QHash<int, QString> where;
         where.insert(Constants::IDENTITY_ISACTIVE, "=1");
         if (!names.at(NameIndex).isEmpty())
-            where.insert(Constants::IDENTITY_BIRTHNAME, QString("like '%1%'").arg(names.at(NameIndex)));
+            where.insert(Constants::IDENTITY_USUALNAME, QString("like '%1%'").arg(names.at(NameIndex)));
         if (!names.at(FirstNameIndex).isEmpty())
             where.insert(Constants::IDENTITY_FIRSTNAME, QString("like '%1%'").arg(names.at(FirstNameIndex)));
         if (!names.at(SecondNameIndex).isEmpty())
-            where.insert(Constants::IDENTITY_SECONDNAME, QString("like '%1%'").arg(names.at(SecondNameIndex)));
+            where.insert(Constants::IDENTITY_OTHERNAMES, QString("like '%1%'").arg(names.at(SecondNameIndex)));
         QString req = patientBase()->select(Constants::Table_IDENT,
                                             QList<int>()
                                             << Constants::IDENTITY_ISACTIVE
-                                            << Constants::IDENTITY_BIRTHNAME
+                                            << Constants::IDENTITY_USUALNAME
                                             << Constants::IDENTITY_FIRSTNAME
-                                            << Constants::IDENTITY_SECONDNAME
+                                            << Constants::IDENTITY_OTHERNAMES
                                             << Constants::IDENTITY_GENDER
                                             << Constants::IDENTITY_DOB
                                             << Constants::IDENTITY_UID,
                                             where
                                             );
-        req += QString("\n  ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
+        req += QString("\n  ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME));
         req += "\n  LIMIT 20";
         setQuery(req, patientBase()->database());
     }

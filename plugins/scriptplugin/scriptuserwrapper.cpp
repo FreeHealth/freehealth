@@ -47,14 +47,14 @@ QString ScriptUserWrapper::fullName() const
     return user()->value(Core::IUser::FullName).toString();
 }
 
-QString ScriptUserWrapper::birthName() const
+QString ScriptUserWrapper::usualName() const
 {
-    return user()->value(Core::IUser::Name).toString();
+    return user()->value(Core::IUser::UsualName).toString();
 }
 
-QString ScriptUserWrapper::secondName() const
+QString ScriptUserWrapper::otherNames() const
 {
-    return user()->value(Core::IUser::SecondName).toString();
+    return user()->value(Core::IUser::OtherNames).toString();
 }
 
 QString ScriptUserWrapper::firstName() const

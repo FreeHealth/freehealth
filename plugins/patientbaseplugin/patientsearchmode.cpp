@@ -87,7 +87,7 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
     // create the mode widget
     m_Selector = new PatientSelector;
     PatientCore::instance()->patientWidgetManager()->setCurrentView(m_Selector);
-    m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
+    m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::UsualName | PatientSelector::OtherNames | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
     m_Selector->initialize();
     setWidget(m_Selector);
 }

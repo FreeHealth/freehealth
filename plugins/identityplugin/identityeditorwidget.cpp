@@ -80,6 +80,7 @@
 #include <utils/widgets/uppercasevalidator.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -244,8 +245,8 @@ public:
         ui->language->setCurrentLanguage(QLocale().language());
 
         Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
-        ui->birthName->setValidator(upperVal);
-        ui->secondName->setValidator(upperVal);
+        ui->usualName->setValidator(upperVal);
+        ui->otherNames->setValidator(upperVal);
 
         Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
         ui->firstname->setValidator(capVal);
@@ -286,15 +287,15 @@ public:
 
     void connectPropertiesNotifier()
     {
-        QObject::connect(ui->birthName, SIGNAL(textChanged(QString)), q, SIGNAL(birthNameChanged(QString)));
-        QObject::connect(ui->secondName, SIGNAL(textChanged(QString)), q, SIGNAL(secondNameChanged(QString)));
+        QObject::connect(ui->usualName, SIGNAL(textChanged(QString)), q, SIGNAL(usualNameChanged(QString)));
+        QObject::connect(ui->otherNames, SIGNAL(textChanged(QString)), q, SIGNAL(otherNamesChanged(QString)));
         QObject::connect(ui->firstname, SIGNAL(textChanged(QString)), q, SIGNAL(firstNameChanged(QString)));
         QObject::connect(ui->dob, SIGNAL(dateChanged(QDate)), q, SIGNAL(dateOfBirthChanged(QDate)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(genderIndexChanged(int)));
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(genderChanged(QString)));
 //        QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(int)), q, SIGNAL(titleIndexChanged(int)));
         QObject::connect(ui->titleCombo, SIGNAL(currentIndexChanged(QString)), q, SIGNAL(titleChanged(QString)));
-//        QObject::connect(ui->photoButton, SIGNAL(), q, SIGNAL(birthNameChanged(QString)));
+//        QObject::connect(ui->photoButton, SIGNAL(), q, SIGNAL(usualNameChanged(QString)));
     }
 
     void updateDefaultPhotoAction()
@@ -345,8 +346,8 @@ public:
     // Add mapping to the mapper
     void addMapperMapping()
     {
-        m_Mapper->addMapping(ui->birthName, Core::IPatient::BirthName, "text");
-        m_Mapper->addMapping(ui->secondName, Core::IPatient::SecondName, "text");
+        m_Mapper->addMapping(ui->usualName, Core::IPatient::UsualName, "text");
+        m_Mapper->addMapping(ui->otherNames, Core::IPatient::OtherNames, "text");
         m_Mapper->addMapping(ui->firstname, Core::IPatient::Firstname, "text");
         m_Mapper->addMapping(ui->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
         m_Mapper->addMapping(ui->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
@@ -365,8 +366,8 @@ public:
     {
         switch (widget) {
         case IdentityEditorWidget::TitleIndex: return ui->titleCombo;
-        case IdentityEditorWidget::BirthName: return ui->birthName;
-        case IdentityEditorWidget::SecondName: return ui->secondName;
+        case IdentityEditorWidget::UsualName: return ui->usualName;
+        case IdentityEditorWidget::OtherNames: return ui->otherNames;
         case IdentityEditorWidget::FirstName: return ui->firstname;
         case IdentityEditorWidget::GenderIndex:
         case IdentityEditorWidget::Gender: return ui->genderCombo;
@@ -389,8 +390,8 @@ public:
         case IdentityEditorWidget::Gender:
         case IdentityEditorWidget::GenderIndex:
             return "currentIndex";
-        case IdentityEditorWidget::BirthName:
-        case IdentityEditorWidget::SecondName:
+        case IdentityEditorWidget::UsualName:
+        case IdentityEditorWidget::OtherNames:
         case IdentityEditorWidget::FirstName:
         case IdentityEditorWidget::Extra_Login:
             return "text";
@@ -433,8 +434,8 @@ public:
         QHash<QString, QString> tags;
         if (!Utils::readXml(xml, "Identity", tags))
             return false;
-        ui->birthName->setText(tags.value(::XML_NAME1));
-        ui->secondName->setText(tags.value(::XML_NAME2));
+        ui->usualName->setText(tags.value(::XML_NAME1));
+        ui->otherNames->setText(tags.value(::XML_NAME2));
         ui->firstname->setText(tags.value(::XML_FIRSTNAME));
         ui->titleCombo->setCurrentIndex(ui->titleCombo->findText(tags.value(::XML_TITLE)));
         int id = -1;
@@ -462,8 +463,8 @@ public:
     QString toXml()
     {
         QHash<QString, QString> tags;
-        tags.insert(::XML_NAME1, ui->birthName->text());
-        tags.insert(::XML_NAME2, ui->secondName->text());
+        tags.insert(::XML_NAME1, ui->usualName->text());
+        tags.insert(::XML_NAME2, ui->otherNames->text());
 //        tags.insert(::XML_NAME3, ui->);
 //        tags.insert(::XML_NAME4, ui->);
         tags.insert(::XML_FIRSTNAME, ui->firstname->text());
@@ -497,10 +498,9 @@ public:
     {
         if (ui) {
             ui->retranslateUi(q);
-            ui->birthName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Birth Name"));
-            ui->secondName->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Second Name"));
-            ui->firstname->setPlaceholderText(QApplication::translate("IdentityEditorWidget", "Firstname"));
-            ui->dob->setEditorPlaceholderText(QApplication::translate("IdentityEditorWidget", "Birthday"));
+            ui->usualName->setPlaceholderText(tkTr(Trans::Constants::USUALNAME));
+            ui->otherNames->setPlaceholderText(tkTr(Trans::Constants::OTHERNAMES));
+            ui->firstname->setPlaceholderText(tkTr(Trans::Constants::FIRSTNAME));
         }
     }
 
@@ -574,8 +574,8 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 
     d->ui->titleCombo->setEnabled(widgets.testFlag(TitleIndex));
     d->ui->genderCombo->setEnabled(widgets.testFlag(Gender) || widgets.testFlag(GenderIndex));
-    d->ui->birthName->setEnabled(widgets.testFlag(BirthName));
-    d->ui->secondName->setEnabled(widgets.testFlag(SecondName));
+    d->ui->usualName->setEnabled(widgets.testFlag(UsualName));
+    d->ui->otherNames->setEnabled(widgets.testFlag(OtherNames));
     d->ui->firstname->setEnabled(widgets.testFlag(FirstName));
     d->ui->language->setEnabled(widgets.testFlag(Language_QLocale) || widgets.testFlag(LanguageIso));
     d->ui->dob->setEnabled(widgets.testFlag(DateOfBirth));
@@ -584,10 +584,10 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 
 //    d->ui->titleLabel->setVisible(d->ui->titleCombo->isEnabled());
     d->ui->titleCombo->setVisible(d->ui->titleCombo->isEnabled());
-    d->ui->birthName->setVisible(d->ui->birthName->isEnabled());
-//    d->ui->birthNameLabel->setVisible(d->ui->birthName->isEnabled());
-    d->ui->secondName->setVisible(d->ui->secondName->isEnabled());
-    d->ui->secondNameLabel->setVisible(d->ui->secondName->isEnabled());
+    d->ui->usualName->setVisible(d->ui->usualName->isEnabled());
+//    d->ui->usualNameLabel->setVisible(d->ui->usualName->isEnabled());
+    d->ui->otherNames->setVisible(d->ui->otherNames->isEnabled());
+    d->ui->otherNamesLabel->setVisible(d->ui->otherNames->isEnabled());
     d->ui->firstname->setVisible(d->ui->firstname->isEnabled());
     d->ui->firstnameLabel->setVisible(d->ui->firstname->isEnabled());
     d->ui->genderCombo->setVisible(d->ui->genderCombo->isEnabled());
@@ -600,10 +600,10 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
     //d->ui->dodLabel->setVisible(d->ui->dod->isEnabled());
     d->ui->photoButton->setVisible(d->ui->photoButton->isEnabled());
 
-    QWidget::setTabOrder(d->ui->titleCombo, d->ui->birthName);
-    QWidget::setTabOrder(d->ui->birthName, d->ui->firstname);
-    QWidget::setTabOrder(d->ui->firstname, d->ui->secondName);
-    QWidget::setTabOrder(d->ui->secondName, d->ui->dob);
+    QWidget::setTabOrder(d->ui->titleCombo, d->ui->usualName);
+    QWidget::setTabOrder(d->ui->usualName, d->ui->firstname);
+    QWidget::setTabOrder(d->ui->firstname, d->ui->otherNames);
+    QWidget::setTabOrder(d->ui->otherNames, d->ui->dob);
     QWidget::setTabOrder(d->ui->dob, d->ui->genderCombo);
 
     QWidget *lastTab = d->ui->genderCombo;
@@ -635,8 +635,8 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 /** Set/unset the view in read-only mode */
 void IdentityEditorWidget::setReadOnly(bool readOnly)
 {
-    d->ui->birthName->setReadOnly(readOnly);
-    d->ui->secondName->setReadOnly(readOnly);
+    d->ui->usualName->setReadOnly(readOnly);
+    d->ui->otherNames->setReadOnly(readOnly);
     d->ui->firstname->setReadOnly(readOnly);
     d->ui->dob->setReadOnly(readOnly);
     d->ui->genderCombo->setEnabled(readOnly);
@@ -656,8 +656,8 @@ void IdentityEditorWidget::clear()
     d->ui->titleCombo->setCurrentIndex(-1);
     d->ui->genderCombo->setCurrentIndex(-1);
     d->ui->language->setCurrentLanguage(QLocale().language());
-    d->ui->birthName->clear();
-    d->ui->secondName->clear();
+    d->ui->usualName->clear();
+    d->ui->otherNames->clear();
     d->ui->firstname->clear();
     d->ui->dob->clear();
     d->ui->photoButton->clearPixmap();
@@ -776,17 +776,17 @@ void IdentityEditorWidget::setCurrentIndex(const QModelIndex &modelIndex)
 
 /**
  * Test the validity of the "actually shown" identity. The default implementation
- * test the content of the firstname, birthname, gender & DOB.
+ * test the content of the firstname, usualName, gender & DOB.
  * When subclassing, if you return false, the object can not submit to the model.
  */
 bool IdentityEditorWidget::isIdentityValid(bool warnUser) const
 {
-    if (d->ui->birthName->text().isEmpty()) {
+    if (d->ui->usualName->text().isEmpty()) {
         if (warnUser)
-            Utils::warningMessageBox(tr("You must specify a birthname."),
-                                 tr("You can not create a patient without a birthname"),
-                                 "", tr("No birthname"));
-        d->ui->birthName->setFocus();
+            Utils::warningMessageBox(tr("You must specify a usualName."),
+                                 tr("You can not create a patient without a usualName"),
+                                 "", tr("No usualName"));
+        d->ui->usualName->setFocus();
         return false;
     }
     if (d->ui->firstname->text().isEmpty()) {
@@ -832,15 +832,15 @@ QString IdentityEditorWidget::currentTitle() const
 }
 
 /** Return the current editing value */
-QString IdentityEditorWidget::currentBirthName() const
+QString IdentityEditorWidget::currentUsualName() const
 {
-    return d->ui->birthName->text();
+    return d->ui->usualName->text();
 }
 
 /** Return the current editing value */
-QString IdentityEditorWidget::currentSecondName() const
+QString IdentityEditorWidget::currentOtherNames() const
 {
-    return d->ui->secondName->text();
+    return d->ui->otherNames->text();
 }
 
 /** Return the current editing value */

@@ -115,16 +115,16 @@ void IUser::registerUserTokens() const
     // Create tokens
     Core::IToken *t;
     QVector<Core::IToken *> _tokens;
-    t = new UserToken(Constants::TOKEN_USERBIRTHNAME, Name);
-    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
+    t = new UserToken(Constants::TOKEN_USERUSUALNAME, UsualName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::USUALNAME);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USEROTHERNAMES, OtherNames);
+    t->setUntranslatedHumanReadableName(Trans::Constants::OTHERNAMES);
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERFIRSTNAME, Firstname);
     t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
-    _tokens << t;
-
-    t = new UserToken(Constants::TOKEN_USERSECONDNAME, SecondName);
-    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
     _tokens << t;
 
     t = new UserToken(Constants::TOKEN_USERFULLNAME, FullName);
@@ -222,9 +222,9 @@ void IUser::registerUserTokens() const
 
 void IUser::replaceTokens(QString &stringWillBeModified)
 {
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERBIRTHNAME,       value(IUser::Name).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERUSUALNAME,  value(IUser::UsualName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USEROTHERNAMES, value(IUser::OtherNames).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFIRSTNAME,  value(IUser::Firstname).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSECONDNAME, value(IUser::SecondName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLNAME,   value(IUser::FullName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTITLE,      value(IUser::Title).toString() );
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERAGE,        value(IUser::Age).toString() );

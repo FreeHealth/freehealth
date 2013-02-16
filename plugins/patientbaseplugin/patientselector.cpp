@@ -267,8 +267,8 @@ void PatientSelector::setPatientModel(PatientModel *m)
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
 #if QT_VERSION < 0x050000
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::BirthName, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::SecondName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullName, QHeaderView::ResizeToContents);
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::IconizedGender, QHeaderView::ResizeToContents);
@@ -278,8 +278,8 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
 #else
     // Qt5
-    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::BirthName, QHeaderView::Stretch);
-    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::SecondName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::UsualName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::OtherNames, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::FullName, QHeaderView::ResizeToContents);
     d->ui->tableView->horizontalHeader()->setSectionResizeMode(Core::IPatient::IconizedGender, QHeaderView::ResizeToContents);
@@ -303,11 +303,11 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
         d->ui->tableView->hideColumn(i);
     }
     // Show selected columns
-    if (fields & PatientSelector::BirthName) {
-        d->ui->tableView->showColumn(Core::IPatient::BirthName);
+    if (fields & PatientSelector::UsualName) {
+        d->ui->tableView->showColumn(Core::IPatient::UsualName);
     }
-    if (fields & PatientSelector::SecondName) {
-        d->ui->tableView->showColumn(Core::IPatient::SecondName);
+    if (fields & PatientSelector::OtherNames) {
+        d->ui->tableView->showColumn(Core::IPatient::OtherNames);
     }
     if (fields & PatientSelector::FirstName) {
         d->ui->tableView->showColumn(Core::IPatient::Firstname);

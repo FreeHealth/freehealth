@@ -142,9 +142,9 @@ IdentityPage::IdentityPage(QWidget *parent) :
 
     m_Identity->setModel(m_Model);
     m_Identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IPatient::TitleIndex);
-    m_Identity->addMapping(Identity::IdentityEditorWidget::BirthName, Core::IPatient::BirthName);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::UsualName, Core::IPatient::UsualName);
     m_Identity->addMapping(Identity::IdentityEditorWidget::FirstName, Core::IPatient::Firstname);
-    m_Identity->addMapping(Identity::IdentityEditorWidget::SecondName, Core::IPatient::SecondName);
+    m_Identity->addMapping(Identity::IdentityEditorWidget::OtherNames, Core::IPatient::OtherNames);
     m_Identity->addMapping(Identity::IdentityEditorWidget::GenderIndex, Core::IPatient::GenderIndex);
     m_Identity->addMapping(Identity::IdentityEditorWidget::DateOfBirth, Core::IPatient::DateOfBirth);
     m_Identity->addMapping(Identity::IdentityEditorWidget::DateOfDeath, Core::IPatient::DateOfDeath);
@@ -175,8 +175,8 @@ bool IdentityPage::validatePage()
     }
 
     // check duplicates
-    if (patientBase()->isPatientExists(m_Identity->currentBirthName(),
-                                       m_Identity->currentSecondName(),
+    if (patientBase()->isPatientExists(m_Identity->currentUsualName(),
+                                       m_Identity->currentOtherNames(),
                                        m_Identity->currentFirstName(),
                                        m_Identity->currentGender(),
                                        m_Identity->currentDateOfBirth())) {
@@ -187,7 +187,7 @@ bool IdentityPage::validatePage()
     } else {
         // nearly duplicates (same names only)
         PatientModel *model = new PatientModel(this);
-        model->setFilter(m_Identity->currentBirthName(), m_Identity->currentFirstName(), "", PatientModel::FilterOnFullName);
+        model->setFilter(m_Identity->currentUsualName(), m_Identity->currentFirstName(), "", PatientModel::FilterOnFullName);
         if (model->rowCount() > 0) {
             QStringList names;
             int count = qMin(10, model->rowCount());
@@ -197,8 +197,8 @@ bool IdentityPage::validatePage()
                          .arg(model->data(model->index(i, Core::IPatient::DateOfBirth)).toString())
                          .arg(model->data(model->index(i, Core::IPatient::Age)).toString());
             QString fullName = QString("%1 %2 %3<br />&nbsp;&nbsp;%4: %5<br />&nbsp;&nbsp;%6: %7")
-                    .arg(m_Identity->currentBirthName())
-                    .arg(m_Identity->currentSecondName())
+                    .arg(m_Identity->currentUsualName())
+                    .arg(m_Identity->currentOtherNames())
                     .arg(m_Identity->currentFirstName())
                     .arg(tkTr(Trans::Constants::GENDER))
                     .arg(m_Identity->currentGender())

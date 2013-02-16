@@ -51,9 +51,9 @@ namespace Constants {
         IDENTITY_FAMILY_UID,
         IDENTITY_ISACTIVE,
         IDENTITY_ISVIRTUAL,
-        IDENTITY_BIRTHNAME,
+        IDENTITY_USUALNAME,
         IDENTITY_FIRSTNAME,
-        IDENTITY_SECONDNAME,
+        IDENTITY_OTHERNAMES,
         IDENTITY_GENDER,
         IDENTITY_TITLE,    // Encoded using the Utils::titles() QStringList index
         IDENTITY_DOB,

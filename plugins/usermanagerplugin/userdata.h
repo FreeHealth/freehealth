@@ -155,8 +155,8 @@ public:
     void  setClearPassword(const QString &val);
     void  setTitleIndex(const QVariant &val)           { setValue(Table_USERS, USER_TITLE ,val); }
     void  setGenderIndex(const QVariant &val)          { setValue(Table_USERS, USER_GENDER ,val); }
-    void  setName(const QVariant &val)                { setValue(Table_USERS, USER_NAME, val); }
-    void  setSecondName(const QVariant &val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
+    void  setUsualName(const QVariant &val)            { setValue(Table_USERS, USER_USUALNAME, val); }
+    void  setOtherNames(const QVariant &val)          { setValue(Table_USERS, USER_OTHERNAMES, val); }
     void  setFirstname(const QVariant &val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
     void  setLanguageIso(const QVariant &val)          { setValue(Table_USERS, USER_LANGUAGE, val); }
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
@@ -212,8 +212,8 @@ public:
     int     titleIndex() const           { return value(Table_USERS, USER_TITLE).toInt(); }
     QString gender() const;
     int     genderIndex() const          { return value(Table_USERS, USER_GENDER).toInt(); }
-    QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
-    QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
+    QString usualName() const                 { return value(Table_USERS, USER_USUALNAME).toString(); }
+    QString otherNames() const           { return value(Table_USERS, USER_OTHERNAMES).toString(); }
     QString firstname() const            { return value(Table_USERS, USER_FIRSTNAME).toString(); }
     QString languageIso() const          { return value(Table_USERS, USER_LANGUAGE).toString(); }
     QLocale::Language localeLanguage() const {return QLocale(languageIso()).language(); }

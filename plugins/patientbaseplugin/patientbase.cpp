@@ -115,18 +115,18 @@ PatientBase::PatientBase(QObject *parent) :
     addIndex(Table_IDENT, IDENTITY_FAMILY_UID);
 
     // Identity
-    addField(Table_IDENT, IDENTITY_BIRTHNAME, "NAME", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_USUALNAME, "NAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_FIRSTNAME, "SURNAME", FieldIsShortText);
-    addField(Table_IDENT, IDENTITY_SECONDNAME, "SECONDNAME", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_OTHERNAMES, "SECONDNAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_GENDER, "GENDER", FieldIsOneChar);
     addField(Table_IDENT, IDENTITY_TITLE, "TITLE", FieldIsInteger);
     addField(Table_IDENT, IDENTITY_DOB, "DOB", FieldIsDate);
     addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
     addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
     addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
-    addIndex(Table_IDENT, IDENTITY_BIRTHNAME);
+    addIndex(Table_IDENT, IDENTITY_USUALNAME);
     addIndex(Table_IDENT, IDENTITY_FIRSTNAME);
-    addIndex(Table_IDENT, IDENTITY_SECONDNAME);
+    addIndex(Table_IDENT, IDENTITY_OTHERNAMES);
     addIndex(Table_IDENT, IDENTITY_DOB);
 
     // Contact
@@ -203,7 +203,7 @@ bool PatientBase::initialize()
 }
 
 /** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
-bool PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+bool PatientBase::createVirtualPatient(const QString &usualName, const QString &otherNames, const QString &firstname,
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
                           const QString &street, const QString &zip, const QString &city,
@@ -235,12 +235,12 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
     query.bindValue(IDENTITY_LK_TOPRACT_LKID, lkid);
     query.bindValue(IDENTITY_FAMILY_UID, "Not yet implemented");
     query.bindValue(IDENTITY_ISVIRTUAL, 1);
-    query.bindValue(IDENTITY_BIRTHNAME, name);
+    query.bindValue(IDENTITY_USUALNAME, usualName);
     query.bindValue(IDENTITY_FIRSTNAME, firstname);
-    if (secondname.isEmpty())
-        query.bindValue(IDENTITY_SECONDNAME, QVariant());
+    if (otherNames.isEmpty())
+        query.bindValue(IDENTITY_OTHERNAMES, QVariant());
     else
-        query.bindValue(IDENTITY_SECONDNAME, secondname);
+        query.bindValue(IDENTITY_OTHERNAMES, otherNames);
     query.bindValue(IDENTITY_GENDER, gender);
     query.bindValue(IDENTITY_TITLE, title);
     query.bindValue(IDENTITY_DOB, dob);
@@ -300,8 +300,8 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
 }
 
 /** Return a patient uuid in the database or a QString::null. */
-QString PatientBase::patientUuid(const QString &birthname,
-                                 const QString &secondname,
+QString PatientBase::patientUuid(const QString &usualname,
+                                 const QString &othernames,
                                  const QString &firstname,
                                  const QString &gender,
                                  const QDate &dob) const
@@ -312,9 +312,9 @@ QString PatientBase::patientUuid(const QString &birthname,
     }
     using namespace Patients::Constants;
     QHash<int, QString> where;
-    where.insert(IDENTITY_BIRTHNAME, QString("='%1'").arg(birthname));
+    where.insert(IDENTITY_USUALNAME, QString("='%1'").arg(usualname));
     where.insert(IDENTITY_FIRSTNAME, QString("='%1'").arg(firstname));
-    where.insert(IDENTITY_SECONDNAME, QString("='%1'").arg(secondname));
+    where.insert(IDENTITY_OTHERNAMES, QString("='%1'").arg(othernames));
     where.insert(IDENTITY_GENDER, QString("='%1'").arg(gender));
     where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
     QString req = select(Table_IDENT, IDENTITY_UID, where);
@@ -334,13 +334,13 @@ QString PatientBase::patientUuid(const QString &birthname,
 }
 
 /** Test the existence of a patient in the database. */
-bool PatientBase::isPatientExists(const QString &birthname,
-                                  const QString &secondname,
+bool PatientBase::isPatientExists(const QString &usualname,
+                                  const QString &othernames,
                                   const QString &firstname,
                                   const QString &gender,
                                   const QDate &dob) const
 {
-    return (!patientUuid(birthname, secondname, firstname, gender, dob).isNull());
+    return (!patientUuid(usualname, othernames, firstname, gender, dob).isNull());
 }
 
 /** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */

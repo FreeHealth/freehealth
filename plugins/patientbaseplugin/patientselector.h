@@ -59,8 +59,8 @@ public:
 
     enum FieldToShow {
         None        = 0x0000,
-        BirthName   = 0x0001,
-        SecondName  = 0x0002,
+        UsualName   = 0x0001,
+        OtherNames  = 0x0002,
         FirstName   = 0x0004,
         FullName    = 0x0008,
         Gender      = 0x0010,

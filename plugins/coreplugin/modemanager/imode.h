@@ -67,7 +67,7 @@ public:
     void setType(const QString &type) { m_type = type; }
 
     void setPatientBarVisibility(bool visible) {m_isPatientBarVisible=visible;}
-    bool setEnabledOnlyWithCurrentPatient(bool enablewithcurrentpatient) {m_onlyWithCurrentPatient = enablewithcurrentpatient;}
+    void setEnabledOnlyWithCurrentPatient(bool enablewithcurrentpatient) {m_onlyWithCurrentPatient = enablewithcurrentpatient;}
 
 Q_SIGNALS:
     void enabledStateChanged(bool enabled);

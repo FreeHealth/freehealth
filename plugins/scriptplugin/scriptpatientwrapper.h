@@ -45,8 +45,8 @@ class ScriptPatientWrapper : public QObject  //, public QScriptClass
 {
     Q_OBJECT
     Q_PROPERTY(bool     isActive    READ isActive())
-    Q_PROPERTY(QString  birthName   READ birthName())
-    Q_PROPERTY(QString  secondName  READ secondName())
+    Q_PROPERTY(QString  usualName   READ usualName())
+    Q_PROPERTY(QString  otherNames  READ otherNames())
     Q_PROPERTY(QString  firstName   READ firstName())
     Q_PROPERTY(QString  fullName    READ fullName())
 
@@ -77,8 +77,8 @@ public Q_SLOTS:
     bool isActive() const;
 
     QString fullName() const;
-    QString birthName() const;
-    QString secondName() const;
+    QString usualName() const;
+    QString otherNames() const;
     QString firstName() const;
 
     QString street() const;

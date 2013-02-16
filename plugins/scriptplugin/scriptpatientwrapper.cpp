@@ -47,14 +47,14 @@ QString ScriptPatientWrapper::fullName() const
     return patient()->data(Core::IPatient::FullName).toString();
 }
 
-QString ScriptPatientWrapper::birthName() const
+QString ScriptPatientWrapper::usualName() const
 {
-    return patient()->data(Core::IPatient::BirthName).toString();
+    return patient()->data(Core::IPatient::UsualName).toString();
 }
 
-QString ScriptPatientWrapper::secondName() const
+QString ScriptPatientWrapper::otherNames() const
 {
-    return patient()->data(Core::IPatient::SecondName).toString();
+    return patient()->data(Core::IPatient::OtherNames).toString();
 }
 
 QString ScriptPatientWrapper::firstName() const

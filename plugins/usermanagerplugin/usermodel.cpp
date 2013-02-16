@@ -195,8 +195,8 @@ public:
         case Core::IUser::TitleIndex : toReturn = user->titleIndex(); break;
         case Core::IUser::Gender : toReturn = user->gender(); break;
         case Core::IUser::Title : toReturn = user->title(); break;
-        case Core::IUser::Name : toReturn = user->name(); break;
-        case Core::IUser::SecondName : toReturn = user->secondName(); break;
+        case Core::IUser::UsualName : toReturn = user->usualName(); break;
+        case Core::IUser::OtherNames : toReturn = user->otherNames(); break;
         case Core::IUser::Firstname : toReturn = user->firstname(); break;
         case Core::IUser::FullName : toReturn = user->fullName(); break;
         case Core::IUser::Mail : toReturn = user->mail(); break;
@@ -637,7 +637,7 @@ bool UserModel::setCurrentUserIsServerManager()
     Internal::UserData *u = d->m_Uuid_UserList.value(uuid, 0);
     if (!u) {
         u = new Internal::UserData(uuid);
-        u->setName(tr("Database server administrator"));
+        u->setUsualName(tr("Database server administrator"));
         u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
         u->setModified(false);
         d->m_Uuid_UserList.insert(uuid, u);
@@ -664,7 +664,7 @@ bool UserModel::setCurrentUserIsServerManager()
             qDeleteAll(d->m_Uuid_UserList);
             d->m_Uuid_UserList.clear();
             u = new Internal::UserData(uuid);
-            u->setName(tr("Database server administrator"));
+            u->setUsualName(tr("Database server administrator"));
             u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
             d->m_Uuid_UserList.insert(uuid, u);
             break;
@@ -962,13 +962,13 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         colsToEmit << Core::IUser::Title << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
         user->setTitleIndex(value);
         break;
-    case Core::IUser::Name:
+    case Core::IUser::UsualName:
         colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
-        user->setName(value);
+        user->setUsualName(value);
         break;
-    case Core::IUser::SecondName :
+    case Core::IUser::OtherNames:
         colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
-        user->setSecondName(value);
+        user->setOtherNames(value);
         break;
     case Core::IUser::Firstname :
         colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
@@ -1332,7 +1332,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
         switch (r)
         {
         case Core::IUser::Uuid : baseField = b->fieldName(Table_USERS, USER_UUID); break;
-        case Core::IUser::Name : baseField = b->fieldName(Table_USERS, USER_NAME); break;
+        case Core::IUser::UsualName : baseField = b->fieldName(Table_USERS, USER_USUALNAME); break;
         case Core::IUser::Firstname : baseField = b->fieldName(Table_USERS, USER_FIRSTNAME); break;
         default: break;
         }
@@ -1418,9 +1418,9 @@ QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)  // sta
         QString req = userBase()->select(Constants::Table_USERS,
                                          QList<int>()
                                          << Constants::USER_TITLE
-                                         << Constants::USER_NAME
+                                         << Constants::USER_USUALNAME
                                          << Constants::USER_FIRSTNAME
-                                         << Constants::USER_SECONDNAME
+                                         << Constants::USER_OTHERNAMES
                                          , where);
         if (query.exec(req)) {
             if (query.next()) {
@@ -1454,7 +1454,7 @@ bool UserModel::createVirtualUsers(const int count)
         QString name = r.getRandomName();
         QString firstName = r.getRandomFirstname(genderIndex==1);
 
-        u->setName(name);
+        u->setUsualName(name);
         u->setFirstname(firstName);
         u->setTitleIndex(r.randomInt(0, 4));
         u->setGenderIndex(genderIndex);

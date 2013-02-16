@@ -66,8 +66,8 @@ namespace Internal {
 
 /// Private data representation for user data
 enum UserDataRepresentation {
-    Name = 0,
-    SecondName,
+    UsualName = 0,
+    OtherNames,
     FirstName,
     Uuid,
     Title,
@@ -117,12 +117,12 @@ public:
         if (canReadAll) {
             Utils::FieldList birthNameConds;
             // Birth/second name
-            if (filter._birth.isEmpty()) {
-                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%'"));
-                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%'"));
+            if (filter._usual.isEmpty()) {
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_USUALNAME, QString("LIKE '%'"));
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_OTHERNAMES, QString("LIKE '%'"));
             } else {
-                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_NAME, QString("LIKE '%1%'").arg(filter._birth));
-                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_SECONDNAME, QString("LIKE '%1%'").arg(filter._birth));
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_USUALNAME, QString("LIKE '%1%'").arg(filter._usual));
+                birthNameConds << Utils::Field(Constants::Table_USERS, Constants::USER_OTHERNAMES, QString("LIKE '%1%'").arg(filter._usual));
             }
             f = userBase()->getWhereClause(birthNameConds, Utils::Database::OR);
             f += " AND ";
@@ -139,8 +139,8 @@ public:
         }
         // Add the SELECT
         sql = userBase()->select(Constants::Table_USERS, QList<int>()
-                                 << Constants::USER_NAME
-                                 << Constants::USER_SECONDNAME
+                                 << Constants::USER_USUALNAME
+                                 << Constants::USER_OTHERNAMES
                                  << Constants::USER_FIRSTNAME
                                  << Constants::USER_UUID
                                  << Constants::USER_TITLE
@@ -245,8 +245,8 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     {
         int i = index.row();
-        QModelIndex name = d->_sqlModel->index(i, Name);
-        const QString &secondname = d->_sqlModel->index(i, SecondName).data().toString();
+        QModelIndex name = d->_sqlModel->index(i, UsualName);
+        const QString &otherNames = d->_sqlModel->index(i, OtherNames).data().toString();
         QModelIndex firstname = d->_sqlModel->index(i, FirstName);
         QModelIndex title = d->_sqlModel->index(i, Title);
         QModelIndex lastLogin = d->_sqlModel->index(i, LastLogin);
@@ -254,8 +254,8 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
         if (!titleString.isEmpty())
             titleString = titleString.replace(" ", "&nbsp;") + "<br />";
         QString fullname;
-        if (!secondname.isEmpty())
-            fullname = titleString + name.data().toString() + " - " + secondname + " " + firstname.data().toString();
+        if (!otherNames.isEmpty())
+            fullname = titleString + name.data().toString() + " - " + otherNames + " " + firstname.data().toString();
         else
             fullname = titleString + name.data().toString() + " " + firstname.data().toString();
         QString html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
@@ -293,10 +293,10 @@ void UserManagerModel::setFilter(const UserManagerModelFilter &filter)
 
     // Read all indexes from the sqlmodel and create the StandardItems
     for(int i = 0; i < d->_sqlModel->rowCount(); ++i) {
-        QModelIndex name = d->_sqlModel->index(i, 0);
-        QModelIndex secondname = d->_sqlModel->index(i, 1);
+        QModelIndex usualname = d->_sqlModel->index(i, 0);
+        QModelIndex othernames = d->_sqlModel->index(i, 1);
         QModelIndex firstname = d->_sqlModel->index(i, 2);
-        QString fullname = name.data().toString() + " " + secondname.data().toString() + " - " + firstname.data().toString();
+        QString fullname = usualname.data().toString() + " " + othernames.data().toString() + " - " + firstname.data().toString();
         QStandardItem *item = new QStandardItem(fullname.simplified());
         invisibleRootItem()->appendRow(item);
         d->appendPages(item);

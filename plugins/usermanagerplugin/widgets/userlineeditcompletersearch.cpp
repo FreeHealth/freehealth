@@ -75,20 +75,20 @@ public:
         QHash<int, QString> where;
         where.insert(Constants::USER_VALIDITY, "=1");
         if (!names.at(NameIndex).isEmpty())
-            where.insert(Constants::USER_NAME, QString("like '%1%'").arg(names.at(NameIndex)));
+            where.insert(Constants::USER_USUALNAME, QString("like '%1%'").arg(names.at(NameIndex)));
         if (!names.at(FirstNameIndex).isEmpty())
             where.insert(Constants::USER_FIRSTNAME, QString("like '%1%'").arg(names.at(FirstNameIndex)));
         if (!names.at(SecondNameIndex).isEmpty())
-            where.insert(Constants::USER_SECONDNAME, QString("like '%1%'").arg(names.at(SecondNameIndex)));
+            where.insert(Constants::USER_OTHERNAMES, QString("like '%1%'").arg(names.at(SecondNameIndex)));
         QString req = userBase()->select(Constants::Table_USERS,
                                             QList<int>()
-                                            << Constants::USER_NAME
+                                            << Constants::USER_USUALNAME
                                             << Constants::USER_FIRSTNAME
-                                            << Constants::USER_SECONDNAME
+                                            << Constants::USER_OTHERNAMES
                                             << Constants::USER_UUID,
                                             where
                                             );
-        req += QString("\n  ORDER BY `%1` ASC").arg(userBase()->fieldName(Constants::Table_USERS, Constants::USER_NAME));
+        req += QString("\n  ORDER BY `%1` ASC").arg(userBase()->fieldName(Constants::Table_USERS, Constants::USER_USUALNAME));
         req += "\n  LIMIT 20";
         setQuery(req, userBase()->database());
     }

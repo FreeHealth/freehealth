@@ -72,8 +72,8 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
     friend class Internal::IdentityEditorWidgetPrivate;
 
     Q_PROPERTY(QString title READ currentTitle NOTIFY titleChanged)
-    Q_PROPERTY(QString birthName READ currentBirthName NOTIFY birthNameChanged)
-    Q_PROPERTY(QString secondName READ currentSecondName NOTIFY secondNameChanged)
+    Q_PROPERTY(QString usualName READ currentUsualName NOTIFY usualNameChanged)
+    Q_PROPERTY(QString otherNames READ currentOtherNames NOTIFY otherNamesChanged)
     Q_PROPERTY(QString firstName READ currentFirstName NOTIFY firstNameChanged)
     Q_PROPERTY(QDate dateOfBirth READ currentDateOfBirth NOTIFY dateOfBirthChanged)
     Q_PROPERTY(QString gender READ currentGender NOTIFY genderChanged)
@@ -87,8 +87,8 @@ class IDENTITYSHARED_EXPORT IdentityEditorWidget : public QWidget
 public:
     enum AvailableWidget {
         TitleIndex      = 0x00000001,
-        BirthName       = 0x00000002,
-        SecondName      = 0x00000004,
+        UsualName       = 0x00000002,
+        OtherNames      = 0x00000004,
         FirstName       = 0x00000008,
         Gender          = 0x00000010,
         GenderIndex     = 0x00000020,
@@ -107,7 +107,7 @@ public:
         Extra_Login     = 0x00080000,
         Extra_Password  = 0x00100000,
         Extra_ConfirmPassword   = 0x00200000,
-        FullIdentity = TitleIndex | BirthName | SecondName | FirstName | Gender | DateOfBirth,
+        FullIdentity = TitleIndex | UsualName | OtherNames | FirstName | Gender | DateOfBirth,
         FullAddress =  Street | City | Zipcode | Province | Country_TwoCharIso |Country_QLocale,
         FullLogin = Extra_Login | Extra_Password | Extra_ConfirmPassword
     };
@@ -135,8 +135,8 @@ public:
     bool isModified() const;
 
     QString currentTitle() const;
-    QString currentBirthName() const;
-    QString currentSecondName() const;
+    QString currentUsualName() const;
+    QString currentOtherNames() const;
     QString currentFirstName() const;
     QString currentGender() const;
     int currentGenderIndex() const;
@@ -161,8 +161,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void titleChanged(const QString &title);
-    void birthNameChanged(const QString &birthName);
-    void secondNameChanged(const QString &secondName);
+    void usualNameChanged(const QString &usualName);
+    void otherNamesChanged(const QString &otherNames);
     void firstNameChanged(const QString &firstName);
     void dateOfBirthChanged(const QDate &date);
     void genderIndexChanged(int genderIndex);

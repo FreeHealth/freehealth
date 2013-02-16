@@ -42,11 +42,11 @@ class IUserViewerPage;
 namespace Internal {
 class UserManagerModelFilter {
 public:
-    UserManagerModelFilter(const QString &birthName = QString::null, const QString &firstName = QString::null) :
-        _birth(birthName), _first(firstName)
+    UserManagerModelFilter(const QString &usualName = QString::null, const QString &firstName = QString::null) :
+        _usual(usualName), _first(firstName)
     {}
 
-    QString _birth, _first;
+    QString _usual, _first;
 };
 
 class UserManagerModelPrivate;

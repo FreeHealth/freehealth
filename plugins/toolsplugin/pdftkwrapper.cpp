@@ -441,7 +441,7 @@ function franceDeclarationMedTraitant()
         return;
     }
 
-    pdf.addFdfValue("nom", patient.birthName + " " + patient.secondName);
+    pdf.addFdfValue("nom", patient.usualName + " " + patient.otherNames);
     pdf.addFdfValue("prénom", patient.firstName);
     pdf.addFdfValue("date naissance", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
     // TODO: split street into 2 max lines if required
@@ -478,7 +478,7 @@ function franceDeclarationMedTraitant()
     }
 
     pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
-    pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
+    pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
     pdf.addFdfValue("prénom médecin", user.firstName);
     pdf.addFdfValue("identif  medecin", user.identifiants.join("; "));
 
@@ -528,7 +528,7 @@ function franceDeclarationAld()
         return;
     }
 
-    pdf.addFdfValue("nom prénom", patient.birthName + " " + patient.secondName + " " + patient.firstName);
+    pdf.addFdfValue("nom prénom", patient.usualName + " " + patient.otherNames + " " + patient.firstName);
     pdf.addFdfValue("date naiss", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
 
     // ADDRESS: 2 lines
@@ -764,7 +764,7 @@ function franceDeclarationAld()
 //    }
 
 //    pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
-//    pdf.addFdfValue("nom medecin", user.birthName + " " + user.secondName);
+//    pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
 //    pdf.addFdfValue("prénom médecin", user.firstName);
 //    pdf.addFdfValue("identif  medecin", user.identifiants.join("; "));
 

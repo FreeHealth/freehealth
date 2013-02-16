@@ -64,8 +64,8 @@ public:
         Title,
         TitleIndex,
         FullName,
-        BirthName,
-        SecondName,           // 10
+        UsualName,
+        OtherNames,           // 10
         Firstname,
         Gender,
         GenderIndex,

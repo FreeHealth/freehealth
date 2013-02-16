@@ -251,6 +251,7 @@ bool UserManagerDialog::initializeAfterShowing()
 {
     Q_ASSERT(m_Widget);
     m_Widget->resizeSplitter();
+    return true;
 }
 
 /** Close the usermanager. Check if modifications have to be saved and ask user. */
@@ -304,7 +305,7 @@ public:
         ui->userSearchLayout->setMargin(0);
         ui->userSearchLayout->setSpacing(0);
 
-        m_SearchBy = Core::IUser::Name;
+        m_SearchBy = Core::IUser::UsualName;
         aCreateUser = new QAction(q);
         aCreateUser->setObjectName(QString::fromUtf8("aCreateUser"));
 
@@ -551,7 +552,7 @@ bool UserManagerWidget::canCloseParent()
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 {
     if (act == d->searchByNameAct)
-        d->m_SearchBy= Core::IUser::Name;
+        d->m_SearchBy= Core::IUser::UsualName;
     else if (act == d->searchByFirstnameAct)
         d->m_SearchBy= Core::IUser::Firstname;
     else if (act == d->searchByNameAndFirstnameAct)
@@ -567,7 +568,7 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 void UserManagerWidget::onCurrentUserChanged()
 {
     int row = userModel()->currentUserIndex().row();
-    d->ui->userTreeView->setCurrentIndex(d->ui->userTreeView->model()->index(row, Core::IUser::Name));
+    d->ui->userTreeView->setCurrentIndex(d->ui->userTreeView->model()->index(row, Core::IUser::UsualName));
 //    ui->userTreeView->selectRow(row);
     d->analyzeCurrentUserRights();
 //    ui->userViewer->setCurrentUser(row);
@@ -593,7 +594,7 @@ void UserManagerWidget::onCreateUserRequested()
         LOG_ERROR("Error creating new user: cannot add row to model");
         return;
     }
-    QModelIndex index = d->ui->userTreeView->model()->index(createdRow, USER_NAME);
+    QModelIndex index = d->ui->userTreeView->model()->index(createdRow, USER_USUALNAME);
     UserCreatorWizard wiz(this);
     // TODO: code here
 //    wiz.setModelRow(createdRow);

@@ -129,14 +129,15 @@ void IPatient::registerPatientTokens()
     QVector<Core::IToken *> _tokens;
 
     // Identity
-    t = new PatientToken(Constants::TOKEN_PATIENTNAME, BirthName);
-    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
+    t = new PatientToken(Constants::TOKEN_PATIENTUSUALNAME, UsualName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::USUALNAME);
     _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTOTHERNAMES, OtherNames);
+    t->setUntranslatedHumanReadableName(Trans::Constants::OTHERNAMES);
+    _tokens << t;
+
     t = new PatientToken(Constants::TOKEN_PATIENTFIRSTNAME, Firstname);
     t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
-    _tokens << t;
-    t = new PatientToken(Constants::TOKEN_PATIENTSECONDNAME, SecondName);
-    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
     _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTFULLNAME, FullName);
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
@@ -238,9 +239,9 @@ IPatient::~IPatient()
 /*! \deprecated */
 void IPatient::replaceTokens(QString &stringWillBeModified)
 {
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTNAME,       data(IPatient::BirthName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTUSUALNAME,  data(IPatient::UsualName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTOTHERNAMES, data(IPatient::OtherNames).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFIRSTNAME,  data(IPatient::Firstname).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSECONDNAME, data(IPatient::SecondName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFULLNAME,   data(IPatient::FullName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD,   data(IPatient::YearsOld).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,        data(IPatient::Age).toString() );

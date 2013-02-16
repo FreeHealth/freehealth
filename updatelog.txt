@@ -45,6 +45,10 @@ FreeMedForms
     * Removing empty menu in menubar
     * In Form selector preferences, only show Complete forms (no sub-forms)
     * Correctly update allergies when saving the form item drugwidget
+    * Relabelling names
+      * "Birth Name" is now "Usual Name"
+      * "Second Name" is now "Other Names"
+      * Warning: you need to update your paper tokens
   * FreeDiams
     * Using the padtools for the posologic sentence edition
     * DDI engine error when detecting some DDI

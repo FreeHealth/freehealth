@@ -68,16 +68,16 @@ public:
 //    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-    bool createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+    bool createVirtualPatient(const QString &usualName, const QString &otherNames, const QString &firstname,
                               const QString &gender, const int title, const QDate &dob,
                               const QString &country, const QString &note,
                               const QString &street, const QString &zip, const QString &city,
                               QString uuid, const int lkid,
                               const QString &photoFile = QString(), const QDate &death = QDate());
 
-    QString patientUuid(const QString &birthname, const QString &secondname, const QString &firstname,
+    QString patientUuid(const QString &usualname, const QString &othernames, const QString &firstname,
                         const QString &gender, const QDate &dob) const;
-    bool isPatientExists(const QString &birthname, const QString &secondname, const QString &firstname,
+    bool isPatientExists(const QString &usualname, const QString &othernames, const QString &firstname,
                          const QString &gender, const QDate &dob) const;
 
 //    bool mergePatients(const QString &uuid1, const QString &uuid2);

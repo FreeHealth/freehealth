@@ -118,7 +118,7 @@ public:
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
         filter += QString(" ORDER BY `%1` ASC")
-                .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
+                .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME));
 
         m_SqlPatient->setFilter(filter);
 
@@ -393,7 +393,7 @@ int PatientModel::columnCount(const QModelIndex &) const
 
 int PatientModel::numberOfFilteredPatients() const
 {
-    return patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME, d->m_SqlPatient->filter());
+    return patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME, d->m_SqlPatient->filter());
 }
 
 bool PatientModel::hasChildren(const QModelIndex &) const
@@ -408,7 +408,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
 
     if (role==Qt::DecorationRole) {
         using namespace Core;
-        if (index.column() == IPatient::BirthName) {
+        if (index.column() == IPatient::UsualName) {
             return d->iconizedGender(index);
         }
     } else if (role==Qt::DisplayRole || role==Qt::ToolTipRole || role==Qt::EditRole) {
@@ -420,8 +420,8 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Id:            col = Constants::IDENTITY_ID;         break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;  break;
-        case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME; break;
+        case IPatient::UsualName:     col = Constants::IDENTITY_USUALNAME;  break;
+        case IPatient::OtherNames:    col = Constants::IDENTITY_OTHERNAMES; break;
         case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;  break;
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;     break;
         case IPatient::GenderIndex:
@@ -478,8 +478,8 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
         case IPatient::FullName:
             {
-                const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_BIRTHNAME)).toString();
-                const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
+                const QString &usualname = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_USUALNAME)).toString();
+                const QString &othernames = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_OTHERNAMES)).toString();
                 const QString &first = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
                 QString title;
                 // add title
@@ -495,10 +495,10 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 if (!title.isEmpty())
                     title.append(" ");
 
-                if (!sec.isEmpty()) {
-                    return QString("%1 - %2 %3").arg(title+name, sec, first);
+                if (!othernames.isEmpty()) {
+                    return QString("%1 - %2 %3").arg(title+usualname, othernames, first);
                 } else {
-                    return QString("%1 %2").arg(title+name, first);
+                    return QString("%1 %2").arg(title+usualname, first);
                 }
                 break;
             }
@@ -588,15 +588,15 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::Id :           col = Constants::IDENTITY_ID;               break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;              break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
-        case IPatient::BirthName:
+        case IPatient::UsualName:
         {
-            col = Constants::IDENTITY_BIRTHNAME;
+            col = Constants::IDENTITY_USUALNAME;
             colsToEmit << Core::IPatient::FullName;
             break;
         }
-        case IPatient::SecondName:
+        case IPatient::OtherNames:
         {
-            col = Constants::IDENTITY_SECONDNAME;
+            col = Constants::IDENTITY_OTHERNAMES;
             colsToEmit << Core::IPatient::FullName;
             break;
         }
@@ -763,9 +763,9 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
     switch (on) {
     case FilterOnFullName :
         {
-            // WHERE (NAME || SECONDNAME || SURNAME LIKE '%') OR (NAME LIKE '%')
-            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME);
-            const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME);
+            // WHERE (USUALNAME || OTHERNAMES || SURNAME LIKE '%') OR (USUALNAME LIKE '%')
+            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_USUALNAME);
+            const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_OTHERNAMES);
             const QString &surField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
             d->m_ExtraFilter.clear();
 //            d->m_ExtraFilter =  name + " || ";
@@ -803,7 +803,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE NAME LIKE '%'
             d->m_ExtraFilter.clear();
-            where.insert(Constants::IDENTITY_BIRTHNAME, QString("LIKE '%%1%'").arg(name));
+            where.insert(Constants::IDENTITY_USUALNAME, QString("LIKE '%%1%'").arg(name));
             d->m_ExtraFilter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
             break;
         }
@@ -992,8 +992,8 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
         QString req = patientBase()->select(Constants::Table_IDENT,
                                             QList<int>()
                                             << Constants::IDENTITY_TITLE
-                                            << Constants::IDENTITY_BIRTHNAME
-                                            << Constants::IDENTITY_SECONDNAME
+                                            << Constants::IDENTITY_USUALNAME
+                                            << Constants::IDENTITY_OTHERNAMES
                                             << Constants::IDENTITY_FIRSTNAME,
                                             where);
         if (query.exec(req)) {
@@ -1002,15 +1002,15 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
                 int titleId = query.value(0).toInt();
                 if (IN_RANGE_STRICT_MAX(titleId, 0, titles.count()))
                     title = titles.at(titleId);
-                const QString &birthName = query.value(1).toString();
-                const QString &secondName = query.value(2).toString();
+                const QString &usualName = query.value(1).toString();
+                const QString &otherNames = query.value(2).toString();
                 const QString &firstName = query.value(3).toString();
-                if (!secondName.isEmpty()) {
+                if (!otherNames.isEmpty()) {
                     names.insert(u, QString("%1 %2 - %3 %4")
-                                 .arg(title, birthName, secondName, firstName).simplified());
+                                 .arg(title, usualName, otherNames, firstName).simplified());
                 } else {
                     names.insert(u, QString("%1 %2 %3")
-                                 .arg(title, birthName, firstName).simplified());
+                                 .arg(title, usualName, firstName).simplified());
                 }
             }
         } else {

@@ -1054,7 +1054,7 @@ Print::TextDocumentExtra *UserData::extraDocument(const int index) const
 
 QString UserData::fullName() const
 {
-    QString r = title() + " " + name() + " " + secondName() + " " + firstname();
+    QString r = title() + " " + usualName() + " " + otherNames() + " " + firstname();
     r.replace("  ", " ");
     return r;
 }

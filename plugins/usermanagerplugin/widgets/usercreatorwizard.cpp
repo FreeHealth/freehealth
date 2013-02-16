@@ -339,8 +339,8 @@ void UserCreatorWizard::done(int r)
         d->m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
         d->m_User->setClearPassword(field("Password").toString());
         d->m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
-        d->m_User->setName(field("Name"));
-        d->m_User->setSecondName(field("SecondName"));
+        d->m_User->setUsualName(field("UsualName"));
+        d->m_User->setOtherNames(field("OtherNames"));
         d->m_User->setFirstname(field("Firstname"));
         d->m_User->setTitleIndex(field("Title"));
         d->m_User->setGenderIndex(field("Gender"));
@@ -648,7 +648,7 @@ void UserLastPage::initializePage()
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LOGIN) << field("Login").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::PASSWORD) << QString(field("Password").toString().count(), QLatin1Char('*')));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::TITLE) << titles().at(field("Title").toInt()));
-    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("Name").toString() + " " + field("SecondName").toString() + " " + field("Firstname").toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("UsualName").toString() + " " + field("OtherName").toString() + " " + field("Firstname").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::GENDER) << genders().at(field("Gender").toInt()));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::M_LANGUAGES_TEXT).remove("&") << QLocale::languageToString(QLocale::Language(field("Language").toInt())) );
 
