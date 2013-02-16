@@ -101,7 +101,7 @@ Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::Fo
 }
 
 TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem,parent), m_Text(0)
+    Form::IFormWidget(formItem,parent), m_Text(0)
 {
     QLayout *hb = 0;
     // QtUi Loaded ?
@@ -138,6 +138,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     }
     m_Text = new Editor::TextEditor(this, t);
     m_Text->setObjectName("TextEditor_" + m_FormItem->uuid());
+    m_Text->textEdit()->setObjectName("TextEditor_TextEdit_" + m_FormItem->uuid());
     m_Text->setDocumentTitle(m_FormItem->spec()->label());
     hb->addWidget(m_Text);
     if (options.contains("expanded", Qt::CaseInsensitive)) {
