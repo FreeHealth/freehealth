@@ -70,6 +70,7 @@ public:
     ~FormFilesSelectorWidget();
 
     void setFormType(FormType type);
+    void setExcludeGenderSpecific(bool excludeGenderSpecific);
     void setSelectionType(SelectionType type);
     void expandAllItems() const;
     void setIncludeLocalFiles(bool includeLocal);

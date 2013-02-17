@@ -11,6 +11,7 @@ FreeMedForms
       * can set print duplicata
       * can set papers to use for the print (header, footer, watermark)
       * define the document title (used by the token engine)
+    * Form description allow you to define gender specific forms (see website for doc)
   * New forms
     * Creating a SOAP with biometrics value (weight, height, blood pressure)
   * Refactoring all identity UI

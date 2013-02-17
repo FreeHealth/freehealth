@@ -151,35 +151,23 @@ FormIOQuery::FormIOQuery() :
     m_type(CompleteForms),
     m_ForceFile(false),
     m_AllForms(false),
-    m_AllDescr(false)
+    m_AllDescr(false),
+    m_ExcludeGenderSpecific(false)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  FormIODescription /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-//namespace Form {
-//namespace Internal {
-//struct FormIODescriptionPrivate
-//{
-//    FormIODescriptionPrivate() : m_reader(0), _hasScreenShot(false) {}
-
-//};
-//}
-//}
-
 FormIODescription::FormIODescription() :
     Utils::GenericDescription()
-//    d_formIO(new Internal::FormIODescriptionPrivate)
 {
+    addNonTranslatableExtraData(GenderLimitation, "genderlimitation");
     setData(FromDatabase, false);
 }
 
 FormIODescription::~FormIODescription()
 {
-//    if (d_formIO)
-//        delete d_formIO;
-//    d_formIO = 0;
 }
 
 void FormIODescription::setIoFormReader(IFormIO *reader)

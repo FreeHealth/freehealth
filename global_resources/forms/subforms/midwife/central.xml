@@ -10,6 +10,8 @@
     <icon>midwifery.png</icon>
     <weblink></weblink>
     <bibliography pmid="7440521"></bibliography>
+    <genderlimitation>F</genderlimitation>
+
     <!-- Translatable values -->
     <license>GPLv3</license>
     <description lang="xx">Pregnant visit</description>

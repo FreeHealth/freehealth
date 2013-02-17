@@ -61,6 +61,8 @@ using namespace XmlForms;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +236,30 @@ Form::FormIODescription *XmlFormIO::readFileInformation(const QString &uuidOrAbs
     return reader()->readFileInformation(uuidOrAbsPath);
 }
 
+// Check the descriptions according to the query settings. Warning: \e forms is modified
+static void checkFormIODescription(QList<Form::FormIODescription *> &forms, const Form::FormIOQuery &query, const XmlFormIO *reader)
+{
+    // Check gender specific
+    if (query.excludeGenderSpecific()) {
+        QString patientGender = patient()->data(Core::IPatient::Gender).toString().toUpper(); // M F H
+        for(int i = forms.count() - 1; i > 0 ; --i) {
+            Form::FormIODescription *descr = forms.at(i);
+            const QString &gender = descr->data(Form::FormIODescription::GenderLimitation).toString();
+            if (!gender.isEmpty()) {
+                if (gender.toUpper() != patientGender)
+                    forms.removeAt(i);
+            }
+        }
+    }
+    // TODO: check all forms for params of Query, check forms versions, remove duplicates
+    // Set IOReader to descriptions
+    const Form::IFormIO *const_iformio = qobject_cast<const Form::IFormIO*>(reader);
+    Form::IFormIO *iformio = const_cast<Form::IFormIO*>(const_iformio);
+    for(int i = 0; i < forms.count(); ++i) {
+        forms.at(i)->setIoFormReader(iformio);
+    }
+}
+
 QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::FormIOQuery &query) const
 {
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -244,8 +270,10 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     if (!query.forceFileReading()) {
         // Get from database
         toReturn = base()->getFormDescription(query);
-        if (!toReturn.isEmpty() && !query.getAllAvailableFormDescriptions())
+        if (!toReturn.isEmpty() && !query.getAllAvailableFormDescriptions()) {
+            checkFormIODescription(toReturn, query, this);
             return toReturn;
+        }
         for(int i=0; i<toReturn.count(); ++i) {
             includedUids << toReturn.at(i)->data(Form::FormIODescription::UuidOrAbsPath).toString();
         }
@@ -260,6 +288,9 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
             Form::FormIODescription *desc = reader()->readFileInformation(form.absFileName, query);
             if (desc) {
                 desc->setData(Form::FormIODescription::IsCompleteForm, true);
+                const Form::IFormIO *const_iformio = qobject_cast<const Form::IFormIO*>(this);
+                Form::IFormIO *iformio = const_cast<Form::IFormIO*>(const_iformio);
+                desc->setIoFormReader(iformio);
                 toReturn.append(desc);
                 return toReturn;
             }
@@ -320,10 +351,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    // TODO: check all forms for params of Query, check forms versions, remove duplicates
-    for(int i = 0; i < toReturn.count(); ++i) {
-        toReturn.at(i)->setIoFormReader((Form::IFormIO*)this);
-    }
+    checkFormIODescription(toReturn, query, this);
     return toReturn;
 }
 

@@ -75,7 +75,8 @@ public:
             aByCategory(0), aByAuthor(0), aBySpecialties(0), aByType(0),
             m_TreeModel(0),
             m_ActualTreeModelColumn(-1),
-            m_GetLocal(false)
+            m_GetLocal(false),
+            m_ExcludeGenderSpecific(false)
     {}
 
     ~FormFilesSelectorWidgetPrivate()
@@ -125,6 +126,7 @@ public:
         ios = refreshIOPlugs();
         Form::FormIOQuery query;
         query.setGetAllAvailableFormDescriptions(m_GetLocal);
+        query.setExcludeGenderSpecific(m_ExcludeGenderSpecific);
         if (m_Type==FormFilesSelectorWidget::CompleteForms)
             query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
         else if (m_Type==FormFilesSelectorWidget::SubForms)
@@ -136,7 +138,6 @@ public:
 //        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
         default: break;
         }
-
         foreach(Form::IFormIO *io, ios)
             m_FormDescr = io->getFormFileDescriptions(query);
     }
@@ -192,7 +193,7 @@ public:
     QStandardItemModel *m_TreeModel;
     int m_ActualTreeModelColumn, m_SelType;
     QString m_HightlightUuid;
-    bool m_GetLocal;
+    bool m_GetLocal, m_ExcludeGenderSpecific;
 };
 
 }  // End namespace Internal
@@ -235,7 +236,10 @@ FormFilesSelectorWidget::~FormFilesSelectorWidget()
     delete d;
 }
 
-/** Define the type of form to use in the selector (complete forms, subforms, both...). */
+/**
+ * Define the type of form to use in the selector (complete forms, subforms, both...),
+ * and get all available forms descriptions.
+*/
 void FormFilesSelectorWidget::setFormType(FormType type)
 {
     if (d->m_Type==type)
@@ -243,6 +247,17 @@ void FormFilesSelectorWidget::setFormType(FormType type)
     d->m_Type = type;
     d->getDescriptions();
     d->createTreeModel(d->m_ActualTreeModelColumn, true);
+}
+
+/**
+ * Some forms are gender specific, by setting this property to true, all form gender will be checked
+ * and excluded if the gender is different to the current patient gender. Otherwise, gender is not checked.
+ * By default, this property is set to false.
+ * Note: must be defined before the FormType using setFormType().
+ */
+void FormFilesSelectorWidget::setExcludeGenderSpecific(bool excludeGenderSpecific)
+{
+    d->m_ExcludeGenderSpecific = excludeGenderSpecific;
 }
 
 /** Define the selection type to single item selection or multiple item selection. */

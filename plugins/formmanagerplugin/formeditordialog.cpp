@@ -66,6 +66,7 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
 
     ui->setupUi(this);
     ui->formSelector->setIncludeLocalFiles(true);
+    ui->formSelector->setExcludeGenderSpecific(true);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 
     ui->treeView->setModel(model);

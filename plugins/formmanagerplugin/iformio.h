@@ -72,6 +72,14 @@ public:
     void setTypeOfForms(const TypesOfForm type) {m_type=type;}
     TypesOfForm typeOfForms() const {return m_type;}
 
+    /**
+     * Some forms are gender specific, by setting this property to true, all form gender will be checked
+     * and excluded if the gender is different to the current patient gender. Otherwise, gender is not checked.
+     * By default, this property is set to false.
+     */
+    void setExcludeGenderSpecific(bool excludeGenderSpecific) {m_ExcludeGenderSpecific = excludeGenderSpecific;}
+    bool excludeGenderSpecific() const {return m_ExcludeGenderSpecific;}
+
     void setIsoLanguageAndCountry(const QStringList &langs) {m_langs=langs;}
     QStringList &isoLanguagesAndCountry() {return m_langs;}
 
@@ -101,7 +109,7 @@ private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
-    bool m_ForceFile, m_AllForms, m_AllDescr;
+    bool m_ForceFile, m_AllForms, m_AllDescr, m_ExcludeGenderSpecific;
 };
 
 }
@@ -125,7 +133,8 @@ public:
         FromDatabase,
         HasScreenShot,
         UpdateAvailable_OldVersion,
-        MaxParam
+        MaxParam,
+        GenderLimitation = Utils::GenericDescription::NonTranslatableExtraData + 1
     };
 
     FormIODescription();
