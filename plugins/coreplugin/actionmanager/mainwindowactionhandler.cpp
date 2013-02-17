@@ -1036,7 +1036,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         lmenu->setTranslations(Trans::Constants::M_LANGUAGES_TEXT);
 
         // populate with actions
-        QMap<QString, QString> loc_lang = Core::ICore::instance()->translators()->availableLocalesAndLanguages();
+        const QMap<QString, QString> &loc_lang = Core::ICore::instance()->translators()->availableLocalesAndLanguages();
         int i = 0;
 
         QString lang = settings()->value(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2)).toString();
