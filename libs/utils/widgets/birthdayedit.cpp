@@ -182,8 +182,10 @@ void BirthDayEdit::setDate(const QDate &date)
     QDate oldDate = d_de->m_date;
     d_de->m_date = date;
     d_de->_validator->setDate(date);
-    if (oldDate != date)
+    if (oldDate != date) {
         Q_EMIT dateChanged(d_de->m_date);
+        Q_EMIT dateChanged();
+    }
     updateDisplayText();
 }
 
@@ -201,17 +203,20 @@ void BirthDayEdit::clear()
     if(!d_de->m_date.isNull()) {
         d_de->m_date = QDate();
         Q_EMIT dateChanged(d_de->m_date);
+        Q_EMIT dateChanged();
     }
     d_de->_validator->setDate(d_de->m_date);
     setText("");
     updatePlaceHolder();
 }
 
-/** \brief overrides the default focusOutEvent and sets a custom css.
+/**
+ * \brief overrides the default focusOutEvent and sets a custom css.
  *
  *  When widget focus is lost with a date string that can't be interpreted by the
  *  validator as a valid date, the css is changed, e.g. red background, to indicate
- *  that there is something wrong. */
+ *  that there is something wrong.
+ */
 void BirthDayEdit::focusOutEvent(QFocusEvent *event)
 {
     // switching to displayMode
@@ -234,6 +239,8 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event)
         }
     }
     updateDisplayText();
+    Q_EMIT dateChanged(d_de->m_date);
+    Q_EMIT dateChanged();
     QButtonLineEdit::focusOutEvent(event);
 }
 
@@ -265,8 +272,10 @@ void BirthDayEdit::setDateString(QString dateString)
     QDate previousDate = d_de->m_date;
     d_de->m_date = d_de->_validator->date();
     if (d_de->m_date.isValid()) {
-        if (d_de->m_date != previousDate)
+        if (d_de->m_date != previousDate) {
             Q_EMIT dateChanged(d_de->m_date);
+            Q_EMIT dateChanged();
+        }
     }
     updateDisplayText();
 }

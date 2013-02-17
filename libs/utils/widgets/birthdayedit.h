@@ -78,6 +78,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void dateChanged(const QDate &date);
+    void dateChanged();
 
 protected Q_SLOTS:
     void updateDisplayText();
