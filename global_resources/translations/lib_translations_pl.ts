@@ -1505,7 +1505,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="35"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Polski</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="38"/>

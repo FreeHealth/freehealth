@@ -114,6 +114,8 @@ QString Translators::pathToTranslations()
 */
 void Translators::changeLanguage(const QString &lang)
 {
+    if (WarnTranslatorsErrors)
+        qWarning() << "Translators::changeLanguage" << lang;
     QString l = lang.left(2);
     QLocale::setDefault(l);
 
@@ -147,6 +149,8 @@ void Translators::changeLanguage(const QString &lang)
 
 void Translators::changeLanguage(QLocale::Language lang)
 {
+    if (WarnTranslatorsErrors)
+        qWarning() << "Translators::changeLanguage" << lang;
     changeLanguage(QLocale(lang).name().left(2));
 }
 
@@ -219,7 +223,7 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
 {
     static QMap<QString, QString> toReturn;
     if (!toReturn.isEmpty())
-    return toReturn;
+        return toReturn;
 
     toReturn.insert("en", "English");
 
@@ -230,7 +234,7 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
     QStringList fileNames = dir.entryList(QStringList() << QString("%1_*.qm").arg(Trans::Constants::CONSTANTS_TRANSLATOR_NAME));
     foreach(QString s, fileNames) {
         QString locale = s;
-        locale.remove(0, locale.indexOf('_') + 1);
+        locale.remove(0, locale.lastIndexOf('_') + 1);
         locale.truncate(locale.lastIndexOf('.'));
         QTranslator translator;
         translator.load(s, m_PathToTranslations);
