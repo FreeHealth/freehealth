@@ -45,7 +45,11 @@ using namespace Internal;
 
 BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
-    _detailsWidget(0)
+    _detailsWidget(0),
+    numberColumns(1),
+    i(0),
+    col(0),
+    row(0)
 {
     setObjectName("BaseDetailsWidge_" + m_FormItem->uuid());
 
@@ -108,7 +112,20 @@ BaseDetailsWidget::~BaseDetailsWidget()
 
 void BaseDetailsWidget::addWidgetToContainer(Form::IFormWidget *widget)
 {
-    Q_UNUSED(widget);
+//    qWarning() << "details add" << widget;
+//    if (!widget)
+//        return;
+//    if (!_detailsWidget->widget() || !_detailsWidget->widget()->layout())
+//        return;
+//    // it is not possible to add a form inside a container
+//    if (widget->formItem()->spec()->pluginName() == "form") // TODO: remove magic number
+//        return;
+//    // TODO: manage grid / box layouts
+////    col = (i % numberColumns);
+////    row = (i / numberColumns);
+//    _detailsWidget->widget()->layout()->addWidget(widget);//, row, col);
+//    qWarning() << "    added";
+//    i++;
 }
 
 bool BaseDetailsWidget::isContainer() const
