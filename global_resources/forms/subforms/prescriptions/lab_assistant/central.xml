@@ -37,8 +37,8 @@
   </formdescription>
 
   <MedForm name="Subs::Tools::LabTests" uifilename="./ui/xx/main.ui">
-    <label lang="xx">Identity</label>
-    <label lang="fr">Identité</label>
+    <label lang="xx">Lab test assistant</label>
+    <label lang="fr">Assistant pour la biologie</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/labtest.png</icon>
 
@@ -51,7 +51,7 @@
             <options>SummaryFontBold;expanded</options>
 
             <Item type="multilist" name="Basics::Hematology">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="hematoLabel" widget="hemato" layout=""/>
                 <label lang="xx">Hematology</label>
                 <label lang="fr">Hématologie</label>
                 <value>
@@ -80,11 +80,11 @@
                     <possible id="6" lang="fr">Schizocyte</possible>
                     <possible id="7" lang="fr">Vitesse de sédimentation (VS)</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Coagulation">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="coagLabel" widget="coag" layout=""/>
                 <label lang="xx">Coagulation</label>
                 <label lang="fr">Coagulation</label>
                 <value>
@@ -101,11 +101,11 @@
                     <possible id="2" lang="fr">Temps de Quick</possible>
                     <possible id="3" lang="fr">INR</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Electrolytes">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="electroLabel" widget="electrolytes" layout=""/>
                 <label lang="xx">Electrolytes</label>
                 <label lang="fr">Électrolytes</label>
                 <value>
@@ -137,11 +137,11 @@
                     <possible id="7" lang="fr">Lactates</possible>
                     <possible id="8" lang="fr">Dioxide de Carbone (CO2)</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Kidney">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="kidneyLabel" widget="kidney" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
                 <value>
@@ -155,11 +155,11 @@
                     <possible id="1" lang="fr">Urée</possible>
                     <possible id="2" lang="fr">Créatinine et calcul de la clearance de la créatinine</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Proteins">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="protLabel" widget="prots" layout=""/>
                 <label lang="xx">Proteins</label>
                 <label lang="fr">Protéines</label>
                 <value>
@@ -176,11 +176,11 @@
                     <possible id="2" lang="fr">Électrophorèse des protéines sériques</possible>
                     <possible id="3" lang="fr">C-Reactive Protein (CRP)</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Liver">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="liverLabel" widget="liver" layout=""/>
                 <label lang="xx">Liver tests</label>
                 <label lang="fr">Fonction hépatique</label>
                 <value>
@@ -233,44 +233,11 @@
                     <possible id="14" lang="fr">Anticorps anti-Hépatite D</possible>
                     <possible id="15" lang="fr">Anticorps anti-Hépatite E</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
-            </Item>
-
-            <Item type="multilist" name="Basics::Cancer">
-                <uilink label="" widget="" layout=""/>
-                <label lang="xx">Tumor markers</label>
-                <label lang="fr">Marqueurs tumoraux</label>
-                <value>
-                    <uuid id="0">cea</uuid>
-                    <uuid id="1">afp</uuid>
-                    <uuid id="2">ca125</uuid>
-                    <uuid id="3">ca152</uuid>
-                    <uuid id="4">ca199</uuid>
-                    <uuid id="5">ca2729</uuid>
-                    <uuid id="6">cyfra211</uuid>
-                    <uuid id="7">hcg</uuid>
-                    <possible id="0">CEA</possible>
-                    <possible id="1">AFP</possible>
-                    <possible id="2">CA 125</possible>
-                    <possible id="3">CA 15-3</possible>
-                    <possible id="4">CA 19-9</possible>
-                    <possible id="5">CA 27.29</possible>
-                    <possible id="6">CYFRA 21-1</possible>
-                    <possible id="7">Human Chorionic Gonadotropin (hCG)</possible>
-                    <possible id="0" lang="fr">ACE</possible>
-                    <possible id="1" lang="fr">AFP</possible>
-                    <possible id="2" lang="fr">CA 125</possible>
-                    <possible id="3" lang="fr">CA 15-3</possible>
-                    <possible id="4" lang="fr">CA 19-9</possible>
-                    <possible id="5" lang="fr">CA 27.29</possible>
-                    <possible id="6" lang="fr">CYFRA 21-1</possible>
-                    <possible id="7" lang="fr">bêta HCG</possible>
-                </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Metabolic">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="metabLabel" widget="metabolic" layout=""/>
                 <label lang="xx">Metabolic lab tests</label>
                 <label lang="fr">Métabolisme</label>
                 <value>
@@ -308,11 +275,52 @@
                     <possible id="9" lang="fr">Lipoprotéine (a)</possible>
                     <possible id="10" lang="fr">Microalbuminurie</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
+            </Item>
+
+        </Item>
+
+        <Item type="detailswidget" name="Basics" uifilename="./ui/xx/complex.ui">
+            <uilink label="" widget="" layout="mainLayout"/>
+            <label lang="xx">Others</label>
+            <label lang="fr">Autres</label>
+            <options>SummaryFontBold;expanded</options>
+
+            <Item type="multilist" name="Basics::Cancer">
+                <uilink label="tumorLabel" widget="tumor" layout=""/>
+                <label lang="xx">Tumor markers</label>
+                <label lang="fr">Marqueurs tumoraux</label>
+                <value>
+                    <uuid id="0">cea</uuid>
+                    <uuid id="1">afp</uuid>
+                    <uuid id="2">ca125</uuid>
+                    <uuid id="3">ca152</uuid>
+                    <uuid id="4">ca199</uuid>
+                    <uuid id="5">ca2729</uuid>
+                    <uuid id="6">cyfra211</uuid>
+                    <uuid id="7">hcg</uuid>
+                    <possible id="0">CEA</possible>
+                    <possible id="1">AFP</possible>
+                    <possible id="2">CA 125</possible>
+                    <possible id="3">CA 15-3</possible>
+                    <possible id="4">CA 19-9</possible>
+                    <possible id="5">CA 27.29</possible>
+                    <possible id="6">CYFRA 21-1</possible>
+                    <possible id="7">Human Chorionic Gonadotropin (hCG)</possible>
+                    <possible id="0" lang="fr">ACE</possible>
+                    <possible id="1" lang="fr">AFP</possible>
+                    <possible id="2" lang="fr">CA 125</possible>
+                    <possible id="3" lang="fr">CA 15-3</possible>
+                    <possible id="4" lang="fr">CA 19-9</possible>
+                    <possible id="5" lang="fr">CA 27.29</possible>
+                    <possible id="6" lang="fr">CYFRA 21-1</possible>
+                    <possible id="7" lang="fr">bêta HCG</possible>
+                </value>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Iron">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="ironLabel" widget="iron" layout=""/>
                 <label lang="xx">Iron lab tests</label>
                 <label lang="fr">Bilan martial</label>
                 <value>
@@ -329,11 +337,11 @@
                     <possible id="2" lang="fr">Fer sérique</possible>
                     <possible id="3" lang="fr">Coefficient de saturation de la sidérophiline</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Prostate">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="prostateLabel" widget="prostate" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
                 <value>
@@ -347,11 +355,11 @@
                     <possible id="1" lang="fr">Dihydrotestostérone (DHT)</possible>
                     <possible id="2" lang="fr">Prostatic acid phosphatase (PAP)</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Vitamins">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="vitaminsLabel" widget="vitamins" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
                 <value>
@@ -374,11 +382,11 @@
                     <possible id="4" lang="fr">Folates érythrocytaires</possible>
                     <possible id="5" lang="fr">Folates sériques</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Thyroid">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="thyroidLabel" widget="thyroid" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
                 <value>
@@ -398,11 +406,11 @@
                     <possible id="2">Thyroid Stimulating Immunoglobulin</possible>
                     <possible id="2">Parathyroid Hormone (PTH), Intact</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Biermer">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="biermerLabel" widget="biermer" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
                 <value>
@@ -415,11 +423,11 @@
                     <possible id="2">Auto-antibodies against the parietal cells of the stomach; Anticorps anti-cellules pariétales gastriques</possible>
                     <possible id="3">Schilling Test</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Serologies">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="serologiesLabel" widget="serologies" layout=""/>
                 <label lang="xx">Serologies</label>
                 <label lang="fr">Sérologies</label>
                 <value>
@@ -458,11 +466,11 @@
                     <possible id="15">Syphilis - Rapid Plasma Reagin (RPR)</possible>
                     <possible id="16">H. pylori Urea Breath Test</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::RhumatoidPolyarth">
-                <uilink label="" widget="" layout=""/>
+                <uilink label="prLabel" widget="pr" layout=""/>
                 <label lang="xx">Rheumatoid Arthritis</label>
                 <label lang="fr">Polyarthrite rhumatoïde</label>
                 <value>
@@ -476,7 +484,7 @@
                     <possible id="1" lang="fr">Anticorps anti-CCP</possible>
                     <possible id="2" lang="fr">Anticorps antinucléaires (AAN)</possible>
                 </value>
-                <options>DontPrintEmptyValue</options>
+                <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
         </Item>
