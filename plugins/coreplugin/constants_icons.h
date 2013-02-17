@@ -234,6 +234,7 @@ const char * const  ICONPATIENTHISTORY= "patienthistory.png";
 const char * const  ICONCHROMOSOME    = "chromosome.png";
 const char * const  ICONDRUGMODE      = "drugmode.png";
 const char * const  ICONACCOUNTMODE   = "accountancymode.png";
+const char * const  ICONLABTEST       = "labtest.png";
 
 // media
 const char * const ICONMEDIAPAUSE     = "media-playback-pause.png";
