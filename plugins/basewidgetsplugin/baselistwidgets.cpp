@@ -80,18 +80,25 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
         m_List->setUniformItemSizes(true);
         m_List->setAlternatingRowColors(true);
         m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
-        if (uniqueList)
-            m_List->setSelectionMode(QAbstractItemView::SingleSelection);
-        else
-            m_List->setSelectionMode(QAbstractItemView::MultiSelection);
-
-        const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-        m_Model = new QStringListModel(possibles, this);
-        m_List->setModel(m_Model);
-
         hb->addWidget(m_List);
     }
 
+    if (uniqueList)
+        m_List->setSelectionMode(QAbstractItemView::SingleSelection);
+    else
+        m_List->setSelectionMode(QAbstractItemView::MultiSelection);
+
+    const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
+    m_Model = new QStringListModel(possibles, this);
+    m_List->setModel(m_Model);
+    m_List->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    if (formItem->getOptions().contains("resizeToContent", Qt::CaseInsensitive)) {
+        int itemHeight = m_List->sizeHintForRow(0);
+        m_List->setMinimumSize(m_List->minimumWidth(), itemHeight * (m_Model->rowCount() + 1));
+        m_List->setMaximumSize(m_List->maximumWidth(), itemHeight * (m_Model->rowCount() + 1));
+        m_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
     setFocusableWidget(m_List);
 
     // create FormItemData
