@@ -58,6 +58,7 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
 
     // Create the detailsWidget
     _dateEdit = new Utils::BirthDayEdit(this);
+    _dateEdit->setObjectName("modernDate_" + m_FormItem->uuid()); // keep this unchanged cause scripts can find widget using their objectname
     _dateEdit->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
     _dateEdit->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));
 
@@ -70,6 +71,8 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
         } else {
             LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
         }
+        // Find Label
+        m_Label = Constants::findLabel(formItem);
     } else {
         QVBoxLayout *layout = new QVBoxLayout(this);
         setLayout(layout);
@@ -85,6 +88,7 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
     data->setBaseDate(this);
     formItem->setItemData(data);
 
+    connect(_dateEdit, SIGNAL(dateChanged()), data, SLOT(onValueChanged()));
     retranslate();
 }
 
@@ -230,6 +234,7 @@ QVariant BaseDateCompleterData::storableData() const
 
 void BaseDateCompleterData::onValueChanged()
 {
+    WARN_FUNC;
     Constants::executeOnValueChangedScript(m_FormItem);
     Q_EMIT dataChanged(0);
 }
