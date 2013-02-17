@@ -1547,8 +1547,12 @@ QVariant BaseSimpleTextData::data(const int ref, const int role) const
     if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         if (m_Text->m_Line)
             return m_Text->m_Line->text();
-        else if (m_Text->m_Text)
-            return m_Text->m_Text->toPlainText();
+        else if (m_Text->m_Text) {
+            if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive))
+                return m_Text->m_Text->toHtml();
+            else
+                return m_Text->m_Text->toPlainText();
+        }
     }
     return QVariant();
 }
@@ -1558,16 +1562,24 @@ void BaseSimpleTextData::setStorableData(const QVariant &data)
     m_OriginalValue = data.toString();
     if (m_Text->m_Line)
         m_Text->m_Line->setText(m_OriginalValue);
-    else if (m_Text->m_Text)
-        m_Text->m_Text->setPlainText(m_OriginalValue);
+    else if (m_Text->m_Text) {
+        if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive))
+            m_Text->m_Text->setHtml(m_OriginalValue);
+        else
+            m_Text->m_Text->setPlainText(m_OriginalValue);
+    }
 }
 
 QVariant BaseSimpleTextData::storableData() const
 {
     if (m_Text->m_Line)
         return m_Text->m_Line->text();
-    else if (m_Text->m_Text)
-        return m_Text->m_Text->toPlainText();
+    else if (m_Text->m_Text) {
+        if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive))
+            return m_Text->m_Text->toHtml();
+        else
+            return m_Text->m_Text->toPlainText();
+    }
     return QVariant();
 }
 

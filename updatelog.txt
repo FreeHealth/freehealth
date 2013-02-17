@@ -11,9 +11,12 @@ FreeMedForms
       * can set print duplicata
       * can set papers to use for the print (header, footer, watermark)
       * define the document title (used by the token engine)
+    * longtext: allow management of content as plaintext or html
     * Form description allow you to define gender specific forms (see website for doc)
   * New forms
     * Creating a SOAP with biometrics value (weight, height, blood pressure)
+    * Lab test prescrition assistant (english/french)
+    * Obstetrical calendar (english/french)
   * Refactoring all identity UI
   * Refactoring the
     * User manager
