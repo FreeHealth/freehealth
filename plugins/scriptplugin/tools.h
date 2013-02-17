@@ -27,9 +27,8 @@
 #define SCRIPT_INTERNAL_TOOLS_H
 
 #include <QObject>
-QT_BEGIN_NAMESPACE
-class QDate;
-QT_END_NAMESPACE
+#include <QDate>
+#include <QString>
 
 /**
  * \file tools.h
@@ -53,6 +52,10 @@ public Q_SLOTS:
     QString userDocumentPath();
 
     QString dateToString(const QDate &date, const QString &format);
+    QDate addDays(const QDate &date, int days);
+    QDate addWeeks(const QDate &date, int weeks);
+    int daysTo(const QDate &from, const QDate &to);
+
     void openUrl(const QString &url);
     QString lineWrapString(const QString &text, int lineLength);
 

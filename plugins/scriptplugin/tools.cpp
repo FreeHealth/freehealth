@@ -56,6 +56,21 @@ QString Tools::dateToString(const QDate &date, const QString &format)
     return date.toString(format);
 }
 
+QDate Tools::addDays(const QDate &date, int days)
+{
+    return date.addDays(days);
+}
+
+QDate Tools::addWeeks(const QDate &date, int weeks)
+{
+    return date.addDays(weeks*7);
+}
+
+int Tools::daysTo(const QDate &from, const QDate &to)
+{
+    return from.daysTo(to);
+}
+
 void Tools::openUrl(const QString &url)
 {
     if (!QDesktopServices::openUrl(QUrl(url)))
