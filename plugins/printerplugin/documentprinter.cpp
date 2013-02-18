@@ -226,7 +226,13 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
     prepareHeader(&p, papers);
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
-    p.setContent(text);
+    if (globalTokens.isEmpty()) {
+        p.setContent(text);
+    } else {
+        QString html = text.toHtml();
+        Utils::replaceTokens(html, globalTokens);
+        p.setContent(html);
+    }
     p.setPrintWithDuplicata(printDuplicata);
 
     if (!p.preparePages()) {
@@ -269,7 +275,13 @@ bool DocumentPrinter::printPreview(const QString &html, const int papers, bool p
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
 
-    p.setContent(html);
+    if (globalTokens.isEmpty()) {
+        p.setContent(html);
+    } else {
+        QString _html = html;
+        Utils::replaceTokens(_html, globalTokens);
+        p.setContent(_html);
+    }
     p.setPrintWithDuplicata(printDuplicata);
     p.previewDialog(qApp->activeWindow());
     // QPrinter is deleted by ~Printer
