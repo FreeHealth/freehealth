@@ -68,7 +68,7 @@ protected:
 private Q_SLOTS:
     void accept();
     void toPdf();
-    void on_duplicatas_toggled(bool);
+    void on_duplicates_toggled(bool);
     void on_nup_toggled(bool);
     void on_nextButton_clicked();
     void on_prevButton_clicked();

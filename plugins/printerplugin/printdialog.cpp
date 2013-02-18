@@ -274,7 +274,7 @@ void PrintDialog::toPdf()
         m_Printer->toPdf(f, "DFSDF");
 }
 
-void PrintDialog::on_duplicatas_toggled(bool state)
+void PrintDialog::on_duplicates_toggled(bool state)
 {
     m_Printer->setPrintWithDuplicata(state);
     m_Printer->preparePages();
