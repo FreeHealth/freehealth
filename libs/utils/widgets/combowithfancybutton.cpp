@@ -404,7 +404,7 @@ void ComboWithFancyButton::hidePopup()
 
 void ComboWithFancyButton::showEvent(QShowEvent *e)
 {
-//    qWarning() <<"show" << m_Index << m_Text;
+    //qWarning() <<"show" << m_Index << m_Text;
     QComboBox::showEvent(e);
     if (m_Index==-1) {
         setEditText(m_Text);
@@ -415,17 +415,17 @@ void ComboWithFancyButton::showEvent(QShowEvent *e)
         setCurrentIndex(-1);
         setEditText(m_Text);
     }
-};
+}
 
 void ComboWithFancyButton::hideEvent(QHideEvent *e)
 {
-//    qWarning() <<"hide";
     m_Index = currentIndex();
     m_Text = currentText();
+    //qWarning() <<"hide" << m_Index << m_Text;
     QComboBox::hideEvent(e);
-    if (m_Index==-1) {
-        setEditText(m_Text);
-    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
-        setCurrentIndex(m_Index);
-    }
+//    if (m_Index==-1) {
+//        setEditText(m_Text);
+//    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
+//        setCurrentIndex(m_Index);
+//    }
 }
