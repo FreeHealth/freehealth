@@ -16,8 +16,8 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="xx">Lab test assistant</description>
-    <description lang="fr">Assistant pour la biologie</description>
+    <description lang="xx">Lab tests prescription</description>
+    <description lang="fr">Prescription d'analyse biologique</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
     <specialties lang="xx">Tools</specialties>
@@ -37,10 +37,11 @@
   </formdescription>
 
   <MedForm name="Subs::Tools::LabTests" uifilename="./ui/xx/main.ui">
-    <label lang="xx">Lab test assistant</label>
-    <label lang="fr">Assistant pour la biologie</label>
+    <label lang="xx">Lab tests prescription</label>
+    <label lang="fr">Prescription d'analyse biologique</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/labtest.png</icon>
+    <file type="htmlprintmask">./html/xx/printmask.html</file>
 
         <Item type="detailswidget" name="Basics" uifilename="./ui/xx/basics.ui">
             <uilink label="" widget="" layout="mainLayout"/>
@@ -280,7 +281,7 @@
 
         </Item>
 
-        <Item type="detailswidget" name="Basics" uifilename="./ui/xx/complex.ui">
+        <Item type="detailswidget" name="Complex" uifilename="./ui/xx/complex.ui">
             <uilink label="" widget="" layout="mainLayout"/>
             <label lang="xx">Others</label>
             <label lang="fr">Autres</label>
