@@ -882,7 +882,12 @@ bool FormPlaceHolder::removeSubForm()
     return true;
 }
 
-/** Print the current editing episode. Return false in case of error. Connected to Form::Internal::FormActionHandler */
+/**
+ * Print the current editing episode. Return false in case of error.
+ * In order to print an episode (not an empty form), this member uses the
+ * Form::FormItemSpec::Spec_HtmlPrintMask of the current editing form. \n
+ * Connected to Form::Internal::FormActionHandler
+ */
 bool FormPlaceHolder::printFormOrEpisode()
 {
     if (!d->ui->formView->selectionModel())
@@ -890,32 +895,42 @@ bool FormPlaceHolder::printFormOrEpisode()
     Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
     if (!formMain)
         return false;
-
-    QString htmlToPrint;
-    QString title;
-    htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
-    title = formMain->spec()->label();
-
-    if (htmlToPrint.isEmpty())
-        return false;
-
     Core::IDocumentPrinter *p = printer();
     if (!p) {
         LOG_ERROR("No IDocumentPrinter found");
         return false;
     }
-    p->clearTokens();
-    QHash<QString, QVariant> tokens;
 
+    QString htmlToPrint;
+    QString title;
+
+    QHash<QString, QVariant> tokens;
+    if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
+        LOG("Printing episode using form HTML print mask. Form: " + formMain->uuid());
+        // TODO: manage this with PadTools later
+        // create a token for each FormItem of the FormMain
+        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+            tokens.insert(item->uuid() + ".label", item->spec()->label());
+            if (item->itemData())
+                tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
+        }
+        htmlToPrint = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
+    } else {
+        htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
+    }
+    title = formMain->spec()->label();
+
+    if (htmlToPrint.isEmpty()) {
+        LOG("Nothing to print");
+        return false;
+    }
+
+    p->clearTokens();
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
-    //    // create a token for each FormItem of the FormMain
-    //    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-    //        if (item->itemData())
-    //            tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::ID_Printable));
-    //    }
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     // print
+    // TODO: manage UserPapers as spec option of FormMain
     p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
     return true;
 }
