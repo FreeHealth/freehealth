@@ -336,8 +336,12 @@ QVariant BaseListData::data(const int ref, const int role) const
                     selected.append(idx.data().toString());
                 }
             }
+            if (role==Form::IFormItemData::PrintRole)
+                return selected.join("<br/>");
             return selected;
         } else if (m_EditableList) {
+            if (role==Form::IFormItemData::PrintRole)
+                return  m_EditableList->m_StringListView->getStringList().toStringList().join("<br/>");
             return m_EditableList->m_StringListView->getStringList();
         }
     }
