@@ -191,6 +191,7 @@ UTILS_EXPORT QPixmap pixmapFromBase64(const QByteArray &base64);
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
 UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);
+UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QVariant> &tokens_values);
 
 // Some network helpers
 UTILS_EXPORT QString testInternetConnection();
