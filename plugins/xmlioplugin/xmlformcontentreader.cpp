@@ -137,8 +137,6 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PLACEHOLDER, Form::FormItemSpec::Spec_PlaceHolder);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
-   m_SpecsTypes.insert(Constants::TAG_SPEC_PRINTHTMLMASK, Form::FormItemSpec::Spec_HtmlPrintMask);
-   m_SpecsTypes.insert(Constants::TAG_SPEC_PRINTPLAINTEXTMASK, Form::FormItemSpec::Spec_PlainTextPrintMask);
 
    m_PatientData.clear();
    // use the Core::IPatient::enumToString()
@@ -766,7 +764,7 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
     fileName = QDir::cleanPath(fileName);
 //    QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
 
-    // Check file content for script addition
+    // Check file content for script addition / printmask types
     const QString &type = element.attribute(Constants::ATTRIB_TYPE);
     if (type.compare(Constants::FILETYPE_SCRIPT, Qt::CaseInsensitive)==0) {
         if (checkFileContent(fileName, content)) {
@@ -786,6 +784,14 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
                 parent->scripts()->setScript(Form::FormItemScripts::Script_PostLoad, content, lang);
             return true;
         }
+    } else if (type.compare(Constants::FILETYPE_PRINTHTMLMASK, Qt::CaseInsensitive)==0) {
+        const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+        if (m_ActualForm)
+            m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_HtmlPrintMask, content, lang);
+    } else if (type.compare(Constants::FILETYPE_PRINTPLAINTEXTMASK, Qt::CaseInsensitive)==0) {
+        const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+        if (m_ActualForm)
+            m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_PlainTextPrintMask, content, lang);
     }
 
     // Check file content (for forms file)
