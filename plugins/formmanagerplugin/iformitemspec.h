@@ -77,6 +77,8 @@ public:
         Spec_UiLabel,
         Spec_UiWidget,
         Spec_UiInsertIntoLayout,
+        Spec_HtmlPrintMask,
+        Spec_PlainTextPrintMask,
         Spec_IconFileName,
         Spec_Tooltip,
         Spec_PlaceHolder,

@@ -170,6 +170,12 @@
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
  *
+ * \var Form::FormItemSpec::Spec_HtmlPrintMask
+ * Printing HTML mask of the form (using tokens)
+ *
+ * \var Form::FormItemSpec::Spec_PlainTextPrintMask
+ * Printing plain text mask of the form (using tokens)
+ *
  * \var Form::FormItemSpec::Spec_IconFileName
  * Translatable icon file name (can contain path tag).
  * \sa Core::Constants::TAG_APPLICATION_THEME_PATH

@@ -137,6 +137,8 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PLACEHOLDER, Form::FormItemSpec::Spec_PlaceHolder);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_PRINTHTMLMASK, Form::FormItemSpec::Spec_HtmlPrintMask);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_PRINTPLAINTEXTMASK, Form::FormItemSpec::Spec_PlainTextPrintMask);
 
    m_PatientData.clear();
    // use the Core::IPatient::enumToString()
