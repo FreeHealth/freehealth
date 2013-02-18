@@ -915,6 +915,11 @@ bool FormPlaceHolder::printFormOrEpisode()
                 tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
         }
         htmlToPrint = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
+        tokens.insert("EpisodeUserDate", formMain->itemData()->data(Form::IFormItemData::ID_EpisodeDate));
+        tokens.insert("EpisodeUserLabel", formMain->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
+        tokens.insert("EpisodeUserName", formMain->itemData()->data(Form::IFormItemData::ID_UserName));
+        tokens.insert("EpisodePriority", formMain->itemData()->data(Form::IFormItemData::ID_Priority));
+        tokens.insert("EpisodeFormLabel", formMain->spec()->label());
     } else {
         htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
     }
