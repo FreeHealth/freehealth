@@ -291,6 +291,11 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
 {
 //    qWarning() << "DrugsWidgetData::data(" << ref << role << ");" << Core::IPatient::DrugsInnAllergies;
 
+    if (role == Form::IFormItemData::PrintRole) {
+        DrugsDB::DrugsModel *model = m_Widget->m_PrescriptionModel;
+        return drugsIo().prescriptionToHtml(model);
+    }
+
     if (role != Form::IFormItemData::PatientModelRole)
         return QVariant();
 

@@ -198,7 +198,7 @@ QVariant TreeViewFormItemData::data(const int ref, const int role) const
     // This member is mainly used by script and Core::IPatient to
     // access the value of the itemData.
     // Above an example:
-    //    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+    //    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
     //        if (m_List) {
     //            QStringList selected;
     //            QItemSelectionModel *selModel = m_List->m_List->selectionModel();

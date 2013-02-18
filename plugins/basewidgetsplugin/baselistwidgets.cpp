@@ -320,7 +320,7 @@ bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseListData::data(const int ref, const int role) const
 {
-    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole)  {
         if (m_List) {
             QStringList selected;
             QItemSelectionModel *selModel = m_List->m_List->selectionModel();
@@ -635,7 +635,7 @@ QVariant BaseComboData::data(const int ref, const int role) const
             return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
 
     }
-    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
         return m_Combo->m_Combo->currentText();
     }
     if (role==Form::IFormItemData::CalculationsRole) {

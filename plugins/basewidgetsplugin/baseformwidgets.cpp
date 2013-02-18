@@ -1285,7 +1285,7 @@ QVariant BaseRadioData::data(const int ref, const int role) const
 //        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
         if (id < vals.count() && id >= 0)
             return vals.at(id);
-    } else if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+    } else if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
         foreach(QRadioButton *but, m_Radio->m_RadioList) {
             if (but->isChecked()) {
                 return but->text();
@@ -1544,14 +1544,19 @@ bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int 
 QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
-    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
         if (m_Text->m_Line)
             return m_Text->m_Line->text();
         else if (m_Text->m_Text) {
-            if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive))
-                return m_Text->m_Text->toHtml();
-            else
+            if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive)) {
+                QString html = m_Text->m_Text->toHtml();
+                int beg = html.indexOf("<body");
+                beg = html.indexOf(">", beg);
+                int end = html.indexOf("</body>");
+                return html.mid(beg, end-beg);
+            } else {
                 return m_Text->m_Text->toPlainText();
+            }
         }
     }
     return QVariant();
