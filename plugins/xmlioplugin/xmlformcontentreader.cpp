@@ -788,10 +788,12 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
         if (m_ActualForm)
             m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_HtmlPrintMask, content, lang);
+        return true;
     } else if (type.compare(Constants::FILETYPE_PRINTPLAINTEXTMASK, Qt::CaseInsensitive)==0) {
         const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
         if (m_ActualForm)
             m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_PlainTextPrintMask, content, lang);
+        return true;
     }
 
     // Check file content (for forms file)
