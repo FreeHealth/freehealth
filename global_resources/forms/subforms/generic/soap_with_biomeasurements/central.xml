@@ -10,7 +10,7 @@
     <fmfv>0.8.2</fmfv>
     <cdate>2012-10-13</cdate>
     <lmdate>2012-09-12</lmdate>
-    <icon>__theme__/soap.png</icon>
+    <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
 
@@ -42,7 +42,7 @@
     <label lang="fr">POMR avec biométrie</label>
     <label lang="de">SOAP mit Biometriedaten</label>
     <options>UseFormNameAsNameSpace</options>
-    <icon>__theme__/soap.png</icon>
+    <icon>__theme__/stethoscope.png</icon>
 
     <Item type="group" name="SubjectiveGroup">
       <uilink widget="sGroup"/>

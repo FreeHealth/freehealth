@@ -343,8 +343,8 @@
 
             <Item type="multilist" name="Basics::Prostate">
                 <uilink label="prostateLabel" widget="prostate" layout=""/>
-                <label lang="xx">Kidney lab test</label>
-                <label lang="fr">Fonction rénale</label>
+                <label lang="xx">Prostate</label>
+                <label lang="fr">Prostate</label>
                 <value>
                     <uuid id="0">psa</uuid>
                     <uuid id="1">dht</uuid>
@@ -361,8 +361,8 @@
 
             <Item type="multilist" name="Basics::Vitamins">
                 <uilink label="vitaminsLabel" widget="vitamins" layout=""/>
-                <label lang="xx">Kidney lab test</label>
-                <label lang="fr">Fonction rénale</label>
+                <label lang="xx">Vitamins</label>
+                <label lang="fr">Vitamines</label>
                 <value>
                     <uuid id="0">b1</uuid>
                     <uuid id="1">b12</uuid>
@@ -388,41 +388,57 @@
 
             <Item type="multilist" name="Basics::Thyroid">
                 <uilink label="thyroidLabel" widget="thyroid" layout=""/>
-                <label lang="xx">Kidney lab test</label>
-                <label lang="fr">Fonction rénale</label>
+                <label lang="xx">Thyroid</label>
+                <label lang="fr">Thyroïde</label>
                 <value>
                     <uuid id="0">tsh</uuid>
                     <uuid id="1">ft3</uuid>
                     <uuid id="2">ft4</uuid>
-                    <uuid id="2">tpo</uuid>
-                    <uuid id="2">tga</uuid>
-                    <uuid id="2">tbii</uuid>
-                    <uuid id="2">pthi</uuid>
+                    <uuid id="3">tpo</uuid>
+                    <uuid id="4">tga</uuid>
+                    <uuid id="5">tshra</uuid>
+                    <uuid id="6">tshimm</uuid>
+                    <uuid id="7">pthi</uuid>
+                    <uuid id="8">pthi</uuid>
                     <possible id="0">TSH (Thyroid-Stimulating Hormone)</possible>
                     <possible id="1">Free T3</possible>
                     <possible id="2">Free T4</possible>
-                    <possible id="2">Thyroid Peroxidase (TPO) Antibodies</possible>
-                    <possible id="2">Thyroglobulin antibody</possible>
-                    <possible id="2">Thyroid stimulating hormone receptor antibody</possible>
-                    <possible id="2">Thyroid Stimulating Immunoglobulin</possible>
-                    <possible id="2">Parathyroid Hormone (PTH), Intact</possible>
+                    <possible id="3">Thyroid Peroxidase (TPO) Antibodies</possible>
+                    <possible id="4">Thyroglobulin antibody</possible>
+                    <possible id="5">Thyroid stimulating hormone receptor antibody</possible>
+                    <possible id="6">Thyroid Stimulating Immunoglobulin</possible>
+                    <possible id="7">Parathyroid Hormone (PTH), Intact</possible>
+                    <possible id="8">Parathyroid Hormone (PTH), RP</possible>
+                    <possible id="0" lang="fr">TSH ultra-sensible</possible>
+                    <possible id="1" lang="fr">FT3</possible>
+                    <possible id="2" lang="fr">FT4</possible>
+                    <possible id="3" lang="fr">Anticorps anti-Thyroïde Péroxidase (anti-TPO)</possible>
+                    <possible id="4" lang="fr">Anticorps anti-Thyroglobuline</possible>
+                    <possible id="5" lang="fr">Anticorps sélectif dirigé contre le récepteur TSH (anti-TSHR-Ab)</possible>
+                    <possible id="6" lang="fr">Thyroid Stimulating Immunoglobulin (TSI)</possible>
+                    <possible id="7" lang="fr">Parathormone (PTH), Intacte</possible>
+                    <possible id="8" lang="fr">Parathormone (PTH), RP</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
 
             <Item type="multilist" name="Basics::Biermer">
                 <uilink label="biermerLabel" widget="biermer" layout=""/>
-                <label lang="xx">Kidney lab test</label>
-                <label lang="fr">Fonction rénale</label>
+                <label lang="xx">Biermer disease</label>
+                <label lang="fr">Maladie de Biermer</label>
                 <value>
                     <uuid id="0">gastrin</uuid>
                     <uuid id="1">aaif</uuid>
                     <uuid id="2">aapcs</uuid>
                     <uuid id="3">schilling</uuid>
                     <possible id="0">Gastrin</possible>
-                    <possible id="1">Auto-antibodies intrinsic factor; Anticorps sériques anti-facteur intrinsèque</possible>
-                    <possible id="2">Auto-antibodies against the parietal cells of the stomach; Anticorps anti-cellules pariétales gastriques</possible>
+                    <possible id="1">Auto-antibodies intrinsic factor</possible>
+                    <possible id="2">Auto-antibodies against the parietal cells of the stomach</possible>
                     <possible id="3">Schilling Test</possible>
+                    <possible id="0" lang="fr">Gastrinémie</possible>
+                    <possible id="1" lang="fr">Anticorps sériques anti-facteur intrinsèque</possible>
+                    <possible id="2" lang="fr">Anticorps anti-cellules pariétales gastriques</possible>
+                    <possible id="3" lang="fr">Test de Schilling</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -432,23 +448,23 @@
                 <label lang="xx">Serologies</label>
                 <label lang="fr">Sérologies</label>
                 <value>
-                    <uuid id="0"></uuid>
-                    <uuid id="1"></uuid>
-                    <uuid id="2"></uuid>
-                    <uuid id="3"></uuid>
-                    <uuid id="4"></uuid>
-                    <uuid id="5"></uuid>
-                    <uuid id="6"></uuid>
-                    <uuid id="7"></uuid>
-                    <uuid id="8"></uuid>
-                    <uuid id="9"></uuid>
-                    <uuid id="10"></uuid>
-                    <uuid id="11"></uuid>
-                    <uuid id="12"></uuid>
-                    <uuid id="13"></uuid>
-                    <uuid id="14"></uuid>
-                    <uuid id="15"></uuid>
-                    <uuid id="16"></uuid>
+                    <uuid id="0">lyme_igm</uuid>
+                    <uuid id="1">lyme_wb</uuid>
+                    <uuid id="2">hiv</uuid>
+                    <uuid id="3">mmr</uuid>
+                    <uuid id="4">hep_b_imm_stat</uuid>
+                    <uuid id="5">ebv</uuid>
+                    <uuid id="6">mononucl</uuid>
+                    <uuid id="7">cmv</uuid>
+                    <uuid id="8">parvob19</uuid>
+                    <uuid id="9">rubella</uuid>
+                    <uuid id="10">rubeola</uuid>
+                    <uuid id="11">toxo</uuid>
+                    <uuid id="12">tetanus</uuid>
+                    <uuid id="13">vzv</uuid>
+                    <uuid id="14">westnile</uuid>
+                    <uuid id="15">syphilis_rapid</uuid>
+                    <uuid id="16">h_pylo_urea</uuid>
                     <possible id="0">Lyme Disease Antibodies, IgM</possible>
                     <possible id="1">Lyme Disease, Serum, Western Blot</possible>
                     <possible id="2">HIV</possible>
@@ -465,7 +481,7 @@
                     <possible id="13">Varicella Zoster Virus (VZV) Antibodies, IgG</possible>
                     <possible id="14">West Nile Virus, PCR</possible>
                     <possible id="15">Syphilis - Rapid Plasma Reagin (RPR)</possible>
-                    <possible id="16">H. pylori Urea Breath Test</possible>
+                    <possible id="16">Helicobacter pylori Urea Breath Test</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -479,7 +495,7 @@
                     <uuid id="1">cpp</uuid>
                     <uuid id="2">ana</uuid>
                     <possible id="0">Rheumatoid Factor (RF)</possible>
-                    <possible id="1">Anti−cyclic citrullinated peptide;anti-CCP</possible>
+                    <possible id="1">Anti−cyclic citrullinated peptide</possible>
                     <possible id="2">Antinuclear Antibodies (ANA)</possible>
                     <possible id="0" lang="fr">Facteur Rhumatoïde (RF)</possible>
                     <possible id="1" lang="fr">Anticorps anti-CCP</possible>
