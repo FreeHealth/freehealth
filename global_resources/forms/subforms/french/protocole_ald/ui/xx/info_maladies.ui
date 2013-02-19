@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>form</class>
+ <widget class="QWidget" name="form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>897</width>
+    <height>262</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>diagnostic(s) de l'(des) affection(s) de longue durée motivant la demande et sa (leurs) date(s) présumée(s) de début</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="diag1"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="diag3"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="diag2"/>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="dateDiag1Layout"/>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="dateDiag2Layout"/>
+     </item>
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="dateDiag3Layout"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>arguments cliniques et résultats des examens complémentaires récents (dans le cas de polypathologie invalidante décrire l'état invalidant)</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QTextEdit" name="arguments">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

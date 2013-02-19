@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>form</class>
+ <widget class="QWidget" name="form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>575</width>
+    <height>232</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>• rappel : situations ouvrant droit à rémunération du protocole- soins ou un arrêt de travail &gt; six mois n'ouvrant pas droit à l'exonération du ticket modérateur
+- soins ouvrant droit à l'exonération du ticket modérateur pour les enfants de moins de seize ans
+- soins ouvrant droit à l'exonération du ticket modérateur au titre de l'article L. 322-3-12° du Code de la sécurité sociale
+
+• examen date le protocole de soins a été établi :
+en consultation au domicile du malade montant des indemnités kilométriques éventuelles :	euros
+
+• mode de règlement virement à un compte postal, bancaire ou de caisse d'épargne lors de la première demande de remboursement par virement à un compte postal, bancaire ou de caisse d'épargne, ou en cas de changement de compte, joindre le relevé d'identité correspondant.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
