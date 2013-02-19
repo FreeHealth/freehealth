@@ -226,13 +226,15 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
     prepareHeader(&p, papers);
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
-    if (globalTokens.isEmpty()) {
+    // TODO: this can work with PadTools but not with HTML recomposing
+//    if (globalTokens.isEmpty()) {
         p.setContent(text);
-    } else {
-        QString html = text.toHtml();
-        Utils::replaceTokens(html, globalTokens);
-        p.setContent(html);
-    }
+//    } else {
+//        QString html = text.toHtml();
+//        Utils::replaceTokens(html, globalTokens);
+//        p.setContent(html);
+//    }
+
     p.setPrintWithDuplicata(printDuplicata);
 
     if (!p.preparePages()) {
@@ -259,7 +261,13 @@ bool DocumentPrinter::print(QTextDocument *text, const int papers, bool printDup
 bool DocumentPrinter::print(const QString &html, const int papers, bool printDuplicata) const
 {
     QTextDocument doc;
-    doc.setHtml(html);
+    if (globalTokens.isEmpty()) {
+        doc.setHtml(html);
+    } else {
+        QString _html = html;
+        Utils::replaceTokens(_html, globalTokens);
+        doc.setHtml(_html);
+    }
     return print(doc, papers, printDuplicata);
 }
 

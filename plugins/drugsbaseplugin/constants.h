@@ -170,7 +170,7 @@ namespace Constants {
             "  </style>\n"
             "</head>\n"
             "<body style=\"font-family:Arial;font-size:12pt\">\n\n"
-            "<a href=\"{ENCODEDPRESCRIPTION}\">\n"
+            "<a style=\"text-decoration:none\" href=\"{ENCODEDPRESCRIPTION}\">\n"
             "{PRESCRIPTION}\n"
             "</a>\n\n"
             "</body>\n"
