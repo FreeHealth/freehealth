@@ -27,8 +27,6 @@
 #ifndef IDENTITY_PASSWORDDIALOG_H
 #define IDENTITY_PASSWORDDIALOG_H
 
-#include <usermanagerplugin/usermanager_exporter.h>
-
 #include <QDialog>
 
 /**
@@ -44,7 +42,7 @@ namespace Ui {
 class  PasswordDialog;
 }  // namespace ui
 
-class USER_EXPORT PasswordDialog : public QDialog
+class PasswordDialog : public QDialog
 {
     Q_OBJECT
     Q_DISABLE_COPY(PasswordDialog)
