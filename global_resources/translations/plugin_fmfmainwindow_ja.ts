@@ -83,18 +83,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="370"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="372"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="397"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="399"/>
         <source>Unable to close window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="371"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="398"/>
         <source>Unable to close the application, error message: &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="417"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="444"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

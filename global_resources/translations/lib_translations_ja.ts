@@ -2321,222 +2321,242 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="37"/>
-        <source>Patient secondname</source>
+        <source>Patient usual name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="38"/>
-        <source>Patient firstname</source>
+        <source>Patient other names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="39"/>
-        <source>Patient full name</source>
+        <source>Patient secondname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="40"/>
+        <source>Patient firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="41"/>
-        <source>Birthname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="42"/>
-        <source>Secondname</source>
+        <source>Patient full name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="43"/>
-        <source>Firstname</source>
+        <source>Birthname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="44"/>
-        <source>Full name</source>
+        <source>Usual name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="45"/>
-        <source>Name</source>
+        <source>Other names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="46"/>
-        <source>Title</source>
+        <source>Secondname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="47"/>
+        <source>Firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="48"/>
-        <source>Contact</source>
+        <source>Full name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="49"/>
-        <source>Full contact (html)</source>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
-        <source>Full address</source>
+        <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="52"/>
-        <source>Full address (html)</source>
+        <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
-        <source>Street</source>
+        <source>Full contact (html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="54"/>
-        <source>City</source>
+        <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="55"/>
-        <source>Zipcode</source>
+        <source>Full address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="56"/>
-        <source>Country</source>
+        <source>Full address (html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="57"/>
-        <source>State/Province</source>
+        <source>Street</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="58"/>
-        <source>E-Mails</source>
+        <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="59"/>
+        <source>Zipcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="60"/>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="61"/>
+        <source>State/Province</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="62"/>
+        <source>E-Mails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="63"/>
         <location filename="../../libs/translationutils/trans_user.h" line="51"/>
         <source>E-Mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="64"/>
         <source>Tels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="65"/>
         <source>Mobile phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="67"/>
         <source>Date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="68"/>
         <source>Date of birth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="65"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="69"/>
         <source>Date of death</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="70"/>
         <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="71"/>
         <source>Age: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="72"/>
         <source>Age in years</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="69"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="73"/>
         <source>Age: %1; DOB: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="75"/>
         <source>Weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="76"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="77"/>
         <source>Creatinin clerance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="79"/>
         <source>Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="80"/>
         <source>Metrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="81"/>
         <source>Biology</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="79"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="83"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="80"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="84"/>
         <source>Patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="81"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="85"/>
         <source>Patient information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="82"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="86"/>
         <source>Patient database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="83"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="87"/>
         <source>Clear patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="84"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="88"/>
         <source>Toggle patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="86"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="90"/>
         <source>Social number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="88"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="92"/>
         <source>Patient synthesis</source>
         <translation type="unfinished"></translation>
     </message>

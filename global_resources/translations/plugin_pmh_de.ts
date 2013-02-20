@@ -208,10 +208,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Past Medical History for PATIENT NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Label and date</source>
         <translation type="unfinished"></translation>
     </message>

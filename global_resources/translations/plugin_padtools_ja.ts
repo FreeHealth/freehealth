@@ -79,51 +79,56 @@
     <name>PadWriter</name>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="63"/>
-        <source>Follow cursor in result output</source>
+        <source>Padtools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="64"/>
-        <source>Find cursor</source>
+        <source>Follow cursor in result output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="65"/>
-        <source>Automatic update of results</source>
+        <source>Find cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="66"/>
-        <source>View output</source>
+        <source>Automatic update of results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/padtoolsplugin/constants.h" line="67"/>
+        <source>View output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="68"/>
         <source>Show source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="70"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="71"/>
         <source>Inside conditional before text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="71"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="72"/>
         <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="72"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="73"/>
         <source>Before the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="73"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="74"/>
         <source>After the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/padtoolsplugin/constants.h" line="74"/>
+        <location filename="../../plugins/padtoolsplugin/constants.h" line="75"/>
         <source>Nested token</source>
         <translation type="unfinished"></translation>
     </message>

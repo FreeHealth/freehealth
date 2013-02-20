@@ -86,37 +86,37 @@
 <context>
     <name>Patients::IdentityPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="130"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="129"/>
         <source>Please enter the patient&apos;s identity.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="183"/>
         <source>Patient already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="185"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
         <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="210"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="209"/>
         <source>You are about to create the following  patient: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="212"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="211"/>
         <source>Patients with the same names exist in the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="214"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="213"/>
         <source>Do you really want to create this patient?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="216"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="215"/>
         <source>Patients of the same name exist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -262,22 +262,22 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
 <context>
     <name>Patients::PatientCreatorWizard</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="74"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="73"/>
         <source>New Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="96"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="95"/>
         <source>WARNING! You did not save this patient. If you continue without saving, all changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="98"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="97"/>
         <source>Do you really want to close this dialog?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="99"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="98"/>
         <source>Patient not saved</source>
         <translation type="unfinished"></translation>
     </message>

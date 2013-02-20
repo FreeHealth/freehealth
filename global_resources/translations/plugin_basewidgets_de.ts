@@ -12,12 +12,12 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="539"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="548"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="540"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="549"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -63,12 +63,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseList</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="145"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="150"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="146"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="151"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
@@ -78,12 +78,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1178"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1188"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1179"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1189"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>

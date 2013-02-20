@@ -181,24 +181,24 @@ Line: %2, Column: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1173"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1174"/>
         <source>Save test only drugs too?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1174"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1175"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1176"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1177"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1253"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1267"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1254"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1268"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -214,27 +214,27 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::GlobalDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="403"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="400"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="407"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="404"/>
         <source>KNOWN INTOLERANCE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="446"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="443"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="447"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="444"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="448"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="445"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>

@@ -400,5 +400,9 @@ Do you really want to remove the current episode?</source>
         <source>ScreenShots are available.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Forms</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

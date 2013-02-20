@@ -5,17 +5,17 @@
     <name>Identity::IdentityEditorWidget</name>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="786"/>
-        <source>You must specify a birthname.</source>
+        <source>You must specify a usualName.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="787"/>
-        <source>You can not create a patient without a birthname</source>
+        <source>You can not create a patient without a usualName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="788"/>
-        <source>No birthname</source>
+        <source>No usualName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -89,7 +89,7 @@
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="46"/>
-        <source>Second name:</source>
+        <source>Other names:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -190,29 +190,6 @@
     <message>
         <location filename="../../plugins/identityplugin/themedgenderbutton.cpp" line="78"/>
         <source>Delete photo</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>IdentityEditorWidget</name>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="500"/>
-        <source>Birth Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="501"/>
-        <source>Second Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="502"/>
-        <source>Firstname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="503"/>
-        <source>Birthday</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

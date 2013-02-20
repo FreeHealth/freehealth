@@ -54,12 +54,12 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="276"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="286"/>
         <source>Preparing database and drug engines report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="294"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="304"/>
         <source>Drug engine report: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -714,18 +714,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="426"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="425"/>
         <source>Drug Dosage Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="608"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="607"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="647"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="646"/>
         <source>Linking to: </source>
         <translation type="unfinished"></translation>
     </message>

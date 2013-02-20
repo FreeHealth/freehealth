@@ -5,18 +5,18 @@
     <name>Identity::IdentityEditorWidget</name>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="786"/>
-        <source>You must specify a birthname.</source>
-        <translation>Vous devez spécifier un nom de naissance.</translation>
+        <source>You must specify a usualName.</source>
+        <translation>Vous devez spécifier un nom usuel.</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="787"/>
-        <source>You can not create a patient without a birthname</source>
-        <translation>Vous ne pouvez pas créer un patient sans nom de naissance</translation>
+        <source>You can not create a patient without a usualName</source>
+        <translation>Vous ne pouvez pas créer un patient sans nom usuel</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="788"/>
-        <source>No birthname</source>
-        <translation>Pas de nom de naissance</translation>
+        <source>No usualName</source>
+        <translation>Pas de nom usuel</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="794"/>
@@ -89,8 +89,8 @@
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="46"/>
-        <source>Second name:</source>
-        <translation>Nom marital :</translation>
+        <source>Other names:</source>
+        <translation>Autres noms :</translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityeditorwidget.ui" line="102"/>
@@ -191,29 +191,6 @@
         <location filename="../../plugins/identityplugin/themedgenderbutton.cpp" line="78"/>
         <source>Delete photo</source>
         <translation>Supprimer la photographie</translation>
-    </message>
-</context>
-<context>
-    <name>IdentityEditorWidget</name>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="500"/>
-        <source>Birth Name</source>
-        <translation>Nom de naissance</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="501"/>
-        <source>Second Name</source>
-        <translation>Nom marital</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="502"/>
-        <source>Firstname</source>
-        <translation>Prénom</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/identityplugin/identityeditorwidget.cpp" line="503"/>
-        <source>Birthday</source>
-        <translation>Date de naissance</translation>
     </message>
 </context>
 <context>

@@ -404,5 +404,9 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
         <source>Remove Form</source>
         <translation>Supprimer le formulaire</translation>
     </message>
+    <message>
+        <source>Forms</source>
+        <translation>Formulaires</translation>
+    </message>
 </context>
 </TS>

@@ -5,6 +5,9 @@
     <name>ZipCodes::Internal::ZipCountryModel</name>
     <message>
         <source>%1, %2</source>
+        <extracomment>%1 = zip code, %2 = city
+----------
+%1 = city, %2 = zip</extracomment>
         <translation></translation>
     </message>
 </context>

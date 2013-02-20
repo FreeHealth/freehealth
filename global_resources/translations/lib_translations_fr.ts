@@ -2444,5 +2444,21 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Pound(s)</source>
         <translation>Livre(s)</translation>
     </message>
+    <message>
+        <source>Patient usual name</source>
+        <translation>Nom usuel du patient</translation>
+    </message>
+    <message>
+        <source>Patient other names</source>
+        <translation>Autres noms du patient</translation>
+    </message>
+    <message>
+        <source>Usual name</source>
+        <translation>Nom usuel</translation>
+    </message>
+    <message>
+        <source>Other names</source>
+        <translation>Autres noms</translation>
+    </message>
 </context>
 </TS>

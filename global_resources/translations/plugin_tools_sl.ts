@@ -4,35 +4,35 @@
 <context>
     <name>Tools::Internal::PdfTkWrapper</name>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="329"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="330"/>
         <source>Starting PDF completion. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="349"/>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="356"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="350"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="357"/>
         <source>PDF Completion error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="350"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="351"/>
         <source>The PDF completion process raised the following error:&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;
 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="379"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="380"/>
         <source>pdftk error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="380"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="381"/>
         <source>The pdftk process ends with the exit code: %1
 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="390"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="391"/>
         <source>Opening completed PDF file</source>
         <translation type="unfinished"></translation>
     </message>

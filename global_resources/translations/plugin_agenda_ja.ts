@@ -43,7 +43,7 @@
 <context>
     <name>Agenda::CalendarItemModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="332"/>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="336"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>

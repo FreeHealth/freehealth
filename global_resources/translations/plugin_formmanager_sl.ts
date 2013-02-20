@@ -4,12 +4,12 @@
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="586"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="590"/>
         <source>Xml content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="618"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="622"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -42,17 +42,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="84"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="85"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="99"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="100"/>
         <source>Insert as root form?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="100"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="101"/>
         <source>You did not selected a form, do you want to add the sub-form as root form?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,7 +78,7 @@
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="791"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="798"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,7 +86,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="955"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="962"/>
         <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -138,40 +138,40 @@ Answering &apos;No&apos; will cause definitve data loss.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="742"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="744"/>
         <source>Validate the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="743"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="745"/>
         <source>When you validate an episode, you prevent all subsequent amendments. The episode will be shown but will be kept unchanged.
 Do you really want to validate the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="784"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="786"/>
         <source>Remove the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="785"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="787"/>
         <source>You can not completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be included in the database.
 Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="809"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="811"/>
         <source>Images (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="858"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="860"/>
         <source>Remove the current form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="859"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="861"/>
         <source>Trying to remove the sub-form:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2This modification will only affect the current patient:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Do you really want to remove the current sub-form?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -279,7 +279,7 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>Form::Internal::FormPreferencesPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="174"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="173"/>
         <source>Form and episode tree viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -337,37 +337,37 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="251"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="250"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="252"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="251"/>
         <source>Label - User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="253"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="252"/>
         <source>Label - User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="254"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="253"/>
         <source>User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="255"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="254"/>
         <source>User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="256"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="255"/>
         <source>User date (small) - Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="257"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="256"/>
         <source>User date (full) - Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -375,31 +375,31 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>FormFilesSelectorWidget</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="96"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="97"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="98"/>
         <source>by category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="102"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="103"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="104"/>
         <source>by author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="108"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="109"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="110"/>
         <source>by specialty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="114"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="115"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="116"/>
         <source>by type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="165"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="166"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -407,17 +407,17 @@ Do you really want to remove the current episode?</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="199"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="187"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="201"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="189"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="203"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="191"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -426,68 +426,73 @@ Do you really want to remove the current episode?</source>
     <name>Forms</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
-        <source>Add Episode</source>
+        <source>Forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
-        <source>Validate Episode</source>
+        <source>Add Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
-        <source>Add Form</source>
+        <source>Validate Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
-        <source>Remove Form</source>
+        <source>Add Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
-        <source>Print Form</source>
+        <source>Remove Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="123"/>
-        <source>Show patients&apos; synthesis</source>
+        <source>Print Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="124"/>
-        <source>Show patients&apos; last episodes</source>
+        <source>Show patients&apos; synthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
+        <source>Show patients&apos; last episodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="126"/>
         <source>Patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="127"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="128"/>
         <source>Forms font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="128"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="129"/>
         <source>Episodes font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="245"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="271"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="233"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="259"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="247"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="273"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="235"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="261"/>
         <source>Last modification date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="284"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="272"/>
         <source>ScreenShots are available.</source>
         <translation type="unfinished"></translation>
     </message>

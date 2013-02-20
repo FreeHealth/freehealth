@@ -208,10 +208,6 @@
         <translation>&amp;Indice de confiance :</translation>
     </message>
     <message>
-        <source>Past Medical History for PATIENT NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Label and date</source>
         <translation>Libellé et date</translation>
     </message>

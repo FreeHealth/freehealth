@@ -266,11 +266,6 @@
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="236"/>
-        <source>Past Medical History for PATIENT NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PMH::PmhCategoryModel</name>
@@ -328,7 +323,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="269"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="273"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,24 +4,24 @@
 <context>
     <name>XmlForms::Internal::XmlFormIO</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="143"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="145"/>
         <source>Invalid form file detected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="144"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="146"/>
         <source>Invalid file detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="145"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="147"/>
         <source>An invalid file was found. Please contact your software administrator.
 Wrong file: %1
 Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="340"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="368"/>
         <source>No form file name</source>
         <translation type="unfinished"></translation>
     </message>

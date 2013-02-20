@@ -814,7 +814,7 @@
 <context>
     <name>Core::ModeManager</name>
     <message>
-        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="209"/>
+        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="212"/>
         <source>Switch to &lt;b&gt;%1&lt;/b&gt; mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -936,17 +936,17 @@
 <context>
     <name>Core::Translators</name>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="136"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="138"/>
         <source>Can not load %1, path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="186"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="190"/>
         <source>Add Translator %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="193"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="197"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -104,5 +104,9 @@
         <source>View output</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Padtools</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
