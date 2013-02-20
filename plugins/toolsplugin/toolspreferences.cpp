@@ -75,8 +75,9 @@ QString ToolsPreferencesWidget::searchKeywords() const
 /*! Saves the settings in the ui to the settings data model. */
 void ToolsPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     // if no sets given as param, take default interface
-    Core::ISettings *s = sets? sets : settings();
+    // Core::ISettings *s = sets? sets : settings();
 }
 
 /*! Writes the default settings to the data model. */
