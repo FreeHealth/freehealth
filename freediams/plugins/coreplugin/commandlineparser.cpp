@@ -73,7 +73,8 @@ namespace Constants {
     const char *const XML_ATTRIB_UID              = "uid";
     const char *const XML_ATTRIB_LASTNAMES        = "lastnames";
     const char *const XML_ATTRIB_NAME             = "name";
-    const char *const XML_ATTRIB_FIRSTNAME        = "firstnames";
+    const char *const XML_ATTRIB_USUALNAME        = "firstnames";
+    const char *const XML_ATTRIB_OTHERNAMES       = "othernames";
     const char *const XML_ATTRIB_VERSION          = "version";
     const char *const XML_ATTRIB_GENDER           = "gender";
     const char *const XML_ATTRIB_DATEOFBIRTH      = "dob";
@@ -292,7 +293,8 @@ public:
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_PATIENT_IDENTITY) {
                 value.insert(CommandLine::CL_PatientName, element.attribute(Internal::Constants::XML_ATTRIB_LASTNAMES));
-                value.insert(CommandLine::CL_PatientFirstname, element.attribute(Internal::Constants::XML_ATTRIB_FIRSTNAME));
+                value.insert(CommandLine::CL_PatientFirstname, element.attribute(Internal::Constants::XML_ATTRIB_USUALNAME));
+                value.insert(CommandLine::CL_PatientOtherNames, element.attribute(Internal::Constants::XML_ATTRIB_OTHERNAMES));
                 value.insert(CommandLine::CL_PatientUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
                 value.insert(CommandLine::CL_PatientGender, element.attribute(Internal::Constants::XML_ATTRIB_GENDER));
                 value.insert(CommandLine::CL_DateOfBirth, QDate::fromString(element.attribute(Internal::Constants::XML_ATTRIB_DATEOFBIRTH),"yyyy/MM/dd"));
@@ -339,7 +341,8 @@ public:
         patient->setData(patient->index(0, IPatient::WeightUnit),     value.value(CommandLine::CL_Weight_Unit));
         patient->setData(patient->index(0, IPatient::Creatinine),     value.value(CommandLine::CL_Creatinine));
         patient->setData(patient->index(0, IPatient::CreatinineUnit), value.value(CommandLine::CL_Creatinine_Unit));
-        patient->setData(patient->index(0, IPatient::BirthName),      value.value(CommandLine::CL_PatientName));
+        patient->setData(patient->index(0, IPatient::UsualName),      value.value(CommandLine::CL_PatientName));
+        patient->setData(patient->index(0, IPatient::OtherNames),      value.value(CommandLine::CL_PatientOtherNames));
         patient->setData(patient->index(0, IPatient::Firstname),      value.value(CommandLine::CL_PatientFirstname));
         patient->setData(patient->index(0, IPatient::Gender),         value.value(CommandLine::CL_PatientGender));
 

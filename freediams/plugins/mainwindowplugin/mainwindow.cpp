@@ -175,7 +175,7 @@ public:
         if (!m_Mapper)
             m_Mapper = new QDataWidgetMapper(q);
         m_Mapper->setModel(patient());
-        m_Mapper->addMapping(q->m_ui->patientName, Core::IPatient::BirthName);
+        m_Mapper->addMapping(q->m_ui->patientName, Core::IPatient::UsualName);
         m_Mapper->addMapping(q->m_ui->patientFirstname, Core::IPatient::Firstname);
         m_Mapper->addMapping(q->m_ui->patientSize, Core::IPatient::Height);
         m_Mapper->addMapping(q->m_ui->sizeUnit, Core::IPatient::HeightUnit);

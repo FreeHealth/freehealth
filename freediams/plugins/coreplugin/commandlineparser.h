@@ -50,6 +50,7 @@ public:
         CL_ExchangeOutFileFormat,
         CL_ExchangeInFile,
         CL_PatientName,
+        CL_PatientOtherNames,
         CL_PatientFirstname,
         CL_PatientUid,
         CL_PatientGender,
