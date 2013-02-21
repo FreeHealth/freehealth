@@ -29,7 +29,7 @@
 
 #include <extensionsystem/iplugin.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 /**
  * \file texteditorplugin.h
