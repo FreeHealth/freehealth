@@ -10,7 +10,8 @@ SUBDIRS = \
     listview \
     usermanager \
     zipcodes \
-    datapack
+    datapack \
+    identity
 
 core.subdir = coreplugin
 
@@ -46,9 +47,14 @@ usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
 usermanager.depends += zipcodes
+usermanager.depends += identity
 
 zipcodes.subdir = zipcodesplugin
 zipcodes.depends += core
 
 datapack.subdir = datapackplugin
 datapack.depends += core
+
+identity.subdir = identityplugin
+identity.depends += core
+identity.depends += zipcodes
