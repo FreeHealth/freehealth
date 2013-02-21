@@ -71,7 +71,7 @@ MainWindowPreferencesPage::~MainWindowPreferencesPage()
 }
 
 QString MainWindowPreferencesPage::id() const { return objectName(); }
-QString MainWindowPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
+QString MainWindowPreferencesPage::displayName() const { return tkTr(Trans::Constants::GENERAL); }
 QString MainWindowPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL); }
 int MainWindowPreferencesPage::sortIndex() const {return 0;}
 
@@ -81,7 +81,7 @@ void MainWindowPreferencesPage::resetToDefaults()
     m_Widget->setDatasToUi();
 }
 
-void MainWindowPreferencesPage::applyChanges()
+void MainWindowPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;

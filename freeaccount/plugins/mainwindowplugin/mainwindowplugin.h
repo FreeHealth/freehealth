@@ -53,10 +53,9 @@
 */
 
 namespace MainWin {
+class MainWindow;
 namespace Internal {
 class MainWindowPreferencesPage;
-
-class MainWindow;
 
 class MainWinPlugin : public ExtensionSystem::IPlugin
 {
