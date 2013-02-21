@@ -62,7 +62,7 @@ AppAboutPage::~AppAboutPage()
 {
 }
 
-QString AppAboutPage::name() const
+QString AppAboutPage::displayName() const
 {
     return "1. " + tr("Application");
 }
@@ -100,7 +100,7 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     return w;
 }
 
-QString CommandLineAboutPage::name() const
+QString CommandLineAboutPage::displayName() const
 {
     return "5. " + tr("Command line");
 }
