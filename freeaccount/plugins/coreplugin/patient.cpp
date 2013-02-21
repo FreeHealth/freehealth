@@ -60,7 +60,7 @@ public:
     PatientPrivate()
     {
         m_XmlTags.insert(IPatient::Uid ,        "UID");
-        m_XmlTags.insert(IPatient::BirthName ,  "Lastnames" );
+        m_XmlTags.insert(IPatient::UsualName ,  "Lastnames" );
         m_XmlTags.insert(IPatient::Firstname ,  "Firstnames" );
         m_XmlTags.insert(IPatient::Gender ,     "Gender" );
         m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");
@@ -187,14 +187,14 @@ QVariant Patient::data(const QModelIndex &index, int role) const
         case FullName:
             {
                 QString r;
-                if (has(SecondName))
+                if (has(OtherNames))
                     r = QString("%1 - %2 %3")
-                    .arg(d->m_Values.value(BirthName).toString())
-                    .arg(d->m_Values.value(SecondName).toString())
+                    .arg(d->m_Values.value(UsualName).toString())
+                    .arg(d->m_Values.value(OtherNames).toString())
                     .arg(d->m_Values.value(Firstname).toString());
                 else
                     r = QString("%1 %3")
-                        .arg(d->m_Values.value(BirthName).toString())
+                        .arg(d->m_Values.value(UsualName).toString())
                         .arg(d->m_Values.value(Firstname).toString());
                 return r;
             }

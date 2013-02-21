@@ -301,7 +301,7 @@ public:
     {
         patient->setData(patient->index(0, IPatient::Uid),            value.value(Core::Constants::CL_PatientUid));
         patient->setData(patient->index(0, IPatient::DateOfBirth),    value.value(Core::Constants::CL_DateOfBirth));
-        patient->setData(patient->index(0, IPatient::BirthName),      value.value(Core::Constants::CL_PatientName));
+        patient->setData(patient->index(0, IPatient::UsualName),      value.value(Core::Constants::CL_PatientName));
         patient->setData(patient->index(0, IPatient::Firstname),      value.value(Core::Constants::CL_PatientFirstname));
         patient->setData(patient->index(0, IPatient::Gender),         value.value(Core::Constants::CL_PatientGender));
     }
