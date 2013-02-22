@@ -317,7 +317,7 @@ EpisodeModel::~EpisodeModel()
 bool EpisodeModel::initialize()
 {
     onUserChanged();
-    onCurrentPatientChanged();
+    onPatientFormLoaded();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
