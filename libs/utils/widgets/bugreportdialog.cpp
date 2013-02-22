@@ -102,6 +102,10 @@ public:
         report << pairs("---", "");
         report << pairs(ui->catLabel->text().remove(":").remove("&"), ui->categoryCombo->currentText());
         report << pairs(ui->descrLabel->text().remove(":").remove("&"), Utils::lineWrapString(ui->descrEdit->toPlainText(), 50));
+        if (ui->documentation->isChecked())
+            report << pairs(ui->documentation->text().remove(":").remove("&"), "yes");
+        else
+            report << pairs(ui->documentation->text().remove(":").remove("&"), "no");
         // find the max length
         int max = 0;
         foreach(const pairs &pair, report) {

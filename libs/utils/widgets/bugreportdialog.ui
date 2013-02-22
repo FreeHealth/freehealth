@@ -153,15 +153,25 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="categoryCombo"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QTextEdit" name="descrEdit">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="catLabel">
         <property name="text">
          <string>Category</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="categoryCombo"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="descrLabel">
@@ -173,13 +183,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QTextEdit" name="descrEdit">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>100</height>
-         </size>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="documentation">
+        <property name="text">
+         <string>Did you check the documentation on the main website before reporting</string>
         </property>
        </widget>
       </item>
