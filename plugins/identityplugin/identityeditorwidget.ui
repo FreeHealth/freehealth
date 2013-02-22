@@ -223,7 +223,7 @@
       </widget>
      </item>
      <item row="4" column="2" colspan="2">
-      <widget class="Utils::BirthDayEdit" name="dob">
+      <widget class="Utils::ModernDateEditor" name="dob">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -260,9 +260,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Utils::BirthDayEdit</class>
+   <class>Utils::ModernDateEditor</class>
    <extends>QLineEdit</extends>
-   <header location="global">utils/widgets/birthdayedit.h</header>
+   <header location="global">utils/widgets/moderndateeditor.h</header>
   </customwidget>
   <customwidget>
    <class>ZipCodes::ZipCodesWidget</class>

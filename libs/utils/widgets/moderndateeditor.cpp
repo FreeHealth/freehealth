@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 /**
- * \class Utils::BirthDayEdit
+ * \class Utils::ModernDateEditor
  * \brief Replacement class for QDateEdit to better handle birthday entering
  *
  * Inherits Utils::QButtonLineEdit and accepts an input format that can be freely defined for
@@ -36,7 +36,7 @@
  * if possible.
  */
 
-#include "birthdayedit.h"
+#include "moderndateeditor.h"
 
 #include <utils/datevalidator.h>
 #include <translationutils/constants.h>
@@ -52,10 +52,10 @@ using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 namespace Internal {
-class BirthDayEditPrivate
+class ModernDateEditorPrivate
 {
 public:
-    BirthDayEditPrivate(BirthDayEdit *parent):
+    ModernDateEditorPrivate(ModernDateEditor *parent):
         _rightButton(0),
         _leftButton(0),
         aShortDisplay(0),
@@ -65,7 +65,7 @@ public:
         q(parent)
     {}
 
-    ~BirthDayEditPrivate()
+    ~ModernDateEditorPrivate()
     {}
 
     void createRightButton(const QString &fullAbsPath)
@@ -118,28 +118,28 @@ public:
     QString _defaultEditingFormat;
 
 private:
-    BirthDayEdit *q;
+    ModernDateEditor *q;
 };
 } // namespace Internal
 } // namespace Utils
 
 /** \brief Default constructor */
-BirthDayEdit::BirthDayEdit(QWidget *parent) :
+ModernDateEditor::ModernDateEditor(QWidget *parent) :
     QButtonLineEdit(parent),
-    d_de(new Internal::BirthDayEditPrivate(this))
+    d_de(new Internal::ModernDateEditorPrivate(this))
 {
     init();
 }
 
 /** \brief Additional constructor that initializes the widget with given date */
-BirthDayEdit::BirthDayEdit(const QDate &date, QWidget *parent) :
+ModernDateEditor::ModernDateEditor(const QDate &date, QWidget *parent) :
     QButtonLineEdit(parent),
-    d_de(new Internal::BirthDayEditPrivate(this))
+    d_de(new Internal::ModernDateEditorPrivate(this))
 {
     init(date);
 }
 
-BirthDayEdit::~BirthDayEdit()
+ModernDateEditor::~ModernDateEditor()
 {
     if (d_de) {
         delete d_de;
@@ -148,7 +148,7 @@ BirthDayEdit::~BirthDayEdit()
 }
 
 /** \brief init function called from constructors to init all internal values */
-void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
+void ModernDateEditor::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
 {
     d_de->m_date = date;
     d_de->m_minimumDate = minimumDate;
@@ -161,19 +161,19 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
 }
 
 /** Define the absolute path \e fullAbsPath to the 'clear' icon */
-void BirthDayEdit::setClearIcon(const QString &fullAbsPath)
+void ModernDateEditor::setClearIcon(const QString &fullAbsPath)
 {
     d_de->createRightButton(fullAbsPath);
 }
 
 /** Define the absolute path \e fullAbsPath to the 'date' icon */
-void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
+void ModernDateEditor::setDateIcon(const QString &fullAbsPath)
 {
     d_de->createLeftButton(fullAbsPath);
 }
 
 /** Sets the internal date of the widget to date */
-void BirthDayEdit::setDate(const QDate &date)
+void ModernDateEditor::setDate(const QDate &date)
 {
     if (date.isNull()) {
         clear();
@@ -190,7 +190,7 @@ void BirthDayEdit::setDate(const QDate &date)
 }
 
 /** Returns the current editing date */
-QDate BirthDayEdit::date() const
+QDate ModernDateEditor::date() const
 {
     return d_de->m_date;
 }
@@ -198,7 +198,7 @@ QDate BirthDayEdit::date() const
 /** \brief sets the internal date of the widget to NULL
  *
  *  If internal date is not already NULL, the widget emits the dateChanged(QDate &) signal. */
-void BirthDayEdit::clear()
+void ModernDateEditor::clear()
 {
     if(!d_de->m_date.isNull()) {
         d_de->m_date = QDate();
@@ -217,7 +217,7 @@ void BirthDayEdit::clear()
  *  validator as a valid date, the css is changed, e.g. red background, to indicate
  *  that there is something wrong.
  */
-void BirthDayEdit::focusOutEvent(QFocusEvent *event)
+void ModernDateEditor::focusOutEvent(QFocusEvent *event)
 {
     // switching to displayMode
     setValidator(0);
@@ -245,7 +245,7 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event)
 }
 
 /** \brief overrides the default focusInEvent and sets \sa DateValidator. */
-void BirthDayEdit::focusInEvent(QFocusEvent *event)
+void ModernDateEditor::focusInEvent(QFocusEvent *event)
 {
     // switching to editMode
     if (d_de->m_date.isValid()) {
@@ -264,7 +264,7 @@ void BirthDayEdit::focusInEvent(QFocusEvent *event)
  * the date field is set to NULL. This method is called when a valid date string was
  * entered and the user presses Enter or the widget looses focus.
  */
-void BirthDayEdit::setDateString(QString dateString)
+void ModernDateEditor::setDateString(QString dateString)
 {
     // inform validator
     int pos = 0;
@@ -281,7 +281,7 @@ void BirthDayEdit::setDateString(QString dateString)
 }
 
 /** \brief updates the displayText with the internal date using the default FMF date format */
-void BirthDayEdit::updateDisplayText()
+void ModernDateEditor::updateDisplayText()
 {
 //    qWarning() << "updateDisplayText(), focus:" << hasFocus() << "valid date:" << m_date.isValid();
     // Edit mode -> do nothing
@@ -303,21 +303,21 @@ void BirthDayEdit::updateDisplayText()
 }
 
 /** Private slot */
-void BirthDayEdit::formatActionTriggered(QAction *a)
+void ModernDateEditor::formatActionTriggered(QAction *a)
 {
     Q_UNUSED(a);
     updateDisplayText();
 }
 
 /** Clear the place holder. */
-void BirthDayEdit::updatePlaceHolder()
+void ModernDateEditor::updatePlaceHolder()
 {
 //    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE));
 //    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormats().join("<br/>")));
 }
 
 /** Retranslate UI. */
-void BirthDayEdit::retranslate()
+void ModernDateEditor::retranslate()
 {
     updatePlaceHolder();
     if (d_de->aLongDisplay) {
@@ -338,7 +338,7 @@ void BirthDayEdit::retranslate()
     d_de->_validator->translateFormats();
 }
 
-void BirthDayEdit::changeEvent(QEvent *e)
+void ModernDateEditor::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
         retranslate();

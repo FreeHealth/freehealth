@@ -31,7 +31,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/widgets/birthdayedit.h>
+#include <utils/widgets/moderndateeditor.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iscriptmanager.h>
@@ -57,7 +57,7 @@ BaseDateCompleterWidget::BaseDateCompleterWidget(Form::FormItem *formItem, QWidg
     setObjectName("BaseDateCompleterWidget_" + m_FormItem->uuid());
 
     // Create the detailsWidget
-    _dateEdit = new Utils::BirthDayEdit(this);
+    _dateEdit = new Utils::ModernDateEditor(this);
     _dateEdit->setObjectName("modernDate_" + m_FormItem->uuid()); // keep this unchanged cause scripts can find widget using their objectname
     _dateEdit->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
     _dateEdit->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));

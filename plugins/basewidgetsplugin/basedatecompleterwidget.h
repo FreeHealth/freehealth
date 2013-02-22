@@ -32,13 +32,13 @@
 
 /**
  * \file basedatecompleterwidget.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 07 Dec 2012
+ * \author Eric MAEKER
+ * \version 0.8.3
+ * \date 22 Feb 2013
 */
 
 namespace Utils {
-class BirthDayEdit;
+class ModernDateEditor;
 }
 
 namespace BaseWidgets {
@@ -64,7 +64,7 @@ public Q_SLOTS:
     void retranslate();
 
 protected:
-    Utils::BirthDayEdit *_dateEdit;
+    Utils::ModernDateEditor *_dateEdit;
 };
 
 class BaseDateCompleterData : public Form::IFormItemData

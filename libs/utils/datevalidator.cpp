@@ -43,7 +43,7 @@ DateValidator::DateValidator(QObject *parent) :
     QValidator(parent)
 {
     // split localized dateFormat string and put the parts in a separated QStringList
-    //: this is a input mask for the local date format for BirthDayEdit that can be used by QDate::fromString()
+    //: this is a input mask for the local date format for ModernDateEditor that can be used by QDate::fromString()
     m_dateFormatList << tr("ddMMyy");
     m_dateFormatList << tr("ddMMyyyy");
     m_lastValidFormat = QString();

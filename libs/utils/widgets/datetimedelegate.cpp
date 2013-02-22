@@ -90,7 +90,7 @@ QWidget *DateTimeDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &index) const
 {
-    // TODO: use the BirthDayEdit editor
+    // TODO: use the ModernDateEditor editor
     if (m_IsDateOnly) {
         QDateEdit *editor = new QDateEdit(parent);
         editor->setMinimumDate(m_MinDate);

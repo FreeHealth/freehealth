@@ -24,8 +24,8 @@
  *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_BIRTHDAYEDIT_H
-#define UTILS_BIRTHDAYEDIT_H
+#ifndef UTILS_MODERNDATEEDITOR_H
+#define UTILS_MODERNDATEEDITOR_H
 
 #include <utils/widgets/qbuttonlineedit.h>
 #include <utils/global_exporter.h>
@@ -39,29 +39,29 @@ class QString;
 QT_END_NAMESPACE
 
 /**
- * \file birthdayedit.h
+ * \file moderndateeditor.h
  * \author Christian A. Reiter, Eric MAEKER
- * \version 0.8.2
- * \date 26 Jun 2012
+ * \version 0.8.4
+ * \date 22 Feb 2013
 */
 
 namespace Utils {
 namespace Internal {
-class BirthDayEditPrivate;
+class ModernDateEditorPrivate;
 }
 class DateValidator;
 
-class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
+class UTILS_EXPORT ModernDateEditor : public QButtonLineEdit
 {
-    friend class Utils::Internal::BirthDayEditPrivate;
+    friend class Utils::Internal::ModernDateEditorPrivate;
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
 //    Q_PROPERTY(bool calendarPopup READ calendarPopup WRITE setCalendarPopup)
 
 public:
-    explicit BirthDayEdit(QWidget *parent = 0);
-    explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
-    ~BirthDayEdit();
+    explicit ModernDateEditor(QWidget *parent = 0);
+    explicit ModernDateEditor(const QDate & date, QWidget *parent = 0);
+    ~ModernDateEditor();
 
     // View options
     void setClearIcon(const QString &fullAbsPath);
@@ -95,9 +95,9 @@ protected:
     void retranslate();
 
 private:
-    Internal::BirthDayEditPrivate *d_de;
+    Internal::ModernDateEditorPrivate *d_de;
 };
 
 } // end Utils
 
-#endif // UTILS_BIRTHDAYEDIT_H
+#endif // UTILS_MODERNDATEEDITOR_H
