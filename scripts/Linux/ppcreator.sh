@@ -18,6 +18,7 @@ PGP_KEY="0x3FA0BBEF"      # Eric's key by default, you have to know the phrase
 WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
+DPUT_ARGS=""
 SERIES="maverick natty oneiric precise"
 
 showHelp()
@@ -36,6 +37,7 @@ showHelp()
   echo "   -s           Do not include source to package for uploading"
   echo "   -n           Do not use proxy when downloading"
   echo "   -r           Specify the Series to build (oneiric maverick natty lucid)"
+  echo "   -f           Use dput -f to upload packages"
   echo
 }
 
@@ -81,10 +83,10 @@ uploadToPPA()
   echo `pwd`
   if [ "$APP_NAME" = "libquazip" ]; then
     echo "      ppa:freemedforms/libquazip"
-    dput ppa:freemedforms/libquazip $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+    dput $DPUT_ARGS ppa:freemedforms/libquazip $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
   else
     echo "      ppa:freemedforms/ppa"
-    dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+    dput $DPUT_ARGS ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
   fi
 }
 
@@ -162,6 +164,8 @@ do
     p) PPA_VERSION=$OPTARG
     ;;
     r) SERIES=$OPTARG
+    ;;
+    f) DPUT_ARGS="-f"
     ;;
   esac
 done
