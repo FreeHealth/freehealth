@@ -1,85 +1,20 @@
 FreeMedForms
-0.8.2
+0.8.4
 ===== News =====
 
-  * New form items:
-    * detailswidget
-    * modern date
-    * measurement widget (a set of two widgets one for the value, one for the measurement unit)
-  * New form item options
-    * Rich texteditor
-      * can set print duplicata
-      * can set papers to use for the print (header, footer, watermark)
-      * define the document title (used by the token engine)
-    * longtext: allow management of content as plaintext or html
-    * Form description allow you to define gender specific forms (see website for doc)
-  * New forms
-    * Creating a SOAP with biometrics value (weight, height, blood pressure)
-    * Lab test prescrition assistant (english/french)
-    * Obstetrical calendar (english/french)
-  * Refactoring all identity UI
-  * Refactoring the
-    * User manager
-    * User creation wizard
-  * Ability to edit agenda day availabilities
-  * All applications are compatible with Qt 4.8 & 5.0
-  * New languages available (translations undone)
-  * Autocompletion of PDF using scripts in forms
-  * Adding drug-drug interaction engine report in menu: Help / About databases / Drugs database
-  * New plugin: PadTools
-    * Better management of tokened templates
-    * Specific UI for tokened templates edition
 
 ===== Bug correction =====
 
   * FreeMedForms
-    * Resolved app crashing when quitting on computer without internet connection
-    * Corrected the patient creation and automatic setting to the current one
-    * Faster start of the app
-    * Episode creation corrected
-    * Patient selector corrections
-    * Bug report sending improvements
-    * Managing state/province in address (using the zipcodes datapacks)
-    * Don't show forms with the 'noepsiode' option, show its first children instead
-    * Correctly set the taborder in forms
-    * Episode view header font were too small on Linux
-    * Avoid identity data duplication from one patient to another
-    * Improving the debug dialog and the log saving
-    * When no patient is selected, disable some modes (that require a current patient to be defined)
-    * Removing empty menu in menubar
-    * In Form selector preferences, only show Complete forms (no sub-forms)
-    * Correctly update allergies when saving the form item drugwidget
-    * Relabelling names
-      * "Birth Name" is now "Usual Name"
-      * "Second Name" is now "Other Names"
-      * Warning: you need to update your paper tokens
   * FreeDiams
-    * Using the padtools for the posologic sentence edition
-    * DDI engine error when detecting some DDI
-    * Corrected prescription printing using HTML posologic sentence instead of the non-HTML one
-    * Corrected management of tokens with textual drugs
   * FreeAccount
   * FreeToolBox
-    * UI update, workflow simplified
-    * Datapack server creation (free & non-free)
-    * New zipcodes datapack (whole world)
-    * Drugs database & datapack automation updated
-    * Many bug fixes
   * Installation && configuration / databases
   * PMHx
-    * Correcting Pmhx ICD button enabled state when installing the ICD10 datapack
   * Agenda:
-    * Adding a manual refreshing of the view
   * DataPack manager
-    * Correcting crash when download dialog is cancelled
-    * Avoid multi-clicks on toolbar actions
-    * Correctly manages versions of available datapacks
-    * Improving the view
-    * Improving communication with the servers
   * Forms
-    * Identity sub-form updated with detaileswidget and a trusted person information
-    * New formitems and options available, see the XML form specifications in documentation
-    * Updating 'textual prescriptions': print with prescription papers and duplicata
+    * Updating labtest helper
   * Debian specific
   * Under the hood
   * Various unloggued bug corrected
@@ -88,12 +23,8 @@ FreeMedForms
 
   * Sources
   * Packaging
-    * Correction of dependencies for the Debian/Ubuntu package
   * Compilation
   * Documentation
-    * Updating the FreeDiams documentation [French section only]
-    * Updating the FreeMedForms documentation [French section only]
-    * First version of the FreeMedForms documentation
 
 *********************************************************************************************
 ===== Nouveautés =====

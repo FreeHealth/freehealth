@@ -24,6 +24,14 @@
     <specialties lang="fr">Outils</specialties>
 
     <updateinfo>
+      <updateversion from="0.8.2" to="0.8.4">
+        <text lang="fr">
+        Ajout: plaquettes, RAI, tests de Coombs
+        </text>
+        <text lang="xx">
+        Adding RIA, platelet, Coombs tests
+        </text>
+      </updateversion>
       <updateversion from="" to="0.8.2">
         <text lang="fr">
         Première mise à disposition
@@ -63,7 +71,11 @@
                     <uuid id="4">mcv</uuid>
                     <uuid id="5">reticulo</uuid>
                     <uuid id="6">schizo</uuid>
-                    <uuid id="7">sr</uuid>
+                    <uuid id="7">bloodplatelet </uuid>
+                    <uuid id="8">sr</uuid>
+                    <uuid id="9">rai</uuid>
+                    <uuid id="10">directcoombs</uuid>
+                    <uuid id="11">indirectcoombs</uuid>
                     <possible id="0">Blood Type Test (ABO Grouping and Rho Typing)</possible>
                     <possible id="1">Complete Blood Count (CBC)</possible>
                     <possible id="2">Hemoglobin</possible>
@@ -71,7 +83,11 @@
                     <possible id="4">Mean corpuscular volume (MCV)</possible>
                     <possible id="5">Reticulocyte Count</possible>
                     <possible id="6">Schizocyte Count</possible>
-                    <possible id="7">Sedimentation Rate (SR)</possible>
+                    <possible id="7">Blood platelet Count</possible>
+                    <possible id="8">Sedimentation Rate (SR)</possible>
+                    <possible id="9">Research of irregular antibodies</possible>
+                    <possible id="10">Direct Coombs' test</possible>
+                    <possible id="11">Indirect Coombs' test</possible>
                     <possible id="0" lang="fr">Groupe sanguin, rhésus et phénotypage</possible>
                     <possible id="1" lang="fr">NFS</possible>
                     <possible id="2" lang="fr">Hémoglobine</possible>
@@ -79,7 +95,11 @@
                     <possible id="4" lang="fr">Volume globulaire moyen (VGM)</possible>
                     <possible id="5" lang="fr">Réticulocyte</possible>
                     <possible id="6" lang="fr">Schizocyte</possible>
-                    <possible id="7" lang="fr">Vitesse de sédimentation (VS)</possible>
+                    <possible id="7" lang="fr">Plaquettes</possible>
+                    <possible id="8" lang="fr">Vitesse de sédimentation (VS)</possible>
+                    <possible id="9" lang="fr">RAI (Recherche d'anticorps irréguliers)</possible>
+                    <possible id="10" lang="fr">Test de Coombs direct</possible>
+                    <possible id="11" lang="fr">Test de Coombs indirect</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
