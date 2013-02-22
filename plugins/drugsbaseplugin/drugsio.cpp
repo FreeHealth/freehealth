@@ -80,6 +80,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace {
@@ -878,6 +879,16 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     // sort
     m->sort(0);
 
+    // Get patient bio(metrics / logy) usefull for the prescription
+    QStringList bio;
+    if (!patient()->data(Core::IPatient::Weight).toString().isEmpty()
+            && !patient()->data(Core::IPatient::WeightUnit).toString().isEmpty()) {
+        bio << tkTr(Trans::Constants::WEIGHT) + ": " + patient()->data(Core::IPatient::Weight).toString() + " " + patient()->data(Core::IPatient::WeightUnit).toString();
+    }
+    if (!patient()->data(Core::IPatient::CreatinClearance).toString().isEmpty()
+            && !patient()->data(Core::IPatient::CreatinClearanceUnit).toString().isEmpty()) {
+        bio << tkTr(Trans::Constants::CREATININ_CLEARANCE) + ": " + patient()->data(Core::IPatient::CreatinClearance).toString() + " " + patient()->data(Core::IPatient::CreatinClearanceUnit).toString();
+    }
     QString ALD, nonALD;
     QString tmp;
     bool lineBreak = settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool();
@@ -949,8 +960,11 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
         }
     }
 
+    if (!bio.isEmpty()) {
+        tmp += bio.join("<br />");
+    }
     if (!ALD.isEmpty()) {
-        tmp = settings()->value(S_ALD_PRE_HTML).toString();
+        tmp += settings()->value(S_ALD_PRE_HTML).toString();
         if (version==MedinTuxVersion)
             tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
         else
