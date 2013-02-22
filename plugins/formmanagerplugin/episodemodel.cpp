@@ -322,7 +322,7 @@ bool EpisodeModel::initialize()
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
 //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onCurrentPatientChanged()));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormLoaded()));
     return true;
 }
 
@@ -367,8 +367,8 @@ void EpisodeModel::onUserChanged()
 {
 }
 
-/** Reacts on patient changes. */
-void EpisodeModel::onCurrentPatientChanged()
+/** Reacts on patient form loaded emitted by Form::FormManager. */
+void EpisodeModel::onPatientFormLoaded()
 {
     d->clearCache();
     d->updateFilter(patient()->uuid());

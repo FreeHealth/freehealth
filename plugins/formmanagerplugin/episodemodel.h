@@ -138,7 +138,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onUserChanged();
-    void onCurrentPatientChanged();
+    void onPatientFormLoaded();
     void populateNewRowWithDefault(int row, QSqlRecord &record);
 
 public Q_SLOTS:
