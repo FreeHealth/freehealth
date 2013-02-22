@@ -506,6 +506,23 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         }
         break;
     }
+//    case Qt::BackgroundRole :
+//    {
+//        if (d->_formMain->itemData()) {
+//            QColor red("darkred");
+//            if (d->_formMain->itemData()->isModified()) {
+//                red.setAlpha(120);
+//                return red;
+//            }
+//            foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+//                if (item->itemData() && item->itemData()->isModified()) {
+//                    red.setAlpha(200);
+//                    return red;
+//                }
+//            }
+//        }
+//        break;
+//    }
     }  // switch (role)
     return QVariant();
 }
