@@ -6,7 +6,9 @@ FreeMedForms
 ===== Bug correction =====
 
   * FreeMedForms
+    * Corrected: losing intake scheme when navigating inside the dosage tabs
   * FreeDiams
+    * Corrected: losing intake scheme when navigating inside the dosage tabs
   * FreeAccount
   * FreeToolBox
   * Installation && configuration / databases
