@@ -41,8 +41,8 @@
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
 #include <drugsplugin/drugswidget/dynamicalert.h>
-#include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
-#include <drugsplugin/dosagedialog/mfDosageDialog.h>
+#include <drugsplugin/dosagedialog/dosagecreatordialog.h>
+#include <drugsplugin/dosagedialog/dosagedialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/constants.h>
 

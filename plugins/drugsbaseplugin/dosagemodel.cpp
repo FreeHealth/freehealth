@@ -78,14 +78,14 @@ enum Warn { WarnDebuggingData = false };
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
-namespace mfDosageModelConstants {
+namespace DosageModelConstants {
     const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
 }
 
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
-using namespace mfDosageModelConstants;
+using namespace DosageModelConstants;
 
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }

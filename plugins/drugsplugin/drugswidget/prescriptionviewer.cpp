@@ -28,8 +28,8 @@
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
-#include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
-#include <drugsplugin/dosagedialog/mfDosageDialog.h>
+#include <drugsplugin/dosagedialog/dosagecreatordialog.h>
+#include <drugsplugin/dosagedialog/dosagedialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
