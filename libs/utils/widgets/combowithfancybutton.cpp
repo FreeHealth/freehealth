@@ -50,7 +50,8 @@ namespace Utils {
 namespace Internal {
 
     enum ColumnRepresentation {
-        ColumnMoveUp = 1,
+        ColumnLabel = 0,
+        ColumnMoveUp,
         ColumnMoveDown,
         ColumnRemove
     };
@@ -224,10 +225,8 @@ public:
     QAbstractItemModel *m_Model;
     QIcon m_RemoveLight, m_MoveUpLight, m_MoveDownLight;
 };
-
 }  // End namespace Internal
 }  // End namespace Utils
-
 
 ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     QComboBox(parent), delegate(0), view(0), m_Settings(0), m_ignoreHide(false), m_Index(-1)
@@ -271,6 +270,7 @@ ComboWithFancyButton::ComboWithFancyButton(QWidget *parent) :
     connect(view, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 }
 
+/** Enable/disable the remove button in the popup view */
 void ComboWithFancyButton::setRemoveItems(bool state)
 {
     Q_ASSERT(view);
@@ -279,6 +279,7 @@ void ComboWithFancyButton::setRemoveItems(bool state)
     view->setColumnHidden(3, !state);
 }
 
+/** Enable/disable the move buttons in the popup view */
 void ComboWithFancyButton::setMoveItems(bool state)
 {
     Q_ASSERT(view);
@@ -298,6 +299,7 @@ void ComboWithFancyButton::fancyAddItem(const QString &text, const QVariant &use
     stringModel->addStringList(QStringList() << text, userData);
 }
 
+/** Return the list of available items in the model used combo */
 QStringList ComboWithFancyButton::fancyItems(const QVariant &userData) const
 {
     if (stringModel)
@@ -305,14 +307,7 @@ QStringList ComboWithFancyButton::fancyItems(const QVariant &userData) const
     return QStringList();
 }
 
-void ComboWithFancyButton::saveItemsToSettings()
-{
-    if (!m_Settings)
-        return;
-    m_Settings->setValue(m_Key, fancyItems());
-    m_Settings->sync();
-}
-
+/** Define the icon to use in the popup view */
 void ComboWithFancyButton::setRemoveLightIcon(const QIcon &icon)
 {
     Q_ASSERT(delegate);
@@ -320,6 +315,7 @@ void ComboWithFancyButton::setRemoveLightIcon(const QIcon &icon)
         delegate->m_RemoveLight = icon;
 }
 
+/** Define the icon to use in the popup view */
 void ComboWithFancyButton::setMoveUpLightIcon(const QIcon &icon)
 {
     Q_ASSERT(delegate);
@@ -327,6 +323,7 @@ void ComboWithFancyButton::setMoveUpLightIcon(const QIcon &icon)
         delegate->m_MoveUpLight = icon;
 }
 
+/** Define the icon to use in the popup view */
 void ComboWithFancyButton::setMoveDownLightIcon(const QIcon &icon)
 {
     Q_ASSERT(delegate);
@@ -334,6 +331,7 @@ void ComboWithFancyButton::setMoveDownLightIcon(const QIcon &icon)
         delegate->m_MoveDownLight = icon;
 }
 
+/** Clear the stringlist model associated with the combobox */
 void ComboWithFancyButton::fancyClear()
 {
     if (stringModel)
@@ -344,88 +342,49 @@ void ComboWithFancyButton::handlePressed(const QModelIndex &index)
 {
     switch (index.column()) {
     case Internal::ColumnRemove:
-        {
-            delegate->pressedIndex = index;
-            stringModel->removeRow(index.row());
-            m_ignoreHide = true;
-            QComboBox::showPopup();
-            break;
-        }
+    {
+        delegate->pressedIndex = index;
+        stringModel->removeRow(index.row());
+        m_ignoreHide = true;
+        QComboBox::showPopup();
+        break;
+    }
     case Internal::ColumnMoveUp:
-        {
-            delegate->pressedIndex = index;
-            stringModel->moveUp(index);
-            m_ignoreHide = true;
-            view->setCurrentIndex(index);
-//            QComboBox::showPopup();
-            break;
-        }
+    {
+        delegate->pressedIndex = index;
+        stringModel->moveUp(index);
+        m_ignoreHide = true;
+        view->setCurrentIndex(index);
+        //            QComboBox::showPopup();
+        break;
+    }
     case Internal::ColumnMoveDown:
-        {
-            delegate->pressedIndex = index;
-            stringModel->moveDown(index);
-            m_ignoreHide = true;
-            view->setCurrentIndex(index);
-//            QComboBox::showPopup();
-            break;
-        }
+    {
+        delegate->pressedIndex = index;
+        stringModel->moveDown(index);
+        m_ignoreHide = true;
+        view->setCurrentIndex(index);
+        // QComboBox::showPopup();
+        break;
+    }
     default:
-        {
-//            qWarning()<<"xxxxxxxxxxxxxx";
-            setCurrentIndex(index.row());
-        }
+    {
+        // qWarning() << "selected" << index.row();
+        setCurrentIndex(index.row());
+    }
     }
 }
 
 void ComboWithFancyButton::showPopup()
 {
-//    this->setCurrentIndex(0);
-//    setRootModelIndex(QModelIndex());
-    m_editableState = isEditable();
-#ifdef Q_OS_MAC
-    setEditable(true);
-#endif
     QComboBox::showPopup();
 }
 
 void ComboWithFancyButton::hidePopup()
 {
     if (m_ignoreHide) {
-        m_ignoreHide=false;
+        m_ignoreHide = false;
     } else {
-        setRootModelIndex(view->currentIndex().parent());
-        setCurrentIndex(view->currentIndex().row());
         QComboBox::hidePopup();
-#ifdef Q_OS_MAC
-        setEditable(m_editableState);
-#endif
     }
-}
-
-void ComboWithFancyButton::showEvent(QShowEvent *e)
-{
-    //qWarning() <<"show" << m_Index << m_Text;
-    QComboBox::showEvent(e);
-    if (m_Index==-1) {
-        setEditText(m_Text);
-    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
-        setCurrentIndex(m_Index);
-    } else {
-        m_Index=-1;
-        setCurrentIndex(-1);
-        setEditText(m_Text);
-    }
-}
-
-void ComboWithFancyButton::hideEvent(QHideEvent *e)
-{
-    m_Index = currentIndex();
-    m_Text = currentText();
-    //qWarning() <<"hide" << m_Index << m_Text;
-    QComboBox::hideEvent(e);
-//    if (m_Index==-1) {
-//        setEditText(m_Text);
-//    } else if (stringModel->index(m_Index, 0).data().toString()==m_Text) {
-//        setCurrentIndex(m_Index);
-//    }
 }
