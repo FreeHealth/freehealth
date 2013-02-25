@@ -30,10 +30,10 @@
 #include <QWidget>
 
 /** \todo aggregate the ui in the private part */
-#include "ui_mfDosageViewer.h"
+#include "ui_dosageviewer.h"
 
 /**
- * \file mfDosageViewer.h
+ * \file dosageviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.2.1
  * \date 26 Oct 2009

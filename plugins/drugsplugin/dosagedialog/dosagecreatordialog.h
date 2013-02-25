@@ -33,10 +33,10 @@ class QDataWidgetMapper;
 QT_END_NAMESPACE
 
 // include Ui
-#include "ui_mfDosageCreatorDialog.h"
+#include "ui_dosagecreatordialog.h"
 
 /**
- * \file mfDosageCreatorDialog.h
+ * \file dosagecreatordialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.5.0
  * \date 19 Sept 2010

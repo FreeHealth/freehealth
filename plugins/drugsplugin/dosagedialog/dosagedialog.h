@@ -28,10 +28,10 @@
 #define DOSAGEDIALOG_H
 
 // include Ui
-#include "ui_mfDosageDialog.h"
+#include "ui_dosagedialog.h"
 
 /**
- * \file mfDosageDialog.h
+ * \file dosagedialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.5.0
  * \date 12 Oct 2010
@@ -44,8 +44,8 @@ class DosageDialogPrivate;
 
 /**
  * \brief Dialog for dosage prescription based on a standard dosage set.
- * Before all, this dialog is a wrapper on the mfDrugsModel (not the mfDosageModel). The mfDrugsModel is a kind of proxy
- * that manages drugs (view only) / dosages (via mfDosageModel) / interactions (view only).
+ * Before all, this dialog is a wrapper on the DrugsDB::DrugsModel (not the DrugsDB::DosageModel). The mfDrugsModel is a kind of proxy
+ * that manages drugs (view only) / dosages (via DrugsDB::DosageModel) / interactions (view only).
  * If you want to create a new dosage, you must create a new row onto the model BEFORE.
  * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
  \ingroup freediams drugswidget

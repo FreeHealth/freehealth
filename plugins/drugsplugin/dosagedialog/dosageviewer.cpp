@@ -36,7 +36,7 @@
 */
 // TODO: update documentation
 
-#include "mfDosageViewer.h"
+#include "dosageviewer.h"
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>

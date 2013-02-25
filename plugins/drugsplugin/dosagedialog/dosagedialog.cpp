@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "mfDosageDialog.h"
+#include "dosagedialog.h"
 
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
