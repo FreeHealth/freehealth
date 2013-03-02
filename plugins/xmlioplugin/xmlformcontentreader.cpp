@@ -774,8 +774,8 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         if (checkFileContent(fileName, content)) {
             // Add script to the empty root FormMain
             Form::FormMain *parent = m_ActualForm;
-            while (m_ActualForm->parentFormMain()) {
-                parent = m_ActualForm->parentFormMain();
+            while (parent->parentFormMain()) {
+                parent = parent->parentFormMain();
             }
             const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
             const QString &scriptType = element.attribute(Constants::ATTRIB_NAME, Trans::Constants::ALL_LANGUAGE);
