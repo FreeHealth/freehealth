@@ -31,9 +31,14 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <iformitem.h>
+#include <iformitemspec.h>
+
 #include <QApplication>
 #include <QPainter>
 #include <QModelIndex>
+
+#include <QDebug>
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
@@ -55,7 +60,24 @@ QSize FormViewDelegate::sizeHint(const QStyleOptionViewItem &option,const QModel
 {
     const bool topLevel = !index.parent().isValid();
     if (topLevel) {
-        return QStyledItemDelegate::sizeHint(option, index) + QSize(10,10);
+        // For top level item, user can define in the Form::FormMain extraData the height of the item
+        // If the item has a defined height, use it
+        // Else check the empty root form height
+        // Else use the default (10px)
+        QSize itemSize(10, 10);
+        Form::FormMain *form = _formTreeModel->formForIndex(index);
+        if (form) {
+            qWarning() << form->extraData();
+            if (form->extraData().contains("rootitemextraheight")) {
+                itemSize = QSize(10, form->extraData().value("rootitemextraheight").toInt());
+            } else {
+                qWarning() << "   " << form->rootFormParent()->extraData();
+                if (form->rootFormParent()->extraData().contains("rootitemextraheight")) {
+                    itemSize = QSize(10, form->rootFormParent()->extraData().value("rootitemextraheight").toInt());
+                }
+            }
+        }
+        return QStyledItemDelegate::sizeHint(option, index) + itemSize;
     }
     return QStyledItemDelegate::sizeHint(option, index);
 }

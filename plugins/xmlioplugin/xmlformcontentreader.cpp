@@ -444,6 +444,10 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
     while (!element.isNull()) {
         int i=0;
 
+        if (element.tagName().toLower()=="rootitemextraheight") {
+            qWarning() << "------";
+        }
+
         // Do not proceed form description here
         if (!descriptionPassed) {
             if (element.tagName().compare(::Constants::TAG_FORM_DESCRIPTION, Qt::CaseInsensitive)==0) {
@@ -558,7 +562,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // All others add them in extraData
         item->addExtraData(element.tagName(), element.text());
-//        qWarning() << "°°°°°°°°°°°°°° XML adding other tag" << element.tagName() << element.text() << item->extraData();
+        qWarning() << "°° XML adding other tag" << element.tagName() << element.text() << item->extraData();
 
         element = element.nextSiblingElement();
     }
