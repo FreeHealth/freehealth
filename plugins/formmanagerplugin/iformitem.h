@@ -258,14 +258,17 @@ inline Form::FormMain *Form::FormMain::formParent() const
 {
     return qobject_cast<FormMain*>(parent());
 }
-/** Returns the Empty Root Form parent of the Form::FormMain. If the parent is not found, the current object is returned */
+/**
+ * Returns the Empty Root Form parent of the Form::FormMain.
+ * If the parent is not found, the current object is returned
+ */
 inline Form::FormMain *Form::FormMain::rootFormParent() const
 {
     if (isEmptyRootForm())
         return const_cast<Form::FormMain*>(this);
     Form::FormMain *parent = formParent();
     while (parent) {
-        if (!parent->isEmptyRootForm())
+        if (parent->isEmptyRootForm())
             return parent;
         parent = parent->formParent();
     }
