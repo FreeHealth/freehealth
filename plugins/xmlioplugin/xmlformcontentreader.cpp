@@ -528,7 +528,10 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Add a form file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
-            addFile(element, form);
+            if (!addFile(element, form)) {
+                LOG_ERROR_FOR("XmlFormContentReader", QString("Unable to add file: %1; in form: %2")
+                              .arg(element.text()).arg(form.absFileName));
+            }
             element = element.nextSiblingElement();
             continue;
         }
@@ -738,17 +741,18 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
             form = XmlFormName(fileName);
             fileName = form.modeName;
         }
-    }
-    else if (fileName.endsWith(".js", Qt::CaseInsensitive))
+    } else if (fileName.endsWith(".js", Qt::CaseInsensitive)) {
         basetype = XmlIOBase::ScriptFile;
-    else if (fileName.endsWith(".ui", Qt::CaseInsensitive))
+    } else if (fileName.endsWith(".ui", Qt::CaseInsensitive)) {
         basetype = XmlIOBase::UiFile;
-    else if (fileName.endsWith(".html", Qt::CaseInsensitive))
+    } else if (fileName.endsWith(".html", Qt::CaseInsensitive)) {
         basetype = XmlIOBase::HtmlFile;
-    else if (fileName.endsWith(".pdf", Qt::CaseInsensitive))
+    } else if (fileName.endsWith(".pdf", Qt::CaseInsensitive)) {
         basetype = XmlIOBase::PdfFile;
-    //    else if (fileName.endsWith(".qml", Qt::CaseInsensitive))
+    }
+    //    else if (fileName.endsWith(".qml", Qt::CaseInsensitive)) {
 //        basetype = XmlIOBase::QmlContent;
+//        }
 
     QString content = base()->getFormContent(form.uid, basetype, fileName);
     if (content.isEmpty()) {
