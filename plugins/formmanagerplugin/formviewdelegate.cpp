@@ -67,11 +67,9 @@ QSize FormViewDelegate::sizeHint(const QStyleOptionViewItem &option,const QModel
         QSize itemSize(10, 10);
         Form::FormMain *form = _formTreeModel->formForIndex(index);
         if (form) {
-            qWarning() << form->extraData();
             if (form->extraData().contains("rootitemextraheight")) {
                 itemSize = QSize(10, form->extraData().value("rootitemextraheight").toInt());
             } else {
-                qWarning() << "   " << form->rootFormParent()->extraData();
                 if (form->rootFormParent()->extraData().contains("rootitemextraheight")) {
                     itemSize = QSize(10, form->rootFormParent()->extraData().value("rootitemextraheight").toInt());
                 }
