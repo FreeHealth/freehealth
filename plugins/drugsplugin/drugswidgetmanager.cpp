@@ -831,9 +831,9 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
     }
 }
 
+/** Reset the posologic sentence to the default one */
 void DrugsActionHandler::resetPrescriptionSentenceToDefault()
 {
-#ifdef WITH_PAD
     QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()));
     if (content.isEmpty()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
@@ -848,17 +848,6 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
     QTextDocument doc;
     doc.setHtml(content);
     settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
-#else
-    //TODO use the bundled file oldstyle_..._lang.html
-    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
-                         QCoreApplication::translate(
-                             Constants::DRUGCONSTANTS_TR_CONTEXT,
-                             DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
-    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
-                         QCoreApplication::translate(
-                             Constants::DRUGCONSTANTS_TR_CONTEXT,
-                             DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
-#endif
     DrugsDB::DrugsModel::activeModel()->resetModel();
 }
 
