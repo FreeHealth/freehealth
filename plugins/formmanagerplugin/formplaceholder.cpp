@@ -53,6 +53,7 @@
 #include "formtreemodel.h"
 #include "formdatawidgetmapper.h"
 #include "formviewdelegate.h"
+#include "subforminsertionpoint.h"
 
 #include "ui_formplaceholder.h"
 
@@ -102,11 +103,7 @@
 #include <QFileDialog>
 #include <QSortFilterProxyModel>
 
-// Test
-#include <QTextBrowser>
-
 #include <QDebug>
-#include "subforminsertionpoint.h"
 
 using namespace Form;
 using namespace Trans::ConstantTranslations;
