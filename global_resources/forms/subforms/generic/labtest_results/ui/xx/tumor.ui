@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LabTestsResults</class>
+ <widget class="QWidget" name="LabTestsResults">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>453</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="5">
+    <widget class="QDoubleSpinBox" name="ca125">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QDoubleSpinBox" name="cyfra211">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="ca153Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>CA 15.3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="hcgLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>bHCG</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QDoubleSpinBox" name="ca199">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QDoubleSpinBox" name="hcg">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="aceLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>ACE</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QDoubleSpinBox" name="afp">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="afpLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>AFP</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QDoubleSpinBox" name="ca2729">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="cyfra211Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>CYFRA 21-1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="ace">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="ca125Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>CA 125</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QLabel" name="ca2729Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>CA 27.29</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="ca199Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>CA199</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="ca153">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

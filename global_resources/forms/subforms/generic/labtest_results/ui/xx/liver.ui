@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LabTestsResults</class>
+ <widget class="QWidget" name="LabTestsResults">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>390</width>
+    <height>119</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="tgoLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>TGO</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <widget class="QDoubleSpinBox" name="nh4">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="biliT">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="amylaseLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Amylase</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QLabel" name="biliCLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>BiliC</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QDoubleSpinBox" name="biliC">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="tgpLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>TGP</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="QDoubleSpinBox" name="ggt">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QDoubleSpinBox" name="amylase">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="ggtLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>GGT</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="tgo">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QDoubleSpinBox" name="tgp">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="lipaseLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Lipase</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="biliULabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>BiliU</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="biliTLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>BiliT</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QLabel" name="nh4Label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>NH4</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QDoubleSpinBox" name="lipase">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QDoubleSpinBox" name="biliU">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

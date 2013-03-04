@@ -2,6 +2,9 @@ FreeMedForms
 0.8.4
 ===== News =====
 
+  * Forms:
+    * Lab tests result helper
+
 
 ===== Bug correction =====
 
@@ -17,6 +20,7 @@ FreeMedForms
   * DataPack manager
   * Forms
     * Updating labtest helper
+    * UI improvement in obstetrical calendar
   * Debian specific
   * Under the hood
   * Various unloggued bug corrected
