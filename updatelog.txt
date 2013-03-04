@@ -2,9 +2,10 @@ FreeMedForms
 0.8.4
 ===== News =====
 
-  * Forms:
+  * Forms
     * Lab tests result helper
-
+  * FreeMedForms
+    * Adding a status bar at the top right corner of the patient bar
 
 ===== Bug correction =====
 

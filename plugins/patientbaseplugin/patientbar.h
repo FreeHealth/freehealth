@@ -34,8 +34,8 @@
 /**
  * \file patientbar.h
  * \author Eric Maeker
- * \version 0.8.2
- * \date 25 Jan 2013
+ * \version 0.8.4
+ * \date 04 Mar 2013
 */
 
 namespace Patients {
@@ -58,6 +58,7 @@ public:
     ~PatientBar();
 
     void addBottomWidget(QWidget *widget);
+    void showMessage(const QString &message, int duration_ms = 2000, const QString &css = QString::null);
 
 private Q_SLOTS:
     void onCurrentPatientChanged();

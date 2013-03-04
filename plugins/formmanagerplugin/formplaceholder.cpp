@@ -42,7 +42,6 @@
  * |              |                                         |
  * |              |                                         |
  * +--------------+-----------------------------------------+
- *
 */
 
 #include "formplaceholder.h"
@@ -69,6 +68,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipatientbar.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/idocumentprinter.h>
 #include <coreplugin/constants_icons.h>
@@ -102,6 +102,7 @@
 #include <QToolBar>
 #include <QFileDialog>
 #include <QSortFilterProxyModel>
+#include <QToolTip>
 
 #include <QDebug>
 
@@ -177,22 +178,6 @@ bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
     }
     return true;
 }
-
-//EpisodeModelUserListener::EpisodeModelUserListener(FormPlaceHolder *parent) :
-//    UserPlugin::IUserListener(parent)
-//{
-//    Q_ASSERT(parent);
-//}
-//EpisodeModelUserListener::~EpisodeModelUserListener() {}
-
-//bool EpisodeModelUserListener::userAboutToChange()
-//{
-//    qWarning() << Q_FUNC_INFO;
-//    m_EpisodeModel->submit();
-//    return true;
-//}
-//bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
-
 
 class FormPlaceHolderPrivate
 {
@@ -273,7 +258,15 @@ public:
             if (!save)
                 return false;
         }
+        patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "Saving episode (%1) from form (%2)")
+                .arg(ui->formDataMapper->currentEpisodeLabel())
+                .arg(ui->formDataMapper->currentFormName()));
         bool ok = ui->formDataMapper->submit();
+        if (!ok) {
+            patient()->patientBar()->showMessage(QApplication::translate("Form::FormPlaceHolder", "WARNING: Episode (%1) from form (%2) can not be saved")
+                    .arg(ui->formDataMapper->currentEpisodeLabel())
+                    .arg(ui->formDataMapper->currentFormName()));
+        }
         return ok;
     }
 
@@ -749,6 +742,11 @@ bool FormPlaceHolder::validateCurrentEpisode()
     if (!d->_currentEpisodeModel)
         return false;
     bool ok = d->_currentEpisodeModel->validateEpisode(d->currentEditingEpisodeIndex());
+    if (ok) {
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) signed")
+                .arg(d->ui->formDataMapper->currentEpisodeLabel())
+                .arg(d->ui->formDataMapper->currentFormName()));
+    }
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
@@ -789,6 +787,11 @@ bool FormPlaceHolder::removeCurrentEpisode()
     if (!yes)
         return false;
     bool ok = d->_currentEpisodeModel->removeEpisode(d->currentEditingEpisodeIndex());
+    if (ok)
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) removed")
+                .arg(d->ui->formDataMapper->currentEpisodeLabel())
+                .arg(d->ui->formDataMapper->currentFormName()));
+
     d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     d->ui->formDataMapper->clear();
     d->ui->formDataMapper->setEnabled(false);

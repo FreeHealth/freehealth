@@ -267,6 +267,22 @@ QModelIndex FormDataWidgetMapper::currentEditingEpisodeIndex() const
     return d->_currentEpisode;
 }
 
+/** Return the label of the currently editing episode */
+QString FormDataWidgetMapper::currentEpisodeLabel() const
+{
+    if (d->_formMain && d->_formMain->itemData())
+        return d->_formMain->itemData()->data(IFormItemData::ID_EpisodeLabel).toString();
+    return QString::null;
+}
+
+/** Return the label of the currently editing form */
+QString FormDataWidgetMapper::currentFormName() const
+{
+    if (d->_formMain)
+        return d->_formMain->spec()->label();
+    return QString::null;
+}
+
 /** Define the Form::FormMain to use in the mapper. */
 void FormDataWidgetMapper::setCurrentForm(const QString &formUid)
 {
