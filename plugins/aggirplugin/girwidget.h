@@ -124,7 +124,7 @@ public:
 public Q_SLOTS:
     void retranslate() {}
 
-private:
+public:
     GirUi *m_ui;
 };
 
@@ -139,6 +139,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     void setGirWidget(GirWidget *widget) {m_GirWidget = widget;}
 
     virtual bool setData(const int ref, const QVariant &data, const int role);
@@ -151,7 +154,7 @@ private:
     Form::FormItem *m_Parent;
     QString m_OriginalValue;
     GirWidget *m_GirWidget;
-    bool m_modified;
+    bool m_modified, m_readonly;
 };
 
 } // End Internal

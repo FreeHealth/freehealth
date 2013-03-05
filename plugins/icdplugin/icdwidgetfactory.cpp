@@ -178,6 +178,17 @@ void IcdFormData::setModified(bool modified)
         m_OriginalValue = storableData().toString();
 }
 
+void IcdFormData::setReadOnly(bool readOnly)
+{
+    // TODO: improve the readonly feature
+    m_Form->m_CentralWidget->setEnabled(!readOnly);
+}
+
+bool IcdFormData::isReadOnly() const
+{
+    return (!m_Form->m_CentralWidget->isEnabled());
+}
+
 bool IcdFormData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

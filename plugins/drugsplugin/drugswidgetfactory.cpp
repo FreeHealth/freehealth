@@ -279,6 +279,17 @@ void DrugsWidgetData::setModified(bool modified)
     m_Widget->m_PrescriptionModel->setModified(modified);
 }
 
+void DrugsWidgetData::setReadOnly(bool readOnly)
+{
+    // TODO improve this readonly feature
+    m_Widget->m_CentralWidget->setEnabled(!readOnly);
+}
+
+bool DrugsWidgetData::isReadOnly() const
+{
+    return (!m_Widget->m_CentralWidget->isEnabled());
+}
+
 bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

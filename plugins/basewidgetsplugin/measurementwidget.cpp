@@ -329,6 +329,17 @@ void MeasurementWidgetData::setModified(bool modified)
         m_OriginalValue = storableData().toString();
 }
 
+void MeasurementWidgetData::setReadOnly(bool readOnly)
+{
+    m_Measurement->m_units->setEnabled(!readOnly);
+    m_Measurement->m_value->setEnabled(!readOnly);
+}
+
+bool MeasurementWidgetData::isReadOnly() const
+{
+    return (!m_Measurement->m_units->isEnabled());
+}
+
 bool MeasurementWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

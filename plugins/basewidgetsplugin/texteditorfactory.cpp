@@ -273,6 +273,16 @@ void TextEditorData::setModified(bool modified)
         m_ForceModified = modified;
 }
 
+void TextEditorData::setReadOnly(bool readOnly)
+{
+    m_Editor->setReadOnly(readOnly);
+}
+
+bool TextEditorData::isReadOnly() const
+{
+    return m_Editor->isReadOnly();
+}
+
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

@@ -122,6 +122,10 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    // TODO: code this
+    //void setReadOnly(bool readOnly);
+    //bool isReadOnly() const;
+
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role);
     QVariant data(const int ref, const int role) const;

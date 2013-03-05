@@ -180,6 +180,17 @@ void TreeViewFormItemData::setModified(bool modified)
     //        m_OriginalValue = storableData().toStringList();
 }
 
+void TreeViewFormItemData::setReadOnly(bool readOnly)
+{
+    // TODO: code this: readOnly feature
+}
+
+bool TreeViewFormItemData::isReadOnly() const
+{
+    // TODO: code this: readOnly feature
+    return false;
+}
+
 bool TreeViewFormItemData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

@@ -133,6 +133,17 @@ void DrugsCentralWidget::clear()
     m_ui->m_PrescriptionView->clear();
 }
 
+void DrugsCentralWidget::setReadOnly(bool readOnly)
+{
+    // TODO: code this readonly feature
+}
+
+bool DrugsCentralWidget::isReadOnly() const
+{
+    // TODO: code this readonly feature
+    return false;
+}
+
 QListView *DrugsCentralWidget::prescriptionListView()
 {
     if (!m_ui)

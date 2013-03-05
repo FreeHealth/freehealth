@@ -251,6 +251,18 @@ void GirItemData::setModified(bool modified)
         m_OriginalValue = storableData().toString();
 }
 
+void GirItemData::setReadOnly(bool readOnly)
+{
+    m_readonly = readOnly;
+    // TODO: improve this
+    m_GirWidget->m_ui->setEnabled(!readOnly);
+}
+
+bool GirItemData::isReadOnly() const
+{
+    return m_readonly;
+}
+
 bool GirItemData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

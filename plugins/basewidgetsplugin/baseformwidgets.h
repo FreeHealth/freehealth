@@ -106,13 +106,13 @@ public Q_SLOTS:
 public:
     QDateTimeEdit *m_EpisodeDate;
     QLineEdit *m_EpisodeLabel;
+    QToolButton *m_PriorityButton;
 
 private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
     Ui::BaseFormWidget *ui;
     QAction *aScreenshot, *aHigh, *aMedium, *aLow;
-    QToolButton *m_PriorityButton;
 };
 
 // Used to pass episode date, label, user...
@@ -128,6 +128,9 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
     void setModified(bool modified);
+
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
 
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
@@ -192,6 +195,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
@@ -243,6 +249,9 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
     void setModified(bool modified);
+
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -296,6 +305,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
@@ -345,6 +357,9 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
     void setModified(bool modified);
+
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -415,6 +430,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
@@ -464,6 +482,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
@@ -484,18 +505,18 @@ private:
 //--------------------------------------------------------------------------------------------------------
 class BaseButton : public Form::IFormWidget
 {
-     Q_OBJECT
+    Q_OBJECT
 public:
-     BaseButton(Form::FormItem *linkedObject, QWidget *parent = 0);
-     ~BaseButton();
+    BaseButton(Form::FormItem *linkedObject, QWidget *parent = 0);
+    ~BaseButton();
 
 public Q_SLOTS:
-     void retranslate();
+    void retranslate();
 
- private Q_SLOTS:
-     void buttonClicked();
+private Q_SLOTS:
+    void buttonClicked();
 private:
-     QPushButton *m_Button;
+    QPushButton *m_Button;
 };
 
 }  // End namespace Internal

@@ -207,6 +207,7 @@ public:
         m_xmlOnly(false),
         m_availaibleSet(false),
         m_checkPasswordConfirmation(true),
+        m_readOnly(false),
         m_minimalLoginLength(6),
         m_minimalPasswordLength(6),
         m_requestedProvider(0),
@@ -509,7 +510,7 @@ public:
     IsDirtyDataWidgetMapper *m_Mapper;
     QAbstractItemModel *m_Model;       // This pointer should never be deleted
     QPixmap m_Photo;
-    bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation;
+    bool m_initialized, m_hasRealPhoto, m_xmlOnly, m_availaibleSet, m_checkPasswordConfirmation, m_readOnly;
     QString m_lastXml;
     int m_minimalLoginLength, m_minimalPasswordLength;
     Core::IPhotoProvider *m_requestedProvider;
@@ -635,6 +636,7 @@ void IdentityEditorWidget::setAvailableWidgets(AvailableWidgets widgets)
 /** Set/unset the view in read-only mode */
 void IdentityEditorWidget::setReadOnly(bool readOnly)
 {
+    d->m_readOnly = readOnly;
     d->ui->usualName->setReadOnly(readOnly);
     d->ui->otherNames->setReadOnly(readOnly);
     d->ui->firstname->setReadOnly(readOnly);
@@ -645,6 +647,11 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
     d->ui->photoButton->setEnabled(readOnly);
     d->ui->zipcodesWidget->setReadOnly(readOnly);
     d->ui->passwordWidget->setReadOnly(readOnly);
+}
+
+bool IdentityEditorWidget::isReadOnly() const
+{
+    return d->m_readOnly;
 }
 
 /**

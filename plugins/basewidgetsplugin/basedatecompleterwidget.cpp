@@ -194,6 +194,16 @@ void BaseDateCompleterData::setModified(bool modified)
         m_OriginalValue = m_Date->_dateEdit->date();
 }
 
+void BaseDateCompleterData::setReadOnly(bool readOnly)
+{
+    m_Date->_dateEdit->setEnabled(!readOnly);
+}
+
+bool BaseDateCompleterData::isReadOnly() const
+{
+    return (!m_Date->_dateEdit->isEnabled());
+}
+
 bool BaseDateCompleterData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

@@ -175,6 +175,16 @@ void FrenchSocialNumberFormData::setModified(bool modified)
         m_OriginalValue = m_Widget->numberWithControlKey();
 }
 
+void FrenchSocialNumberFormData::setReadOnly(bool readOnly)
+{
+    m_Widget->setEnabled(!readOnly);
+}
+
+bool FrenchSocialNumberFormData::isReadOnly() const
+{
+    return (!m_Widget->isEnabled());
+}
+
 bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
     qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;

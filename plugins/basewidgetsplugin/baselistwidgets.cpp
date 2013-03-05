@@ -309,6 +309,24 @@ void BaseListData::setModified(bool modified)
         m_OriginalValue = storableData().toStringList();
 }
 
+void BaseListData::setReadOnly(bool readOnly)
+{
+    // TODO: improve this readonly feature
+    if (m_List->m_List)
+        m_List->m_List->setEnabled(!readOnly);
+    if (m_EditableList && m_EditableList->m_StringListView)
+        m_EditableList->m_StringListView->setEnabled(!readOnly);
+}
+
+bool BaseListData::isReadOnly() const
+{
+    if (m_List->m_List)
+        return (!m_List->m_List->isEnabled());
+    if (m_EditableList && m_EditableList->m_StringListView)
+        return (!m_EditableList->m_StringListView->isEnabled());
+    return false;
+}
+
 bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -617,6 +635,16 @@ void BaseComboData::setModified(bool modified)
 {
     if (!modified)
         m_OriginalValue = m_Combo->m_Combo->currentIndex();
+}
+
+void BaseComboData::setReadOnly(bool readOnly)
+{
+    m_Combo->m_Combo->setEnabled(!readOnly);
+}
+
+bool BaseComboData::isReadOnly() const
+{
+    return m_Combo->m_Combo->isEnabled();
 }
 
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)

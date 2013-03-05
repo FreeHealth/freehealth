@@ -83,6 +83,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
