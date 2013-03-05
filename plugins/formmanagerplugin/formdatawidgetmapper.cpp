@@ -243,7 +243,11 @@ bool FormDataWidgetMapper::isDirty() const
     if (!d->_currentEpisode.isValid())
         return false;
 
-    // form isModified() ?
+    // form main is readonly ?
+    if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly())
+        return false;
+
+    // form main isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
             qWarning() << "FormDataWidgetMapper::isDirty (form)" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();

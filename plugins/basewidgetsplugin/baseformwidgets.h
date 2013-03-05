@@ -97,6 +97,9 @@ public:
     void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const {return true;}  // Always return true even if using QtUiFiles
 
+    void showValidationMessage(const QString &message);
+    void hideAndClearValidationMessage();
+
     // Printing
     QString printableHtml(bool withValues = true) const;
 

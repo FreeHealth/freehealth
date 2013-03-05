@@ -741,6 +741,12 @@ bool FormPlaceHolder::validateCurrentEpisode()
     // get the episodeModel corresponding to the currently selected form
     if (!d->_currentEpisodeModel)
         return false;
+    if (!d->saveCurrentEditingEpisode()) {
+        LOG_ERROR("Unable to save current episode");
+        return false;
+    }
+
+    // validate episode
     bool ok = d->_currentEpisodeModel->validateEpisode(d->currentEditingEpisodeIndex());
     if (ok) {
         patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) signed")

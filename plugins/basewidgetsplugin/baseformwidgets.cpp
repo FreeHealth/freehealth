@@ -286,6 +286,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     mainLayout->addWidget(mainWidget);
     mainLayout->addStretch();
     createActions();
+    hideAndClearValidationMessage();
 
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);
@@ -364,6 +365,18 @@ void BaseForm::addWidgetToContainer(IFormWidget *widget)
 //               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
+}
+
+void BaseForm::showValidationMessage(const QString &message)
+{
+    ui->validatedEpisodeLabel->setText(message);
+    ui->validatedEpisodeLabel->setVisible(true);
+}
+
+void BaseForm::hideAndClearValidationMessage()
+{
+    ui->validatedEpisodeLabel->setText(QString::null);
+    ui->validatedEpisodeLabel->setVisible(false);
 }
 
 QString BaseForm::printableHtml(bool withValues) const
@@ -472,6 +485,7 @@ void BaseFormData::clear()
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
     m_Form->m_EpisodeDate->setEnabled(false);
+    m_Form->hideAndClearValidationMessage();
 }
 
 bool BaseFormData::isModified() const
@@ -503,12 +517,25 @@ void BaseFormData::setModified(bool modified)
     }
 }
 
-/** Switch the formitem widget and data to a readonly state. Warning this does not include all the children. */
+/**
+ * Switch the formitem widget and data to a readonly state (when the episode was validated).
+ * Setting the readonly property to true will show a label informing user that the episode
+ * was validated and can not be modified.\n
+ * Warning this does not include all the children.
+ */
 void BaseFormData::setReadOnly(bool readOnly)
 {
     m_Form->m_EpisodeLabel->setEnabled(!readOnly);
     m_Form->m_EpisodeDate->setEnabled(!readOnly);
     m_Form->m_PriorityButton->setEnabled(!readOnly);
+    if (readOnly)
+        m_Form->showValidationMessage(
+                    QString("<span style='color: maroon;'><span style='font-weight: bold'>%1</span><br />%2</span>")
+                    .arg(QApplication::translate("BaseFormData", "This episode is validated."))
+                    .arg(QApplication::translate("BaseFormData", "You can not edit its content, neither remove it."))
+                    );
+    else
+        m_Form->hideAndClearValidationMessage();
 }
 
 bool BaseFormData::isReadOnly() const
@@ -811,13 +838,15 @@ void BaseGroupData::setModified(bool modified)
 
 void BaseGroupData::setReadOnly(bool readOnly)
 {
+    Q_UNUSED(readOnly);
     // TODO: improve this (we only need to avoid checked state to change)
-    m_BaseGroup->m_Group->setEnabled(!readOnly);
+    //m_BaseGroup->m_Group->setEnabled(!readOnly);
 }
 
 bool BaseGroupData::isReadOnly() const
 {
-    return (!m_BaseGroup->m_Group->isEnabled());
+    return false;
+    //return (!m_BaseGroup->m_Group->isEnabled());
 }
 
 bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)

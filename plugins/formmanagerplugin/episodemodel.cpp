@@ -673,9 +673,16 @@ bool EpisodeModel::removeAllEpisodes()
 }
 
 /** Define the whole model read mode */
-void EpisodeModel::setReadOnly(const bool state)
+void EpisodeModel::setReadOnly(bool state)
 {
     d->_readOnly = state;
+    // update all itemdata of the parent formmain readonly property
+    if (d->_formMain->itemData())
+        d->_formMain->itemData()->setReadOnly(state);
+    foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+        if (item->itemData())
+            item->itemData()->setReadOnly(state);
+    }
 }
 
 /** Return true if the whole model is in a read only mode */
@@ -704,6 +711,7 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     validation->setData(EpisodeValidationData::IsValid, 1);
     d->_validationCache.insertMulti(id.toInt(), validation);
     bool ok = episodeBase()->saveEpisodeValidation(validation);
+    setReadOnly(true);
     Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount() - 1));
     return ok;
 }
@@ -809,6 +817,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->formWidget()->setEnabled(true);
 
     // TODO: if episode is validated ==> read-only
+    if (d->isEpisodeValidated(episode)) {
+        setReadOnly(true);
+    } else {
+        setReadOnly(false);
+    }
 
     if (WarnLogChronos)
         Utils::Log::logTimeElapsed(chrono, objectName(), "populateFormWithEpisode");

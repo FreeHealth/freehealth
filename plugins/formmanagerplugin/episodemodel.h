@@ -114,7 +114,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeAllEpisodes();
 
-    void setReadOnly(const bool state);
+    void setReadOnly(bool state);
     bool isReadOnly() const;
     bool isDirty() const;
 
