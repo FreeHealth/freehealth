@@ -458,6 +458,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         else
             userUid = user()->fullNameOfUser(userUid);
 
+        // TODO: add validation information in the tooltip
         return QString("<p align=\"right\"><img src=\"%5\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))

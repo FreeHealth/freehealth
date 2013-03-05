@@ -6,6 +6,7 @@ FreeMedForms
     * Lab tests result helper
   * FreeMedForms
     * Adding a status bar at the top right corner of the patient bar
+    * Manage episode validation
 
 ===== Bug correction =====
 
