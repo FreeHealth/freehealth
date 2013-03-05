@@ -256,8 +256,8 @@ bool TextEditorData::isModified() const
 {
     if (m_ForceModified)
         return true;
-    if (m_Editor->textEdit()->toPlainText().isEmpty())
-        return m_OriginalValue.isEmpty();
+    if (m_Editor->textEdit()->toPlainText().isEmpty() && m_OriginalValue.isEmpty())
+        return false;
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
