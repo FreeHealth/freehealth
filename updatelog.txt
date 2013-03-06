@@ -13,6 +13,7 @@ FreeMedForms
 
   * FreeMedForms
     * Corrected: losing intake scheme when navigating inside the dosage tabs
+    * Corrected: Linux UI form widget management in the form placeholder
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Improving the french posologic sentence
