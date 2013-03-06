@@ -70,6 +70,9 @@ public:
     bool initialize(bool hideSelector = false);
     void clear();
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     void changeFontTo(const QFont &font);
     DrugsDB::DrugsModel *currentDrugsModel() const;
 

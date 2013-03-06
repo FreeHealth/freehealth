@@ -2,11 +2,20 @@ FreeMedForms
 0.8.4
 ===== News =====
 
+  * Forms
+    * Lab tests result helper
+  * FreeMedForms
+    * Adding a status bar at the top right corner of the patient bar
+    * Manage episode validation
+    * Allow the renewal of episode (in one click)
 
 ===== Bug correction =====
 
   * FreeMedForms
+    * Corrected: losing intake scheme when navigating inside the dosage tabs
   * FreeDiams
+    * Corrected: losing intake scheme when navigating inside the dosage tabs
+    * Improving the french posologic sentence
   * FreeAccount
   * FreeToolBox
   * Installation && configuration / databases
@@ -15,6 +24,7 @@ FreeMedForms
   * DataPack manager
   * Forms
     * Updating labtest helper
+    * UI improvement in obstetrical calendar
   * Debian specific
   * Under the hood
   * Various unloggued bug corrected

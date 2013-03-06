@@ -107,6 +107,7 @@ const char * const  LOCKED_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Lo
 const char * const  UNLOCKED_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Unlocked");
 const char * const  TEMPLATES_DATABASE_INFORMATION_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database information");
 const char * const  REMOVE_EPISODE        = QT_TRANSLATE_NOOP("tkConstants", "Remove episode");
+const char * const  RENEW_EPISODE         = QT_TRANSLATE_NOOP("tkConstants", "Renew episode");
 
 const char * const  PMHX                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
 const char * const  PASTMEDICALHISTORY    = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");

@@ -441,7 +441,7 @@ QModelIndex DrugsModel::index(int row, int column, const QModelIndex &parent) co
 /**
   Defines the data of drugs.
   The drugs model is a read only model for all the namespace mfDrugsConstants::Drug enum values.\n
-  Dosages values are not accessible from here. Use the mfDosageModel.\n
+  Dosages values are not accessible from here. Use the DosageModel.\n
   Prescritions values are writables. Information are transmitted using DrugsDB::setPrescriptionValue().
 */
 bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int role)

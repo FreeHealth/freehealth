@@ -26,6 +26,10 @@
     <specialties lang="de">Tools</specialties>
 
     <updateinfo>
+      <updateversion from="0.8.2" to="0.8.4">
+        <text lang="fr">Amélioration de l'interface</text>
+        <text lang="xx">Small UI improvements</text>
+      </updateversion>
       <updateversion from="" to="0.8.2">
         <text lang="fr">Première version</text>
         <text lang="xx">First version</text>

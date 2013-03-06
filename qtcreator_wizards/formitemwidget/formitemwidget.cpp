@@ -215,6 +215,12 @@ void %ClassName:c%Data::setModified(bool modified)
 //        m_OriginalValue = storableData().toStringList();
 }
 
+void %ClassName:c%Data::setReadOnly(bool readOnly)
+{}
+
+bool %ClassName:c%Data::isReadOnly() const
+{}
+
 bool %ClassName:c%Data::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

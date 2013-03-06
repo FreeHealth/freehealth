@@ -30,6 +30,7 @@
 #include <coreplugin/iscriptmanager.h>
 
 #include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -106,6 +107,7 @@ static inline QLabel *findLabel(Form::FormItem *item)
 CalculationWidgetsFactory::CalculationWidgetsFactory(QObject *parent) :
     IFormWidgetFactory(parent)
 {
+    // TODO: in all the widgets, manage the readonly state.
 }
 
 CalculationWidgetsFactory::~CalculationWidgetsFactory()

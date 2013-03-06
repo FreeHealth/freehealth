@@ -61,6 +61,9 @@ public:
     virtual bool isModified() const = 0;
     virtual void setModified(bool modified) = 0;
 
+    virtual void setReadOnly(bool readOnly) = 0;
+    virtual bool isReadOnly() const = 0;
+
     // ref makes references to patient's data -> Core::IPatient
     virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;
     virtual QVariant data(const int ref, const int role = Qt::DisplayRole) const = 0;

@@ -169,6 +169,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
  */
 bool IdentityPage::validatePage()
 {
+    setFocus();
     if (!m_Identity->isIdentityValid()) {
         LOG_ERROR("Unable to validate page. Invalid identity.");
         return false;

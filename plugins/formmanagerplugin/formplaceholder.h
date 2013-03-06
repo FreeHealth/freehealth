@@ -113,6 +113,7 @@ protected Q_SLOTS:
     void setCurrentEditingFormItem(const QModelIndex &index);
     bool createEpisode();
     bool validateCurrentEpisode();
+    bool renewEpisode();
     bool saveCurrentEpisode();
     bool removeCurrentEpisode();
     bool takeScreenshotOfCurrentEpisode();

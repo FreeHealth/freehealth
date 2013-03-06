@@ -100,6 +100,9 @@ public:
     bool isModified() const;
     void setModified(bool modified);
 
+    void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
+
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role) {Q_UNUSED(ref); Q_UNUSED(data); Q_UNUSED(role); return true;}
     QVariant data(const int ref, const int role) const {Q_UNUSED(role); Q_UNUSED(ref); return QVariant();}

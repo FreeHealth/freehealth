@@ -41,8 +41,8 @@
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
 #include <drugsplugin/drugswidget/dynamicalert.h>
-#include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
-#include <drugsplugin/dosagedialog/mfDosageDialog.h>
+#include <drugsplugin/dosagedialog/dosagecreatordialog.h>
+#include <drugsplugin/dosagedialog/dosagedialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/constants.h>
 
@@ -131,6 +131,18 @@ void DrugsCentralWidget::clear()
 {
     m_ui->m_DrugSelector->clear();
     m_ui->m_PrescriptionView->clear();
+}
+
+void DrugsCentralWidget::setReadOnly(bool readOnly)
+{
+    // TODO: improve this readonly feature
+    m_ui->m_DrugSelector->setEnabled(!readOnly);
+    m_ui->m_PrescriptionView->setEnabled(!readOnly);
+}
+
+bool DrugsCentralWidget::isReadOnly() const
+{
+    return (!m_ui->m_DrugSelector->isEnabled());
 }
 
 QListView *DrugsCentralWidget::prescriptionListView()

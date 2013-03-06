@@ -1151,14 +1151,14 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 
     // Refill
     // FIXME: correcty manages plurial translations
-    QVariant refill = drug->prescriptionValue(Constants::Prescription::Refill);
-    if (!refill.isNull() && !refill.isNull()) {
-        if (refill.toInt() > 1) {
-            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+    int refill = drug->prescriptionValue(Constants::Prescription::Refill).toInt();
+    if (refill > 0) {
+        if (refill > 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill);
             tmp = tmp.remove("(").remove(")");
             tokens_value["REFILL"] = tmp;
-        } else if (refill.toInt() == 1) {
-            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+        } else if (refill == 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill);
             int begin = tmp.indexOf("(");
             if (begin > 0) {
                 int end = tmp.indexOf(")", begin);
@@ -1168,7 +1168,6 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
             tokens_value["REFILL"] = tmp;
         }
     }
-
     Utils::replaceTokens(tmp, tokens_value);
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);

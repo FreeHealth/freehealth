@@ -41,9 +41,9 @@ QT_END_NAMESPACE
 
 /**
  * \file combowithfancybutton.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 18 Aug 2010
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 25 Feb 2013
 */
 
 namespace Utils {
@@ -66,24 +66,12 @@ public:
     void fancyAddItem(const QString &text, const QVariant &userData = QVariant());
     QStringList fancyItems(const QVariant &userData = QVariant()) const;
 
-
-    //    void setSettings(QSettings *settings) {m_Settings = settings;}
-    //    void setSettingsKey(const QString &key) {m_Key = key;}
-    void saveItemsToSettings();
-
-    void setDarkIcon(const QIcon &icon);
     void setRemoveLightIcon(const QIcon &icon);
     void setMoveUpLightIcon(const QIcon &icon);
     void setMoveDownLightIcon(const QIcon &icon);
 
 public Q_SLOTS:
     void fancyClear();
-    // This code is due to QComboBox strange behavior when hiding/showing --> losing content
-    // Eg: combo is inside a tabwidget
-    void clearEditText() {m_Text.clear(); QComboBox::clearEditText();}
-    void setEditText(const QString &text) {m_Text=text; QComboBox::setEditText(text);}
-    void setCurrentIndex(int index) {m_Index=index; QComboBox::setCurrentIndex(index);}
-
 
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
@@ -92,11 +80,6 @@ protected:
     // From virtual members of QComboBox
     void showPopup();
     void hidePopup();
-
-    // This code is due to QComboBox strange behavior when hiding/showing --> losing content
-    // Eg: combo is inside a tabwidget
-    void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *e);
 
 private:
     Internal::ItemDelegate *delegate;

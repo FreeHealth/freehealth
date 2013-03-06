@@ -256,8 +256,8 @@ bool TextEditorData::isModified() const
 {
     if (m_ForceModified)
         return true;
-    if (m_Editor->textEdit()->toPlainText().isEmpty())
-        return m_OriginalValue.isEmpty();
+    if (m_Editor->textEdit()->toPlainText().isEmpty() && m_OriginalValue.isEmpty())
+        return false;
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
@@ -271,6 +271,16 @@ void TextEditorData::setModified(bool modified)
     }
     else
         m_ForceModified = modified;
+}
+
+void TextEditorData::setReadOnly(bool readOnly)
+{
+    m_Editor->setReadOnly(readOnly);
+}
+
+bool TextEditorData::isReadOnly() const
+{
+    return m_Editor->isReadOnly();
 }
 
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)

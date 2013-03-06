@@ -100,6 +100,7 @@ public:
     void addContext(const Core::Context &context);
 
     virtual QTextEdit *textEdit() const;
+    bool isReadOnly() const {return textEdit()->isReadOnly();}
 
     // some QTextEdit wrappers for code simplification
     void setDocument(QTextDocument *doc) {textEdit()->setDocument(doc);}

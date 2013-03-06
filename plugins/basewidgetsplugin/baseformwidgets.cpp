@@ -202,11 +202,13 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
     m_ContainerLayout(0),
+    m_EpisodeDate(0),
+    m_EpisodeLabel(0),
+    m_PriorityButton(new QToolButton(this)),
     i(0), row(0), col(0), numberColumns(1),
     ui(0),
     aScreenshot(0),
-    aHigh(0), aMedium(0), aLow(0),
-    m_PriorityButton(new QToolButton(this))
+    aHigh(0), aMedium(0), aLow(0)
 {
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -284,6 +286,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     mainLayout->addWidget(mainWidget);
     mainLayout->addStretch();
     createActions();
+    hideAndClearValidationMessage();
 
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);
@@ -362,6 +365,18 @@ void BaseForm::addWidgetToContainer(IFormWidget *widget)
 //               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
+}
+
+void BaseForm::showValidationMessage(const QString &message)
+{
+    ui->validatedEpisodeLabel->setText(message);
+    ui->validatedEpisodeLabel->setVisible(true);
+}
+
+void BaseForm::hideAndClearValidationMessage()
+{
+    ui->validatedEpisodeLabel->setText(QString::null);
+    ui->validatedEpisodeLabel->setVisible(false);
 }
 
 QString BaseForm::printableHtml(bool withValues) const
@@ -449,7 +464,9 @@ void BaseForm::retranslate()
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseFormData::BaseFormData(Form::FormItem *item) :
-    m_FormItem(item), m_Form(0), m_Modified(false)
+    m_FormItem(item),
+    m_Form(0),
+    m_Modified(false)
 {}
 
 BaseFormData::~BaseFormData()
@@ -468,6 +485,7 @@ void BaseFormData::clear()
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
     m_Form->m_EpisodeDate->setEnabled(false);
+    m_Form->hideAndClearValidationMessage();
 }
 
 bool BaseFormData::isModified() const
@@ -497,6 +515,32 @@ void BaseFormData::setModified(bool modified)
             m_OriginalData.insert(id, data(id));
         }
     }
+}
+
+/**
+ * Switch the formitem widget and data to a readonly state (when the episode was validated).
+ * Setting the readonly property to true will show a label informing user that the episode
+ * was validated and can not be modified.\n
+ * Warning this does not include all the children.
+ */
+void BaseFormData::setReadOnly(bool readOnly)
+{
+    m_Form->m_EpisodeLabel->setEnabled(!readOnly);
+    m_Form->m_EpisodeDate->setEnabled(!readOnly);
+    m_Form->m_PriorityButton->setEnabled(!readOnly);
+    if (readOnly)
+        m_Form->showValidationMessage(
+                    QString("<span style='color: maroon;'><span style='font-weight: bold'>%1</span><br />%2</span>")
+                    .arg(QApplication::translate("BaseFormData", "This episode is validated."))
+                    .arg(QApplication::translate("BaseFormData", "You can not edit its content, neither remove it."))
+                    );
+    else
+        m_Form->hideAndClearValidationMessage();
+}
+
+bool BaseFormData::isReadOnly() const
+{
+    return (!m_Form->m_EpisodeLabel->isEnabled());
 }
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
@@ -792,6 +836,19 @@ void BaseGroupData::setModified(bool modified)
     }
 }
 
+void BaseGroupData::setReadOnly(bool readOnly)
+{
+    Q_UNUSED(readOnly);
+    // TODO: improve this (we only need to avoid checked state to change)
+    //m_BaseGroup->m_Group->setEnabled(!readOnly);
+}
+
+bool BaseGroupData::isReadOnly() const
+{
+    return false;
+    //return (!m_BaseGroup->m_Group->isEnabled());
+}
+
 bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -961,6 +1018,16 @@ void BaseCheckData::setModified(bool modified)
 {
     if (!modified)
         m_OriginalValue = m_Check->checkState();
+}
+
+void BaseCheckData::setReadOnly(bool readOnly)
+{
+    m_Check->setEnabled(!readOnly);
+}
+
+bool BaseCheckData::isReadOnly() const
+{
+    return (!m_Check->isEnabled());
 }
 
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
@@ -1255,6 +1322,19 @@ void BaseRadioData::setModified(bool modified)
     }
 }
 
+void BaseRadioData::setReadOnly(bool readOnly)
+{
+    foreach(QRadioButton *but, m_Radio->m_RadioList)
+        but->setEnabled(!readOnly);
+}
+
+bool BaseRadioData::isReadOnly() const
+{
+    if (m_Radio->m_RadioList.isEmpty())
+        return false;
+    return (!m_Radio->m_RadioList.at(0)->isEnabled());
+}
+
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1523,6 +1603,23 @@ void BaseSimpleTextData::setModified(bool modified)
         else if (m_Text->m_Text)
             m_OriginalValue = m_Text->m_Text->toPlainText();
     }
+}
+
+void BaseSimpleTextData::setReadOnly(bool readOnly)
+{
+    if (m_Text->m_Line)
+        m_Text->m_Line->setReadOnly(readOnly);
+    if (m_Text->m_Text)
+        m_Text->m_Text->setReadOnly(readOnly);
+}
+
+bool BaseSimpleTextData::isReadOnly() const
+{
+    if (m_Text->m_Line)
+        return m_Text->m_Line->isReadOnly();
+    if (m_Text->m_Text)
+        return m_Text->m_Text->isReadOnly();
+    return false;
 }
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
@@ -1807,6 +1904,16 @@ void BaseDateData::setModified(bool modified)
         m_OriginalValue = m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
+void BaseDateData::setReadOnly(bool readOnly)
+{
+    m_Date->m_Date->setReadOnly(readOnly);
+}
+
+bool BaseDateData::isReadOnly() const
+{
+    return m_Date->m_Date->isReadOnly();
+}
+
 bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -2019,6 +2126,16 @@ void BaseSpinData::setModified(bool modified)
         m_OriginalValue = storableData().toDouble();
 }
 
+void BaseSpinData::setReadOnly(bool readOnly)
+{
+    m_Spin->m_Spin->setReadOnly(readOnly);
+}
+
+bool BaseSpinData::isReadOnly() const
+{
+    return m_Spin->m_Spin->isReadOnly();
+}
+
 bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -2132,6 +2249,7 @@ BaseButton::~BaseButton()
 
 void BaseButton::buttonClicked()
 {
+    // TODO: manage a readonly state using the Form::IFormItemData::setReadOnly()
     if (!m_FormItem->scripts()->onClicked().isEmpty())
         scriptManager()->evaluate(m_FormItem->scripts()->onClicked());
 }

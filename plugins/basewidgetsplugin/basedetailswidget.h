@@ -27,7 +27,6 @@
 #define BASEWIDGETS_INTERNAL_BASEDETAILSWIDGET_H
 
 #include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/iformitemdata.h>
 
 /**
  * \file basedetailswidget.h

@@ -33,8 +33,8 @@
 /**
  * \file ipatientbar.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.2
- * \date 24 Jan 2013
+ * \version 0.8.4
+ * \date 04 Mar 2013
 */
 
 namespace Core {
@@ -48,7 +48,7 @@ public:
     virtual ~IPatientBar() {}
 
     virtual void addBottomWidget(QWidget *widget) = 0;
-
+    virtual void showMessage(const QString &message, int duration_ms = 2000, const QString &css = QString::null) = 0;
 };
 
 } // namespace Core

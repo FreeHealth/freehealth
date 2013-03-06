@@ -458,6 +458,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         else
             userUid = user()->fullNameOfUser(userUid);
 
+        // TODO: add validation information in the tooltip
         return QString("<p align=\"right\"><img src=\"%5\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))
@@ -617,8 +618,10 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
 /** Insert new episodes to the \e parent. The parent must be a form. */
 bool EpisodeModel::insertRows(int row, int count, const QModelIndex &)
 {
-    if (d->_readOnly)
+    if (d->_readOnly) {
+        LOG_ERROR("Unable to insertRow, model is read-only");
         return false;
+    }
     bool ok = d->_sqlModel->insertRows(row, count);
     if (!ok) {
         LOG_ERROR("Unable to insert rows: " + d->_sqlModel->lastError().text());
@@ -673,9 +676,17 @@ bool EpisodeModel::removeAllEpisodes()
 }
 
 /** Define the whole model read mode */
-void EpisodeModel::setReadOnly(const bool state)
+void EpisodeModel::setReadOnly(bool state)
 {
+    // TODO: manage a read-only property PER ROW and for the whole model
     d->_readOnly = state;
+    // update all itemdata of the parent formmain readonly property
+    if (d->_formMain->itemData())
+        d->_formMain->itemData()->setReadOnly(state);
+    foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+        if (item->itemData())
+            item->itemData()->setReadOnly(state);
+    }
 }
 
 /** Return true if the whole model is in a read only mode */
@@ -704,6 +715,7 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     validation->setData(EpisodeValidationData::IsValid, 1);
     d->_validationCache.insertMulti(id.toInt(), validation);
     bool ok = episodeBase()->saveEpisodeValidation(validation);
+    setReadOnly(true);
     Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount() - 1));
     return ok;
 }
@@ -727,6 +739,36 @@ bool EpisodeModel::removeEpisode(const QModelIndex &index)
     endResetModel();
     // TODO: add a trace in the episode db
     return ok;
+}
+
+/**
+ * Renew the selected episode \e episodeToRenew. This member takes the content of
+ * the current episode and use it to create a new one. \n
+ * The date is set to the current date, the episode label is cleared,
+ * and user creator is set to the current user. \n
+ * The Read Only state of the model does not affect this member.\n
+ * Returns the model index (column 0) of the new episode or an
+ * invalid index in case of an error.
+ */
+QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
+{
+    const QString &xml = d->getEpisodeContent(episodeToRenew);
+
+    bool ro = d->_readOnly;
+    d->_readOnly = false;
+    if (!insertRow(rowCount())) {
+        LOG_ERROR("Unable to create a new episode");
+        return QModelIndex();
+    }
+
+    QModelIndex newEpisode = index(rowCount() - 1, 0);
+    QModelIndex xmlIndex = index(newEpisode.row(), EpisodeModel::XmlContent);
+    if (setData(xmlIndex, xml)) {
+        d->_readOnly = ro;
+        return newEpisode;
+    }
+    d->_readOnly = ro;
+    return QModelIndex();
 }
 
 /**
@@ -809,6 +851,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->formWidget()->setEnabled(true);
 
     // TODO: if episode is validated ==> read-only
+    if (d->isEpisodeValidated(episode)) {
+        setReadOnly(true);
+    } else {
+        setReadOnly(false);
+    }
 
     if (WarnLogChronos)
         Utils::Log::logTimeElapsed(chrono, objectName(), "populateFormWithEpisode");

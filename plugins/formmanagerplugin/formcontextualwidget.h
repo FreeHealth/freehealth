@@ -53,14 +53,15 @@ class FormContextualWidget : public QWidget
 public:
     enum WidgetAction {
         Action_Clear = 0,
-        Action_CreateEpisode, /*!< Create new episode */
-        Action_ValidateCurrentEpisode, /*!< "Sign" currently selected episode, so that it can't be changed any more */
-        Action_SaveCurrentEpisode, /*!< Save currently selected episode to database */
-        Action_RemoveCurrentEpisode, /*!< Remove currently selected episode */
-        Action_TakeScreenShot, /*!< Take a screenshot of the current form */
-        Action_AddForm, /*!< Add Form to treeview */
-        Action_RemoveSub, /*!< Remove Form and all subforms from treeview */
-        Action_PrintCurrentFormEpisode /*!< Print currently selected episode */
+        Action_CreateEpisode,               /*!< Create new episode */
+        Action_ValidateCurrentEpisode,      /*!< "Sign" currently selected episode, so that it can't be changed any more */
+        Action_SaveCurrentEpisode,          /*!< Save currently selected episode to database */
+        Action_RenewCurrentEpisode,         /*!< Renew the currently selected episode */
+        Action_RemoveCurrentEpisode,        /*!< Remove currently selected episode */
+        Action_TakeScreenShot,              /*!< Take a screenshot of the current form */
+        Action_AddForm,                     /*!< Add Form to treeview */
+        Action_RemoveSub,                   /*!< Remove Form and all subforms from treeview */
+        Action_PrintCurrentFormEpisode      /*!< Print currently selected episode */
     };
 
     explicit FormContextualWidget(QWidget *parent = 0);
@@ -76,6 +77,7 @@ protected Q_SLOTS:
     virtual bool clear() = 0;
     virtual bool createEpisode() = 0;
     virtual bool validateCurrentEpisode() = 0;
+    virtual bool renewEpisode() = 0;
     virtual bool saveCurrentEpisode() = 0;
     virtual bool removeCurrentEpisode() = 0;
     virtual bool takeScreenshotOfCurrentEpisode() = 0;

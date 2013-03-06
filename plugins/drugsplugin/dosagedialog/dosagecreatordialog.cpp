@@ -33,7 +33,7 @@
  * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
 */
 
-#include "mfDosageCreatorDialog.h"
+#include "dosagecreatordialog.h"
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>

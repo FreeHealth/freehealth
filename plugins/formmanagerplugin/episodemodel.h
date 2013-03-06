@@ -114,7 +114,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeAllEpisodes();
 
-    void setReadOnly(const bool state);
+    void setReadOnly(bool state);
     bool isReadOnly() const;
     bool isDirty() const;
 
@@ -122,6 +122,7 @@ public:
     bool isEpisodeValidated(const QModelIndex &index) const;
 
     bool removeEpisode(const QModelIndex &index);
+    QModelIndex renewEpisode(const QModelIndex &episodeToRenew);
 
 public Q_SLOTS:
     bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);

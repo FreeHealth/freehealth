@@ -84,17 +84,30 @@ public:
 
     void clearStackLayout()
     {
-        if (_stack)
-            delete _stack;
-        _stack = new QStackedLayout(q);
-        q->setLayout(_stack);
+        if (_stack) {
+            if (_formMain) {
+                QList<Form::FormMain *> forms;
+                forms << _formMain;
+                forms << _formMain->flattenFormMainChildren();
+                foreach(FormMain *form, forms) {
+                    if (form->formWidget()) {
+                        form->formWidget()->setParent(0);
+                    }
+                }
+            }
+
+            for(int i=0; i < _stack->count(); ++i) {
+                delete _stack->widget(i);
+            }
+        }
     }
 
     void populateStack(Form::FormMain *rootForm)
     {
-        Q_ASSERT(_stack);
-        if (!_stack)
-            return;
+        if (!_stack) {
+            _stack = new QStackedLayout(q);
+            q->setLayout(_stack);
+        }
         clearStackLayout();
         _formMain = rootForm;
 
@@ -133,7 +146,6 @@ public:
                 vl->addWidget(form->formWidget());
                 int id = _stack->addWidget(sa);
                 _stackId_FormUuid.insert(id, form->uuid());
-//                form->formWidget()->setEnabled(false);
             }
         }
     }
@@ -243,7 +255,11 @@ bool FormDataWidgetMapper::isDirty() const
     if (!d->_currentEpisode.isValid())
         return false;
 
-    // form isModified() ?
+    // form main is readonly ?
+    if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly())
+        return false;
+
+    // form main isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
             qWarning() << "FormDataWidgetMapper::isDirty (form)" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
@@ -265,6 +281,22 @@ bool FormDataWidgetMapper::isDirty() const
 QModelIndex FormDataWidgetMapper::currentEditingEpisodeIndex() const
 {
     return d->_currentEpisode;
+}
+
+/** Return the label of the currently editing episode */
+QString FormDataWidgetMapper::currentEpisodeLabel() const
+{
+    if (d->_formMain && d->_formMain->itemData())
+        return d->_formMain->itemData()->data(IFormItemData::ID_EpisodeLabel).toString();
+    return QString::null;
+}
+
+/** Return the label of the currently editing form */
+QString FormDataWidgetMapper::currentFormName() const
+{
+    if (d->_formMain)
+        return d->_formMain->spec()->label();
+    return QString::null;
 }
 
 /** Define the Form::FormMain to use in the mapper. */

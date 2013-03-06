@@ -219,7 +219,7 @@
   <customwidget>
    <class>DosageViewer</class>
    <extends>QWidget</extends>
-   <header location="global">dosagedialog/mfDosageViewer.h</header>
+   <header location="global">dosagedialog/dosageviewer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

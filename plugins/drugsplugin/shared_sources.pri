@@ -17,17 +17,17 @@ SOURCES += $${PWD}/drugswidgetmanager.cpp \
     $${PWD}/drugswidget/atctreeviewer.cpp
 
 # Dosage Dialog
-HEADERS += $${PWD}/dosagedialog/mfDosageDialog.h \
-    $${PWD}/dosagedialog/mfDosageCreatorDialog.h \
-    $${PWD}/dosagedialog/mfDosageViewer.h
+HEADERS += $${PWD}/dosagedialog/dosagedialog.h \
+    $${PWD}/dosagedialog/dosagecreatordialog.h \
+    $${PWD}/dosagedialog/dosageviewer.h
 
-SOURCES += $${PWD}/dosagedialog/mfDosageDialog.cpp \
-    $${PWD}/dosagedialog/mfDosageCreatorDialog.cpp \
-    $${PWD}/dosagedialog/mfDosageViewer.cpp
+SOURCES += $${PWD}/dosagedialog/dosagedialog.cpp \
+    $${PWD}/dosagedialog/dosagecreatordialog.cpp \
+    $${PWD}/dosagedialog/dosageviewer.cpp
 
-FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
-    $${PWD}/dosagedialog/mfDosageCreatorDialog.ui \
-    $${PWD}/dosagedialog/mfDosageViewer.ui
+FORMS += $${PWD}/dosagedialog/dosagedialog.ui \
+    $${PWD}/dosagedialog/dosagecreatordialog.ui \
+    $${PWD}/dosagedialog/dosageviewer.ui
 
 # DrugsWidget Preferences
 HEADERS += \

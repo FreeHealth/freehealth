@@ -247,6 +247,16 @@ void IdentityWidgetData::setModified(bool modified)
     // TODO: code here: HOW ??
 }
 
+void IdentityWidgetData::setReadOnly(bool readOnly)
+{
+    m_Widget->m_Identity->setReadOnly(readOnly);
+}
+
+bool IdentityWidgetData::isReadOnly() const
+{
+    m_Widget->m_Identity->isReadOnly();
+}
+
 void IdentityWidgetData::setStorableData(const QVariant &value)
 {
     if (m_Widget->m_Identity->isXmlInOut()) {

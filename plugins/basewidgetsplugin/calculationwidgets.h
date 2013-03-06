@@ -27,7 +27,6 @@
 #define __CALCULATIONWIDGETS_H
 
 #include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/iformitemdata.h>
 #include <texteditorplugin/texteditor.h>
 #include <QVariant>
 #include <QLineEdit>
@@ -81,7 +80,6 @@ private:
     QLineEdit *line;
 //    SumWidgetData *m_ItemData;
 };
-
 
 class ScriptWidget : public Form::IFormWidget
 {

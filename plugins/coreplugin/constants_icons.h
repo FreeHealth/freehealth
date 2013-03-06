@@ -85,6 +85,7 @@ const char * const  ICONPASTE =        "editpaste.png";
 const char * const  ICONCLEAR =        "editclear.png";
 const char * const  ICONCLEARLINEEDIT= "editclearlineedit.png";
 const char * const  ICONADD =          "add.png";
+const char * const  ICONRENEW =        "editcopy.png";
 const char * const  ICONREMOVE =       "remove.png";
 const char * const  ICONMOVEUP =       "1uparrow.png";
 const char * const  ICONMOVEDOWN =     "1downarrow.png";

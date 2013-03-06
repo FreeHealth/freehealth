@@ -57,6 +57,8 @@ public:
     void clear();
     bool isDirty() const;
     QModelIndex currentEditingEpisodeIndex() const;
+    QString currentEpisodeLabel() const;
+    QString currentFormName() const;
 
 public Q_SLOTS:
     void setCurrentForm(const QString &formUid);

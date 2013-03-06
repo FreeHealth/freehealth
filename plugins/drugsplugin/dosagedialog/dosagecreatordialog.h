@@ -24,55 +24,65 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DOSAGEDIALOG_H
-#define DOSAGEDIALOG_H
+#ifndef DOSAGECREATORDIALOG_H
+#define DOSAGECREATORDIALOG_H
+
+#include <QtGlobal>
+QT_BEGIN_NAMESPACE
+class QDataWidgetMapper;
+QT_END_NAMESPACE
 
 // include Ui
-#include "ui_mfDosageDialog.h"
+#include "ui_dosagecreatordialog.h"
 
 /**
- * \file mfDosageDialog.h
+ * \file dosagecreatordialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.5.0
- * \date 12 Oct 2010
+ * \date 19 Sept 2010
 */
+
+namespace DrugsDB {
+namespace Internal {
+class DosageModel;
+}  // End Internal
+}  // End DrugsDB
 
 namespace DrugsWidget {
 namespace Internal {
-class DosageDialogPrivate;
+class DosageModel;
+class DosageCreatorDialogPrivate;
 
-
-/**
- * \brief Dialog for dosage prescription based on a standard dosage set.
- * Before all, this dialog is a wrapper on the mfDrugsModel (not the mfDosageModel). The mfDrugsModel is a kind of proxy
- * that manages drugs (view only) / dosages (via mfDosageModel) / interactions (view only).
- * If you want to create a new dosage, you must create a new row onto the model BEFORE.
- * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
- \ingroup freediams drugswidget
-*/
-class DosageDialog : public QDialog, public Ui::DosageDialog
+class DosageCreatorDialog : public QDialog, public Ui::DosageCreatorDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DosageDialog);
+    Q_DISABLE_COPY(DosageCreatorDialog);
 
 public:
-    explicit DosageDialog(QWidget *parent);
-    ~DosageDialog();
+    explicit DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel);
+    ~DosageCreatorDialog();
 
-    void changeRow(const QVariant &drugUid, const int dosageRow);
-
+private:
+    void keyPressEvent(QKeyEvent *e);
 
 private Q_SLOTS:
     void done(int r);
-    void on_drugNameButton_clicked();
-    void on_innButton_clicked();
-    void updatePosologicSentence(const QModelIndex &, const QModelIndex &);
+    void updateSettings();
+    void onProtocolDataChanged();
+    void saveRequested();
+    void prescribeRequested();
+    void saveAndPrescribeRequested();
+    void helpRequested();
+    void drugsInformationRequested();
+    void addTestOnlyRequested();
+    void showInteractionSynthesisRequested();
 
 private:
-    DosageDialogPrivate *d;
+    DosageCreatorDialogPrivate *d;
 };
 
-} // namespace Internal
-} // namespace DrugsWidget
+}  // End Internal
+}  // End DrugsWidget
 
-#endif // DOSAGEDIALOG_H
+
+#endif // DOSAGECREATORDIALOG_H

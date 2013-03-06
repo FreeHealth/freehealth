@@ -120,6 +120,7 @@ public:
     bool initialize();
     void setAvailableWidgets(AvailableWidgets widgets);
     void setReadOnly(bool readOnly);
+    bool isReadOnly() const;
     void clear();
 
     // Use model
