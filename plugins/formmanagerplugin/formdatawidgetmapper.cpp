@@ -84,17 +84,30 @@ public:
 
     void clearStackLayout()
     {
-        if (_stack)
-            delete _stack;
-        _stack = new QStackedLayout(q);
-        q->setLayout(_stack);
+        if (_stack) {
+            if (_formMain) {
+                QList<Form::FormMain *> forms;
+                forms << _formMain;
+                forms << _formMain->flattenFormMainChildren();
+                foreach(FormMain *form, forms) {
+                    if (form->formWidget()) {
+                        form->formWidget()->setParent(0);
+                    }
+                }
+            }
+
+            for(int i=0; i < _stack->count(); ++i) {
+                delete _stack->widget(i);
+            }
+        }
     }
 
     void populateStack(Form::FormMain *rootForm)
     {
-        Q_ASSERT(_stack);
-        if (!_stack)
-            return;
+        if (!_stack) {
+            _stack = new QStackedLayout(q);
+            q->setLayout(_stack);
+        }
         clearStackLayout();
         _formMain = rootForm;
 
@@ -133,7 +146,6 @@ public:
                 vl->addWidget(form->formWidget());
                 int id = _stack->addWidget(sa);
                 _stackId_FormUuid.insert(id, form->uuid());
-//                form->formWidget()->setEnabled(false);
             }
         }
     }
