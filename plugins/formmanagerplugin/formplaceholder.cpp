@@ -774,6 +774,16 @@ bool FormPlaceHolder::renewEpisode()
     if (!d->ui->episodeView->selectionModel()->hasSelection())
         return false;
 
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Renew the current episode"),
+                                      tr("A new episode will created with the exact same content "
+                                         "as the currently selected but at the current date, "
+                                         "using your user.<br />"
+                                         "Do you want to renew the current episode?"));
+    if (!yes)
+        return false;
+
+
     // get the episodeModel corresponding to the currently selected form
     if (!d->_currentEpisodeModel)
         return false;
