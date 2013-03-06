@@ -207,6 +207,8 @@ public:
 
         QStringList actions;
         actions << Constants::A_ADDEPISODE
+                << Constants::A_RENEWEPISODE
+                << "--"
                 << Constants::A_REMOVEEPISODE
                 << "--"
                 << Constants::A_VALIDATEEPISODE
@@ -541,6 +543,7 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
     case Action_SaveCurrentEpisode:
         // Save episode only if
         // - an episode is selected
+        //TODO: - episode is not validated
         return (d->ui->episodeView->selectionModel()->hasSelection());
     case Action_RemoveCurrentEpisode:
     {
@@ -552,10 +555,13 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         return (multiEpisode && modelPopulated
                 && d->ui->episodeView->selectionModel()->hasSelection());
     }
+    case Action_RenewCurrentEpisode:
     case Action_TakeScreenShot:
-        // Take screenshot only if
+    {
+        // Take screenshot / Renew an episode only if
         // - an episode is selected
         return (d->ui->episodeView->selectionModel()->hasSelection());
+    }
     case Action_AddForm:
         // Add form always enabled
         return true;
@@ -755,6 +761,41 @@ bool FormPlaceHolder::validateCurrentEpisode()
     }
     Q_EMIT actionsEnabledStateChanged();
     return ok;
+}
+
+/**
+ * Renew the currently selected episode. This member takes the content of
+ * the current episode and use it to create a new one. Only the date, episode label
+ * and user creator changes.
+ * \sa EpisodeModel::renewEpisode
+ */
+bool FormPlaceHolder::renewEpisode()
+{
+    if (!d->ui->episodeView->selectionModel()->hasSelection())
+        return false;
+
+    // get the episodeModel corresponding to the currently selected form
+    if (!d->_currentEpisodeModel)
+        return false;
+    if (!d->saveCurrentEditingEpisode()) {
+        LOG_ERROR("Unable to save current episode");
+        return false;
+    }
+
+    // renew an episode
+    QModelIndex newEpisode = d->_currentEpisodeModel->renewEpisode(d->currentEditingEpisodeIndex());
+    if (newEpisode.isValid()) {
+        // message
+        patient()->patientBar()->showMessage(tr("Episode (%1) from form (%2) renewed")
+                .arg(d->ui->formDataMapper->currentEpisodeLabel())
+                .arg(d->ui->formDataMapper->currentFormName()));
+
+        // select the newly created episode
+        QModelIndex proxy = d->_proxyModel->mapFromSource(newEpisode);
+        d->ui->episodeView->selectRow(proxy.row());
+    }
+    Q_EMIT actionsEnabledStateChanged();
+    return newEpisode.isValid();
 }
 
 /**

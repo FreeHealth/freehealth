@@ -61,6 +61,7 @@ private Q_SLOTS:
     void onSaveEpisodeRequested();
     void onCreateEpisodeRequested();
     void onValidateEpisodeRequested();
+    void onRenewEpisodeRequested();
     void onRemoveEpisodeRequested();
     void onTakeScreenshotRequested();
     void onAddFormRequested();
@@ -75,7 +76,7 @@ private Q_SLOTS:
 protected:
     QAction *aClear;
     QAction *aShowDatabaseInformation;
-    QAction *aCreateEpisode, *aValidateEpisode, *aRemoveEpisode, *aSaveEpisode;
+    QAction *aCreateEpisode, *aValidateEpisode, *aRenewEpisode, *aRemoveEpisode, *aSaveEpisode;
     QAction *aTakeScreenshot;
     QAction *aAddForm;
     QAction *aRemoveSubForm;

@@ -202,7 +202,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     QObject(parent),
     aClear(0),
     aShowDatabaseInformation(0),
-    aCreateEpisode(0), aValidateEpisode(0), aRemoveEpisode(0), aSaveEpisode(0),
+    aCreateEpisode(0), aValidateEpisode(0), aRenewEpisode(0), aRemoveEpisode(0), aSaveEpisode(0),
     aTakeScreenshot(0),
     aAddForm(0),
     aRemoveSubForm(0),
@@ -260,6 +260,15 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::VALIDATEEPISODE_TEXT, Constants::VALIDATEEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
     connect(aValidateEpisode, SIGNAL(triggered()), this, SLOT(onValidateEpisodeRequested()));
+
+    aRenewEpisode = createAction(this, "aRenewEpisode", Core::Constants::ICONRENEW,
+                                  Constants::A_RENEWEPISODE,
+                                  ctx,
+                                  Trans::Constants::RENEW_EPISODE, "",
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aRenewEpisode, SIGNAL(triggered()), this, SLOT(onRenewEpisodeRequested()));
 
     aRemoveEpisode = createAction(this, "aRemoveEpisode", Core::Constants::ICONREMOVE,
                                   Constants::A_REMOVEEPISODE,
@@ -346,6 +355,7 @@ void FormActionHandler::updateActions()
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_ValidateCurrentEpisode);
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_SaveCurrentEpisode);
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_RemoveCurrentEpisode);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_RenewCurrentEpisode);
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_TakeScreenShot);
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_AddForm);
     onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_RemoveSub);
@@ -361,6 +371,7 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
         case Form::Internal::FormContextualWidget::Action_CreateEpisode: a = aCreateEpisode; break;
         case Form::Internal::FormContextualWidget::Action_ValidateCurrentEpisode: a = aValidateEpisode; break;
         case Form::Internal::FormContextualWidget::Action_SaveCurrentEpisode: a = aSaveEpisode; break;
+        case Form::Internal::FormContextualWidget::Action_RenewCurrentEpisode: a = aRenewEpisode; break;
         case Form::Internal::FormContextualWidget::Action_RemoveCurrentEpisode: a = aRemoveEpisode; break;
         case Form::Internal::FormContextualWidget::Action_TakeScreenShot: a = aTakeScreenshot; break;
         case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
@@ -398,6 +409,13 @@ void FormActionHandler::onValidateEpisodeRequested()
 {
     if (m_CurrentView) {
         m_CurrentView->validateCurrentEpisode();
+    }
+}
+
+void FormActionHandler::onRenewEpisodeRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->renewEpisode();
     }
 }
 

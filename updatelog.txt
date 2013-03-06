@@ -7,6 +7,7 @@ FreeMedForms
   * FreeMedForms
     * Adding a status bar at the top right corner of the patient bar
     * Manage episode validation
+    * Allow the renewal of episode (in one click)
 
 ===== Bug correction =====
 

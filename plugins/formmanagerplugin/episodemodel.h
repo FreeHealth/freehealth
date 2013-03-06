@@ -122,6 +122,7 @@ public:
     bool isEpisodeValidated(const QModelIndex &index) const;
 
     bool removeEpisode(const QModelIndex &index);
+    QModelIndex renewEpisode(const QModelIndex &episodeToRenew);
 
 public Q_SLOTS:
     bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);
