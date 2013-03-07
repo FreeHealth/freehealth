@@ -462,46 +462,46 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;             break;
         case IPatient::TitleIndex:    col = Constants::IDENTITY_TITLE;             break;
         case IPatient::Title:
-            {
-                col = Constants::IDENTITY_TITLE;
-                int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
-                switch (titleIndex) {
-                case Trans::Constants::Mister:    return tkTr(Trans::Constants::MISTER); break;
-                case Trans::Constants::Miss :     return tkTr(Trans::Constants::MISS); break;
-                case Trans::Constants::Madam :    return tkTr(Trans::Constants::MADAM); break;
-                case Trans::Constants::Doctor :   return tkTr(Trans::Constants::DOCTOR); break;
-                case Trans::Constants::Professor: return tkTr(Trans::Constants::PROFESSOR); break;
-                case Trans::Constants::Captain :  return tkTr(Trans::Constants::CAPTAIN); break;
-                default :       return QString();
-                }
-                return QString();
+        {
+            col = Constants::IDENTITY_TITLE;
+            int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
+            switch (titleIndex) {
+            case Trans::Constants::Mister:    return tkTr(Trans::Constants::MISTER); break;
+            case Trans::Constants::Miss :     return tkTr(Trans::Constants::MISS); break;
+            case Trans::Constants::Madam :    return tkTr(Trans::Constants::MADAM); break;
+            case Trans::Constants::Doctor :   return tkTr(Trans::Constants::DOCTOR); break;
+            case Trans::Constants::Professor: return tkTr(Trans::Constants::PROFESSOR); break;
+            case Trans::Constants::Captain :  return tkTr(Trans::Constants::CAPTAIN); break;
+            default :       return QString();
             }
+            return QString();
+        }
         case IPatient::FullName:
-            {
-                const QString &usualname = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_USUALNAME)).toString();
-                const QString &othernames = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_OTHERNAMES)).toString();
-                const QString &first = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
-                QString title;
-                // add title
-                int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
-                switch (titleIndex) {
-                case Trans::Constants::Mister:    title = tkTr(Trans::Constants::MISTER); break;
-                case Trans::Constants::Miss :     title = tkTr(Trans::Constants::MISS); break;
-                case Trans::Constants::Madam :    title = tkTr(Trans::Constants::MADAM); break;
-                case Trans::Constants::Doctor :   title = tkTr(Trans::Constants::DOCTOR); break;
-                case Trans::Constants::Professor: title = tkTr(Trans::Constants::PROFESSOR); break;
-                case Trans::Constants::Captain :  title = tkTr(Trans::Constants::CAPTAIN); break;
-                }
-                if (!title.isEmpty())
-                    title.append(" ");
-
-                if (!othernames.isEmpty()) {
-                    return QString("%1 - %2 %3").arg(title+usualname, othernames, first);
-                } else {
-                    return QString("%1 %2").arg(title+usualname, first);
-                }
-                break;
+        {
+            const QString &usualname = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_USUALNAME)).toString();
+            const QString &othernames = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_OTHERNAMES)).toString();
+            const QString &first = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
+            QString title;
+            // add title
+            int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
+            switch (titleIndex) {
+            case Trans::Constants::Mister:    title = tkTr(Trans::Constants::MISTER); break;
+            case Trans::Constants::Miss :     title = tkTr(Trans::Constants::MISS); break;
+            case Trans::Constants::Madam :    title = tkTr(Trans::Constants::MADAM); break;
+            case Trans::Constants::Doctor :   title = tkTr(Trans::Constants::DOCTOR); break;
+            case Trans::Constants::Professor: title = tkTr(Trans::Constants::PROFESSOR); break;
+            case Trans::Constants::Captain :  title = tkTr(Trans::Constants::CAPTAIN); break;
             }
+            if (!title.isEmpty())
+                title.append(" ");
+
+            if (!othernames.isEmpty()) {
+                return QString("%1 - %2 %3").arg(title+usualname, othernames, first);
+            } else {
+                return QString("%1 %2").arg(title+usualname, first);
+            }
+            break;
+        }
         case IPatient::FullAddress:
         {
             const QString &street = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_STREET)).toString();
