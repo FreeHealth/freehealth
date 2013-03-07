@@ -254,7 +254,7 @@ void IdentityWidgetData::setReadOnly(bool readOnly)
 
 bool IdentityWidgetData::isReadOnly() const
 {
-    m_Widget->m_Identity->isReadOnly();
+    return m_Widget->m_Identity->isReadOnly();
 }
 
 void IdentityWidgetData::setStorableData(const QVariant &value)
