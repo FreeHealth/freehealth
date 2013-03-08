@@ -72,6 +72,7 @@ public:
 public Q_SLOTS:
     bool setCurrentPatientUuid(const QString &uuid);
     void refreshAllPatientModel() const;
+    bool removePatient(const QString &uuid);
 
 Q_SIGNALS:
     

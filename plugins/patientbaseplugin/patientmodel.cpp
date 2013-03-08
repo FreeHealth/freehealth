@@ -31,6 +31,7 @@
 */
 
 #include "patientmodel.h"
+#include "patientcore.h"
 #include "patientbase.h"
 #include "constants_db.h"
 #include "constants_settings.h"
@@ -66,10 +67,11 @@ using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
+static inline Patients::Internal::PatientBase *patientBase() {return patientCore()->patientBase();}
 
 namespace Patients {
 namespace Internal {
@@ -337,21 +339,29 @@ bool PatientModel::beginChangeCurrentPatient()
   *
   * \sa Core::IPatient::currentPatientChanged()
  */
-void PatientModel::setCurrentPatient(const QModelIndex &index)
+bool PatientModel::setCurrentPatient(const QModelIndex &index)
 {
+    // Removing current patient?
+    if (!index.isValid()) {
+        d->m_CurrentPatientIndex = index;
+        d->m_CurrentPatientUuid.clear();
+        LOG("Removed current patient");
+        return true;
+    }
     // Same patient as the current one?
     const QString &patientUuid = this->patientUuid(index);
     if (patientUuid.isEmpty()) {
         LOG_ERROR(QString("Empty patient Uuid. Index(%1,%2,%3)").arg(index.row()).arg(index.column()).arg(index.model()->objectName()));
-        return;
+        return false;
     }
-    if (patientUuid == d->m_CurrentPatientUuid) {
-        return;
-    }
+    // Already current?
+    if (patientUuid == d->m_CurrentPatientUuid)
+        return true;
+    // Change the internal current patient data
     d->m_CurrentPatientUuid = patientUuid;
-
     d->m_CurrentPatientIndex = index;
     LOG("setCurrentPatient: " + patientUuid);
+    return true;
 }
 
 /**
@@ -574,6 +584,16 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 {
     if (!index.isValid())
         return false;
+
+    // Manage IsActive column -> remove the patient from the model.
+    if (index.column() == Core::IPatient::IsActive && role==Qt::EditRole) {
+        if (!value.toBool()) {
+            const QString &uuid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+            if (!patientCore()->removePatient(uuid))
+                return false;
+        }
+        return true;
+    }
 
     if (role == Qt::EditRole) {
         // TODO: manage patient duplicates when modifying names/uuid

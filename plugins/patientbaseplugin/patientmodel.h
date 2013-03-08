@@ -106,7 +106,7 @@ Q_SIGNALS:
 
 protected:
     bool beginChangeCurrentPatient();
-    void setCurrentPatient(const QModelIndex &index);
+    bool setCurrentPatient(const QModelIndex &index);
     void endChangeCurrentPatient();
 
 protected Q_SLOTS:

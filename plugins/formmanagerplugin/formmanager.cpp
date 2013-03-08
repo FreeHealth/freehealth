@@ -132,6 +132,7 @@ public:
     };
 
     FormManagerPrivate(FormManager *parent) :
+        _forceFormLoading(false),
         q(parent)
     {}
 
@@ -413,6 +414,8 @@ public:
     QVector<FormCollection *> _centralFormCollection, _centralFormDuplicateCollection, _subFormCollection, _subFormDuplicateCollection;
     FormCollection _nullFormCollection;
     QHash<QString, FormTreeModel *> _formTreeModels;
+    bool _forceFormLoading;
+
     // OLD
     QVector<Form::FormPage *> _formPages;
     QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
@@ -566,11 +569,19 @@ bool FormManager::removeSubForm(const SubFormRemoval &subFormRemoval)
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
 bool FormManager::loadPatientFile()
 {
-    return onCurrentPatientChanged();
+    d->_forceFormLoading = true;
+    bool ok = onCurrentPatientChanged();
+    d->_forceFormLoading = false;
+    return ok;
 }
 
 bool FormManager::onCurrentPatientChanged()
 {
+    if (!d->_forceFormLoading && patient()->uuid().isEmpty()) {
+        LOG("No current patient.");
+        return true;
+    }
+
     QTime chrono;
     if (LogChronos)
         chrono.start();

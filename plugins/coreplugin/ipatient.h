@@ -57,6 +57,7 @@ public:
 
         // Identity
         Uid,
+        IsActive,
         IsVirtual,
         UsersUidList,
         GroupsUidList,

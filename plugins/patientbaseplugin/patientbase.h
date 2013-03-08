@@ -40,8 +40,8 @@
 /**
  * \file patientbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 04 Dec 2012
+ * \version 0.8.4
+ * \date 08 Mar 2013
 */
 
 namespace Patients {
@@ -80,7 +80,7 @@ public:
     bool isPatientExists(const QString &usualname, const QString &othernames, const QString &firstname,
                          const QString &gender, const QDate &dob) const;
 
-//    bool mergePatients(const QString &uuid1, const QString &uuid2);
+    bool setPatientActiveProperty(const QString &uuid, bool active);
 
     void toTreeWidget(QTreeWidget *tree) const;
 

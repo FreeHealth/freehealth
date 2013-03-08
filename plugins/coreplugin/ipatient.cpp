@@ -25,11 +25,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Core::IPatient
-  Abstract interface provided to access Patient's data.\n
-  Use this class to avoid any plugin dependencies (other than Core),
-  when needing editing access to the \b current \b editing \b patient data.
-  \sa Core::ICore::setPatient(), Core::ICore::patient()
+ * \class Core::IPatient
+ * Abstract interface provided to access Patient's data.\n
+ * Use this class to avoid any plugin dependencies (other than Core),
+ * when needing editing access to the \b current \b editing \b patient data. \n
+ * The Core::IPatient is a QAbstractListModel with only one row (the current patient).
+ * The column represents the patient's values. This object can extract data
+ * from the patient database and also inside the forms (if some items have defined
+ * a patientdatarepresentation). \n
+ * To remove a patient, just set the Core::IPatient::IsActive to \e false or \e 0.
+ * \sa Core::ICore::setPatient(), Core::ICore::patient()
 */
 
 

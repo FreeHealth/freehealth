@@ -68,6 +68,7 @@ public:
 
 private Q_SLOTS:
     void searchActionChanged(QAction *action);
+    void removePatient();
     void viewPatientInformation();
     void printPatientsInformation();
 

@@ -93,8 +93,11 @@ void PatientModelWrapper::initialize(Patients::PatientModel *model)
 QModelIndex PatientModelWrapper::currentPatientIndex() const
 {
     // Return an index created by THIS model
-    QModelIndex index = this->index(m_Model->currentPatient().row(), m_Model->currentPatient().column());
-    return index;
+    if (m_Model->currentPatient().isValid()) {
+        QModelIndex index = this->index(m_Model->currentPatient().row(), m_Model->currentPatient().column());
+        return index;
+    }
+    return QModelIndex();
 }
 
 /**

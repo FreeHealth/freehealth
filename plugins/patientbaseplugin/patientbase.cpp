@@ -343,6 +343,38 @@ bool PatientBase::isPatientExists(const QString &usualname,
     return (!patientUuid(usualname, othernames, firstname, gender, dob).isNull());
 }
 
+/**
+ * Activate or desactivate a patient (eq to remove patient).
+ * Manage its own transaction.
+ */
+bool PatientBase::setPatientActiveProperty(const QString &uuid, bool active)
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    using namespace Patients::Constants;
+    QHash<int, QString> where;
+    where.insert(IDENTITY_UID, QString("='%1'").arg(uuid));
+    if (count(Table_IDENT, IDENTITY_UID, getWhereClause(Table_IDENT, where)) <= 0) {
+        LOG_ERROR(QString("When trying to change the active property of patient: %1; patient does not exist").arg(uuid));
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_IDENT, IDENTITY_ISACTIVE, where));
+    query.bindValue(0, int(active));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("PatientBase", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
 /** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,

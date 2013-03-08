@@ -34,6 +34,7 @@
 #include "constants_menus.h"
 #include "constants_trans.h"
 #include "patientbase.h"
+#include "patientcore.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -45,10 +46,12 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -66,6 +69,9 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -162,6 +168,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     menu->appendGroup(Core::Id(Constants::G_PATIENTS_INFORMATION));
 
 //    actionManager()->actionContainer(Core::Constants::M_PATIENTS)->addMenu(menu, Core::Constants::G_PATIENTS);
+    connect(actionManager()->command(Core::Constants::A_PATIENT_REMOVE)->action(), SIGNAL(triggered()), this, SLOT(removePatient()));
 
     // Search method menu
     Core::ActionContainer *searchmenu = actionManager()->actionContainer(Core::Id(Constants::M_PATIENTS_SEARCH));
@@ -270,6 +277,40 @@ void PatientActionHandler::searchActionChanged(QAction *action)
         if (m_CurrentView)
             m_CurrentView->setSearchMode(PatientSelector::SearchByDOB);
     }
+}
+
+void PatientActionHandler::removePatient()
+{
+    // TODO: move this in the PatientCore and force all patientmodel refreshing
+    if (!patient()->currentPatientIndex().isValid()) {
+        Utils::warningMessageBox(tr("Remove the patient"),
+                                 tr("If you want to remove a patient, you must firstly "
+                                    "select it as the current one and then remove it. <br /><br />"
+                                    "<b>Warning: No current patient. Select a patient first.</b>")
+                                 );
+        return;
+    }
+
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Remove the current patient"),
+                                      tr("You are about to remove the current patient:<br /><br/>"
+                                         "    <b>%1</b><br/>"
+                                         "    <b>%2</b><br/>"
+                                         "    <b>%3</b><br/><br/>"
+                                         "Do you really want to remove this patient?")
+                                      .arg(patient()->data(Core::IPatient::FullName).toString())
+                                      .arg(patient()->data(Core::IPatient::DateOfBirth).toString())
+                                      .arg(patient()->data(Core::IPatient::FullAddress).toString())
+                                      );
+    if (!yes)
+        return;
+
+    // set validity flag to false
+    if (!patientCore()->removePatient(patient()->uuid())) {
+        LOG_ERROR("Unable to remove current patient");
+        return;
+    }
+    // set current mode to patient selector is done by MainWindow::onCurrentPatientChanged
 }
 
 void PatientActionHandler::viewPatientInformation()

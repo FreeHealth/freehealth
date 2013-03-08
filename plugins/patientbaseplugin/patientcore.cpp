@@ -204,13 +204,17 @@ PatientBar *PatientCore::patientBar() const
 
 /**
  * Define the current patient using its \e uuid. Return true if the current patient
- * was correctly set.
+ * was correctly set. If the \e uuid is empty, the current patient will be unset in
+ * all patient models.
  */
 bool PatientCore::setCurrentPatientUuid(const QString &uuid)
 {
     // Take the Core:IPatient internal PatientModel
     PatientModel *patientModel = d->_patientModelWrapper->patientModel();
-    LOG("Changing the current patient. Actual current patient: " + patientModel->index(patientModel->currentPatient().row(), Core::IPatient::Uid).data().toString());
+    if (uuid.isEmpty())
+        LOG("Unsetting the current patient.");
+    else
+        LOG("Changing the current patient. Actual current patient: " + patientModel->index(patientModel->currentPatient().row(), Core::IPatient::Uid).data().toString());
 
     // Start changing the current patient
     if (!patientModel->beginChangeCurrentPatient()) {
@@ -218,21 +222,35 @@ bool PatientCore::setCurrentPatientUuid(const QString &uuid)
         return false;
     }
 
-    // Update the filter to the correct uuid
-    patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
-    if (patientModel->numberOfFilteredPatients() != 1) {
-        LOG_ERROR(QString("No patient found; Number of uuids: %1")
-                  .arg(patientModel->numberOfFilteredPatients()));
-        return false;
-    }
+    // if uuid is empty -> remove any current patient
+    if (uuid.isEmpty()) {
+        patientModel->setFilter("", "", "%", PatientModel::FilterOnUuid);
+        if (!patientModel->setCurrentPatient(QModelIndex())) {
+            LOG_ERROR("Unable to unset the current patient");
+            return false;
+        }
+        patientModel->endChangeCurrentPatient();
+    } else {
+        // Update the filter to the correct uuid
+        patientModel->setFilter("", "", uuid, PatientModel::FilterOnUuid);
+        if (patientModel->numberOfFilteredPatients() != 1) {
+            LOG_ERROR(QString("No patient found; Number of uuids: %1")
+                      .arg(patientModel->numberOfFilteredPatients()));
+            return false;
+        }
 
-    // Define the new current patient
-    patientModel->setCurrentPatient(patientModel->index(0,0));
+        // Define the new current patient
+        patientModel->setCurrentPatient(patientModel->index(0,0));
+    }
 
     // Finish the current patient modification process
     patientModel->endChangeCurrentPatient();
 
-    LOG("Current patient changed to: " + patient()->uuid());
+    if (uuid.isEmpty())
+        LOG("Unsetted any current patient");
+    else
+        LOG("Current patient changed to: " + patient()->uuid());
+
     return true;
 }
 
@@ -252,4 +270,29 @@ void PatientCore::refreshAllPatientModel() const
 
     // Refresh the central patient model wrapper
     d->_patientModelWrapper->patientModel()->refreshModel();
+}
+
+/**
+ * This member does only remove a patient and does not interact with the user. \n
+ * All registered patient model will be refreshed. \n
+ * If the removed patient is the current one, the view will switch to the
+ * patient selector mode and the current patient will be unvalidated.
+ */
+bool PatientCore::removePatient(const QString &uuid)
+{
+    // removing current patient?
+    if (d->_patientModelWrapper->uuid() == uuid) {
+        LOG("Removing current patient");
+        if (!setCurrentPatientUuid(""))
+            LOG_ERROR("Unable to unset current patient");
+    }
+
+    // change the property directly in the database
+    if (!d->_base->setPatientActiveProperty(uuid, false)) {
+        LOG_ERROR("Unable to remove patient: " + uuid);
+        return false;
+    }
+
+    refreshAllPatientModel();
+    return true;
 }
