@@ -641,12 +641,12 @@ void IdentityEditorWidget::setReadOnly(bool readOnly)
     d->ui->otherNames->setReadOnly(readOnly);
     d->ui->firstname->setReadOnly(readOnly);
     d->ui->dob->setReadOnly(readOnly);
-    d->ui->genderCombo->setEnabled(readOnly);
-    d->ui->titleCombo->setEnabled(readOnly);
-    d->ui->language->setEnabled(readOnly);
-    d->ui->photoButton->setEnabled(readOnly);
     d->ui->zipcodesWidget->setReadOnly(readOnly);
     d->ui->passwordWidget->setReadOnly(readOnly);
+    d->ui->genderCombo->setEnabled(!readOnly);
+    d->ui->titleCombo->setEnabled(!readOnly);
+    d->ui->language->setEnabled(!readOnly);
+    d->ui->photoButton->setEnabled(!readOnly);
 }
 
 bool IdentityEditorWidget::isReadOnly() const
