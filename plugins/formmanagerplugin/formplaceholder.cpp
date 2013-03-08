@@ -1094,16 +1094,15 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 
 void FormPlaceHolder::hideEvent(QHideEvent *event)
 {
-//    qWarning() << "FormPlaceHolder::hideEvent" << isVisible();
-    // TODO: this is not working as it does
+    // qWarning() << "FormPlaceHolder::hideEvent" << isVisible();
     // autosave feature
-    if (isVisible()) // mandatory or segfault when widget is removed from the tabwidget
-        d->saveCurrentEditingEpisode();
+    d->saveCurrentEditingEpisode();
     QWidget::hideEvent(event);
 }
 
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
+    // qWarning() << "FormPlaceHolder::showEvent";
     d->selectAndActivateFirstForm();
     d->selectAndActivateFirstEpisode();
     // make sure that the context is updated to the form context
