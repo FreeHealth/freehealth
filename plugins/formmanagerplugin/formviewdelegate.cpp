@@ -58,6 +58,7 @@ void FormViewDelegate::setFormTreeModel(FormTreeModel *model)
 
 QSize FormViewDelegate::sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const
 {
+    Q_ASSERT(_formTreeModel);
     const bool topLevel = !index.parent().isValid();
     if (topLevel) {
         // For top level item, user can define in the Form::FormMain extraData the height of the item

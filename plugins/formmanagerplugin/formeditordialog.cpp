@@ -78,6 +78,7 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     ui->treeView->setAlternatingRowColors(true);
     ui->treeView->setStyleSheet(Constants::FORMTREEVIEW_SHEET);
     _delegate = new Internal::FormViewDelegate(ui->treeView);
+    _delegate->setFormTreeModel(_formTreeModel);
     ui->treeView->setItemDelegate(_delegate);
     ui->stackedWidget->setCurrentWidget(ui->formAdder);
     ui->currentPatient->setChecked(true);
