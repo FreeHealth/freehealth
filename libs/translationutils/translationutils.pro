@@ -34,7 +34,8 @@ HEADERS += \
     trans_team.h \
     trans_titles.h \
     trans_user.h \
-    trans_units.h
+    trans_units.h \
+    trans_numbers.h
 
 SOURCES += constanttranslations.cpp \
     googletranslator.cpp
