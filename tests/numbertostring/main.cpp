@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     QList<double> dlist;
     dlist << 5.8 << 24.7183 << 69.12 << 1732874.871 << 149.67 << 2192.263;
     for(int i = 0 ; i < dlist.count(); ++i)
-        qWarning() << dlist.at(i) << Utils::doubleToHumanReadableString(dlist.at(i));
+        qWarning() << QString::number(dlist.at(i), 'f', 6) << Utils::doubleToHumanReadableString(dlist.at(i));
 
     return 0;
     //return a.exec();
