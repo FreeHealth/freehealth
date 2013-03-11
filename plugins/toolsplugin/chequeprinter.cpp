@@ -102,8 +102,7 @@ private:
 
 
 /*! Constructor of the Tools::ChequePrinter class */
-ChequePrinter::ChequePrinter(QObject *parent) :
-    //QObject(parent),
+ChequePrinter::ChequePrinter() :
     d(new ChequePrinterPrivate(this))
 {
 }

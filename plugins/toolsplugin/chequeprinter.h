@@ -48,7 +48,7 @@ class ChequePrinterPrivate;
 class TOOLS_EXPORT ChequePrinter
 {
 public:
-    explicit ChequePrinter(QObject *parent = 0);
+    explicit ChequePrinter();
     ~ChequePrinter();    
     bool initialize();
     
