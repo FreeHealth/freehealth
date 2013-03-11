@@ -112,7 +112,7 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         m_value->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         hb->addWidget(m_units);
     }
-    m_units->setFocusPolicy(Qt::StrongFocus);
+    m_units->setFocusPolicy(Qt::ClickFocus);
 
     const QStringList &options = formItem->getOptions();
     if (options.contains("Length", Qt::CaseInsensitive)) {
