@@ -237,13 +237,13 @@
 <context>
     <name>Utils::BugReportDialog</name>
     <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="140"/>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="180"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="144"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="184"/>
         <source>&amp;Send report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="141"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="145"/>
         <source>Problem reporting dialog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,7 +267,7 @@
         <location filename="../../libs/utils/datevalidator.cpp" line="47"/>
         <location filename="../../libs/utils/datevalidator.cpp" line="136"/>
         <source>ddMMyy</source>
-        <extracomment>this is a input mask for the local date format for BirthDayEdit that can be used by QDate::fromString()</extracomment>
+        <extracomment>this is a input mask for the local date format for ModernDateEditor that can be used by QDate::fromString()</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -425,17 +425,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="159"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="172"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="169"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="179"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="192"/>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="189"/>
+        <source>Did you check the documentation on the main website before reporting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="199"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>

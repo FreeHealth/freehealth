@@ -149,6 +149,34 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
         <source>Trying to remove the sub-form:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2This modification will only affect the current patient:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Do you really want to remove the current sub-form?</source>
         <translation>Tentative de suppression du sous-formulaire: &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2Cette modification va uniquement affecter le patient courant :&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Voulez-vous réellement supprimer ce sous-formulaire ?</translation>
     </message>
+    <message>
+        <source>Saving episode (%1) from form (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING: Episode (%1) from form (%2) can not be saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode (%1) from form (%2) signed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renew the current episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A new episode will created with the exact same content as the currently selected but at the current date, using your user.&lt;br /&gt;Do you want to renew the current episode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode (%1) from form (%2) renewed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode (%1) from form (%2) removed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::Internal::EpisodeBase</name>

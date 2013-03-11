@@ -2086,7 +2086,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Navigation</source>
@@ -2459,6 +2459,142 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Other names</source>
         <translation>Autres noms</translation>
+    </message>
+    <message>
+        <source>Renew episode</source>
+        <translation>Renouveler l&apos;épisode</translation>
+    </message>
+    <message>
+        <source>one</source>
+        <translation>un</translation>
+    </message>
+    <message>
+        <source>two</source>
+        <translation>deux</translation>
+    </message>
+    <message>
+        <source>three</source>
+        <translation>trois</translation>
+    </message>
+    <message>
+        <source>four</source>
+        <translation>quatre</translation>
+    </message>
+    <message>
+        <source>five</source>
+        <translation>cinq</translation>
+    </message>
+    <message>
+        <source>six</source>
+        <translation>six</translation>
+    </message>
+    <message>
+        <source>seven</source>
+        <translation>sept</translation>
+    </message>
+    <message>
+        <source>eight</source>
+        <translation>huit</translation>
+    </message>
+    <message>
+        <source>nine</source>
+        <translation>neuf</translation>
+    </message>
+    <message>
+        <source>ten</source>
+        <translation>dix</translation>
+    </message>
+    <message>
+        <source>eleven</source>
+        <translation>onze</translation>
+    </message>
+    <message>
+        <source>twelve</source>
+        <translation>douze</translation>
+    </message>
+    <message>
+        <source>thirteen</source>
+        <translation>treize</translation>
+    </message>
+    <message>
+        <source>fourteen</source>
+        <translation>quatorze</translation>
+    </message>
+    <message>
+        <source>fifteen</source>
+        <translation>quinze</translation>
+    </message>
+    <message>
+        <source>sixteen</source>
+        <translation>seize</translation>
+    </message>
+    <message>
+        <source>seventeen</source>
+        <translation>dix-sept</translation>
+    </message>
+    <message>
+        <source>eighteen</source>
+        <translation>dix-huit</translation>
+    </message>
+    <message>
+        <source>nineteen</source>
+        <translation>dix-neuf</translation>
+    </message>
+    <message>
+        <source>twenty</source>
+        <translation>vingt</translation>
+    </message>
+    <message>
+        <source>thirty</source>
+        <translation>trente</translation>
+    </message>
+    <message>
+        <source>fourty</source>
+        <translation>quarante</translation>
+    </message>
+    <message>
+        <source>fifty</source>
+        <translation>cinquante</translation>
+    </message>
+    <message>
+        <source>sixty</source>
+        <translation>soixante</translation>
+    </message>
+    <message>
+        <source>seventy</source>
+        <translation>soixante-dix</translation>
+    </message>
+    <message>
+        <source>eighty</source>
+        <translation>quatre-vingt</translation>
+    </message>
+    <message>
+        <source>ninety</source>
+        <translation>quatre-ving-dix</translation>
+    </message>
+    <message>
+        <source>hundred</source>
+        <translation>cent</translation>
+    </message>
+    <message>
+        <source>thousand</source>
+        <translation>mille</translation>
+    </message>
+    <message>
+        <source>million</source>
+        <translation>million</translation>
+    </message>
+    <message>
+        <source>billion</source>
+        <translation>milliard</translation>
+    </message>
+    <message>
+        <source>trillion</source>
+        <translation>billion</translation>
+    </message>
+    <message>
+        <source>cent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

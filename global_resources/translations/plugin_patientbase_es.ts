@@ -91,32 +91,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="183"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
         <source>Patient already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="185"/>
         <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="209"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="210"/>
         <source>You are about to create the following  patient: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="211"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="212"/>
         <source>Patients with the same names exist in the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="213"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="214"/>
         <source>Do you really want to create this patient?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="215"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="216"/>
         <source>Patients of the same name exist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,13 +137,33 @@
 <context>
     <name>Patients::Internal::PatientActionHandler</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="151"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="157"/>
         <source>Fatal Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="151"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="157"/>
         <source>%1: Unable to retreive patients menu.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="286"/>
+        <source>Remove the patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="287"/>
+        <source>If you want to remove a patient, you must firstly select it as the current one and then remove it. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Warning: No current patient. Select a patient first.&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="295"/>
+        <source>Remove the current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="296"/>
+        <source>You are about to remove the current patient:&lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Do you really want to remove this patient?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

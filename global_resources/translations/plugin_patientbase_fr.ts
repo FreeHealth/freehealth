@@ -121,6 +121,22 @@
         <source>%1: Unable to retreive patients menu.</source>
         <translation>%1 : impossible de récupérer le menu patients.</translation>
     </message>
+    <message>
+        <source>Remove the patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you want to remove a patient, you must firstly select it as the current one and then remove it. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Warning: No current patient. Select a patient first.&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove the current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are about to remove the current patient:&lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Do you really want to remove this patient?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::PatientBasePlugin</name>

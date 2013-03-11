@@ -12,27 +12,27 @@
 <context>
     <name>CommandLine</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="190"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="191"/>
         <source>Passing exchange in file : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="199"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="200"/>
         <source>Passing %1 as exchange in file, but file does not exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="207"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="208"/>
         <source>Reading exchange in file : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="212"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="213"/>
         <source>In File %1 is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="227"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="228"/>
         <source>Wrong root tag %1 %2.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -830,20 +830,20 @@
 <context>
     <name>Core::Patient</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="207"/>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="222"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="208"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="223"/>
         <source>Drugs(%1), </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="210"/>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="225"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="211"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="226"/>
         <source>INN(%1), </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="213"/>
-        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="228"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="214"/>
+        <location filename="../../freediams/plugins/coreplugin/patient.cpp" line="229"/>
         <source>ATC(%1), </source>
         <translation type="unfinished"></translation>
     </message>
@@ -972,7 +972,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/ipatient.cpp" line="59"/>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="64"/>
         <source>This token namespace contains all patient&apos;s related tokens.
 It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
 but does not contains all other form items.</source>
