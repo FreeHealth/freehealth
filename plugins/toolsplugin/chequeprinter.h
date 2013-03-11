@@ -19,46 +19,51 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#ifndef TOOLS_CHEQUEPRINTER_H
+#define TOOLS_CHEQUEPRINTER_H
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <toolsplugin/tools_exporter.h>
+#include <QObject>
+#include <QDate>
 
-#include <extensionsystem/iplugin.h>
+/**
+ * \file chequeprinter.h
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 09 Mar 2013
+ * \note requires Qt 4.8+
+*/
 
 namespace Tools {
 namespace Internal {
 class PdfTkWrapper;
+class ChequePrinterPrivate;
+} // namespace Internal
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+class TOOLS_EXPORT ChequePrinter
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
-
 public:
-    ToolsPlugin();
-    ~ToolsPlugin();
+    explicit ChequePrinter(QObject *parent = 0);
+    ~ChequePrinter();    
+    bool initialize();
     
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+    void setOrder(const QString &order);
+    void setPlace(const QString &place);
+    void setDate(const QDate &date);
+    void setAmount(double amount);
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    void printCheque();
+    bool print();
 
 private:
-    ToolsPreferencesPage *m_prefPage;
-    PdfTkWrapper *pdf;
+    Internal::ChequePrinterPrivate *d;
 };
 
-} // namespace Internal
 } // namespace Tools
 
-#endif // TOOLS_IPLUGIN_H
+#endif  // TOOLS_CHEQUEPRINTER_H
 

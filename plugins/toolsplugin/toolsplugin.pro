@@ -12,15 +12,23 @@ HEADERS += \
     tools_exporter.h \
     toolsconstants.h \
     toolspreferences.h \
-    pdftkwrapper.h
+    pdftkwrapper.h \
+    chequeprinter.h \
+    chequeprinter_preferences.h \
+    chequeprinterdialog.h
         
 SOURCES += \
     toolsplugin.cpp \
     toolspreferences.cpp \
-    pdftkwrapper.cpp
+    pdftkwrapper.cpp \
+    chequeprinter.cpp \
+    chequeprinter_preferences.cpp \
+    chequeprinterdialog.cpp
 
 FORMS += \
-    toolspreferences.ui
+    toolspreferences.ui \
+    chequeprinter_preferences.ui \
+    chequeprinterdialog.ui
 
 OTHER_FILES = Tools.pluginspec
 

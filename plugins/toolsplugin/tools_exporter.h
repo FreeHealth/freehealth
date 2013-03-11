@@ -29,9 +29,9 @@
 #include <QtCore/QtGlobal>
 
 #if defined(TOOLS_LIBRARY)
-#  define TOOLSSHARED_EXPORT Q_DECL_EXPORT
+#  define TOOLS_EXPORT Q_DECL_EXPORT
 #else
-#  define TOOLSSHARED_EXPORT Q_DECL_IMPORT
+#  define TOOLS_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // TOOLS_EXPORTER_H

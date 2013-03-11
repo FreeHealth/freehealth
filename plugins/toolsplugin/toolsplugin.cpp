@@ -26,29 +26,46 @@
 #include "toolsplugin.h"
 #include "toolsconstants.h"
 #include "pdftkwrapper.h"
+#include "chequeprinterdialog.h"
+#include "chequeprinter_preferences.h"
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
-#include <coreplugin/iscriptmanager.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/iscriptmanager.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
+#include <coreplugin/contextmanager/contextmanager.h>
 
 #include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QtPlugin>
+#include <QAction>
 #include <QDebug>
 
-using namespace Tools::Internal;
+using namespace Tools;
+using namespace Internal;
 
 static inline Core::IScriptManager *scriptManager()  { return Core::ICore::instance()->scriptManager(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-ToolsPlugin::ToolsPlugin()
+namespace {
+const char* const PRINT_CHEQUE = QT_TRANSLATE_NOOP("Tools", "Print a cheque");
+}
+
+ToolsPlugin::ToolsPlugin() :
+    ExtensionSystem::IPlugin(),
+    m_prefPage(0),
+    pdf(0)
 {
     setObjectName("ToolsPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -63,7 +80,8 @@ ToolsPlugin::ToolsPlugin()
     // And included in the QObject pool
 //    m_prefPage = new ToolsPreferencesPage(this);
 //    addObject(m_prefPage);
-    
+    addAutoReleasedObject(new ChequePrinterPreferencesPage(this));
+
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -97,20 +115,6 @@ bool ToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
     
     // No user is logged in until here
     
-    
-    //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    //
-    //    QAction *action = new QAction(tr("Tools action"), this);
-    //    Core::Command *cmd = am->registerAction(action, Constants::ACTION_ID,
-    //                         Core::Context(Core::Constants::C_GLOBAL));
-    //    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Shift+Meta+A")));
-    //    connect(action, SIGNAL(triggered()), this, SLOT(triggerAction()));
-    //
-    //    Core::ActionContainer *menu = am->createMenu(Constants::CUSTOM_MENU_ID);
-    //    menu->menu()->setTitle(tr("Tools"));
-    //    menu->addAction(cmd);
-    //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
-    
     return true;
 }
 
@@ -127,19 +131,31 @@ void ToolsPlugin::extensionsInitialized()
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     //    // no user -> stop here
-    //    if (!user())
-    //        return;
-    //    if (user()->uuid().isEmpty())
-    //        return;
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
     
     messageSplash(tr("Initializing Tools..."));
     
     // At this point, user is connected
-    
+
+    // Create some menu actions
+    QAction *action = new QAction(this);
+    Core::Command *cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
+    cmd->setTranslations(::PRINT_CHEQUE, ::PRINT_CHEQUE, "Tools");
+    //: Translation for the 'Print Cheque' action
+    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+C")));
+    connect(action, SIGNAL(triggered()), this, SLOT(printCheque()));
+
+    Core::ActionContainer *menu = actionManager()->createMenu(Core::Constants::M_GENERAL);
+    menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
+    // TODO: add action to the mode manager ?
+
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
     
     // Add Tools to ScriptManager
-    PdfTkWrapper *pdf = new PdfTkWrapper(this);
+    pdf = new PdfTkWrapper(this);
     pdf->initialize();
     QScriptValue pdfValue = scriptManager()->addScriptObject(pdf);
     scriptManager()->evaluate("namespace.com.freemedforms").setProperty("pdf", pdfValue);
@@ -155,12 +171,23 @@ void ToolsPlugin::postCoreInitialization()
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
- {
-     // Save settings
-     // Disconnect from signals that are not needed during shutdown
-     // Hide UI (if you add UI that is not in the main window directly)
-     return SynchronousShutdown;
- }
+{
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    return SynchronousShutdown;
+}
+
+void ToolsPlugin::printCheque()
+{
+    Q_ASSERT(pdf);
+    ChequePrinterDialog printDialog;
+    printDialog.setPlace(settings()->value(S_PLACE).toString());
+    printDialog.setDate(QDate::currentDate());
+    printDialog.setOrder(settings()->value(S_ORDER).toString());
+    printDialog.setDefaultAmounts(settings()->value(S_VALUES).toStringList());
+    printDialog.exec();
+}
 
 Q_EXPORT_PLUGIN(ToolsPlugin)
 

@@ -23,42 +23,80 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#include "chequeprinterdialog.h"
+#include "chequeprinter.h"
+#include "pdftkwrapper.h"
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <utils/log.h>
+#include <utils/global.h>
 
-#include <extensionsystem/iplugin.h>
+#include "ui_chequeprinterdialog.h"
 
 namespace Tools {
-namespace Internal {
-class PdfTkWrapper;
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+ChequePrinterDialog::ChequePrinterDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::ChequePrinterDialog)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
+    ui->setupUi(this);
+}
 
-public:
-    ToolsPlugin();
-    ~ToolsPlugin();
-    
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+ChequePrinterDialog::~ChequePrinterDialog()
+{
+    delete ui;
+}
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    void printCheque();
+void ChequePrinterDialog::done(int result)
+{
+    if (result == QDialog::Rejected) {
+        QDialog::done(result);
+        return;
+    }
+    // Print the cheque
+    ChequePrinter print;
+    print.setOrder(ui->order->text());
+    print.setPlace(ui->place->text());
+    print.setDate(ui->date->date());
+    if (!ui->valueLineEdit->text().simplified().isEmpty()) {
+        print.setAmount(ui->valueLineEdit->text().toDouble());
+    } else if (ui->valueListWidget->selectionModel()->hasSelection()) {
+        print.setAmount(ui->valueListWidget->selectionModel()->currentIndex().data().toDouble());
+    } else {
+        Utils::warningMessageBox(tr("No amount"), tr("Please specify an amount for the cheque."));
+        return;
+    }
+    if (!print.print()) {
+        LOG_ERROR("Unable to print cheque");
+    }
+    QDialog::done(result);
+}
 
-private:
-    ToolsPreferencesPage *m_prefPage;
-    PdfTkWrapper *pdf;
-};
+void ChequePrinterDialog::setOrder(const QString &order)
+{
+    ui->order->setText(order);
+}
 
-} // namespace Internal
+void ChequePrinterDialog::setPlace(const QString &place)
+{
+    ui->place->setText(place);
+}
+
+void ChequePrinterDialog::setDate(const QDate &date)
+{
+    ui->date->setDate(date);
+}
+
+void ChequePrinterDialog::setAmount(double amount)
+{
+    ui->valueLineEdit->setText(QString::number(amount, 'f', 2));
+}
+
+void ChequePrinterDialog::setDefaultAmounts(const QStringList &values)
+{
+    ui->valueListWidget->clear();
+    foreach(const QString &val, values) {
+        ui->valueListWidget->addItem(val);
+    }
+}
+
 } // namespace Tools
-
-#endif // TOOLS_IPLUGIN_H
-

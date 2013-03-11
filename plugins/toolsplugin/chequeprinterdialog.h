@@ -19,46 +19,53 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_IPLUGIN_H
-#define TOOLS_IPLUGIN_H
+#ifndef TOOLS_CHEQUEPRINTERDIALOG_H
+#define TOOLS_CHEQUEPRINTERDIALOG_H
 
-#include "tools_exporter.h"
-#include "toolspreferences.h"
+#include <toolsplugin/tools_exporter.h>
+#include <QDialog>
+#include <QDate>
 
-#include <extensionsystem/iplugin.h>
+/**
+ * \file chequeprinterdialog.h
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 09 Mar 2013
+ * \note requires Qt 4.8+
+*/
 
 namespace Tools {
-namespace Internal {
-class PdfTkWrapper;
 
-class ToolsPlugin : public ExtensionSystem::IPlugin
+namespace Ui {
+class ChequePrinterDialog;
+}
+
+class TOOLS_EXPORT ChequePrinterDialog : public QDialog
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.ToolsPlugin" FILE "Tools.json")
-
-public:
-    ToolsPlugin();
-    ~ToolsPlugin();
     
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void printCheque();
+public:
+    explicit ChequePrinterDialog(QWidget *parent = 0);
+    ~ChequePrinterDialog();
+    
+    void setOrder(const QString &order);
+    void setPlace(const QString &place);
+    void setDate(const QDate &date);
+    void setAmount(double amount);
+    void setDefaultAmounts(const QStringList &values);
 
 private:
-    ToolsPreferencesPage *m_prefPage;
-    PdfTkWrapper *pdf;
+    void done(int result);
+
+private:
+    Ui::ChequePrinterDialog *ui;
 };
 
-} // namespace Internal
+
 } // namespace Tools
-
-#endif // TOOLS_IPLUGIN_H
-
+#endif // TOOLS_CHEQUEPRINTERDIALOG_H
