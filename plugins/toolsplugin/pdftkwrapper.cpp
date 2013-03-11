@@ -69,6 +69,9 @@ const char * const XP_SHA256   = "8826a1ab95375e6960b6b8692f71254dadb75ca580c476
 
 namespace Tools {
 namespace Internal {
+
+PdfTkWrapper *PdfTkWrapper::_instance = 0;
+
 class PdfTkWrapperPrivate
 {
 public:
@@ -144,6 +147,14 @@ PdfTkWrapper::PdfTkWrapper(QObject *parent) :
     d(new PdfTkWrapperPrivate(this))
 {
     setObjectName("PdfTkWrapper");
+    _instance = this;
+}
+
+/** Return the unique instance of the object */
+PdfTkWrapper *PdfTkWrapper::instance()
+{
+    Q_ASSERT(_instance);
+    return _instance;
 }
 
 /*! Destructor of the Tools::Internal::PdfTkWrapper class */

@@ -39,15 +39,20 @@
 
 namespace Tools {
 namespace Internal {
+class ToolsPlugin;
 class PdfTkWrapperPrivate;
 
 class PdfTkWrapper : public QObject
 {
+    friend class Tools::Internal::ToolsPlugin;
     Q_OBJECT
     Q_PROPERTY(bool isAvailable READ isAvailable())
 
-public:
+protected:
     explicit PdfTkWrapper(QObject *parent = 0);
+
+public:
+    static PdfTkWrapper *instance();
     ~PdfTkWrapper();
     
     bool initialize();
@@ -74,6 +79,7 @@ private Q_SLOTS:
 
 private:
     Internal::PdfTkWrapperPrivate *d;
+    static PdfTkWrapper *_instance;
 };
 
 } // namespace Internal
