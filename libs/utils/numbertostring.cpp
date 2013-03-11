@@ -167,6 +167,16 @@ QString integerToHumanReadableString(int n)
 
     work = work.simplified();
 
+    // French specifics:
+    // un mille, un cent
+    if (QLocale().language() == QLocale::French) {
+        work = work.replace(QString("%1 %2")
+                            .arg(tkTr(Trans::Constants::ONE))
+                            .arg(tkTr(Trans::Constants::HUNDRED)), tkTr(Trans::Constants::HUNDRED));
+        work = work.replace(QString("%1 %2")
+                            .arg(tkTr(Trans::Constants::ONE))
+                            .arg(tkTr(Trans::Constants::THOUSAND)), tkTr(Trans::Constants::THOUSAND));
+    }
     return work;
 }
 
