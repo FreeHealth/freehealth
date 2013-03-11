@@ -331,6 +331,7 @@ const int          OPTIONINDEX_DRUGS        = 7000;
 const int          OPTIONINDEX_TEMPLATES    = 8000;
 const int          OPTIONINDEX_WEBCAM       = 9000;
 const int          OPTIONINDEX_ACCOUNT      = 10000;
+const int          OPTIONINDEX_TOOLS        = 11000;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";
