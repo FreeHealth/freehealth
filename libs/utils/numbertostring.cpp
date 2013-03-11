@@ -29,6 +29,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_numbers.h>
 #include <translationutils/trans_account.h>
+#include <translationutils/trans_current.h>
 
 #include <QStringList>
 
@@ -176,6 +177,45 @@ QString integerToHumanReadableString(int n)
         work = work.replace(QString("%1 %2")
                             .arg(tkTr(Trans::Constants::ONE))
                             .arg(tkTr(Trans::Constants::THOUSAND)), tkTr(Trans::Constants::THOUSAND));
+
+        // 21, 31, 41... 81
+        QStringList etUn;
+        etUn << tkTr(Trans::Constants::TWENTY)
+             << tkTr(Trans::Constants::THIRTY)
+             << tkTr(Trans::Constants::FOURTY)
+             << tkTr(Trans::Constants::FIFTY)
+             << tkTr(Trans::Constants::SIXTY)
+             << tkTr(Trans::Constants::SEVENTY)
+             << tkTr(Trans::Constants::EIGHTY);
+        foreach(const QString &un, etUn) {
+            work = work.replace(QString("%1 %2")
+                                .arg(un)
+                                .arg(tkTr(Trans::Constants::ONE))
+                                , QString("%1 %2 %3")
+                                .arg(un)
+                                .arg(tkTr(Trans::Constants::AND))
+                                .arg(tkTr(Trans::Constants::ONE))
+                                );
+        }
+
+        // 91 -> 99
+        QHash<QString, QString> s90;
+        s90.insert(tkTr(Trans::Constants::ONE), "quatre-vingt-onze");
+        s90.insert(tkTr(Trans::Constants::TWO), "quatre-vingt-douze");
+        s90.insert(tkTr(Trans::Constants::THREE), "quatre-vingt-treize");
+        s90.insert(tkTr(Trans::Constants::FOUR), "quatre-vingt-quatorze");
+        s90.insert(tkTr(Trans::Constants::FIVE), "quatre-vingt-quinze");
+        s90.insert(tkTr(Trans::Constants::SIX), "quatre-vingt-seize");
+        s90.insert(tkTr(Trans::Constants::SEVEN), "quatre-vingt-dix-sept");
+        s90.insert(tkTr(Trans::Constants::EIGHT), "quatre-vingt-dix-huit");
+        s90.insert(tkTr(Trans::Constants::NINE), "quatre-vingt-dix-neuf");
+        foreach(const QString &s, s90.keys()) {
+            work = work.replace(QString("%1 %2")
+                                .arg(tkTr(Trans::Constants::NINETY))
+                                .arg(s),
+                                s90.value(s)
+                                );
+        }
     }
     return work;
 }
