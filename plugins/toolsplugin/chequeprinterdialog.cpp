@@ -30,7 +30,13 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include "ui_chequeprinterdialog.h"
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace Tools {
 
@@ -39,6 +45,8 @@ ChequePrinterDialog::ChequePrinterDialog(QWidget *parent) :
     ui(new Ui::ChequePrinterDialog)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("Cheque printing assistant"));
+    setWindowIcon(theme()->icon(Core::Constants::ICONCHEQUE));
 }
 
 ChequePrinterDialog::~ChequePrinterDialog()

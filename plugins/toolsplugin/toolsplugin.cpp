@@ -35,6 +35,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iscriptmanager.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -142,6 +143,7 @@ void ToolsPlugin::extensionsInitialized()
 
     // Create some menu actions
     QAction *action = new QAction(this);
+    action->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
     Core::Command *cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
     cmd->setTranslations(::PRINT_CHEQUE, ::PRINT_CHEQUE, "Tools");
     //: Translation for the 'Print Cheque' action
