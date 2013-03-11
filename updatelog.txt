@@ -8,6 +8,8 @@ FreeMedForms
     * Adding a status bar at the top right corner of the patient bar
     * Manage episode validation
     * Allow the renewal of episode (in one click)
+    * Cheque printing assistant (French specific)
+    * Remove current patient (without any checking)
 
 ===== Bug correction =====
 
@@ -15,6 +17,8 @@ FreeMedForms
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Corrected: Linux UI form widget management in the form placeholder
     * Corrected: app crash when trying to add sub-forms
+    * Corrected: auto-save feature
+    * Corrected: identity widget read-only mode
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Improving the french posologic sentence
