@@ -1945,20 +1945,20 @@ QString Database::prepareInsertQuery(const int tableref) const
 {
     QString toReturn;
     QString fields;
-    QString numbers;
+    QString values;
     QList<int> list = d_database->m_Tables_Fields.values(tableref);
     qSort(list);
     foreach(const int & i, list)
     {
         fields.append("`"+ d_database->m_Fields.value(i) + "`, ");
-        numbers.append("? , ");
+        values.append("? , ");
     }
     fields.chop(2);
-    numbers.chop(2);
+    values.chop(2);
     toReturn = QString("INSERT INTO `%1` \n(%2) \nVALUES (%3);")
             .arg(table(tableref))
             .arg(fields)
-            .arg(numbers);
+            .arg(values);
     if (WarnSqlCommands)
         qWarning() << toReturn;
     return toReturn;
