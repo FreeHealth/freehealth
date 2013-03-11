@@ -206,28 +206,40 @@ bool ChequePrinter::print()
     painter.setFont(font);
 
     painter.translate(d->point(120, 61));
-    QRect amountLine1(d->point(25,17), d->size(90, 5));
-    QRect amountLine2(d->point(10,23), d->size(110, 5));
+    QRect amountLines(d->point(25,17), d->size(90, 10));
+    // QRect amountLine2(d->point(10,23), d->size(110, 5));
     QRect orderLine(d->point(10,28), d->size(110, 5));
 
     QRect numberLine(d->point(133,28), d->point(172, 34));
     QRect placeLine(d->point(133,36), d->point(172, 40));
     QRect dateLine(d->point(133,41), d->point(172, 45));
 
-//    painter.drawRect(amountLine1);
+//    painter.drawRect(amountLines);
 //    painter.drawRect(amountLine2);
 //    painter.drawRect(orderLine);
 //    painter.drawRect(numberLine);
 //    painter.drawRect(placeLine);
 //    painter.drawRect(dateLine);
 
-    amount = Utils::lineWrapString(amount, 50);
-    QStringList lines = amount.split("\n", QString::SkipEmptyParts);
+    if (amount.count() > 50)
+        amount = Utils::lineWrapString(amount, 50);
+    amount = amount.toUpper();
 
-    painter.drawText(amountLine1, Qt::AlignLeft | Qt::AlignVCenter, lines.at(0));
-    if (lines.count() >= 2)
-        painter.drawText(amountLine2, Qt::AlignLeft | Qt::AlignVCenter, lines.at(1));
-    painter.drawText(orderLine, Qt::AlignLeft | Qt::AlignVCenter, d->_order);
+    QFontMetrics metrics(font);
+    while (metrics.width(amount) > amountLines.width() || font.pointSize() == 6) {
+        font.setPointSizeF(font.pointSizeF() - .1);
+        metrics = QFontMetrics(font);
+    }
+    painter.setFont(font);
+    painter.drawText(amountLines, Qt::AlignLeft, amount);
+    font.setPointSize(10);
+    painter.setFont(font);
+
+//    QStringList lines = amount.split("\n", QString::SkipEmptyParts);
+//    painter.drawText(amountLine1, Qt::AlignLeft | Qt::AlignVCenter, lines.at(0));
+//    if (lines.count() >= 2)
+//        painter.drawText(amountLine2, Qt::AlignLeft | Qt::AlignVCenter, lines.at(1));
+    painter.drawText(orderLine, Qt::AlignLeft | Qt::AlignVCenter, d->_order.toUpper());
 
     font.setBold(true);
     painter.setFont(font);
@@ -235,8 +247,17 @@ bool ChequePrinter::print()
 
     font.setPointSize(10);
     font.setBold(false);
+    metrics = QFontMetrics(font);
+    d->_place = d->_place.toUpper();
+    while (metrics.width(d->_place) > placeLine.width() && font.pointSize() > 6) {
+        font.setPointSizeF(font.pointSizeF() - .1);
+        metrics = QFontMetrics(font);
+    }
     painter.setFont(font);
     painter.drawText(placeLine, Qt::AlignLeft | Qt::AlignVCenter, d->_place);
+
+    font.setPointSize(10);
+    painter.setFont(font);
     painter.drawText(dateLine, Qt::AlignLeft | Qt::AlignVCenter, d->_date.toString(Qt::SystemLocaleShortDate)); //QLocale().toString(d->_date, QLocale::ShortFormat));
 
     painter.restore();
