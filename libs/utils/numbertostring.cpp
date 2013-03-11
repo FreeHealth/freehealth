@@ -28,6 +28,7 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_numbers.h>
+#include <translationutils/trans_account.h>
 
 #include <QStringList>
 
@@ -115,10 +116,10 @@ QString millions(int index)
 {
     switch (index) {
     case 0: return QString::null;
-    case 1: tkTr(Trans::Constants::THOUSAND);
-    case 2: tkTr(Trans::Constants::MILLION);
-    case 3: tkTr(Trans::Constants::BILLION);
-    case 4: tkTr(Trans::Constants::TRILLION);
+    case 1: return tkTr(Trans::Constants::THOUSAND);
+    case 2: return tkTr(Trans::Constants::MILLION);
+    case 3: return tkTr(Trans::Constants::BILLION);
+    case 4: return tkTr(Trans::Constants::TRILLION);
     }
     return QString::null;
 }
@@ -174,7 +175,7 @@ QStringList doubleToHumanReadableString(int integer, int decimal)
     QStringList toReturn;
     toReturn << integerToHumanReadableString(integer);
     if (decimal > 0)
-        toReturn << integerToHumanReadableString(decimal);
+        toReturn << QString("%1 %2").arg(integerToHumanReadableString(decimal)).arg(Trans::Constants::CENT);
     return toReturn;
 }
 
