@@ -32,15 +32,19 @@ namespace Trans {
 namespace Constants {
 
 // Account
-const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");
-const char* const BANK_DETAILS = QT_TRANSLATE_NOOP("tkConstants", "Bank details");
-const char* const AVAILABLE_MOVEMENTS = QT_TRANSLATE_NOOP("tkConstants", "Available movements");
-const char* const MEDICAL_PROCEDURES = QT_TRANSLATE_NOOP("tkConstants", "Medical procedures");
-const char*const  SITES = QT_TRANSLATE_NOOP("tkConstants", "Sites");
-const char*const  INSURANCE = QT_TRANSLATE_NOOP("tkConstants", "Insurance");
-const char*const  PERCENT = QT_TRANSLATE_NOOP("tkConstants", "Percentages");
-const char*const  DISTRULES = QT_TRANSLATE_NOOP("tkConstants", "Distance rules");
-const char*const  ASSETSRATES = QT_TRANSLATE_NOOP("tkConstants", "Assets rates");
+const char* const ACCOUNTANCY           = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");
+const char* const BANK_DETAILS          = QT_TRANSLATE_NOOP("tkConstants", "Bank details");
+const char* const AVAILABLE_MOVEMENTS   = QT_TRANSLATE_NOOP("tkConstants", "Available movements");
+const char* const MEDICAL_PROCEDURES    = QT_TRANSLATE_NOOP("tkConstants", "Medical procedures");
+const char*const  SITES                 = QT_TRANSLATE_NOOP("tkConstants", "Sites");
+const char*const  INSURANCE             = QT_TRANSLATE_NOOP("tkConstants", "Insurance");
+const char*const  PERCENT               = QT_TRANSLATE_NOOP("tkConstants", "Percentages");
+const char*const  DISTRULES             = QT_TRANSLATE_NOOP("tkConstants", "Distance rules");
+const char*const  ASSETSRATES           = QT_TRANSLATE_NOOP("tkConstants", "Assets rates");
+
+// Money (use QLocale::currency...) but we need to add 'cents'
+const char*const  CENT                  = QT_TRANSLATE_NOOP("tkConstants", "cent");
+
 
 } // end Constants
 } // end TranslationUtils
