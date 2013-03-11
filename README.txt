@@ -16,11 +16,11 @@ This project is a free and open source project. A community grows up
 around it. FreeMedForms and derivatives are released under the terms
 of the GPLv3. Some parts of the code are LGPL v2.1.
 
-FreeMedForms and Derivatives are coded in C++/Qt4.x.
+FreeMedForms and Derivatives are coded in C++/Qt4/Qt5
 FreeMedForms and Derivatives are available for:
-- MacOs X universal
-- Linux : Ubuntu, Debian, OpenSuse, standalone binary
-- FreeBSD : need compilation of SVN trunk (please contact author)
+- MacOS X universal
+- Linux: Ubuntu, Debian, OpenSuse, standalone binary
+- FreeBSD: need compilation of git trunk (please contact the author)
 - Windows
 
 
