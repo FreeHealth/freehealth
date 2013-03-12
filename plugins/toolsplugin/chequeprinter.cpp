@@ -48,6 +48,8 @@
 
 #include <QDebug>
 
+enum { DrawChequeRects = false };
+
 using namespace Tools;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -213,16 +215,17 @@ bool ChequePrinter::print()
     QRect placeLine(d->point(133,36), d->point(172, 40));
     QRect dateLine(d->point(133,41), d->point(172, 45));
 
-//    painter.drawRect(amountLines);
-//    painter.drawRect(amountLine2);
-//    painter.drawRect(orderLine);
-//    painter.drawRect(numberLine);
-//    painter.drawRect(placeLine);
-//    painter.drawRect(dateLine);
+    if (DrawChequeRects) {
+        painter.drawRect(amountLines);
+        painter.drawRect(orderLine);
+        painter.drawRect(numberLine);
+        painter.drawRect(placeLine);
+        painter.drawRect(dateLine);
+    }
 
     if (amount.count() > 50)
         amount = Utils::lineWrapString(amount, 50);
-    amount = amount.toUpper();
+    amount = QString("****%1****").arg(amount.toUpper());
 
     QFontMetrics metrics(font);
     while (metrics.width(amount) > amountLines.width() || font.pointSize() == 6) {
@@ -242,7 +245,10 @@ bool ChequePrinter::print()
 
     font.setBold(true);
     painter.setFont(font);
-    painter.drawText(numberLine, Qt::AlignCenter | Qt::AlignVCenter, QLocale().toCurrencyString(d->_amount));//, 'f', 2)); //QSystemLocale().query(QSystemLocale::CurrencyToString, var).toString());
+    painter.drawText(numberLine, Qt::AlignCenter | Qt::AlignVCenter,
+                     QString("****%1****").arg(QLocale().toString(d->_amount, 'f', 2))
+                     //.arg(QLocale().toCurrencyString(d->_amount, "*"))
+                     );//QString::number(d->_amount, 'f', 2)); //QSystemLocale().query(QSystemLocale::CurrencyToString, var).toString());
 
     font.setPointSize(10);
     font.setBold(false);
