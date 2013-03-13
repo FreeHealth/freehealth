@@ -6,12 +6,12 @@
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="534"/>
         <source>This episode is validated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette épisode est signé.</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="535"/>
         <source>You can not edit its content, neither remove it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez plus l&apos;éditer, ni le supprimer.</translation>
     </message>
 </context>
 <context>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../../plugins/basewidgetsplugin/austriansocialnumber.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -27,14 +27,16 @@
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="566"/>
         <source>Wrong form&apos;s translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="567"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez demandé de changer le langage du formulaire en %1.
+Une erreur est survenue durant la traduction de %2.
+Le nombre d&apos;items est erronné (%3).</translation>
     </message>
 </context>
 <context>
@@ -42,7 +44,7 @@ Number of items of the translation (%3) are wrong.</source>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidget.ui" line="146"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -50,27 +52,27 @@ Number of items of the translation (%3) are wrong.</source>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.ui" line="20"/>
         <source>Compact view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vue compacte</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.ui" line="26"/>
         <source>set margin to</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir les marges</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.ui" line="36"/>
         <source>set spacing to</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir l&apos;espacement</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgetsoptionspage.cpp" line="93"/>
         <source>Base Forms Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Éléments de formulaire</translation>
     </message>
 </context>
 <context>
@@ -108,17 +110,17 @@ Number of items of the translation (%3) are wrong.</source>
     <message>
         <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="26"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="66"/>
         <source>Sex of the patient (1 for men, 2 for women)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sexe du patient (1 pur les hommes, 2 pour les femmes)</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="76"/>
         <source>Control key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé de contrôle</translation>
     </message>
 </context>
 </TS>
