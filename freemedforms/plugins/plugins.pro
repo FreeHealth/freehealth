@@ -26,42 +26,44 @@ SUBDIRS = \
     pmh \
     accountbase \
     account \
+    account2 \
     agenda \
     script \
     mainwin \
     tools
 
+PLUGINS_PATH=../../plugins
 
 # root plugin
-core.subdir = ../../plugins/fmfcoreplugin
+core.subdir = $${PLUGINS_PATH}/fmfcoreplugin
 
 # simple plugins
-listview.subdir   = ../../plugins/listviewplugin
+listview.subdir   = $${PLUGINS_PATH}/listviewplugin
 listview.depends += core
 
-texteditor.subdir   = ../../plugins/texteditorplugin
+texteditor.subdir   = $${PLUGINS_PATH}/texteditorplugin
 texteditor.depends += core
 
-saverestore.subdir   = ../../plugins/saverestoreplugin
+saverestore.subdir   = $${PLUGINS_PATH}/saverestoreplugin
 saverestore.depends += core
 
-templates.subdir   = ../../plugins/templatesplugin
+templates.subdir   = $${PLUGINS_PATH}/templatesplugin
 templates.depends += core
 
 # complex plugins
-formmanager.subdir   = ../../plugins/formmanagerplugin
+formmanager.subdir   = $${PLUGINS_PATH}/formmanagerplugin
 formmanager.depends += core
 formmanager.depends += listview
 
-printer.subdir   = ../../plugins/printerplugin
+printer.subdir   = $${PLUGINS_PATH}/printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-identity.subdir = ../../plugins/identityplugin
+identity.subdir = $${PLUGINS_PATH}/identityplugin
 identity.depends += core
 identity.depends += zipcodes
 
-mainwin.subdir   = ../../plugins/fmfmainwindowplugin
+mainwin.subdir   = $${PLUGINS_PATH}/fmfmainwindowplugin
 mainwin.depends += core
 mainwin.depends += texteditor
 mainwin.depends += printer
@@ -69,40 +71,40 @@ mainwin.depends += usermanager
 mainwin.depends += formmanager
 mainwin.depends += patientbase
 
-xmlio.subdir   = ../../plugins/xmlioplugin
+xmlio.subdir   = $${PLUGINS_PATH}/xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
 xmlio.depends += category
 xmlio.depends += pmh
 
-basewidgets.subdir   = ../../plugins/basewidgetsplugin
+basewidgets.subdir   = $${PLUGINS_PATH}/basewidgetsplugin
 basewidgets.depends += core
 basewidgets.depends += texteditor
 basewidgets.depends += formmanager
 basewidgets.depends += patientbase
 basewidgets.depends += identity
 
-aggir.subdir   = ../../plugins/aggirplugin
+aggir.subdir   = $${PLUGINS_PATH}/aggirplugin
 aggir.depends += core
 aggir.depends += formmanager
 
-drugsbase.subdir   = ../../plugins/drugsbaseplugin
+drugsbase.subdir   = $${PLUGINS_PATH}/drugsbaseplugin
 drugsbase.depends += core
 drugsbase.depends += templates
 drugsbase.depends += printer
 
-druginteractions.subdir = ../../plugins/druginteractionsplugin
+druginteractions.subdir = $${PLUGINS_PATH}/druginteractionsplugin
 druginteractions.depends += core
 druginteractions.depends += drugsbase
 
-drugs.subdir   = ../../plugins/drugsplugin
+drugs.subdir   = $${PLUGINS_PATH}/drugsplugin
 drugs.depends += core
 drugs.depends += drugsbase
 drugs.depends += texteditor
 drugs.depends += templates
 drugs.depends += formmanager
 
-usermanager.subdir   = ../../plugins/usermanagerplugin
+usermanager.subdir   = $${PLUGINS_PATH}/usermanagerplugin
 usermanager.depends += core
 usermanager.depends += printer
 usermanager.depends += texteditor
@@ -110,7 +112,7 @@ usermanager.depends += listview
 usermanager.depends += zipcodes
 usermanager.depends += identity
 
-agenda.subdir = ../../plugins/agendaplugin
+agenda.subdir = $${PLUGINS_PATH}/agendaplugin
 agenda.depends += core
 agenda.depends += patientbase
 agenda.depends += usermanager
@@ -119,12 +121,12 @@ agenda.depends += listview
 #alerts.subdir = alertsplugin
 #alerts.depends += core
 
-icd.subdir = ../../plugins/icdplugin
+icd.subdir = $${PLUGINS_PATH}/icdplugin
 icd.depends += core
 icd.depends += formmanager
 icd.depends += listview
 
-pmh.subdir = ../../plugins/pmhplugin
+pmh.subdir = $${PLUGINS_PATH}/pmhplugin
 pmh.depends += core
 pmh.depends += icd
 pmh.depends += listview
@@ -132,14 +134,15 @@ pmh.depends += texteditor
 pmh.depends += category
 pmh.depends += formmanager
 
-category.subdir = ../../plugins/categoryplugin
+category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
 category.depends += listview
 
-accountbase.subdir = ../../plugins/accountbaseplugin
+accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
 accountbase.depends += core
+accountbase.depends += datapack
 
-account.subdir   = ../../plugins/accountplugin
+account.subdir   = $${PLUGINS_PATH}/accountplugin
 account.depends += core
 account.depends += texteditor
 account.depends += printer
@@ -147,25 +150,31 @@ account.depends += accountbase
 account.depends += zipcodes
 account.depends += listview
 
-zipcodes.subdir = ../../plugins/zipcodesplugin
+account2.subdir   = $${PLUGINS_PATH}/account2plugin
+account2.depends += core
+account2.depends += datapack
+#account2.depends += texteditor
+#account2.depends += listview
+
+zipcodes.subdir = $${PLUGINS_PATH}/zipcodesplugin
 zipcodes.depends += core
 
-script.subdir = ../../plugins/scriptplugin
+script.subdir = $${PLUGINS_PATH}/scriptplugin
 script.depends += core
 script.depends += formmanager
 
-datapack.subdir = ../../plugins/datapackplugin
+datapack.subdir = $${PLUGINS_PATH}/datapackplugin
 datapack.depends += core
 
 with-webcam {
     SUBDIRS += webcam
-    webcam.subdir = ../../plugins/webcamplugin
+    webcam.subdir = $${PLUGINS_PATH}/webcamplugin
     webcam.depends += core
 }
 
 with-alerts {
     SUBDIRS += alerts
-    alerts.subdir = ../../plugins/alertplugin
+    alerts.subdir = $${PLUGINS_PATH}/alertplugin
     alerts.depends += core
     #alerts.depends += patientbase
 
@@ -174,19 +183,19 @@ with-alerts {
 
 with-pad {
     SUBDIRS += padtools
-    padtools.subdir = ../../plugins/padtoolsplugin
+    padtools.subdir = $${PLUGINS_PATH}/padtoolsplugin
     padtools.depends += core
     padtools.depends += texteditor
 }
 
-patientbase.subdir   = ../../plugins/patientbaseplugin
+patientbase.subdir   = $${PLUGINS_PATH}/patientbaseplugin
 patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
 patientbase.depends += identity
 
-tools.subdir   = ../../plugins/toolsplugin
+tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core
 
 
