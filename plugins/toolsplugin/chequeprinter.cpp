@@ -207,13 +207,15 @@ bool ChequePrinter::print()
     painter.setFont(font);
 
     painter.translate(d->point(120, 61));
-    QRect amountLines(d->point(25,17), d->size(90, 10));
+    // 25,17 pour certains
+    // 45,13 pour d'autres
+    QRect amountLines(d->point(45,13), d->size(90, 10));
     // QRect amountLine2(d->point(10,23), d->size(110, 5));
     QRect orderLine(d->point(10,28), d->size(110, 5));
 
-    QRect numberLine(d->point(133,28), d->point(172, 34));
-    QRect placeLine(d->point(133,36), d->point(172, 40));
-    QRect dateLine(d->point(133,41), d->point(172, 45));
+    QRect numberLine(d->point(133,28), d->size(41, 10));
+    QRect placeLine(d->point(133,38), d->size(40, 4));
+    QRect dateLine(d->point(133,42), d->size(40, 4));
 
     if (DrawChequeRects) {
         painter.drawRect(amountLines);
