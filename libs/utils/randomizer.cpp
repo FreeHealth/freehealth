@@ -74,7 +74,8 @@
 using namespace Utils;
 using namespace std;
 
-#define makeRand(max) (int)((double)rand() / ((double)RAND_MAX + 1) * max)
+#define makeRandDouble(max) ((double)rand() / ((double)RAND_MAX + 1) * (double)max)
+#define makeRand(max)       (int)((double)rand() / ((double)RAND_MAX + 1) * (double)max)
 
 namespace Utils {
 namespace Internal {
@@ -334,6 +335,25 @@ int Randomizer::randomInt(int min, int max)
     int z = 0;
     while (i < min) {
         i = makeRand(max);
+        if (++z == 20) {
+            i = max;
+            break;
+        }
+    }
+    return i;
+}
+
+double Randomizer::randomDouble(double min, double max)
+{
+    Q_ASSERT(min < max);
+    double i = min - 10.;
+    int z = 0;
+    while (i < min) {
+
+//        qWarning() << (double)rand() / (double)(RAND_MAX + 1)
+//                      << ((double)rand() / ((double)RAND_MAX + 1) * (double)max);
+
+        i = makeRandDouble(max);
         if (++z == 20) {
             i = max;
             break;
