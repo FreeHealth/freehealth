@@ -53,10 +53,6 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/icommandline.h>
 
-#ifdef FREEACCOUNT
-#    include <coreplugin/commandlineparser.h>
-#endif
-
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -529,7 +525,6 @@ public:
     // Save all dates of an item into the database (save or update)
     bool saveDates(DatesOfItem &item)
     {
-        qWarning() << "SAVE DATES" << item.id() << item.isModified();
         if (!connectDatabase(q->database(), __LINE__))
             return false;
         bool transactionCreated = false;
@@ -555,7 +550,6 @@ public:
             // Save new dates -> get the date DID
             item.setDateDid(q->max(Constants::Table_Dates, Constants::DATE_DID).toInt() + 1);
         }
-        qWarning() << "   dateDid" << item.dateDid();
         for(int i = 0; i < DatesOfItem::Date_MaxParam; ++i) {
             const QDateTime &dt = item.date(DatesOfItem::DateType(i));
             if (dt.isNull() || !dt.isValid())
@@ -748,43 +742,10 @@ bool AccountBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
 
-    // TODO: start a global transaction for all this code, remove the transactions inside the sub-members, close the transaction
-//    if (!checkDatabaseScheme()) {
-//        if(checkIfIsFirstVersion()){
-//            qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";
-//            if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam) {
-//                if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL"))
-//                       && !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_COUNTRY,FieldIsBlob, QString("NULL"))) {
-//                    LOG_ERROR("Unable to add new field in table MP");
-//                    return false;
-//                } else {
-//                    foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)) {
-//                        qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
-//                    }
-//                    LOG("New Version = "+checkAndReplaceVersionNumber());
-//                    return true;
-//                }
-//            }
-
-//        } else {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
-//            return false;
-//        }
-//    }  //checkDatabaseScheme
-
-//    if (checkIfVersionBeforeThirdVersion() && driver() == Utils::Database::MySQL) {
-//        if (alterFieldPatientNameIntToVarchar()) {
-//            LOG("Field PATIENT_NAME has been changed to varchar");
-//        } else {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
-//            return false;
-//        }
-//    }
-//    // End of todo commit transaction
-
-//    if (versionHasChanged()) {
-//        LOG("Version has changed , new version = " + checkAndReplaceVersionNumber());
-//    }
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR("Wrong database schema");
+        return false;
+    }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     d->m_initialized = true;
