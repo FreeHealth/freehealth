@@ -73,7 +73,7 @@ public:
 
     bool save(QList<Fee> &fees);
     bool save(QList<Payment> &payments);
-    bool save(QList<Banking> &benkings);
+    bool save(QList<Banking> &bankings);
     bool save(QList<Quotation> &quotations);
 
 private:    

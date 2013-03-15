@@ -181,7 +181,8 @@ public:
                 pay.setAmount(query.value(Constants::PAYMENT_AMOUNT).toDouble());
                 pay.setType(Payment::PaymentType(query.value(Constants::PAYMENT_TYPE).toInt()));
                 pay.setDateDid(query.value(Constants::PAYMENT_DATE_DID).toInt());
-                pay.setSignatureId(query.value(Constants::PAYMENT_COMMENT).toInt());
+                pay.setComment(query.value(Constants::PAYMENT_COMMENT).toString());
+                pay.setSignatureId(query.value(Constants::PAYMENT_SIGN_ID).toInt());
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
@@ -344,12 +345,12 @@ public:
     // The dateDid() must return a real value.
     bool getDates(DatesOfItem &item)
     {
-        if (item.dataDid()==-1)
+        if (item.dateDid()==-1)
             return false;
         if (!connectDatabase(q->database(), __LINE__))
             return false;
         QHash<int, QString> where;
-        where.insert(Constants::DATE_DID, QString("='%1'").arg(item.dataDid()));
+        where.insert(Constants::DATE_DID, QString("='%1'").arg(item.dateDid()));
         QSqlQuery query(q->database());
         if (query.exec(q->select(Constants::Table_Dates, where))) {
             while (query.next()) {
@@ -525,6 +526,63 @@ public:
         return true;
     }
 
+    // Save all dates of an item into the database (save or update)
+    bool saveDates(DatesOfItem &item)
+    {
+        qWarning() << "SAVE DATES" << item.id() << item.isModified();
+        if (!connectDatabase(q->database(), __LINE__))
+            return false;
+        bool transactionCreated = false;
+        if (!_transaction) {
+            q->database().transaction();
+            transactionCreated = true;
+            _transaction = true;
+        }
+
+        QSqlQuery query(q->database());
+        if (item.dateDid() != -1) {
+            // Update -> Delete all previously saved dates
+            QHash<int, QString> where;
+            where.insert(Constants::DATE_DID, QString("='%1'").arg(item.dateDid()));
+            q->prepareDeleteQuery(Constants::Table_Dates, where);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR_FOR(q, query);
+                query.finish();
+                q->database().rollback();
+                return false;
+            }
+        } else {
+            // Save new dates -> get the date DID
+            item.setDateDid(q->max(Constants::Table_Dates, Constants::DATE_DID).toInt() + 1);
+        }
+        qWarning() << "   dateDid" << item.dateDid();
+        for(int i = 0; i < DatesOfItem::Date_MaxParam; ++i) {
+            const QDateTime &dt = item.date(DatesOfItem::DateType(i));
+            if (dt.isNull() || !dt.isValid())
+                continue;
+            QString req = q->prepareInsertQuery(Constants::Table_Dates);
+            query.prepare(req);
+            query.bindValue(Constants::DATE_ID, QVariant());
+            query.bindValue(Constants::DATE_DID, item.dateDid());
+            query.bindValue(Constants::DATE_TYPE, i);
+            query.bindValue(Constants::DATE_ISODATE, dt);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR_FOR(q, query);
+                query.finish();
+                q->database().rollback();
+                return false;
+            }
+            query.finish();
+        }
+        query.finish();
+
+        if (transactionCreated) {
+            q->database().commit();
+            _transaction = false;
+        }
+        return true;
+    }
+
 public:
     bool m_LogChrono;
     bool m_initialized, _transaction;
@@ -588,13 +646,13 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_BankDetails,  BANKDETAILS_COMMENT,        "COMMENT",        FieldIsLongText);
     addField(Table_BankDetails,  BANKDETAILS_DEFAULT,        "ISDEFAULT",      FieldIsBoolean);
 
-    addField(Table_Fees,  FEES_ID,          "ISDEFAULT",    FieldIsUniquePrimaryKey);
+    addField(Table_Fees,  FEES_ID,          "ID",           FieldIsUniquePrimaryKey);
     addField(Table_Fees,  FEES_ISVALID,     "ISVALID",      FieldIsBoolean);
     addField(Table_Fees,  FEES_USER_UID,    "USER_UID",     FieldIsUUID);
     addField(Table_Fees,  FEES_PATIENT_UID, "PATIENT_UID",  FieldIsUUID);
     addField(Table_Fees,  FEES_MP_ID,       "MP_ID",        FieldIsInteger);
     addField(Table_Fees,  FEES_TYPE,        "TYPE",         FieldIsShortText);
-    addField(Table_Fees,  FEES_DATE_DID,    "DATE_ID",      FieldIsInteger);
+    addField(Table_Fees,  FEES_DATE_DID,    "DATE_DID",     FieldIsInteger);
     addField(Table_Fees,  FEES_AMOUNT,      "AMOUNT",       FieldIsReal);
     addField(Table_Fees,  FEES_COMMENT,     "COMMENT",      FieldIsShortText);
     addField(Table_Fees,  FEES_SIGN_ID,     "SIGN_ID",      FieldIsInteger);
@@ -606,6 +664,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Payments, PAYMENT_TYPE ,     "TYPE",     FieldIsShortText);
     addField(Table_Payments, PAYMENT_DATE_DID , "DATE_DID", FieldIsInteger);
     addField(Table_Payments, PAYMENT_COMMENT ,  "COMMENT",  FieldIsShortText);
+    addField(Table_Payments, PAYMENT_SIGN_ID ,  "SIGN_ID", FieldIsInteger);
 
     addField(Table_PaymentsFees, PAYFEE_PAY_ID ,  "PAY_ID",  FieldIsInteger);
     addField(Table_PaymentsFees, PAYFEE_FEE_ID ,  "FEE_ID",  FieldIsInteger);
@@ -622,7 +681,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_BankingLink, BANKINGLK_PAYMENT_ID ,  "PAYID",    FieldIsInteger);
 
     addField(Table_Dates, DATE_ID,      "ID",       FieldIsUniquePrimaryKey);
-    addField(Table_Dates, DATE_TYPE,    "DID",      FieldIsInteger);
+    addField(Table_Dates, DATE_DID,     "DID",      FieldIsInteger);
     addField(Table_Dates, DATE_TYPE,    "TYPE",     FieldIsShortText);
     addField(Table_Dates, DATE_ISODATE, "ISODATE",  FieldIsDateTime);
 
@@ -642,6 +701,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Signatures, SIGNATURE_USER_UID,  "USER_UID", FieldIsUUID);
     addField(Table_Signatures, SIGNATURE_DATE_DID,  "DATE_DID", FieldIsInteger);
     addField(Table_Signatures, SIGNATURE_ISVALID,   "ISVALID",  FieldIsBoolean);
+    addField(Table_Signatures, SIGNATURE_COMMENT,   "COMMENT",  FieldIsLongText);
 
     addField(Table_SignatureLink, SIGNATURELINK_LINKID,  "SLINK_ID",    FieldIsInteger);
     addField(Table_SignatureLink, SIGNATURELINK_SIGN_ID, "SIGN_ID",     FieldIsInteger);
@@ -781,6 +841,7 @@ bool AccountBase::createVirtuals(int nb)
     return true;
 }
 
+/** Save or update a list of fees */
 bool AccountBase::save(QList<Fee> &fees)
 {
     if (!connectDatabase(database(), __LINE__))
@@ -794,8 +855,8 @@ bool AccountBase::save(QList<Fee> &fees)
     QSqlQuery query(database());
     for(int i=0; i < fees.count(); ++i) {
         Fee &fee = fees[i];
+        d->saveDates(fee);
         if (fee.id() == -1) {
-            // TODO: Save dates
             // Save
             QString req = prepareInsertQuery(Constants::Table_Fees);
             query.prepare(req);
@@ -805,7 +866,7 @@ bool AccountBase::save(QList<Fee> &fees)
             query.bindValue(Constants::FEES_PATIENT_UID, fee.patientUid());
             query.bindValue(Constants::FEES_MP_ID, fee.mpId());
             query.bindValue(Constants::FEES_TYPE, fee.type());
-            query.bindValue(Constants::FEES_DATE_DID, fee.dataDid());
+            query.bindValue(Constants::FEES_DATE_DID, fee.dateDid());
             query.bindValue(Constants::FEES_AMOUNT, fee.amount());
             query.bindValue(Constants::FEES_COMMENT, fee.comment());
             query.bindValue(Constants::FEES_SIGN_ID, fee.signatureId());
@@ -820,11 +881,10 @@ bool AccountBase::save(QList<Fee> &fees)
             }
             query.finish();
         } else {
-            // TODO: Update dates
             // Update
             if (fee.isModified()) {
                 QHash<int, QString> where;
-                where.insert(Constants::FEES_ID, QString("=%1").arg(fee.id()));
+                where.insert(Constants::FEES_ID, QString("='%1'").arg(fee.id()));
                 QString req = prepareUpdateQuery(Constants::Table_Fees, QList<int>()
                                                  << Constants::FEES_ISVALID
                                                  << Constants::FEES_USER_UID
@@ -863,12 +923,85 @@ bool AccountBase::save(QList<Fee> &fees)
     return true;
 }
 
+/** Save or update a list of payments */
 bool AccountBase::save(QList<Payment> &payments)
 {
+    if (!connectDatabase(database(), __LINE__))
+        return false;
+    if (payments.isEmpty())
+        return true;
+
+    database().transaction();
+    d->_transaction = true;
+
+    QSqlQuery query(database());
+    for(int i=0; i < payments.count(); ++i) {
+        Payment &pay = payments[i];
+        d->saveDates(pay);
+        if (pay.id() == -1) {
+            // Save
+            QString req = prepareInsertQuery(Constants::Table_Payments);
+            query.prepare(req);
+            query.bindValue(Constants::PAYMENT_ID, QVariant());
+            query.bindValue(Constants::PAYMENT_QUOT_ID, pay.quotationId());
+            query.bindValue(Constants::PAYMENT_ISVALID, int(pay.isValid()));
+            query.bindValue(Constants::PAYMENT_AMOUNT, pay.amount());
+            query.bindValue(Constants::PAYMENT_TYPE, pay.type());
+            query.bindValue(Constants::PAYMENT_DATE_DID, pay.dateDid());
+            query.bindValue(Constants::PAYMENT_COMMENT, pay.comment());
+            query.bindValue(Constants::PAYMENT_SIGN_ID, pay.signatureId());
+            if (query.exec()) {
+                pay.setId(query.lastInsertId().toInt());
+                pay.setModified(false);
+            } else {
+                LOG_QUERY_ERROR(query);
+                query.finish();
+                database().rollback();
+                return false;
+            }
+            query.finish();
+        } else {
+            // Update
+            if (pay.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::PAYMENT_ID, QString("='%1'").arg(pay.id()));
+                QString req = prepareUpdateQuery(Constants::Table_Fees, QList<int>()
+                                                 << Constants::PAYMENT_QUOT_ID
+                                                 << Constants::PAYMENT_ISVALID
+                                                 << Constants::PAYMENT_AMOUNT
+                                                 << Constants::PAYMENT_TYPE
+                                                 << Constants::PAYMENT_DATE_DID
+                                                 << Constants::PAYMENT_COMMENT
+                                                 << Constants::PAYMENT_SIGN_ID,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, pay.quotationId());
+                query.bindValue(++i, int(pay.isValid()));
+                query.bindValue(++i, pay.amount());
+                query.bindValue(++i, pay.type());
+                query.bindValue(++i, pay.dateDid());
+                query.bindValue(++i, pay.comment());
+                query.bindValue(++i, pay.signatureId());
+                if (query.exec()) {
+                    pay.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    query.finish();
+                    database().rollback();
+                    return false;
+                }
+                query.finish();
+            }
+        }
+    }
+    query.finish();
+    database().commit();
+    d->_transaction = false;
     return true;
 }
 
-bool AccountBase::save(QList<Banking> &benkings)
+bool AccountBase::save(QList<Banking> &bankings)
 {
     return true;
 }

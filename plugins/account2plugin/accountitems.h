@@ -91,7 +91,8 @@ public:
         Date_Validation,
         Date_Annulation,
         Date_ValidityPeriodStart,
-        Date_ValidityPeriodEnd
+        Date_ValidityPeriodEnd,
+        Date_MaxParam
     };
 
     DatesOfItem() : _date_did(-1) {}
@@ -102,7 +103,7 @@ public:
     virtual void setDate(int type, const QDate &date);
 
 protected: // for database management
-    int dataDid() const {return _date_did;}
+    int dateDid() const {return _date_did;}
     void setDateDid(int id) {setModified(true); _date_did = id;}
     static QString dateTypeUid(DateType type);
 
@@ -169,6 +170,9 @@ public:
     virtual PaymentType type() const {return _type;}
     virtual void setType(PaymentType type) {_modified=true; _type=type;}
 
+    virtual QString comment() const {return _comment;}
+    virtual void setComment(const QString &comment) {_modified=true; _comment=comment;}
+
     virtual void addFee(const Fee &fee) {_fees << fee;}
     virtual QList<Fee> fees() const {return _fees;}
 
@@ -193,6 +197,7 @@ private:
     QList<int> _feesId;
     QList<Fee> _fees;
     PaymentType _type;
+    QString _comment;
 };
 
 class ACCOUNT2_EXPORT Quotation : public DatesOfItem

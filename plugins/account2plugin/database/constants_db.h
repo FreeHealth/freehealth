@@ -142,6 +142,7 @@ namespace Constants {
         PAYMENT_TYPE,
         PAYMENT_DATE_DID,
         PAYMENT_COMMENT,
+        PAYMENT_SIGN_ID,
         PAYMENT_MaxParam
     };
 
@@ -193,7 +194,8 @@ namespace Constants {
         SIGNATURE_ID = 0,
         SIGNATURE_USER_UID,
         SIGNATURE_DATE_DID,
-        SIGNATURE_ISVALID
+        SIGNATURE_ISVALID,
+        SIGNATURE_COMMENT
     };
 
     enum Table_SignatureLink_Fields {
