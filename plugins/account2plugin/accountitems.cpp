@@ -28,22 +28,22 @@
 
 namespace Account2 {
 
-QDateTime DatesOfItem::date(DateType type) const
+QDateTime VariableDatesItem::date(DateType type) const
 {
     return _dates.value(type, QDateTime());
 }
 
-void DatesOfItem::setDate(int type, const QDateTime &datetime)
+void VariableDatesItem::setDate(int type, const QDateTime &datetime)
 {
     _dates.insert(type, datetime);
 }
 
-void DatesOfItem::setDate(int type, const QDate &date)
+void VariableDatesItem::setDate(int type, const QDate &date)
 {
     _dates.insert(type, QDateTime(date, QTime(0,0,0)));
 }
 
-QString DatesOfItem::dateTypeUid(DateType type)
+QString VariableDatesItem::dateTypeUid(DateType type)
 {
     switch (type) {
     case Date_MedicalRealisation: return "med_real";

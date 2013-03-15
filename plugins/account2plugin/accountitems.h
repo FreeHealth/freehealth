@@ -45,13 +45,19 @@ class AccountBase;
 class AccountBasePrivate;
 }
 
-class ACCOUNT2_EXPORT BasicsOfItem
+/*!
+ * \brief Represents a basic accountancy item.
+ *
+ * This item just contains an (internal) id, a UUID, a signatureId, and a modified flag.
+ * It is the base item for all accountancy objects like Fee, Payment etc.
+ */
+class ACCOUNT2_EXPORT BasicItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
 public:
-    BasicsOfItem() : _id(-1), _sign_id(-1), _valid(true), _modified(false) {}
-    virtual ~BasicsOfItem() {}
+    BasicItem() : _id(-1), _sign_id(-1), _valid(true), _modified(false) {}
+    virtual ~BasicItem() {}
 
     virtual int id() const {return _id;}
     virtual void setId(int id) {_modified=true; _id = id;}
@@ -74,7 +80,14 @@ protected:
     QString _uid;
 };
 
-class ACCOUNT2_EXPORT DatesOfItem : public BasicsOfItem
+/*!
+ * \brief The VariableDatesItem class adds multiple and flexible dates to the item.
+ *
+ * By adding a list of dynamically addable/removable dates to the item, it
+ * enables flexible usage of different dates without having the need to create extra
+ * fields for it.
+ */
+class ACCOUNT2_EXPORT VariableDatesItem : public BasicItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
@@ -95,8 +108,8 @@ public:
         Date_MaxParam
     };
 
-    DatesOfItem() : _date_did(-1) {}
-    virtual ~DatesOfItem() {}
+    VariableDatesItem() : _date_did(-1) {}
+    virtual ~VariableDatesItem() {}
 
     virtual QDateTime date(DateType type) const;
     virtual void setDate(int type, const QDateTime &datetime);
@@ -112,7 +125,7 @@ private:
     QHash<int, QDateTime> _dates;
 };
 
-class ACCOUNT2_EXPORT Fee : public DatesOfItem
+class ACCOUNT2_EXPORT Fee : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
@@ -146,7 +159,7 @@ private:
     QString _userUid, _patientUid, _type, _comment;
 };
 
-class ACCOUNT2_EXPORT Payment : public DatesOfItem
+class ACCOUNT2_EXPORT Payment : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
@@ -200,7 +213,7 @@ private:
     QString _comment;
 };
 
-class ACCOUNT2_EXPORT Quotation : public DatesOfItem
+class ACCOUNT2_EXPORT Quotation : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
@@ -234,7 +247,7 @@ private:
     QString _label, _uid, _userComment;
 };
 
-class ACCOUNT2_EXPORT Banking : public DatesOfItem
+class ACCOUNT2_EXPORT Banking : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;

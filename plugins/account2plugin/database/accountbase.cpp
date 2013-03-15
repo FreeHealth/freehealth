@@ -343,7 +343,7 @@ public:
 
     // Retrieve all date related to an item. Does not create its transaction.
     // The dateDid() must return a real value.
-    bool getDates(DatesOfItem &item)
+    bool getDates(VariableDatesItem &item)
     {
         if (item.dateDid()==-1)
             return false;
@@ -527,7 +527,7 @@ public:
     }
 
     // Save all dates of an item into the database (save or update)
-    bool saveDates(DatesOfItem &item)
+    bool saveDates(VariableDatesItem &item)
     {
         qWarning() << "SAVE DATES" << item.id() << item.isModified();
         if (!connectDatabase(q->database(), __LINE__))
@@ -556,8 +556,8 @@ public:
             item.setDateDid(q->max(Constants::Table_Dates, Constants::DATE_DID).toInt() + 1);
         }
         qWarning() << "   dateDid" << item.dateDid();
-        for(int i = 0; i < DatesOfItem::Date_MaxParam; ++i) {
-            const QDateTime &dt = item.date(DatesOfItem::DateType(i));
+        for(int i = 0; i < VariableDatesItem::Date_MaxParam; ++i) {
+            const QDateTime &dt = item.date(VariableDatesItem::DateType(i));
             if (dt.isNull() || !dt.isValid())
                 continue;
             QString req = q->prepareInsertQuery(Constants::Table_Dates);
@@ -823,7 +823,7 @@ bool AccountBase::createVirtuals(int nb)
         fee.setType(d->r.getRandomString(d->r.randomInt(10)));
         fee.setAmount(d->r.randomDouble(10., 1000.));
         fee.setComment(d->r.randomWords(d->r.randomInt(10)));
-        fee.setDate(DatesOfItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
+        fee.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
         fees << fee;
     }
 
@@ -833,7 +833,7 @@ bool AccountBase::createVirtuals(int nb)
         pay.setValid(d->r.randomBool());
         pay.setType(Payment::PaymentType(d->r.randomInt(0, Payment::Other)));
         pay.setAmount(d->r.randomDouble(10., 1000.));
-        pay.setDate(DatesOfItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
+        pay.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
         payments << pay;
     }
     save(fees);
