@@ -157,7 +157,7 @@ public:
         VISA,
         BankTransfer,
         InsuranceDelayed,
-        Other
+        Other = 10000
     };
 
     Payment() : _quotationId(-1) {}
