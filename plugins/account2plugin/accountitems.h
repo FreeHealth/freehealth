@@ -252,16 +252,18 @@ class ACCOUNT2_EXPORT Banking : public VariableDatesItem
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
 public:
-    Banking() : _bkid(-1), _total(0.0) {}
+    Banking() : _bkid(-1), _bkAccId(-1), _total(0.0) {}
     virtual ~Banking() {}
 
-    virtual void setBankAccount(const QString &uid) {_modified=true; _bankAccount=uid;}
-    virtual QString bankAccount() const {return _bankAccount;}
+    virtual void setBankAccountUuid(const QString &uid) {_modified=true; _bankAccount=uid;}
+    virtual QString bankAccountUuid() const {return _bankAccount;}
 
     virtual void setTotalAmount(double total) {_modified=true; _total=total;}
     virtual double totalAmount() const {return _total;}
+    bool canComputeTotalAmount();
+    bool computeTotalAmount();
 
-    virtual void addPayment(const Payment &payment) {_payments << payment;}
+    virtual void addPayment(const Payment &payment);
     virtual QList<Payment> payments() const {return _payments;}
 
 protected:  // for database management
@@ -271,8 +273,11 @@ protected:  // for database management
     int bankingBkid() const {return _bkid;}
     void setBankingBkid(int id) {_modified=true; _bkid = id;}
 
+    virtual void setBankAccountId(int id) {_modified=true; _bkAccId=id;}
+    virtual int bankAccountId() const {return _bkAccId;}
+
 private:
-    int _bkid;
+    int _bkid, _bkAccId;
     double _total;
     QString _bankAccount;
     QList<int> _paymentsId;
@@ -281,8 +286,10 @@ private:
 
 }  // namespace Account2
 
-//ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem &c);
-//ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem *c);
+ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Fee &c);
+ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Payment &c);
+ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Banking &c);
+ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Quotation &c);
 
 #endif  // ACCOUNT2_ACCOUNTITEMS
 
