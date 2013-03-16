@@ -71,6 +71,10 @@ public:
 
     bool createVirtuals(int nb);
 
+    bool save(Fee &fee);
+    bool save(Payment &payment);
+    bool save(Banking &banking);
+    bool save(Quotation &quotation);
     bool save(QList<Fee> &fees);
     bool save(QList<Payment> &payments);
     bool save(QList<Banking> &bankings);

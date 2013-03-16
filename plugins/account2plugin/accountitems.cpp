@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "accountitems.h"
 
+#include <utils/log.h>
+
 #include <QStringList>
 #include <QDebug>
 
@@ -46,7 +48,8 @@ void VariableDatesItem::setDate(int type, const QDate &date)
     _dates.insert(type, QDateTime(date, QTime(0,0,0)));
 }
 
-QString VariableDatesItem::dateTypeUid(DateType type)
+/** Return a persistent in time uuid for each date type for the database management */
+QString VariableDatesItem::dateTypeToSql(DateType type)
 {
     switch (type) {
     case Date_MedicalRealisation: return "med_real";
@@ -63,6 +66,77 @@ QString VariableDatesItem::dateTypeUid(DateType type)
     default: return QString::null;
     }
     return QString::null;
+}
+
+/** Return the date type from the persistent in time uuid (for the database management) */
+VariableDatesItem::DateType VariableDatesItem::dateTypeFromSql(const QString &type)
+{
+    if (type=="med_real")
+        return Date_MedicalRealisation;
+    if (type=="inv")
+        return Date_Invocing;
+    if (type=="pay")
+        return Date_Payment;
+    if (type=="bkg")
+        return Date_Banking;
+    if (type=="acc")
+        return Date_Accountancy;
+    if (type=="crea")
+        return Date_Creation;
+    if (type=="upd")
+        return Date_Update;
+    if (type=="val")
+        return Date_Validation;
+    if (type=="ann")
+        return Date_Annulation;
+    if (type=="validitystart")
+        return Date_ValidityPeriodStart;
+    if (type=="validityend")
+        return Date_ValidityPeriodEnd;
+    Q_ASSERT(false);
+    LOG_ERROR_FOR("VariableDatesItem", "Unknown type: " + type);
+    return Date_Creation;
+}
+
+/** Add a Fee to a Payment. WARNING: the fee must be already saved into the database and/or have its id() defined. */
+void Payment::addFee(const Fee &fee)
+{
+    Q_ASSERT(fee.id() >= 0);
+    _fees << fee;
+    _feesId << fee.id();
+}
+
+/** Return a persistent in time uuid for each type of payment for the database management */
+QString Payment::typeToSql(PaymentType type)
+{
+    switch (type) {
+    case Cash: return "cash";
+    case Cheque: return "chq";
+    case VISA: return "visa";
+    case BankTransfer: return "bktfrt";
+    case InsuranceDelayed: return "delay";
+    case Other: return "other";
+    }
+}
+
+/** Return the payment type from the persistent in time uuid (for the database management) */
+Payment::PaymentType Payment::typeFromSql(const QString &type)
+{
+    if (type=="cash")
+        return Cash;
+    if (type=="chq")
+        return Cheque;
+    if (type=="visa")
+        return VISA;
+    if (type=="bktfrt")
+        return BankTransfer;
+    if (type=="delay")
+        return InsuranceDelayed;
+    if (type=="other")
+        return Other;
+    Q_ASSERT(false);
+    LOG_ERROR_FOR("Payment", "Unknown type: " + type);
+    return Other;
 }
 
 bool Banking::canComputeTotalAmount()
@@ -92,7 +166,7 @@ void Banking::addPayment(const Payment &payment)
 QDebug operator<<(QDebug dbg, const Account2::Fee &c)
 {
     QStringList s;
-    s << "Account2::Fee(" + c.id();
+    s << "Account2::Fee(" + QString::number(c.id());
     if (c.isValid()) {
         if (c.isModified())
             s << "valid*";
@@ -109,19 +183,18 @@ QDebug operator<<(QDebug dbg, const Account2::Fee &c)
     s << "patient: " + c.patientUid();
     s << "type: " + c.type();
     s << "comment: " + c.comment();
-    for(int i = 0; i < Account2::DatesOfItem::Date_MaxParam; ++i) {
+    for(int i = 0; i < Account2::VariableDatesItem::Date_MaxParam; ++i) {
         if (c.date(Account2::Fee::DateType(i)).isValid())
-            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).isValid());
+            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).toString(Qt::ISODate));
     }
-    dbg.nospace() << s.join(",\n           ")
-                  << ")";
+    dbg.nospace() << s.join(",\n           ") + ")";
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const Account2::Payment &c)
 {
     QStringList s;
-    s << "Account2::Payment(" + c.id();
+    s << "Account2::Payment(" + QString::number(c.id());
     if (c.isValid()) {
         if (c.isModified())
             s << "valid*";
@@ -140,19 +213,18 @@ QDebug operator<<(QDebug dbg, const Account2::Payment &c)
         s << "Fee: " + QString::number(fee.id()) + "; amount: " + QString::number(fee.amount(), 'f', 6);;
     }
 
-    for(int i = 0; i < Account2::DatesOfItem::Date_MaxParam; ++i) {
+    for(int i = 0; i < Account2::VariableDatesItem::Date_MaxParam; ++i) {
         if (c.date(Account2::Fee::DateType(i)).isValid())
-            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).isValid());
+            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).toString(Qt::ISODate));
     }
-    dbg.nospace() << s.join(",\n           ")
-                  << ")";
+    dbg.nospace() << s.join(",\n           ") + ")";
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const Account2::Banking &c)
 {
     QStringList s;
-    s << "Account2::Banking(" + c.id();
+    s << "Account2::Banking(" + QString::number(c.id());
     if (c.isValid()) {
         if (c.isModified())
             s << "valid*";
@@ -171,12 +243,11 @@ QDebug operator<<(QDebug dbg, const Account2::Banking &c)
         s << "Payment: " + QString::number(pay.id()) + "; amount: " + QString::number(pay.amount(), 'f', 6);
     }
 
-    for(int i = 0; i < Account2::DatesOfItem::Date_MaxParam; ++i) {
+    for(int i = 0; i < Account2::VariableDatesItem::Date_MaxParam; ++i) {
         if (c.date(Account2::Fee::DateType(i)).isValid())
-            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).isValid());
+            s << QString("date: %1 - %2").arg(i).arg(c.date(Account2::Fee::DateType(i)).toString(Qt::ISODate));
     }
-    dbg.nospace() << s.join(",\n           ")
-                  << ")";
+    dbg.nospace() << s.join(",\n           ") + ")";
     return dbg.space();
 }
 

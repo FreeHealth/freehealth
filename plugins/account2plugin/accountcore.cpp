@@ -37,6 +37,8 @@
 
 #include "accountcore.h"
 #include "database/accountbase.h"
+#include "database/accountbasequery.h"
+#include "database/accountbaseresult.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -53,7 +55,10 @@
 #include <datapackutils/ipackmanager.h>
 #include <datapackutils/pack.h>
 
+enum { RunDatabaseTests = false };
+
 using namespace Account2;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
@@ -88,6 +93,32 @@ public:
 
     ~AccountCorePrivate()
     {
+    }
+
+    void runDatabaseTests()
+    {
+        qWarning() << "RUN TESTS";
+        _accountBase->createVirtuals(10);
+
+        // Query
+        AccountBaseQuery query;
+        query.setDateRange(QDateTime::currentDateTime().addDays(-2), QDateTime::currentDateTime());
+        query.setIncludeInvalidObjects(true);
+        query.setRetrieveObjects(AccountBaseQuery::Fee | AccountBaseQuery::Payment);
+
+        query.addUser("%");
+        query.addPatient("%");
+
+        AccountBaseResult result = _accountBase->query(query);
+        // Warn Fees
+        foreach(const Fee &fee, result.fees())
+            qWarning() << fee;
+        // Warn Payments
+        foreach(const Payment &pay, result.payments())
+            qWarning() << pay;
+        // Warn Bankings
+        foreach(const Banking &bkg, result.bankings())
+            qWarning() << bkg;
     }
 
 public:
@@ -128,7 +159,8 @@ bool AccountCore::initialize()
 {
     if (!d->_accountBase->initialize())
         return false;
-    // d->_accountBase->createVirtuals(10);
+    if (RunDatabaseTests)
+        d->runDatabaseTests();
     return true;
 }
 

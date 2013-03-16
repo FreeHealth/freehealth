@@ -92,8 +92,7 @@ class ACCOUNT2_EXPORT VariableDatesItem : public BasicItem
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
 public:
-    enum DateType {
-        // Date_Quotation, --> eq Date_Creation in Quotation object
+    enum DateType { // if you update this enum, please also update the dateTypeToSql()
         Date_MedicalRealisation = 0,
         Date_Invocing,
         Date_Payment,
@@ -118,7 +117,9 @@ public:
 protected: // for database management
     int dateDid() const {return _date_did;}
     void setDateDid(int id) {setModified(true); _date_did = id;}
-    static QString dateTypeUid(DateType type);
+
+    static QString dateTypeToSql(DateType type);
+    static DateType dateTypeFromSql(const QString &type);
 
 private:
     int _date_did;
@@ -164,13 +165,13 @@ class ACCOUNT2_EXPORT Payment : public VariableDatesItem
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
 public:
-    enum PaymentType {
+    enum PaymentType { // if you update this enum, please also update the typeToSql()
         Cash = 0,
         Cheque,
         VISA,
         BankTransfer,
         InsuranceDelayed,
-        Other = 10000
+        Other
     };
 
     Payment() : _quotationId(-1) {}
@@ -186,7 +187,7 @@ public:
     virtual QString comment() const {return _comment;}
     virtual void setComment(const QString &comment) {_modified=true; _comment=comment;}
 
-    virtual void addFee(const Fee &fee) {_fees << fee;}
+    virtual void addFee(const Fee &fee);
     virtual QList<Fee> fees() const {return _fees;}
 
 //    static QString typeToString(ScriptType type);
@@ -203,6 +204,9 @@ protected: // For database management
 
     int quotationId() const {return _quotationId;}
     void setQuotationId(int id) {_modified=true; _quotationId = id;}
+
+    static QString typeToSql(PaymentType type);
+    static PaymentType typeFromSql(const QString &type);
 
 private:
     int _quotationId;

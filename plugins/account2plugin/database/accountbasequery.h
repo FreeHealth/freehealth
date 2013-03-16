@@ -49,11 +49,11 @@ class AccountBaseQuery
 {
 public:
     enum DataObject {
-        Fee,
-        Payment,
-        Banking,
-        Quotation,
-        None
+        None        = 0,
+        Fee         = 0x0001,
+        Payment     = 0x0002,
+        Banking     = 0x0004,
+        Quotation   = 0x0008
     };
     Q_DECLARE_FLAGS(DataObjects, DataObject)
 

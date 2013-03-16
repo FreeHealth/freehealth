@@ -66,6 +66,11 @@ public:
     void addBanking(const Banking &bkg) {_bankings << bkg;}
     void addQuotation(const Quotation &quot) {_quotations << quot;}
 
+    const QList<Fee> &fees() const {return _fees;}
+    const QList<Payment> &payments() const {return _payments;}
+    const QList<Banking> &bankings() const {return _bankings;}
+    const QList<Quotation> &quotations() const {return _quotations;}
+
 private:
     bool _success;
     QString _errorMsg;
