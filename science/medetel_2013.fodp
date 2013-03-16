@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
- <office:meta><dc:title>FreeMedForms - Med-E-Tel 2013 Poster</dc:title><meta:initial-creator>Malina Jordanova</meta:initial-creator><meta:creation-date>2010-07-30T15:51:35</meta:creation-date><dc:date>2013-03-16T11:50:59</dc:date><meta:editing-cycles>67</meta:editing-cycles><meta:editing-duration>PT8H58S</meta:editing-duration><meta:generator>LibreOffice/4.0.1.2$Linux_X86_64 LibreOffice_project/400m0$Build-2</meta:generator><meta:keyword>FreeMedForms - Med-E-Tel 2013 Poster</meta:keyword><dc:subject>FreeMedForms - Med-E-Tel 2013 Poster</dc:subject><meta:print-date>2013-03-16T11:40:46</meta:print-date><meta:document-statistic meta:object-count="37"/><meta:user-defined meta:name="Projet">FreeMedForms</meta:user-defined><meta:user-defined meta:name="Propriétaire">Eric Maeker, MD (fr)</meta:user-defined><meta:user-defined meta:name="URL">http://freemedforms.com</meta:user-defined></office:meta>
+ <office:meta><dc:title>FreeMedForms - Med-E-Tel 2013 Poster</dc:title><meta:initial-creator>Malina Jordanova</meta:initial-creator><meta:creation-date>2010-07-30T15:51:35</meta:creation-date><dc:date>2013-03-16T22:32:31</dc:date><meta:editing-cycles>92</meta:editing-cycles><meta:editing-duration>PT8H13M5S</meta:editing-duration><meta:generator>LibreOffice/4.0.1.2$Linux_X86_64 LibreOffice_project/400m0$Build-2</meta:generator><meta:keyword>FreeMedForms - Med-E-Tel 2013 Poster</meta:keyword><dc:subject>FreeMedForms - Med-E-Tel 2013 Poster</dc:subject><meta:print-date>2013-03-16T11:40:46</meta:print-date><meta:document-statistic meta:object-count="37"/><meta:user-defined meta:name="Projet">FreeMedForms</meta:user-defined><meta:user-defined meta:name="Propriétaire">Eric Maeker, MD (fr)</meta:user-defined><meta:user-defined meta:name="URL">http://freemedforms.com</meta:user-defined></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="VisibleAreaTop" config:type="int">50120</config:config-item>
-   <config:config-item config:name="VisibleAreaLeft" config:type="int">-3969</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">90260</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">65767</config:config-item>
+   <config:config-item config:name="VisibleAreaTop" config:type="int">16565</config:config-item>
+   <config:config-item config:name="VisibleAreaLeft" config:type="int">-17025</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">120902</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">55101</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -37,10 +37,10 @@
      <config:config-item config:name="EditModeStandard" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeNotes" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeHandout" config:type="int">1</config:config-item>
-     <config:config-item config:name="VisibleAreaTop" config:type="int">52436</config:config-item>
-     <config:config-item config:name="VisibleAreaLeft" config:type="int">-21287</config:config-item>
-     <config:config-item config:name="VisibleAreaWidth" config:type="int">126400</config:config-item>
-     <config:config-item config:name="VisibleAreaHeight" config:type="int">62058</config:config-item>
+     <config:config-item config:name="VisibleAreaTop" config:type="int">18521</config:config-item>
+     <config:config-item config:name="VisibleAreaLeft" config:type="int">-8650</config:config-item>
+     <config:config-item config:name="VisibleAreaWidth" config:type="int">106954</config:config-item>
+     <config:config-item config:name="VisibleAreaHeight" config:type="int">52511</config:config-item>
      <config:config-item config:name="GridCoarseWidth" config:type="int">2000</config:config-item>
      <config:config-item config:name="GridCoarseHeight" config:type="int">2000</config:config-item>
      <config:config-item config:name="GridFineWidth" config:type="int">200</config:config-item>
@@ -123,7 +123,7 @@
    <config:config-item config:name="PrintQuality" config:type="int">0</config:config-item>
    <config:config-item config:name="PrinterIndependentLayout" config:type="string">low-resolution</config:config-item>
    <config:config-item config:name="PrinterName" config:type="string">Officejet_Pro_8000_A809</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">mQH+/09mZmljZWpldF9Qcm9fODAwMF9BODA5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpPZmZpY2VqZXRfUHJvXzgwMDBfQTgwOQAAAAAWAAMAvwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9T2ZmaWNlamV0X1Byb184MDAwX0E4MDkKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKbWFyZ2luZGFqdXN0bWVudD0wLDAsMCwwCmNvbG9yZGVwdGg9MjQKcHNsZXZlbD0wCnBkZmRldmljZT0xCmNvbG9yZGV2aWNlPTAKUFBEQ29udGV4RGF0YQpDb2xvck1vZGVsOktHcmF5AFBhZ2VTaXplOkE0AAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">tAH+/09mZmljZWpldF9Qcm9fODAwMF9BODA5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpPZmZpY2VqZXRfUHJvXzgwMDBfQTgwOQAAAAAWAAMA2gAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9T2ZmaWNlamV0X1Byb184MDAwX0E4MDkKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKbWFyZ2luZGFqdXN0bWVudD0wLDAsMCwwCmNvbG9yZGVwdGg9MjQKcHNsZXZlbD0wCnBkZmRldmljZT0xCmNvbG9yZGV2aWNlPTAKUFBEQ29udGV4RGF0YQpEdXBsZXg6Tm9uZQBJbnB1dFNsb3Q6QXV0bwBQYWdlU2l6ZTpBNABDb2xvck1vZGVsOktHcmF5AAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="SlidesPerHandout" config:type="short">6</config:config-item>
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
@@ -780,7 +780,7 @@
    <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" draw:auto-grow-width="false" fo:min-height="6.392cm" fo:min-width="0cm" fo:wrap-option="wrap"/>
   </style:style>
   <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Standard-subtitle" style:list-style-name="L3">
-   <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="57.4cm" fo:min-width="0cm" fo:padding-top="0.6cm" fo:padding-bottom="0.6cm" fo:padding-left="1.2cm" fo:padding-right="1.2cm" fo:wrap-option="wrap"/>
+   <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="58cm" fo:min-width="0cm" fo:padding-top="0.6cm" fo:padding-bottom="0.6cm" fo:padding-left="1.2cm" fo:padding-right="1.2cm" fo:wrap-option="wrap"/>
   </style:style>
   <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Standard-notes">
    <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:min-height="11.177cm" fo:min-width="0cm" fo:padding-top="0.127cm" fo:padding-bottom="0.127cm" fo:padding-left="0.254cm" fo:padding-right="0.254cm" fo:wrap-option="wrap"/>
@@ -831,10 +831,10 @@
    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:line-height="100%" fo:text-align="end" fo:text-indent="0cm" style:punctuation-wrap="hanging" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="true"/>
   </style:style>
   <style:style style:name="P7" style:family="paragraph">
-   <style:paragraph-properties fo:text-align="justify"/>
+   <style:paragraph-properties fo:margin-top="1cm" fo:margin-bottom="0cm" fo:text-align="justify"/>
   </style:style>
   <style:style style:name="P8" style:family="paragraph">
-   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.423cm" fo:margin-bottom="0cm" fo:text-align="justify" fo:text-indent="0cm" style:punctuation-wrap="hanging" style:line-break="strict">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="1cm" fo:margin-bottom="0cm" fo:text-align="justify" fo:text-indent="0cm" style:punctuation-wrap="hanging" style:line-break="strict">
     <style:tab-stops>
      <style:tab-stop style:position="0cm"/>
      <style:tab-stop style:position="11.998cm"/>
@@ -843,7 +843,7 @@
    </style:paragraph-properties>
   </style:style>
   <style:style style:name="P9" style:family="paragraph">
-   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.476cm" fo:margin-bottom="0cm" fo:text-align="justify" fo:text-indent="0cm" style:punctuation-wrap="hanging" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="true"/>
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="1cm" fo:margin-bottom="0cm" fo:text-align="justify" fo:text-indent="0cm" style:punctuation-wrap="hanging" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="true"/>
    <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="135.899993896484pt" style:font-size-asian="135.899993896484pt" style:font-size-complex="135.899993896484pt"/>
   </style:style>
   <style:style style:name="P10" style:family="paragraph">
@@ -887,51 +887,57 @@
    <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" style:font-size-asian="44pt" style:font-size-complex="44pt"/>
   </style:style>
   <style:style style:name="T6" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:text-position="super 58%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" style:font-size-asian="44pt" style:font-size-complex="44pt"/>
   </style:style>
   <style:style style:name="T7" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="Calibri" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Calibri" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="&apos;Arial Unicode MS&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T8" style:family="text">
-   <style:text-properties fo:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="32pt" style:font-weight-asian="bold" style:font-size-complex="32pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" fo:font-style="italic" style:font-size-asian="44pt" style:font-style-asian="italic" style:font-size-complex="44pt" style:font-style-complex="italic"/>
   </style:style>
   <style:style style:name="T9" style:family="text">
-   <style:text-properties fo:color="#242951" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Verdana" style:font-family-generic-asian="swiss" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Verdana" style:font-family-generic-complex="swiss" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="44pt" fo:language="bg" fo:country="BG" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="Calibri" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Calibri" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T10" style:family="text">
-   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="96pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="96pt" style:font-weight-asian="bold" style:font-size-complex="96pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="32pt" style:font-weight-asian="bold" style:font-size-complex="32pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T11" style:family="text">
-   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="66pt" fo:language="en" fo:country="US" style:font-size-asian="66pt" style:font-size-complex="66pt"/>
+   <style:text-properties fo:color="#242951" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Verdana" style:font-family-generic-asian="swiss" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Verdana" style:font-family-generic-complex="swiss" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T12" style:family="text">
-   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="72pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="72pt" style:font-weight-asian="bold" style:font-size-complex="72pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="96pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="96pt" style:font-weight-asian="bold" style:font-size-complex="96pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T13" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="66pt" fo:language="en" fo:country="US" style:font-size-asian="66pt" style:font-size-complex="66pt"/>
   </style:style>
   <style:style style:name="T14" style:family="text">
-   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:font-weight="bold" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="72pt" fo:language="en" fo:country="US" fo:font-weight="bold" style:font-size-asian="72pt" style:font-weight-asian="bold" style:font-size-complex="72pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T15" style:family="text">
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T16" style:family="text">
-   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-weight="bold" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-weight-asian="bold" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt" style:font-weight-complex="bold"/>
+   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:font-weight="bold" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T17" style:family="text">
-   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="36pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="36pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="T18" style:family="text">
-   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt"/>
+   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-weight="bold" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-weight-asian="bold" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="T19" style:family="text">
-   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="22pt" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="22pt"/>
+   <style:text-properties style:use-window-font-color="true" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-family-asian="Helvetica" style:font-family-generic-asian="swiss" style:font-size-asian="36pt" style:font-family-complex="Helvetica" style:font-family-generic-complex="swiss" style:font-size-complex="36pt"/>
   </style:style>
   <style:style style:name="T20" style:family="text">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="22pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="22pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt"/>
   </style:style>
   <style:style style:name="T21" style:family="text">
+   <style:text-properties fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="22pt" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="22pt"/>
+  </style:style>
+  <style:style style:name="T22" style:family="text">
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-position="0% 100%" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-family-asian="Arial" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-size-asian="22pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" style:font-size-complex="22pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="T23" style:family="text">
    <style:text-properties fo:font-size="32pt" fo:font-weight="bold" style:font-size-asian="32pt" style:font-weight-asian="bold" style:font-size-complex="32pt" style:font-weight-complex="bold"/>
   </style:style>
   <text:list-style style:name="L1">
@@ -1169,14 +1175,14 @@
  <office:body>
   <office:presentation><presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D1"/>
    <draw:page draw:name="PowerPoint Presentation" draw:style-name="dp3" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL1T0" presentation:use-date-time-name="dtd1">
-    <draw:frame presentation:style-name="pr2" draw:text-style-name="P9" draw:layer="layout" svg:width="84.3cm" svg:height="64.185cm" svg:x="2.9cm" svg:y="23cm">
+    <draw:frame presentation:style-name="pr2" draw:text-style-name="P9" draw:layer="layout" svg:width="84.3cm" svg:height="64.923cm" svg:x="2.9cm" svg:y="23cm">
      <draw:text-box>
-      <text:p text:style-name="P7"><text:span text:style-name="T4">INTRODUCTION:</text:span><text:span text:style-name="T5"> Drug-drug interactions (DDI) can lead to severe health outcome and are all avoidable [1]. Electronic medical record (EMR) manager can help to improve patient safety as prescribers&apos; and pharmacists&apos; ability to recognize </text:span><text:span text:style-name="T6">potentially interacting drug pairs</text:span><text:span text:style-name="T5"> is limited [2-3]. Unfortunately, many DDI software are not optimal [4-5].</text:span></text:p>
-      <text:p text:style-name="P7"><text:span text:style-name="T4">THE PROJECT:</text:span><text:span text:style-name="T5"> The FreeMedForms project was started in October 2008. The main objective is to provide a full EMR and an open source DDI software for practitioners and pharmacists. The project is coded using C++ and the Qt framework [6]. The project is driven by a volunteer community of medical doctors, pharmacists and computer scientists. The code is released under the GPLv3 license. FreeMedForms is supported by open source medical team like Debian Med[7], OpenSuse Medical[8] and Fedora Medical[9].</text:span></text:p>
-      <text:p text:style-name="P7"><text:span text:style-name="T4">DATA SOURCES:</text:span><text:span text:style-name="T5"> The drug databases are based on governmental free data and the DDI engine is based on a compilation of data sets (mainly extracted from governmental web sites and scientific publications [10-12]). The internationaly recognized ATC classification[19] is used to compute DDI and other patient-drug interactions. The main work consists in translating drugs components to their ATC equivalents. This is done using a specific application called FreeToolBox and have to be checked « by-hand ». There are no automated data-mining. Actually, the DDI engine can manage database for the following countries: France, USA, Canada, South Africa and Belgium.</text:span></text:p>
-      <text:p text:style-name="P7"><text:span text:style-name="T4">THE DDI ENGINE:</text:span><text:span text:style-name="T5"> A</text:span><text:span text:style-name="T7">s drugs can </text:span><text:span text:style-name="T6">contain multiple components, t</text:span><text:span text:style-name="T5">he DDI engine analyzes prescriptions by pair of components. Each component that can be translated to its ATC equivalent is analyzed. The DDI engine take the route of administration into account as some does not have any (or a weak) systemic passage. Two kind of alerts are defined: non-blocking alerts are represented by an icon next to the drug inside the prescription view, and blocking alerts require an user validation to pass throught. Threshold of each kind of alert can be defined separately to avoid </text:span><text:span text:style-name="T6">alert </text:span><text:span text:style-name="T5">fatigue. Alert fatigue is well known and defined as a phenomenon caused by excessive warnings including irrelevant, non-significant, or repetitious alerts [13]. The timing of alert system is also clearly defined and the engine analyses prescriptions during three different moments: when user search for a drug (warn allergies), when a drug is selected and when the posology is defined.</text:span></text:p>
-      <text:p text:style-name="P8"><text:span text:style-name="T4">INTEROPERABILITY: </text:span><text:span text:style-name="T5">FreeDiams, the DDI software of the project, can be connected to any EMR that wishes to take advantage of its expertise using an interoperability interface. This interface uses simple XML files. The GnuMED [14] and some other EMR projects already implement this interoperability.</text:span></text:p>
-      <text:p text:style-name="P8"><text:span text:style-name="T4">CURRENT AND FUTURE DEVELOPMENTS:</text:span><text:span text:style-name="T5"> Some developments are actually started to implement more complex interactions like potentially inappropriate medication [15-18], renal failure detection. A scientific validation of the DDI engine is required and should be done by independent scientists (to avoid competing conflict and any conflict of interest).</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">INTRODUCTION:</text:span><text:span text:style-name="T5"> Drug-drug interactions (DDI) can lead to severe health outcome and are all avoidable</text:span><text:span text:style-name="T6">1</text:span><text:span text:style-name="T5">. Electronic medical record (EMR) managers can help to improve patient safety, as prescribers&apos; and pharmacists&apos; ability to recognize </text:span><text:span text:style-name="T7">potentially interacting drug pairs</text:span><text:span text:style-name="T5"> is limited</text:span><text:span text:style-name="T6">2-3</text:span><text:span text:style-name="T5">. Unfortunately, many DDI software products are not optimal</text:span><text:span text:style-name="T6">4-5</text:span><text:span text:style-name="T5">.</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">THE PROJECT:</text:span><text:span text:style-name="T5"> The </text:span><text:span text:style-name="T8">FreeMedForms</text:span><text:span text:style-name="T5"> project was started in October 2008. The main objective is to provide a full EMR and an open source DDI software for practitioners and pharmacists. The project is coded using C++ and the Qt framework</text:span><text:span text:style-name="T6">6</text:span><text:span text:style-name="T5">. The project is driven by a volunteer community of medical doctors, pharmacists and computer scientists. The code is released under the GPLv3 license. </text:span><text:span text:style-name="T8">FreeMedForms</text:span><text:span text:style-name="T5"> is supported by open source medical teams like Debian Med</text:span><text:span text:style-name="T6">7</text:span><text:span text:style-name="T5">, OpenSuse Medical</text:span><text:span text:style-name="T6">8</text:span><text:span text:style-name="T5"> and Fedora Medical</text:span><text:span text:style-name="T6">9</text:span><text:span text:style-name="T5">.</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">DATA SOURCES:</text:span><text:span text:style-name="T5"> The drug databases are based on governmental free data, the DDI engine is based on a compilation of data sets mainly extracted from governmental web sites and scientific publications</text:span><text:span text:style-name="T6">10-12</text:span><text:span text:style-name="T5">. The internationally recognized ATC classification</text:span><text:span text:style-name="T6">19</text:span><text:span text:style-name="T5"> is used to compute DDI and other patient-drug interactions. The main work consists of translating drugs components to their ATC equivalents. This is done using a specific application called </text:span><text:span text:style-name="T8">FreeToolBox</text:span><text:span text:style-name="T5"> and has to be checked «by hand». There is no automated data-mining. Actually, the DDI engine can manage databases for the following countries: France, USA, Canada, South Africa and Belgium.</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">THE DDI ENGINE:</text:span><text:span text:style-name="T5"> A</text:span><text:span text:style-name="T9">s drugs can </text:span><text:span text:style-name="T7">contain multiple components, t</text:span><text:span text:style-name="T5">he DDI engine analyzes prescriptions by pairs of components. Each component that can be translated to its ATC equivalent is analyzed. The DDI engine takes the route of administration into account, as some drugs do not have any (or a weak) systemic passage. Two kinds of alerts are defined: </text:span><text:span text:style-name="T8">non-blocking alerts </text:span><text:span text:style-name="T5">are represented by an icon next to the drug inside the prescription view, and </text:span><text:span text:style-name="T8">blocking alerts </text:span><text:span text:style-name="T5">require a user validation to pass through. The threshold of each kind of alert can be defined separately to avoid </text:span><text:span text:style-name="T7">alert </text:span><text:span text:style-name="T5">fatigue. Alert fatigue is well known and defined as a phenomenon caused by excessive warnings including irrelevant, non-significant, or repetitious alerts</text:span><text:span text:style-name="T6">13</text:span><text:span text:style-name="T5">. The timing of the alert system is also clearly defined and the engine analyses prescriptions during three different moments: when user searches for a drug (warn allergies), when a drug is selected and when the posology is defined.</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">INTEROPERABILITY: </text:span><text:span text:style-name="T8">FreeDiams</text:span><text:span text:style-name="T5">, the DDI software of the project, can be connected to any EMR that wishes to take advantage of its expertise using an interoperability interface. This interface uses simple XML files. The GnuMED</text:span><text:span text:style-name="T6">14</text:span><text:span text:style-name="T5"> and some other EMR projects have already implemented this interoperability.</text:span></text:p>
+      <text:p text:style-name="P7"><text:span text:style-name="T4">CURRENT AND FUTURE DEVELOPMENT:</text:span><text:span text:style-name="T5"> Some development is actually started to implement more complex interactions like potentially inappropriate medication</text:span><text:span text:style-name="T6">15-18</text:span><text:span text:style-name="T5">, or renal failure detection. A scientific validation of the DDI engine is required and should be done by independent scientists (to avoid competing conflicts or any conflict of interest).</text:span></text:p>
       <text:list text:style-name="L2">
        <text:list-item>
         <text:p text:style-name="P8"><text:span text:style-name="T5"/></text:p>
@@ -1187,11 +1193,11 @@
     <draw:custom-shape draw:name="TextBox 5" draw:style-name="gr8" draw:text-style-name="P11" draw:layer="layout" svg:width="45.456cm" svg:height="4.323cm" svg:x="19.8cm" svg:y="113.567cm">
      <text:list text:style-name="L1">
       <text:list-header>
-       <text:p text:style-name="P10"><text:span text:style-name="T8">Med-e-Tel - The International eHealth, Telemedicine and Health</text:span></text:p>
+       <text:p text:style-name="P10"><text:span text:style-name="T10">Med-e-Tel - The International eHealth, Telemedicine and Health</text:span></text:p>
       </text:list-header>
       <text:list-item>
-       <text:p text:style-name="P10"><text:span text:style-name="T8"><text:s/></text:span><text:span text:style-name="T8">ICT Forum for Education, Networking and Business</text:span></text:p>
-       <text:p text:style-name="P10"><text:span text:style-name="T8">Open source village, Luxembourg, </text:span><text:span text:style-name="T9">April 10-12, 2013</text:span></text:p>
+       <text:p text:style-name="P10"><text:span text:style-name="T10"><text:s/></text:span><text:span text:style-name="T10">ICT Forum for Education, Networking and Business</text:span></text:p>
+       <text:p text:style-name="P10"><text:span text:style-name="T10">Open source village, Luxembourg, </text:span><text:span text:style-name="T11">April 10-12, 2013</text:span></text:p>
       </text:list-item>
      </text:list>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="mso-spt202" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
@@ -1199,19 +1205,19 @@
     <draw:custom-shape draw:name="TextBox 8" draw:style-name="gr9" draw:text-style-name="P13" draw:layer="layout" svg:width="90.01cm" svg:height="18.294cm" svg:x="0cm" svg:y="1.906cm">
      <text:list text:style-name="L1">
       <text:list-header>
-       <text:p text:style-name="P12"><text:span text:style-name="T10">The FreeMedForms project: </text:span></text:p>
+       <text:p text:style-name="P12"><text:span text:style-name="T12">The FreeMedForms project: </text:span></text:p>
       </text:list-header>
       <text:list-item>
-       <text:p text:style-name="P12"><text:span text:style-name="T10">managing drug-drug interactions,</text:span></text:p>
+       <text:p text:style-name="P12"><text:span text:style-name="T12">managing drug-drug interactions,</text:span></text:p>
       </text:list-item>
       <text:list-item>
-       <text:p text:style-name="P12"><text:span text:style-name="T10"><text:s/></text:span><text:span text:style-name="T10">an open source experimentation.</text:span></text:p>
+       <text:p text:style-name="P12"><text:span text:style-name="T12"><text:s/></text:span><text:span text:style-name="T12">an open source experimentation.</text:span></text:p>
       </text:list-item>
       <text:list-item>
-       <text:p text:style-name="P12"><text:span text:style-name="T11">Eric Maeker MD, Christian A. Reiter MD</text:span></text:p>
+       <text:p text:style-name="P12"><text:span text:style-name="T13">Eric Maeker MD, Christian A. Reiter MD</text:span></text:p>
       </text:list-item>
       <text:list-item>
-       <text:p text:style-name="P12"><text:span text:style-name="T12">freemedforms.com</text:span></text:p>
+       <text:p text:style-name="P12"><text:span text:style-name="T14">www.freemedforms.com</text:span></text:p>
       </text:list-item>
      </text:list>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="mso-spt202" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
@@ -41898,108 +41904,108 @@
       <table:table-column table:style-name="co3"/>
       <table:table-row table:style-name="ro1" table:default-cell-style-name="ce1">
        <table:table-cell table:number-columns-spanned="3">
-        <text:p text:style-name="P14"><text:span text:style-name="T13">Repartition of interactions according to their level of risk</text:span></text:p>
+        <text:p text:style-name="P14"><text:span text:style-name="T15">Repartition of interactions according to their level of risk</text:span></text:p>
        </table:table-cell>
        <table:covered-table-cell/>
        <table:covered-table-cell/>
       </table:table-row>
       <table:table-row table:style-name="ro2" table:default-cell-style-name="ce2">
        <table:table-cell>
-        <text:p><text:span text:style-name="T14">Contra-indication</text:span></text:p>
+        <text:p><text:span text:style-name="T16">Contra-indication</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p><text:span text:style-name="T14">10880</text:span></text:p>
+        <text:p><text:span text:style-name="T16">10880</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p><text:span text:style-name="T15">2%</text:span></text:p>
+        <text:p><text:span text:style-name="T17">2%</text:span></text:p>
        </table:table-cell>
       </table:table-row>
       <table:table-row table:style-name="ro2" table:default-cell-style-name="ce1">
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T16">Unadvised</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T18">Unadvised</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T16">25316</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T18">25316</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T16">6%</text:span></text:p>
-       </table:table-cell>
-      </table:table-row>
-      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Glycoprotein P interaction</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">40936</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">10%</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T18">6%</text:span></text:p>
        </table:table-cell>
       </table:table-row>
       <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">P450 cytochrome interaction</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Glycoprotein P interaction</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">25900</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">40936</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">6%</text:span></text:p>
-       </table:table-cell>
-      </table:table-row>
-      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Take into account</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">216718</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">55%</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">10%</text:span></text:p>
        </table:table-cell>
       </table:table-row>
       <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Precaution for use</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">P450 cytochrome interaction</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">79882</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">25900</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">20%</text:span></text:p>
-       </table:table-cell>
-      </table:table-row>
-      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Information</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">1722</text:span></text:p>
-       </table:table-cell>
-       <table:table-cell>
-        <text:p><text:span text:style-name="T18">&lt; 1 %</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">6%</text:span></text:p>
        </table:table-cell>
       </table:table-row>
       <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Undefined</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Take into account</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">398</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">216718</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p><text:span text:style-name="T18">&lt; 1 %</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">55%</text:span></text:p>
+       </table:table-cell>
+      </table:table-row>
+      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Precaution for use</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">79882</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">20%</text:span></text:p>
+       </table:table-cell>
+      </table:table-row>
+      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Information</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">1722</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p><text:span text:style-name="T20">&lt; 1 %</text:span></text:p>
+       </table:table-cell>
+      </table:table-row>
+      <table:table-row table:style-name="ro1" table:default-cell-style-name="ce2">
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Undefined</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">398</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p><text:span text:style-name="T20">&lt; 1 %</text:span></text:p>
        </table:table-cell>
       </table:table-row>
       <table:table-row table:style-name="ro3" table:default-cell-style-name="ce2">
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">Total DDI per INN</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">Total DDI per INN</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p text:style-name="P15"><text:span text:style-name="T17">390376</text:span></text:p>
+        <text:p text:style-name="P15"><text:span text:style-name="T19">390376</text:span></text:p>
        </table:table-cell>
        <table:table-cell>
-        <text:p><text:span text:style-name="T18">100 %</text:span></text:p>
+        <text:p><text:span text:style-name="T20">100 %</text:span></text:p>
        </table:table-cell>
       </table:table-row>
      </table:table><draw:image>
@@ -42837,30 +42843,30 @@
     </draw:frame>
     <draw:frame draw:style-name="gr11" draw:text-style-name="P16" draw:layer="layout" svg:width="50.2cm" svg:height="25.651cm" svg:x="3.9cm" svg:y="87cm">
      <draw:text-box>
-      <text:p><text:span text:style-name="T19">1 : Committee on Identifying and Preventing Medication Errors. Preventing Medication Errors: Quality Chasm Series. Washington, DC: National Academies Press, 2007.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">2. Ko Y, Malone DC, Skrepnek GH, et al. Prescribers’ knowledge of and sources of information for potential drugedrug interactions: a postal survey of US prescribers. Drug Saf 2008;31:525e36.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">3. Weideman RA, Bernstein IH, McKinney WP. Pharmacist recognition of potential drug interactions. Am J Health Syst Pharm 1999;56:1524e9.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">4. Saverno KR, Hines LE, Warholak TL, et al. Ability of pharmacy clinical decision-support software to alert users about clinically important drug-drug interactions. J Am Med Inform Assoc 2011;18:32e37</text:span></text:p>
-      <text:p><text:span text:style-name="T19">5. Rodríguez-Terol A, Caraballo MO, Palma D, et al. [Quality of interaction database management systems]. Farm Hosp 2009;33(3):134-46</text:span></text:p>
-      <text:p><text:span text:style-name="T19">6. The Qt project : http://qt-project.org</text:span></text:p>
-      <text:p><text:span text:style-name="T19">7. http://wiki.debian.org/DebianMed</text:span></text:p>
-      <text:p><text:span text:style-name="T19">8. http://en.opensuse.org/Portal:Medical</text:span></text:p>
-      <text:p><text:span text:style-name="T19">9. http://fedoraproject.org/wiki/SIGs/FedoraMedical</text:span></text:p>
-      <text:p><text:span text:style-name="T19">10. ANSM, France. Thésaurus des interactions médicamenteuses.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">11. Flockhart DA. Indiana University School of Medicine. Drug Interactions: Cytochrome P450 Drug Interaction Table.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">12. Oesterheld Jessica. P-glycoprotein Table - the Effect of Drugs and Foods. </text:span></text:p>
-      <text:p><text:span text:style-name="T19">13. Shobha Phansalkar, Judy Edworthy, Elizabeth Hellier, et al. A review of human factors principles for the design and implementation of medication safety alerts in clinical information systems. JAMIA 2010 17: 493-501</text:span></text:p>
-      <text:p><text:span text:style-name="T19">14. http://wiki.gnumed.de</text:span></text:p>
-      <text:p><text:span text:style-name="T19">15. Fick DM, Cooper JW, Wade WE, et al. Updating the Beers criteria for potentially inappropriate medication use in older adults: results of a US consensus panel of experts. Arch Intern Med. 2003 Dec 8-22;163(22):2716-24.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">16. Holt S, Schmiedl S, Thürmann PA. Potentially inappropriate medications in the elderly: the PRISCUS list. Dtsch Arztebl Int. 2010 Aug;107(31-32):543-51</text:span></text:p>
-      <text:p><text:span text:style-name="T19">17. Laroche ML, Bouthier F, Merle L, Charmes JP. [Potentially inappropriate medications in the elderly: a list adapted to French medical practice]. Rev Med Interne. 2009 Jul;30(7):592-601.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">18. McLeod PJ, Huang AR, Tamblyn RM, Gayton DC. Defining inappropriate practices in prescribing for elderly people: a national consensus panel. CMAJ. 1997 Feb 1;156(3):385-91.</text:span></text:p>
-      <text:p><text:span text:style-name="T19">19. </text:span><text:span text:style-name="T20">Anatomical Therapeutic Chemical: </text:span><text:span text:style-name="T19">http://www.whocc.no/atc</text:span></text:p>
+      <text:p><text:span text:style-name="T21">1 : Committee on Identifying and Preventing Medication Errors. Preventing Medication Errors: Quality Chasm Series. Washington, DC: National Academies Press, 2007.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">2. Ko Y, Malone DC, Skrepnek GH, et al. Prescribers’ knowledge of and sources of information for potential drugedrug interactions: a postal survey of US prescribers. Drug Saf 2008;31:525e36.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">3. Weideman RA, Bernstein IH, McKinney WP. Pharmacist recognition of potential drug interactions. Am J Health Syst Pharm 1999;56:1524e9.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">4. Saverno KR, Hines LE, Warholak TL, et al. Ability of pharmacy clinical decision-support software to alert users about clinically important drug-drug interactions. J Am Med Inform Assoc 2011;18:32e37</text:span></text:p>
+      <text:p><text:span text:style-name="T21">5. Rodríguez-Terol A, Caraballo MO, Palma D, et al. [Quality of interaction database management systems]. Farm Hosp 2009;33(3):134-46</text:span></text:p>
+      <text:p><text:span text:style-name="T21">6. The Qt project : http://qt-project.org</text:span></text:p>
+      <text:p><text:span text:style-name="T21">7. http://wiki.debian.org/DebianMed</text:span></text:p>
+      <text:p><text:span text:style-name="T21">8. http://en.opensuse.org/Portal:Medical</text:span></text:p>
+      <text:p><text:span text:style-name="T21">9. http://fedoraproject.org/wiki/SIGs/FedoraMedical</text:span></text:p>
+      <text:p><text:span text:style-name="T21">10. ANSM, France. Thésaurus des interactions médicamenteuses.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">11. Flockhart DA. Indiana University School of Medicine. Drug Interactions: Cytochrome P450 Drug Interaction Table.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">12. Oesterheld Jessica. P-glycoprotein Table - the Effect of Drugs and Foods. </text:span></text:p>
+      <text:p><text:span text:style-name="T21">13. Shobha Phansalkar, Judy Edworthy, Elizabeth Hellier, et al. A review of human factors principles for the design and implementation of medication safety alerts in clinical information systems. JAMIA 2010 17: 493-501</text:span></text:p>
+      <text:p><text:span text:style-name="T21">14. http://wiki.gnumed.de</text:span></text:p>
+      <text:p><text:span text:style-name="T21">15. Fick DM, Cooper JW, Wade WE, et al. Updating the Beers criteria for potentially inappropriate medication use in older adults: results of a US consensus panel of experts. Arch Intern Med. 2003 Dec 8-22;163(22):2716-24.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">16. Holt S, Schmiedl S, Thürmann PA. Potentially inappropriate medications in the elderly: the PRISCUS list. Dtsch Arztebl Int. 2010 Aug;107(31-32):543-51</text:span></text:p>
+      <text:p><text:span text:style-name="T21">17. Laroche ML, Bouthier F, Merle L, Charmes JP. [Potentially inappropriate medications in the elderly: a list adapted to French medical practice]. Rev Med Interne. 2009 Jul;30(7):592-601.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">18. McLeod PJ, Huang AR, Tamblyn RM, Gayton DC. Defining inappropriate practices in prescribing for elderly people: a national consensus panel. CMAJ. 1997 Feb 1;156(3):385-91.</text:span></text:p>
+      <text:p><text:span text:style-name="T21">19. </text:span><text:span text:style-name="T22">Anatomical Therapeutic Chemical: </text:span><text:span text:style-name="T21">http://www.whocc.no/atc</text:span></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame draw:style-name="gr12" draw:text-style-name="P17" draw:layer="layout" svg:width="7.407cm" svg:height="1.605cm" svg:x="3.898cm" svg:y="85cm">
      <draw:text-box>
-      <text:p><text:span text:style-name="T21">Bibliography</text:span></text:p>
+      <text:p><text:span text:style-name="T23">Bibliography</text:span></text:p>
      </draw:text-box>
     </draw:frame>
     <draw:frame draw:style-name="gr10" draw:text-style-name="P3" draw:layer="layout" svg:width="30cm" svg:height="3.75cm" svg:x="56.248cm" svg:y="114.084cm">
