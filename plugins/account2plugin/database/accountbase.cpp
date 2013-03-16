@@ -339,7 +339,7 @@ public:
 
     // Retrieve all date related to an item. Does not create its transaction.
     // The dateDid() must return a real value.
-    bool getDates(DatesOfItem &item)
+    bool getDates(VariableDatesItem &item)
     {
         if (item.dateDid()==-1)
             return false;
@@ -523,7 +523,7 @@ public:
     }
 
     // Save all dates of an item into the database (save or update)
-    bool saveDates(DatesOfItem &item)
+    bool saveDates(VariableDatesItem &item)
     {
         if (!connectDatabase(q->database(), __LINE__))
             return false;
@@ -784,7 +784,7 @@ bool AccountBase::createVirtuals(int nb)
         fee.setType(d->r.getRandomString(d->r.randomInt(10)));
         fee.setAmount(d->r.randomDouble(10., 1000.));
         fee.setComment(d->r.randomWords(d->r.randomInt(10)));
-        fee.setDate(DatesOfItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
+        fee.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
         fees << fee;
     }
 
@@ -794,7 +794,7 @@ bool AccountBase::createVirtuals(int nb)
         pay.setValid(d->r.randomBool());
         pay.setType(Payment::PaymentType(d->r.randomInt(0, Payment::Other)));
         pay.setAmount(d->r.randomDouble(10., 1000.));
-        pay.setDate(DatesOfItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
+        pay.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
         payments << pay;
     }
     save(fees);
