@@ -66,6 +66,7 @@ public:
     static AccountCore *instance();
     ~AccountCore();
 
+    bool isDatabaseInitialized() const;
 
 protected:
     void postCoreInitialization();

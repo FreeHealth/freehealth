@@ -164,8 +164,15 @@ bool AccountCore::initialize()
     return true;
 }
 
+/** Return the initiazation state of the accountancy database */
+bool AccountCore::isDatabaseInitialized() const
+{
+    return d->_accountBase->isInitialized();
+}
+
 void AccountCore::packInstalled(const DataPack::Pack &pack)
 {
+    Q_UNUSED(pack);
 //    if (pack.dataType() == DataPack::Pack::AlertPacks) {
 //        // register the alertpack
 //        if (!registerAlertPack(pack.unzipPackToPath())) {
@@ -179,6 +186,7 @@ void AccountCore::packInstalled(const DataPack::Pack &pack)
 
 void AccountCore::packRemoved(const DataPack::Pack &pack)
 {
+    Q_UNUSED(pack);
 //    if (pack.dataType() == DataPack::Pack::AlertPacks) {
 //        if (!removeAlertPack(pack.uuid()))
 //            LOG_ERROR("Unable to remove AlertPack " + pack.uuid());
