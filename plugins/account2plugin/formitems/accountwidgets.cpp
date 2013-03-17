@@ -25,12 +25,50 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class Account::Internal::FeeFormWidget
- * \brief short description of class
- *
- * Long description of class
- * \sa Account::
+ * \class Account::Internal::AccountWidgetFactory
+ * \brief The Accountancy formitem widget factory.
  */
+
+/*!
+ * \class Account::Internal::FeeFormWidget
+ * \brief The Accountancy formitem widget Fee manager.
+ * Should be presented like this
+ * \code
+ * +----------------------------+
+ * | Search [                  ]|
+ * +----------------------------+
+ * |                            |
+ * |       FEE SELECTION        |
+ * |         TREEVIEW           |
+ * | Tree because of categories |
+ * |                            |
+ * +----------------------------+
+ * |                            |
+ * |       SELECTED FEES        |
+ * |         LISTVIEW           |
+ * |                            |
+ * +----------------------------+
+ * | [ BUTTONS ] [ BUTTONS ]    |
+ * +----------------------------+
+ * \endcode
+ * Buttons should include:
+ * - remove fee
+ * - print fees
+ * - create a payment (creates a payment for all the selected fees)
+ *
+ * Views:
+ * Selection view should include:
+ * - Fee label
+ * - Medical Procedure label
+ * - Amount
+ * Selected fees view should include [+][-] buttons when mouse hover items to ease the
+ * fee adding/removal process.
+ *
+ * What is saved in the episodeBase and how to link episode/fees/payments?
+ * - An xml fee collection/payment (shouldn't we use QString UUID instead of simple ID integers)
+ * - Nothing and we use episode date/fee/payment date, patient uuid to link objects?
+ */
+
 
 #include "accountwidgets.h"
 #include "constants.h"
