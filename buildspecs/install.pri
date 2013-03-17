@@ -219,11 +219,11 @@ INSTALLS += plugs_specs
     INSTALLS += profiles_resources
   }
 
-  # Install textfiles (mostly used in debug mode)
+  # Install textfiles (and its subdirectories)
   !isEmpty(INSTALL_TEXTFILES_PATH){
     textfiles.path=$${INSTALL_TEXTFILES_PATH}
-    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
-    INSTALLS+= textfiles
+    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles
+    INSTALLS += textfiles
   }
 
   # Package Helpers
