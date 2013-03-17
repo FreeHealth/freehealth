@@ -4,7 +4,7 @@
  <office:meta><dc:title>FreeMedForms - Med-E-Tel 2013 Poster</dc:title><meta:initial-creator>Malina Jordanova</meta:initial-creator><meta:creation-date>2010-07-30T15:51:35</meta:creation-date><dc:date>2013-03-16T22:32:31</dc:date><meta:editing-cycles>92</meta:editing-cycles><meta:editing-duration>PT8H13M5S</meta:editing-duration><meta:generator>LibreOffice/3.5$MacOSX_x86 LibreOffice_project/7e68ba2-a744ebf-1f241b7-c506db1-7d53735</meta:generator><meta:keyword>FreeMedForms - Med-E-Tel 2013 Poster</meta:keyword><dc:subject>FreeMedForms - Med-E-Tel 2013 Poster</dc:subject><meta:print-date>2013-03-17T09:29:45</meta:print-date><meta:document-statistic meta:object-count="44"/><meta:user-defined meta:name="Projet">FreeMedForms</meta:user-defined><meta:user-defined meta:name="Propriétaire">Eric Maeker, MD (fr)</meta:user-defined><meta:user-defined meta:name="URL">http://freemedforms.com</meta:user-defined></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="VisibleAreaTop" config:type="int">46197</config:config-item>
+   <config:config-item config:name="VisibleAreaTop" config:type="int">79543</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">-13523</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">77230</config:config-item>
    <config:config-item config:name="VisibleAreaHeight" config:type="int">33466</config:config-item>
@@ -37,7 +37,7 @@
      <config:config-item config:name="EditModeStandard" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeNotes" config:type="int">1</config:config-item>
      <config:config-item config:name="EditModeHandout" config:type="int">1</config:config-item>
-     <config:config-item config:name="VisibleAreaTop" config:type="int">46197</config:config-item>
+     <config:config-item config:name="VisibleAreaTop" config:type="int">79543</config:config-item>
      <config:config-item config:name="VisibleAreaLeft" config:type="int">-13523</config:config-item>
      <config:config-item config:name="VisibleAreaWidth" config:type="int">105834</config:config-item>
      <config:config-item config:name="VisibleAreaHeight" config:type="int">45862</config:config-item>
