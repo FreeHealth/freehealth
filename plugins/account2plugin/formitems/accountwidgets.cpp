@@ -71,7 +71,7 @@
 
 
 #include "accountwidgets.h"
-#include "constants.h"
+//#include "constants.h"
 
 #include <account2plugin/accountcore.h>
 
@@ -134,7 +134,7 @@ Form::IFormWidget *AccountWidgetFactory::createWidget(const QString &name, Form:
         return 0;
     switch (id)
     {
-    case 0 : return new FeeFormWidget(formItem, parent);
+    case 0 : return new FeeFormWidget(object, parent);
     }
     return 0;
 }
@@ -208,7 +208,7 @@ bool FeeFormWidget::isContainer() const
     return false;
 }
 
-QString FeeFormWidget::printableHtml(bool withValues = true) const
+QString FeeFormWidget::printableHtml(bool withValues) const
 {
     //    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
     //        return QString();
@@ -335,10 +335,10 @@ QVariant FeeFormWidgetData::storableData() const
     return QVariant();
 }
 
-void FeeFormWidgetData::onValueChanged()
-{
-    // Execute the 'onValueChanged' item script
-    Constants::executeOnValueChangedScript(m_FormItem);
-    Q_EMIT dataChanged(0);
-}
+//void FeeFormWidgetData::onValueChanged()
+//{
+//    // Execute the 'onValueChanged' item script
+////    Constants::executeOnValueChangedScript(m_FormItem);
+//    Q_EMIT dataChanged(0);
+//}
 

@@ -94,6 +94,9 @@ public:
     void setStorableData(const QVariant &modified);
     QVariant storableData() const;
     
+//private Q_SLOTS:
+//    void onValueChanged();
+
 private:
     Form::FormItem *m_FormItem;
     FeeFormWidget *m_Form;
