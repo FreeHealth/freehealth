@@ -10,7 +10,8 @@ HEADERS += $${PWD}/database/constants_db.h \
     $${PWD}/accountitems.h \
     $${PWD}/database/accountbase.h \
     $${PWD}/database/accountbasequery.h \
-    $${PWD}/database/accountbaseresult.h
+    $${PWD}/database/accountbaseresult.h \
+    formitems/accountwidgets.h
     
 
 SOURCES += $${PWD}/account2plugin.cpp \
@@ -18,7 +19,8 @@ SOURCES += $${PWD}/account2plugin.cpp \
     $${PWD}/accountitems.cpp \
     $${PWD}/database/accountbase.cpp \
     $${PWD}/database/accountbasequery.cpp \
-    $${PWD}/database/accountbaseresult.cpp
+    $${PWD}/database/accountbaseresult.cpp \
+    formitems/accountwidgets.cpp
 
 # include translations
 TRANSLATION_NAME = account2
