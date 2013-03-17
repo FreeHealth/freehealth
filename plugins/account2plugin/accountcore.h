@@ -40,7 +40,7 @@
  * \file accountcore.h
  * \author Eric Maeker
  * \version 0.8.6
- * \date 13 Mar 2013
+ * \date 17 Mar 2013
 */
 
 namespace DataPack {
@@ -51,6 +51,7 @@ namespace Account2 {
 namespace Internal {
 class AccountCorePrivate;
 class Account2Plugin;
+class AccountBase;
 } // namespace Internal
 
 class ACCOUNT2_EXPORT AccountCore : public QObject
@@ -67,6 +68,8 @@ public:
     ~AccountCore();
 
     bool isDatabaseInitialized() const;
+
+    Internal::AccountBase *accountBase() const;
 
 protected:
     void postCoreInitialization();

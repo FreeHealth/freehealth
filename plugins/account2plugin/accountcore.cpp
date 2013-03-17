@@ -55,7 +55,7 @@
 #include <datapackutils/ipackmanager.h>
 #include <datapackutils/pack.h>
 
-enum { RunDatabaseTests = false };
+enum { RunDatabaseTests = true };
 
 using namespace Account2;
 using namespace Internal;
@@ -168,6 +168,15 @@ bool AccountCore::initialize()
 bool AccountCore::isDatabaseInitialized() const
 {
     return d->_accountBase->isInitialized();
+}
+
+/**
+ * Return the internal database. SHOULDN'T BE USED OUTSIDE THIS PLUGIN.
+ * \internal
+*/
+Internal::AccountBase *AccountCore::accountBase() const
+{
+    return d->_accountBase;
 }
 
 void AccountCore::packInstalled(const DataPack::Pack &pack)
