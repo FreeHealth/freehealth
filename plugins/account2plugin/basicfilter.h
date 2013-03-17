@@ -29,10 +29,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef ACCOUNT2_ACCOUNTBASEQUERY_H
-#define ACCOUNT2_ACCOUNTBASEQUERY_H
-
-#include <account2plugin/basicfilter.h>
+#ifndef ACCOUNT2_BASICFILTER_H
+#define ACCOUNT2_BASICFILTER_H
 
 #include <QDateTime>
 #include <QStringList>
@@ -41,46 +39,40 @@
  * \file accountbasequery.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 17 Mar 2013
+ * \date 14 Mar 2013
 */
 
 namespace Account2 {
 namespace Internal {
 
-class AccountBaseQuery : public BasicFilter
+class BasicFilter
 {
 public:
-    enum DataObject {
-        None        = 0,
-        Fee         = 0x0001,
-        Payment     = 0x0002,
-        Banking     = 0x0004,
-        Quotation   = 0x0008
-    };
-    Q_DECLARE_FLAGS(DataObjects, DataObject)
+    BasicFilter(): _invalid(false) {}
+    virtual ~BasicFilter() {}
 
-    AccountBaseQuery(): BasicFilter(), _objects(None), _object(None) {}
-    AccountBaseQuery(const BasicFilter &filter): BasicFilter(filter), _objects(None), _object(None) {}
-    ~AccountBaseQuery() {}
+    void setIncludeInvalidObjects(bool invalid) {_invalid=invalid;}
+    bool includeInvalidObjects() const {return _invalid;}
 
-    // Get only one item
-    void setRetrieveObject(DataObject object, const QString &uuid) {_object=object; _objectUuid=uuid;}
-    bool retrieveObject() const {return _object;}
-    QString retrieveObjectUuid() const {return _objectUuid;}
+    void setStartDate(const QDateTime &start) {_start=start;}
+    void setEndDate(const QDateTime &end) {_end=end;}
+    void setDateRange(const QDateTime &start, const QDateTime &end) {_start=start;_end=end;}
 
-    // Get a list of items
-    void setRetrieveObjects(DataObjects objects) {_objects=objects;}
-    DataObjects retrieveObjects() const {return _objects;}
+    QDateTime startDate() const {return _start;}
+    QDateTime endDate() const {return _end;}
+
+    void addUser(const QString &uuid) {_userUids << uuid;}
+    void addPatient(const QString &uuid) {_patientUids << uuid;}
+    QStringList userUids() const {return _userUids;}
+    QStringList patientUids() const {return _patientUids;}
 
 private:
-    DataObjects _objects;
-    DataObject _object;
-    QString _objectUuid;
+    QDateTime _start, _end;
+    bool _invalid;
+    QStringList _userUids, _patientUids;
 };
 
 } // namespace Internal
 } // namespace Account2
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Account2::Internal::AccountBaseQuery::DataObjects)
-
-#endif // ACCOUNT2_ACCOUNTBASEQUERY_H
+#endif // ACCOUNT2_BASICFILTER_H
