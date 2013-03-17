@@ -153,6 +153,7 @@ account.depends += listview
 account2.subdir   = $${PLUGINS_PATH}/account2plugin
 account2.depends += core
 account2.depends += datapack
+account2.depends += formmanager
 #account2.depends += texteditor
 #account2.depends += listview
 
