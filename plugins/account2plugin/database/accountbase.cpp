@@ -396,8 +396,6 @@ public:
                 _transaction = true;
             }
 
-            qWarning() << "GETTING FEES";
-
             using namespace Account2::Constants;
             // Build conditions
             Utils::Field get(Table_Fees, FEES_ID);
@@ -436,9 +434,6 @@ public:
                     conds << Utils::Field(Table_Fees, FEES_PATIENT_UID, QString("IN (%1)").arg(uids));
                 }
             }
-
-            qWarning() << q->select(get, joins, conds);
-
             QSqlQuery query(q->database());
             if (query.exec(q->select(get, joins, conds))) {
                 while (query.next()) {
@@ -455,8 +450,6 @@ public:
                 q->database().commit();
                 _transaction = false;
             }
-
-            qWarning() << "  " << fees.count();
         }
         return fees;
     }
@@ -925,7 +918,8 @@ bool AccountBase::createVirtuals(int nb)
         fee.setUserUuid("all");
         fee.setType(d->r.getRandomString(d->r.randomInt(10)));
         fee.setAmount(d->r.randomDouble(10., 1000.));
-        fee.setComment(d->r.randomWords(d->r.randomInt(10)));
+        fee.setLabel(d->r.randomWords(d->r.randomInt(10)));
+        fee.setComment(d->r.randomWords(d->r.randomInt(20)));
         fee.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
         fees << fee;
     }
