@@ -121,7 +121,7 @@ namespace {
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
-        IFormWidgetFactory(parent)
+    IFormWidgetFactory(parent)
 {
 }
 
