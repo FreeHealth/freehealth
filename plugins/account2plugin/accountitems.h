@@ -190,16 +190,9 @@ public:
     virtual QString comment() const {return _comment;}
     virtual void setComment(const QString &comment) {_modified=true; _comment=comment;}
 
+    // TODO: a payment can include only a part of a Fee amount
     virtual void addFee(const Fee &fee);
     virtual QList<Fee> fees() const {return _fees;}
-
-//    static QString typeToString(ScriptType type);
-//    static QString typeToXml(ScriptType type);
-//    static ScriptType typeFromXml(const QString &xml);
-//    virtual QString toXml() const;
-//    static AlertScript fromDomElement(const QDomElement &element);
-
-//    bool operator<(const AlertScript &script) const;
 
 protected: // For database management
     QList<int> feesId() const {return _feesId;}
