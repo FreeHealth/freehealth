@@ -32,6 +32,10 @@
 #include "account2plugin.h"
 #include "accountcore.h"
 
+#ifdef FREEMEDFORMS
+#    include "accountmode.h"
+#endif
+
 #include <utils/log.h>
 
 #include <coreplugin/icore.h>
@@ -91,6 +95,11 @@ void Account2Plugin::extensionsInitialized()
         return;
 
     messageSplash(tr("Initializing accountancy plugin..."));
+
+    // FreeMedForms specific code
+#ifdef FREEMEDFORMS
+    addAutoReleasedObject(new Account2::Internal::AccountMode(this));
+#endif
 
     // Initialize Account Core
     if (!_core->initialize())
