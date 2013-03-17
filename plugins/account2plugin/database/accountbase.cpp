@@ -129,6 +129,7 @@ public:
                 fee.setValid(query.value(Constants::FEES_ISVALID).toBool());
                 fee.setUserUuid(query.value(Constants::FEES_USER_UID).toString());
                 fee.setPatientUuid(query.value(Constants::FEES_PATIENT_UID).toString());
+                fee.setLabel(query.value(Constants::FEES_LABEL).toString());
                 fee.setAmount(query.value(Constants::FEES_AMOUNT).toDouble());
                 fee.setType(query.value(Constants::FEES_TYPE).toString());
                 fee.setDateDid(query.value(Constants::FEES_DATE_DID).toInt());
@@ -395,6 +396,8 @@ public:
                 _transaction = true;
             }
 
+            qWarning() << "GETTING FEES";
+
             using namespace Account2::Constants;
             // Build conditions
             Utils::Field get(Table_Fees, FEES_ID);
@@ -434,6 +437,8 @@ public:
                 }
             }
 
+            qWarning() << q->select(get, joins, conds);
+
             QSqlQuery query(q->database());
             if (query.exec(q->select(get, joins, conds))) {
                 while (query.next()) {
@@ -450,6 +455,8 @@ public:
                 q->database().commit();
                 _transaction = false;
             }
+
+            qWarning() << "  " << fees.count();
         }
         return fees;
     }
@@ -776,6 +783,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Fees,  FEES_MP_ID,       "MP_ID",        FieldIsInteger);
     addField(Table_Fees,  FEES_TYPE,        "TYPE",         FieldIsShortText);
     addField(Table_Fees,  FEES_DATE_DID,    "DATE_DID",     FieldIsInteger);
+    addField(Table_Fees,  FEES_LABEL,       "LBL",          FieldIsShortText);
     addField(Table_Fees,  FEES_AMOUNT,      "AMOUNT",       FieldIsReal);
     addField(Table_Fees,  FEES_COMMENT,     "COMMENT",      FieldIsShortText);
     addField(Table_Fees,  FEES_SIGN_ID,     "SIGN_ID",      FieldIsInteger);
@@ -992,6 +1000,7 @@ bool AccountBase::save(QList<Fee> &fees)
             query.bindValue(Constants::FEES_MP_ID, fee.mpId());
             query.bindValue(Constants::FEES_TYPE, fee.type());
             query.bindValue(Constants::FEES_DATE_DID, fee.dateDid());
+            query.bindValue(Constants::FEES_LABEL, fee.label());
             query.bindValue(Constants::FEES_AMOUNT, fee.amount());
             query.bindValue(Constants::FEES_COMMENT, fee.comment());
             query.bindValue(Constants::FEES_SIGN_ID, fee.signatureId());
@@ -1016,6 +1025,7 @@ bool AccountBase::save(QList<Fee> &fees)
                                                  << Constants::FEES_PATIENT_UID
                                                  << Constants::FEES_MP_ID
                                                  << Constants::FEES_TYPE
+                                                 << Constants::FEES_LABEL
                                                  << Constants::FEES_AMOUNT
                                                  << Constants::FEES_COMMENT
                                                  << Constants::FEES_SIGN_ID,
@@ -1027,6 +1037,7 @@ bool AccountBase::save(QList<Fee> &fees)
                 query.bindValue(++i, fee.patientUid());
                 query.bindValue(++i, fee.mpId());
                 query.bindValue(++i, fee.type());
+                query.bindValue(++i, fee.label());
                 query.bindValue(++i, fee.amount());
                 query.bindValue(++i, fee.comment());
                 query.bindValue(++i, fee.signatureId());

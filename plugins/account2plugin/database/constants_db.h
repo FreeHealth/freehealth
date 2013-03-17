@@ -128,6 +128,7 @@ namespace Constants {
         FEES_MP_ID,
         FEES_TYPE,
         FEES_DATE_DID,
+        FEES_LABEL,
         FEES_AMOUNT,
         FEES_COMMENT,
         FEES_SIGN_ID,
