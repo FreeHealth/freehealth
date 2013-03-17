@@ -36,7 +36,7 @@
  * \file accountitems.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 13 Mar 2013
+ * \date 17 Mar 2013
 */
 
 namespace Account2 {
@@ -144,6 +144,9 @@ public:
     virtual QString patientUid() const {return _patientUid;}
     virtual void setPatientUuid(const QString &uid) {_modified=true; _patientUid=uid;}
 
+    virtual QString label() const {return _label;}
+    virtual void setLabel(const QString &label) {_label=label;}
+
     virtual QString type() const {return _type;}
     virtual void setType(const QString &type) {_modified=true; _type=type;}
 
@@ -157,7 +160,7 @@ protected: // For database management
 private:
     int _mp_id;
     double _amount;
-    QString _userUid, _patientUid, _type, _comment;
+    QString _userUid, _patientUid, _type, _label, _comment;
 };
 
 class ACCOUNT2_EXPORT Payment : public VariableDatesItem
