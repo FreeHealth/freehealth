@@ -149,7 +149,8 @@ namespace Constants {
 
     enum Table_PaymentsFeesLink_Fields {
         PAYFEE_PAY_ID = 0,
-        PAYFEE_FEE_ID
+        PAYFEE_FEE_ID,
+        PAYFEE_PERCENT_OF_FEE_AMOUNT
     };
 
     enum Table_Banking_Fields {

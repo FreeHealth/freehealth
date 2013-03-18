@@ -99,11 +99,11 @@ VariableDatesItem::DateType VariableDatesItem::dateTypeFromSql(const QString &ty
 }
 
 /** Add a Fee to a Payment. WARNING: the fee must be already saved into the database and/or have its id() defined. */
-void Payment::addFee(const Fee &fee)
+void Payment::addPaidFee(const PaidFee &paidFee)
 {
-    Q_ASSERT(fee.id() >= 0);
-    _fees << fee;
-    _feesId << fee.id();
+    Q_ASSERT(paidFee.feeId() >= 0);
+    _fees << paidFee;
+    _feesId << paidFee.feeId();
 }
 
 /** Return a persistent in time uuid for each type of payment for the database management */
@@ -117,6 +117,7 @@ QString Payment::typeToSql(PaymentType type)
     case InsuranceDelayed: return "delay";
     case Other: return "other";
     }
+    return "other";
 }
 
 /** Return the payment type from the persistent in time uuid (for the database management) */
@@ -209,8 +210,8 @@ QDebug operator<<(QDebug dbg, const Account2::Payment &c)
     s << "amount: " + QString::number(c.amount(), 'f', 6);
     s << "type: " + c.type();
     s << "comment: " + c.comment();
-    foreach(const Account2::Fee &fee, c.fees()) {
-        s << "Fee: " + QString::number(fee.id()) + "; amount: " + QString::number(fee.amount(), 'f', 6);;
+    foreach(const Account2::PaidFee &paidFee, c.paidFees()) {
+        s << "PaidFee: " + QString::number(paidFee.feeId()) + "; amount: " + QString::number(paidFee.fee().amount(), 'f', 6);;
     }
 
     for(int i = 0; i < Account2::VariableDatesItem::Date_MaxParam; ++i) {

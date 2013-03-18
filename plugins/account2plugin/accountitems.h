@@ -163,6 +163,23 @@ private:
     QString _userUid, _patientUid, _type, _label, _comment;
 };
 
+class ACCOUNT2_EXPORT PaidFee
+{
+public:
+    PaidFee(const Fee &fee, double paidPercent) : _fee(fee), _percent(paidPercent) {}
+    PaidFee() : _percent(0.) {}
+
+    void setFee(const Fee &fee) {_fee = fee;}
+    const Fee &fee() const {return _fee;}
+    const int feeId() const {return _fee.id();}
+
+    void setPaidPercentage(double percent) {_percent = percent;}
+    double paidPercentage() const {return _percent;}
+
+protected:
+    Fee _fee;
+    double _percent;
+};
 class ACCOUNT2_EXPORT Payment : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
@@ -190,13 +207,12 @@ public:
     virtual QString comment() const {return _comment;}
     virtual void setComment(const QString &comment) {_modified=true; _comment=comment;}
 
-    // TODO: a payment can include only a part of a Fee amount
-    virtual void addFee(const Fee &fee);
-    virtual QList<Fee> fees() const {return _fees;}
+    virtual void addPaidFee(const PaidFee &paidFee);
+    virtual QList<PaidFee> paidFees() const {return _fees;}
 
 protected: // For database management
-    QList<int> feesId() const {return _feesId;}
-    void addFeesId(int id) {_modified=true; _feesId << id;}
+    QList<int> paidFeesId() const {return _feesId;}
+    void addPaidFeesId(int id) {_modified=true; _feesId << id;}
 
     int quotationId() const {return _quotationId;}
     void setQuotationId(int id) {_modified=true; _quotationId = id;}
@@ -208,7 +224,7 @@ private:
     int _quotationId;
     double _amount;
     QList<int> _feesId;
-    QList<Fee> _fees;
+    QList<PaidFee> _fees;
     PaymentType _type;
     QString _comment;
 };

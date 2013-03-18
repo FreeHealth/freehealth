@@ -195,8 +195,8 @@ public:
         if (query.exec(q->select(Constants::Table_PaymentsFees, where))) {
             while (query.next()) {
                 int feeId = query.value(Constants::PAYFEE_FEE_ID).toInt();
-                pay.addFeesId(feeId);
-                pay.addFee(getFee(QString::number(feeId)));
+                pay.addPaidFeesId(feeId);
+                pay.addPaidFee(PaidFee(getFee(QString::number(feeId)), query.value(Constants::PAYFEE_PERCENT_OF_FEE_AMOUNT).toDouble()));
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
@@ -792,6 +792,8 @@ AccountBase::AccountBase(QObject *parent) :
 
     addField(Table_PaymentsFees, PAYFEE_PAY_ID ,  "PAY_ID",  FieldIsInteger);
     addField(Table_PaymentsFees, PAYFEE_FEE_ID ,  "FEE_ID",  FieldIsInteger);
+    addField(Table_PaymentsFees, PAYFEE_PERCENT_OF_FEE_AMOUNT ,  "FEE_AMOUNT_PERCENT",  FieldIsReal);
+
 
     addField(Table_Banking, BANKING_ID,             "ID",           FieldIsUniquePrimaryKey);
     addField(Table_Banking, BANKING_ISVALID,        "ISVALID",      FieldIsBoolean);
@@ -932,7 +934,7 @@ bool AccountBase::createVirtuals(int nb)
         pay.setType(Payment::PaymentType(d->r.randomInt(0, Payment::Other)));
         pay.setAmount(d->r.randomDouble(10., 1000.));
         pay.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
-        pay.addFee(fees.at(i));
+        pay.addPaidFee(PaidFee(fees.at(i), d->r.randomDouble(30., 100.)));
         payments << pay;
     }
     save(payments);
@@ -1129,15 +1131,18 @@ bool AccountBase::save(QList<Payment> &payments)
             }
         }
         // Save PaymentsToFees
-        for(int i=0; i < pay.feesId().count(); ++i) {
-            if (pay.feesId().at(i) == -1) {
+        for(int i=0; i < pay.paidFees().count(); ++i) {
+            const PaidFee &paidFee = pay.paidFees().at(i);
+            if (paidFee.feeId() == -1) {
                 LOG_ERROR("Fee not saved?");
                 continue;
             }
             QString req = prepareInsertQuery(Constants::Table_PaymentsFees);
             query.prepare(req);
-            query.bindValue(Constants::PAYFEE_FEE_ID, pay.id());
-            query.bindValue(Constants::PAYFEE_PAY_ID, pay.feesId().at(i));
+            query.bindValue(Constants::PAYFEE_PAY_ID, pay.id());
+            query.bindValue(Constants::PAYFEE_FEE_ID, paidFee.feeId());
+            query.bindValue(Constants::PAYFEE_PERCENT_OF_FEE_AMOUNT, paidFee.paidPercentage());
+
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
                 query.finish();

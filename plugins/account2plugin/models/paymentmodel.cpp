@@ -65,8 +65,8 @@ public:
         _payments = result.payments();
         // Create the tree
         // Payment
-        //   +-- Fee
-        //   +-- Fee
+        //   +-- Fee label (xx%)
+        //   +-- Fee label (xx%)
     }
 
 public:
