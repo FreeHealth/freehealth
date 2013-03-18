@@ -126,6 +126,13 @@ void AccountMode::postCoreInitialization()
     lay->addWidget(view);
 
     // Payment view
+    QTreeView *payView = new QTreeView(w);
+    PaymentModel *payModel = new PaymentModel(this);
+//    payModel->setFilter("%");
+    payView->setModel(payModel);
+    QLabel *lblPay = new QLabel("Payment Model/View", w);
+    lay->addWidget(lblPay);
+    lay->addWidget(payView);
 
     // BankAccount view
     QTableView *bkAccView = new QTableView(w);
