@@ -16,6 +16,7 @@ HEADERS += $${PWD}/database/constants_db.h \
     $${PWD}/formitems/accountwidgets.h \
     $${PWD}/models/feemodel.h \
     $${PWD}/models/paymentmodel.h \
+    $${PWD}/models/bankaccountmodel.h \
 
     
 
@@ -30,6 +31,8 @@ SOURCES += $${PWD}/account2plugin.cpp \
     $${PWD}/formitems/accountwidgets.cpp \
     $${PWD}/models/feemodel.cpp \
     $${PWD}/models/paymentmodel.cpp \
+    $${PWD}/models/bankaccountmodel.cpp \
+
 
 
 # include translations
