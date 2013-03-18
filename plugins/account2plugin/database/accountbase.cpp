@@ -910,6 +910,22 @@ AccountBaseResult AccountBase::query(const AccountBaseQuery &query)
 
 bool AccountBase::createVirtuals(int nb)
 {
+    if (max(Constants::Table_BankDetails, Constants::BANKDETAILS_ID).toInt() < 1) {
+        QSqlQuery query(database());
+        query.prepare(prepareInsertQuery(Constants::Table_BankDetails));
+        query.bindValue(Constants::BANKDETAILS_ID, QVariant());
+        query.bindValue(Constants::BANKDETAILS_USER_UID, user()->uuid());
+        query.bindValue(Constants::BANKDETAILS_LABEL, d->r.randomWords(d->r.randomInt(0, 10)));
+        query.bindValue(Constants::BANKDETAILS_OWNER, d->r.getRandomName());
+        query.bindValue(Constants::BANKDETAILS_OWNERADRESS, d->r.randomWords(d->r.randomInt(0, 10)));
+        query.bindValue(Constants::BANKDETAILS_ACCOUNTNUMBER, d->r.getRandomString(16));
+        query.bindValue(Constants::BANKDETAILS_IBAN, d->r.getRandomString(16));
+        query.bindValue(Constants::BANKDETAILS_COMMENT, d->r.randomWords(d->r.randomInt(0, 10)));
+        query.bindValue(Constants::BANKDETAILS_DEFAULT, 1);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+        }
+    }
     QList<Fee> fees;
     QList<Payment> payments;
     for(int i=0; i < nb; ++i) {
