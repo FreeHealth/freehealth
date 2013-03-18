@@ -48,6 +48,7 @@ class PaymentModel : public QStandardItemModel
 public:
     enum DataRepresentation {
         Id = 0,
+        Label,
         Amount,
         Type,
         Date_Creation,
@@ -59,13 +60,17 @@ public:
     PaymentModel(QObject *parent);
     ~PaymentModel();
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &index = QModelIndex()) const;
     int columnCount(const QModelIndex & = QModelIndex()) const {return ColumnCount;}
 
+//    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const = 0;
+//    QModelIndex parent(const QModelIndex &child) const = 0;
+
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool setFilter(const BasicFilter &filter);
 

@@ -206,6 +206,7 @@ public:
         }
         query.finish();
 
+        // TODO: payment was banked?
         getDates(pay);
 
         if (transactionCreated) {
@@ -948,9 +949,10 @@ bool AccountBase::createVirtuals(int nb)
         // pay.setId();
         pay.setValid(d->r.randomBool());
         pay.setType(Payment::PaymentType(d->r.randomInt(0, Payment::Other)));
-        pay.setAmount(d->r.randomDouble(10., 1000.));
         pay.setDate(VariableDatesItem::Date_Creation, d->r.randomDateTime(QDateTime::currentDateTime().addDays(-5)));
-        pay.addPaidFee(PaidFee(fees.at(i), d->r.randomDouble(30., 100.)));
+        double percent = d->r.randomDouble(30., 100.);
+        pay.addPaidFee(PaidFee(fees.at(i), percent));
+        pay.setAmount(fees.at(i).amount() * (percent / 100.));
         payments << pay;
     }
     save(payments);

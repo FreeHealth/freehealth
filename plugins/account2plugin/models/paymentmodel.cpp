@@ -30,7 +30,8 @@
 #include <account2plugin/accountitems.h>
 #include <account2plugin/database/accountbase.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_account.h>
 
 #include <QDebug>
 
@@ -64,9 +65,40 @@ public:
         AccountBaseResult result = accountBase()->query(query);
         _payments = result.payments();
         // Create the tree
-        // Payment
-        //   +-- Fee label (xx%)
-        //   +-- Fee label (xx%)
+        for(int i=0; i < _payments.count(); ++i) {
+            const Payment &pay = _payments.at(i);
+            QString payDt = QLocale().toString(pay.date(VariableDatesItem::Date_Creation), QLocale::ShortFormat);
+            QList<QStandardItem*> line;
+            line
+                    << new QStandardItem(QString::number(pay.id()))
+                    << new QStandardItem(tkTr(Trans::Constants::PAYMENT))
+                    << new QStandardItem(QString::number(pay.amount(), 'f', 2))
+                    << new QStandardItem(pay.type())
+                    << new QStandardItem(payDt)
+                    << new QStandardItem(payDt)
+                    << new QStandardItem(pay.comment());
+
+            foreach(const PaidFee &paidfee, pay.paidFees()) {
+                const Fee &fee = paidfee.fee();
+                QString feeDt = QLocale().toString(fee.date(VariableDatesItem::Date_Creation), QLocale::ShortFormat);
+                QString amount;
+                if (paidfee.paidPercentage() < 100.)
+                    amount = QString("%1 (%2%)").arg(QString::number(fee.amount(),'f', 2)).arg(QString::number(paidfee.paidPercentage(),'f', 2));
+                else
+                    amount = QString::number(fee.amount(),'f', 2);
+                QList<QStandardItem*> feeline;
+                feeline
+                        << new QStandardItem(QString::number(fee.id()))
+                        << new QStandardItem(fee.label())
+                        << new QStandardItem(amount)
+                        << new QStandardItem(fee.type())
+                        << new QStandardItem(feeDt)
+                        << new QStandardItem(feeDt)
+                        << new QStandardItem(fee.comment());
+                line.at(0)->appendRow(feeline);
+            }
+            q->invisibleRootItem()->appendRow(line);
+        }
     }
 
 public:
@@ -93,9 +125,9 @@ PaymentModel::~PaymentModel()
     }
 }
 
-int PaymentModel::rowCount(const QModelIndex &) const
+int PaymentModel::rowCount(const QModelIndex &index) const
 {
-    return d->_payments.count();
+    return QStandardItemModel::rowCount(index);
 }
 
 QVariant PaymentModel::data(const QModelIndex &index, int role) const
@@ -103,33 +135,26 @@ QVariant PaymentModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
        return QVariant();
 
-    if (role == Qt::DisplayRole || role == Qt::EditRole) {
-        const Payment &pay = d->_payments.at(index.row());
-        switch (index.column()) {
-        case Id: return pay.id();
-        case Amount: return pay.amount();
-        case Type: return pay.type();
-        case Date_Creation: return pay.date(VariableDatesItem::Date_Creation);
-        case Date_Execution: return pay.date(VariableDatesItem::Date_MedicalRealisation);
-        case Comment: return pay.comment();
-        default: return QVariant();
-        }
+    // Manage tooltip
+    if (role == Qt::ToolTipRole) {
+        return QStandardItemModel::data(index, Qt::DisplayRole);
     }
-
-    return QVariant();
+    // Manage decoration if payment is banked
+    return QStandardItemModel::data(index, role);
 }
 
-bool PaymentModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    return false;
-}
-
+// Model is currently Read-Only
+//bool PaymentModel::setData(const QModelIndex &index, const QVariant &value, int role)
+//{
+//    return false;
+//}
 
 QVariant PaymentModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
         case Id: return "Id";
+        case Label: return "Label";
         case Amount: return "Amount";
         case Type: return "Type";
         case Date_Creation: return "DateCreation";
@@ -139,6 +164,11 @@ QVariant PaymentModel::headerData(int section, Qt::Orientation orientation, int 
         }
     }
     return QVariant();
+}
+
+Qt::ItemFlags PaymentModel::flags(const QModelIndex &) const
+{
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 bool PaymentModel::setFilter(const BasicFilter &filter)

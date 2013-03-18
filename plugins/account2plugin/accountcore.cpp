@@ -55,7 +55,7 @@
 #include <datapackutils/ipackmanager.h>
 #include <datapackutils/pack.h>
 
-enum { RunDatabaseTests = true };
+enum { RunDatabaseTests = false };
 
 using namespace Account2;
 using namespace Internal;
