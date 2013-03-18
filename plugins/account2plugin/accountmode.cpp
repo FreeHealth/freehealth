@@ -57,8 +57,13 @@ static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 
 // TEST
+#include <QLabel>
+#include <QTreeView>
 #include <QTableView>
+#include <QVBoxLayout>
 #include <account2plugin/models/feemodel.h>
+#include <account2plugin/models/paymentmodel.h>
+#include <account2plugin/models/bankaccountmodel.h>
 // END TEST
 
 AccountMode::~AccountMode()
@@ -102,8 +107,13 @@ void AccountMode::postCoreInitialization()
 //        m_Stack->addWidget(new ReceiptViewer);
 
     // TEST (FeeModel)
-    qWarning() << "--------------------------------------------";
-    QTableView *view = new QTableView(m_Stack);
+    qWarning() << "-------------------------------------------- BEGIN";
+    QWidget *w = new QWidget(m_Stack);
+    QVBoxLayout *lay = new QVBoxLayout(w);
+    w->setLayout(lay);
+
+    // Fee view
+    QTableView *view = new QTableView(w);
     BasicFilter filter;
     filter.setDateRange(QDateTime::currentDateTime().addDays(-1000), QDateTime::currentDateTime());
     filter.addUser("%");
@@ -111,8 +121,25 @@ void AccountMode::postCoreInitialization()
     FeeModel *model = new FeeModel(this);
     model->setFilter(filter);
     view->setModel(model);
-    m_Stack->addWidget(view);
-    m_Stack->setCurrentWidget(view);
+    QLabel *lblFee = new QLabel("Fees Model/View", w);
+    lay->addWidget(lblFee);
+    lay->addWidget(view);
+
+    // Payment view
+
+    // BankAccount view
+    QTableView *bkAccView = new QTableView(w);
+    BankAccountModel *bkAccModel = new BankAccountModel(this);
+    bkAccModel->setFilter("%");
+    bkAccView->setModel(bkAccModel);
+    QLabel *lblBkAcc = new QLabel("Bank account Model/View", w);
+    lay->addWidget(lblBkAcc);
+    lay->addWidget(bkAccView);
+
+    // Manage stack
+    m_Stack->addWidget(w);
+    m_Stack->setCurrentWidget(w);
+    qWarning() << "-------------------------------------------- END";
     // END TEST
 }
 
