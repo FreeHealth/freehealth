@@ -128,7 +128,7 @@ void AccountMode::postCoreInitialization()
     // Payment view
     QTreeView *payView = new QTreeView(w);
     PaymentModel *payModel = new PaymentModel(this);
-//    payModel->setFilter("%");
+    payModel->setFilter(filter);
     payView->setModel(payModel);
     QLabel *lblPay = new QLabel("Payment Model/View", w);
     lay->addWidget(lblPay);
