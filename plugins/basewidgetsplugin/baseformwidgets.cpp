@@ -201,10 +201,10 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 */
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
-    m_ContainerLayout(0),
     m_EpisodeDate(0),
     m_EpisodeLabel(0),
     m_PriorityButton(new QToolButton(this)),
+    m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1),
     ui(0),
     aScreenshot(0),
