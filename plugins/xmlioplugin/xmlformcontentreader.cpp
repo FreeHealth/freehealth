@@ -528,7 +528,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Add a form file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
-            if (!addFile(element, form)) {
+            if (!addFile(element, form, item)) {
                 LOG_ERROR_FOR("XmlFormContentReader", QString("Unable to add file: %1; in form: %2")
                               .arg(element.text()).arg(form.absFileName));
             }
@@ -724,9 +724,11 @@ bool XmlFormContentReader::populateScripts(Form::FormItem *item, const QDomEleme
 }
 
 /** Read a new file. Called when matched XML tag \e file. */
-bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName &formName)
+bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName &formName, Form::FormItem *item)
 {
     XmlFormName form = formName;
+    if (!item)
+        item = m_ActualForm;
     // Get file content from database
     QString fileName = element.text();
     // Guess the type of file according to its extension
@@ -790,13 +792,13 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         }
     } else if (type.compare(Constants::FILETYPE_PRINTHTMLMASK, Qt::CaseInsensitive)==0) {
         const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
-        if (m_ActualForm)
-            m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_HtmlPrintMask, content, lang);
+        if (item)
+            item->spec()->setValue(Form::FormItemSpec::Spec_HtmlPrintMask, content, lang);
         return true;
     } else if (type.compare(Constants::FILETYPE_PRINTPLAINTEXTMASK, Qt::CaseInsensitive)==0) {
         const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
-        if (m_ActualForm)
-            m_ActualForm->spec()->setValue(Form::FormItemSpec::Spec_PlainTextPrintMask, content, lang);
+        if (item)
+            item->spec()->setValue(Form::FormItemSpec::Spec_PlainTextPrintMask, content, lang);
         return true;
     }
 

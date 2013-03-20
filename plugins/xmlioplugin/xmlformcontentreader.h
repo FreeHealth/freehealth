@@ -93,7 +93,7 @@ public:
 
     bool populateValues(Form::FormItem *item, const QDomElement &root, const XmlFormName &form);
     bool populateScripts(Form::FormItem *item, const QDomElement &root, const XmlFormName &form);
-    bool addFile(const QDomElement &element, const XmlFormName &form);
+    bool addFile(const QDomElement &element, const XmlFormName &form, Form::FormItem *item = 0);
 
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
     bool createFormWidget(Form::FormMain *form);
