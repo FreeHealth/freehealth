@@ -65,6 +65,7 @@
 #include <formmanagerplugin/episodemodel.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
@@ -86,6 +87,7 @@
 #include <utils/widgets/datetimedelegate.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 #include <translationutils/trans_filepathxml.h>
 
 #include <QTreeView>
@@ -113,6 +115,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
@@ -972,9 +975,13 @@ bool FormPlaceHolder::printFormOrEpisode()
                 tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
         }
         htmlToPrint = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
-        tokens.insert("EpisodeUserDate", formMain->itemData()->data(Form::IFormItemData::ID_EpisodeDate));
+        tokens.insert("EpisodeUserDate", QLocale().toString(formMain->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
         tokens.insert("EpisodeUserLabel", formMain->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
-        tokens.insert("EpisodeUserName", formMain->itemData()->data(Form::IFormItemData::ID_UserName));
+        // Force the full name of the user
+        QString userName = formMain->itemData()->data(Form::IFormItemData::ID_UserName).toString();
+        if (userName == tkTr(Trans::Constants::YOU))
+            userName = user()->value(Core::IUser::FullName).toString();
+        tokens.insert("EpisodeUserName", userName);
         tokens.insert("EpisodePriority", formMain->itemData()->data(Form::IFormItemData::ID_Priority));
         tokens.insert("EpisodeFormLabel", formMain->spec()->label());
     } else {
