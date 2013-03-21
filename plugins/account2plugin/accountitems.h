@@ -191,10 +191,11 @@ public:
         VISA,
         BankTransfer,
         InsuranceDelayed,
-        Other
+        Other,
+        None
     };
 
-    Payment() : _quotationId(-1) {}
+    Payment() : _quotationId(-1), _amount(0.0), _type(None), _banked(false) {}
     virtual ~Payment() {}
 
     virtual void setAmount(double amount) {_modified = true; _amount=amount;}
@@ -206,6 +207,9 @@ public:
 
     virtual QString comment() const {return _comment;}
     virtual void setComment(const QString &comment) {_modified=true; _comment=comment;}
+
+    virtual void setIsDeposited(bool depositedInABank) {_banked=depositedInABank;}
+    virtual bool isDeposited() const {return _banked;}
 
     virtual void addPaidFee(const PaidFee &paidFee);
     virtual QList<PaidFee> paidFees() const {return _fees;}
@@ -227,6 +231,7 @@ private:
     QList<PaidFee> _fees;
     PaymentType _type;
     QString _comment;
+    bool _banked;
 };
 
 class ACCOUNT2_EXPORT Quotation : public VariableDatesItem

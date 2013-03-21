@@ -138,6 +138,15 @@ QVariant PaymentModel::data(const QModelIndex &index, int role) const
     // Manage tooltip
     if (role == Qt::ToolTipRole) {
         return QStandardItemModel::data(index, Qt::DisplayRole);
+    } else if (role == Qt::BackgroundRole) {
+        if (index.parent() == QModelIndex()) {
+            const Payment &pay = d->_payments.at(index.row());
+            if (pay.isDeposited()) {
+                QColor gray("maroon");
+                gray.setAlpha(50);
+                return gray;
+            }
+        }
     }
     // Manage decoration if payment is banked
     return QStandardItemModel::data(index, role);

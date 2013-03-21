@@ -117,7 +117,7 @@ QString Payment::typeToSql(PaymentType type)
     case InsuranceDelayed: return "delay";
     case Other: return "other";
     }
-    return "other";
+    return "none";
 }
 
 /** Return the payment type from the persistent in time uuid (for the database management) */
@@ -135,9 +135,11 @@ Payment::PaymentType Payment::typeFromSql(const QString &type)
         return InsuranceDelayed;
     if (type=="other")
         return Other;
+    if (type=="none")
+        return None;
     Q_ASSERT(false);
     LOG_ERROR_FOR("Payment", "Unknown type: " + type);
-    return Other;
+    return None;
 }
 
 bool Banking::canComputeTotalAmount()

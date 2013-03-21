@@ -206,7 +206,11 @@ public:
         }
         query.finish();
 
-        // TODO: payment was banked?
+        // Deposited in a bank?
+        where.clear();
+        where.insert(Constants::BANKINGLK_PAYMENT_ID, QString("='%1'").arg(pay.id()));
+        pay.setIsDeposited(q->count(Constants::Table_BankingLink, Constants::BANKINGLK_PAYMENT_ID, q->getWhereClause(Constants::Table_BankingLink, where)) > 0);
+
         getDates(pay);
 
         if (transactionCreated) {
