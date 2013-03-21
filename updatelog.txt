@@ -11,6 +11,9 @@ FreeMedForms
     * Allow the renewal of episode (in one click)
     * Cheque printing assistant (French specific)
     * Remove current patient (without any checking)
+  * XML Forms coding
+    * Allow you to manage html print mask for any items of the forms (MedForms or Item)
+      * See French AGGIR for an example (global mask, aggir mask)
 
 ===== Bug correction =====
 
