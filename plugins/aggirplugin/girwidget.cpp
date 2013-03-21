@@ -221,7 +221,9 @@ bool GirItemData::setData(const int ref, const QVariant &data, const int role)
 QVariant GirItemData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
-    Q_UNUSED(role);
+    if (role == PrintRole) {
+        return m_GirWidget->m_ui->toHtml();
+    }
     return QVariant();
 }
 
