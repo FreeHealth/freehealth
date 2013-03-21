@@ -85,6 +85,7 @@ public:
     QString stringfiedGirScore() const;
     void clearModel();
 
+    void setHtmlPrintMask(const QString &html) {_html=html;}
     QString toHtml() const;
 
 public Q_SLOTS:
@@ -98,7 +99,7 @@ private Q_SLOTS:
 
 private:
     Ui::GirWidget *m_ui;
-    QString m_GirString;
+    QString m_GirString, _html;
     int m_Gir;
     GirModel *model;
 };

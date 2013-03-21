@@ -43,7 +43,7 @@ public:
 
     int rowCountWithChildren() const {return m_fullRowCount;}
 
-    QString toHtml() const;
+    QString toHtml(const QString &mask) const;
 
 Q_SIGNALS:
     void girCalculated(const int score);

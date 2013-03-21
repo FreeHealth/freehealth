@@ -81,20 +81,20 @@ GirModel::GirModel(QObject *parent) :
 
     m_groups.insertMulti(2, Gir::GirItem(::DEP_INT,"","", NewGirScore::DeplacementsInterieurs));
 
-    m_groups.insertMulti(3, Gir::GirItem(::TOILETTE,::HAUT,"", NewGirScore::Toilette, NewGirScore::Haut));
     m_groups.insertMulti(3, Gir::GirItem(::TOILETTE,::BAS,"", NewGirScore::Toilette, NewGirScore::Bas));
+    m_groups.insertMulti(3, Gir::GirItem(::TOILETTE,::HAUT,"", NewGirScore::Toilette, NewGirScore::Haut));
 
-    m_groups.insertMulti(4, Gir::GirItem(::ELIMINATION,::URINAIRE,"", NewGirScore::Elimination, NewGirScore::Urinaire));
     m_groups.insertMulti(4, Gir::GirItem(::ELIMINATION,::FECALE,"", NewGirScore::Elimination, NewGirScore::Fecale));
+    m_groups.insertMulti(4, Gir::GirItem(::ELIMINATION,::URINAIRE,"", NewGirScore::Elimination, NewGirScore::Urinaire));
 
+    m_groups.insertMulti(5, Gir::GirItem(::HABILLAGE,::BAS,"", NewGirScore::Habillage, NewGirScore::Bas));
+    m_groups.insertMulti(5, Gir::GirItem(::HABILLAGE,::MOYEN,"", NewGirScore::Habillage, NewGirScore::Moyen));
     m_groups.insertMulti(5, Gir::GirItem(::HABILLAGE,::HAUT,"", NewGirScore::Habillage, NewGirScore::Haut));
-    m_groups.insertMulti(5, Gir::GirItem(::HABILLAGE,::BAS,"", NewGirScore::Habillage, NewGirScore::Moyen));
-    m_groups.insertMulti(5, Gir::GirItem(::HABILLAGE,::MOYEN,"", NewGirScore::Habillage, NewGirScore::Bas));
 
     m_groups.insertMulti(6, Gir::GirItem(::CUISINE,"","", NewGirScore::Cuisine));
 
-    m_groups.insertMulti(7, Gir::GirItem(::ALIMENTATION,::SERVIR,"", NewGirScore::Alimentation, NewGirScore::SeServir));
     m_groups.insertMulti(7, Gir::GirItem(::ALIMENTATION,::MANGER,"", NewGirScore::Alimentation, NewGirScore::Manger));
+    m_groups.insertMulti(7, Gir::GirItem(::ALIMENTATION,::SERVIR,"", NewGirScore::Alimentation, NewGirScore::SeServir));
 
     m_groups.insertMulti(8, Gir::GirItem(::TRAITEMENT,"","", NewGirScore::Traitement));
     m_groups.insertMulti(9, Gir::GirItem(::MENAGE,"","", NewGirScore::Menage));
@@ -105,11 +105,11 @@ GirModel::GirModel(QObject *parent) :
     m_groups.insertMulti(14, Gir::GirItem(::ACHATS,"","", NewGirScore::Achats));
     m_groups.insertMulti(15, Gir::GirItem(::GESTION,"","", NewGirScore::Gestion));
 
-    m_groups.insertMulti(16, Gir::GirItem(::ORIENTATION,::TEMPS,"", NewGirScore::Orientation, NewGirScore::Temps));
     m_groups.insertMulti(16, Gir::GirItem(::ORIENTATION,::ESPACE,"", NewGirScore::Orientation, NewGirScore::Espace));
+    m_groups.insertMulti(16, Gir::GirItem(::ORIENTATION,::TEMPS,"", NewGirScore::Orientation, NewGirScore::Temps));
 
-    m_groups.insertMulti(17, Gir::GirItem(::COHERENCE,::COMMUNICATION,"", NewGirScore::Coherence, NewGirScore::Communication));
     m_groups.insertMulti(17, Gir::GirItem(::COHERENCE,::COMPORTEMENT,"", NewGirScore::Coherence, NewGirScore::Comportement));
+    m_groups.insertMulti(17, Gir::GirItem(::COHERENCE,::COMMUNICATION,"", NewGirScore::Coherence, NewGirScore::Communication));
 
     QList<int> discriminatives;
     discriminatives << 1 << 2 << 3 << 4 << 5 << 7 << 16 << 17;
@@ -391,58 +391,55 @@ QString GirModel::rowToHtml(int i, const QModelIndex &parent, bool discriminativ
     Q_UNUSED(discriminative);
     QString nfp, s, t, c, h, ok, score, indent;
     if (data(index(i, 1, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        nfp = "☑";
+        nfp = "■";
     } else {
         nfp = "⎕";
     }
-
     if (data(index(i, 2, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        s = "☑";
+        s = "■";
     } else {
         s = "⎕";
     }
 
     if (data(index(i, 3, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        t = "☑";
+        t = "■";
     } else {
         t = "⎕";
     }
 
     if (data(index(i, 4, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        c = "☑";
+        c = "■";
     } else {
         c = "⎕";
     }
 
     if (data(index(i, 5, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        h = "☑";
+        h = "■";
     } else {
         h = "⎕";
     }
 
     if (data(index(i, 6, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
-        ok = "☑";
+        ok = "■";
     } else {
         ok = "⎕";
     }
 
     score = data(index(i, 7, parent)).toString();
-
-    if (parent.isValid()) {
+    if (parent.isValid())
         indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
-    }
-//    if (discriminative) {
-//        style += "font-weight: 600;";
-//    }
+    QString style;
+    if (discriminative)
+        style += "font-weight: 600;";
 
-    return QString("<td width=*>%9%1</span></td>"  // Label
-                    "<td width=4em><center>%2</center></td>"  // NFP
-                    "<td width=2em><center>%3</center></td>"  // S
-                    "<td width=2em><center>%4</center></td>"  // T
-                    "<td width=2em><center>%5</center></td>"  // C
-                    "<td width=2em><center>%6</center></td>"  // H
-                    "<td width=2em><center>%7</center></td>"  // Ok
-                    "<td width=2em><center>%8</center></td>"  // Score
+    return QString("<td><span style=\"%10\">%9%1</span></td>"  // Label
+                    "<td><center>%2</center></td>"  // NFP
+                    "<td><center>%3</center></td>"  // S
+                    "<td><center>%4</center></td>"  // T
+                    "<td><center>%5</center></td>"  // C
+                    "<td><center>%6</center></td>"  // H
+                    "<td><center>%7</center></td>"  // Ok
+                    "<td><center>%8</center></td>"  // Score
                     )
              .arg(data(index(i, 0, parent)).toString())
              .arg(nfp)
@@ -453,61 +450,188 @@ QString GirModel::rowToHtml(int i, const QModelIndex &parent, bool discriminativ
              .arg(ok)
              .arg(score.remove("?"))
              .arg(indent)
+            .arg(style)
              ;
 }
 
-QString GirModel::toHtml() const
+QString GirModel::toHtml(const QString &mask) const
 {
-    QList<int> discriminatives;
-    discriminatives << 0 << 1 << 2 << 3 << 4 << 6 << 15 << 16;
-    // ⍌⎕☒☑
-    QStringList lines;
-    for(int i = 0; i < rowCount() - 1; ++i) {
-        if (hasChildren(index(i,0))) {
-            if (discriminatives.contains(i)) {
-                lines << QString("<td colspan=7><b>%1</b></td>"
-                                 "<td><center>%2</center></td>")
-                         .arg(data(index(i, 0)).toString())
-                         .arg(data(index(i, 7)).toString().remove("?"))
-                         ;
-            } else {
-                lines << QString("<td colspan=7>%1</td>"
-                                 "<td><center>%2</center></td>")
-                         .arg(data(index(i, 0)).toString())
-                         .arg(data(index(i, 7)).toString().remove("?"))
-                         ;
+    qWarning() << "mask" << mask.size();
+    QString content;
+    if (!mask.isEmpty()) {
+        // Use the mask
+        bool html = mask.contains("</body>");
+        content = mask;
+        QStringList adverbs;
+        adverbs << "NFP" << "S" << "T" << "C" << "H" << "F";
+
+        QString item;
+        QString token;
+        QString data;
+        for(int i = 0; i < rowCount() - 1; ++i) {
+            QModelIndex index = this->index(i,0);
+            // score
+            item = this->data(index).toString();
+            token = "[[" + item + "]]";
+            data = this->data(this->index(i, 7)).toString().remove("?");
+            content = content.replace(token, data, Qt::CaseInsensitive);
+
+            qWarning() << "token" << token << "data" << data;
+
+            if (!hasChildren(index)) {
+                for(int j=0; j < adverbs.count(); ++j) {
+                    token = "[[" + item + "." + adverbs.at(j) + "]]";
+                    data.clear();
+                    if (this->data(this->index(i, j+1), Qt::CheckStateRole) == Qt::Checked) {
+                        if (html)
+                            data = "<b>■</b>"; // ■ █
+                        else
+                            data = "█"; // ■ █
+                    } else {
+                        data = "⎕";
+                    }
+                    content = content.replace(token, data, Qt::CaseInsensitive);
+
+                    qWarning() << "    token" << token << "data" << data;
+                }
+                data.clear();
             }
-            for(int j=0; j < rowCount(index(i,0)); ++j) {
-                lines << rowToHtml(j, index(i,0), discriminatives.contains(i));
+
+            // add children
+            for(int z=0; z < rowCount(this->index(i,0)); ++z) {
+                QModelIndex subindex = this->index(z, 0, this->index(i,0));
+                QString sub = this->data(subindex).toString();
+                token = "[[" + item + "." + sub + "]]";
+                data = this->data(this->index(subindex.row(), 7, subindex.parent())).toString().remove("?");
+                content = content.replace(token, data, Qt::CaseInsensitive);
+
+                for(int j=0; j < adverbs.count(); ++j) {
+                    token = "[[" + item + "." + sub + "." + adverbs.at(j) + "]]";
+                    data.clear();
+                    if (this->data(this->index(subindex.row(), j+1, subindex.parent()), Qt::CheckStateRole) == Qt::Checked) {
+                        if (html)
+                            data = "<b>■</b>"; // ■ █
+                        else
+                            data = "█"; // ■ █
+                    } else {
+                        data = "⎕";
+                    }
+                    content = content.replace(token, data, Qt::CaseInsensitive);
+                }
             }
-            continue;
+
+            data.clear();
+            token = "[[AGGIR.SCORE]]";
+            if (m_GirScore->isComplete())
+                data = QString::number(m_GirScore->resultingGir());
+            else
+                data = "Score Incomplet";
+            content = content.replace(token, data, Qt::CaseInsensitive);
         }
 
-        lines << rowToHtml(i, QModelIndex(), discriminatives.contains(i));
+    } else {
+        // No mask, create a default HTML
+        QList<int> discriminatives;
+        discriminatives << 0 << 1 << 2 << 3 << 4 << 6 << 15 << 16;
+        // ⍌⎕■☒☑
+        QStringList lines;
+        for(int i = 0; i < rowCount() - 1; ++i) {
+            if (hasChildren(index(i,0))) {
+                // add title
+                if (discriminatives.contains(i)) {
+                    lines << QString("<td colspan=7><b>%1</b></td>"
+                                     "<td><center>%2</center></td>")
+                             .arg(data(index(i, 0)).toString())
+                             .arg(data(index(i, 7)).toString().remove("?"))
+                             ;
+                } else {
+                    lines << QString("<td colspan=7>%1</td>"
+                                     "<td><center>%2</center></td>")
+                             .arg(data(index(i, 0)).toString())
+                             .arg(data(index(i, 7)).toString().remove("?"))
+                             ;
+                }
+                // add children
+                for(int j=0; j < rowCount(index(i,0)); ++j) {
+                    lines << rowToHtml(j, index(i,0), discriminatives.contains(i));
+                }
+                continue;
+            }
+
+            lines << rowToHtml(i, QModelIndex(), discriminatives.contains(i));
+        }
+
+        // add score
+        lines << QString("<td colspan=7><b>%1</b></td>"
+                         "<td><b>%2</b></td>")
+                 .arg(tr("Score"))
+                 .arg(data(index(rowCount() - 1, Column_Result)).toString())
+                 ;
+
+        QString style;
+        style = "<style>"
+                "#gir {"
+                " font-family: Arial, Helvetica, sans-serif;"
+                " /*witdh:100%;*/"
+                " border-collapse:collapse;"
+                "}"
+                ""
+                "#gir td, #gir th {"
+                "  font-size:1em;"
+                "  border:1px solid #98bf21;"
+                "  padding:2px 5px 2px 5px;"
+                "}"
+                ""
+                "#gir th {"
+                "  font-size:1.1em;"
+                "  text-align:left;"
+                "  padding-top:5px;"
+                "  padding-bottom:4px;"
+                "  background-color:#A7C942;"
+                "  color:#ffffff;"
+                "}"
+                ""
+                "#gir tr.alt td {"
+                "color:#000000;background-color:#EAF2D3;}"
+                ""
+                "#gir td.td1 {width: 20em; }"
+                "#gir td.td2 {width: 3em; }"
+                "#gir td.td3 {width: 1em; }"
+                "#gir td.td4 {width: 1em; }"
+                "#gir td.td5 {width: 1em; }"
+                "#gir td.td6 {width: 1em; }"
+                "#gir td.td7 {width: 1em; }"
+                "#gir td.td8 {width: 1em; }"
+                ""
+                "#gir td.discriminative {font-weight:600}"
+                ""
+                "</style>"
+                ;
+        content = style + QString("\n\n"
+                                          "<p><div style=\"font-weight:600; text-align:center\">%1</div>\n"
+                                          "<table id=\"customers\">\n"
+                                          "<thead>\n"
+                                          "<tr>\n"
+                                          " <td>%2</span></td>\n"  // Label
+                                          " <td><center>NFP</center></td>\n"  // NFP
+                                          " <td><center>S</center></td>\n"  // S
+                                          " <td><center>T</center></td>\n"  // T
+                                          " <td><center>C</center></td>\n"  // C
+                                          " <td><center>H</center></td>\n"  // H
+                                          " <td><center>Fait</center></td>\n"  // Ok
+                                          " <td><center>Score</center></td>\n"  // Score
+                                          "</tr>\n"
+                                          "</thead>\n"
+                                          "<tbody>\n"
+                                          "<tr>\n\n"
+                                          "%3\n\n"
+                                          "</tr>\n"
+                                          "</tbody>\n"
+                                          "</table>\n\n")
+                .arg("AGGIR")
+                .arg(tr("Label"))
+                .arg(lines.join("</tr><tr>"));
     }
-
-    // add score
-    lines << QString("<td colspan=7><b>%1</b></td>"
-                     "<td><b>%2</b></td>")
-             .arg(data(index(rowCount(), 0)).toString())
-             .arg(data(index(rowCount(), 7)).toString())
-             ;
-
-    QString content = QString("<table width=100% border=1 cellpadding=2 cellspacing=0 style=\"margin: 0.2em 0em 0.2em 0em\">"
-                              "<thead>"
-                              "<tr>"
-                              "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=8>"
-                              "<center>%1</center>"
-                              "</td>"
-                              "</tr>"
-                              "</thead>"
-                              "<tbody>"
-                              "<tr>"
-                              "%2"
-                              "</tr>"
-                              "</tbody>"
-                              "</table>")
-            .arg("AGGIR").arg(lines.join("</tr><tr>"));
 
     return content;
 }

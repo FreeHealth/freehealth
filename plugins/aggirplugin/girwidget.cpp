@@ -177,7 +177,7 @@ void GirUi::clearModel()
 
 QString GirUi::toHtml() const
 {
-    return model->toHtml();
+    return model->toHtml(_html);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -191,6 +191,9 @@ GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Label);
     m_ui = new GirUi(this);
     hb->addWidget(m_ui);
+    QString filemask = formItem->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
+    if (!filemask.isEmpty())
+        m_ui->setHtmlPrintMask(filemask);
 
     // create FormItemData
     GirItemData *data = new GirItemData(m_FormItem);
