@@ -88,12 +88,6 @@ public:
     void setHtmlPrintMask(const QString &html) {_html=html;}
     QString toHtml() const;
 
-public Q_SLOTS:
-    void updateGirString(QAbstractButton *radio);
-    void on_aButton_clicked();
-    void on_bButton_clicked();
-    void on_cButton_clicked();
-
 private Q_SLOTS:
     void girCalculated(const int gir);
 
