@@ -74,7 +74,8 @@ HEADERS += global_exporter.h \
     emailvalidator.h \
     widgets/bugreportdialog.h \
     widgets/databaseinformationdialog.h \
-    numbertostring.h
+    numbertostring.h \
+    printaxishelper.h
 
 
 SOURCES += global.cpp \
@@ -134,7 +135,8 @@ SOURCES += global.cpp \
     emailvalidator.cpp \
     widgets/bugreportdialog.cpp \
     widgets/databaseinformationdialog.cpp \
-    numbertostring.cpp
+    numbertostring.cpp \
+    printaxishelper.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm
