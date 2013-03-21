@@ -37,6 +37,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/numbertostring.h>
+#include <utils/printaxishelper.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -61,8 +62,6 @@ class ChequePrinterPrivate
 public:
     ChequePrinterPrivate(ChequePrinter *parent) :
         _amount(0.),
-        _pixToMmCoefX(0.),
-        _pixToMmCoefY(0.),
         q(parent)
     {
     }
@@ -71,30 +70,11 @@ public:
     {
     }
 
-    // Computes the coefficient to transform millimeters to pixels and vice-versa
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeMillimeters)
-    {
-        _pixToMmCoefX = pageRect.width() / pageSizeMillimeters.width();
-        _pixToMmCoefY = pageRect.height() / pageSizeMillimeters.height();
-    }
-    
-    // translate a QPoint in millimeters to QPoint in pixels according to coefficient computed in setPageSize()
-    QPoint point(double x_millimeter, double y_millimeter)
-    {
-        return QPoint(x_millimeter * _pixToMmCoefX, y_millimeter * _pixToMmCoefY);
-    }
-
-    // translate a QSize in millimeters to QSize in pixels according to coefficient computed in setPageSize()
-    QSize size(double width_millimeter, double height_millimeter)
-    {
-        return QSize(width_millimeter * _pixToMmCoefX, height_millimeter * _pixToMmCoefY);
-    }
-
 public:
     QString _order, _place;
     QDate _date;
     double _amount;
-    double _pixToMmCoefX, _pixToMmCoefY;  // number of pixels in 1 millimeter
+    Utils::PrintAxisHelper _axisHelper;
 
 private:
     ChequePrinter *q;
@@ -193,7 +173,7 @@ bool ChequePrinter::print()
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
     printer->setOrientation(QPrinter::Landscape);
-    d->setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+    d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
@@ -206,16 +186,16 @@ bool ChequePrinter::print()
     font.setPointSize(10);
     painter.setFont(font);
 
-    painter.translate(d->point(120, 61));
+    painter.translate(d->_axisHelper.pointToPixels(120, 61));
     // 25,17 pour certains
     // 45,13 pour d'autres
-    QRect amountLines(d->point(45,13), d->size(90, 10));
-    // QRect amountLine2(d->point(10,23), d->size(110, 5));
-    QRect orderLine(d->point(10,28), d->size(110, 5));
+    QRect amountLines(d->_axisHelper.pointToPixels(45,13), d->_axisHelper.sizeToPixels(90, 10));
+    // QRect amountLine2(d->_axisHelper.pointToPixels(10,23), d->size(110, 5));
+    QRect orderLine(d->_axisHelper.pointToPixels(10,28), d->_axisHelper.sizeToPixels(110, 5));
 
-    QRect numberLine(d->point(133,28), d->size(41, 10));
-    QRect placeLine(d->point(133,38), d->size(40, 4));
-    QRect dateLine(d->point(133,42), d->size(40, 4));
+    QRect numberLine(d->_axisHelper.pointToPixels(133,28), d->_axisHelper.sizeToPixels(41, 10));
+    QRect placeLine(d->_axisHelper.pointToPixels(133,38), d->_axisHelper.sizeToPixels(40, 4));
+    QRect dateLine(d->_axisHelper.pointToPixels(133,42), d->_axisHelper.sizeToPixels(40, 4));
 
     if (DrawChequeRects) {
         painter.drawRect(amountLines);
