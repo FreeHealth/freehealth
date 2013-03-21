@@ -4,6 +4,7 @@ FreeMedForms
 
   * Forms
     * Lab tests result helper
+    * French AGGIR printing massively improved
   * FreeMedForms
     * Adding a status bar at the top right corner of the patient bar
     * Manage episode validation
