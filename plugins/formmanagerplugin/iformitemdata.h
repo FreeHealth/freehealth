@@ -39,7 +39,7 @@ class FORM_EXPORT IFormItemData : public QObject
     Q_OBJECT
 public:
     enum ReferenceRepresentation {
-        ID_EpisodeDate = 0, // used by BaseFormData to set episode date
+        ID_EpisodeDate = 0,     // used by BaseFormData to set episode date
         ID_EpisodeLabel,        // used by BaseFormData to set episode label
         ID_UserName,            // used by BaseFormData to set episode label
         ID_Priority,            // used by BaseFormData to set episode label
