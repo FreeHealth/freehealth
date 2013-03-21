@@ -5,10 +5,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
-    <fmfv>0.8.2</fmfv>
+    <version>0.8.4</version>
+    <fmfv>0.8.4</fmfv>
     <cdate>2011-03-15</cdate>
-    <ludate>2013-03-20</ludate>
+    <ludate>2013-03-21</ludate>
     <icon>geriatrics.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -25,6 +25,16 @@
     <htmldescription lang="xx"></htmldescription>
     <specialties lang="fr">Gériatrie</specialties>
     <specialties lang="xx">Geriatrics</specialties>
+    <updateinfo>
+      <updateversion from="0.8.2" to="0.8.4">
+        <text lang="fr">Amélioration de l'impression en utilisant le nouveau code de la version 0.8.4+ de FreeMedForms</text>
+        <text lang="xx">Improving the prints using the new FreeMedForms' 0.8.4+ version</text>
+      </updateversion>
+      <updateversion from="" to="0.8.2">
+        <text lang="fr">Première version</text>
+        <text lang="xx">First version</text>
+      </updateversion>
+    </updateinfo>
 
   </formdescription>
 
