@@ -15,7 +15,8 @@ HEADERS += \
     pdftkwrapper.h \
     chequeprinter.h \
     chequeprinter_preferences.h \
-    chequeprinterdialog.h
+    chequeprinterdialog.h \
+    fspprinter.h
         
 SOURCES += \
     toolsplugin.cpp \
@@ -23,7 +24,8 @@ SOURCES += \
     pdftkwrapper.cpp \
     chequeprinter.cpp \
     chequeprinter_preferences.cpp \
-    chequeprinterdialog.cpp
+    chequeprinterdialog.cpp \
+    fspprinter.cpp
 
 FORMS += \
     toolspreferences.ui \

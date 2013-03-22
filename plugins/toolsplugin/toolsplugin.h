@@ -51,6 +51,7 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void printCheque();
+    void printFsp();
 
 private:
     ToolsPreferencesPage *m_prefPage;
