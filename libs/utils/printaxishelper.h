@@ -30,6 +30,7 @@
 #include <QPoint>
 #include <QSize>
 #include <QRect>
+#include <QPainter>
 
 /**
  * \file printaxishelper.h
@@ -40,6 +41,20 @@
 
 namespace Utils {
 
+struct UTILS_EXPORT PrintString {
+    PrintString() : splitChars(false), autoFontResize(true), minFontPixelSize(10), drawBoundingRect(false) {}
+
+    QString content;        /**< Content of the string */
+    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
+    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
+    int minFontPixelSize;
+
+    bool drawBoundingRect;
+
+    QPoint topMillimeters;
+    QSize contentSizeMillimeters;
+};
+
 class UTILS_EXPORT PrintAxisHelper
 {
 public:
@@ -47,8 +62,14 @@ public:
     void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
 
     // Millimeters to pixels
+    QPoint pointToPixels(const QPoint &pointInMilliters);
     QPoint pointToPixels(double x_millimeter, double y_millimeter);
+
+    QSize sizeToPixels(const QSize &sizeMilliters);
     QSize sizeToPixels(double width_millimeter, double height_millimeter);
+
+    // Print easiers
+    void printString(QPainter *painter, const PrintString &printString);
 
 private:
     double _pixToMmCoefX, _pixToMmCoefY;
