@@ -433,7 +433,7 @@
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
     </draw:custom-shape>
     <draw:custom-shape draw:style-name="gr3" draw:text-style-name="P1" draw:layer="layout" svg:width="4.8cm" svg:height="12cm" svg:x="5.9cm" svg:y="3.5cm">
-     <text:p text:style-name="P1">Bill X</text:p>
+     <text:p text:style-name="P1">Quotation X</text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="flowchart-process" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
     </draw:custom-shape>
     <draw:connector draw:style-name="gr4" draw:text-style-name="P1" draw:layer="layout" draw:type="line" svg:x1="9.4cm" svg:y1="14.1cm" svg:x2="5.4cm" svg:y2="9.05cm" draw:start-shape="id1" draw:start-glue-point="0" draw:end-shape="id2" draw:end-glue-point="1" svg:d="m9400 14100-4000-5050" svg:viewBox="0 0 4001 5051">
@@ -558,7 +558,7 @@
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="flowchart-process" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
     </draw:custom-shape>
     <draw:custom-shape draw:style-name="gr10" draw:text-style-name="P1" draw:layer="layout" svg:width="4.8cm" svg:height="0.9cm" svg:x="5.9cm" svg:y="15.6cm">
-     <text:p text:style-name="P1">Bill Y</text:p>
+     <text:p text:style-name="P1">Quotation Y</text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="flowchart-process" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
     </draw:custom-shape>
    </draw:page>
