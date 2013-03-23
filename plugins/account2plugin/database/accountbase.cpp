@@ -1261,7 +1261,7 @@ bool AccountBase::save(QList<Quotation> &quotations)
     return true;
 }
 
-bool AccountBase::save(Qlist<MedicalProcedure> &medicalProcedures)
+bool AccountBase::save(QList<MedicalProcedure> &medicalProcedures)
 {
     return true;
 }

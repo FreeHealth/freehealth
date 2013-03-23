@@ -17,7 +17,7 @@ HEADERS += $${PWD}/database/constants_db.h \
     $${PWD}/models/feemodel.h \
     $${PWD}/models/paymentmodel.h \
     $${PWD}/models/bankaccountmodel.h \
-    $${PWD}models/medicalproceduremodel.h
+    $${PWD}/models/medicalproceduremodel.h
 
     
 
