@@ -17,6 +17,7 @@ HEADERS += $${PWD}/database/constants_db.h \
     $${PWD}/models/feemodel.h \
     $${PWD}/models/paymentmodel.h \
     $${PWD}/models/bankaccountmodel.h \
+    $${PWD}models/medicalproceduremodel.h
 
     
 
@@ -32,6 +33,7 @@ SOURCES += $${PWD}/account2plugin.cpp \
     $${PWD}/models/feemodel.cpp \
     $${PWD}/models/paymentmodel.cpp \
     $${PWD}/models/bankaccountmodel.cpp \
+    $${PWD}/models/medicalproceduremodel.cpp
 
 
 

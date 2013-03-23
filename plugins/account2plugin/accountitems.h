@@ -305,12 +305,21 @@ private:
     QList<Payment> _payments;
 };
 
+
+class MedicalProcedure : public VariableDatesItem
+{
+public:
+    explicit MedicalProcedure() {}
+    ~MedicalProcedure() {}
+};
+
 }  // namespace Account2
 
 ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Fee &c);
 ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Payment &c);
 ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Banking &c);
 ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::Quotation &c);
+ACCOUNT2_EXPORT QDebug operator<<(QDebug dbg, const Account2::MedicalProcedure &c);
 
 #endif  // ACCOUNT2_ACCOUNTITEMS
 

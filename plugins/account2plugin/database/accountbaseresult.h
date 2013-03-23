@@ -60,16 +60,19 @@ public:
     void setPayments(const QList<Payment> &list) {_payments = list;}
     void setBankings(const QList<Banking> &list) {_bankings = list;}
     void setQuotations(const QList<Quotation> &list) {_quotations = list;}
+    void setMedicalProcedures(const QList<MedicalProcedure> &list) {_medicalProcedures = list; }
 
     void addFee(const Fee &fee) {_fees << fee;}
     void addPayment(const Payment &pay) {_payments << pay;}
     void addBanking(const Banking &bkg) {_bankings << bkg;}
     void addQuotation(const Quotation &quot) {_quotations << quot;}
+    void addMedicalProcedure(const MedicalProcedure &mprocedure) { _medicalProcedures << mprocedure; }
 
     const QList<Fee> &fees() const {return _fees;}
     const QList<Payment> &payments() const {return _payments;}
     const QList<Banking> &bankings() const {return _bankings;}
     const QList<Quotation> &quotations() const {return _quotations;}
+    const QList<MedicalProcedure> &medicalProcedures() const {return _medicalProcedures;}
 
 private:
     bool _success;
@@ -78,6 +81,7 @@ private:
     QList<Payment> _payments;
     QList<Banking> _bankings;
     QList<Quotation> _quotations;
+    QList<MedicalProcedure> _medicalProcedures;
 };
 
 } // namespace Internal

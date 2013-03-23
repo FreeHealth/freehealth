@@ -1261,6 +1261,11 @@ bool AccountBase::save(QList<Quotation> &quotations)
     return true;
 }
 
+bool AccountBase::save(Qlist<MedicalProcedure> &medicalProcedures)
+{
+    return true;
+}
+
 bool AccountBase::createDatabase(const QString &connectionName ,
                                  const QString &dbName,
                                  const QString &pathOrHostName,

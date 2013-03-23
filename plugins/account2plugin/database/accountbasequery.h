@@ -51,11 +51,12 @@ class AccountBaseQuery : public BasicFilter
 {
 public:
     enum DataObject {
-        None        = 0,
-        Fee         = 0x0001,
-        Payment     = 0x0002,
-        Banking     = 0x0004,
-        Quotation   = 0x0008
+        None                = 0,
+        Fee                 = 0x0001,
+        Payment             = 0x0002,
+        Banking             = 0x0004,
+        Quotation           = 0x0008,
+        MedicalProcedure    = 0x0010
     };
     Q_DECLARE_FLAGS(DataObjects, DataObject)
 
