@@ -131,12 +131,21 @@ class ACCOUNT2_EXPORT Fee : public VariableDatesItem
     friend class Account2::Internal::AccountBase;
     friend class Account2::Internal::AccountBasePrivate;
 public:
-    Fee() : _mp_id(-1), _amount(0.) {}
+
+    Fee() :
+        _mp_id(-1),
+        _amount(0.),
+        _taxRate(0.) //TODO: initialize with country specific tax rate?
+    {}
+
     virtual ~Fee() {}
 
     virtual void setAmount(double amount) {_modified = true; _amount=amount;}
     virtual double amount() const {return _amount;}
     bool isNull() {return _amount <= 0.0;}
+
+    virtual void setTaxRate(double taxRate) { _taxRate = taxRate; }
+    virtual double taxRate() { return _taxRate; }
 
     virtual QString userUid() const {return _userUid;}
     virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
@@ -159,7 +168,7 @@ protected: // For database management
 
 private:
     int _mp_id;
-    double _amount;
+    double _amount, _taxRate;
     QString _userUid, _patientUid, _type, _label, _comment;
 };
 
