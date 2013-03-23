@@ -40,16 +40,14 @@
 #include <account2plugin/accountitems.h>
 #include <account2plugin/database/accountbase.h>
 
-
 #include <translationutils/constanttranslations.h>
-
 
 using namespace Account2;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 using namespace Constants;
 
-enum {WarnFilter=true};
+enum { WarnFilter = true };
 enum { WarnDebugMessage = false };
 
 static inline Account2::AccountCore *accountCore() {return Account2::AccountCore::instance();}
@@ -131,7 +129,6 @@ bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &va
     d->m_isDirty = d->_sql->isDirty(index);
     return ret;
 }
-
 
 QVariant MedicalProcedureModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
