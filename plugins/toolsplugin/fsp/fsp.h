@@ -19,27 +19,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
+ *   Main developers : Eric Maeker                                         *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_INTERNAL_FSPPRINTER_H
-#define TOOLS_INTERNAL_FSPPRINTER_H
+#ifndef TOOLS_INTERNAL_FSP_H
+#define TOOLS_INTERNAL_FSP_H
 
 #include <QDate>
 #include <QString>
 
 /**
- * \file fspprinter.h
+ * \file fsp.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 21 Mar 2013
+ * \date 23 Mar 2013
 */
 
 namespace Tools {
 namespace Internal {
-class FspPrinterPrivate;
+class FspPrivate;
 
 struct Fsp_AmountLine {
     Fsp_AmountLine()
@@ -54,57 +54,88 @@ struct Fsp_AmountLine {
     bool depassement;
 };
 
-struct Fsp_Patient {
-    QString fullName, address, nss, nssKey;
-    QString assuredNss, assuredNssKey, assuredName, assuranceNumber;
-    QDate dob;
-};
-
-struct Fsp_Conditions {
-    Fsp_Conditions() :
-          maladie(0), exonerationTM(0), ald(0), accidentParTiers(0), prevention(0), autre(0), soinL115(0),
-          maternite(0), atMP(0), nouveauMT(0),
-          accessSpecific(0), urgence(0), horsResidence(0), medTraitantRemplace(0), accessHorsCoordination(0)
-    {}
-
-    bool maladie, exonerationTM, ald, accidentParTiers, prevention, autre, soinL115;
-    bool maternite, atMP, nouveauMT;
-    QString atMPNumber;
-    QDate accidentParTiersDate, dateGrossesse, atMPDate;
-    QString envoyeParMedecin;
-    bool accessSpecific, urgence, horsResidence, medTraitantRemplace, accessHorsCoordination;
-    QDate dateAccordPrealable;
-};
-
-class FspPrinter
+class Fsp
 {
 public:
-    enum Cerfa {
-        S12541_01 = 0,
-        S12541_02
+    enum Data {
+        Bill_Number = 0,
+        Bill_Date,
+        Patient_FullName,
+        Patient_FullAddress,
+        Patient_DateOfBirth,
+        Patient_Personal_NSS,
+        Patient_Personal_NSSKey,
+        Patient_Assure_FullName,
+        Patient_Assure_NSS,
+        Patient_Assure_NSSKey,
+        Patient_Assurance_Number,
+        Condition_Maladie,
+        Condition_Maladie_ETM,
+        Condition_Maladie_ETM_Ald,
+        Condition_Maladie_ETM_Autre,
+        Condition_Maladie_ETM_L115,
+        Condition_Maladie_ETM_Prevention,
+        Condition_Maladie_ETM_AccidentParTiers_Oui,
+        Condition_Maladie_ETM_AccidentParTiers_Date,
+        Condition_Maternite,
+        Condition_Maternite_Date,
+        Condition_ATMP,
+        Condition_ATMP_Number,
+        Condition_ATMP_Date,
+        Condition_NouveauMedTraitant,
+        Condition_MedecinEnvoyeur,
+        Condition_AccesSpecifique,
+        Condition_Urgence,
+        Condition_HorsResidence,
+        Condition_Remplace,
+        Condition_HorsCoordination,
+        Condition_AccordPrealableDate,
+        Unpaid_PartObligatoire,
+        Unpaid_PartComplementaire,
+        MaxData
     };
 
-    explicit FspPrinter();
-    ~FspPrinter();
+    enum AmountData {
+        Amount_Date = 100,
+        Amount_ActCode,
+        Amount_Activity,
+        Amount_CV,
+        Amount_OtherAct1,
+        Amount_OtherAct2,
+        Amount_Amount,
+        Amount_Depassement,
+        Amount_Deplacement_IKMD,
+        Amount_Deplacement_Nb,
+        Amount_Deplacement_IKValue,
+        Amount_MaxData
+    };
+
+    Fsp();
+    Fsp(const Fsp &cp);
+    ~Fsp();
+    void clear();
+
+    void setData();
 
     void setBillNumber(const QString &uid);
     void setBillDate(const QDate &date);
 
-    void setPatient(const Fsp_Patient &patient);
-    void setConditions(const Fsp_Conditions &conds);
-    void addAmountLine(const Fsp_AmountLine &line);
-    void setPayment(bool nAPasPayePartObligatoire, bool nAPasPayePartComplementaire);
+    bool setData(int index, const QVariant &value);
+    QVariant data(int index) const;
 
-    void clear();
+    void addAmountData(int line, int index, const QVariant &value);
+    QVariant amountLineData(int line, int index) const;
 
-    bool print(Cerfa cerfa = S12541_01);
+    QString toXml() const;
+    bool fromXml(const QString &content);
+    bool fromXmlFile(const QString &absPathFileName);
 
 private:
-    FspPrinterPrivate *d;
+    FspPrivate *d;
 };
+
 
 } // namespace Internal
 } // namespace Tools
 
-#endif // TOOLS_INTERNAL_FSPPRINTER_H
-
+#endif // TOOLS_INTERNAL_FSP_H

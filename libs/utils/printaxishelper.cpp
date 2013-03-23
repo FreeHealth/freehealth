@@ -42,13 +42,13 @@ PrintAxisHelper::PrintAxisHelper() :
 }
 
 /** Computes the coefficient to transform millimeters to pixels and vice-versa */
-void PrintAxisHelper::setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters)
+void PrintAxisHelper::setPageSize(const QRect &pageRectPixels, const QSizeF &pageSizeInMillimeters)
 {
-    _pixToMmCoefX = pageRect.width() / pageSizeInMillimeters.width();
-    _pixToMmCoefY = pageRect.height() / pageSizeInMillimeters.height();
+    _pixToMmCoefX = (qreal)pageRectPixels.width() / pageSizeInMillimeters.width();
+    _pixToMmCoefY = (qreal)pageRectPixels.height() / pageSizeInMillimeters.height();
 }
 
-QPoint PrintAxisHelper::pointToPixels(const QPoint &pointInMilliters)
+QPointF PrintAxisHelper::pointToPixels(const QPointF &pointInMilliters)
 {
     return pointToPixels(pointInMilliters.x(), pointInMilliters.y());
 }
@@ -57,12 +57,12 @@ QPoint PrintAxisHelper::pointToPixels(const QPoint &pointInMilliters)
  * Translates a QPoint in millimeters to QPoint in pixels
  * according to coefficient computed in setPageSize()
  */
-QPoint PrintAxisHelper::pointToPixels(double x_millimeter, double y_millimeter)
+QPointF PrintAxisHelper::pointToPixels(double x_millimeter, double y_millimeter)
 {
-    return QPoint(x_millimeter * _pixToMmCoefX, y_millimeter * _pixToMmCoefY);
+    return QPointF(x_millimeter * _pixToMmCoefX, y_millimeter * _pixToMmCoefY);
 }
 
-QSize PrintAxisHelper::sizeToPixels(const QSize &sizeMilliters)
+QSizeF PrintAxisHelper::sizeToPixels(const QSizeF &sizeMilliters)
 {
     return sizeToPixels(sizeMilliters.width(), sizeMilliters.height());
 }
@@ -71,7 +71,7 @@ QSize PrintAxisHelper::sizeToPixels(const QSize &sizeMilliters)
  * Translate a QSize in millimeters to QSize in pixels
  * according to coefficient computed in setPageSize()
  */
-QSize PrintAxisHelper::sizeToPixels(double width_millimeter, double height_millimeter)
+QSizeF PrintAxisHelper::sizeToPixels(double width_millimeter, double height_millimeter)
 {
     return QSize(width_millimeter * _pixToMmCoefX, height_millimeter * _pixToMmCoefY);
 }
@@ -80,7 +80,7 @@ void PrintAxisHelper::printString(QPainter *painter, const PrintString &printStr
 {
     painter->save();
 
-    QRect content(pointToPixels(printString.topMillimeters),  sizeToPixels(printString.contentSizeMillimeters));
+    QRectF content(pointToPixels(printString.topMillimeters),  sizeToPixels(printString.contentSizeMillimeters));
 
 //    QPen pen(QColor("red"));
 //    painter->setPen(pen);
@@ -123,7 +123,7 @@ void PrintAxisHelper::printString(QPainter *painter, const PrintString &printStr
 //                       << "\n\n";
 
             painter->setFont(font);
-            painter->drawText(content, Qt::AlignVCenter, printString.content);
+            painter->drawText(content, printString.alignment, printString.content);
         } else {
 //            // Split chars and center
             int widthPixels = printString.contentSizeMillimeters.width() * _pixToMmCoefX;

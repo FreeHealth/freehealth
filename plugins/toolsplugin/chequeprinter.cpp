@@ -189,13 +189,13 @@ bool ChequePrinter::print()
     painter.translate(d->_axisHelper.pointToPixels(120, 61));
     // 25,17 pour certains
     // 45,13 pour d'autres
-    QRect amountLines(d->_axisHelper.pointToPixels(45,13), d->_axisHelper.sizeToPixels(90, 10));
+    QRectF amountLines(d->_axisHelper.pointToPixels(45,13), d->_axisHelper.sizeToPixels(90, 10));
     // QRect amountLine2(d->_axisHelper.pointToPixels(10,23), d->size(110, 5));
-    QRect orderLine(d->_axisHelper.pointToPixels(10,28), d->_axisHelper.sizeToPixels(110, 5));
+    QRectF orderLine(d->_axisHelper.pointToPixels(10,28), d->_axisHelper.sizeToPixels(110, 5));
 
-    QRect numberLine(d->_axisHelper.pointToPixels(133,28), d->_axisHelper.sizeToPixels(41, 10));
-    QRect placeLine(d->_axisHelper.pointToPixels(133,38), d->_axisHelper.sizeToPixels(40, 4));
-    QRect dateLine(d->_axisHelper.pointToPixels(133,42), d->_axisHelper.sizeToPixels(40, 4));
+    QRectF numberLine(d->_axisHelper.pointToPixels(133,28), d->_axisHelper.sizeToPixels(41, 10));
+    QRectF placeLine(d->_axisHelper.pointToPixels(133,38), d->_axisHelper.sizeToPixels(40, 4));
+    QRectF dateLine(d->_axisHelper.pointToPixels(133,42), d->_axisHelper.sizeToPixels(40, 4));
 
     if (DrawChequeRects) {
         painter.drawRect(amountLines);

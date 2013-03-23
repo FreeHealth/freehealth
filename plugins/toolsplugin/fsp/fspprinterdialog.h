@@ -19,67 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_PRINTAXISHELPER_H
-#define UTILS_PRINTAXISHELPER_H
+#ifndef TOOLS_INTERNAL_FSPPRINTERDIALOG_H
+#define TOOLS_INTERNAL_FSPPRINTERDIALOG_H
 
-#include <utils/global_exporter.h>
-#include <QPoint>
-#include <QSize>
-#include <QRect>
-#include <QPainter>
+#include <QDialog>
 
 /**
- * \file printaxishelper.h
+ * \file fspprinterdialog.h
  * \author Eric Maeker
- * \version 0.8.4
- * \date 21 Mar 2013
+ * \version 0.8.0
+ * \date 2013-03-22
 */
 
-namespace Utils {
+namespace Tools {
+namespace Internal {
+class FspPrinterDialogPrivate;
 
-struct UTILS_EXPORT PrintString {
-    PrintString() :
-        splitChars(false), autoFontResize(true),
-        minFontPixelSize(10), drawBoundingRect(false),
-        alignment(Qt::AlignVCenter)
-    {}
-
-    QString content;        /**< Content of the string */
-    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
-    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
-    int minFontPixelSize;
-
-    bool drawBoundingRect;
-
-    QPointF topMillimeters;
-    QSizeF contentSizeMillimeters;
-    Qt::AlignmentFlag alignment;
-};
-
-class UTILS_EXPORT PrintAxisHelper
+class FspPrinterDialog : public QDialog
 {
+    Q_OBJECT
+    
 public:
-    PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
-
-    // Millimeters to pixels
-    QPointF pointToPixels(const QPointF &pointInMilliters);
-    QPointF pointToPixels(double x_millimeter, double y_millimeter);
-
-    QSizeF sizeToPixels(const QSizeF &sizeMilliters);
-    QSizeF sizeToPixels(double width_millimeter, double height_millimeter);
-
-    // Print easiers
-    void printString(QPainter *painter, const PrintString &printString);
+    explicit FspPrinterDialog(QWidget *parent = 0);
+    ~FspPrinterDialog();
+    bool initialize();
+    
+Q_SIGNALS:
+    
+private Q_SLOTS:
+    void printFsp();
+    void printCheque();
 
 private:
-    double _pixToMmCoefX, _pixToMmCoefY;
+    FspPrinterDialogPrivate *d;
 };
 
-} // namespace Utils
+} // namespace Internal
+} // namespace Tools
 
-#endif // UTILS_PRINTAXISHELPER_H
+#endif // TOOLS_INTERNAL_FSPPRINTERDIALOG_H
+

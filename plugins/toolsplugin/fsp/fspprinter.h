@@ -19,67 +19,47 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_PRINTAXISHELPER_H
-#define UTILS_PRINTAXISHELPER_H
-
-#include <utils/global_exporter.h>
-#include <QPoint>
-#include <QSize>
-#include <QRect>
-#include <QPainter>
+#ifndef TOOLS_INTERNAL_FSPPRINTER_H
+#define TOOLS_INTERNAL_FSPPRINTER_H
 
 /**
- * \file printaxishelper.h
+ * \file fspprinter.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 21 Mar 2013
+ * \date 23 Mar 2013
 */
 
-namespace Utils {
+namespace Tools {
+namespace Internal {
+class Fsp;
+class FspPrinterPrivate;
 
-struct UTILS_EXPORT PrintString {
-    PrintString() :
-        splitChars(false), autoFontResize(true),
-        minFontPixelSize(10), drawBoundingRect(false),
-        alignment(Qt::AlignVCenter)
-    {}
-
-    QString content;        /**< Content of the string */
-    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
-    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
-    int minFontPixelSize;
-
-    bool drawBoundingRect;
-
-    QPointF topMillimeters;
-    QSizeF contentSizeMillimeters;
-    Qt::AlignmentFlag alignment;
-};
-
-class UTILS_EXPORT PrintAxisHelper
+class FspPrinter
 {
 public:
-    PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
+    enum Cerfa {
+        S12541_01 = 0,
+        S12541_02
+    };
 
-    // Millimeters to pixels
-    QPointF pointToPixels(const QPointF &pointInMilliters);
-    QPointF pointToPixels(double x_millimeter, double y_millimeter);
+    explicit FspPrinter();
+    ~FspPrinter();
 
-    QSizeF sizeToPixels(const QSizeF &sizeMilliters);
-    QSizeF sizeToPixels(double width_millimeter, double height_millimeter);
-
-    // Print easiers
-    void printString(QPainter *painter, const PrintString &printString);
+    void setDrawRects(bool drawRects);
+    bool print(const Fsp &fsp, Cerfa cerfa = S12541_01, bool printCerfaAsBackground = false);
+    // bool preview(const Fsp &fsp, Cerfa cerfa = S12541_01);
 
 private:
-    double _pixToMmCoefX, _pixToMmCoefY;
+    FspPrinterPrivate *d;
 };
 
-} // namespace Utils
+} // namespace Internal
+} // namespace Tools
 
-#endif // UTILS_PRINTAXISHELPER_H
+#endif // TOOLS_INTERNAL_FSPPRINTER_H
+

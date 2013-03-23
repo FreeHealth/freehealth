@@ -28,6 +28,7 @@
 #include "pdftkwrapper.h"
 #include "chequeprinterdialog.h"
 #include "chequeprinter_preferences.h"
+#include "fsp/fspprinterpreferences.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -83,6 +84,7 @@ ToolsPlugin::ToolsPlugin() :
 //    m_prefPage = new ToolsPreferencesPage(this);
 //    addObject(m_prefPage);
     addAutoReleasedObject(new ChequePrinterPreferencesPage(this));
+    addAutoReleasedObject(new FspPrinterPreferencesPage(this));
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
@@ -201,78 +203,68 @@ void ToolsPlugin::printCheque()
     printDialog.exec();
 }
 
-#include "fspprinter.h"
+#include "fsp/fspprinterdialog.h"
+#include "fsp/fspprinter.h"
+#include "fsp/fsp.h"
 void ToolsPlugin::printFsp()
 {
+//    FspPrinterDialog dlg;
+//    dlg.exec();
+
+    Fsp test;
+    test.setData(Fsp::Bill_Number, "123456789012345");
+    test.setData(Fsp::Bill_Date, QDate::currentDate());
+
+    test.setData(Fsp::Patient_FullName, "NOM PATIENT ET PRENOM");
+    test.setData(Fsp::Patient_DateOfBirth, QDate(1974, 11, 7));
+    test.setData(Fsp::Patient_Personal_NSS, "1234567890123");
+    test.setData(Fsp::Patient_Personal_NSSKey, "45");
+    test.setData(Fsp::Patient_Assurance_Number, "ASSURNBSSDF");
+    test.setData(Fsp::Patient_Assure_FullName, "NOM DE L'ASSURÉ");
+    test.setData(Fsp::Patient_Assure_NSS, "ASSURE7890123");
+    test.setData(Fsp::Patient_Assure_NSSKey, "89");
+    test.setData(Fsp::Patient_FullAddress, "ADRESSE DU PATIENT SDFQSD FQSDF QSD FQSD FQSD FQSDFQSDFQSDF QSD F24352345 2345 21345 SQDFQSDF");
+
+    test.setData(Fsp::Condition_Maladie, true);
+    test.setData(Fsp::Condition_Maladie_ETM, true);
+    test.setData(Fsp::Condition_Maladie_ETM_Ald, true);
+    test.setData(Fsp::Condition_Maladie_ETM_Autre, true);
+    test.setData(Fsp::Condition_Maladie_ETM_L115, true);
+    test.setData(Fsp::Condition_Maladie_ETM_Prevention, true);
+    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui, true);
+    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Date, QDate::currentDate());
+    test.setData(Fsp::Condition_Maternite, true);
+    test.setData(Fsp::Condition_Maternite_Date, QDate::currentDate());
+    test.setData(Fsp::Condition_ATMP, true);
+    test.setData(Fsp::Condition_ATMP_Number, "12345678901");
+    test.setData(Fsp::Condition_ATMP_Date, QDate::currentDate());
+    test.setData(Fsp::Condition_NouveauMedTraitant, true);
+    test.setData(Fsp::Condition_MedecinEnvoyeur, "Medecin envoyeur");
+    test.setData(Fsp::Condition_AccesSpecifique, true);
+    test.setData(Fsp::Condition_Urgence, true);
+    test.setData(Fsp::Condition_HorsResidence, true);
+    test.setData(Fsp::Condition_Remplace, true);
+    test.setData(Fsp::Condition_HorsCoordination, true);
+    test.setData(Fsp::Condition_AccordPrealableDate, QDate::currentDate().addDays(-18));
+    test.setData(Fsp::Unpaid_PartObligatoire, true);
+    test.setData(Fsp::Unpaid_PartComplementaire, true);
+
+    for(int i=0; i < 4; ++i) {
+        test.addAmountData(i, Fsp::Amount_Date, QDate::currentDate());
+        test.addAmountData(i, Fsp::Amount_ActCode, "CODE123456");
+        test.addAmountData(i, Fsp::Amount_Activity, i);
+        test.addAmountData(i, Fsp::Amount_CV, "CV");
+        test.addAmountData(i, Fsp::Amount_OtherAct1, "ACT1");
+        test.addAmountData(i, Fsp::Amount_OtherAct2, "ACT2");
+        test.addAmountData(i, Fsp::Amount_Amount, 234.00);
+        test.addAmountData(i, Fsp::Amount_Depassement, 1);
+        test.addAmountData(i, Fsp::Amount_Deplacement_IKMD, "IK");
+        test.addAmountData(i, Fsp::Amount_Deplacement_Nb, 1);
+        test.addAmountData(i, Fsp::Amount_Deplacement_IKValue, 0.97);
+    }
+
     FspPrinter printer;
-    printer.setBillNumber("123456789012345");
-    printer.setBillDate(QDate::currentDate());
-
-    Fsp_Patient patient;
-    patient.fullName = "NOM PATIENT ET PRENOM";
-    patient.dob = QDate(1974, 11, 7);
-    patient.nss = "1234567890123";
-    patient.nssKey = "45";
-    patient.assuranceNumber = "ASSURNB";
-    patient.assuredName = "NOM DE L'ASSURÉ";
-    patient.assuredNss = "ASSURE7890123";
-    patient.assuredNssKey = "89";
-    patient.address = "ADRESSE DU PATIENT SDFQSD FQSDF QSD FQSD FQSD FQSDFQSDFQSDF QSD F24352345 2345 21345 SQDFQSDF";
-    printer.setPatient(patient);
-
-    Fsp_Conditions conds;
-    conds.maladie = true;
-    conds.exonerationTM = true;
-    conds.ald = true;
-    conds.accidentParTiers = true;
-    conds.accidentParTiersDate = QDate::currentDate();
-    conds.prevention = true;
-    conds.autre = true;
-    conds.soinL115 = true;
-    conds.maternite = true;
-    conds.dateGrossesse = QDate::currentDate();
-    conds.atMP = true;
-    conds.nouveauMT = true;
-
-    conds.atMPNumber = "12345678910182742394";
-    conds.atMPDate = QDate(12,2,12);
-    conds.envoyeParMedecin = "MEDECIN ENVOYANT";
-    conds.accessSpecific = true;
-    conds.urgence = true;
-    conds.horsResidence = true;
-    conds.medTraitantRemplace = true;
-    conds.accessHorsCoordination = true;
-    conds.dateAccordPrealable = QDate(13,3,12);
-    printer.setConditions(conds);
-
-    Fsp_AmountLine line;
-    line.date = QDate::currentDate();
-    line.act = "123456789012345678";
-    line.otherAct1 = "O1";
-    line.otherAct2 = "OOO";
-    line.activity = 1;
-    line.C = "CS";
-    line.amount = 23.00;
-    line.idMd = "EE";
-    line.deplacement_nb = 2;
-    line.deplacement_amount = 0.97;
-    printer.addAmountLine(line);
-
-    Fsp_AmountLine line2;
-    line2.date = QDate::currentDate();
-    line2.act = "ACT2342341";
-    line2.otherAct1 = "--0";
-    line2.otherAct2 = "__1";
-    line2.activity = 2;
-    line2.C = "CS";
-    line2.amount = 976.00;
-    line2.idMd = "S";
-    line2.deplacement_nb = 12;
-    line2.deplacement_amount = 0.97;
-    printer.addAmountLine(line2);
-
-    printer.setPayment(true, true);
-    printer.print(FspPrinter::S12541_02);
+    printer.print(test, FspPrinter::S12541_02);
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)

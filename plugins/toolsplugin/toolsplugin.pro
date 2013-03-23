@@ -16,7 +16,12 @@ HEADERS += \
     chequeprinter.h \
     chequeprinter_preferences.h \
     chequeprinterdialog.h \
-    fspprinter.h
+    fsp/fsp.h \
+    fsp/fspprinter.h \
+    fsp/fspprinterdialog.h \
+    fsp/fspprinterpreferences.h \
+    fsp/fspconstants.h
+
         
 SOURCES += \
     toolsplugin.cpp \
@@ -25,17 +30,23 @@ SOURCES += \
     chequeprinter.cpp \
     chequeprinter_preferences.cpp \
     chequeprinterdialog.cpp \
-    fspprinter.cpp
+    fsp/fsp.cpp \
+    fsp/fspprinter.cpp \
+    fsp/fspprinterdialog.cpp \
+    fsp/fspprinterpreferences.cpp
+
 
 FORMS += \
     toolspreferences.ui \
     chequeprinter_preferences.ui \
-    chequeprinterdialog.ui
+    chequeprinterdialog.ui \
+    fsp/fspprinterdialog.ui \
+    fsp/fspprinterdialog_patient.ui \
+    fsp/fspprinterdialog_conds.ui \
+    fsp/fspprinterdialog_amounts.ui \
+    fsp/fspprinterpreferences.ui
 
 OTHER_FILES = Tools.pluginspec
-
-#FREEMEDFORMS_SOURCES=%FreeMedFormsSources%
-#IDE_BUILD_TREE=%FreeMedFormsBuild%
 
 PROVIDER = FreeMedForms
 
