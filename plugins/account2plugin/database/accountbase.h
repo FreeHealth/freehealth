@@ -79,6 +79,7 @@ public:
     bool save(QList<Payment> &payments);
     bool save(QList<Banking> &bankings);
     bool save(QList<Quotation> &quotations);
+    bool save(QList<MedicalProcedure> &medicalProcedures);
 
 private:    
     bool createDatabase(const QString &connectionName , const QString &dbName,

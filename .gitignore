@@ -64,3 +64,4 @@ global_resources/datapacks/tmp/*
 scripts/freemedforms-*
 scripts/Linux/ppa*
 
+.~lock.*#
