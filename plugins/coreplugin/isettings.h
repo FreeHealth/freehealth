@@ -77,6 +77,7 @@ public:
         MediumPixmapPath,
         BigPixmapPath,
         SvgPixmapPath,
+        SplashScreenPixmapPath,
         SystemTempPath,
         ApplicationTempPath,
         // User && Forms path

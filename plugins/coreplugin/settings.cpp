@@ -561,6 +561,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/");
             m_Enum_Path.insert(BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/");
             m_Enum_Path.insert(SvgPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/svg/");
+            m_Enum_Path.insert(SplashScreenPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/splashscreens/");
             m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + "/subforms");
             m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + "/completeforms");
             m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED);
