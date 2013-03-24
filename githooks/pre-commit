@@ -27,18 +27,21 @@ fix_trailing_whitespaces() {
 #    for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
     for FILE in `exec git diff-index --cached --name-only $against | uniq` ; do
 
+        # leave out THIS file!
+        echo "$FILE" | grep -q "pre-commit" && continue
+        
         echo "processing $FILE..."
-        # replace commonly written "Developer" with "Developer" and fix " :" -> ":" after that
+        # replace commonly written "Developper" with "Developer" and fix " :" -> ":" after that
 
 #         count=$(grep "Developer" $FILE -c)
 #         [ "$count" = "0" ] || echo "'Developer' -> 'Developer': $count"
-        sed -i 's/Developer/Developer/' "$FILE"
-        sed -i 's/Developer: /Developer: /' "$FILE"
-        sed -i 's/Developers: /Developers: /' "$FILE"
+        sed -i 's/Developper/Developer/' "$FILE"
+        sed -i 's/Developer :/Developer: /' "$FILE"
+        sed -i 's/Developers :/Developers: /' "$FILE"
 
 #         count=$(grep "Contributors: " $FILE -c)
 #         [ "$count" = "0" ] || echo "'Contributors: ' -> 'Contributors:': $count"
-        sed -i 's/Contributors: /Contributors: /' "$FILE"
+        sed -i 's/Contributors :/Contributors: /' "$FILE"
 
         # replace all trailing whitespace with ""
         sed -i 's/[[:space:]]*$//' "$FILE"
