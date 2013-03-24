@@ -9,7 +9,7 @@ gitroot=`git rev-parse --show-toplevel`
 
 
 fix_trailing_whitespaces() {
-
+    echo "* Fix trailing whitespaces..."
     # get changes since last HEAD
     if git rev-parse --verify HEAD >/dev/null 2>&1
     then
@@ -27,8 +27,15 @@ fix_trailing_whitespaces() {
     # merge multiple identical filenames into one (uniq)
 	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
 
-        # replace all trailing whitespace with ""
+        # replace commonly written "Developer" with "Developer" and fix " :" -> ":" after that
+        sed -i 's/Developer/Developer/' "$FILE"
+        sed -i 's/Developer: /Developer: /' "$FILE"
+        sed -i 's/Developers: /Developers: /' "$FILE"
+        sed -i 's/Contributors: /Contributors: /' "$FILE"
+
+    	# replace all trailing whitespace with ""
 		sed -i 's/[[:space:]]*$//' "$FILE"
+
 
 		# add modified file again to the commit
 		git add "$FILE"
@@ -42,5 +49,7 @@ fix_trailing_whitespaces() {
 ######## main structure #########
 # here should be called all the subroutines in the preferred order
 
+echo "Running FreeMedForms git-hooks..."
 # automatically fix trailing whitespace
 fix_trailing_whitespaces
+
