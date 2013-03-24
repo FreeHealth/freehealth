@@ -42,6 +42,15 @@
 
 #include <translationutils/constanttranslations.h>
 
+/*!
+ * \class Account2::MedicalProcedureModel
+ *
+ * The MedicalProcedureModel provides an editable data model
+ * for the "Medical Procedures" that are used in the accounting.
+ */
+
+
+
 using namespace Account2;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -103,18 +112,19 @@ MedicalProcedureModel::~MedicalProcedureModel()
 {
     if (d) {
         delete d;
-        d=0;
+        d = 0;
     }
 }
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    Q_ASSERT(parent == QModelIndex());
     return d->_sql->rowCount();
 }
 
 int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
 {
+    Q_ASSERT(parent == QModelIndex());
     return d->_sql->columnCount(parent);
 }
 
@@ -157,19 +167,23 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
 //    return d->_sql->removeRows(row, count, parent);
 }
 
-void MedicalProcedureModel::setFilter(const QString & filter){
+void MedicalProcedureModel::setFilter(const QString & filter)
+{
     d->_sql->setFilter(filter);
     //d->m_SqlTable->select();
 }
 
-QString MedicalProcedureModel::filter(){
+QString MedicalProcedureModel::filter()
+{
     return d->_sql->filter();
 }
 
 bool MedicalProcedureModel::submit()
 {
-    d->m_isDirty = false;
-    return true;
+    bool success = d->_sql->submit();
+    if (success)
+        d->m_isDirty = false;
+    return success;
 }
 
 void MedicalProcedureModel::revert()
@@ -183,15 +197,18 @@ bool MedicalProcedureModel::isDirty() const
     return d->m_isDirty;
 }
 
-QSqlError MedicalProcedureModel::lastError(){
+QSqlError MedicalProcedureModel::lastError()
+{
     return d->_sql->lastError();
 }
 
-void MedicalProcedureModel::clear(){
+void MedicalProcedureModel::clear()
+{
     d->_sql->clear();
     d->m_isDirty = false;
 }
 
-bool MedicalProcedureModel::select(){
+bool MedicalProcedureModel::select()
+{
     return d->_sql->select();
 }
