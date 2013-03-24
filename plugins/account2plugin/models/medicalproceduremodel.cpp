@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developers:                                                      *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
  ***************************************************************************/
 #include <QSqlTableModel>
@@ -47,6 +47,10 @@
  *
  * The MedicalProcedureModel provides an editable data model
  * for the "Medical Procedures" that are used in the accounting.
+ *
+ * It is a high-level interface for editing database records of Medical
+ * Procedures. It internally uses a SqlTableModel to save and recieve the
+ * data from the database.
  */
 
 
@@ -56,7 +60,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 using namespace Constants;
 
-enum { WarnFilter = true };
 enum { WarnDebugMessage = false };
 
 static inline Account2::AccountCore *accountCore() {return Account2::AccountCore::instance();}

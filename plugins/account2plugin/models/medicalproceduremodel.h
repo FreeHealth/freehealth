@@ -26,7 +26,7 @@
  ***************************************************************************/
 /***************************************************************************
  *  Main Developers:  Eric MAEKER, <eric.maeker@gmail.com>                 *
- *  Contributors: Christian A. Reiter <christian.a.reiter@gmail.com>       *
+ *  Contributors:  Christian A. Reiter <christian.a.reiter@gmail.com>      *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MEDICALPROCEDUREMODEL_H
