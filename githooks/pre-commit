@@ -24,12 +24,20 @@ fix_trailing_whitespaces() {
     # remove lines with +/- at the beginning (first sed)
     # extract filename from line (cut, delimiter ":", fragment 1)
     # merge multiple identical filenames into one (uniq)
-    for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
+#    for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
+    for FILE in `exec git diff-index --cached --name-only $against | uniq` ; do
 
+        echo "processing $FILE..."
         # replace commonly written "Developer" with "Developer" and fix " :" -> ":" after that
+
+#         count=$(grep "Developer" $FILE -c)
+#         [ "$count" = "0" ] || echo "'Developer' -> 'Developer': $count"
         sed -i 's/Developer/Developer/' "$FILE"
         sed -i 's/Developer: /Developer: /' "$FILE"
         sed -i 's/Developers: /Developers: /' "$FILE"
+
+#         count=$(grep "Contributors: " $FILE -c)
+#         [ "$count" = "0" ] || echo "'Contributors: ' -> 'Contributors:': $count"
         sed -i 's/Contributors: /Contributors: /' "$FILE"
 
         # replace all trailing whitespace with ""
