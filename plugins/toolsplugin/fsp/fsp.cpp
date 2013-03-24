@@ -83,6 +83,18 @@ public:
         case Fsp::Condition_HorsCoordination : return "c.hc";
         case Fsp::Unpaid_PartObligatoire : return "u.po";
         case Fsp::Unpaid_PartComplementaire : return "u.pc";
+            // Amount
+        case Fsp::Amount_Date:  return "am.dt";
+        case Fsp::Amount_ActCode:  return "am.code";
+        case Fsp::Amount_Activity:  return "am.act";
+        case Fsp::Amount_CV:  return "am.cv";
+        case Fsp::Amount_OtherAct1:  return "am.o1";
+        case Fsp::Amount_OtherAct2:  return "am.o2";
+        case Fsp::Amount_Amount:  return "am.am";
+        case Fsp::Amount_Depassement:  return "am.dep";
+        case Fsp::Amount_Deplacement_IKMD:  return "am.ik";
+        case Fsp::Amount_Deplacement_Nb:  return "am.iknb";
+        case Fsp::Amount_Deplacement_IKValue:  return "am.ikval";
         }
         return QString::null;
     }
@@ -162,6 +174,30 @@ public:
                 return Fsp::Unpaid_PartObligatoire;
             } else if (xmlTag.compare("u.pc", Qt::CaseInsensitive) == 0) {
                 return Fsp::Unpaid_PartComplementaire;
+            }
+        } else  if (xmlTag.startsWith("am.")) {
+            if (xmlTag.compare("am.dt", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Date;
+            } else if (xmlTag.compare("am.code", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_ActCode;
+            } else if (xmlTag.compare("am.act", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Activity;
+            } else if (xmlTag.compare("am.cv", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_CV;
+            } else if (xmlTag.compare("am.o1", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_OtherAct1;
+            } else if (xmlTag.compare("am.o2", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_OtherAct2;
+            } else if (xmlTag.compare("am.am", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Amount;
+            } else if (xmlTag.compare("am.dep", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Depassement;
+            } else if (xmlTag.compare("am.ik", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Deplacement_IKMD;
+            } else if (xmlTag.compare("am.iknb", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Deplacement_Nb;
+            } else if (xmlTag.compare("am.ikval", Qt::CaseInsensitive) == 0) {
+                return Fsp::Amount_Deplacement_IKValue;
             }
         }
         return -1;

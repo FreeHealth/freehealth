@@ -27,6 +27,8 @@
 #ifndef TOOLS_INTERNAL_FSPPRINTER_H
 #define TOOLS_INTERNAL_FSPPRINTER_H
 
+#include <QImage>
+
 /**
  * \file fspprinter.h
  * \author Eric Maeker
@@ -52,7 +54,7 @@ public:
 
     void setDrawRects(bool drawRects);
     bool print(const Fsp &fsp, Cerfa cerfa = S12541_01, bool printCerfaAsBackground = false);
-    // bool preview(const Fsp &fsp, Cerfa cerfa = S12541_01);
+    QPixmap preview(const Fsp &fsp, Cerfa cerfa);
 
 private:
     FspPrinterPrivate *d;

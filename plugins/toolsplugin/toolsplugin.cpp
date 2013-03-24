@@ -33,6 +33,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iscriptmanager.h>
@@ -44,6 +45,7 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QtPlugin>
@@ -58,6 +60,7 @@ static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 namespace {
@@ -206,10 +209,17 @@ void ToolsPlugin::printCheque()
 #include "fsp/fspprinterdialog.h"
 #include "fsp/fspprinter.h"
 #include "fsp/fsp.h"
+#include <utils/widgets/imageviewer.h>
+#include <QPainter>
+
 void ToolsPlugin::printFsp()
 {
-//    FspPrinterDialog dlg;
-//    dlg.exec();
+    if (patient()->uuid().isEmpty()) {
+        Utils::warningMessageBox(tr("No current patient"),
+                                 tr("In order to print a french 'FSP', you must select a patient first"),
+                                 "", tr("Print French FSP error"));
+        return;
+    }
 
     Fsp test;
     test.setData(Fsp::Bill_Number, "123456789012345");
@@ -263,8 +273,17 @@ void ToolsPlugin::printFsp()
         test.addAmountData(i, Fsp::Amount_Deplacement_IKValue, 0.97);
     }
 
+    FspPrinterDialog dlg;
+    dlg.initialize(test);
+    dlg.exec();
+
+
     FspPrinter printer;
-    printer.print(test, FspPrinter::S12541_02);
+    printer.setDrawRects(true);
+    Utils::ImageViewer viewer;
+    QPixmap pix = printer.preview(test, FspPrinter::S12541_02);//.scaledToWidth(800);
+    viewer.setPixmap(pix);
+    viewer.exec();
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)

@@ -296,7 +296,7 @@ void FspPrinterPreferencesWidget::printTest()
 
     FspPrinter printer;
     printer.setDrawRects(true);
-    printer.print(test, FspPrinter::S12541_02);
+    printer.print(test, FspPrinter::S12541_01, true);
 }
 
 void FspPrinterPreferencesWidget::viewCerfa()

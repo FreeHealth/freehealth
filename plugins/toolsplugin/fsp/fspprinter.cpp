@@ -85,9 +85,10 @@ public:
                 return QRectF(QPointF(157.5, 6.1), QSizeF(45.7, 5.3));
             case Fsp::Bill_Date:
                 if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(172.5, 14), QSizeF(30, 4));
+                    return QRectF(QPointF(172.9, 13), QSizeF(30, 4));
                 else
                     return QRectF(QPointF(162.6, 12.7), QSizeF(40.6, 4.3));
+                break;
             // Patient
             case Fsp::Patient_FullName:
                 return QRectF(QPointF(55.9,  26.6), QSizeF(140, 4));
@@ -102,6 +103,7 @@ public:
                     return QRectF(QPointF(124.2, 34.4), QSizeF(10,  5));
                 else
                     return QRectF(QPointF(124.5, 34.4), QSizeF(10,  5));
+                break;
             case Fsp::Patient_Assure_FullName:
                 return QRectF(QPointF(55.9,  52.5), QSizeF(140, 4));
             case Fsp::Patient_Assure_NSS:
@@ -111,6 +113,7 @@ public:
                     return QRectF(QPointF(124.2, 60.6), QSizeF(10,  5));
                 else
                     return QRectF(QPointF(124.5, 60.6), QSizeF(10,  5));
+                break;
             case Fsp::Patient_Assurance_Number:
                 return QRectF(QPointF(157.5, 34.4), QSizeF(45.7, 5.4));
             // Conditions
@@ -120,6 +123,7 @@ public:
                 if (cerfa == FspPrinter::S12541_01) {
                     return QRectF(QPointF(116.7, 128.), QSizeF(5.3, 3.8)); // TRUE value
                 }
+                break;
                 // TODO: manage value == false: return QRectF(QPointF(95.5, 128.), QSizeF(5.3, 3.8));
             case Fsp::Condition_Maladie_ETM_Ald :
                 return QRectF(QPointF(55., 134.6) ,QSizeF(5.3, 3.8));
@@ -128,16 +132,19 @@ public:
                     return QRectF(QPointF(197.4, 134.6), QSizeF(5.3, 3.8));
                 else
                     return QRectF(QPointF(124.5, 134.6), QSizeF(5.3, 3.8));
+                break;
             case Fsp::Condition_Maladie_ETM_L115:
                 if (cerfa == FspPrinter::S12541_01)
                     return QRectF(QPointF(166.9, 134.6), QSizeF(5.3, 3.8));
                 else
                     return QRectF(QPointF(135.4, 128.), QSizeF(5.3, 3.8));
+                break;
             case Fsp::Condition_Maladie_ETM_Prevention:
                 if (cerfa == FspPrinter::S12541_01)
                     return QRectF(QPointF(105.7, 134.6), QSizeF(5.3, 3.8));
                 else
                     return QRectF(QPointF(100.1, 134.6), QSizeF(5.3, 3.8));
+                break;
             case Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui :
                 return QRectF(QPointF(64.3, 141.6), QSizeF(5.3, 3.8)); // NON
                 // TODO: manage value == false: return QRectF(QPointF(87.4, 141.6), QSizeF(5.3, 3.8)); // OUI
@@ -159,7 +166,8 @@ public:
                 if (cerfa == FspPrinter::S12541_01)
                     return QRectF(QPointF(62.1, 175.1), QSizeF(140., 5.3));
                 else
-                    return QRectF(QPointF(50.5, 173.2), QSizeF(140., 5.3));
+                    return QRectF(QPointF(50.5, 173.2), QSizeF(140., 4.1));
+                break;
             case Fsp::Condition_AccesSpecifique :
                 return QRectF(QPointF(37.1, 183.2), QSizeF(5.3, 3.8));
             case Fsp::Condition_Urgence :
@@ -171,18 +179,23 @@ public:
             case Fsp::Condition_HorsCoordination :
                 return QRectF(QPointF(197.4, 183.2), QSizeF(5.3, 3.8));
             case Fsp::Condition_AccordPrealableDate:
-                if (cerfa == FspPrinter::S12541_02)
+                if (cerfa == FspPrinter::S12541_01)
+                    return QRectF(QPointF(171.8, 116.), QSizeF(30.7, 4.2));
+                else
                     return QRectF(QPointF(144.8, 193.5), QSizeF(40.6, 4.1));
+                break;
             case Fsp::Unpaid_PartObligatoire:
                 if (cerfa == FspPrinter::S12541_01)
                     return QRectF(QPointF(86.2, 256.3), QSizeF(5.3, 3.8));
                 else
                     return QRectF(QPointF(86.4, 261.6), QSizeF(5.3, 3.8));
+                break;
             case Fsp::Unpaid_PartComplementaire:
                 if (cerfa == FspPrinter::S12541_01)
                     return QRectF(QPointF(190.5, 256.3), QSizeF(5.3, 3.8));
                 else
                     return QRectF(QPointF(190.5, 261.6), QSizeF(5.3, 3.8));
+                break;
             }
         return QRectF();
     }
@@ -232,12 +245,13 @@ public:
         switch (fspIndex) {
         // Bill
         case Fsp::Bill_Number:
-            return fsp.data(Fsp::Bill_Number).toString().left(9);
+            return fsp.data(fspIndex).toString().left(9);
         case Fsp::Bill_Date:
             if (cerfa == FspPrinter::S12541_01)
-                return fsp.data(Fsp::Bill_Date).toDate().toString("ddMMyy");
+                return fsp.data(fspIndex).toDate().toString("ddMMyy");
             else
-                return fsp.data(Fsp::Bill_Date).toDate().toString("ddMMyyyy");
+                return fsp.data(fspIndex).toDate().toString("ddMMyyyy");
+            break;
             // Patient
         case Fsp::Patient_FullName:
         case Fsp::Patient_FullAddress:
@@ -256,7 +270,7 @@ public:
         case Fsp::Condition_Maladie_ETM_AccidentParTiers_Date:
         case Fsp::Condition_AccordPrealableDate:
         case Fsp::Condition_ATMP_Date:
-            return fsp.data(Fsp::Patient_DateOfBirth).toDate().toString("ddMMyyyy");
+            return fsp.data(fspIndex).toDate().toString("ddMMyyyy");
             // Conditions
         case Fsp::Condition_Maladie:
         case Fsp::Condition_Maladie_ETM:
@@ -277,6 +291,7 @@ public:
         case Fsp::Unpaid_PartComplementaire:
             if (fsp.data(fspIndex).toBool())
                 return "X";
+            break;
         }
         return QString::null;
     }
@@ -298,7 +313,7 @@ public:
         case Fsp::Amount_Deplacement_IKMD:
             return fsp.amountLineData(line, fspIndex).toString().left(2);
         case Fsp::Amount_Deplacement_Nb:
-            return fsp.amountLineData(line, fspIndex).toString();
+            return fsp.amountLineData(line, fspIndex).toString().left(2).rightJustified(2, '*');
         case Fsp::Amount_Amount:
             return QString::number(fsp.amountLineData(line, fspIndex).toDouble(), 'f', 2).remove(".").rightJustified(6, '*');
         case Fsp::Amount_Deplacement_IKValue:
@@ -377,6 +392,74 @@ public:
         return Qt::AlignLeft;
     }
 
+    // Draw the content of the FSP to the QPainter. The Utils::PrintAxisHelper must be defined first.
+    void drawContent(QPainter &painter, const Fsp &fsp, FspPrinter::Cerfa cerfa)
+    {
+        Utils::PrintString s;
+        s.autoFontResize = true;
+        s.minFontPixelSize = 10;
+        s.drawBoundingRect = _drawRects;
+        for(int i = 0; i < Fsp::MaxData; ++i) {
+            const QRectF &rect = rectInMilliters(cerfa, i);
+            if (!rect.isValid() || rect.isNull())
+                continue;
+            s.topMillimeters = rect.topLeft();
+            s.contentSizeMillimeters = rect.size();
+            s.splitChars = charSplitting(i);
+            s.content = printingValue(fsp, cerfa, i);
+            _axisHelper.printString(&painter, s);
+        }
+
+        // Acts and amount
+        double totalAmount = 0.;
+        for(int i=0; i < 4; ++i) {
+            if (fsp.amountLineData(i, Fsp::Amount_Amount).isNull())
+                break;
+            for(int j = Fsp::Amount_Date; j < Fsp::Amount_MaxData; ++j) {
+                const QRectF &rect = amountRectInMilliters(cerfa, i, j);
+                if (!rect.isValid() || rect.isNull())
+                    continue;
+                s.topMillimeters = rect.topLeft();
+                s.contentSizeMillimeters = rect.size();
+                s.splitChars = charSplitting(j);
+                s.content = amountPrintingValue(fsp, cerfa, i, j);
+                s.alignment = amountAlignement(j);
+                _axisHelper.printString(&painter, s);
+            }
+
+            QRectF amountRect = amountRectInMilliters(cerfa, i, Fsp::Amount_Amount);
+            s.topMillimeters = amountRect.topLeft() + QPointF(19.6, 0.3);
+            s.contentSizeMillimeters =  QSizeF(1.8, 5.1);
+            s.content = ",";
+            _axisHelper.printString(&painter, s);
+
+            if (!fsp.amountLineData(i, Fsp::Amount_Amount).isNull()) {
+                totalAmount += fsp.amountLineData(i, Fsp::Amount_Amount).toDouble(); // add IK
+            }
+            if (!fsp.amountLineData(i, Fsp::Amount_Deplacement_IKValue).isNull()) {
+                QRectF coma = amountRectInMilliters(cerfa, i, Fsp::Amount_Deplacement_IKValue);
+                s.topMillimeters = coma.topLeft() + QPointF(9.2, 0.3);
+                s.contentSizeMillimeters =  QSizeF(1.8, 5.1);
+                s.content = ",";
+                _axisHelper.printString(&painter, s);
+            }
+        }
+
+        if (totalAmount > 0.) {
+            const QRectF amountRect = totalAmountRect(cerfa);
+            s.topMillimeters = amountRect.topLeft();
+            s.contentSizeMillimeters =  amountRect.size();
+            s.content = QString::number(totalAmount, 'f', 2).remove(".").rightJustified(6, '*');
+            s.splitChars = true;
+            _axisHelper.printString(&painter, s);
+
+            s.topMillimeters = amountRect.topLeft() + QPointF(19.6, 0.3);
+            s.contentSizeMillimeters =  QSizeF(1.8, 5.1);
+            s.content = ",";
+            _axisHelper.printString(&painter, s);
+        }
+    }
+
 public:
     Utils::PrintAxisHelper _axisHelper;
     bool _drawRects;
@@ -420,7 +503,7 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
-        qWarning("failed to open file, is it writable?");
+        qWarning("failed to begin on the printer device");
         return false;
     }
 
@@ -445,69 +528,61 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
                                                    settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
 
-    Utils::PrintString s;
-    s.autoFontResize = true;
-    s.minFontPixelSize = 10;
-    s.drawBoundingRect = d->_drawRects;
-    for(int i = 0; i < Fsp::MaxData; ++i) {
-        const QRectF &rect = d->rectInMilliters(cerfa, i);
-        if (!rect.isValid() || rect.isNull())
-            continue;
-        s.topMillimeters = rect.topLeft();
-        s.contentSizeMillimeters = rect.size();
-        s.splitChars = d->charSplitting(i);
-        s.content = d->printingValue(fsp, cerfa, i);
-        d->_axisHelper.printString(&painter, s);
-    }
-
-    // Acts and amount
-    double totalAmount = 0.;
-    for(int i=0; i < 4; ++i) {
-        if (fsp.amountLineData(i, Fsp::Amount_Amount).isNull())
-            break;
-        for(int j = Fsp::Amount_Date; j < Fsp::Amount_MaxData; ++j) {
-            const QRectF &rect = d->amountRectInMilliters(cerfa, i, j);
-            if (!rect.isValid() || rect.isNull())
-                continue;
-            s.topMillimeters = rect.topLeft();
-            s.contentSizeMillimeters = rect.size();
-            s.splitChars = d->charSplitting(j);
-            s.content = d->amountPrintingValue(fsp, cerfa, i, j);
-            s.alignment = d->amountAlignement(j);
-            d->_axisHelper.printString(&painter, s);
-        }
-
-        QRectF amountRect = d->amountRectInMilliters(cerfa, i, Fsp::Amount_Amount);
-        s.topMillimeters = amountRect.topLeft() + QPointF(19.6, 0.3);
-        s.contentSizeMillimeters =  QSizeF(1.8, 5.1);
-        s.content = ",";
-        d->_axisHelper.printString(&painter, s);
-
-        if (!fsp.amountLineData(i, Fsp::Amount_Amount).isNull()) {
-            totalAmount += fsp.amountLineData(i, Fsp::Amount_Amount).toDouble(); // add IK
-        }
-    }
-
-    if (totalAmount > 0.) {
-        const QRectF amountRect = d->totalAmountRect(cerfa);
-        s.topMillimeters = amountRect.topLeft();
-        s.contentSizeMillimeters =  amountRect.size();
-        s.content = QString::number(totalAmount, 'f', 2).remove(".").rightJustified(6, '*');
-        s.splitChars = true;
-        d->_axisHelper.printString(&painter, s);
-
-        s.topMillimeters = amountRect.topLeft() + QPointF(19.6, 0.3);
-        s.contentSizeMillimeters =  QSizeF(1.8, 5.1);
-        s.content = ",";
-        d->_axisHelper.printString(&painter, s);
-    }
+    painter.save();
+    d->drawContent(painter, fsp, cerfa);
+    painter.restore();
 
     painter.end();
     return true;
 }
 
-///** Print the preview in a QPainter with the CERFA as background */
-//bool FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
-//{
+/**
+ * Print the preview in a QPainter with the CERFA as background
+\code
+// Example of code using the previewer
+   FspPrinter printer;
+   printer.setDrawRects(true);
+   Utils::ImageViewer viewer;
+   QPixmap pix = QPixmap::fromImage(printer.preview(test, FspPrinter::S12541_01));
+   pix = pix.scaledToWidth(800);
+   viewer.setPixmap(pix);
+   viewer.exec();
+\endcode
+ */
+QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
+{
+    QPixmap image(210*10, 297*10);
+    d->_axisHelper.setPageSize(image.rect(), QSize(210,297)); // A4
 
-//}
+    QPainter painter;
+    if (!painter.begin(&image)) { // failed to open file
+        qWarning("failed to begin the image device");
+        return image;
+    }
+
+    QFont font;
+    font.setFamily("Arial Black");
+    font.setPointSize(9);
+    painter.setFont(font);
+
+    QPen pen(Qt::black, 3, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+    painter.setPen(pen);
+
+    QPixmap background;
+//    if (printCerfaAsBackground) {
+        if (cerfa == S12541_01) {
+            if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110.png", "PNG"))
+                qWarning() << "ERROR: unable to load background pixmap";
+        } else {
+            if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02.png", "PNG"))
+                qWarning() << "ERROR: unable to load background pixmap";
+        }
+        painter.drawPixmap(image.rect(), background);
+//    }
+
+    painter.save();
+    d->drawContent(painter, fsp, cerfa);
+    painter.restore();
+
+    return image;
+}

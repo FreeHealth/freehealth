@@ -33,12 +33,13 @@
  * \file fspprinterdialog.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 2013-03-22
+ * \date 23 Mar 2013
 */
 
 namespace Tools {
 namespace Internal {
 class FspPrinterDialogPrivate;
+class Fsp;
 
 class FspPrinterDialog : public QDialog
 {
@@ -47,7 +48,7 @@ class FspPrinterDialog : public QDialog
 public:
     explicit FspPrinterDialog(QWidget *parent = 0);
     ~FspPrinterDialog();
-    bool initialize();
+    bool initialize(const Fsp &fsp);
     
 Q_SIGNALS:
     
