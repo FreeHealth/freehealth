@@ -26,9 +26,34 @@
  ***************************************************************************/
 #include "fsp.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <QHash>
 #include <QVariant>
 #include <QDate>
+
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+
+// Fsp
+//   i n="..." v="..."
+//   i n="..." v="..."
+//   Acts
+//     Act
+//       i n="..." v="..."
+//       i n="..." v="..."
+//     /Act
+//   /Acts
+// /Fsp
+
+namespace {
+const char * const XML_TAG_ROOT = "Fsp";
+const char * const XML_TAG_ITEM = "i";
+const char * const XML_ATTRIB_NAME = "n";
+const char * const XML_ATTRIB_VALUE = "v";
+const char * const XML_TAG_ACTS = "Acts";
+const char * const XML_TAG_ACT = "Act";
+}
 
 namespace Tools {
 namespace Internal {
@@ -227,6 +252,14 @@ Fsp::Fsp(const Fsp &cp) :
     d->_amountLines = cp.d->_amountLines;
 }
 
+/** Copy operator */
+void Fsp::operator=(const Fsp &cp)
+{
+    d = new FspPrivate(this);
+    d->_data = cp.d->_data;
+    d->_amountLines = cp.d->_amountLines;
+}
+
 /*! Destructor of the Tools::Internal::Fsp class */
 Fsp::~Fsp()
 {
@@ -251,6 +284,24 @@ void Fsp::setBillNumber(const QString &uid)
 void Fsp::setBillDate(const QDate &date)
 {
     d->_data.insert(int(Bill_Date), date);
+}
+
+bool Fsp::populateWithCurrentPatientData()
+{
+    if (patient()->uuid().isEmpty())
+        return false;
+    d->_data.insert(Patient_FullName, patient()->data(Core::IPatient::FullName));
+    d->_data.insert(Patient_FullAddress, patient()->data(Core::IPatient::FullAddress));
+    d->_data.insert(Patient_DateOfBirth, patient()->data(Core::IPatient::DateOfBirth));
+    QString nss = patient()->data(Core::IPatient::SocialNumber).toString();
+    d->_data.insert(Patient_Personal_NSS, nss.left(13));
+    if (nss.size() > 13)
+        d->_data.insert(Patient_Personal_NSSKey, patient()->data(Core::IPatient::SocialNumber).toString().mid(13));
+//    d->_data.insert(Patient_Assure_FullName, patient()->data(Core::IPatient:));
+//    d->_data.insert(Patient_Assure_NSS, patient()->data(Core::IPatient:));
+//    d->_data.insert(Patient_Assure_NSSKey, patient()->data(Core::IPatient:));
+//    d->_data.insert(Patient_Assurance_Number, patient()->data(Core::IPatient:));
+    return true;
 }
 
 /** Define the patient information */

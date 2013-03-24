@@ -202,36 +202,36 @@ public:
 
     QRectF amountRectInMilliters(FspPrinter::Cerfa cerfa, int line, int fspIndex)
     {
-            int y;
-            if (cerfa == FspPrinter::S12541_01)
-                y = 209.4 + 8.6*line;
-            else
-                y = 214.1 + 8.6*line;
-            switch (fspIndex) {
-            case Fsp::Amount_Date:
-                return QRectF(QPointF(6.8, y), QSizeF(30.7, 5.1));
-            case Fsp::Amount_ActCode:
-                return QRectF(QPointF(38.3, y), QSizeF(36.6, 5.1));
-            case Fsp::Amount_Activity:
-                return QRectF(QPointF(74.8, y), QSizeF(5.8, 5.1));
-            case Fsp::Amount_CV:
-                return QRectF(QPointF(80.6, y), QSizeF(10.7, 5.1));
-            case Fsp::Amount_OtherAct1:
-                return QRectF(QPointF(91.4, y), QSizeF(16.5, 5.1));
-            case Fsp::Amount_OtherAct2:
-                return QRectF(QPointF(108.2, y), QSizeF(16.5, 5.1));
-            case Fsp::Amount_Amount:
-                return QRectF(QPointF(124.6, y), QSizeF(30.2, 5.1));
-            case Fsp::Amount_Depassement:
-                return QRectF(QPointF(155.1, y), QSizeF(7.1, 5.1));
-            case Fsp::Amount_Deplacement_IKMD:
-                return QRectF(QPointF(162.9, y), QSizeF(9.7, 5.1));
-            case Fsp::Amount_Deplacement_Nb:
-                return QRectF(QPointF(173.0, y),QSizeF(9.7, 5.1));
-            case Fsp::Amount_Deplacement_IKValue:
-                return QRectF(QPointF(183.2, y), QSizeF(20.1, 5.1));
-            return QRectF();
+        int y;
+        if (cerfa == FspPrinter::S12541_01)
+            y = 209.4 + 8.6*line;
+        else
+            y = 214.1 + 8.6*line;
+        switch (fspIndex) {
+        case Fsp::Amount_Date:
+            return QRectF(QPointF(6.8, y), QSizeF(30.7, 5.1));
+        case Fsp::Amount_ActCode:
+            return QRectF(QPointF(38.3, y), QSizeF(36.6, 5.1));
+        case Fsp::Amount_Activity:
+            return QRectF(QPointF(74.8, y), QSizeF(5.8, 5.1));
+        case Fsp::Amount_CV:
+            return QRectF(QPointF(80.6, y), QSizeF(10.7, 5.1));
+        case Fsp::Amount_OtherAct1:
+            return QRectF(QPointF(91.4, y), QSizeF(16.5, 5.1));
+        case Fsp::Amount_OtherAct2:
+            return QRectF(QPointF(108.2, y), QSizeF(16.5, 5.1));
+        case Fsp::Amount_Amount:
+            return QRectF(QPointF(124.6, y), QSizeF(30.2, 5.1));
+        case Fsp::Amount_Depassement:
+            return QRectF(QPointF(155.1, y), QSizeF(7.1, 5.1));
+        case Fsp::Amount_Deplacement_IKMD:
+            return QRectF(QPointF(162.9, y), QSizeF(9.7, 5.1));
+        case Fsp::Amount_Deplacement_Nb:
+            return QRectF(QPointF(173.0, y),QSizeF(9.7, 5.1));
+        case Fsp::Amount_Deplacement_IKValue:
+            return QRectF(QPointF(183.2, y), QSizeF(20.1, 5.1));
         }
+        return QRectF();
     }
 
     QString printingValue(const Fsp &fsp, FspPrinter::Cerfa cerfa, int fspIndex)
@@ -253,13 +253,15 @@ public:
                 return fsp.data(fspIndex).toDate().toString("ddMMyyyy");
             break;
             // Patient
+        case Fsp::Patient_Personal_NSS:
+        case Fsp::Patient_Assure_NSS:
+            return fsp.data(fspIndex).toString().left(13).leftJustified(13, '_');
+        case Fsp::Patient_Personal_NSSKey:
+        case Fsp::Patient_Assure_NSSKey:
+            return fsp.data(fspIndex).toString().left(2).leftJustified(2, '_');
         case Fsp::Patient_FullName:
         case Fsp::Patient_FullAddress:
-        case Fsp::Patient_Personal_NSS:
-        case Fsp::Patient_Personal_NSSKey:
         case Fsp::Patient_Assure_FullName:
-        case Fsp::Patient_Assure_NSS:
-        case Fsp::Patient_Assure_NSSKey:
         case Fsp::Condition_MedecinEnvoyeur:
             return fsp.data(fspIndex).toString();
         case Fsp::Patient_Assurance_Number:

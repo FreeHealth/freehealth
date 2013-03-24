@@ -44,6 +44,7 @@ FORMS += \
     fsp/fspprinterdialog_patient.ui \
     fsp/fspprinterdialog_conds.ui \
     fsp/fspprinterdialog_amounts.ui \
+    fsp/fspprinterdialog_prerecorded.ui \
     fsp/fspprinterpreferences.ui
 
 OTHER_FILES = Tools.pluginspec

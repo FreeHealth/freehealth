@@ -41,19 +41,6 @@ namespace Tools {
 namespace Internal {
 class FspPrivate;
 
-struct Fsp_AmountLine {
-    Fsp_AmountLine()
-        : activity(-1), deplacement_nb(-1), deplacement_amount(0.), depassement(false)
-    {}
-
-    QDate date;
-    QString act;
-    int activity, deplacement_nb;
-    QString C, otherAct1, otherAct2, idMd;
-    double amount, deplacement_amount;
-    bool depassement;
-};
-
 class Fsp
 {
 public:
@@ -112,6 +99,8 @@ public:
 
     Fsp();
     Fsp(const Fsp &cp);
+    void operator=(const Fsp &cp);
+
     ~Fsp();
     void clear();
 
@@ -119,6 +108,8 @@ public:
 
     void setBillNumber(const QString &uid);
     void setBillDate(const QDate &date);
+
+    bool populateWithCurrentPatientData();
 
     bool setData(int index, const QVariant &value);
     QVariant data(int index) const;

@@ -225,15 +225,17 @@ void ToolsPlugin::printFsp()
     test.setData(Fsp::Bill_Number, "123456789012345");
     test.setData(Fsp::Bill_Date, QDate::currentDate());
 
-    test.setData(Fsp::Patient_FullName, "NOM PATIENT ET PRENOM");
-    test.setData(Fsp::Patient_DateOfBirth, QDate(1974, 11, 7));
-    test.setData(Fsp::Patient_Personal_NSS, "1234567890123");
-    test.setData(Fsp::Patient_Personal_NSSKey, "45");
-    test.setData(Fsp::Patient_Assurance_Number, "ASSURNBSSDF");
-    test.setData(Fsp::Patient_Assure_FullName, "NOM DE L'ASSURÉ");
-    test.setData(Fsp::Patient_Assure_NSS, "ASSURE7890123");
-    test.setData(Fsp::Patient_Assure_NSSKey, "89");
-    test.setData(Fsp::Patient_FullAddress, "ADRESSE DU PATIENT SDFQSD FQSDF QSD FQSD FQSD FQSDFQSDFQSDF QSD F24352345 2345 21345 SQDFQSDF");
+//    test.setData(Fsp::Patient_FullName, "NOM PATIENT ET PRENOM");
+//    test.setData(Fsp::Patient_DateOfBirth, QDate(1974, 11, 7));
+//    test.setData(Fsp::Patient_Personal_NSS, "1234567890123");
+//    test.setData(Fsp::Patient_Personal_NSSKey, "45");
+//    test.setData(Fsp::Patient_Assurance_Number, "ASSURNBSSDF");
+//    test.setData(Fsp::Patient_Assure_FullName, "NOM DE L'ASSURÉ");
+//    test.setData(Fsp::Patient_Assure_NSS, "ASSURE7890123");
+//    test.setData(Fsp::Patient_Assure_NSSKey, "89");
+//    test.setData(Fsp::Patient_FullAddress, "ADRESSE DU PATIENT SDFQSD FQSDF QSD FQSD FQSD FQSDFQSDFQSDF QSD F24352345 2345 21345 SQDFQSDF");
+
+    test.populateWithCurrentPatientData();
 
     test.setData(Fsp::Condition_Maladie, true);
     test.setData(Fsp::Condition_Maladie_ETM, true);
@@ -278,12 +280,12 @@ void ToolsPlugin::printFsp()
     dlg.exec();
 
 
-    FspPrinter printer;
-    printer.setDrawRects(true);
-    Utils::ImageViewer viewer;
-    QPixmap pix = printer.preview(test, FspPrinter::S12541_02);//.scaledToWidth(800);
-    viewer.setPixmap(pix);
-    viewer.exec();
+//    FspPrinter printer;
+//    printer.setDrawRects(true);
+//    Utils::ImageViewer viewer;
+//    QPixmap pix = printer.preview(test, FspPrinter::S12541_02);//.scaledToWidth(800);
+//    viewer.setPixmap(pix);
+//    viewer.exec();
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)

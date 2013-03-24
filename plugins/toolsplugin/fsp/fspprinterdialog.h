@@ -53,6 +53,7 @@ public:
 Q_SIGNALS:
     
 private Q_SLOTS:
+    void toggleView(bool complex);
     void printFsp();
     void printCheque();
 

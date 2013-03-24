@@ -40,7 +40,9 @@
 #include "ui_fspprinterdialog_patient.h"
 #include "ui_fspprinterdialog_conds.h"
 #include "ui_fspprinterdialog_amounts.h"
+#include "ui_fspprinterdialog_prerecorded.h"
 
+#include <utils/global.h>
 #include <utils/widgets/detailswidget.h>
 #include <translationutils/constants.h>
 
@@ -61,10 +63,12 @@ public:
         ui(0),
         _patientUi(0),
         _condsUi(0),
+        _preRecUi(0),
         _patientDetailsWidget(0),
         _condDetailsWidget(0),
         _actDetailsWidget(0),
         _previewDetailsWidget(0),
+        _prerecordedFspDetailsWidget(0),
         _preview(0),
         q(parent)
     {
@@ -72,11 +76,16 @@ public:
         _patientUi = new Ui::FspPrinterDialogPatient;
         _condsUi = new Ui::FspPrinterDialogConds;
         _amountsUi = new Ui::FspPrinterDialogAmounts;
+        _preRecUi = new Ui::FspPrinterDialogPrecorded;
     }
     
     ~FspPrinterDialogPrivate()
     {
         delete ui;
+        delete _patientUi;
+        delete _condsUi;
+        delete _amountsUi;
+        delete _preRecUi;
     }
     
     void fspToUi(const Fsp &fsp)
@@ -183,15 +192,19 @@ public:
     {
         FspPrinter printer;
         printer.setDrawRects(false);
-        _preview->setPixmap(printer.preview(_fsp, cerfa()).scaledToWidth(700));
+        _preview->setPixmap(printer.preview(_fsp, cerfa()).scaledToWidth(700, Qt::SmoothTransformation));
     }
 
 public:
     Ui::FspPrinterDialog *ui;
     Ui::FspPrinterDialogPatient *_patientUi;
     Ui::FspPrinterDialogConds *_condsUi;
-    Ui::FspPrinterDialogAmounts *_amountsUi;
-    Utils::DetailsWidget *_patientDetailsWidget, *_condDetailsWidget, *_actDetailsWidget, *_previewDetailsWidget;
+    Ui::FspPrinterDialogAmounts * _amountsUi;
+    Ui::FspPrinterDialogPrecorded *_preRecUi;
+//    QList<Ui::FspPrinterDialogAmounts *> _amountsUi;
+    Utils::DetailsWidget *_patientDetailsWidget, *_condDetailsWidget;
+    Utils::DetailsWidget *_actDetailsWidget, *_previewDetailsWidget;
+    Utils::DetailsWidget *_prerecordedFspDetailsWidget;
     QLabel *_preview;
     Fsp _fsp;
 
@@ -230,16 +243,31 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
     d->_actDetailsWidget->setSummaryText("Actes");
     d->_actDetailsWidget->setSummaryFontBold(true);
     d->_actDetailsWidget->setState(Utils::DetailsWidget::Expanded);
-    QWidget *aW = new QWidget(this);
-    d->_amountsUi->setupUi(aW);
-    d->_actDetailsWidget->setWidget(aW);
+    QWidget *aWCont = new QWidget(this);
+    QVBoxLayout *lay = new QVBoxLayout(aWCont);
+    aWCont->setLayout(lay);
+    for(int i=0; i < 4; ++i) {
+        QWidget *aW = new QWidget(this);
+        d->_amountsUi->setupUi(aW);
+        lay->addWidget(aW);
+    }
+    d->_actDetailsWidget->setWidget(aWCont);
 
     d->_previewDetailsWidget = new Utils::DetailsWidget(this);
     d->_previewDetailsWidget->setSummaryText("Prévisualisation");
     d->_previewDetailsWidget->setSummaryFontBold(true);
     d->_previewDetailsWidget->setState(Utils::DetailsWidget::Expanded);
     d->_preview = new QLabel(this);
+    d->_preview->setAlignment(Qt::AlignCenter);
     d->_previewDetailsWidget->setWidget(d->_preview);
+
+    d->_prerecordedFspDetailsWidget = new Utils::DetailsWidget(this);
+    d->_prerecordedFspDetailsWidget->setSummaryText("Cotations pré-enregistrées");
+    d->_prerecordedFspDetailsWidget->setSummaryFontBold(true);
+    d->_prerecordedFspDetailsWidget->setState(Utils::DetailsWidget::Expanded);
+    QWidget *preW = new QWidget(this);
+    d->_preRecUi->setupUi(preW);
+    d->_prerecordedFspDetailsWidget->setWidget(preW);
 
     // Change the button box
     QPushButton *button = d->ui->buttonBox->addButton("Imprimer la FSP", QDialogButtonBox::ActionRole);
@@ -248,13 +276,17 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
     connect(button, SIGNAL(clicked()), this, SLOT(printCheque()));
 
     d->ui->contentLayout->addWidget(d->_patientDetailsWidget);
+    d->ui->contentLayout->addWidget(d->_prerecordedFspDetailsWidget);
     d->ui->contentLayout->addWidget(d->_condDetailsWidget);
     d->ui->contentLayout->addWidget(d->_actDetailsWidget);
     d->ui->contentLayout->addWidget(d->_previewDetailsWidget);
     d->ui->contentLayout->addStretch(100);
 
+    connect(d->ui->vueComplexe, SIGNAL(clicked(bool)), this, SLOT(toggleView(bool)));
+    toggleView(d->ui->vueComplexe->isChecked());
     d->updatePreview();
     resize(800, 400);
+    Utils::centerWidget(this, parent);
 }
 
 /*! Destructor of the Tools::Internal::FspPrinterDialog class */
@@ -271,6 +303,13 @@ bool FspPrinterDialog::initialize(const Fsp &fsp)
     d->fspToUi(fsp);
     d->updatePreview();
     return true;
+}
+
+void FspPrinterDialog::toggleView(bool complex)
+{
+    d->_condDetailsWidget->setVisible(complex);
+    d->_actDetailsWidget->setVisible(complex);
+//    d->_prerecordedFspDetailsWidget->setVisible(!complex);
 }
 
 void FspPrinterDialog::printFsp()
