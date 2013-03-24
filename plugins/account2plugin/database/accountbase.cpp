@@ -408,7 +408,7 @@ public:
             joins << Utils::Join(Table_Dates, DATE_DID, Table_Fees, FEES_DATE_DID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Fees, FEES_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
@@ -481,7 +481,7 @@ public:
             joins << Utils::Join(Table_Dates, DATE_DID, Table_Payments, PAYMENT_DATE_DID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Payments, PAYMENT_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
@@ -556,7 +556,7 @@ public:
             joins << Utils::Join(Table_BankDetails, BANKDETAILS_ID, Table_Banking, BANKING_BANKDETAILS_ID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Banking, BANKING_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
