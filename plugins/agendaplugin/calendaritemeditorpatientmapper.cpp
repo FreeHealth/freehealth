@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *   Main Developers:                                                     *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "calendaritemeditorpatientmapper.h"
@@ -177,6 +177,7 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     } else {
         ui->createPatientToolButton->setDefaultAction(aUseCurrentPatient);
     }
+    ui->patientSearchEdit->setFocus();
 
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
