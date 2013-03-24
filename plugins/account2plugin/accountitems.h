@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *   Main Developers:                                                     *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ACCOUNT2_ACCOUNTITEMS
@@ -320,6 +320,25 @@ class MedicalProcedure : public VariableDatesItem
 public:
     explicit MedicalProcedure() {}
     ~MedicalProcedure() {}
+
+    void setLabel(QString label) { _label = label; }
+    QString label() const { return _label; }
+
+    void setSubLabel(QString subLabel) { _subLabel = subLabel; }
+    QString subLabel() const { return _subLabel; }
+
+    void setDescription(QString description) { _description = description; }
+    QString description() const { return _description; }
+
+    void setCreationDate(QDate date) { _creationDate = date; }
+    QDate creationDate() const { return _creationDate; }
+
+    void setComment(QString comment) { _comment = comment; }
+    QString comment() const { return _comment; }
+
+private:
+    QString _label, _subLabel, _description, _comment;
+    QDate _creationDate;
 };
 
 }  // namespace Account2

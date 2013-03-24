@@ -133,7 +133,21 @@ int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
 {
-    return d->_sql->data(index, role);
+    if (!index.isValid())
+        return QVariant();
+
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        const MedicalProcedure mp = d->_medicalProcedures.at(index.row());
+        switch (index.column()) {
+        case Id: return mp.id();
+        case Label: return mp.label();
+        case SubLabel: return mp.subLabel();
+        case Description: return mp.description();
+        case Date_Creation: return mp.creationDate();
+        case Comment: return mp.comment();
+        default: return QVariant();
+        }
+    }
 }
 
 bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &value, int role)
