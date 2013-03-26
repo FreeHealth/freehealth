@@ -19,32 +19,38 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *   Main Developers:                                                     *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "icalendaritemdatawidget.h"
 
-/**
-  \class Calendar::ICalendarItemDataWidget
+/*!
+ * \class Calendar::ICalendarItemDataWidget
+ * \brief generic interface to describe a calendar data widget.
+ *
+ * Widgets implementing this interface can be plugged into the calendar item editor dialog
+ * and provide additional data to any calendar item.
+ */
 
+
+/*!
+ * \fn virtual int Calendar::ICalendarItemDataWidget::insertionPlace() const = 0;
+ * \returns a \sa ICalendarItemDataWidget::InsertionPlaces which describes where the
+ * widget was inserted into the ui of the calendar item editor dialog.
 */
 
+/*!
+ * \fn virtual QWidget *Calendar::ICalendarItemDataWidget::createWidget(QWidget *parent = 0) = 0;
+ * \brief Factory method to create the widget.
+ */
 
-/**
- \fn virtual int Calendar::ICalendarItemDataWidget::insertionPlace() const = 0;
-*/
+/*!
+ * \fn virtual bool Calendar::ICalendarItemDataWidget::setCalendarItem(const Calendar::CalendarItem &item) = 0;
+ */
 
-/**
- \fn virtual QWidget *Calendar::ICalendarItemDataWidget::createWidget(QWidget *parent = 0) = 0;
-*/
-
-/**
- \fn virtual bool Calendar::ICalendarItemDataWidget::setCalendarItem(const Calendar::CalendarItem &item) = 0;
-*/
-
-/**
- \fn virtual bool Calendar::ICalendarItemDataWidget::submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
-*/
+/*!
+ * \fn virtual bool Calendar::ICalendarItemDataWidget::submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
+ */
