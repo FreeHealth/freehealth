@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 /**
@@ -785,6 +785,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Fees,  FEES_AMOUNT,      "AMOUNT",       FieldIsReal);
     addField(Table_Fees,  FEES_COMMENT,     "COMMENT",      FieldIsShortText);
     addField(Table_Fees,  FEES_SIGN_ID,     "SIGN_ID",      FieldIsInteger);
+    addField(Table_Fees,  FEES_TAX,         "TAX",          FieldIsReal);
 
     addField(Table_Payments, PAYMENT_ID ,       "ID",       FieldIsUniquePrimaryKey);
     addField(Table_Payments, PAYMENT_QUOT_ID ,  "QUOT_ID",  FieldIsInteger);

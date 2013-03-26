@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNT2_DATABASE_CONSTANTS_H
@@ -49,14 +49,14 @@ namespace Constants {
     const char * const DB_ACCOUNTANCY           = "account2";
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
     const char * const DB_VERSION_NUMBER        = "0.1";
-    
+
     //DatapackMPModel
 //    const char * const DATAPACK_ACCOUNTANCY     = "account";
 //    const char * const DATAPACK_DB              = "mp_datapack";
 //    const char * const DATAPACK_ACCOUNTANCY_FILENAME    = "mp_datapack.db";
 
     // Database abstraction
-    
+
     enum Tables {
         Table_MedicalProcedure = 0,
         Table_BankDetails,
@@ -89,7 +89,7 @@ namespace Constants {
 //        Table_NameIndex,
         Table_VERSION
     };
-    
+
     enum TableMedicalProcedure_Fields {
         MP_ID = 0,
         MP_UID,
@@ -132,6 +132,7 @@ namespace Constants {
         FEES_AMOUNT,
         FEES_COMMENT,
         FEES_SIGN_ID,
+        FEES_TAX,
         FEES_MaxParam
     };
 
@@ -208,7 +209,7 @@ namespace Constants {
     enum Table_Version_Fields{
         VERSION_ACTUAL = 0
     };
-    
+
 }  // End namespace Constants
 }  // End namespace Account2
 
