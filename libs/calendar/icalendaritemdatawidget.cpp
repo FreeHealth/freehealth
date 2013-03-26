@@ -27,9 +27,10 @@
  ***************************************************************************/
 #include "icalendaritemdatawidget.h"
 
+namespace Calendar {
 /*!
  * \class Calendar::ICalendarItemDataWidget
- * \brief generic interface to describe a calendar data widget.
+ * \brief Generic interface to describe a calendar data widget.
  *
  * Widgets implementing this interface can be plugged into the calendar item editor dialog
  * and provide additional data to any calendar item.
@@ -38,8 +39,9 @@
 
 /*!
  * \fn virtual int Calendar::ICalendarItemDataWidget::insertionPlace() const = 0;
- * \returns a \sa ICalendarItemDataWidget::InsertionPlaces which describes where the
+ * \returns a InsertionPlaces which describes where the
  * widget was inserted into the ui of the calendar item editor dialog.
+ * \sa InsertionPlaces
 */
 
 /*!
@@ -48,9 +50,11 @@
  */
 
 /*!
- * \fn virtual bool Calendar::ICalendarItemDataWidget::setCalendarItem(const Calendar::CalendarItem &item) = 0;
+ * \fn virtual bool setCalendarItem(const Calendar::CalendarItem &item) = 0;
  */
 
 /*!
- * \fn virtual bool Calendar::ICalendarItemDataWidget::submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
+ * \fn virtual bool submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
  */
+
+}

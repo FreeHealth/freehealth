@@ -49,13 +49,13 @@ class CALENDAR_EXPORT ICalendarItemDataWidget : public QObject
     Q_OBJECT
 public:
     enum InsertionPlaces {
-        Beginning = 0,
-        Ending,
-        AfterGeneralInformation,
-        AfterDateTime,
-        AfterDescription,
-        BeforeDateTime,
-        BeforeDescription
+        Beginning = 0,              //!< top of dialog
+        Ending,                     //!< bottom of dialog
+        AfterGeneralInformation,    //!< after "general Information"
+        BeforeDateTime,             //!< before date/time section
+        AfterDateTime,              //!< after the date/time section
+        BeforeDescription,          //!< before description
+        AfterDescription            //!< after description
     };
 
     ICalendarItemDataWidget(QObject *parent = 0) : QObject(parent) { }
