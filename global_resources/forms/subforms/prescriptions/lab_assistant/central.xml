@@ -18,10 +18,13 @@
     <license>GPLv3</license>
     <description lang="xx">Lab tests prescription</description>
     <description lang="fr">Prescription d'analyse biologique</description>
+    <description lang="de">Laboranforderungen</description>
     <category lang="xx">Generic tools</category>
     <category lang="fr">Outils généraux</category>
+    <category lang="de">Allgemein</category>
     <specialties lang="xx">Tools</specialties>
     <specialties lang="fr">Outils</specialties>
+    <!--    <specialties lang="de">Werkzeuge</specialties> -->
 
     <updateinfo>
       <updateversion from="0.8.2" to="0.8.4">
@@ -31,6 +34,10 @@
         <text lang="xx">
         Adding RIA, platelet, Coombs tests
         </text>
+        <text lang="de">
+        RIA, Thrombos, Coombs tests hinzugefügt
+        </text>
+
       </updateversion>
       <updateversion from="" to="0.8.2">
         <text lang="fr">
@@ -38,6 +45,9 @@
         </text>
         <text lang="xx">
         First release
+        </text>
+        <text lang="de">
+        Erste Ausgabe
         </text>
       </updateversion>
     </updateinfo>
@@ -47,6 +57,7 @@
   <MedForm name="Subs::Tools::LabTests" uifilename="./ui/xx/main.ui">
     <label lang="xx">Lab tests prescription</label>
     <label lang="fr">Prescription d'analyse biologique</label>
+    <label lang="de">Laboranforderungen</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/labtest.png</icon>
     <file type="htmlprintmask">./html/xx/printmask.html</file>
@@ -55,7 +66,7 @@
             <uilink label="" widget="" layout="mainLayout"/>
             <label lang="xx">Basics</label>
             <label lang="fr">Basique</label>
-            <label lang="de">Wesentliche</label>
+            <label lang="de">Allgemeines</label>
             <label lang="es">Lo esencial</label>
             <options>SummaryFontBold;expanded</options>
 
@@ -108,6 +119,7 @@
                 <uilink label="coagLabel" widget="coag" layout=""/>
                 <label lang="xx">Coagulation</label>
                 <label lang="fr">Coagulation</label>
+                <label lang="fr">Gerinnung</label>
                 <value>
                     <uuid id="0">pt</uuid>
                     <uuid id="1">aptt</uuid>
@@ -117,10 +129,17 @@
                     <possible id="1">Activated partial thromboplastin time</possible>
                     <possible id="2">One-stage prothrombin time test</possible>
                     <possible id="3">INR</possible>
+
                     <possible id="0" lang="fr">Temps de Prothrombine</possible>
                     <possible id="1" lang="fr">TCA</possible>
                     <possible id="2" lang="fr">Temps de Quick</possible>
                     <possible id="3" lang="fr">INR</possible>
+
+                    <possible id="0" lang="de">PT (Prothrombinzeit)</possible>
+                    <possible id="1" lang="de">PTT (partielle Thromboplastinzeit)</possible>
+                    <possible id="2" lang="de">Quick</possible>
+                    <possible id="3" lang="de">INR</possible>
+
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -129,6 +148,7 @@
                 <uilink label="electroLabel" widget="electrolytes" layout=""/>
                 <label lang="xx">Electrolytes</label>
                 <label lang="fr">Électrolytes</label>
+                <label lang="de">Elektrolyte</label>
                 <value>
                     <uuid id="0">na</uuid>
                     <uuid id="1">k</uuid>
@@ -139,6 +159,7 @@
                     <uuid id="6">osm</uuid>
                     <uuid id="7">lact</uuid>
                     <uuid id="8">co2</uuid>
+
                     <possible id="0">Sodium (Na) in blood</possible>
                     <possible id="1">Potassium (K) in blood</possible>
                     <possible id="2">Chloride (Cl) in blood</possible>
@@ -148,6 +169,7 @@
                     <possible id="6">Serum Osmolality</possible>
                     <possible id="7">Lactic acid</possible>
                     <possible id="8">Carbon dioxide (CO2)</possible>
+
                     <possible id="0" lang="fr">Natrémie</possible>
                     <possible id="1" lang="fr">Kaliémie</possible>
                     <possible id="2" lang="fr">Chlorémie</possible>
@@ -157,6 +179,17 @@
                     <possible id="6" lang="fr">Osmolalité plasmatique</possible>
                     <possible id="7" lang="fr">Lactates</possible>
                     <possible id="8" lang="fr">Dioxide de Carbone (CO2)</possible>
+
+                    <possible id="0" lang="de">Natrium</possible>
+                    <possible id="1" lang="de">Kalium</possible>
+                    <possible id="2" lang="de">Chlor</possible>
+                    <possible id="3" lang="de">Kalzium gesamt</possible>
+                    <possible id="4" lang="de">Kalzium ionisiert</possible>
+                    <possible id="5" lang="de">Phosphat</possible>
+                    <possible id="6" lang="de">Plasmaosmolalität</possible>
+                    <possible id="7" lang="de">Laktat</possible>
+<!--                    <possible id="8" lang="de">Dioxide de Carbone (CO2)</possible>-->
+
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -165,6 +198,7 @@
                 <uilink label="kidneyLabel" widget="kidney" layout=""/>
                 <label lang="xx">Kidney lab test</label>
                 <label lang="fr">Fonction rénale</label>
+                <label lang="de">Nierenfunktion</label>
                 <value>
                     <uuid id="0">uricacid</uuid>
                     <uuid id="1">bun</uuid>
@@ -172,9 +206,14 @@
                     <possible id="0">Uric acid in blood</possible>
                     <possible id="1">Blood urea nitrogen (BUN)</possible>
                     <possible id="2">Creatinine and creatinine clearance</possible>
+
                     <possible id="0" lang="fr">Acide urique</possible>
                     <possible id="1" lang="fr">Urée</possible>
                     <possible id="2" lang="fr">Créatinine et calcul de la clearance de la créatinine</possible>
+
+                    <possible id="0" lang="de">Harnsäure</possible>
+                    <possible id="1" lang="de">Harnstoff</possible>
+                    <possible id="2" lang="de">Kreatinin &amp; Kreatinin-Clearance</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -183,6 +222,7 @@
                 <uilink label="protLabel" widget="prots" layout=""/>
                 <label lang="xx">Proteins</label>
                 <label lang="fr">Protéines</label>
+                <label lang="de">Proteine</label>
                 <value>
                     <uuid id="0">totalprot</uuid>
                     <uuid id="1">albumin</uuid>
@@ -192,10 +232,16 @@
                     <possible id="1">Albumin</possible>
                     <possible id="2">Serum Protein Electrophoresis (SPE)</possible>
                     <possible id="3">C-Reactive Protein (CRP)</possible>
+
                     <possible id="0" lang="fr">Protéine sérique totale</possible>
                     <possible id="1" lang="fr">Albumine</possible>
                     <possible id="2" lang="fr">Électrophorèse des protéines sériques</possible>
                     <possible id="3" lang="fr">C-Reactive Protein (CRP)</possible>
+
+                    <possible id="0" lang="de">Gesamt-Serumprotein</possible>
+                    <possible id="1" lang="de">Albumin</possible>
+                    <possible id="2" lang="de">Protein-Gelelektrophorese</possible>
+                    <possible id="3" lang="de">CRP (C-Reaktives Protein)</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
@@ -204,6 +250,7 @@
                 <uilink label="liverLabel" widget="liver" layout=""/>
                 <label lang="xx">Liver tests</label>
                 <label lang="fr">Fonction hépatique</label>
+                <label lang="de">Leberfunktionsparameter</label>
                 <value>
                     <uuid id="0">alat</uuid>
                     <uuid id="1">asat</uuid>
@@ -237,6 +284,7 @@
                     <possible id="13">Hepatitis C viral load</possible>
                     <possible id="14">Hepatitis D antibody</possible>
                     <possible id="15">Hepatitis E antibody</possible>
+
                     <possible id="0" lang="fr">ALAT (TGP)</possible>
                     <possible id="1" lang="fr">ASAT (TGO)</possible>
                     <possible id="2" lang="fr">Gamma Glutamyl Transpeptidase (GGT)</possible>
@@ -253,6 +301,23 @@
                     <possible id="13" lang="fr">Charge virale Hépatite C viral load</possible>
                     <possible id="14" lang="fr">Anticorps anti-Hépatite D</possible>
                     <possible id="15" lang="fr">Anticorps anti-Hépatite E</possible>
+
+                    <possible id="0" lang="de">GPT (ALT,ALAT)</possible>
+                    <possible id="1" lang="de">GOT (AST,ASAT)</possible>
+                    <possible id="2" lang="de">GGT (Gamma-Glutamyl-Transpeptidase)</possible>
+                    <possible id="3" lang="de">Lipase</possible>
+                    <possible id="4" lang="de">Amylase</possible>
+                    <possible id="5" lang="de">Gesamt-Bilirubin</possible>
+                    <possible id="6" lang="de">Konjugiertes (indirektes) Bilirubin</possible>
+                    <possible id="7" lang="de">freies (direktes) Bilirubin</possible>
+                    <possible id="8" lang="de">Ammoniak</possible>
+                    <possible id="9" lang="de">Anticorps anti-Hepatite A</possible>
+                    <possible id="10" lang="de">Anticorps anti-Hépatite B</possible>
+                    <possible id="11" lang="de">Antigènes anti-Hépatite B S (anti-HBs)</possible>
+                    <possible id="12" lang="de">Anticorps anti-Hépatite C</possible>
+                    <possible id="13" lang="de">Charge virale Hépatite C viral load</possible>
+                    <possible id="14" lang="de">Anticorps anti-Hépatite D</possible>
+                    <possible id="15" lang="de">Anticorps anti-Hépatite E</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>
