@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
@@ -323,8 +323,8 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a = aGeneralPatientNew = new QAction(this);
         a->setObjectName("aGeneralPatientNew");
         QIcon icon;
-        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENT, Core::ITheme::SmallIcon), QSize(16, 16));
-        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENT, Core::ITheme::MediumIcon), QSize(32, 32));
+        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENTNEW, Core::ITheme::SmallIcon), QSize(16, 16));
+        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENTNEW, Core::ITheme::MediumIcon), QSize(32, 32));
         a->setIcon(icon);
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
