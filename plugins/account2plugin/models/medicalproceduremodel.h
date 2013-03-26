@@ -58,6 +58,7 @@ public:
         Reimbursement,
         //...
         Date_Creation,
+        Date_Update,
         //...
         Comment,
         ColumnCount

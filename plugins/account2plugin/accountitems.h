@@ -27,10 +27,13 @@
 #ifndef ACCOUNT2_ACCOUNTITEMS
 #define ACCOUNT2_ACCOUNTITEMS
 
-#include <account2plugin/account2_exporter.h>
+#include <account2_exporter.h>
+#include <utils/global.h>
+
 #include <QString>
 #include <QVariant>
 #include <QDateTime>
+#include <QLocale>
 
 /**
  * \file accountitems.h
@@ -318,28 +321,44 @@ private:
 
 class MedicalProcedure : public VariableDatesItem
 {
+
 public:
     explicit MedicalProcedure() {}
     ~MedicalProcedure() {}
 
-    void setLabel(QString label) { _label = label; }
-    QString label() const { return _label; }
+    QString label() const { return m_label; }
+    QString subLabel() const { return m_subLabel; }
+    QLocale::Country country() const { return m_country; }
+    QString countryToIso() { return Utils::countryToIso(m_country); }
+    QString abstract() const { return m_abstract; }
+    QDate dateDid() const { return m_dateDid; }
+    QString comment() const { return m_comment; }
+    int categoryId() const { return m_categoryId; }
+    QString categoryUid() const { return m_categoryUid; }
+    QString type() const { return m_type; }
+    double amount() const { return m_amount; }
+    double reimbursement() const { return m_reimbursement; }
 
-    void setSubLabel(QString subLabel) { _subLabel = subLabel; }
-    QString subLabel() const { return _subLabel; }
-
-    void setDescription(QString description) { _description = description; }
-    QString description() const { return _description; }
-
-    void setCreationDate(QDate date) { _creationDate = date; }
-    QDate creationDate() const { return _creationDate; }
-
-    void setComment(QString comment) { _comment = comment; }
-    QString comment() const { return _comment; }
+public slots:
+    void setLabel(QString label) { m_label = label; }
+    void setSubLabel(QString subLabel) { m_subLabel = subLabel; }
+    void setCountry(QLocale::Country country) { m_country = country; }
+    void setDescription(QString description) { m_abstract = description; }
+    void setCreationDate(QDate date) { m_dateDid = date; }
+    void setComment(QString comment) { m_comment = comment; }
+    void setCategoryId(int categoryId) { m_categoryId = categoryId; }
+    void setCategoryUid(QString categoryUid) { m_categoryUid = categoryUid; }
+    void setType(QString type) { m_type = type; }
+    void setAmount(double amount) {m_amount = amount; }
+    void setReimbursement(double reimbursement) { m_reimbursement = reimbursement; }
+    void setDateDid(QDate did) { m_dateDid = did; }
 
 private:
-    QString _label, _subLabel, _description, _comment;
-    QDate _creationDate;
+    QString m_label, m_subLabel, m_abstract, m_comment, m_categoryUid, m_type;
+    QDate m_dateDid;
+    QLocale::Country m_country;
+    double m_amount, m_reimbursement;
+    int m_categoryId;
 };
 
 }  // namespace Account2

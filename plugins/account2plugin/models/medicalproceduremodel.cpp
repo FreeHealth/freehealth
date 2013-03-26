@@ -138,8 +138,9 @@ QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
         case Id: return mp.id();
         case Label: return mp.label();
         case SubLabel: return mp.subLabel();
-        case Description: return mp.description();
-        case Date_Creation: return mp.creationDate();
+        case Description: return mp.abstract();
+        case Date_Creation: return mp.date(VariableDatesItem::Date_Creation);
+        case Date_Update: return mp.date(VariableDatesItem::Date_Update);
         case Comment: return mp.comment();
         default: return QVariant();
         }
