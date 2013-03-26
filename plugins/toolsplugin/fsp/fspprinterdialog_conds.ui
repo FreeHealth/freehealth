@@ -6,321 +6,377 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>596</width>
-    <height>434</height>
+    <width>785</width>
+    <height>261</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>785</width>
+    <height>261</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>785</width>
+    <height>261</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>785</width>
+    <height>261</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>0</number>
+  <widget class="QLabel" name="conditionsLabel">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>785</width>
+     <height>261</height>
+    </rect>
    </property>
-   <property name="spacing">
-    <number>5</number>
+   <property name="minimumSize">
+    <size>
+     <width>785</width>
+     <height>261</height>
+    </size>
    </property>
-   <item row="6" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <widget class="QCheckBox" name="nouveau">
-       <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
-       </property>
-       <property name="text">
-        <string>si vous êtes le nouveau médecin traitant cochez cette case</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Accident causé par un tiers</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="accident">
-       <item>
-        <property name="text">
-         <string>NC</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>non</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>oui</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Date</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Utils::ModernDateEditor" name="accidentDate"/>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QCheckBox" name="mater">
-       <property name="text">
-        <string>Maternité</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>date début de grossesse ou accouchement</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Utils::ModernDateEditor" name="materDate"/>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QCheckBox" name="maladie">
-       <property name="text">
-        <string>Maladie</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="exo">
-       <item>
-        <property name="text">
-         <string>Pas d'exoneration du ticket modérateur</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Exoneration du ticket modérateur</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QCheckBox" name="ald">
-       <property name="text">
-        <string>ALD</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="prev">
-       <property name="text">
-        <string>Acte de prévention</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="l115">
-       <property name="text">
-        <string>L115</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="autre">
-       <property name="text">
-        <string>Autre</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <widget class="QCheckBox" name="at">
-       <property name="text">
-        <string>AT/MP</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Numéro</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="atNb"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Date</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Utils::ModernDateEditor" name="atDate"/>
-     </item>
-    </layout>
-   </item>
-   <item row="8" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
-     <item>
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="envoyeur"/>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>si le patient est envoyé par le médecin traitant, complétez la ligne ci-dessous nom et prénom du médecin traitant :</string>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>s'il ne l'est pas, sélectionnez un item</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="parcours">
-       <item>
-        <property name="text">
-         <string/>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Accès direct spécifique</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Urgence</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Hors résidence habituelle</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Médecin traitant remplace</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Accès hors coordination</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
+   <property name="pixmap">
+    <pixmap>../../../global_resources/pixmap/others/S3110_conditions.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="ald">
+   <property name="geometry">
+    <rect>
+     <x>195</x>
+     <y>50</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="autre">
+   <property name="geometry">
+    <rect>
+     <x>753</x>
+     <y>50</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="medtrempla">
+   <property name="geometry">
+    <rect>
+     <x>582</x>
+     <y>241</y>
+     <width>19</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="materDate">
+   <property name="geometry">
+    <rect>
+     <x>615</x>
+     <y>104</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="horscoord">
+   <property name="geometry">
+    <rect>
+     <x>753</x>
+     <y>241</y>
+     <width>19</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="urgence">
+   <property name="geometry">
+    <rect>
+     <x>216</x>
+     <y>241</y>
+     <width>19</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="exoTM_Oui">
+   <property name="geometry">
+    <rect>
+     <x>436</x>
+     <y>22</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="maladie">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>23</y>
+     <width>21</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="accident_oui">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>77</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="at">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>134</y>
+     <width>16</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="atDate">
+   <property name="geometry">
+    <rect>
+     <x>615</x>
+     <y>132</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="accessspe">
+   <property name="geometry">
+    <rect>
+     <x>124</x>
+     <y>241</y>
+     <width>19</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="horsresidence">
+   <property name="geometry">
+    <rect>
+     <x>396</x>
+     <y>241</y>
+     <width>19</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="accident_non">
+   <property name="geometry">
+    <rect>
+     <x>232</x>
+     <y>77</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="l115">
+   <property name="geometry">
+    <rect>
+     <x>634</x>
+     <y>50</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="envoyeur">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>210</y>
+     <width>531</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="mater">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>104</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="nouveauMT">
+   <property name="geometry">
+    <rect>
+     <x>337</x>
+     <y>161</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="accidentDate">
+   <property name="geometry">
+    <rect>
+     <x>425</x>
+     <y>75</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="exoTM_non">
+   <property name="geometry">
+    <rect>
+     <x>353</x>
+     <y>22</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="atNb">
+   <property name="geometry">
+    <rect>
+     <x>244</x>
+     <y>132</y>
+     <width>185</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="prevention">
+   <property name="geometry">
+    <rect>
+     <x>393</x>
+     <y>50</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>

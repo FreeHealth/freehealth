@@ -72,131 +72,139 @@ public:
     QRectF totalAmountRect(FspPrinter::Cerfa cerfa)
     {
         if (cerfa == FspPrinter::S12541_01)
-            return QRectF(QPointF(109.2, 247.2), QSizeF(30.7, 5.3));
+            return QRectF(QPointF(109.2, 247.), QSizeF(30.7, 5.3));
         else
-            return QRectF(QPointF(109.2, 252.2), QSizeF(30.7, 5.3));
+            return QRectF(QPointF(109.2, 252.), QSizeF(30.7, 5.3));
     }
 
-    QRectF rectInMilliters(FspPrinter::Cerfa cerfa, int fspIndex)
+    QRectF rectInMilliters(const Fsp &fsp, FspPrinter::Cerfa cerfa, int fspIndex)
     {
-            switch (fspIndex) {
-            // Bill
-            case Fsp::Bill_Number:
-                return QRectF(QPointF(157.5, 6.1), QSizeF(45.7, 5.3));
-            case Fsp::Bill_Date:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(172.9, 13), QSizeF(30, 4));
-                else
-                    return QRectF(QPointF(162.6, 12.7), QSizeF(40.6, 4.3));
-                break;
+        switch (fspIndex) {
+        // Bill
+        case Fsp::Bill_Number:
+            return QRectF(QPointF(157.5, 6.1), QSizeF(45.7, 5.3));
+        case Fsp::Bill_Date:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(172.9, 13), QSizeF(30, 4));
+            else
+                return QRectF(QPointF(162.6, 12.7), QSizeF(40.6, 4.3));
+            break;
             // Patient
-            case Fsp::Patient_FullName:
-                return QRectF(QPointF(55.9,  26.6), QSizeF(140, 4));
-            case Fsp::Patient_FullAddress:
-                return QRectF(QPointF(55.9,  70.1), QSizeF(110, 4));
-            case Fsp::Patient_DateOfBirth:
-                return QRectF(QPointF(55.9,  43.), QSizeF(40,  4));
-            case Fsp::Patient_Personal_NSS:
-                return QRectF(QPointF(55.9,  34.4), QSizeF(66,  5));
-            case Fsp::Patient_Personal_NSSKey:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(124.2, 34.4), QSizeF(10,  5));
-                else
-                    return QRectF(QPointF(124.5, 34.4), QSizeF(10,  5));
-                break;
-            case Fsp::Patient_Assure_FullName:
-                return QRectF(QPointF(55.9,  52.5), QSizeF(140, 4));
-            case Fsp::Patient_Assure_NSS:
-                return QRectF(QPointF(55.9,  60.6), QSizeF(66,  5));
-            case Fsp::Patient_Assure_NSSKey:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(124.2, 60.6), QSizeF(10,  5));
-                else
-                    return QRectF(QPointF(124.5, 60.6), QSizeF(10,  5));
-                break;
-            case Fsp::Patient_Assurance_Number:
-                return QRectF(QPointF(157.5, 34.4), QSizeF(45.7, 5.4));
+        case Fsp::Patient_FullName:
+            return QRectF(QPointF(55.9,  26.6), QSizeF(140, 4));
+        case Fsp::Patient_FullAddress:
+            return QRectF(QPointF(55.9,  70.1), QSizeF(110, 4));
+        case Fsp::Patient_DateOfBirth:
+            return QRectF(QPointF(55.9,  43.), QSizeF(40,  4));
+        case Fsp::Patient_Personal_NSS:
+            return QRectF(QPointF(55.9,  34.4), QSizeF(66,  5));
+        case Fsp::Patient_Personal_NSSKey:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(124.2, 34.4), QSizeF(10,  5));
+            else
+                return QRectF(QPointF(124.5, 34.4), QSizeF(10,  5));
+            break;
+        case Fsp::Patient_Assure_FullName:
+            return QRectF(QPointF(55.9,  52.5), QSizeF(140, 4));
+        case Fsp::Patient_Assure_NSS:
+            return QRectF(QPointF(55.9,  60.6), QSizeF(66,  5));
+        case Fsp::Patient_Assure_NSSKey:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(124.2, 60.6), QSizeF(10,  5));
+            else
+                return QRectF(QPointF(124.5, 60.6), QSizeF(10,  5));
+            break;
+        case Fsp::Patient_Assurance_Number:
+            return QRectF(QPointF(157.5, 34.4), QSizeF(45.7, 5.4));
             // Conditions
-            case Fsp::Condition_Maladie:
-                return QRectF(QPointF(7.3, 128.), QSizeF(5.3, 3.8));
-            case Fsp::Condition_Maladie_ETM :
-                if (cerfa == FspPrinter::S12541_01) {
-                    return QRectF(QPointF(116.7, 128.), QSizeF(5.3, 3.8)); // TRUE value
-                }
-                break;
-                // TODO: manage value == false: return QRectF(QPointF(95.5, 128.), QSizeF(5.3, 3.8));
-            case Fsp::Condition_Maladie_ETM_Ald :
-                return QRectF(QPointF(55., 134.6) ,QSizeF(5.3, 3.8));
-            case Fsp::Condition_Maladie_ETM_Autre :
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(197.4, 134.6), QSizeF(5.3, 3.8));
+        case Fsp::Condition_Maladie:
+            return QRectF(QPointF(7.3, 128.), QSizeF(5.3, 3.8));
+        case Fsp::Condition_Maladie_ETM :
+            if (cerfa == FspPrinter::S12541_01) {
+                if (fsp.data(Fsp::Condition_Maladie_ETM).isNull())
+                    return QRectF();
+                if (fsp.data(Fsp::Condition_Maladie_ETM).toBool())
+                    return QRectF(QPointF(116.7, 128.), QSizeF(5.3, 3.8)); // OUI
                 else
-                    return QRectF(QPointF(124.5, 134.6), QSizeF(5.3, 3.8));
-                break;
-            case Fsp::Condition_Maladie_ETM_L115:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(166.9, 134.6), QSizeF(5.3, 3.8));
-                else
-                    return QRectF(QPointF(135.4, 128.), QSizeF(5.3, 3.8));
-                break;
-            case Fsp::Condition_Maladie_ETM_Prevention:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(105.7, 134.6), QSizeF(5.3, 3.8));
-                else
-                    return QRectF(QPointF(100.1, 134.6), QSizeF(5.3, 3.8));
-                break;
-            case Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui :
-                return QRectF(QPointF(64.3, 141.6), QSizeF(5.3, 3.8)); // NON
-                // TODO: manage value == false: return QRectF(QPointF(87.4, 141.6), QSizeF(5.3, 3.8)); // OUI
-            case Fsp::Condition_Maladie_ETM_AccidentParTiers_Date :
-                return QRectF(QPointF(114.5, 141.2), QSizeF(40.6, 4.1));
-            case Fsp::Condition_Maternite :
-                return QRectF(QPointF(7.5, 148.7), QSizeF(5.3, 3.8));
-            case Fsp::Condition_Maternite_Date :
-                return QRectF(QPointF(162.5, 148.7), QSizeF(40.6, 4.1));
-            case Fsp::Condition_ATMP :
-                return QRectF(QPointF(7.5, 155.9), QSizeF(5.3, 3.8));
-            case Fsp::Condition_ATMP_Number :
-                return QRectF(QPointF(68.4, 155.9), QSizeF(45.7, 4.3));
-            case Fsp::Condition_ATMP_Date :
-                return QRectF(QPointF(162.5, 155.9), QSizeF(40.6, 4.1));
-            case Fsp::Condition_NouveauMedTraitant:
-                return QRectF(QPointF(91.1, 163.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_MedecinEnvoyeur :
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(62.1, 175.1), QSizeF(140., 5.3));
-                else
-                    return QRectF(QPointF(50.5, 173.2), QSizeF(140., 4.1));
-                break;
-            case Fsp::Condition_AccesSpecifique :
-                return QRectF(QPointF(37.1, 183.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_Urgence :
-                return QRectF(QPointF(60.8, 183.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_HorsResidence :
-                return QRectF(QPointF(106.3, 183.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_Remplace :
-                return QRectF(QPointF(154.1, 183.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_HorsCoordination :
-                return QRectF(QPointF(197.4, 183.2), QSizeF(5.3, 3.8));
-            case Fsp::Condition_AccordPrealableDate:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(171.8, 116.), QSizeF(30.7, 4.2));
-                else
-                    return QRectF(QPointF(144.8, 193.5), QSizeF(40.6, 4.1));
-                break;
-            case Fsp::Unpaid_PartObligatoire:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(86.2, 256.3), QSizeF(5.3, 3.8));
-                else
-                    return QRectF(QPointF(86.4, 261.6), QSizeF(5.3, 3.8));
-                break;
-            case Fsp::Unpaid_PartComplementaire:
-                if (cerfa == FspPrinter::S12541_01)
-                    return QRectF(QPointF(190.5, 256.3), QSizeF(5.3, 3.8));
-                else
-                    return QRectF(QPointF(190.5, 261.6), QSizeF(5.3, 3.8));
-                break;
+                    return QRectF(QPointF(95.2, 128.), QSizeF(5.3, 3.8)); // NON
             }
+            break;
+        case Fsp::Condition_Maladie_ETM_Ald :
+            return QRectF(QPointF(55., 134.6) ,QSizeF(5.3, 3.8));
+        case Fsp::Condition_Maladie_ETM_Autre :
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(197.4, 134.6), QSizeF(5.3, 3.8));
+            else
+                return QRectF(QPointF(124.5, 134.6), QSizeF(5.3, 3.8));
+            break;
+        case Fsp::Condition_Maladie_ETM_L115:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(166.9, 134.6), QSizeF(5.3, 3.8));
+            else
+                return QRectF(QPointF(135.4, 128.), QSizeF(5.3, 3.8));
+            break;
+        case Fsp::Condition_Maladie_ETM_Prevention:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(105.7, 134.6), QSizeF(5.3, 3.8));
+            else
+                return QRectF(QPointF(100.1, 134.6), QSizeF(5.3, 3.8));
+            break;
+        case Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui:
+            if (fsp.data(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui).isNull())
+                return QRectF();
+            if (fsp.data(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui).toBool())
+                return QRectF(QPointF(87.4, 141.6), QSizeF(5.3, 3.8)); // OUI
+            else
+                return QRectF(QPointF(64.3, 141.6), QSizeF(5.3, 3.8)); // NON
+        case Fsp::Condition_Maladie_ETM_AccidentParTiers_Date :
+            return QRectF(QPointF(114.5, 141.2), QSizeF(40.6, 4.1));
+        case Fsp::Condition_Maternite :
+            return QRectF(QPointF(7.5, 148.7), QSizeF(5.3, 3.8));
+        case Fsp::Condition_Maternite_Date :
+            return QRectF(QPointF(162.5, 148.7), QSizeF(40.6, 4.1));
+        case Fsp::Condition_ATMP :
+            return QRectF(QPointF(7.5, 155.9), QSizeF(5.3, 3.8));
+        case Fsp::Condition_ATMP_Number :
+            return QRectF(QPointF(68.4, 155.9), QSizeF(45.7, 4.3));
+        case Fsp::Condition_ATMP_Date :
+            return QRectF(QPointF(162.5, 155.9), QSizeF(40.6, 4.1));
+        case Fsp::Condition_NouveauMedTraitant:
+            return QRectF(QPointF(91.1, 163.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_MedecinEnvoyeur :
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(62.1, 175.1), QSizeF(140., 5.3));
+            else
+                return QRectF(QPointF(50.5, 173.2), QSizeF(140., 4.1));
+            break;
+        case Fsp::Condition_AccesSpecifique :
+            return QRectF(QPointF(37.1, 183.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_Urgence :
+            return QRectF(QPointF(60.8, 183.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_HorsResidence :
+            return QRectF(QPointF(106.3, 183.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_Remplace :
+            return QRectF(QPointF(154.1, 183.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_HorsCoordination :
+            return QRectF(QPointF(197.4, 183.2), QSizeF(5.3, 3.8));
+        case Fsp::Condition_AccordPrealableDate:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(171.8, 116.), QSizeF(30.7, 4.2));
+            else
+                return QRectF(QPointF(144.8, 193.5), QSizeF(40.6, 4.1));
+            break;
+        case Fsp::Unpaid_PartObligatoire:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(86.2, 256.3), QSizeF(5.3, 3.8));
+            else
+                return QRectF(QPointF(86.4, 261.6), QSizeF(5.3, 3.8));
+            break;
+        case Fsp::Unpaid_PartComplementaire:
+            if (cerfa == FspPrinter::S12541_01)
+                return QRectF(QPointF(190.5, 256.3), QSizeF(5.3, 3.8));
+            else
+                return QRectF(QPointF(190.5, 261.6), QSizeF(5.3, 3.8));
+            break;
+        }
         return QRectF();
     }
 
@@ -204,9 +212,9 @@ public:
     {
         int y;
         if (cerfa == FspPrinter::S12541_01)
-            y = 209.4 + 8.6*line;
+            y = 209.2 + 8.6*line;
         else
-            y = 214.1 + 8.6*line;
+            y = 213.9 + 8.6*line;
         switch (fspIndex) {
         case Fsp::Amount_Date:
             return QRectF(QPointF(6.8, y), QSizeF(30.7, 5.1));
@@ -236,9 +244,9 @@ public:
 
     QString printingValue(const Fsp &fsp, FspPrinter::Cerfa cerfa, int fspIndex)
     {
-        if (!fsp.data(fspIndex).isValid() || fsp.data(fspIndex).isNull()) {
-            qWarning() << "fspIndex" << fspIndex << "isNull or invalid"
-                       << "data" << fsp.data(fspIndex);
+        if (!fsp.data(fspIndex).isValid()
+                || fsp.data(fspIndex).isNull()
+                || fsp.data(fspIndex).toString().simplified().isEmpty()) {
             return QString::null;
         }
 
@@ -253,12 +261,19 @@ public:
                 return fsp.data(fspIndex).toDate().toString("ddMMyyyy");
             break;
             // Patient
+
         case Fsp::Patient_Personal_NSS:
+            if (!fsp.data(Fsp::Patient_Assure_FullName).toString().isEmpty())
+                return QString::null;
         case Fsp::Patient_Assure_NSS:
             return fsp.data(fspIndex).toString().left(13).leftJustified(13, '_');
+
         case Fsp::Patient_Personal_NSSKey:
+            if (!fsp.data(Fsp::Patient_Assure_FullName).toString().isEmpty())
+                return QString::null;
         case Fsp::Patient_Assure_NSSKey:
             return fsp.data(fspIndex).toString().left(2).leftJustified(2, '_');
+
         case Fsp::Patient_FullName:
         case Fsp::Patient_FullAddress:
         case Fsp::Patient_Assure_FullName:
@@ -274,8 +289,10 @@ public:
         case Fsp::Condition_ATMP_Date:
             return fsp.data(fspIndex).toDate().toString("ddMMyyyy");
             // Conditions
-        case Fsp::Condition_Maladie:
         case Fsp::Condition_Maladie_ETM:
+            if (cerfa==FspPrinter::S12541_01)
+                return "X";
+        case Fsp::Condition_Maladie:
         case Fsp::Condition_Maladie_ETM_Ald:
         case Fsp::Condition_Maladie_ETM_Autre:
         case Fsp::Condition_Maladie_ETM_L115:
@@ -300,6 +317,8 @@ public:
 
     QString amountPrintingValue(const Fsp &fsp, FspPrinter::Cerfa cerfa, int line, int fspIndex)
     {
+        if (fsp.amountLineData(line, fspIndex).isNull())
+            return QString::null;
         switch (fspIndex) {
         case Fsp::Amount_Date:
             return fsp.amountLineData(line, fspIndex).toDate().toString("ddMMyyyy");
@@ -402,7 +421,7 @@ public:
         s.minFontPixelSize = 10;
         s.drawBoundingRect = _drawRects;
         for(int i = 0; i < Fsp::MaxData; ++i) {
-            const QRectF &rect = rectInMilliters(cerfa, i);
+            const QRectF &rect = rectInMilliters(fsp, cerfa, i);
             if (!rect.isValid() || rect.isNull())
                 continue;
             s.topMillimeters = rect.topLeft();
@@ -501,7 +520,13 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     printer->setFullPage(true);
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
+    printer->setPageMargins(0, 0, 0, 0, QPrinter::DevicePixel);
     d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
+
+//    qreal l, r, t ,b;
+//    printer->getPageMargins(&l, &t, &r, &b, );
+//    qWarning() << l << t << r << b;
+
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
@@ -571,16 +596,14 @@ QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
     painter.setPen(pen);
 
     QPixmap background;
-//    if (printCerfaAsBackground) {
-        if (cerfa == S12541_01) {
-            if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110.png", "PNG"))
-                qWarning() << "ERROR: unable to load background pixmap";
-        } else {
-            if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02.png", "PNG"))
-                qWarning() << "ERROR: unable to load background pixmap";
-        }
-        painter.drawPixmap(image.rect(), background);
-//    }
+    if (cerfa == S12541_01) {
+        if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110.png", "PNG"))
+            qWarning() << "ERROR: unable to load background pixmap";
+    } else {
+        if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02.png", "PNG"))
+            qWarning() << "ERROR: unable to load background pixmap";
+    }
+    painter.drawPixmap(image.rect(), background);
 
     painter.save();
     d->drawContent(painter, fsp, cerfa);

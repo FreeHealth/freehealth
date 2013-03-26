@@ -214,12 +214,12 @@ void ToolsPlugin::printCheque()
 
 void ToolsPlugin::printFsp()
 {
-    if (patient()->uuid().isEmpty()) {
-        Utils::warningMessageBox(tr("No current patient"),
-                                 tr("In order to print a french 'FSP', you must select a patient first"),
-                                 "", tr("Print French FSP error"));
-        return;
-    }
+//    if (patient()->uuid().isEmpty()) {
+//        Utils::warningMessageBox(tr("No current patient"),
+//                                 tr("In order to print a french 'FSP', you must select a patient first"),
+//                                 "", tr("Print French FSP error"));
+//        return;
+//    }
 
     Fsp test;
     test.setData(Fsp::Bill_Number, "123456789012345");
@@ -275,17 +275,17 @@ void ToolsPlugin::printFsp()
         test.addAmountData(i, Fsp::Amount_Deplacement_IKValue, 0.97);
     }
 
+//    QString xml = test.toXml(Fsp::ConditionData | Fsp::AmountData | Fsp::ModelData);
+//    qWarning() << xml;
+//    Fsp test2;
+//    test2.fromXml(xml);
+//    QString xml2 = test2.toXml(Fsp::ConditionData | Fsp::AmountData | Fsp::ModelData);
+//    qWarning() << xml2;
+//    qWarning() << "----------" << (xml==xml2);
+
     FspPrinterDialog dlg;
     dlg.initialize(test);
     dlg.exec();
-
-
-//    FspPrinter printer;
-//    printer.setDrawRects(true);
-//    Utils::ImageViewer viewer;
-//    QPixmap pix = printer.preview(test, FspPrinter::S12541_02);//.scaledToWidth(800);
-//    viewer.setPixmap(pix);
-//    viewer.exec();
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)

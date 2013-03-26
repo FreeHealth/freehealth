@@ -20,34 +20,92 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developpers:                                                     *
- *       Eric Maeker <eric.maeker@gmail.com>                               *
+ *       Eric Maeker <e>                             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_FSPCONSTANTS_H
-#define TOOLS_FSPCONSTANTS_H
+#ifndef TOOLS_INTERNAL_FSPPRINTER_PREFERENCES_H
+#define TOOLS_INTERNAL_FSPPRINTER_PREFERENCES_H
+
+#include <coreplugin/ioptionspage.h>
+
+#include <QWidget>
+#include <QPointer>
 
 /**
- * \file fspconstants.h
+ * \file templatespreferences.h
  * \author Eric Maeker
- * \version 0.8.4
- * \date 23 Mar 2013
+ * \version 0.8.0
+ * \date
 */
 
-namespace Tools {
-namespace Constants {
-
-const char * const S_HORIZ_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/horiz_mm";
-const char * const S_VERTIC_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/vertic_mm";
-const char * const S_DEFAULTCERFA = "Tools/Fsp/DefaultCerfa";
-
-// Settings Values
-const char * const S_CERFA_01 = "cerfa01";
-const char * const S_CERFA_02 = "cerfa02";
-
-// Datapack path
-const char * const DATAPACK_PATH = "/fsp/";
-
+namespace Core {
+class ISettings;
 }
+
+namespace Templates {
+namespace Internal {
+namespace Ui {
+class TemplatesPreferencesWidget;
 }
-#endif // TOOLS_FSPCONSTANTS_H
+
+class TemplatesPreferencesWidget : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    explicit TemplatesPreferencesWidget(QWidget *parent = 0);
+    ~TemplatesPreferencesWidget();
+    
+    void setDataToUi();
+    QString searchKeywords() const;
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+    
+private:
+    Ui::TemplatesPreferencesWidget *ui;
+};
+
+
+class TemplatesPreferencesPage : public Core::IOptionsPage
+{
+public:
+    TemplatesPreferencesPage(QObject *parent = 0);
+    ~TemplatesPreferencesPage();
+    
+    QString id() const;
+    QString displayName() const;
+    QString category() const;
+    QString title() const;
+    int sortIndex() const;
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void apply();
+    void finish();
+    
+    bool matches(QString &s) const;
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {TemplatesPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
+private:
+    QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
+    QString m_searchKeywords;
+};
+
+} // namespace Internal
+} // namespace Tools
+
+#endif // TOOLS_INTERNAL_FSPPRINTER_PREFERENCES_H
+

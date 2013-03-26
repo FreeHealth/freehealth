@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Tools::FspPrinterDialogFees</class>
+ <widget class="QWidget" name="Tools::FspPrinterDialogFees">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>785</width>
+    <height>286</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>785</width>
+    <height>286</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>785</width>
+    <height>286</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>785</width>
+    <height>286</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="conditionsLabel">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>785</width>
+     <height>286</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>785</width>
+     <height>261</height>
+    </size>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../../global_resources/pixmap/others/S3110_honoraires.png</pixmap>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="date_1">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>80</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="code_1">
+   <property name="geometry">
+    <rect>
+     <x>126</x>
+     <y>80</y>
+     <width>143</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+   <property name="inputMask">
+    <string notr="true">N N N N N N N; </string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="activite_1">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>80</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="cv_1">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>80</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_11">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>80</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="depassement_1">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>80</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="idmd_1">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>80</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikNb_1">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>80</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikAmount_1">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>80</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_12">
+   <property name="geometry">
+    <rect>
+     <x>407</x>
+     <y>80</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikNb_2">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>114</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_21">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>114</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="date_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>114</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikAmount_2">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>114</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="cv_2">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>114</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="activite_2">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>114</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="code_2">
+   <property name="geometry">
+    <rect>
+     <x>126</x>
+     <y>114</y>
+     <width>143</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+   <property name="inputMask">
+    <string notr="true">N N N N N N N; </string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="depassement_2">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>114</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_22">
+   <property name="geometry">
+    <rect>
+     <x>407</x>
+     <y>114</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="idmd_2">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>114</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikNb_3">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>148</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_31">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>148</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="date_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>148</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikAmount_3">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>148</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="cv_3">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>148</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="activite_3">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>148</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="code_3">
+   <property name="geometry">
+    <rect>
+     <x>126</x>
+     <y>148</y>
+     <width>143</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+   <property name="inputMask">
+    <string notr="true">N N N N N N N; </string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="depassement_3">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>148</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_32">
+   <property name="geometry">
+    <rect>
+     <x>407</x>
+     <y>148</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="idmd_3">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>148</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikNb_4">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>180</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_41">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>180</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="Utils::ModernDateEditor" name="date_4">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>180</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ikAmount_4">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>180</y>
+     <width>71</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="cv_4">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>180</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="activite_4">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>180</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="code_4">
+   <property name="geometry">
+    <rect>
+     <x>126</x>
+     <y>180</y>
+     <width>143</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+   <property name="inputMask">
+    <string notr="true">N N N N N N N; </string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="depassement_4">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>180</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="autres_42">
+   <property name="geometry">
+    <rect>
+     <x>407</x>
+     <y>180</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="idmd_4">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>180</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid black;
+background-color: transparent</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="partOblig">
+   <property name="geometry">
+    <rect>
+     <x>317</x>
+     <y>264</y>
+     <width>21</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="partCompl">
+   <property name="geometry">
+    <rect>
+     <x>725</x>
+     <y>263</y>
+     <width>16</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="amount_4">
+   <property name="geometry">
+    <rect>
+     <x>474</x>
+     <y>178</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="amount_3">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>145</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="amount_2">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>112</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="amount_1">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>79</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="total">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>230</y>
+     <width>111</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::ModernDateEditor</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/moderndateeditor.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>date_1</tabstop>
+  <tabstop>code_1</tabstop>
+  <tabstop>activite_1</tabstop>
+  <tabstop>cv_1</tabstop>
+  <tabstop>autres_11</tabstop>
+  <tabstop>autres_12</tabstop>
+  <tabstop>amount_1</tabstop>
+  <tabstop>depassement_1</tabstop>
+  <tabstop>idmd_1</tabstop>
+  <tabstop>ikNb_1</tabstop>
+  <tabstop>ikAmount_1</tabstop>
+  <tabstop>date_2</tabstop>
+  <tabstop>code_2</tabstop>
+  <tabstop>activite_2</tabstop>
+  <tabstop>cv_2</tabstop>
+  <tabstop>autres_21</tabstop>
+  <tabstop>autres_22</tabstop>
+  <tabstop>amount_2</tabstop>
+  <tabstop>depassement_2</tabstop>
+  <tabstop>idmd_2</tabstop>
+  <tabstop>ikNb_2</tabstop>
+  <tabstop>ikAmount_2</tabstop>
+  <tabstop>date_3</tabstop>
+  <tabstop>code_3</tabstop>
+  <tabstop>activite_3</tabstop>
+  <tabstop>cv_3</tabstop>
+  <tabstop>autres_31</tabstop>
+  <tabstop>autres_32</tabstop>
+  <tabstop>amount_3</tabstop>
+  <tabstop>depassement_3</tabstop>
+  <tabstop>idmd_3</tabstop>
+  <tabstop>ikNb_3</tabstop>
+  <tabstop>ikAmount_3</tabstop>
+  <tabstop>date_4</tabstop>
+  <tabstop>code_4</tabstop>
+  <tabstop>activite_4</tabstop>
+  <tabstop>cv_4</tabstop>
+  <tabstop>autres_41</tabstop>
+  <tabstop>autres_42</tabstop>
+  <tabstop>amount_4</tabstop>
+  <tabstop>depassement_4</tabstop>
+  <tabstop>idmd_4</tabstop>
+  <tabstop>ikNb_4</tabstop>
+  <tabstop>ikAmount_4</tabstop>
+  <tabstop>total</tabstop>
+  <tabstop>partOblig</tabstop>
+  <tabstop>partCompl</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

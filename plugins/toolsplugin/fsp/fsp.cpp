@@ -29,12 +29,16 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <utils/global.h>
+
 #include <QHash>
 #include <QVariant>
 #include <QDate>
+#include <QDomDocument>
 
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
+// FspSet
 // Fsp
 //   i n="..." v="..."
 //   i n="..." v="..."
@@ -45,12 +49,18 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 //     /Act
 //   /Acts
 // /Fsp
+// Fsp
+//  ...
+// /Fsp
+// /FspSet
 
 namespace {
+const char * const XML_TAG_FSPSET = "FspSet";
 const char * const XML_TAG_ROOT = "Fsp";
 const char * const XML_TAG_ITEM = "i";
 const char * const XML_ATTRIB_NAME = "n";
 const char * const XML_ATTRIB_VALUE = "v";
+const char * const XML_ATTRIB_LINE = "i";
 const char * const XML_TAG_ACTS = "Acts";
 const char * const XML_TAG_ACT = "Act";
 }
@@ -69,10 +79,10 @@ public:
     {
     }
 
-    QString xmlTag(int index)
+    QString xmlItemName(int index)
     {
         switch (index) {
-            // Bill
+        // Bill
         case Fsp::Bill_Number : return "b.nb";
         case Fsp::Bill_Date : return "b.dt";
             // Patient
@@ -106,6 +116,7 @@ public:
         case Fsp::Condition_HorsResidence : return "c.hr";
         case Fsp::Condition_Remplace : return "c.rp";
         case Fsp::Condition_HorsCoordination : return "c.hc";
+        case Fsp::Condition_AccordPrealableDate : return "c.prea";
         case Fsp::Unpaid_PartObligatoire : return "u.po";
         case Fsp::Unpaid_PartComplementaire : return "u.pc";
             // Amount
@@ -120,11 +131,14 @@ public:
         case Fsp::Amount_Deplacement_IKMD:  return "am.ik";
         case Fsp::Amount_Deplacement_Nb:  return "am.iknb";
         case Fsp::Amount_Deplacement_IKValue:  return "am.ikval";
+        case Fsp::TotalAmount: return "total";
+            // ModelData
+        case Fsp::Label: return "m.lbl";
         }
         return QString::null;
     }
 
-    int indexForXmlTag(const QString &xmlTag)
+    int indexForXmlItemName(const QString &xmlTag)
     {
         if (xmlTag.startsWith("b.")) {
             if (xmlTag.compare("b.nb", Qt::CaseInsensitive) == 0) {
@@ -193,6 +207,8 @@ public:
                 return Fsp::Condition_Remplace;
             } else if (xmlTag.compare("c.hc", Qt::CaseInsensitive) == 0) {
                 return Fsp::Condition_HorsCoordination;
+            } else if (xmlTag.compare("c.prea", Qt::CaseInsensitive) == 0) {
+                return Fsp::Condition_AccordPrealableDate;
             }
         } else if (xmlTag.startsWith("u.")) {
             if (xmlTag.compare("u.po", Qt::CaseInsensitive) == 0) {
@@ -224,6 +240,12 @@ public:
             } else if (xmlTag.compare("am.ikval", Qt::CaseInsensitive) == 0) {
                 return Fsp::Amount_Deplacement_IKValue;
             }
+        } else if (xmlTag.startsWith("m.")) {
+            if (xmlTag.compare("m.lbl", Qt::CaseInsensitive) == 0) {
+                return Fsp::Label;
+            }
+        } else if (xmlTag.compare("total", Qt::CaseInsensitive) == 0) {
+            return Fsp::TotalAmount;
         }
         return -1;
     }
@@ -272,6 +294,9 @@ Fsp::~Fsp()
 void Fsp::clear()
 {
     d->_data.clear();
+    d->_amountLines.clear();
+    for(int i=0; i< 4; ++i)
+        d->_amountLines.append(QHash<int, QVariant>());
 }
 
 /** Add a bill uuid (max 9chars) */
@@ -286,6 +311,7 @@ void Fsp::setBillDate(const QDate &date)
     d->_data.insert(int(Bill_Date), date);
 }
 
+/** Populate the FSP patient part with the current patient data */
 bool Fsp::populateWithCurrentPatientData()
 {
     if (patient()->uuid().isEmpty())
@@ -297,11 +323,28 @@ bool Fsp::populateWithCurrentPatientData()
     d->_data.insert(Patient_Personal_NSS, nss.left(13));
     if (nss.size() > 13)
         d->_data.insert(Patient_Personal_NSSKey, patient()->data(Core::IPatient::SocialNumber).toString().mid(13));
-//    d->_data.insert(Patient_Assure_FullName, patient()->data(Core::IPatient:));
-//    d->_data.insert(Patient_Assure_NSS, patient()->data(Core::IPatient:));
-//    d->_data.insert(Patient_Assure_NSSKey, patient()->data(Core::IPatient:));
-//    d->_data.insert(Patient_Assurance_Number, patient()->data(Core::IPatient:));
+    d->_data.insert(Patient_Assure_FullName, patient()->data(Core::IPatient::SocialNumberOwnerFullName));
+    if (!d->_data.value(Patient_Assure_FullName).toString().isEmpty()) {
+        d->_data.insert(Patient_Assure_NSS, nss.left(13));
+        if (nss.size() > 13)
+            d->_data.insert(Patient_Assure_NSSKey, patient()->data(Core::IPatient::SocialNumber).toString().mid(13));
+    }
+    //    d->_data.insert(Patient_Assurance_Number, patient()->data(Core::IPatient:));
     return true;
+}
+
+/** Define the bill date, all amount date (if not defined) to the current date */
+void Fsp::populateAmountsWithCurrentDate()
+{
+    for(int i=0; i< 4; ++i) {
+        QHash<int, QVariant> &values = d->_amountLines[i];
+        if (values.value(Amount_Amount).isNull())
+            continue;
+        if (values.value(Amount_Date).isNull())
+            values.insert(Amount_Date, QDate::currentDate());
+    }
+    if (d->_data.value(Bill_Date).isNull())
+        d->_data.insert(Bill_Date, QDate::currentDate());
 }
 
 /** Define the patient information */
@@ -328,26 +371,161 @@ QVariant Fsp::amountLineData(int line, int index) const
     return d->_amountLines[line].value(index);
 }
 
-///** Add an amount line */
-//void Fsp::addAmountLine(const Fsp_AmountLine &line)
-//{
-//    d->_amountLines.append(line);
-//}
-
-QString Fsp::toXml() const
+/**
+ * Compute the total amount of the FSP by adding each fees amount and
+ * set the Fsp::TotalAmount value. \n
+ * This does not the IK/ID into account.
+ */
+void Fsp::computeTotalAmountFromFees()
 {
-    QString xml;
+    // TODO: ajouter les IK au montant total
+    double total = 0.0;
+    for(int i=0; i< 4; ++i) {
+        if (!d->_amountLines.value(i).value(Amount_Amount).isNull())
+            total += d->_amountLines.value(i).value(Amount_Amount).toDouble();
+    }
+    d->_data.insert(TotalAmount, total);
+}
+
+/** FSP to XML. TotalAmount must be computed first. */
+QString Fsp::toXml(XmlDataSet dataSet) const
+{
+    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE FreeMedForms>\n";
+    QDomDocument doc;
+    QDomElement root = doc.createElement(::XML_TAG_ROOT);
+    doc.appendChild(root);
+    QList<int> ids;
+    if (dataSet.testFlag(BillData)) {
+        ids << Bill_Date << Bill_Number;
+    }
+    if (dataSet.testFlag(PatientData)) {
+        ids <<  Patient_FullName
+             << Patient_FullAddress
+             << Patient_DateOfBirth
+             << Patient_Personal_NSS
+             << Patient_Personal_NSSKey
+             << Patient_Assure_FullName
+             << Patient_Assure_NSS
+             << Patient_Assure_NSSKey
+             << Patient_Assurance_Number;
+    }
+    if (dataSet.testFlag(ConditionData)) {
+        ids << Condition_Maladie
+            << Condition_Maladie_ETM
+            << Condition_Maladie_ETM_Ald
+            << Condition_Maladie_ETM_Autre
+            << Condition_Maladie_ETM_L115
+            << Condition_Maladie_ETM_Prevention
+            << Condition_Maladie_ETM_AccidentParTiers_Oui
+            << Condition_Maladie_ETM_AccidentParTiers_Date
+            << Condition_Maternite
+            << Condition_Maternite_Date
+            << Condition_ATMP
+            << Condition_ATMP_Number
+            << Condition_ATMP_Date
+            << Condition_NouveauMedTraitant
+            << Condition_MedecinEnvoyeur
+            << Condition_AccesSpecifique
+            << Condition_Urgence
+            << Condition_HorsResidence
+            << Condition_Remplace
+            << Condition_HorsCoordination
+            << Condition_AccordPrealableDate;
+    }
+    if (dataSet.testFlag(UnpaidData)) {
+        ids << Unpaid_PartObligatoire
+            << Unpaid_PartComplementaire;
+    }
+    if (dataSet.testFlag(ModelData)) {
+        for(int i = Label; i < ModelData_ColumnCount; ++i)
+            ids << i;
+    }
+
+    // Append values
+    for(int i=0; i < ids.count(); ++i) {
+        int id = ids.at(i);
+        if (d->_data.value(id, QVariant()).isNull())
+            continue;
+        QDomElement item = doc.createElement(::XML_TAG_ITEM);
+        item.setAttribute(::XML_ATTRIB_NAME, d->xmlItemName(id));
+        item.setAttribute(::XML_ATTRIB_VALUE, d->_data.value(id).toString());
+        root.appendChild(item);
+    }
+
+    // Append amounts
+    if (d->_amountLines.count() && dataSet.testFlag(AmountData)) {
+        QDomElement acts = doc.createElement(::XML_TAG_ACTS);
+        root.appendChild(acts);
+        for(int i=0; i < 4; ++i) {
+            QDomElement act = doc.createElement(::XML_TAG_ACT);
+            const QHash<int, QVariant> &values = d->_amountLines.at(i);
+            for(int j=0; j < Amount_MaxData; ++j) {
+                if (values.value(j, QVariant()).isNull())
+                    continue;
+                QDomElement item = doc.createElement(::XML_TAG_ITEM);
+                item.setAttribute(::XML_ATTRIB_NAME, d->xmlItemName(j));
+                item.setAttribute(::XML_ATTRIB_LINE, i);
+                item.setAttribute(::XML_ATTRIB_VALUE, values.value(j).toString());
+                act.appendChild(item);
+            }
+            acts.appendChild(act);
+        }
+
+        QDomElement total = doc.createElement(::XML_TAG_ITEM);
+        total.setAttribute(::XML_ATTRIB_NAME, d->xmlItemName(TotalAmount));
+        total.setAttribute(::XML_ATTRIB_VALUE, d->_data.value(TotalAmount).toString());
+        root.appendChild(total);
+    }
+    xml += doc.toString(1);
     return xml;
 }
 
-bool Fsp::fromXml(const QString &content)
+QList<Fsp> Fsp::fromXml(const QString &content)
 {
-    return true;
+    QList<Fsp> fsps;
+    QDomDocument doc;
+    QString error;
+    int col, line;
+    if (!doc.setContent(content, &error, &line, &col)) {
+        Utils::warningMessageBox("Erreur XML",
+                                 QString("La FSP ne peut pas être reconstruite, une erreur XML a été détectée :<br />"
+                                         "(%1; %2) %3<br />")
+                                 .arg(line).arg(col).arg(error));
+        return fsps;
+    }
+    QDomElement root = doc.firstChildElement(::XML_TAG_FSPSET);
+    root = root.firstChildElement(::XML_TAG_ROOT);
+    while (!root.isNull()) {
+        Fsp fsp;
+        // Read patient, condition, unpaid item
+        QDomElement item = root.firstChildElement(::XML_TAG_ITEM);
+        while (!item.isNull()) {
+            fsp.d->_data.insert(d->indexForXmlItemName(item.attribute(::XML_ATTRIB_NAME)), item.attribute(::XML_ATTRIB_VALUE));
+            item = item.nextSiblingElement(::XML_TAG_ITEM);
+        }
+        // Read amount item
+        QDomElement acts = root.firstChildElement(::XML_TAG_ACTS);
+        QDomElement act = acts.firstChildElement(::XML_TAG_ACT);
+        line = 0;
+        while (!act.isNull()) {
+            QHash<int, QVariant> &values = fsp.d->_amountLines[line];
+            item = act.firstChildElement(::XML_TAG_ITEM);
+            while (!item.isNull()) {
+                values.insert(d->indexForXmlItemName(item.attribute(::XML_ATTRIB_NAME)), item.attribute(::XML_ATTRIB_VALUE));
+                item = item.nextSiblingElement(::XML_TAG_ITEM);
+            }
+            act = act.nextSiblingElement(::XML_TAG_ACT);
+            ++line;
+        }
+        fsps << fsp;
+        root = root.nextSiblingElement(::XML_TAG_ROOT);
+    }
+    return fsps;
 }
 
-bool Fsp::fromXmlFile(const QString &absPathFileName)
+QList<Fsp> Fsp::fromXmlFile(const QString &absPathFileName)
 {
-    return true;
+    return fromXml(Utils::readTextFile(absPathFileName));
 }
 
 } // namespace Internal

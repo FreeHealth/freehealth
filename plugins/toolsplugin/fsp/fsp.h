@@ -79,6 +79,7 @@ public:
         Condition_AccordPrealableDate,
         Unpaid_PartObligatoire,
         Unpaid_PartComplementaire,
+        TotalAmount,
         MaxData
     };
 
@@ -97,6 +98,22 @@ public:
         Amount_MaxData
     };
 
+    enum ModelData {
+        Label = 1000,
+        ModelData_ColumnCount
+    };
+
+    enum XmlData {
+        PatientData   = 0x00001,
+        BillData      = 0x00002,
+        ConditionData = 0x00004,
+        UnpaidData    = 0x00008,
+        ModelData     = 0x00010,
+        AmountData    = 0x01000,
+        AllData       = PatientData | BillData | ConditionData | AmountData | ModelData
+    };
+    Q_DECLARE_FLAGS(XmlDataSet, XmlData)
+
     Fsp();
     Fsp(const Fsp &cp);
     void operator=(const Fsp &cp);
@@ -110,6 +127,7 @@ public:
     void setBillDate(const QDate &date);
 
     bool populateWithCurrentPatientData();
+    void populateAmountsWithCurrentDate();
 
     bool setData(int index, const QVariant &value);
     QVariant data(int index) const;
@@ -117,16 +135,19 @@ public:
     void addAmountData(int line, int index, const QVariant &value);
     QVariant amountLineData(int line, int index) const;
 
-    QString toXml() const;
-    bool fromXml(const QString &content);
-    bool fromXmlFile(const QString &absPathFileName);
+    void computeTotalAmountFromFees();
+
+    QString toXml(XmlDataSet dataSet = AllData) const;
+    QList<Fsp> fromXml(const QString &content);
+    QList<Fsp> fromXmlFile(const QString &absPathFileName);
 
 private:
     FspPrivate *d;
 };
 
-
 } // namespace Internal
 } // namespace Tools
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Tools::Internal::Fsp::XmlDataSet)
 
 #endif // TOOLS_INTERNAL_FSP_H

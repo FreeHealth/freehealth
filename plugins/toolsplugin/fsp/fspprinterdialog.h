@@ -28,6 +28,9 @@
 #define TOOLS_INTERNAL_FSPPRINTERDIALOG_H
 
 #include <QDialog>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 /**
  * \file fspprinterdialog.h
@@ -54,8 +57,12 @@ Q_SIGNALS:
     
 private Q_SLOTS:
     void toggleView(bool complex);
+    void expandChildren(const QModelIndex &index);
+    void useTemplate(const QModelIndex &index);
     void printFsp();
+    void previewFsp();
     void printCheque();
+    void updatePreview();
 
 private:
     FspPrinterDialogPrivate *d;

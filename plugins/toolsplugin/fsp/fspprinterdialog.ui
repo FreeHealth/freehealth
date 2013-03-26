@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>415</width>
     <height>612</height>
    </rect>
   </property>
@@ -34,16 +34,16 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>376</width>
+        <width>391</width>
         <height>500</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout_3">
        <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <layout class="QVBoxLayout" name="contentLayout"/>
+        <layout class="QGridLayout" name="contentLayout"/>
        </item>
       </layout>
      </widget>

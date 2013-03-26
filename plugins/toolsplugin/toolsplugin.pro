@@ -20,7 +20,8 @@ HEADERS += \
     fsp/fspprinter.h \
     fsp/fspprinterdialog.h \
     fsp/fspprinterpreferences.h \
-    fsp/fspconstants.h
+    fsp/fspconstants.h \
+    fsp/fsptemplatemodel.h
 
         
 SOURCES += \
@@ -33,7 +34,8 @@ SOURCES += \
     fsp/fsp.cpp \
     fsp/fspprinter.cpp \
     fsp/fspprinterdialog.cpp \
-    fsp/fspprinterpreferences.cpp
+    fsp/fspprinterpreferences.cpp \
+    fsp/fsptemplatemodel.cpp
 
 
 FORMS += \
@@ -43,7 +45,7 @@ FORMS += \
     fsp/fspprinterdialog.ui \
     fsp/fspprinterdialog_patient.ui \
     fsp/fspprinterdialog_conds.ui \
-    fsp/fspprinterdialog_amounts.ui \
+    fsp/fspprinterdialog_fees.ui \
     fsp/fspprinterdialog_prerecorded.ui \
     fsp/fspprinterpreferences.ui
 

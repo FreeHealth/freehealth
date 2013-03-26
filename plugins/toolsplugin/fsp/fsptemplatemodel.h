@@ -19,35 +19,52 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Eric Maeker <eric.maeker@gmail.com>                               *
+ *   Main developers : Eric Maeker <eric.maeker@gmail.com>                 *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_FSPCONSTANTS_H
-#define TOOLS_FSPCONSTANTS_H
+#ifndef TOOLS_INTERNAL_FSPTEMPLATEMODEL_H
+#define TOOLS_INTERNAL_FSPTEMPLATEMODEL_H
+
+#include <QStandardItemModel>
 
 /**
- * \file fspconstants.h
+ * \file fsptemplatemodel.h
  * \author Eric Maeker
- * \version 0.8.4
- * \date 23 Mar 2013
+ * \version 0.8.0
+ * \date 2013-03-25
 */
 
 namespace Tools {
-namespace Constants {
+namespace Internal {
+class Fsp;
+class FspTemplateModelPrivate;
 
-const char * const S_HORIZ_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/horiz_mm";
-const char * const S_VERTIC_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/vertic_mm";
-const char * const S_DEFAULTCERFA = "Tools/Fsp/DefaultCerfa";
+class FspTemplateModel : public QStandardItemModel
+{
+    Q_OBJECT
+    
+public:
+    explicit FspTemplateModel(QObject *parent = 0);
+    ~FspTemplateModel();
+    
+    bool initialize();
+    
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
-// Settings Values
-const char * const S_CERFA_01 = "cerfa01";
-const char * const S_CERFA_02 = "cerfa02";
+    const Fsp &fsp(const QModelIndex &index) const;
 
-// Datapack path
-const char * const DATAPACK_PATH = "/fsp/";
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    
+private:
+    FspTemplateModelPrivate *d;
+};
 
-}
-}
-#endif // TOOLS_FSPCONSTANTS_H
+} // namespace Internal
+} // namespace Tools
+
+#endif // TOOLS_INTERNAL_FSPTEMPLATEMODEL_H
+
