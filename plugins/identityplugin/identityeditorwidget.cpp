@@ -157,8 +157,6 @@ bool IsDirtyDataWidgetMapper::isDirty() const
             // Special case of null original variant
             if (orig.isNull() && current.toString().isEmpty())
                 continue;
-            QVariant::Type currentType = current.type();
-            QVariant::Type origType = orig.type();
             if (current.type() == QVariant::Pixmap)
                 if (orig.isNull() && current.value<QPixmap>().isNull())
                     continue;
