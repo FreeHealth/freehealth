@@ -53,14 +53,10 @@
  * data from the database.
  */
 
-
-
 using namespace Account2;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 using namespace Constants;
-
-enum { WarnDebugMessage = false };
 
 static inline Account2::AccountCore *accountCore() {return Account2::AccountCore::instance();}
 static inline Account2::Internal::AccountBase *accountBase() {return Account2::AccountCore::instance()->accountBase();}

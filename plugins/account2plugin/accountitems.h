@@ -189,6 +189,7 @@ protected:
     Fee _fee;
     double _percent;
 };
+
 class ACCOUNT2_EXPORT Payment : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
