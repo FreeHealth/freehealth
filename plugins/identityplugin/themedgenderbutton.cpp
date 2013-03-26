@@ -86,10 +86,25 @@ ThemedGenderButton::ThemedGenderButton(QWidget *parent) :
     addAction(m_separator);
 }
 
+/** Set the pixmap of the button */
+void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
+{
+    //TODO: check if pixmap is already the same - if yes, return without emitting pixmapChanged()
+
+    setIcon(QIcon(pixmap));
+    m_isDefaultGender = false;
+    m_pixmap = pixmap;
+    m_deletePhotoAction->setEnabled(!pixmap.isNull());
+    Q_EMIT pixmapChanged(pixmap);
+}
+
 /** Return the current pixmap of the button */
 QPixmap ThemedGenderButton::pixmap() const
 {
-    return m_pixmap;
+    if (m_isDefaultGender)
+        return QPixmap();
+    else
+        return m_pixmap;
 }
 
 /** Set the default action of the button */
@@ -126,16 +141,6 @@ QAction *ThemedGenderButton::deletePhotoAction() const
     return m_deletePhotoAction;
 }
 
-/** Set the pixmap of the button */
-void ThemedGenderButton::setPixmap(const QPixmap &pixmap)
-{
-    setIcon(QIcon(pixmap));
-    m_isDefaultGender = false;
-    m_pixmap = pixmap;
-    m_deletePhotoAction->setEnabled(!pixmap.isNull());
-    Q_EMIT pixmapChanged(pixmap);
-}
-
 /** Clear the internal pixmap of the button */
 void ThemedGenderButton::clearPixmap()
 {
@@ -157,4 +162,5 @@ void ThemedGenderButton::setGenderImage(int genderIndex)
     genderPix = theme()->defaultGenderPixmap(genderIndex);
     setPixmap(genderPix);
     m_isDefaultGender = true;
+    m_deletePhotoAction->setEnabled(false);
 }

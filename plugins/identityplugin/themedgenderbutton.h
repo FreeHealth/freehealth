@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
- *   Contributors :                                                        *
+ *   Main Developer:  Christian A. Reiter <christian.a.reiter@gmail.com>   *
+ *   Contributors:                                                         *
  *       Eric Maeker                                                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -41,7 +41,7 @@ namespace Internal {
 class ThemedGenderButton : public QToolButton
 {
     Q_OBJECT
-    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap NOTIFY pixmapChanged)
+    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap NOTIFY pixmapChanged USER true)
 
 public:
     explicit ThemedGenderButton(QWidget* parent = 0);

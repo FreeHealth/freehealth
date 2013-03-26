@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -52,7 +52,6 @@ public:
     IsDirtyDataWidgetMapper(QObject *parent = 0);
     void onModelSubmitted();
     bool isDirty() const;
-    void setPixmapDirty(bool dirty);
 
 public Q_SLOTS:
     void setCurrentIndex(int index);
@@ -62,7 +61,6 @@ private:
 
 private:
     QHash<QWidget *, QVariant> _original;
-    bool m_PixDirty;
 };
 }
 
@@ -181,7 +179,6 @@ private:
 private Q_SLOTS:
     void photoButton_clicked();
     void onCurrentPatientChanged();
-    void onPhotoPixmapChanged();
     void onPhotoProviderRequested();
     void onPhotoProviderPhotoReady(const QPixmap &pixmap);
 
