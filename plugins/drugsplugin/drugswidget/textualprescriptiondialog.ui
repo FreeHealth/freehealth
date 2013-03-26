@@ -51,7 +51,11 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QTextEdit" name="drugNameTextEdit"/>
+    <widget class="QTextEdit" name="drugNameTextEdit">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_3">
@@ -67,7 +71,11 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QTextEdit" name="drugNoteTextEdit"/>
+    <widget class="QTextEdit" name="drugNoteTextEdit">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="7" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -94,6 +102,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>drugNameTextEdit</tabstop>
+  <tabstop>drugNoteTextEdit</tabstop>
+  <tabstop>aldCheck</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
