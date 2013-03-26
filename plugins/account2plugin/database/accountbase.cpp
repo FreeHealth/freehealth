@@ -343,7 +343,7 @@ public:
         return quot;
     }
 
-    // Retrieve all date related to an item. Does not create its transaction.
+    // Retrieve all dates related to an item. Does not create its transaction.
     // The dateDid() must return a real value.
     bool getDates(VariableDatesItem &item)
     {
