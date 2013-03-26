@@ -287,7 +287,7 @@ void ItemEditorWidget::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *
     case ICalendarItemDataWidget::AfterDescription: d->ui->afterDescriptionLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::AfterGeneralInformation: d->ui->afterGeneralInformationLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::BeforeDateTime: d->ui->beforeDateTimeLayout->addWidget(widget); break;
-    case ICalendarItemDataWidget::BeforeDescrition: d->ui->beforeDescriptionLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::BeforeDescription: d->ui->beforeDescriptionLayout->addWidget(widget); break;
     }
 }
 

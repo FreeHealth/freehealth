@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *   Main Developers:                                                     *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ICALENDARITEMDATAWIDGET_H
@@ -55,7 +55,7 @@ public:
         AfterDateTime,
         AfterDescription,
         BeforeDateTime,
-        BeforeDescrition
+        BeforeDescription
     };
 
     ICalendarItemDataWidget(QObject *parent = 0) : QObject(parent) { }
