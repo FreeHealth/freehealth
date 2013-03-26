@@ -51,7 +51,8 @@ public:
     enum InsertionPlaces {
         Beginning = 0,              //!< top of dialog
         Ending,                     //!< bottom of dialog
-        AfterGeneralInformation,    //!< after "general Information"
+        BeforeGeneralInformation,   //!< in the "extra section", before "general Information"
+        AfterGeneralInformation,    //!< in the "extra section", after "general Information"
         BeforeDateTime,             //!< before date/time section
         AfterDateTime,              //!< after the date/time section
         BeforeDescription,          //!< before description
