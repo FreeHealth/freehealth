@@ -148,7 +148,7 @@ public:
     bool isNull() {return _amount <= 0.0;}
 
     virtual void setTaxRate(double taxRate) { _taxRate = taxRate; }
-    virtual double taxRate() { return _taxRate; }
+    virtual double taxRate() const { return _taxRate; }
 
     virtual QString userUid() const {return _userUid;}
     virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
@@ -183,7 +183,7 @@ public:
 
     void setFee(const Fee &fee) {_fee = fee;}
     const Fee &fee() const {return _fee;}
-    const int feeId() const {return _fee.id();}
+    int feeId() const {return _fee.id();}
 
     void setPaidPercentage(double percent) {_percent = percent;}
     double paidPercentage() const {return _percent;}
