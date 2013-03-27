@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -54,11 +54,11 @@ protected:
 public:
     static PdfTkWrapper *instance();
     ~PdfTkWrapper();
-    
+
     bool initialize();
-    
+
 Q_SIGNALS:
-    
+
 public Q_SLOTS:
     // Checker
     bool isAvailable() const;

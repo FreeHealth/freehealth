@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -77,11 +77,11 @@
  */
 
 /**
- * \var Form::IFormItemData::ID_EpisodeLabel 
+ * \var Form::IFormItemData::ID_EpisodeLabel
  */
 
 /**
- * \var Form::IFormItemData::ID_UserName 
+ * \var Form::IFormItemData::ID_UserName
  */
 
 /**
@@ -90,7 +90,7 @@
 
 
 /**
- * \var Form::IFormItemData::ID_CurrentUuid 
+ * \var Form::IFormItemData::ID_CurrentUuid
  */
 
 /**
@@ -103,7 +103,7 @@
  */
 
 /**
- * \var Form::IFormItemData::PatientModelRole, 
+ * \var Form::IFormItemData::PatientModelRole,
  * Value to use for the patient model (if the Form::FormItem has got a patient data representation).
  */
 
@@ -116,7 +116,7 @@
  * \fn void Form::IFormItemData::clear()
  * Clear the data manager (return to the default value using the form item Form::FormItemValues).
  */
- 
+
 /**
  * \fn Form::FormItem *Form::IFormItemData::parentItem()
  * Return the parent Form::FormItem.

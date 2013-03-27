@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
+ *   Main Developer:  Eric MAEKER, <eric.maeker@free.fr>                  *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "iconbadgealert.h"

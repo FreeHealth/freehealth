@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef PADTOOLS_TOKENTREEVIEW_H
@@ -44,7 +44,7 @@ class TokenTreeView : public QTreeView
     Q_OBJECT
 public:
     explicit TokenTreeView(QWidget *parent = 0);
-    
+
 protected:
     void startDrag(Qt::DropActions supportedActions);
 

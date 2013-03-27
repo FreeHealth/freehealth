@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "assetmodel.h"
@@ -126,9 +126,9 @@ QVariant AssetModel::headerData(int section, Qt::Orientation orientation, int ro
     return d->m_SqlTable->headerData(section,orientation,role);
 }
 
-bool AssetModel::setHeaderData(int section, 
-                                  Qt::Orientation orientation, 
-                                  const QVariant & value, 
+bool AssetModel::setHeaderData(int section,
+                                  Qt::Orientation orientation,
+                                  const QVariant & value,
                                   int role){
     bool ret = true;
     ret = d->m_SqlTable->setHeaderData(section,orientation,value,role);

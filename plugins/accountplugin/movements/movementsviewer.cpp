@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "movementsviewer.h"
@@ -93,22 +93,22 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
     ui->quitButton->setShortcut(QKeySequence::Quit);
     ui->quitButton->setToolTip(QKeySequence(QKeySequence::Quit).toString());
-    
+
     ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     ui->deleteButton->setShortcut(QKeySequence::Delete);
     ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
-    
+
     ui->validButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     ui->validButton->setShortcut(QKeySequence("CTRL+V"));
-    ui->validButton->setToolTip(QKeySequence(QKeySequence("CTRL+V")).toString());    
-    
+    ui->validButton->setToolTip(QKeySequence(QKeySequence("CTRL+V")).toString());
+
     ui->valAndRecButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
     ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
-    ui->valAndRecButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString()); 
+    ui->valAndRecButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
 
     ui->recordButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
     ui->recordButton->setShortcut(QKeySequence::Save);
-    ui->recordButton->setToolTip(QKeySequence(QKeySequence::Save).toString()); 
+    ui->recordButton->setToolTip(QKeySequence(QKeySequence::Save).toString());
 
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeaccout()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -50,20 +50,20 @@ class IdentityViewerWidget : public QWidget
 public:
     explicit IdentityViewerWidget(QWidget *parent = 0);
     ~IdentityViewerWidget();
-    
+
     bool initialize();
-    
+
     Patients::PatientModel *patientModel() const;
 
 //Q_SIGNALS:
-    
+
 private Q_SLOTS:
     void getPatientForms();
 
 public Q_SLOTS:
     void setCurrentPatientModel(Patients::PatientModel *model);
     void setCurrentIndex(const QModelIndex &patientIndex);
-    
+
 private:
     //void IdentityWidget::changeEvent(QEvent *e)
 

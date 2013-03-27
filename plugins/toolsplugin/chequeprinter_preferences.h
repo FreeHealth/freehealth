@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <>                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
@@ -57,23 +57,23 @@ class ChequePrinterPreferencesWidget;
 class ChequePrinterPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit ChequePrinterPreferencesWidget(QWidget *parent = 0);
     ~ChequePrinterPreferencesWidget();
-    
+
     void setDataToUi();
     QString searchKeywords() const;
-    
+
     static void writeDefaultSettings(Core::ISettings *s);
-    
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    
+
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
-    
+
 private:
     Ui::ChequePrinterPreferencesWidget *ui;
 };
@@ -84,26 +84,26 @@ class ChequePrinterPreferencesPage : public Core::IOptionsPage
 public:
     ChequePrinterPreferencesPage(QObject *parent = 0);
     ~ChequePrinterPreferencesPage();
-    
+
     QString id() const;
     QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
-    
+
     void resetToDefaults();
     void checkSettingsValidity();
     void apply();
     void finish();
-    
+
     bool matches(const QString &s) const;
-    
+
     QString helpPage() {return QString();}
-    
+
     static void writeDefaultSettings(Core::ISettings *s) {ChequePrinterPreferencesWidget::writeDefaultSettings(s);}
-    
+
     QWidget *createPage(QWidget *parent = 0);
-    
+
 private:
     QPointer<Internal::ChequePrinterPreferencesWidget> m_Widget;
     QString m_searchKeywords;

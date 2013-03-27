@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -122,7 +122,7 @@ static inline void defineLibraryPaths()
 
 int main( int argc, char *argv[] )
 {
-    
+
     QApplication app(argc, argv);
 
 #if QT_VERSION < 0x050000
@@ -226,7 +226,7 @@ int main( int argc, char *argv[] )
 //        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 123;
     }
-    
+
 //    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
 //        printVersion(coreplugin, pluginManager);
 //        return 0;

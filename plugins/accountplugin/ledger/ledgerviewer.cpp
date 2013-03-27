@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "ledgerviewer.h"
@@ -74,7 +74,7 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
                            "padding: 1px 4px;"
                            "background: transparent;"
                            "border-radius: 4px;}"
-                           "QMenuBar::item:selected {" // when selected using mouse or keyboard 
+                           "QMenuBar::item:selected {" // when selected using mouse or keyboard
                            "background: #a8a8a8;}"
                            "QMenuBar::item:pressed {"
                            "background: #888888;}";
@@ -120,7 +120,7 @@ void LedgerViewer::changeEvent(QEvent *e) {
 }
 
 void LedgerViewer::fillMenuBar(){
-    
+
     m_menuBar->addMenu(m_menuWidgetAction);
     m_menuBar->addMenu(m_menuAnalyze);
     m_menuBar->addMenu(m_ledger);
@@ -336,5 +336,5 @@ void LedgerViewer::quitFreeAccount()
     {
     	close();
         }
-    
+
 }

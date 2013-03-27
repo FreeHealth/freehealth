@@ -21,7 +21,7 @@
 # ***************************************************************************/
 #/***************************************************************************
 # *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
-# *   Contributors :                                                        *
+# *  Contributors:                                                          *
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # *       NAME <MAIL@ADDRESS.COM>                                           *
 # ***************************************************************************/
@@ -65,7 +65,7 @@ cd $SCRIPT_PATH"/.."
 #echo "Updating files rights : step 1"
 #sudo find . -type f -exec chmod -R 666 {} \;
 #echo "Updating files rights : step 2"
-#sudo find . -type f -name "*.sh" -exec chmod -R 777 {} \; 
+#sudo find . -type f -name "*.sh" -exec chmod -R 777 {} \;
 
 export COPYFILE_DISABLE=true
 

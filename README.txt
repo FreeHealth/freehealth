@@ -28,7 +28,7 @@ II. When did this project start?
 
 This project started from scratch in October 2008. It was conducted by
 a few professionals. Eric Maeker, MD (France) is the Main Creator and
-Main Developper.
+Main Developer.
 
 
 III. Where can I find informations about FreeMedForms?

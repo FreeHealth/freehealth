@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -49,7 +49,7 @@ public:
     explicit DataPackPage(QObject *parent = 0);
     ~DataPackPage();
     bool initialize();
-    
+
     virtual QString id() const {return "DataPackPage";}
     virtual QString name() const;
     virtual QString category() const;

@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef PADTOOLS_TOKENEDITORWIDGET_H
@@ -53,11 +53,11 @@ class TokenEditorWidget;
 class TokenEditorWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit TokenEditorWidget(QWidget *parent = 0);
     ~TokenEditorWidget();
-    
+
     void setTokenModel(TokenModel *model);
 
 public Q_SLOTS:

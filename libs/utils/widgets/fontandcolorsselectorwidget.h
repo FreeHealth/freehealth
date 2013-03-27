@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FONTANDCOLORSSELECTORWIDGET_H
@@ -40,7 +40,7 @@ class UTILS_EXPORT FontAndColorsSelectorWidget : public QWidget
     Q_OBJECT
 public:
     explicit FontAndColorsSelectorWidget(QWidget *parent = 0);
-    
+
     void setLabelText(const QString &unTranslatedText, const QString &translationContext);
     void setDefaultFont(const QFont &font);
     void setCurrentFont(const QFont &font);

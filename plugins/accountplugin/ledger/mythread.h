@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MYTHREAD_H
@@ -73,7 +73,7 @@ class ProduceDoc: public QThread {
     enum placeInVector {
         PLACE_OF_DATE = 0,
         PLACE_OF_PATIENT_NAME,
-        PLACE_OF_CASH        
+        PLACE_OF_CASH
         };
     enum tableColumns {
         TABLE_DATE = 1,
@@ -103,22 +103,22 @@ class ProduceDoc: public QThread {
         void        fillTable(QList<QVector<QString> > & tableau,
                               QTextTableFormat & tableFormatOrganized,
                               QTextCursor * cursorForFillFunction,
-                              QString & thisMonth, 
-                              QStringList & listSums, 
+                              QString & thisMonth,
+                              QStringList & listSums,
                               int choice,
                               const QString & totalMovementString);
         QStringList calculateReceipts(QString & dateBegin, QString & dateEnd);
         QStringList calculateMovements(QString & dateBegin, QString & dateEnd);
-    
-                         
+
+
         QTextTableFormat myFormat(QTextTableFormat & tableFormat,QString & parametersForTableFormat);
-                               
+
         bool modele(QString & month,
-                    QString & day1 , 
+                    QString & day1 ,
                     QString & lastDay ,
                     QTextTableFormat & tableFormatOrganized,
                     QTextCursor *cursorForFunction);
-    
+
     signals :
         void outThread(const QString & text);
         //void started();

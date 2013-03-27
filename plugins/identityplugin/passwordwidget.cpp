@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -62,7 +62,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~PasswordWidgetPrivate()
     {
         delete ui;
@@ -90,7 +90,7 @@ public:
 public:
     Ui::PasswordWidget *ui;
     QString _cachedUncryptedPassword, _cachedCryptedPassword;
-    
+
 private:
     PasswordWidget *q;
 };

@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -85,7 +85,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~UserManagerModelPrivate()
     {
     }
@@ -150,7 +150,7 @@ public:
             sql += QString(" WHERE (%1)").arg(f);
         return sql;
     }
-    
+
     // Create sub-items for one user \e currentItem with all IUserViewerPages
     void appendPages(QStandardItem *currentItem)
     {

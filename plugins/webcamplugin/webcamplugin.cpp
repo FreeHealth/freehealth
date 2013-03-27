@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -66,14 +66,14 @@ WebcamPlugin::WebcamPlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_webcam");
-    
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
-    
+
 //    // All preferences pages must be created in this part (before user connection)
 //    m_prefPage = new WebcamPreferencesPage(this);
 //    // And included in the QObject pool
 //    addObject(m_prefPage);
-    
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -90,7 +90,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    
+
     if (Utils::Log::warnPluginsCreation()) {
         qDebug() << "WebcamPlugin::initialize";
     }
@@ -108,9 +108,9 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-    
+
     // No user is logged in until here
-    
+
     messageSplash(tr("Initializing Webcam..."));
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
@@ -128,7 +128,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     //    menu->menu()->setTitle(tr("Webcam"));
     //    menu->addAction(cmd);
     //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
-    
+
     return true;
 }
 
@@ -137,11 +137,11 @@ void WebcamPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qDebug() << "Webcam::extensionsInitialized";
     }
-    
+
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
-    
+
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     //    // no user -> stop here
@@ -149,13 +149,13 @@ void WebcamPlugin::extensionsInitialized()
     //        return;
     //    if (user()->uuid().isEmpty())
     //        return;
-    
+
     messageSplash(tr("Initializing Webcam..."));
-    
+
     // At this point, user is connected
-    
+
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
-    
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

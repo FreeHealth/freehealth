@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -43,14 +43,14 @@ class FspPrinterDialogPrivate;
 class FspPrinterDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit FspPrinterDialog(QWidget *parent = 0);
     ~FspPrinterDialog();
     bool initialize();
-    
+
 Q_SIGNALS:
-    
+
 private Q_SLOTS:
     void printFsp();
     void printCheque();

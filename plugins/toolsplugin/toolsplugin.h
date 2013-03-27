@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TOOLS_IPLUGIN_H
@@ -43,7 +43,7 @@ class ToolsPlugin : public ExtensionSystem::IPlugin
 public:
     ToolsPlugin();
     ~ToolsPlugin();
-    
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();

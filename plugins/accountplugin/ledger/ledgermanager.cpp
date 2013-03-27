@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "ledgermanager.h"
@@ -58,7 +58,7 @@ AccountModel * LedgerManager::getModelMonthlyReceiptsAnalysis(QObject * parent,Q
 }
 
 QStandardItemModel * LedgerManager::getModelMonthlyAndTypeReceiptsAnalysis(QObject * parent,
-                                                                       QString & month , 
+                                                                       QString & month ,
                                                                        QString & year){
     QStandardItemModel * model = new QStandardItemModel(parent);
     m_sums = 0.00;

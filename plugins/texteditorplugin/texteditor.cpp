@@ -25,8 +25,8 @@
  ***************************************************************************/
 
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
@@ -275,8 +275,8 @@ public:
             cursor.select(QTextCursor::WordUnderCursor);
         cursor.mergeCharFormat(format);
         textEdit->mergeCurrentCharFormat(format);
-    }           
-    
+    }
+
 public:
     TextEditor::Types m_Type;
     EditorContext *m_Context;

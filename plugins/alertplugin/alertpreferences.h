@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ALERT_INTERNAL_ALERTPREFERENCES_H
@@ -53,11 +53,11 @@ class AlertPreferencesWidget;
 class AlertPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit AlertPreferencesWidget(QWidget *parent = 0);
     ~AlertPreferencesWidget();
-    
+
     void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);

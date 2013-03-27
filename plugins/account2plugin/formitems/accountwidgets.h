@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker <eric.maeker@gmail.com>                 *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -59,20 +59,20 @@ public:
 class FeeFormWidget : public Form::IFormWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit FeeFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~FeeFormWidget();
-    
+
     void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const;
-    
+
     // Printing
     QString printableHtml(bool withValues = true) const;
-    
+
 public Q_SLOTS:
     void retranslate();
-    
+
 };
 
 class FeeFormWidgetData : public Form::IFormItemData
@@ -81,19 +81,19 @@ public:
     FeeFormWidgetData(Form::FormItem *item, FeeFormWidget *formWidget);
     ~FeeFormWidgetData();
     void clear();
-    
+
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
     void setModified(bool modified);
-    
+
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
-    
+
     // Used storable data for forms
     void setStorableData(const QVariant &modified);
     QVariant storableData() const;
-    
+
 //private Q_SLOTS:
 //    void onValueChanged();
 

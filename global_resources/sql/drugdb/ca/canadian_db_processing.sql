@@ -33,8 +33,8 @@
 -- *   POSSIBILITY OF SUCH DAMAGE.                                           *
 -- ***************************************************************************/
 -- /**************************************************************************
--- *   Main Developper : Jim Busser, MD <jbusser@interchange.ubc.ca>         *
--- *   Contributors :                                                        *
+-- *   Main Developer:  Jim Busser, MD <jbusser@interchange.ubc.ca>         *
+-- *  Contributors:                                                          *
 -- *       Eric MAEKER, MD <eric.maeker@free.fr>                             *
 -- ***************************************************************************/
 
@@ -53,7 +53,7 @@
 --  * Dec 26, 2010
 --  *   More correctly constructed values for global_strength and dosage
 --  *   Patched also against Canadian source bug (drugs missing ingredients)
---  * 
+--  *
 --  * Sept 22, 2010 : recreate the drug's UID using forms and routes ID.
 --  *   Preparation of the future surrogate key.
 --  *   Drugs are created by the FreeToolBox code.

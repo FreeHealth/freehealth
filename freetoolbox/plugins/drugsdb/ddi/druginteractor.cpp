@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
- *   Contributors :                                                        *
+ *  Main Developer: Eric MAEKER, MD <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -640,7 +640,7 @@ QVariant DrugInteractorModel::data(const QModelIndex &index, int role) const
         } // End switch
     } else if (role == Qt::ToolTipRole) {
         return d->getTooltip(item);
-    } else if (role==Qt::ForegroundRole) {        
+    } else if (role==Qt::ForegroundRole) {
         if (!di->isClass() && di->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
             return QColor(255,50,50,150);
         }

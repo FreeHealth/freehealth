@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -75,7 +75,7 @@ public Q_SLOTS:
     bool removePatient(const QString &uuid);
 
 Q_SIGNALS:
-    
+
 private Q_SLOTS:
     void postCoreInitialization();
 

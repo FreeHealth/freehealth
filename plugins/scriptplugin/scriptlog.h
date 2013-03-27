@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -44,7 +44,7 @@ class ScriptLog : public QObject
 public:
     explicit ScriptLog(QObject *parent = 0);
     ~ScriptLog();
-    
+
 public Q_SLOTS:
     void message(const QString &owner, const QString &message);
     void error(const QString &owner, const QString &message);

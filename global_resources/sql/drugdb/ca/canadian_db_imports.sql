@@ -33,8 +33,8 @@
 -- *   POSSIBILITY OF SUCH DAMAGE.                                           *
 -- ***************************************************************************/
 -- /**************************************************************************
--- *   Main Developper : Jim Busser, MD <jbusser@interchange.ubc.ca>         *
--- *   Contributors :                                                        *
+-- *   Main Developer:  Jim Busser, MD <jbusser@interchange.ubc.ca>         *
+-- *  Contributors:                                                          *
 -- *       Eric MAEKER, MD <eric.maeker@free.fr>                             *
 -- ***************************************************************************/
 

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker                                *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -50,7 +50,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
     : Form::IFormWidget(formItem, parent)
 {
     setObjectName("TreeViewFormItem");
-    
+
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -82,7 +82,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
     //            m_List->setSelectionMode(QAbstractItemView::MultiSelection);
         hb->addWidget(m_Tree);
     }
-    
+
     // Create the model using the extraData 'xmlModel', 'jsonModel'
     if (!m_FormItem->extraData().value("xmlmodel").isEmpty()) {
         // Read the XML model
@@ -92,11 +92,11 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
 //    m_Tree->setModel(m_Model);
 
     setFocusableWidget(m_Tree);
-    
+
     // create FormItemData
     TreeViewFormItemData *data = new TreeViewFormItemData(m_FormItem, this);
     m_FormItem->setItemData(data);
-    
+
     // connect(m_List->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), data, SLOT(onValueChanged()));
 }
 

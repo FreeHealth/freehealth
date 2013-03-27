@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "identityplugin.h"
@@ -51,17 +51,17 @@ IdentityPlugin::IdentityPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Identity";
-    
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_identity");
-    
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
-    
+
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
 //    m_prefPage = new IdentityPreferencesPage(this);
 //    addObject(m_prefPage);
-    
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -76,27 +76,27 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    
+
     setObjectName("IdentityPlugin");
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "creating Identity";
     }
-    
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-    
+
     // No user is logged in until here
-    
-    
+
+
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
     //    QAction *action = new QAction(tr("Identity action"), this);
@@ -109,7 +109,7 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
     //    menu->menu()->setTitle(tr("Identity"));
     //    menu->addAction(cmd);
     //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
-    
+
     return true;
 }
 
@@ -118,11 +118,11 @@ void IdentityPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "Identity::extensionsInitialized";
     }
-    
+
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
-    
+
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     //    // no user -> stop here
@@ -130,13 +130,13 @@ void IdentityPlugin::extensionsInitialized()
     //        return;
     //    if (user()->uuid().isEmpty())
     //        return;
-    
+
     messageSplash(tr("Initializing Identity..."));
-    
+
     // At this point, user is connected
-    
+
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
-    
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }

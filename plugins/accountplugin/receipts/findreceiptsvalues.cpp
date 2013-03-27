@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "findreceiptsvalues.h"
@@ -124,7 +124,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setShortcut(QKeySequence::Quit);
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(QKeySequence(QKeySequence::Quit).toString());
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(theme()->icon(Core::Constants::ICONEXIT));
-  
+
   //flag
   setFlagAccordingToMProcedureCountry();
   //disable lessButton
@@ -669,8 +669,8 @@ void findReceiptsValues::setLessButtonEnabled(QListWidgetItem * item)
 void findReceiptsValues::setFlagAccordingToMProcedureCountry()
 {
   int counterId = 0;
-  QString reqCountry; 
-  QString flagText;  
+  QString reqCountry;
+  QString flagText;
   while(reqCountry.isEmpty())
   {
       ++counterId;

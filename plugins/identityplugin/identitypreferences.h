@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <eric.maeker@gmail.com>                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef IDENTITY_INTERNAL_IDENTITYPREFERENCES_H
@@ -45,23 +45,23 @@ class IdentityPreferencesWidget;
 class IdentityPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit IdentityPreferencesWidget(QWidget *parent = 0);
     ~IdentityPreferencesWidget();
-    
+
     void setDataToUi();
     QString searchKeywords() const;
-    
+
     static void writeDefaultSettings(Core::ISettings *s);
-    
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    
+
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
-    
+
 private:
     Ui::IdentityPreferencesWidget *ui;
 };
@@ -72,23 +72,23 @@ class IdentityPreferencesPage : public Core::IOptionsPage
 public:
     IdentityPreferencesPage(QObject *parent = 0);
     ~IdentityPreferencesPage();
-    
+
     QString id() const;
     QString name() const;
     QString category() const;
     QString title() const {return name();}
-    
+
     void resetToDefaults();
     void checkSettingsValidity();
     void applyChanges();
     void finish();
-    
+
     QString helpPage() {return QString();}
-    
+
     static void writeDefaultSettings(Core::ISettings *s) {IdentityPreferencesWidget::writeDefaultSettings(s);}
-    
+
     QWidget *createPage(QWidget *parent = 0);
-    
+
 private:
     QPointer<Internal::IdentityPreferencesWidget> m_Widget;
 };

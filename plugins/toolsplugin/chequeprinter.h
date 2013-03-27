@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -49,9 +49,9 @@ class TOOLS_EXPORT ChequePrinter
 {
 public:
     explicit ChequePrinter();
-    ~ChequePrinter();    
+    ~ChequePrinter();
     bool initialize();
-    
+
     void setOrder(const QString &order);
     void setPlace(const QString &place);
     void setDate(const QDate &date);

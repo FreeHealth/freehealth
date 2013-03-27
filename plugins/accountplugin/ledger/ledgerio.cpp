@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "ledgerio.h"
@@ -642,13 +642,13 @@ QString LedgerIO::getNoName(const QString nameSurname)
     QStringList nameList;
     	if (nameSurname.contains(","))
     	{
-    		nameList = nameSurname.split(",");  
+    		nameList = nameSurname.split(",");
     	    }
     	if (nameSurname.contains(" ")&& !nameSurname.contains(","))
     	{
     		nameList = nameSurname.split(" ");
     	    }
-    	
+
     	QString name;
     	QString surname;
     	if (nameList.size()>1)
@@ -663,15 +663,15 @@ QString LedgerIO::getNoName(const QString nameSurname)
     		  	  name = surname;
     		  	  surname = nameList[SURNAME+1];
     		          }
-    		      }		  
-    		  
+    		      }
+
     	    }
     	for (int i = 1; i < name.size(); ++i)
     	{
     		  name.replace(i,1,"x");
     	    }
     	QString newNameSurname;
-    	newNameSurname = name+","+surname;    
+    	newNameSurname = name+","+surname;
     return newNameSurname;
 }
 

@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <eric.maeker@gmail.com>                               *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "fspprinterpreferences.h"
@@ -120,7 +120,7 @@ QString FspPrinterPreferencesWidget::searchKeywords() const
     // QTextStream(&rc)
     //        << ui->someLabel->text()
     //        << ui->otherLabel->text();
-    
+
     rc.remove(QLatin1Char('&'));
     return rc;
 }
@@ -398,7 +398,7 @@ void FspPrinterPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
-    
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));

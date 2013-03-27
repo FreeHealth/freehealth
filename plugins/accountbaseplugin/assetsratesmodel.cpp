@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "assetsratesmodel.h"
@@ -67,7 +67,7 @@ private:
 
 
 
-AssetsRatesModel::AssetsRatesModel(QObject *parent) : QAbstractTableModel(parent), 
+AssetsRatesModel::AssetsRatesModel(QObject *parent) : QAbstractTableModel(parent),
                                                       //m_UserUid(user()->value(Core::IUser::Uuid).toString()),
                                                       d(new Internal::AssetsRatesModelPrivate(this))
 {

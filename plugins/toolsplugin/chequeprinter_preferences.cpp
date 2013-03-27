@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <>                             *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "chequeprinter_preferences.h"
@@ -72,7 +72,7 @@ QString ChequePrinterPreferencesWidget::searchKeywords() const
     // QTextStream(&rc)
     //        << ui->someLabel->text()
     //        << ui->otherLabel->text();
-    
+
     rc.remove(QLatin1Char('&'));
     return rc;
 }

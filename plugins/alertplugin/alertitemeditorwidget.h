@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ALERTITEMEDITORWIDGET_H
@@ -43,7 +43,7 @@ class AlertItemEditorWidgetPrivate;
 class AlertItemEditorWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit AlertItemEditorWidget(QWidget *parent = 0);
     ~AlertItemEditorWidget();

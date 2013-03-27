@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
  ***************************************************************************/
 #include <QSqlTableModel>

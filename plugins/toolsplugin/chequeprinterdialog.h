@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -48,11 +48,11 @@ class ChequePrinterDialog;
 class TOOLS_EXPORT ChequePrinterDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit ChequePrinterDialog(QWidget *parent = 0);
     ~ChequePrinterDialog();
-    
+
     void setOrder(const QString &order);
     void setPlace(const QString &place);
     void setDate(const QDate &date);

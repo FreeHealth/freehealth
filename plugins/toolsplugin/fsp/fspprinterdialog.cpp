@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -68,12 +68,12 @@ public:
         _condsUi = new Ui::FspPrinterDialogConds;
         _amountsUi = new Ui::FspPrinterDialogAmounts;
     }
-    
+
     ~FspPrinterDialogPrivate()
     {
         delete ui;
     }
-    
+
 public:
     Ui::FspPrinterDialog *ui;
     Ui::FspPrinterDialogPatient *_patientUi;

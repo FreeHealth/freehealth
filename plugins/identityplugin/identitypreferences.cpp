@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <eric.maeker@gmail.com>                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "identitypreferences.h"
@@ -67,7 +67,7 @@ QString IdentityPreferencesWidget::searchKeywords() const
     // QTextStream(&rc)
     //        << ui->someLabel->text()
     //        << ui->otherLabel->text();
-    
+
     rc.remove(QLatin1Char('&'));
     return rc;
 }
@@ -186,7 +186,7 @@ void IdentityPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     //    defaultvalues.insert(Identity::Constants::FOO_SETTING_KEY, Identity::Constants::FOO_SETTING_VALUE);
-    
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));

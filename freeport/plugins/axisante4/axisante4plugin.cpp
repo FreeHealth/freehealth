@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Fredman, Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "axisante4plugin.h"
@@ -61,15 +61,15 @@ Axisante4Plugin::Axisante4Plugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Axisante4";
-    
+
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("axisante4"); 
-    
+    Core::ICore::instance()->translators()->addNewTranslator("axisante4");
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
-    
+
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
-    
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -84,27 +84,27 @@ bool Axisante4Plugin::initialize(const QStringList &arguments, QString *errorStr
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    
+
     setObjectName("Axisante4");
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "creating Axisante4";
     }
-    
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-    
+
     // No user is logged in until here
-    
-    
+
+
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
     //    QAction *action = new QAction(tr("Axisante4 action"), this);
@@ -117,7 +117,7 @@ bool Axisante4Plugin::initialize(const QStringList &arguments, QString *errorStr
     //    menu->menu()->setTitle(tr("Axisante4"));
     //    menu->addAction(cmd);
     //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
-    
+
     return true;
 }
 
@@ -126,14 +126,14 @@ void Axisante4Plugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "Axisante4::extensionsInitialized";
     }
-    
+
     // Add Translator to the Application
     //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
-    
+
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
-    
+
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     //    // no user -> stop here
@@ -141,13 +141,13 @@ void Axisante4Plugin::extensionsInitialized()
     //        return;
     //    if (user()->uuid().isEmpty())
     //        return;
-    
+
     messageSplash(tr("Initializing Axisante4..."));
-    
+
     // At this point, user is connected
-    
+
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
-    
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
