@@ -19,8 +19,8 @@
 --  *  If not, see <http://www.gnu.org/licenses/>.                            *
 --  ***************************************************************************/
 -- /**************************************************************************
--- *   Main Developper : Eric MAEKER, MD <eric.maeker@free.fr>               *
--- *   Contributors :                                                        *
+-- *   Main Developer:  Eric MAEKER, MD <eric.maeker@free.fr>               *
+-- *  Contributors:                                                          *
 -- ***************************************************************************/
 
 -- /**

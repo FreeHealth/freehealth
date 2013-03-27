@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -47,14 +47,12 @@ class Fsp;
 class FspPrinterDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit FspPrinterDialog(QWidget *parent = 0);
     ~FspPrinterDialog();
     bool initialize(const Fsp &fsp);
-    
-Q_SIGNALS:
-    
+
 private Q_SLOTS:
     void toggleView(bool complex);
     void expandChildren(const QModelIndex &index);

@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "accountmode.h"
@@ -64,6 +64,7 @@ static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->
 #include <account2plugin/models/feemodel.h>
 #include <account2plugin/models/paymentmodel.h>
 #include <account2plugin/models/bankaccountmodel.h>
+#include <account2plugin/models/medicalproceduremodel.h>
 // END TEST
 
 AccountMode::~AccountMode()
@@ -142,6 +143,15 @@ void AccountMode::postCoreInitialization()
     QLabel *lblBkAcc = new QLabel("Bank account Model/View", w);
     lay->addWidget(lblBkAcc);
     lay->addWidget(bkAccView);
+
+    // MedicalProcedureView
+    QTableView *mpView = new QTableView(w);
+    MedicalProcedureModel *mpModel = new MedicalProcedureModel(this);
+    mpModel->setFilter("%");
+    mpView->setModel(mpModel);
+    QLabel *lblMp = new QLabel("MedProc Model/View", w);
+    lay->addWidget(lblMp);
+    lay->addWidget(mpView);
 
     // Manage stack
     m_Stack->addWidget(w);

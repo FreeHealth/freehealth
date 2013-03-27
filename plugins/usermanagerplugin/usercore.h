@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -62,14 +62,14 @@ protected:
 public:
     static UserCore &instance();
     ~UserCore();
-    
+
     Internal::UserBase *userBase() const;
     UserModel *userModel() const;
 
 Q_SIGNALS:
-    
+
 public Q_SLOTS:
-    
+
 private:
     Internal::UserCorePrivate *d;
     static UserCore *_instance;

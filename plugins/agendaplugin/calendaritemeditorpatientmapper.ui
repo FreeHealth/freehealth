@@ -64,7 +64,10 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="createPatientToolButton">
+         <widget class="QToolButton" name="useCurrentPatientToolButton"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="newPatientToolButton">
           <property name="text">
            <string/>
           </property>
@@ -106,6 +109,12 @@
    <header location="global">patientbaseplugin/patientsearchedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>patientSearchEdit</tabstop>
+  <tabstop>useCurrentPatientToolButton</tabstop>
+  <tabstop>newPatientToolButton</tabstop>
+  <tabstop>selectedPatientView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

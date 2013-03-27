@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *   Main developers : Eric Maeker                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -49,7 +49,7 @@ class TOOLS_EXPORT ChequePrinter
 {
 public:
     explicit ChequePrinter();
-    ~ChequePrinter();    
+    ~ChequePrinter();
     bool initialize();
     
     void setDrawRects(bool drawRects);

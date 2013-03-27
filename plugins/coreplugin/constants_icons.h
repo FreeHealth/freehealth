@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef CORE_CONSTANTS_ICONS_H
@@ -227,6 +227,7 @@ const char * const  ICONSERVERADMIN   = "people-serveradmin.png";
 
 // patients icons --> MediumSize / BigSize
 const char * const  ICONPATIENT       = "patient.png";
+const char * const  ICONPATIENTNEW    = "patient-new.png";
 const char * const  ICONPATIENTS      = "patientsearch.png";
 const char * const  ICONMALE          = "male.png";
 const char * const  ICONFEMALE        = "female.png";

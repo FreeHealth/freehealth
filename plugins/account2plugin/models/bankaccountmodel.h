@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ACCOUNT2_BANKACCOUNTMODEL_H
@@ -82,7 +82,7 @@ public:
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
     bool isDirty() const;
-    
+
 public Q_SLOTS:
     bool submit();
     void revert();

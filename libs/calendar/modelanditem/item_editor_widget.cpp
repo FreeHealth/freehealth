@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *  Main Developers:                                                       *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -178,7 +178,9 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
 
 ItemEditorWidget::~ItemEditorWidget()
 {
-    delete d;
+    if (d)
+        delete d;
+    d = 0;
 }
 
 /** Clear the widget of its data. All changes will be lost. You must redefine the Calendar::CalendarItem to edit. \sa setCalendarEvent() */
@@ -283,9 +285,11 @@ void ItemEditorWidget::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *
     case ICalendarItemDataWidget::Ending: d->ui->endingLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::AfterDateTime: d->ui->afterDateTimeLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::AfterDescription: d->ui->afterDescriptionLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::BeforeGeneralInformation: d->ui->beforeGeneralInformationLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::AfterGeneralInformation: d->ui->afterGeneralInformationLayout->addWidget(widget); break;
     case ICalendarItemDataWidget::BeforeDateTime: d->ui->beforeDateTimeLayout->addWidget(widget); break;
-    case ICalendarItemDataWidget::BeforeDescrition: d->ui->beforeDescriptionLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::BeforeDescription: d->ui->beforeDescriptionLayout->addWidget(widget); break;
+    default: break;
     }
 }
 

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -47,9 +47,9 @@ public:
     explicit ScriptWriterDialog(QWidget *parent = 0);
     ~ScriptWriterDialog();
     bool initialize();
-    
+
 Q_SIGNALS:
-    
+
 public Q_SLOTS:
     void onReadFileTriggered();
     void onSaveFileTriggered();

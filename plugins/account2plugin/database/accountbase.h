@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNT2_ACCOUNTBASE_H
@@ -81,7 +81,7 @@ public:
     bool save(QList<Quotation> &quotations);
     bool save(QList<MedicalProcedure> &medicalProcedures);
 
-private:    
+private:
     bool createDatabase(const QString &connectionName , const QString &dbName,
                         const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
@@ -89,7 +89,7 @@ private:
                         const int port,
                         CreationOption /*createOption*/
                        );
-    
+
 //    bool checkIfIsFirstVersion();
 //    bool versionHasChanged();
 //    QString checkAndReplaceVersionNumber();

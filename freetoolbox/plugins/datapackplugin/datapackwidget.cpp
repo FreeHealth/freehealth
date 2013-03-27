@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -70,7 +70,7 @@ public:
     {
         ui = new Ui::DataPackWidget;
     }
-    
+
     ~DataPackWidgetPrivate()
     {
         delete ui;
@@ -134,7 +134,7 @@ public:
             sui->datapacksGroup->layout()->addWidget(l);
         }
     }
-    
+
 public:
     Ui::DataPackWidget *ui;
     QHash<QString, Ui::ServerWidget *> _sui;

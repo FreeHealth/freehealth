@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef IDENTITY_H
@@ -49,16 +49,16 @@ class IdentityPlugin : public ExtensionSystem::IPlugin
 public:
     IdentityPlugin();
     ~IdentityPlugin();
-    
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     //    ShutdownFlag aboutToShutdown();
-    
+
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
     //    void triggerAction();
-    
+
 private:
 //    IdentityPreferencesPage *m_prefPage;
 };

@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
- *  Contributors :                                                         *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>                  *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "dragdroptextedit.h"

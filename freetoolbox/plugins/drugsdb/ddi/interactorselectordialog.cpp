@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -65,12 +65,12 @@ public:
         q(parent)
     {
     }
-    
+
     ~InteractorSelectorDialogPrivate()
     {
         delete ui;
     }
-    
+
 public:
     Ui::InteractorSelectorWidget *ui;
     QStringListModel *_selectedNames;

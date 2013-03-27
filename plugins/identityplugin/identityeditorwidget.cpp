@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -127,8 +127,7 @@ const char * const XML_PASSWORD = "pwd";
 namespace Identity {
 namespace Internal {
 IsDirtyDataWidgetMapper::IsDirtyDataWidgetMapper(QObject *parent) :
-    QDataWidgetMapper(parent),
-    m_PixDirty(false)
+    QDataWidgetMapper(parent)
 {
     //TODO: extract this class into Utils?
 }
@@ -145,8 +144,8 @@ bool IsDirtyDataWidgetMapper::isDirty() const
     Q_ASSERT(orientation() == Qt::Horizontal);
     Q_ASSERT(rootIndex() == QModelIndex());
 
-    if (m_PixDirty)
-        return true;
+//    if (m_PixDirty)
+//        return true;
 
     // cycle through all widgets the mapper supports
     for(int i = 0; i < model()->columnCount(); i++) {
@@ -158,6 +157,9 @@ bool IsDirtyDataWidgetMapper::isDirty() const
             // Special case of null original variant
             if (orig.isNull() && current.toString().isEmpty())
                 continue;
+            if (current.type() == QVariant::Pixmap)
+                if (orig.isNull() && current.value<QPixmap>().isNull())
+                    continue;
             if (current != orig) {
 //                qWarning() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(i))
 //                           << "orig" << orig
@@ -167,11 +169,6 @@ bool IsDirtyDataWidgetMapper::isDirty() const
         }
     }
     return false;
-}
-
-void IsDirtyDataWidgetMapper::setPixmapDirty(bool dirty)
-{
-    m_PixDirty = dirty;
 }
 
 /** Overload method (creates the internal cache) */
@@ -193,7 +190,6 @@ void IsDirtyDataWidgetMapper::refreshCache()
             _original.insert(mapWidget, model()->data(model()->index(currentIndex(), i)));
         }
     }
-    m_PixDirty = false;
 }
 
 class IdentityEditorWidgetPrivate
@@ -281,7 +277,6 @@ public:
         }
         QObject::connect(ui->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
         QObject::connect(ui->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
-        QObject::connect(ui->photoButton, SIGNAL(pixmapChanged(QPixmap)), q, SLOT(onPhotoPixmapChanged()));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(clearPasswordChanged(QString)));
         QObject::connect(ui->passwordWidget, SIGNAL(uncryptedPasswordChanged(QString)), q, SIGNAL(passwordConfirmed()));
     }
@@ -912,11 +907,11 @@ bool IdentityEditorWidget::isPasswordCompleted() const
  *
  * \returns QPixmap current widget photo of patient.
  * If patient has no photo in the current widget (this function does NOT query the database!),
- * it returns a QPixmap()
+ * or the widget is displaying the default gender picture, then it returns a QPixmap()
  */
 QPixmap IdentityEditorWidget::currentPhoto() const
 {
-    QPixmap photo;    
+    QPixmap photo;
     photo = hasPhoto() ? d->ui->photoButton->pixmap() : QPixmap();
     return photo;
 }
@@ -1025,18 +1020,6 @@ void IdentityEditorWidget::onCurrentPatientChanged()
     d->m_Mapper->setCurrentModelIndex(patient()->currentPatientIndex());
     d->populatePixmap();
     updateGenderImage();
-}
-
-/**
- * \internal
- * Connected to the photobutton pixmapChanged signal. Manages the mapper dirty state.
- */
-void IdentityEditorWidget::onPhotoPixmapChanged()
-{
-    // BUG: QPixmap are not managed in QDataWidgetMapper
-    // Manage the dirty state of the mapper by hand
-    if (d->m_Mapper)
-        d->m_Mapper->setPixmapDirty(true);
 }
 
 /**

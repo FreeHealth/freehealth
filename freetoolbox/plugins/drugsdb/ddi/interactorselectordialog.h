@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -59,7 +59,7 @@ public:
     void setTitle(const QString &title);
 
     QStringList selectedNames() const;
-    
+
 private Q_SLOTS:
     void onButtonClicked(QAbstractButton *button);
     void onClassInteractorActivated(const QModelIndex &index);

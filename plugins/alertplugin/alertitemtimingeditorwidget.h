@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
@@ -46,7 +46,7 @@ class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
 public:
     explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
     ~AlertItemTimingEditorWidget();
-    
+
 public Q_SLOTS:
     void clear();
     void setAlertItem(const AlertItem &item);

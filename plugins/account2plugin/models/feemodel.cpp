@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "feemodel.h"
@@ -109,6 +109,7 @@ QVariant FeeModel::data(const QModelIndex &index, int role) const
         case Type: return fee.type();
         case Date_Creation: return fee.date(VariableDatesItem::Date_Creation);
         case Date_Execution: return fee.date(VariableDatesItem::Date_MedicalRealisation);
+        case TaxRate: return fee.taxRate();
         case Comment: return fee.comment();
         default: return QVariant();
         }
@@ -135,6 +136,7 @@ QVariant FeeModel::headerData(int section, Qt::Orientation orientation, int role
         case Type: return "Type";
         case Date_Creation: return "DateCreation";
         case Date_Execution: return "DateExec";
+        case TaxRate: return "TaxRate";
         case Comment: return "Comment";
         default: return QVariant();
         }

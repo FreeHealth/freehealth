@@ -9,14 +9,13 @@ gitroot=`git rev-parse --show-toplevel`
 
 
 fix_trailing_whitespaces() {
-
     # get changes since last HEAD
     if git rev-parse --verify HEAD >/dev/null 2>&1
     then
-	    against=HEAD
+        against=HEAD
     else
-	    # Initial commit: diff against an empty tree object (root commit)
-	    against=1d95ea7e95bf04afaaf67f22374cc4722f879392
+        # Initial commit: diff against an empty tree object (root commit)
+        against=1d95ea7e95bf04afaaf67f22374cc4722f879392
     fi
 
     # Find files with trailing whitespace in the current commit
@@ -25,16 +24,37 @@ fix_trailing_whitespaces() {
     # remove lines with +/- at the beginning (first sed)
     # extract filename from line (cut, delimiter ":", fragment 1)
     # merge multiple identical filenames into one (uniq)
-	for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
+#    for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | cut -d: -f1 | uniq` ; do
+    for FILE in `exec git diff-index --cached --name-only $against | uniq` ; do
+
+        # skip THIS file!
+        echo "$FILE" | grep -q "pre-commit" && continue
+        
+        # skip binary files
+        [ `file -ib "$FILE" |cut -d' ' -f2| cut -d= -f2` = "binary" ] && continue
+        
+        echo "processing $FILE..."
+        # replace commonly written "Developper" with "Developer" and fix " :" -> ":" after that
+
+#         count=$(grep "Developer" $FILE -c)
+#         [ "$count" = "0" ] || echo "'Developer' -> 'Developer': $count"
+        sed -i 's/Developper/Developer/' "$FILE"
+        sed -i 's/Developer :/Developer: /' "$FILE"
+        sed -i 's/Developers :/Developers: /' "$FILE"
+
+#         count=$(grep "Contributors: " $FILE -c)
+#         [ "$count" = "0" ] || echo "'Contributors: ' -> 'Contributors:': $count"
+        sed -i 's/Contributors :/Contributors: /' "$FILE"
 
         # replace all trailing whitespace with ""
-		sed -i 's/[[:space:]]*$//' "$FILE"
+        sed -i 's/[[:space:]]*$//' "$FILE"
 
-		# add modified file again to the commit
-		git add "$FILE"
 
-		echo "Automatically fixing trailing whitespace in $FILE."
-	done
+        # add modified file again to the commit
+        git add "$FILE"
+
+        echo "Automatically fixing trailing whitespace in $FILE."
+    done
 }
 
 
@@ -42,5 +62,7 @@ fix_trailing_whitespaces() {
 ######## main structure #########
 # here should be called all the subroutines in the preferred order
 
+echo "Running FreeMedForms git-hooks..."
 # automatically fix trailing whitespace
 fix_trailing_whitespaces
+

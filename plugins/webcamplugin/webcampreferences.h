@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Christian A Reiter <christian.a.reiter@gmail.com>                 *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef WEBCAM_INTERNAL_WEBCAMPREFERENCES_H

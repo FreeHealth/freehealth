@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef BASEWIDGETS_INTERNAL_BASEZIPCODESWIDGET_H

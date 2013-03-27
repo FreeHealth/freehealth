@@ -19,18 +19,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ACCOUNT2_ACCOUNTITEMS
 #define ACCOUNT2_ACCOUNTITEMS
 
-#include <account2plugin/account2_exporter.h>
+#include <account2_exporter.h>
+#include <utils/global.h>
+
 #include <QString>
 #include <QVariant>
 #include <QDateTime>
+#include <QLocale>
 
 /**
  * \file accountitems.h
@@ -145,7 +148,7 @@ public:
     bool isNull() {return _amount <= 0.0;}
 
     virtual void setTaxRate(double taxRate) { _taxRate = taxRate; }
-    virtual double taxRate() { return _taxRate; }
+    virtual double taxRate() const { return _taxRate; }
 
     virtual QString userUid() const {return _userUid;}
     virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
@@ -180,7 +183,7 @@ public:
 
     void setFee(const Fee &fee) {_fee = fee;}
     const Fee &fee() const {return _fee;}
-    const int feeId() const {return _fee.id();}
+    int feeId() const {return _fee.id();}
 
     void setPaidPercentage(double percent) {_percent = percent;}
     double paidPercentage() const {return _percent;}
@@ -189,6 +192,7 @@ protected:
     Fee _fee;
     double _percent;
 };
+
 class ACCOUNT2_EXPORT Payment : public VariableDatesItem
 {
     friend class Account2::Internal::AccountBase;
@@ -317,9 +321,44 @@ private:
 
 class MedicalProcedure : public VariableDatesItem
 {
+
 public:
     explicit MedicalProcedure() {}
     ~MedicalProcedure() {}
+
+    QString label() const { return m_label; }
+    QString subLabel() const { return m_subLabel; }
+    QLocale::Country country() const { return m_country; }
+    QString countryToIso() { return Utils::countryToIso(m_country); }
+    QString abstract() const { return m_abstract; }
+    QDate dateDid() const { return m_dateDid; }
+    QString comment() const { return m_comment; }
+    int categoryId() const { return m_categoryId; }
+    QString categoryUid() const { return m_categoryUid; }
+    QString type() const { return m_type; }
+    double amount() const { return m_amount; }
+    double reimbursement() const { return m_reimbursement; }
+
+public slots:
+    void setLabel(QString label) { m_label = label; }
+    void setSubLabel(QString subLabel) { m_subLabel = subLabel; }
+    void setCountry(QLocale::Country country) { m_country = country; }
+    void setDescription(QString description) { m_abstract = description; }
+    void setCreationDate(QDate date) { m_dateDid = date; }
+    void setComment(QString comment) { m_comment = comment; }
+    void setCategoryId(int categoryId) { m_categoryId = categoryId; }
+    void setCategoryUid(QString categoryUid) { m_categoryUid = categoryUid; }
+    void setType(QString type) { m_type = type; }
+    void setAmount(double amount) {m_amount = amount; }
+    void setReimbursement(double reimbursement) { m_reimbursement = reimbursement; }
+    void setDateDid(QDate did) { m_dateDid = did; }
+
+private:
+    QString m_label, m_subLabel, m_abstract, m_comment, m_categoryUid, m_type;
+    QDate m_dateDid;
+    QLocale::Country m_country;
+    double m_amount, m_reimbursement;
+    int m_categoryId;
 };
 
 }  // namespace Account2

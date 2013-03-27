@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       Eric Maeker <eric.maeker@gmail.com                                *
  ***************************************************************************/
 #include "webcamdialog.h"

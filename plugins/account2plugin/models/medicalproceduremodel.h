@@ -26,7 +26,7 @@
  ***************************************************************************/
 /***************************************************************************
  *  Main Developers:  Eric MAEKER, <eric.maeker@gmail.com>                 *
- *  Contributors: Christian A. Reiter <christian.a.reiter@gmail.com>       *
+ *  Contributors:  Christian A. Reiter <christian.a.reiter@gmail.com>      *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MEDICALPROCEDUREMODEL_H
@@ -48,11 +48,17 @@ class MedicalProcedureModel : public QAbstractTableModel
 public:
     enum DataRepresentation {
         Id = 0,
+        Uid,
+        Country,
+        Category,
+
         Label,          //!< short and pregnant label
         SubLabel,       //!< additional one-line text to describe the MedicalProcedure
         Description,    //!< longer description
+        Reimbursement,
         //...
         Date_Creation,
+        Date_Update,
         //...
         Comment,
         ColumnCount

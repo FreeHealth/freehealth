@@ -35,8 +35,8 @@ You can add a comment frame like below stating your participation.
 
 \verbatim
 /***************************************************************************
- *   Main Developer: NAME <MAIL@ADRESS>                                    *
- *   Contributors:                                                         *
+ *  Main Developer: NAME <MAIL@ADRESS>                                     *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************\/

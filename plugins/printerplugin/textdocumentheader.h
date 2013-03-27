@@ -33,8 +33,8 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  ***************************************************************************/
 #ifndef TEXTDOCUMENTEXTRA_H
 #define TEXTDOCUMENTEXTRA_H

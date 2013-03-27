@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER, MD <eric.maeker@gmail.com>              *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/

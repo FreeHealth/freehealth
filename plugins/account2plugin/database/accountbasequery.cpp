@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "accountbasequery.h"

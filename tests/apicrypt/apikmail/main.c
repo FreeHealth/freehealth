@@ -40,7 +40,7 @@
  *      Laurent Masson <docteur.laurentmasson@gmail.com>                   *
  *      Pierre-Marie Desombre <pm.desombre@gmail.com>                      *
  *      Eric MAEKER, <eric.maeker@gmail.com>                               *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 /***************************************************************************
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     sprintf(nomFichier2, "%smailtext000.txt", cheminApicrypt);
     sprintf(prefixe, "%smailtext", cheminApicrypt);
 
-    csplit("****FINFICHIER****", nomFichier1, nomFichier2, prefixe); /* copie le fichier nomFichier1 jusqu'à la ligne 
+    csplit("****FINFICHIER****", nomFichier1, nomFichier2, prefixe); /* copie le fichier nomFichier1 jusqu'à la ligne
                                                                         précédant la chaine "****FINFICHIER****"      */
 
 //    if (mkdir(cheminApitemp, 0775) != 0) printf("problème dossier !\n");
@@ -113,17 +113,17 @@ int main(int argc, char *argv[])
     sprintf(nomFichier2, "%stmp/resutext000.txt", cheminApicrypt);
     sprintf(prefixe, "%stmp/resutext", cheminApicrypt);
 
-    numero = csplit("****FIN****", nomFichier1, nomFichier2, prefixe); /* découpe le fichier en sections         
-                                                                          déterminées par des lignes contenant 
+    numero = csplit("****FIN****", nomFichier1, nomFichier2, prefixe); /* découpe le fichier en sections
+                                                                          déterminées par des lignes contenant
                                                                           la chaine et renvoie le nombre d'occurences
                                                                           trouvées                                   */
 
-    if (numero == 0) numero = 1;     /* si l'occurence "****FIN****" n'est pas trouvée 
+    if (numero == 0) numero = 1;     /* si l'occurence "****FIN****" n'est pas trouvée
                                         il y a quand même un fichier à copier
                                         d'où "numero = 1"                              */
 
     moveFichiers(numero, cheminApicrypt, cheminApitemp); // renome et déplace les fichiers de tmp vers apitemp
- 
+
     afficheFichier(nomFichierTxt); // Affiche le contenu du fichier décrypté
 
     remove(nomFichier1);   // efface le fichier nomFichier2

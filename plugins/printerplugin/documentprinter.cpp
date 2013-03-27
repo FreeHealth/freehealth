@@ -19,18 +19,18 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
- /** 
+ /**
    \class Print::Internal::DocumentPrinter
-   Wrapper to the Core::IDocumentPrinter. The instance is created by the 
+   Wrapper to the Core::IDocumentPrinter. The instance is created by the
    PrinterPlugin class and can be accessed by the plugin manager object pool.\n
-   The patient tokens are managed by the Core::IPatient object before the 
+   The patient tokens are managed by the Core::IPatient object before the
    print process starts.
 */
-   
+
 #include "documentprinter.h"
 
 #include <coreplugin/icore.h>

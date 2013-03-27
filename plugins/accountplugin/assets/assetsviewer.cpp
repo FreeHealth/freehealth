@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "assetsviewer.h"
@@ -74,7 +74,7 @@ AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsVi
     ui->quitButton->setShortcut(QKeySequence::Close);
     ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONEXIT));
     ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
-    
+
     fillModeComboBox();
     fillBankComboBox();
     ui->dateEdit->setDate(QDate::currentDate());
@@ -320,5 +320,5 @@ void AssetsViewer::quitFreeAccount()
     else
     {
     	close();
-        }    
+        }
 }

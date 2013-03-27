@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MEDICALPROCEDUREMODEL_H
@@ -60,9 +60,9 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
-    
+
     QSqlError lastError();
-    
+
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());

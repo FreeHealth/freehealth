@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
  *       Eric Maeker <eric.maeker@gmail.com>                               *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "opencvwidget.h"

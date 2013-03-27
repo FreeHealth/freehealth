@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef WEBCAM_H
@@ -52,7 +52,7 @@ class WebcamPlugin : public ExtensionSystem::IPlugin
 public:
     WebcamPlugin();
     ~WebcamPlugin();
-    
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();

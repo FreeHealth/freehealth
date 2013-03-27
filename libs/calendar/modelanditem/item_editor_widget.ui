@@ -386,8 +386,8 @@
   <tabstop>durationCombo</tabstop>
   <tabstop>endDateEdit</tabstop>
   <tabstop>endTimeEdit</tabstop>
-  <tabstop>busyCheck</tabstop>
   <tabstop>statusCombo</tabstop>
+  <tabstop>busyCheck</tabstop>
   <tabstop>privateCheck</tabstop>
   <tabstop>passwordCheck</tabstop>
   <tabstop>passwordEdit</tabstop>
@@ -395,8 +395,8 @@
   <tabstop>typeCombo</tabstop>
   <tabstop>location</tabstop>
   <tabstop>calendarCombo</tabstop>
-  <tabstop>selectIconButton</tabstop>
   <tabstop>fullInfo</tabstop>
+  <tabstop>selectIconButton</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -413,6 +413,22 @@
     <hint type="destinationlabel">
      <x>195</x>
      <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passwordCheck</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>passwordEdit</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>168</y>
     </hint>
    </hints>
   </connection>

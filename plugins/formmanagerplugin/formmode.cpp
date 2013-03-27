@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/

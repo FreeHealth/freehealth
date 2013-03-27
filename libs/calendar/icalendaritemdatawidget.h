@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *  Main Developers:                                                       *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ICALENDARITEMDATAWIDGET_H
@@ -49,13 +49,14 @@ class CALENDAR_EXPORT ICalendarItemDataWidget : public QObject
     Q_OBJECT
 public:
     enum InsertionPlaces {
-        Beginning = 0,
-        Ending,
-        AfterGeneralInformation,
-        AfterDateTime,
-        AfterDescription,
-        BeforeDateTime,
-        BeforeDescrition
+        Beginning = 0,              //!< top of dialog
+        Ending,                     //!< bottom of dialog
+        BeforeGeneralInformation,   //!< in the "extra section", before "general Information"
+        AfterGeneralInformation,    //!< in the "extra section", after "general Information"
+        BeforeDateTime,             //!< before date/time section
+        AfterDateTime,              //!< after the date/time section
+        BeforeDescription,          //!< before description
+        AfterDescription            //!< after description
     };
 
     ICalendarItemDataWidget(QObject *parent = 0) : QObject(parent) { }

@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <eric.maeker@gmail.com>                               *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TOOLS_INTERNAL_FSPPRINTER_PREFERENCES_H
@@ -52,16 +52,16 @@ class FspPrinterPreferencesWidget;
 class FspPrinterPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit FspPrinterPreferencesWidget(QWidget *parent = 0);
     ~FspPrinterPreferencesWidget();
-    
+
     void setDataToUi();
     QString searchKeywords() const;
-    
+
     static void writeDefaultSettings(Core::ISettings *s);
-    
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
     void updatePreview();
@@ -71,7 +71,7 @@ public Q_SLOTS:
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
-    
+
 private:
     Ui::FspPrinterPreferencesWidget *ui;
     QPixmap _background;
@@ -83,26 +83,26 @@ class FspPrinterPreferencesPage : public Core::IOptionsPage
 public:
     FspPrinterPreferencesPage(QObject *parent = 0);
     ~FspPrinterPreferencesPage();
-    
+
     QString id() const;
     QString displayName() const;
     QString category() const;
     QString title() const;
     int sortIndex() const;
-    
+
     void resetToDefaults();
     void checkSettingsValidity();
     void apply();
     void finish();
-    
+
     bool matches(const QString &s) const;
-    
+
     QString helpPage() {return QString();}
-    
+
     static void writeDefaultSettings(Core::ISettings *s) {FspPrinterPreferencesWidget::writeDefaultSettings(s);}
-    
+
     QWidget *createPage(QWidget *parent = 0);
-    
+
 private:
     QPointer<Internal::FspPrinterPreferencesWidget> m_Widget;
     QString m_searchKeywords;

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "toolsplugin.h"
@@ -76,12 +76,12 @@ ToolsPlugin::ToolsPlugin() :
     setObjectName("ToolsPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Tools";
-    
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_tools");
-    
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
-    
+
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
 //    m_prefPage = new ToolsPreferencesPage(this);
@@ -103,25 +103,25 @@ bool ToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-    
+
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "Tools::initialize";
     }
-    
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
-    
+
     // No user is logged in until here
-    
+
     return true;
 }
 
@@ -130,11 +130,11 @@ void ToolsPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation()) {
         qWarning() << "Tools::extensionsInitialized";
     }
-    
+
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
-    
+
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     //    // no user -> stop here
@@ -142,9 +142,9 @@ void ToolsPlugin::extensionsInitialized()
         return;
     if (user()->uuid().isEmpty())
         return;
-    
+
     messageSplash(tr("Initializing Tools..."));
-    
+
     // At this point, user is connected
 
     // Create some menu actions
@@ -171,7 +171,7 @@ void ToolsPlugin::extensionsInitialized()
     // TODO: add action to the mode manager ?
 
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
-    
+
     // Add Tools to ScriptManager
     pdf = new PdfTkWrapper(this);
     pdf->initialize();

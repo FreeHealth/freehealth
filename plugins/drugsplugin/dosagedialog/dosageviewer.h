@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -66,7 +66,7 @@ public Q_SLOTS:
     void done(int r);
     void commitToModel();
     void changeCurrentRow(const int dosageRow);
-    void changeCurrentRow(const QModelIndex &current, const QModelIndex &previous); 
+    void changeCurrentRow(const QModelIndex &current, const QModelIndex &previous);
 
 Q_SIGNALS:
     void protocolDataChanged();

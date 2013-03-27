@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef SCRIPT_INTERNAL_TOOLS_H
@@ -47,7 +47,7 @@ class Tools : public QObject
 
 public:
     explicit Tools(QObject *parent = 0);
-    
+
 public Q_SLOTS:
     QString userDocumentPath();
 

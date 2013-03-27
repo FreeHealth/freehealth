@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef AVAILABLEMOVEMENTPAGE_H
@@ -94,7 +94,7 @@ private:
     void fillHugeWidgets();
 //    QStandardItemModel * availableMovementModelByLocale();
     void setCompletionList(const QString & text);
-    
+
 private:
     AccountDB::AvailableMovementModel *m_Model;
     QDataWidgetMapper *m_Mapper;
@@ -120,7 +120,7 @@ public:
     void checkSettingsValidity();
     void apply();
     void finish();
-    
+
     QString helpPage() {return QString();}
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::AvailableMovementWidget::writeDefaultSettings(s);}

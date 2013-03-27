@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "accountview.h"
@@ -118,7 +118,7 @@ AccountView::AccountView(QWidget *parent) :
     calc();
     connect(m_ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(m_ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
-    
+
 }
 
 AccountView::~AccountView()
@@ -338,5 +338,5 @@ void AccountView::quitFreeAccount()
     else
     {
     	close();
-        }    
+        }
 }

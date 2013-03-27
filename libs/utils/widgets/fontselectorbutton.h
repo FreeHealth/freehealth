@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                     *
+ *   Main Developers:                                                      *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FONTSELECTORBUTTON_H
@@ -42,7 +42,7 @@ class UTILS_EXPORT FontSelectorButton : public QToolButton
     Q_OBJECT
 public:
     explicit FontSelectorButton(QWidget *parent = 0);
-    
+
 public Q_SLOTS:
     void setDefaultFont(const QFont &font);
     void setCurrentFont(const QFont &font);

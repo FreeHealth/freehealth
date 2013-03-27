@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNTMODEL_H
@@ -74,7 +74,7 @@ public:
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
     bool isDirty() const;
-    
+
     QSqlError lastError();
     bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
     void fetchMore(const QModelIndex &parent = QModelIndex());
@@ -90,7 +90,7 @@ public:
 
     // Sums
     double sum(const int &fieldRef);
-    
+
     //list of doubles rows
     QList<int> getDoublesRows;
 

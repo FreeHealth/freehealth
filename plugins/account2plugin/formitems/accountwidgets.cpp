@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker                                *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -145,7 +145,7 @@ FeeFormWidget::FeeFormWidget(Form::FormItem *linkedObject, QWidget *parent)
     : Form::IFormWidget(linkedObject, parent)
 {
     setObjectName("FeeFormWidget");
-    
+
     //    // QtUi Loaded ?
     //    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     //    if (!widget.isEmpty()) {
@@ -164,7 +164,7 @@ FeeFormWidget::FeeFormWidget(Form::FormItem *linkedObject, QWidget *parent)
     //        // Prepare Widget Layout and label
     //        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     //        hb->addWidget(m_Label);
-    
+
     //        // Add List and manage size
     //        m_List = new QListView(this);
     //        m_List->setObjectName("List_" + m_FormItem->uuid());
@@ -175,21 +175,21 @@ FeeFormWidget::FeeFormWidget(Form::FormItem *linkedObject, QWidget *parent)
     //            m_List->setSelectionMode(QAbstractItemView::SingleSelection);
     //        else
     //            m_List->setSelectionMode(QAbstractItemView::MultiSelection);
-    
+
     //        const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
     //        m_Model = new QStringListModel(possibles, this);
     //        m_List->setModel(m_Model);
-    
+
     //        hb->addWidget(m_List);
     //    }
-    
+
     //    setFocusableWidget(m_List);
-    
+
     //    // create FormItemData
     //    FeeFormWidgetData *data = new FeeFormWidgetData(m_FormItem);
     //    data->setBaseList(this);
     //    m_FormItem->setItemData(data);
-    
+
     //    connect(m_List->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), data, SLOT(onValueChanged()));
 }
 

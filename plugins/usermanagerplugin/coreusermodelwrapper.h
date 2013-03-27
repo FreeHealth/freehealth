@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -48,7 +48,7 @@ public:
     explicit CoreUserModelWrapper(QObject *parent = 0);
     ~CoreUserModelWrapper();
     bool initialize(UserModel *model);
-    
+
     // IUser interface
     void clear() {}
     bool has(const int ref) const;

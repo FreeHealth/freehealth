@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
  ***************************************************************************/
 #include <QSqlTableModel>
@@ -42,13 +42,21 @@
 
 #include <translationutils/constanttranslations.h>
 
+/*!
+ * \class Account2::MedicalProcedureModel
+ *
+ * The MedicalProcedureModel provides an editable data model
+ * for the "Medical Procedures" that are used in the accounting.
+ *
+ * It is a high-level interface for editing database records of Medical
+ * Procedures. It internally uses a SqlTableModel to save and recieve the
+ * data from the database.
+ */
+
 using namespace Account2;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 using namespace Constants;
-
-enum { WarnFilter = true };
-enum { WarnDebugMessage = false };
 
 static inline Account2::AccountCore *accountCore() {return Account2::AccountCore::instance();}
 static inline Account2::Internal::AccountBase *accountBase() {return Account2::AccountCore::instance()->accountBase();}
@@ -103,24 +111,40 @@ MedicalProcedureModel::~MedicalProcedureModel()
 {
     if (d) {
         delete d;
-        d=0;
+        d = 0;
     }
 }
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    Q_ASSERT(parent == QModelIndex());
     return d->_sql->rowCount();
 }
 
 int MedicalProcedureModel::columnCount(const QModelIndex &parent) const
 {
+    Q_ASSERT(parent == QModelIndex());
     return d->_sql->columnCount(parent);
 }
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
 {
-    return d->_sql->data(index, role);
+    if (!index.isValid())
+        return QVariant();
+
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        const MedicalProcedure mp = d->_medicalProcedures.at(index.row());
+        switch (index.column()) {
+        case Id: return mp.id();
+        case Label: return mp.label();
+        case SubLabel: return mp.subLabel();
+        case Description: return mp.abstract();
+        case Date_Creation: return mp.date(VariableDatesItem::Date_Creation);
+        case Date_Update: return mp.date(VariableDatesItem::Date_Update);
+        case Comment: return mp.comment();
+        default: return QVariant();
+        }
+    }
 }
 
 bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -157,19 +181,23 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
 //    return d->_sql->removeRows(row, count, parent);
 }
 
-void MedicalProcedureModel::setFilter(const QString & filter){
+void MedicalProcedureModel::setFilter(const QString & filter)
+{
     d->_sql->setFilter(filter);
     //d->m_SqlTable->select();
 }
 
-QString MedicalProcedureModel::filter(){
+QString MedicalProcedureModel::filter()
+{
     return d->_sql->filter();
 }
 
 bool MedicalProcedureModel::submit()
 {
-    d->m_isDirty = false;
-    return true;
+    bool success = d->_sql->submit();
+    if (success)
+        d->m_isDirty = false;
+    return success;
 }
 
 void MedicalProcedureModel::revert()
@@ -183,15 +211,18 @@ bool MedicalProcedureModel::isDirty() const
     return d->m_isDirty;
 }
 
-QSqlError MedicalProcedureModel::lastError(){
+QSqlError MedicalProcedureModel::lastError()
+{
     return d->_sql->lastError();
 }
 
-void MedicalProcedureModel::clear(){
+void MedicalProcedureModel::clear()
+{
     d->_sql->clear();
     d->m_isDirty = false;
 }
 
-bool MedicalProcedureModel::select(){
+bool MedicalProcedureModel::select()
+{
     return d->_sql->select();
 }

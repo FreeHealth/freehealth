@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef XMLCATEGORIESPARSER_H
@@ -45,6 +45,6 @@ class ACCOUNT_EXPORT xmlCategoriesParser : public QObject
   public :
     xmlCategoriesParser();
     ~xmlCategoriesParser();
-    QList<QHash<QString,QString> > readXmlFile();  
+    QList<QHash<QString,QString> > readXmlFile();
 };
 #endif

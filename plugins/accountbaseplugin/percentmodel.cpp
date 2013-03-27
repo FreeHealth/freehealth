@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "percentmodel.h"
@@ -57,7 +57,7 @@ public:
                                                 m_UserUid(user()->uuid()),
                                                 m_IsDirty(false),
                                                 q(parent)
-    {   
+    {
         if(WarnFilter)
         qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
@@ -65,7 +65,7 @@ public:
         refreshFilter();
     }
     ~PercentModelPrivate () {}
-    
+
     void refreshFilter()
     {
         if (!m_SqlTable)
@@ -153,7 +153,7 @@ QVariant PercentModel::headerData(int section, Qt::Orientation orientation, int 
 
 bool PercentModel::setHeaderData(int section, Qt::Orientation orientation,
                                           const QVariant &value, int role ){
-    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
+    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;
 }
 
 bool PercentModel::insertRows(int row, int count, const QModelIndex &parent)

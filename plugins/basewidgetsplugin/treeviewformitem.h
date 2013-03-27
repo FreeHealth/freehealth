@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker <eric.maeker@gmail.com>                 *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -50,16 +50,16 @@ class TreeViewFormItem : public Form::IFormWidget
 public:
     explicit TreeViewFormItem(Form::FormItem *formItem, QWidget *parent = 0);
     ~TreeViewFormItem();
-    
+
     void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const;
-    
+
     // Printing
     QString printableHtml(bool withValues = true) const;
-    
+
 public Q_SLOTS:
     void retranslate();
-    
+
 public:
     QTreeView *m_Tree;
     QAbstractItemModel *m_Model;
@@ -72,22 +72,22 @@ public:
     TreeViewFormItemData(Form::FormItem *item, TreeViewFormItem *formWidget);
     ~TreeViewFormItemData();
     void clear();
-    
+
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
     void setModified(bool modified);
-    
+
     void setReadOnly(bool readOnly);
     bool isReadOnly() const;
 
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
-    
+
     // Used storable data for forms
     void setStorableData(const QVariant &modified);
     QVariant storableData() const;
-    
+
 public Q_SLOTS:
     void onValueChanged();
 

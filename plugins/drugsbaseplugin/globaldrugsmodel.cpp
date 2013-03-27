@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -424,7 +424,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         //        }
 
         // Create tooltip
-        tmp += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>"
+        tmp += QString("<table border=0 cellpadding=2 cellspacing=2 width=100%>"
                         " <tr>"
                         "   <td colspan=2 rowspan=1 align=center>"
                         "       <span style=\"font-weight: bold;\">%1</span>"

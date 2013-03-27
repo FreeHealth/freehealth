@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric Maeker <eric.maeker@gmail.com>                             *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TOOLS_INTERNAL_TOOLSPREFERENCES_H
@@ -45,23 +45,23 @@ class ToolsPreferencesWidget;
 class ToolsPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit ToolsPreferencesWidget(QWidget *parent = 0);
     ~ToolsPreferencesWidget();
-    
+
     void setDataToUi();
     QString searchKeywords() const;
-    
+
     static void writeDefaultSettings(Core::ISettings *s);
-    
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    
+
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
-    
+
 private:
     Ui::ToolsPreferencesWidget *ui;
 };
@@ -72,24 +72,24 @@ class ToolsPreferencesPage : public Core::IOptionsPage
 public:
     ToolsPreferencesPage(QObject *parent = 0);
     ~ToolsPreferencesPage();
-    
+
     QString id() const;
     QString displayName() const;
     QString category() const;
     QString title() const {return displayName();}
     int sortIndex() const;
-    
+
     void resetToDefaults();
     void checkSettingsValidity();
     void apply();
     void finish();
-    
+
     QString helpPage() {return QString();}
-    
+
     static void writeDefaultSettings(Core::ISettings *s) {ToolsPreferencesWidget::writeDefaultSettings(s);}
-    
+
     QWidget *createPage(QWidget *parent = 0);
-    
+
 private:
     QPointer<Internal::ToolsPreferencesWidget> m_Widget;
 };

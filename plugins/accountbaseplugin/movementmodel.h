@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MOVEMENTMODEL_H
@@ -59,16 +59,16 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
-    bool setHeaderData(int section, 
-                       Qt::Orientation orientation, 
-                       const QVariant & value, 
-                       int role = Qt::EditRole);                           
+    bool setHeaderData(int section,
+                       Qt::Orientation orientation,
+                       const QVariant & value,
+                       int role = Qt::EditRole);
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    
+
     bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
     void fetchMore(const QModelIndex &parent = QModelIndex());
-    
+
     void clearFilters();
     void setFilter(const QString & filter);
     QString filter();
@@ -85,7 +85,7 @@ public Q_SLOTS:
 
 private:
     Internal::MovementModelPrivate *d;
-    
+
 };
 
 }  // End namespace AccountDB

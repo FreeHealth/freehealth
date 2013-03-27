@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "receiptsio.h"
@@ -543,13 +543,13 @@ bool receiptsEngine::datapackIsAvalaible()
     	QStringList nameList;
     	if (nameSurname.contains(","))
     	{
-    		nameList = nameSurname.split(",");  
+    		nameList = nameSurname.split(",");
     	    }
     	if (nameSurname.contains(" ")&& !nameSurname.contains(","))
     	{
     		nameList = nameSurname.split(" ");
     	    }
-    	
+
     	QString name;
     	QString surname;
     	if (nameList.size()>1)
@@ -564,8 +564,8 @@ bool receiptsEngine::datapackIsAvalaible()
     		  	  name = surname;
     		  	  surname = nameList[SURNAME+1];
     		          }
-    		      }		  
-    		  
+    		      }
+
     	    }
     	for (int i = 1; i < name.size(); ++i)
     	{
@@ -579,9 +579,9 @@ bool receiptsEngine::datapackIsAvalaible()
     	{
     		  qWarning() << __FILE__ << QString::number(__LINE__) << qUpdate.lastError().text() ;
     		  return false;
-    		  
+
     	    }
         }//while
-       
+
     return success;
 }*/

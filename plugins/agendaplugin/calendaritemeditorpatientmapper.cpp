@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *  Main Developers:                                                       *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "calendaritemeditorpatientmapper.h"
@@ -163,7 +163,8 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     aUseCurrentPatient->setText(tr("Add current patient"));
     aUseCurrentPatient->setToolTip(tr("Add current patient"));
 
-    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+    ui->useCurrentPatientToolButton->addAction(aUseCurrentPatient);
+    ui->useCurrentPatientToolButton->setDefaultAction(aUseCurrentPatient);
     aUseCurrentPatient->setEnabled(!patient()->uuid().isEmpty());
 
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
@@ -171,12 +172,14 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
         // change the Patient settings for autoselection of newly created patients
         m_StoredSettingsValue = settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool();
         settings()->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, false);
-        ui->createPatientToolButton->addAction(cmd->action());
-        ui->createPatientToolButton->setDefaultAction(cmd->action());
+        ui->newPatientToolButton->addAction(cmd->action());
+        ui->newPatientToolButton->setDefaultAction(cmd->action());
+        ui->newPatientToolButton->show();
         connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
     } else {
-        ui->createPatientToolButton->setDefaultAction(aUseCurrentPatient);
+        ui->newPatientToolButton->hide();
     }
+    ui->patientSearchEdit->setFocus();
 
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));

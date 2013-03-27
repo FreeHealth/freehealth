@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -52,13 +52,13 @@ class UTILS_EXPORT DatabaseInformationDialog : public QDialog
 public:
     explicit DatabaseInformationDialog(QWidget *parent = 0);
     ~DatabaseInformationDialog();
-    
+
     void setTitle(const QString &title);
     bool setDatabase(const Utils::Database &database);
 
     QTreeWidget *getHeaderTreeWidget();
     QTreeWidget *getDescriptionTreeWidget();
-    
+
 public Q_SLOTS:
     bool saveContent();
 

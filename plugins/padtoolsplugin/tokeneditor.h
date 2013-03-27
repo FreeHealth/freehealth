@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef PADTOOLS_TOKENEDITOR_H
@@ -49,11 +49,11 @@ class TokenEditor;
 class TokenEditor : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit TokenEditor(QWidget *parent = 0);
     ~TokenEditor();
-    
+
     void setTokenModel(TokenModel *model);
     void setCurrentIndex(const QModelIndex &index);
 

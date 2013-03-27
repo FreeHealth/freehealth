@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef ALERT_PLUGIN__ALERTPLACEHOLDERWIDGET_H
@@ -42,11 +42,11 @@ class NonBlockingAlertToolButton;
 class ALERT_EXPORT AlertPlaceHolderWidget : public IAlertPlaceHolder
 {
     Q_OBJECT
-    
+
 public:
     explicit AlertPlaceHolderWidget(QObject *parent = 0);
     ~AlertPlaceHolderWidget();
-    
+
     // identification
     virtual QString uuid() const;
     virtual QString name(const QString &lang = QString::null) const;

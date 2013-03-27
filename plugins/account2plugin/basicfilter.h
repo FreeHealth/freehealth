@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers: Eric MAEKER, <eric.maeker@gmail.com>                  *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNT2_BASICFILTER_H
@@ -52,7 +52,7 @@ public:
     virtual ~BasicFilter() {}
 
     void setIncludeInvalidObjects(bool invalid) {_invalid=invalid;}
-    bool includeInvalidObjects() const {return _invalid;}
+    bool isIncludeInvalidObjects() const {return _invalid;}
 
     void setStartDate(const QDateTime &start) {_start=start;}
     void setEndDate(const QDateTime &end) {_end=end;}

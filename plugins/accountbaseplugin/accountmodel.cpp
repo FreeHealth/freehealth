@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "accountmodel.h"
@@ -307,7 +307,7 @@ QSqlError AccountModel::lastError(){
 bool AccountModel::canFetchMore ( const QModelIndex & parent  ) const  {
     return d->m_SqlTable->canFetchMore ( parent  );
 }
-    
+
 void AccountModel::fetchMore ( const QModelIndex & parent ) {
     d->m_SqlTable->fetchMore ( parent  );
 }

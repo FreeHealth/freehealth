@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -62,7 +62,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~DatabaseInformationDialogPrivate()
     {
     }
@@ -84,7 +84,7 @@ public:
             text += getTreeItemText(item->child(i), indent + 4);
         return text;
     }
-    
+
 public:
     QTreeWidget *_headerTree, *_contentTree;
     QLabel *_title;

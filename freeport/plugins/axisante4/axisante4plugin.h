@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developer: Fredman, Eric Maeker <eric.maeker@gmail.com>                  *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef AXISANTE4_H
@@ -39,11 +39,11 @@ class Axisante4Plugin : public ExtensionSystem::IPlugin
 public:
     Axisante4Plugin();
     ~Axisante4Plugin();
-    
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
     //    ShutdownFlag aboutToShutdown();
-    
+
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();

@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -65,12 +65,12 @@ public:
 
     bool isDatabaseAvailable() const;
     QSqlDatabase &database() const;
-    
+
 Q_SIGNALS:
     void databaseRefreshed();
 
 public Q_SLOTS:
-    
+
 private Q_SLOTS:
     void packChanged(const DataPack::Pack &pack);
 

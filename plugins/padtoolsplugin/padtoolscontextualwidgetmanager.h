@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric Maeker                                                       *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef PADTOOLS_INTERNAL_PADTOOLSCONTEXTUALWIDGETMANAGER_H
@@ -73,13 +73,13 @@ protected:
 class PadToolsContextualWidgetManager : public PadToolsActionHandler
 {
     Q_OBJECT
-    
+
 public:
     explicit PadToolsContextualWidgetManager(QObject *parent = 0);
     ~PadToolsContextualWidgetManager();
-    
+
     PadWriter *currentView() const;
-    
+
 private Q_SLOTS:
     void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };

@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "receiptviewer.h"
@@ -93,7 +93,7 @@ DisplayModel::DisplayModel(QObject *parent) : QAbstractTableModel(parent)
 
 DisplayModel::~DisplayModel(){}
 
-int DisplayModel::rowCount(const QModelIndex &parent ) const 
+int DisplayModel::rowCount(const QModelIndex &parent ) const
 {
     // prevent trees
     if (parent.isValid()) return 0;
@@ -101,7 +101,7 @@ int DisplayModel::rowCount(const QModelIndex &parent ) const
     return m_listsOfValuesbyRows->size();
 }
 
-int DisplayModel::columnCount(const QModelIndex &parent) const 
+int DisplayModel::columnCount(const QModelIndex &parent) const
 {
         Q_UNUSED(parent);
         return int(Col_Count);
@@ -1105,13 +1105,13 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 m_freePayer = QString();
                 m_freePayer = choice.getFreePayer();
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
-                
+
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
 
                 percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
-               	debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);              
-                
+               	debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
                 site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);

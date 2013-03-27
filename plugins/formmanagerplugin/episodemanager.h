@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric MAEKER
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -50,12 +50,12 @@ class FORM_EXPORT EpisodeManager : public QObject
 public:
     explicit EpisodeManager(QObject *parent = 0);
     ~EpisodeManager();
-    
+
     bool initialize();
-    
+
     EpisodeModel *episodeModel(Form::FormMain *form);
     EpisodeModel *episodeModel(const QString &formUid);
-    
+
 private:
     Internal::EpisodeManagerPrivate *d;
 };

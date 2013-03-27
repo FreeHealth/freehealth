@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker                                         *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -73,7 +73,7 @@ public:
     QString title(const QModelIndex &index) const;
 
 Q_SIGNALS:
-    
+
 //private Q_SLOTS:
 //    void pluginManagerObjectAdded(QObject *o);
 //    void pluginManagerObjectRemoved(QObject *o);

@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main developers :                                                     *
  *       Eric MAEKER <eric.maeker@gmail.com>                               *
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -55,17 +55,17 @@ class FORM_EXPORT FormCore : public QObject
 public:
     static FormCore &instance();
     ~FormCore();
-    
+
     bool initialize();
-    
+
     Form::FormManager &formManager() const;
     Form::EpisodeManager &episodeManager() const;
 
 Q_SIGNALS:
-    
+
 public Q_SLOTS:
     void activatePatientFileCentralMode();
-    
+
 private:
     Internal::FormCorePrivate *d;
     static FormCore *_instance;

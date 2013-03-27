@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -63,7 +63,7 @@ protected:
 public:
     static DataPackCore *instance() {return _instance;}
     ~DataPackCore();
-    
+
 public Q_SLOTS:
     bool refreshServerDataPacks(const QString &serverUid);
     bool registerDataPack(const DataPackQuery &query, const QString &serverUid);

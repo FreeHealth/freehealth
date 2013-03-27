@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -44,7 +44,7 @@ class GenericDataPackCreator : public Core::IFullReleaseStep
     Q_OBJECT
 public:
     explicit GenericDataPackCreator(QObject *parent = 0);
-    
+
     virtual QString id() const {return objectName();}
     virtual Steps stepNumber() const;
 

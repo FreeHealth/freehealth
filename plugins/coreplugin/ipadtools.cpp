@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
 #include "ipadtools.h"
@@ -113,7 +113,7 @@ QString IToken::tooltip() const
 
 /** Returns the human readable tooltip of the token translated to the current application language */
 QString TokenDescription::tooltip() const
-{    
+{
     if (!_trContext.isEmpty())
         return QApplication::translate(_trContext.toUtf8(), _tooltip.toUtf8());
     return QApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, _tooltip.toUtf8());;

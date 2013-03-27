@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric MAEKER <eric.maeker@gmail.com>                             *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FORM_INTERNAL_FORMCONTEXTUALWIDGETMANAGER_H
@@ -53,9 +53,9 @@ class FormActionHandler : public QObject
 public:
     FormActionHandler(QObject *parent = 0);
     virtual ~FormActionHandler() {}
-    
+
     void setCurrentView(FormContextualWidget *view);
-    
+
 private Q_SLOTS:
     void onClearRequested();
     void onSaveEpisodeRequested();
@@ -68,11 +68,11 @@ private Q_SLOTS:
     void onRemoveFormRequested();
     void onPrintFormRequested();
     void showDatabaseInformation();
-    
+
 private Q_SLOTS:
     void updateActions();
     void onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction action);
-    
+
 protected:
     QAction *aClear;
     QAction *aShowDatabaseInformation;
@@ -81,7 +81,7 @@ protected:
     QAction *aAddForm;
     QAction *aRemoveSubForm;
     QAction *aPrintForm;
-    
+
     QPointer<FormContextualWidget> m_CurrentView;
 };
 

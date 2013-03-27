@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -64,7 +64,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~ScriptWriterDialogPrivate()
     {
         delete ui;
@@ -106,7 +106,7 @@ public:
         QObject::connect(aSaveFile, SIGNAL(triggered()), q, SLOT(onSaveFileTriggered()));
         QObject::connect(aExecute, SIGNAL(triggered()), q, SLOT(onExecuteScriptTriggered()));
     }
-    
+
 public:
     Ui::ScriptWriterDialog *ui;
     QAction *aReadFile, *aSaveFile, *aExecute;

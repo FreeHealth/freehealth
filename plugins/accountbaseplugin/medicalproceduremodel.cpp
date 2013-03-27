@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "medicalproceduremodel.h"
@@ -59,7 +59,7 @@ namespace Internal {
 class MedicalProcedureModelPrivate
 {
 public:
-    MedicalProcedureModelPrivate(MedicalProcedureModel *parent) : m_SqlTable(0), 
+    MedicalProcedureModelPrivate(MedicalProcedureModel *parent) : m_SqlTable(0),
                                                                   m_IsDirty(false),
                                                                   m_UserUid(user()->uuid()),
                                                                   q(parent)
@@ -69,13 +69,13 @@ public:
         //refreshFilter();
     }
     ~MedicalProcedureModelPrivate () {}
-    
+
     void setTable(){
           m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
           m_SqlTable->setFilter("");
           m_SqlTable->select();
     }
-    
+
     /*void refreshFilter()
     {
         if (!m_SqlTable)
@@ -88,8 +88,8 @@ public:
         if (!m_nameFilter.isEmpty() )
         {
         	  where.insert(AccountDB::Constants::MP_NAME, QString("='%1'").arg(m_nameFilter));
-            } 
-            
+            }
+
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_MedicalProcedure, where));
         if (WarnFilter){
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
@@ -130,7 +130,7 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
-{ 
+{
     /*int rows = 0;
     QSqlQuery q(m_db);
     const QString req = QString("SELECT %1 FROM %2").arg("NAME","medical_procedure");
@@ -143,9 +143,9 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
     while (q.next())
     {
         ++rows;
-        }    
+        }
     return rows;*/
-   
+
     int rows = 0;
     d->m_SqlTable->setFilter("");
     //d->m_SqlTable->select();
@@ -193,12 +193,12 @@ void MedicalProcedureModel::setUserUuid(const QString &uuid)
 }
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
-{   
+{
     return d->m_SqlTable->data(index, role);
 }
 
 QVariant MedicalProcedureModel::dataWithFilter(const QModelIndex &index, int role , const QString & filter) const
-{   
+{
     d->m_SqlTable->setFilter(filter);
     return d->m_SqlTable->data(index, role);
 }
@@ -218,7 +218,7 @@ QVariant MedicalProcedureModel::headerData(int section, Qt::Orientation orientat
 
 bool MedicalProcedureModel::setHeaderData(int section, Qt::Orientation orientation,
                                           const QVariant &value, int role ){
-    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
+    return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;
 }
 
 bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &parent)

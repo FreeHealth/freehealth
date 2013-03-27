@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "movementmodel.h"
@@ -127,9 +127,9 @@ QVariant MovementModel::headerData(int section, Qt::Orientation orientation, int
     return d->m_SqlTable->headerData(section,orientation,role);
 }
 
-bool MovementModel::setHeaderData(int section, 
-                                  Qt::Orientation orientation, 
-                                  const QVariant & value, 
+bool MovementModel::setHeaderData(int section,
+                                  Qt::Orientation orientation,
+                                  const QVariant & value,
                                   int role){
     bool ret = true;
     ret = d->m_SqlTable->setHeaderData(section,orientation,value,role);
@@ -196,7 +196,7 @@ QString MovementModel::filter(){
 bool MovementModel::canFetchMore ( const QModelIndex & parent  ) const  {
     return d->m_SqlTable->canFetchMore ( parent  );
 }
-    
+
 void MovementModel::fetchMore ( const QModelIndex & parent ) {
     d->m_SqlTable->fetchMore ( parent  );
 }
@@ -217,5 +217,5 @@ void MovementModel::setDatesBeginEndAndUserFilter(QDateTime &start, QDateTime &e
     filter += " AND ";
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(start.toString("yyyy-MM-dd"),end.toString("yyyy-MM-dd"));
     setFilter(filter);
-    
+
 }

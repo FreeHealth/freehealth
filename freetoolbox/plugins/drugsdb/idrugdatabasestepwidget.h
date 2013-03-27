@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -47,9 +47,9 @@ class IDrugDatabaseStepWidget : public QWidget
 public:
     explicit IDrugDatabaseStepWidget(QWidget *parent = 0);
     ~IDrugDatabaseStepWidget();
-    
+
     bool initialize(IDrugDatabaseStep *step);
-        
+
 private Q_SLOTS:
     void on_startJobs_clicked();
     bool on_download_clicked();

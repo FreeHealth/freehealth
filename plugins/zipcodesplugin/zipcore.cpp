@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
- *   Contributors:                                                         *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -66,11 +66,11 @@ public:
         q(parent)
     {
     }
-    
+
     ~ZipCorePrivate()
     {
     }
-    
+
     // Find the database to use. In priority order:
     // - User datapack
     // - Application installed datapack
@@ -121,7 +121,7 @@ public:
 public:
     QSqlDatabase _db;
     bool _initialized, _dbAvailable;
-    
+
 private:
     ZipCore *q;
 };

@@ -25,8 +25,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers :  Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Main Developers:   Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 /**
@@ -343,7 +343,7 @@ public:
         return quot;
     }
 
-    // Retrieve all date related to an item. Does not create its transaction.
+    // Retrieve all dates related to an item. Does not create its transaction.
     // The dateDid() must return a real value.
     bool getDates(VariableDatesItem &item)
     {
@@ -408,7 +408,7 @@ public:
             joins << Utils::Join(Table_Dates, DATE_DID, Table_Fees, FEES_DATE_DID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Fees, FEES_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
@@ -481,7 +481,7 @@ public:
             joins << Utils::Join(Table_Dates, DATE_DID, Table_Payments, PAYMENT_DATE_DID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Payments, PAYMENT_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
@@ -556,7 +556,7 @@ public:
             joins << Utils::Join(Table_BankDetails, BANKDETAILS_ID, Table_Banking, BANKING_BANKDETAILS_ID);
             Utils::FieldList conds;
             // Validity
-            if (!query.includeInvalidObjects())
+            if (!query.isIncludeInvalidObjects())
                 conds << Utils::Field(Table_Banking, BANKING_ISVALID, QString("=1"));
             // Dates
             if (query.startDate().isValid())
@@ -785,6 +785,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Fees,  FEES_AMOUNT,      "AMOUNT",       FieldIsReal);
     addField(Table_Fees,  FEES_COMMENT,     "COMMENT",      FieldIsShortText);
     addField(Table_Fees,  FEES_SIGN_ID,     "SIGN_ID",      FieldIsInteger);
+    addField(Table_Fees,  FEES_TAX,         "TAX",          FieldIsReal);
 
     addField(Table_Payments, PAYMENT_ID ,       "ID",       FieldIsUniquePrimaryKey);
     addField(Table_Payments, PAYMENT_QUOT_ID ,  "QUOT_ID",  FieldIsInteger);
@@ -1263,6 +1264,89 @@ bool AccountBase::save(QList<Quotation> &quotations)
 
 bool AccountBase::save(QList<MedicalProcedure> &medicalProcedures)
 {
+    if (!connectDatabase(database(), __LINE__))
+        return false;
+    if (medicalProcedures.isEmpty())
+        return true;
+
+    database().transaction();
+    d->_transaction = true;
+
+    QSqlQuery query(database());
+    foreach(MedicalProcedure mp, medicalProcedures) {
+        d->saveDates(mp);
+
+        if (mp.id() == -1) { // new MedicalProcedure
+            // Save
+            QString req = prepareInsertQuery(Constants::Table_MedicalProcedure);
+            query.prepare(req);
+            query.bindValue(Constants::MP_ID, QVariant());
+            query.bindValue(Constants::MP_UID, mp.uuid());
+            query.bindValue(Constants::MP_COUNTRY, mp.countryToIso());
+            query.bindValue(Constants::MP_CATEGORY_ID, mp.categoryId());
+            query.bindValue(Constants::MP_CATEGORY_UID, mp.categoryUid());
+            query.bindValue(Constants::MP_LABEL, mp.label());
+            query.bindValue(Constants::MP_ABSTRACT, mp.abstract());
+            query.bindValue(Constants::MP_TYPE, mp.type());
+            query.bindValue(Constants::MP_AMOUNT, mp.amount());
+            query.bindValue(Constants::MP_REIMBOURSEMENT, mp.reimbursement());
+            query.bindValue(Constants::MP_DATE_DID, mp.dateDid());
+
+            if (query.exec()) {
+                mp.setId(query.lastInsertId().toInt());
+                mp.setModified(false);
+            } else {
+                LOG_QUERY_ERROR(query);
+                query.finish();
+                database().rollback();
+                return false;
+            }
+            query.finish();
+        } else { // update exsting
+
+            if (mp.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::MP_ID, QString("='%1'").arg(mp.id()));
+                QString req = prepareUpdateQuery(Constants::Table_MedicalProcedure,
+                                                 QList<int>()
+                                                 << Constants::MP_UID
+                                                 << Constants::MP_COUNTRY
+                                                 << Constants::MP_CATEGORY_ID
+                                                 << Constants::MP_CATEGORY_UID
+                                                 << Constants::MP_LABEL
+                                                 << Constants::MP_ABSTRACT
+                                                 << Constants::MP_TYPE
+                                                 << Constants::MP_AMOUNT
+                                                 << Constants::MP_REIMBOURSEMENT
+                                                 << Constants::MP_DATE_DID,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, mp.uuid());
+                query.bindValue(++i, mp.countryToIso());
+                query.bindValue(++i, mp.categoryId());
+                query.bindValue(++i, mp.categoryUid());
+                query.bindValue(++i, mp.label());
+                query.bindValue(++i, mp.abstract());
+                query.bindValue(++i, mp.type());
+                query.bindValue(++i, mp.amount());
+                query.bindValue(++i, mp.reimbursement());
+                query.bindValue(++i, mp.dateDid());
+                if (query.exec()) {
+                    mp.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    query.finish();
+                    database().rollback();
+                    return false;
+                }
+                query.finish();
+            }
+        }
+    }
+    query.finish();
+    database().commit();
+    d->_transaction = false;
     return true;
 }
 

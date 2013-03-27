@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNT_PREFERENCES_H
@@ -141,7 +141,7 @@ private:
     bool createDefaultsFor(const QString &filePrototype, const int tableRef);
     bool createMinimalsDefaults(const int tableRef);
     bool createMinimalDefaultsFor(const QString &connectionName,
-                                  const int tableRef, 
+                                  const int tableRef,
                                   const QStringList & valuesList);
 
 protected:

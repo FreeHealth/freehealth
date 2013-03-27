@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNTBASE_CONSTANTS_H
@@ -50,14 +50,14 @@ namespace Constants {
     const char * const DB_ACCOUNTANCY           = "account";
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
     const char * const DB_VERSION_NUMBER        = "0.3";// "0.2"; "0.1";
-    
+
     //DatapackMPModel
     const char * const DATAPACK_ACCOUNTANCY    = "account";
     const char * const DATAPACK_DB = "mp_datapack";
     const char * const DATAPACK_ACCOUNTANCY_FILENAME    = "mp_datapack.db";
 
     // Database abstraction
-    
+
     enum Tables {
         Table_MedicalProcedure = 0,
         Table_BankDetails,
@@ -80,7 +80,7 @@ namespace Constants {
         Table_NameIndex,
         Table_VERSION
     };
-    
+
     enum Tables_datapack
     {
         Table_DatapackMP = 0
@@ -151,7 +151,7 @@ namespace Constants {
         ACCOUNT_TRACE,
         ACCOUNT_MaxParam
     };
-    
+
     enum TableActs_Fields {
         ACTS_ID,
         ACTS_UID,
@@ -185,7 +185,7 @@ namespace Constants {
         ASSETS_TRACE,
         ASSETS_MaxParam
     };
-    
+
     enum TableAssetsRates_Fields {
         ASSETSRATES_ID = 0,
         ASSETSRATES_USER_UID,
@@ -285,7 +285,7 @@ namespace Constants {
         DISTRULES_PREF,
         DISTRULES_MaxParam
     };
-    
+
     enum TableThesaurus_Fields {
         THESAURUS_ID = 0,
         THESAURUS_UID,
@@ -298,14 +298,14 @@ namespace Constants {
     enum fieldsVERSION {
         VERSION_ACTUAL = 0
     };
-    
+
     //assets
     enum Modes {
         LINEAR_MODE = 1,
         DECREASING_MODE,
         MODES_MaxParam
     };
-    
+
     enum TypeOfMovements {
         SPENDING = 0,
         RECEIVING,

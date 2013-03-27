@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -61,7 +61,7 @@ protected:
 public:
     static PadToolsCore &instance();
     ~PadToolsCore();
-    
+
     QAbstractItemModel *tokenModel() const;
     Core::ITokenPool *tokenPool() const;
 

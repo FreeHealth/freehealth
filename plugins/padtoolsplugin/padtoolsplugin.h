@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef PADTOOLSPLUGIN_H

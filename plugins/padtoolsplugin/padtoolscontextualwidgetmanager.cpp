@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers:                                                      *
+ *  Main Developers:                                                       *
  *       Eric Maeker <>                             *
- *   Contributors:                                                         *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
@@ -136,7 +136,7 @@ void PadToolsContextualWidgetManager::updateContext(Core::IContext *object, cons
     //    qWarning() << "PadToolsContextualWidgetManager::updateContext(Core::IContext *object)";
     //    if (object)
     //        qWarning() << "PadToolsContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
-    
+
     PadTools::Internal::PadWriter *view = 0;
     do {
         if (!object) {
@@ -155,11 +155,11 @@ void PadToolsContextualWidgetManager::updateContext(Core::IContext *object, cons
                 return;
             break;
         }
-        
+
         if (view == m_CurrentView) {
             return;
         }
-        
+
     } while (false);
 
     if (view)
@@ -181,7 +181,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     m_CurrentView(0)
 {
     setObjectName("PadToolsActionHandler");
-        
+
 //    QAction *a = 0;
     Core::Command *cmd = 0;
     Core::Context ctx(PadTools::Constants::C_PADTOOLS_PLUGINS);
@@ -197,7 +197,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
         //        menu->appendGroup(PadTools::Constants::G_PLUGINS_DRUGS);
         //        menu->appendGroup(PadTools::Constants::G_PLUGINS_INTERACTIONS);
         menu->setTranslations(PadTools::Constants::PADTOOLS_TEXT);
-        
+
         // Add the menu to the menubar or to the plugin menu
 #ifdef FREEDIAMS
         actionManager()->actionContainer(Core::Id(DrugsWidget::Constants::M_PLUGINS_DRUGS))->addMenu(menu, Core::Constants::G_PLUGINS_PADTOOLS);
@@ -210,11 +210,11 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
 #endif
     }
     Q_ASSERT(menu);
-    
+
     // Example: register an existing Core action
     //    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
     //    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
-    
+
     //    a = aClear = new QAction(this);
     //    a->setObjectName("PadTools.aClear");
     //    a->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
@@ -222,7 +222,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     //    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
     //    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
     //    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
-    
+
     aShowSource = createAction(this, "aShowSource", Core::Constants::ICONHELP,
                                Constants::A_PADTOOLS_SHOWSOURCE,
                                ctx,
@@ -253,7 +253,7 @@ void PadToolsActionHandler::setCurrentView(PadWriter *view)
         LOG_ERROR("setCurrentView: no view");
         return;
     }
-    
+
     // disconnect old view
     if (m_CurrentView) {
         //        if (view == m_CurrentView.data())
@@ -266,7 +266,7 @@ void PadToolsActionHandler::setCurrentView(PadWriter *view)
         //        m_CurrentView->drugSelector()->disconnectFilter();
     }
     m_CurrentView = view;
-    
+
     // connect new view
     //    DrugsDB::DrugsModel::setActiveModel(view->currentDrugsModel());
     //    m_CurrentView->createConnections();
@@ -275,7 +275,7 @@ void PadToolsActionHandler::setCurrentView(PadWriter *view)
     //    connect(m_CurrentView->currentDrugsModel(), SIGNAL(numberOfRowsChanged()),
     //            this, SLOT(drugsModelChanged()));
     //    m_CurrentView->drugSelector()->connectFilter();
-    
+
     // update actions according to the current view
     updateActions();
 }

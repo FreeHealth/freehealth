@@ -24,9 +24,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:  Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MEDICALPROCEDURESPAGE_H
@@ -63,7 +63,7 @@ class MedicalProcedureWidget : public QWidget, private Ui::MedicalProcedureWidge
 {
     Q_OBJECT
     Q_DISABLE_COPY(MedicalProcedureWidget)
-    
+
     enum widgetsNumbers{
         WN_MP_USER_UID = 0,
         WN_NAME,
@@ -102,7 +102,7 @@ private:
     QHash<int,QString> fillHashOfInsurances();
     void save();
     void fillHugeWidgets();
-    
+
 private Q_SLOTS :
     void fillMPCombo();
 

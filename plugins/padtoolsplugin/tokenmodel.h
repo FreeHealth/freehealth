@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef PADTOOLS_TOKENMODEL_H
@@ -64,7 +64,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
-    
+
     Qt::ItemFlags flags(const QModelIndex &index) const;
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;

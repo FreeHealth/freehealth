@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -51,7 +51,7 @@ public:
         connect(m_ui->repeatRadio, SIGNAL(toggled(bool)), this, SLOT(on_repeatRadio_toggled(bool)));
         connect(m_ui->distribRadio,SIGNAL(toggled(bool)), this, SLOT(on_distribRadio_toggled(bool)));
     }
-    
+
     ~DailySchemeViewerPrivate()
     {
         if (m_ui) {
