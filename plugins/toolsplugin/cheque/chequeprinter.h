@@ -19,7 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
+<<<<<<< HEAD:plugins/toolsplugin/cheque/chequeprinter.h
  *   Main developers : Eric Maeker                                         *
+=======
+ *   Main developers : Eric Maeker
+>>>>>>> 05812a06306f1d862154c30b64da662ece672ed4:plugins/toolsplugin/chequeprinter.h
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
@@ -51,8 +55,12 @@ public:
     explicit ChequePrinter();
     ~ChequePrinter();
     bool initialize();
+<<<<<<< HEAD:plugins/toolsplugin/cheque/chequeprinter.h
     
     void setDrawRects(bool drawRects);
+=======
+
+>>>>>>> 05812a06306f1d862154c30b64da662ece672ed4:plugins/toolsplugin/chequeprinter.h
     void setOrder(const QString &order);
     void setPlace(const QString &place);
     void setDate(const QDate &date);

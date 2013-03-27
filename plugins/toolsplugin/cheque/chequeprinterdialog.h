@@ -55,7 +55,10 @@ class TOOLS_EXPORT ChequePrinterDialog : public QDialog
 public:
     explicit ChequePrinterDialog(QWidget *parent = 0);
     ~ChequePrinterDialog();
+<<<<<<< HEAD:plugins/toolsplugin/cheque/chequeprinterdialog.h
     void initializeWithSettings();
+=======
+>>>>>>> 05812a06306f1d862154c30b64da662ece672ed4:plugins/toolsplugin/chequeprinterdialog.h
 
     void setOrder(const QString &order);
     void setPlace(const QString &place);
