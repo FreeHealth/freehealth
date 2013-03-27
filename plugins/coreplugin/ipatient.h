@@ -98,20 +98,24 @@ public:
         ProfessionalSite,
 
         // Social numbers
-        //TODO: this is HIGHLY France specific.
-        // a more generic approach should be used!
         SocialNumber,
         SocialNumber2,
         SocialNumber3,
         SocialNumber4,
+        SocialNumberOwnerFullName,      // If different from the patient
+        SocialNumberOwnerFullAddress,   // If different from the patient
+
+        // Women
+        IsPregnant,
+        LastMenstrualPeriod,
 
         // Biometrics
         SystolicBloodPressure,
         DiastolicBloodPressure,
         Weight,
-        WeightUnit,
+        WeightUnit,         // 40
         Height,
-        HeightUnit,         // 40
+        HeightUnit,
         BMI,
         Creatinine,
         CreatinineUnit,
