@@ -19,73 +19,74 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_PRINTAXISHELPER_H
-#define UTILS_PRINTAXISHELPER_H
+#ifndef TOOLS_INTERNAL_CHEQUEPRINTFORMAT_H
+#define TOOLS_INTERNAL_CHEQUEPRINTFORMAT_H
 
-#include <utils/global_exporter.h>
-#include <QPoint>
-#include <QSize>
-#include <QRect>
-#include <QPainter>
+#include <QRectF>
+#include <QList>
+#include <QHash>
+#include <QPixmap>
 
 /**
- * \file printaxishelper.h
+ * \file chequeprintformat.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 21 Mar 2013
+ * \date 27 Mar 2013
 */
 
-namespace Utils {
+namespace Tools {
+namespace Internal {
+class ChequePrintFormatPrivate;
 
-struct UTILS_EXPORT PrintString {
-    PrintString() :
-        splitChars(false), autoFontResize(true),
-        minFontPixelSize(10), drawBoundingRect(false),
-        alignment(Qt::AlignVCenter)
-    {}
-
-    QString content;        /**< Content of the string */
-    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
-    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
-    int minFontPixelSize;
-
-    bool drawBoundingRect;
-
-    QPointF topMillimeters;
-    QSizeF contentSizeMillimeters;
-    Qt::Alignment alignment;
-};
-
-class UTILS_EXPORT PrintAxisHelper
+class ChequePrintFormat
 {
 public:
-    PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
-    void setMargins(qreal left, qreal top, qreal right, qreal bottom);
-    void translatePixels(int x, int y);
-    void translateMillimeters(double x, double y);
+    enum Rect {
+        AmountNumbers = 0,
+        AmountLetters,
+        Date,
+        Place,
+        PayTo,
+        RectCount
+    };
+    explicit ChequePrintFormat();
+    ~ChequePrintFormat();
 
-    // Millimeters to pixels
-    QPointF pointToPixels(const QPointF &pointInMilliters);
-    QPointF pointToPixels(double x_millimeter, double y_millimeter);
+    void setLabel(const QString &label) {_label=label;}
+    QString label() const {return _label;}
 
-    QSizeF sizeToPixels(const QSizeF &sizeMilliters);
-    QSizeF sizeToPixels(double width_millimeter, double height_millimeter);
+    void setBackgroundPixmap(const QPixmap &pix) {_pix = pix;}
+    const QPixmap &pixmap() const {return _pix;}
 
-    // Print easiers
-    void printString(QPainter *painter, const PrintString &printString);
+    void setSizeMillimeters(const QSizeF &size) {_sizeMillimeters = size;}
+    QSizeF sizeMillimeters() const {return _sizeMillimeters;}
+
+    void setRectMillimetersFromTopLeft(Rect rect, const QRectF &rectMm) {_rects.insert(rect,rectMm);}
+    QRectF rectMillimetersFromTopLeft(Rect rect) const {return _rects.value(rect, QRectF());}
+
+    QRectF chequePaperRect() const {return QRectF(QPointF(0.,0.), _sizeMillimeters);}
+
+    static QString toXml(const QList<ChequePrintFormat> &set);
+    static QList<ChequePrintFormat> fromXmlFile(const QString &file);
+    static QList<ChequePrintFormat> fromXml(const QString &xmlContent);
 
 private:
-    QRect _pageRect;
-    double _pixToMmCoefX, _pixToMmCoefY;
-    qreal _left, _right, _top, _bottom;
-    int _transXPixels, _transYPixels;
+    QString _label;
+    QPixmap _pix;
+    QSizeF _sizeMillimeters;
+    QHash<int, QRectF> _rects;
 };
 
-} // namespace Utils
+} // namespace Internal
+} // namespace Tools
 
-#endif // UTILS_PRINTAXISHELPER_H
+QDebug operator<<(QDebug dbg, const Tools::Internal::ChequePrintFormat &c);
+QDebug operator<<(QDebug dbg, const Tools::Internal::ChequePrintFormat *c);
+
+#endif // TOOLS_INTERNAL_CHEQUEPRINTFORMAT_H
+

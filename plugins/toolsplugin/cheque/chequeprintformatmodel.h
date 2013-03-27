@@ -19,97 +19,46 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Eric Maeker <>                             *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
-#define TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
+#ifndef TOOLS_INTERNAL_CHEQUEPRINTFORMATMODEL_H
+#define TOOLS_INTERNAL_CHEQUEPRINTFORMATMODEL_H
 
-#include <coreplugin/ioptionspage.h>
-
-#include <QWidget>
-#include <QPointer>
+#include <QStandardItemModel>
 
 /**
- * \file chequeprinter_preferences.h
+ * \file chequeprintformatmodel.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 10 Mar 2013
+ * \date 27 Mar 2013
 */
-
-namespace Core {
-class ISettings;
-}
 
 namespace Tools {
 namespace Internal {
+class ChequePrintFormat;
+class ChequePrintFormatModelPrivate;
 
-const char * const S_ORDER = "Tools/ChequePrinter/Order";
-const char * const S_PLACE = "Tools/ChequePrinter/Place";
-const char * const S_VALUES = "Tools/ChequePrinter/Values";
-
-namespace Ui {
-class ChequePrinterPreferencesWidget;
-}
-
-class ChequePrinterPreferencesWidget : public QWidget
+class ChequePrintFormatModel : public QStandardItemModel
 {
-    Q_OBJECT
-    
+    Q_OBJECT    
 public:
-    explicit ChequePrinterPreferencesWidget(QWidget *parent = 0);
-    ~ChequePrinterPreferencesWidget();
+    explicit ChequePrintFormatModel(QObject *parent = 0);
+    ~ChequePrintFormatModel();
+    bool initialize();
     
-    void setDataToUi();
-    QString searchKeywords() const;
-    
-    static void writeDefaultSettings(Core::ISettings *s);
-    
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-    
-private:
-    void retranslateUi();
-    void changeEvent(QEvent *e);
-    
-private:
-    Ui::ChequePrinterPreferencesWidget *ui;
-};
+    Qt::ItemFlags flags(const QModelIndex &) const;
 
+    const ChequePrintFormat &chequePrintFormat(const QModelIndex &index) const;
 
-class ChequePrinterPreferencesPage : public Core::IOptionsPage
-{
-public:
-    ChequePrinterPreferencesPage(QObject *parent = 0);
-    ~ChequePrinterPreferencesPage();
-    
-    QString id() const;
-    QString displayName() const;
-    QString category() const;
-    QString title() const;
-    int sortIndex() const;
-    
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void apply();
-    void finish();
-    
-    bool matches(const QString &s) const;
-    
-    QString helpPage() {return QString();}
-    
-    static void writeDefaultSettings(Core::ISettings *s) {ChequePrinterPreferencesWidget::writeDefaultSettings(s);}
-    
-    QWidget *createPage(QWidget *parent = 0);
-    
 private:
-    QPointer<Internal::ChequePrinterPreferencesWidget> m_Widget;
-    QString m_searchKeywords;
+    ChequePrintFormatModelPrivate *d;
 };
 
 } // namespace Internal
 } // namespace Tools
 
-#endif // TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
+#endif // TOOLS_INTERNAL_CHEQUEPRINTFORMATMODEL_H
+

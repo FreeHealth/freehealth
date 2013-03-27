@@ -25,33 +25,59 @@
  ***************************************************************************/
 #include "chequeprinterdialog.h"
 #include "chequeprinter.h"
-#include "pdftkwrapper.h"
+#include "chequeconstants.h"
+#include "chequeprintformat.h"
+#include "chequeprintformatmodel.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/imageviewer.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
 
 #include "ui_chequeprinterdialog.h"
 
+#include <QPushButton>
+
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace Tools {
 
 ChequePrinterDialog::ChequePrinterDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ChequePrinterDialog)
+    ui(new Ui::ChequePrinterDialog),
+    _printFormatModel(0)
 {
     ui->setupUi(this);
+    ui->valueLineEdit->setFocus();
+    _printFormatModel = new Internal::ChequePrintFormatModel(this);
+    _printFormatModel->initialize();
+    ui->chequeFormat->setModel(_printFormatModel);
+    ui->chequeFormat->selectionModel()->setCurrentIndex(_printFormatModel->index(0,0), QItemSelectionModel::SelectCurrent);
     setWindowTitle(tr("Cheque printing assistant"));
     setWindowIcon(theme()->icon(Core::Constants::ICONCHEQUE));
+
+    QPushButton *button = ui->buttonBox->addButton("Prévisualiser", QDialogButtonBox::ActionRole);
+    connect(button, SIGNAL(clicked()), this, SLOT(previewCheque()));
+    button = ui->buttonBox->addButton("Imprimer le chèque", QDialogButtonBox::AcceptRole);
+    connect(button, SIGNAL(clicked()), this, SLOT(printCheque()));
 }
 
 ChequePrinterDialog::~ChequePrinterDialog()
 {
     delete ui;
+}
+
+void ChequePrinterDialog::initializeWithSettings()
+{
+    setPlace(settings()->value(Constants::S_PLACE).toString());
+    setDate(QDate::currentDate());
+    setOrder(settings()->value(Constants::S_ORDER).toString());
+    setDefaultAmounts(settings()->value(Constants::S_VALUES).toStringList());
 }
 
 void ChequePrinterDialog::done(int result)
@@ -60,8 +86,15 @@ void ChequePrinterDialog::done(int result)
         QDialog::done(result);
         return;
     }
+    if (printCheque())
+        QDialog::done(QDialog::Accepted);
+}
+
+bool ChequePrinterDialog::printCheque()
+{
     // Print the cheque
     ChequePrinter print;
+    print.setDrawRects(true);
     print.setOrder(ui->order->text());
     print.setPlace(ui->place->text());
     print.setDate(ui->date->date());
@@ -71,12 +104,13 @@ void ChequePrinterDialog::done(int result)
         print.setAmount(ui->valueListWidget->selectionModel()->currentIndex().data().toDouble());
     } else {
         Utils::warningMessageBox(tr("No amount"), tr("Please specify an amount for the cheque."));
-        return;
+        return false;
     }
-    if (!print.print()) {
+    if (!print.print(_printFormatModel->chequePrintFormat(ui->chequeFormat->selectionModel()->currentIndex()))) {
         LOG_ERROR("Unable to print cheque");
+        return false;
     }
-    QDialog::done(result);
+    return true;
 }
 
 void ChequePrinterDialog::setOrder(const QString &order)
@@ -105,6 +139,25 @@ void ChequePrinterDialog::setDefaultAmounts(const QStringList &values)
     foreach(const QString &val, values) {
         ui->valueListWidget->addItem(val);
     }
+}
+
+void ChequePrinterDialog::previewCheque()
+{
+    Utils::ImageViewer viewer(this);
+    ChequePrinter printer;
+    printer.setDrawRects(true);
+    printer.setOrder(ui->order->text());
+    printer.setPlace(ui->place->text());
+    printer.setDate(ui->date->date());
+    if (!ui->valueLineEdit->text().simplified().isEmpty()) {
+        printer.setAmount(ui->valueLineEdit->text().toDouble());
+    } else if (ui->valueListWidget->selectionModel()->hasSelection()) {
+        printer.setAmount(ui->valueListWidget->selectionModel()->currentIndex().data().toDouble());
+    }
+    Internal::ChequePrintFormat format = _printFormatModel->chequePrintFormat(ui->chequeFormat->selectionModel()->currentIndex());
+    QPixmap pix = printer.preview(format).scaledToWidth(700, Qt::SmoothTransformation);
+    viewer.setPixmap(pix);
+    viewer.exec();
 }
 
 } // namespace Tools

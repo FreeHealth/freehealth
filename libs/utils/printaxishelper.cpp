@@ -37,7 +37,10 @@ namespace Utils {
 
 PrintAxisHelper::PrintAxisHelper() :
     _pixToMmCoefX(0.),
-    _pixToMmCoefY(0.)
+    _pixToMmCoefY(0.),
+    _left(0), _right(0), _top(0), _bottom(0),
+    _transXPixels(0.),
+    _transYPixels(0.)
 {
 }
 
@@ -46,8 +49,24 @@ void PrintAxisHelper::setPageSize(const QRect &pageRectPixels, const QSizeF &pag
 {
     _pixToMmCoefX = (qreal)pageRectPixels.width() / pageSizeInMillimeters.width();
     _pixToMmCoefY = (qreal)pageRectPixels.height() / pageSizeInMillimeters.height();
+    _pageRect = pageRectPixels;
 }
 
+/** Define the unprintable margins of the page */
+void PrintAxisHelper::setMargins(qreal left, qreal top, qreal right, qreal bottom)
+{
+    _left = left;
+    _right = right;
+    _top = top;
+    _bottom = bottom;
+}
+
+/**
+ * Translates a QPoint in millimeters to QPoint in pixels
+ * according to coefficient computed in setPageSize().
+ * Manages translation of coordinates.
+ * \sa translateMillimeters(), translatePixels()
+ */
 QPointF PrintAxisHelper::pointToPixels(const QPointF &pointInMilliters)
 {
     return pointToPixels(pointInMilliters.x(), pointInMilliters.y());
@@ -59,9 +78,13 @@ QPointF PrintAxisHelper::pointToPixels(const QPointF &pointInMilliters)
  */
 QPointF PrintAxisHelper::pointToPixels(double x_millimeter, double y_millimeter)
 {
-    return QPointF(x_millimeter * _pixToMmCoefX, y_millimeter * _pixToMmCoefY);
+    return QPointF(x_millimeter * _pixToMmCoefX + _transXPixels, y_millimeter * _pixToMmCoefY + _transYPixels);
 }
 
+/**
+ * Translate a QSize in millimeters to QSize in pixels
+ * according to coefficient computed in setPageSize()
+ */
 QSizeF PrintAxisHelper::sizeToPixels(const QSizeF &sizeMilliters)
 {
     return sizeToPixels(sizeMilliters.width(), sizeMilliters.height());
@@ -76,11 +99,41 @@ QSizeF PrintAxisHelper::sizeToPixels(double width_millimeter, double height_mill
     return QSize(width_millimeter * _pixToMmCoefX, height_millimeter * _pixToMmCoefY);
 }
 
+void PrintAxisHelper::translatePixels(int x, int y)
+{
+    _transXPixels = x;
+    _transYPixels = y;
+}
+
+void PrintAxisHelper::translateMillimeters(double x, double y)
+{
+    _transXPixels = x * _pixToMmCoefX;
+    _transYPixels = y * _pixToMmCoefY;
+}
+
 void PrintAxisHelper::printString(QPainter *painter, const PrintString &printString)
 {
     painter->save();
 
     QRectF content(pointToPixels(printString.topMillimeters),  sizeToPixels(printString.contentSizeMillimeters));
+
+    // If defined -> manage margins
+    if (_left != 0.
+            || _top != 0.
+            || _right != 0.
+            || _bottom != 0.) {
+        if (content.left() < _left)
+            content.setLeft(_left);
+
+        if (content.right() > (_pageRect.right() - _right))
+            content.setRight(_pageRect.right() - _right);
+
+        if (content.top() < _top)
+            content.setTop(_top);
+
+        if (content.bottom() > (_pageRect.bottom() - _bottom))
+            content.setBottom(_pageRect.bottom() - _bottom);
+    }
 
 //    QPen pen(QColor("red"));
 //    painter->setPen(pen);
@@ -107,25 +160,25 @@ void PrintAxisHelper::printString(QPainter *painter, const PrintString &printStr
             int widthPixels = printString.contentSizeMillimeters.width() * _pixToMmCoefX;
             double widthScaleFactor = ((double)metrics.width(printString.content)/(double)widthPixels);
 
-//            qWarning() << "font size: fontsize" << font.pointSize()
-//                       << "widthPixels" << widthPixels << "widthScaleFactor" << widthScaleFactor;
+            //            qWarning() << "font size: fontsize" << font.pointSize()
+            //                       << "widthPixels" << widthPixels << "widthScaleFactor" << widthScaleFactor;
 
             double scaleFactor = qMax(heightScaleFactor, widthScaleFactor);
-//            qWarning() << "scaleFactor" << scaleFactor;
+            //            qWarning() << "scaleFactor" << scaleFactor;
 
             font.setPointSizeF(((double)font.pointSize() / scaleFactor));
 
             metrics = QFontMetrics(font);
-//            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
-//                       << "fontMetrics.height" << metrics.height()
-//                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
-//                       << "fontPointSize" << font.pointSizeF()
-//                       << "\n\n";
+            //            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
+            //                       << "fontMetrics.height" << metrics.height()
+            //                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
+            //                       << "fontPointSize" << font.pointSizeF()
+            //                       << "\n\n";
 
             painter->setFont(font);
             painter->drawText(content, printString.alignment, printString.content);
         } else {
-//            // Split chars and center
+            //            // Split chars and center
             int widthPixels = printString.contentSizeMillimeters.width() * _pixToMmCoefX;
             double widthScaleFactorPerChar = ((double)metrics.width(printString.content)/(double)widthPixels) / (double)(printString.content.size());
 
@@ -135,39 +188,40 @@ void PrintAxisHelper::printString(QPainter *painter, const PrintString &printStr
                 widthScaleFactorPerChar = qMax(widthScaleFactorPerChar, ((double)metrics.width(printString.content, i)/(double)widthPixels));
             }
 
-//            qWarning() << "font size: fontsize" << font.pointSize()
-//                       << "widthPixels" << widthPixels << "widthScaleFactorPerChar" << widthScaleFactorPerChar;
+            //            qWarning() << "font size: fontsize" << font.pointSize()
+            //                       << "widthPixels" << widthPixels << "widthScaleFactorPerChar" << widthScaleFactorPerChar;
 
             double scaleFactor = qMax(heightScaleFactor, widthScaleFactorPerChar);
-//            qWarning() << "scaleFactor" << scaleFactor;
+            //            qWarning() << "scaleFactor" << scaleFactor;
 
             font.setPointSizeF(((double)font.pointSize() / scaleFactor));
 
             metrics = QFontMetrics(font);
-//            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
-//                       << "fontMetrics.height" << metrics.height()
-//                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
-//                       << "fontPointSize" << font.pointSizeF();
+            //            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
+            //                       << "fontMetrics.height" << metrics.height()
+            //                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
+            //                       << "fontPointSize" << font.pointSizeF();
 
             painter->setFont(font);
 
             double pixelPerChar = (double)widthPixels / (double)(printString.content.size());
-//            qWarning() << "pixelPerChar" << pixelPerChar << (pixelPerChar * _pixToMmCoefX) << "\n\n";
+            //            qWarning() << "pixelPerChar" << pixelPerChar << (pixelPerChar * _pixToMmCoefX) << "\n\n";
 
             for(int i=0; i < printString.content.size(); ++i) {
                 // if (printString.content.at(i) == "*")
                 //    continue;
                 QRectF charRect = QRectF(content.topLeft() + QPointF(i*pixelPerChar, 0.1), QSizeF(pixelPerChar, content.height()));
-//                if (printString.drawBoundingRect)
-//                    painter->drawRect(charRect);
+                //                if (printString.drawBoundingRect)
+                //                    painter->drawRect(charRect);
                 painter->drawText(charRect, Qt::AlignCenter, printString.content.at(i));
             }
         }
-
+    } else {
+        painter->drawText(content, printString.alignment, printString.content);
     }
 
 
-//    qWarning() << "fontPixelSize" << font.pixelSize();
+    //    qWarning() << "fontPixelSize" << font.pixelSize();
 
     painter->restore();
 }

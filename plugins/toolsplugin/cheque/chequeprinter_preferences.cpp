@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "chequeprinter_preferences.h"
+#include "chequeconstants.h"
 #include "ui_chequeprinter_preferences.h"
 
 #include <translationutils/constants.h>
@@ -59,9 +60,9 @@ ChequePrinterPreferencesWidget::~ChequePrinterPreferencesWidget()
 /*! Sets data of a changed data model to the ui's widgets. */
 void ChequePrinterPreferencesWidget::setDataToUi()
 {
-    ui->orderLineEdit->setText(settings()->value(S_ORDER).toString());
-    ui->placeLineEdit->setText(settings()->value(S_PLACE).toString());
-    ui->defaultValuesTextEdit->setPlainText(settings()->value(S_VALUES).toStringList().join("\n"));
+    ui->orderLineEdit->setText(settings()->value(Constants::S_ORDER).toString());
+    ui->placeLineEdit->setText(settings()->value(Constants::S_PLACE).toString());
+    ui->defaultValuesTextEdit->setPlainText(settings()->value(Constants::S_VALUES).toStringList().join("\n"));
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -83,9 +84,9 @@ void ChequePrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
     Core::ISettings *s = sets? sets : settings();
-    s->setValue(S_ORDER, ui->orderLineEdit->text());
-    s->setValue(S_PLACE, ui->placeLineEdit->text());
-    s->setValue(S_VALUES, ui->defaultValuesTextEdit->toPlainText().split("\n"));
+    s->setValue(Constants::S_ORDER, ui->orderLineEdit->text());
+    s->setValue(Constants::S_PLACE, ui->placeLineEdit->text());
+    s->setValue(Constants::S_VALUES, ui->defaultValuesTextEdit->toPlainText().split("\n"));
 }
 
 /*! Writes the default settings to the data model. */

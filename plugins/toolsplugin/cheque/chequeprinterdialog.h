@@ -19,73 +19,62 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_PRINTAXISHELPER_H
-#define UTILS_PRINTAXISHELPER_H
+#ifndef TOOLS_CHEQUEPRINTERDIALOG_H
+#define TOOLS_CHEQUEPRINTERDIALOG_H
 
-#include <utils/global_exporter.h>
-#include <QPoint>
-#include <QSize>
-#include <QRect>
-#include <QPainter>
+#include <toolsplugin/tools_exporter.h>
+#include <QDialog>
+#include <QDate>
 
 /**
- * \file printaxishelper.h
+ * \file chequeprinterdialog.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 21 Mar 2013
+ * \date 27 Mar 2013
+ * \note requires Qt 4.8+
 */
 
-namespace Utils {
+namespace Tools {
+namespace Internal {
+class ChequePrintFormatModel;
+}
 
-struct UTILS_EXPORT PrintString {
-    PrintString() :
-        splitChars(false), autoFontResize(true),
-        minFontPixelSize(10), drawBoundingRect(false),
-        alignment(Qt::AlignVCenter)
-    {}
+namespace Ui {
+class ChequePrinterDialog;
+}
 
-    QString content;        /**< Content of the string */
-    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
-    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
-    int minFontPixelSize;
-
-    bool drawBoundingRect;
-
-    QPointF topMillimeters;
-    QSizeF contentSizeMillimeters;
-    Qt::Alignment alignment;
-};
-
-class UTILS_EXPORT PrintAxisHelper
+class TOOLS_EXPORT ChequePrinterDialog : public QDialog
 {
+    Q_OBJECT
+    
 public:
-    PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
-    void setMargins(qreal left, qreal top, qreal right, qreal bottom);
-    void translatePixels(int x, int y);
-    void translateMillimeters(double x, double y);
+    explicit ChequePrinterDialog(QWidget *parent = 0);
+    ~ChequePrinterDialog();
+    void initializeWithSettings();
 
-    // Millimeters to pixels
-    QPointF pointToPixels(const QPointF &pointInMilliters);
-    QPointF pointToPixels(double x_millimeter, double y_millimeter);
-
-    QSizeF sizeToPixels(const QSizeF &sizeMilliters);
-    QSizeF sizeToPixels(double width_millimeter, double height_millimeter);
-
-    // Print easiers
-    void printString(QPainter *painter, const PrintString &printString);
+    void setOrder(const QString &order);
+    void setPlace(const QString &place);
+    void setDate(const QDate &date);
+    void setAmount(double amount);
+    void setDefaultAmounts(const QStringList &values);
 
 private:
-    QRect _pageRect;
-    double _pixToMmCoefX, _pixToMmCoefY;
-    qreal _left, _right, _top, _bottom;
-    int _transXPixels, _transYPixels;
+    void done(int result);
+
+private Q_SLOTS:
+    bool printCheque();
+    void previewCheque();
+
+private:
+    Ui::ChequePrinterDialog *ui;
+    Internal::ChequePrintFormatModel *_printFormatModel;
 };
 
-} // namespace Utils
+} // namespace Tools
 
-#endif // UTILS_PRINTAXISHELPER_H
+#endif // TOOLS_CHEQUEPRINTERDIALOG_H

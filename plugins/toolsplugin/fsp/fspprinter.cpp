@@ -31,6 +31,7 @@
 
 #include "fspprinter.h"
 #include "fspconstants.h"
+#include "../constants.h"
 #include "fsp.h"
 
 #include <coreplugin/icore.h>
@@ -40,6 +41,7 @@
 #include <translationutils/constants.h>
 
 #include <QPrinter>
+#include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPainter>
 #include <QSystemLocale>
@@ -317,6 +319,7 @@ public:
 
     QString amountPrintingValue(const Fsp &fsp, FspPrinter::Cerfa cerfa, int line, int fspIndex)
     {
+        Q_UNUSED(cerfa);
         if (fsp.amountLineData(line, fspIndex).isNull())
             return QString::null;
         switch (fspIndex) {
@@ -395,6 +398,7 @@ public:
         case Fsp::Amount_Deplacement_IKMD:
             return false;
         }
+        return false;
     }
 
     Qt::AlignmentFlag amountAlignement(int fspIndex)
@@ -520,13 +524,7 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     printer->setFullPage(true);
     printer->setPaperSize(QPrinter::A4);
     printer->setResolution(150);
-    printer->setPageMargins(0, 0, 0, 0, QPrinter::DevicePixel);
     d->_axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
-
-//    qreal l, r, t ,b;
-//    printer->getPageMargins(&l, &t, &r, &b, );
-//    qWarning() << l << t << r << b;
-
 
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
@@ -551,9 +549,22 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
         painter.drawPixmap(QRect(QPoint(0,0), printer->pageRect().size()), background);
     }
 
-    // Include the printer correction
-    painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
-                                                   settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
+    // Printer correction: user defined
+    d->_axisHelper.translateMillimeters(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
+                                        settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble());
+
+    // Printer correction: not over margins
+    qreal l, r, t ,b;
+    printer->getPageMargins(&l, &t, &r, &b, QPrinter::DevicePixel);
+    d->_axisHelper.setMargins(l, t, r, b);
+
+    // Print correction: direction
+    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_BOTTOMTOTOP) {
+        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
+                                                       settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
+        painter.translate(printer->pageRect().bottomRight());
+        painter.rotate(180.);
+    }
 
     painter.save();
     d->drawContent(painter, fsp, cerfa);
@@ -594,6 +605,14 @@ QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
 
     QPen pen(Qt::black, 3, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
     painter.setPen(pen);
+
+    // Manage print direction?
+//    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_BOTTOMTOTOP) {
+//        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
+//                                                       settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
+//        painter.translate(image.rect().bottomRight());
+//        painter.rotate(180.);
+//    }
 
     QPixmap background;
     if (cerfa == S12541_01) {

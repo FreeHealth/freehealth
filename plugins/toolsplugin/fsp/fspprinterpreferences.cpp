@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "fspprinterpreferences.h"
 #include "fspconstants.h"
+#include "../constants.h"
 #include "fsp.h"
 #include "fspprinter.h"
 
@@ -104,6 +105,10 @@ void FspPrinterPreferencesWidget::setDataToUi()
     else
         ui->defaultCerfa->setCurrentIndex(1);
 
+    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_TOPTOBOTTOM)
+        ui->direction->setCurrentIndex(0);
+    else
+        ui->direction->setCurrentIndex(1);
     connect(ui->horizCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
     connect(ui->verticCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
     connect(ui->horiz, SIGNAL(valueChanged(double)), this, SLOT(updatePreview()));
@@ -149,6 +154,10 @@ void FspPrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     }
     s->setValue(Constants::S_HORIZ_CORRECTION_MM, -x);
     s->setValue(Constants::S_VERTIC_CORRECTION_MM, -y);
+    if (ui->direction->currentIndex() == FspPrinter::TopToBottom)
+        s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
+    else
+        s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_BOTTOMTOTOP);
     if (ui->defaultCerfa->currentIndex() == 0)
         s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
     else
@@ -161,6 +170,7 @@ void FspPrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     Q_UNUSED(s);
     LOG_FOR("FspPrinterPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FspPrinterPreferencesWidget"));
     s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
+    s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
 }
 
 /*! Retranslates the ui widgets to the changed language. */
@@ -398,7 +408,8 @@ void FspPrinterPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
-    
+    defaultvalues.insert(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));

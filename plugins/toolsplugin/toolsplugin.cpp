@@ -26,8 +26,8 @@
 #include "toolsplugin.h"
 #include "toolsconstants.h"
 #include "pdftkwrapper.h"
-#include "chequeprinterdialog.h"
-#include "chequeprinter_preferences.h"
+#include "cheque/chequeprinterdialog.h"
+#include "cheque/chequeprinter_preferences.h"
 #include "fsp/fspprinterpreferences.h"
 
 #include <coreplugin/icore.h>
@@ -199,10 +199,7 @@ ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
 void ToolsPlugin::printCheque()
 {
     ChequePrinterDialog printDialog;
-    printDialog.setPlace(settings()->value(S_PLACE).toString());
-    printDialog.setDate(QDate::currentDate());
-    printDialog.setOrder(settings()->value(S_ORDER).toString());
-    printDialog.setDefaultAmounts(settings()->value(S_VALUES).toStringList());
+    printDialog.initializeWithSettings();
     printDialog.exec();
 }
 

@@ -24,48 +24,48 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_CHEQUEPRINTERDIALOG_H
-#define TOOLS_CHEQUEPRINTERDIALOG_H
+#ifndef TOOLS_CHEQUEPRINTER_H
+#define TOOLS_CHEQUEPRINTER_H
 
 #include <toolsplugin/tools_exporter.h>
-#include <QDialog>
+#include <QPixmap>
 #include <QDate>
 
 /**
- * \file chequeprinterdialog.h
+ * \file chequeprinter.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 09 Mar 2013
+ * \date 27 Mar 2013
  * \note requires Qt 4.8+
 */
 
 namespace Tools {
+namespace Internal {
+class ChequePrintFormat;
+class ChequePrinterPrivate;
+} // namespace Internal
 
-namespace Ui {
-class ChequePrinterDialog;
-}
-
-class TOOLS_EXPORT ChequePrinterDialog : public QDialog
+class TOOLS_EXPORT ChequePrinter
 {
-    Q_OBJECT
-    
 public:
-    explicit ChequePrinterDialog(QWidget *parent = 0);
-    ~ChequePrinterDialog();
+    explicit ChequePrinter();
+    ~ChequePrinter();    
+    bool initialize();
     
+    void setDrawRects(bool drawRects);
     void setOrder(const QString &order);
     void setPlace(const QString &place);
     void setDate(const QDate &date);
     void setAmount(double amount);
-    void setDefaultAmounts(const QStringList &values);
+
+    bool print(const Internal::ChequePrintFormat &format);
+    QPixmap preview(const Internal::ChequePrintFormat &format);
 
 private:
-    void done(int result);
-
-private:
-    Ui::ChequePrinterDialog *ui;
+    Internal::ChequePrinterPrivate *d;
 };
 
-
 } // namespace Tools
-#endif // TOOLS_CHEQUEPRINTERDIALOG_H
+
+#endif  // TOOLS_CHEQUEPRINTER_H
+

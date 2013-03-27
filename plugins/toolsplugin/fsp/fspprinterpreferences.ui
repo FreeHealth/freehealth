@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>497</width>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,6 +134,34 @@
         </item>
        </widget>
       </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Sens de l'impression</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QComboBox" name="direction">
+        <item>
+         <property name="text">
+          <string>Du haut vers le bas</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Du bas vers le haut</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QPushButton" name="printTest">
+        <property name="text">
+         <string>Print a test</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0" colspan="4">
        <layout class="QGridLayout" name="gridLayout">
         <item row="1" column="2">
@@ -204,13 +232,6 @@
          </spacer>
         </item>
        </layout>
-      </item>
-      <item row="3" column="3">
-       <widget class="QPushButton" name="printTest">
-        <property name="text">
-         <string>Print a test</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

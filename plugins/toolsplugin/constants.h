@@ -19,51 +19,33 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
+ *   Main Developpers:                                                     *
+ *       Eric Maeker <eric.maeker@gmail.com>                               *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_CHEQUEPRINTER_H
-#define TOOLS_CHEQUEPRINTER_H
-
-#include <toolsplugin/tools_exporter.h>
-#include <QObject>
-#include <QDate>
+#ifndef TOOLS_GLOBAL_CONSTANTS_H
+#define TOOLS_GLOBAL_CONSTANTS_H
 
 /**
- * \file chequeprinter.h
+ * \file constants.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 09 Mar 2013
- * \note requires Qt 4.8+
+ * \date 23 Mar 2013
 */
 
 namespace Tools {
-namespace Internal {
-class PdfTkWrapper;
-class ChequePrinterPrivate;
-} // namespace Internal
+namespace Constants {
 
-class TOOLS_EXPORT ChequePrinter
-{
-public:
-    explicit ChequePrinter();
-    ~ChequePrinter();    
-    bool initialize();
-    
-    void setOrder(const QString &order);
-    void setPlace(const QString &place);
-    void setDate(const QDate &date);
-    void setAmount(double amount);
+const char * const S_HORIZ_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/horiz_mm";
+const char * const S_VERTIC_CORRECTION_MM = "Tools/Fsp/PrinterCorrection/vertic_mm";
+const char * const S_PRINT_DIRECTION = "Tools/Fsp/PrinterCorrection/direction";
 
-    bool print();
+// Settings Values
+const char * const S_TOPTOBOTTOM = "topToBottom";
+const char * const S_BOTTOMTOTOP = "bottomToTop";
 
-private:
-    Internal::ChequePrinterPrivate *d;
-};
+}
+}
 
-} // namespace Tools
-
-#endif  // TOOLS_CHEQUEPRINTER_H
-
+#endif // TOOLS_GLOBAL_CONSTANTS_H

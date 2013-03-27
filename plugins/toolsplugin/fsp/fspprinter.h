@@ -49,6 +49,11 @@ public:
         S12541_02
     };
 
+    enum PrintDirection {
+        TopToBottom = 0,
+        BottomToTop
+    };
+
     explicit FspPrinter();
     ~FspPrinter();
 

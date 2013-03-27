@@ -13,35 +13,41 @@ HEADERS += \
     toolsconstants.h \
     toolspreferences.h \
     pdftkwrapper.h \
-    chequeprinter.h \
-    chequeprinter_preferences.h \
-    chequeprinterdialog.h \
+    cheque/chequeprinter.h \
+    cheque/chequeprinter_preferences.h \
+    cheque/chequeprinterdialog.h \
     fsp/fsp.h \
     fsp/fspprinter.h \
     fsp/fspprinterdialog.h \
     fsp/fspprinterpreferences.h \
     fsp/fspconstants.h \
-    fsp/fsptemplatemodel.h
+    fsp/fsptemplatemodel.h \
+    cheque/chequeconstants.h \
+    constants.h \
+    cheque/chequeprintformat.h \
+    cheque/chequeprintformatmodel.h
 
         
 SOURCES += \
     toolsplugin.cpp \
     toolspreferences.cpp \
     pdftkwrapper.cpp \
-    chequeprinter.cpp \
-    chequeprinter_preferences.cpp \
-    chequeprinterdialog.cpp \
+    cheque/chequeprinter.cpp \
+    cheque/chequeprinter_preferences.cpp \
+    cheque/chequeprinterdialog.cpp \
     fsp/fsp.cpp \
     fsp/fspprinter.cpp \
     fsp/fspprinterdialog.cpp \
     fsp/fspprinterpreferences.cpp \
-    fsp/fsptemplatemodel.cpp
+    fsp/fsptemplatemodel.cpp \
+    cheque/chequeprintformat.cpp \
+    cheque/chequeprintformatmodel.cpp
 
 
 FORMS += \
     toolspreferences.ui \
-    chequeprinter_preferences.ui \
-    chequeprinterdialog.ui \
+    cheque/chequeprinter_preferences.ui \
+    cheque/chequeprinterdialog.ui \
     fsp/fspprinterdialog.ui \
     fsp/fspprinterdialog_patient.ui \
     fsp/fspprinterdialog_conds.ui \

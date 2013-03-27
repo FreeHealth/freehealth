@@ -19,33 +19,31 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Eric Maeker <eric.maeker@gmail.com>                               *
- *   Contributors :                                                        *
+ *   Main Developer: Eric Maeker <eric.maeker@gmail.com>                  *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_FSPCONSTANTS_H
-#define TOOLS_FSPCONSTANTS_H
+#ifndef TOOLS_CHEQUECONSTANTS_H
+#define TOOLS_CHEQUECONSTANTS_H
 
 /**
- * \file fspconstants.h
+ * \file chequeconstants.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 23 Mar 2013
+ * \date 27 Mar 2013
 */
 
 namespace Tools {
 namespace Constants {
 
-const char * const S_DEFAULTCERFA = "Tools/Fsp/DefaultCerfa";
-
-// Settings Values
-const char * const S_CERFA_01 = "cerfa01";
-const char * const S_CERFA_02 = "cerfa02";
+const char * const S_ORDER = "Tools/ChequePrinter/Order";
+const char * const S_PLACE = "Tools/ChequePrinter/Place";
+const char * const S_VALUES = "Tools/ChequePrinter/Values";
 
 // Datapack path
-const char * const DATAPACK_PATH = "/fsp/";
+const char * const DATAPACK_PATH = "/cheques/";
 
 }
 }
-#endif // TOOLS_FSPCONSTANTS_H
+
+#endif // TOOLS_CHEQUECONSTANTS_H

@@ -19,73 +19,93 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric Maeker <>                             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_PRINTAXISHELPER_H
-#define UTILS_PRINTAXISHELPER_H
+#ifndef TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
+#define TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
 
-#include <utils/global_exporter.h>
-#include <QPoint>
-#include <QSize>
-#include <QRect>
-#include <QPainter>
+#include <coreplugin/ioptionspage.h>
+
+#include <QWidget>
+#include <QPointer>
 
 /**
- * \file printaxishelper.h
+ * \file chequeprinter_preferences.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 21 Mar 2013
+ * \date 10 Mar 2013
 */
 
-namespace Utils {
+namespace Core {
+class ISettings;
+}
 
-struct UTILS_EXPORT PrintString {
-    PrintString() :
-        splitChars(false), autoFontResize(true),
-        minFontPixelSize(10), drawBoundingRect(false),
-        alignment(Qt::AlignVCenter)
-    {}
+namespace Tools {
+namespace Internal {
 
-    QString content;        /**< Content of the string */
-    bool splitChars;        /**< Split chars: if defined all chars are positioned equally to each other */
-    bool autoFontResize;    /**< Force resizing of the chars for them to feet inside the size of the printing rect */
-    int minFontPixelSize;
+namespace Ui {
+class ChequePrinterPreferencesWidget;
+}
 
-    bool drawBoundingRect;
-
-    QPointF topMillimeters;
-    QSizeF contentSizeMillimeters;
-    Qt::Alignment alignment;
+class ChequePrinterPreferencesWidget : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    explicit ChequePrinterPreferencesWidget(QWidget *parent = 0);
+    ~ChequePrinterPreferencesWidget();
+    
+    void setDataToUi();
+    QString searchKeywords() const;
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+    
+private:
+    Ui::ChequePrinterPreferencesWidget *ui;
 };
 
-class UTILS_EXPORT PrintAxisHelper
+
+class ChequePrinterPreferencesPage : public Core::IOptionsPage
 {
 public:
-    PrintAxisHelper();
-    void setPageSize(const QRect &pageRect, const QSizeF &pageSizeInMillimeters);
-    void setMargins(qreal left, qreal top, qreal right, qreal bottom);
-    void translatePixels(int x, int y);
-    void translateMillimeters(double x, double y);
-
-    // Millimeters to pixels
-    QPointF pointToPixels(const QPointF &pointInMilliters);
-    QPointF pointToPixels(double x_millimeter, double y_millimeter);
-
-    QSizeF sizeToPixels(const QSizeF &sizeMilliters);
-    QSizeF sizeToPixels(double width_millimeter, double height_millimeter);
-
-    // Print easiers
-    void printString(QPainter *painter, const PrintString &printString);
-
+    ChequePrinterPreferencesPage(QObject *parent = 0);
+    ~ChequePrinterPreferencesPage();
+    
+    QString id() const;
+    QString displayName() const;
+    QString category() const;
+    QString title() const;
+    int sortIndex() const;
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void apply();
+    void finish();
+    
+    bool matches(const QString &s) const;
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {ChequePrinterPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
 private:
-    QRect _pageRect;
-    double _pixToMmCoefX, _pixToMmCoefY;
-    qreal _left, _right, _top, _bottom;
-    int _transXPixels, _transYPixels;
+    QPointer<Internal::ChequePrinterPreferencesWidget> m_Widget;
+    QString m_searchKeywords;
 };
 
-} // namespace Utils
+} // namespace Internal
+} // namespace Tools
 
-#endif // UTILS_PRINTAXISHELPER_H
+#endif // TOOLS_INTERNAL_CHEQUEPRINTER_PREF_H
