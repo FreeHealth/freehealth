@@ -231,3 +231,26 @@ bool DayAvailabilityModel::submit()
     qDebug() << "DayAvailabilityModel::submit() is a stub.";
     return false;
 }
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c)
+{
+    QStringList t;
+    for(int i = 0; i < c.timeRangeCount(); ++i) {
+        const TimeRange &tr = c.timeRangeAt(i);
+        t << QString("%1-%2").arg(tr.from.toString()).arg(tr.to.toString());
+    }
+    dbg.nospace() << "DayAvailability("
+                  << QDate::shortDayName(c.weekDay())
+                  << t.join("; ")
+                  << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c)
+{
+    if (!c) {
+        dbg.nospace() << "DayAvailability(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
+}

@@ -117,4 +117,8 @@ private:
 };
 
 } // end namespace Agenda
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c);
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c);
+
 #endif // AGENDA_DAYAVAILABILITY_H
