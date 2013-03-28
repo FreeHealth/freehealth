@@ -2,7 +2,7 @@
 #/***************************************************************************
 # *  The FreeMedForms project is a set of free, open source medical         *
 # *  applications.                                                          *
-# *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
 # *  All rights reserved.                                                   *
 # *                                                                         *
 # *  This program is free software: you can redistribute it and/or modify   *
@@ -104,6 +104,7 @@ global_resources/pixmap/16x16 \
 global_resources/pixmap/32x32 \
 global_resources/pixmap/48x48 \
 global_resources/pixmap/64x64 \
+global_resources/pixmap/others \
 global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
@@ -168,6 +169,7 @@ plugins/fmf_plugins.pri \
 plugins/pluginjsonmetadata.xsl \
 plugins/accountbaseplugin \
 plugins/accountplugin \
+plugins/account2plugin \
 plugins/agendaplugin \
 plugins/aggirplugin \
 plugins/alertplugin \
