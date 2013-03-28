@@ -94,7 +94,7 @@ bool ChequePrinterDialog::printCheque()
 {
     // Print the cheque
     ChequePrinter print;
-    print.setDrawRects(true);
+//    print.setDrawRects(true);
     print.setOrder(ui->order->text());
     print.setPlace(ui->place->text());
     print.setDate(ui->date->date());
