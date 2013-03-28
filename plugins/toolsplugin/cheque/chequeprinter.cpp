@@ -214,8 +214,8 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     }
 
     // Center the cheque in the page
-    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width());
-    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.);
+    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width()) + settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble();
+    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.) + settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble();
     d->_axisHelper.translateMillimeters(centerX, centerY);
 
     // Printer correction: user defined
