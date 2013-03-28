@@ -101,7 +101,7 @@ VariableDatesItem::DateType VariableDatesItem::dateTypeFromSql(const QString &ty
 /** Add a Fee to a Payment. WARNING: the fee must be already saved into the database and/or have its id() defined. */
 void Payment::addPaidFee(const PaidFee &paidFee)
 {
-    Q_ASSERT(paidFee.feeId() >= 0);
+//    Q_ASSERT(paidFee.feeId() >= 0);
     _fees << paidFee;
     _feesId << paidFee.feeId();
 }
