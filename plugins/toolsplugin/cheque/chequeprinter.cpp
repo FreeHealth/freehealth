@@ -35,6 +35,8 @@
 #include "../constants.h"
 #include "chequeprintformat.h"
 
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/numbertostring.h>
@@ -49,6 +51,8 @@
 #include <QPixmap>
 
 #include <QDebug>
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace Tools;
 using namespace Internal;
@@ -65,7 +69,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~ChequePrinterPrivate()
     {
     }
