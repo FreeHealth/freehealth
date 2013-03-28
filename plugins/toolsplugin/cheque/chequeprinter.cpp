@@ -54,6 +54,8 @@
 
 #include <QDebug>
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 using namespace Tools;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -71,7 +73,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~ChequePrinterPrivate()
     {
     }
