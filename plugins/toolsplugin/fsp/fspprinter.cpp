@@ -36,6 +36,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/printaxishelper.h>
 #include <translationutils/constants.h>
@@ -550,8 +551,8 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     }
 
     // Printer correction: user defined
-    d->_axisHelper.translateMillimeters(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
-                                        settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble());
+    d->_axisHelper.translateMillimeters(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
+                                        settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble());
 
     // Printer correction: not over margins
     qreal l, r, t ,b;
@@ -559,9 +560,9 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     d->_axisHelper.setMargins(l, t, r, b);
 
     // Print correction: direction
-    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_BOTTOMTOTOP) {
-        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
-                                                       settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
+    if (settings()->value(Core::Constants::S_PRINT_DIRECTION) == Core::Constants::S_BOTTOMTOTOP) {
+        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
+                                                       settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble()));
         painter.translate(printer->pageRect().bottomRight());
         painter.rotate(180.);
     }
@@ -608,8 +609,8 @@ QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
 
     // Manage print direction?
 //    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_BOTTOMTOTOP) {
-//        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
-//                                                       settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble()));
+//        painter.translate(d->_axisHelper.pointToPixels(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
+//                                                       settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble()));
 //        painter.translate(image.rect().bottomRight());
 //        painter.rotate(180.);
 //    }

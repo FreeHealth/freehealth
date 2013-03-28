@@ -36,6 +36,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <utils/widgets/imageviewer.h>
@@ -83,8 +84,8 @@ void FspPrinterPreferencesWidget::setDataToUi()
     if (!_background.load(settings()->path(Core::ISettings::SplashScreenPixmapPath) + "fsp.png"))
         LOG_ERROR("Unable to loa the background image");
 
-    double x = settings()->value(Constants::S_HORIZ_CORRECTION_MM, 0.).toDouble();
-    double y = settings()->value(Constants::S_VERTIC_CORRECTION_MM, 0.).toDouble();
+    double x = settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM, 0.).toDouble();
+    double y = settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM, 0.).toDouble();
     if (x < 0.) {
         x = -x;
         ui->horizCombo->setCurrentIndex(0);
@@ -105,7 +106,7 @@ void FspPrinterPreferencesWidget::setDataToUi()
     else
         ui->defaultCerfa->setCurrentIndex(1);
 
-    if (settings()->value(Constants::S_PRINT_DIRECTION) == Constants::S_TOPTOBOTTOM)
+    if (settings()->value(Core::Constants::S_PRINT_DIRECTION) == Core::Constants::S_TOPTOBOTTOM)
         ui->direction->setCurrentIndex(0);
     else
         ui->direction->setCurrentIndex(1);
@@ -136,28 +137,6 @@ void FspPrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
     Core::ISettings *s = sets? sets : settings();
-    double x = 0.;
-    double y = 0.;
-    if (ui->horizCombo->currentIndex() == 0) {
-        // ->
-        x += ui->horiz->value();
-    } else {
-        // <-
-        x -= ui->horiz->value();
-    }
-    if (ui->verticCombo->currentIndex() == 0) {
-        // haut de page
-        y -= ui->vertic->value();
-    } else {
-        // bas de page
-        y += ui->vertic->value();
-    }
-    s->setValue(Constants::S_HORIZ_CORRECTION_MM, -x);
-    s->setValue(Constants::S_VERTIC_CORRECTION_MM, -y);
-    if (ui->direction->currentIndex() == FspPrinter::TopToBottom)
-        s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
-    else
-        s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_BOTTOMTOTOP);
     if (ui->defaultCerfa->currentIndex() == 0)
         s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
     else
@@ -170,7 +149,6 @@ void FspPrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     Q_UNUSED(s);
     LOG_FOR("FspPrinterPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FspPrinterPreferencesWidget"));
     s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
-    s->setValue(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
 }
 
 /*! Retranslates the ui widgets to the changed language. */
@@ -408,7 +386,6 @@ void FspPrinterPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
-    defaultvalues.insert(Constants::S_PRINT_DIRECTION, Constants::S_TOPTOBOTTOM);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())

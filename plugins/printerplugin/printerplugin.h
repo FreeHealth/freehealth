@@ -33,13 +33,14 @@
 /**
  * \file printerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 25 July 2012
+ * \version 0.8.4
+ * \date 28 Mar 2013
 */
 
 namespace Print {
 namespace Internal {
 class PrinterPreferencesPage;
+class PrintCorrectionPreferencesPage;
 class DocumentPrinter;
 
 class PrinterPlugin : public ExtensionSystem::IPlugin
@@ -57,6 +58,7 @@ public:
 
 private:
     Print::Internal::PrinterPreferencesPage *prefPage;
+    Print::Internal::PrintCorrectionPreferencesPage *printCorrectionPage;
     Internal::DocumentPrinter *docPrinter;
 };
 

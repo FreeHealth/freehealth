@@ -29,13 +29,11 @@
 /**
  * \file constants_tokensandsettings.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \version 0.8.4
+ * \date 28 Mar 2013
 */
 
-
 namespace Core {
-
 namespace Constants {
 
 // TEXT COMPLETION tokens
@@ -215,6 +213,14 @@ const char * const  S_ALLOW_VIRTUAL_DATA            = "Core/AllowAndUseVirtuals"
 const char * const  S_PROXY = "Core/Proxy";
 
 const char * const  S_PATIENTCHANGEONCREATION = "Patients/SelectOnCreation";
+
+// Printer correction
+const char * const S_PRINTERCORRECTION_HORIZ_MM = "Printer/Correction/horiz_mm";
+const char * const S_PRINTERCORRECTION_VERTIC_MM = "Printer/Correction/vertic_mm";
+const char * const S_PRINT_DIRECTION = "Printer/Correction/direction";
+// Settings Values
+const char * const S_TOPTOBOTTOM = "topToBottom";
+const char * const S_BOTTOMTOTOP = "bottomToTop";
 
 }  // end Constants
 } // end Core
