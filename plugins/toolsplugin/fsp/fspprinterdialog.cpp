@@ -40,7 +40,7 @@
 #include "ui_fspprinterdialog_patient.h"
 #include "ui_fspprinterdialog_conds.h"
 #include "ui_fspprinterdialog_fees.h"
-#include "ui_fspprinterdialog_amounts.h"
+//#include "ui_fspprinterdialog_amounts.h"
 #include "ui_fspprinterdialog_prerecorded.h"
 
 #include <coreplugin/icore.h>
@@ -96,7 +96,7 @@ public:
         delete _feesUi;
         delete _preRecUi;
     }
-    
+
     void clearUi()
     {
         foreach(QLineEdit *edit, q->findChildren<QLineEdit*>()) {
