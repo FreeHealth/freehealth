@@ -97,7 +97,7 @@ XmlFormIO::~XmlFormIO()
 {
 }
 
-QString XmlFormIO::lastestXmlVersion()
+QString XmlFormIO::latestXmlVersion()
 {
     return "0.3.0";
 }
