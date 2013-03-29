@@ -58,6 +58,8 @@ public:
 
     void setLeftButton(QToolButton *button);
     void setRightButton(QToolButton *button);
+    void setRightIcon(QIcon icon);
+    void setLeftIcon(QIcon icon);
     void setRoundedCorners();
 
     void setEditorPlaceholderText(const QString &placeholder);
@@ -77,7 +79,7 @@ private Q_SLOTS:
     void leftTrig(QAction *action);
 
 private:
-    Internal::QButtonLineEditPrivate *d_qble;
+    Internal::QButtonLineEditPrivate *d;
 };
 
 }  // End namespace Utils

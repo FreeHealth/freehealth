@@ -78,8 +78,8 @@ public:
         QStringList css;
 
         // Create padding for buttons
-        css << QString("padding-left:%1px").arg(_leftPadding);
-        css << QString("padding-right:%1px").arg(_rightPadding);
+        css << QString("padding-left: %1px").arg(_leftPadding);
+        css << QString("padding-right: %1px").arg(_rightPadding);
 
         // Analyse extraStyleSheet (remove all paddings)
         if (!extraStyleSheet.isEmpty()) {
@@ -88,7 +88,7 @@ public:
                     css << c;
             }
         }
-        return QString("%2;").arg(css.join(";"));
+        return QString("%1;").arg(css.join(";"));
     }
 
     void setSpecificStyleSheet()
@@ -149,34 +149,34 @@ private:
 
 QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    d_qble(new Internal::QButtonLineEditPrivate(this))
+    d(new Internal::QButtonLineEditPrivate(this))
 {
     static int handle = 0;
     handle++;
     if (objectName().isNull())
         setObjectName("QButtonLineEdit_" + QString::number(handle));
-    d_qble->_timer = new QTimer(this);
-    d_qble->_timer->setSingleShot(true);
+    d->_timer = new QTimer(this);
+    d->_timer->setSingleShot(true);
 }
 
 QButtonLineEdit::~QButtonLineEdit()
 {
-    if (d_qble)
-        delete d_qble;
-    d_qble = 0;
+    if (d)
+        delete d;
+    d = 0;
 }
 
 /** Delay textChanged signal emition */
 void QButtonLineEdit::setDelayedSignals(bool state)
 {
-    d_qble->_delayed = state;
-    d_qble->_timer->stop();
+    d->_delayed = state;
+    d->_timer->stop();
     if (state) {
         blockSignals(true);
-        connect(d_qble->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+        connect(d->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
     } else {
         blockSignals(false);
-        disconnect(d_qble->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+        disconnect(d->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
     }
 }
 
@@ -191,22 +191,22 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
     if (!button)
         return;
     button->setParent(this);
-    d_qble->_leftButton = button;
-    d_qble->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
-    d_qble->_leftButton->setCursor(Qt::ArrowCursor);
+    d->_leftButton = button;
+    d->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
+    d->_leftButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    d_qble->_leftPadding = button->sizeHint().width() + frameWidth + 1;
+    d->_leftPadding = button->sizeHint().width() + frameWidth + 1;
 
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
 
     // set text to button toolTip
-    d_qble->updatePlaceholderText();
-    d_qble->prepareConnections();
+    d->updatePlaceholderText();
+    d->prepareConnections();
     clearFocus();
-    d_qble->setSpecificStyleSheet();
+    d->setSpecificStyleSheet();
 }
 
 /**
@@ -218,33 +218,75 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 {
     if (!button)
         return;
+
+    if (d->_rightButton)
+        delete d->_rightButton;
+
     button->setParent(this);
-    d_qble->_rightButton = button;
-    d_qble->_rightButton->setStyleSheet("border:none;padding: 0 0 0 0px;");
-    d_qble->_rightButton->setCursor(Qt::ArrowCursor);
+    d->_rightButton = button;
+    d->_rightButton->setStyleSheet("border:none; padding: 0;");
+    d->_rightButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    d_qble->_rightPadding = button->sizeHint().width() + frameWidth + 1;
-
+    d->_rightPadding = button->sizeHint().width() + frameWidth + 1;
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
-    d_qble->prepareConnections();
+
+    d->prepareConnections();
     clearFocus();
-    d_qble->setSpecificStyleSheet();
+    d->setSpecificStyleSheet();
+}
+
+/*!
+ * \brief Convenience function for setting an icon on the right side.
+ *
+ * Calls setRightbutton(). Internally creates an empty action with the icon and
+ * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
+ */
+void QButtonLineEdit::setRightIcon(QIcon icon)
+{
+    if (icon.isNull())
+        return;
+
+    // create a new action with given icon and assign it to the button
+    QAction *action = new QAction(icon, "", this);
+    QToolButton *button = new QToolButton();
+    button->addAction(action);
+    button->setDefaultAction(action);
+    setRightButton(button);
+}
+
+/*!
+ * \brief Convenience function for setting an icon on the left side.
+ *
+ * Calls SetLeftButton(). Internally creates an empty action with the icon and
+ * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
+ */
+void QButtonLineEdit::setLeftIcon(QIcon icon)
+{
+    if (icon.isNull())
+        return;
+
+    // create a new action with given icon and assign it to the button
+    QAction *action = new QAction(icon, "", this);
+    QToolButton *button = new QToolButton();
+    button->addAction(action);
+    button->setDefaultAction(action);
+    setLeftButton(button);
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
 {
-    if (d_qble->_leftButton) {
-        QSize sz = d_qble->_leftButton->sizeHint();
+    if (d->_leftButton) {
+        QSize sz = d->_leftButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        d_qble->_leftButton->move(rect().left() + frameWidth, (rect().bottom() + 1 - sz.height()) / 2);
+        d->_leftButton->move(rect().left() + frameWidth, (rect().bottom() + 1 - sz.height()) / 2);
     }
-    if (d_qble->_rightButton) {
-        QSize sz = d_qble->_rightButton->sizeHint();
+    if (d->_rightButton) {
+        QSize sz = d->_rightButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        d_qble->_rightButton->move(rect().right() - frameWidth - sz.width(), (rect().bottom() + 2 - sz.height()) / 2);
+        d->_rightButton->move(rect().right() - frameWidth - sz.width(), (rect().bottom() + 2 - sz.height()) / 2);
     }
 }
 
@@ -263,23 +305,23 @@ void QButtonLineEdit::emitTextChangedSignal()
 /** \brief slot for triggered left button */
 void QButtonLineEdit::leftTrig(QAction *action)
 {
-    d_qble->_leftButton->setDefaultAction(action);
-    d_qble->updatePlaceholderText();
+    d->_leftButton->setDefaultAction(action);
+    d->updatePlaceholderText();
     clearFocus();
 }
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 {
-    if (d_qble->_delayed)
-        d_qble->_timer->stop();
+    if (d->_delayed)
+        d->_timer->stop();
 
     if (event->modifiers() & Qt::AltModifier) {
-        if (!d_qble->_leftButton)
+        if (!d->_leftButton)
             return;
-        const QList<QAction *> &list = d_qble->_leftButton->actions();
+        const QList<QAction *> &list = d->_leftButton->actions();
 
         if (list.count()) {
-            int actual = list.indexOf(d_qble->_leftButton->defaultAction());
+            int actual = list.indexOf(d->_leftButton->defaultAction());
             QAction *a = 0;
 
             if (event->key()==Qt::Key_Down) {
@@ -302,7 +344,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
                 return;
             }
         }
-    } else if (d_qble->_delayed) {
+    } else if (d->_delayed) {
         if (event->key()==Qt::Key_Enter) {
             blockSignals(false);
             Q_EMIT returnPressed();
@@ -318,7 +360,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
                 int delay = 300 - t.length()*t.length()*10;
                 if (delay < 0)
                     delay = 0;
-                d_qble->_timer->start(delay);
+                d->_timer->start(delay);
             }
         }
     }
@@ -343,41 +385,41 @@ void QButtonLineEdit::setRoundedCorners()
  */
 void QButtonLineEdit::setEditorPlaceholderText(const QString &placeholder)
 {
-    d_qble->_placeHolder = placeholder;
-    d_qble->updatePlaceholderText();
+    d->_placeHolder = placeholder;
+    d->updatePlaceholderText();
 }
 
 void QButtonLineEdit::setTranslatableExtraToolTip(const QString &trContext, const QString &translatable)
 {
-    d_qble->_extraToolTipContext = trContext;
-    d_qble->_extraToolTipTr = translatable;
+    d->_extraToolTipContext = trContext;
+    d->_extraToolTipTr = translatable;
 }
 
 void QButtonLineEdit::setExtraToolTip(const QString &nonTranslatable)
 {
-    d_qble->_extraToolTipNonTr = nonTranslatable;
+    d->_extraToolTipNonTr = nonTranslatable;
 }
 
 void QButtonLineEdit::setExtraStyleSheet(const QString &extraCss)
 {
-    d_qble->_extraCss = extraCss;
-    if (d_qble->_extraCss.contains("{")) {
-        int b = d_qble->_extraCss.indexOf("{") + 1;
-        int e = d_qble->_extraCss.indexOf("}", b);
+    d->_extraCss = extraCss;
+    if (d->_extraCss.contains("{")) {
+        int b = d->_extraCss.indexOf("{") + 1;
+        int e = d->_extraCss.indexOf("}", b);
         if (e>0) {
-            d_qble->_extraCss = d_qble->_extraCss.mid(b, e-b);
+            d->_extraCss = d->_extraCss.mid(b, e-b);
         } else {
             LOG_ERROR("Wrong styleSheet -> {} " + extraCss);
-            d_qble->_extraCss.clear();
+            d->_extraCss.clear();
         }
     }
-    d_qble->setSpecificStyleSheet();
+    d->setSpecificStyleSheet();
 }
 
 void QButtonLineEdit::clearExtraStyleSheet()
 {
-    d_qble->_extraCss.clear();
-    d_qble->setSpecificStyleSheet();
+    d->_extraCss.clear();
+    d->setSpecificStyleSheet();
 }
 
 void QButtonLineEdit::changeEvent(QEvent *e)
@@ -385,7 +427,7 @@ void QButtonLineEdit::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        d_qble->updatePlaceholderText();
+        d->updatePlaceholderText();
         break;
     default:
         break;
