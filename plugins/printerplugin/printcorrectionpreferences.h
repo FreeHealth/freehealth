@@ -24,20 +24,95 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_GLOBAL_CONSTANTS_H
-#define TOOLS_GLOBAL_CONSTANTS_H
+#ifndef PRINT_INTERNAL_PRINTPREFERENCES_H
+#define PRINT_INTERNAL_PRINTPREFERENCES_H
+
+#include <coreplugin/ioptionspage.h>
+
+#include <QWidget>
+#include <QPointer>
 
 /**
- * \file constants.h
+ * \file printcorrectionpreferences.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 23 Mar 2013
+ * \date 28 Mar 2013
 */
 
-namespace Tools {
-namespace Constants {
-
-}
+namespace Core {
+class ISettings;
 }
 
-#endif // TOOLS_GLOBAL_CONSTANTS_H
+namespace Print {
+namespace Internal {
+namespace Ui {
+class PrintCorrectionPreferencesWidget;
+}
+
+class PrintCorrectionPreferencesWidget : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    explicit PrintCorrectionPreferencesWidget(QWidget *parent = 0);
+    ~PrintCorrectionPreferencesWidget();
+    
+    void setDataToUi();
+    QString searchKeywords() const;
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    
+private Q_SLOTS:
+    bool horizLineDistanceChanged();
+    bool verticLineDistanceChanged();
+    bool printTest();
+    void shiftPreview();
+
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+    
+private:
+    Ui::PrintCorrectionPreferencesWidget *ui;
+};
+
+
+class PrintCorrectionPreferencesPage : public Core::IOptionsPage
+{
+public:
+    PrintCorrectionPreferencesPage(QObject *parent = 0);
+    ~PrintCorrectionPreferencesPage();
+    
+    QString id() const;
+    QString displayName() const;
+    QString category() const;
+    QString title() const;
+    int sortIndex() const;
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void apply();
+    void finish();
+    
+    bool matches(const QString &s) const;
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {PrintCorrectionPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
+private:
+    QPointer<Internal::PrintCorrectionPreferencesWidget> m_Widget;
+    QString m_searchKeywords;
+};
+
+
+} // namespace Internal
+} // namespace Print
+
+#endif // PRINT_INTERNAL_PRINTPREFERENCES_H
+

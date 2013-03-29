@@ -33,10 +33,10 @@
 #include <QPointer>
 
 /**
- * \file %PluginName:l%preferences.h
+ * \file %PluginName:l%preferences.%CppHeaderSuffix:l%
  * \author %Author%
- * \version 0.8.0
- * \date
+ * \version 0.8.4
+ * \date %CurrentDate%
 */
 
 namespace Core {
@@ -91,7 +91,7 @@ public:
     void apply();
     void finish();
 
-    bool matches(QString &s) const;
+    bool matches(const QString &s) const;
 
     QString helpPage() {return QString();}
 
@@ -106,5 +106,6 @@ private:
 
 
 } // namespace Internal
-} // namespace %Namespace:c%
-#endif // %Namespace:u%_INTERNAL_%ClassName:u%_H
+} // namespace %PluginName:c%
+
+#endif // %PluginName:u%_INTERNAL_%PluginName:u%PREFERENCES_H

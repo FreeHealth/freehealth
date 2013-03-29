@@ -35,8 +35,10 @@
 #include "../constants.h"
 #include "chequeprintformat.h"
 
-#include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/numbertostring.h>
@@ -218,13 +220,13 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     }
 
     // Center the cheque in the page
-    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width()) + settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble();
-    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.) + settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble();
+    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width()) + settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble();
+    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.) + settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble();
     d->_axisHelper.translateMillimeters(centerX, centerY);
 
     // Printer correction: user defined
-//    d->_axisHelper.translateMillimeters(settings()->value(Constants::S_HORIZ_CORRECTION_MM).toDouble(),
-//                                        settings()->value(Constants::S_VERTIC_CORRECTION_MM).toDouble());
+//    d->_axisHelper.translateMillimeters(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
+//                                        settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble());
 
     QFont font;
     font.setPointSize(10);
