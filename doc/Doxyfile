@@ -31,7 +31,7 @@ PROJECT_NAME           = "FreeMedForms API Documentation (version 0.8.0 - git ve
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = 2012-12-02
+PROJECT_NUMBER         = 2013-03-29
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
