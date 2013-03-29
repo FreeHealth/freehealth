@@ -347,7 +347,7 @@ QString GenericDescription::htmlUpdateInformationForVersion(const Utils::Version
     return html;
 }
 
-/** You can add untranslatable extra-data. \e ref must be greated than GenericDescription::NonTranslatableExtraData and lower than GenericDescription::TranslatableExtraData. */
+/** You can add untranslatable extra-data. \e ref must be greater than NonTranslatableExtraData and lower than TranslatableExtraData. */
 void GenericDescription::addNonTranslatableExtraData(const int ref, const QString &tagName)
 {
     Q_ASSERT(ref>NonTranslatableExtraData && ref<TranslatableExtraData);
@@ -356,7 +356,7 @@ void GenericDescription::addNonTranslatableExtraData(const int ref, const QStrin
     }
 }
 
-/** You can add translatable extra-data. \e ref must be greated than GenericDescription::TranslatableExtraData. */
+/** You can add translatable extra-data. \e ref must be greater than TranslatableExtraData. */
 void GenericDescription::addTranslatableExtraData(const int ref, const QString &tagName)
 {
     Q_ASSERT(ref>TranslatableExtraData);
