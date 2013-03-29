@@ -60,8 +60,6 @@ using namespace Tools;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
 namespace Tools {
 namespace Internal {
 class ChequePrinterPrivate
