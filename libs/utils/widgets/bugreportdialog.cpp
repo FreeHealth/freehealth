@@ -46,6 +46,7 @@
 
 #include "ui_bugreportdialog.h"
 
+
 using namespace Utils;
 using namespace Internal;
 
@@ -69,12 +70,19 @@ public:
         ui = new Ui::BugReportDialog;
         ui->setupUi(q);
         ui->emailEdit->setValidator(new EmailValidator(q));
+
         _sendButton = new QPushButton(q);
+        _sendButton->setDisabled(true);
         ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);
     }
 
     void connectUi()
     {
+        QObject::connect(ui->emailEdit, SIGNAL(textChanged(QString)), q, SLOT(validateInputs()));
+        QObject::connect(ui->categoryCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(validateInputs()));
+        QObject::connect(ui->severityCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(validateInputs()));
+        QObject::connect(ui->descrEdit, SIGNAL(textChanged()), q, SLOT(validateInputs()));
+        QObject::connect(ui->hasLookedUpDocumentationCheckBox, SIGNAL(clicked()), q, SLOT(validateInputs()));
         QObject::connect(_sendButton, SIGNAL(clicked()), q, SLOT(sendBugReport()));
     }
 
@@ -102,10 +110,10 @@ public:
         report << pairs("---", "");
         report << pairs(ui->catLabel->text().remove(":").remove("&"), ui->categoryCombo->currentText());
         report << pairs(ui->descrLabel->text().remove(":").remove("&"), Utils::lineWrapString(ui->descrEdit->toPlainText(), 50));
-        if (ui->documentation->isChecked())
-            report << pairs(ui->documentation->text().remove(":").remove("&"), "yes");
+        if (ui->hasLookedUpDocumentationCheckBox->isChecked())
+            report << pairs(ui->hasLookedUpDocumentationCheckBox->text().remove(":").remove("&"), "yes");
         else
-            report << pairs(ui->documentation->text().remove(":").remove("&"), "no");
+            report << pairs(ui->hasLookedUpDocumentationCheckBox->text().remove(":").remove("&"), "no");
         // find the max length
         int max = 0;
         foreach(const pairs &pair, report) {
@@ -159,6 +167,36 @@ void BugReportDialog::setBugCategories(const QStringList &cat)
     d->ui->categoryCombo->clear();
     d->ui->categoryCombo->addItems(cat);
     d->ui->categoryCombo->setCurrentIndex(-1);
+}
+
+void BugReportDialog::validateInputs()
+{
+    bool enabled = true;
+    QString toolTip;
+
+    if (!d->ui->emailEdit->hasAcceptableInput()) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
+    }
+    if (d->ui->categoryCombo->currentIndex() == -1) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("Please choose the issue category."));
+    }
+    if (d->ui->severityCombo->currentIndex() == -1) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("Please select the severity of the issue."));
+    }
+    if (d->ui->descrEdit->toPlainText().isEmpty()) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("Describe the problem you have in short, pregnant words.<br/>The more information you provide, the easier we can help."));
+    }
+    if (!d->ui->hasLookedUpDocumentationCheckBox->isChecked()) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("Please confirm that you have looked up the documentation"));
+    }
+    //: tooltip for bug report "send" button
+    d->_sendButton->setToolTip(enabled? "" : tr("<p>The following problems occurred:</p><ul>%1</ul>").arg(toolTip));
+    d->_sendButton->setEnabled(enabled);
 }
 
 /**
