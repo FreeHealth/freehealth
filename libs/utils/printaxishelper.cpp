@@ -150,62 +150,38 @@ void PrintAxisHelper::printString(QPainter *painter, const PrintString &printStr
     QFontMetrics metrics(font);
     if (printString.autoFontResize) {
         // Ensure height of the chars does fit the content rect
-        int heightPixels = printString.contentSizeMillimeters.height() * _pixToMmCoefY * 0.85;
+        int heightPixels = content.size().height() * 0.9; // printString.contentSizeMillimeters.height() * _pixToMmCoefY * 0.85;
         double heightScaleFactor = ((double)metrics.height()/(double)heightPixels);
-//        qWarning() << "font size: fontsize" << font.pointSize()
-//                   << "heighPixel" << heightPixels << "heightScaleFactor" << heightScaleFactor;
 
         if (!printString.splitChars) {
             // Don't split chars (check width)
-            int widthPixels = printString.contentSizeMillimeters.width() * _pixToMmCoefX;
+            int widthPixels = content.size().width(); //printString.contentSizeMillimeters.width() * _pixToMmCoefX;
             double widthScaleFactor = ((double)metrics.width(printString.content)/(double)widthPixels);
 
-            //            qWarning() << "font size: fontsize" << font.pointSize()
-            //                       << "widthPixels" << widthPixels << "widthScaleFactor" << widthScaleFactor;
-
             double scaleFactor = qMax(heightScaleFactor, widthScaleFactor);
-            //            qWarning() << "scaleFactor" << scaleFactor;
 
             font.setPointSizeF(((double)font.pointSize() / scaleFactor));
 
             metrics = QFontMetrics(font);
-            //            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
-            //                       << "fontMetrics.height" << metrics.height()
-            //                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
-            //                       << "fontPointSize" << font.pointSizeF()
-            //                       << "\n\n";
-
             painter->setFont(font);
             painter->drawText(content, printString.alignment, printString.content);
         } else {
-            //            // Split chars and center
-            int widthPixels = printString.contentSizeMillimeters.width() * _pixToMmCoefX;
+            // Split chars and center
+            int widthPixels = content.size().width();
             double widthScaleFactorPerChar = ((double)metrics.width(printString.content)/(double)widthPixels) / (double)(printString.content.size());
-
-            // qWarning() << "width" << widthPixels << "widthScaleFactorPerChar" << widthScaleFactorPerChar << "content.size()" << printString.content.size();
 
             for(int i=0; i < printString.content.size(); ++i) {
                 widthScaleFactorPerChar = qMax(widthScaleFactorPerChar, ((double)metrics.width(printString.content, i)/(double)widthPixels));
             }
 
-            //            qWarning() << "font size: fontsize" << font.pointSize()
-            //                       << "widthPixels" << widthPixels << "widthScaleFactorPerChar" << widthScaleFactorPerChar;
-
             double scaleFactor = qMax(heightScaleFactor, widthScaleFactorPerChar);
-            //            qWarning() << "scaleFactor" << scaleFactor;
 
             font.setPointSizeF(((double)font.pointSize() / scaleFactor));
 
             metrics = QFontMetrics(font);
-            //            qWarning() << "fontMetrics.width" << metrics.width(printString.content)
-            //                       << "fontMetrics.height" << metrics.height()
-            //                       << "heightpixel" << heightPixels << "widthPixels" << widthPixels
-            //                       << "fontPointSize" << font.pointSizeF();
-
             painter->setFont(font);
 
             double pixelPerChar = (double)widthPixels / (double)(printString.content.size());
-            //            qWarning() << "pixelPerChar" << pixelPerChar << (pixelPerChar * _pixToMmCoefX) << "\n\n";
 
             for(int i=0; i < printString.content.size(); ++i) {
                 // if (printString.content.at(i) == "*")
