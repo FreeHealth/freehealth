@@ -150,7 +150,7 @@ public:
     bool hasScreenShots() const;
     QList<QPixmap> screenShots() const;
 
-    void toTreeWidget(QTreeWidget *tree) const;
+    void fillTreeWidget(QTreeWidget *tree) const;
     QString toHtml() const;
 
 private:

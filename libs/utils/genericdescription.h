@@ -128,7 +128,7 @@ public:
 //    // Manage unknown tags (not in nontransatable, not in translatable)
 //    virtual void readUnknownElement(const QDomElement &element);
 
-    virtual void toTreeWidget(QTreeWidget *tree) const;
+    virtual void fillTreeWidget(QTreeWidget *tree) const;
 
 private:
     QHash<int, QString> nonTranslatableTagsDataReference() const;

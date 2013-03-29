@@ -211,7 +211,7 @@ QList<QPixmap> FormIODescription::screenShots() const
     return m_reader->screenShots(data(UuidOrAbsPath).toString());
 }
 
-void FormIODescription::toTreeWidget(QTreeWidget *tree) const
+void FormIODescription::fillTreeWidget(QTreeWidget *tree) const
 {
     // TODO: code here
     tree->clear();

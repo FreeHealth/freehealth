@@ -373,7 +373,7 @@ void GenericDescription::addTranslatableExtraData(const int ref, const QString &
 //    qWarning() << "Use the Utils::GenericDescription inheritance to access to these data";
 //}
 
-void GenericDescription::toTreeWidget(QTreeWidget *tree) const
+void GenericDescription::fillTreeWidget(QTreeWidget *tree) const
 {
     Q_UNUSED(tree);
 }
