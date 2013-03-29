@@ -67,6 +67,11 @@
        <string>Cerfa S12541*02</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Cerfa S12541*02 v2</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="0" column="0">

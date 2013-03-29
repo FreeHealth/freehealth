@@ -103,8 +103,10 @@ void FspPrinterPreferencesWidget::setDataToUi()
 
     if (settings()->value(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01).toString() == Constants::S_CERFA_01)
         ui->defaultCerfa->setCurrentIndex(0);
-    else
+    else if (settings()->value(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01).toString() == Constants::S_CERFA_02)
         ui->defaultCerfa->setCurrentIndex(1);
+    else
+        ui->defaultCerfa->setCurrentIndex(2);
 
     if (settings()->value(Core::Constants::S_PRINT_DIRECTION) == Core::Constants::S_TOPTOBOTTOM)
         ui->direction->setCurrentIndex(0);
@@ -139,8 +141,10 @@ void FspPrinterPreferencesWidget::saveToSettings(Core::ISettings *sets)
     Core::ISettings *s = sets? sets : settings();
     if (ui->defaultCerfa->currentIndex() == 0)
         s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01);
-    else
+    else if (ui->defaultCerfa->currentIndex() == 1)
         s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_02);
+    else
+        s->setValue(Constants::S_DEFAULTCERFA, Constants::S_CERFA_02_V2);
 }
 
 /*! Writes the default settings to the data model. */
@@ -295,8 +299,12 @@ void FspPrinterPreferencesWidget::viewCerfa()
         if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110.png", "PNG"))
             qWarning() << "ERROR: unable to load background pixmap";
         view.setPixmap(background);
-    } else {
+    } else if (ui->defaultCerfa->currentIndex() == 1) {
         if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02.png", "PNG"))
+            qWarning() << "ERROR: unable to load background pixmap";
+        view.setPixmap(background);
+    } else {
+        if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02_v2.png", "PNG"))
             qWarning() << "ERROR: unable to load background pixmap";
         view.setPixmap(background);
     }

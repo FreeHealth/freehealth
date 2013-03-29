@@ -42,6 +42,7 @@ const char * const S_DEFAULTCERFA = "Tools/Fsp/DefaultCerfa";
 // Settings Values
 const char * const S_CERFA_01 = "cerfa01";
 const char * const S_CERFA_02 = "cerfa02";
+const char * const S_CERFA_02_V2 = "cerfa02v2";
 
 // Datapack path
 const char * const DATAPACK_PATH = "/fsp/";

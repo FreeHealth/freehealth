@@ -46,7 +46,8 @@ class FspPrinter
 public:
     enum Cerfa {
         S12541_01 = 0,
-        S12541_02
+        S12541_02,
+        S12541_02_2
     };
 
     enum PrintDirection {

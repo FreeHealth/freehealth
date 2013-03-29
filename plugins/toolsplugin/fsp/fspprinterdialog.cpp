@@ -346,7 +346,11 @@ public:
     {
         if (ui->cerfa->currentIndex() == 0)
             return FspPrinter::S12541_01;
-        return FspPrinter::S12541_02;
+        else if (ui->cerfa->currentIndex() == 1)
+            return FspPrinter::S12541_02;
+        else if (ui->cerfa->currentIndex() == 2)
+            return FspPrinter::S12541_02_2;
+        return FspPrinter::S12541_01;
     }
 
     void updatePreview()
@@ -476,6 +480,8 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
         d->ui->cerfa->setCurrentIndex(0);
     else if (settings()->value(Constants::S_DEFAULTCERFA) == Constants::S_CERFA_02)
         d->ui->cerfa->setCurrentIndex(1);
+    else if (settings()->value(Constants::S_DEFAULTCERFA) == Constants::S_CERFA_02_V2)
+        d->ui->cerfa->setCurrentIndex(2);
 
     // Connections
     connect(d->ui->vueComplexe, SIGNAL(clicked(bool)), this, SLOT(toggleView(bool)));
