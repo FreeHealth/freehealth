@@ -76,7 +76,7 @@
  * and represents the root of the form (it does only handle some basic information).\n
  *
  * Object tree management:\n
- * When you need to create a Form::FormMain as child of one another, use the createChildForm() member.
+ * When you need to create a Form::FormMain as child of another one, use the createChildForm() member.
  * Get all its children (including sub-trees) using the Form::FormMain::flattenFormMainChildren()
  * member or the formMainChild() if you want a specific child.\n
  *
