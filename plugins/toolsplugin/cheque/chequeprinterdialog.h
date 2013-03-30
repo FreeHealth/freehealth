@@ -55,6 +55,8 @@ class TOOLS_EXPORT ChequePrinterDialog : public QDialog
 public:
     explicit ChequePrinterDialog(QWidget *parent = 0);
     ~ChequePrinterDialog();
+    static bool isAvailable();
+
     void initializeWithSettings();
 
     void setOrder(const QString &order);

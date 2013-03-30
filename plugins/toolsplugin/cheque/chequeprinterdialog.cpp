@@ -40,6 +40,8 @@
 
 #include "ui_chequeprinterdialog.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QPushButton>
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
@@ -72,6 +74,15 @@ ChequePrinterDialog::~ChequePrinterDialog()
     delete ui;
 }
 
+bool ChequePrinterDialog::isAvailable()  // static
+{
+    QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
+    if (!dir.exists())
+        return false;
+    QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
+    return !files.isEmpty();
+}
+
 void ChequePrinterDialog::initializeWithSettings()
 {
     setPlace(settings()->value(Constants::S_PLACE).toString());
@@ -86,15 +97,13 @@ void ChequePrinterDialog::done(int result)
         QDialog::done(result);
         return;
     }
-    if (printCheque())
-        QDialog::done(QDialog::Accepted);
 }
 
 bool ChequePrinterDialog::printCheque()
 {
     // Print the cheque
     ChequePrinter print;
-//    print.setDrawRects(true);
+    print.setDrawRects(false);
     print.setOrder(ui->order->text());
     print.setPlace(ui->place->text());
     print.setDate(ui->date->date());

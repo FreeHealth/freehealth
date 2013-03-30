@@ -53,6 +53,8 @@ public:
     ~FspPrinterDialog();
     bool initialize(const Fsp &fsp);
 
+    static bool isAvailable();
+
 private Q_SLOTS:
     void toggleView(bool complex);
     void expandChildren(const QModelIndex &index);

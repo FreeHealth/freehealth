@@ -40,7 +40,6 @@
 #include "ui_fspprinterdialog_patient.h"
 #include "ui_fspprinterdialog_conds.h"
 #include "ui_fspprinterdialog_fees.h"
-#include "ui_fspprinterdialog_amounts.h"
 #include "ui_fspprinterdialog_prerecorded.h"
 
 #include <coreplugin/icore.h>
@@ -52,6 +51,8 @@
 #include <utils/widgets/detailswidget.h>
 #include <translationutils/constants.h>
 
+#include <QDir>
+#include <QFileInfo>
 #include <QPushButton>
 
 #include <QDebug>
@@ -509,6 +510,15 @@ bool FspPrinterDialog::initialize(const Fsp &fsp)
     d->fspToUi();
     d->updatePreview();
     return true;
+}
+
+bool FspPrinterDialog::isAvailable()  // static
+{
+    QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
+    if (!dir.exists())
+        return false;
+    QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
+    return !files.isEmpty();
 }
 
 void FspPrinterDialog::toggleView(bool complex)

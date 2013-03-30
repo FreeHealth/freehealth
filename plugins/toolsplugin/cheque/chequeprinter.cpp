@@ -97,6 +97,11 @@ public:
         s.minFontPixelSize = 10;
         s.drawBoundingRect = _drawRects;
 
+        if (_drawRects)
+            painter.drawRect(QRectF(_axisHelper.pointToPixels(format.chequePaperRect().topLeft()),
+                                    _axisHelper.sizeToPixels(format.chequePaperRect().size()))
+                             );
+
         QFont font = painter.font();
         font.setBold(true);
         painter.setFont(font);
@@ -287,6 +292,6 @@ QPixmap ChequePrinter::preview(const Internal::ChequePrintFormat &format)
     painter.save();
     d->drawContent(painter, format);
     painter.restore();
-
+    painter.end();
     return image;
 }

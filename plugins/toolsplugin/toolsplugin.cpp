@@ -29,6 +29,7 @@
 #include "cheque/chequeprinterdialog.h"
 #include "cheque/chequeprinter_preferences.h"
 #include "fsp/fspprinterpreferences.h"
+#include "fsp/fspprinterdialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -65,7 +66,7 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 namespace {
 const char* const PRINT_CHEQUE = QT_TRANSLATE_NOOP("Tools", "Print a cheque");
-const char* const PRINT_FSP    = "Imprimer la FSP";
+const char* const PRINT_FSP    = QT_TRANSLATE_NOOP("Tools", "Print a french 'FSP'");
 }
 
 ToolsPlugin::ToolsPlugin() :
@@ -151,6 +152,7 @@ void ToolsPlugin::extensionsInitialized()
     Core::ActionContainer *menu = actionManager()->createMenu(Core::Constants::M_GENERAL);
 
     QAction *action = new QAction(this);
+    action->setEnabled(ChequePrinterDialog::isAvailable());
     action->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
     Core::Command *cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
     cmd->setTranslations(::PRINT_CHEQUE, ::PRINT_CHEQUE, "Tools");
@@ -160,9 +162,10 @@ void ToolsPlugin::extensionsInitialized()
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
 
     QAction *printFsp = new QAction(this);
+    printFsp->setEnabled(FspPrinterDialog::isAvailable());
     printFsp->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
     cmd = actionManager()->registerAction(printFsp, "aTools.PrintFsp", Core::Context(Core::Constants::C_GLOBAL));
-    printFsp->setText(::PRINT_FSP);
+    cmd->setTranslations(::PRINT_FSP, ::PRINT_FSP, "Tools");
     //: Translation for the 'Print FSP' action
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+F")));
     connect(printFsp, SIGNAL(triggered()), this, SLOT(printFsp()));
@@ -203,12 +206,6 @@ void ToolsPlugin::printCheque()
     printDialog.exec();
 }
 
-#include "fsp/fspprinterdialog.h"
-#include "fsp/fspprinter.h"
-#include "fsp/fsp.h"
-#include <utils/widgets/imageviewer.h>
-#include <QPainter>
-
 void ToolsPlugin::printFsp()
 {
 //    if (patient()->uuid().isEmpty()) {
@@ -218,9 +215,12 @@ void ToolsPlugin::printFsp()
 //        return;
 //    }
 
-    Fsp test;
-    test.setData(Fsp::Bill_Number, "123456789012345");
-    test.setData(Fsp::Bill_Date, QDate::currentDate());
+    FspPrinterDialog dlg;
+    dlg.exec();
+
+//    Fsp test;
+//    test.setData(Fsp::Bill_Number, "123456789012345");
+//    test.setData(Fsp::Bill_Date, QDate::currentDate());
 
 //    test.setData(Fsp::Patient_FullName, "NOM PATIENT ET PRENOM");
 //    test.setData(Fsp::Patient_DateOfBirth, QDate(1974, 11, 7));
@@ -232,45 +232,45 @@ void ToolsPlugin::printFsp()
 //    test.setData(Fsp::Patient_Assure_NSSKey, "89");
 //    test.setData(Fsp::Patient_FullAddress, "ADRESSE DU PATIENT SDFQSD FQSDF QSD FQSD FQSD FQSDFQSDFQSDF QSD F24352345 2345 21345 SQDFQSDF");
 
-    test.populateWithCurrentPatientData();
+//    test.populateWithCurrentPatientData();
 
-    test.setData(Fsp::Condition_Maladie, true);
-    test.setData(Fsp::Condition_Maladie_ETM, true);
-    test.setData(Fsp::Condition_Maladie_ETM_Ald, true);
-    test.setData(Fsp::Condition_Maladie_ETM_Autre, true);
-    test.setData(Fsp::Condition_Maladie_ETM_L115, true);
-    test.setData(Fsp::Condition_Maladie_ETM_Prevention, true);
-    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui, true);
-    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Date, QDate::currentDate());
-    test.setData(Fsp::Condition_Maternite, true);
-    test.setData(Fsp::Condition_Maternite_Date, QDate::currentDate());
-    test.setData(Fsp::Condition_ATMP, true);
-    test.setData(Fsp::Condition_ATMP_Number, "12345678901");
-    test.setData(Fsp::Condition_ATMP_Date, QDate::currentDate());
-    test.setData(Fsp::Condition_NouveauMedTraitant, true);
-    test.setData(Fsp::Condition_MedecinEnvoyeur, "Medecin envoyeur");
-    test.setData(Fsp::Condition_AccesSpecifique, true);
-    test.setData(Fsp::Condition_Urgence, true);
-    test.setData(Fsp::Condition_HorsResidence, true);
-    test.setData(Fsp::Condition_Remplace, true);
-    test.setData(Fsp::Condition_HorsCoordination, true);
-    test.setData(Fsp::Condition_AccordPrealableDate, QDate::currentDate().addDays(-18));
-    test.setData(Fsp::Unpaid_PartObligatoire, true);
-    test.setData(Fsp::Unpaid_PartComplementaire, true);
+//    test.setData(Fsp::Condition_Maladie, true);
+//    test.setData(Fsp::Condition_Maladie_ETM, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_Ald, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_Autre, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_L115, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_Prevention, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui, true);
+//    test.setData(Fsp::Condition_Maladie_ETM_AccidentParTiers_Date, QDate::currentDate());
+//    test.setData(Fsp::Condition_Maternite, true);
+//    test.setData(Fsp::Condition_Maternite_Date, QDate::currentDate());
+//    test.setData(Fsp::Condition_ATMP, true);
+//    test.setData(Fsp::Condition_ATMP_Number, "12345678901");
+//    test.setData(Fsp::Condition_ATMP_Date, QDate::currentDate());
+//    test.setData(Fsp::Condition_NouveauMedTraitant, true);
+//    test.setData(Fsp::Condition_MedecinEnvoyeur, "Medecin envoyeur");
+//    test.setData(Fsp::Condition_AccesSpecifique, true);
+//    test.setData(Fsp::Condition_Urgence, true);
+//    test.setData(Fsp::Condition_HorsResidence, true);
+//    test.setData(Fsp::Condition_Remplace, true);
+//    test.setData(Fsp::Condition_HorsCoordination, true);
+//    test.setData(Fsp::Condition_AccordPrealableDate, QDate::currentDate().addDays(-18));
+//    test.setData(Fsp::Unpaid_PartObligatoire, true);
+//    test.setData(Fsp::Unpaid_PartComplementaire, true);
 
-    for(int i=0; i < 4; ++i) {
-        test.addAmountData(i, Fsp::Amount_Date, QDate::currentDate());
-        test.addAmountData(i, Fsp::Amount_ActCode, "CODE123456");
-        test.addAmountData(i, Fsp::Amount_Activity, i);
-        test.addAmountData(i, Fsp::Amount_CV, "CV");
-        test.addAmountData(i, Fsp::Amount_OtherAct1, "ACT1");
-        test.addAmountData(i, Fsp::Amount_OtherAct2, "ACT2");
-        test.addAmountData(i, Fsp::Amount_Amount, 234.00);
-        test.addAmountData(i, Fsp::Amount_Depassement, 1);
-        test.addAmountData(i, Fsp::Amount_Deplacement_IKMD, "IK");
-        test.addAmountData(i, Fsp::Amount_Deplacement_Nb, 1);
-        test.addAmountData(i, Fsp::Amount_Deplacement_IKValue, 0.97);
-    }
+//    for(int i=0; i < 4; ++i) {
+//        test.addAmountData(i, Fsp::Amount_Date, QDate::currentDate());
+//        test.addAmountData(i, Fsp::Amount_ActCode, "CODE123456");
+//        test.addAmountData(i, Fsp::Amount_Activity, i);
+//        test.addAmountData(i, Fsp::Amount_CV, "CV");
+//        test.addAmountData(i, Fsp::Amount_OtherAct1, "ACT1");
+//        test.addAmountData(i, Fsp::Amount_OtherAct2, "ACT2");
+//        test.addAmountData(i, Fsp::Amount_Amount, 234.00);
+//        test.addAmountData(i, Fsp::Amount_Depassement, 1);
+//        test.addAmountData(i, Fsp::Amount_Deplacement_IKMD, "IK");
+//        test.addAmountData(i, Fsp::Amount_Deplacement_Nb, 1);
+//        test.addAmountData(i, Fsp::Amount_Deplacement_IKValue, 0.97);
+//    }
 
 //    QString xml = test.toXml(Fsp::ConditionData | Fsp::AmountData | Fsp::ModelData);
 //    qWarning() << xml;
@@ -279,10 +279,6 @@ void ToolsPlugin::printFsp()
 //    QString xml2 = test2.toXml(Fsp::ConditionData | Fsp::AmountData | Fsp::ModelData);
 //    qWarning() << xml2;
 //    qWarning() << "----------" << (xml==xml2);
-
-    FspPrinterDialog dlg;
-    dlg.initialize(test);
-    dlg.exec();
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)
