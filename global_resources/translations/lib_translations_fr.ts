@@ -2596,5 +2596,21 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>cent</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Payment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Payments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fees</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -1352,12 +1352,12 @@ Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.ui" line="65"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.ui" line="69"/>
         <source>Prescription text or note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.ui" line="91"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/textualprescriptiondialog.ui" line="99"/>
         <source>100%</source>
         <translation type="unfinished"></translation>
     </message>
