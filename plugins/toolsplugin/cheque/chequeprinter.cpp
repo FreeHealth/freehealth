@@ -227,6 +227,7 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     // Center the cheque in the page
     double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width());
     double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.);
+
     // Printer correction: user defined
     // As we are printing in landscape -> invert x <-> y in the translation
     centerX -= settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble();
