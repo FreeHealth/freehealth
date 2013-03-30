@@ -30,6 +30,16 @@
  * Use this class to create specific queries in the Form::IFormIO engines.
  */
 
+/*!
+ * \fn void setExcludeGenderSpecific(bool excludeGenderSpecific)
+ * \brief Sets GenderSpecific filter for form searches.
+ *
+ * Some forms are gender specific, by setting this property to \e true, all form gender information will be checked
+ * and excluded if the gender is different to the current patient gender. If set to \e false, gender is not checked.
+ * By default, this property is set to false.
+ */
+
+
 /**
  * \class Form::FormIODescription
  * Description of a form extracted from a Form::IFormIO engine. This is different than
@@ -211,7 +221,7 @@ QList<QPixmap> FormIODescription::screenShots() const
     return m_reader->screenShots(data(UuidOrAbsPath).toString());
 }
 
-void FormIODescription::toTreeWidget(QTreeWidget *tree) const
+void FormIODescription::fillTreeWidget(QTreeWidget *tree) const
 {
     // TODO: code here
     tree->clear();

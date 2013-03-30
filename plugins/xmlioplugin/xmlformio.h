@@ -61,7 +61,7 @@ public:
     XmlFormIO(QObject *parent=0);
     ~XmlFormIO();
 
-    static QString lastestXmlVersion();
+    static QString latestXmlVersion();
 
     // Form::IForm interface
     QString name() const {return "XmlFormIO";}

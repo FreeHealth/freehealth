@@ -55,40 +55,41 @@ namespace Utils {
 class UTILS_EXPORT GenericDescription
 {
 public:
+    /*! Data representation tokens for retrieving description data using the data() method. */
     enum DataRepresentation {
         // Non translatable data
-        Uuid= 0,
-        Version,
-        Author,
-        Country,
+        Uuid = 0,                       //!< Unique ID
+        Version,                        //!< Version of the data
+        Author,                         //!< Author name
+        Country,                        //!< Countries where this data is valid
         URL,
-        AbsFileName,
-        Vendor,
-        Validity,
-        FreeMedFormsCompatVersion,
-        FreeDiamsCompatVersion,
-        FreeAccountCompatVersion,
-        CreationDate,
-        LastModificationDate,
-        GeneralIcon,
+        AbsFileName,                    //!< absolute filename path
+        Vendor,                         //!< Vendor of this data
+        Validity,                       //!< Validity
+        FreeMedFormsCompatVersion,      //!< With which version of FreeMedForms is this data compatible
+        FreeDiamsCompatVersion,         //!< With which version of FreeDiams is this data compatible
+        FreeAccountCompatVersion,       //!< With which version of FreeAccount is this data compatible
+        CreationDate,                   //!< Creation date
+        LastModificationDate,           //!< Last modification date
+        GeneralIcon,                    //!< Representative Icon of this data
 
         // Translatable data
-        Label,
-        Category,
-        ToolTip,
-        Specialties,
-        TypeName,
-        ShortDescription,
-        HtmlDescription,
-        HtmlSynthesis,
-        LicenseName,
-        LicenseTerms,
-        WebLink,
+        Label,                          //!< Label (translatable)
+        Category,                       //!< %Category (translatable)
+        ToolTip,                        //!< Tooltip (translatable)
+        Specialties,                    //!< Specialities (translatable)
+        TypeName,                       //!< Type name (translatable)
+        ShortDescription,               //!< Short description (one line, translatable)
+        HtmlDescription,                //!< Long description, including HTML (translatable)
+        HtmlSynthesis,                  //!< Synthesis text (translatable)
+        LicenseName,                    //!< Short name of license (e.g. GPL, translatable)
+        LicenseTerms,                   //!< License terms, full text (translatable)
+        WebLink,                        //!< Link to data information in the Internet
         MaxParam
     };
     enum ExtraDataReference {
-        NonTranslatableExtraData = 20000,
-        TranslatableExtraData = 40000
+        NonTranslatableExtraData = 20000,   //!< Start number for data reference values that are not translatable
+        TranslatableExtraData = 40000       //!< Start number for data reference values that are translatable
     };
 
     GenericDescription(const QString &rootTag = QString::null);
@@ -128,7 +129,7 @@ public:
 //    // Manage unknown tags (not in nontransatable, not in translatable)
 //    virtual void readUnknownElement(const QDomElement &element);
 
-    virtual void toTreeWidget(QTreeWidget *tree) const;
+    virtual void fillTreeWidget(QTreeWidget *tree) const;
 
 private:
     QHash<int, QString> nonTranslatableTagsDataReference() const;

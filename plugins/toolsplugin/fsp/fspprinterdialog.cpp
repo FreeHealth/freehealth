@@ -97,7 +97,7 @@ public:
         delete _feesUi;
         delete _preRecUi;
     }
-    
+
     void clearUi()
     {
         foreach(QLineEdit *edit, q->findChildren<QLineEdit*>()) {

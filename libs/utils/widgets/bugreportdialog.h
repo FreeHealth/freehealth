@@ -54,7 +54,7 @@ public:
 
 
 private Q_SLOTS:
-//    void on_emailEdit_textChanged(const QString &text);
+    void validateInputs();
     void sendBugReport();
 
 private:

@@ -72,11 +72,6 @@ public:
     void setTypeOfForms(const TypesOfForm type) {m_type=type;}
     TypesOfForm typeOfForms() const {return m_type;}
 
-    /**
-     * Some forms are gender specific, by setting this property to true, all form gender will be checked
-     * and excluded if the gender is different to the current patient gender. Otherwise, gender is not checked.
-     * By default, this property is set to false.
-     */
     void setExcludeGenderSpecific(bool excludeGenderSpecific) {m_ExcludeGenderSpecific = excludeGenderSpecific;}
     bool excludeGenderSpecific() const {return m_ExcludeGenderSpecific;}
 
@@ -124,6 +119,7 @@ struct FormIODescriptionPrivate;
 class FORM_EXPORT FormIODescription : public Utils::GenericDescription
 {
 public:
+    /*! Data representation for retrieving description data using the data() method. */
     enum ExtraDataRepresentation {
         UuidOrAbsPath = Utils::GenericDescription::MaxParam + 1,
         IsCompleteForm,
@@ -150,7 +146,7 @@ public:
     bool hasScreenShots() const;
     QList<QPixmap> screenShots() const;
 
-    void toTreeWidget(QTreeWidget *tree) const;
+    void fillTreeWidget(QTreeWidget *tree) const;
     QString toHtml() const;
 
 private:
