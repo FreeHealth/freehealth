@@ -84,23 +84,6 @@ void FspPrinterPreferencesWidget::setDataToUi()
     if (!_background.load(settings()->path(Core::ISettings::SplashScreenPixmapPath) + "fsp.png"))
         LOG_ERROR("Unable to loa the background image");
 
-    double x = settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM, 0.).toDouble();
-    double y = settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM, 0.).toDouble();
-    if (x < 0.) {
-        x = -x;
-        ui->horizCombo->setCurrentIndex(0);
-    } else {
-        ui->horizCombo->setCurrentIndex(1);
-    }
-    if (y < 0.) {
-        y = -y;
-        ui->verticCombo->setCurrentIndex(1);
-    } else {
-        ui->verticCombo->setCurrentIndex(0);
-    }
-    ui->horiz->setValue(x);
-    ui->vertic->setValue(y);
-
     if (settings()->value(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01).toString() == Constants::S_CERFA_01)
         ui->defaultCerfa->setCurrentIndex(0);
     else if (settings()->value(Constants::S_DEFAULTCERFA, Constants::S_CERFA_01).toString() == Constants::S_CERFA_02)
@@ -108,16 +91,7 @@ void FspPrinterPreferencesWidget::setDataToUi()
     else
         ui->defaultCerfa->setCurrentIndex(2);
 
-    if (settings()->value(Core::Constants::S_PRINT_DIRECTION) == Core::Constants::S_TOPTOBOTTOM)
-        ui->direction->setCurrentIndex(0);
-    else
-        ui->direction->setCurrentIndex(1);
-    connect(ui->horizCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
-    connect(ui->verticCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
-    connect(ui->horiz, SIGNAL(valueChanged(double)), this, SLOT(updatePreview()));
-    connect(ui->vertic, SIGNAL(valueChanged(double)), this, SLOT(updatePreview()));
     connect(ui->printTest, SIGNAL(clicked()), this, SLOT(printTest()));
-    updatePreview();
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -170,66 +144,6 @@ void FspPrinterPreferencesWidget::changeEvent(QEvent *e)
     default:
         break;
     }
-}
-
-//static void drawArrow(QPainter *p, QPointF from, QPointF to, int size, int blanc_dist)
-//{
-//    QPointF points[3];
-//    float a = atan2(from.y()-to.y(), from.x()-to.x());
-//    to.setX(to.x()+blanc_dist*cos(a));
-//    to.setY(to.y()+blanc_dist*sin(a));
-//    blanc_dist += size;
-//    from.setX(from.x()-blanc_dist*cos(a));
-//    from.setY(from.y()-blanc_dist*sin(a));
-//    a = atan2(from.y()-to.y(), from.x()-to.x());
-
-//    QPointF k(to.x()+size*cos(a), to.y()+size*sin(a));
-//    a += M_PI/2;
-//    size /= 2;
-//    QPointF i(k.x()+size*cos(a), k.y()+size*sin(a));
-//    QPointF j(k.x()-size*cos(a), k.y()-size*sin(a));
-
-//    p->drawLine(from, k);
-//    points[0] = to;
-//    points[1] = i;
-//    points[2] = j;
-//    p->drawConvexPolygon(points, 3);
-//}
-
-void FspPrinterPreferencesWidget::updatePreview()
-{
-    QPixmap pix(_background);
-
-    QPainter painter;
-    painter.begin(&pix);
-    QPen pen(Qt::black, 3, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
-    painter.setPen(pen);
-    double x = 0.;
-    double y = 0.;
-    if (ui->horizCombo->currentIndex() == 0) {
-        // ->
-        x += ui->horiz->value() / _xcoef;
-    } else {
-        // <-
-        x -= ui->horiz->value() / _xcoef;
-    }
-    if (ui->verticCombo->currentIndex() == 0) {
-        // haut de page
-        y -= ui->vertic->value() / _ycoef;
-    } else {
-        // bas de page
-        y += ui->vertic->value() / _ycoef;
-    }
-    painter.drawRect(QRect(199 + x, 70 + y, 261, 21));
-    painter.drawRect(QRect(469 + x, 70 + y, 41, 21));
-    painter.drawRect(QRect(199 + x, 103 + y, 160, 18));
-
-    // Draw arrow (rotate the pixmap, draw a pixmap)
-//    pen.setColor(QColor(Qt::darkRed));
-//    painter.setPen(pen);
-//    drawArrow(&painter, QPoint(199, 70), QPoint(199 + x, 70 + y), 10, 10);
-
-    ui->currentPrintLabel->setPixmap(pix);
 }
 
 void FspPrinterPreferencesWidget::printTest()

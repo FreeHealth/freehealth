@@ -64,7 +64,6 @@ public:
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    void updatePreview();
     void printTest();
     void viewCerfa();
 
