@@ -270,7 +270,7 @@ public:
         if (cerfa == FspPrinter::S12541_01)
             y = 209.2 + 8.6*line;
         else if (cerfa == FspPrinter::S12541_02_2)
-            y = 210.9 + 8.6*line;
+            y = 212. + 8.6*line;
         else if (cerfa == FspPrinter::S12541_02)
             y = 213.9 + 8.6*line;
         switch (fspIndex) {

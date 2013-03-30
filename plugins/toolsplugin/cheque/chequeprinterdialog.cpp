@@ -44,6 +44,8 @@
 #include <QFileInfo>
 #include <QPushButton>
 
+enum { DrawRects = false };
+
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
@@ -103,7 +105,7 @@ bool ChequePrinterDialog::printCheque()
 {
     // Print the cheque
     ChequePrinter print;
-    print.setDrawRects(false);
+    print.setDrawRects(DrawRects);
     print.setOrder(ui->order->text());
     print.setPlace(ui->place->text());
     print.setDate(ui->date->date());

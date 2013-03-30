@@ -29,6 +29,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/printaxishelper.h>
@@ -433,7 +434,7 @@ QString PrintCorrectionPreferencesPage::title() const
 /*! Returns the sorting order (pages are sorted starting from 0). */
 int PrintCorrectionPreferencesPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_PRINT;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
