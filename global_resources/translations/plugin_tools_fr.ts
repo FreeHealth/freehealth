@@ -11,7 +11,7 @@
     <message>
         <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="69"/>
         <source>Print a french &apos;FSP&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer une FSP</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.cpp" line="65"/>
         <source>Cheque printing assistant</source>
-        <translation type="unfinished"></translation>
+        <translation>Assistant d&apos;impression de chèque</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/cheque/chequeprinterdialog.cpp" line="117"/>
@@ -67,32 +67,32 @@
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="62"/>
         <source>Cerfa S12541*01</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="67"/>
         <source>Cerfa S12541*02</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="72"/>
         <source>Cerfa S12541*02 v2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="80"/>
         <source>Vue complexe</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.ui" line="102"/>
         <source>Impression de FSP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog_conds.ui" line="38"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -108,7 +108,7 @@
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog_fees.ui" line="38"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -116,12 +116,12 @@
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog_patient.ui" line="32"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog_patient.ui" line="188"/>
         <source>N N N N N N N N N; </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog_prerecorded.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -180,7 +180,7 @@ Une par ligne</translation>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.cpp" line="268"/>
         <source>Tools</source>
-        <translation type="unfinished">Outils</translation>
+        <translation>Outils</translation>
     </message>
 </context>
 <context>
@@ -193,32 +193,32 @@ Une par ligne</translation>
     <message utf8="true">
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="33"/>
         <source>Cerfa par défaut</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message utf8="true">
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="39"/>
         <source>Utiliser ce CERFA par défaut</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="57"/>
         <source>12541*01</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="62"/>
         <source>12541*02</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="67"/>
         <source>12541*02_v2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="75"/>
         <source>Print a test</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer un test</translation>
     </message>
 </context>
 <context>
@@ -276,7 +276,7 @@ Une par ligne</translation>
         <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="170"/>
         <source>Ctrl+Shift+F</source>
         <extracomment>Translation for the &apos;Print FSP&apos; action</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -289,7 +289,7 @@ Une par ligne</translation>
     <message>
         <location filename="../../plugins/toolsplugin/toolspreferences.cpp" line="165"/>
         <source>Tools</source>
-        <translation type="unfinished">Outils</translation>
+        <translation>Outils</translation>
     </message>
 </context>
 <context>
