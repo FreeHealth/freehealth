@@ -116,6 +116,7 @@ QString Payment::typeToSql(PaymentType type)
     case BankTransfer: return "bktfrt";
     case InsuranceDelayed: return "delay";
     case Other: return "other";
+    default: break;
     }
     return "none";
 }
@@ -256,5 +257,6 @@ QDebug operator<<(QDebug dbg, const Account2::Banking &c)
 
 QDebug operator<<(QDebug dbg, const Account2::Quotation &c)
 {
+    // TODO: code me
     return dbg.space();
 }
