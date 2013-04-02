@@ -388,6 +388,7 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
     d(new FspPrinterDialogPrivate(this))
 {
     d->ui->setupUi(this);
+    setWindowTitle(tr("French 'FSP' printing assistant"));
 
     // Templates
     d->_templateModel = new FspTemplateModel(this);
