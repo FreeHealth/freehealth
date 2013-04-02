@@ -118,17 +118,20 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     QVariant result = m_Model->data(idx, role);
     if (!result.isNull())
         return result;
+    if (idx.isValid())
+        return QVariant();
 
     // or in the forms widgets
-//    qWarning() << "  Trying to get" << patient()->enumToString(Core::IPatient::PatientDataRepresentation(index.column())) << "from formItems";
+    qWarning() << "PatientModelWrapper Trying to get" << patient()->enumToString(Core::IPatient::PatientDataRepresentation(index.column())) << "from formItems";
     const QList<Form::FormMain*> &forms = formManager().allEmptyRootForms();
     foreach(Form::FormMain *modeForms, forms) {
         foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->flattenFormItemChildren()) {
                 if (item->itemData()) {
-//                    qWarning() << "    " << item->uuid() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation()));
-                    if (item->patientDataRepresentation() == index.column())
+                    if (item->patientDataRepresentation() == index.column()) {
+                        qWarning() << "    " << item->uuid() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation())) << item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
                         return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
+                    }
                 }
             }
         }
