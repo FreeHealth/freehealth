@@ -229,9 +229,8 @@ void ZipCodesWidget::setReadOnly(bool readOnly)
     d->_street->setReadOnly(readOnly);
     d->_city->setReadOnly(readOnly);
     d->_zip->setReadOnly(readOnly);
-
-    d->_stateCombo->setEnabled(readOnly);
-    d->_country->setEnabled(readOnly);
+    d->_stateCombo->setEnabled(!readOnly);
+    d->_country->setEnabled(!readOnly);
 }
 
 /** Add mapping to a QDataWidgetMapper for a specific \e section and a specific \e Mapping */
