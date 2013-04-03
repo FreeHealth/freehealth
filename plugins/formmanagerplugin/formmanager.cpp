@@ -575,6 +575,13 @@ bool FormManager::loadPatientFile()
     return ok;
 }
 
+/**
+ * Reacts on current patient changed.
+ * - Load central form if needed (because all patients have the same central form)
+ * - Refresh all form tree models
+ * - Load subforms into the form tree models
+ * - Emits patientFormsLoaded() when done
+*/
 bool FormManager::onCurrentPatientChanged()
 {
     if (!d->_forceFormLoading && patient()->uuid().isEmpty()) {
