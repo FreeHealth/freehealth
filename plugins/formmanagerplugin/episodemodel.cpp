@@ -715,6 +715,7 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     validation->setData(EpisodeValidationData::IsValid, 1);
     d->_validationCache.insertMulti(id.toInt(), validation);
     bool ok = episodeBase()->saveEpisodeValidation(validation);
+    // FIXME: improve the readonly state to per QModelIndex readonly state -> isReadOnly(index)
     setReadOnly(true);
     Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount() - 1));
     return ok;
@@ -754,6 +755,7 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 {
     const QString &xml = d->getEpisodeContent(episodeToRenew);
 
+    // FIXME: see bool EpisodeModel::validateEpisode(const QModelIndex &index)
     bool ro = d->_readOnly;
     d->_readOnly = false;
     if (!insertRow(rowCount())) {

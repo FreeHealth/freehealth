@@ -711,6 +711,8 @@ bool FormPlaceHolder::createEpisode()
     setCurrentEditingFormItem(index);
 
     // create a new episode the selected form and its children
+    // FIXME: see bool EpisodeModel::validateEpisode(const QModelIndex &index)
+    d->_currentEpisodeModel->setReadOnly(false);
     if (!d->_currentEpisodeModel->insertRow(d->_currentEpisodeModel->rowCount())) {
         LOG_ERROR("Unable to create new episode");
         return false;
