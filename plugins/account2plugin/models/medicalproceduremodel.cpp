@@ -145,6 +145,7 @@ QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
         default: return QVariant();
         }
     }
+    return QVariant();
 }
 
 bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &value, int role)
