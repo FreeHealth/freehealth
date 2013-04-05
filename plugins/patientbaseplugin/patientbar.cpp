@@ -162,6 +162,7 @@ void PatientBar::addBottomWidget(QWidget *widget)
 
 void PatientBar::showMessage(const QString &message, int duration_ms, const QString &css)
 {
+    LOG(message);
     if (d->m_MessageLabel) {
         delete d->m_MessageLabel;
         d->m_MessageLabel = 0;
