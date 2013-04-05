@@ -775,7 +775,8 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 
 /**
  * Populate the Form::IFormItemData of the parent Form::FormMain pointer
- * with the content of the episode.
+ * with the content of the episode. If the index is not valid, returns false.
+ *
  * If \e feedPatientModel is set to true and if the Form::IFormItemData has a
  * patient data representation, patient model will be automatically populated
  * with the value of the item data.
@@ -787,6 +788,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     if (WarnLogChronos)
         chrono.start();
     d->_formMain->clear();
+    if (!episode.isValid()) {
+        // Nothing to do but clear the form
+        return true;
+    }
+
     d->_formMain->formWidget()->setEnabled(false);
     const QString &xml = d->getEpisodeContent(episode);
     QHash<QString, FormItem *> items;
@@ -862,6 +868,17 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     if (WarnLogChronos)
         Utils::Log::logTimeElapsed(chrono, objectName(), "populateFormWithEpisode");
     return true;
+}
+
+/**
+ * Populate the Form::IFormItemData of the parent Form::FormMain pointer
+ * with the content of the latest valid episode content.
+ */
+bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
+{
+    // as the SQlModel is sorted on the userdate, we just need to populate with the first index of the model
+    QModelIndex index = this->index(0,0);
+    return populateFormWithEpisodeContent(index);
 }
 
 /**
