@@ -268,9 +268,9 @@ void TextEditorData::setModified(bool modified)
             m_OriginalValue.clear();
         else
             m_OriginalValue = m_Editor->textEdit()->toHtml();
-    }
-    else
+    } else {
         m_ForceModified = modified;
+    }
 }
 
 void TextEditorData::setReadOnly(bool readOnly)
