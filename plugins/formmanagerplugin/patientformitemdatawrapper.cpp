@@ -156,6 +156,7 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
         foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
             if (!item->itemData() || item->patientDataRepresentation() == -1)
                 continue;
+            // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
             if (item->patientDataRepresentation() == ref) {
                 return item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
             }
@@ -170,7 +171,7 @@ void PatientFormItemDataWrapper::onCurrentPatientChanged()
 
 void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
 {
-    // Disconnect all EpisodeModels
+    // TODO: Disconnect all EpisodeModels
 
     // Get Duplicates FormCollections
     QList<FormMain *> forms = formManager().allDuplicatesEmptyRootForms();
@@ -182,5 +183,5 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     // Populate each forms with its lastest recorded episode
     d->populateEpisodeModelsWithLastEpisode();
 
-    // Reconnect all EpisodeModels
+    // TODO: Reconnect all EpisodeModels
 }
