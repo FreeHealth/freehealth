@@ -146,6 +146,7 @@ bool PatientFormItemDataWrapper::isDataAvailable(int ref) const
 
 QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 {
+    Q_UNUSED(role);
     if (!d->_availablePatientData.contains(ref))
         return QVariant();
 
