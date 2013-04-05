@@ -1642,9 +1642,9 @@ QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole || role==Form::IFormItemData::PrintRole) {
-        if (m_Text->m_Line)
+        if (m_Text->m_Line) {
             return m_Text->m_Line->text();
-        else if (m_Text->m_Text) {
+        } else if (m_Text->m_Text) {
             if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive)) {
                 QString html = m_Text->m_Text->toHtml();
                 int beg = html.indexOf("<body");
