@@ -30,15 +30,24 @@
  * This class manages all aspect of the patient's forms. It loads the patient
  * central form and all included forms using the Form::IFormIO objects. These forms
  * are used to create the patient forms and integrate them in the UI.\n
+ * Due to the QObject copy protection, forms are always duplicated by the Form::IFormIO
+ * readers, one collection is used for the user edition,
+ * another collection is used for internal computations (the duplicates one).
+ *
+ * Management of Form::IFormIO:\n
+ * - getting forms when patient is selected
+ * - getting form updates at startup
+ * - extracting screenshots and files from the 'form set'
  *
  * Form::FormManager also manages :
- * - a cache system to fasten the form's access and construction ;
+ * - a cache system to fasten the form's access and construction
+ * - keeps duplicates of each forms to use in specific computation (statistics...).
+ * - allow creation of Form::FormPage (createFormPage())
+ * - manages all Form::FormTreeModel (one per Form::FormMain empty root)
+ * - manages datapack installation (form set datpacks)
  *
-*/
-// - keeps duplicates of each forms to use in specific computation (statistics...).
-
-// TODO: correctly manages subforms (keep them in a list and in cache)
-// TODO: correctly manages subforms duplicates
+ * \sa Form::IFormIO, Form::FormMain, Form::FormItem
+ */
 
 #include "formmanager.h"
 #include "iformitem.h"
@@ -133,6 +142,7 @@ public:
 
     FormManagerPrivate(FormManager *parent) :
         _forceFormLoading(false),
+        _identityForm(0),
         q(parent)
     {}
 
@@ -209,11 +219,33 @@ public:
             LOG_ERROR_FOR(q, "No IFormIO loaded...");
             return false;
         }
+
         // Load forms
         foreach(Form::IFormIO *io, list) {
             if (io->canReadForms(uid)) {
-                // Create the main collection
+                // Load the forms once (for the main collection)
                 QList<Form::FormMain *> list = io->loadAllRootForms(uid);
+
+                // Check list for identity form
+                if (!_identityForm) {
+                    FormCollection *collection = new FormCollection;
+                    collection->setEmptyRootForms(list);
+                    _identityForm = collection->identityForm();
+                    if (_identityForm) {
+                        LOG_FOR(q, "Identity form detected: " + _identityForm->uuid());
+                        // Reparent identity form and delete all other Form::FormMain
+                        _identityForm->setParent(q);
+                        list.removeAll(_identityForm);
+                        qDeleteAll(list);
+                        // Re-load the forms once (for the main collection)
+                        list.clear();
+                        list = io->loadAllRootForms(uid);
+                    }
+                    collection->setEmptyRootForms(QList<Form::FormMain *>());
+                    delete collection;
+                }
+
+                // Create the main collection
                 createModeFormCollections(list, type, false);
                 list.clear();
 
@@ -415,11 +447,12 @@ public:
     FormCollection _nullFormCollection;
     QHash<QString, FormTreeModel *> _formTreeModels;
     bool _forceFormLoading;
+    QVector<Form::FormPage *> _formPages;
+    Form::FormMain *_identityForm;
 
     // OLD
-    QVector<Form::FormPage *> _formPages;
-    QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
-    QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
+//    QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
+//    QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
 
 private:
     FormManager *q;
@@ -483,6 +516,15 @@ const FormCollection &FormManager::centralFormDuplicateCollection(const QString 
 const FormCollection &FormManager::subFormDuplicateCollection(const QString &subFormUid) const
 {
     return d->extractFormCollectionFrom(d->_subFormDuplicateCollection, FormManagerPrivate::SubForms, subFormUid);
+}
+
+/**
+ * Scans all loaded forms (complete and sub-forms) and extract all available modeUid
+ * A mode is the same as a FormPage
+ */
+QStringList FormManager::availableModeUids() const
+{
+    return d->_formTreeModels.uniqueKeys();
 }
 
 /** Return the Form::FormTreeModel corresponding to the mode \e modeUid */
@@ -549,6 +591,23 @@ QList<FormMain *> FormManager::allEmptyRootForms() const
         roots << collection->emptyRootForms();
     return roots;
 }
+
+/**
+ * Return all available empty root forms (complete or subforms) for the current patient
+ * using the duplicates forms (Forms are always duplicated, one is use for the user edition,
+ * the other is used for internal computations - the duplicates one).
+ * \sa Form::FormMain
+ */
+QList<FormMain *> FormManager::allDuplicatesEmptyRootForms() const
+{
+    QList<FormMain*> roots;
+    foreach(FormCollection *collection, d->_centralFormDuplicateCollection)
+        roots << collection->emptyRootForms();
+    foreach(FormCollection *collection, d->_subFormDuplicateCollection)
+        roots << collection->emptyRootForms();
+    return roots;
+}
+
 
 /**
  * Insert a sub-form to a form to the specified \e insertionPoint.
@@ -642,43 +701,24 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 }
 
 /**
- * Extract from the patient file form the empty root form corresponding to the identity form
- * or 0 if no form matches request.
+ * Return the specific identity form. You can populate it with any value without any
+ * changes to the current patient (Core::IPatient) data. If no identity form is found
+ * returns zero.
 */
 Form::FormMain *FormManager::identityRootForm() const
 {
-    foreach(FormCollection *collection, d->_centralFormCollection) {
-        FormMain *identity = collection->identityForm();
-        if (identity)
-            return identity;
-    }
-    foreach(FormCollection *collection, d->_subFormCollection) {
-        FormMain *identity = collection->identityForm();
-        if (identity)
-            return identity;
-    }
-    LOG_ERROR("No identity form found");
-    return 0;
-}
-
-/**
- * Extract from the patient file form the empty root form corresponding to the identity form
- * or 0 if no form matches request.
-*/
-Form::FormMain *FormManager::identityRootFormDuplicate() const
-{
-    foreach(FormCollection *collection, d->_centralFormDuplicateCollection) {
-        FormMain *identity = collection->identityForm();
-        if (identity)
-            return identity;
-    }
-    foreach(FormCollection *collection, d->_subFormDuplicateCollection) {
-        FormMain *identity = collection->identityForm();
-        if (identity)
-            return identity;
-    }
-    LOG_ERROR("No identity form duplicate found");
-    return 0;
+//    foreach(FormCollection *collection, d->_centralFormCollection) {
+//        FormMain *identity = collection->identityForm();
+//        if (identity)
+//            return identity;
+//    }
+//    foreach(FormCollection *collection, d->_subFormCollection) {
+//        FormMain *identity = collection->identityForm();
+//        if (identity)
+//            return identity;
+//    }
+//    LOG_ERROR("No identity form found");
+    return d->_identityForm;
 }
 
 /** Return one specific screenshot for the form \e formUid and nammed \e fileName. */
