@@ -301,6 +301,9 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     setObjectName("Form::EpisodeModel");
     d->_formMain = rootEmptyForm;
 
+    // FIXME: cache system sometimes loses data?
+    setUseFormContentCache(false);
+
     // Create the SQL Model
     onCoreDatabaseServerChanged();
 }
