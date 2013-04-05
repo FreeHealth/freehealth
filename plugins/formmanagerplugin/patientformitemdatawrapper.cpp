@@ -93,7 +93,6 @@ public:
                 _episodeModels.insert(form, model);
             }
         }
-        qWarning() << "CREATING EPISODEMODELS" << _episodeModels.count();
     }
 
     // Populate all available EpisodeModels with their latest saved content
@@ -104,7 +103,6 @@ public:
                 LOG_ERROR_FOR(q, "EpisodeModel can not be populated");
             }
         }
-        qWarning() << "EPISODES POPULATED";
     }
 
 public:
@@ -148,8 +146,6 @@ bool PatientFormItemDataWrapper::isDataAvailable(int ref) const
 
 QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 {
-    qWarning() << objectName() << "DATA:" << patient()->enumToString(Core::IPatient::PatientDataRepresentation(ref)) << role << "available:" << d->_availablePatientData.contains(ref);
-
     if (!d->_availablePatientData.contains(ref))
         return QVariant();
 
@@ -160,7 +156,6 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
             if (!item->itemData() || item->patientDataRepresentation() == -1)
                 continue;
             if (item->patientDataRepresentation() == ref) {
-                qWarning() << "  --" << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation())) << item->uuid() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
                 return item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
             }
         }
