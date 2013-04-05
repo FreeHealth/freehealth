@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.8.2</version>
+    <version>test</version>
     <fmfv>0.8.2</fmfv>
     <lmdate>2013-02-05</lmdate>
     <cdate>2011-09-02</cdate>
@@ -22,15 +22,18 @@
     <category lang="fr">Médecine générale</category>
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
+
     <updateinfo>
     <updateversion from="0.8.0" to="0.8.2">
       <text lang="fr">
       Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
       Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
+      Ajout de l'assistant de prescription d'examen biologique
       </text>
       <text lang="en">
       Defining user documents to use for the print process of the textual prescription text editor.
       Adding basic biometric measurements in the SOAP form (using a sub-form).
+      Adding lab test prescription assistant
       </text>
     </updateversion>
     <updateversion from="0.7.2" to="0.8.0">
@@ -71,9 +74,38 @@
     <equivalent old="GP::Basic::SOAP::P" new="Subs::Tools::SOAP::WithBio::AssessmentPlanGroup::Plan" setInVersion=""/>
   </fieldequivalence>
 
+  <rootitemextraheight>15</rootitemextraheight>
+
   <file>__subForms__/generic/fullidentity/central.xml</file>
 
-  <file>__subForms__/generic/soap_with_biomeasurements/central.xml</file>
+  <MedForm name="GP::Basic::Consultation">
+    <label lang="xx">Consultations</label>
+    <label lang="en">Consultations</label>
+    <icon>__theme__/stethoscope.png</icon>
+    <options>NoEpisode;DontPrintEmptyValues</options>
+
+    <file>__subForms__/generic/soap_with_biomeasurements/central.xml</file>
+
+    <MedForm name="GP::Basic::Consultation::Results">
+      <label lang="xx">Textual results</label>
+      <label lang="fr">Résultats textuels</label>
+      <icon>__theme__/edit.png</icon>
+      <options>DontPrintEmptyValues</options>
+
+      <Item type="texteditor" name="GP::Basic::Consultation::Results::Textual">
+        <label lang="xx">Textual results</label>
+        <label lang="fr">Résultats textuels</label>
+        <tooltip lang="xx">You can add here results from XRay, specialists consultations...</tooltip>
+        <tooltip lang="fr">Vous pouvez mettre ici les résultats de radiologie, consultations spécialisées...</tooltip>
+        <options>FullEditor;WithIO;WithTable;Expanded;DontPrintEmptyValues;PrintDuplicata</options>
+        <papers>Generic</papers>
+      </Item>
+
+      </MedForm>
+
+      <file>__subForms__/generic/labtest_results/central.xml</file>
+
+  </MedForm> <!-- Consultation -->
 
   <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
@@ -83,6 +115,7 @@
     <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
+      <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
 
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
@@ -91,8 +124,8 @@
         <options>FullEditor;DontPrintEmptyValues;PrintDuplicata</options>
         <papers>Prescription</papers>
       </Item>
-    </MedForm>
 
+    </MedForm>
 
     <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
@@ -106,7 +139,9 @@
       </Item>
     </MedForm>
 
-  </MedForm>
+    <file>__subForms__/prescriptions/lab_assistant/central.xml</file>
+
+  </MedForm> <!-- Prescription -->
 
   <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
