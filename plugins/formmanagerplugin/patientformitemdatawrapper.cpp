@@ -84,8 +84,10 @@ public:
     // Clear cache then create all EpisodeModel for each available forms empty root
     void clearCacheAndCreateAllEpisodeModels(const QList<FormMain *> &forms)
     {
+        // Disconnect and delete all EpisodeModels
         qDeleteAll(_episodeModels.values());
         _episodeModels.clear();
+        // Recreate all internal EpisodeModels
         foreach(Form::FormMain *emptyrootform, forms) {
             foreach(Form::FormMain *form, emptyrootform->flattenFormMainChildren()) {
                 EpisodeModel *model = new EpisodeModel(form, q);
@@ -171,8 +173,6 @@ void PatientFormItemDataWrapper::onCurrentPatientChanged()
 
 void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
 {
-    // TODO: Disconnect all EpisodeModels
-
     // Get Duplicates FormCollections
     QList<FormMain *> forms = formManager().allDuplicatesEmptyRootForms();
     d->scanFormItemDataForAvailableData(forms);
@@ -183,5 +183,5 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     // Populate each forms with its lastest recorded episode
     d->populateEpisodeModelsWithLastEpisode();
 
-    // TODO: Reconnect all EpisodeModels
+    // TODO: Connect all EpisodeModels
 }
