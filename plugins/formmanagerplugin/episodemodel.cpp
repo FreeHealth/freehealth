@@ -165,12 +165,16 @@ public:
 
     QString getEpisodeContentFormCache(const QModelIndex &index)
     {
+        if (!_useCache)
+            return QString::null;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return _xmlContentCache.value(_sqlModel->data(id).toInt());
     }
 
     void storeEpisodeContentInCache(const QModelIndex &index, const QString &xml)
     {
+        if (!_useCache)
+            return;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         _xmlContentCache.insert(_sqlModel->data(id).toInt(), xml);
     }
@@ -557,13 +561,17 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             QModelIndex id = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
             QVariant episodeId = d->_sqlModel->data(id);
             // update internal cache
-            d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
+            if (d->_useCache)
+                d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
             // send to database
-            return episodeBase()->saveEpisodeContent(episodeId, value.toString());
+            bool ok = episodeBase()->saveEpisodeContent(episodeId, value.toString());
+            if (ok)
+                Q_EMIT dataChanged(index, index);
+            return ok;
         }
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         }
-        if (sqlColumn!=-1) {
+        if (sqlColumn != -1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
             bool ok = d->_sqlModel->setData(sqlIndex, value, role);
             if (ok)
