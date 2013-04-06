@@ -696,6 +696,14 @@ bool FormPlaceHolder::createEpisode()
     if (!d->ui->formView->selectionModel()->hasSelection())
         return false;
 
+    // autosave feature
+    if (d->_currentEpisodeModel) {
+        if (!d->saveCurrentEditingEpisode()) {
+            LOG_ERROR("Unable to save current episode");
+            return false;
+        }
+    }
+
     // get the form
     QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
     if (d->_formTreeModel->isNoEpisode(index)) {
