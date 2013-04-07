@@ -550,6 +550,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
+        Q_EMIT episodeAboutToChange(index);
         d->_dirtyIndexes << index;
         int sqlColumn = -1;
         switch (index.column()) {
@@ -567,19 +568,21 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
                 d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
             // send to database
             bool ok = episodeBase()->saveEpisodeContent(episodeId, value.toString());
-            if (ok)
+            if (ok) {
                 Q_EMIT dataChanged(index, index);
+                Q_EMIT episodeChanged(index);
+            }
             return ok;
         }
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
-        }
+        } // switch
+
         if (sqlColumn != -1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
-            bool ok = d->_sqlModel->setData(sqlIndex, value, role);
-            if (ok)
-                Q_EMIT dataChanged(index, index);
+            bool ok = d->_sqlModel->setData(sqlIndex, value, role); // also emits dataChanged
             if (index.column()==Priority)
                 Q_EMIT dataChanged(this->index(index.row(), int(PriorityIcon)), this->index(index.row(), int(PriorityIcon)));
+            Q_EMIT episodeChanged(index);
             return ok;
         }
     }
@@ -787,6 +790,14 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 }
 
 /**
+ * Reset the model.
+ */
+void EpisodeModel::refreshFilter()
+{
+    d->updateFilter(patient()->uuid());
+}
+
+/**
  * Populate the Form::IFormItemData of the parent Form::FormMain pointer
  * with the content of the episode. If the index is not valid, returns false.
  *
@@ -889,7 +900,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
  */
 bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
 {
-    // as the SQlModel is sorted on the userdate, we just need to populate with the first index of the model
+    // as the SqlModel is sorted on the userdate, we just need to populate with the first index of the model
     QModelIndex index = this->index(0,0);
     return populateFormWithEpisodeContent(index);
 }
@@ -962,4 +973,3 @@ QString EpisodeModel::lastEpisodesSynthesis() const
 
     return html;
 }
-

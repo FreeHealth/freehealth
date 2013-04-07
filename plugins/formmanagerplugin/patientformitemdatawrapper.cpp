@@ -34,10 +34,11 @@
 
 #include "patientformitemdatawrapper.h"
 #include "formcore.h"
-#include "formmanager.h"
 #include "iformitem.h"
-#include "iformitemdata.h"
+#include "formmanager.h"
 #include "episodemodel.h"
+#include "iformitemdata.h"
+#include "episodemanager.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -51,7 +52,9 @@ using namespace Form;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 namespace Form {
@@ -91,10 +94,13 @@ public:
         foreach(Form::FormMain *emptyrootform, forms) {
             foreach(Form::FormMain *form, emptyrootform->flattenFormMainChildren()) {
                 EpisodeModel *model = new EpisodeModel(form, q);
+                // Never use the internal cache of the model
+                model->setUseFormContentCache(false);
                 model->initialize();
                 _episodeModels.insert(form, model);
             }
         }
+//        connectModels();
     }
 
     // Populate all available EpisodeModels with their latest saved content
@@ -105,6 +111,56 @@ public:
                 LOG_ERROR_FOR(q, "EpisodeModel can not be populated");
             }
         }
+    }
+
+    void disconnectModels()
+    {}
+
+    // Connect editing EpisodeModel (models used to populated editing forms) to the current object
+    void connectEditingEpisodeModels()
+    {
+        QHashIterator<Form::FormMain *, EpisodeModel *> it(_episodeModels);
+        while (it.hasNext()) {
+            it.next();
+            // We must use the uuid because pointer are different than the editing collection
+            EpisodeModel *editing = episodeManager().episodeModel(it.key()->uuid());
+            if (editing) {
+                QObject::connect(editing, SIGNAL(episodeChanged(QModelIndex)), q, SLOT(editingModelEpisodeChanged(QModelIndex)), Qt::UniqueConnection);
+                QObject::connect(editing, SIGNAL(rowsInserted(QModelIndex, int, int)), q, SLOT(editingModelRowsInserted(QModelIndex, int, int)));
+                QObject::connect(editing, SIGNAL(rowsRemoved(QModelIndex, int, int)), q, SLOT(editingModelRowsRemoved(QModelIndex, int, int)));
+            }
+        }
+    }
+
+    // Get the internal model corresponding to the editing model (returns 0 if model is not found)
+    EpisodeModel *getInternalEpisodeModel(EpisodeModel *editing)
+    {
+        QHashIterator<Form::FormMain *, EpisodeModel *> it(_episodeModels);
+        while (it.hasNext()) {
+            it.next();
+            // We must use the uuid because pointer are different than the editing collection
+            if (editing->formUid() == it.value()->formUid())
+                return it.value();
+        }
+        return 0;
+    }
+
+    // Refresh the EpisodeModel corresponding to the following index (get its last episode and populate the form)
+    void refreshInternals(const QModelIndex &index)
+    {
+        // Get the editing model that was modified
+        EpisodeModel *editing = qobject_cast<EpisodeModel*>(const_cast<QAbstractItemModel*>(index.model()));
+        if (!editing)
+            return;
+
+        // Get the internal model corresponding to this model
+        EpisodeModel *model = getInternalEpisodeModel(editing);
+        if (!model)
+            return;
+
+        // reload the lastepisode from database
+        model->refreshFilter();
+        model->populateFormWithLatestValidEpisodeContent();
     }
 
 public:
@@ -169,6 +225,7 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 
 void PatientFormItemDataWrapper::onCurrentPatientChanged()
 {
+    d->disconnectModels();
 }
 
 void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
@@ -183,5 +240,29 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     // Populate each forms with its lastest recorded episode
     d->populateEpisodeModelsWithLastEpisode();
 
-    // TODO: Connect all EpisodeModels
+    // Connect editing models
+    d->connectEditingEpisodeModels();
 }
+
+void PatientFormItemDataWrapper::editingModelEpisodeChanged(const QModelIndex &index)
+{
+    if (index.column() != EpisodeModel::XmlContent)
+        return;
+
+    d->refreshInternals(index);
+}
+
+void PatientFormItemDataWrapper::editingModelRowsInserted(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(first);
+    Q_UNUSED(last);
+    d->refreshInternals(parent);
+}
+
+void PatientFormItemDataWrapper::editingModelRowsRemoved(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(first);
+    Q_UNUSED(last);
+    d->refreshInternals(parent);
+}
+

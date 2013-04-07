@@ -29,6 +29,10 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
+#include <QModelIndex>
+//QT_BEGIN_NAMESPACE
+//class QModelIndex;
+//QT_END_NAMESPACE
 
 /**
  * \file patientformitemdatawrapper.h
@@ -57,6 +61,9 @@ public:
 private Q_SLOTS:
     void onCurrentPatientChanged();
     void onCurrentPatientFormsLoaded();
+    void editingModelEpisodeChanged(const QModelIndex &index);
+    void editingModelRowsInserted(const QModelIndex &parent, int first, int last);
+    void editingModelRowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
     Internal::PatientFormItemDataWrapperPrivate *d;

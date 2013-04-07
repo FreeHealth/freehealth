@@ -128,6 +128,8 @@ public:
     bool removeEpisode(const QModelIndex &index);
     QModelIndex renewEpisode(const QModelIndex &episodeToRenew);
 
+    void refreshFilter();
+
 public Q_SLOTS:
     // FIXME: remove the 'feedPatientModel' as we created the Form::PatientFormItemDataWrapper
     bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel = false);
@@ -136,12 +138,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void episodeAboutToChange(const QModelIndex &index);
-    void episodeAboutToBeDeleted(const QModelIndex &index);
-    void episodeAboutToBeCreated(const QModelIndex &index);
-
     void episodeChanged(const QModelIndex &index);
-    void episodeDeleted(const QModelIndex &index);
-    void episodeCreated(const QModelIndex &index);
 
 private Q_SLOTS:
     void onUserChanged();
