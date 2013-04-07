@@ -59,18 +59,6 @@ void %PluginName:c%PreferencesWidget::setDataToUi()
 {
 }
 
-QString %PluginName:c%PreferencesWidget::searchKeywords() const
-{
-    QString rc;
-    // uncomment these lines to add keywords to the search index
-
-//    QTextStream(&rc)
-//            << ui->deviceInfoLabel->text()
-                        ;
-    rc.remove(QLatin1Char('&'));
-    return rc;
-}
-
 /*! \sa IOptionsPage::matches() */
 QString %PluginName:c%PreferencesWidget::searchKeywords() const
 {
@@ -174,7 +162,7 @@ QString %PluginName:c%PreferencesPage::category() const
 /*! Returns the (translated) title of the preferences page. */
 QString %PluginName:c%PreferencesPage::title() const
 {
-    return tr("%PluginName");
+    return tr("%PluginName:c%");
 }
 
 /*! Returns the sorting order (pages are sorted starting from 0). */
@@ -222,7 +210,7 @@ void %PluginName:c%PreferencesPage::checkSettingsValidity()
 
 bool %PluginName:c%PreferencesPage::matches(const QString &searchKeyWord) const
 {
-    return m_searchKeywords.contains(s, Qt::CaseInsensitive);
+    return m_searchKeywords.contains(searchKeyWord, Qt::CaseInsensitive);
 }
 
 /*! Creates the settings page */
@@ -231,7 +219,7 @@ QWidget *%PluginName:c%PreferencesPage::createPage(QWidget *parent)
     if (m_Widget)
         delete m_Widget;
     m_Widget = new %PluginName:c%PreferencesWidget(parent);
-    if (m_searchKeywords.isEmpty)
+    if (m_searchKeywords.isEmpty())
         m_searchKeywords = m_Widget->searchKeywords();
     return m_Widget;
 }

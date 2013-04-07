@@ -25,6 +25,7 @@
 
 #include "printerplugin.h"
 #include "printerpreferences.h"
+#include "printcorrectionpreferences.h"
 #include "documentprinter.h"
 
 #include <utils/log.h>
@@ -50,7 +51,9 @@ using namespace Internal;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 PrinterPlugin::PrinterPlugin() :
-        prefPage(0), docPrinter(0)
+    prefPage(0),
+    printCorrectionPage(0),
+    docPrinter(0)
 {
     setObjectName("PrinterPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -59,6 +62,8 @@ PrinterPlugin::PrinterPlugin() :
     // Add preferences pages, printer manager
     prefPage = new Print::Internal::PrinterPreferencesPage(this);
     addObject(prefPage);
+    printCorrectionPage = new Print::Internal::PrintCorrectionPreferencesPage(this);
+    addObject(printCorrectionPage);
     docPrinter = new Internal::DocumentPrinter(this);
     addObject(docPrinter);
 }
@@ -110,6 +115,10 @@ ExtensionSystem::IPlugin::ShutdownFlag PrinterPlugin::aboutToShutdown()
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;
+    }
+    if (printCorrectionPage) {
+        removeObject(printCorrectionPage);
+        delete printCorrectionPage; printCorrectionPage = 0;
     }
     if (docPrinter) {
         removeObject(docPrinter);
