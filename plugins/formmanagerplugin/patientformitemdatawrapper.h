@@ -30,9 +30,6 @@
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
 #include <QModelIndex>
-//QT_BEGIN_NAMESPACE
-//class QModelIndex;
-//QT_END_NAMESPACE
 
 /**
  * \file patientformitemdatawrapper.h
