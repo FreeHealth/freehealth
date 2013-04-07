@@ -26,8 +26,9 @@
  ***************************************************************************/
 /*!
  * \class Form::Internal::EpisodeManager
- * Manages all Form::EpisodeModel
- * \sa Form::EpisodeModel
+ * Manages all editing Form::EpisodeModel. The models are created with the editing form collection
+ * not the duplicate collection.
+ * \sa Form::EpisodeModel, Form::FormManager
  */
 
 #include "episodemanager.h"
