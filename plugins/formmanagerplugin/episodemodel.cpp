@@ -350,6 +350,8 @@ void EpisodeModel::setUseFormContentCache(bool useCache)
 /** Return the current form unique identifier linked to this model */
 QString EpisodeModel::formUid() const
 {
+    if (!d->_formMain)
+        return QString::null;
     return d->_formMain->uuid();
 }
 
