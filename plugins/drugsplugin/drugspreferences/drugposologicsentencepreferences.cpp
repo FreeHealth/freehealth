@@ -56,10 +56,10 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPadTools *padTools() { return Core::ICore::instance()->padTools(); }
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+
 static QString getPrescriptionTokenHtmlFileContent()
 {
     QString content;
-#ifdef WITH_PAD
     content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()));
     if (content.isEmpty()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
@@ -69,10 +69,6 @@ static QString getPrescriptionTokenHtmlFileContent()
     }
     if (content.contains("<body"))
         content = content.remove("\n");
-#else
-    // Old style
-    content = QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
-#endif
     return content;
 }
 
