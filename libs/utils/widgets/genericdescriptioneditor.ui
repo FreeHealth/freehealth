@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -27,7 +27,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>UUID</string>
+          <string>UUID:</string>
          </property>
         </widget>
        </item>
@@ -37,7 +37,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Current version</string>
+          <string>Current version:</string>
          </property>
         </widget>
        </item>
@@ -47,37 +47,49 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Authors</string>
+          <string>Authors:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="authors"/>
+        <widget class="QLineEdit" name="authors">
+         <property name="placeholderText">
+          <string>Author1, Author2, ...</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Countries limitation</string>
+          <string>Countries limitation:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="countries"/>
+        <widget class="QLineEdit" name="countries">
+         <property name="placeholderText">
+          <string>Country A, Country B, ...</string>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Vendor</string>
+          <string>Vendor:</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="vendor"/>
+        <widget class="QLineEdit" name="vendor">
+         <property name="placeholderText">
+          <string>Your company</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>Creation date</string>
+          <string>Creation date:</string>
          </property>
         </widget>
        </item>
@@ -94,7 +106,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
-          <string>Icon</string>
+          <string>Icon:</string>
          </property>
         </widget>
        </item>
@@ -124,17 +136,21 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>URL</string>
+          <string>URL:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="url"/>
+        <widget class="QLineEdit" name="url">
+         <property name="placeholderText">
+          <string>http://</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>AbsoluteFileName</string>
+          <string>Absolute filename path:</string>
          </property>
         </widget>
        </item>
@@ -150,7 +166,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>FreeMedForms</string>
+             <string>FreeMedForms:</string>
             </property>
            </widget>
           </item>
@@ -160,7 +176,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>FreeDiams</string>
+             <string>FreeDiams:</string>
             </property>
            </widget>
           </item>
@@ -170,7 +186,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>FreeAccount</string>
+             <string>FreeAccount:</string>
             </property>
            </widget>
           </item>
@@ -203,7 +219,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_14">
          <property name="text">
-          <string>Category</string>
+          <string>Category:</string>
          </property>
         </widget>
        </item>
@@ -229,7 +245,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label_15">
          <property name="text">
-          <string>Tooltip</string>
+          <string>Tooltip:</string>
          </property>
         </widget>
        </item>
@@ -239,7 +255,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_16">
          <property name="text">
-          <string>Specialties</string>
+          <string>Specialties:</string>
          </property>
         </widget>
        </item>
@@ -249,7 +265,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="label_17">
          <property name="text">
-          <string>Short description</string>
+          <string>Short description:</string>
          </property>
         </widget>
        </item>
@@ -259,7 +275,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="label_18">
          <property name="text">
-          <string>Long description</string>
+          <string>Long description:</string>
          </property>
         </widget>
        </item>
@@ -269,12 +285,16 @@
        <item row="5" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>License terms</string>
+          <string>License terms:</string>
          </property>
         </widget>
        </item>
        <item row="5" column="1" colspan="2">
-        <widget class="QTextEdit" name="license"/>
+        <widget class="QTextEdit" name="license">
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -298,7 +318,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Versions</string>
+             <string>Versions:</string>
             </property>
            </widget>
           </item>
@@ -327,7 +347,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>From</string>
+             <string>From:</string>
             </property>
            </widget>
           </item>
@@ -337,7 +357,7 @@
           <item row="0" column="2">
            <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>To</string>
+             <string>To:</string>
             </property>
            </widget>
           </item>
@@ -347,7 +367,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_22">
             <property name="text">
-             <string>Author</string>
+             <string>Author:</string>
             </property>
            </widget>
           </item>
@@ -357,7 +377,7 @@
           <item row="1" column="2">
            <widget class="QLabel" name="label_23">
             <property name="text">
-             <string>Date</string>
+             <string>Date:</string>
             </property>
            </widget>
           </item>

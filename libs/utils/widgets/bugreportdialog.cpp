@@ -30,10 +30,13 @@
  */
 
 #include "bugreportdialog.h"
+#include "ui_bugreportdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/emailvalidator.h>
+#include <utils/widgets/qbuttonlineedit.h>
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -41,10 +44,7 @@
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QUrl>
-
 #include <QDebug>
-
-#include "ui_bugreportdialog.h"
 
 
 using namespace Utils;
@@ -70,7 +70,6 @@ public:
         ui = new Ui::BugReportDialog;
         ui->setupUi(q);
         ui->emailEdit->setValidator(new EmailValidator(q));
-
         _sendButton = new QPushButton(q);
         _sendButton->setDisabled(true);
         ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);

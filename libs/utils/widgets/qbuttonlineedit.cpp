@@ -78,8 +78,8 @@ public:
         QStringList css;
 
         // Create padding for buttons
-        css << QString("padding-left:%1px").arg(_leftPadding);
-        css << QString("padding-right:%1px").arg(_rightPadding);
+        css << QString("padding-left: %1px").arg(_leftPadding);
+        css << QString("padding-right: %1px").arg(_rightPadding);
 
         // Analyse extraStyleSheet (remove all paddings)
         if (!extraStyleSheet.isEmpty()) {
@@ -88,7 +88,7 @@ public:
                     css << c;
             }
         }
-        return QString("%2;").arg(css.join(";"));
+        return QString("%1;").arg(css.join(";"));
     }
 
     void setSpecificStyleSheet()
@@ -218,20 +218,62 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 {
     if (!button)
         return;
+
+    if (d_qble->_rightButton)
+        delete d_qble->_rightButton;
+
     button->setParent(this);
     d_qble->_rightButton = button;
-    d_qble->_rightButton->setStyleSheet("border:none;padding: 0 0 0 0px;");
+    d_qble->_rightButton->setStyleSheet("border:none; padding: 0;");
     d_qble->_rightButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     d_qble->_rightPadding = button->sizeHint().width() + frameWidth + 1;
-
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
+
     d_qble->prepareConnections();
     clearFocus();
     d_qble->setSpecificStyleSheet();
+}
+
+/*!
+ * \brief Convenience function for setting an icon on the right side.
+ *
+ * Calls setRightbutton(). Internally creates an empty action with the icon and
+ * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
+ */
+void QButtonLineEdit::setRightIcon(QIcon icon)
+{
+    if (icon.isNull())
+        return;
+
+    // create a new action with given icon and assign it to the button
+    QAction *action = new QAction(icon, "", this);
+    QToolButton *button = new QToolButton();
+    button->addAction(action);
+    button->setDefaultAction(action);
+    setRightButton(button);
+}
+
+/*!
+ * \brief Convenience function for setting an icon on the left side.
+ *
+ * Calls SetLeftButton(). Internally creates an empty action with the icon and
+ * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
+ */
+void QButtonLineEdit::setLeftIcon(QIcon icon)
+{
+    if (icon.isNull())
+        return;
+
+    // create a new action with given icon and assign it to the button
+    QAction *action = new QAction(icon, "", this);
+    QToolButton *button = new QToolButton();
+    button->addAction(action);
+    button->setDefaultAction(action);
+    setLeftButton(button);
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)

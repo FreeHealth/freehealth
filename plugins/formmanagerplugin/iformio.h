@@ -119,16 +119,16 @@ struct FormIODescriptionPrivate;
 class FORM_EXPORT FormIODescription : public Utils::GenericDescription
 {
 public:
-    /*! Data representation for retrieving description data using the data() method. */
-    enum ExtraDataRepresentation {
-        UuidOrAbsPath = Utils::GenericDescription::MaxParam + 1,
-        IsCompleteForm,
-        IsSubForm,
-        IsPage,
-        ScreenShotsPath,
-        FromDatabase,
-        HasScreenShot,
-        UpdateAvailable_OldVersion,
+    /*! Data representation tokens for retrieving description data using the data() method. */
+    enum FormIODataRepresentation {
+        UuidOrAbsPath = Utils::GenericDescription::MaxParam + 1,                        //!< UUID of the Form or absolute file path
+        IsCompleteForm,                                                                 //!< form is a complete form
+        IsSubForm,                                                                      //!< form is a subform
+        IsPage,                                                                         //!< form is a page
+        ScreenShotsPath,                                                                //!< (relative) path to form screenshots directory
+        FromDatabase,                                                                   //!< form is recieved from database
+        HasScreenShot,                                                                  //!< form has a screenshot
+        UpdateAvailable_OldVersion,                                                     //!< an update of this form is available
         MaxParam,
         GenderLimitation = Utils::GenericDescription::NonTranslatableExtraData + 1
     };

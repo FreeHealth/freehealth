@@ -45,6 +45,9 @@
  * Description of a form extracted from a Form::IFormIO engine. This is different than
  * Form::FormItemSpec. This description only handles information from the IO engine, not usable in
  * forms view/model computation.
+ * The description contains informations about the Form name, category, author, version, FreeMedForms compatibility version,
+ * country, and many other things. You can read this information very convenient through this FormIODescription class, using
+ * the data() method with the right DataRepresentation parameters.
  */
 
 /**
