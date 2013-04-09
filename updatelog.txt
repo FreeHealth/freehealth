@@ -11,6 +11,8 @@ FreeMedForms
     * Allow the renewal of episode (in one click)
     * Cheque printing assistant (French specific)
     * Remove current patient (without any checking)
+    * Manages last measurements of weight and height in tokens and scripts
+    * All last episodes values are accessible throught the Core::IPatient model
   * XML Forms coding
     * Allow you to manage html print mask for any items of the forms (MedForms or Item)
       * See French AGGIR for an example (global mask, aggir mask)
