@@ -70,6 +70,7 @@ protected:
     QComboBox *m_units;
     QDoubleSpinBox *m_value;
     int m_defaultUnitId;
+    bool m_isWeight, m_isLength;
 };
 
 class MeasurementWidgetData : public Form::IFormItemData

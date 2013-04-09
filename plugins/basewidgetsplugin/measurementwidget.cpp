@@ -42,7 +42,9 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
     Form::IFormWidget(formItem,parent),
     m_units(0),
     m_value(0),
-    m_defaultUnitId(-1)
+    m_defaultUnitId(-1),
+    m_isWeight(false),
+    m_isLength(false)
 {
     setObjectName("MeasurementWidget");
     bool uiBased = false;
@@ -150,6 +152,8 @@ void MeasurementWidget::populateWithLength()
 {
     if (!m_units)
         return;
+    // Take care: see MeasurementWidgetData::data code
+    m_isLength = true;
     Form::FormItemValues *vals = m_FormItem->valueReferences();
     QString defaultVal = m_FormItem->extraData().value("default");
     int i = 0;
@@ -190,6 +194,8 @@ void MeasurementWidget::populateWithWeight()
 {
     if (!m_units)
         return;
+    // Take care: see MeasurementWidgetData::data code
+    m_isWeight = true;
     Form::FormItemValues *vals = m_FormItem->valueReferences();
     QString defaultVal = m_FormItem->extraData().value("default");
     int i = 0;
@@ -343,6 +349,8 @@ bool MeasurementWidgetData::isReadOnly() const
 bool MeasurementWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
+    Q_UNUSED(data);
+    Q_UNUSED(role);
     // TODO: code this
 //    qWarning() << "MeasurementWidgetData::setData" << data << role;
 //    if (role==Qt::EditRole) {
@@ -356,9 +364,32 @@ QVariant MeasurementWidgetData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     Q_UNUSED(role);
-    // TODO: code this
-//    return m_Editor->textEdit()->toHtml();
-    return QVariant();
+//    qWarning() << "MeasurementWidgetData::data" << ref << role << m_Measurement->m_value->value() << m_Measurement->m_units->currentText();
+
+    // Manage specific measurements (weight & length)
+    if (m_Measurement->m_isWeight) {
+        // return in grams
+        double val = m_Measurement->m_value->value();
+        switch (m_Measurement->m_units->currentIndex()) {
+        case 0: return val;
+        case 1: return val*100.;
+        case 2: return val*28.3495231; // 1 ounce = 28.3495231 grams
+        case 3: return val*453.59237;  // 1 pound = 453.59237 grams
+        }
+        return val;
+    } else if (m_Measurement->m_isLength) {
+        // return in centimeters
+        double val = m_Measurement->m_value->value();
+        switch (m_Measurement->m_units->currentIndex()) {
+        case 0: return val;
+        case 1: return val*100.;
+        case 2: return val*2.54;   // 1 inch = 2.54 centimeters
+        case 3: return val*30.48;  // 1 foot = 30.48 centimeters
+        }
+        return val;
+    }
+    // return value + unit in a string
+    return QString("%1 %2").arg(m_Measurement->m_value->value()).arg(m_Measurement->m_units->currentText());
 }
 
 // Storable data are serialized like this: value;;unit
