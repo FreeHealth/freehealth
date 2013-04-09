@@ -79,7 +79,7 @@ private Q_SLOTS:
     void leftTrig(QAction *action);
 
 private:
-    Internal::QButtonLineEditPrivate *d;
+    Internal::QButtonLineEditPrivate *d_qble;
 };
 
 }  // End namespace Utils
