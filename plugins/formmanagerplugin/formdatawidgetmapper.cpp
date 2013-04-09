@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
  *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
