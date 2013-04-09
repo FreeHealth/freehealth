@@ -19,51 +19,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Christian A Reiter, Eric Maeker                     *
+ *  Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com      *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef UTILS_BUGREPORTDIALOG_H
-#define UTILS_BUGREPORTDIALOG_H
+#ifndef FEEDBACK_EXPORTER_H
+#define FEEDBACK_EXPORTER_H
 
-#include <utils/global_exporter.h>
-#include <QDialog>
+#include <QtCore/QtGlobal>
 
-/**
- * \file bugreportdialog.h
- * \author Christian A Reiter, Eric Maeker
- * \version 0.8.0
- * \date 20 Dec 2012
-*/
+#if defined(FEEDBACK_LIBRARY)
+#  define FEEDBACK_EXPORT Q_DECL_EXPORT
+#else
+#  define FEEDBACK_EXPORT Q_DECL_IMPORT
+#endif
 
-namespace Utils {
-namespace Internal {
-class BugReportDialogPrivate;
-} // namespace Internal
+#endif // FEEDBACK_EXPORTER_H
 
-class UTILS_EXPORT BugReportDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    explicit BugReportDialog(QWidget *parent = 0);
-    ~BugReportDialog();
-
-    void setBugCategories(const QStringList &cat);
-
-
-private Q_SLOTS:
-    void validateInputs();
-    void sendBugReport();
-
-private:
-    void changeEvent(QEvent *e);
-
-private:
-    Internal::BugReportDialogPrivate *d;
-};
-
-} // namespace Utils
-
-#endif // UTILS_BUGREPORTDIALOG_H

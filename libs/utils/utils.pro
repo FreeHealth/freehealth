@@ -72,7 +72,6 @@ HEADERS += global_exporter.h \
     widgets/timecombobox.h \
     httpdownloader_p.h \
     emailvalidator.h \
-    widgets/bugreportdialog.h \
     widgets/databaseinformationdialog.h \
     numbertostring.h \
     printaxishelper.h
@@ -133,7 +132,6 @@ SOURCES += global.cpp \
     stringutils.cpp \
     widgets/timecombobox.cpp \
     emailvalidator.cpp \
-    widgets/bugreportdialog.cpp \
     widgets/databaseinformationdialog.cpp \
     numbertostring.cpp \
     printaxishelper.cpp
@@ -153,8 +151,7 @@ FORMS += \
     widgets/genericupdateinformationeditor.ui \
     widgets/genericinformationeditordialog.ui \
     widgets/loginwidget.ui \
-    widgets/basiclogindialog.ui \
-    widgets/bugreportdialog.ui
+    widgets/basiclogindialog.ui
 
 
 # include translations

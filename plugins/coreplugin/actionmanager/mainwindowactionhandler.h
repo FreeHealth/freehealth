@@ -123,7 +123,6 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool aboutQt()          {return false;}
     virtual bool debugDialog();
     virtual bool checkUpdate();
-    virtual bool reportBug();
     virtual void goToAppWebSite();
 
 public Q_SLOTS:

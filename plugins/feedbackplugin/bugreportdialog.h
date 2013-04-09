@@ -19,71 +19,52 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *   Main developers : Christian A Reiter, Eric Maeker                     *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef QBUTTONLINEEDIT_H
-#define QBUTTONLINEEDIT_H
+#ifndef FEEDBACK_BUGREPORTDIALOG_H
+#define FEEDBACK_BUGREPORTDIALOG_H
+
+#include <feedbackplugin/feedback_exporter.h>
+
+#include <QDialog>
 
 /**
- * \file qbuttonlineedit.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 10 Jan 2012
+ * \file bugreportdialog.h
+ * \author Christian A Reiter, Eric Maeker
+ * \version 0.8.0
+ * \date 20 Dec 2012
 */
 
-#include <utils/global_exporter.h>
-
-#include <QString>
-#include <QIcon>
-#include <QLineEdit>
-
-QT_BEGIN_NAMESPACE
-class QToolButton;
-class QTimer;
-QT_END_NAMESPACE
-
-namespace Utils {
+namespace Feedback {
 namespace Internal {
-class QButtonLineEditPrivate;
-}
+class BugReportDialogPrivate;
+} // namespace Internal
 
-class UTILS_EXPORT QButtonLineEdit : public QLineEdit
+class FEEDBACK_EXPORT BugReportDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    QButtonLineEdit(QWidget *parent = 0);
-    ~QButtonLineEdit();
+    explicit BugReportDialog(QWidget *parent = 0);
+    ~BugReportDialog();
 
-    void setDelayedSignals(bool state);
+    void setBugCategories(const QStringList &cat);
 
-    void setLeftButton(QToolButton *button);
-    void setRightButton(QToolButton *button);
-    void setRightIcon(QIcon icon = QIcon());
-    void setLeftIcon(QIcon icon = QIcon());
-    void setRoundedCorners();
-
-    void setEditorPlaceholderText(const QString &placeholder);
-
-    void setTranslatableExtraToolTip(const QString &trContext, const QString &translatable);
-    void setExtraToolTip(const QString &nonTranslatable);
-    void setExtraStyleSheet(const QString &extraCss);
-    void clearExtraStyleSheet();
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    void resizeEvent(QResizeEvent *);
-    void changeEvent(QEvent *e);
 
 private Q_SLOTS:
-    void emitTextChangedSignal();
-    void leftTrig(QAction *action);
+    void validateInputs();
+    void sendBugReport();
 
 private:
-    Internal::QButtonLineEditPrivate *d_qble;
+    void changeEvent(QEvent *e);
+
+private:
+    Internal::BugReportDialogPrivate *d;
 };
 
-}  // End namespace Utils
+} // namespace Feedback
 
-#endif
+#endif // FEEDBACK_BUGREPORTDIALOG_H

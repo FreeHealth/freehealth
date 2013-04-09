@@ -19,71 +19,42 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef QBUTTONLINEEDIT_H
-#define QBUTTONLINEEDIT_H
+#ifndef FEEDBACK_IPLUGIN_H
+#define FEEDBACK_IPLUGIN_H
 
-/**
- * \file qbuttonlineedit.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 10 Jan 2012
-*/
+#include <extensionsystem/iplugin.h>
 
-#include <utils/global_exporter.h>
-
-#include <QString>
-#include <QIcon>
-#include <QLineEdit>
-
-QT_BEGIN_NAMESPACE
-class QToolButton;
-class QTimer;
-QT_END_NAMESPACE
-
-namespace Utils {
+namespace Feedback {
 namespace Internal {
-class QButtonLineEditPrivate;
-}
 
-class UTILS_EXPORT QButtonLineEdit : public QLineEdit
+class FeedbackPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.FeedbackPlugin" FILE "Feedback.json")
+
 public:
-    QButtonLineEdit(QWidget *parent = 0);
-    ~QButtonLineEdit();
+    FeedbackPlugin();
+    ~FeedbackPlugin();
 
-    void setDelayedSignals(bool state);
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
-    void setLeftButton(QToolButton *button);
-    void setRightButton(QToolButton *button);
-    void setRightIcon(QIcon icon = QIcon());
-    void setLeftIcon(QIcon icon = QIcon());
-    void setRoundedCorners();
-
-    void setEditorPlaceholderText(const QString &placeholder);
-
-    void setTranslatableExtraToolTip(const QString &trContext, const QString &translatable);
-    void setExtraToolTip(const QString &nonTranslatable);
-    void setExtraStyleSheet(const QString &extraCss);
-    void clearExtraStyleSheet();
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    void resizeEvent(QResizeEvent *);
-    void changeEvent(QEvent *e);
+public slots:
+    void reportBug();
 
 private Q_SLOTS:
-    void emitTextChangedSignal();
-    void leftTrig(QAction *action);
-
-private:
-    Internal::QButtonLineEditPrivate *d_qble;
+    void postCoreInitialization();
+    void coreAboutToClose();
+    //    void triggerAction();
 };
 
-}  // End namespace Utils
+} // namespace Internal
+} // namespace Feedback
 
-#endif
+#endif // FEEDBACK_IPLUGIN_H
+

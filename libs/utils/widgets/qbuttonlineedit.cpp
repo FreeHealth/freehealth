@@ -188,24 +188,29 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
-    if (!button)
-        return;
-    button->setParent(this);
-    d_qble->_leftButton = button;
-    d_qble->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
-    d_qble->_leftButton->setCursor(Qt::ArrowCursor);
+    if (d_qble->_leftButton) {
+        delete d_qble->_leftButton;
+        d_qble->_leftButton = 0;
+    }
 
-    int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    d_qble->_leftPadding = button->sizeHint().width() + frameWidth + 1;
+    if (button){
 
-    QSize msz = minimumSizeHint();
-    setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
-                   qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
+        button->setParent(this);
+        d_qble->_leftButton = button;
+        d_qble->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
+        d_qble->_leftButton->setCursor(Qt::ArrowCursor);
+
+        int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+        d_qble->_leftPadding = button->sizeHint().width() + frameWidth + 1;
+
+        QSize msz = minimumSizeHint();
+        setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
+                       qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
+    }
 
     // set text to button toolTip
     d_qble->updatePlaceholderText();
     d_qble->prepareConnections();
-    clearFocus();
     d_qble->setSpecificStyleSheet();
 }
 
@@ -216,25 +221,27 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 */
 void QButtonLineEdit::setRightButton(QToolButton * button)
 {
-    if (!button)
-        return;
 
-    if (d_qble->_rightButton)
+    if (d_qble->_rightButton) {
         delete d_qble->_rightButton;
+        d_qble->_rightButton = 0;
+    }
 
-    button->setParent(this);
-    d_qble->_rightButton = button;
-    d_qble->_rightButton->setStyleSheet("border:none; padding: 0;");
-    d_qble->_rightButton->setCursor(Qt::ArrowCursor);
+    if (button){
 
-    int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    d_qble->_rightPadding = button->sizeHint().width() + frameWidth + 1;
-    QSize msz = minimumSizeHint();
-    setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
-                   qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
+        button->setParent(this);
+        d_qble->_rightButton = button;
+        d_qble->_rightButton->setStyleSheet("border:none; padding: 0;");
+        d_qble->_rightButton->setCursor(Qt::ArrowCursor);
+
+        int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+        d_qble->_rightPadding = button->sizeHint().width() + frameWidth + 1;
+        QSize msz = minimumSizeHint();
+        setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
+                       qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
+    }
 
     d_qble->prepareConnections();
-    clearFocus();
     d_qble->setSpecificStyleSheet();
 }
 
@@ -246,8 +253,10 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
  */
 void QButtonLineEdit::setRightIcon(QIcon icon)
 {
-    if (icon.isNull())
+    if (icon.isNull()) {
+        setRightButton(0);
         return;
+    }
 
     // create a new action with given icon and assign it to the button
     QAction *action = new QAction(icon, "", this);
@@ -265,8 +274,10 @@ void QButtonLineEdit::setRightIcon(QIcon icon)
  */
 void QButtonLineEdit::setLeftIcon(QIcon icon)
 {
-    if (icon.isNull())
+    if (icon.isNull()) {
+        setLeftButton(0);
         return;
+    }
 
     // create a new action with given icon and assign it to the button
     QAction *action = new QAction(icon, "", this);
