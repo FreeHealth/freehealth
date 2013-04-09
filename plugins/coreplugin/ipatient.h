@@ -112,10 +112,8 @@ public:
         // Biometrics
         SystolicBloodPressure,
         DiastolicBloodPressure,
-        Weight,
-        WeightUnit,         // 40
-        Height,
-        HeightUnit,
+        WeightInGrams,                  // 40
+        HeightInCentimeters,
         BMI,
         Creatinine,
         CreatinineUnit,

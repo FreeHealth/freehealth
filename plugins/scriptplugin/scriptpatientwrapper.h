@@ -60,10 +60,8 @@ class ScriptPatientWrapper : public QObject  //, public QScriptClass
     Q_PROPERTY(int      yearsOld    READ yearsOld())
     Q_PROPERTY(bool     isMale      READ isMale())
     Q_PROPERTY(bool     isFemale    READ isFemale())
-    Q_PROPERTY(double   weight      READ weight())
-    Q_PROPERTY(QString  weightUnit  READ weightUnit())
-    Q_PROPERTY(double   height      READ height())
-    Q_PROPERTY(QString  heightUnit  READ heightUnit())
+    Q_PROPERTY(double   weightInGrams READ weightInGrams())
+    Q_PROPERTY(double   heightInCentimeters      READ heightInCentimeters())
 
     Q_PROPERTY(double   creatinine              READ creatinine())
     Q_PROPERTY(QString  creatinineUnit          READ creatinineUnit())
@@ -91,10 +89,8 @@ public Q_SLOTS:
     int yearsOld() const;
     bool isMale() const;
     bool isFemale() const;
-    double weight() const;
-    QString weightUnit() const;
-    double height() const;
-    QString heightUnit() const;
+    double weightInGrams() const;
+    double heightInCentimeters() const;
     double bmi() const;
     double imc() const {return bmi();}
     double creatinine() const;

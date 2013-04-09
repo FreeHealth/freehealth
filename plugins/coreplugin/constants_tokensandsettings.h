@@ -52,14 +52,18 @@ const char * const  TOKEN_PATIENTOTHERNAMES = "PATIENTOTHERNAMES";
 const char * const  TOKEN_PATIENTFIRSTNAME  = "PATIENTFIRSTNAME";
 const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";
 const char * const  TOKEN_PATIENTDATEOFBIRTH= "PATIENTDATEOFBIRTH";
-const char * const  TOKEN_WEIGHT            = "WEIGHT";
-const char * const  TOKEN_WEIGHT_UNIT       = "WEIGHT_UNIT";
-const char * const  TOKEN_HEIGHT            = "HEIGHT";
-const char * const  TOKEN_HEIGHT_UNIT       = "HEIGHT_UNIT";
+const char * const  TOKEN_WEIGHTINGRAMS     = "WEIGHTINGRAMS";
+const char * const  TOKEN_HEIGHTINCENTIMETERS = "HEIGHTINCENTIMETERS";
 const char * const  TOKEN_CLCR              = "CLCR";
 const char * const  TOKEN_CLCR_UNIT         = "CLCR_UNIT";
 const char * const  TOKEN_DATE              = "DATE";
 const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
+const char * const  TOKEN_PATIENTSOCIALNUMBER = "SOCIALNUMBER";
+const char * const  TOKEN_PATIENTSOCIALNUMBER2 = "SOCIALNUMBER2";
+const char * const  TOKEN_PATIENTSOCIALNUMBER3 = "SOCIALNUMBER3";
+const char * const  TOKEN_PATIENTSOCIALNUMBER4 = "SOCIALNUMBER4";
+const char * const  TOKEN_PATIENTSOCIALNUMBERS = "SOCIALNUMBERS";
+const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERNAME = "SOCIALNUMBEROWNERNAME";
 // END
 #else
 // NEW TOKENS (>= v0.8.0)

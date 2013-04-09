@@ -140,6 +140,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         aViewPatientInformation(0),
         aPrintPatientInformation(0),
         aShowPatientDatabaseInformation(0),
+        aViewCurrentPatientData(0),
         gSearchMethod(0)
 {
     setObjectName("PatientActionHandler");
@@ -244,11 +245,18 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     cmd->setTranslations(Trans::Constants::PATIENT_DATABASE);
     cmd->retranslate();
     hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
-
     connect(aShowPatientDatabaseInformation,SIGNAL(triggered()), this, SLOT(showPatientDatabaseInformation()));
 
-//    contextManager()->updateContext();
-//    actionManager()->retranslateMenusAndActions();
+    if (!Utils::isReleaseCompilation()) {
+        a = aViewCurrentPatientData = new QAction(this);
+        a->setObjectName("aViewCurrentPatientData");
+        a->setIcon(th->icon(Core::Constants::ICONPATIENTHISTORY));
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_VIEWCURRENTPATIENTDATA), globalcontext);
+        cmd->setTranslations(Trans::Constants::PATIENT_SYNTHESIS);
+        cmd->retranslate();
+        menu->addAction(cmd, Core::Id(Constants::G_PATIENTS_HISTORY));
+        connect(aViewCurrentPatientData,SIGNAL(triggered()), this, SLOT(viewCurrentPatientData()));
+    }
 }
 
 void PatientActionHandler::updateActions()
@@ -326,4 +334,11 @@ void PatientActionHandler::showPatientDatabaseInformation()
     dlg.setDatabase(*PatientBase::instance());
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
+}
+
+void PatientActionHandler::viewCurrentPatientData()
+{
+    for(int i=0; i < Core::IPatient::NumberOfColumns; ++i) {
+        qWarning() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)) << patient()->data(i);
+    }
 }

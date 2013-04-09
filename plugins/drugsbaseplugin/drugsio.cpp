@@ -59,6 +59,7 @@
 #include <coreplugin/ipadtools.h>
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_units.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/messagesender.h>
@@ -109,7 +110,7 @@ namespace {
     const char *const XML_DRUG_INNS         = "DrugINN";
     const char *const XML_DRUG_INNS_ATC     = "DrugINN_ATC";
     const char *const XML_DRUG_ATC          = "DrugATC";
-    const char *const XML_PRESCRIPTION_UID= "qdfqsfqsf";
+    const char *const XML_PRESCRIPTION_UID  = "PrescrUuid";
 
     const char *const XML_COMPOSITION                  = "Composition";
     const char *const XML_COMPOSITION_INN              = "inn";
@@ -880,10 +881,19 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     m->sort(0);
 
     // Get patient bio(metrics / logy) usefull for the prescription
+    // TODO: put this in a setting value (like 100%)
     QStringList bio;
-    if (!patient()->data(Core::IPatient::Weight).toString().isEmpty()
-            && !patient()->data(Core::IPatient::WeightUnit).toString().isEmpty()) {
-        bio << tkTr(Trans::Constants::WEIGHT) + ": " + patient()->data(Core::IPatient::Weight).toString() + " " + patient()->data(Core::IPatient::WeightUnit).toString();
+    if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()) {
+        bio << QString("%1: %2 %3")
+               .arg(tkTr(Trans::Constants::WEIGHT))
+               .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 100, 'f', 2))
+               .arg(tkTr(Trans::Constants::KILOGRAM_S));
+    }
+    if (!patient()->data(Core::IPatient::HeightInCentimeters).toString().isEmpty()) {
+        bio << QString("%1: %2 %3")
+               .arg(tkTr(Trans::Constants::HEIGHT))
+               .arg(QString::number(patient()->data(Core::IPatient::HeightInCentimeters).toDouble(), 'f', 2))
+               .arg(tkTr(Trans::Constants::CENTIMETER_S));
     }
     if (!patient()->data(Core::IPatient::CreatinClearance).toString().isEmpty()
             && !patient()->data(Core::IPatient::CreatinClearanceUnit).toString().isEmpty()) {
@@ -1023,14 +1033,14 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
         tmp = mask;
     }
 
-//#ifdef WITH_PAD
-//    PrescriptionToken::setPrescriptionModel(model);
-//    PrescriptionToken::setPrescriptionModelRow(drugRow);
-//    if (toHtml) {
-//        return padTools()->processHtml(tmp);
-//    }
-//    return padTools()->processPlainText(tmp);
-//#else
+#ifdef WITH_PAD
+    PrescriptionToken::setPrescriptionModel(model);
+    PrescriptionToken::setPrescriptionModelRow(drugRow);
+    if (toHtml) {
+        return padTools()->processHtml(tmp);
+    }
+    return padTools()->processPlainText(tmp);
+#else
     QHash<QString, QString> tokens_value;
     tokens_value.insert("DRUG", QString());
     tokens_value.insert("NOTE", QString());
@@ -1172,7 +1182,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);
     return tmp;
-//#endif
+#endif
 }
 
 /**

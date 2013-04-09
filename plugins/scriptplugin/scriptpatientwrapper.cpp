@@ -103,21 +103,13 @@ bool ScriptPatientWrapper::isFemale() const
 {
     return patient()->data(Core::IPatient::GenderIndex).toInt()==1;
 }
-double ScriptPatientWrapper::weight() const
+double ScriptPatientWrapper::weightInGrams() const
 {
-    return patient()->data(Core::IPatient::Weight).toDouble();
+    return patient()->data(Core::IPatient::WeightInGrams).toDouble();
 }
-QString ScriptPatientWrapper::weightUnit() const
+double ScriptPatientWrapper::heightInCentimeters() const
 {
-    return patient()->data(Core::IPatient::WeightUnit).toString();
-}
-double ScriptPatientWrapper::height() const
-{
-    return patient()->data(Core::IPatient::Height).toDouble();
-}
-QString ScriptPatientWrapper::heightUnit() const
-{
-    return patient()->data(Core::IPatient::HeightUnit).toString();
+    return patient()->data(Core::IPatient::HeightInCentimeters).toDouble();
 }
 double ScriptPatientWrapper::bmi() const
 {

@@ -73,6 +73,7 @@ private Q_SLOTS:
     void printPatientsInformation();
 
     void showPatientDatabaseInformation();
+    void viewCurrentPatientData();
 
 private:
     void updateActions();
@@ -85,6 +86,7 @@ protected:
     QAction *aViewPatientInformation;
     QAction *aPrintPatientInformation;
     QAction *aShowPatientDatabaseInformation;
+    QAction *aViewCurrentPatientData;
     QActionGroup *gSearchMethod;
     // setDeceased
     // writeALetter...

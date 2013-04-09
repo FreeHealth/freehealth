@@ -198,22 +198,13 @@ void IPatient::registerPatientTokens()
 //    t->setUntranslatedHumanReadableName(Trans::Constants::MOBILEPHONE);
 //    _tokens << t;
 
-    t = new PatientToken(Constants::TOKEN_WEIGHT, Weight);
+    t = new PatientToken(Constants::TOKEN_WEIGHTINGRAMS, WeightInGrams);
     t->setUntranslatedHumanReadableName(Trans::Constants::WEIGHT);
     _tokens << t;
 
-    t = new PatientToken(Constants::TOKEN_WEIGHT_UNIT, WeightUnit);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
-    _tokens << t;
-
-    t = new PatientToken(Constants::TOKEN_HEIGHT, Height);
+    t = new PatientToken(Constants::TOKEN_HEIGHTINCENTIMETERS, HeightInCentimeters);
     t->setUntranslatedHumanReadableName(Trans::Constants::HEIGHT);
     _tokens << t;
-
-    t = new PatientToken(Constants::TOKEN_HEIGHT_UNIT, HeightUnit);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
-    _tokens << t;
-
 
     t = new PatientToken(Constants::TOKEN_CLCR, CreatinClearance);
     t->setUntranslatedHumanReadableName(Trans::Constants::CREATININ_CLEARANCE);
@@ -222,6 +213,8 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_CLCR_UNIT, CreatinClearanceUnit);
 //    t->setUntranslatedHumanReadableName(Trans::Constants::);
     _tokens << t;
+
+    // TODO : add social numbers
 
     if (tokenPool()) {
         LOG("Registering Core::IPatient tokens");
@@ -250,14 +243,20 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFULLNAME,   data(IPatient::FullName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTYEARSOLD,   data(IPatient::YearsOld).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTAGE,        data(IPatient::Age).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT,            data(IPatient::Weight).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHT_UNIT,       data(IPatient::WeightUnit).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT,            data(IPatient::Height).toString() );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHT_UNIT,       data(IPatient::HeightUnit).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHTINGRAMS,     data(IPatient::WeightInGrams).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHTINCENTIMETERS, data(IPatient::HeightInCentimeters).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFBIRTH,data(IPatient::DateOfBirth).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,              data(IPatient::CreatinClearance).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR_UNIT,         data(IPatient::CreatinClearanceUnit).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,      data(IPatient::Title).toString() );
+
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBER,  data(IPatient::SocialNumber).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBER2, data(IPatient::SocialNumber2).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBER3, data(IPatient::SocialNumber3).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBER4, data(IPatient::SocialNumber4).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBERS, data(IPatient::SocialNumber).toString() + " " + data(IPatient::SocialNumber2).toString() + " " + data(IPatient::SocialNumber3).toString() + " " + data(IPatient::SocialNumber4).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBEROWNERNAME, data(IPatient::SocialNumberOwnerFullName).toString());
+
 }
 // END
 
