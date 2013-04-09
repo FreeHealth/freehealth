@@ -27,6 +27,10 @@
     <specialties lang="de">Tools</specialties>
 
     <updateinfo>
+      <updateversion from="0.8.2" to="0.8.4">
+        <text lang="fr">Gestion du poids et de la taille du patient</text>
+        <text lang="xx">Correctly manages weight and height of the patient</text>
+      </updateversion>
       <updateversion from="" to="0.8.2">
         <text lang="fr">Première version</text>
         <text lang="xx">First version</text>
@@ -120,7 +124,7 @@
           <tooltip lang="de">Gewicht</tooltip>
           <options>DontPrintEmptyValues;Weight</options>
           <default>kilogram</default>
-          <patientdata>Weight</patientdata>
+          <patientdata>WeightInGrams</patientdata>
         </Item>
 
         <Item type="measurement" name="ObjectiveGroup::Height::Value">
@@ -131,7 +135,7 @@
           <tooltip lang="fr">Taille</tooltip>
           <options>DontPrintEmptyValues;Length</options>
           <default>centimeter</default>
-          <patientdata>Height</patientdata>
+          <patientdata>HeightInCentimeters</patientdata>
         </Item>
 
         <Item type="helptext" name="ObjectiveGroup::BMI::Label">
