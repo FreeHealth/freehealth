@@ -27,11 +27,12 @@
 #include "toolspreferences.h"
 #include "ui_toolspreferences.h"
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
+
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 using namespace Tools;
 using namespace Internal;
@@ -155,14 +156,13 @@ QString ToolsPreferencesPage::displayName() const
 /*! Returns the sort index of the page. The higher the number, the lower the page. */
 int ToolsPreferencesPage::sortIndex() const
 {
-    //TODO: write a meaningful number here
-    return 0;
+    return Core::Constants::OPTIONINDEX_TOOLS;
 }
 
 /*! Returns the (translated) category of the preferences page. */
 QString ToolsPreferencesPage::category() const
 {
-    return tr("TOOLS");
+    return tr("Tools");
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */

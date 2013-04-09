@@ -9,6 +9,123 @@
     </message>
 </context>
 <context>
+    <name>Print::Internal::PrintCorrectionPreferencesPage</name>
+    <message>
+        <source>Print correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Print::Internal::PrintCorrectionPreferencesWidget</name>
+    <message>
+        <source>Print Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print the test page without the correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check print errors of your printer and correct them.&lt;br/&gt;
+First step, print the test page &lt;u&gt;without&lt;/u&gt; the correction and check the marks.&lt;br/&gt;
+Second step, inform the corrections.&lt;br/&gt;
+Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-check the marks.&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Correction de l&apos;impression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To your right (-&gt;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To your left (&lt;-)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Horizontal shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sens de l&apos;impression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distance between horizontal line and the left border of the page, in millimeters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Du haut vers le bas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Du bas vers le haut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To the bottom of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distance between vertical line and the top of the page, in millimeters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print the test page with the correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrected printing. x shift=%1mm; y shift=%2mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The above line should be at 50mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The above line is printed at _____mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The line should be at 50mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The line is printed at _____mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The square should be at 100mm, 270mm to the top left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The above line is printed at %1mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The line is printed at %1mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Print::Internal::PrintDialog</name>
     <message>
         <source>Print</source>

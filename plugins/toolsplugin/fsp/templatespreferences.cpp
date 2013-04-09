@@ -27,11 +27,12 @@
 #include "templatespreferences.h"
 #include "ui_templatespreferences.h"
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
+
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 using namespace Templates;
 using namespace Internal;
@@ -180,7 +181,7 @@ QString TemplatesPreferencesPage::title() const
 /*! Returns the sorting order (pages are sorted starting from 0). */
 int %PluginName:c%PreferencesPage::sortIndex() const
 {
-    return 0;
+    return 0; // Core::Constants::OPTIONINDEX_...;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */

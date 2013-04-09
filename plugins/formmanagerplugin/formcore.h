@@ -34,13 +34,15 @@
 /**
  * \file formcore.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 01 Oct 2012
+ * \version 0.8.4
+ * \date 04 Apr 2013
 */
 
 namespace Form {
 class FormManager;
 class EpisodeManager;
+class PatientFormItemDataWrapper;
+
 namespace Internal {
 class FormManagerPlugin;
 class FormCorePrivate;
@@ -60,6 +62,7 @@ public:
 
     Form::FormManager &formManager() const;
     Form::EpisodeManager &episodeManager() const;
+    Form::PatientFormItemDataWrapper &patientFormItemDataWrapper() const;
 
 Q_SIGNALS:
 

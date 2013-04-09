@@ -47,6 +47,7 @@ namespace {
 const char * const XML_TAG_CHEQUESET = "ChqSet";
 const char * const XML_TAG_CHEQUE = "Chq";
 const char * const XML_ATTRIB_LABEL = "name";
+const char * const XML_ATTRIB_DEFAULT = "default";
 const char * const XML_TAG_RECT = "Rect";
 const char * const XML_ATTRIB_RECT = "r";
 const char * const XML_ATTRIB_POINTX = "x";
@@ -87,7 +88,8 @@ Tools::Internal::ChequePrintFormat::Rect rectFromXml(const QString &s)
 }
 
 /*! Constructor of the Tools::Internal::ChequePrintFormat class */
-ChequePrintFormat::ChequePrintFormat()
+ChequePrintFormat::ChequePrintFormat() :
+    _default(false)
 {
 }
 
@@ -105,6 +107,7 @@ QString ChequePrintFormat::toXml(const QList<ChequePrintFormat> &set)
     foreach(const ChequePrintFormat &format, set) {
         QDomElement cheque = doc.createElement(::XML_TAG_CHEQUE);
         cheque.setAttribute(::XML_ATTRIB_LABEL, format.label());
+        cheque.setAttribute(::XML_ATTRIB_DEFAULT, format.isDefault());
         root.appendChild(cheque);
 
         // Append rects
@@ -161,6 +164,7 @@ QList<ChequePrintFormat> ChequePrintFormat::fromXml(const QString &xmlContent)
         ChequePrintFormat format;
         // Read Label
         format.setLabel(root.attribute(::XML_ATTRIB_LABEL));
+        format.setDefault(root.attribute(::XML_ATTRIB_DEFAULT) == "true");
 
         // Read pix
         QDomElement pix = root.firstChildElement(::XML_TAG_BACKGROUNDPIX);
@@ -192,6 +196,18 @@ QList<ChequePrintFormat> ChequePrintFormat::fromXml(const QString &xmlContent)
         root = root.nextSiblingElement(::XML_TAG_CHEQUE);
     }
     return set;
+}
+
+bool ChequePrintFormat::labelLessThan(const ChequePrintFormat &format1, const ChequePrintFormat &format2)
+{
+    return format1.label() < format2.label();
+}
+
+bool ChequePrintFormat::defaultLessThan(const ChequePrintFormat &format1, const ChequePrintFormat &format2)
+{
+    if (format2.isDefault())
+        return false;
+    return true;
 }
 
 QDebug operator<<(QDebug dbg, const Tools::Internal::ChequePrintFormat &c)

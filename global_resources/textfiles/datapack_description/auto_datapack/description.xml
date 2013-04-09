@@ -27,4 +27,12 @@
     <content type="file_zipped">./nonfree/pdfcompletion/win/pdf.zip</content>
   </datapack>
 
+  <datapack description="./nonfree/fsp/packdescription.xml" server="asso_nonfree">
+    <content type="file_nonzipped">./nonfree/fsp/fsp_general.xml</content>
+  </datapack>
+
+  <datapack description="./nonfree/cheque/packdescription.xml" server="asso_nonfree">
+    <content type="file_nonzipped">./nonfree/cheque/france.zip</content>
+  </datapack>
+
 </Automatic_DataPack>

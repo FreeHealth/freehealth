@@ -24,9 +24,6 @@ SUBDIRS = \
     druginteractions \
     icd \
     pmh \
-    accountbase \
-    account \
-    account2 \
     agenda \
     script \
     mainwin \
@@ -138,24 +135,30 @@ category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
 category.depends += listview
 
-accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
-accountbase.depends += core
-accountbase.depends += datapack
+with-old-account {
+    SUBDIRS += accountbase account
+    accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
+    accountbase.depends += core
+    accountbase.depends += datapack
 
-account.subdir   = $${PLUGINS_PATH}/accountplugin
-account.depends += core
-account.depends += texteditor
-account.depends += printer
-account.depends += accountbase
-account.depends += zipcodes
-account.depends += listview
+    account.subdir   = $${PLUGINS_PATH}/accountplugin
+    account.depends += core
+    account.depends += texteditor
+    account.depends += printer
+    account.depends += accountbase
+    account.depends += zipcodes
+    account.depends += listview
+}
 
-account2.subdir   = $${PLUGINS_PATH}/account2plugin
-account2.depends += core
-account2.depends += datapack
-account2.depends += formmanager
-#account2.depends += texteditor
-#account2.depends += listview
+with-account {
+    SUBDIRS += account2
+    account2.subdir   = $${PLUGINS_PATH}/account2plugin
+    account2.depends += core
+    account2.depends += datapack
+    account2.depends += formmanager
+    #account2.depends += texteditor
+    #account2.depends += listview
+}
 
 zipcodes.subdir = $${PLUGINS_PATH}/zipcodesplugin
 zipcodes.depends += core

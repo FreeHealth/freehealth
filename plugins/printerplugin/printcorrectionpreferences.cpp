@@ -29,6 +29,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/printaxishelper.h>
@@ -88,20 +89,15 @@ void PrintCorrectionPreferencesWidget::setDataToUi()
 {
     double x = settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM, 0.).toDouble();
     double y = settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM, 0.).toDouble();
-    qWarning() << "SETDATA" << x << y;
     if (x < 0.) {
         ui->horizCombo->setCurrentIndex(ToLeft);
-        qWarning() << "  ToLeft";
     } else {
         ui->horizCombo->setCurrentIndex(ToRight);
-        qWarning() << "  ToRight";
     }
     if (y < 0.) {
         ui->verticCombo->setCurrentIndex(ToTop);
-        qWarning() << "  ToTop";
     } else {
         ui->verticCombo->setCurrentIndex(ToBottom);
-        qWarning() << "  ToBottom";
     }
     ui->horizDist->setValue(50. + x);
     ui->verticDist->setValue(50. + y);
@@ -213,10 +209,20 @@ bool PrintCorrectionPreferencesWidget::printTest()
     Utils::PrintAxisHelper axisHelper;
     axisHelper.setPageSize(printer->paperRect(), printer->paperSize(QPrinter::Millimeter));
 
-    // Printer correction: not over margins
-    qreal l, r, t ,b;
-    printer->getPageMargins(&l, &t, &r, &b, QPrinter::DevicePixel);
-    axisHelper.setMargins(l, t, r, b);
+    QPainter painter;
+    if (!painter.begin(printer)) { // failed to open file
+        qWarning("failed to open file, is it writable?");
+        return false;
+    }
+
+    QFont font;
+    font.setFamily("Arial Black");
+    font.setPointSize(9);
+    painter.setFont(font);
+
+    QPen pen(Qt::black, 3, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+    painter.setPen(pen);
+    painter.save();
 
     // Print correction: horiz and vertic shift
     if (sdr == ui->printTestWithCorrection) {
@@ -236,23 +242,10 @@ bool PrintCorrectionPreferencesWidget::printTest()
             // to bottom
             y += ui->vertic->value();
         }
-        axisHelper.translateMillimeters(x, y);
+        axisHelper.translateMillimeters(-x, -y);
+        painter.drawText(axisHelper.pointToPixels(80.0,  200.0), tr("Corrected printing. x shift=%1mm; y shift=%2mm").arg(x).arg(y));
     }
 
-    QPainter painter;
-    if (!painter.begin(printer)) { // failed to open file
-        qWarning("failed to open file, is it writable?");
-        return false;
-    }
-
-    QFont font;
-    font.setFamily("Arial Black");
-    font.setPointSize(9);
-    painter.setFont(font);
-
-    QPen pen(Qt::black, 3, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
-    painter.setPen(pen);
-    painter.save();
     QPointF top1 = axisHelper.pointToPixels(50.0,  50.0);
     QPointF top2 = axisHelper.pointToPixels(150.0, 50.0);
     QPointF topText = axisHelper.pointToPixels(60.0,  60.0);
@@ -268,6 +261,12 @@ bool PrintCorrectionPreferencesWidget::printTest()
     painter.drawText(leftText, "<<< " + tr("The line should be at 50mm to the left of the page"));
     leftText = axisHelper.pointToPixels(60.0, 160.0);
     painter.drawText(leftText, "<<< " + tr("The line is printed at _____mm to the left of the page"));
+
+    QPointF squareTopLeft = axisHelper.pointToPixels(100.0,  270.0);
+    QSizeF  squareSize = axisHelper.sizeToPixels(10., 10.0);
+    painter.drawRect(QRectF(squareTopLeft, squareSize));
+    leftText = axisHelper.pointToPixels(70.0,  265.0);
+    painter.drawText(leftText, tr("The square should be at 100mm, 270mm to the top left of the page"));
 
     painter.restore();
     painter.end();
@@ -430,7 +429,7 @@ QString PrintCorrectionPreferencesPage::title() const
 /*! Returns the sorting order (pages are sorted starting from 0). */
 int PrintCorrectionPreferencesPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_PRINT;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */

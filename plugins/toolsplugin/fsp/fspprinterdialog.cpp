@@ -40,7 +40,6 @@
 #include "ui_fspprinterdialog_patient.h"
 #include "ui_fspprinterdialog_conds.h"
 #include "ui_fspprinterdialog_fees.h"
-//#include "ui_fspprinterdialog_amounts.h"
 #include "ui_fspprinterdialog_prerecorded.h"
 
 #include <coreplugin/icore.h>
@@ -52,6 +51,8 @@
 #include <utils/widgets/detailswidget.h>
 #include <translationutils/constants.h>
 
+#include <QDir>
+#include <QFileInfo>
 #include <QPushButton>
 
 #include <QDebug>
@@ -346,7 +347,11 @@ public:
     {
         if (ui->cerfa->currentIndex() == 0)
             return FspPrinter::S12541_01;
-        return FspPrinter::S12541_02;
+        else if (ui->cerfa->currentIndex() == 1)
+            return FspPrinter::S12541_02;
+        else if (ui->cerfa->currentIndex() == 2)
+            return FspPrinter::S12541_02_2;
+        return FspPrinter::S12541_01;
     }
 
     void updatePreview()
@@ -383,6 +388,7 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
     d(new FspPrinterDialogPrivate(this))
 {
     d->ui->setupUi(this);
+    setWindowTitle(tr("French 'FSP' printing assistant"));
 
     // Templates
     d->_templateModel = new FspTemplateModel(this);
@@ -476,6 +482,8 @@ FspPrinterDialog::FspPrinterDialog(QWidget *parent) :
         d->ui->cerfa->setCurrentIndex(0);
     else if (settings()->value(Constants::S_DEFAULTCERFA) == Constants::S_CERFA_02)
         d->ui->cerfa->setCurrentIndex(1);
+    else if (settings()->value(Constants::S_DEFAULTCERFA) == Constants::S_CERFA_02_V2)
+        d->ui->cerfa->setCurrentIndex(2);
 
     // Connections
     connect(d->ui->vueComplexe, SIGNAL(clicked(bool)), this, SLOT(toggleView(bool)));
@@ -503,6 +511,15 @@ bool FspPrinterDialog::initialize(const Fsp &fsp)
     d->fspToUi();
     d->updatePreview();
     return true;
+}
+
+bool FspPrinterDialog::isAvailable()  // static
+{
+    QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
+    if (!dir.exists())
+        return false;
+    QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
+    return !files.isEmpty();
 }
 
 void FspPrinterDialog::toggleView(bool complex)

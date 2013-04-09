@@ -165,12 +165,16 @@ public:
 
     QString getEpisodeContentFormCache(const QModelIndex &index)
     {
+        if (!_useCache)
+            return QString::null;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return _xmlContentCache.value(_sqlModel->data(id).toInt());
     }
 
     void storeEpisodeContentInCache(const QModelIndex &index, const QString &xml)
     {
+        if (!_useCache)
+            return;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         _xmlContentCache.insert(_sqlModel->data(id).toInt(), xml);
     }
@@ -301,6 +305,9 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     setObjectName("Form::EpisodeModel");
     d->_formMain = rootEmptyForm;
 
+    // FIXME: cache system sometimes loses data?
+    setUseFormContentCache(false);
+
     // Create the SQL Model
     onCoreDatabaseServerChanged();
 }
@@ -343,6 +350,8 @@ void EpisodeModel::setUseFormContentCache(bool useCache)
 /** Return the current form unique identifier linked to this model */
 QString EpisodeModel::formUid() const
 {
+    if (!d->_formMain)
+        return QString::null;
     return d->_formMain->uuid();
 }
 
@@ -541,6 +550,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
+        Q_EMIT episodeAboutToChange(index);
         d->_dirtyIndexes << index;
         int sqlColumn = -1;
         switch (index.column()) {
@@ -554,19 +564,25 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             QModelIndex id = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
             QVariant episodeId = d->_sqlModel->data(id);
             // update internal cache
-            d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
+            if (d->_useCache)
+                d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
             // send to database
-            return episodeBase()->saveEpisodeContent(episodeId, value.toString());
+            bool ok = episodeBase()->saveEpisodeContent(episodeId, value.toString());
+            if (ok) {
+                Q_EMIT dataChanged(index, index);
+                Q_EMIT episodeChanged(index);
+            }
+            return ok;
         }
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
-        }
-        if (sqlColumn!=-1) {
+        } // switch
+
+        if (sqlColumn != -1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
-            bool ok = d->_sqlModel->setData(sqlIndex, value, role);
-            if (ok)
-                Q_EMIT dataChanged(index, index);
+            bool ok = d->_sqlModel->setData(sqlIndex, value, role); // also emits dataChanged
             if (index.column()==Priority)
                 Q_EMIT dataChanged(this->index(index.row(), int(PriorityIcon)), this->index(index.row(), int(PriorityIcon)));
+            Q_EMIT episodeChanged(index);
             return ok;
         }
     }
@@ -715,6 +731,7 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     validation->setData(EpisodeValidationData::IsValid, 1);
     d->_validationCache.insertMulti(id.toInt(), validation);
     bool ok = episodeBase()->saveEpisodeValidation(validation);
+    // FIXME: improve the readonly state to per QModelIndex readonly state -> isReadOnly(index)
     setReadOnly(true);
     Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount() - 1));
     return ok;
@@ -754,6 +771,7 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 {
     const QString &xml = d->getEpisodeContent(episodeToRenew);
 
+    // FIXME: see bool EpisodeModel::validateEpisode(const QModelIndex &index)
     bool ro = d->_readOnly;
     d->_readOnly = false;
     if (!insertRow(rowCount())) {
@@ -772,8 +790,17 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 }
 
 /**
+ * Reset the model.
+ */
+void EpisodeModel::refreshFilter()
+{
+    d->updateFilter(patient()->uuid());
+}
+
+/**
  * Populate the Form::IFormItemData of the parent Form::FormMain pointer
- * with the content of the episode.
+ * with the content of the episode. If the index is not valid, returns false.
+ *
  * If \e feedPatientModel is set to true and if the Form::IFormItemData has a
  * patient data representation, patient model will be automatically populated
  * with the value of the item data.
@@ -785,6 +812,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     if (WarnLogChronos)
         chrono.start();
     d->_formMain->clear();
+    if (!episode.isValid()) {
+        // Nothing to do but clear the form
+        return true;
+    }
+
     d->_formMain->formWidget()->setEnabled(false);
     const QString &xml = d->getEpisodeContent(episode);
     QHash<QString, FormItem *> items;
@@ -863,6 +895,17 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 }
 
 /**
+ * Populate the Form::IFormItemData of the parent Form::FormMain pointer
+ * with the content of the latest valid episode content.
+ */
+bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
+{
+    // as the SqlModel is sorted on the userdate, we just need to populate with the first index of the model
+    QModelIndex index = this->index(0,0);
+    return populateFormWithEpisodeContent(index);
+}
+
+/**
  * Save the whole model, set the Form::IFormItemData to non-modified if the submition gone
  * right. This does include the root Form::FormMain of this model.
  * \sa isDirty()
@@ -930,4 +973,3 @@ QString EpisodeModel::lastEpisodesSynthesis() const
 
     return html;
 }
-

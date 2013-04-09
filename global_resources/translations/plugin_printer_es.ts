@@ -10,6 +10,154 @@
     </message>
 </context>
 <context>
+    <name>Print::Internal::PrintCorrectionPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="419"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="431"/>
+        <source>Print correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Print::Internal::PrintCorrectionPreferencesWidget</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="14"/>
+        <source>Print Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="20"/>
+        <source>Print the test page without the correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="33"/>
+        <source>Check print errors of your printer and correct them.&lt;br/&gt;
+First step, print the test page &lt;u&gt;without&lt;/u&gt; the correction and check the marks.&lt;br/&gt;
+Second step, inform the corrections.&lt;br/&gt;
+Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-check the marks.&lt;br/&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="52"/>
+        <source>Correction de l&apos;impression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="59"/>
+        <source>To your right (-&gt;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="64"/>
+        <source>To your left (&lt;-)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="78"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="105"/>
+        <source>mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="85"/>
+        <source>Horizontal shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="92"/>
+        <source>Vertical shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="112"/>
+        <source>Sens de l&apos;impression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="119"/>
+        <source>Distance between horizontal line and the left border of the page, in millimeters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="156"/>
+        <source>Your print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="201"/>
+        <source>Du haut vers le bas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="206"/>
+        <source>Du bas vers le haut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="215"/>
+        <source>To the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="220"/>
+        <source>To the bottom of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="234"/>
+        <source>Distance between vertical line and the top of the page, in millimeters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.ui" line="266"/>
+        <source>Print the test page with the correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="251"/>
+        <source>Corrected printing. x shift=%1mm; y shift=%2mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="258"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="307"/>
+        <source>The above line should be at 50mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="260"/>
+        <source>The above line is printed at _____mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="266"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="313"/>
+        <source>The line should be at 50mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="268"/>
+        <source>The line is printed at _____mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="274"/>
+        <source>The square should be at 100mm, 270mm to the top left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="351"/>
+        <source>The above line is printed at %1mm to the top of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="353"/>
+        <source>The line is printed at %1mm to the left of the page</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Print::Internal::PrintDialog</name>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="23"/>

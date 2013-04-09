@@ -54,8 +54,12 @@ public:
         PayTo,
         RectCount
     };
+
     explicit ChequePrintFormat();
     ~ChequePrintFormat();
+
+    void setDefault(bool isDefault) {_default = isDefault;}
+    bool isDefault() const {return _default;}
 
     void setLabel(const QString &label) {_label=label;}
     QString label() const {return _label;}
@@ -75,11 +79,15 @@ public:
     static QList<ChequePrintFormat> fromXmlFile(const QString &file);
     static QList<ChequePrintFormat> fromXml(const QString &xmlContent);
 
+    static bool labelLessThan(const ChequePrintFormat &format1, const ChequePrintFormat &format2);
+    static bool defaultLessThan(const ChequePrintFormat &format1, const ChequePrintFormat &format2);
+
 private:
     QString _label;
     QPixmap _pix;
     QSizeF _sizeMillimeters;
     QHash<int, QRectF> _rects;
+    bool _default;
 };
 
 } // namespace Internal

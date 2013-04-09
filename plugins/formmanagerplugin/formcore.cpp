@@ -38,6 +38,7 @@
 #include "formcore.h"
 #include "formmanager.h"
 #include "episodemanager.h"
+#include "patientformitemdatawrapper.h"
 #include "formcontextualwidgetmanager.h"
 
 #include <coreplugin/icore.h>
@@ -67,6 +68,7 @@ public:
         _formManager(0),
         _episodeManager(0),
         _widgetManager(0),
+        _patientFormItemDataWrapper(0),
         q(parent)
     {
     }
@@ -79,6 +81,7 @@ public:
     FormManager *_formManager;
     EpisodeManager *_episodeManager;
     FormContextualWidgetManager *_widgetManager;
+    PatientFormItemDataWrapper *_patientFormItemDataWrapper;
 
 private:
     FormCore *q;
@@ -102,6 +105,7 @@ FormCore::FormCore(QObject *parent) :
     _instance = this;
     d->_formManager = new FormManager(this);
     d->_episodeManager = new EpisodeManager(this);
+    d->_patientFormItemDataWrapper = new PatientFormItemDataWrapper(this);
     // TODO: add episodeBase in the core
 }
 
@@ -120,6 +124,7 @@ bool FormCore::initialize()
     d->_formManager->initialize();
     d->_episodeManager->initialize();
     d->_widgetManager = new Internal::FormContextualWidgetManager(this);
+    d->_patientFormItemDataWrapper->initialize();
     return true;
 }
 
@@ -133,6 +138,12 @@ Form::FormManager &FormCore::formManager() const
 Form::EpisodeManager &FormCore::episodeManager() const
 {
     return *d->_episodeManager;
+}
+
+/** Return the unique instance of the Form::PatientFormItemDataWrapper */
+Form::PatientFormItemDataWrapper &FormCore::patientFormItemDataWrapper() const
+{
+    return *d->_patientFormItemDataWrapper;
 }
 
 void FormCore::activatePatientFileCentralMode()

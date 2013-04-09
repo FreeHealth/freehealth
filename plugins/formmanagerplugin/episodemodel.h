@@ -37,8 +37,8 @@ QT_END_NAMESPACE
 /**
  * \file episodemodel.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 01 Oct 2012
+ * \version 0.8.4
+ * \date 05 Apr 2013
 */
 
 // friend class only
@@ -51,15 +51,19 @@ class IdentityViewerWidget;
 namespace Form {
 class FormMain;
 class EpisodeManager;
+class PatientFormItemDataWrapper;
 
 namespace Internal {
 class EpisodeModelPrivate;
+class PatientFormItemDataWrapperPrivate;
 }  // namespace Internal
 
 class FORM_EXPORT EpisodeModel : public QAbstractListModel
 {
     Q_OBJECT
     friend class Form::EpisodeManager;
+    friend class Form::PatientFormItemDataWrapper;
+    friend class Form::Internal::PatientFormItemDataWrapperPrivate;
     friend class Patients::Internal::IdentityViewerWidget;
 
 protected:
@@ -124,18 +128,17 @@ public:
     bool removeEpisode(const QModelIndex &index);
     QModelIndex renewEpisode(const QModelIndex &episodeToRenew);
 
+    void refreshFilter();
+
 public Q_SLOTS:
-    bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);
+    // FIXME: remove the 'feedPatientModel' as we created the Form::PatientFormItemDataWrapper
+    bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel = false);
+    bool populateFormWithLatestValidEpisodeContent();
     bool submit();
 
 Q_SIGNALS:
     void episodeAboutToChange(const QModelIndex &index);
-    void episodeAboutToBeDeleted(const QModelIndex &index);
-    void episodeAboutToBeCreated(const QModelIndex &index);
-
     void episodeChanged(const QModelIndex &index);
-    void episodeDeleted(const QModelIndex &index);
-    void episodeCreated(const QModelIndex &index);
 
 private Q_SLOTS:
     void onUserChanged();

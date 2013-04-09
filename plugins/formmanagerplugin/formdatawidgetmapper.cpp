@@ -234,11 +234,13 @@ bool FormDataWidgetMapper::initialize()
     return true;
 }
 
-/** Clear the current form content */
+/** Clear the current form content but unique episode forms. */
 void FormDataWidgetMapper::clear()
 {
     if (!d->_formMain)
         return;
+//    if (d->_formMain->isUniqueEpisode())
+//        return;
     d->_formMain->clear();
     d->_currentEpisode = QModelIndex();
 }

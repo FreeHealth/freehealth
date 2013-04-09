@@ -39,15 +39,13 @@
 #include <coreplugin/ipatient.h>
 
 #include <formmanagerplugin/formcore.h>
-#include <formmanagerplugin/formmanager.h>
-#include <formmanagerplugin/iformitem.h>
-#include <formmanagerplugin/iformitemdata.h>
+#include <formmanagerplugin/patientformitemdatawrapper.h>
 
 #include <patientbaseplugin/patientmodel.h>
 
 #include <utils/global.h>
 
-static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
@@ -101,38 +99,32 @@ QModelIndex PatientModelWrapper::currentPatientIndex() const
 }
 
 /**
-  \brief Return the Patient's Data represented by the \e index.column().
-  The wrapper model searches in the identity model (Patient::PatientModel) and if it cannot find
-  a value, it searches in the Forms (some Form::FormItem can represent patient values).
+ * \brief Return the Patient's Data represented by the \e index.column().
+ * The wrapper model searches in the identity model (Patient::PatientModel) and if it cannot find
+ * a value, it searches in the Forms (some Form::FormItem can represent patient values).
 */
 QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+    if (!patient()->currentPatientIndex().isValid())
+        return QVariant();
 
     if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
-    // get data from the model
+    // get data from the sqlmodel
     QModelIndex idx = m_Model->index(index.row(), index.column());
     QVariant result = m_Model->data(idx, role);
     if (!result.isNull())
         return result;
 
-    // or in the forms widgets
-//    qWarning() << "  Trying to get" << patient()->enumToString(Core::IPatient::PatientDataRepresentation(index.column())) << "from formItems";
-    const QList<Form::FormMain*> &forms = formManager().allEmptyRootForms();
-    foreach(Form::FormMain *modeForms, forms) {
-        foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
-            foreach(Form::FormItem *item, f->flattenFormItemChildren()) {
-                if (item->itemData()) {
-//                    qWarning() << "    " << item->uuid() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation()));
-                    if (item->patientDataRepresentation() == index.column())
-                        return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
-                }
-            }
-        }
-    }
+    // TODO: if data are only provided by the SqlModel -> stop here
+
+    // Limit to current patient only
+    if (index.row() == patient()->currentPatientIndex().row())
+        return formCore().patientFormItemDataWrapper().data(index.column());
+
     return QVariant();
 }
 

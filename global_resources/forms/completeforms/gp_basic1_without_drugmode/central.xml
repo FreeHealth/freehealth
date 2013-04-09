@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.8.2</version>
+    <version>test</version>
     <fmfv>0.8.2</fmfv>
     <lmdate>2013-02-05</lmdate>
     <cdate>2011-03-15</cdate>
@@ -27,10 +27,12 @@
       <text lang="fr">
       Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
       Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
+      Ajout de l'assistant de prescription d'examen biologique
       </text>
       <text lang="en">
       Defining user documents to use for the print process of the textual prescription text editor.
       Adding basic biometric measurements in the SOAP form (using a sub-form).
+      Adding lab test prescription assistant
       </text>
     </updateversion>
     <updateversion from="0.7.2" to="0.8.0">
@@ -127,7 +129,9 @@
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
       <label lang="de">Verschreibungen</label>
+      <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
+
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
@@ -137,6 +141,7 @@
       </Item>
     </MedForm>
 
+    <file>__subForms__/prescriptions/lab_assistant/central.xml</file>
 
     <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>

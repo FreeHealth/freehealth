@@ -696,6 +696,14 @@ bool FormPlaceHolder::createEpisode()
     if (!d->ui->formView->selectionModel()->hasSelection())
         return false;
 
+    // autosave feature
+    if (d->_currentEpisodeModel) {
+        if (!d->saveCurrentEditingEpisode()) {
+            LOG_ERROR("Unable to save current episode");
+            return false;
+        }
+    }
+
     // get the form
     QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
     if (d->_formTreeModel->isNoEpisode(index)) {
@@ -711,6 +719,8 @@ bool FormPlaceHolder::createEpisode()
     setCurrentEditingFormItem(index);
 
     // create a new episode the selected form and its children
+    // FIXME: see bool EpisodeModel::validateEpisode(const QModelIndex &index)
+    d->_currentEpisodeModel->setReadOnly(false);
     if (!d->_currentEpisodeModel->insertRow(d->_currentEpisodeModel->rowCount())) {
         LOG_ERROR("Unable to create new episode");
         return false;

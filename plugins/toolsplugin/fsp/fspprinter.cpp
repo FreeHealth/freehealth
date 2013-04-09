@@ -76,8 +76,11 @@ public:
     {
         if (cerfa == FspPrinter::S12541_01)
             return QRectF(QPointF(109.2, 247.), QSizeF(30.7, 5.3));
-        else
+        else if (cerfa == FspPrinter::S12541_02)
             return QRectF(QPointF(109.2, 252.), QSizeF(30.7, 5.3));
+        else if (cerfa == FspPrinter::S12541_02_2)
+            return QRectF(QPointF(109.2, 249.), QSizeF(30.7, 5.3));
+        return QRectF();
     }
 
     QRectF rectInMilliters(const Fsp &fsp, FspPrinter::Cerfa cerfa, int fspIndex)
@@ -121,7 +124,9 @@ public:
             return QRectF(QPointF(157.5, 34.4), QSizeF(45.7, 5.4));
             // Conditions
         case Fsp::Condition_Maladie:
-            return QRectF(QPointF(7.3, 128.), QSizeF(5.3, 3.8));
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(7.5, 126.), QSizeF(5.3, 3.8));
+            return QRectF(QPointF(7.5, 128.), QSizeF(5.3, 3.8));
         case Fsp::Condition_Maladie_ETM :
             if (cerfa == FspPrinter::S12541_01) {
                 if (fsp.data(Fsp::Condition_Maladie_ETM).isNull())
@@ -133,78 +138,126 @@ public:
             }
             break;
         case Fsp::Condition_Maladie_ETM_Ald :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(55., 132.6) ,QSizeF(5.3, 3.8));
             return QRectF(QPointF(55., 134.6) ,QSizeF(5.3, 3.8));
         case Fsp::Condition_Maladie_ETM_Autre :
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(197.4, 134.6), QSizeF(5.3, 3.8));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(124.5, 132.6), QSizeF(5.3, 3.8));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(124.5, 134.6), QSizeF(5.3, 3.8));
             break;
         case Fsp::Condition_Maladie_ETM_L115:
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(166.9, 134.6), QSizeF(5.3, 3.8));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(135.4, 126.), QSizeF(5.3, 3.8));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(135.4, 128.), QSizeF(5.3, 3.8));
             break;
         case Fsp::Condition_Maladie_ETM_Prevention:
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(105.7, 134.6), QSizeF(5.3, 3.8));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(100.1, 132.6), QSizeF(5.3, 3.8));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(100.1, 134.6), QSizeF(5.3, 3.8));
             break;
         case Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui:
+        {
             if (fsp.data(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui).isNull())
                 return QRectF();
-            if (fsp.data(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui).toBool())
+            if (fsp.data(Fsp::Condition_Maladie_ETM_AccidentParTiers_Oui).toBool()) {
+                if (cerfa == FspPrinter::S12541_02_2)
+                    return QRectF(QPointF(87.4, 139.6), QSizeF(5.3, 3.8)); // OUI
                 return QRectF(QPointF(87.4, 141.6), QSizeF(5.3, 3.8)); // OUI
-            else
+            } else {
+                if (cerfa == FspPrinter::S12541_02_2)
+                    return QRectF(QPointF(64.3, 139.6), QSizeF(5.3, 3.8)); // NON
                 return QRectF(QPointF(64.3, 141.6), QSizeF(5.3, 3.8)); // NON
+            }
+        }
+            break;
         case Fsp::Condition_Maladie_ETM_AccidentParTiers_Date :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(114.5, 139.2), QSizeF(40.6, 4.1));
             return QRectF(QPointF(114.5, 141.2), QSizeF(40.6, 4.1));
         case Fsp::Condition_Maternite :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(7.5, 146.7), QSizeF(5.3, 3.8));
             return QRectF(QPointF(7.5, 148.7), QSizeF(5.3, 3.8));
         case Fsp::Condition_Maternite_Date :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(162.5, 146.7), QSizeF(40.6, 4.1));
             return QRectF(QPointF(162.5, 148.7), QSizeF(40.6, 4.1));
         case Fsp::Condition_ATMP :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(7.5, 153.9), QSizeF(5.3, 3.8));
             return QRectF(QPointF(7.5, 155.9), QSizeF(5.3, 3.8));
         case Fsp::Condition_ATMP_Number :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(68.4, 135.9), QSizeF(45.7, 4.3));
             return QRectF(QPointF(68.4, 155.9), QSizeF(45.7, 4.3));
         case Fsp::Condition_ATMP_Date :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(162.5, 153.9), QSizeF(40.6, 4.1));
             return QRectF(QPointF(162.5, 155.9), QSizeF(40.6, 4.1));
         case Fsp::Condition_NouveauMedTraitant:
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(91.1, 161.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(91.1, 163.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_MedecinEnvoyeur :
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(62.1, 175.1), QSizeF(140., 5.3));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(50.5, 171.2), QSizeF(140., 4.1));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(50.5, 173.2), QSizeF(140., 4.1));
             break;
         case Fsp::Condition_AccesSpecifique :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(37.1, 181.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(37.1, 183.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_Urgence :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(61.8, 181.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(60.8, 183.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_HorsResidence :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(105.3, 181.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(106.3, 183.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_Remplace :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(153.1, 181.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(154.1, 183.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_HorsCoordination :
+            if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(196.4, 181.2), QSizeF(5.3, 3.8));
             return QRectF(QPointF(197.4, 183.2), QSizeF(5.3, 3.8));
         case Fsp::Condition_AccordPrealableDate:
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(171.8, 116.), QSizeF(30.7, 4.2));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(143.8, 191.5), QSizeF(40.6, 4.1));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(144.8, 193.5), QSizeF(40.6, 4.1));
             break;
         case Fsp::Unpaid_PartObligatoire:
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(86.2, 256.3), QSizeF(5.3, 3.8));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(85.4, 258.6), QSizeF(5.3, 3.8));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(86.4, 261.6), QSizeF(5.3, 3.8));
             break;
         case Fsp::Unpaid_PartComplementaire:
             if (cerfa == FspPrinter::S12541_01)
                 return QRectF(QPointF(190.5, 256.3), QSizeF(5.3, 3.8));
-            else
+            else if (cerfa == FspPrinter::S12541_02_2)
+                return QRectF(QPointF(189.5, 258.6), QSizeF(5.3, 3.8));
+            else if (cerfa == FspPrinter::S12541_02)
                 return QRectF(QPointF(190.5, 261.6), QSizeF(5.3, 3.8));
             break;
         }
@@ -216,7 +269,9 @@ public:
         int y;
         if (cerfa == FspPrinter::S12541_01)
             y = 209.2 + 8.6*line;
-        else
+        else if (cerfa == FspPrinter::S12541_02_2)
+            y = 212. + 8.6*line;
+        else if (cerfa == FspPrinter::S12541_02)
             y = 213.9 + 8.6*line;
         switch (fspIndex) {
         case Fsp::Amount_Date:
@@ -551,8 +606,8 @@ bool FspPrinter::print(const Fsp &fsp, Cerfa cerfa, bool printCerfaAsBackground)
     }
 
     // Printer correction: user defined
-    d->_axisHelper.translateMillimeters(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
-                                        settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble());
+    d->_axisHelper.translateMillimeters(-settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
+                                        -settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble());
 
     // Printer correction: not over margins
     qreal l, r, t ,b;
@@ -619,8 +674,11 @@ QPixmap FspPrinter::preview(const Fsp &fsp, Cerfa cerfa)
     if (cerfa == S12541_01) {
         if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110.png", "PNG"))
             qWarning() << "ERROR: unable to load background pixmap";
-    } else {
+    } else if (cerfa == S12541_02) {
         if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02.png", "PNG"))
+            qWarning() << "ERROR: unable to load background pixmap";
+    } else if (cerfa == S12541_02_2) {
+        if (!background.load(settings()->path(Core::ISettings::ThemeRootPath) + "/pixmap/others/S3110_02_v2.png", "PNG"))
             qWarning() << "ERROR: unable to load background pixmap";
     }
     painter.drawPixmap(image.rect(), background);

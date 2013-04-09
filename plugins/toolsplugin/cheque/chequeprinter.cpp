@@ -97,6 +97,11 @@ public:
         s.minFontPixelSize = 10;
         s.drawBoundingRect = _drawRects;
 
+        if (_drawRects)
+            painter.drawRect(QRectF(_axisHelper.pointToPixels(format.chequePaperRect().topLeft()),
+                                    _axisHelper.sizeToPixels(format.chequePaperRect().size()))
+                             );
+
         QFont font = painter.font();
         font.setBold(true);
         painter.setFont(font);
@@ -220,13 +225,14 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     }
 
     // Center the cheque in the page
-    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width()) + settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble();
-    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.) + settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble();
-    d->_axisHelper.translateMillimeters(centerX, centerY);
+    double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width());
+    double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.);
 
     // Printer correction: user defined
-//    d->_axisHelper.translateMillimeters(settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble(),
-//                                        settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble());
+    // As we are printing in landscape -> invert x <-> y in the translation
+    centerX -= settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble();
+    centerY -= settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble();
+    d->_axisHelper.translateMillimeters(centerX, centerY);
 
     QFont font;
     font.setPointSize(10);
@@ -287,6 +293,6 @@ QPixmap ChequePrinter::preview(const Internal::ChequePrintFormat &format)
     painter.save();
     d->drawContent(painter, format);
     painter.restore();
-
+    painter.end();
     return image;
 }

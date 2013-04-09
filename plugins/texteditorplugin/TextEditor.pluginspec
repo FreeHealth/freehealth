@@ -2,7 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
-    <category>Text editor</category>
+    <category>UI improvements</category>
     <description>Rich Text Editor for FreeMedForms.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>

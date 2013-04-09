@@ -223,7 +223,7 @@ tar -cf $PACKPATH/sources.tar \
 --exclude '_protected' --exclude '__nonfree__' --exclude 'nonfree' \
 --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'zlib-1.2.3' \
 --exclude 'rushes' --exclude 'doxygen' \
---exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' \
+--exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' --exclude '*autosave' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
 --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
 --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \

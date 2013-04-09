@@ -93,6 +93,8 @@ public:
     const FormCollection &centralFormDuplicateCollection(const QString &modeUId) const;
     const FormCollection &subFormDuplicateCollection(const QString &subFormUid) const;
 
+    QStringList availableModeUids() const;
+
     // Form pointers and models
     FormMain *form(const QString &formUid) const;
     QList<FormMain *> allEmptyRootForms() const;
@@ -100,13 +102,15 @@ public:
     FormTreeModel *formTreeModelForCompleteForm(const QString &formUid);
     FormTreeModel *formTreeModelForSubForm(const QString &subFormUid);
 
+    QList<FormMain *> allDuplicatesEmptyRootForms() const;
+
     // Mode page creation
     FormPage *createFormPage(const QString &uuid);
 
     // Form pointers && extra
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
-    Form::FormMain *identityRootFormDuplicate() const;
+//    Form::FormMain *identityRootFormDuplicate() const;
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
     QString extractFormFileToTmpPath(const QString &formUid, const QString &fileName);
 

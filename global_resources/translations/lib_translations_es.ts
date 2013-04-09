@@ -58,31 +58,51 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="39"/>
-        <source>Sites</source>
+        <source>Payment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="40"/>
-        <source>Insurance</source>
+        <source>Payments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="41"/>
-        <source>Percentages</source>
+        <source>Fee</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="42"/>
-        <source>Distance rules</source>
+        <source>Fees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="43"/>
-        <source>Assets rates</source>
+        <source>Sites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_account.h" line="44"/>
+        <source>Insurance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_account.h" line="45"/>
+        <source>Percentages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="46"/>
+        <source>Distance rules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_account.h" line="47"/>
+        <source>Assets rates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_account.h" line="50"/>
         <source>cent</source>
         <translation type="unfinished"></translation>
     </message>

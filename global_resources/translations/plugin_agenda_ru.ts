@@ -113,8 +113,8 @@
     <message>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="163"/>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="164"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="301"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="302"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="304"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="305"/>
         <source>Add current patient</source>
         <translation type="unfinished"></translation>
     </message>

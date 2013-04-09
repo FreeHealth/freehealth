@@ -56,6 +56,7 @@
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_titles.h>
 #include <translationutils/trans_user.h>
+#include <translationutils/trans_msgerror.h>
 
 #include "ui_identityviewer.h"
 
@@ -698,7 +699,12 @@ public:
 
         // address
         // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
-        viewUi->addressDetails->setSummaryText(m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString());
+        const QString &fulladdress = m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString();
+        if (fulladdress.isEmpty())
+            viewUi->addressDetails->setSummaryText(tkTr(Trans::Constants::NO_ADDRESS_RECORDED));
+        else
+            viewUi->addressDetails->setSummaryText(fulladdress);
+        viewUi->addressDetails->setSummaryFontBold(true);
         m_FullContactWidget->clear();
         m_FullContactWidget->address()->setAddress(_patientModelIdentityWrapper->data(Core::IPatient::Street).toString());
         m_FullContactWidget->address()->setCity(_patientModelIdentityWrapper->data(Core::IPatient::City).toString());
@@ -754,7 +760,10 @@ bool IdentityViewerWidget::initialize()
 
 void IdentityViewerWidget::getPatientForms()
 {
-    Form::FormMain *form = formManager().identityRootFormDuplicate();
+    // Get the inerte identity form from formmanager
+    // This form can be populated by any value without any modification of the
+    // current patient data
+    Form::FormMain *form = formManager().identityRootForm();
     if (form) {
         d->_patientModelIdentityWrapper->setIdentityForm(form);
         d->_patientModelIdentityWrapper->setEpisodeModel(new Form::EpisodeModel(form, this));
@@ -783,16 +792,3 @@ void IdentityViewerWidget::setCurrentIndex(const QModelIndex &patientIndex)
     d->clearReadOnlyWidget();
     d->populateReadOnlyWidget(patientIndex.row());
 }
-
-//void IdentityWidget::changeEvent(QEvent *e)
-//{
-//    QWidget::changeEvent(e);
-//    switch (e->type()) {
-//    case QEvent::LanguageChange:
-//        if (d->editUi)
-//            d->editUi->retranslateUi(this);
-//        break;
-//    default:
-//        break;
-//    }
-//}

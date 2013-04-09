@@ -64,6 +64,11 @@ public:
     void toItem(const ChequePrintFormat &format)
     {
         QStandardItem *root = new QStandardItem(format.label());
+        if (format.isDefault()) {
+            QFont bold;
+            bold.setBold(true);
+            root->setFont(bold);
+        }
         q->invisibleRootItem()->appendRow(root);
     }
 
@@ -74,13 +79,18 @@ public:
         if (!dir.exists())
             return;
         QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
+        QList<ChequePrintFormat> formats;
         foreach(const QFileInfo &info, files) {
-            QList<ChequePrintFormat> formats = ChequePrintFormat::fromXmlFile(info.absoluteFilePath());
-            foreach(const ChequePrintFormat &format, formats) {
-                toItem(format);
-            }
-            _formats << formats;
+            formats << ChequePrintFormat::fromXmlFile(info.absoluteFilePath());
         }
+        qSort(formats.begin(), formats.end(), ChequePrintFormat::defaultLessThan);
+        ChequePrintFormat defaultFormat = formats.takeFirst();
+        qSort(formats.begin(), formats.end(), ChequePrintFormat::labelLessThan);
+        formats.prepend(defaultFormat);
+        foreach(const ChequePrintFormat &format, formats) {
+            toItem(format);
+        }
+        _formats = formats;
     }
 
 public:

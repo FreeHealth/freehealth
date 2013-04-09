@@ -19,34 +19,57 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers:                                                       *
- *       Eric Maeker <eric.maeker@gmail.com>                               *
- *  Contributors:                                                          *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_FSPCONSTANTS_H
-#define TOOLS_FSPCONSTANTS_H
+#ifndef FORM_PATIENTFORMITEMDATAWRAPPER_H
+#define FORM_PATIENTFORMITEMDATAWRAPPER_H
+
+#include <formmanagerplugin/formmanager_exporter.h>
+#include <QObject>
+#include <QModelIndex>
+//QT_BEGIN_NAMESPACE
+//class QModelIndex;
+//QT_END_NAMESPACE
 
 /**
- * \file fspconstants.h
+ * \file patientformitemdatawrapper.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 23 Mar 2013
+ * \date 03 Apr 2013
 */
 
-namespace Tools {
-namespace Constants {
+namespace Form {
+namespace Internal {
+class PatientFormItemDataWrapperPrivate;
+} // namespace Internal
 
-const char * const S_DEFAULTCERFA = "Tools/Fsp/DefaultCerfa";
+class FORM_EXPORT PatientFormItemDataWrapper : public QObject
+{
+    Q_OBJECT
+    
+public:
+    explicit PatientFormItemDataWrapper(QObject *parent = 0);
+    ~PatientFormItemDataWrapper();
+    bool initialize();
 
-// Settings Values
-const char * const S_CERFA_01 = "cerfa01";
-const char * const S_CERFA_02 = "cerfa02";
-const char * const S_CERFA_02_V2 = "cerfa02v2";
+    bool isDataAvailable(int ref) const;
+    QVariant data(int ref, int role = -1) const;
 
-// Datapack path
-const char * const DATAPACK_PATH = "/fsp/";
+private Q_SLOTS:
+    void onCurrentPatientChanged();
+    void onCurrentPatientFormsLoaded();
+    void editingModelEpisodeChanged(const QModelIndex &index);
+    void editingModelRowsInserted(const QModelIndex &parent, int first, int last);
+    void editingModelRowsRemoved(const QModelIndex &parent, int first, int last);
 
-}
-}
-#endif // TOOLS_FSPCONSTANTS_H
+private:
+    Internal::PatientFormItemDataWrapperPrivate *d;
+};
+
+} // namespace Form
+
+#endif  // FORM_PATIENTFORMITEMDATAWRAPPER_H
+

@@ -2,7 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
-    <category>UI improvement</category>
+    <category>UI improvements</category>
     <description>Implements a webcam as patient photo source.</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>

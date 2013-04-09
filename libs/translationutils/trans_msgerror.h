@@ -80,6 +80,8 @@ const char* const LAST_CHECK                         = QT_TRANSLATE_NOOP("tkCons
 const char* const CONNECTED                          = QT_TRANSLATE_NOOP("tkConstants", "Connected");
 const char* const NOT_CONNECTED                      = QT_TRANSLATE_NOOP("tkConstants", "Not connected");
 
+const char* const NO_ADDRESS_RECORDED                = QT_TRANSLATE_NOOP("tkConstants", "No address recorded");
+
 } // end Constants
 } // end TranslationUtils
 

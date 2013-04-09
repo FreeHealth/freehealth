@@ -58,6 +58,7 @@ Account2Plugin::Account2Plugin() :
     ExtensionSystem::IPlugin(),
     _core(0)
 {
+    setObjectName("Account2Plugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Account2Plugin";
 

@@ -27,11 +27,12 @@
 #include "%PluginName:l%preferences.h"
 #include "ui_%PluginName:l%preferences.h"
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
+
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 using namespace %PluginName:c%;
 using namespace Internal;
@@ -154,8 +155,7 @@ QString %PluginName:c%PreferencesPage::displayName() const
 /*! Returns the sort index of the page. The higher the number, the lower the page. */
 int %PluginName:c%PreferencesPage::sortIndex() const
 {
-    //TODO: write a meaningful number here
-    return 0;
+    return 0; //Core::Constants::OPTIONINDEX_...;
 }
 
 /*! Returns the (translated) category of the preferences page. */
