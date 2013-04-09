@@ -883,13 +883,15 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     // Get patient bio(metrics / logy) usefull for the prescription
     // TODO: put this in a setting value (like 100%)
     QStringList bio;
-    if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()) {
+    if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()
+            && patient()->data(Core::IPatient::WeightInGrams).toDouble() > 0.) {
         bio << QString("%1: %2 %3")
                .arg(tkTr(Trans::Constants::WEIGHT))
                .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 100, 'f', 2))
                .arg(tkTr(Trans::Constants::KILOGRAM_S));
     }
-    if (!patient()->data(Core::IPatient::HeightInCentimeters).toString().isEmpty()) {
+    if (!patient()->data(Core::IPatient::HeightInCentimeters).toString().isEmpty()
+        && patient()->data(Core::IPatient::HeightInCentimeters).toDouble() > 0.) {
         bio << QString("%1: %2 %3")
                .arg(tkTr(Trans::Constants::HEIGHT))
                .arg(QString::number(patient()->data(Core::IPatient::HeightInCentimeters).toDouble(), 'f', 2))
