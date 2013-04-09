@@ -226,8 +226,10 @@ INSTALLS += plugs_specs
   # Install textfiles (and its subdirectories)
   !isEmpty(INSTALL_TEXTFILES_PATH){
     textfiles.path=$${INSTALL_TEXTFILES_PATH}
-    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles
-    INSTALLS += textfiles
+    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
+    textfiles.path=$${INSTALL_TEXTFILES_PATH}/prescription
+    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/prescription/*
+    INSTALLS += textfiles prescriptionstokened
   }
 
   # Package Helpers
