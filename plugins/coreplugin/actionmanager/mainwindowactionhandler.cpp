@@ -57,7 +57,6 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 
 #include <utils/log.h>
-#include <utils/widgets/bugreportdialog.h>
 
 #include <QAction>
 #include <QStatusBar>
@@ -82,7 +81,6 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aGeneralAppPrefs(0), aGeneralAppConfigurator(0), aGeneralPlugsPrefs(0), aGeneralMedinTux(0),
         aGeneralAppAbout(0), aGeneralPlugsAbout(0), aGeneralAppHelp(0), aGeneralQtAbout(0), aGeneralDebugDialog(0),
         aGeneralCheckUpdate(0), aGeneralUpdateAvailable(0),
-        aReportBug(0),
         aNew(0),
         aOpen(0),
         aSave(0),
@@ -1128,15 +1126,6 @@ void MainWindowActionHandler::createHelpActions(int actions)
         menu->addAction(cmd, Id(Constants::G_UPDATE));
     }
 
-    // bug report
-    if (actions & Core::MainWindowActions::A_BugReport) {
-        a = aReportBug = new QAction(this);
-        a->setIcon(theme()->icon("face-sad.png"));
-        cmd = actionManager()->registerAction(a, Constants::A_BUGREPORT, ctx);
-        cmd->setTranslations(Trans::Constants::BUG_REPORT);
-        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
-    }
-
     // Debugging tools
     if (actions & Core::MainWindowActions::A_DebugDialog) {
         a = aDebugDialog = new QAction(this);
@@ -1211,9 +1200,6 @@ void MainWindowActionHandler::connectHelpActions()
 
     if (aCheckUpdate)
         connect(aCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
-
-    if (aReportBug)
-        connect(aReportBug, SIGNAL(triggered()), this, SLOT(reportBug()));
 
     if (aAppGoToWebSite)
         connect(aAppGoToWebSite, SIGNAL(triggered()), this, SLOT(goToAppWebSite()));
@@ -1314,26 +1300,6 @@ bool MainWindowActionHandler::checkUpdate()
     return true;
 }
 
-/** Starts the Utils::BugReportDialog with the correct categories */
-bool MainWindowActionHandler::reportBug()
-{
-    Utils::BugReportDialog dlg;
-    QStringList categories;
-    categories << tr("General comment");
-    categories << tr("Forms management");
-    categories << tr("Patient management");
-    categories << tr("User management");
-    categories << tr("Drugs management");
-    categories << tr("Agenda management");
-    categories << tr("Printings");
-    categories << tr("Installation");
-    categories << tr("Configuration");
-    dlg.setBugCategories(categories);
-    int result = dlg.exec();
-    Q_UNUSED(result);
-    return true;
-//    return result = QDialog::Accepted;
-}
 
 /**
   \brief Slot to connect with the Utils::UpdateChecker::updateFound() signal.

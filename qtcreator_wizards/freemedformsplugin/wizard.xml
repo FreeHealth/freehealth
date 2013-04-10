@@ -23,7 +23,7 @@
 
 Project wizard configuration file for FreeMedForms plugins.
 Note that by convention, the project file page goes last.
-The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and 
+The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and
 leave room for the Qt 4 target page.
 -->
 <wizard version="1" kind="project"
@@ -79,7 +79,7 @@ leave room for the Qt 4 target page.
                           defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
             <fielddescription xml:lang="de">Anbieter:</fielddescription>
-            <fielddescription xml:lang="de">Nom du vendeur :</fielddescription>
+            <fielddescription xml:lang="fr">Nom du vendeur :</fielddescription>
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"

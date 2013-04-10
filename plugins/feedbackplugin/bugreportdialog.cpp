@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class Utils::BugReportDialog
+ * \class Feedback::BugReportDialog
  * Simple bug report sender dialog.
  */
 
@@ -36,6 +36,8 @@
 #include <utils/global.h>
 #include <utils/emailvalidator.h>
 #include <utils/widgets/qbuttonlineedit.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/icore.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -47,10 +49,13 @@
 #include <QDebug>
 
 
-using namespace Utils;
+using namespace Feedback;
 using namespace Internal;
 
-namespace Utils {
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+
+
+namespace Feedback {
 namespace Internal {
 class BugReportDialogPrivate
 {
@@ -69,7 +74,7 @@ public:
     {
         ui = new Ui::BugReportDialog;
         ui->setupUi(q);
-        ui->emailEdit->setValidator(new EmailValidator(q));
+        ui->emailEdit->setValidator(new Utils::EmailValidator(q));
         _sendButton = new QPushButton(q);
         _sendButton->setDisabled(true);
         ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);
@@ -139,7 +144,7 @@ private:
     BugReportDialog *q;
 };
 } // namespace Internal
-} // namespace Utils
+} // namespace Feedback
 
 BugReportDialog::BugReportDialog(QWidget *parent) :
     QDialog(parent),
@@ -173,9 +178,12 @@ void BugReportDialog::validateInputs()
     bool enabled = true;
     QString toolTip;
 
-    if (!d->ui->emailEdit->hasAcceptableInput()) {
+    if (d->ui->emailEdit->hasAcceptableInput()) {
+        d->ui->emailEdit->setRightIcon(theme()->icon("ok.png", Core::ITheme::SmallIcon));
+    } else {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
+        d->ui->emailEdit->setRightIcon();
     }
     if (d->ui->categoryCombo->currentIndex() == -1) {
         enabled = false;

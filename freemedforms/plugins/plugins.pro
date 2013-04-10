@@ -27,7 +27,8 @@ SUBDIRS = \
     agenda \
     script \
     mainwin \
-    tools
+    tools \
+    feedback
 
 PLUGINS_PATH=../../plugins
 
@@ -134,6 +135,9 @@ pmh.depends += formmanager
 category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
 category.depends += listview
+
+feedback.subdir = $${PLUGINS_PATH}/feedbackplugin
+feedback.depends += core
 
 with-old-account {
     SUBDIRS += accountbase account
