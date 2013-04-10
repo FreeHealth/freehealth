@@ -834,9 +834,9 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
 /** Reset the posologic sentence to the default one */
 void DrugsActionHandler::resetPrescriptionSentenceToDefault()
 {
-    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()));
+    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()), Utils::DontWarnUser);
     if (content.isEmpty()) {
-        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE), Utils::DontWarnUser);
         if (content.isEmpty()) {
             LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
         }

@@ -60,9 +60,9 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 static QString getPrescriptionTokenHtmlFileContent()
 {
     QString content;
-    content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()));
+    content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()), Utils::DontWarnUser);
     if (content.isEmpty()) {
-        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE), Utils::DontWarnUser);
         if (content.isEmpty()) {
             LOG_ERROR_FOR("DrugPosologicSentencePreferencesWidget", "No token'd prescription file found");
         }
