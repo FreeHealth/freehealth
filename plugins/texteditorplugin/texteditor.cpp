@@ -675,7 +675,7 @@ void TextEditor::fontSmaller()
 void TextEditor::fontFixedWidth()
 {
     QFont font = textEdit()->textCursor().charFormat().font();
-    font.setStyleHint(QFont::Courier);
+    font.setFamily("Courier");
     QTextCharFormat fmt;
     fmt.setFont(font);
     d->mergeFormatOnWordOrSelection(fmt);
