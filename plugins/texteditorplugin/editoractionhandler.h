@@ -97,6 +97,7 @@ private Q_SLOTS:
 
     void fontBigger();
     void fontSmaller();
+    void fontFixedWidth();
     void textBold();
     void textUnderline();
     void textItalic();
@@ -142,6 +143,7 @@ private:
     QAction *aFontFormat;
     QAction *aFontBigger;
     QAction *aFontSmaller;
+    QAction *aFontFixedWidth;
     QAction *aLeft;
     QAction *aCenter;
     QAction *aRight;

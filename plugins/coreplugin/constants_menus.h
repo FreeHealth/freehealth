@@ -249,6 +249,7 @@ const char * const  A_FORMAT_UNDERLINE    = "actionFormatUnderline";  /*!< \brie
 const char * const  A_FORMAT_STRIKE       = "actionFormatStrike";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_BIGGER       = "actionFormatBigger";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_SMALLER      = "actionFormatSmaller";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_FIXEDWIDTH_FONT = "actionFormatFixedWidthFont";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_FONT         = "actionFormatFont";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_FONTCOLOR    = "actionFormatFontColor";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FORMAT_TABLE        = "actionFormatTable";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
