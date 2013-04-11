@@ -183,7 +183,7 @@ void BugReportDialog::validateInputs()
     } else {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
-        d->ui->emailEdit->setRightIcon();
+        d->ui->emailEdit->clearRightButton();
     }
     if (d->ui->categoryCombo->currentIndex() == -1) {
         enabled = false;

@@ -70,6 +70,7 @@ public:
     QButtonLineEditPrivate(QButtonLineEdit *parent) :
         _leftButton(0), _rightButton(0), _delayed(false),
         _rightPadding(0), _leftPadding(0),
+        m_leftInternalAction(0), m_rightInternalAction(0),
         q(parent)
     {}
 
@@ -140,6 +141,7 @@ public:
     QTimer *_timer;
     bool _delayed;
     int _rightPadding, _leftPadding;
+    QAction *m_leftInternalAction, *m_rightInternalAction;
 
 private:
     QButtonLineEdit *q;
@@ -161,6 +163,17 @@ QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
 
 QButtonLineEdit::~QButtonLineEdit()
 {
+    // delete temporary icon actions
+    if (d_qble->m_rightInternalAction) {
+        delete d_qble->m_rightInternalAction;
+    }
+    d_qble->m_rightInternalAction = 0;
+
+    if (d_qble->m_leftInternalAction) {
+        delete d_qble->m_leftInternalAction;
+    }
+    d_qble->m_leftInternalAction = 0;
+
     if (d_qble)
         delete d_qble;
     d_qble = 0;
@@ -182,19 +195,17 @@ void QButtonLineEdit::setDelayedSignals(bool state)
 
 /**
  \brief Define the left button for the line edit.
- QButtonLineEdit takes ownership of the button. \n
- Text of selected action is shown in gray inside the line edit when it is empty. \n
+ QButtonLineEdit takes ownership of the button and deletes it when necessary, but \e not of the actions
+ that may be associated with the button. These must be deleted by the callee.\n
+ The text of the selected action is shown as PlaceHolderText inside the line edit when it is empty. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
-    if (d_qble->_leftButton) {
-        delete d_qble->_leftButton;
-        d_qble->_leftButton = 0;
-    }
+    if (d_qble->_leftButton)
+        clearLeftButton();
 
     if (button){
-
         button->setParent(this);
         d_qble->_leftButton = button;
         d_qble->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
@@ -216,19 +227,16 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 
 /**
  \brief Define the right button for the line edit.
- QButtonLineEdit takes ownership of the button. \n
+ QButtonLineEdit takes ownership of the button and deletes it when necessary, but \e not of the actions
+ that may be associated with the button. These must be deleted by the callee.\n
  For now pixmaps of QAction must be sized (16x16). \n
 */
 void QButtonLineEdit::setRightButton(QToolButton * button)
 {
-
-    if (d_qble->_rightButton) {
-        delete d_qble->_rightButton;
-        d_qble->_rightButton = 0;
-    }
+    if (d_qble->_rightButton)
+        clearRightButton();
 
     if (button){
-
         button->setParent(this);
         d_qble->_rightButton = button;
         d_qble->_rightButton->setStyleSheet("border:none; padding: 0;");
@@ -254,16 +262,28 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 void QButtonLineEdit::setRightIcon(QIcon icon)
 {
     if (icon.isNull()) {
-        setRightButton(0);
+        clearRightButton();
         return;
     }
 
-    // create a new action with given icon and assign it to the button
-    QAction *action = new QAction(icon, "", this);
-    QToolButton *button = new QToolButton();
-    button->addAction(action);
-    button->setDefaultAction(action);
-    setRightButton(button);
+    // if not exists, create a new action with given icon, save it
+    if (!d_qble->m_rightInternalAction)
+         d_qble->m_rightInternalAction = new QAction(icon, "", this);
+
+    // if there is no right button, create one
+    if (!d_qble->_rightButton)
+        d_qble->_rightButton = new QToolButton();
+    else
+        // this can be done because:
+        // - if this is a user set button, QButtonLineEdit doesn't have ownership of the actions anyway,
+        //   ths caller is responsible for the deleting/releasing of the actions
+        // - if this is a temporary button, we have a action saved in d_qble->m_rightInternalAction
+        // so just clear all actions
+        d_qble->_rightButton->actions().clear();
+
+    d_qble->_rightButton->addAction(d_qble->m_rightInternalAction);
+    d_qble->_rightButton->setDefaultAction(d_qble->m_rightInternalAction);
+    setRightButton(d_qble->_rightButton);
 }
 
 /*!
@@ -274,17 +294,32 @@ void QButtonLineEdit::setRightIcon(QIcon icon)
  */
 void QButtonLineEdit::setLeftIcon(QIcon icon)
 {
-    if (icon.isNull()) {
-        setLeftButton(0);
+    clearLeftButton();
+    if (icon.isNull())
         return;
-    }
 
-    // create a new action with given icon and assign it to the button
-    QAction *action = new QAction(icon, "", this);
+    // if not exists, create a new action with given icon, save it, and assign it to the right button
+    if (!d_qble->m_leftInternalAction)
+         d_qble->m_leftInternalAction = new QAction(icon, "", this);
+
     QToolButton *button = new QToolButton();
-    button->addAction(action);
-    button->setDefaultAction(action);
+    button->addAction(d_qble->m_leftInternalAction);
+    button->setDefaultAction(d_qble->m_leftInternalAction);
     setLeftButton(button);
+}
+
+void QButtonLineEdit::clearLeftButton()
+{
+    if  (d_qble->_leftButton)
+        delete d_qble->_leftButton;
+    d_qble->_leftButton = 0;
+}
+
+void QButtonLineEdit::clearRightButton()
+{
+    if (d_qble->_rightButton)
+        delete d_qble->_rightButton;
+    d_qble->_rightButton = 0;
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
