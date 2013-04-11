@@ -120,6 +120,7 @@ const char * const  FORMATSTRIKE_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "St
 const char * const  FORMATBIGGER_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Bigger");
 const char * const  FORMATSMALLER_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Smaller");
 const char * const  FORMATFIXEDWIDTHFONT_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Fixed width");
+const char * const  FORMATTYPEWRITER_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Typewriter");
 const char * const  FORMATFONT_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Font format");
 const char * const  FORMATFONTCOLOR_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Color");
 const char * const  FORMATTABLE_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Table format");

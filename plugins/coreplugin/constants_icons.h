@@ -140,7 +140,7 @@ const char * const  ICONSTRIKE =        "format-text-strikethrough.png";
 const char * const  ICONFONTFORMAT =    "format-fonts.png";
 const char * const  ICONFONTBIGGER =    "font-bigger.png";
 const char * const  ICONFONTSMALLER =   "font-smaller.png";
-const char * const  ICONFIXEDWIDTHFONT ="font-fixedwidth.png";
+const char * const  ICONTYPEWRITER =    "typewriter.png";
 
 const char * const  ICONALIGNLEFT =     "format-justify-left.png";
 const char * const  ICONALIGNRIGHT =    "format-justify-right.png";
