@@ -148,7 +148,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="hasLookedUpDocumentationLabel">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Yes, I have checked the documentation on the &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;FreeMedForms Project website&lt;/span&gt;&lt;/a&gt; before reporting this issue.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
