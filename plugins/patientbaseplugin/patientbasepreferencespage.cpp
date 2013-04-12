@@ -143,6 +143,8 @@ void PatientBasePreferencesWidget::setDataToUi()
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
     ui->searchWhileTyping->setChecked(settings()->value(Constants::S_SEARCHWHILETYPING).toBool());
     ui->maxRecentPatient->setValue(settings()->value(Constants::S_RECENTPATIENT_MAX, 10).toInt());
+    ui->defaultCity->setText(settings()->value(Constants::S_NEWPATIENT_DEFAULTCITY).toString());
+    ui->defaultZip->setText(settings()->value(Constants::S_NEWPATIENT_DEFAULTZIP).toString());
 
     // find the id of the photo source in the combo box items
     const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
@@ -163,6 +165,8 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
     s->setValue(Constants::S_SEARCHWHILETYPING, ui->searchWhileTyping->isChecked());
     s->setValue(Constants::S_RECENTPATIENT_MAX, ui->maxRecentPatient->value());
+    s->setValue(Constants::S_NEWPATIENT_DEFAULTCITY, ui->defaultCity->text());
+    s->setValue(Constants::S_NEWPATIENT_DEFAULTZIP, ui->defaultZip->text());
 
     // save the id of the provider to identify it the next time.
     const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
