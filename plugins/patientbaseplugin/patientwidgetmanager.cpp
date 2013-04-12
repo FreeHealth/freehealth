@@ -138,17 +138,17 @@ PatientSelector *PatientWidgetManager::selector() const
 // View patients information
 // Patient selection history
 PatientActionHandler::PatientActionHandler(QObject *parent) :
-        QObject(parent),
-        m_RecentPatients(0),
-        aSearchName(0),
-        aSearchFirstname(0),
-        aSearchNameFirstname(0),
-        aSearchDob(0),
-        aViewPatientInformation(0),
-        aPrintPatientInformation(0),
-        aShowPatientDatabaseInformation(0),
-        aViewCurrentPatientData(0),
-        gSearchMethod(0)
+    QObject(parent),
+    m_RecentPatients(0),
+    aSearchName(0),
+    aSearchFirstname(0),
+    aSearchNameFirstname(0),
+    aSearchDob(0),
+    aViewPatientInformation(0),
+    aPrintPatientInformation(0),
+    aShowPatientDatabaseInformation(0),
+    aViewCurrentPatientData(0),
+    gSearchMethod(0)
 {
     setObjectName("PatientActionHandler");
     m_RecentPatients = new Core::FileManager(this);
