@@ -15,6 +15,7 @@ FreeMedForms
     * All last episodes values are accessible throught the Core::IPatient model
     * New patient data and tokens (SocialNumber, SocialNumberOwnerFullName, WeigthInGrams...)
     * New settings for the patient selector (patient navigation history, new patient default values)
+    * When loading a textual file inside a text editor of a patient file, all tokens are replaced (patient tokens, user tokens)
   * XML Forms coding
     * Allow you to manage html print mask for any items of the forms (MedForms or Item)
       * See French AGGIR for an example (global mask, aggir mask)
