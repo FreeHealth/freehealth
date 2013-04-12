@@ -312,7 +312,7 @@ void BaseListData::setModified(bool modified)
 void BaseListData::setReadOnly(bool readOnly)
 {
     // TODO: improve this readonly feature
-    if (m_List->m_List)
+    if (m_List && m_List->m_List)
         m_List->m_List->setEnabled(!readOnly);
     if (m_EditableList && m_EditableList->m_StringListView)
         m_EditableList->m_StringListView->setEnabled(!readOnly);
