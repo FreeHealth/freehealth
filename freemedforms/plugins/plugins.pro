@@ -27,8 +27,7 @@ SUBDIRS = \
     agenda \
     script \
     mainwin \
-    tools \
-    feedback
+    tools
 
 PLUGINS_PATH=../../plugins
 
@@ -136,9 +135,6 @@ category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
 category.depends += listview
 
-feedback.subdir = $${PLUGINS_PATH}/feedbackplugin
-feedback.depends += core
-
 with-old-account {
     SUBDIRS += accountbase account
     accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
@@ -194,6 +190,12 @@ with-pad {
     padtools.subdir = $${PLUGINS_PATH}/padtoolsplugin
     padtools.depends += core
     padtools.depends += texteditor
+}
+
+with-feedback {
+    SUBDIRS += feedback
+    feedback.subdir = $${PLUGINS_PATH}/feedbackplugin
+    feedback.depends += core
 }
 
 patientbase.subdir   = $${PLUGINS_PATH}/patientbaseplugin
