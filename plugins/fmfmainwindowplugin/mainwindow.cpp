@@ -452,6 +452,7 @@ bool MainWindow::loadFile(const QString &absDirPath)
 /** \brief Create a new patient. \sa Patients::PatientCreatorWizard */
 bool MainWindow::createNewPatient()
 {
+    // TODO: move this in the patient plugin
     Patients::PatientCreatorWizard wiz(this);
     wiz.exec();
     return true;
