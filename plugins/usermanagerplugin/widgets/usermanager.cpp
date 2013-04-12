@@ -671,6 +671,8 @@ void UserManagerWidget::onCurrentSelectedIndexChanged(const QModelIndex &current
 
 void UserManagerWidget::selectuserTreeView(int row)
 {
+    Q_UNUSED(row);
+    // TODO: manage this code
 //    d->ui->userViewer->setCurrentUser(row);
 }
 

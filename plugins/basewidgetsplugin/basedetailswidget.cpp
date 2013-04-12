@@ -112,6 +112,8 @@ BaseDetailsWidget::~BaseDetailsWidget()
 
 void BaseDetailsWidget::addWidgetToContainer(Form::IFormWidget *widget)
 {
+    Q_UNUSED(widget);
+    // TODO: manage this code?
 //    qWarning() << "details add" << widget;
 //    if (!widget)
 //        return;
