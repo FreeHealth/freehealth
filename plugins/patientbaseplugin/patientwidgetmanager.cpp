@@ -33,6 +33,7 @@
 #include "patientwidgetmanager.h"
 #include "constants_menus.h"
 #include "constants_trans.h"
+#include "constants_settings.h"
 #include "patientbase.h"
 #include "patientcore.h"
 
@@ -45,9 +46,11 @@
 #include <translationutils/trans_database.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/filemanager.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -61,6 +64,7 @@
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QMenu>
 
 using namespace Patients::Constants;
 using namespace Patients::Internal;
@@ -70,6 +74,8 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Patients::PatientCore *patientCore() {return Patients::PatientCore::instance();}
 
@@ -133,6 +139,7 @@ PatientSelector *PatientWidgetManager::selector() const
 // Patient selection history
 PatientActionHandler::PatientActionHandler(QObject *parent) :
         QObject(parent),
+        m_RecentPatients(0),
         aSearchName(0),
         aSearchFirstname(0),
         aSearchNameFirstname(0),
@@ -144,6 +151,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         gSearchMethod(0)
 {
     setObjectName("PatientActionHandler");
+    m_RecentPatients = new Core::FileManager(this);
 
     Core::ITheme *th = Core::ICore::instance()->theme();
 
@@ -257,6 +265,75 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         menu->addAction(cmd, Core::Id(Constants::G_PATIENTS_HISTORY));
         connect(aViewCurrentPatientData,SIGNAL(triggered()), this, SLOT(viewCurrentPatientData()));
     }
+
+    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
+    if (!recentsMenu)
+        return;
+    if (!recentsMenu->menu())
+        return;
+    connect(recentsMenu->menu(), SIGNAL(aboutToShow()), this, SLOT(aboutToShowRecentPatients()));
+
+    refreshSettings();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(refreshSettings()));
+}
+
+void PatientActionHandler::onCurrentPatientChanged()
+{
+    // Store the uuids of the patient in the recent manager
+    const QString &uuid = patient()->uuid();
+    m_RecentPatients->setCurrentFile(uuid);
+    m_RecentPatients->addToRecentFiles(uuid);
+
+    // Force settings to be saved
+    // TODO: improve this
+    settings()->setValue(Constants::S_RECENTPATIENT_LIST, m_RecentPatients->recentFiles());
+    settings()->sync();
+
+    // refresh the navigation menu
+    aboutToShowRecentPatients();
+}
+
+/** \brief Rebuild the patients' history menu */
+void PatientActionHandler::aboutToShowRecentPatients()
+{
+    // update patient history
+    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
+    if (!recentsMenu)
+        return;
+    if (!recentsMenu->menu())
+        return;
+    recentsMenu->menu()->clear();
+
+    bool hasRecentFiles = false;
+    const QStringList &uuids = m_RecentPatients->recentFiles();
+    const QHash<QString, QString> &names = patient()->fullPatientName(uuids);
+    for(int i = 0; i < uuids.count(); ++i) {
+        hasRecentFiles = true;
+        QAction *action = recentsMenu->menu()->addAction(QString("%1: %2").arg(i).arg(names.value(uuids.at(i))));
+        action->setData(uuids.at(i));
+        connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
+    }
+
+    recentsMenu->menu()->setEnabled(hasRecentFiles);
+}
+
+/**
+ * Opens a recent patient selected from the patient history.
+ * This slot is called by a recent patients' menu's action.
+ */
+void PatientActionHandler::openRecentPatient()
+{
+    // get the uuid of the sender
+    QAction *a = qobject_cast<QAction*>(sender());
+    if (!a)
+        return;
+    const QString &uuid = a->data().toString();
+    if (uuid.isEmpty())
+        return;
+
+    // get the corresponding to the uuid
+    patientCore()->setCurrentPatientUuid(uuid);
 }
 
 void PatientActionHandler::updateActions()
@@ -265,6 +342,17 @@ void PatientActionHandler::updateActions()
 void PatientActionHandler::setCurrentView(PatientSelector *view)
 {
     m_CurrentView = view;
+}
+
+void PatientActionHandler::refreshSettings()
+{
+    // Update recent patient max
+    m_RecentPatients->setMaximumRecentFiles(settings()->value(Constants::S_RECENTPATIENT_MAX, 10).toInt());
+    QStringList uuids = settings()->value(Constants::S_RECENTPATIENT_LIST).toStringList();
+    uuids.removeAll("");
+    m_RecentPatients->setRecentFiles(uuids);
+    // Refresh the patient navigation history
+    aboutToShowRecentPatients();
 }
 
 void PatientActionHandler::searchActionChanged(QAction *action)

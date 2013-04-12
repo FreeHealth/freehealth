@@ -39,10 +39,14 @@
 
 /**
  * \file patientwidgetmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 05 Dec 2012
+ * \author Eric Maeler
+ * \version 0.8.4
+ * \date 12 Apr 2013
 */
+
+namespace Core {
+class FileManager;
+}
 
 namespace Patients {
 class PatientCore;
@@ -66,6 +70,9 @@ public:
 
     void setCurrentView(PatientSelector *view);
 
+public Q_SLOTS:
+    void refreshSettings();
+
 private Q_SLOTS:
     void searchActionChanged(QAction *action);
     void removePatient();
@@ -75,10 +82,14 @@ private Q_SLOTS:
     void showPatientDatabaseInformation();
     void viewCurrentPatientData();
 
-private:
+    void onCurrentPatientChanged();
+    void aboutToShowRecentPatients();
+    void openRecentPatient();
+
     void updateActions();
 
 protected:
+    Core::FileManager *m_RecentPatients;
     QAction *aSearchName;
     QAction *aSearchFirstname;
     QAction *aSearchNameFirstname;

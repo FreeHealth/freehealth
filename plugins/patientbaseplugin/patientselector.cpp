@@ -242,7 +242,7 @@ void PatientSelector::updateNavigationButton()
     d->m_NavigationMenu->addAction(cmd->action());
     d->m_NavigationMenu->addSeparator();
 
-    // add navigation actions
+    // add navigation actions (these actions are managed by the MainWindow)
     Core::ActionContainer *navMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
     if (!navMenu)
         return;

@@ -38,6 +38,9 @@ namespace Constants {
     const char * const  S_DEFAULTPHOTOSOURCE = "Patients/Photo/Source";
     const char * const  S_SEARCHWHILETYPING = "Patients/SeachWhileTyping";
 
+    const char * const  S_RECENTPATIENT_MAX  = "Patients/Recent/Max";
+    const char * const  S_RECENTPATIENT_LIST = "Patients/Recent/List";
+
 }  // End namespace Patients::Constants
 }  // End namespace Patients
 
