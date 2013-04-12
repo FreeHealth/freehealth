@@ -181,6 +181,7 @@ plugins/druginteractionsplugin \
 plugins/drugsbaseplugin \
 plugins/drugsplugin \
 plugins/emptyplugin \
+plugins/feedbackplugin \
 plugins/fmfcoreplugin \
 plugins/fmfmainwindowplugin \
 plugins/formmanagerplugin \
