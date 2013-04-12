@@ -282,42 +282,6 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
         <source>Ctrl+,</source>
         <translation></translation>
     </message>
-    <message>
-        <source>General comment</source>
-        <translation>Commentaire général</translation>
-    </message>
-    <message>
-        <source>Forms management</source>
-        <translation>Gestion des formulaires</translation>
-    </message>
-    <message>
-        <source>Patient management</source>
-        <translation>Gestion des patients</translation>
-    </message>
-    <message>
-        <source>User management</source>
-        <translation>Gestion des utilisateurs</translation>
-    </message>
-    <message>
-        <source>Drugs management</source>
-        <translation>Gestion des médicaments</translation>
-    </message>
-    <message>
-        <source>Agenda management</source>
-        <translation>Gestion des agendas</translation>
-    </message>
-    <message>
-        <source>Printings</source>
-        <translation>Impressions</translation>
-    </message>
-    <message>
-        <source>Installation</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Configuration</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>Core::Internal::PageWidget</name>

@@ -334,54 +334,9 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="371"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1015"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="369"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1013"/>
         <source>Ctrl+,</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1322"/>
-        <source>General comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1323"/>
-        <source>Forms management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1324"/>
-        <source>Patient management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1325"/>
-        <source>User management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1326"/>
-        <source>Drugs management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1327"/>
-        <source>Agenda management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1328"/>
-        <source>Printings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1329"/>
-        <source>Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1330"/>
-        <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -78,23 +78,23 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="142"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="141"/>
         <source>Creating Main Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="397"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="399"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="378"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="380"/>
         <source>Unable to close window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="398"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="379"/>
         <source>Unable to close the application, error message: &lt;br/&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="444"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="425"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

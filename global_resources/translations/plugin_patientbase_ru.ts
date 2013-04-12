@@ -91,32 +91,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="184"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="188"/>
         <source>Patient already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="185"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="189"/>
         <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="210"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="214"/>
         <source>You are about to create the following  patient: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="212"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="216"/>
         <source>Patients with the same names exist in the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="214"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="218"/>
         <source>Do you really want to create this patient?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="216"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="220"/>
         <source>Patients of the same name exist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,32 +137,32 @@
 <context>
     <name>Patients::Internal::PatientActionHandler</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="157"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="166"/>
         <source>Fatal Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="157"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="166"/>
         <source>%1: Unable to retreive patients menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="286"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="382"/>
         <source>Remove the patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="287"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="383"/>
         <source>If you want to remove a patient, you must firstly select it as the current one and then remove it. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Warning: No current patient. Select a patient first.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="295"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="391"/>
         <source>Remove the current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="296"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="392"/>
         <source>You are about to remove the current patient:&lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Do you really want to remove this patient?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,7 +189,7 @@
 <context>
     <name>Patients::Internal::PatientBasePreferencesPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="74"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="76"/>
         <source>Patient database preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,43 +202,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="20"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="147"/>
         <source>Patient bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="26"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="153"/>
         <source>Background color:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="68"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="20"/>
         <source>Patient selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="74"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="26"/>
         <source>Use color to differentiate genders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="81"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="123"/>
         <source>Select newly created patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="95"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="57"/>
         <source>When this option is checked, the patient selector updates the search result while you are typing. If you are using FreeMedForms over a network, this can lead to heavy network usage.
 This option is not recommended with big patient database (&gt; 10.000 patients).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="99"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="33"/>
+        <source>Maximum patient in the recent list (default 10)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="61"/>
         <source>Search patients while typing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="124"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="86"/>
         <source>When this option is checked, the patient selector updates the search result while you are typing.When this option is unckecked you need to hit enter to refresh the search results.
 
 Warning: If you are using FreeMedForms over a network, this can lead to heavy network usage. This option is not recommended with big patient database (&gt; 10.000 patients).
@@ -246,12 +251,27 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="142"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="104"/>
+        <source>New patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="113"/>
+        <source>Default zipcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="130"/>
+        <source>Default city</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="182"/>
         <source>Patient photo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="151"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="191"/>
         <source>Default photo source:</source>
         <translation type="unfinished"></translation>
     </message>

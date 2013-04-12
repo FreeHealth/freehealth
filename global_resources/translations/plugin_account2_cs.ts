@@ -4,7 +4,7 @@
 <context>
     <name>Account2::Internal::Account2Plugin</name>
     <message>
-        <location filename="../../plugins/account2plugin/account2plugin.cpp" line="97"/>
+        <location filename="../../plugins/account2plugin/account2plugin.cpp" line="98"/>
         <source>Initializing accountancy plugin...</source>
         <translation type="unfinished"></translation>
     </message>

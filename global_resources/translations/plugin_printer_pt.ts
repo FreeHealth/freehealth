@@ -12,8 +12,8 @@
 <context>
     <name>Print::Internal::PrintCorrectionPreferencesPage</name>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="419"/>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="431"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="414"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="426"/>
         <source>Print correction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,44 +115,44 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="251"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="246"/>
         <source>Corrected printing. x shift=%1mm; y shift=%2mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="258"/>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="307"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="253"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="302"/>
         <source>The above line should be at 50mm to the top of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="260"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="255"/>
         <source>The above line is printed at _____mm to the top of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="266"/>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="313"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="261"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="308"/>
         <source>The line should be at 50mm to the left of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="268"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="263"/>
         <source>The line is printed at _____mm to the left of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="274"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="269"/>
         <source>The square should be at 100mm, 270mm to the top left of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="351"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="346"/>
         <source>The above line is printed at %1mm to the top of the page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="353"/>
+        <location filename="../../plugins/printerplugin/printcorrectionpreferences.cpp" line="348"/>
         <source>The line is printed at %1mm to the left of the page</source>
         <translation type="unfinished"></translation>
     </message>
