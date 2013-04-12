@@ -10,11 +10,7 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Tools Preferences</string>
-  </property>
  </widget>
  <resources/>
  <connections/>
 </ui>
-
