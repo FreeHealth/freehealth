@@ -33,6 +33,7 @@
 
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/formcollection.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
@@ -94,27 +95,28 @@ void FormManagerScriptWrapper::recreateItemWrappers()
 
 void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
 {
-    // TODO: code this: FormManagerScriptWrapper::updateSubFormItemWrappers
     Q_UNUSED(uuid);
-//    const QList<Form::FormMain*> &list = formManager().subFormsEmptyRoot();
-//    const QStringList &uuids = m_Items.keys();
-//    foreach(Form::FormItem *main, list) { // all subForms roots
-//        if (main->uuid()!=uuid)
-//            continue;
+    // Get subform EmptyRootForms
+    const Form::FormCollection &coll = formManager().subFormCollection(uuid);
+    const QStringList &uuids = m_Items.keys();
 
-//        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
-//            if (uuids.contains(item->uuid())) {
-//                // Remove item
-////                delete m_Items[item->uuid()];
-//                m_Items.remove(item->uuid());
-//            }
-//            // Create && insert item
-//            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
-//            m_Wrappers << w;
-//            w->setFormItem(item);
-//            m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
-//        }
-//    }
+    // Create all ScriptFormItemWrapper
+    foreach(Form::FormItem *main, coll.emptyRootForms()) {
+        if (main->uuid() != uuid)
+            continue;
+
+        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+            if (uuids.contains(item->uuid())) {
+                // Remove item
+                m_Items.remove(item->uuid());
+            }
+            // Create && insert item
+            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
+            m_Wrappers << w;
+            w->setFormItem(item);
+            m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
+        }
+    }
 }
 
 QString FormManagerScriptWrapper::currentLanguage() const

@@ -302,7 +302,7 @@ public:
             return false;
         }
 
-        // TODO : improve this code and manage modeuid
+        // TODO: improve this code and manage modeuid
         // Find all FormTreeModel with the formUid && populate them
         if (insertionPoint.receiverUid() == Constants::ROOT_FORM_TAG) {
             // Add to the central mode
@@ -322,7 +322,7 @@ public:
                     break;
                 }
             }
-        }
+        }            
         return true;
     }
 
@@ -615,7 +615,10 @@ QList<FormMain *> FormManager::allDuplicatesEmptyRootForms() const
  */
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-    return d->insertSubFormInModels(insertionPoint);
+    bool ok = d->insertSubFormInModels(insertionPoint);
+    if (insertionPoint.emitInsertionSignal())
+        Q_EMIT subFormLoaded(insertionPoint.subFormUid());
+    return ok;
 }
 
 /** Remove a sub-form according to the \e subFormRemoval value */
