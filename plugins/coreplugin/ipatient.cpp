@@ -214,7 +214,27 @@ void IPatient::registerPatientTokens()
 //    t->setUntranslatedHumanReadableName(Trans::Constants::);
     _tokens << t;
 
-    // TODO : add social numbers
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBER, SocialNumber);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBER2, SocialNumber2);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBER3, SocialNumber3);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBER4, SocialNumber4);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBERS, SocialNumbers);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBERS);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBEROWNERNAME, SocialNumberOwnerFullName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER_OWNER_NAME);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS, SocialNumberOwnerFullAddress);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER_OWNER_ADDRESS);
+    _tokens << t;
 
     if (tokenPool()) {
         LOG("Registering Core::IPatient tokens");
@@ -256,6 +276,7 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBER4, data(IPatient::SocialNumber4).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBERS, data(IPatient::SocialNumber).toString() + " " + data(IPatient::SocialNumber2).toString() + " " + data(IPatient::SocialNumber3).toString() + " " + data(IPatient::SocialNumber4).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBEROWNERNAME, data(IPatient::SocialNumberOwnerFullName).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS, data(IPatient::SocialNumberOwnerFullAddress).toString());
 
 }
 // END
