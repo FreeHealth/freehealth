@@ -175,9 +175,8 @@ bool UserManagerMainWindow::initialize(const QStringList &arguments, QString *er
             Core::MainWindowActions::A_PluginsAbout |
             Core::MainWindowActions::A_AppHelp |
             Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_AppGoToWebSite |
-            Core::MainWindowActions::A_BugReport
-            );
+            Core::MainWindowActions::A_AppGoToWebSite
+                );
 
     actions.createEditActions(true);
     createActions(actions);

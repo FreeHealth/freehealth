@@ -120,7 +120,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     aCut(0), aCopy(0), aPaste(0),
     aBold(0), aUnderline(0), aStrike(0),
     aItalic(0), aColor(0),
-    aFontFormat(0), aFontBigger(0), aFontSmaller(0),
+    aFontFormat(0), aFontBigger(0), aFontSmaller(0), aTypeWriterFont(0),
     aLeft(0), aCenter(0), aRight(0), aJustify(0),
     aAddTable(0), aTableProperties(0),
     aAddRow(0),aAddCol(0),
@@ -292,6 +292,7 @@ void EditorActionHandler::createActions()
     aStrike = createAction(this, "aStrike", ICONSTRIKE, A_FORMAT_STRIKE, charContext, FORMATSTRIKE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::UnknownKey, true);
     aFontBigger = createAction(this, "aFontBigger", ICONFONTBIGGER, A_FORMAT_BIGGER, charContext, FORMATBIGGER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
     aFontSmaller = createAction(this, "aFontSmaller", ICONFONTSMALLER, A_FORMAT_SMALLER, charContext, FORMATSMALLER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
+    aTypeWriterFont = createAction(this, "aTypeWriterFont", ICONTYPEWRITER, A_FORMAT_TYPEWRITERFONT, charContext, FORMATTYPEWRITER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
     aFontFormat = createAction(this, "aFontFormat", ICONFONTFORMAT, A_FORMAT_FONT, charContext, FORMATFONT_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
     aColor = createAction(this, "aColor", "", A_FORMAT_FONTCOLOR, charContext, FORMATFONTCOLOR_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateIcon);
@@ -376,6 +377,7 @@ void EditorActionHandler::connectActions()
     connect(aStrike, SIGNAL(triggered()), this, SLOT(textStrike()));
     connect(aFontBigger, SIGNAL(triggered()), this, SLOT(fontBigger()));
     connect(aFontSmaller, SIGNAL(triggered()), this, SLOT(fontSmaller()));
+    connect(aTypeWriterFont, SIGNAL(triggered()), this, SLOT(typeWriterFont()));
     connect(aFontFormat, SIGNAL(triggered()), this, SLOT(fontFormat()));
     connect(aColor, SIGNAL(triggered()), this, SLOT(textColor()));
     connect(aLeft, SIGNAL(triggered()), this, SLOT(textAlign()));
@@ -645,6 +647,13 @@ void EditorActionHandler::fontSmaller()
 {
     if (m_CurrentEditor)
         m_CurrentEditor->fontSmaller();
+    m_CurrentEditor->textEdit()->setFocus();
+}
+
+void EditorActionHandler::typeWriterFont()
+{
+    if (m_CurrentEditor)
+        m_CurrentEditor->typeWriterFont();
     m_CurrentEditor->textEdit()->setFocus();
 }
 

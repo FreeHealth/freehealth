@@ -227,8 +227,8 @@ INSTALLS += plugs_specs
   !isEmpty(INSTALL_TEXTFILES_PATH){
     textfiles.path=$${INSTALL_TEXTFILES_PATH}
     textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
-    textfiles.path=$${INSTALL_TEXTFILES_PATH}/prescription
-    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/prescription/*
+    prescriptionstokened.path=$${INSTALL_TEXTFILES_PATH}/prescription
+    prescriptionstokened.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/prescription/*
     INSTALLS += textfiles prescriptionstokened
   }
 

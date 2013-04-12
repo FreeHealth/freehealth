@@ -672,6 +672,15 @@ void TextEditor::fontSmaller()
     d->mergeFormatOnWordOrSelection(fmt);
 }
 
+void TextEditor::typeWriterFont()
+{
+    QFont font = textEdit()->textCursor().charFormat().font();
+    font.setFamily("Courier");
+    QTextCharFormat fmt;
+    fmt.setFont(font);
+    d->mergeFormatOnWordOrSelection(fmt);
+}
+
 void TextEditor::textBold(bool checked)
 {
     QTextCharFormat fmt;

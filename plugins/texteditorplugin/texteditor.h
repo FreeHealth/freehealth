@@ -139,6 +139,7 @@ protected Q_SLOTS:
 
     void fontBigger();
     void fontSmaller();
+    void typeWriterFont();
     void textBold( bool checked );
     void textUnderline( bool checked );
     void textItalic( bool checked );

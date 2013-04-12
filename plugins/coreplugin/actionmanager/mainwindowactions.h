@@ -32,9 +32,9 @@
 
 /**
  * \file mainwindowactions.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.6
- * \date 13 Aug 2009
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 10 Apr 2013
 */
 
 namespace Core {
@@ -84,8 +84,7 @@ public:
         A_PluginsAbout           = 0x00020000,
         A_FormsAbout             = 0x00040000,
         A_CheckUpdate            = 0x00080000,
-        A_AppGoToWebSite         = 0x00100000,
-        A_BugReport              = 0x00200000
+        A_AppGoToWebSite         = 0x00100000
     };
     enum TemplatesAction {
         A_Templates_New          = 0x00200000,
@@ -98,14 +97,20 @@ public:
         A_Patients_Remove        = 0x20000000
     };
 
-    Q_DECLARE_FLAGS( FileActions, FileAction );
-    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction );
-    Q_DECLARE_FLAGS( HelpActions, HelpAction );
-    Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction );
-    Q_DECLARE_FLAGS( PatientsActions, PatientsAction );
+    Q_DECLARE_FLAGS( FileActions, FileAction )
+    Q_DECLARE_FLAGS( ConfigurationActions, ConfigurationAction )
+    Q_DECLARE_FLAGS( HelpActions, HelpAction )
+    Q_DECLARE_FLAGS( TemplatesActions, TemplatesAction )
+    Q_DECLARE_FLAGS( PatientsActions, PatientsAction )
 
     MainWindowActions() :
-            general(0), file(0), config(0), help(0), templates(0), patients(0), edit(false)
+        general(0),
+        file(0),
+        config(0),
+        help(0),
+        templates(0),
+        patients(0),
+        edit(false)
     {
     }
 
