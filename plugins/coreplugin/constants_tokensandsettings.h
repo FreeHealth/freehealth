@@ -194,7 +194,7 @@ const char * const  TAG_USER_RESOURCES_PATH                 = "__userResources__
 // Settings keys
 const char * const  S_RECENTFILES_GROUP    = "RecentFiles";
 const char * const  S_RECENTFILES_KEY      = "File";
-const char * const  S_PATIENT_UUID_HISTORY = "PatientsUuids";
+const char * const  S_RECENTFILES_MAX_KEY  = "Max";
 const char * const  S_SAVEINTERVAL         = "Core/SaveInterval";
 const char * const  S_OPENLAST             = "Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT         = "Core/ShowFormHelpText";
