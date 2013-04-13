@@ -115,9 +115,9 @@ public:
         report << pairs(ui->catLabel->text().remove(":").remove("&"), ui->categoryCombo->currentText());
         report << pairs(ui->descrLabel->text().remove(":").remove("&"), Utils::lineWrapString(ui->descrEdit->toPlainText(), 50));
         if (ui->hasLookedUpDocumentationCheckBox->isChecked())
-            report << pairs(ui->hasLookedUpDocumentationCheckBox->text().remove(":").remove("&"), "yes");
+            report << pairs("has looked up documentation", "yes");
         else
-            report << pairs(ui->hasLookedUpDocumentationCheckBox->text().remove(":").remove("&"), "no");
+            report << pairs("has looked up documentation", "no");
         // find the max length
         int max = 0;
         foreach(const pairs &pair, report) {
@@ -179,11 +179,13 @@ void BugReportDialog::validateInputs()
     QString toolTip;
 
     if (d->ui->emailEdit->hasAcceptableInput()) {
+        //buggy??
         d->ui->emailEdit->setRightIcon(theme()->icon("ok.png", Core::ITheme::SmallIcon));
     } else {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
-        d->ui->emailEdit->setRightIcon();
+        // buggy??
+        d->ui->emailEdit->clearRightButton();
     }
     if (d->ui->categoryCombo->currentIndex() == -1) {
         enabled = false;

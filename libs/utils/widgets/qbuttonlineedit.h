@@ -60,8 +60,13 @@ public:
 
     void setLeftButton(QToolButton *button);
     void setRightButton(QToolButton *button);
-    void setRightIcon(QIcon icon = QIcon());
-    void setLeftIcon(QIcon icon = QIcon());
+
+    void setRightIcon(QIcon icon);
+    void setLeftIcon(QIcon icon);
+
+    void clearLeftButton();
+    void clearRightButton();
+
     void setRoundedCorners();
 
     void setEditorPlaceholderText(const QString &placeholder);

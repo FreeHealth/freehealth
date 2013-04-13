@@ -25,13 +25,13 @@
  ***************************************************************************/
 /**
  \class Utils::QButtonLineEdit
- \brief This widget can present two QToolButtons inside a QlineEdit: one left, the other on the right.
-    QButtonLineEdit inherits QLineEdit
-    After instanciating it, define the ToolButtons for the right and the left, or only one.
-    The tooltip of the leftButton is shown in gray inside the LineEdit when the user has not typed
-    anything in.
-    You can delay the textChanged() signal using setDelayedSignals().
-    All action pixmaps of the left and right buttons must be 16x16.
+ \brief Presents two QToolButtons inside a QLineEdit: one left, one right.
+
+ Inherits QLineEdit and extends it with a left and right QToolButton inside the widget.
+ After instantiating it, define the ToolButtons for the right and/or the left side.
+ The tooltip of the leftButton is shown as PlaceHolderText inside the QLineEdit when the field is empty.
+ You can delay the textChanged() signal using setDelayedSignals().
+ All action icons of the left and right buttons must be 16x16px.
  */
 
 #include "qbuttonlineedit.h"
@@ -161,8 +161,7 @@ QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
 
 QButtonLineEdit::~QButtonLineEdit()
 {
-    if (d_qble)
-        delete d_qble;
+    delete d_qble;
     d_qble = 0;
 }
 
@@ -182,22 +181,23 @@ void QButtonLineEdit::setDelayedSignals(bool state)
 
 /**
  \brief Define the left button for the line edit.
- QButtonLineEdit takes ownership of the button. \n
- Text of selected action is shown in gray inside the line edit when it is empty. \n
+ QButtonLineEdit takes ownership of the button and deletes it when necessary, but \e not of the actions
+ that may be associated with the button. These must be deleted by the caller.\n
+ The text of the selected action is shown as PlaceHolderText inside the line edit when it is empty. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
-    if (d_qble->_leftButton) {
-        delete d_qble->_leftButton;
-        d_qble->_leftButton = 0;
-    }
+    if (d_qble->_leftButton == button)
+        return;
+
+    if (d_qble->_leftButton)
+        clearLeftButton();
 
     if (button){
-
         button->setParent(this);
         d_qble->_leftButton = button;
-        d_qble->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
+        d_qble->_leftButton->setStyleSheet("border:none;padding:0 0 0 2px;");
         d_qble->_leftButton->setCursor(Qt::ArrowCursor);
 
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
@@ -216,22 +216,26 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 
 /**
  \brief Define the right button for the line edit.
- QButtonLineEdit takes ownership of the button. \n
+ QButtonLineEdit takes ownership of the button and deletes it when necessary, but \e not of the actions
+ that may be associated with the button. These must be deleted by the caller.\n
  For now pixmaps of QAction must be sized (16x16). \n
 */
 void QButtonLineEdit::setRightButton(QToolButton * button)
 {
+    // button is already there, or both 0
+    if (d_qble->_rightButton == button)
+        return;
 
-    if (d_qble->_rightButton) {
+    // we should clear button, and there is one
+    if (!button && d_qble->_rightButton) {
         delete d_qble->_rightButton;
         d_qble->_rightButton = 0;
     }
 
-    if (button){
-
+    if (button) {
         button->setParent(this);
         d_qble->_rightButton = button;
-        d_qble->_rightButton->setStyleSheet("border:none; padding: 0;");
+        d_qble->_rightButton->setStyleSheet("border:none;padding:0;");
         d_qble->_rightButton->setCursor(Qt::ArrowCursor);
 
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
@@ -248,21 +252,17 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 /*!
  * \brief Convenience function for setting an icon on the right side.
  *
- * Calls setRightbutton(). Internally creates an empty action with the icon and
- * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
+ * Calls setRightbutton(). Internally creates an empty QToolButton with the given \e icon.
+ * An existing QToolButton on the right side is deleted.
  */
 void QButtonLineEdit::setRightIcon(QIcon icon)
 {
     if (icon.isNull()) {
-        setRightButton(0);
+        clearRightButton();
         return;
     }
-
-    // create a new action with given icon and assign it to the button
-    QAction *action = new QAction(icon, "", this);
-    QToolButton *button = new QToolButton();
-    button->addAction(action);
-    button->setDefaultAction(action);
+    QToolButton *button = new QToolButton(this);
+    button->setIcon(icon);
     setRightButton(button);
 }
 
@@ -275,16 +275,25 @@ void QButtonLineEdit::setRightIcon(QIcon icon)
 void QButtonLineEdit::setLeftIcon(QIcon icon)
 {
     if (icon.isNull()) {
-        setLeftButton(0);
+        clearLeftButton();
         return;
     }
 
-    // create a new action with given icon and assign it to the button
-    QAction *action = new QAction(icon, "", this);
-    QToolButton *button = new QToolButton();
-    button->addAction(action);
-    button->setDefaultAction(action);
+    QToolButton *button = new QToolButton(this);
+    button->setIcon(icon);
     setLeftButton(button);
+}
+
+/*! Convenience function for clearing left button. */
+void QButtonLineEdit::clearLeftButton()
+{
+    setLeftButton(0);
+}
+
+/*! Convenience function for clearing right button. */
+void QButtonLineEdit::clearRightButton()
+{
+    setRightButton(0);
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
