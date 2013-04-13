@@ -179,10 +179,12 @@ void BugReportDialog::validateInputs()
     QString toolTip;
 
     if (d->ui->emailEdit->hasAcceptableInput()) {
+        //buggy??
         d->ui->emailEdit->setRightIcon(theme()->icon("ok.png", Core::ITheme::SmallIcon));
     } else {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
+        // buggy??
         d->ui->emailEdit->clearRightButton();
     }
     if (d->ui->categoryCombo->currentIndex() == -1) {

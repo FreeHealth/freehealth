@@ -23,15 +23,25 @@
       <string>First step</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QLabel" name="dateLabel">
+      <item row="3" column="0">
+       <widget class="QLabel" name="osLabel">
         <property name="text">
-         <string>Date:</string>
+         <string>OS:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="dateValue"/>
+      <item row="0" column="0">
+       <widget class="QLabel" name="emailLabel">
+        <property name="text">
+         <string>&amp;Email:</string>
+        </property>
+        <property name="buddy">
+         <cstring>emailEdit</cstring>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="applicationLabel">
@@ -57,25 +67,15 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="osLabel">
+      <item row="1" column="0">
+       <widget class="QLabel" name="dateLabel">
         <property name="text">
-         <string>OS:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         <string>Date:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="emailLabel">
-        <property name="text">
-         <string>&amp;Email:</string>
-        </property>
-        <property name="buddy">
-         <cstring>emailEdit</cstring>
-        </property>
-       </widget>
+      <item row="1" column="1">
+       <widget class="QLabel" name="dateValue"/>
       </item>
      </layout>
     </widget>
@@ -115,7 +115,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="descrLabel">
         <property name="text">
-         <string>Description:</string>
+         <string>&amp;Description:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -204,8 +204,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>444</y>
+     <x>230</x>
+     <y>484</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -220,8 +220,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
-     <y>444</y>
+     <x>298</x>
+     <y>484</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
