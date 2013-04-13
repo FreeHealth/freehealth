@@ -301,7 +301,7 @@ bool FspTemplateModel::initialize()
     return true;
 }
 
-Qt::ItemFlags FspTemplateModel::flags(const QModelIndex &index) const
+Qt::ItemFlags FspTemplateModel::flags(const QModelIndex &) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }

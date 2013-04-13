@@ -27,7 +27,9 @@
 #include "patientbasepreferencespage.h"
 #include "constants_settings.h"
 #include "constants_db.h"
+#include "patientcore.h"
 #include "patientselector.h"
+#include "patientwidgetmanager.h"
 
 #include "ui_patientbasepreferencespage.h"
 
@@ -102,6 +104,8 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_PATIENTBARCOLOR, int(Qt::white));
     defaultvalues.insert(Core::Constants::S_PATIENTCHANGEONCREATION, true);
     defaultvalues.insert(Constants::S_SEARCHWHILETYPING, true);
+    defaultvalues.insert(Constants::S_RECENTPATIENT_MAX, 10);
+    defaultvalues.insert(Constants::S_RECENTPATIENT_LIST, QString());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -138,6 +142,9 @@ void PatientBasePreferencesWidget::setDataToUi()
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
     ui->searchWhileTyping->setChecked(settings()->value(Constants::S_SEARCHWHILETYPING).toBool());
+    ui->maxRecentPatient->setValue(settings()->value(Constants::S_RECENTPATIENT_MAX, 10).toInt());
+    ui->defaultCity->setText(settings()->value(Constants::S_NEWPATIENT_DEFAULTCITY).toString());
+    ui->defaultZip->setText(settings()->value(Constants::S_NEWPATIENT_DEFAULTZIP).toString());
 
     // find the id of the photo source in the combo box items
     const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
@@ -157,6 +164,9 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
     s->setValue(Constants::S_SEARCHWHILETYPING, ui->searchWhileTyping->isChecked());
+    s->setValue(Constants::S_RECENTPATIENT_MAX, ui->maxRecentPatient->value());
+    s->setValue(Constants::S_NEWPATIENT_DEFAULTCITY, ui->defaultCity->text());
+    s->setValue(Constants::S_NEWPATIENT_DEFAULTZIP, ui->defaultZip->text());
 
     // save the id of the provider to identify it the next time.
     const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
@@ -169,11 +179,10 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
         method = Patients::PatientSelector::WhileTyping;
     else
         method = Patients::PatientSelector::ReturnPress;
-    foreach (QWidget *widget, QApplication::allWidgets()) {
-        Patients::PatientSelector *sel = qobject_cast<Patients::PatientSelector *>(widget);
-        if (sel)
-            sel->setRefreshSearchResultMethod(method);
-    }
+
+    //&& update refresh patientselector
+    PatientCore::instance()->patientWidgetManager()->refreshSettings();
+    PatientCore::instance()->patientWidgetManager()->selector()->setRefreshSearchResultMethod(method);
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -184,6 +193,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_PATIENTBARCOLOR, int(Qt::white));
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
     s->setValue(Constants::S_SEARCHWHILETYPING, true);
+    s->setValue(Constants::S_RECENTPATIENT_MAX, 10);
 
     QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
     qSort(providerList);

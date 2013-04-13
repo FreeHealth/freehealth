@@ -2612,5 +2612,29 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Fees</source>
         <translation>Honoraires</translation>
     </message>
+    <message>
+        <source>Fixed width</source>
+        <translation>Taille fixe</translation>
+    </message>
+    <message>
+        <source>Typewriter</source>
+        <translation>Machine à écrire</translation>
+    </message>
+    <message>
+        <source>No address recorded</source>
+        <translation>Pas d&apos;adresse enregistrée</translation>
+    </message>
+    <message>
+        <source>Social number (all)</source>
+        <translation>Numéro de sécurité sociale (tous)</translation>
+    </message>
+    <message>
+        <source>Social number (owner name)</source>
+        <translation>Numéro de sécurité sociale (nom du propriétaire)</translation>
+    </message>
+    <message>
+        <source>Social number (owner address)</source>
+        <translation>Numéro de sécurité sociale (adresse du propriétaire)</translation>
+    </message>
 </context>
 </TS>

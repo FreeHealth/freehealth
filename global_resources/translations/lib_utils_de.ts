@@ -235,20 +235,6 @@
     </message>
 </context>
 <context>
-    <name>Utils::BugReportDialog</name>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="144"/>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="184"/>
-        <source>&amp;Send report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.cpp" line="145"/>
-        <source>Problem reporting dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Utils::DatabaseInformationDialog</name>
     <message>
         <location filename="../../libs/utils/widgets/databaseinformationdialog.cpp" line="129"/>
@@ -378,74 +364,6 @@
     </message>
 </context>
 <context>
-    <name>Utils::Internal::BugReportDialog</name>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="23"/>
-        <source>First step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="38"/>
-        <source>&amp;Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="54"/>
-        <source>yourname@gmail.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="67"/>
-        <source>Date:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="90"/>
-        <source>Application:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="107"/>
-        <source>OS:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="130"/>
-        <source>Severity:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="150"/>
-        <source>Current problem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="172"/>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="179"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="189"/>
-        <source>Did you check the documentation on the main website before reporting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/bugreportdialog.ui" line="199"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Utils::Internal::GenericDescriptionEditor</name>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="14"/>
@@ -459,157 +377,177 @@
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="30"/>
-        <source>UUID</source>
+        <source>UUID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="40"/>
-        <source>Current version</source>
+        <source>Current version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="50"/>
-        <source>Authors</source>
+        <source>Authors:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="60"/>
-        <source>Countries limitation</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="57"/>
+        <source>Author1, Author2, ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="70"/>
-        <source>Vendor</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="64"/>
+        <source>Countries limitation:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="80"/>
-        <source>Creation date</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="71"/>
+        <source>Country A, Country B, ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="87"/>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="367"/>
-        <source>dd/MM/yyyy</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="78"/>
+        <source>Vendor:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="97"/>
-        <source>Icon</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="85"/>
+        <source>Your company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="121"/>
-        <source>Compatibility &amp;&amp; places</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="92"/>
+        <source>Creation date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="127"/>
-        <source>URL</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="109"/>
+        <source>Icon:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="137"/>
-        <source>AbsoluteFileName</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="139"/>
+        <source>URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="147"/>
-        <source>Compatibility</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="146"/>
+        <source>http://</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="153"/>
-        <source>FreeMedForms</source>
+        <source>Absolute filename path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="163"/>
-        <source>FreeDiams</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="169"/>
+        <source>FreeMedForms:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="173"/>
-        <source>FreeAccount</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="179"/>
+        <source>FreeDiams:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="200"/>
-        <source>Descriptions</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="189"/>
+        <source>FreeAccount:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="206"/>
-        <source>Category</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="222"/>
+        <source>Category:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="232"/>
-        <source>Tooltip</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="248"/>
+        <source>Tooltip:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="242"/>
-        <source>Specialties</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="258"/>
+        <source>Specialties:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="252"/>
-        <source>Short description</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="268"/>
+        <source>Short description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="262"/>
-        <source>Long description</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="278"/>
+        <source>Long description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="272"/>
-        <source>License terms</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="288"/>
+        <source>License terms:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="283"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="289"/>
-        <source>Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="301"/>
-        <source>Versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="324"/>
-        <source>Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="330"/>
-        <source>From</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="340"/>
-        <source>To</source>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="321"/>
+        <source>Versions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="350"/>
-        <source>Author</source>
+        <source>From:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="360"/>
-        <source>Date</source>
+        <source>To:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="381"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="370"/>
+        <source>Author:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="380"/>
+        <source>Date:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="99"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="387"/>
+        <source>dd/MM/yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="133"/>
+        <source>Compatibility &amp;&amp; places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="163"/>
+        <source>Compatibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="216"/>
+        <source>Descriptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="303"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="309"/>
+        <source>Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="344"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="401"/>
         <source>XML</source>
         <translation type="unfinished"></translation>
     </message>

@@ -88,6 +88,9 @@ const char* const CLEAR_PATIENT_INFOS         = QT_TRANSLATE_NOOP("tkConstants",
 const char* const TOGGLE_PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");
 
 const char* const SOCIAL_NUMBER               = QT_TRANSLATE_NOOP("tkConstants", "Social number");
+const char* const SOCIAL_NUMBERS               = QT_TRANSLATE_NOOP("tkConstants", "Social number (all)");
+const char* const SOCIAL_NUMBER_OWNER_NAME    = QT_TRANSLATE_NOOP("tkConstants", "Social number (owner name)");
+const char* const SOCIAL_NUMBER_OWNER_ADDRESS = QT_TRANSLATE_NOOP("tkConstants", "Social number (owner address)");
 
 const char* const PATIENT_SYNTHESIS           = QT_TRANSLATE_NOOP("tkConstants", "Patient synthesis");
 

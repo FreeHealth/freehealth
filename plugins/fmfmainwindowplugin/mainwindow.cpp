@@ -135,14 +135,11 @@ bool MainWindowUserListener::currentUserAboutToDisconnect()
 MainWindow::MainWindow(QWidget *parent) :
     Core::IMainWindow(parent),
     m_modeStack(0),
-    m_RecentPatients(0),
     m_UserListener(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
     setAttribute(Qt::WA_QuitOnClose);
-    m_RecentPatients = new Core::FileManager(this);
-    m_RecentPatients->setSettingsKey(Core::Constants::S_PATIENT_UUID_HISTORY);
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -171,9 +168,6 @@ void MainWindow::init()
 //    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
 //    Q_ASSERT(fmenu);
 //    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
-    Q_ASSERT(pmenu);
-    connect(pmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(aboutToShowRecentPatients()));
 
     Core::MainWindowActions actions;
 
@@ -291,9 +285,6 @@ void MainWindow::postCoreInitialization()
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
-    // Create the patient navigation menu (needed in Patient::PatientSelector)
-    aboutToShowRecentPatients();
-
     theme()->finishSplashScreen(this);
 
     manageIModeEnabledState();
@@ -358,13 +349,6 @@ void MainWindow::onCurrentPatientChanged()
 
     // Activate Patient files mode
     formCore().activatePatientFileCentralMode();
-
-    // Store the uuids of the patient in the recent manager
-    const QString &uuid = patient()->uuid();
-    m_RecentPatients->setCurrentFile(uuid);
-    m_RecentPatients->addToRecentFiles(uuid);
-    // refresh the navigation menu
-    aboutToShowRecentPatients();
 
     endProcessingSpinner();
 }
@@ -468,6 +452,7 @@ bool MainWindow::loadFile(const QString &absDirPath)
 /** \brief Create a new patient. \sa Patients::PatientCreatorWizard */
 bool MainWindow::createNewPatient()
 {
+    // TODO: move this in the patient plugin
     Patients::PatientCreatorWizard wiz(this);
     wiz.exec();
     return true;
@@ -506,30 +491,6 @@ void MainWindow::aboutToShowRecentFiles()
     recentsMenu->menu()->setEnabled(hasRecentFiles);
 }
 
-/** \brief Rebuild the patients' history menu */
-void MainWindow::aboutToShowRecentPatients()
-{
-    // update patient history
-    Core::ActionContainer *recentsMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
-    if (!recentsMenu)
-        return;
-    if (!recentsMenu->menu())
-        return;
-    recentsMenu->menu()->clear();
-
-    bool hasRecentFiles = false;
-    const QStringList &uuids = m_RecentPatients->recentFiles();
-    const QHash<QString, QString> &names = patient()->fullPatientName(uuids);
-    for(int i = 0; i < uuids.count(); ++i) {
-        hasRecentFiles = true;
-        QAction *action = recentsMenu->menu()->addAction(names.value(uuids.at(i)));
-        action->setData(uuids.at(i));
-        connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
-    }
-
-    recentsMenu->menu()->setEnabled(hasRecentFiles);
-}
-
 /** \brief Opens a recent file. This slot is called by a recent files' menu's action. */
 void MainWindow::openRecentFile()
 {
@@ -542,21 +503,6 @@ void MainWindow::openRecentFile()
     }
 }
 
-/** \brief Opens a recent patient selected from the patient history. This slot is called by a recent patients' menu's action. */
-void MainWindow::openRecentPatient()
-{
-    // get the uuid of the sender
-    QAction *a = qobject_cast<QAction*>(sender());
-    if (!a)
-        return;
-    const QString &uuid = a->data().toString();
-    if (uuid.isEmpty())
-        return;
-
-    // get the corresponding to the uuid
-    patientCore()->setCurrentPatientUuid(uuid);
-}
-
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
@@ -565,7 +511,7 @@ void MainWindow::readSettings()
     // Main Application settings
     settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
-    m_RecentPatients->getRecentFilesFromSettings();
+    fileManager()->getMaximumRecentFilesFromSettings();
     m_AutomaticSaveInterval = settings()->value(Core::Constants::S_SAVEINTERVAL, 600).toUInt(); // Default = 10 minutes
     m_OpenLastOpenedForm = settings()->value(Core::Constants::S_OPENLAST, true).toBool();
 
@@ -583,7 +529,6 @@ void MainWindow::writeSettings()
     settings()->saveState(this);
     // Recent managers
     fileManager()->saveRecentFiles();
-    m_RecentPatients->saveRecentFiles();
     // Main Application settings
     settings()->setValue(Core::Constants::S_SAVEINTERVAL, m_AutomaticSaveInterval);
     settings()->setValue(Core::Constants::S_OPENLAST, m_OpenLastOpenedForm);

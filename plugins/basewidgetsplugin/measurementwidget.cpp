@@ -238,6 +238,7 @@ QString MeasurementWidget::printableHtml(bool withValues) const
         return QString();
 
     // TODO: write this
+    Q_UNUSED(withValues);
 //    if (withValues) {
 //        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
 //            if (m_Text->textEdit()->toPlainText().isEmpty())

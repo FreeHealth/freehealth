@@ -279,42 +279,6 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>General comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Forms management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Drugs management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Agenda management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Printings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Core::Internal::PageWidget</name>

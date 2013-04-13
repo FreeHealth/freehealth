@@ -266,7 +266,7 @@ public:
 
     QRectF amountRectInMilliters(FspPrinter::Cerfa cerfa, int line, int fspIndex)
     {
-        int y;
+        int y = 0;
         if (cerfa == FspPrinter::S12541_01)
             y = 209.2 + 8.6*line;
         else if (cerfa == FspPrinter::S12541_02_2)

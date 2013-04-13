@@ -210,6 +210,22 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
 </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Maximum patient in the recent list (default 10)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default zipcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default city</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

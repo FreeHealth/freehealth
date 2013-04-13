@@ -64,6 +64,7 @@ const char * const  TOKEN_PATIENTSOCIALNUMBER3 = "SOCIALNUMBER3";
 const char * const  TOKEN_PATIENTSOCIALNUMBER4 = "SOCIALNUMBER4";
 const char * const  TOKEN_PATIENTSOCIALNUMBERS = "SOCIALNUMBERS";
 const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERNAME = "SOCIALNUMBEROWNERNAME";
+const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS = "SOCIALNUMBEROWNERADDRESS";
 // END
 #else
 // NEW TOKENS (>= v0.8.0)
@@ -88,6 +89,14 @@ const char * const  TOKEN_PATIENTCONTACT_EMAIL       = "Patient.Contact.Email";
 const char * const  TOKEN_PATIENTCONTACT_TELS        = "Patient.Contact.Tels";
 const char * const  TOKEN_PATIENTCONTACT_FAX         = "Patient.Contact.Fax";
 const char * const  TOKEN_PATIENTCONTACT_MOBILEPHONE = "Patient.Contact.MobilePhone";
+
+const char * const  TOKEN_PATIENTSOCIALNUMBER        = "Patient.Insurance.SocialNumber";
+const char * const  TOKEN_PATIENTSOCIALNUMBER2       = "Patient.Insurance.SocialNumber2";
+const char * const  TOKEN_PATIENTSOCIALNUMBER3       = "Patient.Insurance.SocialNumber3";
+const char * const  TOKEN_PATIENTSOCIALNUMBER4       = "Patient.Insurance.SocialNumber4";
+const char * const  TOKEN_PATIENTSOCIALNUMBERS       = "Patient.Insurance.SocialNumbers";
+const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERNAME = "Patient.Insurance.SocialNumberOwnerName";
+const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS = "Patient.Insurance.SocialNumberOwnerAddress";
 
 const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
 const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
@@ -194,7 +203,7 @@ const char * const  TAG_USER_RESOURCES_PATH                 = "__userResources__
 // Settings keys
 const char * const  S_RECENTFILES_GROUP    = "RecentFiles";
 const char * const  S_RECENTFILES_KEY      = "File";
-const char * const  S_PATIENT_UUID_HISTORY = "PatientsUuids";
+const char * const  S_RECENTFILES_MAX_KEY  = "Max";
 const char * const  S_SAVEINTERVAL         = "Core/SaveInterval";
 const char * const  S_OPENLAST             = "Core/OpenLastOpenedFile";
 const char * const  S_SHOWHELPTEXT         = "Core/ShowFormHelpText";

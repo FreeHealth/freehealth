@@ -111,12 +111,7 @@ Number of items of the translation (%3) are wrong.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="66"/>
-        <source>Sex of the patient (1 for men, 2 for women)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="76"/>
+        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="63"/>
         <source>Control key</source>
         <translation type="unfinished"></translation>
     </message>

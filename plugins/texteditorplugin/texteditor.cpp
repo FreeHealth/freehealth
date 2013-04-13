@@ -578,6 +578,11 @@ void TextEditor::fileOpen()
     if (file.isEmpty())
         return;
     QString str = Utils::readTextFile(file, Utils::WarnUser, this);
+    // run token if FreeMedForms
+#ifdef FREEMEDFORMS
+    patient()->replaceTokens(str);
+    user()->replaceTokens(str);
+#endif
     if (Qt::mightBeRichText(str)) {
         textEdit()->setHtml(str);
     } else {

@@ -44,9 +44,9 @@ QT_END_NAMESPACE
 
 /**
  * \file filemanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.2
- * \date 13 Sept 2009
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 12 Apr 2013
 */
 
 namespace Core {
@@ -56,27 +56,29 @@ class CORE_EXPORT FileManager : public QObject
     Q_OBJECT
 
 public:
-    FileManager(QObject *parent=0) : QObject(parent) {setObjectName("FileManager");}
+    FileManager(QObject *parent = 0);
     virtual ~FileManager() {}
 
-    // recent files
+    // settings management
+    void setSettingsKey(const QString &key) {m_Key = key;}
+    QString settingsKey() const {return m_Key;}
+    void saveRecentFiles() const;
     void getRecentFilesFromSettings();
+    void getMaximumRecentFilesFromSettings();
+
+    // Recent files management
     void addToRecentFiles(const QString &fileName);
     void setRecentFiles(const QStringList &files) {m_recentFiles = files;}
     QStringList recentFiles() const;
-    void saveRecentFiles() const;
+    void setMaximumRecentFiles(int max) {m_maxRecentFiles = max;}
 
     // current file
     void setCurrentFile(const QString &filePath);
     QString currentFile() const;
 
-    // settings
-    void setSettingsKey(const QString &key) {m_Key = key;}
-    QString settingsKey() const {return m_Key;}
-
 private:
     QStringList m_recentFiles;
-    static const int m_maxRecentFiles = 10;
+    int m_maxRecentFiles;
     QString m_currentFile;
     QString m_Key;
 };

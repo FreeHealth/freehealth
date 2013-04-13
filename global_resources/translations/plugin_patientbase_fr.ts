@@ -123,19 +123,19 @@
     </message>
     <message>
         <source>Remove the patient</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le patient</translation>
     </message>
     <message>
         <source>If you want to remove a patient, you must firstly select it as the current one and then remove it. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Warning: No current patient. Select a patient first.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous désirez supprimer un patient, vous devez d&apos;abord sélectionner son dossier et ensuite le supprimer.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Attention : pas de patient courant. Sélectionnez un patient d&apos;abord.&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Remove the current patient</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprime le patient courant</translation>
     </message>
     <message>
         <source>You are about to remove the current patient:&lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Do you really want to remove this patient?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous allez supprimer le patient courant : &lt;br /&gt;&lt;br/&gt;    &lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%2&lt;/b&gt;&lt;br/&gt;    &lt;b&gt;%3&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Voulez-vous réellement supprimer ce patient ?</translation>
     </message>
 </context>
 <context>
@@ -212,6 +212,22 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation>Lorsque vous activez cette option, le sélecteur de patient met à jour les résultats de la recherche durant la frappe. Si vous désactivez cette option, vous devrez appuyer sur la touche &apos;Entrée&apos; pour rafraîchir les résultats de la recherche.
 
 Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surcharge de l&apos;utilisation du réseau. Cette option n&apos;est pas recommandée pour les bases de données larges (&gt; 10 000 patients).</translation>
+    </message>
+    <message>
+        <source>Maximum patient in the recent list (default 10)</source>
+        <translation>Nombre maximum de patient dans l&apos;historique de navigation (10 par défaut)</translation>
+    </message>
+    <message>
+        <source>New patient</source>
+        <translation>Nouveau patient</translation>
+    </message>
+    <message>
+        <source>Default zipcode</source>
+        <translation>Code postal par défaut</translation>
+    </message>
+    <message>
+        <source>Default city</source>
+        <translation>Ville par défaut</translation>
     </message>
 </context>
 <context>

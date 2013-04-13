@@ -45,6 +45,13 @@ using namespace Core;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
+/** CTor*/
+FileManager::FileManager(QObject *parent)
+    : QObject(parent),
+      m_maxRecentFiles(10)
+{
+    setObjectName("FileManager");
+}
 
 /*!
     Adds the \a fileName to the list of recent files.
@@ -68,17 +75,22 @@ QStringList FileManager::recentFiles() const
     return m_recentFiles;
 }
 
+/** Save the recorded recent files and the maximum number of records in the Core::ISettings */
 void FileManager::saveRecentFiles() const
 {
     Core::ISettings *s = settings();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
-    if (m_Key.isEmpty())
+    if (m_Key.isEmpty()) {
         s->setValue(Constants::S_RECENTFILES_KEY, m_recentFiles);
-    else
+        s->setValue(Constants::S_RECENTFILES_MAX_KEY, m_maxRecentFiles);
+    } else {
         s->setValue(m_Key, m_recentFiles);
+        s->setValue(m_Key + "/" + Constants::S_RECENTFILES_MAX_KEY, m_maxRecentFiles);
+    }
     s->endGroup();
 }
 
+/** Get the recent recorded from the global Core::ISettings */
 void FileManager::getRecentFilesFromSettings()
 {
     Core::ISettings *s = settings();
@@ -88,6 +100,19 @@ void FileManager::getRecentFilesFromSettings()
         m_recentFiles = s->value(Constants::S_RECENTFILES_KEY).toStringList();
     else
         m_recentFiles = s->value(m_Key).toStringList();
+    s->endGroup();
+}
+
+/** Get the maximum of recent records from the global Core::ISettings */
+void FileManager::getMaximumRecentFilesFromSettings()
+{
+    Core::ISettings *s = settings();
+    m_recentFiles.clear();
+    s->beginGroup(Constants::S_RECENTFILES_GROUP);
+    if (m_Key.isEmpty())
+        m_maxRecentFiles = s->value(Constants::S_RECENTFILES_MAX_KEY, m_maxRecentFiles).toInt();
+    else
+        m_maxRecentFiles = s->value(m_Key + "/" + Constants::S_RECENTFILES_MAX_KEY, m_maxRecentFiles).toInt();
     s->endGroup();
 }
 

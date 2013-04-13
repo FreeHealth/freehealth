@@ -80,14 +80,14 @@ Le nombre d&apos;items est erronné (%3).</translation>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="150"/>
         <source>Wrong form&apos;s translations</source>
-        <translation type="unfinished">Mauvaise traduction de formulaire</translation>
+        <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="151"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
-        <translation type="unfinished">Vous avez demandé de changer le langage du formulaire en %1.
+        <translation>Vous avez demandé de changer le langage du formulaire en %1.
 Une erreur est survenue durant la traduction de %2.
 Le nombre d&apos;items est erronné (%3).</translation>
     </message>
@@ -97,14 +97,14 @@ Le nombre d&apos;items est erronné (%3).</translation>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1255"/>
         <source>Wrong form&apos;s translations</source>
-        <translation type="unfinished">Mauvaise traduction de formulaire</translation>
+        <translation>Mauvaise traduction de formulaire</translation>
     </message>
     <message>
         <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1256"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
-        <translation type="unfinished">Vous avez demandé de changer le langage du formulaire en %1.
+        <translation>Vous avez demandé de changer le langage du formulaire en %1.
 Une erreur est survenue durant la traduction de %2.
 Le nombre d&apos;items est erronné (%3).</translation>
     </message>
@@ -117,12 +117,7 @@ Le nombre d&apos;items est erronné (%3).</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="66"/>
-        <source>Sex of the patient (1 for men, 2 for women)</source>
-        <translation>Sexe du patient (1 pur les hommes, 2 pour les femmes)</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="76"/>
+        <location filename="../../plugins/basewidgetsplugin/frenchsocialnumber.ui" line="63"/>
         <source>Control key</source>
         <translation>Clé de contrôle</translation>
     </message>

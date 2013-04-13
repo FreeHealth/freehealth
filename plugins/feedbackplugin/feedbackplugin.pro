@@ -1,3 +1,7 @@
+!with-feedback {
+    error(Feedback plugin not requested)
+}
+
 TARGET = Feedback
 TEMPLATE = lib
 

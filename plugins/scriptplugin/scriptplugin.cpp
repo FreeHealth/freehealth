@@ -61,6 +61,8 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
                                     QKeySequence::StandardKey key = QKeySequence::UnknownKey,
                                     bool checkable = false)
 {
+    Q_UNUSED(menu);
+    Q_UNUSED(group);
     QAction *a = new QAction(parent);
     a->setObjectName(name);
     if (!icon.isEmpty())

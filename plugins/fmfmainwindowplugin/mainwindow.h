@@ -43,8 +43,8 @@ QT_END_NAMESPACE
 /**
  * \file mainwindow.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 12 Sept 2012
+ * \version 0.8.4
+ * \date 12 Apr 2013
 */
 
 namespace Form {
@@ -108,12 +108,8 @@ private Q_SLOTS:
     void onCurrentPatientChanged();
 
     // Interface of MainWidowActionHandler
-//    bool newFile();
     bool openFile();
     bool loadFile(const QString &absDirPath);
-//    bool saveFile();
-//    bool saveAsFile();
-//    bool print();
 
     bool createNewPatient();
     bool viewPatientIdentity();
@@ -121,20 +117,12 @@ private Q_SLOTS:
 
     bool applicationPreferences();
     bool applicationConfiguratorWizard();
-//    bool configureMedintux();
-//
-//    virtual bool aboutApplication();
-//    bool applicationHelp();
-//    bool aboutQt();
-//    bool aboutPlugins();
 
     void updateCheckerEnd(bool error);
 
     void openPatientFormsFile();
     void aboutToShowRecentFiles();
-    void aboutToShowRecentPatients();
     void openRecentFile();
-    void openRecentPatient();
 
 protected:
     void manageIModeEnabledState();
@@ -143,10 +131,6 @@ protected:
 
 public:
     Utils::FancyTabWidget *m_modeStack;
-
-    /** \todo Move this Patient History in the ICore ? */
-    Core::FileManager *m_RecentPatients;
-
     bool m_HelpTextShow;
     uint m_AutomaticSaveInterval;   /*!< Interval between each automatic save in SECONDS */
     int  m_TimerId;

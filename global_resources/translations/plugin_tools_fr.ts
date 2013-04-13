@@ -176,6 +176,14 @@ Une par ligne</translation>
     </message>
 </context>
 <context>
+    <name>Tools::Internal::FspPrinterDialog</name>
+    <message>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterdialog.cpp" line="391"/>
+        <source>French &apos;FSP&apos; printing assistant</source>
+        <translation>Assistant d&apos;impression des FSP</translation>
+    </message>
+</context>
+<context>
     <name>Tools::Internal::FspPrinterPreferencesPage</name>
     <message>
         <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.cpp" line="268"/>
@@ -290,14 +298,6 @@ Une par ligne</translation>
         <location filename="../../plugins/toolsplugin/toolspreferences.cpp" line="165"/>
         <source>Tools</source>
         <translation>Outils</translation>
-    </message>
-</context>
-<context>
-    <name>Tools::Internal::ToolsPreferencesWidget</name>
-    <message>
-        <location filename="../../plugins/toolsplugin/toolspreferences.ui" line="14"/>
-        <source>Tools Preferences</source>
-        <translation>Préférences des outils</translation>
     </message>
 </context>
 </TS>

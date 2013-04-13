@@ -209,16 +209,12 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 
     // Find the FormMain parent that contains the item with the correct 'ref'
     const QList<Form::FormMain*> &forms = d->_episodeModels.uniqueKeys();
-    bool warn = false;
     foreach(Form::FormMain *main, forms) {
         foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
             if (!item->itemData() || item->patientDataRepresentation() == -1)
                 continue;
             // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
-            warn = (ref==Core::IPatient::WeightInGrams);
             if (item->patientDataRepresentation() == ref) {
-//                if (warn)
-//                    qWarning() << item->uuid() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
                 return item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
             }
         }
@@ -243,15 +239,15 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     // Populate each forms with its lastest recorded episode
     d->populateEpisodeModelsWithLastEpisode();
 
-    foreach(Form::FormMain *forms, formManager().allDuplicatesEmptyRootForms()) {
-        foreach(Form::FormMain *form, forms->flattenFormMainChildren()) {
-            qWarning() <<"\n\n"<< form->uuid() << d->_episodeModels.value(form)->rowCount();
-            foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
-                if (item->itemData())
-                    qWarning() << item->uuid() << item->itemData()->data(IFormItemData::PatientModelRole) ;
-            }
-        }
-    }
+//    foreach(Form::FormMain *forms, formManager().allDuplicatesEmptyRootForms()) {
+//        foreach(Form::FormMain *form, forms->flattenFormMainChildren()) {
+//            qWarning() <<"\n\n"<< form->uuid() << d->_episodeModels.value(form)->rowCount();
+//            foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+//                if (item->itemData())
+//                    qWarning() << item->uuid() << item->itemData()->data(IFormItemData::PatientModelRole) ;
+//            }
+//        }
+//    }
 
     // Connect editing models
     d->connectEditingEpisodeModels();

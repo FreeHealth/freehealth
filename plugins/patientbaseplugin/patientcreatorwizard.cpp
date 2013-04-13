@@ -140,6 +140,10 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
+    // Set defaults
+    m_Model->setData(m_Model->index(0, Core::IPatient::City), settings()->value(Constants::S_NEWPATIENT_DEFAULTCITY));
+    m_Model->setData(m_Model->index(0, Core::IPatient::ZipCode), settings()->value(Constants::S_NEWPATIENT_DEFAULTZIP));
+
     m_Identity->setModel(m_Model);
     m_Identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IPatient::TitleIndex);
     m_Identity->addMapping(Identity::IdentityEditorWidget::UsualName, Core::IPatient::UsualName);
