@@ -205,7 +205,7 @@ bool ChequePrintFormat::labelLessThan(const ChequePrintFormat &format1, const Ch
 
 bool ChequePrintFormat::defaultLessThan(const ChequePrintFormat &format1, const ChequePrintFormat &format2)
 {
-    Q_UNUSED(format2);
+    Q_UNUSED(format1);
     if (format2.isDefault())
         return false;
     return true;
