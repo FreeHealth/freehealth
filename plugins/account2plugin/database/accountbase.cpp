@@ -133,6 +133,7 @@ public:
                 fee.setAmount(query.value(Constants::FEES_AMOUNT).toDouble());
                 fee.setType(query.value(Constants::FEES_TYPE).toString());
                 fee.setDateDid(query.value(Constants::FEES_DATE_DID).toInt());
+                fee.setTaxRate(query.value(Constants::FEES_TAX).toDouble());
                 fee.setComment(query.value(Constants::FEES_COMMENT).toString());
                 fee.setMpId(query.value(Constants::FEES_MP_ID).toInt());
                 fee.setSignatureId(query.value(Constants::FEES_SIGN_ID).toInt());
@@ -1022,6 +1023,7 @@ bool AccountBase::save(QList<Fee> &fees)
             query.bindValue(Constants::FEES_LABEL, fee.label());
             query.bindValue(Constants::FEES_AMOUNT, fee.amount());
             query.bindValue(Constants::FEES_COMMENT, fee.comment());
+            query.bindValue(Constants::FEES_TAX, fee.taxRate());
             query.bindValue(Constants::FEES_SIGN_ID, fee.signatureId());
             if (query.exec()) {
                 fee.setId(query.lastInsertId().toInt());
@@ -1047,6 +1049,7 @@ bool AccountBase::save(QList<Fee> &fees)
                                                  << Constants::FEES_LABEL
                                                  << Constants::FEES_AMOUNT
                                                  << Constants::FEES_COMMENT
+                                                 << Constants::FEES_TAX,
                                                  << Constants::FEES_SIGN_ID,
                                                  where);
                 query.prepare(req);
@@ -1059,6 +1062,7 @@ bool AccountBase::save(QList<Fee> &fees)
                 query.bindValue(++i, fee.label());
                 query.bindValue(++i, fee.amount());
                 query.bindValue(++i, fee.comment());
+                query.bindValue(++i, fee.taxRate());
                 query.bindValue(++i, fee.signatureId());
                 if (query.exec()) {
                     fee.setModified(false);
