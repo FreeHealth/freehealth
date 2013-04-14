@@ -36,8 +36,10 @@
 #include <utils/global.h>
 #include <utils/emailvalidator.h>
 #include <utils/widgets/qbuttonlineedit.h>
+
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -78,6 +80,7 @@ public:
         _sendButton = new QPushButton(q);
         _sendButton->setDisabled(true);
         ui->buttonBox->addButton(_sendButton, QDialogButtonBox::ActionRole);
+        ui->hasLookedUpDocumentationCheckBox->setCheckState(Qt::PartiallyChecked);
     }
 
     void connectUi()
@@ -175,35 +178,62 @@ void BugReportDialog::setBugCategories(const QStringList &cat)
 
 void BugReportDialog::validateInputs()
 {
+    // WARN_FUNC;
     bool enabled = true;
     QString toolTip;
 
+    // qWarning() << d->ui->emailEdit->hasAcceptableInput();
+    // Check email
     if (d->ui->emailEdit->hasAcceptableInput()) {
-        //buggy??
-        d->ui->emailEdit->setRightIcon(theme()->icon("ok.png", Core::ITheme::SmallIcon));
+        d->ui->emailState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
     } else {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("The email address you entered is not valid."));
-        // buggy??
-        d->ui->emailEdit->clearRightButton();
+        d->ui->emailState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
     }
+
+    // Check category
     if (d->ui->categoryCombo->currentIndex() == -1) {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("Please choose the issue category."));
+        d->ui->categoryState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
+    } else {
+        d->ui->categoryState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
     }
+
+    // Check severity
     if (d->ui->severityCombo->currentIndex() == -1) {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("Please select the severity of the issue."));
+        d->ui->severityState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
+    } else {
+        d->ui->severityState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
     }
+
+    // Check description
     if (d->ui->descrEdit->toPlainText().isEmpty()) {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("Describe the problem you have in short, pregnant words.<br/>The more information you provide, the easier we can help."));
+        d->ui->descriptionState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
+    } else {
+        d->ui->descriptionState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
     }
+
+    // Check doc
+    if (d->ui->hasLookedUpDocumentationCheckBox->checkState() == Qt::PartiallyChecked) {
+        enabled = false;
+        toolTip += QString("<li>%1</li>").arg(tr("Check/uncheck the documentation checkbox."));
+        d->ui->docState->setPixmap(theme()->icon(Core::Constants::ICONWARNING, Core::ITheme::SmallIcon).pixmap(16, 16));
+    } else {
+        d->ui->docState->setPixmap(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon).pixmap(16, 16));
+        d->ui->hasLookedUpDocumentationCheckBox->setTristate(false);
+    }
+
+    // Manage global tooltip
     if (!d->ui->hasLookedUpDocumentationCheckBox->isChecked()) {
         enabled = false;
         toolTip += QString("<li>%1</li>").arg(tr("Please confirm that you have looked up the documentation"));
     }
-    //: tooltip for bug report "send" button
     d->_sendButton->setToolTip(enabled? "" : QString("<p>%1</p><ul>%2</ul>").arg(tr("The following problems occurred:")).arg(toolTip));
     d->_sendButton->setEnabled(enabled);
 }
