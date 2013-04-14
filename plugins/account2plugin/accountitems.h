@@ -201,7 +201,7 @@ public:
     enum PaymentType { // if you update this enum, please also update the typeToSql()
         Cash = 0,
         Cheque,
-        VISA,
+        CreditCard,
         BankTransfer,
         InsuranceDelayed,
         Other,

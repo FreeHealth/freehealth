@@ -112,7 +112,7 @@ QString Payment::typeToSql(PaymentType type)
     switch (type) {
     case Cash: return "cash";
     case Cheque: return "chq";
-    case VISA: return "visa";
+    case CreditCard: return "creditcard";
     case BankTransfer: return "bktfrt";
     case InsuranceDelayed: return "delay";
     case Other: return "other";
@@ -128,8 +128,8 @@ Payment::PaymentType Payment::typeFromSql(const QString &type)
         return Cash;
     if (type=="chq")
         return Cheque;
-    if (type=="visa")
-        return VISA;
+    if (type=="creditcard")
+        return CreditCard;
     if (type=="bktfrt")
         return BankTransfer;
     if (type=="delay")
