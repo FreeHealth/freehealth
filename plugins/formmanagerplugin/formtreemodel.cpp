@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
  * \class Form::FormTreeModel
- * Model for forms. Get your model from Form::FormManager::formTreeModel()
+ * Model for forms. Get your model from Form::FormManager::formTreeModel().
  */
 
 #include "formtreemodel.h"
@@ -39,10 +39,11 @@
 #include "constants_db.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <translationutils/constants.h>
@@ -50,7 +51,10 @@
 
 #include <QDebug>
 
-enum {WarnFormRetreiving=true};
+enum {
+    WarnFormRetreiving = false,
+//    IncludeOverviewItem = true   //!< Include the FormCollection overview as first item of the model
+};
 
 using namespace Form;
 using namespace Internal;
@@ -113,6 +117,16 @@ public:
         return QIcon(iconFile);
     }
 
+//    void createOverviewItem()
+//    {
+//        QFont bold;
+//        bold.setBold(true);
+//        QStandardItem *item = new QStandardItem(theme()->icon(Core::Constants::ICONPATIENTOVERVIEW), tkTr(Trans::Constants::OVERVIEW));
+//        item->setFont(bold);
+//        linkFormAndItem(0, item);
+//        q->invisibleRootItem()->appendRow(item);
+//    }
+
     void createItems(const QList<Form::FormMain *> &emptyrootforms, bool tagAsSubForm = false)
     {
         QFont bold;
@@ -168,6 +182,7 @@ public:
                         .arg(_rootForms.at(i)->firstLevelFormMainChildren().count()));
             }
         }
+//        createOverviewItem();
         createItems(_rootForms);
         reparentItems(_rootForms);
     }

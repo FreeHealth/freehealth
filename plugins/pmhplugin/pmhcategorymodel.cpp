@@ -432,7 +432,7 @@ public:
                 _synthesis->setData(Category::CategoryItem::DbOnly_LabelId, -1);
                 _synthesis->setData(Category::CategoryItem::DbOnly_ParentId, -3);
                 _synthesis->setData(Category::CategoryItem::DbOnly_Mime, -1);
-                _synthesis->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTSYNTHESIS);
+                _synthesis->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTOVERVIEW);
                 _synthesis->setData(Category::CategoryItem::SortId, -1);
                 _synthesis->setLabel("Synthesis", Trans::Constants::ALL_LANGUAGE);
             }
@@ -635,7 +635,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             if (index.column()==Label) {
                 if (it->isCategory()) {
                     if (it->pmhCategory() == d->_synthesis)
-                        return tkTr(Trans::Constants::PATIENT_SYNTHESIS);
+                        return tkTr(Trans::Constants::PATIENT_OVERVIEW);
                     else
                         return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
                 }

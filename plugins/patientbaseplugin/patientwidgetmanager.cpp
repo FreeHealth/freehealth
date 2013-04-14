@@ -260,7 +260,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         a->setObjectName("aViewCurrentPatientData");
         a->setIcon(th->icon(Core::Constants::ICONPATIENTHISTORY));
         cmd = actionManager()->registerAction(a, Core::Id(Constants::A_VIEWCURRENTPATIENTDATA), globalcontext);
-        cmd->setTranslations(Trans::Constants::PATIENT_SYNTHESIS);
+        cmd->setTranslations(Trans::Constants::PATIENT_OVERVIEW);
         cmd->retranslate();
         menu->addAction(cmd, Core::Id(Constants::G_PATIENTS_HISTORY));
         connect(aViewCurrentPatientData,SIGNAL(triggered()), this, SLOT(viewCurrentPatientData()));
