@@ -20,7 +20,7 @@ DEFINES += QUAZIP_BUILD
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
 CONFIG(dontbuildquazip) {
-  message(Using libquazip0 package)
+  message(Using system libquazip0 package)
   LIBS+=-lquazip
 } else {
   message(Building libquazip)
