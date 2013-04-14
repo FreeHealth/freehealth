@@ -255,7 +255,7 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
  * Calls setRightbutton(). Internally creates an empty QToolButton with the given \e icon.
  * An existing QToolButton on the right side is deleted.
  */
-void QButtonLineEdit::setRightIcon(QIcon icon)
+void QButtonLineEdit::setRightIcon(const QIcon &icon)
 {
     if (icon.isNull()) {
         clearRightButton();
@@ -272,7 +272,7 @@ void QButtonLineEdit::setRightIcon(QIcon icon)
  * Calls SetLeftButton(). Internally creates an empty action with the icon and
  * assigns it to the internal toolbutton. If there is no toolbutton, it creates one.
  */
-void QButtonLineEdit::setLeftIcon(QIcon icon)
+void QButtonLineEdit::setLeftIcon(const QIcon &icon)
 {
     if (icon.isNull()) {
         clearLeftButton();

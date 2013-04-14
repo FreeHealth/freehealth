@@ -61,8 +61,8 @@ public:
     void setLeftButton(QToolButton *button);
     void setRightButton(QToolButton *button);
 
-    void setRightIcon(QIcon icon);
-    void setLeftIcon(QIcon icon);
+    void setRightIcon(const QIcon &icon);
+    void setLeftIcon(const QIcon &icon);
 
     void clearLeftButton();
     void clearRightButton();
