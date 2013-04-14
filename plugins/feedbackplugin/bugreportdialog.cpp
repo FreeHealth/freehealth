@@ -204,7 +204,7 @@ void BugReportDialog::validateInputs()
         toolTip += QString("<li>%1</li>").arg(tr("Please confirm that you have looked up the documentation"));
     }
     //: tooltip for bug report "send" button
-    d->_sendButton->setToolTip(enabled? "" : tr("<p>The following problems occurred:</p><ul>%1</ul>").arg(toolTip));
+    d->_sendButton->setToolTip(enabled? "" : QString("<p>%1</p><ul>%2</ul>").arg(tr("The following problems occurred:")).arg(toolTip));
     d->_sendButton->setEnabled(enabled);
 }
 
