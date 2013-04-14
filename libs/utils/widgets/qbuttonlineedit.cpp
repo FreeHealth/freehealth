@@ -220,18 +220,19 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
  that may be associated with the button. These must be deleted by the caller.\n
  For now pixmaps of QAction must be sized (16x16). \n
 */
-void QButtonLineEdit::setRightButton(QToolButton * button)
+void QButtonLineEdit::setRightButton(QToolButton *button)
 {
     // button is already there, or both 0
     if (d_qble->_rightButton == button)
         return;
 
-    // we should clear button, and there is one
-    if (!button && d_qble->_rightButton) {
+    // we should clear the right button if there is one
+    if (d_qble->_rightButton) {
         delete d_qble->_rightButton;
         d_qble->_rightButton = 0;
     }
 
+    // add the new button
     if (button) {
         button->setParent(this);
         d_qble->_rightButton = button;
