@@ -1049,7 +1049,7 @@ bool AccountBase::save(QList<Fee> &fees)
                                                  << Constants::FEES_LABEL
                                                  << Constants::FEES_AMOUNT
                                                  << Constants::FEES_COMMENT
-                                                 << Constants::FEES_TAX,
+                                                 << Constants::FEES_TAX
                                                  << Constants::FEES_SIGN_ID,
                                                  where);
                 query.prepare(req);
