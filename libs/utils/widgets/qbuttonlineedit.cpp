@@ -188,13 +188,17 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
+    // button is already there, or both 0
     if (d_qble->_leftButton == button)
         return;
 
-    if (d_qble->_leftButton)
-        clearLeftButton();
+    // we should clear the left button if there is one
+    if (d_qble->_leftButton) {
+        delete d_qble->_leftButton;
+        d_qble->_leftButton = 0;
+    }
 
-    if (button){
+    if (button) {
         button->setParent(this);
         d_qble->_leftButton = button;
         d_qble->_leftButton->setStyleSheet("border:none;padding:0 0 0 2px;");
