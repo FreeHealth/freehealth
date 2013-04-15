@@ -65,8 +65,8 @@ public:
         Title,
         TitleIndex,
         FullName,
-        UsualName,
-        OtherNames,           // 10
+        UsualName,            // 10
+        OtherNames,
         Firstname,
         Gender,
         GenderIndex,
@@ -75,8 +75,8 @@ public:
         DateOfBirth,
         Age,
         YearsOld,
-        MaritalStatus,
-        Profession,           // 20
+        MaritalStatus,        // 20
+        Profession,
         ProfessionSite,
         DateOfDeath,
         Photo_32x32,
@@ -87,10 +87,10 @@ public:
         ZipCode,
         City,
         Country,
-        StateProvince,
+        StateProvince,       // 30
         AddressNote,
         FullAddress,
-        Mails,             // 30
+        Mails,
         Tels,
         MobilePhone,
         Faxes,
@@ -99,7 +99,7 @@ public:
 
         // Social numbers
         SocialNumber,
-        SocialNumber2,
+        SocialNumber2,      // 40
         SocialNumber3,
         SocialNumber4,
         SocialNumberOwnerFullName,      // If different from the patient
