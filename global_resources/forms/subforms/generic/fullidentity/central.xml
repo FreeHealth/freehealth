@@ -27,6 +27,7 @@
       <updateversion from="0.8.2" to="0.8.4">
         <text lang="fr">
         Gestion de la représentation des données patient (nom du propriétaire du NSS)
+        Par défaut, le patient est propriétaire du numéro de sécurité sociale.
         </text>
         Managing the patient data representation for the SocialNumber owner full name
         <text lang="xx">
@@ -115,7 +116,7 @@
             <label lang="xx">Patient is the social insurance number owner</label>
             <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
             <options>DontPrintEmptyValues</options>
-            <value><default>1</default></value>
+            <value><default>checked</default></value>
           </Item>
 
           <Item type="shorttext" name="FrGroup::OwnerName">
