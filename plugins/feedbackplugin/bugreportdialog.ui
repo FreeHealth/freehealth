@@ -348,6 +348,10 @@
  </customwidgets>
  <tabstops>
   <tabstop>emailEdit</tabstop>
+  <tabstop>categoryCombo</tabstop>
+  <tabstop>severityCombo</tabstop>
+  <tabstop>descrEdit</tabstop>
+  <tabstop>hasLookedUpDocumentationCheckBox</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
