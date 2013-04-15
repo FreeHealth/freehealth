@@ -227,7 +227,7 @@ BaseEditableStringList::~BaseEditableStringList()
 
 QString BaseEditableStringList::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE, Qt::CaseInsensitive))
         return QString();
 
     if (withValues) {

@@ -234,54 +234,16 @@ void MeasurementWidget::populateWithWeight()
 
 QString MeasurementWidget::printableHtml(bool withValues) const
 {
-    if (m_FormItem->getOptions().contains("notprintable"))
+    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE, Qt::CaseInsensitive))
         return QString();
 
-    // TODO: write this
-    Q_UNUSED(withValues);
-//    if (withValues) {
-//        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
-//            if (m_Text->textEdit()->toPlainText().isEmpty())
-//                return QString();
-//        }
-//        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
-//                   "<thead>"
-//                   "<tr>"
-//                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-//                    "%1"
-//                   "</td>"
-//                   "</tr>"
-//                   "</thead>"
-//                   "<tbody>"
-//                   "<tr>"
-//                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-//                   "%2"
-//                   "</td>"
-//                   "</tr>"
-//                   "</tbody>"
-//                   "</table>")
-//            .arg(m_FormItem->spec()->label()).arg(m_Text->getHtml().remove("</body>").remove("</html>"));
-//    } else {
-//        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
-//                       "<thead>"
-//                       "<tr>"
-//                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-//                       "%1"
-//                       "</td>"
-//                       "</tr>"
-//                       "</thead>"
-//                       "<tbody>"
-//                       "<tr>"
-//                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-//                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
-//                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
-//                       "</td>"
-//                       "</tr>"
-//                       "</tbody>"
-//                       "</table>")
-//                .arg(m_FormItem->spec()->label());
-//    }
-    return QString();
+    if (withValues) {
+        return QString("%1 %2").arg(m_value->value()).arg(m_units->currentText());
+    } else if (m_FormItem->getOptions().contains(Constants::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive)
+               && m_value->value() == 0) {
+        return QString();
+    }
+    return QString("--&nbsp;&nbsp;---");
 }
 
 void MeasurementWidget::retranslate()
