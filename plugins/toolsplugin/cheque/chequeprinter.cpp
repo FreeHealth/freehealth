@@ -218,6 +218,8 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     printer->getPageMargins(&l, &t, &r, &b, QPrinter::DevicePixel);
     d->_axisHelper.setMargins(l, t, r, b);
 
+//    qWarning() << "Print margins (landscape)" << l << t << r << b;
+
     QPainter painter;
     if (!painter.begin(printer)) { // failed to open file
         qWarning("failed to open file, is it writable?");
@@ -228,11 +230,16 @@ bool ChequePrinter::print(const Internal::ChequePrintFormat &format)
     double centerX = (printer->paperSize(QPrinter::Millimeter).width() - format.sizeMillimeters().width());
     double centerY = (printer->paperSize(QPrinter::Millimeter).height() / 2.) - (format.sizeMillimeters().height() / 2.);
 
+//    qWarning() << "Paper height" << printer->paperSize(QPrinter::Millimeter).height() << "cheque height" << format.sizeMillimeters().height();
+//    qWarning() << "Before correction: centerX" << centerX << "centerY" << centerY;
+
     // Printer correction: user defined
     // As we are printing in landscape -> invert x <-> y in the translation
     centerX -= settings()->value(Core::Constants::S_PRINTERCORRECTION_VERTIC_MM).toDouble();
     centerY -= settings()->value(Core::Constants::S_PRINTERCORRECTION_HORIZ_MM).toDouble();
     d->_axisHelper.translateMillimeters(centerX, centerY);
+
+//    qWarning() << "After correction: centerX" << centerX << "centerY" << centerY;
 
     QFont font;
     font.setPointSize(10);
