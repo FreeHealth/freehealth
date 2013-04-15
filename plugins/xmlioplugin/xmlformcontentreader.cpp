@@ -800,6 +800,16 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
         if (item)
             item->spec()->setValue(Form::FormItemSpec::Spec_PlainTextPrintMask, content, lang);
         return true;
+    } else if (type.compare(Constants::FILETYPE_EXPORTHTMLMASK, Qt::CaseInsensitive)==0) {
+        const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+        if (item)
+            item->spec()->setValue(Form::FormItemSpec::Spec_HtmlExportMask, content, lang);
+        return true;
+    } else if (type.compare(Constants::FILETYPE_EXPORTPLAINTEXTMASK, Qt::CaseInsensitive)==0) {
+        const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+        if (item)
+            item->spec()->setValue(Form::FormItemSpec::Spec_PlainTextExportMask, content, lang);
+        return true;
     }
 
     // Check file content (for forms file)

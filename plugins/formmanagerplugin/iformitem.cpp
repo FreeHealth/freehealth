@@ -176,6 +176,12 @@
  * \var Form::FormItemSpec::Spec_PlainTextPrintMask
  * Printing plain text mask of the form (using tokens)
  *
+ * \var Form::FormItemSpec::Spec_HtmlExportMask
+ * Export mask of the form (using tokens) in HTML
+ *
+ * \var Form::FormItemSpec::Spec_PlainTextExportMask
+ * Export mask of the form (using tokens) in plain text
+ *
  * \var Form::FormItemSpec::Spec_IconFileName
  * Translatable icon file name (can contain path tag).
  * \sa Core::Constants::TAG_APPLICATION_THEME_PATH

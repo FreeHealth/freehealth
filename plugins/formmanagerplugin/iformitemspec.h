@@ -79,6 +79,8 @@ public:
         Spec_UiInsertIntoLayout,
         Spec_HtmlPrintMask,
         Spec_PlainTextPrintMask,
+        Spec_HtmlExportMask,
+        Spec_PlainTextExportMask,
         Spec_IconFileName,
         Spec_Tooltip,
         Spec_PlaceHolder,

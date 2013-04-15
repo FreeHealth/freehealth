@@ -86,6 +86,13 @@ public:
         Label_OnTopCentered
     };
 
+    enum OutputType {
+        HtmlPrintOutput,
+        HtmlExportOutput,
+        PlainTextPrintOutput,
+        PlainTextExportOutput
+    };
+
     IFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     virtual ~IFormWidget() {}
 
@@ -107,8 +114,8 @@ public:
     void setLastTabWidget(QWidget *widget) {_lastTabWidget = widget;}
     virtual void setTabOrder(bool consoleWarn = false) {Q_UNUSED(consoleWarn);}
 
-    // Printing
-    virtual QString printableHtml(bool withValues = true) const {Q_UNUSED(withValues); return QString();}
+    // toString
+    virtual QString toString(OutputType type = HtmlPrintOutput, bool withValues = true) const {Q_UNUSED(type); Q_UNUSED(withValues); return QString();}
 
 public Q_SLOTS:
     virtual void retranslate() {}

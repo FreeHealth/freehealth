@@ -192,6 +192,8 @@ const char* const FILETYPE_SCRIPT       = "script";
 const char* const FILETYPE_FORM         = "form";
 const char* const FILETYPE_PRINTHTMLMASK       = "htmlprintmask";
 const char* const FILETYPE_PRINTPLAINTEXTMASK  = "plaintextprintmask";
+const char* const FILETYPE_EXPORTHTMLMASK       = "htmlexportmask";
+const char* const FILETYPE_EXPORTPLAINTEXTMASK  = "plaintextexportmask";
 
 const char* const OPTION_PLUGIN_NAME  = "type";
 const char* const OPTION_USEFORMNAMEASNS  = "useformnameasnamespace";
