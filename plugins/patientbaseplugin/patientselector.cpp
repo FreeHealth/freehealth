@@ -52,9 +52,10 @@
 #include "ui_patientselector.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/ipatient.h>
@@ -79,6 +80,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
@@ -178,7 +180,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
 
-    // Get the active model
+    // Create internal patient model
     PatientModel *model = new PatientModel(this);
     setPatientModel(model);
     patientCore()->registerPatientModel(model);
@@ -206,6 +208,9 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         setRefreshSearchResultMethod(WhileTyping);
     else
         setRefreshSearchResultMethod(ReturnPress);
+
+    // Connect Core::IPatient model
+    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onPatientDataChanged(QModelIndex,QModelIndex)));
 }
 
 PatientSelector::~PatientSelector()
@@ -423,6 +428,29 @@ void PatientSelector::onPatientActivated(const QModelIndex &index)
         LOG_ERROR("Unable to select the patient: " + uuid);
         mainWindow()->endProcessingSpinner();
     }
+}
+
+/**
+ * \brief Update the model/view on patient data changed
+ * \internal
+*/
+void PatientSelector::onPatientDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    // TODO: Refresh only if the current patient is visible in the model
+    if (topLeft.row() == bottomRight.row()) {
+        // Limit the model refreshing to address, name and dates
+        if (IN_RANGE(topLeft.column(), bottomRight.column(), Core::IPatient::FullName))
+            d->m_Model->refreshModel();
+        else if (IN_RANGE(topLeft.column(), bottomRight.column(), Core::IPatient::FullAddress))
+            d->m_Model->refreshModel();
+        else if (IN_RANGE(topLeft.column(), bottomRight.column(), Core::IPatient::DateOfBirth))
+            d->m_Model->refreshModel();
+        else if (IN_RANGE(topLeft.column(), bottomRight.column(), Core::IPatient::DateOfDeath))
+            d->m_Model->refreshModel();
+        return;
+    }
+    // Unable to limit? Refresh
+    d->m_Model->refreshModel();
 }
 
 /**

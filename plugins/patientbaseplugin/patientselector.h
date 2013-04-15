@@ -101,6 +101,7 @@ private Q_SLOTS:
     void changeIdentity(const QModelIndex &current, const QModelIndex &previous);
     void refreshFilter();
     void onPatientActivated(const QModelIndex &index);
+    void onPatientDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void onUserChanged();
 
 protected:
