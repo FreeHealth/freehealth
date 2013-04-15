@@ -30,12 +30,28 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Utils::QButtonLineEdit" name="emailEdit">
-        <property name="placeholderText">
-         <string>yourname@gmail.com</string>
+      <item row="2" column="3" colspan="2">
+       <widget class="QLabel" name="applicationValue"/>
+      </item>
+      <item row="3" column="3" colspan="2">
+       <widget class="QLabel" name="osValue">
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="emailLabel">
+        <property name="text">
+         <string>&amp;Email:</string>
+        </property>
+        <property name="buddy">
+         <cstring>emailEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" colspan="2">
+       <widget class="QLabel" name="dateValue"/>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QLabel" name="applicationLabel">
@@ -55,6 +71,13 @@
        </widget>
       </item>
       <item row="0" column="3">
+       <widget class="Utils::QButtonLineEdit" name="emailEdit">
+        <property name="placeholderText">
+         <string>yourname@gmail.com</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QLabel" name="emailState">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -85,29 +108,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="emailLabel">
-        <property name="text">
-         <string>&amp;Email:</string>
-        </property>
-        <property name="buddy">
-         <cstring>emailEdit</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" colspan="2">
-       <widget class="QLabel" name="dateValue"/>
-      </item>
-      <item row="2" column="2" colspan="2">
-       <widget class="QLabel" name="applicationValue"/>
-      </item>
-      <item row="3" column="2" colspan="2">
-       <widget class="QLabel" name="osValue">
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -117,6 +117,67 @@
       <string>Current problem</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="2">
+       <widget class="QComboBox" name="categoryCombo"/>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="docState">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>22</width>
+            <height>22</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="hasLookedUpDocumentationCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="tristate">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="hasLookedUpDocumentationLabel">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Yes, I have checked the documentation on the &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;FreeMedForms Project website&lt;/span&gt;&lt;/a&gt; before reporting this issue.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="buddy">
+           <cstring>hasLookedUpDocumentationCheckBox</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="catLabel">
         <property name="text">
@@ -127,10 +188,40 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="categoryCombo"/>
+      <item row="1" column="0">
+       <widget class="QLabel" name="severityLabel">
+        <property name="text">
+         <string>&amp;Severity:</string>
+        </property>
+        <property name="buddy">
+         <cstring>severityCombo</cstring>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="2">
+      <item row="1" column="2">
+       <widget class="QComboBox" name="severityCombo"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="descrLabel">
+        <property name="text">
+         <string>&amp;Description:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="buddy">
+         <cstring>descrEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QTextEdit" name="descrEdit">
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
        <widget class="QLabel" name="categoryState">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -161,20 +252,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="severityLabel">
-        <property name="text">
-         <string>&amp;Severity:</string>
-        </property>
-        <property name="buddy">
-         <cstring>severityCombo</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="severityCombo"/>
-      </item>
-      <item row="1" column="2">
        <widget class="QLabel" name="severityState">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -205,27 +283,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="descrLabel">
-        <property name="text">
-         <string>&amp;Description:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-        <property name="buddy">
-         <cstring>descrEdit</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
-       <widget class="QTextEdit" name="descrEdit">
-        <property name="tabChangesFocus">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
        <widget class="QLabel" name="descriptionState">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -243,64 +301,6 @@
          <size>
           <width>22</width>
           <height>200</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QCheckBox" name="hasLookedUpDocumentationCheckBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="tristate">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="hasLookedUpDocumentationLabel">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Yes, I have checked the documentation on the &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;FreeMedForms Project website&lt;/span&gt;&lt;/a&gt; before reporting this issue.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="buddy">
-           <cstring>hasLookedUpDocumentationCheckBox</cstring>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="docState">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>22</width>
-          <height>22</height>
          </size>
         </property>
         <property name="baseSize">
