@@ -200,6 +200,8 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 
     if (button) {
         button->setParent(this);
+        if (button->actions().empty())
+            button->setFocusPolicy(Qt::ClickFocus);
         d_qble->_leftButton = button;
         d_qble->_leftButton->setStyleSheet("border:none;padding:0 0 0 2px;");
         d_qble->_leftButton->setCursor(Qt::ArrowCursor);
@@ -239,6 +241,8 @@ void QButtonLineEdit::setRightButton(QToolButton *button)
     // add the new button
     if (button) {
         button->setParent(this);
+        if (button->actions().empty())
+            button->setFocusPolicy(Qt::ClickFocus);
         d_qble->_rightButton = button;
         d_qble->_rightButton->setStyleSheet("border:none;padding:0;");
         d_qble->_rightButton->setCursor(Qt::ArrowCursor);
