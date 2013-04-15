@@ -26,10 +26,15 @@
  ***************************************************************************/
 #include "chequeprinter_preferences.h"
 #include "chequeconstants.h"
+#include "chequeprinter.h"
+#include "chequeprintformat.h"
+#include "chequeprintformatmodel.h"
 #include "ui_chequeprinter_preferences.h"
 
+#include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+#include <translationutils/trans_units.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -46,8 +51,10 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 /*! Creates a new preferences widget with a given parent. */
 ChequePrinterPreferencesWidget::ChequePrinterPreferencesWidget(QWidget *parent) :
     QWidget(parent),
+    _model(0),
     ui(new Ui::ChequePrinterPreferencesWidget)
 {
+    setObjectName("ChequePrinterPreferencesWidget");
     ui->setupUi(this);
     setDataToUi();
 }
@@ -63,6 +70,72 @@ void ChequePrinterPreferencesWidget::setDataToUi()
     ui->orderLineEdit->setText(settings()->value(Constants::S_ORDER).toString());
     ui->placeLineEdit->setText(settings()->value(Constants::S_PLACE).toString());
     ui->defaultValuesTextEdit->setPlainText(settings()->value(Constants::S_VALUES).toStringList().join("\n"));
+    // Create chequeformat model
+    _model = new ChequePrintFormatModel(this);
+    _model->initialize();
+    ui->availableFormats->setModel(_model);
+    connect(ui->availableFormats, SIGNAL(activated(QModelIndex)), this, SLOT(onChequeFormatActivated(QModelIndex)), Qt::UniqueConnection);
+    connect(ui->printTest, SIGNAL(clicked()), this, SLOT(onPrintTestClicked()));
+}
+
+void ChequePrinterPreferencesWidget::onChequeFormatActivated(const QModelIndex &index)
+{
+    const ChequePrintFormat &format = _model->chequePrintFormat(index);
+    QRectF rect = format.rectMillimetersFromTopLeft(ChequePrintFormat::PayTo);
+    ui->pt_x->setText(QString::number(rect.x(), 'f', 2));
+    ui->pt_y->setText(QString::number(rect.y(), 'f', 2));
+    ui->pt_w->setText(QString::number(rect.width(), 'f', 2));
+    ui->pt_h->setText(QString::number(rect.height(), 'f', 2));
+
+    rect = format.rectMillimetersFromTopLeft(ChequePrintFormat::AmountNumbers);
+    ui->an_x->setText(QString::number(rect.x(), 'f', 2));
+    ui->an_y->setText(QString::number(rect.y(), 'f', 2));
+    ui->an_w->setText(QString::number(rect.width(), 'f', 2));
+    ui->an_h->setText(QString::number(rect.height(), 'f', 2));
+
+    rect = format.rectMillimetersFromTopLeft(ChequePrintFormat::AmountLetters);
+    ui->al_x->setText(QString::number(rect.x(), 'f', 2));
+    ui->al_y->setText(QString::number(rect.y(), 'f', 2));
+    ui->al_w->setText(QString::number(rect.width(), 'f', 2));
+    ui->al_h->setText(QString::number(rect.height(), 'f', 2));
+
+    rect = format.rectMillimetersFromTopLeft(ChequePrintFormat::Date);
+    ui->dt_x->setText(QString::number(rect.x(), 'f', 2));
+    ui->dt_y->setText(QString::number(rect.y(), 'f', 2));
+    ui->dt_w->setText(QString::number(rect.width(), 'f', 2));
+    ui->dt_h->setText(QString::number(rect.height(), 'f', 2));
+
+    rect = format.rectMillimetersFromTopLeft(ChequePrintFormat::Place);
+    ui->pl_x->setText(QString::number(rect.x(), 'f', 2));
+    ui->pl_y->setText(QString::number(rect.y(), 'f', 2));
+    ui->pl_w->setText(QString::number(rect.width(), 'f', 2));
+    ui->pl_h->setText(QString::number(rect.height(), 'f', 2));
+}
+
+static QString rectToString(const QRectF &rect)
+{
+    return QString("x: %1; y: %2; w: %3; h%4")
+            .arg(rect.x())
+            .arg(rect.y())
+            .arg(rect.width())
+            .arg(rect.height());
+}
+
+bool ChequePrinterPreferencesWidget::onPrintTestClicked()
+{
+    const ChequePrintFormat &format = _model->chequePrintFormat(ui->availableFormats->currentIndex());
+    // Print the cheque
+    ChequePrinter print;
+    print.setDrawRects(true);
+    print.setOrder(rectToString(format.rectMillimetersFromTopLeft(ChequePrintFormat::PayTo)));
+    print.setPlace(rectToString(format.rectMillimetersFromTopLeft(ChequePrintFormat::Place)));
+    print.setDate(QDate::currentDate());
+    print.setAmount(1000);
+    if (!print.print(format)) {
+        LOG_ERROR("Unable to print cheque");
+        return false;
+    }
+    return true;
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -148,7 +221,7 @@ QString ChequePrinterPreferencesPage::id() const
 /*! Returns the (translated) name of the preferences page. */
 QString ChequePrinterPreferencesPage::displayName() const
 {
-    return tr("Print helpers");
+    return tr("Cheque printer");
 }
 
 /*! Returns the (translated) category of the preferences page. */

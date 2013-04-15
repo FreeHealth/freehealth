@@ -31,12 +31,13 @@
 
 #include <QWidget>
 #include <QPointer>
+#include <QModelIndex>
 
 /**
  * \file chequeprinter_preferences.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 10 Mar 2013
+ * \date 16 Apr 2013
 */
 
 namespace Core {
@@ -45,6 +46,7 @@ class ISettings;
 
 namespace Tools {
 namespace Internal {
+class ChequePrintFormatModel;
 
 namespace Ui {
 class ChequePrinterPreferencesWidget;
@@ -64,6 +66,8 @@ public:
     static void writeDefaultSettings(Core::ISettings *s);
 
 public Q_SLOTS:
+    void onChequeFormatActivated(const QModelIndex &index);
+    bool onPrintTestClicked();
     void saveToSettings(Core::ISettings *s = 0);
 
 private:
@@ -72,6 +76,7 @@ private:
 
 private:
     Ui::ChequePrinterPreferencesWidget *ui;
+    ChequePrintFormatModel *_model;
 };
 
 
