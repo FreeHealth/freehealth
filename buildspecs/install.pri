@@ -81,44 +81,44 @@ CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 CONFIG(debug,debug|release):message( Building pure debug version )
 CONFIG(debug): message( Building Debug )
 CONFIG(release): message( Building Release )
-message( Binary : )
-message(    * From : $${BUILD_BINARY_PATH} )
-message(    * To : $${INSTALL_BINARY_PATH} )
+message( Binary: )
+message(    * From: $${BUILD_BINARY_PATH} )
+message(    * To: $${INSTALL_BINARY_PATH} )
 
 !CONFIG(dontinstalllibs) {
-    message( Application libraries : )
-    message(    * From : $${BUILD_LIB_PATH})
-    message(    * To : $${INSTALL_LIBS_PATH})
-    message(    * Extension : $${LIB_EXTENSION})
-    message(    * RPath : $${RPATH_LIBS_BIN} )
+    message( Application libraries: )
+    message(    * From: $${BUILD_LIB_PATH})
+    message(    * To: $${INSTALL_LIBS_PATH})
+    message(    * Extension: $${LIB_EXTENSION})
+    message(    * RPath: $${RPATH_LIBS_BIN} )
 }
 
-message( Plugins : )
-message(    * From : $${BUILD_PLUGIN_PATH})
-message(    * To : $${INSTALL_PLUGINS_PATH} )
-message(    * Extension : $${LIB_EXTENSION})
-!isEmpty(INSTALL_QT_LIBS_PATH):message( Qt Libs : $${INSTALL_QT_LIBS_PATH} )
-!isEmpty(INSTALL_QT_PLUGINS_PATH):message( Qt Plugins : $${INSTALL_QT_PLUGINS_PATH} )
+message( Plugins: )
+message(    * From: $${BUILD_PLUGIN_PATH})
+message(    * To: $${INSTALL_PLUGINS_PATH} )
+message(    * Extension: $${LIB_EXTENSION})
+!isEmpty(INSTALL_QT_LIBS_PATH):message( Qt Libs: $${INSTALL_QT_LIBS_PATH} )
+!isEmpty(INSTALL_QT_PLUGINS_PATH):message( Qt Plugins: $${INSTALL_QT_PLUGINS_PATH} )
 
 !CONFIG(dontinstallresources) {
     message( ******************************************************************************** )
     message( *************************    FreeMedForms Resources   ************************** )
     message( ******************************************************************************** )
-    message( Resources : $${INSTALL_RESOURCES_PATH} )
-    message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
-    !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
-    !isEmpty(INSTALL_FORMS_PATH):message( Forms : $${INSTALL_FORMS_PATH} )
-    message( Pixmaps - small : $${INSTALL_SMALLPIX_PATH} )
-    message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
-    message( Pixmaps - big : $${INSTALL_BIGPIX_PATH} )
+    message( Resources: $${INSTALL_RESOURCES_PATH} )
+    message( Translations: $${INSTALL_TRANSLATIONS_PATH} )
+    !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path: $${INSTALL_FREEDATAPACK_PATH} )
+    !isEmpty(INSTALL_FORMS_PATH):message( Forms: $${INSTALL_FORMS_PATH} )
+    message( Pixmaps - small: $${INSTALL_SMALLPIX_PATH} )
+    message( Pixmaps - medium: $${INSTALL_MEDIUMPIX_PATH} )
+    message( Pixmaps - big: $${INSTALL_BIGPIX_PATH} )
     message( Pixmaps - others: $${INSTALL_OTHERPIX_PATH} )
-    message( Pixmaps - svg : $${INSTALL_SVGPIX_PATH} )
-    message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
+    message( Pixmaps - svg: $${INSTALL_SVGPIX_PATH} )
+    message( Pixmaps - splashscreens: $${INSTALL_SPLASHPIX_PATH} )
 }
 
-!isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
-!isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
-!isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
+!isEmpty(INSTALL_DOCS_PATH):message( Documentation: $${INSTALL_DOCS_PATH} )
+!isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile: $${INSTALL_DESKTOP_FILES_PATH} )
+!isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon: $${INSTALL_DESKTOP_ICON_PATH} )
 
 !CONFIG(dontinstallresources) {
     message( ******************************************************************************** )
@@ -178,7 +178,7 @@ plugs_specs.CONFIG += no_check_exist
 INSTALLS += plugs_specs
 }
 
-# Install common resources : Theme && Translations
+# Install common resources: Theme && Translations
 !CONFIG(dontinstallresources) {
   # Install translations
   !isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){
@@ -343,8 +343,8 @@ INSTALLS+=docs
 
    INSTALLS+=qt_libs
 
-   linux:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
-   else:win32:message(Bundle : Qt Libs will be installed from $$[QT_INSTALL_BIN] to $${INSTALL_QT_LIBS_PATH})
+   linux:message(Bundle: Qt Libs will be installed from $$[QT_INSTALL_LIBS] to $${INSTALL_QT_LIBS_PATH})
+   else:win32:message(Bundle: Qt Libs will be installed from $$[QT_INSTALL_BIN] to $${INSTALL_QT_LIBS_PATH})
 
    # Install Qt plugins (SQL plugins)
    qt_sqlplugins.path = $${INSTALL_QT_PLUGINS_PATH}
@@ -354,7 +354,7 @@ INSTALLS+=docs
    qt_accessibleplugins.path = $${INSTALL_QT_PLUGINS_PATH}
    qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
    INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
-   message(Bundle : Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
+   message(Bundle: Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
  }
 
 }
