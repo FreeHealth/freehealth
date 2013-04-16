@@ -105,7 +105,7 @@ public:
     // FormIO extra data
     virtual void addExtraData(const QString &key, const QString &value);
 
-    /*! Returns the FormItem extra data as QHash (keys are all lowered) */
+    /*! Returns the FormItem extra data as QHash (keys are all lowercase) */
     virtual QHash<QString,QString> extraData() const {return m_ExtraData;}
 
     /*! Clears the internal extra data of the FormItem */
