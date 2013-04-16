@@ -56,6 +56,7 @@ class PatientFormItemDataWrapper;
 namespace Internal {
 class EpisodeModelPrivate;
 class PatientFormItemDataWrapperPrivate;
+class FormExporterPrivate;
 }  // namespace Internal
 
 class FORM_EXPORT EpisodeModel : public QAbstractListModel
@@ -64,6 +65,7 @@ class FORM_EXPORT EpisodeModel : public QAbstractListModel
     friend class Form::EpisodeManager;
     friend class Form::PatientFormItemDataWrapper;
     friend class Form::Internal::PatientFormItemDataWrapperPrivate;
+    friend class Form::Internal::FormExporterPrivate;
     friend class Patients::Internal::IdentityViewerWidget;
 
 protected:
