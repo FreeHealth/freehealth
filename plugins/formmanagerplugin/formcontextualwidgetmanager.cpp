@@ -34,6 +34,8 @@
 #include "formcontextualwidgetmanager.h"
 #include "formcontextualwidget.h"
 #include "episodebase.h"
+#include "formcore.h"
+#include "formexporter.h"
 #include "constants_db.h"
 
 #include <coreplugin/icore.h>
@@ -70,6 +72,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
+static inline Form::FormExporter &formExporter() { return Form::FormCore::instance().formExporter(); }
 
 // Register an existing Core action
 static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
@@ -207,6 +210,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     aAddForm(0),
     aRemoveSubForm(0),
     aPrintForm(0),
+    aExportPatientFile(0),
     m_CurrentView(0)
 {
     setObjectName("FormActionHandler");
@@ -306,6 +310,18 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 
     aPrintForm = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
     connect(aPrintForm, SIGNAL(triggered()), this, SLOT(onPrintFormRequested()));
+
+    // Export patient file -> Patient Menu
+    Core::ActionContainer *patientmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_PATIENTS));
+    Q_ASSERT(patientmenu);
+    aExportPatientFile = createAction(this, "aExportPatientFile", Core::Constants::ICONEXPORTPATIENTFILE,
+                                      Constants::A_EXPORTPATIENTFILE,
+                                      ctx,
+                                      Trans::Constants::EXPORTPATIENTFILE, "",
+                                      cmd,
+                                      patientmenu, Core::Constants::G_PATIENT_INFORMATION,
+                                      QKeySequence::UnknownKey, false);
+    connect(aExportPatientFile, SIGNAL(triggered()), this, SLOT(onExportPatientFileRequested()));
 
     // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
@@ -452,6 +468,13 @@ void FormActionHandler::onPrintFormRequested()
     if (m_CurrentView) {
         m_CurrentView->printFormOrEpisode();
     }
+}
+
+void FormActionHandler::onExportPatientFileRequested()
+{
+    FormExporterJob job;
+    job.setExportGroupmentType(FormExporterJob::FormOrderedExportation);
+    formExporter().startExportation(job);
 }
 
 void FormActionHandler::showDatabaseInformation()

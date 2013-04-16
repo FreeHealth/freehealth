@@ -158,6 +158,7 @@ const char * const  VIEWUPDATE_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Vi
 const char * const  PRINT_PREVIEW_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Print preview");
 const char * const  TRANSLATORS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
+const char * const  EXPORTPATIENTFILE     = QT_TRANSLATE_NOOP("tkConstants", "Export patient file");
 const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toggle full screen");
 const char * const  ZOOMIN_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Zoom in");
 const char * const  ZOOMOUT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Zoom out");

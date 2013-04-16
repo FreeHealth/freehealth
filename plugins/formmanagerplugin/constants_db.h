@@ -106,6 +106,7 @@ namespace Constants {
     const char * const A_ADDFORM = "aForm.AddForm";
     const char * const A_REMOVEFORM = "aForm.RemoveForm";
     const char * const A_TAKESCREENSHOT = "aForm.TakeScreenshot";
+    const char * const A_EXPORTPATIENTFILE = "aForm.ExportPatientFile";
 
 //    const char * const A_PRINTFORM = "aForm.PrintForm";
     const char * const A_SHOWPATIENTSYNTHESIS = "aForm.PatientSynth";

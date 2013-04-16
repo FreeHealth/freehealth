@@ -191,6 +191,7 @@ const char * const  ICONFORMS    =  "forms.png";
 const char * const  ICONFORMS_ADD    =  "form-new.png";
 const char * const  ICONPATIENTOVERVIEW  =  "patientsynthesis.png";
 const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
+const char * const  ICONEXPORTPATIENTFILE  =  "export-patient-file.png";
 const char * const  ICONCHEQUE       = "bank-cheque.png";
 
 // date and time Icons
