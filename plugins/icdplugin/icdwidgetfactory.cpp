@@ -75,7 +75,7 @@ IcdFormWidget::IcdFormWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent), m_CentralWidget(0)
 {
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+    QBoxLayout * hb = getBoxLayout(OnTop, m_FormItem->spec()->label(), this);
     hb->setSpacing(0);
     hb->setMargin(0);
     hb->addWidget(m_Label);

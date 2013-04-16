@@ -72,13 +72,13 @@ enum ProvidedWidget {
 
 }  // End namespace Anonymous
 
-static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft)
 {
     const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnTop;
+        return Form::IFormWidget::OnTop;
     else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnLeft;
+        return Form::IFormWidget::OnLeft;
     return defaultValue;
 }
 
@@ -206,7 +206,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
         m_Label = findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add LineEdit for the result
@@ -402,7 +402,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
             m_Label = findLabel(formItem);
         } else {
             // Prepare Widget Layout and label
-            QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+            QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
             hb->addWidget(m_Label);
 
             // Add LineEdit for the result

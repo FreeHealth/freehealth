@@ -1110,7 +1110,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Constants::labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(Constants::labelAlignement(formItem, OnTop), m_FormItem->spec()->label(), this);
 
         // Add QLabel
         //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
@@ -1444,7 +1444,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add List and manage size
@@ -1772,7 +1772,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
         // Find Label
         m_Label = Constants::findLabel(formItem);
     } else {    // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add Date selector and manage date format
@@ -1999,7 +1999,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add spin

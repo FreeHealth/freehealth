@@ -149,7 +149,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 {
     // Prepare Widget Layout and label
     QWidget *labelWidget = new QWidget(this);
-    QBoxLayout *labelBox = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), labelWidget);
+    QBoxLayout *labelBox = getBoxLayout(OnLeft, m_FormItem->spec()->label(), labelWidget);
     labelBox->setSpacing(0);
     labelBox->setMargin(0);
     labelBox->addWidget(m_Label);

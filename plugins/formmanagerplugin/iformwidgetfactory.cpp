@@ -199,14 +199,14 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     QBoxLayout *hb;
     m_Label = new QLabel(this);
     m_Label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    if (labelOption == Label_OnTop) {
+    if (labelOption == OnTop) {
         hb = new QBoxLayout(QBoxLayout::TopToBottom, parent);
         createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         hb->setSpacing(5);
     } else {
         // TODO: Code specific label options
         hb = new QHBoxLayout(parent);
-        if (labelOption != Label_NoLabel) {
+        if (labelOption != NoLabel) {
             createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         }
         hb->setSpacing(5);

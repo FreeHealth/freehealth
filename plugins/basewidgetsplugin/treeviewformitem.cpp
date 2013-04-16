@@ -67,7 +67,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add List and manage size

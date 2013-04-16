@@ -77,13 +77,13 @@ public:
     };
 
     enum LabelOptions {
-        Label_NoOptions = 0,
-        Label_NoLabel,
-        Label_OnTop,
-        Label_OnBottom,
-        Label_OnLeft,
-        Label_OnRight,
-        Label_OnTopCentered
+        NoOptions = 0,
+        NoLabel,
+        OnTop,
+        OnBottom,
+        OnLeft,
+        OnRight,
+        OnTopCentered
     };
 
     IFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);

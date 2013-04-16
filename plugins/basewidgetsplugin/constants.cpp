@@ -37,9 +37,9 @@ Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFor
 {
     const QStringList &o = item->getOptions();
     if (o.contains(LABEL_ALIGN_TOP, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnTop;
+        return Form::IFormWidget::OnTop;
     else if (o.contains(LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnLeft;
+        return Form::IFormWidget::OnLeft;
     return defaultValue;
 }
 

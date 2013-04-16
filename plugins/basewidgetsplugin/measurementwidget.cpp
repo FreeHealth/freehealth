@@ -93,7 +93,7 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         // Find Label
         m_Label = findLabel(formItem);
     } else {
-        hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
         hb->setMargin(0);
         hb->setSpacing(0);

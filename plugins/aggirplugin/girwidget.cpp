@@ -130,7 +130,7 @@ QString GirUi::toHtml() const
 GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent), m_ui(0)
 {
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+    QBoxLayout * hb = getBoxLayout(OnTop, m_FormItem->spec()->label(), this);
     m_Label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     hb->addWidget(m_Label);
     m_ui = new GirUi(this);
