@@ -1646,11 +1646,7 @@ QVariant BaseSimpleTextData::data(const int ref, const int role) const
             return m_Text->m_Line->text();
         } else if (m_Text->m_Text) {
             if (m_FormItem->getOptions().contains("html", Qt::CaseInsensitive)) {
-                QString html = m_Text->m_Text->toHtml();
-                int beg = html.indexOf("<body");
-                beg = html.indexOf(">", beg);
-                int end = html.indexOf("</body>");
-                return html.mid(beg, end-beg);
+                return Utils::htmlBodyContent(m_Text->m_Text->toHtml());
             } else {
                 return m_Text->m_Text->toPlainText();
             }

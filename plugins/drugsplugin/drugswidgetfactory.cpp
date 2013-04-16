@@ -55,6 +55,7 @@
 
 #include <formmanagerplugin/iformitem.h>
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
 
 #include <QStringList>
@@ -204,15 +205,11 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
     if (withValues && dontPrintEmptyValues(m_FormItem) && m_PrescriptionModel->rowCount()==0) {
         return QString();
     }
-    QString html = drugsIo().prescriptionToHtml(m_PrescriptionModel);
-    int begin = html.indexOf("<body");
-    begin = html.indexOf(">", begin) + 1;
-    int end = html.indexOf("</body>");
-    html = html.mid(begin, end-begin);
-    begin = html.indexOf("<a href");
+    QString html = Utils::htmlBodyContent(drugsIo().prescriptionToHtml(m_PrescriptionModel));
+    int begin = html.indexOf("<a href");
     if (begin!=-1) {
         // remove the link
-        end = html.indexOf(">", begin) + 1;
+        int end = html.indexOf(">", begin) + 1;
         html = html.left(begin) + html.mid(end);
         html = html.remove("</a>");
     }
