@@ -1322,6 +1322,30 @@ QLocale::Country countryIsoToCountry(const QString &country) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   HTML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Extract the html body content and return it. Eg:
+ * \code
+ * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle:;\">BODY <b>CONTENT</b></body></html>");
+ * // body = "<p style=\"bodyStyle:;\"><b>BODY CONTENT</b></p>";
+ * \endcode
+ * WARNING: this function will create a new HTML paragraph with the body style.
+ */
+QString htmlBodyContent(const QString &fullHtml)
+{
+    // Catch body tag
+    int beg = fullHtml.indexOf("<body");
+    if (beg == -1)
+        return fullHtml;
+    // Extract the body css style
+    beg += 5;
+    int end = fullHtml.indexOf(">", beg);
+    QString style = fullHtml.mid(beg, end-beg);
+    // Extract the body content
+    beg = end + 1;
+    end = fullHtml.indexOf("</body>", beg);
+    return QString("<p %1>%2</p>").arg(style).arg(fullHtml.mid(beg, end-beg));
+}
+
 /** \brief Return the CSS style for a font. **/
 QString fontToHtml(const QFont &font, const QColor &color)
 {
