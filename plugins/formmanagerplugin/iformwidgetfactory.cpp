@@ -148,7 +148,7 @@
 
 /**
  * \fn QWidget *Form::IFormWidget::lastTabWidget() const
- * When the widget contains multiple editors, and when the taborder is defined in the Form description,
+ * When the widget contains multiple editors, and when the taborder is defined in the form description,
  * The last tab widget correspond to the last widget that recieve the tabFocus.
  * By default, the widget is concidered as a unique editor and the last tab widget is the
  * focusable widget.
