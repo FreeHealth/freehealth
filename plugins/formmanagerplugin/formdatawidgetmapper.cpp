@@ -88,7 +88,7 @@ public:
             if (_formMain) {
                 QList<Form::FormMain *> forms;
                 forms << _formMain;
-                forms << _formMain->flattenFormMainChildren();
+                forms << _formMain->flattenedFormMainChildren();
                 foreach(FormMain *form, forms) {
                     if (form->formWidget()) {
                         form->formWidget()->setParent(0);
@@ -132,7 +132,7 @@ public:
 
         QList<Form::FormMain *> forms;
         forms << _formMain;
-        forms << _formMain->flattenFormMainChildren();
+        forms << _formMain->flattenedFormMainChildren();
 
         foreach(FormMain *form, forms) {
             if (form->formWidget()) {

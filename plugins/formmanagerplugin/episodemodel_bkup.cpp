@@ -507,7 +507,7 @@ public:
 //        bool formIsModified = false;
 
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, form->flattenFormItemChildren()) {
+        foreach(FormItem *it, form->flattenedFormItemChildren()) {
             // TODO: check nested items?
             if (it->itemData()) {
 //                if (it->itemDatas()->isModified()) {
@@ -565,7 +565,7 @@ public:
             }
 
             // inform the patient model
-            foreach(FormItem *it, form->flattenFormItemChildren()) {
+            foreach(FormItem *it, form->flattenedFormItemChildren()) {
                 if (!it->itemData())
                     continue;
 //                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole);
@@ -607,7 +607,7 @@ public:
         // XML content ==
         // <formitemuid>value</formitemuid>
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, form->flattenFormItemChildren()) {
+        foreach(FormItem *it, form->flattenedFormItemChildren()) {
             items.insert(it->uuid(), it);
         }
 
@@ -659,7 +659,7 @@ public:
 //            if (andFeedPatientModel) {
 //                bool hasPatientDatas = false;
 //                // test all children FormItem for patientDataRepresentation
-//                foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+//                foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
 //                    if (item->itemDatas()) {
 //                        if (item->patientDataRepresentation()!=-1) {
 //                            hasPatientDatas = true;
@@ -1330,7 +1330,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     // XML content ==
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
-    foreach(FormItem *it, form->flattenFormItemChildren()) {
+    foreach(FormItem *it, form->flattenedFormItemChildren()) {
         items.insert(it->uuid(), it);
         // Add fieldEquivalence
 //        foreach(const QString &uuid, it->equivalentUuid()) {

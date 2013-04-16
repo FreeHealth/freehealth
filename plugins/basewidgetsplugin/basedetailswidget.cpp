@@ -204,7 +204,7 @@ void BaseDetailsWidget::retranslate()
     Q_ASSERT(_detailsWidget);
     // TODO: manage extralabel
 //    QString extra = m_FormItem->spec()->extraLabel();
-//    foreach(Form::FormItem *item, m_FormItem->flattenFormItemChildren()) {
+//    foreach(Form::FormItem *item, m_FormItem->flattenedFormItemChildren()) {
 //        if (item->itemData())
 //            extra.replace(QString("{%1}").arg(item->uuid()), item->itemData()->data(0).toString());
 //        else

@@ -92,7 +92,7 @@ public:
         _episodeModels.clear();
         // Recreate all internal EpisodeModels
         foreach(Form::FormMain *emptyrootform, forms) {
-            foreach(Form::FormMain *form, emptyrootform->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, emptyrootform->flattenedFormMainChildren()) {
                 EpisodeModel *model = new EpisodeModel(form, q);
                 // Never use the internal cache of the model
                 model->setUseFormContentCache(false);
@@ -240,9 +240,9 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     d->populateEpisodeModelsWithLastEpisode();
 
 //    foreach(Form::FormMain *forms, formManager().allDuplicatesEmptyRootForms()) {
-//        foreach(Form::FormMain *form, forms->flattenFormMainChildren()) {
+//        foreach(Form::FormMain *form, forms->flattenedFormMainChildren()) {
 //            qWarning() <<"\n\n"<< form->uuid() << d->_episodeModels.value(form)->rowCount();
-//            foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+//            foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
 //                if (item->itemData())
 //                    qWarning() << item->uuid() << item->itemData()->data(IFormItemData::PatientModelRole) ;
 //            }

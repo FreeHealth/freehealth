@@ -183,7 +183,7 @@ FeeFormWidget::FeeFormWidget(Form::FormItem *linkedObject, QWidget *parent)
     //        hb->addWidget(m_List);
     //    }
 
-    //    setFocusableWidget(m_List);
+    //    setFocusedWidget(m_List);
 
     //    // create FormItemData
     //    FeeFormWidgetData *data = new FeeFormWidgetData(m_FormItem);

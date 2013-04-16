@@ -322,7 +322,7 @@ public:
                     break;
                 }
             }
-        }            
+        }
         return true;
     }
 
@@ -568,7 +568,7 @@ FormMain *FormManager::form(const QString &formUid) const
         Form::FormMain *form = roots.at(i);
         if (form->uuid()==formUid)
             return form;
-        const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
+        const QList<Form::FormMain*> &children = form->flattenedFormMainChildren();
         for(int j=0; j < children.count(); ++j) {
             Form::FormMain *test = children.at(j);
             if (test->uuid()==formUid)
@@ -781,10 +781,10 @@ QString FormManager::extractFormFileToTmpPath(const QString &formUid, const QStr
 //void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
 //{
 //    scriptManager()->evaluate(emptyRootForm->scripts()->onLoadScript());
-//    QList<Form::FormMain *> children = emptyRootForm->flattenFormMainChildren();
+//    QList<Form::FormMain *> children = emptyRootForm->flattenedFormMainChildren();
 //    foreach(Form::FormMain *mainChild, children) {
 //        scriptManager()->evaluate(mainChild->scripts()->onLoadScript());
-//        foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
+//        foreach(Form::FormItem *item, mainChild->flattenedFormItemChildren()) {
 //            scriptManager()->evaluate(item->scripts()->onLoadScript());
 //        }
 //    }

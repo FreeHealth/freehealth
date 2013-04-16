@@ -54,7 +54,7 @@ static inline Core::Translators *translators() { return Core::ICore::instance()-
 //{
 //    foreach(Form::FormMain *main, formManager().allEmptyRootForms()) {
 //        if (main->uuid().startsWith(ns)) {
-//            QList<Form::FormItem *> items = main->flattenFormItemChildren();
+//            QList<Form::FormItem *> items = main->flattenedFormItemChildren();
 //            for(int i=0; i < items.count(); ++i) {
 //                Form::FormItem *item = items.at(i);
 //                if (item->uuid().compare(uuid, Qt::CaseInsensitive)) {

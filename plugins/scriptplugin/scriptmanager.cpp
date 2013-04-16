@@ -214,7 +214,7 @@ void ScriptManager::onAllFormsLoaded()
     // Execute RootForm all OnLoad scripts
     foreach(Form::FormMain *main, formManager().allEmptyRootForms()) {
         evaluate(main->scripts()->onLoadScript());
-        QList<Form::FormMain *> children = main->flattenFormMainChildren();
+        QList<Form::FormMain *> children = main->flattenedFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
             evaluate(mainChild->scripts()->onLoadScript());
             foreach(Form::FormItem *item, mainChild->flattenedFormItemChildren()) {
@@ -243,7 +243,7 @@ void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
             continue;
 
         evaluate(main->scripts()->onLoadScript());
-        QList<Form::FormMain *> children = main->flattenFormMainChildren();
+        QList<Form::FormMain *> children = main->flattenedFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
             evaluate(mainChild->scripts()->onLoadScript());
             foreach(Form::FormItem *item, mainChild->flattenedFormItemChildren()) {

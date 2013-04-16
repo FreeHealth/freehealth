@@ -240,7 +240,7 @@ public:
 ////            if (andFeedPatientModel) {
 ////                bool hasPatientData = false;
 ////                // test all children FormItem for patientDataRepresentation
-////                foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+////                foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
 ////                    if (item->itemData()) {
 ////                        if (item->patientDataRepresentation()!=-1) {
 ////                            hasPatientData = true;
@@ -524,7 +524,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 //                red.setAlpha(120);
 //                return red;
 //            }
-//            foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+//            foreach(Form::FormItem *item, d->_formMain->flattenedFormItemChildren()) {
 //                if (item->itemData() && item->itemData()->isModified()) {
 //                    red.setAlpha(200);
 //                    return red;
