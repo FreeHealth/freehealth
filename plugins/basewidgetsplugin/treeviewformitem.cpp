@@ -91,7 +91,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
 //    m_Model = new QStringListModel(possibles, this);
 //    m_Tree->setModel(m_Model);
 
-    setFocusableWidget(m_Tree);
+    setFocusedWidget(m_Tree);
 
     // create FormItemData
     TreeViewFormItemData *data = new TreeViewFormItemData(m_FormItem, this);

@@ -217,7 +217,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
     }
     retranslate();
 
-    setFocusableWidget(line);
+    setFocusedWidget(line);
 
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
@@ -420,7 +420,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
         }
     }
 
-    setFocusableWidget(line);
+    setFocusedWidget(line);
 
     retranslate();
 

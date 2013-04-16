@@ -99,7 +99,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
         m_List->setMaximumSize(m_List->maximumWidth(), itemHeight * (m_Model->rowCount() + 1));
         m_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
-    setFocusableWidget(m_List);
+    setFocusedWidget(m_List);
 
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
@@ -213,7 +213,7 @@ BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget
 
     layout->addWidget(m_StringListView);
 
-    setFocusableWidget(m_StringListView);
+    setFocusedWidget(m_StringListView);
 
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
@@ -438,7 +438,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     }
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
 
-    setFocusableWidget(m_Combo);
+    setFocusedWidget(m_Combo);
 
     // Manage options
     int defaultId = -1;

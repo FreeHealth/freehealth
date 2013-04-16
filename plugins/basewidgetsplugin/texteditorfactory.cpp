@@ -162,7 +162,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
             m_Text->setUserDocumentForPrintingProcess(Core::IDocumentPrinter::Papers_Prescription_User);
     }
 
-    setFocusableWidget(m_Text->textEdit());
+    setFocusedWidget(m_Text->textEdit());
     setFocusProxy(m_Text->textEdit());
 
     // create item data

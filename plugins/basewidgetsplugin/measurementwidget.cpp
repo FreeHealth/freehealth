@@ -123,7 +123,7 @@ MeasurementWidget::MeasurementWidget(Form::FormItem *formItem, QWidget *parent) 
         populateWithWeight();
     }
 
-    setFocusableWidget(m_value);
+    setFocusedWidget(m_value);
     setLastTabWidget(m_units);
     setFocusProxy(m_value);
 

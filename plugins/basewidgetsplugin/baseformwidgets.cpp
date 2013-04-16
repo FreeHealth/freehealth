@@ -924,7 +924,7 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_Check);
     }
 
-    setFocusableWidget(m_Check);
+    setFocusedWidget(m_Check);
 
     // Check options
     if (formItem->getOptions().contains("onright", Qt::CaseInsensitive)) {
@@ -1159,7 +1159,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     }
 
     if (m_RadioList.count() >= 1)
-        setFocusableWidget(m_RadioList.at(0));
+        setFocusedWidget(m_RadioList.at(0));
 
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
@@ -1462,9 +1462,9 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
     }
 
     if (m_Text) {
-        setFocusableWidget(m_Text);
+        setFocusedWidget(m_Text);
     } else if (m_Line) {
-        setFocusableWidget(m_Line);
+        setFocusedWidget(m_Line);
         // Read options
         // validator
         if (formItem->extraData().contains(Constants::EXTRAS_LINEEDIT_VALIDATOR)) {
@@ -1783,7 +1783,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
         hb->addWidget(m_Date);
     }
     m_Date->setDisplayFormat(Constants::getDateFormat(m_FormItem));
-    setFocusableWidget(m_Date);
+    setFocusedWidget(m_Date);
 
     // Manage options
     const QStringList &options = formItem->getOptions();
@@ -2024,7 +2024,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         hb->addWidget(m_Spin);
     }
     setObjectName("BaseSpin_" + m_FormItem->uuid());
-    setFocusableWidget(m_Spin);
+    setFocusedWidget(m_Spin);
 
     // manage options
     data->setBaseSpin(this);
@@ -2240,7 +2240,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
         m_Button->setIcon(QIcon(icon));
     }
     m_Button->setText(m_FormItem->spec()->label());
-    setFocusableWidget(m_Button);
+    setFocusedWidget(m_Button);
     connect(m_Button, SIGNAL(clicked()) , this , SLOT(buttonClicked()));
 }
 

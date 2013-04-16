@@ -100,10 +100,10 @@ public:
     virtual void setFormItem(Form::FormItem *link) { m_FormItem = link; }
     virtual Form::FormItem *formItem() { return m_FormItem; }
 
-    QWidget *focusableWidget() const {return _focusableWidget;}
-    void setFocusableWidget(QWidget *widget) {_focusableWidget = widget;}
+    QWidget *focusedWidget() const {return m_focusedWidget;}
+    void setFocusedWidget(QWidget *widget) {m_focusedWidget = widget;}
 
-    QWidget *lastTabWidget() const {if (!_lastTabWidget) return _focusableWidget; return _lastTabWidget;}
+    QWidget *lastTabWidget() const {if (!_lastTabWidget) return m_focusedWidget; return _lastTabWidget;}
     void setLastTabWidget(QWidget *widget) {_lastTabWidget = widget;}
     virtual void setTabOrder(bool consoleWarn = false) {Q_UNUSED(consoleWarn);}
 
@@ -117,7 +117,7 @@ public:
     QLabel *m_Label;
     Form::FormItem *m_FormItem;
     QString m_OldTrans;
-    QWidget *_focusableWidget, *_lastTabWidget;
+    QWidget *m_focusedWidget, *_lastTabWidget;
 };
 
 } // namespace Form

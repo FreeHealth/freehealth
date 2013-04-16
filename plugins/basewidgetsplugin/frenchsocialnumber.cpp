@@ -78,7 +78,7 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     }
     retranslate();
 
-    setFocusableWidget(m_NSS);
+    setFocusedWidget(m_NSS);
 
     // create itemdata
     m_ItemData = new FrenchSocialNumberFormData(formItem);

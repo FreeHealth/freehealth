@@ -175,7 +175,7 @@ IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     QWidget(parent),
     m_Label(0),
     m_FormItem(formItem),
-    _focusableWidget(0),
+    m_focusedWidget(0),
     _lastTabWidget(0)
 {
     m_FormItem->setFormWidget(this);

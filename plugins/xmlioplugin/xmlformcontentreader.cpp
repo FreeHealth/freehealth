@@ -913,9 +913,9 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
                     second = item->formWidget();
                     if (WarnTabOrder) {
 //                        qWarning() << QString("  setTabOrder\n" + warn);
-                        qWarning() << "    " << first->lastTabWidget() << "\n    " << second->focusableWidget() << "\n\n";
+                        qWarning() << "    " << first->lastTabWidget() << "\n    " << second->focusedWidget() << "\n\n";
                     }
-                    QWidget::setTabOrder(first->lastTabWidget(), second->focusableWidget());
+                    QWidget::setTabOrder(first->lastTabWidget(), second->focusedWidget());
                     first = second;
                     first->setTabOrder(WarnTabOrder);
                     warn = "    first: " + item->uuid() + "\n";
