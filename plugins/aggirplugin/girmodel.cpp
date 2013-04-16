@@ -456,7 +456,6 @@ QString GirModel::rowToHtml(int i, const QModelIndex &parent, bool discriminativ
 
 QString GirModel::toHtml(const QString &mask) const
 {
-    qWarning() << "mask" << mask.size();
     QString content;
     if (!mask.isEmpty()) {
         // Use the mask
@@ -475,9 +474,6 @@ QString GirModel::toHtml(const QString &mask) const
             token = "[[" + item + "]]";
             data = this->data(this->index(i, 7)).toString().remove("?");
             content = content.replace(token, data, Qt::CaseInsensitive);
-
-            qWarning() << "token" << token << "data" << data;
-
             if (!hasChildren(index)) {
                 for(int j=0; j < adverbs.count(); ++j) {
                     token = "[[" + item + "." + adverbs.at(j) + "]]";
@@ -491,8 +487,6 @@ QString GirModel::toHtml(const QString &mask) const
                         data = "⎕";
                     }
                     content = content.replace(token, data, Qt::CaseInsensitive);
-
-                    qWarning() << "    token" << token << "data" << data;
                 }
                 data.clear();
             }
