@@ -193,10 +193,9 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_FAX, Faxes);
     t->setUntranslatedHumanReadableName(Trans::Constants::FAX);
     _tokens << t;
-    // TODO: add mobile phone (form patient data representation, patientmodel, tokens)
-//    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_MOBILEPHONE, MobilePhone);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::MOBILEPHONE);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_MOBILEPHONE, MobilePhone);
+    t->setUntranslatedHumanReadableName(Trans::Constants::MOBILEPHONE);
+    _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_WEIGHTINGRAMS, WeightInGrams);
     t->setUntranslatedHumanReadableName(Trans::Constants::WEIGHT);
@@ -278,6 +277,10 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBEROWNERNAME, data(IPatient::SocialNumberOwnerFullName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS, data(IPatient::SocialNumberOwnerFullAddress).toString());
 
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTELS, data(IPatient::Tels).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFAXES, data(IPatient::Faxes).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMAILS, data(IPatient::Mails).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMOBILEPHONE, data(IPatient::MobilePhone).toString());
 }
 // END
 
