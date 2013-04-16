@@ -389,7 +389,7 @@ QString BaseForm::printableHtml(bool withValues) const
     for(int i = 0; i < items.count(); ++i) {
         Form::IFormWidget *w = items.at(i)->formWidget();
         if (w)
-            html << w->printableHtml(withValues);
+            html << Utils::htmlBodyContent(w->printableHtml(withValues));
     }
     html.removeAll("");
 
@@ -407,17 +407,17 @@ QString BaseForm::printableHtml(bool withValues) const
     int previousrow = 0;
     QString header, content;
     // Start with the header of the form
-    header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
-                    "<thead>"
-                    "<tr>"
-                    "<td style=\"vertical-align: top;padding: 5px\">"
-                    "<center><span style=\"font-weight: 600;\">%1</span><br />"
+    header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">\n"
+                    "<thead>\n"
+                    "<tr>\n"
+                    "<td style=\"vertical-align: top;padding: 5px\">\n"
+                    "<center><span style=\"font-weight: 600;\">%1</span><br />\n"
                     "%2"
-                      "</center>"
-                    "</td>"
-                    "</tr>"
-                    "</thead>"
-                    "</table>")
+                    "</center>\n"
+                    "</td>\n"
+                    "</tr>\n"
+                    "</thead>\n"
+                    "</table>\n")
             .arg(m_FormItem->spec()->label())
             .arg(m_EpisodeLabel->toolTip().replace("right", "center").replace("<p ", "<span ").replace("</p>", "</span>"));
 
@@ -429,20 +429,20 @@ QString BaseForm::printableHtml(bool withValues) const
             previousrow = r;
             content += "</tr><tr>";
         }
-        content += QString("<td style=\"vertical-align: top; align: left\">"
-                           "%1"
-                           "</td>").arg(s);
+        content += QString("<td style=\"vertical-align: top; align: left\">\n"
+                           "%1\n"
+                           "</td>\n").arg(s);
         ++i;
     }
 
-    return QString("%1"
-                   "<table width=100% border=0 cellpadding=0 cellspacing=0 style=\"margin:0px\">"
-                   "<tbody>"
-                   "<tr>"
-                   "%2"
-                   "</tr>"
-                   "</tbody>"
-                   "</table>")
+    return QString("%1\n"
+                   "<table width=100% border=0 cellpadding=0 cellspacing=0 style=\"margin:0px\">\n"
+                   "<tbody>\n"
+                   "<tr>\n"
+                   "%2\n"
+                   "</tr>\n"
+                   "</tbody>\n"
+                   "</table>\n\n")
             .arg(header).arg(content);
 }
 
@@ -698,7 +698,7 @@ QString BaseGroup::printableHtml(bool withValues) const
     QList<Form::FormItem*> items = m_FormItem->formItemChildren();
     for(int i = 0; i < items.count(); ++i) {
         if (items.at(i)->formWidget()) {
-            html << items.at(i)->formWidget()->printableHtml(withValues);
+            html << Utils::htmlBodyContent(items.at(i)->formWidget()->printableHtml(withValues));
         }
     }
     // remove empty values
