@@ -1,4 +1,5 @@
 #include "../../libs/utils/widgets/qbuttonlineedit.h"
+#include "../../libs/utils/global.h"
 
 #include <QApplication>
 #include <QIcon>
@@ -12,6 +13,10 @@ const char * const ICONWARNING = "/Volumes/RamDisk/eric/freemedforms/global_reso
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+//    QTextDocument doc;
+//    doc.setHtml(Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/forms/subforms/geriatrics/frenchaggir/html/fr/global_printmask.html"));
+//    qWarning() << Utils::htmlBodyContent(doc.toHtml());
 
     QWidget *w = new QWidget;
     QVBoxLayout *l = new QVBoxLayout(w);
