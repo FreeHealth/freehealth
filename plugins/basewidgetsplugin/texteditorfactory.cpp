@@ -30,6 +30,7 @@
 #include <coreplugin/iscriptmanager.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 using namespace BaseWidgets;
 
@@ -183,19 +184,23 @@ QString TextEditorForm::printableHtml(bool withValues) const
     if (m_FormItem->getOptions().contains("notprintable"))
         return QString();
 
+    QString label;
+    if (!m_FormItem->spec()->label().isEmpty()) {
+        label = QString("<thead>"
+                        "<tr>"
+                        "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                        "%1"
+                        "</td>"
+                        "</tr>"
+                        "</thead>").arg(m_FormItem->spec()->label());
+    }
     if (withValues) {
         if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
             if (m_Text->textEdit()->toPlainText().isEmpty())
                 return QString();
         }
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
-                   "<thead>"
-                   "<tr>"
-                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-                    "%1"
-                   "</td>"
-                   "</tr>"
-                   "</thead>"
+                   "%1"
                    "<tbody>"
                    "<tr>"
                    "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
@@ -204,16 +209,10 @@ QString TextEditorForm::printableHtml(bool withValues) const
                    "</tr>"
                    "</tbody>"
                    "</table>")
-            .arg(m_FormItem->spec()->label()).arg(m_Text->getHtml().remove("</body>").remove("</html>"));
+            .arg(label).arg(Utils::htmlBodyContent(m_Text->getHtml()));
     } else {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
-                       "<thead>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
                        "%1"
-                       "</td>"
-                       "</tr>"
-                       "</thead>"
                        "<tbody>"
                        "<tr>"
                        "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
@@ -223,7 +222,7 @@ QString TextEditorForm::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label());
+                .arg(label);
     }
     return QString();
 }
@@ -300,7 +299,7 @@ QVariant TextEditorData::data(const int ref, const int role) const
     Q_UNUSED(role);
     if (m_Editor->textEdit()->toPlainText().isEmpty())
         return QVariant();
-    return m_Editor->textEdit()->toHtml();
+    return Utils::htmlBodyContent(m_Editor->textEdit()->toHtml());
 }
 
 void TextEditorData::setStorableData(const QVariant &data)
