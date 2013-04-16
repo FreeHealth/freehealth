@@ -134,3 +134,7 @@ void EpisodeData::addEpisodeModification(EpisodeModificationData &modification)
     }
 }
 
+bool EpisodeData::lessThanByUserDate(EpisodeData *one, EpisodeData *two)
+{
+    return one->data(UserDate).toDateTime() < two->data(UserDate).toDateTime();
+}

@@ -138,6 +138,8 @@ public:
     void addEpisodeModification(EpisodeModificationData &modification);
     QVector<EpisodeModificationData> &modifications() {return m_Modification;}
 
+    static bool lessThanByUserDate(EpisodeData *one, EpisodeData *two);
+
 protected:
     int episodeId() const {return m_Data.value(Id).toInt();}
     int contentId() const {return m_Data.value(ContentId).toInt();}
