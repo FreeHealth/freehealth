@@ -83,7 +83,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
     m_Wrappers.clear();
     m_Items.clear();
     foreach(Form::FormItem *main, formManager().allEmptyRootForms()) {
-        const QList<Form::FormItem*> items = main->flattenFormItemChildren();
+        const QList<Form::FormItem*> items = main->flattenedFormItemChildren();
         for(int i=0; i < items.count(); ++i) {
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
             w->setFormItem(items.at(i));
@@ -105,7 +105,7 @@ void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
         if (main->uuid() != uuid)
             continue;
 
-        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+        foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
             if (uuids.contains(item->uuid())) {
                 // Remove item
                 m_Items.remove(item->uuid());
@@ -303,7 +303,7 @@ QStringList FormItemScriptWrapper::childrenUuid() const
     if (!m_Item)
         return QStringList();
     QStringList uuids;
-    foreach(Form::FormItem *item, m_Item->flattenFormItemChildren()) {
+    foreach(Form::FormItem *item, m_Item->flattenedFormItemChildren()) {
         uuids.append(item->uuid());
     }
     return uuids;

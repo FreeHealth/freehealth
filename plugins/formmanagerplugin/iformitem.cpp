@@ -754,7 +754,7 @@ void FormMain::clear()
 {
     if (itemData())
         itemData()->clear();
-    foreach(FormItem *it, this->flattenFormItemChildren()) {
+    foreach(FormItem *it, this->flattenedFormItemChildren()) {
         if (it->itemData())
             it->itemData()->clear();
     }

@@ -100,7 +100,7 @@ public:
     virtual FormItem *createChildItem(const QString &uuid = QString::null);
     virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
     virtual QList<FormItem *> formItemChildren() const;
-    virtual QList<FormItem *> flattenFormItemChildren() const;
+    virtual QList<FormItem *> flattenedFormItemChildren() const;
 
     // FormIO extra data
     virtual void addExtraData(const QString &key, const QString &value);
@@ -141,14 +141,14 @@ inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
      return list;
 }
 /** Returns all level Form::FormItem children. */
-inline QList<FormItem *> Form::FormItem::flattenFormItemChildren() const
+inline QList<FormItem *> Form::FormItem::flattenedFormItemChildren() const
 {
     QList<Form::FormItem *> list;
     foreach(QObject *o, children()) {
          Form::FormItem *i = qobject_cast<Form::FormItem*>(o);
          if (i) {
              list.append(i);
-             list.append(i->flattenFormItemChildren());
+             list.append(i->flattenedFormItemChildren());
          }
     }
     return list;

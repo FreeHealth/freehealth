@@ -979,7 +979,7 @@ bool FormPlaceHolder::printFormOrEpisode()
         LOG("Printing episode using form HTML print mask. Form: " + formMain->uuid());
         // TODO: manage this with PadTools later
         // create a token for each FormItem of the FormMain
-        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+        foreach(FormItem *item, formMain->flattenedFormItemChildren()) {
             tokens.insert(item->uuid() + ".label", item->spec()->label());
             if (item->itemData())
                 tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));

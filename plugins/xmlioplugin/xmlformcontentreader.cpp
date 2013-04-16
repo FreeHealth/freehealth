@@ -425,7 +425,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
             if (newUids.contains(main->uuid(), Qt::CaseInsensitive)) {
                 main->spec()->setEquivalentUuid(oldToNew.keys(main->uuid()));
             }
-            foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+            foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
                 if (newUids.contains(item->uuid(), Qt::CaseInsensitive)) {
                     item->spec()->setEquivalentUuid(oldToNew.keys(item->uuid()));
                 }
@@ -892,7 +892,7 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
 //    QString ns = root.attribute("ns");
 //    if (!ns.isEmpty())
 //        ns.append("::");
-    const QList<Form::FormItem *> &items = rootForm->flattenFormItemChildren();
+    const QList<Form::FormItem *> &items = rootForm->flattenedFormItemChildren();
     Form::IFormWidget *first = 0;
     Form::IFormWidget *second = 0;
     QDomElement element = tabs.firstChildElement(Constants::TAG_TABSTOP);

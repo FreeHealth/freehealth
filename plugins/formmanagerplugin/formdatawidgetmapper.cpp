@@ -165,7 +165,7 @@ public:
             return QString::null;
 
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
+        foreach(FormItem *it, _formMain->flattenedFormItemChildren()) {
             if (it->itemData()) {
                 items.insert(it->uuid(), it);
             }
@@ -268,7 +268,7 @@ bool FormDataWidgetMapper::isDirty() const
         return true;
     }
     // ask all current form item data
-    foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+    foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
         if (WarnDirty && it->itemData() && it->itemData()->isModified())
             qWarning() << "FormDataWidgetMapper::isDirty (item)" << it->uuid() << it->itemData()->isModified();
         if (it->itemData() && it->itemData()->isModified())

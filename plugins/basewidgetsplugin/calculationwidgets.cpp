@@ -293,7 +293,7 @@ void SumWidget::connectFormItems()
     if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         foreach(QString uid, uuids) {
             uid = uid.simplified();
             for(int i = 0; i < items.count(); ++i) {
@@ -310,7 +310,7 @@ void SumWidget::connectFormItems()
         }
     } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
             if (item==m_FormItem)
@@ -336,7 +336,7 @@ void SumWidget::recalculate(const int modifiedRef)
     if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
@@ -348,7 +348,7 @@ void SumWidget::recalculate(const int modifiedRef)
         }
     } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
             if (item->uuid().contains(reg) && item->itemData()) {
@@ -507,7 +507,7 @@ void ScriptWidget::connectFormItems()
     QString itemList = formItem()->extraData().value(::CONNECT_EXTRA_KEY);
     QString regexp = formItem()->extraData().value(::CONNECT_REGEXP_EXTRA_KEY);
     // Find all items to connect
-    QList<Form::FormItem *> children = p->flattenFormItemChildren();
+    QList<Form::FormItem *> children = p->flattenedFormItemChildren();
     if (!itemList.isEmpty()) {
         QStringList items = itemList.split(";");
         for(int i = 0; i < children.count(); ++i) {
