@@ -244,12 +244,16 @@ public:
 
     bool saveCurrentEditingEpisode()
     {
-        if (!ui->formDataMapper->currentEditingEpisodeIndex().isValid())
+        if (!ui->formDataMapper->currentEditingEpisodeIndex().isValid()) {
+            LOG_FOR(q, "Episode not saved, no current editing episode");
             return true;
+        }
 
         // Something to save?
-        if (!ui->formDataMapper->isDirty())
+        if (!ui->formDataMapper->isDirty()) {
+            LOG_FOR(q, "Episode not saved, episode is not dirty");
             return true;
+        }
 
         // Autosave or ask user?
         if (!isAutosaveOn()) {
@@ -702,6 +706,8 @@ bool FormPlaceHolder::createEpisode()
             LOG_ERROR("Unable to save current episode");
             return false;
         }
+    } else {
+        Q_ASSERT(false);
     }
 
     // get the form
