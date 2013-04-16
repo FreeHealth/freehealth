@@ -37,6 +37,7 @@
 
 #include "formcore.h"
 #include "formmanager.h"
+#include "formexporter.h"
 #include "episodemanager.h"
 #include "patientformitemdatawrapper.h"
 #include "formcontextualwidgetmanager.h"
@@ -69,6 +70,7 @@ public:
         _episodeManager(0),
         _widgetManager(0),
         _patientFormItemDataWrapper(0),
+        _formExporter(0),
         q(parent)
     {
     }
@@ -82,6 +84,7 @@ public:
     EpisodeManager *_episodeManager;
     FormContextualWidgetManager *_widgetManager;
     PatientFormItemDataWrapper *_patientFormItemDataWrapper;
+    FormExporter *_formExporter;
 
 private:
     FormCore *q;
@@ -106,6 +109,7 @@ FormCore::FormCore(QObject *parent) :
     d->_formManager = new FormManager(this);
     d->_episodeManager = new EpisodeManager(this);
     d->_patientFormItemDataWrapper = new PatientFormItemDataWrapper(this);
+    d->_formExporter = new FormExporter(this);
     // TODO: add episodeBase in the core
 }
 
@@ -125,6 +129,7 @@ bool FormCore::initialize()
     d->_episodeManager->initialize();
     d->_widgetManager = new Internal::FormContextualWidgetManager(this);
     d->_patientFormItemDataWrapper->initialize();
+    d->_formExporter->initialize();
     return true;
 }
 
@@ -144,6 +149,11 @@ Form::EpisodeManager &FormCore::episodeManager() const
 Form::PatientFormItemDataWrapper &FormCore::patientFormItemDataWrapper() const
 {
     return *d->_patientFormItemDataWrapper;
+}
+
+FormExporter &FormCore::formExporter() const
+{
+    return *d->_formExporter;
 }
 
 void FormCore::activatePatientFileCentralMode()

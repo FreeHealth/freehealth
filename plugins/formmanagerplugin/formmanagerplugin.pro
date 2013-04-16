@@ -40,7 +40,8 @@ HEADERS = formmanagerplugin.h \
     formcontextualwidgetmanager.h \
     episodemanager.h \
     formviewdelegate.h \
-    patientformitemdatawrapper.h
+    patientformitemdatawrapper.h \
+    formexporter.h
 
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
@@ -66,7 +67,8 @@ SOURCES = formmanagerplugin.cpp \
     subforminsertpoint.cpp \
     episodemanager.cpp \
     formviewdelegate.cpp \
-    patientformitemdatawrapper.cpp
+    patientformitemdatawrapper.cpp \
+    formexporter.cpp
 
 FORMS += formfilesselectorwidget.ui \
     formeditordialog.ui \

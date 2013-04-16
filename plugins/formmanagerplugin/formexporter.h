@@ -19,64 +19,82 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers :                                                     *
- *       Eric MAEKER <eric.maeker@gmail.com>                               *
- *  Contributors:                                                          *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORM_FORMCORE_H
-#define FORM_FORMCORE_H
+#ifndef FORM_FORMEXPORTER_H
+#define FORM_FORMEXPORTER_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
+#include <QString>
+#include <QStringList>
 
 /**
- * \file formcore.h
- * \author Eric MAEKER
+ * \file formexporter.h
+ * \author Eric Maeker
  * \version 0.8.4
- * \date 04 Apr 2013
+ * \date 15 Apr 2013
 */
 
 namespace Form {
-class FormManager;
-class EpisodeManager;
-class PatientFormItemDataWrapper;
-class FormExporter;
 
-namespace Internal {
-class FormManagerPlugin;
-class FormCorePrivate;
-}  // namespace Internal
-
-class FORM_EXPORT FormCore : public QObject
+class FormExporterJob
 {
-    Q_OBJECT
-    friend class Form::Internal::FormManagerPlugin;
-    explicit FormCore(QObject *parent = 0);
-
 public:
-    static FormCore &instance();
-    ~FormCore();
+    enum ExportGroupmentType {
+        FormOrderedExportation,
+        DateOrderedExportation
+    };
 
-    bool initialize();
+    FormExporterJob() : _allPatients(false), _groupType(FormOrderedExportation) {}
+    ~FormExporterJob() {}
 
-    Form::FormManager &formManager() const;
-    Form::EpisodeManager &episodeManager() const;
-    Form::PatientFormItemDataWrapper &patientFormItemDataWrapper() const;
-    FormExporter &formExporter() const;
+    void setExportAllPatients(bool exportAll) {_allPatients=exportAll;}
+    bool exportAllPatients() const {return _allPatients;}
 
-Q_SIGNALS:
+    void setPatientUids(const QStringList &uuids) {_patientUids = uuids;}
+    void setPatientUid(const QString &uid) {_patientUids.clear(); _patientUids<<uid;}
+    const QStringList &patientUids() const {return _patientUids;}
 
-public Q_SLOTS:
-    void activatePatientFileCentralMode();
+    void setExportGroupmentType(ExportGroupmentType type) {_groupType=type;}
+    ExportGroupmentType exportGroupmentType() const {return _groupType;}
 
 private:
-    Internal::FormCorePrivate *d;
-    static FormCore *_instance;
+    bool _allPatients;
+    QStringList _patientUids;
+    ExportGroupmentType _groupType;
+};
+
+namespace Internal {
+class FormExporterPrivate;
+} // namespace Internal
+
+class FORM_EXPORT FormExporter : public QObject
+{
+    Q_OBJECT
+    
+public:
+    explicit FormExporter(QObject *parent = 0);
+    ~FormExporter();
+    bool initialize();
+    
+    void setPatientUuid(const QString &uuid);
+    void setUseCurrentPatientForms(bool useCurrent);
+    void setUseAllAvailableForms(bool useAll);
+
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    void startExportation(const FormExporterJob &job);
+
+private:
+    Internal::FormExporterPrivate *d;
 };
 
 } // namespace Form
 
-#endif  // FORM_FORMCORE_H
+#endif  // FORM_FORMEXPORTER_H
 
