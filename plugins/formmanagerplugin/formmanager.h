@@ -24,11 +24,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORMMANAGER_H
-#define FORMMANAGER_H
+#ifndef FORM_FORMMANAGER_H
+#define FORM_FORMMANAGER_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
+#include <QHash>
+
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -41,8 +43,8 @@ QT_END_NAMESPACE
 /**
  * \file formmanager.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 06 Oct 2012
+ * \version 0.8.4
+ * \date 16 Apr 2013
 */
 
 namespace DataPack {
@@ -110,9 +112,12 @@ public:
     // Form pointers && extra
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
-//    Form::FormMain *identityRootFormDuplicate() const;
+    // Form::FormMain *identityRootFormDuplicate() const;
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
     QString extractFormFileToTmpPath(const QString &formUid, const QString &fileName);
+
+    // Link with tokens
+    QHash<QString, QVariant> formToTokens(Form::FormMain *form) const;
 
 public Q_SLOTS:
     // Form management
@@ -140,4 +145,4 @@ private:
 
 } // End Form
 
-#endif  // FORMMANAGER_H
+#endif  // FORM_FORMMANAGER_H

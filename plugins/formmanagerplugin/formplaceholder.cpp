@@ -975,25 +975,12 @@ bool FormPlaceHolder::printFormOrEpisode()
     QString title;
 
     QHash<QString, QVariant> tokens;
+    // If a print mask is available, create tokens for the form
     if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
         LOG("Printing episode using form HTML print mask. Form: " + formMain->uuid());
-        // TODO: manage this with PadTools later
-        // create a token for each FormItem of the FormMain
-        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-            tokens.insert(item->uuid() + ".label", item->spec()->label());
-            if (item->itemData())
-                tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
-        }
         htmlToPrint = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
-        tokens.insert("EpisodeUserDate", QLocale().toString(formMain->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
-        tokens.insert("EpisodeUserLabel", formMain->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
-        // Force the full name of the user
-        QString userName = formMain->itemData()->data(Form::IFormItemData::ID_UserName).toString();
-        if (userName == tkTr(Trans::Constants::YOU))
-            userName = user()->value(Core::IUser::FullName).toString();
-        tokens.insert("EpisodeUserName", userName);
-        tokens.insert("EpisodePriority", formMain->itemData()->data(Form::IFormItemData::ID_Priority));
-        tokens.insert("EpisodeFormLabel", formMain->spec()->label());
+        // TODO: manage PadTools
+        tokens = formManager().formToTokens(formMain);
     } else {
         htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
     }

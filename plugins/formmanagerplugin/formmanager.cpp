@@ -64,6 +64,7 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
@@ -117,6 +118,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
@@ -777,18 +779,28 @@ QString FormManager::extractFormFileToTmpPath(const QString &formUid, const QStr
     return QString::null;
 }
 
-///** Execute all OnLoad scripts of the \e emptyRootForm */
-//void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
-//{
-//    scriptManager()->evaluate(emptyRootForm->scripts()->onLoadScript());
-//    QList<Form::FormMain *> children = emptyRootForm->flattenFormMainChildren();
-//    foreach(Form::FormMain *mainChild, children) {
-//        scriptManager()->evaluate(mainChild->scripts()->onLoadScript());
-//        foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
-//            scriptManager()->evaluate(item->scripts()->onLoadScript());
-//        }
-//    }
-//}
+QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
+{
+    // TODO: manage PadTools here
+    QHash<QString, QVariant> tokens;
+    // Create a token for each FormItem of the FormMain (label and value)
+    foreach(FormItem *item, form->flattenFormItemChildren()) {
+        tokens.insert(item->uuid() + ".label", item->spec()->label());
+        if (item->itemData())
+            tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
+    }
+    // Create tokens for episode data
+    tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
+    tokens.insert("EpisodeUserLabel", form->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
+    // Force the full name of the user
+    QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();
+    if (userName == tkTr(Trans::Constants::YOU))
+        userName = user()->value(Core::IUser::FullName).toString();
+    tokens.insert("EpisodeUserName", userName);
+    tokens.insert("EpisodePriority", form->itemData()->data(Form::IFormItemData::ID_Priority));
+    tokens.insert("EpisodeFormLabel", form->spec()->label());
+    return tokens;
+}
 
 void FormManager::checkFormUpdates()
 {
