@@ -32,9 +32,9 @@
  * \brief Manages data propagation between form widget and the patient model.\n
  *
  * Life cycle:
- * This form item data manager can be created by the Form::FormItem or the Form::IFormItemWidget.
+ * This form item data manager can be created by the Form::FormItem or the Form::IFormWidget.
  * It is purely internal to your form item plugin implementation. In the BaseWidgets plugin, the
- * data managers are created and managed by the Form::IFormItemWidget. This object is deleted
+ * data managers are created and managed by the Form::IFormWidget. This object is deleted
  * by its parent Form::FormItem in its dtor.
  *
  * Automatic access to the episode database of FreeMedForms:
@@ -64,7 +64,7 @@
  * }
  * \endcode
  *
- * \sa Form::FormItem, Form::IFormItemWidget, Form::EpisodeModel, Form::Internal::FormDataWidgetMapper
+ * \sa Form::FormItem, Form::IFormWidget, Form::EpisodeModel, Form::Internal::FormDataWidgetMapper
  */
 
 

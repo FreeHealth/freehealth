@@ -331,7 +331,7 @@ void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
     d->setCurrentEpisode(index);
 }
 
-/** Enable or disable the Form::FormMain Form::IFormItemWidget */
+/** Enable or disable the Form::FormMain Form::IFormWidget */
 void FormDataWidgetMapper::setFormWidgetEnabled(bool enabled)
 {
     d->_formMain->formWidget()->setEnabled(enabled);
