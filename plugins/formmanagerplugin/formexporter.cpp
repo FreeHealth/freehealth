@@ -41,21 +41,25 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+
 #include <QSortFilterProxyModel>
 
 #include <QDebug>
+
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 // TODO: manage user rights here +++
 
 using namespace Form;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
-
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
-static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
-//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-//static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace Form {
 namespace Internal {
@@ -80,6 +84,7 @@ public:
 
         // Foreach FormMain get all its episode
         QString html;
+        QHash<Form::FormMain *, QString> formCss;
         foreach(Form::FormMain *emptyRoot, forms) {
             foreach(Form::FormMain *form, emptyRoot->flattenFormMainChildren()) {
                 // Use EpisodeModel
@@ -94,14 +99,17 @@ public:
                 proxy->sort(EpisodeModel::UserTimeStamp, Qt::DescendingOrder);
 
                 // Read all rows of the model
+                QString htmlMask = Utils::htmlBodyContent(form->spec()->value(FormItemSpec::Spec_HtmlExportMask).toString().simplified());
+//                formCss.insert(form, );
                 for(int i=0; i < proxy->rowCount(); ++i) {
                     QModelIndex index = proxy->mapToSource(proxy->index(i, 0));
                     // Populate form with data
                     model->populateFormWithEpisodeContent(index, false);
                     // Try to export with the HTML mask
-                    QString htmlMask = form->spec()->value(FormItemSpec::Spec_HtmlExportMask).toString().simplified();
                     if (!htmlMask.isEmpty()) {
                         Utils::replaceTokens(htmlMask, formManager().formToTokens(form));
+                        patient()->replaceTokens(htmlMask);
+                        user()->replaceTokens(htmlMask);
                         html += Utils::htmlBodyContent(htmlMask);
                     } else {
                         // Get the default HTML output
