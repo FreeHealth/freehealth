@@ -133,7 +133,7 @@ public:
         bold.setBold(true);
         for(int i=0; i<emptyrootforms.count(); ++i) {
             Form::FormMain *root = emptyrootforms.at(i);
-            foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                 QStandardItem *item = new QStandardItem(formIcon(form), formLabelWithEpisodeCount(form));
                 item->setFont(bold);
                 linkFormAndItem(form, item);
@@ -149,7 +149,7 @@ public:
             defaultRootParent = q->invisibleRootItem();
         for(int i=0; i < emptyrootforms.count(); ++i) {
             Form::FormMain *root = emptyrootforms.at(i);
-            foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                 QStandardItem *item = formToItem(form);
                 QStandardItem *parent = 0;
                 if (form->formParent() == root) {
@@ -199,7 +199,7 @@ public:
         } else {
             for(int i=0; i< forms.count(); ++i) {
                 Form::FormMain *root = forms.at(i);
-                foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+                foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                     if (form->uuid() == insertionPoint.receiverUid()) {
                         receiver = formToItem(form);
                         break;

@@ -67,7 +67,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add List and manage size
@@ -91,7 +91,7 @@ TreeViewFormItem::TreeViewFormItem(Form::FormItem *formItem, QWidget *parent)
 //    m_Model = new QStringListModel(possibles, this);
 //    m_Tree->setModel(m_Model);
 
-    setFocusableWidget(m_Tree);
+    setFocusedWidget(m_Tree);
 
     // create FormItemData
     TreeViewFormItemData *data = new TreeViewFormItemData(m_FormItem, this);

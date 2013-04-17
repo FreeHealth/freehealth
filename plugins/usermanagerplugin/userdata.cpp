@@ -1114,8 +1114,8 @@ QStringList UserData::warnText() const
     tmp += QString("%1 = %2\n").arg("m_Modifiable").arg(isModifiable());
     tmp += QString("%1 = %2\n").arg("m_Modified").arg(isModified());
     tmp += QString("%1 = %2\n").arg("m_IsNull").arg(d->m_IsNull);
-    tmp += QString("%1 = %2\n").arg("hasModifiedDynamicDatas").arg(hasModifiedDynamicDataToStore());
-    tmp += "modifiedDynamicDatas = ";
+    tmp += QString("%1 = %2\n").arg("hasModifiedDynamicData").arg(hasModifiedDynamicDataToStore());
+    tmp += "modifiedDynamicData = ";
     foreach(UserDynamicData *dyn, dynList)
              tmp += dyn->name() + "; ";
     tmp.chop(2);

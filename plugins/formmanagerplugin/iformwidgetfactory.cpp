@@ -30,7 +30,7 @@
 /**
  * \class Form::IFormWidgetFactory
  * \brief Interface for the form's widget creation.
- * The factory allow user to create specific Form::IFormWidget according to their 'plugin'
+ * The factory allows the user to create specific Form::IFormWidget according to their 'plugin'
  * name. Factories must be sent in the plugins manager objects pool.\n
  * Factory owns form widget plugin that are described by the providedWidgets().\n
  * You can only use the factories in your Form::IFormIO form loader.
@@ -132,27 +132,27 @@
  */
 
 /**
- * \fn QWidget *Form::IFormWidget::focusableWidget() const
+ * \fn QWidget *Form::IFormWidget::focusedWidget() const
  * When dynamically loading the forms (using a QtUi file), the formItemWidget is not included
  * in the view, but only its internal widget. To allow the definition of tab orders you must
  * define the widget that will get the focus (and the one that is in the view, so in the
  * QtUi file). It is also the first in the taborder
- * \sa Form::IFormWidget::setFocusableWidget()
+ * \sa Form::IFormWidget::setFocusedWidget()
  * \sa setLastTabWidget()
  */
 
 /**
- * \fn void Form::IFormWidget::setFocusableWidget(QWidget *widget)
- * \sa Form::IFormWidget::focusableWidget()
+ * \fn void Form::IFormWidget::setFocusedWidget(QWidget *widget)
+ * \sa Form::IFormWidget::focusedWidget()
  */
 
 /**
  * \fn QWidget *Form::IFormWidget::lastTabWidget() const
- * When the widget contains multiple editors, and when the taborder is defined in the Form description,
- * The last tab widget correspond to the last widget that recieve the tabFocus.
- * By default, the widget is concidered as a unique editor and the last tab widget is the
- * focusable widget.
- * \sa setFocusableWidget(), addTabOrder()
+ * When the widget contains multiple editors, and when the taborder is defined in the form description,
+ * the last tab widget corresponds to the last widget that recieves the tabFocus.
+ * By default, the widget is considered as a unique editor and the last tab widget is the
+ * focusedWidget.
+ * \sa setFocusedWidget(), addTabOrder()
  */
 
 /**
@@ -175,7 +175,7 @@ IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     QWidget(parent),
     m_Label(0),
     m_FormItem(formItem),
-    _focusableWidget(0),
+    m_focusedWidget(0),
     _lastTabWidget(0)
 {
     m_FormItem->setFormWidget(this);
@@ -199,14 +199,14 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     QBoxLayout *hb;
     m_Label = new QLabel(this);
     m_Label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    if (labelOption == Label_OnTop) {
+    if (labelOption == OnTop) {
         hb = new QBoxLayout(QBoxLayout::TopToBottom, parent);
         createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         hb->setSpacing(5);
     } else {
         // TODO: Code specific label options
         hb = new QHBoxLayout(parent);
-        if (labelOption != Label_NoLabel) {
+        if (labelOption != NoLabel) {
             createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         }
         hb->setSpacing(5);

@@ -155,7 +155,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         m_Identity->layout()->setMargin(0);
     }
 
-    setFocusableWidget(m_Identity);
+    setFocusedWidget(m_Identity);
 
     // create itemdata
     IdentityWidgetData *data = new IdentityWidgetData(m_FormItem);

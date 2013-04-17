@@ -119,7 +119,7 @@ using namespace Trans::ConstantTranslations;
 //        hb->addWidget(m_List);
 //    }
 
-//    setFocusableWidget(m_List);
+//    setFocusedWidget(m_List);
 
 //    // create FormItemData
 //    %ClassName:c%Data *data = new %ClassName:c%Data(m_FormItem, %ClassName:c%);

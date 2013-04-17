@@ -120,7 +120,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         // Find Label
         m_Label = findLabel(formItem);
     } else {
-        hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+        hb = getBoxLayout(OnTop, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
         hb->setMargin(0);
         hb->setSpacing(0);
@@ -163,7 +163,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
             m_Text->setUserDocumentForPrintingProcess(Core::IDocumentPrinter::Papers_Prescription_User);
     }
 
-    setFocusableWidget(m_Text->textEdit());
+    setFocusedWidget(m_Text->textEdit());
     setFocusProxy(m_Text->textEdit());
 
     // create item data

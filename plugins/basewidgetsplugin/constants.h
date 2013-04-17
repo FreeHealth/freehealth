@@ -73,7 +73,7 @@ const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
 const char * const  NOT_PRINTABLE        = "notprintable";
 const char * const  SUMMARY_FONT_BOLD    = "SummaryFontBold";
 
-Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft);
+Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft);
 
 QStringList getCountries(Form::FormItem *item);
 

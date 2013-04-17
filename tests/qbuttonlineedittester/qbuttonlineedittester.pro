@@ -23,3 +23,6 @@ HEADERS += \
     ../../libs/utils/widgets/qbuttonlineedit.h \
     ../../libs/translationutils/constants.h \
     ../../libs/translationutils/trans_numbers.h
+
+RESOURCES += \
+    icons.qrc

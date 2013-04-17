@@ -71,7 +71,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout * hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add List and manage size
@@ -99,7 +99,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
         m_List->setMaximumSize(m_List->maximumWidth(), itemHeight * (m_Model->rowCount() + 1));
         m_List->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
-    setFocusableWidget(m_List);
+    setFocusedWidget(m_List);
 
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
@@ -187,7 +187,7 @@ BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
         layout = hb;
     }
@@ -213,7 +213,7 @@ BaseEditableStringList::BaseEditableStringList(Form::FormItem *formItem, QWidget
 
     layout->addWidget(m_StringListView);
 
-    setFocusableWidget(m_StringListView);
+    setFocusedWidget(m_StringListView);
 
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
@@ -428,7 +428,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
         m_Label = Constants::findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add List and manage size
@@ -438,7 +438,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     }
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
 
-    setFocusableWidget(m_Combo);
+    setFocusedWidget(m_Combo);
 
     // Manage options
     int defaultId = -1;

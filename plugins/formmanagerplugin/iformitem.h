@@ -100,12 +100,12 @@ public:
     virtual FormItem *createChildItem(const QString &uuid = QString::null);
     virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
     virtual QList<FormItem *> formItemChildren() const;
-    virtual QList<FormItem *> flattenFormItemChildren() const;
+    virtual QList<FormItem *> flattenedFormItemChildren() const;
 
     // FormIO extra data
     virtual void addExtraData(const QString &key, const QString &value);
 
-    /*! Returns the FormItem extra data as QHash (keys are all lowered) */
+    /*! Returns the FormItem extra data as QHash (keys are all lowercase) */
     virtual QHash<QString,QString> extraData() const {return m_ExtraData;}
 
     /*! Clears the internal extra data of the FormItem */
@@ -141,14 +141,14 @@ inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
      return list;
 }
 /** Returns all level Form::FormItem children. */
-inline QList<FormItem *> Form::FormItem::flattenFormItemChildren() const
+inline QList<FormItem *> Form::FormItem::flattenedFormItemChildren() const
 {
     QList<Form::FormItem *> list;
     foreach(QObject *o, children()) {
          Form::FormItem *i = qobject_cast<Form::FormItem*>(o);
          if (i) {
              list.append(i);
-             list.append(i->flattenFormItemChildren());
+             list.append(i->flattenedFormItemChildren());
          }
     }
     return list;
@@ -223,7 +223,7 @@ public:
 
     virtual FormMain *formParent() const;
     virtual FormMain *rootFormParent() const;
-    virtual QList<FormMain *> flattenFormMainChildren() const;
+    virtual QList<FormMain *> flattenedFormMainChildren() const;
     virtual QList<FormMain *> firstLevelFormMainChildren() const;
     virtual FormMain *formMainChild(const QString &uuid) const;
 
@@ -274,15 +274,15 @@ inline Form::FormMain *Form::FormMain::rootFormParent() const
     }
     return const_cast<Form::FormMain*>(this);
 }
-/** Returns all Form::FormMain children of the Form::FormMain  (all level). */
-inline QList<Form::FormMain *> Form::FormMain::flattenFormMainChildren() const
+/** Returns all Form::FormMain children of the Form::FormMain  (all levels). */
+inline QList<Form::FormMain *> Form::FormMain::flattenedFormMainChildren() const
 {
      QList<Form::FormMain *> list;
      foreach(QObject *o, children()) {
           Form::FormMain *i = qobject_cast<Form::FormMain*>(o);
           if (i) {
               list.append(i);
-              list.append(i->flattenFormMainChildren());
+              list.append(i->flattenedFormMainChildren());
           }
      }
      return list;
@@ -302,7 +302,7 @@ inline QList<FormMain *> Form::FormMain::firstLevelFormMainChildren() const
 /** Returns the Form::FormMain child with the uuid \e uuid. */
 inline Form::FormMain *Form::FormMain::formMainChild(const QString &uuid) const
 {
-    QList<FormMain *> forms = flattenFormMainChildren();
+    QList<FormMain *> forms = flattenedFormMainChildren();
     for(int i=0; i<forms.count(); ++i) {
         FormMain *form = forms.at(i);
         if (form->uuid()==uuid)

@@ -32,9 +32,9 @@
  * \brief Manages data propagation between form widget and the patient model.\n
  *
  * Life cycle:
- * This form item data manager can be created by the Form::FormItem or the Form::IFormItemWidget.
+ * This form item data manager can be created by the Form::FormItem or the Form::IFormWidget.
  * It is purely internal to your form item plugin implementation. In the BaseWidgets plugin, the
- * data managers are created and managed by the Form::IFormItemWidget. This object is deleted
+ * data managers are created and managed by the Form::IFormWidget. This object is deleted
  * by its parent Form::FormItem in its dtor.
  *
  * Automatic access to the episode database of FreeMedForms:
@@ -42,7 +42,7 @@
  * The storable data can be anything you want: serialized values, XML, HTML, JSON... But only strings.
  * This will evolve in future version using QVariant.\n
  * The storable data is saved to the database after beeing tagged with the Form::FormItem uuid. This is
- * reason why the form item uuid MUST BE persistent in time and unique in all forms. See the wiki documentation.\n
+ * reason why the form item uuid MUST BE persistent in time and unique in all forms.\n
  * The storable data is kept inside the central episode database. When an episode is activated in the
  * form data widget mapper, the data manager will receive its storable data (anything stringified using
  * setStorableData()). It can then manage its Form::IFormWidget. When an episode is submitted from
@@ -64,7 +64,7 @@
  * }
  * \endcode
  *
- * \sa Form::FormItem, Form::IFormItemWidget, Form::EpisodeModel, Form::Internal::FormDataWidgetMapper
+ * \sa Form::FormItem, Form::IFormWidget, Form::EpisodeModel, Form::Internal::FormDataWidgetMapper
  */
 
 

@@ -7,8 +7,8 @@
 
 #include <QDebug>
 
-const char * const ICONOK = "/Volumes/RamDisk/eric/freemedforms/global_resources/pixmap/16x16/ok.png";
-const char * const ICONWARNING = "/Volumes/RamDisk/eric/freemedforms/global_resources/pixmap/16x16/warning.png";
+const char * const ICONOK = ":/icons/ok.png";
+const char * const ICONWARNING = ":/icons/warning.png";
 
 int main(int argc, char *argv[])
 {

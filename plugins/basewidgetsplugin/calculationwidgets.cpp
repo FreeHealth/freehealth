@@ -72,13 +72,13 @@ enum ProvidedWidget {
 
 }  // End namespace Anonymous
 
-static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::OnLeft)
 {
     const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnTop;
+        return Form::IFormWidget::OnTop;
     else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
-        return Form::IFormWidget::Label_OnLeft;
+        return Form::IFormWidget::OnLeft;
     return defaultValue;
 }
 
@@ -206,7 +206,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
         m_Label = findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
-        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
         hb->addWidget(m_Label);
 
         // Add LineEdit for the result
@@ -217,7 +217,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
     }
     retranslate();
 
-    setFocusableWidget(line);
+    setFocusedWidget(line);
 
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
@@ -293,7 +293,7 @@ void SumWidget::connectFormItems()
     if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         foreach(QString uid, uuids) {
             uid = uid.simplified();
             for(int i = 0; i < items.count(); ++i) {
@@ -310,7 +310,7 @@ void SumWidget::connectFormItems()
         }
     } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
             if (item==m_FormItem)
@@ -336,7 +336,7 @@ void SumWidget::recalculate(const int modifiedRef)
     if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
@@ -348,7 +348,7 @@ void SumWidget::recalculate(const int modifiedRef)
         }
     } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        QList<Form::FormItem *> items = p->flattenedFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
             if (item->uuid().contains(reg) && item->itemData()) {
@@ -402,7 +402,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
             m_Label = findLabel(formItem);
         } else {
             // Prepare Widget Layout and label
-            QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+            QBoxLayout *hb = getBoxLayout(OnLeft, m_FormItem->spec()->label(), this);
             hb->addWidget(m_Label);
 
             // Add LineEdit for the result
@@ -420,7 +420,7 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
         }
     }
 
-    setFocusableWidget(line);
+    setFocusedWidget(line);
 
     retranslate();
 
@@ -507,7 +507,7 @@ void ScriptWidget::connectFormItems()
     QString itemList = formItem()->extraData().value(::CONNECT_EXTRA_KEY);
     QString regexp = formItem()->extraData().value(::CONNECT_REGEXP_EXTRA_KEY);
     // Find all items to connect
-    QList<Form::FormItem *> children = p->flattenFormItemChildren();
+    QList<Form::FormItem *> children = p->flattenedFormItemChildren();
     if (!itemList.isEmpty()) {
         QStringList items = itemList.split(";");
         for(int i = 0; i < children.count(); ++i) {

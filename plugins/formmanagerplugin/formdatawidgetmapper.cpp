@@ -88,7 +88,7 @@ public:
             if (_formMain) {
                 QList<Form::FormMain *> forms;
                 forms << _formMain;
-                forms << _formMain->flattenFormMainChildren();
+                forms << _formMain->flattenedFormMainChildren();
                 foreach(FormMain *form, forms) {
                     if (form->formWidget()) {
                         form->formWidget()->setParent(0);
@@ -132,7 +132,7 @@ public:
 
         QList<Form::FormMain *> forms;
         forms << _formMain;
-        forms << _formMain->flattenFormMainChildren();
+        forms << _formMain->flattenedFormMainChildren();
 
         foreach(FormMain *form, forms) {
             if (form->formWidget()) {
@@ -165,7 +165,7 @@ public:
             return QString::null;
 
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
+        foreach(FormItem *it, _formMain->flattenedFormItemChildren()) {
             if (it->itemData()) {
                 items.insert(it->uuid(), it);
             }
@@ -268,7 +268,7 @@ bool FormDataWidgetMapper::isDirty() const
         return true;
     }
     // ask all current form item data
-    foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+    foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
         if (WarnDirty && it->itemData() && it->itemData()->isModified())
             qWarning() << "FormDataWidgetMapper::isDirty (item)" << it->uuid() << it->itemData()->isModified();
         if (it->itemData() && it->itemData()->isModified())
@@ -331,7 +331,7 @@ void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
     d->setCurrentEpisode(index);
 }
 
-/** Enable or disable the Form::FormMain Form::IFormItemWidget */
+/** Enable or disable the Form::FormMain Form::IFormWidget */
 void FormDataWidgetMapper::setFormWidgetEnabled(bool enabled)
 {
     d->_formMain->formWidget()->setEnabled(enabled);

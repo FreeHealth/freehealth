@@ -46,7 +46,7 @@
  * - createPage() to create a new Form::FormPage
  *
  * You can get all of its first level children by calling Form::FormItem::formItemChildren() and the
- * full list of its children (flattened) using Form::FormItem::flattenFormItemChildren().
+ * full list of its children (flattened) using Form::FormItem::flattenedFormItemChildren().
  *
  * You can define extra data (options) with the addExtraData(), extraData() and clearExtraData().
  *
@@ -77,7 +77,7 @@
  *
  * Object tree management:\n
  * When you need to create a Form::FormMain as child of another one, use the createChildForm() member.
- * Get all its children (including sub-trees) using the Form::FormMain::flattenFormMainChildren()
+ * Get all its children (including sub-trees) using the Form::FormMain::flattenedFormMainChildren()
  * member or the formMainChild() if you want a specific child.\n
  *
  * Managing episode behavior:\n
@@ -760,7 +760,7 @@ void FormMain::clear()
 {
     if (itemData())
         itemData()->clear();
-    foreach(FormItem *it, this->flattenFormItemChildren()) {
+    foreach(FormItem *it, this->flattenedFormItemChildren()) {
         if (it->itemData())
             it->itemData()->clear();
     }

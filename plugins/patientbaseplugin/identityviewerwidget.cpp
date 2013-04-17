@@ -540,7 +540,7 @@ public:
         _identityForm = form;
         if (form) {
             // Create a cache to speed up the wrapper
-            foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+            foreach(Form::FormItem *item, _identityForm->flattenedFormItemChildren()) {
                 if (item->itemData() && item->patientDataRepresentation() != -1) {
                     _formItemWithData.insert(item->patientDataRepresentation(), item);
                 }

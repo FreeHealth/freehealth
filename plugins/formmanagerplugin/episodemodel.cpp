@@ -240,7 +240,7 @@ public:
 ////            if (andFeedPatientModel) {
 ////                bool hasPatientData = false;
 ////                // test all children FormItem for patientDataRepresentation
-////                foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+////                foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
 ////                    if (item->itemData()) {
 ////                        if (item->patientDataRepresentation()!=-1) {
 ////                            hasPatientData = true;
@@ -524,7 +524,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 //                red.setAlpha(120);
 //                return red;
 //            }
-//            foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+//            foreach(Form::FormItem *item, d->_formMain->flattenedFormItemChildren()) {
 //                if (item->itemData() && item->itemData()->isModified()) {
 //                    red.setAlpha(200);
 //                    return red;
@@ -699,7 +699,7 @@ void EpisodeModel::setReadOnly(bool state)
     // update all itemdata of the parent formmain readonly property
     if (d->_formMain->itemData())
         d->_formMain->itemData()->setReadOnly(state);
-    foreach(Form::FormItem *item, d->_formMain->flattenFormItemChildren()) {
+    foreach(Form::FormItem *item, d->_formMain->flattenedFormItemChildren()) {
         if (item->itemData())
             item->itemData()->setReadOnly(state);
     }
@@ -830,7 +830,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         }
 
         // put data into the FormItems of the form
-        foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+        foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
             items.insert(it->uuid(), it);
         }
     }
@@ -932,7 +932,7 @@ bool EpisodeModel::submit()
 
     // Set all formitemdata to a non-modified state
     if (ok) {
-        foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+        foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
             if (it->itemData())
                 it->itemData()->setModified(false);
         }

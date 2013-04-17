@@ -424,7 +424,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
             toReturn.append(root);
         }
         // Emit the formLoaded signal for all subForms loaded
-        QList<Form::FormMain *> forms = root->flattenFormMainChildren();
+        QList<Form::FormMain *> forms = root->flattenedFormMainChildren();
         for(int i=0; i < forms.count(); ++i) {
             forms.at(i)->emitFormLoaded();
         }

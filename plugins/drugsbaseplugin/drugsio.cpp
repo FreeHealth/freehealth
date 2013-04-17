@@ -152,7 +152,7 @@ namespace {
     const char *const XML_PRESCRIPTION_REFILL              = "Refill";
     const char *const XML_PRESCRIPTION_TOHTML              = "Html";
 
-    const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
+    const char *const XML_EXTRADATA_TAG                    = "ExtraDatas";
     const char *const XML_FULLPRESCRIPTION_TAG             = "FullPrescription";
     const char *const XML_DATEOFGENERATION_TAG             = "DateOfGeneration";
 }  // namespace Anonymous
@@ -812,7 +812,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
     QString extras;
     if (!loadPrescription(m, fileName, extras, loader))
         return false;
-    Utils::readXml(extras, XML_EXTRADATAS_TAG, extraData, false);
+    Utils::readXml(extras, XML_EXTRADATA_TAG, extraData, false);
     return true;
 }
 
@@ -848,8 +848,8 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
     prescriptionFromXml(m, xml,loader);
 
     // get extraData
-    QString start = QString("<%1>").arg(XML_EXTRADATAS_TAG);
-    QString finish = QString("</%1>").arg(XML_EXTRADATAS_TAG);
+    QString start = QString("<%1>").arg(XML_EXTRADATA_TAG);
+    QString finish = QString("</%1>").arg(XML_EXTRADATA_TAG);
     int begin = xml.indexOf(start) + start.length();
     int end = xml.indexOf(finish, begin);
     if (begin==-1 || end==-1) {
@@ -1236,7 +1236,7 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
     Q_ASSERT(model);
     QString extra;
     if (!extraData.isEmpty()) {
-        extra = Utils::createXml(XML_EXTRADATAS_TAG, extraData);
+        extra = Utils::createXml(XML_EXTRADATA_TAG, extraData);
     }
     QString xmldPrescription = prescriptionToXml(model, extra);
     if (toFileName.isEmpty())
@@ -1257,9 +1257,9 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraD
     Q_ASSERT(model);
     QString extra;
     if (!extraData.isEmpty()) {
-        extra.append(QString("\n<%1>\n").arg(XML_EXTRADATAS_TAG));
+        extra.append(QString("\n<%1>\n").arg(XML_EXTRADATA_TAG));
         extra.append(extraData);
-        extra.append(QString("\n</%1>\n").arg(XML_EXTRADATAS_TAG));
+        extra.append(QString("\n</%1>\n").arg(XML_EXTRADATA_TAG));
     }
     QString xmldPrescription = prescriptionToXml(model, extra);
     if (toFileName.isEmpty())

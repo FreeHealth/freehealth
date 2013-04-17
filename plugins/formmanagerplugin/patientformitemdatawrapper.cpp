@@ -66,17 +66,17 @@ public:
         q(parent)
     {
     }
-    
+
     ~PatientFormItemDataWrapperPrivate()
     {
     }
-    
+
     // Scan all FormItem for patient data representation and feed _availablePatientData
     void scanFormItemDataForAvailableData(const QList<FormMain *> &emptyRootForms)
     {
         _availablePatientData.clear();
         foreach(FormMain *form, emptyRootForms) {
-            foreach(FormItem *item, form->flattenFormItemChildren()) {
+            foreach(FormItem *item, form->flattenedFormItemChildren()) {
                 if (item->itemData())
                     _availablePatientData << item->patientDataRepresentation();
             }
@@ -92,7 +92,7 @@ public:
         _episodeModels.clear();
         // Recreate all internal EpisodeModels
         foreach(Form::FormMain *emptyrootform, forms) {
-            foreach(Form::FormMain *form, emptyrootform->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, emptyrootform->flattenedFormMainChildren()) {
                 EpisodeModel *model = new EpisodeModel(form, q);
                 // Never use the internal cache of the model
                 model->setUseFormContentCache(false);
@@ -165,7 +165,7 @@ public:
 public:
     QList<int> _availablePatientData;
     QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
-    
+
 private:
     PatientFormItemDataWrapper *q;
 };
@@ -210,7 +210,7 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
     // Find the FormMain parent that contains the item with the correct 'ref'
     const QList<Form::FormMain*> &forms = d->_episodeModels.uniqueKeys();
     foreach(Form::FormMain *main, forms) {
-        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+        foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
             if (!item->itemData() || item->patientDataRepresentation() == -1)
                 continue;
             // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
@@ -240,9 +240,9 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     d->populateEpisodeModelsWithLastEpisode();
 
 //    foreach(Form::FormMain *forms, formManager().allDuplicatesEmptyRootForms()) {
-//        foreach(Form::FormMain *form, forms->flattenFormMainChildren()) {
+//        foreach(Form::FormMain *form, forms->flattenedFormMainChildren()) {
 //            qWarning() <<"\n\n"<< form->uuid() << d->_episodeModels.value(form)->rowCount();
-//            foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
+//            foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
 //                if (item->itemData())
 //                    qWarning() << item->uuid() << item->itemData()->data(IFormItemData::PatientModelRole) ;
 //            }

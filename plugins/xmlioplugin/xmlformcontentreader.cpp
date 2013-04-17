@@ -421,11 +421,11 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     if (!oldToNew.isEmpty()) {
         QStringList newUids = oldToNew.values();
         newUids.removeDuplicates();
-        foreach(Form::FormMain *main, rootForm->flattenFormMainChildren()) {
+        foreach(Form::FormMain *main, rootForm->flattenedFormMainChildren()) {
             if (newUids.contains(main->uuid(), Qt::CaseInsensitive)) {
                 main->spec()->setEquivalentUuid(oldToNew.keys(main->uuid()));
             }
-            foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+            foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
                 if (newUids.contains(item->uuid(), Qt::CaseInsensitive)) {
                     item->spec()->setEquivalentUuid(oldToNew.keys(item->uuid()));
                 }
@@ -885,7 +885,7 @@ bool XmlFormContentReader::createFormWidget(Form::FormMain *form)
 bool XmlFormContentReader::createWidgets(const Form::FormMain *rootForm)
 {
     // foreach FormMain children
-    foreach(Form::FormMain *form, rootForm->flattenFormMainChildren()) {
+    foreach(Form::FormMain *form, rootForm->flattenedFormMainChildren()) {
         // create the form
         createFormWidget(form);
     }
@@ -902,7 +902,7 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
 //    QString ns = root.attribute("ns");
 //    if (!ns.isEmpty())
 //        ns.append("::");
-    const QList<Form::FormItem *> &items = rootForm->flattenFormItemChildren();
+    const QList<Form::FormItem *> &items = rootForm->flattenedFormItemChildren();
     Form::IFormWidget *first = 0;
     Form::IFormWidget *second = 0;
     QDomElement element = tabs.firstChildElement(Constants::TAG_TABSTOP);
@@ -923,9 +923,9 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
                     second = item->formWidget();
                     if (WarnTabOrder) {
 //                        qWarning() << QString("  setTabOrder\n" + warn);
-                        qWarning() << "    " << first->lastTabWidget() << "\n    " << second->focusableWidget() << "\n\n";
+                        qWarning() << "    " << first->lastTabWidget() << "\n    " << second->focusedWidget() << "\n\n";
                     }
-                    QWidget::setTabOrder(first->lastTabWidget(), second->focusableWidget());
+                    QWidget::setTabOrder(first->lastTabWidget(), second->focusedWidget());
                     first = second;
                     first->setTabOrder(WarnTabOrder);
                     warn = "    first: " + item->uuid() + "\n";
