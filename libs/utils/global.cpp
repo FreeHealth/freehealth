@@ -1346,6 +1346,43 @@ QString htmlBodyContent(const QString &fullHtml)
     return QString("<p %1>%2</p>").arg(style).arg(fullHtml.mid(beg, end-beg));
 }
 
+/**
+ * Match all CSS style declaration, remove it from the HTML code and return it.
+ * WARNING: The \e fullHtml will be modified.
+*/
+QString htmlTakeAllCssContent(QString &fullHtml)
+{
+    QString css;
+    typedef QPair<int,int> pairs;
+    QList<pairs> removalIndexes; // begin, end
+    int begin = 0;
+    while (begin >= 0) {
+        begin = fullHtml.indexOf("<style", begin);
+        if (begin != -1) {
+            int end = fullHtml.indexOf("</style>", begin);
+            if (end != -1) {
+                // Found a block <style ...> ...css content... </style>
+                end += 8;
+                removalIndexes << pairs(begin, end);
+                css += fullHtml.mid(begin, end-begin);
+            } else {
+                // Found a file declaration? <style .../>
+                // TODO: code this
+                end = fullHtml.indexOf("/>", begin);
+                Q_ASSERT(false); // "CSS extraction from file declaration not yet implemented"
+            }
+            begin += end;
+        }
+        qWarning() << begin;
+    }
+    // remove found css
+    foreach(const pairs &indexes, removalIndexes) {
+        fullHtml = fullHtml.remove(indexes.first, indexes.second - indexes.first);
+    }
+
+    return css;
+}
+
 /** \brief Return the CSS style for a font. **/
 QString fontToHtml(const QFont &font, const QColor &color)
 {
