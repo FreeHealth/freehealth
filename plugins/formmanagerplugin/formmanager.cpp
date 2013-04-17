@@ -786,6 +786,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     // Create a token for each FormItem of the FormMain (label and value)
     foreach(FormItem *item, form->flattenFormItemChildren()) {
         tokens.insert(item->uuid() + ".label", item->spec()->label());
+        tokens.insert(item->uuid() + ".tooltip", item->spec()->tooltip());
         if (item->itemData())
             tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
     }
