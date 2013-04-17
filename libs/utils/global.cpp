@@ -1373,7 +1373,6 @@ QString htmlTakeAllCssContent(QString &fullHtml)
             }
             begin += end;
         }
-        qWarning() << begin;
     }
     // remove found css
     foreach(const pairs &indexes, removalIndexes) {
