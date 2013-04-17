@@ -62,8 +62,18 @@ void htmlCssStyleExtractions()
                          "</div> <!-- formHeader -->"
                          "</body>"
                          "</html>").arg(css);
+    QString out = QString("<html>"
+                         "<body>\n"
+                         "\n"
+                         "<div class=\"__ident__formContent\">"
+                         "<div class=\"formHeader\">"
+                         "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                         "</div> <!-- formHeader -->"
+                         "</body>"
+                         "</html>");
 
     qWarning() << "Extracting CSS in body content" << (css == Utils::htmlTakeAllCssContent(in));
+    qWarning() << "  HTML block" << in.size() << out.size() << (in == out);
 
     // In header
     in = QString("<html>"
@@ -78,8 +88,20 @@ void htmlCssStyleExtractions()
                  "</body>"
                  "</html>")
             .arg(css);
+    out = QString("<html>"
+                 "<header>"
+                 "\n"
+                 "</header>"
+                 "<body>\n"
+                 "<div class=\"__ident__formContent\">"
+                 "<div class=\"formHeader\">"
+                 "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                 "</div> <!-- formHeader -->"
+                 "</body>"
+                 "</html>");
 
     qWarning() << "Extracting CSS in header content" << (css == Utils::htmlTakeAllCssContent(in));
+    qWarning() << "  HTML block" << in.size() << out.size() << (in == out);
 
     // Double css
     QString doubleCss = css + css;
@@ -96,8 +118,21 @@ void htmlCssStyleExtractions()
                  "</body>"
                  "</html>")
             .arg(css);
+    out = QString("<html>"
+                 "<header>"
+                 "\n"
+                 "</header>"
+                 "<body>\n"
+                 "\n"
+                 "<div class=\"__ident__formContent\">"
+                 "<div class=\"formHeader\">"
+                 "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                 "</div> <!-- formHeader -->"
+                 "</body>"
+                 "</html>");
 
     qWarning() << "Extracting CSS: double CSS" << (doubleCss == Utils::htmlTakeAllCssContent(in));
+    qWarning() << "  HTML block" << in.size() << out.size() << (in == out);
 }
 
 
