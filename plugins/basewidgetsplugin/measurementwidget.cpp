@@ -330,29 +330,33 @@ QVariant MeasurementWidgetData::data(const int ref, const int role) const
 //    qWarning() << "MeasurementWidgetData::data" << ref << role << m_Measurement->m_value->value() << m_Measurement->m_units->currentText();
 
     // Manage specific measurements (weight & length)
-    if (m_Measurement->m_isWeight) {
-        // return in grams
-        double val = m_Measurement->m_value->value();
-        switch (m_Measurement->m_units->currentIndex()) {
-        case 0: return val;
-        case 1: return val*100.;
-        case 2: return val*28.3495231; // 1 ounce = 28.3495231 grams
-        case 3: return val*453.59237;  // 1 pound = 453.59237 grams
+    if (role == Form::IFormItemData::PatientModelRole) {
+        if (m_Measurement->m_isWeight) {
+            // return in grams
+            double val = m_Measurement->m_value->value();
+            switch (m_Measurement->m_units->currentIndex()) {
+            case 0: return val;
+            case 1: return val*100.;
+            case 2: return val*28.3495231; // 1 ounce = 28.3495231 grams
+            case 3: return val*453.59237;  // 1 pound = 453.59237 grams
+            }
+            return val;
+        } else if (m_Measurement->m_isLength) {
+            // return in centimeters
+            double val = m_Measurement->m_value->value();
+            switch (m_Measurement->m_units->currentIndex()) {
+            case 0: return val;
+            case 1: return val*100.;
+            case 2: return val*2.54;   // 1 inch = 2.54 centimeters
+            case 3: return val*30.48;  // 1 foot = 30.48 centimeters
+            }
+            return val;
         }
-        return val;
-    } else if (m_Measurement->m_isLength) {
-        // return in centimeters
-        double val = m_Measurement->m_value->value();
-        switch (m_Measurement->m_units->currentIndex()) {
-        case 0: return val;
-        case 1: return val*100.;
-        case 2: return val*2.54;   // 1 inch = 2.54 centimeters
-        case 3: return val*30.48;  // 1 foot = 30.48 centimeters
-        }
-        return val;
     }
     // return value + unit in a string
-    return QString("%1 %2").arg(m_Measurement->m_value->value()).arg(m_Measurement->m_units->currentText());
+    return QString("%1 %2")
+            .arg(QString::number(m_Measurement->m_value->value(), 'f', 2))
+            .arg(m_Measurement->m_units->currentText());
 }
 
 // Storable data are serialized like this: value;;unit
