@@ -1374,8 +1374,10 @@ QString htmlTakeAllCssContent(QString &fullHtml)
             begin += end;
         }
     }
-    // remove found css
-    foreach(const pairs &indexes, removalIndexes) {
+
+    // remove found css in reverse order
+    for (int i = removalIndexes.count() - 1; i > -1; --i) {
+        const pairs &indexes = removalIndexes.at(i);
         fullHtml = fullHtml.remove(indexes.first, indexes.second - indexes.first);
     }
 
