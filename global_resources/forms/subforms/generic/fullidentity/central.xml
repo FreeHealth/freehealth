@@ -77,6 +77,8 @@
         <label lang="fr">Identité</label>
         <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
         <icon>__theme__/identity.png</icon>
+        <file type="htmlprintmask">./html/xx/mask.html</file>
+        <file type="htmlexportmask">./html/xx/mask.html</file>
 
         <Item type="detailswidget" name="IdentityDetails" uifilename="./ui/xx/ident.ui">
             <uilink label="" widget="" layout="identityLayout"/>
