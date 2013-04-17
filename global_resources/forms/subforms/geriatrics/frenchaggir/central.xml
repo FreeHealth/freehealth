@@ -5,10 +5,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.8.4</version>
+    <version>test</version>
     <fmfv>0.8.4</fmfv>
     <cdate>2011-03-15</cdate>
-    <ludate>2013-03-21</ludate>
+    <ludate>2013-04-16</ludate>
     <icon>geriatrics.png</icon>
     <weblink></weblink>
     <bibliography/>
