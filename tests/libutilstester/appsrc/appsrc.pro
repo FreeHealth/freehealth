@@ -10,11 +10,16 @@ include(../../../libs/rpath.pri)
 
 SOURCES = main.cpp \
     widgets_unit_test.cpp \
-    html_unit_tests.cpp
+    html_unit_tests.cpp \
+    htmlcontenttester.cpp
 
 RESOURCES += \
     icons.qrc
 
 HEADERS += \
     widgets_unit_test.h \
-    html_unit_tests.h
+    html_unit_tests.h \
+    htmlcontenttester.h
+
+FORMS += \
+    htmlcontenttester.ui

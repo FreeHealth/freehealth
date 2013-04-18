@@ -19,32 +19,75 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "widgets_unit_test.h"
-#include "html_unit_tests.h"
 #include "htmlcontenttester.h"
+#include "ui_htmlcontenttester.h"
 
-#include <QApplication>
+#include <translationutils/constants.h>
+
+#include <QPushButton>
 
 #include <QDebug>
 
-#include <QtGui>
-#include <utils/global.h>
-int main(int argc, char *argv[])
+using namespace Tests;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
+
+namespace Tests {
+namespace Internal {
+class HtmlContentTesterPrivate
 {
-    QApplication a(argc, argv);
-    qWarning();
+public:
+    HtmlContentTesterPrivate(HtmlContentTester *parent) :
+        ui(new Ui::HtmlContentTester),
+        q(parent)
+    {
+    }
+    
+    ~HtmlContentTesterPrivate()
+    {
+        delete ui;
+    }
+    
+public:
+    Ui::HtmlContentTester *ui;
+    
+private:
+    HtmlContentTester *q;
+};
+} // namespace Internal
+} // end namespace Tests
 
-    // Tests::testQButtonLineEdit();
 
-    // Tests::htmlCssStyleExtractions();
+/*! Constructor of the Tests::HtmlContentTester class */
+HtmlContentTester::HtmlContentTester(QWidget *parent) :
+    QDialog(parent),
+    d(new HtmlContentTesterPrivate(this))
+{
+}
 
-    Tests::HtmlContentTester html;
-    html.initialize();
-    html.exec();
+/*! Destructor of the Tests::HtmlContentTester class */
+HtmlContentTester::~HtmlContentTester()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
 
-    return a.exec();
+/*! Initializes the object with the default values. Return true if initialization was completed. */
+bool HtmlContentTester::initialize()
+{
+    d->ui->setupUi(this);
+    QPushButton *but = d->ui->buttonBox->addButton(tr("Refresh Browser"), QDialogButtonBox::ActionRole);
+    connect(but, SIGNAL(clicked()), this, SLOT(refreshBrowserContent()), Qt::UniqueConnection);
+    return true;
+}
+
+void HtmlContentTester::refreshBrowserContent()
+{
+    d->ui->textBrowser->setHtml(d->ui->plainTextEdit->toPlainText());
 }
