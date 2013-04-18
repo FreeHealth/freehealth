@@ -29,6 +29,7 @@
 #include <utils/global.h>
 
 #include <QtGui>
+#include <QVBoxLayout>
 
 const char * const ICONOK = ":/icons/ok.png";
 const char * const ICONWARNING = ":/icons/warning.png";
