@@ -265,6 +265,7 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_WEIGHTINGRAMS,     data(IPatient::WeightInGrams).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_HEIGHTINCENTIMETERS, data(IPatient::HeightInCentimeters).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFBIRTH,data(IPatient::DateOfBirth).toString() );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTDATEOFDEATH,data(IPatient::DateOfDeath).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR,              data(IPatient::CreatinClearance).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_CLCR_UNIT,         data(IPatient::CreatinClearanceUnit).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,      data(IPatient::Title).toString() );
