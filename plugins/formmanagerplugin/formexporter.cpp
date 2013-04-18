@@ -84,39 +84,65 @@ public:
 
         // Foreach FormMain get all its episode
         QString html;
-        QHash<Form::FormMain *, QString> formCss;
+        QStringList formCss;
         foreach(Form::FormMain *emptyRoot, forms) {
-            foreach(Form::FormMain *form, emptyRoot->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
                 // Use EpisodeModel
                 EpisodeModel *model = new EpisodeModel(form, q);
                 model->initialize();
                 if (!_patientUid.isEmpty())
                     model->setCurrentPatient(_patientUid);
 
-                // Add a sortproxymodel
+                // Get *all* episodes
+                QModelIndex fetchIndex = model->index(model->rowCount(), 0);
+                while (model->canFetchMore(fetchIndex)) {
+                    model->fetchMore(fetchIndex);
+                    fetchIndex = model->index(model->rowCount(), 0);
+                }
+
+                // Add a sortproxymodel wrapper
                 QSortFilterProxyModel *proxy = new QSortFilterProxyModel(model);
                 proxy->setSourceModel(model);
                 proxy->sort(EpisodeModel::UserTimeStamp, Qt::DescendingOrder);
 
                 // Read all rows of the model
                 QString htmlMask = Utils::htmlBodyContent(form->spec()->value(FormItemSpec::Spec_HtmlExportMask).toString().simplified());
-//                formCss.insert(form, );
+                formCss << Utils::htmlTakeAllCssContent(htmlMask);
+
                 for(int i=0; i < proxy->rowCount(); ++i) {
                     QModelIndex index = proxy->mapToSource(proxy->index(i, 0));
+
                     // Populate form with data
                     model->populateFormWithEpisodeContent(index, false);
+
                     // Try to export with the HTML mask
                     if (!htmlMask.isEmpty()) {
-                        Utils::replaceTokens(htmlMask, formManager().formToTokens(form));
-                        patient()->replaceTokens(htmlMask);
-                        user()->replaceTokens(htmlMask);
-                        html += Utils::htmlBodyContent(htmlMask);
+
+                        qWarning() << "\n\nHTML MASK\n" << htmlMask;
+
+                        QString tmpMask = htmlMask;
+                        Utils::replaceTokens(tmpMask, formManager().formToTokens(form));
+                        patient()->replaceTokens(tmpMask);
+                        user()->replaceTokens(tmpMask);
+                        html += Utils::htmlBodyContent(tmpMask);
+
+                        qWarning() << "\n\nHTML\n" << tmpMask;
+
                     } else {
                         // Get the default HTML output
                         html += Utils::htmlBodyContent(form->printableHtml(true));
                     }
                 }
             }
+        }
+        // Re-insert CSS style blocks
+        int begin = html.indexOf("<body");
+        if (begin == -1) {
+            html.prepend(formCss.join("\n"));
+        } else {
+            begin = html.indexOf(">", begin + 2);
+            ++begin;
+            html.insert(begin, formCss.join("\n"));
         }
         Utils::saveStringToFile(html, "/Users/eric/Desktop/patient.html");
         return html;

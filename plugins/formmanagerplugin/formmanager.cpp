@@ -102,6 +102,7 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QProgressDialog>
+#include <QTextDocument>
 
 #include <QDebug>
 
@@ -787,8 +788,22 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     foreach(FormItem *item, form->flattenedFormItemChildren()) {
         tokens.insert(item->uuid() + ".label", item->spec()->label());
         tokens.insert(item->uuid() + ".tooltip", item->spec()->tooltip());
-        if (item->itemData())
-            tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
+        if (item->itemData()) {
+            QString value = item->itemData()->data(0, Form::IFormItemData::PrintRole).toString();
+            if (Qt::mightBeRichText(value)) {
+                if (value.contains("<body") && value.contains("</body>")) {
+                    // extract css
+                    QString css = Utils::htmlTakeAllCssContent(value);
+                    // remove body
+                    value = Utils::htmlBodyContent(value);
+                    // reinject css
+                    value.prepend(css);
+                }
+                tokens.insert(item->uuid(), Utils::htmlReplaceParagraphWithDiv(value));
+            } else {
+                tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::PrintRole));
+            }
+        }
     }
     // Create tokens for episode data
     tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
@@ -800,6 +815,14 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     tokens.insert("EpisodeUserName", userName);
     tokens.insert("EpisodePriority", form->itemData()->data(Form::IFormItemData::ID_Priority));
     tokens.insert("EpisodeFormLabel", form->spec()->label());
+    Form::FormMain *parent = form;
+    QStringList fullFormName;
+    while (parent) {
+        if (!parent->spec()->label().isEmpty())
+            fullFormName.prepend(parent->spec()->label());
+        parent = parent->formParent();
+    }
+    tokens.insert("EpisodeFullFormLabel", fullFormName.join(" / "));
     return tokens;
 }
 
