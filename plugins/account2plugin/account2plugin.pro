@@ -1,7 +1,7 @@
 !with-account {
   message(Account2 plugin included but not in the CONFIG var of the qmake process)
 } else {
-  message(Building Newd Accountancy plugin)
+  message(Building New Accountancy plugin)
 }
 
 TEMPLATE = lib
