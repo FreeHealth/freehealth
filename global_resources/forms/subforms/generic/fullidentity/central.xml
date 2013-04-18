@@ -345,6 +345,8 @@
         <label lang="fr">Personne de confiance</label>
         <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
         <icon>__theme__/identity.png</icon>
+        <file type="htmlprintmask">./html/xx/trustedperson_mask.html</file>
+        <file type="htmlexportmask">./html/xx/trustedperson_mask.html</file>
 
         <Item type="detailswidget" name="TrustedPersonDetails" uifilename="./ui/xx/trusted.ui">
             <uilink label="" widget="" layout="identityLayout"/>
