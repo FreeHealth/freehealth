@@ -39,6 +39,10 @@ private slots:
     {
     }
 
+    void cleanupTestCase()
+    {
+    }
+
     /** Test body content extraction */
     void htmlBodyExtractions()
     {
