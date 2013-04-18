@@ -30,8 +30,11 @@
 
 .__drugsprescr__formContent .episodeLabel {
   font-weight: 600;
-  font-size: 14pt;
+  /* text-transform: uppercase;
+  background-color: gray;
+  color: white; */
   padding: 5px;
+  margin-bottom: 0.2em;
 }
 
 .__drugsprescr__formContent .episodeUserCreator {
@@ -62,9 +65,9 @@
     </div> <!-- formHeader -->
 
     <div class="episodeHeader">
-        <div class="episodeLabel">[[EpisodeUserLabel]]</div>
-        [<span class="episodeUserCreator">Created by: [EpisodeUserName]</span>]
-        [&nbsp;<span class="episodeUserDate">on the [EpisodeUserDate]</span>]
+        [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
     </div> <!-- episodeHeader -->
 
     <div class="episodeContent">

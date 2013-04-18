@@ -7,8 +7,8 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.2</fmfv>
-    <lmdate>2013-02-05</lmdate>
+    <fmfv>0.8.4</fmfv>
+    <lmdate>2013-04-18</lmdate>
     <cdate>2011-09-02</cdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
@@ -24,34 +24,42 @@
     <specialties lang="xx">General practice</specialties>
 
     <updateinfo>
-    <updateversion from="0.8.0" to="0.8.2">
-      <text lang="fr">
-      Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
-      Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
-      Ajout de l'assistant de prescription d'examen biologique
-      </text>
-      <text lang="en">
-      Defining user documents to use for the print process of the textual prescription text editor.
-      Adding basic biometric measurements in the SOAP form (using a sub-form).
-      Adding lab test prescription assistant
-      </text>
-    </updateversion>
-    <updateversion from="0.7.2" to="0.8.0">
-      <text lang="fr">Compatibilité avec FreeMedForms 0.8.0.</text>
-      <text lang="en">Compatibility with FreeMedForms 0.8.0.</text>
-    </updateversion>
-    <updateversion from="0.7.0" to="0.7.2">
-      <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
-      <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
-    </updateversion>
-      <updateversion from="0.6.0" to="0.7.0">
-        <text lang="fr">Amélioration du processus d'impression.&lt;br />Ajoute un bouton pour importer dans la prescription courante les traitements chroniques.&lt;br />Ajout des éléments de contact des patients</text>
-        <text lang="en">Improvements in the printing process.&lt;br />Add a button next to the current prescription to append the long-term medications.&lt;br />Adding contact items to patient identity</text>
-      </updateversion>
-      <updateversion from="0.5.0~alpha" to="0.6.0">
-        <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
-        <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
-      </updateversion>
+        <updateversion from="0.8.2" to="0.8.4">
+            <text lang="fr">
+            Ajout des masques HTML d'exportation et d'impression plus modernes.
+            </text>
+            <text lang="en">
+            Adding modern HTML export and print masks.
+            </text>
+        </updateversion>
+        <updateversion from="0.8.0" to="0.8.2">
+            <text lang="fr">
+            Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
+            Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
+            Ajout de l'assistant de prescription d'examen biologique
+            </text>
+            <text lang="en">
+            Defining user documents to use for the print process of the textual prescription text editor.
+            Adding basic biometric measurements in the SOAP form (using a sub-form).
+            Adding lab test prescription assistant
+            </text>
+        </updateversion>
+        <updateversion from="0.7.2" to="0.8.0">
+            <text lang="fr">Compatibilité avec FreeMedForms 0.8.0.</text>
+            <text lang="en">Compatibility with FreeMedForms 0.8.0.</text>
+        </updateversion>
+        <updateversion from="0.7.0" to="0.7.2">
+            <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
+            <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
+        </updateversion>
+        <updateversion from="0.6.0" to="0.7.0">
+            <text lang="fr">Amélioration du processus d'impression.&lt;br />Ajoute un bouton pour importer dans la prescription courante les traitements chroniques.&lt;br />Ajout des éléments de contact des patients</text>
+            <text lang="en">Improvements in the printing process.&lt;br />Add a button next to the current prescription to append the long-term medications.&lt;br />Adding contact items to patient identity</text>
+        </updateversion>
+        <updateversion from="0.5.0~alpha" to="0.6.0">
+            <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
+            <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
+        </updateversion>
     </updateinfo>
 
   </formdescription>
