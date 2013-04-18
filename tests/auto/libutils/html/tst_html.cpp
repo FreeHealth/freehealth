@@ -52,6 +52,12 @@ private slots:
     /** Test body content extraction */
     void extractHtmlBody()
     {
+        // simple extract
+        in = "<body>Whoooa!</body>";
+        QCOMPARE(Utils::htmlBodyContent(in), QString("<p>Whoooa!</p>"));
+
+
+        // mode complicated
         out = "<div class=\"__ident__formContent\"> <!-- comment -->"
                 "<div class=\"formHeader\">"
                 "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
@@ -66,8 +72,16 @@ private slots:
 
         QCOMPARE(Utils::htmlBodyContent(in), QString("<p>%1</p>").arg(out));
 
+
+        // with style attribute
         in = body.arg(" style=\"background: white;\"", out);
         QCOMPARE(Utils::htmlBodyContent(in), QString("<p style=\"background: white;\">%1</p>").arg(out));
+    }
+
+    void extractMisformedBody()
+    {
+        in = "<body>Whoooa!";
+        QCOMPARE(Utils::htmlBodyContent(in), QString("<p>Whoooa!</p>"));
     }
 
     /** Test body content extraction */

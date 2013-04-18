@@ -1328,7 +1328,8 @@ QLocale::Country countryIsoToCountry(const QString &country) {
  * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle:;\">BODY <b>CONTENT</b></body></html>");
  * // body = "<p style=\"bodyStyle:;\"><b>BODY CONTENT</b></p>";
  * \endcode
- * WARNING: this function will create a new HTML paragraph with the body style.
+ * WARNING: This function will create a new HTML paragraph with the body style, including the body content.
+ * If there is no body tag in the given argument, the function returns the full text.
  */
 QString htmlBodyContent(const QString &fullHtml)
 {
@@ -1343,6 +1344,11 @@ QString htmlBodyContent(const QString &fullHtml)
     // Extract the body content
     beg = end + 1;
     end = fullHtml.indexOf("</body>", beg);
+
+    // no </body> found?
+    if (end < beg)
+        end = fullHtml.length();
+
     return QString("<p%1>%2</p>").arg(style.isEmpty()? "" : QString(" %1").arg(style)).arg(fullHtml.mid(beg, end-beg));
 }
 
