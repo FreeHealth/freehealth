@@ -72,7 +72,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~FormExporterPrivate()
     {
     }
@@ -177,11 +177,11 @@ public:
         //
         return QString::null;
     }
-    
+
 public:
     bool _useCurrent, _useAll;
     QString _patientUid;
-    
+
 private:
     FormExporter *q;
 };
