@@ -814,6 +814,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->clear();
     if (!episode.isValid()) {
         // Nothing to do but clear the form
+        qWarning() << "EpisodeModel: index not valid, clearing form";
         return true;
     }
 
