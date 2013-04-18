@@ -23,64 +23,68 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "widgets_unit_test.h"
-
-#include <utils/widgets/qbuttonlineedit.h>
 #include <utils/global.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
-#include <QtGui>
 #include <QVBoxLayout>
+#include <QTest>
+#include <QtGui>
 
 const char * const ICONOK = ":/icons/ok.png";
 const char * const ICONWARNING = ":/icons/warning.png";
 
-namespace Tests {
-
-void testQButtonLineEdit()
+class tst_QButtonLineEdit : public QObject
 {
-    QWidget *w = new QWidget;
-    QVBoxLayout *l = new QVBoxLayout(w);
-    w->setLayout(l);
+    Q_OBJECT
+private slots:
 
-    Utils::QButtonLineEdit *line1 = new Utils::QButtonLineEdit;
-    line1->setRightIcon(QIcon(ICONOK));
-    line1->setPlaceholderText("Line 1 (Right icon test: one icon set)");
+    void testQButtonLineEdit()
+    {
+        QWidget *w = new QWidget;
+        QVBoxLayout *l = new QVBoxLayout(w);
+        w->setLayout(l);
 
-    Utils::QButtonLineEdit *line2 = new Utils::QButtonLineEdit;
-    line2->setRightIcon(QIcon(ICONOK));
-    line2->setRightIcon(QIcon(ICONWARNING));
-    line2->setPlaceholderText("Line 2 (Right icon test: replacing ok icon with warning icon)");
+        Utils::QButtonLineEdit *line1 = new Utils::QButtonLineEdit;
+        line1->setRightIcon(QIcon(ICONOK));
+        line1->setPlaceholderText("Line 1 (Right icon test: one icon set)");
 
-    Utils::QButtonLineEdit *line3 = new Utils::QButtonLineEdit;
-    line3->setLeftIcon(QIcon(ICONOK));
-    line3->setPlaceholderText("Line 3 (Left icon test: one icon set)");
+        Utils::QButtonLineEdit *line2 = new Utils::QButtonLineEdit;
+        line2->setRightIcon(QIcon(ICONOK));
+        line2->setRightIcon(QIcon(ICONWARNING));
+        line2->setPlaceholderText("Line 2 (Right icon test: replacing ok icon with warning icon)");
 
-    Utils::QButtonLineEdit *line4 = new Utils::QButtonLineEdit;
-    line4->setLeftIcon(QIcon(ICONOK));
-    line4->setLeftIcon(QIcon(ICONWARNING));
-    line4->setPlaceholderText("Line 4 (Left icon test: replacing ok icon with warning icon)");
+        Utils::QButtonLineEdit *line3 = new Utils::QButtonLineEdit;
+        line3->setLeftIcon(QIcon(ICONOK));
+        line3->setPlaceholderText("Line 3 (Left icon test: one icon set)");
 
-    Utils::QButtonLineEdit *line5 = new Utils::QButtonLineEdit;
-    line5->setLeftIcon(QIcon(ICONOK));
-    line5->setRightIcon(QIcon(ICONOK));
-    line5->setPlaceholderText("Line 5 (both ok)");
+        Utils::QButtonLineEdit *line4 = new Utils::QButtonLineEdit;
+        line4->setLeftIcon(QIcon(ICONOK));
+        line4->setLeftIcon(QIcon(ICONWARNING));
+        line4->setPlaceholderText("Line 4 (Left icon test: replacing ok icon with warning icon)");
 
-    Utils::QButtonLineEdit *line6 = new Utils::QButtonLineEdit;
-    line6->setLeftIcon(QIcon(ICONOK));
-    line6->setLeftIcon(QIcon(ICONWARNING));
-    line6->setRightIcon(QIcon(ICONOK));
-    line6->setRightIcon(QIcon(ICONWARNING));
-    line6->setPlaceholderText("Line 6 (both warning)");
+        Utils::QButtonLineEdit *line5 = new Utils::QButtonLineEdit;
+        line5->setLeftIcon(QIcon(ICONOK));
+        line5->setRightIcon(QIcon(ICONOK));
+        line5->setPlaceholderText("Line 5 (both ok)");
 
-    l->addWidget(line1);
-    l->addWidget(line2);
-    l->addWidget(line3);
-    l->addWidget(line4);
-    l->addWidget(line5);
-    l->addWidget(line6);
-    w->setFocus();
-    w->show();
+        Utils::QButtonLineEdit *line6 = new Utils::QButtonLineEdit;
+        line6->setLeftIcon(QIcon(ICONOK));
+        line6->setLeftIcon(QIcon(ICONWARNING));
+        line6->setRightIcon(QIcon(ICONOK));
+        line6->setRightIcon(QIcon(ICONWARNING));
+        line6->setPlaceholderText("Line 6 (both warning)");
 
-}
+        l->addWidget(line1);
+        l->addWidget(line2);
+        l->addWidget(line3);
+        l->addWidget(line4);
+        l->addWidget(line5);
+        l->addWidget(line6);
+        w->setFocus();
+        w->show();
+    }
+};
 
-} // namespace Tests
+QTEST_MAIN(tst_QButtonLineEdit)
+#include "tst_qbuttonlineedit.moc"
+

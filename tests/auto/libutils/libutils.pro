@@ -4,5 +4,6 @@ CONFIG += ordered
 SUBDIRS = \
     appnamedefine \
     libs \
-    src
+    html \
+    qbuttonlineedit
 
