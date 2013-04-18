@@ -1,7 +1,4 @@
-TEMPLATE = app
-TARGET = LibUtilsTester
-
-QT += xml network core gui testlib
+QT += testlib
 
 include(../../../../libs/utils.pri)
 include(../../../../buildspecs/config.pri)

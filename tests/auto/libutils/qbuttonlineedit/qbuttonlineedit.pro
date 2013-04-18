@@ -1,5 +1,4 @@
-TEMPLATE = app
-TARGET = LibUtilsTester
+#TEMPLATE = app
 
 QT += gui testlib
 
