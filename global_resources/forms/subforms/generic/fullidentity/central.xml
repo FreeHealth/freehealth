@@ -9,7 +9,7 @@
     <version>test</version>
     <fmfv>0.8.4</fmfv>
     <cdate>2012-01-01</cdate>
-    <lmdate>2013-03-25</lmdate>
+    <lmdate>2013-04-18</lmdate>
     <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -28,8 +28,10 @@
         <text lang="fr">
         Gestion de la représentation des données patient (nom du propriétaire du NSS)
         Par défaut, le patient est propriétaire du numéro de sécurité sociale.
+        Ajout des masques HTML d'exportation et d'impression plus modernes.
         </text>
         Managing the patient data representation for the SocialNumber owner full name
+        Adding modern HTML export and print masks.
         <text lang="xx">
         </text>
       </updateversion>

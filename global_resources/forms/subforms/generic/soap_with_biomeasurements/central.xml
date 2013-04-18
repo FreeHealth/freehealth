@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.2</fmfv>
+    <fmfv>0.8.4</fmfv>
     <cdate>2012-10-13</cdate>
-    <lmdate>2012-09-12</lmdate>
+    <lmdate>2013-04-18</lmdate>
     <icon>__theme__/stethoscope.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -28,8 +28,14 @@
 
     <updateinfo>
       <updateversion from="0.8.2" to="0.8.4">
-        <text lang="fr">Gestion du poids et de la taille du patient</text>
-        <text lang="xx">Correctly manages weight and height of the patient</text>
+        <text lang="fr">
+        Gestion du poids et de la taille du patient
+        Ajout des masques HTML d'exportation et d'impression plus modernes.
+        </text>
+        <text lang="xx">
+        Correctly manages weight and height of the patient
+        Adding modern HTML export and print masks.
+        </text>
       </updateversion>
       <updateversion from="" to="0.8.2">
         <text lang="fr">Première version</text>
