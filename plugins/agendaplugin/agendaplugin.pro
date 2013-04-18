@@ -1,3 +1,9 @@
+!with-agenda {
+  message(Agenda plugin included but not in the CONFIG var of the qmake process)
+} else {
+  message(Building Agenda plugin)
+}
+
 TEMPLATE        = lib
 TARGET          = Agenda
 

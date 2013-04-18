@@ -24,7 +24,6 @@ SUBDIRS = \
     druginteractions \
     icd \
     pmh \
-    agenda \
     script \
     mainwin \
     tools
@@ -109,15 +108,6 @@ usermanager.depends += listview
 usermanager.depends += zipcodes
 usermanager.depends += identity
 
-agenda.subdir = $${PLUGINS_PATH}/agendaplugin
-agenda.depends += core
-agenda.depends += patientbase
-agenda.depends += usermanager
-agenda.depends += listview
-
-#alerts.subdir = alertsplugin
-#alerts.depends += core
-
 icd.subdir = $${PLUGINS_PATH}/icdplugin
 icd.depends += core
 icd.depends += formmanager
@@ -158,6 +148,15 @@ with-account {
     account2.depends += formmanager
     #account2.depends += texteditor
     #account2.depends += listview
+}
+
+with-agenda {
+    SUBDIRS += agenda
+    agenda.subdir = $${PLUGINS_PATH}/agendaplugin
+    agenda.depends += core
+    agenda.depends += patientbase
+    agenda.depends += usermanager
+    agenda.depends += listview
 }
 
 zipcodes.subdir = $${PLUGINS_PATH}/zipcodesplugin
