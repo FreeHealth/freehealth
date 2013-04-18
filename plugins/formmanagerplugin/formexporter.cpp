@@ -72,7 +72,7 @@ public:
         q(parent)
     {
     }
-    
+
     ~FormExporterPrivate()
     {
     }
@@ -86,7 +86,7 @@ public:
         QString html;
         QHash<Form::FormMain *, QString> formCss;
         foreach(Form::FormMain *emptyRoot, forms) {
-            foreach(Form::FormMain *form, emptyRoot->flattenFormMainChildren()) {
+            foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
                 // Use EpisodeModel
                 EpisodeModel *model = new EpisodeModel(form, q);
                 model->initialize();
@@ -151,11 +151,11 @@ public:
         //
         return QString::null;
     }
-    
+
 public:
     bool _useCurrent, _useAll;
     QString _patientUid;
-    
+
 private:
     FormExporter *q;
 };

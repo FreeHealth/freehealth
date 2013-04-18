@@ -784,7 +784,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     // TODO: manage PadTools here
     QHash<QString, QVariant> tokens;
     // Create a token for each FormItem of the FormMain (label and value)
-    foreach(FormItem *item, form->flattenFormItemChildren()) {
+    foreach(FormItem *item, form->flattenedFormItemChildren()) {
         tokens.insert(item->uuid() + ".label", item->spec()->label());
         tokens.insert(item->uuid() + ".tooltip", item->spec()->tooltip());
         if (item->itemData())
