@@ -19,32 +19,45 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
+ *   Main developers : Eric Maeker
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "widgets_unit_test.h"
-#include "html_unit_tests.h"
-#include "htmlcontenttester.h"
+#ifndef HTMLCONTENTTESTER_H
+#define HTMLCONTENTTESTER_H
 
-#include <QApplication>
+#include <QDialog>
 
-#include <QDebug>
+/**
+ * \file htmlcontenttester.h
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 18 Apr 2013
+*/
 
-#include <QtGui>
-#include <utils/global.h>
-int main(int argc, char *argv[])
+namespace Tests {
+namespace Internal {
+class HtmlContentTesterPrivate;
+} // namespace Internal
+
+class HtmlContentTester : public QDialog
 {
-    QApplication a(argc, argv);
-    qWarning();
+    Q_OBJECT
 
-    // Tests::testQButtonLineEdit();
+public:
+    explicit HtmlContentTester(QWidget *parent = 0);
+    ~HtmlContentTester();
+    bool initialize();
 
-    // Tests::htmlCssStyleExtractions();
+private Q_SLOTS:
+    void refreshBrowserContent();
 
-    Tests::HtmlContentTester html;
-    html.initialize();
-    html.exec();
+private:
+    Internal::HtmlContentTesterPrivate *d;
+};
 
-    return a.exec();
-}
+} // namespace Tests
+
+#endif  // HTMLCONTENTTESTER_H
+
