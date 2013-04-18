@@ -1384,6 +1384,16 @@ QString htmlTakeAllCssContent(QString &fullHtml)
     return css;
 }
 
+/** Replace all <p> </p> HTML tag with <div></div> */
+QString htmlReplaceParagraphWithDiv(const QString &fullHtml)
+{
+    QString r = fullHtml;
+    r = r.replace("<p>", "<div>");
+    r = r.replace("<p ", "<div ");
+    r = r.replace("</p>", "</div>");
+    return r;
+}
+
 /** \brief Return the CSS style for a font. **/
 QString fontToHtml(const QFont &font, const QColor &color)
 {
