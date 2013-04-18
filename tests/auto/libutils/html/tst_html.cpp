@@ -49,10 +49,6 @@ private slots:
                 "</style>";
     }
 
-    //    void cleanupTestCase()
-    //    {
-    //    }
-
     //    /** Test body content extraction */
     //    void htmlBodyExtractions()
     //    {
