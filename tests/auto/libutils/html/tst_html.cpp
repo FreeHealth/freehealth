@@ -49,11 +49,26 @@ private slots:
                 "</style>";
     }
 
-    //    /** Test body content extraction */
-    //    void htmlBodyExtractions()
-    //    {
-    //
-    //    }
+    /** Test body content extraction */
+    void extractHtmlBody()
+    {
+        out = "<div class=\"__ident__formContent\"> <!-- comment -->"
+                "<div class=\"formHeader\">"
+                "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                "</div> <!-- blah -->";
+
+        const QString body =
+                "<html><!-- comment -->"
+                "<body%1>%2</body>"
+                "<!-- another comment --></html>";
+
+        in = body.arg("", out);
+
+        QCOMPARE(Utils::htmlBodyContent(in), QString("<p>%1</p>").arg(out));
+
+        in = body.arg(" style=\"background: white;\"", out);
+        QCOMPARE(Utils::htmlBodyContent(in), QString("<p style=\"background: white;\">%1</p>").arg(out));
+    }
 
     /** Test body content extraction */
     void extractCssFromBody()

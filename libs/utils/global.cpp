@@ -1339,11 +1339,11 @@ QString htmlBodyContent(const QString &fullHtml)
     // Extract the body css style
     beg += 5;
     int end = fullHtml.indexOf(">", beg);
-    QString style = fullHtml.mid(beg, end-beg);
+    QString style = fullHtml.mid(beg, end-beg).trimmed();
     // Extract the body content
     beg = end + 1;
     end = fullHtml.indexOf("</body>", beg);
-    return QString("<p %1>%2</p>").arg(style).arg(fullHtml.mid(beg, end-beg));
+    return QString("<p%1>%2</p>").arg(style.isEmpty()? "" : QString(" %1").arg(style)).arg(fullHtml.mid(beg, end-beg));
 }
 
 /**
