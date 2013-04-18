@@ -32,67 +32,62 @@ class TestHtml : public QObject
 {
     Q_OBJECT
 public:
-    QString css, in;
+    QString css, in, out;
 
 private slots:
     void initTestCase()
     {
+        css = "<style type=\"text/css\">"
+              ".__ident__formContent {"
+              "  font-size: 12pt;"
+              "  color: black;"
+              "  border: 2px solid gray;"
+              "}"
+              " "
+              ".__ident__formContent .formHeader {"
+              "}"
+              "</style>";
     }
 
-    void cleanupTestCase()
-    {
-    }
+//    void cleanupTestCase()
+//    {
+//    }
+
+//    /** Test body content extraction */
+//    void htmlBodyExtractions()
+//    {
+//
+//    }
 
     /** Test body content extraction */
-    void htmlBodyExtractions()
+    void extractCssFromBody()
     {
-
-    }
-
-    /** Test body content extraction */
-    void htmlCssStyleExtractions()
-    {
-        css =
-                "<style type=\"text/css\">"
-                ".__ident__formContent {"
-                "  font-size: 12pt;"
-                "  color: black;"
-                "  border: 2px solid gray;"
-                "}"
-                " "
-                " .__ident__formContent .formHeader {"
-                " }"
-                "</style>";
-
-        // In body style
         in = QString("<html>"
-                             "<body>\n"
-                             "%1\n"
-                             "<div class=\"__ident__formContent\">"
-                             "<div class=\"formHeader\">"
-                             "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
-                             "</div> <!-- formHeader -->"
-                             "</body>"
-                             "</html>").arg(css);
+                     "<body>\n"
+                     "%1\n"
+                     "<div class=\"__ident__formContent\">"
+                     "<div class=\"formHeader\">"
+                     "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                     "</div> <!-- formHeader -->"
+                     "</body>"
+                     "</html>").arg(css);
 
-        QString out = QString("<html>"
-                              "<body>\n"
-                              "\n"
-                              "<div class=\"__ident__formContent\">"
-                              "<div class=\"formHeader\">"
-                              "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
-                              "</div> <!-- formHeader -->"
-                              "</body>"
-                              "</html>");
+        out = QString("<html>"
+                      "<body>\n"
+                      "\n"
+                      "<div class=\"__ident__formContent\">"
+                      "<div class=\"formHeader\">"
+                      "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                      "</div> <!-- formHeader -->"
+                      "</body>"
+                      "</html>");
 
-        // qDebug() << "Extracting CSS in body content";
-        QVERIFY(css == Utils::htmlTakeAllCssContent(in));
         QCOMPARE(Utils::htmlTakeAllCssContent(in), css);
-
-        qDebug() << "  HTML block" << in.size() << out.size();
         QVERIFY(in == out);
+    }
 
-        // In header
+    void extractCssFromHeader()
+    {
         in = QString("<html>"
                      "<header>"
                      "%1\n"
@@ -118,12 +113,12 @@ private slots:
                       "</body>"
                       "</html>");
 
-        qDebug() << "Extracting CSS in header content";
-        QVERIFY(css == Utils::htmlTakeAllCssContent(in));
-        qDebug() << "  HTML block" << in.size() << out.size();
+        QCOMPARE(Utils::htmlTakeAllCssContent(in), css);
         QVERIFY(in == out);
+    }
 
-        // Double css
+    void extractDoubleCss()
+    {
         QString doubleCss = css + css;
         in = QString("<html>"
                      "<header>"
@@ -152,9 +147,7 @@ private slots:
                       "</body>"
                       "</html>");
 
-        qDebug() << "Extracting CSS: double CSS";
-        QVERIFY(doubleCss == Utils::htmlTakeAllCssContent(in));
-        qDebug() << "  HTML block" << in.size() << out.size();
+        QCOMPARE(Utils::htmlTakeAllCssContent(in), doubleCss);
         QVERIFY(in == out);
     }
 };
