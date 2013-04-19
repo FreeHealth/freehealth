@@ -28,6 +28,7 @@
 #define PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
 
 #include <QDialog>
+#include <QModelIndex>
 
 /**
  * \file formexporterdialog.h
@@ -52,8 +53,11 @@ public:
     
 Q_SIGNALS:
     
-public Q_SLOTS:
-    
+private Q_SLOTS:
+    void refreshPatientModelFilter();
+    void onPatientActivated(const QModelIndex &index);
+    void onExportRequested();
+
 private:
     FormExporterDialogPrivate *d;
 };
