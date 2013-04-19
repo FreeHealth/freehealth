@@ -361,6 +361,7 @@
                 <label lang="xx">Full Identity</label>
                 <label lang="fr">Identité</label>
                 <options>with-address;xml</options>
+                <file type="htmlprintmask">./html/xx/identity_mask.html</file>
             </Item>
 
           <Item type="shorttext" name="Mail">
