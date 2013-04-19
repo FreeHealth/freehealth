@@ -37,6 +37,7 @@
 #include <identityplugin/identityeditorwidget.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
 
@@ -189,40 +190,61 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
         return QString();
 
     if (withValues) {
-        QString n = patient()->data(Core::IPatient::FullName).toString();
-        n = n.simplified();
-        QString age;
-        // For pediatrics show full age
-        // For adults show simplified age
-        if (patient()->data(Core::IPatient::YearsOld).toInt() <= 15) {
-            age = patient()->data(Core::IPatient::Age).toString();
+        if (!m_FormItem->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
+            QString mask = m_FormItem->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
+            // TODO: manage PadTools
+            QHash<QString, QVariant> tokens;
+            tokens.insert("USUALNAME", m_Identity->currentUsualName());
+            tokens.insert("OTHERNAMES", m_Identity->currentOtherNames());
+            tokens.insert("FIRSTNAME", m_Identity->currentFirstName());
+            tokens.insert("TITLE", m_Identity->currentTitle());
+            tokens.insert("GENDER", m_Identity->currentGender());
+            tokens.insert("DATEOFBIRTH", m_Identity->currentDateOfBirth());
+            tokens.insert("LANGUAGE", m_Identity->currentLanguage());
+            tokens.insert("STREET", m_Identity->currentStreet());
+            tokens.insert("CITY", m_Identity->currentCity());
+            tokens.insert("STATE", m_Identity->currentStateProvince());
+            tokens.insert("COUNTRY", m_Identity->currentCountryName());
+            tokens.insert("COUNTRYISO", m_Identity->currentCountryIso());
+            tokens.insert("ZIP", m_Identity->currentZipCode());
+            Utils::replaceTokens(mask, tokens);
+            return mask;
         } else {
-            age = patient()->data(Core::IPatient::YearsOld).toString() + " " + tkTr(Trans::Constants::YEARS);
+            QString n = patient()->data(Core::IPatient::FullName).toString();
+            n = n.simplified();
+            QString age;
+            // For pediatrics show full age
+            // For adults show simplified age
+            if (patient()->data(Core::IPatient::YearsOld).toInt() <= 15) {
+                age = patient()->data(Core::IPatient::Age).toString();
+            } else {
+                age = patient()->data(Core::IPatient::YearsOld).toString() + " " + tkTr(Trans::Constants::YEARS);
+            }
+            QModelIndex idx = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
+            QDate dob = patient()->data(idx, Qt::EditRole).toDate();
+            return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
+                           "<thead>"
+                           "<tr>"
+                           "<td style=\"vertical-align: top; padding: 5px\">"
+                           "<span style=\"font-weight: 600\">%1</span> (%2; %3) - %4"
+                           "</td>"
+                           "</tr>"
+                           "</thead>"
+                           "<tbody>"
+                           "<tr>"
+                           "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                           "%5"
+                           "</td>"
+                           "</tr>"
+                           "</tbody>"
+                           "</table>")
+                    .arg(n)
+                    .arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat)))
+                    .arg(age)
+                    .arg(patient()->data(Core::IPatient::Gender).toString())
+                    .arg(patient()->data(Core::IPatient::FullAddress).toString())
+                    ;
         }
-        QModelIndex idx = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
-        QDate dob = patient()->data(idx, Qt::EditRole).toDate();
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
-                       "<thead>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; padding: 5px\">"
-                       "<span style=\"font-weight: 600\">%1</span> (%2; %3) - %4"
-                       "</td>"
-                       "</tr>"
-                       "</thead>"
-                       "<tbody>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                       "%5"
-                       "</td>"
-                       "</tr>"
-                       "</tbody>"
-                       "</table>")
-                .arg(n)
-                .arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat)))
-                .arg(age)
-                .arg(patient()->data(Core::IPatient::Gender).toString())
-                .arg(patient()->data(Core::IPatient::FullAddress).toString())
-                ;
     } else {
         // TODO: code here: empty identity HTML mask
         return QString();
@@ -255,6 +277,15 @@ void IdentityWidgetData::setReadOnly(bool readOnly)
 bool IdentityWidgetData::isReadOnly() const
 {
     return m_Widget->m_Identity->isReadOnly();
+}
+
+QVariant IdentityWidgetData::data(const int ref, const int role) const
+{
+    if (role==Form::IFormItemData::PrintRole) {
+        return m_Widget->printableHtml(true);
+    }
+    Q_UNUSED(ref);
+    return QVariant();
 }
 
 void IdentityWidgetData::setStorableData(const QVariant &value)
