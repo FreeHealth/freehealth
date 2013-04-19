@@ -28,7 +28,8 @@ HEADERS = patientbaseplugin.h \
     urlphotoprovider.h \
     urlphotodialog.h \
     patientsearchedit.h \
-    patientcore.h
+    patientcore.h \
+    formexporterdialog.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -45,14 +46,16 @@ SOURCES = patientbaseplugin.cpp \
     urlphotoprovider.cpp \
     urlphotodialog.cpp \
     patientsearchedit.cpp \
-    patientcore.cpp
+    patientcore.cpp \
+    formexporterdialog.cpp
 
 FORMS += \
     patientselector.ui \
     patientbasepreferencespage.ui \
     patientbar.ui \
     identityviewer.ui \
-    urlphotodialog.ui
+    urlphotodialog.ui \
+    formexporterdialog.ui
 
 OTHER_FILES = PatientBase.pluginspec
 
