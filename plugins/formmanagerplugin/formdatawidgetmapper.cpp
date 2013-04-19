@@ -186,7 +186,7 @@ public:
         _currentEpisode = index;
 
         if (!index.isValid()) {
-//            LOG_ERROR_FOR(q, "Invalid index when setting current episode. Episode not read.");
+            LOG_ERROR_FOR(q, "Invalid index when setting current episode. Episode not read.");
             return;
         }
 
@@ -236,6 +236,7 @@ void FormDataWidgetMapper::clear()
         return;
 //    if (d->_formMain->isUniqueEpisode())
 //        return;
+    LOG("Clear");
     d->_formMain->clear();
     d->_currentEpisode = QModelIndex();
 }
@@ -253,24 +254,27 @@ bool FormDataWidgetMapper::isDirty() const
         return false;
 
     // form main is readonly ?
-    if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly())
+    if (d->_formMain->itemData() && d->_formMain->itemData()->isReadOnly()) {
+        LOG(QString("isDirty (form) %1 isReadOnly").arg(d->_formMain->uuid()));
         return false;
+    }
 
     // form main isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         if (WarnDirty)
-            qWarning() << "FormDataWidgetMapper::isDirty (form)" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
+            LOG(QString("isDirty (form) %1 %2").arg(d->_formMain->uuid()).arg(d->_formMain->itemData()->isModified()));
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
-        if (WarnDirty && it->itemData() && it->itemData()->isModified())
-            qWarning() << "FormDataWidgetMapper::isDirty (item)" << it->uuid() << it->itemData()->isModified();
-        if (it->itemData() && it->itemData()->isModified())
+        if (it->itemData() && it->itemData()->isModified()) {
+            if (WarnDirty)
+                LOG(QString("isDirty (item) %1 %2").arg(it->uuid()).arg(+it->itemData()->isModified()));
             return true;
+        }
     }
     if (WarnDirty)
-        qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
+        LOG(QString("isDirty false, Form: %1").arg(d->_formMain->uuid()));
     return false;
 }
 
