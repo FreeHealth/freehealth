@@ -81,6 +81,7 @@ private Q_SLOTS:
 
     void showPatientDatabaseInformation();
     void viewCurrentPatientData();
+    void onExportPatientFileRequested();
 
     void onCurrentPatientChanged();
     void aboutToShowRecentPatients();
@@ -98,6 +99,7 @@ protected:
     QAction *aPrintPatientInformation;
     QAction *aShowPatientDatabaseInformation;
     QAction *aViewCurrentPatientData;
+    QAction *aExportPatientFile;
     QActionGroup *gSearchMethod;
     // setDeceased
     // writeALetter...

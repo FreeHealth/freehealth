@@ -36,6 +36,7 @@
 #include "constants_settings.h"
 #include "patientbase.h"
 #include "patientcore.h"
+#include "formexporterdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -148,6 +149,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     aPrintPatientInformation(0),
     aShowPatientDatabaseInformation(0),
     aViewCurrentPatientData(0),
+    aExportPatientFile(0),
     gSearchMethod(0)
 {
     setObjectName("PatientActionHandler");
@@ -240,6 +242,16 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 //    cmd->setTranslations(Trans::Constants::PATIENT_INFORMATION);
 //    menu->addAction(cmd, Constants::G_PATIENTS_INFORMATION);
 ////    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+
+    // Export patient file
+    a = aExportPatientFile = new QAction(this);
+    a->setObjectName("aExportPatientFile");
+    a->setIcon(th->icon(Core::Constants::ICONEXPORTPATIENTFILE));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_EXPORTPATIENTFILE), ctx);
+    cmd->setTranslations(Trans::Constants::EXPORTPATIENTFILE);
+    cmd->retranslate();
+    menu->addAction(cmd, Core::Id(Constants::G_PATIENTS_INFORMATION));
+    connect(aExportPatientFile, SIGNAL(triggered()), this, SLOT(onExportPatientFileRequested()));
 
     // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
@@ -429,4 +441,11 @@ void PatientActionHandler::viewCurrentPatientData()
     for(int i=0; i < Core::IPatient::NumberOfColumns; ++i) {
         qWarning() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)) << patient()->data(i);
     }
+}
+
+void PatientActionHandler::onExportPatientFileRequested()
+{
+    FormExporterDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.initialize();
+    dlg.exec();
 }

@@ -67,7 +67,6 @@ private Q_SLOTS:
     void onAddFormRequested();
     void onRemoveFormRequested();
     void onPrintFormRequested();
-    void onExportPatientFileRequested();
 
     void showDatabaseInformation();
 
@@ -83,7 +82,6 @@ protected:
     QAction *aAddForm;
     QAction *aRemoveSubForm;
     QAction *aPrintForm;
-    QAction *aExportPatientFile;
 
     QPointer<FormContextualWidget> m_CurrentView;
 };

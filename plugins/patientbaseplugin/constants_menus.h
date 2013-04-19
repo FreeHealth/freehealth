@@ -50,6 +50,8 @@ namespace Constants {
     const char * const  A_VIEWPATIENTDATABASE_INFOS       = "Patient.DB.Information";
     const char * const  A_VIEWCURRENTPATIENTDATA          = "Patient.CurrentData";
 
+    const char * const  A_EXPORTPATIENTFILE               = "Patient.ExportPatientFile";
+
 
     const char * const  C_PATIENTS             = "Patients.Context";
     const char * const  C_PATIENTS_SEARCH      = "Patients.Context.Search";
