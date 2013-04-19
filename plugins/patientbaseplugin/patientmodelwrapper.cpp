@@ -99,6 +99,15 @@ QModelIndex PatientModelWrapper::currentPatientIndex() const
 }
 
 /**
+ * Set the current active patient to \e uuid
+ * \sa Patients::PatientCore::setCurrentPatientUid()
+*/
+void PatientModelWrapper::setCurrentPatientUid(const QString &uid)
+{
+    patientCore()->setCurrentPatientUuid(uid);
+}
+
+/**
  * \brief Return the Patient's Data represented by the \e index.column().
  * The wrapper model searches in the identity model (Patient::PatientModel) and if it cannot find
  * a value, it searches in the Forms (some Form::FormItem can represent patient values).

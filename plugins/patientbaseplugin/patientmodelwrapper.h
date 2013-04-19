@@ -36,8 +36,8 @@ QT_END_NAMESPACE
 /**
  * \file patientmodelwrapper.h
  * \author Eric MAEKER
- * \version 0.8.0
- * \date 12 Sept 2012
+ * \version 0.8.4
+ * \date 18 Apr 2013
 */
 
 namespace Patients {
@@ -58,6 +58,7 @@ public:
     void clear() {}
     bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
     QModelIndex currentPatientIndex() const;
+    void setCurrentPatientUid(const QString &uid);
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant data(int column) const;
