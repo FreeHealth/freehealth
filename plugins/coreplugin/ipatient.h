@@ -38,8 +38,8 @@
 /**
  * \file ipatient.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \version 0.8.4
+ * \date 18 Apr 2013
 */
 
 namespace Core {
@@ -147,7 +147,11 @@ public:
     virtual void clear() = 0;
     virtual bool has(const int ref) const = 0;
 
+    /** Return the current active patient UUID */
     QString uuid() const {return data(Uid).toString();}
+
+    /** Set the current active patient to \e uuid */
+    virtual void setCurrentPatientUid(const QString &uid) {Q_UNUSED(uid);}
 
     int	columnCount(const QModelIndex & = QModelIndex()) const {return NumberOfColumns;}
     int	rowCount(const QModelIndex & = QModelIndex()) const {return 1;}
@@ -167,12 +171,10 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
-    // Remove this and create a Core::IPatientBar
     virtual Core::IPatientBar *patientBar() const = 0;
     virtual void hidePatientBar() = 0;
     virtual void showPatientBar() = 0;
     virtual bool isPatientBarVisible() const = 0;
-    // End
 
     virtual QHash<QString, QString> fullPatientName(const QString &uuid) const {Q_UNUSED(uuid); return QHash<QString, QString>();}
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const {Q_UNUSED(uuids); return QHash<QString, QString>();}
