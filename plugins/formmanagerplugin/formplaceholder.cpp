@@ -402,11 +402,14 @@ public:
 
     void selectAndActivateFirstEpisode()
     {
-        ui->formDataMapper->setCurrentEpisode(QModelIndex());
         // Assuming the _currentEditingForm is defined and the episodeView model is set
-        if (ui->episodeView->selectionModel() && !ui->episodeView->selectionModel()->hasSelection()) {
+        if (ui->episodeView->selectionModel()
+                && !ui->episodeView->selectionModel()->hasSelection()) {
+            ui->formDataMapper->setCurrentEpisode(QModelIndex());
             if (ui->episodeView->model()->rowCount() > 0) {
                 ui->episodeView->selectRow(0);
+                // force q->episodeChanged
+                q->episodeChanged(ui->episodeView->currentIndex(), QModelIndex());
                 ui->formDataMapper->setFormWidgetEnabled(true);
             } else {
                 ui->formDataMapper->setFormWidgetEnabled(false);
@@ -1057,7 +1060,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
+    LOG(QString("episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid()));
     // Autosave is problematic when patient changed
     QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
     QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);
@@ -1104,7 +1107,7 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 
 void FormPlaceHolder::hideEvent(QHideEvent *event)
 {
-    // qWarning() << "FormPlaceHolder::hideEvent" << isVisible();
+    LOG(QString("HideEvent: %1").arg(isVisible() ? "isVisible" : "isHidden"));
     // autosave feature
     d->saveCurrentEditingEpisode();
     QWidget::hideEvent(event);
@@ -1112,7 +1115,14 @@ void FormPlaceHolder::hideEvent(QHideEvent *event)
 
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
-    // qWarning() << "FormPlaceHolder::showEvent";
+    LOG(QString("ShowEvent: %1").arg(isVisible() ? "isVisible" : "isHidden"));
+
+    if (d->ui->formDataMapper->isDirty()) {
+        LOG_ERROR("**** During ShowEvent FormDataMapper is Dirty: " + d->_formTreeModel->formForIndex(d->_currentEditingForm)->uuid());
+        Q_ASSERT(false);
+        d->saveCurrentEditingEpisode();
+    }
+
     d->selectAndActivateFirstForm();
     d->selectAndActivateFirstEpisode();
     // make sure that the context is updated to the form context
