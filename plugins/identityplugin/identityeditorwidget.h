@@ -149,6 +149,13 @@ public:
     QPixmap currentPhoto() const;
     bool hasPhoto() const;
 
+    QString currentStreet() const;
+    QString currentCity() const;
+    QString currentStateProvince() const;
+    QString currentCountryName() const;
+    QString currentCountryIso() const;
+    QString currentZipCode() const;
+
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &modelIndex);
     virtual bool submit();

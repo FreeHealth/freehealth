@@ -925,6 +925,42 @@ bool IdentityEditorWidget::hasPhoto() const
     return (!d->ui->photoButton->pixmap().isNull());
 }
 
+/** Return the current editing value */
+QString IdentityEditorWidget::currentStreet() const
+{
+    return d->ui->zipcodesWidget->street();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentCity() const
+{
+    return d->ui->zipcodesWidget->city();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentStateProvince() const
+{
+    return d->ui->zipcodesWidget->stateProvince();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentCountryName() const
+{
+    return d->ui->zipcodesWidget->countryName();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentCountryIso() const
+{
+    return d->ui->zipcodesWidget->countryIso();
+}
+
+/** Return the current editing value */
+QString IdentityEditorWidget::currentZipCode() const
+{
+    return d->ui->zipcodesWidget->zipCode();
+}
+
 /**
  * Submit the Identity to the model (Core::IPatient or your QAbstractItemModel).
  * If you set the XML in/out only (setXmlInOut()), does nothing and return true.
