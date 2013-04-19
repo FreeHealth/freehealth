@@ -164,16 +164,11 @@ public:
         if (!_formMain)
             return QString::null;
 
-        QHash<QString, FormItem *> items;
+        QHash<QString, QString> xmlData;
         foreach(FormItem *it, _formMain->flattenedFormItemChildren()) {
             if (it->itemData()) {
-                items.insert(it->uuid(), it);
+                xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
             }
-        }
-        // create the XML episode file
-        QHash<QString, QString> xmlData;
-        foreach(FormItem *it, items) {
-            xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
         }
         return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
     }
