@@ -45,7 +45,6 @@
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPainter>
-#include <QSystemLocale>
 #include <QPixmap>
 
 #include <QDebug>
