@@ -73,7 +73,8 @@ class %ClassName:c%Private
 {
 public:
     %ClassName:c%Private(%ClassName:c% *parent) :
-      q(parent)
+        _initialized(false),
+        q(parent)
     {
     }
 
@@ -82,6 +83,7 @@ public:
     }
 
 public:
+    bool _initialized;
     // Put your data here
 
 private:
@@ -154,5 +156,7 @@ private:
 @endif
 bool %ClassName:c%::initialize()
 {
+    if (d->_initialized)
+        return true;
     return true;
 }
