@@ -143,6 +143,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     // Set defaults
     m_Model->setData(m_Model->index(0, Core::IPatient::City), settings()->value(Constants::S_NEWPATIENT_DEFAULTCITY));
     m_Model->setData(m_Model->index(0, Core::IPatient::ZipCode), settings()->value(Constants::S_NEWPATIENT_DEFAULTZIP));
+    m_Model->setData(m_Model->index(0, Core::IPatient::Country), Utils::countryToIso(QLocale().country()));
 
     m_Identity->setModel(m_Model);
     m_Identity->addMapping(Identity::IdentityEditorWidget::TitleIndex, Core::IPatient::TitleIndex);
