@@ -41,7 +41,7 @@
 
 namespace Form {
 
-class FormExporterJob
+class FORM_EXPORT FormExporterJob
 {
 public:
     enum ExportGroupmentType {
@@ -81,7 +81,6 @@ public:
     ~FormExporter();
     bool initialize();
     
-    void setPatientUuid(const QString &uuid);
     void setUseCurrentPatientForms(bool useCurrent);
     void setUseAllAvailableForms(bool useAll);
 

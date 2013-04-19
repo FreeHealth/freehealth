@@ -77,8 +77,14 @@ public:
     {
     }
 
-    QString formOrderedExport(const FormExporterJob &job)
+    QString formOrderedExport(const FormExporterJob &job, const QString &patientUid)
     {
+        if (patientUid.isEmpty())
+            return QString::null;
+
+        // Change the current patient in order to extract the identity, update the forms, sub-forms...
+        patient()->setCurrentPatientUid(patientUid);
+
         // Get all current forms
         QList<Form::FormMain*> forms = formManager().allDuplicatesEmptyRootForms();
 
@@ -90,8 +96,7 @@ public:
                 // Use EpisodeModel
                 EpisodeModel *model = new EpisodeModel(form, q);
                 model->initialize();
-                if (!_patientUid.isEmpty())
-                    model->setCurrentPatient(_patientUid);
+                model->setCurrentPatient(patientUid);
 
                 // Get *all* episodes
                 QModelIndex fetchIndex = model->index(model->rowCount(), 0);
@@ -117,17 +122,11 @@ public:
 
                     // Try to export with the HTML mask
                     if (!htmlMask.isEmpty()) {
-
-                        qWarning() << "\n\nHTML MASK\n" << htmlMask;
-
                         QString tmpMask = htmlMask;
                         Utils::replaceTokens(tmpMask, formManager().formToTokens(form));
                         patient()->replaceTokens(tmpMask);
                         user()->replaceTokens(tmpMask);
                         html += Utils::htmlBodyContent(tmpMask);
-
-                        qWarning() << "\n\nHTML\n" << tmpMask;
-
                     } else {
                         // Get the default HTML output
                         html += Utils::htmlBodyContent(form->printableHtml(true));
@@ -144,7 +143,7 @@ public:
             ++begin;
             html.insert(begin, formCss.join("\n"));
         }
-        Utils::saveStringToFile(html, "/Users/eric/Desktop/patient.html");
+        Utils::saveStringToFile(html, QString("/Users/eric/Desktop/patient_%1.html").arg(patientUid));
         return html;
 
 //                // TODO: get episodes one by one not all in once
@@ -180,7 +179,6 @@ public:
 
 public:
     bool _useCurrent, _useAll;
-    QString _patientUid;
 
 private:
     FormExporter *q;
@@ -220,20 +218,17 @@ void FormExporter::setUseAllAvailableForms(bool useAll)
     d->_useAll = useAll;
 }
 
-void FormExporter::setPatientUuid(const QString &uuid)
-{
-   d->_patientUid = uuid;
-}
-
 #include <QTextBrowser>
 void FormExporter::startExportation(const FormExporterJob &job)
 {
     // Export all recorded non-form data like PMHx
     // Get all emptyRootForms
     if (job.exportGroupmentType() == FormExporterJob::FormOrderedExportation) {
-        QTextBrowser *browser = new QTextBrowser;
-        browser->setHtml(d->formOrderedExport(job));
-        browser->show();
+        foreach(const QString &uid, job.patientUids()) {
+            QTextBrowser *browser = new QTextBrowser;
+            browser->setHtml(d->formOrderedExport(job, uid));
+            browser->show();
+        }
     } else if (job.exportGroupmentType() == FormExporterJob::DateOrderedExportation) {
 
     }
