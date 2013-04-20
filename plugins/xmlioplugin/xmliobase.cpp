@@ -898,9 +898,8 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
 bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
 {
     Q_UNUSED(form);
-    WARN_FUNC;
-    QTime chr;
-    chr.start();
+//    QTime chr;
+//    chr.start();
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (content.isEmpty()) {
         LOG_ERROR("Empty content.");
@@ -912,7 +911,7 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     int col = -1;
     QString error;
     if (!doc.setContent(content, &error, &line, &col)) {
-        LOG_ERROR(QString("Error while oading PMHxCategories XML files.\n  %1: %2;%3").arg(error).arg(line).arg(col));
+        LOG_ERROR(QString("Error while loading PMHxCategories XML files.\n  %1: %2;%3").arg(error).arg(line).arg(col));
         return false;
     }
     QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
@@ -923,16 +922,14 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
         rootCategories << createCategory(form, element, 0);
         element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
     }
-    Utils::Log::logTimeElapsed(chr, "---", "create categories");
-
+    // Utils::Log::logTimeElapsed(chr, "---", "create categories");
     // save categories in the categories plugin
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!categoryCore()->saveCategories(rootCategories)) {
         LOG_ERROR(tr("Error while saving PMHxCateogries (%1)").arg(form.uid));
         return false;
     }
-    Utils::Log::logTimeElapsed(chr, "---", "save categories");
-//    qWarning() << "END";
+    // Utils::Log::logTimeElapsed(chr, "---", "save categories");
     return true;
 }
 
