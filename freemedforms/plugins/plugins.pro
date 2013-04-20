@@ -71,7 +71,6 @@ xmlio.subdir   = $${PLUGINS_PATH}/xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
 xmlio.depends += category
-xmlio.depends += pmh
 
 basewidgets.subdir   = $${PLUGINS_PATH}/basewidgetsplugin
 basewidgets.depends += core
