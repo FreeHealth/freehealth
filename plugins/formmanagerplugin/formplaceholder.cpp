@@ -262,7 +262,7 @@ public:
                                                                        "Save episode?"),
                                                QApplication::translate("Form::FormPlaceHolder",
                                                                        "The actual episode has been modified. Do you want to save changes in your database?\n"
-                                                                       "Answering 'No' will cause definitve data loss."),
+                                                                       "Answering 'No' will cause deftialtve data loss."),
                                                "", QApplication::translate("Form::FormPlaceHolder", "Save episode"));
             if (!save)
                 return false;
@@ -1119,7 +1119,6 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
 
     if (d->ui->formDataMapper->isDirty()) {
         LOG_ERROR("**** During ShowEvent FormDataMapper is Dirty: " + d->_formTreeModel->formForIndex(d->_currentEditingForm)->uuid());
-        Q_ASSERT(false);
         d->saveCurrentEditingEpisode();
     }
 

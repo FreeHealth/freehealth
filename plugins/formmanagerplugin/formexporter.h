@@ -27,7 +27,7 @@
 #ifndef FORM_FORMEXPORTER_H
 #define FORM_FORMEXPORTER_H
 
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <coreplugin/ipatientdataexporter.h>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -36,63 +36,34 @@
  * \file formexporter.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 15 Apr 2013
+ * \date 20 Apr 2013
 */
 
 namespace Form {
-
-class FORM_EXPORT FormExporterJob
-{
-public:
-    enum ExportGroupmentType {
-        FormOrderedExportation,
-        DateOrderedExportation
-    };
-
-    FormExporterJob() : _allPatients(false), _groupType(FormOrderedExportation) {}
-    ~FormExporterJob() {}
-
-    void setExportAllPatients(bool exportAll) {_allPatients=exportAll;}
-    bool exportAllPatients() const {return _allPatients;}
-
-    void setPatientUids(const QStringList &uuids) {_patientUids = uuids;}
-    void setPatientUid(const QString &uid) {_patientUids.clear(); _patientUids<<uid;}
-    const QStringList &patientUids() const {return _patientUids;}
-
-    void setExportGroupmentType(ExportGroupmentType type) {_groupType=type;}
-    ExportGroupmentType exportGroupmentType() const {return _groupType;}
-
-private:
-    bool _allPatients;
-    QStringList _patientUids;
-    ExportGroupmentType _groupType;
-};
-
 namespace Internal {
 class FormExporterPrivate;
-} // namespace Internal
 
-class FORM_EXPORT FormExporter : public QObject
+class FormExporter : public Core::IPatientDataExporter
 {
     Q_OBJECT
     
 public:
-    explicit FormExporter(QObject *parent = 0);
+    explicit FormExporter(bool identityOnly, QObject *parent = 0);
     ~FormExporter();
     bool initialize();
-    
-    void setUseCurrentPatientForms(bool useCurrent);
-    void setUseAllAvailableForms(bool useAll);
 
-Q_SIGNALS:
+    void setIdentityOnly(bool identityOnly);
+
+    bool isBusy() const;
     
 public Q_SLOTS:
-    void startExportation(const FormExporterJob &job);
+    Core::PatientDataExtraction *startExportationJob(const Core::PatientDataExporterJob &job);
 
 private:
     Internal::FormExporterPrivate *d;
 };
 
+} // namespace Internal
 } // namespace Form
 
 #endif  // FORM_FORMEXPORTER_H

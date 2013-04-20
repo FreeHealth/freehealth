@@ -36,7 +36,7 @@
 #include "constants_settings.h"
 #include "patientbase.h"
 #include "patientcore.h"
-#include "formexporterdialog.h"
+#include "patientdataextractordialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -445,7 +445,7 @@ void PatientActionHandler::viewCurrentPatientData()
 
 void PatientActionHandler::onExportPatientFileRequested()
 {
-    FormExporterDialog dlg(Core::ICore::instance()->mainWindow());
+    PatientDataExtractorDialog dlg(Core::ICore::instance()->mainWindow());
     dlg.initialize();
     dlg.exec();
 }

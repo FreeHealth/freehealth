@@ -47,6 +47,7 @@
 #include <coreplugin/constants_menus.h>
 
 #include <translationutils/constants.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDebug>
 
@@ -55,6 +56,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace Form {
 namespace Internal {
@@ -84,7 +86,7 @@ public:
     EpisodeManager *_episodeManager;
     FormContextualWidgetManager *_widgetManager;
     PatientFormItemDataWrapper *_patientFormItemDataWrapper;
-    FormExporter *_formExporter;
+    FormExporter *_formExporter, *_identitytFormExporter;
 
 private:
     FormCore *q;
@@ -109,13 +111,16 @@ FormCore::FormCore(QObject *parent) :
     d->_formManager = new FormManager(this);
     d->_episodeManager = new EpisodeManager(this);
     d->_patientFormItemDataWrapper = new PatientFormItemDataWrapper(this);
-    d->_formExporter = new FormExporter(this);
+    d->_formExporter = new FormExporter(false, this);
+    d->_identitytFormExporter = new FormExporter(true, this);
     // TODO: add episodeBase in the core
 }
 
 /*! Destructor of the FormCore class */
 FormCore::~FormCore()
 {
+    pluginManager()->removeObject(d->_formExporter);
+    pluginManager()->removeObject(d->_identitytFormExporter);
     _instance = 0;
     if (d)
         delete d;
@@ -130,6 +135,9 @@ bool FormCore::initialize()
     d->_widgetManager = new Internal::FormContextualWidgetManager(this);
     d->_patientFormItemDataWrapper->initialize();
     d->_formExporter->initialize();
+    d->_identitytFormExporter->initialize();
+    pluginManager()->addObject(d->_formExporter);
+    pluginManager()->addObject(d->_identitytFormExporter);
     return true;
 }
 
@@ -149,11 +157,6 @@ Form::EpisodeManager &FormCore::episodeManager() const
 Form::PatientFormItemDataWrapper &FormCore::patientFormItemDataWrapper() const
 {
     return *d->_patientFormItemDataWrapper;
-}
-
-FormExporter &FormCore::formExporter() const
-{
-    return *d->_formExporter;
 }
 
 void FormCore::activatePatientFileCentralMode()

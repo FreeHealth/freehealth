@@ -24,30 +24,30 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
-#define PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
+#ifndef PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
+#define PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
 
 #include <QDialog>
 #include <QModelIndex>
 
 /**
- * \file formexporterdialog.h
+ * \file patientdataextratordialog.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 19 Apr 2013
+ * \date 20 Apr 2013
 */
 
 namespace Patients {
 namespace Internal {
-class FormExporterDialogPrivate;
+class PatientDataExtractorDialogPrivate;
 
-class FormExporterDialog : public QDialog
+class PatientDataExtractorDialog : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit FormExporterDialog(QWidget *parent = 0);
-    ~FormExporterDialog();
+    explicit PatientDataExtractorDialog(QWidget *parent = 0);
+    ~PatientDataExtractorDialog();
     
     bool initialize();
     
@@ -59,11 +59,11 @@ private Q_SLOTS:
     void onExportRequested();
 
 private:
-    FormExporterDialogPrivate *d;
+    PatientDataExtractorDialogPrivate *d;
 };
 
 } // namespace Internal
 } // namespace Patients
 
-#endif // PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
+#endif // PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
 
