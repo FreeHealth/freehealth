@@ -410,7 +410,7 @@ public:
             if (type == ModeForms) {
                 const FormCollection &collection = extractFormCollectionFrom(_centralFormCollection, type, uid);
                 if (collection.isNull()) {
-                    LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                    LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                     return 0;
                 } else {
                     model = new FormTreeModel(collection, q);
@@ -420,19 +420,19 @@ public:
                 if (collection.isNull()) {
                     // Load the form
                     if (!loadFormCollection(uid, type)) {
-                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                         return 0;
                     }
                     model = new FormTreeModel(extractFormCollectionFrom(_centralFormCollection, type, uid), q);
                 } else {
                     model = new FormTreeModel(collection, q);
                 }
-            } else {
+            } else if (type == SubForms) {
                 const FormCollection &collection = extractFormCollectionFrom(_subFormCollection, type, uid);
                 if (collection.isNull()) {
                     // Load the form
                     if (!loadFormCollection(uid, type)) {
-                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                         return 0;
                     }
                     model = new FormTreeModel(extractFormCollectionFrom(_subFormCollection, type, uid), q);
@@ -440,6 +440,7 @@ public:
                     model = new FormTreeModel(collection, q);
                 }
             }
+            model->initialize();
             _formTreeModels.insert(uid, model);
         }
         return model;
