@@ -1,5 +1,7 @@
 !with-alerts{
     error(Alert plugin not requested)
+} else {
+    message(Building Alert plugin)
 }
 
 TEMPLATE = lib

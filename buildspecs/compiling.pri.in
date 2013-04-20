@@ -8,7 +8,8 @@ BUILD_PATH_POSTFIXE = $${CAMELCASE_APPNAME}
 
 # manages extra plugins
 with-agenda { DEFINES += WITH_AGENDA }
-with-pad    { DEFINES += WITH_PAD }
 with-alerts { DEFINES += WITH_ALERTS }
 with-feedback { DEFINES += WITH_FEEDBACK }
+with-pad    { DEFINES += WITH_PAD }
+with-pmh    { DEFINES += WITH_PMH }
 with-webcam { DEFINES += WITH_WEBCAM }
