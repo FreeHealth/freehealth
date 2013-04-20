@@ -518,6 +518,12 @@ const FormCollection &FormManager::subFormDuplicateCollection(const QString &sub
     return d->extractFormCollectionFrom(d->_subFormDuplicateCollection, FormManagerPrivate::SubForms, subFormUid);
 }
 
+/** Return the central patient file form uuid for the current patient */
+QString FormManager::centralFormUid() const
+{
+    return episodeBase()->getGenericFormFile();
+}
+
 /**
  * Scans all loaded forms (complete and sub-forms) and extract all available modeUid
  * A mode is the same as a FormPage
