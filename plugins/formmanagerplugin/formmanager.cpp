@@ -271,6 +271,7 @@ public:
         if (absDirPath.isEmpty()) {
             // TODO: code here: manage no patient form file recorded in episodebase
             LOG_ERROR_FOR(q, "No patient central form defined");
+            Q_ASSERT(false);
             return false;
         }
 
