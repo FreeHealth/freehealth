@@ -454,10 +454,6 @@ public:
     QVector<Form::FormPage *> _formPages;
     Form::FormMain *_identityForm;
 
-    // OLD
-//    QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
-//    QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
-
 private:
     FormManager *q;
 };
@@ -714,17 +710,6 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 */
 Form::FormMain *FormManager::identityRootForm() const
 {
-//    foreach(FormCollection *collection, d->_centralFormCollection) {
-//        FormMain *identity = collection->identityForm();
-//        if (identity)
-//            return identity;
-//    }
-//    foreach(FormCollection *collection, d->_subFormCollection) {
-//        FormMain *identity = collection->identityForm();
-//        if (identity)
-//            return identity;
-//    }
-//    LOG_ERROR("No identity form found");
     return d->_identityForm;
 }
 
