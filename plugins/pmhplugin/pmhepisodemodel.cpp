@@ -68,8 +68,6 @@ private:
 }  // End namespace PMH
 
 
-
-
 PmhEpisodeModel::PmhEpisodeModel(Internal::PmhData *pmh, QObject *parent) :
     QAbstractListModel(parent), d(new PmhEpisodeModelPrivate(this))
 {

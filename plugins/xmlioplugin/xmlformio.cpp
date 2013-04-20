@@ -395,7 +395,6 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 
     reader()->refreshPluginFactories();
 
-    // TODO: manage mode creation... How???
     QHashIterator<QString, QString> it(mode_contents);
     while (it.hasNext()) {
         it.next();
@@ -434,11 +433,13 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 
 bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const
 {
-    XmlFormName &form = formName(uuidOrAbsPath, m_FormNames);
+    Q_UNUSED(uuidOrAbsPath);
+    // TODO: remove dead code
+//    XmlFormName &form = formName(uuidOrAbsPath, m_FormNames);
 //    WARN_FUNC << uuidOrAbsPath << form;
-    pmhCore()->pmhCategoryModel()->setRootFormUid(form.uid);
-    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
-    LOG("Category retreived");
+//    pmhCore()->pmhCategoryModel()->setRootFormUid(form.uid);
+//    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
+//    LOG("--------------------------- PMH Category retreived");
     return true;
 }
 

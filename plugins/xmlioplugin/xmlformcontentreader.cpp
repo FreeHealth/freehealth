@@ -50,9 +50,6 @@
 #include <categoryplugin/categoryitem.h>
 #include <categoryplugin/categorycore.h>
 
-#include <pmhplugin/pmhcore.h>
-#include <pmhplugin/pmhcategorymodel.h>
-
 #include <QApplication>
 #include <QDir>
 #include <QTextCodec>
@@ -74,7 +71,6 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
-static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
@@ -936,77 +932,5 @@ bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomEleme
         }
         element = element.nextSiblingElement(Constants::TAG_TABSTOP);
     }
-    return true;
-}
-
-bool XmlFormContentReader::loadPmhCategories(const QString &uuidOrAbsPath)
-{
-    Q_UNUSED(uuidOrAbsPath);
-//    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + QDir::separator() + Constants::PMHXCATOGORIES_FILENAME;
-//    // replace path TAGs
-//    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
-//    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
-//    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
-
-//    QDomDocument *doc = 0;
-//    if (!reader()->isInCache(file)) {
-//        if (!canReadForms(file)) {
-//            LOG_ERROR("Unable to read Pmh Category file: " + file);
-//            return false;
-//        }
-//    }
-//    categoryCore()->removeAllExistingCategories("PMHx");
-//    doc = reader()->fromCache(file);
-//    Q_ASSERT(doc);
-//    if (!doc) {
-//        LOG_ERROR("No category document in XmlFormIO::loadPmhCategories("+file+")");
-//        return false;
-//    }
-//    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
-//    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
-//    element = element.firstChildElement(::Constants::TAG_CATEGORY);
-//    while (!element.isNull()) {
-//        createCategory(element, 0);
-//        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
-//    }
-//    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
-    return true;
-}
-
-bool XmlFormContentReader::createCategory(const QDomElement &element, Category::CategoryItem *parent)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(parent);
-//    // create the category
-//    Category::CategoryItem *item = new Category::CategoryItem;
-//    item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");
-//    item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
-
-//    // read the labels
-//    QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
-//    while (!label.isNull()) {
-//        item->setLabel(label.text(), label.attribute(::Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-//        label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
-//    }
-
-//    // get ExtraTag content -> CategoryItem::ExtraXml
-//    QDomElement extra = element.firstChildElement(::Constants::TAG_SPEC_EXTRA);
-//    if (!extra.isNull()) {
-//        item->setData(Category::CategoryItem::ExtraXml, extra.toDocument().toString(2));
-//    }
-
-//    // save to database
-//    if (parent) {
-//        parent->addChild(item);
-//        item->setParent(parent);
-//    }
-//    categoryCore()->saveCategory(item);
-
-//    // has children ?
-//    QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
-//    while (!child.isNull()) {
-//        createCategory(child, item);
-//        child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
-//    }
     return true;
 }
