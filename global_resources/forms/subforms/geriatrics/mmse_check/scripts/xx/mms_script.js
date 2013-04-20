@@ -20,8 +20,8 @@ namespace.module('com.freemedforms.subs.geriatrics.mmse', function (exports, req
 
                      function getUiElements() {
                          freemedforms.forms.namespaceInUse = "";
-                         mmsForm = freemedforms.forms.item("Subs::Geriatrics::MMSE");
-                         freemedforms.forms.namespaceInUse = "Subs::Geriatrics::MMSE";
+                         mmsForm = freemedforms.forms.item("Subs::Geriatrics::MMSE::Checked");
+                         freemedforms.forms.namespaceInUse = "Subs::Geriatrics::MMSE::Checked";
                          var ui = mmsForm.ui();
                          optionsCombo = ui.findChild("optionsCombo");
                          showDrawing = ui.findChild("showDrawing");
@@ -41,7 +41,6 @@ namespace.module('com.freemedforms.subs.geriatrics.mmse', function (exports, req
                          showDrawingText["fr"] = "Montrer le dessin";
                          showDrawingText["de"] = "Zeigen sie die zeichnung";
                          showDrawingText["xx"] = "Show drawing";
-
                      }
 
                      function connectUiElements() {
@@ -63,7 +62,6 @@ namespace.module('com.freemedforms.subs.geriatrics.mmse', function (exports, req
                      }
 
                      function optionSelected(row) {
-                         print("option selected" + row);
                          var checked = false;
                          freemedforms.forms.namespaceInUse = "";
                          var items = mmsForm.childrenUuid();
@@ -87,7 +85,6 @@ namespace.module('com.freemedforms.subs.geriatrics.mmse', function (exports, req
                      }
 
                      function onShowDrawing() {
-                         print("onShowDrawing");
                          freemedforms.uiTools.showScreenshot("__subForms__/geriatrics/mmse_check", "xx/drawing.png");
                      }
 });
