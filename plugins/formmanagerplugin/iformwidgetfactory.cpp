@@ -30,9 +30,9 @@
 /**
  * \class Form::IFormWidgetFactory
  * \brief Interface for the form's widget creation.
- * The factory allows the user to create specific Form::IFormWidget according to their 'plugin'
- * name. Factories must be sent in the plugins manager objects pool.\n
- * Factory owns form widget plugin that are described by the providedWidgets().\n
+ * The factory allows the user to create a specific Form::IFormWidget according to their 'plugin'
+ * name. Factories must be sent into the PluginManager objects pool.\n
+ * The factory owns the form widget plugins that are described by the providedWidgets().\n
  * You can only use the factories in your Form::IFormIO form loader.
  *
  * Initialization of the object is done through:
