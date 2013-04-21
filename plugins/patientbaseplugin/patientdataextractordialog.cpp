@@ -253,7 +253,7 @@ void PatientDataExtractorDialog::onExportRequested()
     // Prepare patient extraction job
     QList<Core::PatientDataExtraction *> result;
     Core::PatientDataExporterJob job;
-    job.setExportGroupmentType(Core::PatientDataExporterJob::FormOrderedExportation);
+    job.setExportGroupmentType(Core::PatientDataExporterJob::DateOrderedExportation);
 
     // Get patient uids to extract
     QStringList uids;

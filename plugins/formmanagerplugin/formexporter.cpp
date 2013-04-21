@@ -39,6 +39,7 @@
 #include "formmanager.h"
 #include "episodebase.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 
@@ -64,6 +65,12 @@ using namespace Trans::ConstantTranslations;
 
 namespace Form {
 namespace Internal {
+
+struct FormExportation {
+    QStringList css;
+    QMultiMap<QDateTime, QString> episodes;
+};
+
 class FormExporterPrivate
 {
 public:
@@ -77,8 +84,41 @@ public:
     {
     }
 
-    QString formExportation(Form::FormMain *form, const QString &patientUid)
+    int countEpisodes()
     {
+        int episodes = 0;
+        if (_identityOnly) {
+            Form::FormMain *form = formManager().identityRootForm();
+            if (form)
+                episodes = 1;
+        } else {
+            // Get all current forms
+            QList<Form::FormMain*> forms = formManager().allDuplicatesEmptyRootForms();
+
+            // Export all FormMain episodes
+            foreach(Form::FormMain *emptyRoot, forms) {
+                foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
+                    if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+                        continue;
+                    EpisodeModel *model = formCore().episodeManager().episodeModel(form);
+                    if (model->currentPatientUuid() != patient()->uuid())
+                        return 0;
+                    // Get *all* episodes
+                    QModelIndex fetchIndex = model->index(model->rowCount(), 0);
+                    while (model->canFetchMore(fetchIndex)) {
+                        model->fetchMore(fetchIndex);
+                        fetchIndex = model->index(model->rowCount(), 0);
+                    }
+                    episodes += model->rowCount();
+                }
+            }
+        }
+        return episodes;
+    }
+
+    FormExportation formExportation(Form::FormMain *form, const QString &patientUid)
+    {
+        FormExportation formExport;
         // Use FormManager EpisodeModel
         EpisodeModel *model = formCore().episodeManager().episodeModel(form);
         model->setCurrentPatient(patientUid);
@@ -96,13 +136,17 @@ public:
         proxy->sort(EpisodeModel::UserTimeStamp, Qt::DescendingOrder);
 
         // Read all rows of the model
-        QStringList formCss;
         QString htmlMask = Utils::htmlBodyContent(form->spec()->value(FormItemSpec::Spec_HtmlExportMask).toString().simplified());
-        formCss << Utils::htmlTakeAllCssContent(htmlMask);
+        formExport.css << Utils::htmlTakeAllCssContent(htmlMask);
+        if (htmlMask.isEmpty()) {
+            QString tmp = form->printableHtml(true);
+            formExport.css << Utils::htmlTakeAllCssContent(tmp);
+        }
 
-        QString html;
+        // Start episode extraction
         for(int i=0; i < proxy->rowCount(); ++i) {
             QModelIndex index = proxy->mapToSource(proxy->index(i, 0));
+            const QDateTime &dt = model->data(model->index(index.row(), EpisodeModel::UserTimeStamp, index.parent())).toDateTime();
 
             // Populate form with data
             model->populateFormWithEpisodeContent(index, false);
@@ -113,37 +157,27 @@ public:
                 Utils::replaceTokens(tmpMask, formManager().formToTokens(form));
                 patient()->replaceTokens(tmpMask);
                 user()->replaceTokens(tmpMask);
-                html += Utils::htmlBodyContent(tmpMask);
+                qWarning() << "\n\n" << form->spec()->label() << "\n" << tmpMask;
+                formExport.episodes.insertMulti(dt, Utils::htmlBodyContent(tmpMask));
             } else {
                 // Get the default HTML output
-                html += Utils::htmlBodyContent(form->printableHtml(true));
+                QString tmp = form->printableHtml(true);
+                Utils::htmlTakeAllCssContent(tmp);
+                qWarning() << "\n\n" << form->spec()->label() << "\n" << tmp;
+                formExport.episodes.insertMulti(dt, Utils::htmlBodyContent(tmp));
             }
         }
-        // Re-insert CSS style blocks
-        int begin = html.indexOf("<body");
-        if (begin == -1) {
-            html.prepend(formCss.join("\n"));
-        } else {
-            begin = html.indexOf(">", begin + 2);
-            ++begin;
-            html.insert(begin, formCss.join("\n"));
-        }
-        return html;
+        return formExport;
     }
 
-    QString formOrderedExport(const Core::PatientDataExporterJob &job, const QString &patientUid)
+    QList<FormExportation> extractFormEpisodes(const Core::PatientDataExporterJob &job, const QString &patientUid)
     {
-        if (patientUid.isEmpty())
-            return QString::null;
+        QList<FormExportation> formExports;
 
-        // Change the current patient in order to extract the identity, update the forms, sub-forms...
-        // patient()->setCurrentPatientUid(patientUid);
-
-        QString html;
         if (_identityOnly) {
             Form::FormMain *form = formManager().identityRootForm();
             if (form)
-                html += formExportation(form, patientUid);
+                formExports << formExportation(form, patientUid);
         } else {
             // Get all current forms
             QList<Form::FormMain*> forms = formManager().allDuplicatesEmptyRootForms();
@@ -153,22 +187,65 @@ public:
                 foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
                     if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
                         continue;
-                    html += formExportation(form, patientUid);
+                    formExports << formExportation(form, patientUid);
                 }
             }
         }
+        return formExports;
+
+    }
+
+    QString constructOutputContent(const Core::PatientDataExporterJob &job, const QList<FormExportation> &formExports)
+    {
+
+        qWarning() << "----------------- OUTPUT" << formExports.count();
+
+        // Join all css style sheets
+        QString html;
+        QString css;
+        foreach(const FormExportation &exp, formExports)
+            css += exp.css.join("\n");
+        if (job.exportGroupmentType() == Core::PatientDataExporterJob::DateOrderedExportation) {
+            // Join all extracted episodes into one unique map
+            QMultiMap<QDateTime, QString> allEpisodes;
+            foreach(const FormExportation &exp, formExports) {
+                foreach(const QDateTime &dt, exp.episodes.uniqueKeys()) {
+                    foreach(const QString &val, exp.episodes.values(dt)) {
+                        allEpisodes.insertMulti(dt, val);
+                    }
+                }
+            }
+
+            // Construct HTML
+            qWarning() << "-------- episodecount" << allEpisodes.values().count();
+            foreach(const QString &val, allEpisodes.values()) {
+                html += val;
+            }
+        } else { // FormOrderedExportation
+            // Construct HTML
+            foreach(const FormExportation &exp, formExports) {
+                foreach(const QString &val, exp.episodes.values()) {
+                    html += val;
+                }
+            }
+        }
+
+        // Re-insert CSS style blocks
+        int begin = html.indexOf("<body");
+        if (begin == -1) {
+            html.prepend(css);
+        } else {
+            begin = html.indexOf(">", begin + 2);
+            ++begin;
+            html.insert(begin, css);
+        }
+
         Utils::saveStringToFile(html, QString("/Users/eric/Desktop/patient_%1%2.html")
                                 .arg(_identityOnly ? "ident_" : "forms_")
-                                .arg(patientUid));
+                                .arg(patient()->uuid()));
         return html;
-
     }
 
-    QString dateOrderedExport()
-    {
-        //
-        return QString::null;
-    }
 
 public:
     bool _identityOnly;
@@ -185,6 +262,7 @@ FormExporter::FormExporter(bool identityOnly, QObject *parent) :
     Core::IPatientDataExporter(parent),
     d(new FormExporterPrivate(this))
 {
+    setObjectName("FormExporter");
     setIdentityOnly(identityOnly);
 }
 
@@ -225,15 +303,26 @@ bool FormExporter::isBusy() const
 #include <QTextBrowser>
 Core::PatientDataExtraction *FormExporter::startExportationJob(const Core::PatientDataExporterJob &job)
 {
-    Core::PatientDataExtraction *result = 0;
-    if (job.exportGroupmentType() == Core::PatientDataExporterJob::FormOrderedExportation) {
-        foreach(const QString &uid, job.patientUids()) {
-            QTextBrowser *browser = new QTextBrowser;
-            browser->setHtml(d->formOrderedExport(job, uid));
-            browser->show();
-        }
-    } else if (job.exportGroupmentType() == Core::PatientDataExporterJob::DateOrderedExportation) {
+    // Patient to export must be the current patient
+    if (job.patientUids().count()==0)
+        return 0;
 
+    if (job.patientUids().at(0).isEmpty())
+        return 0;
+
+    // Patient to extract must be the current one
+    if (job.patientUids().at(0) != patient()->uuid()) {
+        LOG_ERROR("Extracting wrong patient");
+        return 0;
     }
+
+    Core::PatientDataExtraction *result = 0;
+
+    int count = d->countEpisodes();
+    qWarning() << "EXPORTATION" << patient()->uuid() << "EPISODE COUNT:" << count;
+
+    QList<FormExportation> formExports = d->extractFormEpisodes(job, job.patientUids().at(0));
+    d->constructOutputContent(job, formExports);
+
     return result;
 }
