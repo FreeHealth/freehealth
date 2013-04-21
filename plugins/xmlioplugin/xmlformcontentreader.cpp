@@ -826,14 +826,17 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
 /** Create a formitemwidget for the \e item with the specified \e parent */
 bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *parent)
 {
+    if (!item)
+        return false;
+
 //    qWarning() << Q_FUNC_INFO;
 //    qWarning() << item << item->uuid() << item->spec()->pluginName();
-    QString requestedWidget = item->spec()->pluginName().toLower();
-    Form::IFormWidgetFactory *factory = m_PlugsFactories.value(requestedWidget);
+    QString requestedWidgetName = item->spec()->pluginName().toLower();
+    Form::IFormWidgetFactory *factory = m_PlugsFactories.value(requestedWidgetName);
     Form::IFormWidget *w = 0;
 
     // does plugin was inform in the xml file ?
-    if (item->spec()->pluginName().isEmpty()) {
+    if (requestedWidgetName.isEmpty()) {
         LOG_ERROR_FOR("XmlFormContentReader", "No plugin name for item: " + item->uuid());
         factory = m_PlugsFactories.value("helptext");
         w = factory->createWidget("helptext", item);
@@ -843,7 +846,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
 
     // does requested widget exist in the plugins ?
     if (!factory) {
-        LOG_ERROR_FOR("XmlFormContentReader", QString("Form error in item '%1': Requested widget '%2' does not exist in plugin's widgets list.").arg(item->uuid()).arg(requestedWidget));
+        LOG_ERROR_FOR("XmlFormContentReader", QString("Form error in item '%1': Requested widget '%2' does not exist in plugin's widgets list.").arg(item->uuid()).arg(requestedWidgetName));
         // Add a default widget for the error log
         factory = m_PlugsFactories.value("helptext");
         item->spec()->setValue(Form::FormItemSpec::Spec_Label, QString("XML FORM ERROR: Requested widget does not exist for item '%1'").arg(item->uuid()));
@@ -852,7 +855,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     }
 
     // get the widget
-    w = factory->createWidget(requestedWidget, item, parent);
+    w = factory->createWidget(requestedWidgetName, item, parent);
     if (w->isContainer()) {
         foreach(Form::FormItem *child, item->formItemChildren()) {
 //            Form::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
