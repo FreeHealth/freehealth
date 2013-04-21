@@ -18,7 +18,7 @@
     <license>GPLv3</license>
     <description lang="xx">Generic ultra-simplified patient file</description>
     <description lang="fr">Dossier médical ultra-simplifié</description>
-    <description lang="de">Allgemeine ultra-vereinfachte Krankenakte</description>
+    <description lang="de">Allgemeine, stark vereinfachte Krankenakte</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
     <specialties lang="de">Allgemeinmedizin</specialties>

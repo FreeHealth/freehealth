@@ -75,8 +75,8 @@ private:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::ChequePrinterPreferencesWidget *ui;
     ChequePrintFormatModel *_model;
+    Ui::ChequePrinterPreferencesWidget *ui;
 };
 
 
