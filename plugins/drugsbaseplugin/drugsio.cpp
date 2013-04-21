@@ -1027,10 +1027,13 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 {
     QString tmp;
     if (mask.isEmpty()) {
-        if (toHtml)
+        if (toHtml) {
             tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_HTML).toString();
-        else
+            QString css = Utils::htmlTakeAllCssContent(tmp);
+            tmp = css + Utils::htmlBodyContent(tmp);
+        } else {
             tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
+        }
     } else {
         tmp = mask;
     }
@@ -1279,7 +1282,12 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     // TODO: add more options for the user : select papers, print duplicatas...
-    return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
+    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
+    QString css = Utils::htmlTakeAllCssContent(html);
+    html = Utils::htmlBodyContent(html);
+    html = Utils::htmlRemoveLinkTags(html);
+    html.prepend(css);
+    return p->print(html,
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }
@@ -1296,7 +1304,12 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     // TODO: add more options for the user: select papers, print duplicatas...
-    p->printPreview(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
+    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
+    QString css = Utils::htmlTakeAllCssContent(html);
+    html = Utils::htmlBodyContent(html);
+    html = Utils::htmlRemoveLinkTags(html);
+    html.prepend(css);
+    p->printPreview(html,
              Core::IDocumentPrinter::Papers_Prescription_User,
              settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }

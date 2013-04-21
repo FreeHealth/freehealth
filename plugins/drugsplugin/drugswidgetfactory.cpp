@@ -206,13 +206,7 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
         return QString();
     }
     QString html = Utils::htmlBodyContent(drugsIo().prescriptionToHtml(m_PrescriptionModel));
-    int begin = html.indexOf("<a href");
-    if (begin!=-1) {
-        // remove the link
-        int end = html.indexOf(">", begin) + 1;
-        html = html.left(begin) + html.mid(end);
-        html = html.remove("</a>");
-    }
+    html = Utils::htmlRemoveLinkTags(html);
     return QString("<table width=100% border=1 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
                    "<thead>"
                    "<tr>"
@@ -301,7 +295,12 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
 
     if (role == Form::IFormItemData::PrintRole) {
         DrugsDB::DrugsModel *model = m_Widget->m_PrescriptionModel;
-        return drugsIo().prescriptionToHtml(model);
+        QString html = drugsIo().prescriptionToHtml(model);
+        QString css = Utils::htmlTakeAllCssContent(html);
+        html = Utils::htmlBodyContent(html);
+        html = Utils::htmlRemoveLinkTags(html);
+        html.prepend(css);
+        return html;
     }
 
     if (role != Form::IFormItemData::PatientModelRole)
