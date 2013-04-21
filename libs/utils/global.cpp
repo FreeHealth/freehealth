@@ -1420,7 +1420,7 @@ QString htmlRemoveLinkTags(const QString &fullHtml)
         // remove the link
         int end = html.indexOf(">", begin);
         if (end != -1) {
-            html = html.remove(begin, end-begin);
+            html = html.remove(begin, end-begin+1);
         }
         begin = html.indexOf("<a ", begin, Qt::CaseInsensitive);
     }
