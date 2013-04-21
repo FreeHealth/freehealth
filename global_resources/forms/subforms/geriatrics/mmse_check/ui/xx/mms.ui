@@ -101,7 +101,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="orientationGroup">
      <property name="title">
       <string>Orientation</string>
      </property>
@@ -402,7 +402,7 @@
     </widget>
    </item>
    <item row="5" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="recallGroup">
      <property name="title">
       <string>Recall</string>
      </property>

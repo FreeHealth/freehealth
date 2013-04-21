@@ -24,47 +24,46 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORM_FORMEXPORTER_H
-#define FORM_FORMEXPORTER_H
+#ifndef PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
+#define PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
 
-#include <coreplugin/ipatientdataexporter.h>
-#include <QObject>
-#include <QString>
-#include <QStringList>
+#include <QDialog>
+#include <QModelIndex>
 
 /**
- * \file formexporter.h
+ * \file patientdataextratordialog.h
  * \author Eric Maeker
  * \version 0.8.4
  * \date 20 Apr 2013
 */
 
-namespace Form {
+namespace Patients {
 namespace Internal {
-class FormExporterPrivate;
+class PatientDataExtractorDialogPrivate;
 
-class FormExporter : public Core::IPatientDataExporter
+class PatientDataExtractorDialog : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit FormExporter(bool identityOnly, QObject *parent = 0);
-    ~FormExporter();
-    bool initialize();
-
-    void setIdentityOnly(bool identityOnly);
-
-    bool isBusy() const;
+    explicit PatientDataExtractorDialog(QWidget *parent = 0);
+    ~PatientDataExtractorDialog();
     
-public Q_SLOTS:
-    Core::PatientDataExtraction *startExportationJob(const Core::PatientDataExporterJob &job);
+    bool initialize();
+    
+Q_SIGNALS:
+    
+private Q_SLOTS:
+    void refreshPatientModelFilter();
+    void onPatientActivated(const QModelIndex &index);
+    void onExportRequested();
 
 private:
-    Internal::FormExporterPrivate *d;
+    PatientDataExtractorDialogPrivate *d;
 };
 
 } // namespace Internal
-} // namespace Form
+} // namespace Patients
 
-#endif  // FORM_FORMEXPORTER_H
+#endif // PATIENTS_INTERNAL_PATIENTDATAEXTRACTORDIALOG_H
 

@@ -1,3 +1,9 @@
+!with-pmh{
+    error(PMH plugin not requested)
+} else {
+    message(Building PMH plugin)
+}
+
 TEMPLATE        = lib
 TARGET          = PMH
 

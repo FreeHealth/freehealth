@@ -95,6 +95,7 @@ public:
     const FormCollection &centralFormDuplicateCollection(const QString &modeUId) const;
     const FormCollection &subFormDuplicateCollection(const QString &subFormUid) const;
 
+    QString centralFormUid() const;
     QStringList availableModeUids() const;
 
     // Form pointers and models

@@ -25,24 +25,25 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class Patients::Internal::FormExporterDialog
+ * \class Patients::Internal::PatientDataExtractorDialog
  */
 
-#include "formexporterdialog.h"
+#include "patientdataextractordialog.h"
 #include "patientmodel.h"
-
-#include <formmanagerplugin/formexporter.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipatientdataexporter.h>
 
+#include <utils/log.h>
 #include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constants.h>
+#include <extensionsystem/pluginmanager.h>
 
-#include "ui_formexporterdialog.h"
+#include "ui_patientdataextractordialog.h"
 
 #include <QStringListModel>
 
@@ -54,57 +55,61 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace Patients {
 namespace Internal {
 
-class FormExporterDialogPrivate
+class PatientDataExtractorDialogPrivate
 {
 public:
-    FormExporterDialogPrivate(FormExporterDialog *parent) :
+    PatientDataExtractorDialogPrivate(PatientDataExtractorDialog *parent) :
         _initialized(false),
-        ui(new Ui::FormExporterDialog),
+        ui(new Ui::PatientDataExtractorDialog),
         _exportButton(0),
-        _exporter(0),
         _patientModel(0),
         _selectedModel(0),
         q(parent)
     {
     }
     
-    ~FormExporterDialogPrivate()
+    ~PatientDataExtractorDialogPrivate()
     {
         delete ui;
     }
     
 public:
     bool _initialized;
-    Ui::FormExporterDialog *ui;
+    Ui::PatientDataExtractorDialog *ui;
     QPushButton *_exportButton;
-    Form::FormExporter *_exporter;
     PatientModel *_patientModel;
     QStringListModel *_selectedModel;
     QString m_LastSearch;
 
 private:
-    FormExporterDialog *q;
+    PatientDataExtractorDialog *q;
 };
 } // namespace Internal
 } // end namespace Patients
 
 
-/*! Constructor of the Patients::Internal::FormExporterDialog class */
-FormExporterDialog::FormExporterDialog(QWidget *parent) :
+/*! Constructor of the Patients::Internal::PatientDataExtractorDialog class */
+PatientDataExtractorDialog::PatientDataExtractorDialog(QWidget *parent) :
     QDialog(parent),
-    d(new FormExporterDialogPrivate(this))
+    d(new PatientDataExtractorDialogPrivate(this))
 {
-    d->_exporter = new Form::FormExporter(this);
+    setObjectName("PatientDataExtractorDialog");
+//    d->_exporter = new Form::FormExporter(this);
     d->_patientModel = new PatientModel(this);
     d->_selectedModel = new QStringListModel(this);
+
+    setWindowTitle(tr("Patient data extractor"));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
 }
 
-/*! Destructor of the Patients::Internal::FormExporterDialog class */
-FormExporterDialog::~FormExporterDialog()
+/*! Destructor of the Patients::Internal::PatientDataExtractorDialog class */
+PatientDataExtractorDialog::~PatientDataExtractorDialog()
 {
     if (d)
         delete d;
@@ -112,7 +117,7 @@ FormExporterDialog::~FormExporterDialog()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool FormExporterDialog::initialize()
+bool PatientDataExtractorDialog::initialize()
 {
     if (d->_initialized)
         return true;
@@ -170,7 +175,7 @@ bool FormExporterDialog::initialize()
     return true;
 }
 
-void FormExporterDialog::refreshPatientModelFilter()
+void PatientDataExtractorDialog::refreshPatientModelFilter()
 {
     if (!d->_patientModel)
         return;
@@ -182,7 +187,7 @@ void FormExporterDialog::refreshPatientModelFilter()
     d->_patientModel->setFilter(text, "%");
 }
 
-void FormExporterDialog::onPatientActivated(const QModelIndex &index)
+void PatientDataExtractorDialog::onPatientActivated(const QModelIndex &index)
 {
     QModelIndex full = d->_patientModel->index(index.row(), Core::IPatient::FullName);
     QModelIndex uid = d->_patientModel->index(index.row(), Core::IPatient::Uid);
@@ -201,21 +206,86 @@ static QString getUid(const QString &selected)
     return selected.mid(b, e-b);
 }
 
-void FormExporterDialog::onExportRequested()
+static QList<Core::PatientDataExtraction*> extract(const QList<Core::IPatientDataExporter *> &extractors, const Core::PatientDataExporterJob &job, Core::IPatientDataExporter::ExporterType type)
 {
+    QList<Core::PatientDataExtraction *> result;
+    foreach(Core::IPatientDataExporter *e, extractors) {
+        if (e->exporterTypes().testFlag(type)) {
+            Core::PatientDataExtraction *r = e->startExportationJob(job);
+            if (r)
+                result << r;
+        }
+    }
+    return result;
+}
+
+static QList<Core::PatientDataExtraction*> extractAll(const QList<Core::IPatientDataExporter *> &extractors, const Core::PatientDataExporterJob &job)
+{
+    // Extract in the correct order
+    QList<Core::PatientDataExtraction *> result;
+    result << extract(extractors, job, Core::IPatientDataExporter::IdentityExporter);
+    result << extract(extractors, job, Core::IPatientDataExporter::PmhxExporter);
+    result << extract(extractors, job, Core::IPatientDataExporter::FormsExporter);
+    result << extract(extractors, job, Core::IPatientDataExporter::VaccineExporter);
+    result << extract(extractors, job, Core::IPatientDataExporter::DocumentExporter);
+    return result;
+}
+
+void PatientDataExtractorDialog::onExportRequested()
+{
+    // Avoid multiclicks on button
     d->_exportButton->setEnabled(false);
-    Form::FormExporterJob job;
-    job.setExportGroupmentType(Form::FormExporterJob::FormOrderedExportation);
+
+    // Get all extractors
+    QList<Core::IPatientDataExporter *> extractors = pluginManager()->getObjects<Core::IPatientDataExporter>();
+    if (extractors.isEmpty()) {
+        LOG_ERROR("No Core::IPatientDataExporter object found");
+        return;
+    }
+
+    // Log & timer
+    LOG("---------- Starting patient data extraction");
+    QTime chr;
+    chr.start();
+    QTime chrGlobal;
+    chrGlobal.start();
+
+    // Prepare patient extraction job
+    QList<Core::PatientDataExtraction *> result;
+    Core::PatientDataExporterJob job;
+    job.setExportGroupmentType(Core::PatientDataExporterJob::FormOrderedExportation);
+
+    // Get patient uids to extract
+    QStringList uids;
     if (d->ui->exportAll->isChecked()) {
-        job.setExportAllPatients(true);
+//        uids << patient()->allValidPatientUids();
     } else {
         const QStringList &list = d->_selectedModel->stringList();
-        QStringList uids;
         foreach(const QString &patient, list) {
             uids << getUid(patient);
         }
-        job.setPatientUids(uids);
     }
-    d->_exporter->startExportation(job);
+    Utils::Log::logTimeElapsed(chr, objectName(), "Getting patient uids to extract");
+
+    // Store current patient uid
+    QString current = patient()->uuid();
+
+    // Start extraction patient by patient
+    foreach(const QString &uid, uids) {
+        job.setPatientUid(uid);
+        patient()->setCurrentPatientUid(uid);
+        result << extractAll(extractors, job);
+        Utils::Log::logTimeElapsed(chr, objectName(), QString("Extracted patient uid: %1").arg(uid));
+    }
+
+    // Reset current patient
+    patient()->setCurrentPatientUid(current);
+
+    qWarning() << result.count();
+    qDeleteAll(result);
+
+    Utils::Log::logTimeElapsed(chrGlobal, objectName(), QString("Patient data extraction done"));
+    LOG("---------- Patient data extraction done");
+
     d->_exportButton->setEnabled(true);
 }

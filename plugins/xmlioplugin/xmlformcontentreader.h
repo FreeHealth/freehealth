@@ -100,10 +100,6 @@ public:
     bool createWidgets(const Form::FormMain *rootForm);
     bool setTabOrder(Form::FormMain *rootForm, const QDomElement &root);
 
-    // PMHx categories
-    bool loadPmhCategories(const QString &uuidOrAbsPath);
-    bool createCategory(const QDomElement &element, Category::CategoryItem *parent);
-
 private:
     static XmlFormContentReader *m_Instance;
     QHash<QString, Form::IFormWidgetFactory *> m_PlugsFactories;

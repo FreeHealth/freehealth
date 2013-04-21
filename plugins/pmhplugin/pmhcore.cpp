@@ -28,10 +28,15 @@
 #include "pmhcategorymodel.h"
 #include "pmhwidgetmanager.h"
 
+#include <formmanagerplugin/formcore.h>
+#include <formmanagerplugin/formmanager.h>
+
 #include <QApplication>
 
 using namespace PMH;
 using namespace Internal;
+
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 PmhCore *PmhCore::m_Instance = 0;
 
@@ -70,15 +75,15 @@ public:
     PmhWidgetManager *m_PmhWidgetManager;
 };
 
-}
-}
-
+} // namespace Internal
+} // namespace PMH
 
 PmhCore::PmhCore(QObject *parent) :
     QObject(parent), d(new PmhCorePrivate)
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
     d->m_PmhWidgetManager = new PmhWidgetManager(this);
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 PmhCore::~PmhCore()
@@ -93,3 +98,8 @@ PmhCategoryModel *PmhCore::pmhCategoryModel() const
     return d->m_PmhCategoryModel;
 }
 
+void PmhCore::onPatientFormsLoaded()
+{
+    d->m_PmhCategoryModel->setRootFormUid(formManager().centralFormUid());
+    d->m_PmhCategoryModel->refreshFromDatabase();
+}

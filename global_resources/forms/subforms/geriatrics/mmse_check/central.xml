@@ -4,7 +4,7 @@
     <formdescription>
         <!-- Non translatable values -->
         <authors>Eric Maeker, MD</authors>
-        <version>0.7.0</version>
+        <version>test</version>
         <fmfv>0.7.0</fmfv>
         <cdate>2012-01-05</cdate>
         <lmdate>2012-01-08</lmdate>
@@ -31,6 +31,7 @@
         <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
         <Item type="group" name="Orientation">
+            <uilink widget="orientationGroup"/>
             <label lang="fr">Orientation</label>
             <label lang="xx">Orientation</label>
             <label lang="de">Orientierung</label>
@@ -47,8 +48,8 @@
             <Item type="check" name="Orientation::Year">
                 <uilink widget="or1Check"/>
                 <options>DontPrintEmptyValues;OnRight</options>
-                <label lang="de">Jahr</label>
                 <label lang="xx">What is the year?</label>
+                <label lang="de">Jahr</label>
                 <label lang="fr">En quelle année sommes-nous ?</label>
                 <value>
                     <numerical id="1">0</numerical>
@@ -162,7 +163,7 @@
               <uilink label="orSumLabel" widget="orSum"/>
               <label lang="xx">Total</label>
               <label lang="fr">Total</label>
-              <sumof_regexp>Subs::Geriatrics::MMSE::Orientation::*</sumof_regexp>
+              <sumof_regexp>Subs::Geriatrics::MMSE::Checked::Orientation::*</sumof_regexp>
               <options>notprintable</options>
             </Item>
         </Item>
@@ -217,7 +218,7 @@
               <uilink label="learnSumLabel" widget="learnSum"/>
               <label lang="xx">Total</label>
               <label lang="fr">Total</label>
-              <sumof_regexp>Subs::Geriatrics::MMSE::Registration::*</sumof_regexp>
+              <sumof_regexp>Subs::Geriatrics::MMSE::Checked::Registration::*</sumof_regexp>
               <options>notprintable</options>
             </Item>
         </Item>
@@ -290,13 +291,13 @@
             </Item>
             <Item type="sum" name="Attention::Score">
               <uilink label="attSumLabel" widget="attSum"/>
-              <sumof_regexp>Subs::Geriatrics::MMSE::Attention::*</sumof_regexp>
+              <sumof_regexp>Subs::Geriatrics::MMSE::Checked::Attention::*</sumof_regexp>
               <options>DontPrintEmptyValues</options>
             </Item>
         </Item>
 
-
         <Item type="group" name="Recall">
+            <uilink widget="recallGroup"/>
             <label lang="fr">Rappel</label>
             <label lang="xx">Recall of three words</label>
             <label lang="de">Gedächtnis</label>
@@ -343,11 +344,10 @@
             </Item>
             <Item type="sum" name="Recall::Score">
               <uilink label="recallSumLabel" widget="recallSum"/>
-              <sumof_regexp>Subs::Geriatrics::MMSE::Recall::*</sumof_regexp>
+              <sumof_regexp>Subs::Geriatrics::MMSE::Checked::Recall::*</sumof_regexp>
               <options>DontPrintEmptyValues</options>
             </Item>
         </Item>
-
 
         <Item type="group" name="Language">
             <uilink widget="langGroup"/>
@@ -489,7 +489,7 @@
             </Item>
             <Item name="Language::Score" type="sum">
                 <uilink label="langSumLabel" widget="langSum"/>
-                <sumof_regexp>Subs::Geriatrics::MMSE::Language::*</sumof_regexp>
+                <sumof_regexp>Subs::Geriatrics::MMSE::Checked::Language::*</sumof_regexp>
                 <options>DontPrintEmptyValues</options>
             </Item>
         </Item>
@@ -497,21 +497,15 @@
         <Item name="FinalScore" type="sum">
             <uilink label="totalLabel" widget="total"/>
             <label>Score = </label>
-            <sumof_regexp>Subs::Geriatrics::MMSE::*</sumof_regexp>
+            <sumof_regexp>Subs::Geriatrics::MMSE::Checked*</sumof_regexp>
             <options>changeepisodelabel;horizontal;DontPrintEmptyValues</options>
         </Item>
 
-        <Item name="Interpretation" type="sum">
-            <uilink label="totalLabel" widget="total"/>
-            <sumof_regexp>Subs::Geriatrics::MMSE::*</sumof_regexp>
-            <options>changeepisodelabel;horizontal;DontPrintEmptyValues</options>
-        </Item>
         <Item type="helptext" name="Space::Help">
             <uilink widget="interpretationLabel"/>
             <label lang="xx">Any score greater than or equal to 25 points (out of 30) is effectively normal (intact). Below this, scores can indicate severe (≤9 points), moderate (10-20 points) or mild (21-24 points) cognitive impairment.</label>
             <label lang="fr">Tout score supérieur ou égal à 25 points (sur 30) est effectivement normal (intact). En dessous, les scores peuvent indiquer une déficience cognitive sévère (≤ 9 points), modérément sévère (10-20 points) ou modérée (21-24 points).</label>
         </Item>
-
 
         <Item name="Comment" type="texteditor">
           <uilink layout="commentLayout"/>

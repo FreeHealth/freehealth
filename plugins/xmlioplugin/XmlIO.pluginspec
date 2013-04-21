@@ -9,6 +9,5 @@
       <dependency name="Core" version="0.0.1"/>
       <dependency name="FormManager" version="0.0.1"/>
       <dependency name="Category" version="0.0.1"/>
-      <dependency name="PMH" version="0.0.1"/>
     </dependencyList>
 </plugin>

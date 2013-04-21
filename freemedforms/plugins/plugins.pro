@@ -23,7 +23,6 @@ SUBDIRS = \
     drugs \
     druginteractions \
     icd \
-    pmh \
     script \
     mainwin \
     tools
@@ -71,7 +70,6 @@ xmlio.subdir   = $${PLUGINS_PATH}/xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
 xmlio.depends += category
-xmlio.depends += pmh
 
 basewidgets.subdir   = $${PLUGINS_PATH}/basewidgetsplugin
 basewidgets.depends += core
@@ -112,14 +110,6 @@ icd.subdir = $${PLUGINS_PATH}/icdplugin
 icd.depends += core
 icd.depends += formmanager
 icd.depends += listview
-
-pmh.subdir = $${PLUGINS_PATH}/pmhplugin
-pmh.depends += core
-pmh.depends += icd
-pmh.depends += listview
-pmh.depends += texteditor
-pmh.depends += category
-pmh.depends += formmanager
 
 category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
@@ -189,6 +179,17 @@ with-pad {
     padtools.subdir = $${PLUGINS_PATH}/padtoolsplugin
     padtools.depends += core
     padtools.depends += texteditor
+}
+
+with-pmh {
+    SUBDIRS += pmh
+    pmh.subdir = $${PLUGINS_PATH}/pmhplugin
+    pmh.depends += core
+    pmh.depends += icd
+    pmh.depends += listview
+    pmh.depends += texteditor
+    pmh.depends += category
+    pmh.depends += formmanager
 }
 
 with-feedback {

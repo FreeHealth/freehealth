@@ -49,11 +49,15 @@ class PMH_EXPORT PmhCore : public QObject
 {
     Q_OBJECT
     explicit PmhCore(QObject *parent = 0);
+
 public:
     static PmhCore *instance(QObject *parent = 0);
     ~PmhCore();
 
     PmhCategoryModel *pmhCategoryModel() const;
+
+private Q_SLOTS:
+    void onPatientFormsLoaded();
 
 private:
     static PmhCore *m_Instance;

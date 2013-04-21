@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Patients::Internal::FormExporterDialog</class>
- <widget class="QDialog" name="Patients::Internal::FormExporterDialog">
+ <class>Patients::Internal::PatientDataExtractorDialog</class>
+ <widget class="QDialog" name="Patients::Internal::PatientDataExtractorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -62,7 +62,7 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
            <number>0</number>
@@ -185,7 +185,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Patients::Internal::FormExporterDialog</receiver>
+   <receiver>Patients::Internal::PatientDataExtractorDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -201,7 +201,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Patients::Internal::FormExporterDialog</receiver>
+   <receiver>Patients::Internal::PatientDataExtractorDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

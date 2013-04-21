@@ -93,11 +93,10 @@ namespace {
 
         TreeItem(TreeItem *parent = 0) :
                 m_Parent(parent),
-//                m_IsModified(false),
                 m_Cat(0),
                 m_Pmh(0),
                 m_Form(0),
-                m_EpisodeModel(0)
+                m_FormEpisodeModel(0)
         {
             if (m_Parent)
                 m_Parent->addChildren(this);
@@ -112,7 +111,7 @@ namespace {
             m_Cat=0;
             m_Parent=0;
             m_Form=0;
-            m_EpisodeModel=0;
+            m_FormEpisodeModel=0;
         }
 
 
@@ -141,10 +140,6 @@ namespace {
                 return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
             return 0;
         }
-        //    void sortChildren()
-        //    {
-        //        qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
-        //    }
         bool removeChild(TreeItem *child)
         {
             if (m_Children.contains(child)) {
@@ -183,23 +178,12 @@ namespace {
         void setForm(Form::FormMain *form, Form::EpisodeModel *model)
         {
             m_Form = form;
-            m_EpisodeModel = model;
+            m_FormEpisodeModel = model;
         }
         Form::FormMain *form() const {return m_Form;}
-        Form::EpisodeModel *episodeModel() const {return m_EpisodeModel;}
+        Form::EpisodeModel *formEpisodeModel() const {return m_FormEpisodeModel;}
 
-        bool isForm() const {return ((m_Form) && (m_EpisodeModel));}
-
-        // For sort functions
-        //    static bool lessThan(TreeItem *item1, TreeItem *item2)
-        //    {
-        //        // category goes first
-        //        // then sort by name
-        //        bool sameType = (((item1->isTemplate()) && (item2->isTemplate())) || ((!item1->isTemplate()) && (!item2->isTemplate())));
-        //        if (sameType)
-        //            return item1->data(Constants::Data_Label).toString() < item2->data(Constants::Data_Label).toString();
-        //        return item2->isTemplate();
-        //    }
+        bool isForm() const {return ((m_Form) && (m_FormEpisodeModel));}
 
         void warn(int indent = 0)
         {
@@ -219,11 +203,10 @@ namespace {
         QString m_Label;
         QIcon m_Icon;
         QVector<int> m_DirtyRows;
-//        bool m_IsModified;
         Category::CategoryItem *m_Cat;
         PmhData *m_Pmh;
         Form::FormMain *m_Form;
-        Form::EpisodeModel *m_EpisodeModel;
+        Form::EpisodeModel *m_FormEpisodeModel;
     };
 }
 
@@ -276,17 +259,16 @@ public:
         return _rootItem;
     }
 
-    void formModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::FormTreeModel *model, const QModelIndex &index = QModelIndex())
+    void formModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::FormTreeModel *formTreeModel, const QModelIndex &index = QModelIndex())
     {
-        for(int i = 0; i < model->rowCount(index); ++i) {
-            QModelIndex idx = model->index(i, Form::FormTreeModel::Label, index);
-//            if (model->isLastEpisodeIndex(idx))
-//                continue;
+        // Create an item for each form
+        for(int i = 0; i < formTreeModel->rowCount(index); ++i) {
+            QModelIndex idx = formTreeModel->index(i, Form::FormTreeModel::Label, index);
             TreeItem *newItem = new TreeItem(parentItem);
-            newItem->setLabel(model->data(idx).toString());
-            newItem->setForm(model->formForIndex(idx), episodeManager().episodeModel(form));
+            newItem->setLabel(formTreeModel->data(idx).toString());
+            newItem->setForm(formTreeModel->formForIndex(idx), episodeManager().episodeModel(form));
             // Read all its children
-            formModelToTreeItem(form, newItem, model, idx);
+            formModelToTreeItem(form, newItem, formTreeModel, idx);
         }
     }
 
@@ -299,7 +281,6 @@ public:
         // Category has forms ?
         const QString &xml = cat->data(Category::CategoryItem::ExtraXml).toString();
         if (!xml.isEmpty()) {
-            // TODO: improve this +++ this should be part of the XmlFormIO plugin
             // Check the addfile tag
             QDomDocument doc;
             doc.setContent(xml);
@@ -307,9 +288,9 @@ public:
             addFile = addFile.firstChildElement("file");
             if (!addFile.isNull()) {
                 // Get the FormTreeModel with the form
-                Form::FormTreeModel *model = formManager().formTreeModelForSubForm(addFile.text());
+                Form::FormTreeModel *formModel = formManager().formTreeModelForSubForm(addFile.text());
                 // Translate all modelindex to TreeItem
-                formModelToTreeItem(model->formForIndex(model->index(0,0)), item, model);
+                formModelToTreeItem(formModel->formForIndex(formModel->index(0,0)), item, formModel);
             }
         }
 
@@ -513,7 +494,7 @@ QString PmhCategoryModel::rootFormUid() const
 /** Clear and refresh the whole model */
 void PmhCategoryModel::refreshFromDatabase()
 {
-    if (!patient())
+    if (patient()->uuid().isEmpty())
         return;
     beginResetModel();
     qDeleteAll(d->_pmh);
@@ -1083,7 +1064,7 @@ bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex) const
         return false;
 
     // get the Form::FormMain index
-    Form::EpisodeModel *model = it->episodeModel();
+    Form::EpisodeModel *model = it->formEpisodeModel();
     if (!model)
         return false;
 

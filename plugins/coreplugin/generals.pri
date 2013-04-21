@@ -31,7 +31,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/iscriptmanager.h \
     $${PWD}/constants_colors.h \
     $${PWD}/id.h \
-    $${PWD}/ipatientbar.h
+    $${PWD}/ipatientbar.h \
+    $${PWD}/ipatientdataexporter.h
 
 SOURCES += \
     $${PWD}/icore.cpp \
@@ -46,3 +47,4 @@ SOURCES += \
     $${PWD}/ipadtools.cpp \
     $${PWD}/igenericpage.cpp \
     $${PWD}/id.cpp \
+    $${PWD}/ipatientdataexporter.cpp

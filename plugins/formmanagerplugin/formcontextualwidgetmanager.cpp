@@ -35,7 +35,6 @@
 #include "formcontextualwidget.h"
 #include "episodebase.h"
 #include "formcore.h"
-#include "formexporter.h"
 #include "constants_db.h"
 
 #include <coreplugin/icore.h>
@@ -72,7 +71,6 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
-static inline Form::FormExporter &formExporter() { return Form::FormCore::instance().formExporter(); }
 
 // Register an existing Core action
 static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)

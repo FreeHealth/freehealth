@@ -271,6 +271,7 @@ public:
         if (absDirPath.isEmpty()) {
             // TODO: code here: manage no patient form file recorded in episodebase
             LOG_ERROR_FOR(q, "No patient central form defined");
+            Q_ASSERT(false);
             return false;
         }
 
@@ -410,7 +411,7 @@ public:
             if (type == ModeForms) {
                 const FormCollection &collection = extractFormCollectionFrom(_centralFormCollection, type, uid);
                 if (collection.isNull()) {
-                    LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                    LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                     return 0;
                 } else {
                     model = new FormTreeModel(collection, q);
@@ -420,19 +421,19 @@ public:
                 if (collection.isNull()) {
                     // Load the form
                     if (!loadFormCollection(uid, type)) {
-                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                         return 0;
                     }
                     model = new FormTreeModel(extractFormCollectionFrom(_centralFormCollection, type, uid), q);
                 } else {
                     model = new FormTreeModel(collection, q);
                 }
-            } else {
+            } else if (type == SubForms) {
                 const FormCollection &collection = extractFormCollectionFrom(_subFormCollection, type, uid);
                 if (collection.isNull()) {
                     // Load the form
                     if (!loadFormCollection(uid, type)) {
-                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        LOG_ERROR_FOR(q, QString("Unable to create formtreemodel: %1").arg(uid));
                         return 0;
                     }
                     model = new FormTreeModel(extractFormCollectionFrom(_subFormCollection, type, uid), q);
@@ -440,6 +441,7 @@ public:
                     model = new FormTreeModel(collection, q);
                 }
             }
+            model->initialize();
             _formTreeModels.insert(uid, model);
         }
         return model;
@@ -452,10 +454,6 @@ public:
     bool _forceFormLoading;
     QVector<Form::FormPage *> _formPages;
     Form::FormMain *_identityForm;
-
-    // OLD
-//    QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
-//    QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
 
 private:
     FormManager *q;
@@ -519,6 +517,12 @@ const FormCollection &FormManager::centralFormDuplicateCollection(const QString 
 const FormCollection &FormManager::subFormDuplicateCollection(const QString &subFormUid) const
 {
     return d->extractFormCollectionFrom(d->_subFormDuplicateCollection, FormManagerPrivate::SubForms, subFormUid);
+}
+
+/** Return the central patient file form uuid for the current patient */
+QString FormManager::centralFormUid() const
+{
+    return episodeBase()->getGenericFormFile();
 }
 
 /**
@@ -713,17 +717,6 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 */
 Form::FormMain *FormManager::identityRootForm() const
 {
-//    foreach(FormCollection *collection, d->_centralFormCollection) {
-//        FormMain *identity = collection->identityForm();
-//        if (identity)
-//            return identity;
-//    }
-//    foreach(FormCollection *collection, d->_subFormCollection) {
-//        FormMain *identity = collection->identityForm();
-//        if (identity)
-//            return identity;
-//    }
-//    LOG_ERROR("No identity form found");
     return d->_identityForm;
 }
 

@@ -19,51 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
- *   Contributors :                                                        *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
-#define PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
-
-#include <QDialog>
-#include <QModelIndex>
-
-/**
- * \file formexporterdialog.h
- * \author Eric Maeker
- * \version 0.8.4
- * \date 19 Apr 2013
-*/
-
-namespace Patients {
-namespace Internal {
-class FormExporterDialogPrivate;
-
-class FormExporterDialog : public QDialog
-{
-    Q_OBJECT
-    
-public:
-    explicit FormExporterDialog(QWidget *parent = 0);
-    ~FormExporterDialog();
-    
-    bool initialize();
-    
-Q_SIGNALS:
-    
-private Q_SLOTS:
-    void refreshPatientModelFilter();
-    void onPatientActivated(const QModelIndex &index);
-    void onExportRequested();
-
-private:
-    FormExporterDialogPrivate *d;
-};
-
-} // namespace Internal
-} // namespace Patients
-
-#endif // PATIENTS_INTERNAL_FORMEXPORTERDIALOG_H
+//#include "ipatientdataexporter.h"
 
