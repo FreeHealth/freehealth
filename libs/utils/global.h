@@ -165,6 +165,7 @@ UTILS_EXPORT QLocale::Country countryIsoToCountry(const QString &country);
 UTILS_EXPORT QString htmlBodyContent(const QString &fullHtml);
 UTILS_EXPORT QString htmlTakeAllCssContent(QString &fullHtml);
 UTILS_EXPORT QString htmlReplaceParagraphWithDiv(const QString &fullHtml);
+UTILS_EXPORT QString htmlRemoveLinkTags(const QString &fullHtml);
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
 UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
 UTILS_EXPORT QString toHtmlAccent(const QString &html);

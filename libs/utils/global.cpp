@@ -1406,6 +1406,28 @@ QString htmlReplaceParagraphWithDiv(const QString &fullHtml)
     return r;
 }
 
+/**
+ * Removes all links tags, but not the content of the link, in an HTML content \e fullHtml.
+ * \code
+ *   <a *>this is not removed</a>  -> this is not removed
+ * \endcode
+ */
+QString htmlRemoveLinkTags(const QString &fullHtml)
+{
+    QString html = fullHtml;
+    int begin = html.indexOf("<a ", 0, Qt::CaseInsensitive);
+    while (begin != -1) {
+        // remove the link
+        int end = html.indexOf(">", begin);
+        if (end != -1) {
+            html = html.remove(begin, end-begin);
+        }
+        begin = html.indexOf("<a ", begin, Qt::CaseInsensitive);
+    }
+    html = html.remove("</a>", Qt::CaseInsensitive);
+    return html;
+}
+
 /** \brief Return the CSS style for a font. **/
 QString fontToHtml(const QFont &font, const QColor &color)
 {
