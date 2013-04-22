@@ -5,10 +5,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-09-15</cdate>
-    <lmdate>2012-02-26</lmdate>
+    <lmdate>2013-04-22</lmdate>
     <icon>cardiology.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -32,6 +32,8 @@
     <label lang="xx">Cardiovascular risk factors</label>
     <label lang="fr">Facteurs de risque cardio-vasculaire</label>
     <options>compact;UseFormNameAsNameSpace</options>
+    <file type="htmlprintmask">./html/xx/print_export_mask.html</file>
+    <file type="htmlexportmask">./html/xx/print_export_mask.html</file>
 
 <!--
     <Item name="NonModifiable" type="group">
