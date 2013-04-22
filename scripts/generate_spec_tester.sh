@@ -19,7 +19,10 @@ echo "message(***  Catching the current specs)" > $_O
 
 for f in $_F ; do
     if [[ "$f" != "common" && "$f" != "features" && "$f" != "default" ]]; then
-        echo "$f:message($f)"
+        echo "$f{"
+        echo "  message($f)"
+        echo "  CURRENT_SPEC=$f"
+        echo "}"
     fi
 done >> $_O
 
