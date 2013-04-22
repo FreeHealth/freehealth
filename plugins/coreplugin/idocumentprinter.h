@@ -95,6 +95,8 @@ public:
     virtual bool print(QTextDocument *text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
     virtual bool print(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
 
+    virtual bool toPdf(const QString &html, const QString &absOutputFilePath, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
+
     virtual bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
 
     static void addPrintedDoc(const QString &fileName, const QString &docName, const QDateTime &dt, const QString &userUid);

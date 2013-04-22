@@ -59,6 +59,8 @@ public:
     bool print(QTextDocument *text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
     bool print(const QString &html, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
 
+    bool toPdf(const QString &html, const QString &absOutputFilePath, const int papers = Papers_Generic_User, bool printDuplicata = false) const;
+
     bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const;
 
 private:
