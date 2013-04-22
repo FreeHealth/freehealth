@@ -94,7 +94,7 @@ public:
 
     /** Define the absolute path of the extraction */
     void setOutputAbsolutePath(const QString &path) {_absPath=path;}
-    const QString &outputAbsolutePathFormat() const {return _absPath;}
+    const QString &outputAbsolutePath() const {return _absPath;}
 
 private:
     bool _allPatients;
@@ -111,6 +111,7 @@ public:
     PatientDataExtraction() {}
     ~PatientDataExtraction() {}
 
+    // Files
     void setMasterAbsoluteFilePath(const QString &filepath) {_masterFile=filepath;}
     QString masterAbsoluteFilePath() const {return _masterFile;}
 
@@ -119,9 +120,14 @@ public:
     void clearSecondaryFiles() {_secondaryFiles.clear();}
     QStringList secondaryFiles() const {return _secondaryFiles;}
 
+    // Errors
+    bool hasError() const {return (!_errors.isEmpty());}
+    void addErrorMessage(const QString &error) {_errors << error;}
+    const QStringList &errorMessages() const {return _errors;}
+
 private:
     QString _masterFile;
-    QStringList _secondaryFiles;
+    QStringList _secondaryFiles, _errors;
 };
 
 class CORE_EXPORT IPatientDataExporter : public QObject
@@ -150,6 +156,7 @@ public Q_SLOTS:
     virtual Core::PatientDataExtraction *startExportationJob(const Core::PatientDataExporterJob &job) = 0;
 
 Q_SIGNALS:
+    void extractionProgressValueChanged(int value);
     void extractionProgressRangeChanged(int min, int max);
     void extractionProgressMessageChanged(const QString &message);
 

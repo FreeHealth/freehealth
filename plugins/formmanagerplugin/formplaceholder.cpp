@@ -980,27 +980,11 @@ bool FormPlaceHolder::printFormOrEpisode()
         return false;
     }
 
-    QString htmlToPrint;
-    QString title;
-
-    QHash<QString, QVariant> tokens;
-    // If a print mask is available, create tokens for the form
-    if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
-        LOG("Printing episode using form HTML print mask. Form: " + formMain->uuid());
-        htmlToPrint = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
-        // TODO: manage PadTools
-        tokens = formManager().formToTokens(formMain);
-    } else {
-        htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
-    }
-    title = formMain->spec()->label();
-
-    if (htmlToPrint.isEmpty()) {
-        LOG("Nothing to print");
-        return false;
-    }
+    QString title = formMain->spec()->label();
+    QString htmlToPrint = formManager().formPrintHtmlOutput(formMain);
 
     p->clearTokens();
+    QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 

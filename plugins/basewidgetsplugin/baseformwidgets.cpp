@@ -1058,14 +1058,23 @@ bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 QVariant BaseCheckData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
-    if (role==Qt::CheckStateRole)
+    if (role==Qt::CheckStateRole) {
         return m_Check->checkState();
-    if (role==Form::IFormItemData::CalculationsRole) {
+    } else if (role==Form::IFormItemData::CalculationsRole) {
         const QStringList &vals = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Numerical);
         if (m_Check->isChecked() && vals.count() >= 1)
             return vals.at(0);
         if (vals.count()>=2)
             return vals.at(1);
+    } else if (role == Form::IFormItemData::PrintRole) {
+        // ⍌⎕☒☑
+        if (m_Check->isChecked()) {
+            return QString("%1&nbsp;%2").arg("☒").arg(m_FormItem->spec()->label());
+        } else {
+            if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive))
+                return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
+        }
+        return QVariant();
     }
     return Qt::Unchecked;
 }

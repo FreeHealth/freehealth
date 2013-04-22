@@ -19,62 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DOCUMENTPRINTER_H
-#define DOCUMENTPRINTER_H
+#ifndef PMH_INTERNAL_PMHCONTENTEXPORTER_H
+#define PMH_INTERNAL_PMHCONTENTEXPORTER_H
 
-#include <coreplugin/idocumentprinter.h>
-
-QT_BEGIN_NAMESPACE
-class QTextDocument;
-QT_END_NAMESPACE
+#include <coreplugin/ipatientdataexporter.h>
+#include <QObject>
 
 /**
- * \file documentprinter.h
+ * \file pmhcontentexporter.h
  * \author Eric Maeker
  * \version 0.8.4
  * \date 22 Apr 2013
 */
 
-
-namespace Print {
-class Printer;
+namespace PMH {
 namespace Internal {
+class PmhContentExporterPrivate;
 
-class DocumentPrinter : public Core::IDocumentPrinter
+class PmhContentExporter : public Core::IPatientDataExporter
 {
     Q_OBJECT
-
+    
 public:
-    DocumentPrinter(QObject *parent = 0);
-    ~DocumentPrinter();
+    explicit PmhContentExporter(QObject *parent = 0);
+    ~PmhContentExporter();
+    
+    bool initialize();
+    bool isBusy() const;
 
-    void clearTokens();
-    void addTokens(const int tokenWhere, const QHash<QString, QVariant> &tokensAndValues);
-
-    bool print(const QTextDocument &text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
-    bool print(QTextDocument *text, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
-    bool print(const QString &html, const int papers = Core::IDocumentPrinter::Papers_Generic_User, bool printDuplicata = false) const;
-
-    bool toPdf(const QString &html, const QString &absOutputFilePath, const int papers = Papers_Generic_User, bool printDuplicata = false) const;
-
-    bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const;
+public Q_SLOTS:
+    Core::PatientDataExtraction *startExportationJob(const Core::PatientDataExporterJob &job);
 
 private:
-    void prepareHeader(Print::Printer *p, const int papers) const;
-    void prepareFooter(Print::Printer *p, const int papers) const;
-    void prepareWatermark(Print::Printer *p, const int papers) const;
-    void setDocumentName(Print::Printer *p) const;
-
-private:
-    QHash<QString, QVariant> headerTokens, footerTokens, watermarkTokens, globalTokens;
-
+    PmhContentExporterPrivate *d;
 };
 
-}  // End namespace Internal
-}  // End namespace Print
+} // namespace Internal
+} // namespace PMH
 
-#endif // DOCUMENTPRINTER_H
+#endif // PMH_INTERNAL_PMHCONTENTEXPORTER_H
+

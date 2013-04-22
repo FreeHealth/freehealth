@@ -271,6 +271,36 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
     return print(doc, papers, printDuplicata);
 }
 
+bool DocumentPrinter::toPdf(const QString &html, const QString &absOutputFilePath, const int papers, bool printDuplicata) const
+{
+    // Create a QPrinter pointer (will be deleted by ~Print::Printer)
+    Print::Printer p;
+    QPrinter *printer = new QPrinter(QPrinter::ScreenResolution);
+    printer->setPageSize(QPrinter::A4);
+    printer->setNumCopies(1);
+    printer->setPrintRange(QPrinter::AllPages);
+    if (!absOutputFilePath.endsWith(".pdf", Qt::CaseInsensitive))
+        printer->setOutputFileName(absOutputFilePath + ".pdf");
+    else
+        printer->setOutputFileName(absOutputFilePath);
+    printer->setOutputFormat(QPrinter::PdfFormat);
+    printer->setCreator(qApp->applicationName() + " " + qApp->applicationVersion());
+
+    p.setPrinter(printer);
+    p.setPaperSize(QPrinter::A4);
+    p.setOrientation(QPrinter::Portrait);
+    p.setTwoNUp(false);
+    p.setPrintWithDuplicata(printDuplicata);
+
+    p.setContent(html);
+    prepareHeader(&p, papers);
+    prepareFooter(&p, papers);
+    prepareWatermark(&p, papers);
+    p.preparePages();
+
+    return p.reprint(printer);
+}
+
 bool DocumentPrinter::printPreview(const QString &html, const int papers, bool printDuplicata) const
 {
     Print::Printer p;

@@ -137,6 +137,10 @@ public:
     // Update the SQL filter based on the Form UUID and its equivalents for the patient \e patientUid
     void updateFilter(const QString &patientUid)
     {
+        if (_currentPatientUuid == patientUid)
+            return;
+        _currentPatientUuid = patientUid;
+
         // Filter valid episodes
         QHash<int, QString> where;
         Utils::FieldList uuid;
@@ -289,6 +293,7 @@ public:
     QHash<int, QString> _xmlContentCache;
     QMultiHash<int, EpisodeValidationData *> _validationCache;
     QModelIndexList _dirtyIndexes;
+    QString _currentPatientUuid;
 
 private:
     EpisodeModel *q;
@@ -340,6 +345,11 @@ bool EpisodeModel::initialize()
 void EpisodeModel::setCurrentPatient(const QString &uuid)
 {
     d->updateFilter(uuid);
+}
+
+QString EpisodeModel::currentPatientUuid() const
+{
+    return d->_currentPatientUuid;
 }
 
 void EpisodeModel::setUseFormContentCache(bool useCache)

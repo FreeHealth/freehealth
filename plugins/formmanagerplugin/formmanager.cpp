@@ -773,6 +773,53 @@ QString FormManager::extractFormFileToTmpPath(const QString &formUid, const QStr
     return QString::null;
 }
 
+/**
+ * Return the printable HTML resulting of a Form::FormMain
+ * transformation (using the print mask if available)
+ */
+QString FormManager::formPrintHtmlOutput(Form::FormMain *formMain)
+{
+    QString out;
+    // If a print mask is available, create tokens for the form
+    if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
+        // TODO: manage PadTools
+        out = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
+        const QHash<QString, QVariant> &tokens = formToTokens(formMain);
+        Utils::replaceTokens(out, tokens);
+        patient()->replaceTokens(out);
+        user()->replaceTokens(out);
+    } else {
+        out = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
+    }
+    return out;
+}
+
+/**
+ * Return the printable HTML resulting of a Form::FormMain
+ * transformation (using the print mask if available)
+ */
+QString FormManager::formExportHtmlOutput(Form::FormMain *formMain)
+{
+    QString out;
+    // If a print mask is available, create tokens for the form
+    if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlExportMask).toString().isEmpty()) {
+        // TODO: manage PadTools
+        out = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlExportMask).toString();
+        const QHash<QString, QVariant> &tokens = formToTokens(formMain);
+        Utils::replaceTokens(out, tokens);
+        patient()->replaceTokens(out);
+        user()->replaceTokens(out);
+    } else {
+        out = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
+    }
+    return out;
+}
+
+/**
+ * Create a token for each FormItem of the \e form.
+ * Also add its label (with a '.label' ending token)
+ * and a tooltip label (with a '.tooltip' ending token)
+ */
 QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
 {
     // TODO: manage PadTools here
@@ -805,6 +852,8 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();
     if (userName == tkTr(Trans::Constants::YOU))
         userName = user()->value(Core::IUser::FullName).toString();
+    else if (userName.isEmpty())
+        userName = qApp->applicationName();
     tokens.insert("EpisodeUserName", userName);
     tokens.insert("EpisodeUserName.createdBy", tkTr(Trans::Constants::CREATED_BY_1).arg(userName));
     tokens.insert("EpisodePriority", form->itemData()->data(Form::IFormItemData::ID_Priority));

@@ -23,6 +23,14 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+    <updateversion from="0.8.2" to="0.8.4">
+      <text lang="fr">
+      Ajout de masques d'exportation et d'impression
+      </text>
+      <text lang="en">
+      Adding exporting/printing masks
+      </text>
+    </updateversion>
     <updateversion from="0.8.0" to="0.8.2">
       <text lang="fr">
       Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
@@ -84,6 +92,9 @@
       <label lang="fr">Traitement chronique</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/drugs_chronic_mask.html</file>
+      <file type="htmlexportmask">./html/xx/drugs_chronic_mask.html</file>
+
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Long-term medication</label>
         <label lang="fr">Traitement chronique</label>
@@ -102,6 +113,9 @@
       <label lang="xx">Allergies</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/drugs_allergies_mask.html</file>
+      <file type="htmlexportmask">./html/xx/drugs_allergies_mask.html</file>
+
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
@@ -131,6 +145,8 @@
       <label lang="de">Verschreibungen</label>
       <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/textual_prescription_mask.html</file>
+      <file type="htmlexportmask">./html/xx/textual_prescription_mask.html</file>
 
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
@@ -149,6 +165,9 @@
       <label lang="de">Medikamentöse Verschreibungen</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/prescription_drugs_mask.html</file>
+      <file type="htmlexportmask">./html/xx/prescription_drugs_mask.html</file>
+
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
@@ -163,7 +182,7 @@
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
     <label lang="de">CIM10-Kodierung</label>
-  <Item type="icd" name="GP::Basic::ICD10::Content">
+    <Item type="icd" name="GP::Basic::ICD10::Content">
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
       <label lang="de">CIM10-Kodierung</label>

@@ -1333,6 +1333,8 @@ QLocale::Country countryIsoToCountry(const QString &country) {
  */
 QString htmlBodyContent(const QString &fullHtml)
 {
+    if (fullHtml.isEmpty())
+        return QString::null;
     // Catch body tag
     int beg = fullHtml.indexOf("<body");
     if (beg == -1)
@@ -1358,6 +1360,8 @@ QString htmlBodyContent(const QString &fullHtml)
 */
 QString htmlTakeAllCssContent(QString &fullHtml)
 {
+    if (fullHtml.isEmpty())
+        return QString::null;
     QString css;
     typedef QPair<int,int> pairs;
     QList<pairs> removalIndexes; // begin, end
@@ -1393,11 +1397,35 @@ QString htmlTakeAllCssContent(QString &fullHtml)
 /** Replace all <p> </p> HTML tag with <div></div> */
 QString htmlReplaceParagraphWithDiv(const QString &fullHtml)
 {
+    if (fullHtml.isEmpty())
+        return QString::null;
     QString r = fullHtml;
     r = r.replace("<p>", "<div>");
     r = r.replace("<p ", "<div ");
     r = r.replace("</p>", "</div>");
     return r;
+}
+
+/**
+ * Removes all links tags, but not the content of the link, in an HTML content \e fullHtml.
+ * \code
+ *   <a *>this is not removed</a>  -> this is not removed
+ * \endcode
+ */
+QString htmlRemoveLinkTags(const QString &fullHtml)
+{
+    QString html = fullHtml;
+    int begin = html.indexOf("<a ", 0, Qt::CaseInsensitive);
+    while (begin != -1) {
+        // remove the link
+        int end = html.indexOf(">", begin);
+        if (end != -1) {
+            html = html.remove(begin, end-begin+1);
+        }
+        begin = html.indexOf("<a ", begin, Qt::CaseInsensitive);
+    }
+    html = html.remove("</a>", Qt::CaseInsensitive);
+    return html;
 }
 
 /** \brief Return the CSS style for a font. **/
@@ -1541,6 +1569,8 @@ QString toHtmlAccent(const QString &html)
 /** Capitalize the first letter of a string */
 QString firstLetterUpperCase(const QString &s)
 {
+    if (s.isEmpty())
+        return QString::null;
     QString tmp = s;
     tmp[0] = tmp[0].toUpper();
     return tmp;
@@ -1549,6 +1579,8 @@ QString firstLetterUpperCase(const QString &s)
 /** Removes accent from a UTF8 only string */
 QString removeAccents(const QString &text)
 {
+    if (text.isEmpty())
+        return QString::null;
     QHash< QString, QString > accents;
     accents.insert(QString::fromUtf8("é"), "e;");
     accents.insert(QString::fromUtf8("è"), "e");
@@ -1625,6 +1657,8 @@ static inline bool isLineSplitter(const QChar &c)
 /** Split a string to multiple lines, with a max \e lineLength char per lines */
 QString lineWrapString(const QString &in, int lineLength)
 {
+    if (in.isEmpty())
+        return QString::null;
     QString tempStr = in;
     int len = in.length();
     int pos = lineLength;
@@ -1660,6 +1694,8 @@ QString lineWrapString(const QString &in, int lineLength)
 /** Indent a string of \e lineIndent spaces */
 QString indentString(const QString &in, int lineIndent)
 {
+    if (in.isEmpty())
+        return QString::null;
     QString indent;
     indent = indent.fill(' ', lineIndent);
     QString correctedIn = in;

@@ -26,7 +26,8 @@ HEADERS = pmhplugin.h \
     pmhepisodeviewer.h \
     pmhwidgetmanager.h \
     pmhcontextualwidget.h \
-    pmhpreferencespage.h
+    pmhpreferencespage.h \
+    pmhcontentexporter.h
 #    pmhmodel.h \
 #    pmhcategorydialog.h \
 #    pmhcategoryonlyproxymodel.h \
@@ -46,7 +47,8 @@ SOURCES = pmhplugin.cpp \
     pmhepisodeviewer.cpp \
     pmhwidgetmanager.cpp \
     pmhcontextualwidget.cpp \
-    pmhpreferencespage.cpp
+    pmhpreferencespage.cpp \
+    pmhcontentexporter.cpp
 #    pmhmodel.cpp \
 #    pmhcategorydialog.cpp \
 #    pmhcategoryonlyproxymodel.cpp \

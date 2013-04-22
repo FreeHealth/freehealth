@@ -46,7 +46,8 @@ class FormExporterPrivate;
 class FormExporter : public Core::IPatientDataExporter
 {
     Q_OBJECT
-    
+    friend class Form::Internal::FormExporterPrivate;
+
 public:
     explicit FormExporter(bool identityOnly, QObject *parent = 0);
     ~FormExporter();

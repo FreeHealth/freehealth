@@ -1,109 +1,397 @@
 message(***  Catching the current specs)
-aix-g++:message(aix-g++)
-aix-g++-64:message(aix-g++-64)
-aix-xlc:message(aix-xlc)
-aix-xlc-64:message(aix-xlc-64)
-blackberry-armv7le-qcc:message(blackberry-armv7le-qcc)
-blackberry-x86-qcc:message(blackberry-x86-qcc)
-cygwin-g++:message(cygwin-g++)
-darwin-g++:message(darwin-g++)
-freebsd-g++:message(freebsd-g++)
-freebsd-g++34:message(freebsd-g++34)
-freebsd-g++40:message(freebsd-g++40)
-freebsd-g++46:message(freebsd-g++46)
-freebsd-icc:message(freebsd-icc)
-hpux-acc:message(hpux-acc)
-hpux-acc-64:message(hpux-acc-64)
-hpux-acc-o64:message(hpux-acc-o64)
-hpux-g++:message(hpux-g++)
-hpux-g++-64:message(hpux-g++-64)
-hpuxi-acc-32:message(hpuxi-acc-32)
-hpuxi-acc-64:message(hpuxi-acc-64)
-hpuxi-g++-64:message(hpuxi-g++-64)
-hurd-g++:message(hurd-g++)
-irix-cc:message(irix-cc)
-irix-cc-64:message(irix-cc-64)
-irix-g++:message(irix-g++)
-irix-g++-64:message(irix-g++-64)
-linux-arm-gnueabi-g++:message(linux-arm-gnueabi-g++)
-linux-clang:message(linux-clang)
-linux-cxx:message(linux-cxx)
-linux-ecc-64:message(linux-ecc-64)
-linux-g++:message(linux-g++)
-linux-g++-32:message(linux-g++-32)
-linux-g++-64:message(linux-g++-64)
-linux-g++-maemo:message(linux-g++-maemo)
-linux-icc:message(linux-icc)
-linux-icc-32:message(linux-icc-32)
-linux-icc-64:message(linux-icc-64)
-linux-kcc:message(linux-kcc)
-linux-llvm:message(linux-llvm)
-linux-lsb-g++:message(linux-lsb-g++)
-linux-pgcc:message(linux-pgcc)
-lynxos-g++:message(lynxos-g++)
-macx-clang:message(macx-clang)
-macx-clang-32:message(macx-clang-32)
-macx-clang-libc++:message(macx-clang-libc++)
-macx-clang-libc++-32:message(macx-clang-libc++-32)
-macx-g++:message(macx-g++)
-macx-g++-32:message(macx-g++-32)
-macx-g++40:message(macx-g++40)
-macx-g++42:message(macx-g++42)
-macx-icc:message(macx-icc)
-macx-llvm:message(macx-llvm)
-macx-pbuilder:message(macx-pbuilder)
-macx-xcode:message(macx-xcode)
-macx-xlc:message(macx-xlc)
-netbsd-g++:message(netbsd-g++)
-openbsd-g++:message(openbsd-g++)
-qnx-armv7le-qcc:message(qnx-armv7le-qcc)
-qnx-x86-qcc:message(qnx-x86-qcc)
-sco-cc:message(sco-cc)
-sco-g++:message(sco-g++)
-solaris-cc:message(solaris-cc)
-solaris-cc-64:message(solaris-cc-64)
-solaris-cc-64-stlport:message(solaris-cc-64-stlport)
-solaris-cc-stlport:message(solaris-cc-stlport)
-solaris-g++:message(solaris-g++)
-solaris-g++-64:message(solaris-g++-64)
-symbian-abld:message(symbian-abld)
-symbian-armcc:message(symbian-armcc)
-symbian-gcce:message(symbian-gcce)
-symbian-sbsv2:message(symbian-sbsv2)
-tru64-cxx:message(tru64-cxx)
-tru64-g++:message(tru64-g++)
-unixware-cc:message(unixware-cc)
-unixware-g++:message(unixware-g++)
-win32-borland:message(win32-borland)
-win32-g++:message(win32-g++)
-win32-g++-4.6:message(win32-g++-4.6)
-win32-icc:message(win32-icc)
-win32-msvc2003:message(win32-msvc2003)
-win32-msvc2005:message(win32-msvc2005)
-win32-msvc2008:message(win32-msvc2008)
-win32-msvc2010:message(win32-msvc2010)
-win32-msvc2012:message(win32-msvc2012)
-wince50standard-armv4i-msvc2005:message(wince50standard-armv4i-msvc2005)
-wince50standard-armv4i-msvc2008:message(wince50standard-armv4i-msvc2008)
-wince50standard-mipsii-msvc2005:message(wince50standard-mipsii-msvc2005)
-wince50standard-mipsii-msvc2008:message(wince50standard-mipsii-msvc2008)
-wince50standard-mipsiv-msvc2005:message(wince50standard-mipsiv-msvc2005)
-wince50standard-mipsiv-msvc2008:message(wince50standard-mipsiv-msvc2008)
-wince50standard-sh4-msvc2005:message(wince50standard-sh4-msvc2005)
-wince50standard-sh4-msvc2008:message(wince50standard-sh4-msvc2008)
-wince50standard-x86-msvc2005:message(wince50standard-x86-msvc2005)
-wince50standard-x86-msvc2008:message(wince50standard-x86-msvc2008)
-wince60standard-armv4i-msvc2005:message(wince60standard-armv4i-msvc2005)
-wince60standard-x86-msvc2005:message(wince60standard-x86-msvc2005)
-wince70embedded-armv4i-msvc2008:message(wince70embedded-armv4i-msvc2008)
-wince70embedded-x86-msvc2008:message(wince70embedded-x86-msvc2008)
-wincewm50pocket-msvc2005:message(wincewm50pocket-msvc2005)
-wincewm50pocket-msvc2008:message(wincewm50pocket-msvc2008)
-wincewm50smart-msvc2005:message(wincewm50smart-msvc2005)
-wincewm50smart-msvc2008:message(wincewm50smart-msvc2008)
-wincewm60professional-msvc2005:message(wincewm60professional-msvc2005)
-wincewm60professional-msvc2008:message(wincewm60professional-msvc2008)
-wincewm60standard-msvc2005:message(wincewm60standard-msvc2005)
-wincewm60standard-msvc2008:message(wincewm60standard-msvc2008)
-wincewm65professional-msvc2005:message(wincewm65professional-msvc2005)
-wincewm65professional-msvc2008:message(wincewm65professional-msvc2008)
+aix-g++{
+  message(aix-g++)
+  CURRENT_SPEC=aix-g++
+}
+aix-g++-64{
+  message(aix-g++-64)
+  CURRENT_SPEC=aix-g++-64
+}
+aix-xlc{
+  message(aix-xlc)
+  CURRENT_SPEC=aix-xlc
+}
+aix-xlc-64{
+  message(aix-xlc-64)
+  CURRENT_SPEC=aix-xlc-64
+}
+blackberry-armv7le-qcc{
+  message(blackberry-armv7le-qcc)
+  CURRENT_SPEC=blackberry-armv7le-qcc
+}
+blackberry-x86-qcc{
+  message(blackberry-x86-qcc)
+  CURRENT_SPEC=blackberry-x86-qcc
+}
+cygwin-g++{
+  message(cygwin-g++)
+  CURRENT_SPEC=cygwin-g++
+}
+darwin-g++{
+  message(darwin-g++)
+  CURRENT_SPEC=darwin-g++
+}
+freebsd-g++{
+  message(freebsd-g++)
+  CURRENT_SPEC=freebsd-g++
+}
+freebsd-g++46{
+  message(freebsd-g++46)
+  CURRENT_SPEC=freebsd-g++46
+}
+freebsd-icc{
+  message(freebsd-icc)
+  CURRENT_SPEC=freebsd-icc
+}
+hpux-acc{
+  message(hpux-acc)
+  CURRENT_SPEC=hpux-acc
+}
+hpux-acc-64{
+  message(hpux-acc-64)
+  CURRENT_SPEC=hpux-acc-64
+}
+hpux-acc-o64{
+  message(hpux-acc-o64)
+  CURRENT_SPEC=hpux-acc-o64
+}
+hpux-g++{
+  message(hpux-g++)
+  CURRENT_SPEC=hpux-g++
+}
+hpux-g++-64{
+  message(hpux-g++-64)
+  CURRENT_SPEC=hpux-g++-64
+}
+hpuxi-acc-32{
+  message(hpuxi-acc-32)
+  CURRENT_SPEC=hpuxi-acc-32
+}
+hpuxi-acc-64{
+  message(hpuxi-acc-64)
+  CURRENT_SPEC=hpuxi-acc-64
+}
+hpuxi-g++-64{
+  message(hpuxi-g++-64)
+  CURRENT_SPEC=hpuxi-g++-64
+}
+hurd-g++{
+  message(hurd-g++)
+  CURRENT_SPEC=hurd-g++
+}
+irix-cc{
+  message(irix-cc)
+  CURRENT_SPEC=irix-cc
+}
+irix-cc-64{
+  message(irix-cc-64)
+  CURRENT_SPEC=irix-cc-64
+}
+irix-g++{
+  message(irix-g++)
+  CURRENT_SPEC=irix-g++
+}
+irix-g++-64{
+  message(irix-g++-64)
+  CURRENT_SPEC=irix-g++-64
+}
+linux-arm-gnueabi-g++{
+  message(linux-arm-gnueabi-g++)
+  CURRENT_SPEC=linux-arm-gnueabi-g++
+}
+linux-clang{
+  message(linux-clang)
+  CURRENT_SPEC=linux-clang
+}
+linux-cxx{
+  message(linux-cxx)
+  CURRENT_SPEC=linux-cxx
+}
+linux-g++{
+  message(linux-g++)
+  CURRENT_SPEC=linux-g++
+}
+linux-g++-32{
+  message(linux-g++-32)
+  CURRENT_SPEC=linux-g++-32
+}
+linux-g++-64{
+  message(linux-g++-64)
+  CURRENT_SPEC=linux-g++-64
+}
+linux-g++-maemo{
+  message(linux-g++-maemo)
+  CURRENT_SPEC=linux-g++-maemo
+}
+linux-icc{
+  message(linux-icc)
+  CURRENT_SPEC=linux-icc
+}
+linux-icc-32{
+  message(linux-icc-32)
+  CURRENT_SPEC=linux-icc-32
+}
+linux-icc-64{
+  message(linux-icc-64)
+  CURRENT_SPEC=linux-icc-64
+}
+linux-kcc{
+  message(linux-kcc)
+  CURRENT_SPEC=linux-kcc
+}
+linux-llvm{
+  message(linux-llvm)
+  CURRENT_SPEC=linux-llvm
+}
+linux-lsb-g++{
+  message(linux-lsb-g++)
+  CURRENT_SPEC=linux-lsb-g++
+}
+linux-pgcc{
+  message(linux-pgcc)
+  CURRENT_SPEC=linux-pgcc
+}
+lynxos-g++{
+  message(lynxos-g++)
+  CURRENT_SPEC=lynxos-g++
+}
+macx-clang{
+  message(macx-clang)
+  CURRENT_SPEC=macx-clang
+}
+macx-clang-32{
+  message(macx-clang-32)
+  CURRENT_SPEC=macx-clang-32
+}
+macx-clang-libc++{
+  message(macx-clang-libc++)
+  CURRENT_SPEC=macx-clang-libc++
+}
+macx-clang-libc++-32{
+  message(macx-clang-libc++-32)
+  CURRENT_SPEC=macx-clang-libc++-32
+}
+macx-g++{
+  message(macx-g++)
+  CURRENT_SPEC=macx-g++
+}
+macx-g++-32{
+  message(macx-g++-32)
+  CURRENT_SPEC=macx-g++-32
+}
+macx-g++40{
+  message(macx-g++40)
+  CURRENT_SPEC=macx-g++40
+}
+macx-g++42{
+  message(macx-g++42)
+  CURRENT_SPEC=macx-g++42
+}
+macx-icc{
+  message(macx-icc)
+  CURRENT_SPEC=macx-icc
+}
+macx-llvm{
+  message(macx-llvm)
+  CURRENT_SPEC=macx-llvm
+}
+macx-xcode{
+  message(macx-xcode)
+  CURRENT_SPEC=macx-xcode
+}
+modules{
+  message(modules)
+  CURRENT_SPEC=modules
+}
+netbsd-g++{
+  message(netbsd-g++)
+  CURRENT_SPEC=netbsd-g++
+}
+openbsd-g++{
+  message(openbsd-g++)
+  CURRENT_SPEC=openbsd-g++
+}
+qconfig.pri{
+  message(qconfig.pri)
+  CURRENT_SPEC=qconfig.pri
+}
+qnx-armv7le-qcc{
+  message(qnx-armv7le-qcc)
+  CURRENT_SPEC=qnx-armv7le-qcc
+}
+qnx-x86-qcc{
+  message(qnx-x86-qcc)
+  CURRENT_SPEC=qnx-x86-qcc
+}
+sco-cc{
+  message(sco-cc)
+  CURRENT_SPEC=sco-cc
+}
+sco-g++{
+  message(sco-g++)
+  CURRENT_SPEC=sco-g++
+}
+solaris-cc{
+  message(solaris-cc)
+  CURRENT_SPEC=solaris-cc
+}
+solaris-cc-64{
+  message(solaris-cc-64)
+  CURRENT_SPEC=solaris-cc-64
+}
+solaris-cc-64-stlport{
+  message(solaris-cc-64-stlport)
+  CURRENT_SPEC=solaris-cc-64-stlport
+}
+solaris-cc-stlport{
+  message(solaris-cc-stlport)
+  CURRENT_SPEC=solaris-cc-stlport
+}
+solaris-g++{
+  message(solaris-g++)
+  CURRENT_SPEC=solaris-g++
+}
+solaris-g++-64{
+  message(solaris-g++-64)
+  CURRENT_SPEC=solaris-g++-64
+}
+tru64-cxx{
+  message(tru64-cxx)
+  CURRENT_SPEC=tru64-cxx
+}
+tru64-g++{
+  message(tru64-g++)
+  CURRENT_SPEC=tru64-g++
+}
+unixware-cc{
+  message(unixware-cc)
+  CURRENT_SPEC=unixware-cc
+}
+unixware-g++{
+  message(unixware-g++)
+  CURRENT_SPEC=unixware-g++
+}
+unsupported{
+  message(unsupported)
+  CURRENT_SPEC=unsupported
+}
+win32-g++{
+  message(win32-g++)
+  CURRENT_SPEC=win32-g++
+}
+win32-icc{
+  message(win32-icc)
+  CURRENT_SPEC=win32-icc
+}
+win32-msvc2005{
+  message(win32-msvc2005)
+  CURRENT_SPEC=win32-msvc2005
+}
+win32-msvc2008{
+  message(win32-msvc2008)
+  CURRENT_SPEC=win32-msvc2008
+}
+win32-msvc2010{
+  message(win32-msvc2010)
+  CURRENT_SPEC=win32-msvc2010
+}
+win32-msvc2012{
+  message(win32-msvc2012)
+  CURRENT_SPEC=win32-msvc2012
+}
+wince50standard-armv4i-msvc2005{
+  message(wince50standard-armv4i-msvc2005)
+  CURRENT_SPEC=wince50standard-armv4i-msvc2005
+}
+wince50standard-armv4i-msvc2008{
+  message(wince50standard-armv4i-msvc2008)
+  CURRENT_SPEC=wince50standard-armv4i-msvc2008
+}
+wince50standard-mipsii-msvc2005{
+  message(wince50standard-mipsii-msvc2005)
+  CURRENT_SPEC=wince50standard-mipsii-msvc2005
+}
+wince50standard-mipsii-msvc2008{
+  message(wince50standard-mipsii-msvc2008)
+  CURRENT_SPEC=wince50standard-mipsii-msvc2008
+}
+wince50standard-mipsiv-msvc2005{
+  message(wince50standard-mipsiv-msvc2005)
+  CURRENT_SPEC=wince50standard-mipsiv-msvc2005
+}
+wince50standard-mipsiv-msvc2008{
+  message(wince50standard-mipsiv-msvc2008)
+  CURRENT_SPEC=wince50standard-mipsiv-msvc2008
+}
+wince50standard-sh4-msvc2005{
+  message(wince50standard-sh4-msvc2005)
+  CURRENT_SPEC=wince50standard-sh4-msvc2005
+}
+wince50standard-sh4-msvc2008{
+  message(wince50standard-sh4-msvc2008)
+  CURRENT_SPEC=wince50standard-sh4-msvc2008
+}
+wince50standard-x86-msvc2005{
+  message(wince50standard-x86-msvc2005)
+  CURRENT_SPEC=wince50standard-x86-msvc2005
+}
+wince50standard-x86-msvc2008{
+  message(wince50standard-x86-msvc2008)
+  CURRENT_SPEC=wince50standard-x86-msvc2008
+}
+wince60standard-armv4i-msvc2005{
+  message(wince60standard-armv4i-msvc2005)
+  CURRENT_SPEC=wince60standard-armv4i-msvc2005
+}
+wince60standard-x86-msvc2005{
+  message(wince60standard-x86-msvc2005)
+  CURRENT_SPEC=wince60standard-x86-msvc2005
+}
+wince70embedded-armv4i-msvc2008{
+  message(wince70embedded-armv4i-msvc2008)
+  CURRENT_SPEC=wince70embedded-armv4i-msvc2008
+}
+wince70embedded-x86-msvc2008{
+  message(wince70embedded-x86-msvc2008)
+  CURRENT_SPEC=wince70embedded-x86-msvc2008
+}
+wincewm50pocket-msvc2005{
+  message(wincewm50pocket-msvc2005)
+  CURRENT_SPEC=wincewm50pocket-msvc2005
+}
+wincewm50pocket-msvc2008{
+  message(wincewm50pocket-msvc2008)
+  CURRENT_SPEC=wincewm50pocket-msvc2008
+}
+wincewm50smart-msvc2005{
+  message(wincewm50smart-msvc2005)
+  CURRENT_SPEC=wincewm50smart-msvc2005
+}
+wincewm50smart-msvc2008{
+  message(wincewm50smart-msvc2008)
+  CURRENT_SPEC=wincewm50smart-msvc2008
+}
+wincewm60professional-msvc2005{
+  message(wincewm60professional-msvc2005)
+  CURRENT_SPEC=wincewm60professional-msvc2005
+}
+wincewm60professional-msvc2008{
+  message(wincewm60professional-msvc2008)
+  CURRENT_SPEC=wincewm60professional-msvc2008
+}
+wincewm60standard-msvc2005{
+  message(wincewm60standard-msvc2005)
+  CURRENT_SPEC=wincewm60standard-msvc2005
+}
+wincewm60standard-msvc2008{
+  message(wincewm60standard-msvc2008)
+  CURRENT_SPEC=wincewm60standard-msvc2008
+}
+wincewm65professional-msvc2005{
+  message(wincewm65professional-msvc2005)
+  CURRENT_SPEC=wincewm65professional-msvc2005
+}
+wincewm65professional-msvc2008{
+  message(wincewm65professional-msvc2008)
+  CURRENT_SPEC=wincewm65professional-msvc2008
+}

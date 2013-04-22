@@ -40,9 +40,9 @@ QT_END_NAMESPACE
 
 /**
  * \file idocumentprinter.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.2
- * \date 13 July 2010
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 22 Apr 2013
 */
 
 
@@ -94,6 +94,8 @@ public:
     virtual bool print(const QTextDocument &text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
     virtual bool print(QTextDocument *text, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
     virtual bool print(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
+
+    virtual bool toPdf(const QString &html, const QString &absOutputFilePath, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
 
     virtual bool printPreview(const QString &html, const int papers = Papers_Generic_User, bool printDuplicata = false) const = 0;
 

@@ -36,9 +36,11 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/idocumentprinter.h>
 #include <coreplugin/ipatientdataexporter.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constants.h>
 #include <extensionsystem/pluginmanager.h>
@@ -46,6 +48,10 @@
 #include "ui_patientdataextractordialog.h"
 
 #include <QStringListModel>
+#include <QProgressDialog>
+#include <QDir>
+#include <QPrinter>
+#include <QTextDocument>
 
 #include <QDebug>
 
@@ -57,6 +63,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace Patients {
 namespace Internal {
@@ -103,9 +110,6 @@ PatientDataExtractorDialog::PatientDataExtractorDialog(QWidget *parent) :
 //    d->_exporter = new Form::FormExporter(this);
     d->_patientModel = new PatientModel(this);
     d->_selectedModel = new QStringListModel(this);
-
-    setWindowTitle(tr("Patient data extractor"));
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
 }
 
 /*! Destructor of the Patients::Internal::PatientDataExtractorDialog class */
@@ -123,6 +127,8 @@ bool PatientDataExtractorDialog::initialize()
         return true;
 
     d->ui->setupUi(this);
+    setWindowTitle(tr("Patient data extractor"));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
     d->_exportButton = d->ui->buttonBox->addButton(tr("Export..."), QDialogButtonBox::ActionRole);
     connect(d->_exportButton, SIGNAL(clicked()), this, SLOT(onExportRequested()));
 
@@ -253,7 +259,7 @@ void PatientDataExtractorDialog::onExportRequested()
     // Prepare patient extraction job
     QList<Core::PatientDataExtraction *> result;
     Core::PatientDataExporterJob job;
-    job.setExportGroupmentType(Core::PatientDataExporterJob::FormOrderedExportation);
+    job.setExportGroupmentType(Core::PatientDataExporterJob::DateOrderedExportation);
 
     // Get patient uids to extract
     QStringList uids;
@@ -270,18 +276,90 @@ void PatientDataExtractorDialog::onExportRequested()
     // Store current patient uid
     QString current = patient()->uuid();
 
-    // Start extraction patient by patient
-    foreach(const QString &uid, uids) {
-        job.setPatientUid(uid);
-        patient()->setCurrentPatientUid(uid);
-        result << extractAll(extractors, job);
-        Utils::Log::logTimeElapsed(chr, objectName(), QString("Extracted patient uid: %1").arg(uid));
+    // Show a progress dialog
+    QProgressDialog dlg(this);
+    dlg.setWindowTitle(windowTitle());
+    dlg.setWindowIcon(windowIcon());
+    dlg.setLabelText(tr("Start patient file extraction"));
+    dlg.setAutoClose(false);
+    dlg.setRange(0, 0);
+    dlg.show();
+    Utils::centerWidget(&dlg, this);
+
+    // Connect all extractor signals to the progress dialog
+    foreach(Core::IPatientDataExporter *e, extractors) {
+        connect(e, SIGNAL(extractionProgressRangeChanged(int,int)), &dlg, SLOT(setRange(int,int)));
+        connect(e, SIGNAL(extractionProgressValueChanged(int)), &dlg, SLOT(setValue(int)));
+        connect(e, SIGNAL(extractionProgressMessageChanged(QString)), &dlg, SLOT(setLabelText(QString)));
     }
 
+    // Start extraction patient by patient
+    foreach(const QString &uid, uids) {
+        // Progress cosmetics
+        dlg.setLabelText(tr("Setting patient uuid %1 as current patient").arg(uid));
+        Utils::centerWidget(&dlg, this);
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+        // Define current patient for extraction
+        job.setPatientUid(uid);
+        patient()->setCurrentPatientUid(uid);
+
+        // Define output path
+        QString path = patient()->data(Core::IPatient::FullName).toString();
+        path = Utils::removeAccents(path);
+        path = path.replace(" ", "_");
+        path = QString("%1/%2").arg(d->ui->pathChooser->path()).arg(path);
+        if (!QDir().mkpath(path))
+            LOG_ERROR("Unable to create path: " + path);
+        job.setOutputAbsolutePath(path);
+
+        // Run extractors
+        result << extractAll(extractors, job);
+        Utils::Log::logTimeElapsed(chr, objectName(), QString("Extracted patient uid: %1").arg(uid));
+
+        // According to params -> recreate one big HTML file
+        QString out, outCss;
+        foreach(Core::PatientDataExtraction *exp, result) {
+            // Append all secondary files into the master
+            QString master;
+            master = Utils::readTextFile(exp->masterAbsoluteFilePath(), Utils::DontWarnUser);
+            if (master.isEmpty())
+                continue;
+            QString masterCss;
+            masterCss = Utils::htmlTakeAllCssContent(master);
+            master = Utils::htmlBodyContent(master);
+            foreach(const QString &sec, exp->secondaryFiles()) {
+                QString second = Utils::readTextFile(sec, Utils::DontWarnUser);
+                if (second.isEmpty())
+                    continue;
+                QString secCss;
+                secCss = Utils::htmlTakeAllCssContent(second);
+                master += Utils::htmlBodyContent(second);
+                masterCss += secCss;
+            }
+            out += master;
+            outCss += masterCss;
+        }
+
+        // According to params -> transform to one big HTML file
+        if (d->ui->outputFormat->currentText().contains("HTML", Qt::CaseInsensitive)) {
+            if (!Utils::saveStringToFile(outCss + out, job.outputAbsolutePath() + "/export.html"))
+                LOG_ERROR("Unable to save file");
+        }
+
+        // According to params -> transform to PDF file
+        if (d->ui->outputFormat->currentText().contains("PDF", Qt::CaseInsensitive)) {
+            printer()->toPdf(outCss+out, job.outputAbsolutePath() + "/export.pdf");
+        }
+    }
+
+
     // Reset current patient
+    dlg.setLabelText(tr("Setting patient uuid %1 as current patient").arg(current));
+    Utils::centerWidget(&dlg, this);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     patient()->setCurrentPatientUid(current);
 
-    qWarning() << result.count();
     qDeleteAll(result);
 
     Utils::Log::logTimeElapsed(chrGlobal, objectName(), QString("Patient data extraction done"));

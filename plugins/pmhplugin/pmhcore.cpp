@@ -27,9 +27,12 @@
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
 #include "pmhwidgetmanager.h"
+#include "pmhcontentexporter.h"
 
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
 
@@ -37,6 +40,7 @@ using namespace PMH;
 using namespace Internal;
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 PmhCore *PmhCore::m_Instance = 0;
 
@@ -53,13 +57,13 @@ PmhCore *PmhCore::instance(QObject *parent)
 
 namespace PMH {
 namespace Internal {
-
 class PmhCorePrivate
 {
 public:
     PmhCorePrivate() :
         m_PmhCategoryModel(0),
-        m_PmhWidgetManager(0)
+        m_PmhWidgetManager(0),
+        m_Exporter(0)
     {
     }
 
@@ -73,6 +77,7 @@ public:
 public:
     PmhCategoryModel *m_PmhCategoryModel;
     PmhWidgetManager *m_PmhWidgetManager;
+    PmhContentExporter *m_Exporter;
 };
 
 } // namespace Internal
@@ -83,11 +88,15 @@ PmhCore::PmhCore(QObject *parent) :
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
     d->m_PmhWidgetManager = new PmhWidgetManager(this);
+    d->m_Exporter = new PmhContentExporter(this);
+    d->m_Exporter->initialize();
+    pluginManager()->addObject(d->m_Exporter);
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 PmhCore::~PmhCore()
 {
+    pluginManager()->removeObject(d->m_Exporter);
     if (d)
         delete d;
     d = 0;
