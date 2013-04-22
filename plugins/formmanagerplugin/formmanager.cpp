@@ -805,6 +805,8 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     QString userName = form->itemData()->data(Form::IFormItemData::ID_UserName).toString();
     if (userName == tkTr(Trans::Constants::YOU))
         userName = user()->value(Core::IUser::FullName).toString();
+    else if (userName.isEmpty())
+        userName = qApp->applicationName();
     tokens.insert("EpisodeUserName", userName);
     tokens.insert("EpisodeUserName.createdBy", tkTr(Trans::Constants::CREATED_BY_1).arg(userName));
     tokens.insert("EpisodePriority", form->itemData()->data(Form::IFormItemData::ID_Priority));
