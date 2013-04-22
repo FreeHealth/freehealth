@@ -34,9 +34,9 @@ QT_END_NAMESPACE
 
 /**
  * \file documentprinter.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 20 June 2010
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 22 Apr 2013
 */
 
 
