@@ -150,6 +150,11 @@
           <string>PDF</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>HTML+PDF</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
