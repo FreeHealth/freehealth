@@ -92,6 +92,8 @@
       <label lang="fr">Traitement chronique</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/drugs_chronic_mask.html</file>
+      <file type="htmlexportmask">./html/xx/drugs_chronic_mask.html</file>
 
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Long-term medication</label>
@@ -111,6 +113,9 @@
       <label lang="xx">Allergies</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/drugs_allergies_mask.html</file>
+      <file type="htmlexportmask">./html/xx/drugs_allergies_mask.html</file>
+
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
@@ -160,8 +165,8 @@
       <label lang="de">Medikamentöse Verschreibungen</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
-      <file type="htmlprintmask">./html/xx/drugs_chronic_mask.html</file>
-      <file type="htmlexportmask">./html/xx/drugs_chronic_mask.html</file>
+      <file type="htmlprintmask">./html/xx/prescription_drugs_mask.html</file>
+      <file type="htmlexportmask">./html/xx/prescription_drugs_mask.html</file>
 
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
