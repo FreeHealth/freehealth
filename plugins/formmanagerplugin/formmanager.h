@@ -117,6 +117,10 @@ public:
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
     QString extractFormFileToTmpPath(const QString &formUid, const QString &fileName);
 
+    // Form HTML ouput
+    QString formPrintHtmlOutput(Form::FormMain *formMain);
+    QString formExportHtmlOutput(Form::FormMain *formMain);
+
     // Link with tokens
     QHash<QString, QVariant> formToTokens(Form::FormMain *form) const;
 

@@ -1183,12 +1183,13 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
     } else if (isForm(index)) {
         // populate form
         activateFormEpisode(index);
-        // get the synthesis
-        html = QString("<p style=\"margin:0px 0px 0px %1px\">%2<br />")
-                .arg(indent*10)
-                .arg(formForIndex(index)->printableHtml());
-        // clear form
         Form::FormMain *form = formForIndex(index);
+        // get print mask
+        html = formManager().formPrintHtmlOutput(form);
+        QString css = Utils::htmlTakeAllCssContent(html);
+        html = Utils::htmlBodyContent(html);
+        html.prepend(css);
+        // clear form
         if (form)
             form->clear();
     }
