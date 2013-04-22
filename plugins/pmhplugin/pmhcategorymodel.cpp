@@ -56,6 +56,7 @@
 #include <categoryplugin/categorycore.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QSqlQuery>
@@ -217,7 +218,7 @@ class PmhCategoryModelPrivate
 public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
         _rootItem(0),
-        _synthesis(0),
+        _overview(0),
         q(parent)
     {
         clearTree();
@@ -407,17 +408,17 @@ public:
             _categoryTree.clear();
             // Get all categories from database
             _categoryToItem.clear();
-            if (!_synthesis) {
-                _synthesis = new Category::CategoryItem;
-                _synthesis->setData(Category::CategoryItem::DbOnly_Id, -2);
-                _synthesis->setData(Category::CategoryItem::DbOnly_LabelId, -1);
-                _synthesis->setData(Category::CategoryItem::DbOnly_ParentId, -3);
-                _synthesis->setData(Category::CategoryItem::DbOnly_Mime, -1);
-                _synthesis->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTOVERVIEW);
-                _synthesis->setData(Category::CategoryItem::SortId, -1);
-                _synthesis->setLabel("Synthesis", Trans::Constants::ALL_LANGUAGE);
+            if (!_overview) {
+                _overview = new Category::CategoryItem;
+                _overview->setData(Category::CategoryItem::DbOnly_Id, -2);
+                _overview->setData(Category::CategoryItem::DbOnly_LabelId, -1);
+                _overview->setData(Category::CategoryItem::DbOnly_ParentId, -3);
+                _overview->setData(Category::CategoryItem::DbOnly_Mime, -1);
+                _overview->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTOVERVIEW);
+                _overview->setData(Category::CategoryItem::SortId, -1);
+                _overview->setLabel(tkTr(Trans::Constants::OVERVIEW), Trans::Constants::ALL_LANGUAGE);
             }
-            _categoryTree << _synthesis;
+            _categoryTree << _overview;
             _categoryTree << base()->getPmhCategory(_rootUid);
         }
         // Recreate the category tree
@@ -450,7 +451,7 @@ public:
     QHash<Category::CategoryItem *, TreeItem *> _categoryToItem;
     QHash<PmhData *, TreeItem *> _pmhToItems;
     QMultiHash<Category::CategoryItem *, PmhData *> _categoryToMultiPmh;
-    Category::CategoryItem *_synthesis;
+    Category::CategoryItem *_overview;
     QString _htmlSynthesis;
     QString _rootUid;
 
@@ -615,7 +616,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
         {
             if (index.column()==Label) {
                 if (it->isCategory()) {
-                    if (it->pmhCategory() == d->_synthesis)
+                    if (it->pmhCategory() == d->_overview)
                         return tkTr(Trans::Constants::PATIENT_OVERVIEW);
                     else
                         return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
@@ -986,7 +987,7 @@ bool PmhCategoryModel::isSynthesis(const QModelIndex &item) const
         return false; // root is a category
     TreeItem *it = d->getItem(item);
     if (it->isCategory())
-        return (it->pmhCategory() == d->_synthesis);
+        return (it->pmhCategory() == d->_overview);
     return false;
 }
 
