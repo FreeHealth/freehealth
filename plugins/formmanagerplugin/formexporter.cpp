@@ -297,7 +297,6 @@ bool FormExporter::isBusy() const
     return false;
 }
 
-#include <QTextBrowser>
 Core::PatientDataExtraction *FormExporter::startExportationJob(const Core::PatientDataExporterJob &job)
 {
     Core::PatientDataExtraction *result = 0;
@@ -335,7 +334,7 @@ Core::PatientDataExtraction *FormExporter::startExportationJob(const Core::Patie
             .arg(d->_identityOnly ? "identity_" : "forms_")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
     if (!Utils::saveStringToFile(output, fileName, Utils::Overwrite, Utils::DontWarnUser)) {
-        LOG_ERROR("Unable to save file");
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED).arg(fileName));
         result->addErrorMessage(tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED).arg(fileName));
     } else {
         result->setMasterAbsoluteFilePath(fileName);
