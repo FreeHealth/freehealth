@@ -42,6 +42,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -157,13 +158,11 @@ public:
                 Utils::replaceTokens(tmpMask, formManager().formToTokens(form));
                 patient()->replaceTokens(tmpMask);
                 user()->replaceTokens(tmpMask);
-                qWarning() << "\n\n" << form->spec()->label() << "\n" << tmpMask;
                 formExport.episodes.insertMulti(dt, Utils::htmlBodyContent(tmpMask));
             } else {
                 // Get the default HTML output
                 QString tmp = form->printableHtml(true);
                 Utils::htmlTakeAllCssContent(tmp);
-                qWarning() << "\n\n" << form->spec()->label() << "\n" << tmp;
                 formExport.episodes.insertMulti(dt, Utils::htmlBodyContent(tmp));
             }
         }
@@ -178,16 +177,22 @@ public:
             Form::FormMain *form = formManager().identityRootForm();
             if (form)
                 formExports << formExportation(form, patientUid);
+            Q_EMIT q->extractionProgressValueChanged(1);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         } else {
             // Get all current forms
             QList<Form::FormMain*> forms = formManager().allDuplicatesEmptyRootForms();
 
             // Export all FormMain episodes
+            int n = 0;
             foreach(Form::FormMain *emptyRoot, forms) {
                 foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
                     if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
                         continue;
                     formExports << formExportation(form, patientUid);
+                    ++n;
+                    Q_EMIT q->extractionProgressValueChanged(n);
+                    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
                 }
             }
         }
@@ -197,9 +202,6 @@ public:
 
     QString constructOutputContent(const Core::PatientDataExporterJob &job, const QList<FormExportation> &formExports)
     {
-
-        qWarning() << "----------------- OUTPUT" << formExports.count();
-
         // Join all css style sheets
         QString html;
         QString css;
@@ -217,7 +219,6 @@ public:
             }
 
             // Construct HTML
-            qWarning() << "-------- episodecount" << allEpisodes.values().count();
             foreach(const QString &val, allEpisodes.values()) {
                 html += val;
             }
@@ -239,10 +240,6 @@ public:
             ++begin;
             html.insert(begin, css);
         }
-
-        Utils::saveStringToFile(html, QString("/Users/eric/Desktop/patient_%1%2.html")
-                                .arg(_identityOnly ? "ident_" : "forms_")
-                                .arg(patient()->uuid()));
         return html;
     }
 
@@ -303,26 +300,51 @@ bool FormExporter::isBusy() const
 #include <QTextBrowser>
 Core::PatientDataExtraction *FormExporter::startExportationJob(const Core::PatientDataExporterJob &job)
 {
+    Core::PatientDataExtraction *result = 0;
     // Patient to export must be the current patient
     if (job.patientUids().count()==0)
-        return 0;
+        return result;
 
     if (job.patientUids().at(0).isEmpty())
-        return 0;
+        return result;
 
     // Patient to extract must be the current one
     if (job.patientUids().at(0) != patient()->uuid()) {
         LOG_ERROR("Extracting wrong patient");
-        return 0;
+        return result;
     }
 
-    Core::PatientDataExtraction *result = 0;
-
+    // Log chrono & emits progress signals
+    QTime chr;
+    chr.start();
     int count = d->countEpisodes();
-    qWarning() << "EXPORTATION" << patient()->uuid() << "EPISODE COUNT:" << count;
+    QString msg = tr("Start exportation for patient %1. %2 recorded episodes")
+            .arg(patient()->uuid()).arg(count);
+    LOG(msg);
+    Q_EMIT extractionProgressMessageChanged(msg);
+    Q_EMIT extractionProgressRangeChanged(0, count + 1);
+    Q_EMIT extractionProgressValueChanged(0);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
+    // Extract form episodes & generate HTML output file
+    result = new Core::PatientDataExtraction;
     QList<FormExportation> formExports = d->extractFormEpisodes(job, job.patientUids().at(0));
-    d->constructOutputContent(job, formExports);
+    QString output = d->constructOutputContent(job, formExports);
+    QString fileName = QString("%1/%2_%3.html")
+            .arg(job.outputAbsolutePath())
+            .arg(d->_identityOnly ? "identity_" : "forms_")
+            .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
+    if (!Utils::saveStringToFile(output, fileName, Utils::Overwrite, Utils::DontWarnUser)) {
+        LOG_ERROR("Unable to save file");
+        result->addErrorMessage(tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED).arg(fileName));
+    } else {
+        result->setMasterAbsoluteFilePath(fileName);
+    }
+
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    msg = tr("Exportation done in %1 ms").arg(chr.elapsed());
+    Q_EMIT extractionProgressMessageChanged(msg);
+    LOG(msg);
 
     return result;
 }
