@@ -376,7 +376,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setObjectName("aGeneralPlugsPrefs");
         a->setIcon(theme()->icon(Constants::ICONPLUGIN));
         cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
-        cmd->setDefaultKeySequence(QKeySequence::SelectAll);
+        // cmd->setDefaultKeySequence(QKeySequence::SelectAll);
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
         menu->addAction(cmd, group);
     }
@@ -715,8 +715,6 @@ void MainWindowActionHandler::createFileActions(int actions)
 {
     if (!actions)
         return;
-
-//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
     Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *mfile = actionManager()->actionContainer(Constants::M_FILE);
     mfile->setTranslations(Trans::Constants::M_FILE_TEXT);
@@ -936,7 +934,6 @@ void MainWindowActionHandler::createPatientsActions(int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
     Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_PATIENTS);
     Q_ASSERT(menu);
