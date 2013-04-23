@@ -1,14 +1,14 @@
-<FreeDiams_In version="0.7.2">
+<FreeDiams_In version="0.8.4">
   <ConfigFile value="../../../../../global_resources/config.ini"/>
   <DrugsDatabase uid="FR-AFSSAPS"/>
   <EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
-  <ExchangeOut value="../../../../../global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml" format="xml"/>
+  <ExchangeOut value="../../../../../global_resources/textfiles/freediamstest/prescription-0.8.4.xml" format="xml"/>
   <Patient>
     <Identity lastnames="KIRK" firstnames="James Tiberius" uid="EMR Patient's UID" dob="1960/12/01" gender="M"/>
     <Creatinine value="12" unit="mg/l"/>
     <CreatinineClearance value="100" unit="ml/min"/>
-    <Weight value="70" unit="kg" />
-    <Height value="170" unit="cm"/>
+    <WeightInGrams value="70" />
+    <HeightInCentimeters value="170"/>
 
     <InnAllergies value=""/>
     <ATCAllergies value="A02BC01;D10AD02;V03A;B01B;A02BX;H01AA"/>
