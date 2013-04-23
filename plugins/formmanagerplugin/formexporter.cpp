@@ -170,7 +170,7 @@ public:
         return formExport;
     }
 
-    QList<FormExportation> extractFormEpisodes(const Core::PatientDataExporterJob &job, const QString &patientUid)
+    QList<FormExportation> extractFormEpisodes(const QString &patientUid)
     {
         QList<FormExportation> formExports;
 
@@ -187,6 +187,9 @@ public:
             // Export all FormMain episodes
             int n = 0;
             foreach(Form::FormMain *emptyRoot, forms) {
+                if (emptyRoot->modeUniqueName() != Core::Constants::MODE_PATIENT_FILE
+                        && emptyRoot->modeUniqueName() != Core::Constants::MODE_PATIENT_DRUGS)
+                    continue;
                 foreach(Form::FormMain *form, emptyRoot->flattenedFormMainChildren()) {
                     if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
                         continue;
@@ -328,7 +331,7 @@ Core::PatientDataExtraction *FormExporter::startExportationJob(const Core::Patie
 
     // Extract form episodes & generate HTML output file
     result = new Core::PatientDataExtraction;
-    QList<FormExportation> formExports = d->extractFormEpisodes(job, job.patientUids().at(0));
+    QList<FormExportation> formExports = d->extractFormEpisodes(job.patientUids().at(0));
     QString output = d->constructOutputContent(job, formExports);
     QString fileName = QString("%1/%2_%3.html")
             .arg(job.outputAbsolutePath())
