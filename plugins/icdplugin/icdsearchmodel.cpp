@@ -55,10 +55,9 @@ namespace Internal {
 class IcdSearchModelPrivate
 {
 public:
-    IcdSearchModelPrivate(IcdSearchModel *parent) :
+    IcdSearchModelPrivate(IcdSearchModel */*parent*/) :
         m_IcdMaster(0),
-        m_SearchMode(IcdSearchModel::SearchByLabel),
-        q(parent)
+        m_SearchMode(IcdSearchModel::SearchByLabel) //,q(parent)
     {
         // Master -> valid=1, level=4, code like '%search%'
         // Libelle -> XX_OMS like 'search', valid=1
@@ -120,7 +119,7 @@ public:
     int m_LangField;
 
 private:
-    IcdSearchModel *q;
+//    IcdSearchModel *q;
 };
 
 
