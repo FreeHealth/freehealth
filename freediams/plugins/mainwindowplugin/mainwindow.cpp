@@ -140,6 +140,7 @@ public:
     bool readExchangeFile(const QString &msg)
     {
         QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
+        LOG_FOR(q, "Reading exchange out prescription file: " + exfile);
         if (!exfile.isEmpty()) {
             messageSplash(msg);
             if (QFileInfo(exfile).isRelative())
@@ -177,10 +178,11 @@ public:
         m_Mapper->setModel(patient());
         m_Mapper->addMapping(q->m_ui->patientName, Core::IPatient::UsualName);
         m_Mapper->addMapping(q->m_ui->patientFirstname, Core::IPatient::Firstname);
-        m_Mapper->addMapping(q->m_ui->patientSize, Core::IPatient::Height);
-        m_Mapper->addMapping(q->m_ui->sizeUnit, Core::IPatient::HeightUnit);
-        m_Mapper->addMapping(q->m_ui->patientWeight, Core::IPatient::Weight);
-        m_Mapper->addMapping(q->m_ui->weightUnit, Core::IPatient::WeightUnit);
+        // TODO: manage weight and height
+//        m_Mapper->addMapping(q->m_ui->patientSize, Core::IPatient::Height);
+//        m_Mapper->addMapping(q->m_ui->sizeUnit, Core::IPatient::HeightUnit);
+//        m_Mapper->addMapping(q->m_ui->patientWeight, Core::IPatient::Weight);
+//        m_Mapper->addMapping(q->m_ui->weightUnit, Core::IPatient::WeightUnit);
         m_Mapper->addMapping(q->m_ui->sexCombo, Core::IPatient::GenderIndex);
         m_Mapper->addMapping(q->m_ui->patientCreatinin, Core::IPatient::Creatinine);
         m_Mapper->addMapping(q->m_ui->creatinineUnit, Core::IPatient::CreatinineUnit);
@@ -224,6 +226,31 @@ public:
             treeview->setFrameStyle(QFrame::NoFrame);
             treeview->setAlternatingRowColors(true);
         }
+    }
+
+    QString getXmlExtraData()
+    {
+        QString extraData = patient()->toXml();
+        Q_ASSERT(printer());
+        if (printer()) {
+            const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
+            foreach(const Core::PrintedDocumentTracer &t, pdfs) {
+                extraData += QString("<Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
+                        .arg(t.fileName())
+                        .arg(t.documentName())
+                        .arg(t.dateTime().toString(Qt::ISODate))
+                        .arg(t.userUid());
+            }
+        }
+        // Add EMR informations
+        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+            extraData.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+            if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
+                extraData.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
+            }
+            extraData.append("/>");
+        }
+        return extraData;
     }
 
 public:
@@ -418,7 +445,8 @@ void MainWindow::extensionsInitialized()
 
     // If needed read exchange file
     if (!d->readExchangeFile(tr("Reading exchange file..."))) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()));
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE)
+                  .arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()));
     }
 
     // Start the update checker
@@ -572,25 +600,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QString format = commandLine()->value(Core::CommandLine::CL_ExchangeOutFileFormat).toString();
         QString tmp;
 
-        // create PDF cache printed docs XML lines
-        const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
-        QString extraDatas = patient()->toXml();
-        foreach(const Core::PrintedDocumentTracer &t, pdfs) {
-            extraDatas += QString("<Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
-                           .arg(t.fileName())
-                           .arg(t.documentName())
-                           .arg(t.dateTime().toString(Qt::ISODate))
-                           .arg(t.userUid());
-        }
-
-        // Add date of creation
-        extraDatas.prepend(QString("<DateOfCreation>%1</DateOfCreation>").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+        QString extraData = d->getXmlExtraData();
 
         // Manage specific MedinTux output exchange file format
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
-            commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {
+            commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux", Qt::CaseInsensitive) == 0) {
             if (format=="html_xml" || format=="html") {
-                tmp = drugsIo().prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
                 tmp.replace("font-weight:bold;", "font-weight:600;");
                 Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
@@ -598,7 +614,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         } else {
             if (format=="html_xml" || format=="html") {
-                tmp = drugsIo().prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
                 Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
@@ -715,6 +731,7 @@ void MainWindow::togglePrecautions()
 
 void MainWindow::updateCheckerEnd(bool error)
 {
+    Q_UNUSED(error);
     // this code avoid deletion of the resizer corner of the mainwindow
     delete statusBar();
     statusBar()->hide();
@@ -804,24 +821,7 @@ bool MainWindow::saveFile()
 */
 bool MainWindow::savePrescription(const QString &fileName)
 {
-    const QList<Core::PrintedDocumentTracer> &pdfs = printer()->printedDocs();
-    QString extraDatas = patient()->toXml();
-    foreach(const Core::PrintedDocumentTracer &t, pdfs) {
-        extraDatas += QString("<Printed file=\"%1\" docName=\"%2\" dateTime=\"%3\" userUid=\"%4\"/>\n")
-                       .arg(t.fileName())
-                       .arg(t.documentName())
-                       .arg(t.dateTime().toString(Qt::ISODate))
-                       .arg(t.userUid());
-    }
-    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-        extraDatas.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-            extraDatas.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
-        }
-        extraDatas.append("/>");
-    }
-//    qWarning() << extraDatas;
-    return drugsIo().savePrescription(drugModel(), extraDatas, fileName);
+    return drugsIo().savePrescription(drugModel(), d->getXmlExtraData(), fileName);
 }
 
 /**

@@ -13,14 +13,14 @@ include(coreplugin_dependencies.pri)
 
 # specific derivative files
 HEADERS += coreplugin.h \
-    coreimpl.h \ # mainwindow.h \
+    coreimpl.h \
     appaboutpage.h \
     commandlineparser.h \
     patient.h \
     user.h
 
 SOURCES += coreplugin.cpp \
-    coreimpl.cpp \ # mainwindow.cpp \
+    coreimpl.cpp \
     appaboutpage.cpp \
     patient.cpp \
     commandlineparser.cpp \

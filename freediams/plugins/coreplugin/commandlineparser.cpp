@@ -54,8 +54,8 @@ namespace Constants {
     const char *const XML_PATIENT_IDENTITY        = "Identity";
     const char *const XML_PATIENT_CREAT           = "Creatinine";
     const char *const XML_PATIENT_CRCL            = "CreatinineClearance";
-    const char *const XML_PATIENT_WEIGHT          = "Weight";
-    const char *const XML_PATIENT_HEIGHT          = "Height";
+    const char *const XML_PATIENT_WEIGHT          = "WeightInGrams";
+    const char *const XML_PATIENT_HEIGHT          = "HeightInCentimeters";
     const char *const XML_INN_ALLERGIES           = "InnAllergies";
     const char *const XML_DRUGS_ALLERGIES         = "DrugsUidAllergies";
     const char *const XML_ATC_ALLERGIES           = "ATCAllergies";
@@ -107,10 +107,8 @@ public:
         params.insert(CommandLine::CL_PatientFirstname,  "--patientfirstname");
         params.insert(CommandLine::CL_PatientGender,     "--gender");
         params.insert(CommandLine::CL_DateOfBirth,       "--dateofbirth");
-        params.insert(CommandLine::CL_Weight,            "--weight");
-        params.insert(CommandLine::CL_Weight_Unit,       "--weight-unit");
-        params.insert(CommandLine::CL_Height,            "--height");
-        params.insert(CommandLine::CL_Height_Unit,       "--height-unit");
+        params.insert(CommandLine::CL_WeightInGrams,     "--weightingrams");
+        params.insert(CommandLine::CL_HeightInCentimeters,"--heightincentimeters");
         params.insert(CommandLine::CL_CrCl,              "--crcl");
         params.insert(CommandLine::CL_CrCl_Unit,         "--crcl-unit");
         params.insert(CommandLine::CL_Chrono,            "--chrono");
@@ -158,10 +156,8 @@ public:
             case CommandLine::CL_PatientFirstname :  value.insert(CommandLine::CL_PatientFirstname, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientGender :     value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_DateOfBirth :       value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight :            value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight_Unit :       value.insert(CommandLine::CL_Weight_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height :            value.insert(CommandLine::CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height_Unit :       value.insert(CommandLine::CL_Height_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_WeightInGrams :     value.insert(CommandLine::CL_WeightInGrams, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::CL_HeightInCentimeters:value.insert(CommandLine::CL_HeightInCentimeters, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_CrCl :              value.insert(CommandLine::CL_CrCl, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_CrCl_Unit :         value.insert(CommandLine::CL_CrCl_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_Creatinine :        value.insert(CommandLine::CL_Creatinine, a.mid(a.indexOf("=")+1).remove("\"")); break;
@@ -299,11 +295,9 @@ public:
                 value.insert(CommandLine::CL_PatientGender, element.attribute(Internal::Constants::XML_ATTRIB_GENDER));
                 value.insert(CommandLine::CL_DateOfBirth, QDate::fromString(element.attribute(Internal::Constants::XML_ATTRIB_DATEOFBIRTH),"yyyy/MM/dd"));
             } else if (element.tagName() == Internal::Constants::XML_PATIENT_HEIGHT) {
-                value.insert(CommandLine::CL_Height, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_Height_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
+                value.insert(CommandLine::CL_HeightInCentimeters, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_PATIENT_WEIGHT) {
-                value.insert(CommandLine::CL_Weight, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_Weight_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
+                value.insert(CommandLine::CL_WeightInGrams, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_PATIENT_CREAT) {
                 value.insert(CommandLine::CL_Creatinine, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
                 value.insert(CommandLine::CL_Creatinine_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
@@ -335,10 +329,8 @@ public:
             return;
         patient->setData(patient->index(0, IPatient::Uid),            value.value(CommandLine::CL_PatientUid));
         patient->setData(patient->index(0, IPatient::DateOfBirth),    value.value(CommandLine::CL_DateOfBirth));
-        patient->setData(patient->index(0, IPatient::Height),         value.value(CommandLine::CL_Height));
-        patient->setData(patient->index(0, IPatient::HeightUnit),     value.value(CommandLine::CL_Height_Unit));
-        patient->setData(patient->index(0, IPatient::Weight),         value.value(CommandLine::CL_Weight));
-        patient->setData(patient->index(0, IPatient::WeightUnit),     value.value(CommandLine::CL_Weight_Unit));
+        patient->setData(patient->index(0, IPatient::HeightInCentimeters), value.value(CommandLine::CL_HeightInCentimeters));
+        patient->setData(patient->index(0, IPatient::WeightInGrams),       value.value(CommandLine::CL_WeightInGrams));
         patient->setData(patient->index(0, IPatient::Creatinine),     value.value(CommandLine::CL_Creatinine));
         patient->setData(patient->index(0, IPatient::CreatinineUnit), value.value(CommandLine::CL_Creatinine_Unit));
         patient->setData(patient->index(0, IPatient::UsualName),      value.value(CommandLine::CL_PatientName));

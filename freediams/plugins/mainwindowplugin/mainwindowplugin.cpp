@@ -85,9 +85,6 @@ ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
         delete m_MainWindow;
         m_MainWindow = 0;
     }
-//    Core::ICore::instance()->setMainWindow(0);
-
-    // m_MainWindow is deleted by Core
     return SynchronousShutdown;
 }
 

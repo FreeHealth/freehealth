@@ -65,10 +65,8 @@ public:
         m_XmlTags.insert(IPatient::Firstname ,  "Firstnames" );
         m_XmlTags.insert(IPatient::Gender ,     "Gender" );
         m_XmlTags.insert(IPatient::DateOfBirth ,"DateOfbirth");
-        m_XmlTags.insert(IPatient::Weight ,     "Weight");
-        m_XmlTags.insert(IPatient::WeightUnit , "WeightUnit");
-        m_XmlTags.insert(IPatient::Height ,     "Height" );
-        m_XmlTags.insert(IPatient::HeightUnit , "HeightUnit" );
+        m_XmlTags.insert(IPatient::WeightInGrams ,        "WeightInGrams");
+        m_XmlTags.insert(IPatient::HeightInCentimeters ,  "HeightInCentimeters" );
         m_XmlTags.insert(IPatient::Creatinine,  "Creatinine" );
         m_XmlTags.insert(IPatient::CreatinineUnit,  "CreatinineUnit" );
         m_XmlTags.insert(IPatient::BMI ,        "BMI");
@@ -176,10 +174,10 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                     return d->m_Values.value(ref);
                 // If we can not retreive it from command line --> calculate it
                 if (data(YearsOld).toInt()>0) {
-                    if (has(Creatinine) && has(Gender) && has(Weight)) {
+                    if (has(Creatinine) && has(Gender) && has(WeightInGrams)) {
                         bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
                         return MedicalUtils::clearanceCreatinin(data(YearsOld).toInt(),
-                                                                d->m_Values.value(Weight).toDouble(),
+                                                                d->m_Values.value(WeightInGrams).toDouble()/100.,
                                                                 d->m_Values.value(Creatinine).toDouble(),
                                                                 isMale);
                     }
