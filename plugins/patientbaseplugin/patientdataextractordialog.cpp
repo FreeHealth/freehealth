@@ -177,6 +177,7 @@ bool PatientDataExtractorDialog::initialize()
 #endif
     connect(d->ui->availablePatients, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientActivated(QModelIndex)));
 
+    connect(d->ui->addCurrent, SIGNAL(clicked()), this, SLOT(onAddCurrentClicked()), Qt::UniqueConnection);
     d->ui->selectedPatients->setModel(d->_selectedModel);
     return true;
 }
@@ -201,6 +202,20 @@ void PatientDataExtractorDialog::onPatientActivated(const QModelIndex &index)
             .arg(d->_patientModel->data(full).toString())
             .arg(d->_patientModel->data(uid).toString());
     QStringList list = d->_selectedModel->stringList();
+    list << toAdd;
+    d->_selectedModel->setStringList(list);
+}
+
+void PatientDataExtractorDialog::onAddCurrentClicked()
+{
+    if (patient()->uuid().isEmpty())
+        return;
+    QString toAdd = QString("%1 {%2}")
+            .arg(patient()->data(Core::IPatient::FullName).toString())
+            .arg(patient()->data(Core::IPatient::Uid).toString());
+    QStringList list = d->_selectedModel->stringList();
+    if (list.contains(toAdd))
+        return;
     list << toAdd;
     d->_selectedModel->setStringList(list);
 }
@@ -323,6 +338,7 @@ void PatientDataExtractorDialog::onExportRequested()
             // Append all secondary files into the master
             QString master;
             master = Utils::readTextFile(exp->masterAbsoluteFilePath(), Utils::DontWarnUser);
+            QFile(exp->masterAbsoluteFilePath()).remove();
             if (master.isEmpty())
                 continue;
             QString masterCss;
@@ -330,6 +346,7 @@ void PatientDataExtractorDialog::onExportRequested()
             master = Utils::htmlBodyContent(master);
             foreach(const QString &sec, exp->secondaryFiles()) {
                 QString second = Utils::readTextFile(sec, Utils::DontWarnUser);
+                QFile(sec).remove();
                 if (second.isEmpty())
                     continue;
                 QString secCss;
@@ -352,7 +369,6 @@ void PatientDataExtractorDialog::onExportRequested()
             printer()->toPdf(outCss+out, job.outputAbsolutePath() + "/export.pdf");
         }
     }
-
 
     // Reset current patient
     dlg.setLabelText(tr("Setting patient uuid %1 as current patient").arg(current));
