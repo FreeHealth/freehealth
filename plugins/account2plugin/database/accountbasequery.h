@@ -66,7 +66,7 @@ public:
 
     // Get only one item
     void setRetrieveObject(DataObject object, const QString &uuid) {_object=object; _objectUuid=uuid;}
-    bool retrieveObject() const {return _object;}
+    DataObject retrieveObject() const {return _object;}
     QString retrieveObjectUuid() const {return _objectUuid;}
 
     // Get a list of items
