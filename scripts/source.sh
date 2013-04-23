@@ -124,6 +124,9 @@ global_resources/textfiles/girls_surnames.csv \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/*.db \
+global_resources/textfiles/freediamstest \
+global_resources/textfiles/oldprescriptionsfiles \
+global_resources/textfiles/prescription \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
 "
