@@ -51,7 +51,7 @@ public:
     BasicCalendarModel(QObject *parent = 0);
     virtual ~BasicCalendarModel();
 
-    QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
+    QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to);
 
     int count() const { return m_sortedByBeginList.count(); }
 

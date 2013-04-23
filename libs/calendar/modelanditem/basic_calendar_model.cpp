@@ -115,7 +115,7 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
         }
     }
 
-QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const QDate &to) const {
+QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const QDate &to) {
 	Q_ASSERT_X(from <= to, "BasicCalendarModel::getItemsBetween", "<from> is strictly greater than <to>");
 
 	QList<CalendarItem> list;
