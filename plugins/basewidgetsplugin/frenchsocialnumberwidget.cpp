@@ -77,6 +77,7 @@ public:
         //ui->nss->setMinimumWidth(ui->nss->fontMetrics().width(QString().fill('9', 18)));
         //ui->nss->setMinimumHeight(ui->nss->fontMetrics().height() + 10);
 
+        ui->key->setFocusPolicy(Qt::NoFocus);
         ui->key->setReadOnly(true);
         ui->key->setMaximumWidth(ui->key->fontMetrics().width(QString().fill('9', 4)));
         //ui->key->setMinimumWidth(ui->key->fontMetrics().width(QString().fill('9', 2)));

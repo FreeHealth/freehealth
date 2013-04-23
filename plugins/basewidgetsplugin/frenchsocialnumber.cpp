@@ -84,7 +84,6 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     m_ItemData = new FrenchSocialNumberFormData(formItem);
     m_ItemData->setWidget(m_NSS);
     formItem->setItemData(m_ItemData);
-    m_ItemData->populateWithPatientData();
 }
 
 FrenchSocialNumberFormWidget::~FrenchSocialNumberFormWidget()
@@ -119,7 +118,7 @@ void FrenchSocialNumberFormWidget::retranslate()
 //////////////////////////   FrenchSocialNumberFormData   ///////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 FrenchSocialNumberFormData::FrenchSocialNumberFormData(Form::FormItem *item) :
-        m_FormItem(item), m_Widget(0)
+    m_FormItem(item), m_Widget(0)
 {}
 
 FrenchSocialNumberFormData::~FrenchSocialNumberFormData()
@@ -127,18 +126,24 @@ FrenchSocialNumberFormData::~FrenchSocialNumberFormData()
 
 void FrenchSocialNumberFormData::clear()
 {
+//    WARN_FUNC;
     m_Widget->clear();
-    populateWithPatientData();
 }
 
 void FrenchSocialNumberFormData::populateWithPatientData()
 {
+//    WARN_FUNC;
     if (!m_Widget->numberWithControlKey().isEmpty())
         return;
+    if (patient()->uuid().isEmpty()) {
+        m_Widget->clear();
+        return;
+    }
 
     QString fullNumber;
     fullNumber.fill(' ', 13);
 
+//    qWarning() << "NSS populateWithPatientData";
     // Add patient default values
     if (patient()->data(Core::IPatient::Gender).toString()=="M") {
         fullNumber[0] = '1';
@@ -161,33 +166,37 @@ void FrenchSocialNumberFormData::populateWithPatientData()
 
     fullNumber = fullNumber.simplified();
     m_Widget->setNumberWithoutControlKey(fullNumber);
-    //qWarning() << "AUTO" << fullNumber;
+//    qWarning() << "    AUTO" << fullNumber;
 }
 
 bool FrenchSocialNumberFormData::isModified() const
 {
+//    WARN_FUNC;
     return m_OriginalValue != m_Widget->numberWithControlKey();
 }
 
 void FrenchSocialNumberFormData::setModified(bool modified)
 {
+//    WARN_FUNC << modified;
     if (!modified)
         m_OriginalValue = m_Widget->numberWithControlKey();
 }
 
 void FrenchSocialNumberFormData::setReadOnly(bool readOnly)
 {
+//    WARN_FUNC << readOnly;
     m_Widget->setEnabled(!readOnly);
 }
 
 bool FrenchSocialNumberFormData::isReadOnly() const
 {
+    WARN_FUNC;
     return (!m_Widget->isEnabled());
 }
 
 bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
-    qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;
+//    qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
 //            m_Check->setCheckState(Qt::CheckState(data.toInt()));
@@ -198,6 +207,7 @@ bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, co
 
 QVariant FrenchSocialNumberFormData::data(const int ref, const int role) const
 {
+//    WARN_FUNC << this << m_Widget->numberWithControlKey();
     Q_UNUSED(ref);
     Q_UNUSED(role);
     return m_Widget->numberWithControlKey();
@@ -205,16 +215,20 @@ QVariant FrenchSocialNumberFormData::data(const int ref, const int role) const
 
 void FrenchSocialNumberFormData::setStorableData(const QVariant &data)
 {
+//    WARN_FUNC << data;
     if (!data.isValid())
         return;
     m_OriginalValue = data.toString();
-    if (m_OriginalValue.simplified().isEmpty())
+    if (m_OriginalValue.simplified().isEmpty()
+            && !patient()->uuid().isEmpty())
         populateWithPatientData();
     else
         m_Widget->setNumberWithControlKey(m_OriginalValue);
+//    qWarning() << "    " << m_Widget->numberWithControlKey();
 }
 
 QVariant FrenchSocialNumberFormData::storableData() const
 {
+//    WARN_FUNC << m_Widget->numberWithControlKey();
     return m_Widget->numberWithControlKey();
 }
