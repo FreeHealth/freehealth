@@ -69,13 +69,12 @@ namespace Internal {
 class PatientDataExtractorDialogPrivate
 {
 public:
-    PatientDataExtractorDialogPrivate(PatientDataExtractorDialog *parent) :
+    PatientDataExtractorDialogPrivate(PatientDataExtractorDialog */*parent*/) :
         _initialized(false),
         ui(new Ui::PatientDataExtractorDialog),
         _exportButton(0),
         _patientModel(0),
-        _selectedModel(0),
-        q(parent)
+        _selectedModel(0) // ,q(parent)
     {
     }
     
@@ -93,7 +92,7 @@ public:
     QString m_LastSearch;
 
 private:
-    PatientDataExtractorDialog *q;
+//    PatientDataExtractorDialog *q;
 };
 } // namespace Internal
 } // end namespace Patients
@@ -298,6 +297,7 @@ void PatientDataExtractorDialog::onExportRequested()
     dlg.setRange(0, 0);
     dlg.show();
     Utils::centerWidget(&dlg, this);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Connect all extractor signals to the progress dialog
     foreach(Core::IPatientDataExporter *e, extractors) {

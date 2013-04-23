@@ -162,9 +162,9 @@ void AccountMode::postCoreInitialization()
 
 void AccountMode::modeActivated(Core::IMode *mode)
 {
-//    if (mode!=this) {
-//        return;
-//    }
+    if (mode!=this) {
+        return;
+    }
 //    if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
 //        QString firstExplanationText = QString("<center><span style=\"font-size:x-large;font-weight:bold;color:darkred;font-variant:small-caps\">%1</span></center>")
 //                .arg(tr("The account plugin is still is early alpha stage (do not use in "

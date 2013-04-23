@@ -65,8 +65,8 @@ namespace Internal {
 class PmhContentExporterPrivate
 {
 public:
-    PmhContentExporterPrivate(PmhContentExporter *parent) :
-        q(parent)
+    PmhContentExporterPrivate(PmhContentExporter */*parent*/)
+        // : q(parent)
     {
     }
     
@@ -78,7 +78,7 @@ public:
     // Put your data here
     
 private:
-    PmhContentExporter *q;
+//    PmhContentExporter *q;
 };
 } // namespace Internal
 } // end namespace PMH

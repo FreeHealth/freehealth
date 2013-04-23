@@ -216,10 +216,9 @@ namespace Internal {
 class PmhCategoryModelPrivate
 {
 public:
-    PmhCategoryModelPrivate(PmhCategoryModel *parent) :
+    PmhCategoryModelPrivate(PmhCategoryModel */*parent*/) :
         _rootItem(0),
-        _overview(0),
-        q(parent)
+        _overview(0) // ,q(parent)
     {
         clearTree();
     }
@@ -456,7 +455,7 @@ public:
     QString _rootUid;
 
 private:
-    PmhCategoryModel *q;
+//    PmhCategoryModel *q;
 };
 
 }  // End namespace Internal

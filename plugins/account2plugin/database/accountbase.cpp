@@ -371,6 +371,7 @@ public:
     bool getUniqueObject(const AccountBaseQuery &query, AccountBaseResult &result)
     {
         switch (query.retrieveObject()) {
+        case AccountBaseQuery::None: return true;
         case AccountBaseQuery::Fee:
             result.addFee(getFee(query.retrieveObjectUuid()));
             return true;
@@ -382,6 +383,9 @@ public:
             return true;
         case AccountBaseQuery::Quotation:
             result.addQuotation(getQuotation(query.retrieveObjectUuid()));
+            return true;
+        case AccountBaseQuery::MedicalProcedure:
+            // TODO: result.addMedicalProcedure(getMedicalProcedure(query.retrieveObjectUuid()));
             return true;
         }
         result.setSuccessfull(false);

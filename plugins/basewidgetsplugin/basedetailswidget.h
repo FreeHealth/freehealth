@@ -59,7 +59,7 @@ public Q_SLOTS:
 
 private:
     Utils::DetailsWidget *_detailsWidget;
-    int numberColumns, i, col, row;
+    //int numberColumns, i, col, row;
 };
 
 } // namespace Internal

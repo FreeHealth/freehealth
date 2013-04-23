@@ -86,9 +86,8 @@ namespace Internal {
 class AccountCorePrivate
 {
 public:
-    AccountCorePrivate(AccountCore *parent) :
-        _accountBase(0),
-        q(parent)
+    AccountCorePrivate(AccountCore */*parent*/) :
+        _accountBase(0) //,q(parent)
     {}
 
     ~AccountCorePrivate()
@@ -125,7 +124,7 @@ public:
     AccountBase *_accountBase;
 
 private:
-    AccountCore *q;
+//    AccountCore *q;
 };
 } // namespace Internal
 } // namespace Account2

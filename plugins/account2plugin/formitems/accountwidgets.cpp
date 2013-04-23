@@ -93,7 +93,8 @@ static inline Account2::AccountCore *accountCore() {return Account2::AccountCore
 static const QStringList widgetsName =
         QStringList() << "fee";
 
-AccountWidgetFactory::AccountWidgetFactory(QObject *parent)
+AccountWidgetFactory::AccountWidgetFactory(QObject *parent) :
+    Form::IFormWidgetFactory(parent)
 {
 }
 
@@ -208,7 +209,7 @@ bool FeeFormWidget::isContainer() const
     return false;
 }
 
-QString FeeFormWidget::printableHtml(bool withValues) const
+QString FeeFormWidget::printableHtml(bool /*withValues*/) const
 {
     //    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
     //        return QString();
@@ -267,7 +268,7 @@ bool FeeFormWidgetData::isModified() const
     return false;
 }
 
-void FeeFormWidgetData::setModified(bool modified)
+void FeeFormWidgetData::setModified(bool /*modified*/)
 {
     //    if (!modified)
     //        m_OriginalValue = storableData().toStringList();

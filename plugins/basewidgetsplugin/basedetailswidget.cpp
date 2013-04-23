@@ -45,11 +45,11 @@ using namespace Internal;
 
 BaseDetailsWidget::BaseDetailsWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
-    _detailsWidget(0),
-    numberColumns(1),
-    i(0),
-    col(0),
-    row(0)
+    _detailsWidget(0) //,
+//    numberColumns(1),
+//    i(0),
+//    col(0),
+//    row(0)
 {
     setObjectName("BaseDetailsWidge_" + m_FormItem->uuid());
 

@@ -44,9 +44,8 @@ namespace Internal {
 class PmhEpisodeModelPrivate
 {
 public:
-    PmhEpisodeModelPrivate(PmhEpisodeModel *parent) :
-            m_Pmh(0),
-            q(parent)
+    PmhEpisodeModelPrivate(PmhEpisodeModel */*parent*/) :
+        m_Pmh(0) //, q(parent)
     {
     }
 
@@ -60,7 +59,7 @@ public:
     PmhData *m_Pmh;
 
 private:
-    PmhEpisodeModel *q;
+//    PmhEpisodeModel *q;
 
 };
 

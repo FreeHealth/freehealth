@@ -48,8 +48,8 @@ namespace Internal {
 class FeeModelPrivate
 {
 public:
-    FeeModelPrivate(FeeModel *parent) :
-        q(parent)
+    FeeModelPrivate(FeeModel */*parent*/)
+        // : q(parent)
     {
     }
 
@@ -68,7 +68,7 @@ public:
     QList<Fee> _fees;
 
 private:
-    FeeModel *q;
+//    FeeModel *q;
 };
 
 } // namespace Internal

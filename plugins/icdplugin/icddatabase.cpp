@@ -101,8 +101,9 @@ struct Daget {
 class IcdDatabasePrivate
 {
 public:
-    IcdDatabasePrivate(IcdDatabase *base) :
-            m_LogChrono(false), m_DownloadAndPopulate(false), q(base)
+    IcdDatabasePrivate(IcdDatabase */*base*/) :
+        m_LogChrono(false),
+        m_DownloadAndPopulate(false) // , q(base)
     {
         m_CachedCodes.setMaxCost(1000);
         m_CachedDaget.setMaxCost(1000);
@@ -125,7 +126,7 @@ public:
     QMultiHash<int, Daget *> m_CachedDependentDaget;
 
 private:
-    IcdDatabase *q;
+//    IcdDatabase *q;
 };
 }  // End Internal
 }  // End ICD
