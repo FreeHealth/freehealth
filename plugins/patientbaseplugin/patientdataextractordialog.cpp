@@ -50,8 +50,6 @@
 #include <QStringListModel>
 #include <QProgressDialog>
 #include <QDir>
-#include <QPrinter>
-#include <QTextDocument>
 
 #include <QDebug>
 
