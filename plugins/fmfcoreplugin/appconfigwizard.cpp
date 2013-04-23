@@ -592,8 +592,8 @@ bool ServerConfigPage::validatePage()
         QSqlQuery query(mysql);
         if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
             if (query.next()) {
-                LOG("Server already configurated");
-                Utils::informativeMessageBox(tr("Server already configurated"), tr("The server is already configurated for FreeMedForms."));
+                LOG("Server already configured");
+                Utils::informativeMessageBox(tr("Server already configured"), tr("The server is already configured for FreeMedForms."));
             } else {
                 LOG("Executing server configuration SQL script");
                 QString error;
@@ -604,8 +604,8 @@ bool ServerConfigPage::validatePage()
                                                 "Please check out the log files and contact your administrator."),
                                              error);
                 } else {
-                    LOG("Server successfully configurated");
-                    Utils::informativeMessageBox(tr("Server configurated"), tr("The server was successfully configurated."));
+                    LOG("Server successfully configured");
+                    Utils::informativeMessageBox(tr("Server configured"), tr("The server was successfully configured."));
                 }
             }
         }
