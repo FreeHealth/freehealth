@@ -331,10 +331,10 @@ bool EpisodeModel::initialize()
     onUserChanged();
     onPatientFormLoaded();
 
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()), Qt::UniqueConnection);
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()), Qt::UniqueConnection);
 //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormLoaded()));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormLoaded()), Qt::UniqueConnection);
     return true;
 }
 
@@ -389,17 +389,19 @@ void EpisodeModel::onUserChanged()
 /** Reacts on patient form loaded emitted by Form::FormManager. */
 void EpisodeModel::onPatientFormLoaded()
 {
+    beginResetModel();
     d->clearCache();
     d->updateFilter(patient()->uuid());
     d->_sqlModel->select();
     d->checkModelContent();
+    endResetModel();
 }
 
 int EpisodeModel::rowCount(const QModelIndex &parent) const
 {
     // prevent trees
-    if (parent.isValid()) return 0;
-
+    if (parent.isValid())
+        return 0;
     return d->_sqlModel->rowCount(parent);
 }
 
@@ -824,12 +826,13 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->clear();
     if (!episode.isValid()) {
         // Nothing to do but clear the form
-        qWarning() << "EpisodeModel: index not valid, clearing form";
+        qWarning() << "EpisodeModel: index not valid, clearing form" << d->_formMain->uuid();
         return true;
     }
 
     d->_formMain->formWidget()->setEnabled(false);
     const QString &xml = d->getEpisodeContent(episode);
+
     QHash<QString, FormItem *> items;
     QHash<QString, QString> _data;
     if (!xml.isEmpty()) {
@@ -842,6 +845,8 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 
         // put data into the FormItems of the form
         foreach(FormItem *it, d->_formMain->flattenedFormItemChildren()) {
+            if (!it->itemData())
+                continue;
             items.insert(it->uuid(), it);
         }
     }
@@ -863,8 +868,6 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
             LOG_ERROR("populateFormWithEpisode :: ERROR: no item: " + items.key(it));
             continue;
         }
-        if (!it->itemData())
-            continue;
 
         QString value = _data.value(it->uuid(), QString::null);
         bool setToModified = false;
@@ -911,13 +914,10 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
  */
 bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
 {
+    if (rowCount() == 0)
+        return true;
     // as the SqlModel is sorted on the userdate, we just need to populate with the last index of the model
     QModelIndex index = this->index(rowCount() - 1,0);
-//    qWarning() << "***" << d->_formMain->uuid();
-//    for(int i=0; i < rowCount(); ++i) {
-//        qWarning() << data(this->index(i, UserTimeStamp)).toString() << data(this->index(i, Label)).toString();
-//    }
-//    qWarning() << "***";
     return populateFormWithEpisodeContent(index);
 }
 

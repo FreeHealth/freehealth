@@ -90,6 +90,7 @@ public:
         // Disconnect and delete all EpisodeModels
         qDeleteAll(_episodeModels.values());
         _episodeModels.clear();
+
         // Recreate all internal EpisodeModels
         foreach(Form::FormMain *emptyrootform, forms) {
             foreach(Form::FormMain *form, emptyrootform->flattenedFormMainChildren()) {
@@ -106,6 +107,7 @@ public:
     void populateEpisodeModelsWithLastEpisode()
     {
         foreach(EpisodeModel *model, _episodeModels.values()) {
+            model->initialize();
             if (!model->populateFormWithLatestValidEpisodeContent()) {
                 LOG_ERROR_FOR(q, "EpisodeModel can not be populated");
             }
@@ -125,8 +127,8 @@ public:
             EpisodeModel *editing = episodeManager().episodeModel(it.key()->uuid());
             if (editing) {
                 QObject::connect(editing, SIGNAL(episodeChanged(QModelIndex)), q, SLOT(editingModelEpisodeChanged(QModelIndex)), Qt::UniqueConnection);
-                QObject::connect(editing, SIGNAL(rowsInserted(QModelIndex, int, int)), q, SLOT(editingModelRowsInserted(QModelIndex, int, int)));
-                QObject::connect(editing, SIGNAL(rowsRemoved(QModelIndex, int, int)), q, SLOT(editingModelRowsRemoved(QModelIndex, int, int)));
+                QObject::connect(editing, SIGNAL(rowsInserted(QModelIndex, int, int)), q, SLOT(editingModelRowsInserted(QModelIndex, int, int)), Qt::UniqueConnection);
+                QObject::connect(editing, SIGNAL(rowsRemoved(QModelIndex, int, int)), q, SLOT(editingModelRowsRemoved(QModelIndex, int, int)), Qt::UniqueConnection);
             }
         }
     }
@@ -178,7 +180,6 @@ PatientFormItemDataWrapper::PatientFormItemDataWrapper(QObject *parent) :
     d(new PatientFormItemDataWrapperPrivate(this))
 {
     setObjectName("Form::PatientFormItemDataWrapper");
-    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onCurrentPatientFormsLoaded()), Qt::DirectConnection);
 }
 
 /*! Destructor of the Form::PatientFormItemDataWrapper class */
@@ -192,6 +193,7 @@ PatientFormItemDataWrapper::~PatientFormItemDataWrapper()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool PatientFormItemDataWrapper::initialize()
 {
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()), Qt::DirectConnection);
     onCurrentPatientChanged();
     return true;
 }
@@ -211,10 +213,12 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
     const QList<Form::FormMain*> &forms = d->_episodeModels.uniqueKeys();
     foreach(Form::FormMain *main, forms) {
         foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
-            if (!item->itemData() || item->patientDataRepresentation() == -1)
+            if (!item->itemData()
+                    || item->patientDataRepresentation() == -1)
                 continue;
             // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
             if (item->patientDataRepresentation() == ref) {
+                // qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
                 return item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
             }
         }
@@ -224,14 +228,11 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 
 void PatientFormItemDataWrapper::onCurrentPatientChanged()
 {
-    d->disconnectModels();
-}
-
-void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
-{
     // No current patient -> break
     if (patient()->uuid().isEmpty())
         return;
+
+    d->disconnectModels();
 
     // Get Duplicates FormCollections
     QList<FormMain *> forms = formManager().allDuplicatesEmptyRootForms();
@@ -243,6 +244,7 @@ void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
     // Populate each forms with its lastest recorded episode
     d->populateEpisodeModelsWithLastEpisode();
 
+//    qWarning() << "\n\n--------------------------------------- 1";
 //    foreach(Form::FormMain *forms, formManager().allDuplicatesEmptyRootForms()) {
 //        foreach(Form::FormMain *form, forms->flattenedFormMainChildren()) {
 //            qWarning() <<"\n\n"<< form->uuid() << d->_episodeModels.value(form)->rowCount();

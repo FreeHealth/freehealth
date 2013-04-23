@@ -322,13 +322,23 @@ public:
         case Fsp::Patient_Personal_NSS:
             if (!fsp.data(Fsp::Patient_Assure_FullName).toString().isEmpty())
                 return QString::null;
+            if (fsp.data(fspIndex).toString().size() < 13)
+                return QString::null;
+            return fsp.data(fspIndex).toString().left(13).leftJustified(13, '_');
+
         case Fsp::Patient_Assure_NSS:
+            if (fsp.data(fspIndex).toString().isEmpty())
+                return QString::null;
             return fsp.data(fspIndex).toString().left(13).leftJustified(13, '_');
 
         case Fsp::Patient_Personal_NSSKey:
             if (!fsp.data(Fsp::Patient_Assure_FullName).toString().isEmpty())
                 return QString::null;
+            if (fsp.data(fspIndex).toString().size() < 2)
+                return QString::null;
         case Fsp::Patient_Assure_NSSKey:
+            if (fsp.data(fspIndex).toString().size() < 2)
+                return QString::null;
             return fsp.data(fspIndex).toString().left(2).leftJustified(2, '_');
 
         case Fsp::Patient_FullName:

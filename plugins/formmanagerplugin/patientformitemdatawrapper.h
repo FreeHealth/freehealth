@@ -57,7 +57,7 @@ public:
 
 private Q_SLOTS:
     void onCurrentPatientChanged();
-    void onCurrentPatientFormsLoaded();
+//    void onCurrentPatientFormsLoaded();
     void editingModelEpisodeChanged(const QModelIndex &index);
     void editingModelRowsInserted(const QModelIndex &parent, int first, int last);
     void editingModelRowsRemoved(const QModelIndex &parent, int first, int last);
