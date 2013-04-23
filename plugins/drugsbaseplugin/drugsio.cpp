@@ -1195,8 +1195,6 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 */
 QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExtraData)
 {
-    Q_UNUSED(xmlExtraData);
-    // TODO: manage xmlExtraData
     Q_ASSERT(m);
     if (!m->testingDrugsAreVisible()) {
         bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too?"),
@@ -1208,24 +1206,37 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
             m->showTestingDrugs(true);
     }
 
+    // Create the XML document
     QDomDocument doc;
     doc.setContent(QString(::XML_HEADER));
     QDomElement root = doc.createElement(::XML_ROOT_TAG);
     doc.appendChild(root);
 
+    // Add date of generation
     QDomElement date = doc.createElement(::XML_DATEOFGENERATION_TAG);
     root.appendChild(date);
     date.setAttribute(::XML_VERSION, QDateTime::currentDateTime().toString(Qt::ISODate));
 
+    // Add full prescription
     QDomElement fullPres = doc.createElement(::XML_FULLPRESCRIPTION_TAG);
     root.appendChild(fullPres);
     fullPres.setAttribute(::XML_VERSION, versionUpdater().lastXmlIOVersion());
-
     const QList<IDrug *> &drugs = m->drugsList();
     for(int i=0; i < drugs.count(); ++i) {
         IDrug *drug = drugs.at(i);
         d->drugPrescriptionToXml(drug, doc, fullPres);
     }
+
+    // Add extradata
+    if (!xmlExtraData.isEmpty()) {
+        QString xml = doc.toString(2);
+        int index = xml.lastIndexOf(QString("</%1>").arg(XML_ROOT_TAG));
+        Q_ASSERT(index != -1);
+        xml.insert(index, "\n" + xmlExtraData + "\n");
+        doc.setContent(xml);
+    }
+
+    // Return the xml document
     return doc.toString(2);
 }
 
@@ -1260,17 +1271,18 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraD
     Q_ASSERT(model);
     QString extra;
     if (!extraData.isEmpty()) {
-        extra.append(QString("\n<%1>\n").arg(XML_EXTRADATA_TAG));
-        extra.append(extraData);
-        extra.append(QString("\n</%1>\n").arg(XML_EXTRADATA_TAG));
+        extra = QString("\n<%1>\n").arg(XML_EXTRADATA_TAG);
+        extra += extraData;
+        extra += QString("\n</%1>\n").arg(XML_EXTRADATA_TAG);
     }
     QString xmldPrescription = prescriptionToXml(model, extra);
-    if (toFileName.isEmpty())
+    if (toFileName.isEmpty()) {
         return Utils::saveStringToFile(xmldPrescription,
                                       QDir::homePath() + "/prescription.di",
                                       tr(Core::Constants::FREEDIAMS_FILEFILTER)) ;
-    else
+    } else {
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
+    }
 }
 
 /** \brief Print the prescription from the DrugsDB::DrugsModel \e model */
