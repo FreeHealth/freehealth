@@ -211,7 +211,7 @@ QDebug operator<<(QDebug dbg, const Account2::Payment &c)
             s << "notValid";
     }
     s << "amount: " + QString::number(c.amount(), 'f', 6);
-    s << "type: " + c.type();
+    s << "type: " + QString::number(c.type());
     s << "comment: " + c.comment();
     foreach(const Account2::PaidFee &paidFee, c.paidFees()) {
         s << "PaidFee: " + QString::number(paidFee.feeId()) + "; amount: " + QString::number(paidFee.fee().amount(), 'f', 6);;
