@@ -124,7 +124,7 @@ void FormManagerPlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing form manager plugin..."));
 
-    // Initialize patient base and manager
+    // Initialize base and manager
     episodeBase()->initialize();
     formManager().checkFormUpdates();
 
