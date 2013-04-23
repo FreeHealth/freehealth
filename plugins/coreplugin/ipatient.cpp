@@ -225,9 +225,9 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBER4, SocialNumber4);
     t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER);
     _tokens << t;
-    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBERS, SocialNumbers);
-    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBERS);
-    _tokens << t;
+//    t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBERS, SocialNumbers);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBERS);
+//    _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTSOCIALNUMBEROWNERNAME, SocialNumberOwnerFullName);
     t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER_OWNER_NAME);
     _tokens << t;
@@ -256,6 +256,10 @@ IPatient::~IPatient()
 /*! \deprecated */
 void IPatient::replaceTokens(QString &stringWillBeModified)
 {
+#ifdef WITH_PAD
+    Q_UNUSED(stringWillBeModified);
+    // TODO: manage PADTOOLS here
+#else
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTUSUALNAME,  data(IPatient::UsualName).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTOTHERNAMES, data(IPatient::OtherNames).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFIRSTNAME,  data(IPatient::Firstname).toString());
@@ -284,6 +288,7 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTFAXES, data(IPatient::Faxes).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMAILS, data(IPatient::Mails).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTMOBILEPHONE, data(IPatient::MobilePhone).toString());
+#endif
 }
 // END
 

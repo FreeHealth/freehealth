@@ -105,10 +105,9 @@ const char * const  TOKEN_PATIENTSOCIALNUMBERS       = "Patient.Insurance.Social
 const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERNAME = "Patient.Insurance.SocialNumberOwnerName";
 const char * const  TOKEN_PATIENTSOCIALNUMBEROWNERADDRESS = "Patient.Insurance.SocialNumberOwnerAddress";
 
-const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
-const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
-const char * const  TOKEN_HEIGHT            = "Patient.Metrics.Height";
-const char * const  TOKEN_HEIGHT_UNIT       = "Patient.Metrics.HeightUnit";
+const char * const  TOKEN_WEIGHTINGRAMS     = "Patient.Metrics.WeightInGrams";
+const char * const  TOKEN_HEIGHTINCENTIMETERS = "Patient.Metrics.HeightInCentimeters";
+const char * const  TOKEN_CLCRINMLMIN         = "Patient.Biology.CreatininClearanceInMlMin";
 const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
 const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
 
