@@ -28,7 +28,6 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QDir>
-
 #include <QLibrary>
 
 #include <QDebug>
@@ -126,7 +125,8 @@ int main( int argc, char *argv[] )
     QApplication app(argc, argv);
     qWarning();
 
-    // --exchange-in=../../../../global_resources/textfiles/dataintest.xml --config=../../../../global_resources/config.ini
+    // Command line for Mac using a debug_without_install
+    // --exchange-in=../../../../../global_resources/textfiles/freediamstest/dataintest.xml --config=../../../../../global_resources/freediams_config.ini
 
     // Add some debugging information
     defineLibraryPaths();
