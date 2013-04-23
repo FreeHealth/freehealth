@@ -151,7 +151,6 @@ public:
 
 private:
     IFormIO *m_reader;
-    bool _hasScreenShot;
 };
 
 class FORM_EXPORT IFormIO : public QObject
