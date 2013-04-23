@@ -71,8 +71,10 @@ struct SimpleCode {
 class SimpleIcdModelPrivate
 {
 public:
-    SimpleIcdModelPrivate(SimpleIcdModel *parent) :
-            m_UseDagDepend(false), m_Checkable(false), m_GetAllLabels(false), q(parent)
+    SimpleIcdModelPrivate(SimpleIcdModel */*parent*/) :
+        m_UseDagDepend(false),
+        m_Checkable(false),
+        m_GetAllLabels(false) //, q(parent)
     {
     }
 
@@ -91,7 +93,7 @@ public:
     QList<int> m_CheckStates;
 
 private:
-    SimpleIcdModel *q;
+//    SimpleIcdModel *q;
 };
 
 
