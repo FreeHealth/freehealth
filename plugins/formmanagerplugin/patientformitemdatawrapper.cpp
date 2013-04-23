@@ -229,6 +229,10 @@ void PatientFormItemDataWrapper::onCurrentPatientChanged()
 
 void PatientFormItemDataWrapper::onCurrentPatientFormsLoaded()
 {
+    // No current patient -> break
+    if (patient()->uuid().isEmpty())
+        return;
+
     // Get Duplicates FormCollections
     QList<FormMain *> forms = formManager().allDuplicatesEmptyRootForms();
     d->scanFormItemDataForAvailableData(forms);
