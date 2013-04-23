@@ -911,11 +911,13 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
  */
 bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
 {
-    // as the SqlModel is sorted on the userdate, we just need to populate with the first index of the model
+    // as the SqlModel is sorted on the userdate, we just need to populate with the last index of the model
     QModelIndex index = this->index(rowCount() - 1,0);
+//    qWarning() << "***" << d->_formMain->uuid();
 //    for(int i=0; i < rowCount(); ++i) {
 //        qWarning() << data(this->index(i, UserTimeStamp)).toString() << data(this->index(i, Label)).toString();
 //    }
+//    qWarning() << "***";
     return populateFormWithEpisodeContent(index);
 }
 
