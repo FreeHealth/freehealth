@@ -48,9 +48,8 @@ namespace Internal {
 class CoreUserModelWrapperPrivate
 {
 public:
-    CoreUserModelWrapperPrivate(CoreUserModelWrapper *parent) :
-        _userModel(0),
-        q(parent)
+    CoreUserModelWrapperPrivate(CoreUserModelWrapper */*parent*/) :
+        _userModel(0)  // , q(parent)
     {
     }
 
@@ -62,7 +61,7 @@ public:
     UserModel *_userModel;
 
 private:
-    CoreUserModelWrapper *q;
+//    CoreUserModelWrapper *q;
 };
 } // namespace Internal
 } // end namespace UserPlugin

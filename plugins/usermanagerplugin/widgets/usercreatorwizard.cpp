@@ -165,12 +165,11 @@ namespace Internal {
 class UserCreatorWizardPrivate
 {
 public:
-    UserCreatorWizardPrivate(UserCreatorWizard *parent) :
+    UserCreatorWizardPrivate(UserCreatorWizard */*parent*/) :
         m_User(new UserData),
         m_Row(-1),
         m_Saved(false),
-        m_CreateUser(true),
-        q(parent)
+        m_CreateUser(true) //, q(parent)
     {}
 
     ~UserCreatorWizardPrivate()
@@ -186,7 +185,7 @@ public:
     static QHash<int, int> m_Rights;
 
 private:
-    UserCreatorWizard *q;
+//    UserCreatorWizard *q;
 };
 } // namespace Internal
 } // namespace UserPlugin

@@ -55,11 +55,10 @@ namespace Internal {
 class DatabaseInformationDialogPrivate
 {
 public:
-    DatabaseInformationDialogPrivate(DatabaseInformationDialog *parent) :
+    DatabaseInformationDialogPrivate(DatabaseInformationDialog */*parent*/) :
         _headerTree(0),
         _contentTree(0),
-        _title(0),
-        q(parent)
+        _title(0) // , q(parent)
     {
     }
 
@@ -90,7 +89,7 @@ public:
     QLabel *_title;
 
 private:
-    DatabaseInformationDialog *q;
+//    DatabaseInformationDialog *q;
 };
 } // namespace Internal
 } // end namespace UserPlugin

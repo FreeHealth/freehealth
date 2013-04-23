@@ -56,11 +56,10 @@ namespace Internal {
 class UserCorePrivate
 {
 public:
-    UserCorePrivate(UserCore *parent) :
+    UserCorePrivate(UserCore */*parent*/) :
         _base(0),
         _model(0),
-        _coreUserModelWrapper(0),
-        q(parent)
+        _coreUserModelWrapper(0)  // , q(parent)
     {
     }
 
@@ -74,7 +73,7 @@ public:
     CoreUserModelWrapper *_coreUserModelWrapper;
 
 private:
-    UserCore *q;
+//    UserCore *q;
 };
 } // namespace Internal
 } // end namespace UserPlugin

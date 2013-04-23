@@ -49,10 +49,9 @@ namespace Internal {
 class FormCollectionPrivate
 {
 public:
-    FormCollectionPrivate(FormCollection *parent) :
+    FormCollectionPrivate(FormCollection */*parent*/) :
         _isDuplicates(false),
-        _type(FormCollection::CompleteForm),
-        q(parent)
+        _type(FormCollection::CompleteForm)  // , q(parent)
     {
     }
 
@@ -67,7 +66,7 @@ public:
     FormCollection::CollectionType _type;
 
 private:
-    FormCollection *q;
+//    FormCollection *q;
 };
 }  // namespace Internal
 } // end namespace Form

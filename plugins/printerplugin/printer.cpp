@@ -153,9 +153,12 @@ namespace Internal {
 class PrinterPrivate
 {
 public:
-    PrinterPrivate(Printer *parent) :
-            m_TwoNUp(false), m_Printer(0), m_Content(0), m_WithDuplicata(false), m_PrintingDuplicata(false),
-            q(parent)
+    PrinterPrivate(Printer */*parent*/) :
+        m_TwoNUp(false),
+        m_Printer(0),
+        m_Content(0),
+        m_WithDuplicata(false),
+        m_PrintingDuplicata(false)  //, q(parent)
     {
         m_TwoNUp = settings()->value(Print::Constants::S_TWONUP).toBool();
     }
@@ -457,7 +460,7 @@ public:
     QList<QPicture *> m_Pages;
 
 private:
-    Printer *q;
+//    Printer *q;
 };
 
 }  // End Internal

@@ -141,15 +141,14 @@ namespace Internal {
 class BlockingAlertDialogPrivate
 {
 public:
-    BlockingAlertDialogPrivate(BlockingAlertDialog *parent):
+    BlockingAlertDialogPrivate(BlockingAlertDialog */*parent*/):
         ui(new Ui::BlockingAlertDialog),
         cui(0),
         _overrideButton(0),
         _remindLaterButton(0),
         _overrideCommentRequired(false),
         _remind(false),
-        _lastVisibleWidget(0),
-        q(parent)
+        _lastVisibleWidget(0)  // , q(parent)
     {}
 
     ~BlockingAlertDialogPrivate()
@@ -173,7 +172,7 @@ public:
     QList<AlertItem> _items;
 
 private:
-    BlockingAlertDialog *q;
+//    BlockingAlertDialog *q;
 };
 }  // Internal
 }  // Alert

@@ -61,9 +61,8 @@ namespace Internal {
 class FspPrinterPrivate
 {
 public:
-    FspPrinterPrivate(FspPrinter *parent) :
-        _drawRects(false),
-        q(parent)
+    FspPrinterPrivate(FspPrinter */*parent*/) :
+        _drawRects(false) // , q(parent)
     {
     }
 
@@ -555,7 +554,7 @@ public:
     bool _drawRects;
 
 private:
-    FspPrinter *q;
+//    FspPrinter *q;
 };
 } // namespace Internal
 } // namespace Tools

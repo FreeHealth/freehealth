@@ -80,12 +80,11 @@ namespace Internal {
 class PatientBarPrivate
 {
 public:
-    PatientBarPrivate(PatientBar *parent) :
+    PatientBarPrivate(PatientBar */*parent*/) :
         ui(new Ui::PatientBar),
         m_Mapper(0),
         m_Index(0),
-        m_MessageLabel(0),
-        q(parent)
+        m_MessageLabel(0) //, q(parent)
     {
     }
 
@@ -129,7 +128,7 @@ public:
     QPointer<QLabel> m_MessageLabel;
 
 private:
-    PatientBar *q;
+//    PatientBar *q;
 };
 }  // namespace Internal
 }  // namespace Patients

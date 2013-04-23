@@ -70,8 +70,8 @@ namespace Internal {
 class FspPrivate
 {
 public:
-    FspPrivate(Fsp *parent) :
-        q(parent)
+    FspPrivate(Fsp */*parent*/)
+        // : q(parent)
     {
     }
 
@@ -255,7 +255,7 @@ public:
     QList< QHash<int, QVariant> > _amountLines;
 
 private:
-    Fsp *q;
+//    Fsp *q;
 };
 
 /*! Constructor of the Tools::Internal::Fsp class */

@@ -60,7 +60,10 @@ namespace Internal {
 class CategoryItemPrivate
 {
 public:
-    CategoryItemPrivate(CategoryItem *parent) : m_Parent(0), m_IsDirty(false), q(parent) {}
+    CategoryItemPrivate(CategoryItem */*parent*/) :
+        m_Parent(0),
+        m_IsDirty(false)  // , q(parent)
+    {}
 
     ~CategoryItemPrivate()
     {
@@ -75,7 +78,7 @@ public:
     bool m_IsDirty;
 
 private:
-    CategoryItem *q;
+//    CategoryItem *q;
 };
 }
 }

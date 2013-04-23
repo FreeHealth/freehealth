@@ -64,10 +64,9 @@ namespace Internal {
 class ChequePrinterPrivate
 {
 public:
-    ChequePrinterPrivate(ChequePrinter *parent) :
+    ChequePrinterPrivate(ChequePrinter */*parent*/) :
         _amount(0.),
-        _drawRects(false),
-        q(parent)
+        _drawRects(false)  // , q(parent)
     {
     }
 
@@ -148,7 +147,7 @@ public:
     bool _drawRects;
 
 private:
-    ChequePrinter *q;
+//    ChequePrinter *q;
 };
 } // namespace Internal
 } // end namespace Tools

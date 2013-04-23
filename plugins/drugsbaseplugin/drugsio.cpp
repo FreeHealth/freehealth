@@ -167,8 +167,7 @@ namespace Internal {
 class DrugsIOPrivate
 {
 public:
-    DrugsIOPrivate(DrugsIO *parent):
-        q(parent)
+    DrugsIOPrivate(DrugsIO */*parent*/)  //:q(parent)
     {
     }
 
@@ -621,7 +620,7 @@ public:
     QVector<Core::IToken *> _tokens;
 
 private:
-    DrugsIO *q;
+//    DrugsIO *q;
 };
 }  // namespace Internal
 }  // namespace DrugsDB

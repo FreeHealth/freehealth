@@ -67,13 +67,12 @@ namespace Internal {
 class FormCorePrivate
 {
 public:
-    FormCorePrivate(FormCore *parent) :
+    FormCorePrivate(FormCore */*parent*/) :
         _formManager(0),
         _episodeManager(0),
         _widgetManager(0),
         _patientFormItemDataWrapper(0),
-        _formExporter(0),
-        q(parent)
+        _formExporter(0)  // , q(parent)
     {
     }
 
@@ -89,7 +88,7 @@ public:
     FormExporter *_formExporter, *_identitytFormExporter;
 
 private:
-    FormCore *q;
+//    FormCore *q;
 };
 }  // namespace Internal
 } // end namespace Form

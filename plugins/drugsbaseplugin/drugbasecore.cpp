@@ -64,8 +64,8 @@ namespace Internal {
 class DrugBaseCorePrivate
 {
 public:
-    DrugBaseCorePrivate(DrugBaseCore *base) :
-        q(base),
+    DrugBaseCorePrivate(DrugBaseCore */*base*/) :
+//        q(base),
         m_DrugsBase(0),
         m_ProtocolsBase(0),
         m_InteractionManager(0),
@@ -82,7 +82,7 @@ public:
     }
 
 private:
-    DrugBaseCore *q;
+//    DrugBaseCore *q;
 
 public:
     DrugsBase *m_DrugsBase;

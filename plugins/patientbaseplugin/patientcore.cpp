@@ -66,12 +66,11 @@ namespace Internal {
 class PatientCorePrivate
 {
 public:
-    PatientCorePrivate(PatientCore *parent) :
+    PatientCorePrivate(PatientCore */*parent*/) :
         _base(0),
         _patientModelWrapper(0),
         _patientWidgetManager(0),
-        _patientBar(0),
-        q(parent)
+        _patientBar(0) // , q(parent)
     {
     }
 
@@ -87,7 +86,7 @@ public:
     QList< QPointer<PatientModel> >_patientModels;
 
 private:
-    PatientCore *q;
+//    PatientCore *q;
 };
 }  // namespace Internal
 } // end namespace Patients

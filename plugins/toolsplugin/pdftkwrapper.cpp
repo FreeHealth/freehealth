@@ -75,10 +75,9 @@ PdfTkWrapper *PdfTkWrapper::_instance = 0;
 class PdfTkWrapperPrivate
 {
 public:
-    PdfTkWrapperPrivate(PdfTkWrapper *parent) :
+    PdfTkWrapperPrivate(PdfTkWrapper */*parent*/) :
         _initialized(false),
-        _process(0),
-        q(parent)
+        _process(0)  // , q(parent)
     {
     }
 
@@ -135,7 +134,7 @@ public:
     QHash<QProcess *, QProgressDialog *> _progressDialog;
 
 private:
-    PdfTkWrapper *q;
+//    PdfTkWrapper *q;
 };
 } // namespace Internal
 } // end namespace Tools

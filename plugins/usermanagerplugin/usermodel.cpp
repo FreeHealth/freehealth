@@ -103,9 +103,8 @@ namespace Internal {
 class UserModelPrivate
 {
 public:
-    UserModelPrivate(UserModel *parent) :
-        m_Sql(0),
-        q(parent)
+    UserModelPrivate(UserModel */*parent*/) :
+        m_Sql(0)  // , q(parent)
     {}
 
     ~UserModelPrivate()
@@ -414,7 +413,7 @@ public:
     Core::IUser::UserRights m_CurrentUserRights;
 
 private:
-    UserModel *q;
+//    UserModel *q;
 };
 
 }  // End Internal

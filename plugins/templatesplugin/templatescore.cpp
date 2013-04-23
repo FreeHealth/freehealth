@@ -36,10 +36,9 @@ namespace Internal {
 class TemplatesCorePrivate
 {
 public:
-    TemplatesCorePrivate(TemplatesCore *parent) :
+    TemplatesCorePrivate(TemplatesCore */*parent*/) :
         m_Base(0),
-        m_Manager(0),
-        q(parent)
+        m_Manager(0) //, q(parent)
     {
     }
 
@@ -48,7 +47,7 @@ public:
     TemplatesViewManager *m_Manager;
 
 private:
-    TemplatesCore *q;
+//    TemplatesCore *q;
 };
 }  // Internal
 }  // Templates

@@ -51,8 +51,7 @@ namespace Internal {
 class EpisodeManagerPrivate
 {
 public:
-    EpisodeManagerPrivate(EpisodeManager *parent) :
-        q(parent)
+    EpisodeManagerPrivate(EpisodeManager */*parent*/) //:q(parent)
     {
     }
 
@@ -64,7 +63,7 @@ public:
     QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 
 private:
-    EpisodeManager *q;
+//    EpisodeManager *q;
 };
 }  // namespace Internal
 } // end namespace Form
