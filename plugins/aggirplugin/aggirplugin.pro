@@ -2,7 +2,6 @@ TEMPLATE = lib
 TARGET = Gir
 
 DEFINES += AGGIR_LIBRARY
-with-pad { DEFINES += WITH_PAD }
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 
