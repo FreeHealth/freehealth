@@ -5,6 +5,7 @@ FreeMedForms
   * Forms
     * Lab tests result helper
     * French AGGIR printing massively improved
+    * Massively improved print and export mask of complete forms and some sub-forms
   * FreeMedForms
     * Adding a status bar at the top right corner of the patient bar
     * Manage episode validation
@@ -34,6 +35,15 @@ FreeMedForms
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Improving the french posologic sentence
+    * Corrected: Xml exchange-out file now handles the printed PDF files
+    * Commandline params
+      * weight/weightunit are now grouped in weightingrams
+      * height/heightunit are now grouped in heightincentimeters
+      * the height and weight units are not read anymore
+    * Xml exchange-in file
+      * Weight renamed WeightInGrams and only accepts 'value' attribute
+      * Height renamed HeightInCentimeters and only accepts 'value' attribute
+      * the height and weight units are not read anymore
   * FreeAccount
   * FreeToolBox
   * Installation && configuration / databases
