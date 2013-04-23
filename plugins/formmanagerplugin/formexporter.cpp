@@ -39,14 +39,15 @@
 #include "formmanager.h"
 #include "episodebase.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/constants_menus.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
-
-#include <coreplugin/icore.h>
-#include <coreplugin/iuser.h>
-#include <coreplugin/ipatient.h>
 
 #include <QSortFilterProxyModel>
 
