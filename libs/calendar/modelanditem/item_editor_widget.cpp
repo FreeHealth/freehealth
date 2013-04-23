@@ -62,12 +62,11 @@ namespace Internal {
 class ItemEditorWidgetPrivate
 {
 public:
-    ItemEditorWidgetPrivate(ItemEditorWidget *parent) :
+    ItemEditorWidgetPrivate(ItemEditorWidget */*parent*/) :
         m_Model(0),
         ui(new Internal::Ui::ItemEditorWidget),
         m_UserCalsModel(0),
-        m_ShowingExtra(true),
-        q(parent)
+        m_ShowingExtra(true) //,q(parent)
     {
     }
 
@@ -147,7 +146,7 @@ public:
     bool m_ShowingExtra;
 
 private:
-    ItemEditorWidget *q;
+//    ItemEditorWidget *q;
 };
 }
 }

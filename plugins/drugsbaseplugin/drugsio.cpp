@@ -167,7 +167,8 @@ namespace Internal {
 class DrugsIOPrivate
 {
 public:
-    DrugsIOPrivate(DrugsIO */*parent*/)  //:q(parent)
+    DrugsIOPrivate(DrugsIO *parent)
+        : q(parent)
     {
     }
 
@@ -334,6 +335,9 @@ public:
             LOG_FOR(q, "Adding prescription tokens");
             padTools()->tokenPool()->addTokens(_tokens);
         }
+#else
+        // Clang warning
+        Q_UNUSED(q);
 #endif
     }
 
@@ -620,7 +624,7 @@ public:
     QVector<Core::IToken *> _tokens;
 
 private:
-//    DrugsIO *q;
+    DrugsIO *q;
 };
 }  // namespace Internal
 }  // namespace DrugsDB
