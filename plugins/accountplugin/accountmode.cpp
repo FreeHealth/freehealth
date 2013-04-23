@@ -113,7 +113,7 @@ void AccountMode::modeActivated(Core::IMode *mode)
     }
     if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
         QString firstExplanationText = QString("<center><span style=\"font-size:x-large;font-weight:bold;color:darkred;font-variant:small-caps\">%1</span></center>")
-                .arg(tr("The account plugin is still is early alpha stage (do not use in "
+                .arg(tr("The account plugin is still an early alpha (do not use in "
                         "day-to-day practice)."));
         firstExplanationText += "<br /><br />";
         firstExplanationText += tr("Please read this explanation before using FreeAccount.\n"
