@@ -241,8 +241,6 @@ void IPatient::registerPatientTokens()
     } else {
         LOG_ERROR("PadTools object is not available, can not register the Core::IPatient tokens");
     }
-    // END
-
 #endif
 
 }
