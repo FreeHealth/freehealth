@@ -43,17 +43,29 @@
 
 using namespace Utils;
 
+VersionNumber::VersionNumber() :
+    m_Major(0),
+    m_Minor(0),
+    m_Debug(0),
+    m_Alpha(0),
+    m_Beta(0),
+    m_RC(0),
+    m_IsAlpha(false),
+    m_IsBeta(false),
+    m_IsRC(false)
+{}
+
 VersionNumber::VersionNumber(const QString &version) :
-        m_Version(version),
-        m_Major(0),
-        m_Minor(0),
-        m_Debug(0),
-        m_Alpha(0),
-        m_Beta(0),
-        m_RC(0),
-        m_IsAlpha(false),
-        m_IsBeta(false),
-        m_IsRC(false)
+    m_Version(version),
+    m_Major(0),
+    m_Minor(0),
+    m_Debug(0),
+    m_Alpha(0),
+    m_Beta(0),
+    m_RC(0),
+    m_IsAlpha(false),
+    m_IsBeta(false),
+    m_IsRC(false)
 {
 //    int tilde = version.indexOf("~");
     int dotCount = version.count(".");

@@ -42,6 +42,7 @@ namespace Utils {
 class UTILS_EXPORT VersionNumber
 {
 public:
+    VersionNumber();
     VersionNumber(const QString &versionNumber);
 
     QString versionString() const {return m_Version;}
