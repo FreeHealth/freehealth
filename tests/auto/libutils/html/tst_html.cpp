@@ -23,8 +23,10 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-
 #include <utils/global.h>
+
+#include "../../autotest.h"
+
 #include <QDebug>
 #include <QTest>
 
@@ -152,5 +154,5 @@ private slots:
     }
 };
 
-QTEST_MAIN(tst_Html)
+DECLARE_TEST(tst_Html)
 #include "tst_html.moc"
