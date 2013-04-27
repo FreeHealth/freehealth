@@ -14,7 +14,8 @@ SOURCES = \
     tst_datetime.cpp \
     tst_xml.cpp \
     tst_pass_log.cpp \
-    tst_versionnumber.cpp
+    tst_versionnumber.cpp \
+    tst_printaxishelper.cpp
 
 HEADERS += \
     testhtmlcontent.h \
