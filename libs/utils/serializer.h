@@ -30,8 +30,9 @@ class QNetworkProxy;
 QT_END_NAMESPACE
 
 /**
-  \namespace Utils::Serializer
-  \brief Serializer/deserializer for various Qt objects.
+ * \namespace Utils::Serializer
+ * \brief Serializer/deserializer for various Qt objects.
+ * \obsolete
 */
 
 namespace Utils {
