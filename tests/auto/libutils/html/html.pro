@@ -11,7 +11,8 @@ SOURCES = \
     tst_html.cpp \
     os_config.cpp \
     tst_fileaccess.cpp \
-    tst_datetime.cpp
+    tst_datetime.cpp \
+    tst_xml.cpp
 
 HEADERS += \
     testhtmlcontent.h \
