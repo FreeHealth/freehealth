@@ -158,6 +158,16 @@ private slots:
         // TODO: write me
         // UTILS_EXPORT QString htmlRemoveLinkTags(const QString &fullHtml);
     }
+
+    // TODO: code this tests
+//    UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
+//    UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
+//    UTILS_EXPORT QString toHtmlAccent(const QString &html);
+//    UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
+//    UTILS_EXPORT QString removeAccents(const QString &text);
+//    UTILS_EXPORT QString lineWrapString(const QString &in, int lineLength);
+//    UTILS_EXPORT QString indentString(const QString &in, int lineIndent);
+
 };
 
 DECLARE_TEST(tst_Html)
