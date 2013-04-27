@@ -152,6 +152,12 @@ private slots:
         QCOMPARE(Utils::htmlTakeAllCssContent(in), doubleCss);
         QVERIFY(in == out);
     }
+
+    void removeLinkTags()
+    {
+        // TODO: write me
+        // UTILS_EXPORT QString htmlRemoveLinkTags(const QString &fullHtml);
+    }
 };
 
 DECLARE_TEST(tst_Html)

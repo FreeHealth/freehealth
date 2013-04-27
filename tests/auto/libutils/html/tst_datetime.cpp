@@ -68,6 +68,11 @@ private slots:
 //        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
     }
 
+    void testInRange()
+    {
+        // TODO: write me
+    }
+
     void cleanupTestCase()
     {}
 };
