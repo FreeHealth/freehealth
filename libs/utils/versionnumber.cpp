@@ -157,15 +157,12 @@ bool VersionNumber::operator<=(const VersionNumber &b) const
 bool VersionNumber::operator==(const VersionNumber &b) const
 {
     if (m_Major==b.majorNumber() && m_Minor==b.minorNumber() && m_Debug==b.debugNumber()) {
-        if ((m_IsAlpha && b.isAlpha()) && (m_Alpha==b.alphaNumber())) {
-            return true;
-        } else if ((m_IsBeta && b.isBeta()) && (m_Beta==b.betaNumber())) {
-            return true;
-        } else if ((m_IsRC && b.isRC()) && (m_RC==b.rcNumber())) {
-            return true;
-        } else {
-            return (m_IsAlpha==b.isAlpha() && m_IsBeta==b.isBeta() && m_IsRC==b.isRC());
-        }
+        if (m_IsAlpha && b.isAlpha())
+            return m_Alpha==b.alphaNumber();
+        if (m_IsBeta && b.isBeta())
+            return m_Beta==b.betaNumber();
+        if (m_IsRC && b.isRC())
+            return m_RC==b.rcNumber();
     }
     return false;
 }
