@@ -13,7 +13,8 @@ SOURCES = \
     tst_fileaccess.cpp \
     tst_datetime.cpp \
     tst_xml.cpp \
-    tst_pass_log.cpp
+    tst_pass_log.cpp \
+    tst_versionnumber.cpp
 
 HEADERS += \
     testhtmlcontent.h \
