@@ -77,6 +77,19 @@ private slots:
         QCOMPARE(toXml, fromXml);
     }
 
+    // TODO: code this
+//    UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
+//    UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);
+//    UTILS_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const int defaultValue);
+//    UTILS_EXPORT int     xmlRead(const QDomElement &father, const QString &name, const long int defaultValue);
+//    UTILS_EXPORT bool    xmlRead(const QDomElement &father, const QString &name, const bool defaultValue);
+//    UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, const QString &value);
+//    UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, char *value);
+//    UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, int value);
+//    UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, long int value);
+//    UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool value);
+
+
     void cleanupTestCase()
     {}
 };
