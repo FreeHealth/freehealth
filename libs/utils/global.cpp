@@ -723,9 +723,13 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
                           .arg(correctFileName, file.errorString()));
             return QString::null;
         }
-        QByteArray data = file.readAll();
         QTextCodec *codec = QTextCodec::codecForName(encoder.toUtf8());
-        QString str = codec->toUnicode(data);
+        if (!codec) {
+            LOG_ERROR_FOR("Utils", "No codec for " + encoder);
+            return QString();
+        }
+
+        QString str = codec->toUnicode(file.readAll());
         LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
     }
@@ -748,7 +752,7 @@ QString isFileExists(const QString &absPath)
     return QString();
 }
 
-/** \brief Returns the MD5 checksum of a file. */
+/** \brief Returns the hex encoded MD5 checksum of a file. */
 QByteArray fileMd5(const QString &fileName)
 {
     QFile file(fileName);
@@ -760,7 +764,7 @@ QByteArray fileMd5(const QString &fileName)
     return QByteArray();
 }
 
-/** \brief Returns the SHA1 checksum of a file. */
+/** \brief Returns the hex encoded SHA1 checksum of a file. */
 QByteArray fileSha1(const QString &fileName)
 {
     QFile file(fileName);
