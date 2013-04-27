@@ -58,7 +58,7 @@ private slots:
                 "  <TAG2>VALUE IS A 23423.2342</TAG2>\n"
                 "  <TAG3>;qsdf;&amp;amp;&amp;lt;&amp;gt;</TAG3>\n"
               "</MAIN>\n";
-        QCOMPARE(xml, control);
+        // QCOMPARE(xml, control); // Can not be tested has QHash is not ordered so the XML output is not always in the same order
 
         QHash<QString,QString> fromXml;
         Utils::readXml(xml, "MAIN", fromXml, false);
@@ -71,7 +71,7 @@ private slots:
                 "  <TAG3>O3FzZGY7JmFtcDsmbHQ7Jmd0Ow==</TAG3>\n"
                 "</MAIN>\n";
         xml = Utils::createXml("MAIN", toXml, 2, true);
-        QCOMPARE(xml, control);
+        // QCOMPARE(xml, control); // Can not be tested has QHash is not ordered so the XML output is not always in the same order
 
         Utils::readXml(xml, "MAIN", fromXml, true);
         QCOMPARE(toXml, fromXml);
