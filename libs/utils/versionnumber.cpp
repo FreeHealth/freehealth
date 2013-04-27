@@ -102,41 +102,49 @@ VersionNumber::VersionNumber(const QString &version) :
 
 bool VersionNumber::operator>(const VersionNumber &b) const
 {
-    if (m_Major > b.majorNumber()) {
+    if (m_Major > b.majorNumber())
         return true;
-    } else if (m_Major == b.majorNumber()) {
-        if (m_Minor > b.minorNumber()) {
+    if (m_Major < b.majorNumber())
+        return false;
+
+    // here: m_Major == b.majorNumber()
+    if (m_Minor > b.minorNumber())
+        return true;
+    if (m_Minor < b.minorNumber())
+        return false;
+
+    // here: m_Major == b.majorNumber()  &&  m_Minor == b.minorNumber()
+    if (m_Debug > b.debugNumber())
+        return true;
+    if (m_Debug < b.debugNumber())
+        return false;
+
+    // here: m_Major == b.majorNumber()  &&  m_Minor == b.minorNumber()  &&  m_Debug==b.debugNumber()
+
+    // Major > alpha, beta, rc
+    if (!m_IsAlpha && !m_IsBeta && !m_IsRC) {
+        if (b.isAlpha() || b.isBeta() || b.isRC())
             return true;
-        } else if (m_Minor == b.minorNumber()) {
-            if (m_Debug > b.debugNumber()) {
-                return true;
-            } else if (m_Debug==b.debugNumber()) {
-                // Check sub versions
-                if (m_IsAlpha) {
-                    if (b.isAlpha()) {
-                        if (m_Alpha > b.alphaNumber()) {
-                            return true;
-                        }
-                    }
-                }
-
-                if (m_IsBeta) {
-                    if (b.isAlpha())
-                        return true;
-                    if (b.isBeta() && m_Beta > b.betaNumber())
-                        return true;
-                }
-
-                if (m_IsRC) {
-                    if (b.isAlpha() || b.isBeta())
-                        return true;
-                    if (m_RC > b.rcNumber())
-                        return true;
-                }
-            }
-        }
     }
-    return false;
+    if (!b.isAlpha() && !b.isBeta() && !b.isRC()) {
+        if (m_IsAlpha || m_IsBeta || m_IsRC)
+            return false;
+    }
+
+    // Check sub versions; Create a compact number
+    quint32 compact =  0; // uint max 4 294 967 295
+    int rc   = 10000000;
+    int beta =    10000;
+    int alpha =       1;
+    m_IsRC ? compact += (m_RC+1)*rc : compact += m_RC*rc;
+    m_IsBeta ? compact += (m_Beta+1)*beta : compact += m_Beta*beta;
+    m_IsAlpha ? compact += (m_Alpha+1)*alpha : compact += m_Alpha*alpha;
+
+    quint32 othercompact =  0; // uint max 4 294 967 295
+    b.isRC() ? othercompact += (b.rcNumber()+1)*rc : othercompact += b.rcNumber()*rc;
+    b.isBeta() ? othercompact += (b.betaNumber()+1)*beta : othercompact += b.betaNumber()*beta;
+    b.isAlpha() ? othercompact += (b.alphaNumber()+1)*alpha : othercompact += b.alphaNumber()*alpha;
+    return compact > othercompact;
 }
 
 bool VersionNumber::operator<(const VersionNumber &b) const
