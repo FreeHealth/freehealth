@@ -1224,13 +1224,14 @@ void switchEchoMode(QLineEdit * l)
 /** Rounds the \e date to the number of minutes \e minutesRound. */
 QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
 {
-    Q_ASSERT(minutesRound != 0);
+    Q_ASSERT(minutesRound > 0);
     if (date.isNull())
         return QDateTime();
-    if (date.time().minute() % minutesRound == 0)
+    if (date.time().minute() % minutesRound == 0
+            && date.time().second() == 0
+            && date.time().msec() == 0)
         return QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
     QDateTime dt = QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
-    dt = dt.addSecs(60);
     int minToRound = dt.time().minute() % minutesRound;
     dt = dt.addSecs((minutesRound - minToRound)*60);
     return dt;

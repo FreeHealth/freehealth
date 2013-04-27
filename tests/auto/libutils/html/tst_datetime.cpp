@@ -54,18 +54,32 @@ private slots:
         QCOMPARE(Utils::roundDateTime(dt, 15), rd);
 
         dt = QDateTime(QDate::currentDate(), QTime(12,15,12));
+        rd = QDateTime(QDate::currentDate(), QTime(12,30,00));
+        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+
+        dt = QDateTime(QDate::currentDate(), QTime(12,45,00,01));
+        rd = QDateTime(QDate::currentDate(), QTime(13,00,00));
+        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+
+        dt = QDateTime(QDate::currentDate(), QTime(12,44,59,99));
+        rd = QDateTime(QDate::currentDate(), QTime(12,45,00));
+        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+
+        dt = QDateTime(QDate::currentDate(), QTime(12,01,10,01));
         rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
         QCOMPARE(Utils::roundDateTime(dt, 15), rd);
 
-        // Buggy
-//        dt = QDateTime(QDate::currentDate(), QTime(12,45,00,01));
-//        rd = QDateTime(QDate::currentDate(), QTime(13,00,00));
-//        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        // Buggy
-//        dt = QDateTime(QDate::currentDate(), QTime(12,44,59,99));
-//        rd = QDateTime(QDate::currentDate(), QTime(12,45,00));
-//        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+        int div = 15;
+        int max = 60*15 - 2;
+        dt = QDateTime(QDate::currentDate(), QTime(12,0,1));
+        for(int i = 0; i < max; ++i) {
+            dt = dt.addMSecs(1000);
+            rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
+            QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+        }
+        dt = dt.addMSecs(2000);
+        rd = QDateTime(QDate::currentDate(), QTime(12,30,00));
+        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
     }
 
     void testInRange()
