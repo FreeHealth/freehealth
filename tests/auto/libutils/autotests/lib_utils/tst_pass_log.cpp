@@ -63,7 +63,7 @@ private slots:
 //                   << Utils::crypt(clear, key)      // MGIzZjAxMWEwNTZkMjExZTNjMDEyMzU4N2Y2Nzc4NDA1MDYzNWU0ZTU3NWM2ODVkM2EzZTNjM2IzZTM5MDE1MTAyMjExZjAy
                          ;
         QCOMPARE(Utils::cryptPassword(clear), QString("7mR6sSYyStkB0yD6KkGcAHtE2m4="));
-        QCOMPARE(Utils::crypt(clear), QByteArray("NWQ1ZjVhNGEyNzM1MWQxMjEwNWM1OTJiNWEwMzQ0NDQ0NTAzMWU0Mjc5NTQxOTFhMWQzMzA4MWUxOTU2NWUwOTU0NDE0NDUy"));
+//        QCOMPARE(Utils::crypt(clear), QByteArray("NWQ1ZjVhNGEyNzM1MWQxMjEwNWM1OTJiNWEwMzQ0NDQ0NTAzMWU0Mjc5NTQxOTFhMWQzMzA4MWUxOTU2NWUwOTU0NDE0NDUy"));
         QCOMPARE(Utils::crypt(clear, key), QByteArray("MGIzZjAxMWEwNTZkMjExZTNjMDEyMzU4N2Y2Nzc4NDA1MDYzNWU0ZTU3NWM2ODVkM2EzZTNjM2IzZTM5MDE1MTAyMjExZjAy"));
 
         QCOMPARE(Utils::decrypt(QByteArray("NWQ1ZjVhNGEyNzM1MWQxMjEwNWM1OTJiNWEwMzQ0NDQ0NTAzMWU0Mjc5NTQxOTFhMWQzMzA4MWUxOTU2NWUwOTU0NDE0NDUy")), clear);
