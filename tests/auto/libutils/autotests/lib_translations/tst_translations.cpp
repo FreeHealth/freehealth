@@ -23,21 +23,17 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <utils/global.h>
+#include <translationutils/constants.h>
 
 #include "../../autotest.h"
 
 #include <QDebug>
 #include <QTest>
-#include <QCryptographicHash>
 
 /**
  * Run test on:
- * QDateTime roundDateTime(const QDateTime &date, const int minutesRound);
- * bool inRange(const int min, const int max, const int value);
- * bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QModelIndex &value);
 */
-class tst_DateTime : public QObject
+class tst_Translations : public QObject
 {
     Q_OBJECT
 public:
@@ -47,50 +43,11 @@ private slots:
     {
     }
 
-    void testRoundDateTime()
-    {
-        QDateTime dt = QDateTime(QDate::currentDate(), QTime(12,12,12));
-        QDateTime rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        dt = QDateTime(QDate::currentDate(), QTime(12,15,12));
-        rd = QDateTime(QDate::currentDate(), QTime(12,30,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        dt = QDateTime(QDate::currentDate(), QTime(12,45,00,01));
-        rd = QDateTime(QDate::currentDate(), QTime(13,00,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        dt = QDateTime(QDate::currentDate(), QTime(12,44,59,99));
-        rd = QDateTime(QDate::currentDate(), QTime(12,45,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        dt = QDateTime(QDate::currentDate(), QTime(12,01,10,01));
-        rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-
-        int div = 15;
-        int max = 60*15 - 2;
-        dt = QDateTime(QDate::currentDate(), QTime(12,0,1));
-        for(int i = 0; i < max; ++i) {
-            dt = dt.addMSecs(1000);
-            rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
-            QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-        }
-        dt = dt.addMSecs(2000);
-        rd = QDateTime(QDate::currentDate(), QTime(12,30,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
-    }
-
-    void testInRange()
-    {
-        // TODO: write me
-    }
 
     void cleanupTestCase()
     {}
 };
 
-DECLARE_TEST(tst_DateTime)
-#include "tst_datetime.moc"
+DECLARE_TEST(tst_Translations)
+#include "tst_translations.moc"
 
