@@ -132,7 +132,7 @@ QString TextDocumentExtra::toXml() const
     t.insert(Constants::TKDOCUMENT_PRESENCE_XML_TAG,QString::number(presence()));
     t.insert(Constants::TKDOCUMENT_PRIORITY_XML_TAG, QString::number(priority()));
     t.insert(Constants::TKDOCUMENT_EXTRA_XML_TAG, "");
-    t.insert(Constants::TKDOCUMENT_HTML_XML_TAG, Utils::toHtmlAccent(toHtml()));
+    t.insert(Constants::TKDOCUMENT_HTML_XML_TAG, Utils::htmlReplaceAccents(toHtml()));
     return Utils::createXml(Constants::TKDOCUMENT_GENERAL_XML_TAG,t, 4, false);
 }
 

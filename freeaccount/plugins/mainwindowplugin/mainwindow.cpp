@@ -304,7 +304,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
 //        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
 //            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
 //            tmp.replace("font-weight:bold;", "font-weight:600;");
-//            Utils::saveStringToFile(Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser);
+//            Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp) , exfile, Utils::DontWarnUser);
 //        } else {
 //            savePrescription(exfile);
 //        }

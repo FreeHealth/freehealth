@@ -610,7 +610,7 @@ void TextEditor::saveAs()
     if (fileName.isEmpty())
         return;
     if (selected==tkTr(Trans::Constants::FILE_FILTER_HTML)) {
-        if (Utils::saveStringToFile(Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
+        if (Utils::saveStringToFile(Utils::htmlReplaceAccents(textEdit()->document()->toHtml("UTF-8")),
                                     fileName, Utils::Overwrite, Utils::WarnUser, this))
             textEdit()->document()->setModified(false);
     } else if (selected==tkTr(Trans::Constants::FILE_FILTER_TXT)) {

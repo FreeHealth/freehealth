@@ -608,14 +608,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
             if (format=="html_xml" || format=="html") {
                 tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
                 tmp.replace("font-weight:bold;", "font-weight:600;");
-                Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+                Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
             }
         } else {
             if (format=="html_xml" || format=="html") {
                 tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
-                Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+                Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
             }

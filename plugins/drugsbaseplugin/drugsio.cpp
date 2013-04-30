@@ -1188,7 +1188,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     }
     Utils::replaceTokens(tmp, tokens_value);
     if (toHtml)
-        tmp = Utils::toHtmlAccent(tmp);
+        tmp = Utils::htmlReplaceAccents(tmp);
     return tmp;
 #endif
 }

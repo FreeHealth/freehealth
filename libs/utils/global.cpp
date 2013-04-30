@@ -1476,8 +1476,11 @@ QString textAlignmentToHtml(const Qt::Alignment &align)
     return toReturn;
 }
 
-/** \brief Assumes a better encoding of HTML files by replacing special characters with the html code (é==&eacute;) **/
-QString toHtmlAccent(const QString &html)
+/**
+ * \brief Assumes a better encoding of HTML files by replacing special
+ * characters with the html code (é == &eacute;)
+ **/
+QString htmlReplaceAccents(const QString &html)
 {
     if (html.isEmpty())
         return html;

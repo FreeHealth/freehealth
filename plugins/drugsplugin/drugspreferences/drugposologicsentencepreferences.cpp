@@ -157,10 +157,11 @@ void DrugPosologicSentencePreferencesWidget::saveToSettings(Core::ISettings *set
         s = sets;
 
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
-    tmp = Utils::toHtmlAccent(tmp);
-    int cutBegin = tmp.indexOf("<p ");
-    int cutEnd = tmp.indexOf("</body>");
-    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
+    QString css = Utils::htmlTakeAllCssContent(tmp);
+    tmp = Utils::htmlReplaceAccents(tmp);
+    tmp = Utils::htmlBodyContent(tmp);
+    tmp .prepend(css);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
 }
 
@@ -245,10 +246,11 @@ void DrugPosologicSentenceWithPadPreferencesWidget::saveToSettings(Core::ISettin
         s = sets;
 
     QString tmp = _writer->rawSourceToHtml();
-    tmp = Utils::toHtmlAccent(tmp);
-    int cutBegin = tmp.indexOf("<p ");
-    int cutEnd = tmp.indexOf("</body>");
-    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
+    QString css = Utils::htmlTakeAllCssContent(tmp);
+    tmp = Utils::htmlReplaceAccents(tmp);
+    tmp = Utils::htmlBodyContent(tmp);
+    tmp .prepend(css);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->rawSourceToPlainText());
 }
 
