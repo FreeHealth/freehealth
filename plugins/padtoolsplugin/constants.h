@@ -74,6 +74,9 @@ const char * const BEFORE_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Before the tok
 const char * const AFTER_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "After the token");
 const char * const NESTED_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Nested token");
 
+const char * const ICON_PADSOURCE = "pad_source.png";
+const char * const ICON_PADTOKENS = "pad_tokens.png";
+
 /** Column representation for the token model */
 enum TokenModelDataRepresentation {
     TokenModel_HtmlLabelColumn = 0,

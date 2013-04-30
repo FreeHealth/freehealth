@@ -223,7 +223,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
     //    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
     //    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
-    aShowSource = createAction(this, "aShowSource", Core::Constants::ICONHELP,
+    aShowSource = createAction(this, "aShowSource", Constants::ICON_PADSOURCE,
                                Constants::A_PADTOOLS_SHOWSOURCE,
                                ctx,
                                Constants::SHOW_SOURCE, Constants::PADWRITER_TRANS_CONTEXT,
@@ -232,7 +232,7 @@ PadToolsActionHandler::PadToolsActionHandler(QObject *parent) :
                                QKeySequence::UnknownKey, false);
     connect(aShowSource, SIGNAL(triggered()), this, SLOT(onShowSourceRequested()));
 
-    aViewOutput = createAction(this, "aViewOutput", Core::Constants::ICONHELP,
+    aViewOutput = createAction(this, "aViewOutput", Constants::ICON_PADTOKENS,
                                      Constants::A_PADTOOLS_VIEWOUTPUT,
                                      ctx,
                                      Constants::VIEW_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT,
