@@ -71,13 +71,13 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 // Register an existing Core action
-static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
-{
-    QAction *a = new QAction(parent);
-    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
-    Q_UNUSED(cmd);
-    return a;
-}
+//static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
+//{
+//    QAction *a = new QAction(parent);
+//    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
+//    Q_UNUSED(cmd);
+//    return a;
+//}
 
 // Create an action
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
