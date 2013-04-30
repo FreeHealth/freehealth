@@ -66,11 +66,10 @@ namespace Internal {
 class TokenHighlighterEditorPrivate
 {
 public:
-    TokenHighlighterEditorPrivate(TokenHighlighterEditor *parent):
+    TokenHighlighterEditorPrivate(TokenHighlighterEditor */*parent*/):
         _pad(0),
         _lastHoveredItem(0),
-        _lastUnderCursorItem(0),
-        q(parent)
+        _lastUnderCursorItem(0) // , q(parent)
     {
         // Using gnome palette: http://openclipart.org/detail/25332/gnome-color-palette-by-anonymous-25332
         QColor core("#E0C39E");
@@ -134,7 +133,7 @@ public:
     QMultiMap<PadItem *, QTextEdit::ExtraSelection> _tokenExtraSelection;
 
 private:
-    TokenHighlighterEditor *q;
+    // TokenHighlighterEditor *q;
 };
 
 class TokenOutputDocumentPrivate
