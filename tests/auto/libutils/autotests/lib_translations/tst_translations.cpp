@@ -43,7 +43,7 @@ private slots:
     {
     }
 
-
+    // TODO: add Trans::MultiLingualClass<T> tests
     void cleanupTestCase()
     {}
 };

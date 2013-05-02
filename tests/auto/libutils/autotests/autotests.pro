@@ -12,3 +12,4 @@ HEADERS += \
     ../../autotest.h
 
 include(lib_utils/lib_utils.pri)
+include(lib_translations/lib_translations.pri)
