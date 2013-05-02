@@ -305,9 +305,10 @@ void XmlIOBase::onCoreFirstRunCreationRequested()
 }
 
 /**
-  Return true if the form \e form, XmlIOBase::TypeOfForm \e type and \e modeName exists in the database.\n
-  Empty \e modeName are interpreted as the central form.\n
-  The \e form is modified and populate with the database content.
+ * Return true if the form \e form, XmlIOBase::TypeOfForm \e type
+ * and \e modeName exists in the database.\n
+ * Empty \e modeName are interpreted as the central form.\n
+ * The \e form is modified and populate with the database content.
 */
 bool XmlIOBase::isFormExists(XmlFormName &form, const int type, QString modeName)
 {
@@ -798,9 +799,16 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     // Save qml
 //    saveFiles(form, "qml", "qml", XmlIOBase::QmlFile);
 
-    // Save html
+    // Save html && css
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveFiles(form, "html", "html", XmlIOBase::HtmlFile)) {
+        LOG_ERROR("Unable to save HTML files");
+        database().rollback();
+        _transaction = false;
+        return false;
+    }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    if (!saveFiles(form, "html", "css", XmlIOBase::HtmlFile)) {
         LOG_ERROR("Unable to save HTML files");
         database().rollback();
         _transaction = false;

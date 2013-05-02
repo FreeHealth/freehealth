@@ -73,10 +73,10 @@ public:
         ScriptFile,
         UiFile,
         HtmlFile,
-//        Forms,
         PmhCategories,
         ExtraFiles,
-        PdfFile
+        PdfFile,
+        CssFile
     };
 
     // Constructor
