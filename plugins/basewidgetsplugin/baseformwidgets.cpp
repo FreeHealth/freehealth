@@ -1084,7 +1084,7 @@ QVariant BaseCheckData::data(const int ref, const int role) const
         }
         return QVariant();
     }
-    return Qt::Unchecked;
+    return QVariant();
 }
 
 void BaseCheckData::setStorableData(const QVariant &data)
