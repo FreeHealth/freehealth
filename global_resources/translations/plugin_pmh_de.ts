@@ -61,6 +61,17 @@
     </message>
 </context>
 <context>
+    <name>PMH::Internal::PmhContentExporter</name>
+    <message>
+        <source>Start PMHx exportation for patient %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exportation done in %1 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PMH::Internal::PmhModeWidget</name>
     <message>
         <source>Form</source>

@@ -764,14 +764,6 @@ Please contact your server administrator.</source>
 Veuillez contacter votre administrateur réseau.</translation>
     </message>
     <message>
-        <source>Server already configurated</source>
-        <translation>Serveur déjà configuré</translation>
-    </message>
-    <message>
-        <source>The server is already configurated for FreeMedForms.</source>
-        <translation>Le serveur est déjà configuré pour FreeMedForms.</translation>
-    </message>
-    <message>
         <source>An error occured...</source>
         <translation>Une erreur est survenue...</translation>
     </message>
@@ -782,11 +774,19 @@ Please check out the log files and contact your administrator.</source>
 Veuillez vérifier les fichiers journaux et contacter votre administrateur.</translation>
     </message>
     <message>
-        <source>Server configurated</source>
+        <source>Server already configured</source>
+        <translation>Serveur déjà configuré</translation>
+    </message>
+    <message>
+        <source>The server is already configured for FreeMedForms.</source>
+        <translation>Ce serveur est déjà configuré pour FreeMedForms.</translation>
+    </message>
+    <message>
+        <source>Server configured</source>
         <translation>Serveur configuré</translation>
     </message>
     <message>
-        <source>The server was successfully configurated.</source>
+        <source>The server was successfully configured.</source>
         <translation>Le serveur a été correctement configuré.</translation>
     </message>
 </context>

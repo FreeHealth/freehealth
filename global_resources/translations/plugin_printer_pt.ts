@@ -415,7 +415,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="829"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="832"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -463,7 +463,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="657"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="660"/>
         <source>No content to preview (simpleDraw).</source>
         <translation type="unfinished"></translation>
     </message>

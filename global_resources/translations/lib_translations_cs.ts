@@ -338,7 +338,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="48"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="138"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="140"/>
         <source>Subforms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -414,337 +414,347 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="63"/>
-        <source>Unique identifier</source>
+        <source>Tooltip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="64"/>
-        <source>URL</source>
+        <source>Unique identifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="65"/>
-        <source>Value</source>
+        <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="66"/>
-        <source>Value: %1</source>
+        <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="67"/>
-        <source>Is valid</source>
+        <source>Value: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="68"/>
-        <source>Icon</source>
+        <source>Is valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="69"/>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="70"/>
         <source>Engine report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="71"/>
-        <source>Token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="72"/>
-        <source>Token: %1</source>
+        <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="73"/>
-        <source>Token namespace: %1</source>
+        <source>Token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="74"/>
-        <source>Edit token</source>
+        <source>Token: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="75"/>
-        <source>Validate</source>
+        <source>Token namespace: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="76"/>
-        <source>Validate episode</source>
+        <source>Edit token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="77"/>
-        <source>Override</source>
+        <source>Validate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="78"/>
-        <source>Add alert</source>
+        <source>Validate episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="79"/>
-        <source>Edit alert</source>
+        <source>Override</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="80"/>
-        <source>Remind later</source>
+        <source>Add alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="81"/>
-        <source>%1 alerts</source>
+        <source>Edit alert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="82"/>
+        <source>Remind later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="83"/>
-        <source>from</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="84"/>
-        <source>to</source>
+        <source>%1 alerts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="85"/>
-        <source>from %1 to %2</source>
+        <source>from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="86"/>
-        <source>during</source>
+        <source>to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="87"/>
-        <source>each</source>
+        <source>from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="88"/>
-        <source>and</source>
+        <source>during</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="89"/>
-        <source>Alert</source>
+        <source>each</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="90"/>
-        <source>Alerts</source>
+        <source>and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="91"/>
-        <source>Dynamic alert</source>
+        <source>Alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="92"/>
-        <source>Blocking alert</source>
+        <source>Alerts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="93"/>
+        <source>Dynamic alert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="94"/>
+        <source>Blocking alert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="95"/>
         <source>Non-blocking alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="96"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="98"/>
         <source>related to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="97"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="99"/>
         <source>related to patient %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="98"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="100"/>
         <source>related to current patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="99"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="101"/>
         <source>related to all patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="100"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="102"/>
         <source>related to user %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="101"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="103"/>
         <source>related to current user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="102"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="104"/>
         <source>related to all users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="103"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="105"/>
         <source>related to application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="104"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="106"/>
         <source>related to the family %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="105"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="107"/>
         <source>related to user group %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="106"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="108"/>
         <source>You</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="107"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="109"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="108"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="110"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="109"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="111"/>
         <source>Created by: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="110"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="112"/>
         <source>On the: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="111"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="113"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="114"/>
         <location filename="../../libs/translationutils/trans_current.h" line="116"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="118"/>
         <source>Settings recovered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="115"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="117"/>
         <source>Reading settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="117"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="119"/>
         <source>Creating default settings for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="118"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="120"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="119"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="121"/>
         <source>More information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="120"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="122"/>
         <source>Hide extra information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="123"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="125"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="124"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="126"/>
         <source>Footer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="125"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="127"/>
         <source>Watermark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="126"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="128"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="129"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="131"/>
         <source>Data pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="130"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="132"/>
         <source>Data pack manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="131"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="133"/>
         <source>Last modification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="132"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="134"/>
         <source>Data type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="135"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="137"/>
         <source>Zip codes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="136"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="138"/>
         <source>User documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="137"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="139"/>
         <source>Full set of forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="139"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="141"/>
         <source>International classification of diseases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="140"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="142"/>
         <source>Diseases classifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="141"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="143"/>
         <source>Alert packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="142"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="144"/>
         <source>Binary packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="143"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="145"/>
         <source>Various</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1868,7 +1878,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="113"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="169"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="170"/>
         <source>Past medical history</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2086,41 +2096,46 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="161"/>
-        <source>Toggle full screen</source>
+        <source>Export patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="162"/>
-        <source>Zoom in</source>
+        <source>Toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="163"/>
-        <source>Zoom out</source>
+        <source>Zoom in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="164"/>
-        <source>Take screenshot</source>
+        <source>Zoom out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="165"/>
-        <source>Screenshots</source>
+        <source>Take screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="166"/>
-        <source>Navigation</source>
+        <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="167"/>
+        <source>Navigation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="168"/>
         <source>Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="171"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="172"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2617,7 +2632,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="95"/>
-        <source>Patient synthesis</source>
+        <source>Patient overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

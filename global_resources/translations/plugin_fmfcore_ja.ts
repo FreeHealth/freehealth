@@ -335,7 +335,7 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
         <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="369"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1013"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1010"/>
         <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>
@@ -962,12 +962,22 @@ Please contact your server administrator.</source>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="596"/>
-        <source>Server already configurated</source>
+        <source>Server already configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="596"/>
-        <source>The server is already configurated for FreeMedForms.</source>
+        <source>The server is already configured for FreeMedForms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
+        <source>Server configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
+        <source>The server was successfully configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -979,16 +989,6 @@ Please contact your server administrator.</source>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="603"/>
         <source>An error occured when trying to execute the script configuration script.
 Please check out the log files and contact your administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
-        <source>Server configurated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="608"/>
-        <source>The server was successfully configurated.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1083,7 +1083,7 @@ Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/ipatient.cpp" line="64"/>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="65"/>
         <source>This token namespace contains all patient&apos;s related tokens.
 It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
 but does not contains all other form items.</source>

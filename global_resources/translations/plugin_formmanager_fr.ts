@@ -132,12 +132,6 @@ L&apos;épisode ne sera plus visible bien que toujours présent dans la base de 
 Voulez-vous réellement supprimer cet épisode ?</translation>
     </message>
     <message>
-        <source>The actual episode has been modified. Do you want to save changes in your database?
-Answering &apos;No&apos; will cause definitve data loss.</source>
-        <translation>L&apos;épisode en cours a été modifié. Voulez-vous sauvegarder les modifications dans la base de données ?
-Répondre &quot;Non&quot; causera une perte irréversible des données modifiées.</translation>
-    </message>
-    <message>
         <source>Images (*.png)</source>
         <translation></translation>
     </message>
@@ -151,31 +145,37 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
     </message>
     <message>
         <source>Saving episode (%1) from form (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarde de l&apos;épisode (%1) du formulaire (%2)</translation>
     </message>
     <message>
         <source>WARNING: Episode (%1) from form (%2) can not be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>ATTENTION: l&apos;épisode (%1) du formulaire (%2) ne peut pas être sauvegardé</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) signed</source>
-        <translation type="unfinished"></translation>
+        <translation>Episode (%1) du formulaire (%2) est signé</translation>
     </message>
     <message>
         <source>Renew the current episode</source>
-        <translation type="unfinished"></translation>
+        <translation>Renouveler l&apos;épisode courant</translation>
     </message>
     <message>
         <source>A new episode will created with the exact same content as the currently selected but at the current date, using your user.&lt;br /&gt;Do you want to renew the current episode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Un nouvel épisode va être créer avec le même contenu que l&apos;épisode en cours d&apos;édition mais à la date du jour, en utilisant votre utilisateur.&lt;br/&gt;Voulez-vous réellement renouveler l&apos;épisode courant ?</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) renewed</source>
-        <translation type="unfinished"></translation>
+        <translation>Épisode (%1) du formulaire (%2) a été renouvelé</translation>
     </message>
     <message>
         <source>Episode (%1) from form (%2) removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Épisode (%1) du formulaire (%2) a été supprimé</translation>
+    </message>
+    <message>
+        <source>The actual episode has been modified. Do you want to save changes in your database?
+Answering &apos;No&apos; will cause deftialtve data loss.</source>
+        <translation>L&apos;épisode courant a été modifié. Voulez-vous sauvegarder les modifications dans votre base de données ?
+Répondre &apos;Non&apos; causera des pertes de données définitive.</translation>
     </message>
 </context>
 <context>
@@ -214,6 +214,17 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
     <message>
         <source>You must select one file to be used by default.</source>
         <translation>Vous devez ne sélectionner qu&apos;un seul formulaire.</translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormExporter</name>
+    <message>
+        <source>Start exportation for patient %1. %2 recorded episodes</source>
+        <translation>Début de l&apos;exportation du dossier patient %1. %2 épisode(s) enregistré(s)</translation>
+    </message>
+    <message>
+        <source>Exportation done in %1 ms</source>
+        <translation>Exportation terminé en %1 ms</translation>
     </message>
 </context>
 <context>
@@ -435,6 +446,22 @@ Répondre &quot;Non&quot; causera une perte irréversible des données modifiée
     <message>
         <source>Forms</source>
         <translation>Formulaires</translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation>Données</translation>
+    </message>
+    <message>
+        <source>Patient extracted data</source>
+        <translation>Données patient extraites</translation>
+    </message>
+    <message>
+        <source>Print output</source>
+        <translation>Contenu d&apos;impression</translation>
+    </message>
+    <message>
+        <source>Item current data</source>
+        <translation>Données de l&apos;élément de formulaire courant</translation>
     </message>
 </context>
 </TS>

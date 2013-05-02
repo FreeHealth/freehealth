@@ -29,7 +29,7 @@ Error: %2</source>
 <context>
     <name>XmlForms::Internal::XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="931"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="929"/>
         <source>Error while saving PMHxCateogries (%1)</source>
         <translation type="unfinished"></translation>
     </message>

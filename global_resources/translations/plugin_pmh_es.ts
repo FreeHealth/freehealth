@@ -75,6 +75,19 @@
     </message>
 </context>
 <context>
+    <name>PMH::Internal::PmhContentExporter</name>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="134"/>
+        <source>Start PMHx exportation for patient %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhcontentexporter.cpp" line="156"/>
+        <source>Exportation done in %1 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PMH::Internal::PmhModeWidget</name>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmodewidget.ui" line="14"/>
@@ -270,8 +283,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1228"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1238"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1210"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1220"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>
@@ -292,22 +305,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
         <source>Starting date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
         <source>Ending date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="268"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="269"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
         <source>ICD10 coding</source>
         <translation type="unfinished"></translation>
     </message>

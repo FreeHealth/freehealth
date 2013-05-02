@@ -228,6 +228,77 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
     </message>
 </context>
 <context>
+    <name>Patients::Internal::PatientDataExtractorDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient file exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select patients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export all patients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select file format and exportation path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select an output format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML+PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient data extractor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start patient file extraction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Setting patient uuid %1 as current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Patients::Internal::UrlPhotoDialog</name>
     <message>
         <source>Dialog</source>

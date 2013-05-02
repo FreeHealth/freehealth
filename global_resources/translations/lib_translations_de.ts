@@ -2081,10 +2081,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Patient synthesis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Needed license agreement...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2639,6 +2635,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Social number (owner address)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tooltip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient overview</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1820,10 +1820,6 @@ Emplacement : %2</translation>
         <translation>Afficher/cacher les informations concernant le patient</translation>
     </message>
     <message>
-        <source>Patient synthesis</source>
-        <translation>Synthèse patient</translation>
-    </message>
-    <message>
         <source>Specialties</source>
         <translation>Spécialités</translation>
     </message>
@@ -2635,6 +2631,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <source>Social number (owner address)</source>
         <translation>Numéro de sécurité sociale (adresse du propriétaire)</translation>
+    </message>
+    <message>
+        <source>Tooltip</source>
+        <translation>Bulle d&apos;aide</translation>
+    </message>
+    <message>
+        <source>Overview</source>
+        <translation>Vue d&apos;ensemble</translation>
+    </message>
+    <message>
+        <source>Export patient file</source>
+        <translation>Exporter le dossier patient</translation>
+    </message>
+    <message>
+        <source>Patient overview</source>
+        <translation>Vue d&apos;ensemble du patient</translation>
     </message>
 </context>
 </TS>

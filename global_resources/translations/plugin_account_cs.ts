@@ -240,7 +240,7 @@ You have to complete them yourself.</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="116"/>
-        <source>The account plugin is still is early alpha stage (do not use in day-to-day practice).</source>
+        <source>The account plugin is still an early alpha (do not use in day-to-day practice).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

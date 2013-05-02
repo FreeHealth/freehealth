@@ -61,6 +61,17 @@
     </message>
 </context>
 <context>
+    <name>PMH::Internal::PmhContentExporter</name>
+    <message>
+        <source>Start PMHx exportation for patient %1</source>
+        <translation>Début de l&apos;exportation des antécédents du patient %1</translation>
+    </message>
+    <message>
+        <source>Exportation done in %1 ms</source>
+        <translation>Exporation terminée en %1 ms</translation>
+    </message>
+</context>
+<context>
     <name>PMH::Internal::PmhModeWidget</name>
     <message>
         <source>Remove PMHx</source>

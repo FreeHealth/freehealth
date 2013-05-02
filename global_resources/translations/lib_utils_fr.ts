@@ -175,28 +175,28 @@
         <translation>Erreur %1 en essayant d&apos;ouvrir le fichier %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="960"/>
+        <location filename="../../libs/utils/global.cpp" line="964"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1051"/>
+        <location filename="../../libs/utils/global.cpp" line="1055"/>
         <source>This function is not available in this version.</source>
         <translation>Cette fonction n&apos;est pas disponible dans cette version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1052"/>
+        <location filename="../../libs/utils/global.cpp" line="1056"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1113"/>
+        <location filename="../../libs/utils/global.cpp" line="1117"/>
         <source>Do you agree these terms?</source>
         <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1093"/>
-        <location filename="../../libs/utils/global.cpp" line="1094"/>
+        <location filename="../../libs/utils/global.cpp" line="1097"/>
+        <location filename="../../libs/utils/global.cpp" line="1098"/>
         <source>License agreement acceptation</source>
         <translation>Agrément de Licence</translation>
     </message>
@@ -207,22 +207,22 @@
         <translation>%1 correctement sauvegardé (%2)</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1105"/>
+        <location filename="../../libs/utils/global.cpp" line="1109"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1183"/>
+        <location filename="../../libs/utils/global.cpp" line="1187"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1188"/>
+        <location filename="../../libs/utils/global.cpp" line="1192"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1832"/>
+        <location filename="../../libs/utils/global.cpp" line="1954"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -238,12 +238,12 @@
 <context>
     <name>Utils::DatabaseInformationDialog</name>
     <message>
-        <location filename="../../libs/utils/widgets/databaseinformationdialog.cpp" line="129"/>
+        <location filename="../../libs/utils/widgets/databaseinformationdialog.cpp" line="128"/>
         <source>Save this report</source>
         <translation>Sauvegarder ce rapport</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/databaseinformationdialog.cpp" line="195"/>
+        <location filename="../../libs/utils/widgets/databaseinformationdialog.cpp" line="194"/>
         <source>Save the current report</source>
         <translation>Sauvegarder le rapport courant</translation>
     </message>

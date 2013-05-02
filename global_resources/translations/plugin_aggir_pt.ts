@@ -4,12 +4,12 @@
 <context>
     <name>Gir::GirModel</name>
     <message>
-        <location filename="../../plugins/aggirplugin/girmodel.cpp" line="567"/>
+        <location filename="../../plugins/aggirplugin/girmodel.cpp" line="561"/>
         <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/aggirplugin/girmodel.cpp" line="632"/>
+        <location filename="../../plugins/aggirplugin/girmodel.cpp" line="626"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>

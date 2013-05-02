@@ -135,17 +135,13 @@
 <context>
     <name>Tools::Internal::ChequePrinterPreferencesPage</name>
     <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="151"/>
-        <source>Print helpers</source>
-        <translation>Assistants d&apos;impression</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="157"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="230"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="163"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="224"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.cpp" line="236"/>
         <source>Cheque printer</source>
         <translation>Imprimer un chèque</translation>
     </message>
@@ -158,17 +154,75 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="23"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="20"/>
+        <source>Available formats</source>
+        <translation>Formats disponibles</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="29"/>
+        <source>Pay to</source>
+        <translation>Ordre</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="104"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="211"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="318"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="425"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="532"/>
+        <source>width</source>
+        <translation>largeur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="129"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="236"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="343"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="450"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="557"/>
+        <source>height</source>
+        <translation>hauteur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="136"/>
+        <source>Amount (numbers)</source>
+        <translation>Montant (nombres)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="243"/>
+        <source>Amount (letters)</source>
+        <translation>Montant (lettres)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="350"/>
+        <source>Date</source>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="457"/>
+        <source>Place</source>
+        <translation>Lieu</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="564"/>
+        <source>Print a test</source>
+        <translation>Imprimer un test</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="574"/>
+        <source>Cheque printing</source>
+        <translation>Impression de chèques</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="596"/>
         <source>Default place</source>
         <translation>Lieu par défault</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="36"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="586"/>
         <source>Cheque order</source>
         <translation>Ordre du chèque</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="59"/>
+        <location filename="../../plugins/toolsplugin/cheque/chequeprinter_preferences.ui" line="606"/>
         <source>Default values
 One per line</source>
         <translation>Valeurs par défaut
@@ -232,37 +286,37 @@ Une par ligne</translation>
 <context>
     <name>Tools::Internal::PdfTkWrapper</name>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="341"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="340"/>
         <source>Starting PDF completion. Please wait...</source>
         <translation>Initialise la complétion du formulaire PDF. Veuillez patienter...</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="361"/>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="368"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="360"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="367"/>
         <source>PDF Completion error</source>
         <translation>Erreur lors de la complétion du formulaire PDF</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="362"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="361"/>
         <source>The PDF completion process raised the following error:&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;
 %2</source>
         <translation>La complétion du formulaire PDF a levé l&apos;erreur suivante : &lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;
 %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="391"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="390"/>
         <source>pdftk error</source>
         <translation>Erreur complétion PDF</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="392"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="391"/>
         <source>The pdftk process ends with the exit code: %1
 %2</source>
         <translation>Le processus de complétion des formulaires PDF s&apos;est terminé avec le code d&apos;erreur : %1
 %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="402"/>
+        <location filename="../../plugins/toolsplugin/pdftkwrapper.cpp" line="401"/>
         <source>Opening completed PDF file</source>
         <translation>Ouverture du formulaire PDF complété</translation>
     </message>

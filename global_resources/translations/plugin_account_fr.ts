@@ -224,7 +224,7 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation>Ne pas montrer ce message à nouveau.</translation>
     </message>
     <message>
-        <source>The account plugin is still is early alpha stage (do not use in day-to-day practice).</source>
+        <source>The account plugin is still an early alpha (do not use in day-to-day practice).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

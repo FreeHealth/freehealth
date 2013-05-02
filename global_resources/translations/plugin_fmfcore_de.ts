@@ -758,14 +758,6 @@ Please contact your server administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Server already configurated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The server is already configurated for FreeMedForms.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>An error occured...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -775,11 +767,19 @@ Please check out the log files and contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Server configurated</source>
+        <source>Server already configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The server was successfully configurated.</source>
+        <source>The server is already configured for FreeMedForms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server was successfully configured.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

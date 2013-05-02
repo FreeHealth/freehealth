@@ -231,6 +231,77 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     </message>
 </context>
 <context>
+    <name>Patients::Internal::PatientDataExtractorDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Patient file exporter</source>
+        <translation>Exportation de dossier patient</translation>
+    </message>
+    <message>
+        <source>Select patients</source>
+        <translation>Sélectionnez les patients</translation>
+    </message>
+    <message>
+        <source>Export all patients</source>
+        <translation>Exporter tous les patients</translation>
+    </message>
+    <message>
+        <source>Add current patient</source>
+        <translation>Ajouter le patient courant</translation>
+    </message>
+    <message>
+        <source>Select file format and exportation path</source>
+        <translation>Sélectionnez un format de fichier et le chemin de l&apos;exportation</translation>
+    </message>
+    <message>
+        <source>Select an output format</source>
+        <translation>Sélectionnez le format de fichier</translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HTML+PDF</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Group by</source>
+        <translation>Regrouper par</translation>
+    </message>
+    <message>
+        <source>Forms</source>
+        <translation>Formulaires</translation>
+    </message>
+    <message>
+        <source>Dates</source>
+        <translation>Dates</translation>
+    </message>
+    <message>
+        <source>Patient data extractor</source>
+        <translation>Extracteur de données patient</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Exportation...</translation>
+    </message>
+    <message>
+        <source>Start patient file extraction</source>
+        <translation>Début de l&apos;exportation du dossier patient</translation>
+    </message>
+    <message>
+        <source>Setting patient uuid %1 as current patient</source>
+        <translation>Défini le patient courant avec l&apos;uuid %1</translation>
+    </message>
+</context>
+<context>
     <name>Patients::Internal::UrlPhotoDialog</name>
     <message>
         <source>Dialog</source>

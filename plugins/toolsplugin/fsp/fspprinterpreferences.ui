@@ -10,9 +10,6 @@
     <height>378</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Templates Preferences</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="1" column="0">
     <spacer name="verticalSpacer">

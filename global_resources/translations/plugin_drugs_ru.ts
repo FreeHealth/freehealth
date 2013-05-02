@@ -1054,13 +1054,13 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugPosologicSentencePage</name>
     <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="280"/>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="282"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="284"/>
         <source>Posologic sentence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="315"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="313"/>
         <source>Updating posologic sentence.</source>
         <translation type="unfinished"></translation>
     </message>

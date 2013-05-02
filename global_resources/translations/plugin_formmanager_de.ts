@@ -106,11 +106,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The actual episode has been modified. Do you want to save changes in your database?
-Answering &apos;No&apos; will cause definitve data loss.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,6 +168,11 @@ Do you really want to remove the current episode?</source>
         <source>Episode (%1) from form (%2) removed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The actual episode has been modified. Do you want to save changes in your database?
+Answering &apos;No&apos; will cause deftialtve data loss.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::Internal::EpisodeBase</name>
@@ -209,6 +209,17 @@ Do you really want to remove the current episode?</source>
     </message>
     <message>
         <source>You must select one file to be used by default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormExporter</name>
+    <message>
+        <source>Start exportation for patient %1. %2 recorded episodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exportation done in %1 ms</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -430,6 +441,22 @@ Do you really want to remove the current episode?</source>
     </message>
     <message>
         <source>Forms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient extracted data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Item current data</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
