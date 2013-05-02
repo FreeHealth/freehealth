@@ -247,38 +247,33 @@ Une par ligne</translation>
 </context>
 <context>
     <name>Tools::Internal::FspPrinterPreferencesWidget</name>
-    <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="14"/>
-        <source>Templates Preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message utf8="true">
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="33"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="30"/>
         <source>Cerfa par défaut</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="39"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="36"/>
         <source>Utiliser ce CERFA par défaut</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="57"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="54"/>
         <source>12541*01</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="62"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="59"/>
         <source>12541*02</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="67"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="64"/>
         <source>12541*02_v2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="75"/>
+        <location filename="../../plugins/toolsplugin/fsp/fspprinterpreferences.ui" line="72"/>
         <source>Print a test</source>
         <translation>Imprimer un test</translation>
     </message>
