@@ -387,7 +387,7 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
             conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH));
         }
     }
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(Description));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(Description));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
 
     QString req = select(gets, joins, conds);
@@ -452,7 +452,7 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
     for(int i = 0; i < ids.count(); ++i) {
         int id = ids.at(i);
         Utils::FieldList conds;
-        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(FullContent));
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(FullContent));
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID, QString("=%1").arg(id));
         req = select(gets, joins, conds);
@@ -499,7 +499,7 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
     Utils::FieldList conds;
     conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(type));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(type));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
     if (modeName.isEmpty()) {
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("='central'"));
@@ -575,7 +575,7 @@ bool XmlIOBase::hasScreenShots(const QString &formUid, const QString &lang)
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
     Utils::FieldList conds;
     conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(ScreenShot));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
     if (!lang.isEmpty()) {
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
@@ -636,7 +636,7 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
     Utils::FieldList conds;
     conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("='%1'").arg(ScreenShot));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
     if (!lang.isEmpty()) {
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
@@ -1129,7 +1129,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     // update or insert content table ?
     where.clear();
     where.insert(FORMCONTENT_FORM_ID, QString("=%1").arg(formId));
-    where.insert(FORMCONTENT_TYPE, QString("=%1").arg(type));
+    where.insert(FORMCONTENT_TYPE, QString("='%1'").arg(type));
     where.insert(FORMCONTENT_MODENAME, QString("='%1'").arg(mode));
     where.insert(FORMCONTENT_CONTENT, "IS NOT NULL");
     nb = count(Table_FORM_CONTENT, FORMCONTENT_FORM_ID, getWhereClause(Table_FORM_CONTENT, where));
@@ -1220,7 +1220,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             end += QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION).length();
             QString descr = xmlContent.mid(beg, end-beg);
 
-            where.insert(FORMCONTENT_TYPE, QString("=%1").arg(Description));
+            where.insert(FORMCONTENT_TYPE, QString("='%1'").arg(Description));
             req = prepareUpdateQuery(Table_FORM_CONTENT, FORMCONTENT_CONTENT, where);
             query.prepare(req);
             query.bindValue(0, descr);
