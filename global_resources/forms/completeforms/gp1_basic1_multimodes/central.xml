@@ -23,22 +23,30 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
-    <updateversion from="0.8.0" to="0.8.2">
-      <text lang="fr">
-      Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
-      Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
-      Ajout de l'assistant de prescription d'examen biologique
-      </text>
-      <text lang="en">
-      Defining user documents to use for the print process of the textual prescription text editor.
-      Adding basic biometric measurements in the SOAP form (using a sub-form).
-      Adding lab test prescription assistant
-      </text>
-    </updateversion>
-      <updateversion from="0.8.0" to="0.7.2">
-        <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
-        <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
-      </updateversion>
+        <updateversion from="0.8.2" to="0.8.4">
+            <text lang="fr">
+            Ajout des masques HTML d'exportation et d'impression plus modernes.
+            </text>
+            <text lang="en">
+            Adding modern HTML export and print masks.
+            </text>
+        </updateversion>
+        <updateversion from="0.8.0" to="0.8.2">
+            <text lang="fr">
+            Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.
+            Ajout des valeurs biométriques de base dans la partie POMR (en utilisant un sous-formulaire).
+            Ajout de l'assistant de prescription d'examen biologique
+            </text>
+            <text lang="en">
+            Defining user documents to use for the print process of the textual prescription text editor.
+            Adding basic biometric measurements in the SOAP form (using a sub-form).
+            Adding lab test prescription assistant
+            </text>
+        </updateversion>
+        <updateversion from="0.8.0" to="0.7.2">
+            <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
+            <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
+        </updateversion>
     </updateinfo>
 
   </formdescription>
@@ -73,6 +81,8 @@
       <label lang="fr">Prescriptions textuelles</label>
       <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/padtools_textual_prescription_mask.html</file>
+      <file type="htmlexportmask">./html/xx/padtools_textual_prescription_mask.html</file>
 
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
@@ -89,6 +99,9 @@
       <label lang="fr">Prescriptions médicamenteuses</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/padtools_prescription_drugs_mask.html</file>
+      <file type="htmlexportmask">./html/xx/padtools_prescription_drugs_mask.html</file>
+
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>

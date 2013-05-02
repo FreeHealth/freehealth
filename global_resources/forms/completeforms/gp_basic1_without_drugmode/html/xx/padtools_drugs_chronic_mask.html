@@ -1,0 +1,91 @@
+<html>
+<body>
+<style type="text/css">
+.__drugsprescr__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__drugsprescr__formContent .formHeader {
+}
+
+.__drugsprescr__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__drugsprescr__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__drugsprescr__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__drugsprescr__formContent .episodeLabel {
+  font-weight: 600;
+  /* text-transform: uppercase;
+  background-color: gray;
+  color: white; */
+  padding: 5px;
+  margin-bottom: 0.2em;
+}
+
+.__drugsprescr__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__drugsprescr__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__drugsprescr__formContent .textContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__drugsprescr__formContent .textContainer #textContent {
+}
+</style>
+
+<div class="__drugsprescr__formContent">
+
+    <div class="formHeader">
+        <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+    </div> <!-- formHeader -->
+
+    <div class="episodeHeader">
+        [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+    </div> <!-- episodeHeader -->
+
+    <div class="episodeContent">
+        <div class="textContainer">
+            <div id="textContent">
+            {{~Form.Data.Print.GP::Basic::Drugs::Chronic::Content~}}
+            </div>
+        </div> <!-- textContainer -->
+
+        {{<div class="textContainer">
+            <div id="textContent">
+            ~Form.Data.Item.GP::Basic::Drugs::Chronic::Comment~
+            </div>
+        </div> <!-- textContainer -->}}
+
+    </div> <!-- episodeContent -->
+
+</div> <!-- __drugsprescr__formContent -->
+
+</body>
+</html>

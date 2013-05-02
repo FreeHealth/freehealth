@@ -53,8 +53,8 @@
     <label lang="de">SOAP mit Biometriedaten</label>
     <options>UseFormNameAsNameSpace</options>
     <icon>__theme__/stethoscope.png</icon>
-    <file type="htmlprintmask">./html/xx/mask.html</file>
-    <file type="htmlexportmask">./html/xx/mask.html</file>
+    <file type="htmlprintmask">./html/xx/padtools_mask.html</file>
+    <file type="htmlexportmask">./html/xx/padtools_mask.html</file>
 
     <Item type="group" name="SubjectiveGroup">
       <uilink widget="sGroup"/>

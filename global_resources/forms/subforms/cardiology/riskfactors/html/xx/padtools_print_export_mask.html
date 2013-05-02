@@ -1,0 +1,100 @@
+<html>
+<body>
+<style type="text/css">
+.__cvrf__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__cvrf__formContent .formHeader {
+}
+
+.__cvrf__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__cvrf__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__cvrf__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__cvrf__formContent .episodeLabel {
+  font-weight: 600;
+  /* text-transform: uppercase;
+  background-color: gray;
+  color: white; */
+  padding: 5px;
+  margin-bottom: 0.2em;
+}
+
+.__cvrf__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__cvrf__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__cvrf__formContent .textContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__cvrf__formContent .textContainer #textContent {
+}
+
+.__cvrf__formContent ul {
+  list-style-type:none;
+  padding:0px;
+  margin-left:10px;
+}
+</style>
+
+<div class="__cvrf__formContent">
+
+    <div class="formHeader">
+        <div class="formLabel">[[EpisodeFullFormLabel]]</div>
+    </div> <!-- formHeader -->
+
+    <div class="episodeHeader">
+        [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+        [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+        [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+    </div> <!-- episodeHeader -->
+
+    <div class="episodeContent">
+        <div class="textContainer">
+            <div id="textContent">
+            <ul>
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::PhysicalInactivity~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::FamilyHistory~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Stress~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Obesity~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Smoking~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Diet~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Cholesterol~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Hypertension~</li>}}
+            {{<li>~Form.Data.Print.Subs::Cardiology::RiskFactors::Modifiable::Diabetes~</li>}}
+            </ul>
+            </div>
+        </div> <!-- textContainer -->
+    </div> <!-- episodeContent -->
+
+</div> <!-- __cvrf__formContent -->
+
+</body>
+</html>

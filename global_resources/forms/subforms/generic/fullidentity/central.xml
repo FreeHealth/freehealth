@@ -79,8 +79,8 @@
         <label lang="fr">Identité</label>
         <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
         <icon>__theme__/identity.png</icon>
-        <file type="htmlprintmask">./html/xx/mask.html</file>
-        <file type="htmlexportmask">./html/xx/mask.html</file>
+        <file type="htmlprintmask">./html/xx/padtools_mask.html</file>
+        <file type="htmlexportmask">./html/xx/padtools_mask.html</file>
 
         <Item type="detailswidget" name="IdentityDetails" uifilename="./ui/xx/ident.ui">
             <uilink label="" widget="" layout="identityLayout"/>
@@ -347,8 +347,8 @@
         <label lang="fr">Personne de confiance</label>
         <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
         <icon>__theme__/identity.png</icon>
-        <file type="htmlprintmask">./html/xx/trustedperson_mask.html</file>
-        <file type="htmlexportmask">./html/xx/trustedperson_mask.html</file>
+        <file type="htmlprintmask">./html/xx/trustedperson_padtools_mask.html</file>
+        <file type="htmlexportmask">./html/xx/trustedperson_padtools_mask.html</file>
 
         <Item type="detailswidget" name="TrustedPersonDetails" uifilename="./ui/xx/trusted.ui">
             <uilink label="" widget="" layout="identityLayout"/>

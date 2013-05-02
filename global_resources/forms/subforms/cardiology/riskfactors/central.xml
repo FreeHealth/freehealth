@@ -32,8 +32,8 @@
     <label lang="xx">Cardiovascular risk factors</label>
     <label lang="fr">Facteurs de risque cardio-vasculaire</label>
     <options>compact;UseFormNameAsNameSpace</options>
-    <file type="htmlprintmask">./html/xx/print_export_mask.html</file>
-    <file type="htmlexportmask">./html/xx/print_export_mask.html</file>
+    <file type="htmlprintmask">./html/xx/padtools_print_export_mask.html</file>
+    <file type="htmlexportmask">./html/xx/padtools_print_export_mask.html</file>
 
 <!--
     <Item name="NonModifiable" type="group">
