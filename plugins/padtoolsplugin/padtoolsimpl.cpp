@@ -74,6 +74,7 @@ QString PadToolsImpl::processPlainText(const QString &plainText)
 //        t = t.replace("&lt;","<").replace("&gt;",">");
 //    }
     PadDocument *pad = analyzer.analyze(plainText);
+    pad->setContentType(PadDocument::ContentIsPlainText);
 //    errors = analyzer.lastErrors();
     Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze text source");
 
@@ -88,22 +89,20 @@ QString PadToolsImpl::processHtml(const QString &html)
 {
     QTime chr;
     chr.start();
-//    qWarning() << QCryptographicHash::hash(html.toUtf8(), QCryptographicHash::Md5);
-//    Utils::Log::logTimeElapsed(chr, "PadAnalyzer", "MD5");
 
     PadAnalyzer analyzer;
-//    QString t = html;
-//    if (t.contains("&lt;")) {
-//        t = t.replace("&lt;","<").replace("&gt;",">");
-//    }
     QTextDocument *doc = new QTextDocument(this);
-    doc->setHtml(html);
+    // Do not use setHtml because QTextDocument will interpret the HTML content
+    doc->setPlainText(html);
+
     PadDocument *pad = analyzer.analyze(doc, 0);
+    // Do not use ContentIsHtml or ContentAutoType because QTextDocument will interpret the HTML content of any token value
+    pad->setContentType(PadDocument::ContentIsPlainText);
 //    errors = analyzer.lastErrors();
     Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze HTML source");
 
     pad->toOutput(_pool);
-    const QString &out = pad->outputDocument()->toHtml();
+    const QString &out = pad->outputDocument()->toPlainText();
     Utils::Log::logTimeElapsed(chr, "PadTools", "Process HTML");
     return out;
 }

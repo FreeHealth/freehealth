@@ -72,6 +72,12 @@ class PadDocument : public QObject, public PadFragment
 {
     Q_OBJECT
 public:
+    enum ContentType {
+        ContentAutoType = 0,
+        ContentIsPlainText,
+        ContentIsHtml
+    };
+
     PadDocument(QTextDocument *source, QObject *parent = 0);
     PadDocument(QObject *parent = 0);
     virtual ~PadDocument();
@@ -87,6 +93,8 @@ public:
     void setTokenPool(Core::ITokenPool *pool);
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
+    void setContentType(ContentType contentType) {_contentType = contentType;}
+    ContentType contentType() const {return _contentType;}
 
     // Manage children fragments
     void addChild(PadFragment *fragment);
@@ -148,6 +156,7 @@ private:
     Core::ITokenPool *_tokenPool;
     QTimer *_timer;
     PadPositionTranslator _posTrans;
+    ContentType _contentType;
 };
 
 } // namespace Internal

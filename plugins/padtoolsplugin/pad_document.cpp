@@ -136,7 +136,8 @@ PadDocument::PadDocument(QTextDocument *source, QObject *parent) :
     _docSource(source),
     _docOutput(new QTextDocument(this)),
     _tokenPool(padCore().tokenPool()),
-    _timer(0)
+    _timer(0),
+    _contentType(ContentAutoType)
 {
 }
 
@@ -149,7 +150,8 @@ PadDocument::PadDocument(QObject *parent) :
     _docSource(0),
     _docOutput(new QTextDocument(this)),
     _tokenPool(padCore().tokenPool()),
-    _timer(0)
+    _timer(0),
+    _contentType(ContentAutoType)
 {
 }
 
