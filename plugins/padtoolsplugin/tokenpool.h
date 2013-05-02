@@ -55,7 +55,7 @@ public:
     Core::TokenNamespace getTokenNamespace(const QString &name) const;
 
     void addToken(Core::IToken *token);
-    void addTokens(QVector<Core::IToken *> &tokens);
+    void addTokens(const QVector<Core::IToken *> &tokens);
     Core::IToken *token(const QString &name);
     void removeToken(Core::IToken *token);
 

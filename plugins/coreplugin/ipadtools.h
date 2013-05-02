@@ -149,7 +149,7 @@ public:
 
     // Tokens
     virtual void addToken(Core::IToken *token) = 0;
-    virtual void addTokens(QVector<Core::IToken *> &tokens) = 0;
+    virtual void addTokens(const QVector<Core::IToken *> &tokens) = 0;
     virtual Core::IToken *token(const QString &name) = 0;
     virtual void removeToken(Core::IToken *token) = 0;
 

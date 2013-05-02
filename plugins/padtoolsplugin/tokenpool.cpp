@@ -156,7 +156,7 @@ void TokenPool::addToken(Core::IToken *token)
     d->_tokens << token;
 }
 
-void TokenPool::addTokens(QVector<Core::IToken *> &tokens)
+void TokenPool::addTokens(const QVector<Core::IToken *> &tokens)
 {
     for(int i=0; i < tokens.count(); ++i)
         d->_tokens.append(tokens.at(i));
