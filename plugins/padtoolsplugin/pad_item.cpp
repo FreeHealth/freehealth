@@ -231,6 +231,18 @@ void PadConditionnalSubItem::toRaw(PadDocument *doc)
     Q_UNUSED(doc);
 }
 
+/** Returns the UUID of the PadTools::PadCore fragment */
+const QString &PadCore::uid() const
+{
+    return _uid;
+}
+
+/** Defines the UUID of the PadTools::PadCore fragment */
+void PadCore::setUid(const QString &uid)
+{
+    _uid = uid;
+}
+
 /** Overwrite the position tester, by default a PadTools::PadCore does not include the outputStart() and outputEnd() position. */
 bool PadCore::containsOutputPosition(const int pos) const
 {
@@ -315,7 +327,11 @@ void PadCore::toOutput(Core::ITokenPool *pool, PadDocument *document, TokenRepla
     cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
     QTextCharFormat format = cursor.charFormat();
     cursor.removeSelectedText();
-    if (Qt::mightBeRichText(coreValue)) {
+
+    // Add core value in the output document according to the contentType
+    if ((document->contentType() == PadDocument::ContentAutoType
+            && Qt::mightBeRichText(coreValue))
+            || document->contentType() == PadDocument::ContentIsHtml) {
         cursor.insertHtml(coreValue);
         setOutputEnd(cursor.selectionEnd());
         cursor.setPosition(outputStart());
@@ -374,7 +390,10 @@ QString PadCore::tokenValue(Core::ITokenPool *pool, TokenReplacementMethod metho
     case ReplaceWithTokenTestingValue: return pool->token(uid())->testValue().toString();
     case ReplaceWithTokenUuid: return uid();
     default: // ReplaceWithTokenValue
-        return pool->token(uid())->value().toString();
+        if (pool->token(uid()))
+            return pool->token(uid())->value().toString();
+        else
+            qWarning() << "**** Missing token "<<uid();
     }
     return QString::null;
 }

@@ -91,8 +91,8 @@ class PadCore : public PadFragment
 public:
     PadCore() : PadFragment() {}
 
-    const QString &uid() const { return _uid; }
-    void setUid(const QString &uid) { _uid = uid; }
+    const QString &uid() const;
+    void setUid(const QString &uid);
 
     bool containsOutputPosition(const int pos) const;
     bool isBeforeOutputPosition(const int pos) const;
