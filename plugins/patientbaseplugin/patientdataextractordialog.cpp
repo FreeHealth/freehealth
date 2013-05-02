@@ -271,7 +271,10 @@ void PatientDataExtractorDialog::onExportRequested()
     // Prepare patient extraction job
     QList<Core::PatientDataExtraction *> result;
     Core::PatientDataExporterJob job;
-    job.setExportGroupmentType(Core::PatientDataExporterJob::DateOrderedExportation);
+    if (d->ui->group->currentIndex() == 0)
+        job.setExportGroupmentType(Core::PatientDataExporterJob::FormOrderedExportation);
+    else
+        job.setExportGroupmentType(Core::PatientDataExporterJob::DateOrderedExportation);
 
     // Get patient uids to extract
     QStringList uids;
@@ -295,9 +298,9 @@ void PatientDataExtractorDialog::onExportRequested()
     dlg.setLabelText(tr("Start patient file extraction"));
     dlg.setAutoClose(false);
     dlg.setRange(0, 0);
-    dlg.show();
     Utils::centerWidget(&dlg, this);
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    dlg.show();
 
     // Connect all extractor signals to the progress dialog
     foreach(Core::IPatientDataExporter *e, extractors) {
