@@ -60,6 +60,7 @@ const char* const UNDEFINED                          = QT_TRANSLATE_NOOP("tkCons
 const char* const LICENSE                            = QT_TRANSLATE_NOOP("tkConstants", "License");
 const char* const LICENSE_TERMS                      = QT_TRANSLATE_NOOP("tkConstants", "License terms");
 const char* const LABEL                              = QT_TRANSLATE_NOOP("tkConstants", "Label");
+const char* const TOOLTIP                            = QT_TRANSLATE_NOOP("tkConstants", "Tooltip");
 const char* const UNIQUE_IDENTIFIER                  = QT_TRANSLATE_NOOP("tkConstants", "Unique identifier");
 const char* const URL                                = QT_TRANSLATE_NOOP("tkConstants", "URL");
 const char* const VALUE                              = QT_TRANSLATE_NOOP("tkConstants", "Value");
