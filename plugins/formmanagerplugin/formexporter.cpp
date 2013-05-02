@@ -42,6 +42,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/constants_menus.h>
 
 #include <utils/log.h>
@@ -54,10 +55,11 @@
 #include <QDebug>
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IPadTools *padTools()  { return Core::ICore::instance()->padTools(); }
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 // TODO: manage user rights here +++
 
@@ -159,6 +161,9 @@ public:
                 Utils::replaceTokens(tmpMask, formManager().formToTokens(form));
                 patient()->replaceTokens(tmpMask);
                 user()->replaceTokens(tmpMask);
+#ifdef WITH_PAD
+                tmpMask = padTools()->processHtml(tmpMask);
+#endif
                 formExport.episodes.insertMulti(dt, Utils::htmlBodyContent(tmpMask));
             } else {
                 // Get the default HTML output
