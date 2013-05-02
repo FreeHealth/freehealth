@@ -96,10 +96,8 @@ void PadToolsPlugin::extensionsInitialized()
 #endif
 
     _core->initialize();
-#if defined(WITH_PAD) || defined(FREEPAD)
     Core::ICore::instance()->patient()->registerPatientTokens();
     Core::ICore::instance()->user()->registerUserTokens();
-#endif
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
