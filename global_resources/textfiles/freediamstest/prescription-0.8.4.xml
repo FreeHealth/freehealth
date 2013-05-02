@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE FreeMedForms>
+<FreeDiams>
+  <DateOfGeneration version="2013-04-23T15:50:36"/>
+  <FullPrescription version="0.7.2">
+    <Prescription>
+      <Drug u1="68586203" u2="" old="68586203" u3="" db="FR_AFSSAPS">
+        <DrugForm>gel pour application</DrugForm>
+        <DrugRoute>transdermique</DrugRoute>
+        <DrugStrength/>
+        <DrugName>17 B ESTRADIOL BESINS-ISCOVESCO 0,06 POUR CENT, gel pour application cutanée en tube</DrugName>
+        <DrugUidName>CIS</DrugUidName>
+        <Composition inn="ESTRADIOL" route="transdermique" form="gel pour application" strength="" nature="SA" natureLink="1" atc="G03CA03" molecularName="ESTRADIOL HÉMIHYDRATÉ"/>
+        <Composition inn="ESTRADIOL" route="transdermique" form="gel pour application" strength="60 mg/100 g" nature="FT" natureLink="1" atc="G03CA03" molecularName="ESTRADIOL ANHYDRE"/>
+      </Drug>
+      <Dose MealTime="0" Period="1" Note="" DurationFromTo="false" RefDosage="78d255383477454b8e32916cfe773faa" Daily="&lt;Distribute/>" DurationScheme="mois" INN="false" Refill="0" DurationFrom="1" IntakeIntervalScheme="3" IntakeFrom="1" IntakeIntervalTime="0" PeriodScheme="jour(s)" RouteId="58" IntakeScheme="gel pour application" IntakeFromTo="false"/>
+    </Prescription>
+    <Prescription>
+      <Drug u1="62869109" u2="" old="62869109" u3="" db="FR_AFSSAPS">
+        <DrugForm>capsule molle</DrugForm>
+        <DrugRoute>orale</DrugRoute>
+        <DrugStrength/>
+        <DrugName>A 313 50 000 U.I., capsule molle</DrugName>
+        <DrugUidName>CIS</DrugUidName>
+        <Composition inn="" route="orale" form="capsule molle" strength="50 000 UI/une capsule" nature="SA" natureLink="1" atc="" molecularName="CONCENTRAT DE VITAMINE A SYNTHÉTIQUE, FORME HUILEUSE"/>
+      </Drug>
+      <Dose MealTime="0" Period="1" Note="" DurationFromTo="false" RefDosage="92b36c5590b546bca5a23eee91d67e44" Daily="&lt;Distribute/>" DurationScheme="mois" INN="false" Refill="0" DurationFrom="1" IntakeIntervalScheme="3" IntakeFrom="1" IntakeIntervalTime="0" PeriodScheme="jour(s)" RouteId="48" IntakeScheme="capsule molle" IntakeFromTo="false"/>
+    </Prescription>
+  </FullPrescription>
+  <ExtraDatas>
+    <PatientDatas>
+      <DateOfbirth>MTk2MC0xMi0wMQ==</DateOfbirth>
+      <CreatinClearance>MTAw</CreatinClearance>
+      <DrugsUidAllergies/>
+      <Lastnames>S0lSSw==</Lastnames>
+      <DrugsAtcAllergies/>
+      <DrugsInnAllergies/>
+      <Firstnames>SmFtZXMgVGliZXJpdXM=</Firstnames>
+      <HeightInCentimeters>MTcw</HeightInCentimeters>
+      <Creatinine>MTI=</Creatinine>
+      <WeightInGrams>NzA=</WeightInGrams>
+      <DrugsUidIntolerances/>
+      <UID>RU1SIFBhdGllbnQncyBVSUQ=</UID>
+      <OtherNames/>
+      <Gender>TQ==</Gender>
+      <CreatinineUnit>bWcvbA==</CreatinineUnit>
+      <DrugsAtcIntolerances/>
+    </PatientDatas>
+    <EMR uid="SessionUIDWillBeReturnedInOutputFile" name="EMRName"/>
+  </ExtraDatas>
+</FreeDiams>
