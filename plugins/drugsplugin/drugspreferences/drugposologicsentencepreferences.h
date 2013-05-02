@@ -52,33 +52,31 @@ class IDrug;
 namespace DrugsWidget {
 namespace Internal {
 
-#ifdef WITH_PAD
-class DrugPosologicSentenceWithPadPreferencesWidget : public QWidget //, private Ui::DrugPosologicSentencePreferencesWithPadWidget
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(DrugPosologicSentenceWithPadPreferencesWidget)
+//#ifdef WITH_PAD
+// TODO: reintroduce this when the PadWriter will be stable
+//class DrugPosologicSentenceWithPadPreferencesWidget : public QWidget //, private Ui::DrugPosologicSentencePreferencesWithPadWidget
+//{
+//    Q_OBJECT
+//    Q_DISABLE_COPY(DrugPosologicSentenceWithPadPreferencesWidget)
 
-public:
-    explicit DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent = 0);
-    ~DrugPosologicSentenceWithPadPreferencesWidget();
+//public:
+//    explicit DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent = 0);
+//    ~DrugPosologicSentenceWithPadPreferencesWidget();
 
-    void setDataToUi();
+//    void setDataToUi();
 
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-    void resetToDefaultFormatting();
+//public Q_SLOTS:
+//    void saveToSettings(Core::ISettings *s = 0);
+//    void resetToDefaultFormatting();
 
-//private Q_SLOTS:
-//    void updateFormatting();
+//protected:
+//    virtual void changeEvent(QEvent *e);
 
-protected:
-    virtual void changeEvent(QEvent *e);
-
-private:
-    DrugsDB::IDrug *_drug;
-    Core::IPadWriter *_writer;
-};
-#endif
+//private:
+//    DrugsDB::IDrug *_drug;
+//    Core::IPadWriter *_writer;
+//};
+//#endif
 
 
 class DrugPosologicSentencePreferencesWidget : public QWidget, private Ui::DrugPosologicSentencePreferencesWidget
@@ -131,11 +129,12 @@ public:
     QWidget *createPage(QWidget *parent = 0);
 
 private:
-#ifdef WITH_PAD
-    QPointer<Internal::DrugPosologicSentenceWithPadPreferencesWidget> m_Widget;
-#else
     QPointer<Internal::DrugPosologicSentencePreferencesWidget> m_Widget;
-#endif
+//#ifdef WITH_PAD
+//    QPointer<Internal::DrugPosologicSentenceWithPadPreferencesWidget> m_Widget;
+//#else
+//    QPointer<Internal::DrugPosologicSentencePreferencesWidget> m_Widget;
+//#endif
 };
 
 
