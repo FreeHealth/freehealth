@@ -129,6 +129,20 @@ namespace Constants {
     const char * const FORMS_FONT = QT_TRANSLATE_NOOP("Forms", "Forms font");
     const char * const EPISODES_FONT = QT_TRANSLATE_NOOP("Forms", "Episodes font");
 
+    // Tokens constants
+    const char * const TOKENFORM_NAMESPACE = "Form";
+    const char * const TOKENFORM_LABEL_NAMESPACE = "Label";
+    const char * const TOKENFORM_TOOLTIP_NAMESPACE = "Tooltip";
+    const char * const TOKENFORM_DATA_NAMESPACE = "Data";
+    const char * const TOKENFORM_PATIENTDATA_NAMESPACE = "Patient";
+    const char * const TOKENFORM_PRINTDATA_NAMESPACE = "Print";
+    const char * const TOKENFORM_ITEMDATA_NAMESPACE = "Item";
+
+    const char * const TOKENFORM_DATA_NAMESPACE_TEXT = QT_TRANSLATE_NOOP("Forms", "Data");
+    const char * const TOKENFORM_PATIENTDATA_NAMESPACE_TEXT = QT_TRANSLATE_NOOP("Forms", "Patient extracted data");
+    const char * const TOKENFORM_PRINTDATA_NAMESPACE_TEXT = QT_TRANSLATE_NOOP("Forms", "Print output");
+    const char * const TOKENFORM_ITEMDATA_NAMESPACE_TEXT = QT_TRANSLATE_NOOP("Forms", "Item current data");
+
 }  // End namespace Form::Constants
 }  // End namespace Form
 

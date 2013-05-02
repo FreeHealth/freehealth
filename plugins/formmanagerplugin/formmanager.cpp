@@ -45,6 +45,7 @@
  * - allow creation of Form::FormPage (createFormPage())
  * - manages all Form::FormTreeModel (one per Form::FormMain empty root)
  * - manages datapack installation (form set datpacks)
+ * - Core::IToken generation for each item
  *
  * \sa Form::IFormIO, Form::FormMain, Form::FormItem
  */
@@ -59,6 +60,7 @@
 #include "subforminsertionpoint.h"
 #include "formcollection.h"
 #include "formtreemodel.h"
+#include "formitemtoken.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -67,6 +69,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/iscriptmanager.h>
 #include <coreplugin/icommandline.h>
@@ -87,6 +90,7 @@
 #include <datapackutils/pack.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_current.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -120,6 +124,7 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
+static inline Core::IPadTools *padTools()  { return Core::ICore::instance()->padTools(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
@@ -144,6 +149,7 @@ public:
     };
 
     FormManagerPrivate(FormManager *parent) :
+        _initialized(false),
         _forceFormLoading(false),
         _identityForm(0),
         q(parent)
@@ -447,13 +453,61 @@ public:
         return model;
     }
 
+    void createTokenNamespaces()
+    {
+#ifdef WITH_PAD
+        // Create form token namespaces
+        // Create and register namespaces
+        Core::TokenNamespace formNs(Constants::TOKENFORM_NAMESPACE);
+        formNs.setUntranslatedHumanReadableName(Trans::Constants::FORMS);
+        // TODO: improve the help text & tooltip
+        formNs.setUntranslatedHelpText(Trans::Constants::FORMS);
+        formNs.setUntranslatedTooltip(Trans::Constants::FORMS);
+
+        Core::TokenNamespace formLabelNs(Constants::TOKENFORM_LABEL_NAMESPACE);
+        formLabelNs.setUntranslatedHumanReadableName(Trans::Constants::LABEL);
+        Core::TokenNamespace formTooltipNs(Constants::TOKENFORM_TOOLTIP_NAMESPACE);
+        formLabelNs.setUntranslatedHumanReadableName(Trans::Constants::TOOLTIP);
+
+        Core::TokenNamespace formData(Constants::TOKENFORM_DATA_NAMESPACE);
+        formData.setTrContext(Constants::FORM_TR_CONTEXT);
+        formData.setUntranslatedHumanReadableName(Constants::TOKENFORM_DATA_NAMESPACE_TEXT);
+
+        Core::TokenNamespace formDataPatient(Constants::TOKENFORM_PATIENTDATA_NAMESPACE);
+        formDataPatient.setTrContext(Constants::FORM_TR_CONTEXT);
+        formDataPatient.setUntranslatedHumanReadableName(Constants::TOKENFORM_PATIENTDATA_NAMESPACE_TEXT);
+
+        Core::TokenNamespace formDataPrint(Constants::TOKENFORM_PRINTDATA_NAMESPACE);
+        formDataPrint.setTrContext(Constants::FORM_TR_CONTEXT);
+        formDataPrint.setUntranslatedHumanReadableName(Constants::TOKENFORM_PRINTDATA_NAMESPACE_TEXT);
+
+        Core::TokenNamespace formDataItem(Constants::TOKENFORM_ITEMDATA_NAMESPACE);
+        formDataItem.setTrContext(Constants::FORM_TR_CONTEXT);
+        formDataItem.setUntranslatedHumanReadableName(Constants::TOKENFORM_ITEMDATA_NAMESPACE_TEXT);
+
+        formData.addChild(formDataPatient);
+        formData.addChild(formDataPrint);
+        formData.addChild(formDataItem);
+
+        formNs.addChild(formLabelNs);
+        formNs.addChild(formTooltipNs);
+        formNs.addChild(formData);
+
+        if (padTools() && padTools()->tokenPool()) {
+            padTools()->tokenPool()->registerNamespace(formNs);
+        }
+#endif
+    }
+
 public:
+    bool _initialized;
     QVector<FormCollection *> _centralFormCollection, _centralFormDuplicateCollection, _subFormCollection, _subFormDuplicateCollection;
     FormCollection _nullFormCollection;
     QHash<QString, FormTreeModel *> _formTreeModels;
     bool _forceFormLoading;
     QVector<Form::FormPage *> _formPages;
     Form::FormMain *_identityForm;
+    QMultiHash<Form::FormMain *, Core::IToken *> _tokens;
 
 private:
     FormManager *q;
@@ -480,13 +534,19 @@ FormManager::~FormManager()
 /** Initialize the object (called when all plugins are initialized) \sa Form::FormCore::initialize() */
 bool FormManager::initialize()
 {
+    if (d->_initialized)
+        return true;
+
+    d->createTokenNamespaces();
     //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
-    return true;
+
+    d->_initialized = true;
+    return d->_initialized;
 }
 
 /** Return the Form::FormCollection to use for the mode uid \e modeUid */
@@ -782,15 +842,20 @@ QString FormManager::formPrintHtmlOutput(Form::FormMain *formMain)
     QString out;
     // If a print mask is available, create tokens for the form
     if (!formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString().isEmpty()) {
-        // TODO: manage PadTools
         out = formMain->spec()->value(Form::FormItemSpec::Spec_HtmlPrintMask).toString();
         const QHash<QString, QVariant> &tokens = formToTokens(formMain);
         Utils::replaceTokens(out, tokens);
         patient()->replaceTokens(out);
         user()->replaceTokens(out);
+#ifdef WITH_PAD
+        out = padTools()->processHtml(out);
+#endif
     } else {
         out = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
     }
+
+    qWarning() << out;
+
     return out;
 }
 
@@ -809,6 +874,9 @@ QString FormManager::formExportHtmlOutput(Form::FormMain *formMain)
         Utils::replaceTokens(out, tokens);
         patient()->replaceTokens(out);
         user()->replaceTokens(out);
+#ifdef WITH_PAD
+        out = padTools()->processHtml(out);
+#endif
     } else {
         out = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
     }
@@ -822,8 +890,28 @@ QString FormManager::formExportHtmlOutput(Form::FormMain *formMain)
  */
 QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
 {
-    // TODO: manage PadTools here
     QHash<QString, QVariant> tokens;
+#ifdef WITH_PAD
+    // Removes all formitem token from the token pool
+    qWarning() << "____________ formToTokens" << form->uuid();
+    // Include all formitems token from the formmain to the token pool
+    if (d->_tokens.values(form).isEmpty()) {
+        QVector<FormItemToken::ValueType> types;
+        types << FormItemToken::FormItemLabel
+              << FormItemToken::FormItemTooltip
+              << FormItemToken::FormItemPatientModelValue
+              << FormItemToken::FormItemPrintValue
+              << FormItemToken::FormItemDataValue;
+        foreach(Form::FormItem *item, form->flattenedFormItemChildren()) {
+            for(int i = 0; i < types.count(); ++i) {
+                if (FormItemToken::canManageValueType(item, types.at(i)))
+                    d->_tokens.insertMulti(form, new FormItemToken(item, types.at(i)));
+            }
+        }
+        padTools()->tokenPool()->addTokens(d->_tokens.values(form).toVector());
+    }
+#else
+    // TODO: manage PadTools here
     // Create a token for each FormItem of the FormMain (label and value)
     foreach(FormItem *item, form->flattenedFormItemChildren()) {
         tokens.insert(item->uuid() + ".label", item->spec()->label());
@@ -845,6 +933,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
             }
         }
     }
+#endif
     // Create tokens for episode data
     tokens.insert("EpisodeUserDate", QLocale().toString(form->itemData()->data(Form::IFormItemData::ID_EpisodeDate).toDateTime(), QLocale::LongFormat));
     tokens.insert("EpisodeUserLabel", form->itemData()->data(Form::IFormItemData::ID_EpisodeLabel));
