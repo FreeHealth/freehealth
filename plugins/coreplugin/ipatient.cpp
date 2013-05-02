@@ -51,6 +51,7 @@
 #include <translationutils/trans_user.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_account.h>
 
 #include <QMetaEnum>
 
@@ -120,12 +121,16 @@ void IPatient::registerPatientTokens()
     TokenNamespace patientBioNs("Biology");
     patientBioNs.setUntranslatedHumanReadableName(Trans::Constants::BIOLOGY);
 
+    TokenNamespace patientInsuranceNs("Insurance");
+    patientInsuranceNs.setUntranslatedHumanReadableName(Trans::Constants::INSURANCE);
+
     patientNs.addChild(patientIdentNs);
     patientNs.addChild(patientAgeNs);
     patientNs.addChild(patientAddressNs);
     patientNs.addChild(patientContactNs);
     patientNs.addChild(patientMetricsNs);
     patientNs.addChild(patientBioNs);
+    patientNs.addChild(patientInsuranceNs);
     if (tokenPool())
         tokenPool()->registerNamespace(patientNs);
 
@@ -155,7 +160,7 @@ void IPatient::registerPatientTokens()
     t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfBirth);
     t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_BIRTH);
     _tokens << t;
-    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfDeath);
+    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFDEATH, DateOfDeath);
     t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_DEATH);
     _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
