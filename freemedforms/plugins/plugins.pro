@@ -45,6 +45,12 @@ saverestore.depends += core
 templates.subdir   = $${PLUGINS_PATH}/templatesplugin
 templates.depends += core
 
+datapack.subdir = $${PLUGINS_PATH}/datapackplugin
+datapack.depends += core
+
+zipcodes.subdir = $${PLUGINS_PATH}/zipcodesplugin
+zipcodes.depends += core
+
 # complex plugins
 formmanager.subdir   = $${PLUGINS_PATH}/formmanagerplugin
 formmanager.depends += core
@@ -70,6 +76,13 @@ xmlio.subdir   = $${PLUGINS_PATH}/xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
 xmlio.depends += category
+
+patientbase.subdir   = $${PLUGINS_PATH}/patientbaseplugin
+patientbase.depends += core
+patientbase.depends += listview
+patientbase.depends += zipcodes
+patientbase.depends += formmanager
+patientbase.depends += identity
 
 basewidgets.subdir   = $${PLUGINS_PATH}/basewidgetsplugin
 basewidgets.depends += core
@@ -116,6 +129,13 @@ category.subdir = $${PLUGINS_PATH}/categoryplugin
 category.depends += core
 category.depends += listview
 
+script.subdir = $${PLUGINS_PATH}/scriptplugin
+script.depends += core
+script.depends += formmanager
+
+# optional plugins
+include(../../buildspecs/optionalplugins.pri)
+
 with-old-account {
     SUBDIRS += accountbase account
     accountbase.subdir = $${PLUGINS_PATH}/accountbaseplugin
@@ -149,16 +169,6 @@ with-agenda {
     agenda.depends += usermanager
     agenda.depends += listview
 }
-
-zipcodes.subdir = $${PLUGINS_PATH}/zipcodesplugin
-zipcodes.depends += core
-
-script.subdir = $${PLUGINS_PATH}/scriptplugin
-script.depends += core
-script.depends += formmanager
-
-datapack.subdir = $${PLUGINS_PATH}/datapackplugin
-datapack.depends += core
 
 with-webcam {
     SUBDIRS += webcam
@@ -199,12 +209,6 @@ with-feedback {
     feedback.depends += core
 }
 
-patientbase.subdir   = $${PLUGINS_PATH}/patientbaseplugin
-patientbase.depends += core
-patientbase.depends += listview
-patientbase.depends += zipcodes
-patientbase.depends += formmanager
-patientbase.depends += identity
 
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core

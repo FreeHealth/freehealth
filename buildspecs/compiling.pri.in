@@ -5,11 +5,3 @@ LOWERED_APPNAME=$${LOW_APPNAME}
 DEFINES*=$${UP_APPNAME}
 $${UP_APPNAME}=1
 BUILD_PATH_POSTFIXE = $${CAMELCASE_APPNAME}
-
-# manages extra plugins
-with-agenda { DEFINES += WITH_AGENDA }
-with-alerts { DEFINES += WITH_ALERTS }
-with-feedback { DEFINES += WITH_FEEDBACK }
-with-pad    { DEFINES += WITH_PAD }
-with-pmh    { DEFINES += WITH_PMH }
-with-webcam { DEFINES += WITH_WEBCAM }

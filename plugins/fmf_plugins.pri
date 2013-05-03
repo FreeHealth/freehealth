@@ -1,7 +1,10 @@
-#This is the include file to add to your plugins project
+# This is the include file to add to your plugins project
 
 # set plugin name define
 isEmpty(TARGET):error(You must specify a target when including fmf_plugins.pri)
+
+# include optional plugin configuration
+include(../buildspecs/optionalplugins.pri)
 
 # manage pre tag translations
 PRE_TRANSLATION  = plugin
