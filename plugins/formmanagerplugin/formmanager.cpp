@@ -315,8 +315,10 @@ public:
 
     bool insertSubFormInModels(const SubFormInsertionPoint &insertionPoint)
     {
-        if (!insertionPoint.isValid())
+        if (!insertionPoint.isValid()) {
+            LOG_ERROR_FOR(q, "Insertion point is not valid");
             return false;
+        }
         // Load subform
         if (!loadFormCollection(insertionPoint.subFormUid(), SubForms)) {
             LOG_ERROR_FOR(q, "Unable to load subform: " + insertionPoint.subFormUid());
@@ -332,19 +334,28 @@ public:
                 mode = Core::Constants::MODE_PATIENT_FILE;
             FormTreeModel *model = getFormTreeModel(mode, ModeForms);
             if (model)
-                model->addSubForm(insertionPoint);
+                return model->addSubForm(insertionPoint);
         } else {
-            foreach(FormCollection *collection, _centralFormCollection) {
-                if (collection->formUid() == insertionPoint.receiverUid()) {
+            // Try to find the insertion point form
+            QList<FormCollection *> colls;
+            colls << _centralFormCollection.toList();
+            colls << _subFormCollection.toList();
+            foreach(FormCollection *coll, colls) {
+                FormMain *receiver = coll->form(insertionPoint.receiverUid());
+                if (receiver) {
+                    QString mode = insertionPoint.modeUid();
+                    if (mode.isEmpty())
+                        mode = Core::Constants::MODE_PATIENT_FILE;
                     // update the formtreemodel
-                    FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
+                    FormTreeModel *model = getFormTreeModel(mode, ModeForms); //coll->type() == FormCollection::CompleteForm ? CompleteForms : SubForms);
                     if (model)
-                        model->addSubForm(insertionPoint);
-                    break;
+                        return model->addSubForm(insertionPoint);
                 }
             }
+            LOG_ERROR_FOR(q, "Insertion point receiver not found");
+            return false;
         }
-        return true;
+        return false;
     }
 
     bool removeSubFormFromModels(const SubFormRemoval &remove)
@@ -689,6 +700,12 @@ QList<FormMain *> FormManager::allDuplicatesEmptyRootForms() const
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
     bool ok = d->insertSubFormInModels(insertionPoint);
+    if (!ok) {
+        LOG_ERROR(tr("Unable to insert sub-form %1 into form %2")
+                  .arg(insertionPoint.subFormUid())
+                  .arg(insertionPoint.receiverUid()));
+        return false;
+    } else
     if (insertionPoint.emitInsertionSignal())
         Q_EMIT subFormLoaded(insertionPoint.subFormUid());
     return ok;

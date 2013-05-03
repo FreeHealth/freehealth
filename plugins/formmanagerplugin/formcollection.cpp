@@ -173,16 +173,19 @@ Form::FormMain *FormCollection::identityForm() const
     return 0;
 }
 
+/**
+ * Returns the Form::FormMain corresponding with the uuid like \e formUid or \e zero
+ * if the collection does not include this form.
+ */
 Form::FormMain *FormCollection::form(const QString &formUid) const
 {
-    for(int i=0; i < d->_emptyRootForms.count(); ++i) {
-        Form::FormMain *form = d->_emptyRootForms.at(i);
-        if (form->uuid()==formUid)
+    foreach(Form::FormMain *form, d->_emptyRootForms) {
+        // Test all empty roots
+        if (form->uuid() == formUid)
             return form;
-        const QList<Form::FormMain*> &children = form->flattenedFormMainChildren();
-        for(int j=0; j < children.count(); ++j) {
-            Form::FormMain *test = children.at(j);
-            if (test->uuid()==formUid)
+        // Test all children
+        foreach(Form::FormMain *test, form->flattenedFormMainChildren()) {
+            if (test->uuid() == formUid)
                 return test;
         }
     }

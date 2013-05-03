@@ -124,6 +124,8 @@ void FormManagerPlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing form manager plugin..."));
 
+//    _core->initialize();
+
     // Initialize base and manager
     episodeBase()->initialize();
     formManager().checkFormUpdates();

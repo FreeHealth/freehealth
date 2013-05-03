@@ -26,7 +26,8 @@
  ***************************************************************************/
 /**
  * \class Form::FormTreeModel
- * Model for forms. Get your model from Form::FormManager::formTreeModel().
+ * Model for forms. All Form::FormTreeModel represents one Mode.
+ * Get your model from Form::FormManager::formTreeModel().
  */
 
 #include "formtreemodel.h"
@@ -68,6 +69,7 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 
 namespace {
 const int SUBFORM_TAG_ROLE = Qt::UserRole + 1;
+const int SUBFORM_PARENTUID_TAG_ROLE = Qt::UserRole + 2;
 }
 
 namespace Form {
@@ -117,28 +119,22 @@ public:
         return QIcon(iconFile);
     }
 
-//    void createOverviewItem()
-//    {
-//        QFont bold;
-//        bold.setBold(true);
-//        QStandardItem *item = new QStandardItem(theme()->icon(Core::Constants::ICONPATIENTOVERVIEW), tkTr(Trans::Constants::OVERVIEW));
-//        item->setFont(bold);
-//        linkFormAndItem(0, item);
-//        q->invisibleRootItem()->appendRow(item);
-//    }
-
     void createItems(const QList<Form::FormMain *> &emptyrootforms, bool tagAsSubForm = false)
     {
+//        qWarning() << "CREATE ITEMS" << emptyrootforms.count() << tagAsSubForm;
         QFont bold;
         bold.setBold(true);
-        for(int i=0; i<emptyrootforms.count(); ++i) {
-            Form::FormMain *root = emptyrootforms.at(i);
+        foreach(Form::FormMain *root, emptyrootforms) {
             foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                 QStandardItem *item = new QStandardItem(formIcon(form), formLabelWithEpisodeCount(form));
                 item->setFont(bold);
+//                qWarning() << "   ->" << formLabelWithEpisodeCount(form) << item;
+
                 linkFormAndItem(form, item);
-                if (tagAsSubForm)
+                if (tagAsSubForm) {
                     item->setData(true, ::SUBFORM_TAG_ROLE);
+                    item->setData(true, ::SUBFORM_PARENTUID_TAG_ROLE);
+                }
             }
         }
     }
@@ -147,16 +143,20 @@ public:
     {
         if (!defaultRootParent)
             defaultRootParent = q->invisibleRootItem();
-        for(int i=0; i < emptyrootforms.count(); ++i) {
-            Form::FormMain *root = emptyrootforms.at(i);
+
+        foreach(Form::FormMain *root, emptyrootforms) {
             foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                 QStandardItem *item = formToItem(form);
                 QStandardItem *parent = 0;
-                if (form->formParent() == root) {
-                    parent = q->invisibleRootItem();
-                } else {
-                    parent = formToItem(form->formParent());
-                }
+                parent = formToItem(form->formParent());
+                if (!parent)
+                    parent = defaultRootParent;
+
+//                parent = q->invisibleRootItem(); // FOR TESTS: ALL ITEMS ARE ROOT
+//                qWarning() << "REPARENT" << form->uuid() << item << parent << q->invisibleRootItem();
+//                qWarning() << q->indexFromItem(item);
+//                qWarning() << q->indexFromItem(parent);
+
                 QStandardItem *itemUuid = new QStandardItem(form->uuid());
                 QStandardItem *itemEmpty1 = new QStandardItem;
                 QStandardItem *itemEmpty2 = new QStandardItem;
@@ -164,6 +164,7 @@ public:
                 cols << item << itemUuid << itemEmpty1 << itemEmpty2;
                 //            qWarning() << parent << cols << form->uuid() << form->formParent();
                 parent->appendRow(cols);
+//                qWarning() << q->indexFromItem(item);
             }
         }
     }
@@ -197,19 +198,24 @@ public:
             receiver = q->invisibleRootItem();
             qWarning() << "  --> Receiver == invisiblerootitem" << q->invisibleRootItem();
         } else {
-            for(int i=0; i< forms.count(); ++i) {
-                Form::FormMain *root = forms.at(i);
+            foreach(Form::FormMain *root, formManager().allEmptyRootForms()) {
+                if (root->uuid() == insertionPoint.receiverUid())
+                    receiver = formToItem(root);
                 foreach(Form::FormMain *form, root->flattenedFormMainChildren()) {
                     if (form->uuid() == insertionPoint.receiverUid()) {
                         receiver = formToItem(form);
+                        qWarning() << "  --> Receiver == " << insertionPoint.receiverUid() << receiver;
                         break;
                     }
                 }
             }
         }
 
-        if (!receiver)
+        if (!receiver) {
+            LOG_ERROR_FOR(q, QString("Unable to find receiver: %1").arg(insertionPoint.receiverUid()));
             return false;
+        }
+
         createItems(forms, true);
         reparentItems(forms, receiver);
         q->setColumnCount(FormTreeModel::MaxData);

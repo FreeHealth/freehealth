@@ -45,6 +45,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/imainwindow.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 
 #include <QSortFilterProxyModel>
@@ -68,6 +69,7 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     ui->formSelector->setIncludeLocalFiles(true);
     ui->formSelector->setExcludeGenderSpecific(true);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
+    // TODO: remove already included sub-forms to avoid duplication
 
     ui->treeView->setModel(model);
     ui->treeView->expandAll();
@@ -96,6 +98,7 @@ FormEditorDialog::~FormEditorDialog()
 
 void FormEditorDialog::on_addForm_clicked()
 {
+    // Get the uuid of the form receiver (where to insert the sub-form)
     QString insertTo;
     if (!ui->treeView->selectionModel()->hasSelection()) {
         bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"),
@@ -108,11 +111,21 @@ void FormEditorDialog::on_addForm_clicked()
         QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
         insertTo = _formTreeModel->data(_formTreeModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
     }
-
-    // Save to database
-    QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
-    if (selected.isEmpty() || insertTo.isEmpty())
+    if (insertTo.isEmpty()) {
+        LOG_ERROR("Trying to insert sub-form but no receiver was identified");
         return;
+    }
+
+    // Get the selected sub-forms + some checks
+    QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
+    if (selected.isEmpty()) {
+        LOG_ERROR("Trying to insert sub-form but sub-forms was selected");
+        return;
+    }
+
+    qWarning() << selected.count() << insertTo;
+
+    // Prepare sub-form insertion point for each selected sub-forms
     QVector<SubFormInsertionPoint> insertions;
     for(int i=0; i < selected.count(); ++i) {
         Form::FormIODescription *insert = selected.at(i);
@@ -120,8 +133,11 @@ void FormEditorDialog::on_addForm_clicked()
         point.setEmitInsertionSignal(true); // inform everyone of the newly added subform
         point.setForAllPatient(ui->allPatients->isChecked());
         insertions << point;
+        // Send sub-form insertion to the formmanager
         formManager().insertSubForm(point);
     }
+
+    // Save insertions to the episode database
     episodeBase()->addSubForms(insertions);
 }
 
