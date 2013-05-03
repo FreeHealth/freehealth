@@ -112,9 +112,6 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     // No user is logged in until here
 
     messageSplash(tr("Initializing Webcam..."));
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-
-    detectDevices();
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
@@ -144,13 +141,15 @@ void WebcamPlugin::extensionsInitialized()
 
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
-    //    // no user -> stop here
-    //    if (!user())
-    //        return;
-    //    if (user()->uuid().isEmpty())
-    //        return;
+    // no user -> stop here
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     messageSplash(tr("Initializing Webcam..."));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    detectDevices();
 
     // At this point, user is connected
 
