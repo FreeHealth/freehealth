@@ -210,6 +210,17 @@ public:
         }
     }
 
+    // Returns all empty root forms of each collections
+    QList<FormMain *> allEmptyRootForms() const
+    {
+        QList<FormMain*> roots;
+        foreach(FormCollection *collection, _centralFormCollection)
+            roots << collection->emptyRootForms();
+        foreach(FormCollection *collection, _subFormCollection)
+            roots << collection->emptyRootForms();
+        return roots;
+    }
+
     // Loads a form and create its collection, creates duplicates too
     bool loadFormCollection(const QString &uid, FormType type)
     {
@@ -630,7 +641,7 @@ FormPage *FormManager::createFormPage(const QString &uuid)
 /** Return the form (Form::FormMain*) with the uuid \e formUid or return zero. This function checks the central and all loaded subforms */
 FormMain *FormManager::form(const QString &formUid) const
 {
-    const QList<FormMain*> &roots = allEmptyRootForms();
+    const QList<FormMain*> &roots = d->allEmptyRootForms();
     for(int i=0; i < roots.count(); ++i) {
         Form::FormMain *form = roots.at(i);
         if (form->uuid()==formUid)
@@ -651,12 +662,7 @@ FormMain *FormManager::form(const QString &formUid) const
  */
 QList<FormMain *> FormManager::allEmptyRootForms() const
 {
-    QList<FormMain*> roots;
-    foreach(FormCollection *collection, d->_centralFormCollection)
-        roots << collection->emptyRootForms();
-    foreach(FormCollection *collection, d->_subFormCollection)
-        roots << collection->emptyRootForms();
-    return roots;
+    return d->allEmptyRootForms();
 }
 
 /**
@@ -760,7 +766,7 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 */
 Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 {
-    const QList<FormMain*> &roots = allEmptyRootForms();
+    const QList<FormMain*> &roots = d->allEmptyRootForms();
     for(int i=0; i < roots.count(); ++i) {
         FormMain *root = roots.at(i);
         if (root->modeUniqueName().compare(QString(modeUniqueName), Qt::CaseInsensitive)==0) {
