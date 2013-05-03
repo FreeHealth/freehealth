@@ -319,10 +319,12 @@ bool UserManagerPlugin::identifyUser()
     QString pass;
     bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
     bool usingCommandLine = false;
+#ifdef WITH_USER_AUTOLOGIN
     if (sqliteVersion) {
         log = settings()->databaseConnector().clearLog();
         pass = settings()->databaseConnector().clearPass();
     }
+#endif
     if (commandLine()->value(Core::ICommandLine::UserClearLogin).isValid()) {
         log = commandLine()->value(Core::ICommandLine::UserClearLogin).toString();
         pass = commandLine()->value(Core::ICommandLine::UserClearPassword).toString();

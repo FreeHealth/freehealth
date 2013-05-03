@@ -212,8 +212,14 @@ bool DatabaseConnector::isDriverValid() const { return d->m_DriverIsValid; }
 
 QString DatabaseConnector::forSettings() const
 {
-    QString tmp = d->m_ClearLog + QString(SEPARATOR);
+    QString tmp;
+#ifdef WITH_LOGINANDPASSWORD_CACHING
+    tmp = d->m_ClearLog + QString(SEPARATOR);
     tmp += d->m_ClearPass + QString(SEPARATOR);
+#else
+    tmp = "-" + QString(SEPARATOR);
+    tmp += "-" + QString(SEPARATOR);
+#endif
     tmp += d->m_HostName + QString(SEPARATOR);
     tmp += QString::number(d->m_Port) + QString(SEPARATOR);
     tmp += QString::number(d->m_Driver);

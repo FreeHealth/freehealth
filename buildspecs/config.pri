@@ -8,6 +8,10 @@ include(compiling.pri)
 isEmpty(LOWERED_APPNAME) {
     error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
 }
+
+# check optional build features
+include(optionalfeatures.pri)
+
 # include the generic configuration file (define some paths)
 SOURCES_ROOT_PATH        = $${PWD}/..
 include(config_paths.pri)
