@@ -24,3 +24,24 @@
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
 # DEFINES *= WITH_LOGINANDPASSWORD_CACHING
+
+# ***************************************************************************************
+# *                                   Cheque printing                                   *
+# ***************************************************************************************
+# * By default this feature is activated. When activated, users can print cheques.      *
+# ***************************************************************************************
+# * We suggest to activate this feature                                                 *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+ DEFINES *= WITH_CHEQUE_PRINTING
+
+# ***************************************************************************************
+# *                            French specific: printing FSP                            *
+# ***************************************************************************************
+# * By default this feature is activated. When activated, users can print french        *
+# 'feuilles de soins'.                                                                  *
+# ***************************************************************************************
+# * We suggest to activate this feature if you want to use FreeMedForms in France       *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+ DEFINES *= WITH_FRENCH_FSP

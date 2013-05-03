@@ -10,53 +10,69 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 include(../fmf_plugins.pri)
 include(tools_dependencies.pri)
 
+# French FSP Feature
+contains(DEFINES, WITH_FRENCH_FSP){
+    HEADERS += \
+        fsp/fsp.h \
+        fsp/fspprinter.h \
+        fsp/fspprinterdialog.h \
+        fsp/fspprinterpreferences.h \
+        fsp/fspconstants.h \
+        fsp/fsptemplatemodel.h
+
+    SOURCES += \
+        fsp/fsp.cpp \
+        fsp/fspprinter.cpp \
+        fsp/fspprinterdialog.cpp \
+        fsp/fspprinterpreferences.cpp \
+        fsp/fsptemplatemodel.cpp
+
+    FORMS += \
+        fsp/fspprinterdialog.ui \
+        fsp/fspprinterdialog_patient.ui \
+        fsp/fspprinterdialog_conds.ui \
+        fsp/fspprinterdialog_fees.ui \
+        fsp/fspprinterdialog_prerecorded.ui \
+        fsp/fspprinterpreferences.ui
+}
+
+# Cheque printing Feature
+contains(DEFINES, WITH_CHEQUE_PRINTING){
+    HEADERS += \
+        cheque/chequeconstants.h \
+        cheque/chequeprinter.h \
+        cheque/chequeprinter_preferences.h \
+        cheque/chequeprinterdialog.h \
+        cheque/chequeprintformat.h \
+        cheque/chequeprintformatmodel.h
+
+    SOURCES += \
+        cheque/chequeprinter.cpp \
+        cheque/chequeprinter_preferences.cpp \
+        cheque/chequeprinterdialog.cpp \
+        cheque/chequeprintformat.cpp \
+        cheque/chequeprintformatmodel.cpp
+
+    FORMS += \
+        cheque/chequeprinter_preferences.ui \
+        cheque/chequeprinterdialog.ui
+}
+
 HEADERS += \
+    constants.h \
     toolsplugin.h \
     tools_exporter.h \
     toolsconstants.h \
     toolspreferences.h \
-    pdftkwrapper.h \
-    cheque/chequeprinter.h \
-    cheque/chequeprinter_preferences.h \
-    cheque/chequeprinterdialog.h \
-    fsp/fsp.h \
-    fsp/fspprinter.h \
-    fsp/fspprinterdialog.h \
-    fsp/fspprinterpreferences.h \
-    fsp/fspconstants.h \
-    fsp/fsptemplatemodel.h \
-    cheque/chequeconstants.h \
-    constants.h \
-    cheque/chequeprintformat.h \
-    cheque/chequeprintformatmodel.h
-
+    pdftkwrapper.h
 
 SOURCES += \
     toolsplugin.cpp \
     toolspreferences.cpp \
-    pdftkwrapper.cpp \
-    cheque/chequeprinter.cpp \
-    cheque/chequeprinter_preferences.cpp \
-    cheque/chequeprinterdialog.cpp \
-    fsp/fsp.cpp \
-    fsp/fspprinter.cpp \
-    fsp/fspprinterdialog.cpp \
-    fsp/fspprinterpreferences.cpp \
-    fsp/fsptemplatemodel.cpp \
-    cheque/chequeprintformat.cpp \
-    cheque/chequeprintformatmodel.cpp
-
+    pdftkwrapper.cpp
 
 FORMS += \
-    toolspreferences.ui \
-    cheque/chequeprinter_preferences.ui \
-    cheque/chequeprinterdialog.ui \
-    fsp/fspprinterdialog.ui \
-    fsp/fspprinterdialog_patient.ui \
-    fsp/fspprinterdialog_conds.ui \
-    fsp/fspprinterdialog_fees.ui \
-    fsp/fspprinterdialog_prerecorded.ui \
-    fsp/fspprinterpreferences.ui
+    toolspreferences.ui
 
 OTHER_FILES = Tools.pluginspec
 

@@ -26,10 +26,16 @@
 #include "toolsplugin.h"
 #include "toolsconstants.h"
 #include "pdftkwrapper.h"
+
+#ifdef WITH_CHEQUE_PRINTING
 #include "cheque/chequeprinterdialog.h"
 #include "cheque/chequeprinter_preferences.h"
+#endif
+
+#ifdef WITH_FRENCH_FSP
 #include "fsp/fspprinterpreferences.h"
 #include "fsp/fspprinterdialog.h"
+#endif
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -85,10 +91,13 @@ ToolsPlugin::ToolsPlugin() :
 
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
-//    m_prefPage = new ToolsPreferencesPage(this);
-//    addObject(m_prefPage);
+#ifdef WITH_CHEQUE_PRINTING
     addAutoReleasedObject(new ChequePrinterPreferencesPage(this));
+#endif
+
+#ifdef WITH_FRENCH_FSP
     addAutoReleasedObject(new FspPrinterPreferencesPage(this));
+#endif
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
@@ -150,26 +159,32 @@ void ToolsPlugin::extensionsInitialized()
 
     // Create some menu actions
     Core::ActionContainer *menu = actionManager()->createMenu(Core::Constants::M_GENERAL);
+    QAction *action = 0;
+    Core::Command *cmd = 0;
 
-    QAction *action = new QAction(this);
+#ifdef WITH_CHEQUE_PRINTING
+    action = new QAction(this);
     action->setEnabled(ChequePrinterDialog::isAvailable());
     action->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
-    Core::Command *cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
+    cmd = actionManager()->registerAction(action, "aTools.PrintCheque", Core::Context(Core::Constants::C_GLOBAL));
     cmd->setTranslations(::PRINT_CHEQUE, ::PRINT_CHEQUE, "Tools");
     //: Translation for the 'Print Cheque' action
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+C")));
     connect(action, SIGNAL(triggered()), this, SLOT(printCheque()));
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
+#endif
 
-    QAction *printFsp = new QAction(this);
-    printFsp->setEnabled(FspPrinterDialog::isAvailable());
-    printFsp->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
-    cmd = actionManager()->registerAction(printFsp, "aTools.PrintFsp", Core::Context(Core::Constants::C_GLOBAL));
+#ifdef WITH_FRENCH_FSP
+    action = new QAction(this);
+    action->setEnabled(FspPrinterDialog::isAvailable());
+    action->setIcon(theme()->icon(Core::Constants::ICONCHEQUE));
+    cmd = actionManager()->registerAction(action, "aTools.PrintFsp", Core::Context(Core::Constants::C_GLOBAL));
     cmd->setTranslations(::PRINT_FSP, ::PRINT_FSP, "Tools");
     //: Translation for the 'Print FSP' action
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+F")));
-    connect(printFsp, SIGNAL(triggered()), this, SLOT(printFsp()));
+    connect(action, SIGNAL(triggered()), this, SLOT(printFsp()));
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
+#endif
 
     // TODO: add action to the mode manager ?
 
