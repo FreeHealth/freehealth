@@ -32,6 +32,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/theme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/actionmanager/actionmanager_p.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -268,6 +269,11 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 void CoreImpl::extensionsInitialized()
 {
     LOG("Core opened");
+    // no user -> end
+    if (!m_User)
+        return;
+    if (m_User->uuid().isEmpty())
+        return;
     Q_EMIT coreOpened();
 }
 
