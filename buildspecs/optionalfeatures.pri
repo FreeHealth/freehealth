@@ -1,4 +1,17 @@
 # ***************************************************************************************
+# *                                    Auto-locking                                     *
+# ***************************************************************************************
+# * By default this feature is activated. When activated, users can define time         *
+# * to automatically lock FreeMedForms. FreeMedForms will then ask user for his         *
+# * identification.                                                                     *
+# * This is a good security feature, but can be redondant with OS configuration.        *
+# ***************************************************************************************
+# * We suggest to activate this feature                                                 *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+ DEFINES *= WITH_UI_AUTO_LOCKING
+
+# ***************************************************************************************
 # *                                   User auto login                                   *
 # ***************************************************************************************
 # * By default this feature is not activated. When activated, users can get             *
