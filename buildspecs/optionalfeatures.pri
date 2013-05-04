@@ -6,10 +6,10 @@
 # * identification.                                                                     *
 # * This is a good security feature, but can be redondant with OS configuration.        *
 # ***************************************************************************************
-# * We suggest to activate this feature                                                 *
+# * We suggest to not activate this feature as it is not currently stable.              *
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
- DEFINES *= WITH_UI_AUTO_LOCKING
+# DEFINES *= WITH_UI_AUTO_LOCKING
 
 # ***************************************************************************************
 # *                                   User auto login                                   *
