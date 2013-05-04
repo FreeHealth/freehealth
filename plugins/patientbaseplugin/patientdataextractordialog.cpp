@@ -249,6 +249,7 @@ static QList<Core::PatientDataExtraction*> extractAll(const QList<Core::IPatient
     return result;
 }
 
+//#include <QTextBrowser>
 void PatientDataExtractorDialog::onExportRequested()
 {
     // Avoid multiclicks on button
@@ -310,6 +311,7 @@ void PatientDataExtractorDialog::onExportRequested()
     }
 
     // Start extraction patient by patient
+    QStringList finalMessage;
     foreach(const QString &uid, uids) {
         // Progress cosmetics
         dlg.setLabelText(tr("Setting patient uuid %1 as current patient").arg(uid));
@@ -360,14 +362,35 @@ void PatientDataExtractorDialog::onExportRequested()
         }
 
         // According to params -> transform to one big HTML file
+        finalMessage << tr("Exporting %1 file")
+                        .arg(QString("<b>%1</b>")
+                             .arg(patient()->data(Core::IPatient::FullName).toString())
+                             );
         if (d->ui->outputFormat->currentText().contains("HTML", Qt::CaseInsensitive)) {
-            if (!Utils::saveStringToFile(outCss + out, job.outputAbsolutePath() + "/export.html"))
+            if (!Utils::saveStringToFile(outCss + out, job.outputAbsolutePath() + "/export.html")) {
                 LOG_ERROR("Unable to save file");
+                finalMessage << QString("&nbsp;&nbsp;%1")
+                                .arg(tr("An error occured when saving the HTML patient file"));
+            } else {
+                finalMessage << QString("&nbsp;&nbsp;%1")
+                                .arg(QString("<a href='file://%1'>%2</a>")
+                                     .arg(tr("Patient HTML file correctly created"))
+                                     .arg(job.outputAbsolutePath() + "/export.html"));
+            }
         }
 
         // According to params -> transform to PDF file
         if (d->ui->outputFormat->currentText().contains("PDF", Qt::CaseInsensitive)) {
-            printer()->toPdf(outCss+out, job.outputAbsolutePath() + "/export.pdf");
+            if (!printer()->toPdf(outCss+out, job.outputAbsolutePath() + "/export.pdf")) {
+                LOG_ERROR("Unable to save file");
+                finalMessage << QString("&nbsp;&nbsp;%1")
+                                .arg(tr("An error occured when saving the PDF patient file"));
+            } else {
+                finalMessage << QString("&nbsp;&nbsp;%1")
+                                .arg(QString("<a href='file://%1'>%2</a>")
+                                     .arg(tr("Patient PDF file correctly created"))
+                                     .arg(job.outputAbsolutePath() + "/export.pdf"));
+            }
         }
     }
 
@@ -382,5 +405,9 @@ void PatientDataExtractorDialog::onExportRequested()
     Utils::Log::logTimeElapsed(chrGlobal, objectName(), QString("Patient data extraction done"));
     LOG("---------- Patient data extraction done");
 
+    // Show a small dialog with the finalMessage content
+//    QTextBrowser *b = new QTextBrowser;
+//    b->setHtml(finalMessage.join("<br/><br/>"));
+//    b->show();
     d->_exportButton->setEnabled(true);
 }
