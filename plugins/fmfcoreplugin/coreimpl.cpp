@@ -42,6 +42,7 @@
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ipadtools.h>
+#include <coreplugin/applicationautolock.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -80,8 +81,8 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Patient(0),
     m_User(0),
     m_Script(0),
-    m_PadTools(0)
-
+    m_PadTools(0),
+    m_AutoLock(0)
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
@@ -136,9 +137,6 @@ CoreImpl::CoreImpl(QObject *parent) :
     }
 #endif
 
-//    m_MainWindow = new MainWindow();
-//    m_ActionManager = new ActionManagerPrivate(m_MainWindow);
-//    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
     if (logChrono)
@@ -178,6 +176,10 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ModeManager = new ModeManager(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
+    m_AutoLock = new ApplicationAutoLock(this);
+    m_AutoLock->initialize();
+    m_AutoLock->setTimeBeforeLocking(2000);
+    m_AutoLock->startListening();
 }
 
 bool CoreImpl::applicationConfigurationDialog() const
@@ -268,6 +270,14 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
+    // Some tests on external objects
+//    Q_ASSERT(m_MainWindow==0);
+//    Q_ASSERT(m_ActionManager==0);
+//    Q_ASSERT(m_ContextManager==0);
+//    Q_ASSERT(m_ModeManager==0);
+//    Q_ASSERT(m_AutoLock==0);
+//    Q_ASSERT(m_User==0);
+//    Q_ASSERT(m_Patient==0);
     LOG("Core opened");
     // no user -> end
     if (!m_User)

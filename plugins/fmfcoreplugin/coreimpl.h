@@ -56,6 +56,7 @@ namespace Core {
     class ISettings;
     class IMainWindow;
     class CommandLine;
+    class ApplicationAutoLock;
 
 namespace Internal {
     class ThemePrivate;
@@ -127,6 +128,7 @@ private:
     IUser *m_User;
     IScriptManager *m_Script;
     IPadTools *m_PadTools;
+    ApplicationAutoLock *m_AutoLock;
 };
 
 } // namespace Internal
