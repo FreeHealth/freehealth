@@ -34,9 +34,16 @@ class QPushButton;
 class QTextBrowser;
 QT_END_NAMESPACE
 
+/**
+ * \file basiclogindialog.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.0
+ * \date 24 Oct 2011
+*/
+
 namespace Utils {
 namespace Ui {
-    class BasicLoginDialog;
+class BasicLoginDialog;
 }
 
 class UTILS_EXPORT BasicLoginDialog : public QDialog
@@ -62,7 +69,6 @@ private:
     QPushButton *_more;
     QTextBrowser *_moreBrowser;
 };
-
 
 } // namespace Utils
 #endif // UTILS_BASICLOGINDIALOG_H

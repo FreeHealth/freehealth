@@ -30,6 +30,13 @@
 #include <utils/global_exporter.h>
 #include <QWidget>
 
+/**
+ * \file loginwidget.h
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 04 May 2013
+*/
+
 namespace Utils {
 
 namespace Ui {
@@ -60,6 +67,6 @@ private:
     Ui::LoginWidget *ui;
 };
 
-
 } // namespace Utils
+
 #endif // UTILS_LOGINWIDGET_H
