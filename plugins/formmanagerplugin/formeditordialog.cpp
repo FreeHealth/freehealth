@@ -38,6 +38,7 @@
 #include "subforminsertionpoint.h"
 #include "formmanager.h"
 #include "iformio.h"
+#include "iformitem.h"
 #include "formviewdelegate.h"
 
 #include <coreplugin/icore.h>
@@ -66,10 +67,15 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     Q_UNUSED(mode);
 
     ui->setupUi(this);
+    // Mange FormSelector options
     ui->formSelector->setIncludeLocalFiles(true);
     ui->formSelector->setExcludeGenderSpecific(true);
+    // Exclude all included forms
+    QStringList excludeUids;
+    foreach(Form::FormMain *form, formManager().allEmptyRootForms())
+        excludeUids << form->uuid();
+    ui->formSelector->setExcludeFormByUid(excludeUids);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
-    // TODO: remove already included sub-forms to avoid duplication
 
     ui->treeView->setModel(model);
     ui->treeView->expandAll();
@@ -115,6 +121,10 @@ void FormEditorDialog::on_addForm_clicked()
         LOG_ERROR("Trying to insert sub-form but no receiver was identified");
         return;
     }
+    if (ui->formSelector->excludedFormByUid().contains(insertTo, Qt::CaseInsensitive)) {
+        LOG_ERROR("Trying to insert sub-form but sub-form is already inserted in the patient file");
+        return;
+    }
 
     // Get the selected sub-forms + some checks
     QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
@@ -122,8 +132,6 @@ void FormEditorDialog::on_addForm_clicked()
         LOG_ERROR("Trying to insert sub-form but sub-forms was selected");
         return;
     }
-
-    qWarning() << selected.count() << insertTo;
 
     // Prepare sub-form insertion point for each selected sub-forms
     QVector<SubFormInsertionPoint> insertions;
