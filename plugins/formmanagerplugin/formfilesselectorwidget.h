@@ -71,6 +71,8 @@ public:
 
     void setFormType(FormType type);
     void setExcludeGenderSpecific(bool excludeGenderSpecific);
+    void setExcludeFormByUid(const QStringList &formuids);
+    const QStringList &excludedFormByUid() const;
     void setSelectionType(SelectionType type);
     void expandAllItems() const;
     void setIncludeLocalFiles(bool includeLocal);

@@ -158,6 +158,10 @@ public:
         QHash<QString, QStandardItem *> categories;
         for(int i=0; i < m_FormDescr.count(); ++i) {
             Form::FormIODescription *descr = m_FormDescr.at(i);
+            // Do not manage excluded forms
+            if (_excludeUids.contains(descr->data(Form::FormIODescription::UuidOrAbsPath).toString(), Qt::CaseInsensitive))
+                continue;
+
             const QString &cat = descr->data(treeItemReference).toString();
             QStandardItem *catItem = 0;
             if (!categories.contains(cat)) {
@@ -194,6 +198,7 @@ public:
     int m_ActualTreeModelColumn, m_SelType;
     QString m_HightlightUuid;
     bool m_GetLocal, m_ExcludeGenderSpecific;
+    QStringList _excludeUids;
 };
 
 }  // End namespace Internal
@@ -258,6 +263,26 @@ void FormFilesSelectorWidget::setFormType(FormType type)
 void FormFilesSelectorWidget::setExcludeGenderSpecific(bool excludeGenderSpecific)
 {
     d->m_ExcludeGenderSpecific = excludeGenderSpecific;
+}
+
+/**
+ * Exclude some form using a uuid matching. Use the emptyroot uuid.
+ * This param must be defined before calling setFormType().
+ * \code
+ * uuid example: __completeForms__/gp_basic1
+ * \endcode
+ */
+void FormFilesSelectorWidget::setExcludeFormByUid(const QStringList &formuids)
+{
+    d->_excludeUids = formuids;
+}
+
+/**
+ * Returns the excluded forms using a uuid matching. Uses the emptyroot uuid.
+ */
+const QStringList &FormFilesSelectorWidget::excludedFormByUid() const
+{
+    return d->_excludeUids;
 }
 
 /** Define the selection type to single item selection or multiple item selection. */
