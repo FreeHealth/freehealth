@@ -81,6 +81,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aGeneralAppPrefs(0), aGeneralAppConfigurator(0), aGeneralPlugsPrefs(0), aGeneralMedinTux(0),
         aGeneralAppAbout(0), aGeneralPlugsAbout(0), aGeneralAppHelp(0), aGeneralQtAbout(0), aGeneralDebugDialog(0),
         aGeneralCheckUpdate(0), aGeneralUpdateAvailable(0),
+        aGeneralLockApplication(0),
         aNew(0),
         aOpen(0),
         aSave(0),
@@ -235,6 +236,14 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     }
 
     group = Id(Constants::G_GENERAL_EXIT);
+    // Lock application
+    if (actions & Core::MainWindowActions::A_FileQuit) {
+        a = aGeneralLockApplication = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONLOCK));
+        cmd = actionManager()->registerAction(a, Constants::A_FILE_LOCKAPPLICATION, ctx);
+        cmd->setTranslations(Trans::Constants::FILELOCKAPPLICATION_TEXT);
+        menu->addAction(cmd, group);
+    }
 
     // Quit Action
     if (actions & Core::MainWindowActions::A_FileQuit) {
@@ -249,73 +258,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         menu->addAction(cmd, group);
     }
 
-//    group = Id(Constants::G_GENERAL_EDIT);
-//
-//    // Undo Action
-//    if (actions & Core::MainWindowActions::A_) {
-//    a = aGeneralUndo = new QAction(this);
-//    a->setObjectName("aGeneralUndo");
-//    a->setIcon(theme()->icon(Constants::ICONUNDO));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_UNDO, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::Undo);
-//    //    cmd->setAttribute(Command::CA_UpdateText);
-//    cmd->setTranslations(Trans::Constants::EDITUNDO_TEXT);
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-//
-//    // Redo Action
-//    a = aGeneralRedo = new QAction(this);
-//    a->setObjectName("aGeneralRedo");
-//    a->setIcon(theme()->icon(Constants::ICONREDO));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_REDO, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::Redo);
-//    //    cmd->setAttribute(Command::CA_UpdateText);
-//    cmd->setTranslations(Trans::Constants::EDITREDO_TEXT);
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-//
-//    // Cut Action
-//    a = aGeneralCut = new QAction(this);
-//    a->setObjectName("aGeneralCut");
-//    a->setIcon(theme()->icon(Constants::ICONCUT));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_CUT, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::Cut);
-//    cmd->setTranslations(Trans::Constants::EDITCUT_TEXT );
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-//
-//    // Copy Action
-//    a = aGeneralCopy = new QAction(this);
-//    a->setObjectName("aGeneralCopy");
-//    a->setIcon(theme()->icon(Constants::ICONCOPY));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_COPY, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::Copy);
-//    cmd->setTranslations(Trans::Constants::EDITCOPY_TEXT );
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-//
-//    // Paste Action
-//    a = aGeneralPaste = new QAction(this);
-//    a->setObjectName("aGeneralPaste");
-//    a->setIcon(theme()->icon(Constants::ICONPASTE));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_PASTE, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::Paste);
-//    cmd->setTranslations(Trans::Constants::EDITPASTE_TEXT );
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-//
-//    // SelectAll Action
-//    a = aGeneralSelectAll = new QAction(this);
-//    a->setObjectName("aGeneralSelectAll");
-//    a->setIcon(theme()->icon(Constants::ICONSELECTALL));
-//    cmd = actionManager()->registerAction(a, Constants::A_EDIT_SELECTALL, ctx);
-//    cmd->setDefaultKeySequence(QKeySequence::SelectAll);
-//    cmd->setTranslations(Trans::Constants::EDITSELECTALL_TEXT );
-//    menu->addAction(cmd, group);
-//    a->setEnabled(false);
-
     group = Id(Constants::G_GENERAL_PATIENTS);
-
     // Patient's new
     if (actions & Core::MainWindowActions::A_Patients_New) {
         a = aGeneralPatientNew = new QAction(this);
@@ -467,14 +410,11 @@ void MainWindowActionHandler::connectGeneralActions()
     if (aGeneralPrintPreview)
         connect(aGeneralPrintPreview, SIGNAL(triggered()), this, SLOT(printPreview()));
 
+    if (aGeneralLockApplication)
+        connect(aGeneralLockApplication, SIGNAL(triggered()), this, SLOT(lockApplication()));
     if (aGeneralQuit)
         connect(aGeneralQuit, SIGNAL(triggered()), this, SLOT(close()));
-    //    if (aGeneralUndo) {}
-    //    if (aGeneralRedo) {}
-    //    if (aGeneralCut) {}
-    //    if (aGeneralCopy) {}
-    //    if (aGeneralPaste) {}
-    //    if (aGeneralSelectAll) {}
+
     if (aGeneralPatientNew)
         connect(aGeneralPatientNew, SIGNAL(triggered()), this, SLOT(createNewPatient()));
     if (aGeneralPatientViewIdentity)
@@ -1345,3 +1285,12 @@ void MainWindowActionHandler::goToAppWebSite()
         QDesktopServices::openUrl(QUrl(settings()->path(Core::ISettings::WebSiteUrl)));
 }
 
+/**
+ * Lock the application:
+ * - change the mainwindow central widget
+ * - require user authentication to unlock the window
+ */
+void MainWindowActionHandler::lockApplication()
+{
+    // TODO: code this, one action is already available in the General menu and connected to this slot
+}

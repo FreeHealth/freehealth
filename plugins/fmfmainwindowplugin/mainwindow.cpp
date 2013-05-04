@@ -154,7 +154,6 @@ void MainWindow::init()
     Q_ASSERT(contextManager());
 
     // create menus
-//    createFileMenu();
     createGeneralMenu();
     createPatientMenu();
     createEditMenu();

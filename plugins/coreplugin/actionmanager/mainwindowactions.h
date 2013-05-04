@@ -67,7 +67,8 @@ public:
         A_FileClose              = 0x00000010,
         A_FilePrint              = 0x00000020,
         A_FilePrintPreview       = 0x00000040,
-        A_FileQuit               = 0x00000080
+        A_FileLockApplication    = 0x00000080,
+        A_FileQuit               = 0x00000100
     };
     enum ConfigurationAction {
         A_AppPreferences         = 0x00000100,

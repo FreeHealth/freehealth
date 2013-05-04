@@ -57,7 +57,6 @@ public:
 
     void startProcessingSpinner();
     void endProcessingSpinner();
-
 };
 
 } // end Core

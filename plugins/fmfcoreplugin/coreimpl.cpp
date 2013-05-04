@@ -176,10 +176,12 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ModeManager = new ModeManager(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
+    // Create application locker listener and connect it to the core locking code
     m_AutoLock = new ApplicationAutoLock(this);
     m_AutoLock->initialize();
     m_AutoLock->setTimeBeforeLocking(2000);
     m_AutoLock->startListening();
+    connect(m_AutoLock, SIGNAL(lockRequired()), m_MainWindow, SLOT(lockApplication()));
 }
 
 bool CoreImpl::applicationConfigurationDialog() const
@@ -286,4 +288,3 @@ void CoreImpl::extensionsInitialized()
         return;
     Q_EMIT coreOpened();
 }
-

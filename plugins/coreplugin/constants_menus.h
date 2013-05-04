@@ -201,6 +201,7 @@ const char * const  A_FILE_PRINT             = "actionFilePrint";  /*!< \brief D
 const char * const  A_FILE_PRINTFORM         = "actionFilePrintForm";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_PRINTPRESCRIPTION = "actionFilePrintPrescription";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_PRINTPREVIEW      = "actionFilePrintPreview";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_LOCKAPPLICATION   = "actionFileLockApplication";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_FILE_EXIT              = "actionFileExit";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Patient actions

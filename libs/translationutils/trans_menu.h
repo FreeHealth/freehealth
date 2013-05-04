@@ -64,6 +64,7 @@ const char * const  FILESAVE_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&S
 const char * const  FILESAVEAS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Save &as...");
 const char * const  FILEPRINT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "&Print...");
 const char * const  PRINTPREVIEW_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Print pre&view");
+const char * const  FILELOCKAPPLICATION_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "&Lock application");
 const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&Exit");
 const char * const  SEARCHMENU_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Sea&rch...");
 

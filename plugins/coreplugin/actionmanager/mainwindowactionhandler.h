@@ -125,6 +125,8 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool checkUpdate();
     virtual void goToAppWebSite();
 
+    virtual void lockApplication();
+
 public Q_SLOTS:
     virtual void switchLanguage(QAction * action);
 
@@ -136,6 +138,7 @@ protected:
     QAction *aGeneralAppPrefs, *aGeneralAppConfigurator, *aGeneralPlugsPrefs, *aGeneralMedinTux;
     QAction *aGeneralAppAbout, *aGeneralPlugsAbout, *aGeneralAppHelp, *aGeneralQtAbout, *aGeneralDebugDialog;
     QAction *aGeneralCheckUpdate, *aGeneralUpdateAvailable;
+    QAction *aGeneralLockApplication;
     QAction *aReportBug;
 
     QAction *aNew;
