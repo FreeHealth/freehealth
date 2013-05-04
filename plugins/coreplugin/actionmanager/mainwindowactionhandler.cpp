@@ -62,6 +62,8 @@
 #include <QStatusBar>
 #include <QLabel>
 #include <QDesktopServices>
+#include <QGridLayout>
+#include <QSpacerItem>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -237,13 +239,15 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
 
     group = Id(Constants::G_GENERAL_EXIT);
     // Lock application
-    if (actions & Core::MainWindowActions::A_FileQuit) {
+#ifdef WITH_UI_AUTO_LOCKING
+    if (actions & Core::MainWindowActions::A_FileLockApplication) {
         a = aGeneralLockApplication = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONLOCK));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_LOCKAPPLICATION, ctx);
         cmd->setTranslations(Trans::Constants::FILELOCKAPPLICATION_TEXT);
         menu->addAction(cmd, group);
     }
+#endif
 
     // Quit Action
     if (actions & Core::MainWindowActions::A_FileQuit) {
@@ -1292,5 +1296,20 @@ void MainWindowActionHandler::goToAppWebSite()
  */
 void MainWindowActionHandler::lockApplication()
 {
+#ifdef WITH_UI_AUTO_LOCKING
     // TODO: code this, one action is already available in the General menu and connected to this slot
+//    QWidget *currentCentral = this->centralWidget();
+//    currentCentral->setEnabled(false);
+//    QWidget *w = new QWidget(this);
+//    QGridLayout *grid = new QGridLayout(w);
+    // +----------+-----------+----------+
+    // |          |   SPACER  |          |
+    // +----------+-----------+----------+
+    // | SPACER   |   LOGIN   |  SPACER  |
+    // +----------+-----------+----------+
+    // |          |   BUTTONS |          |
+    // +----------+-----------+----------+
+    // |          |   SPACER  |          |
+    // +----------+-----------+----------+
+#endif
 }

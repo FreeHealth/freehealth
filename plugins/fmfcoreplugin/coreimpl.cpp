@@ -177,11 +177,13 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
     // Create application locker listener and connect it to the core locking code
+#ifdef WITH_UI_AUTO_LOCKING
     m_AutoLock = new ApplicationAutoLock(this);
     m_AutoLock->initialize();
     m_AutoLock->setTimeBeforeLocking(2000);
     m_AutoLock->startListening();
     connect(m_AutoLock, SIGNAL(lockRequired()), m_MainWindow, SLOT(lockApplication()));
+#endif
 }
 
 bool CoreImpl::applicationConfigurationDialog() const

@@ -142,8 +142,6 @@ bool ApplicationAutoLock::eventFilter(QObject *obj, QEvent *event)
 
 void ApplicationAutoLock::timerTimeOut()
 {
-    qWarning() << "***************** TIME OUT" << isLocked();
     d->_timer.stop();
     Q_EMIT lockRequired();
-    qWarning() << "***************** TIME OUT" << isLocked();
 }
