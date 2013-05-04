@@ -49,6 +49,10 @@
 using namespace %PluginNamespace:c%;
 @if "%Internal%" == "true"
 using namespace Internal;
+@else
+@if "%PIMPL%" == "true"
+using namespace Internal;
+@endif
 @endif
 @if "%Translations%" == "true"
 using namespace Trans::ConstantTranslations;
