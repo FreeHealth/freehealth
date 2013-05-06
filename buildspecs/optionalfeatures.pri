@@ -1,4 +1,17 @@
 # ***************************************************************************************
+# *                           Drug database compatibility                               *
+# ***************************************************************************************
+# * By default defined to the latest version, but you can define another version.       *
+# * Available versions:                                                                 *
+# *     - 0.6.4 : use 0x000604                                                          *
+# *     - 0.8.4 : use 0x000804                                                          *
+# ***************************************************************************************
+# * We suggest to keep this value unchanged unless you know what you are doing.         *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+DEFINES += DRUGS_DATABASE_VERSION=0x000604
+
+# ***************************************************************************************
 # *                                    Auto-locking                                     *
 # ***************************************************************************************
 # * By default this feature is activated. When activated, users can define time         *

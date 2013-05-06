@@ -52,7 +52,13 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString databaseFileName() {return settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME) + QDir::separator() + QString(Constants::DB_DRUGS_FILENAME);}
 
 namespace {
+#if DRUGS_DATABASE_VERSION = 0x000804
+const char * const CURRENTVERSION = "0.8.4";
+#elif DRUGS_DATABASE_VERSION = 0x000604
 const char * const CURRENTVERSION = "0.6.4";
+#else
+const char * const CURRENTVERSION = "0.0.0";
+#endif
 
 struct ftype {
     ftype(int _f, Utils::Database::TypeOfField _t) : f(_f), t(_t) {}
@@ -250,6 +256,17 @@ DrugBaseEssentials::DrugBaseEssentials():
     i = Table_CURRENTVERSION;
     types.insertMulti(i, ftype(CURRENTVERSION_ID, FieldIsUniquePrimaryKey));
     types.insertMulti(i, ftype(CURRENTVERSION_NUMBER, FieldIsShortText));
+#if DRUGS_DATABASE_VERSION >= 0x000804
+    i = Table_DRUG_SPC;
+    types.insertMulti(i, ftype(DRUG_SPC_DID,FieldIsInteger));
+    types.insertMulti(i, ftype(DRUG_SPC_SPCCONTENT_ID,FieldIsInteger));
+    i = Table_SPC_CONTENT;
+    types.insertMulti(i, ftype(SPCCONTENT_ID,FieldIsUniquePrimaryKey));
+    types.insertMulti(i, ftype(SPCCONTENT_LABEL,FieldIsLongText));
+    types.insertMulti(i, ftype(SPCCONTENT_URL_SOURCE,FieldIsShortText));
+    types.insertMulti(i, ftype(SPCCONTENT_DATEOFDOWNLOAD,FieldIsDateTime));
+    types.insertMulti(i, ftype(SPCCONTENT_HTMLCONTENT,FieldIsBlob));
+#endif
 
     for(int i=0; i < Table_MaxParam; ++i) {
         addTable(i, "t" + QString::number(i));
@@ -277,6 +294,7 @@ DrugBaseEssentials::DrugBaseEssentials():
     addIndex(Table_DRUG_ROUTES, DRUG_ROUTES_DID);
     addIndex(Table_DRUG_ROUTES, DRUG_ROUTES_RID);
     addIndex(Table_DRUG_FORMS, DRUG_FORMS_DID);
+    addIndex(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID);
     addIndex(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID);
     addIndex(Table_ROUTES, ROUTES_RID);
     addIndex(Table_ROUTES, ROUTES_MASTERLID);
@@ -306,6 +324,12 @@ DrugBaseEssentials::DrugBaseEssentials():
     addIndex(Table_PIMS, PIMS_ID);
     addIndex(Table_PIM_TYPES, PIM_TYPES_TID);
     addIndex(Table_PIM_SOURCES, PIM_SOURCES_SID);
+
+#if DRUGS_DATABASE_VERSION >= 0x000804
+    addIndex(Table_DRUG_SPC, DRUG_SPC_DID);
+    addIndex(Table_DRUG_SPC, DRUG_SPC_SPCCONTENT_ID);
+    addIndex(Table_SPC_CONTENT, SPCCONTENT_ID);
+#endif
 }
 
 /** Force the re-initialization of the database. Call initialize() after this. */
