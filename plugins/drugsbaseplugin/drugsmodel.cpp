@@ -147,7 +147,7 @@ public:
         if (column == Constants::Drug::Denomination) {
             if (textualdrug) {
                 textualdrug->setDenomination(value.toString());
-//                _posologicSentence.remove(drug);
+                _posologicSentence.remove(drug);
                 return true;
             } else {
                 return false;
@@ -164,7 +164,7 @@ public:
 //            }
             drug->setPrescriptionValue(column, value);
         }
-//        _posologicSentence.remove(drug);
+        _posologicSentence.remove(drug);
         return true;
     }
 
@@ -369,7 +369,7 @@ public:
     DrugInteractionQuery *m_InteractionQuery;
     IDrugAllergyEngine *m_AllergyEngine;
     bool m_ComputeInteraction;
-//    QHash<const IDrug*, QString> _posologicSentence;
+    QHash<const IDrug*, QString> _posologicSentence;
 
 private:
     DrugsModel *q;
@@ -490,7 +490,7 @@ bool DrugsModel::submit()
 void DrugsModel::resetModel()
 {
     beginResetModel();
-//    d->_posologicSentence.clear();
+    d->_posologicSentence.clear();
     d->m_IsDirty = false;
     endResetModel();
 }
@@ -696,7 +696,7 @@ void DrugsModel::clearDrugsList()
     d->m_TestingDrugsList.clear();
     d->m_InteractionQuery->clearDrugsList();
     d->m_InteractionResult->clear();
-//    d->_posologicSentence.clear();
+    d->_posologicSentence.clear();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     d->m_IsDirty = true;
     endResetModel();
@@ -890,7 +890,7 @@ int DrugsModel::removeDrug(const QVariant &drugId)
     foreach(IDrug * drug, d->m_DrugsList) {
         if (drug->drugId() == drugId) {
             d->m_DrugsList.removeAt(d->m_DrugsList.indexOf(drug));
-//            d->_posologicSentence.remove(drug);
+            d->_posologicSentence.remove(drug);
             delete drug;
             ++i;
         } else {
@@ -910,7 +910,7 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
-//    d->_posologicSentence.remove(d->m_DrugsList.last());
+    d->_posologicSentence.remove(d->m_DrugsList.last());
     delete d->m_DrugsList.last();
     d->m_DrugsList.removeLast();
     d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
@@ -945,11 +945,11 @@ void DrugsModel::checkInteractions()
  */
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)
 {
-//    if (d->_posologicSentence.contains(drug))
-//        return d->_posologicSentence.value(drug);
+    if (d->_posologicSentence.contains(drug))
+        return d->_posologicSentence.value(drug);
     QString result;
     result = drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
-//    d->_posologicSentence.insert(drug, result);
+    d->_posologicSentence.insert(drug, result);
     return result;
 }
 
