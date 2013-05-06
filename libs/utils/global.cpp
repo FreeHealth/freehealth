@@ -1330,7 +1330,8 @@ QLocale::Country countryIsoToCountry(const QString &country) {
 /**
  * Extract the html body content and return it.
  * The body can will be replaced by default by a P tag but using \e replaceBodyTagByParagraphTag
- * you can select a SPAN replacement (setting \e replaceBodyTagByParagraphTag to false).
+ * you can select a null replacement (setting \e replaceBodyTagByParagraphTag to false - in
+ * this case all css content of the body tag will be lost).
  *
  * \code
  * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle;\">BODY <b>CONTENT</b></body></html>");
@@ -1339,7 +1340,7 @@ QLocale::Country countryIsoToCountry(const QString &country) {
  *
  * \code
  * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle;\">BODY <b>CONTENT</b></body></html>", false);
- * // body = "<span style=\"bodyStyle;\"><b>BODY CONTENT</b></span>";
+ * // body = "<b>BODY CONTENT</b>";
  * \endcode
  *
  * WARNING: This function will create a new HTML paragraph with the body style, including the body content.
@@ -1365,11 +1366,12 @@ QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphT
     if (end < beg)
         end = fullHtml.length();
 
-    QString bodyReplacement = replaceBodyTagByParagraphTag ? "p" : "span";
-    return QString("<%1%2>%3</1>")
-            .arg(bodyReplacement)
-            .arg(style.isEmpty()? "" : QString(" %1").arg(style))
-            .arg(fullHtml.mid(beg, end-beg));
+    if (replaceBodyTagByParagraphTag)
+        return QString("<%1%2>%3</%1>")
+                .arg("p")
+                .arg(style.isEmpty()? "" : QString(" %1").arg(style))
+                .arg(fullHtml.mid(beg, end-beg));
+    return fullHtml.mid(beg, end-beg);
 }
 
 /**
