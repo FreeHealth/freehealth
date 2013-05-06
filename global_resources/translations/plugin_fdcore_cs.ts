@@ -238,8 +238,8 @@
 <context>
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="369"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1010"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="316"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="954"/>
         <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>

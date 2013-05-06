@@ -2648,5 +2648,9 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Patient overview</source>
         <translation>Vue d&apos;ensemble du patient</translation>
     </message>
+    <message>
+        <source>&amp;Lock application</source>
+        <translation>&amp;Verrouiller l&apos;application</translation>
+    </message>
 </context>
 </TS>

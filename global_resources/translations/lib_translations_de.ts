@@ -2653,5 +2653,9 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Patient overview</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Lock application</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

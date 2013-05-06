@@ -300,6 +300,26 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
         <source>Setting patient uuid %1 as current patient</source>
         <translation>Défini le patient courant avec l&apos;uuid %1</translation>
     </message>
+    <message>
+        <source>Exporting %1 file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured when saving the HTML patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient HTML file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured when saving the PDF patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient PDF file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

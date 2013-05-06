@@ -181,24 +181,24 @@ Line: %2, Column: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1203"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1222"/>
         <source>Save test only drugs too?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1204"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1223"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1206"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1225"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1297"/>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1316"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1335"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -428,27 +428,27 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="910"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="925"/>
         <source>No INN found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="915"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="930"/>
         <source>No interaction class found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="953"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="968"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="954"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="969"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="970"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -469,12 +469,12 @@ Do you want to add them to the file?</source>
 <context>
     <name>mfDrugsConstants</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="86"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="87"/>
         <source>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;[[DRUG]]&lt;/span&gt;&lt;span style=&quot;font-style:italic;&quot;&gt;[&lt;br /&gt;Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][&lt;br /&gt;Route: [ROUTE]][&lt;br /&gt;Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][&lt;br /&gt;Minimum interval between intakes: [MIN_INTERVAL]][&lt;br /&gt;[NOTE] ]&lt;/span&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="94"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="95"/>
         <source>[[DRUG]][
 Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][
 Route: [ROUTE]][
@@ -484,171 +484,171 @@ Minimum interval between intakes: [MIN_INTERVAL]][
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="261"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="278"/>
         <source>Nature of risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="262"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="279"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="263"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="280"/>
         <source>Drug-drug interactions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="266"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="283"/>
         <source>Prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="267"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="284"/>
         <source>Drug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="268"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="285"/>
         <source>Protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="269"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="286"/>
         <source>This token namespace contains all prescription&apos;s&apos; related tokens.
 It includes the drug brand name and all the items of your protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="271"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="288"/>
         <source>Drug brand name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="272"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="289"/>
         <source>Quantity (from)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="273"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="290"/>
         <source>Quantity (to)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="274"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="291"/>
         <source>Quantity (scheme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="275"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="292"/>
         <source>Quantity (complete)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="276"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="293"/>
         <source>Meal relation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="277"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="294"/>
         <source>Period (value)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="278"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="295"/>
         <source>Period (scheme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="279"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="296"/>
         <source>Period (complete)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="280"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="297"/>
         <source>Duration (from)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="281"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="298"/>
         <source>Duration (to)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="282"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="299"/>
         <source>Duration (scheme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="283"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="300"/>
         <source>Duration (complete)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="284"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="301"/>
         <source>Route</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="285"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="302"/>
         <source>Daily distribution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="286"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="303"/>
         <source>Repeated ditribution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="287"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="304"/>
         <source>Minimum interval between intakes (complete)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="288"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="305"/>
         <source>Minimum interval between intakes (value)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="289"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="306"/>
         <source>Minimum interval between intakes (scheme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="290"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="307"/>
         <source>Refill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="291"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="308"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="294"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="311"/>
         <source>DDI</source>
         <extracomment>This is the short name of the drug-drug interactions engine.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="296"/>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="300"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="313"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="317"/>
         <source>Potentially inappropriate medications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="299"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="316"/>
         <source>PIM</source>
         <extracomment>This is the short name of the potentially inappropriate medications engine.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="303"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="320"/>
         <source>Allergy / Intolerances to medications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="306"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="323"/>
         <source>Allergy</source>
         <extracomment>This is the short name of the potentially inappropriate medications engine.</extracomment>
         <translation type="unfinished"></translation>

@@ -1574,7 +1574,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="44"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="98"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="99"/>
         <source>Templates</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1630,7 +1630,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="55"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="152"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="153"/>
         <source>Interpreter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1677,465 +1677,470 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="67"/>
-        <source>&amp;Exit</source>
+        <source>&amp;Lock application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="68"/>
+        <source>&amp;Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="69"/>
         <source>Sea&amp;rch...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="70"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="71"/>
         <source>New patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="72"/>
         <source>Remove patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="73"/>
         <source>View patient identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="74"/>
         <source>Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="76"/>
         <source>Open a prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="77"/>
         <source>Save a prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="78"/>
         <source>Print a prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="79"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="80"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="80"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="81"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="81"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="82"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="82"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="83"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="83"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="84"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="84"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="85"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="85"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="86"/>
         <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="86"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="87"/>
         <source>Deselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="87"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="88"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="88"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="89"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="89"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="90"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="90"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="91"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="91"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="92"/>
         <source>Remove from list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="92"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="93"/>
         <source>Move item up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="93"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="94"/>
         <source>Move item down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="94"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="95"/>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="37"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="95"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="96"/>
         <source>Sort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="96"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="97"/>
         <source>Web site</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="99"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="100"/>
         <source>Create a new template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="100"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="101"/>
         <source>Toggle template view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="101"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="102"/>
         <source>Add a category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="102"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="103"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="103"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="104"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="104"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="105"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="105"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="106"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="106"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="107"/>
         <source>Locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="107"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="108"/>
         <source>Unlocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="108"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="109"/>
         <source>Templates database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="109"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="110"/>
         <source>Remove episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="110"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="111"/>
         <source>Renew episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="112"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="113"/>
         <source>PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="113"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="170"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="114"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="171"/>
         <source>Past medical history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="114"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="115"/>
         <source>PMHx preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="116"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="117"/>
         <source>Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="117"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="118"/>
         <source>Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="118"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="119"/>
         <source>Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="119"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="120"/>
         <source>Strike through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="120"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="121"/>
         <source>Bigger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="121"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="122"/>
         <source>Smaller</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="122"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="123"/>
         <source>Fixed width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="123"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="124"/>
         <source>Typewriter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="124"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="125"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="125"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="126"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="126"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="127"/>
         <source>Table format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="127"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="128"/>
         <source>Image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="128"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="129"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="129"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="130"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="130"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="131"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="131"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="132"/>
         <source>Justify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="133"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="134"/>
         <source>Add table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="134"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="135"/>
         <source>Table properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="135"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="136"/>
         <source>Add row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="136"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="137"/>
         <source>Remove row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="137"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="138"/>
         <source>Add colunm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="138"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="139"/>
         <source>Remove column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="139"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
         <source>Merge cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="141"/>
         <source>Split cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="153"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="154"/>
         <source>&amp;User manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="56"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="148"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="149"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="142"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
         <source>&amp;About...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="144"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="144"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="145"/>
         <source>About &amp;plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="145"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="146"/>
         <source>About plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="146"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="147"/>
         <source>About &amp;Qt...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="147"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="148"/>
         <source>About this &amp;form...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="149"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="150"/>
         <source>Debugging tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="150"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="151"/>
         <source>Display/Hide form&apos;s help text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="151"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="152"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="154"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="155"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="155"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="156"/>
         <source>Application global configurator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="156"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="157"/>
         <source>Configure MedinTux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="157"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="158"/>
         <source>View update information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="158"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="159"/>
         <source>Print preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="159"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="160"/>
         <location filename="../../libs/translationutils/trans_team.h" line="45"/>
         <source>Translators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="161"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="162"/>
         <source>Export patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="162"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="163"/>
         <source>Toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="163"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="164"/>
         <source>Zoom in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="164"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="165"/>
         <source>Zoom out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="165"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="166"/>
         <source>Take screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="166"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="167"/>
         <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="167"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="168"/>
         <source>Navigation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="168"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="169"/>
         <source>Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="172"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="173"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>

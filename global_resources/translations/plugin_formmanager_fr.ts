@@ -98,6 +98,10 @@
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation>Une mise à jour de formulaires a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
     </message>
+    <message>
+        <source>Unable to insert sub-form %1 into form %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::FormPlaceHolder</name>

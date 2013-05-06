@@ -42,17 +42,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="86"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="101"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="110"/>
         <source>Insert as root form?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="102"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="111"/>
         <source>You did not selected a form, do you want to add the sub-form as root form?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,27 +94,32 @@
 <context>
     <name>Form::FormManager</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="985"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="704"/>
+        <source>Unable to insert sub-form %1 into form %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1008"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="986"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1009"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="987"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1010"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="995"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1018"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="996"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1019"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -447,7 +452,7 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="166"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="170"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>

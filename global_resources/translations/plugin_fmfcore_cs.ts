@@ -260,8 +260,8 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="150"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="152"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="149"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="151"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -334,8 +334,8 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="369"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="1010"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="316"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="954"/>
         <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>

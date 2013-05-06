@@ -694,6 +694,10 @@ p, li { white-space: pre-wrap; }
         <source>Form</source>
         <translation>Forme</translation>
     </message>
+    <message>
+        <source>Automatically sort drugs on printing</source>
+        <translation>Trier automatiquement les médicaments avant l&apos;impression</translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::Internal::DrugInfo</name>

@@ -297,6 +297,26 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <source>Setting patient uuid %1 as current patient</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Exporting %1 file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured when saving the HTML patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient HTML file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured when saving the PDF patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient PDF file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Patients::Internal::UrlPhotoDialog</name>

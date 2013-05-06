@@ -112,17 +112,17 @@
 <context>
     <name>UserManagerPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="339"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="341"/>
         <source>You can proceed with this user or connect with another one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="341"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="343"/>
         <source>Stay connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="342"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="344"/>
         <source>Change the current user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -404,7 +404,7 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="330"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="332"/>
         <source>Using command line user identifiants: %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>

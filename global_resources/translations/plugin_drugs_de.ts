@@ -694,6 +694,10 @@ p, li { white-space: pre-wrap; }
         <source>Print duplicatas</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically sort drugs on printing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::Internal::DrugInfo</name>

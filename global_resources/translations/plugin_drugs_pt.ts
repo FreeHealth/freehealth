@@ -750,7 +750,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugGeneralOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="199"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="202"/>
         <source>Drug&apos;s general preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,6 +868,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="307"/>
         <source>Print duplicatas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="314"/>
+        <source>Automatically sort drugs on printing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1054,13 +1059,13 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugPosologicSentencePage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="280"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="282"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="284"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="286"/>
         <source>Posologic sentence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="313"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugposologicsentencepreferences.cpp" line="321"/>
         <source>Updating posologic sentence.</source>
         <translation type="unfinished"></translation>
     </message>

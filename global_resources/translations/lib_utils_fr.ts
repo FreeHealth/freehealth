@@ -222,7 +222,7 @@
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1954"/>
+        <location filename="../../libs/utils/global.cpp" line="1969"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -556,69 +556,69 @@
 <context>
     <name>Utils::Internal::HttpDownloaderPrivate</name>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="254"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="262"/>
         <source>Initialization of the download</source>
         <translation>Initialisation du téléchargement</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="271"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="279"/>
         <source>There already exists a file called %1 in the current directory. Overwrite?</source>
         <translation>Un fichier nommé %1 existe déjà dans le répertoire. Voulez-vous l&apos;écraser ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="280"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="288"/>
         <source>Unable to save the file %1: %2.</source>
         <translation>Impossible de sauvegarder le fichier %1 : %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="305"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="313"/>
         <source>Start downloading: %1 to %2</source>
         <translation>Début du téléchargement : %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="326"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="334"/>
         <source>Download canceled.</source>
         <translation>Téléchargement annulé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="354"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="362"/>
         <source>Download finished with an error: %1.</source>
         <translation>Le téléchargement s&apos;est terminé avec une erreur :%1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="358"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="366"/>
         <source>Download finished.</source>
         <translation>Téléchargement terminé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="371"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="379"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="372"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="377"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="380"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="385"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="375"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="376"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="383"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="384"/>
         <source>Redirect to %1?</source>
         <translation>Redirigé vers %1 ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="389"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="397"/>
         <source>Downloaded %1 to current directory.</source>
         <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="445"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="453"/>
         <source>Server authentication required</source>
         <translation>Authentification requise par le serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="472"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="480"/>
         <source>Proxy authentication required</source>
         <translation>Authentification requise par le pare-feu</translation>
     </message>

@@ -4,12 +4,12 @@
 <context>
     <name>Tools</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="68"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="74"/>
         <source>Print a cheque</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="69"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="75"/>
         <source>Print a french &apos;FSP&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -316,18 +316,18 @@ One per line</source>
 <context>
     <name>Tools::Internal::ToolsPlugin</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="147"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="156"/>
         <source>Initializing Tools...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="160"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="172"/>
         <source>Ctrl+Shift+C</source>
         <extracomment>Translation for the &apos;Print Cheque&apos; action</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="170"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="184"/>
         <source>Ctrl+Shift+F</source>
         <extracomment>Translation for the &apos;Print FSP&apos; action</extracomment>
         <translation type="unfinished"></translation>

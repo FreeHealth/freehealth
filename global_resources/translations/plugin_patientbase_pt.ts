@@ -354,14 +354,39 @@ Warning: If you are using FreeMedForms over a network, this can lead to heavy ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="298"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="299"/>
         <source>Start patient file extraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="315"/>
-        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="375"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="317"/>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="398"/>
         <source>Setting patient uuid %1 as current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="365"/>
+        <source>Exporting %1 file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="373"/>
+        <source>An error occured when saving the HTML patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="377"/>
+        <source>Patient HTML file correctly created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="387"/>
+        <source>An error occured when saving the PDF patient file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientdataextractordialog.cpp" line="391"/>
+        <source>Patient PDF file correctly created</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
