@@ -178,8 +178,11 @@ IComponent::IComponent(IDrug *parent) :
 }
 
 IComponent::IComponent(IDrug *parent, const IComponent &copy) :
-    d_component(new Internal::IComponentPrivate(*copy.d_component))
+    d_component(new Internal::IComponentPrivate())
 {
+    d_component->m_Content = copy.d_component->m_Content;
+    d_component->m_7CharAtcIds = copy.d_component->m_7CharAtcIds;
+    d_component->m_InteractingClassAtcIds = copy.d_component->m_InteractingClassAtcIds;
     d_component->m_Drug = parent;
     d_component->m_LinkOwned = true;
     if (d_component->m_Link && !d_component->m_LinkOwned)
@@ -395,8 +398,11 @@ DrugRoute::DrugRoute(IDrug *drug) :
 }
 
 DrugRoute::DrugRoute(IDrug *drug, const DrugRoute &copy) :
-    d(new Internal::DrugRoutePrivate(*copy.d))
+    d(new Internal::DrugRoutePrivate)
 {
+    d->m_Labels = copy.d->m_Labels;
+    d->m_Syst = copy.d->m_Syst;
+    d->m_Rid = copy.d->m_Rid;
     d->m_Drug = drug;
     if (d->m_Drug)
         d->m_Drug->addRoute(this);
@@ -489,7 +495,7 @@ DrugRoute::SystemicEffects DrugRoute::maximumSystemicEffect(const IDrug *drug)  
 ////////////////////////////////////////  IPrescription  //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 IPrescription::IPrescription() :
-        d_pres(new Internal::IPrescriptionPrivate)
+    d_pres(new Internal::IPrescriptionPrivate)
 {
     d_pres->m_PrescriptionChanges = false;
 }
@@ -497,6 +503,9 @@ IPrescription::IPrescription() :
 IPrescription::IPrescription(const IPrescription &copy) :
     d_pres(new Internal::IPrescriptionPrivate(*copy.d_pres))
 {
+    d_pres->m_PrescriptionChanges = copy.d_pres->m_PrescriptionChanges;
+    d_pres->m_PrescriptionValues = copy.d_pres->m_PrescriptionValues;
+    d_pres->m_Routes = copy.d_pres->m_Routes;
 }
 
 IPrescription::~IPrescription()
@@ -623,22 +632,28 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
 ////////////////////////////////////////////  IDRUG  //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 IDrug::IDrug() :
-        IPrescription(),
-        d_drug(new Internal::IDrugPrivate)
+    IPrescription(),
+    d_drug(new Internal::IDrugPrivate)
 {
 }
 
 IDrug::IDrug(const IDrug &copy) :
-        IPrescription(copy),
-        d_drug(new Internal::IDrugPrivate(*copy.d_drug))
+    IPrescription(copy),
+    d_drug(new Internal::IDrugPrivate)
 {
+    d_drug->m_Content = copy.d_drug->m_Content;
+    d_drug->m_7CharsAtc = copy.d_drug->m_7CharsAtc;
+    d_drug->m_InteractingClasses = copy.d_drug->m_InteractingClasses;
+    d_drug->m_AllIds = copy.d_drug->m_AllIds;
+    d_drug->m_AllAtcCodes = copy.d_drug->m_AllAtcCodes;
+    d_drug->m_NoLaboDenomination = copy.d_drug->m_NoLaboDenomination;
     // make copies of components
     d_drug->m_Compo.clear();
     foreach(IComponent *compo, copy.d_drug->m_Compo) {
         new IComponent(this, *compo); // component is added to the drug in the ctor
     }
     // make copies of routes
-    d_drug->m_Compo.clear();
+    d_drug->m_Routes.clear();
     foreach(DrugRoute *route, copy.d_drug->m_Routes) {
         new DrugRoute(this, *route); // route is added to the drug in the ctor
     }
