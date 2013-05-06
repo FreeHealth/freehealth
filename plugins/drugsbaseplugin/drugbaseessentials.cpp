@@ -52,9 +52,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString databaseFileName() {return settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME) + QDir::separator() + QString(Constants::DB_DRUGS_FILENAME);}
 
 namespace {
-#if DRUGS_DATABASE_VERSION = 0x000804
+#if DRUGS_DATABASE_VERSION == 0x000804
 const char * const CURRENTVERSION = "0.8.4";
-#elif DRUGS_DATABASE_VERSION = 0x000604
+#elif DRUGS_DATABASE_VERSION == 0x000604
 const char * const CURRENTVERSION = "0.6.4";
 #else
 const char * const CURRENTVERSION = "0.0.0";
