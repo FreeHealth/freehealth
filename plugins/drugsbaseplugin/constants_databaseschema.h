@@ -49,9 +49,17 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
-        Table_MASTER = 0, Table_SOURCES, Table_DRUGS, Table_MOLS, Table_COMPO,
-        Table_DRUG_FORMS, Table_DRUG_ROUTES, Table_ROUTES, Table_SEARCHENGINES,
-        Table_LABELS, Table_LABELSLINK, Table_PACKAGING, Table_BIB, Table_BIB_LINK, Table_UNITS,
+        Table_MASTER = 0, Table_SOURCES,
+        Table_DRUGS, Table_MOLS, Table_COMPO,
+        Table_DRUG_FORMS, Table_DRUG_ROUTES, Table_ROUTES,
+#if DRUGS_DATABASE_VERSION >= 0x000804
+        Table_DRUG_SPC,
+        Table_SPC_CONTENT,
+#endif
+        Table_SEARCHENGINES,
+        Table_LABELS, Table_LABELSLINK,
+        Table_PACKAGING,
+        Table_BIB, Table_BIB_LINK, Table_UNITS,
 
         Table_ATC, Table_ATC_LABELS, Table_IAM_TREE, Table_LK_MOL_ATC,
         Table_INTERACTIONS, Table_IAKNOWLEDGE, Table_IA_IAK, Table_PIM_SOURCES,
@@ -159,6 +167,18 @@ namespace Constants {
     enum SEARCHENGINESFields {
         SEARCHENGINE_ID = 0, SEARCHENGINE_LABEL, SEARCHENGINE_URL,
         SEARCHENGINES_MaxParam
+    };
+
+    enum DRUG_SPCFields {
+        DRUG_SPC_DID = 0, DRUG_SPC_SPCCONTENT_ID,
+        DRUG_SPS_MaxParam
+    };
+
+    enum SPCCONTENTFields {
+        SPCCONTENT_ID = 0, SPCCONTENT_LABEL,
+        SPCCONTENT_URL_SOURCE, SPCCONTENT_DATEOFDOWNLOAD,
+        SPCCONTENT_HTMLCONTENT,
+        DRUG_SPS_CONTENT_MaxParam
     };
 
     enum VERSIONFields {
