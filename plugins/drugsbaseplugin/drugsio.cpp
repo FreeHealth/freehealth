@@ -881,7 +881,8 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     bool testingDrugsVisible = m->testingDrugsAreVisible();
     m->showTestingDrugs(false);
     // sort
-    m->sort(0);
+    if (settings()->value(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING).toBool())
+        m->sort(0);
 
     // Get patient bio(metrics / logy) usefull for the prescription
     // TODO: put this in a setting value (like 100%)
@@ -918,7 +919,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
                 tmp = "<li>" + m->data(m->index(i, Prescription::ToHtml)).toString();
                 if (lineBreak)
                     tmp += "<span style=\"font-size:4pt\"><br /></span>";
-                tmp += "</li>";
+                tmp += "</li>\n\n";
                 if (m->index(i, Prescription::IsALD).data().toBool()) {
                     ALD += tmp;
                 } else {
@@ -975,22 +976,42 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
         }
     }
 
-    if (!bio.isEmpty()) {
-        tmp += bio.join("<br />");
-    }
+    if (!bio.isEmpty())
+        tmp += QString("<p>%1</p>").arg(bio.join("<br />"));
+
     if (!ALD.isEmpty()) {
-        tmp += settings()->value(S_ALD_PRE_HTML).toString();
+        // Add ALD Pre text - Keep only body content
+        QString aldPre = settings()->value(S_ALD_PRE_HTML).toString();
+        QString css = Utils::htmlTakeAllCssContent(aldPre);
+        aldPre = Utils::htmlBodyContent(aldPre);
+        aldPre.prepend(css);
+        tmp += "\n\n<!-- PRE ALD --> \n";
+        tmp += aldPre;
+        tmp += "\n<!-- PRE ALD END --> \n\n";
+        // Add drugs to the prescription
         if (version==MedinTuxVersion)
             tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
         else
             tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
-        tmp += settings()->value(S_ALD_POST_HTML).toString();
+        // Add ALD Post text - Keep only body content
+        QString aldPost = settings()->value(S_ALD_POST_HTML).toString();
+        css = Utils::htmlTakeAllCssContent(aldPost);
+        aldPost = Utils::htmlBodyContent(aldPost);
+        aldPost.prepend(css);
+        // Add to the prescription
+        tmp += "\n\n<!-- POST ALD --> \n";
+        tmp += aldPost;
+        tmp += "\n<!-- POST ALD END --> \n\n";
     }
     if (!nonALD.isEmpty()) {
         if (version==MedinTuxVersion)
             tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
         else
             tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
+        // Keep only body content
+        QString css = Utils::htmlTakeAllCssContent(tmp);
+        tmp = Utils::htmlBodyContent(tmp);
+        tmp.prepend(css);
     }
 
     // show all drugs (including testing to get the testing drugs)
@@ -1012,7 +1033,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 //                         .arg(QString(prescriptionToXml(m))));
                      .arg(QString(xmldPrescription.toUtf8().toBase64())));
 
-//    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
+    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);

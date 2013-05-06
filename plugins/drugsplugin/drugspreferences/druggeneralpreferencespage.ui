@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>455</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -305,6 +305,13 @@
        <widget class="QCheckBox" name="printDuplicataCheck">
         <property name="text">
          <string>Print duplicatas</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="autoSort">
+        <property name="text">
+         <string>Automatically sort drugs on printing</string>
         </property>
        </widget>
       </item>
