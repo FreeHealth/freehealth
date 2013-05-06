@@ -107,6 +107,11 @@ void HttpDownloader::setUrl(const QUrl &url)
 //    d->m_Url.setAuthority();
 }
 
+const QUrl &HttpDownloader::url() const
+{
+    return d->m_Url;
+}
+
 /**
  * Instead of downloading the content into a file, keep the content in a buffer.
  * To retrieve the content, use getBufferContent(). \n
@@ -146,14 +151,15 @@ void HttpDownloader::setOutputFileName(const QString &fileName)
 /*!
   * \brief Returns the output file name.
   *
-  * By default, the output filename is the filename of the URL, you can customize it with setOutputFileName().
+  * By default, the output filename is the filename of the URL,
+  * you can customize it with setOutputFileName().
   * \sa setUrl(), setOutputFileName()
   */
 QString HttpDownloader::outputFileName() const
 {
     if (d->m_OutputFileName.isEmpty()) {
         QFileInfo fileInfo(d->m_Url.path());
-        QString fileName =fileInfo.fileName();
+        QString fileName = fileInfo.fileName();
         if (fileName.isEmpty())
             fileName = "index.html";
         return fileName;
@@ -169,7 +175,9 @@ QString HttpDownloader::outputFileName() const
   */
 QString HttpDownloader::outputAbsoluteFileName() const
 {
-    return d->m_Path + QDir::separator() + outputFileName();
+    if (d->m_Path.isEmpty())
+        return outputFileName();
+    return QDir::cleanPath(d->m_Path + QDir::separator() + outputFileName());
 }
 
 /** Defines the label of the progress */
@@ -183,7 +191,7 @@ QString HttpDownloader::lastErrorString() const
     return d->lastError;
 }
 
-QNetworkReply::NetworkError HttpDownloader::networkError()
+QNetworkReply::NetworkError HttpDownloader::networkError() const
 {
     return d->networkError;
 }

@@ -60,6 +60,7 @@ public:
     void setMainWindow(QMainWindow *win);
 
     void setUrl(const QUrl &url);
+    const QUrl &url() const;
 
     void setStoreInBuffer(bool store);
     QByteArray getBufferContent() const;
@@ -72,7 +73,7 @@ public:
     void setLabelText(const QString &text);
 
     QString lastErrorString() const;
-    QNetworkReply::NetworkError networkError();
+    QNetworkReply::NetworkError networkError() const;
 
 public Q_SLOTS:
     bool startDownload();
