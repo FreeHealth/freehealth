@@ -162,7 +162,7 @@ UTILS_EXPORT QString countryIsoToName(const QString &country);
 UTILS_EXPORT QLocale::Country countryIsoToCountry(const QString &country);
 
 // Some functions for QString/HTML work
-UTILS_EXPORT QString htmlBodyContent(const QString &fullHtml);
+UTILS_EXPORT QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphTag = true);
 UTILS_EXPORT QString htmlTakeAllCssContent(QString &fullHtml);
 UTILS_EXPORT QString htmlReplaceParagraphWithDiv(const QString &fullHtml);
 UTILS_EXPORT QString htmlRemoveLinkTags(const QString &fullHtml);

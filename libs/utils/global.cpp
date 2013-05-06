@@ -1328,15 +1328,24 @@ QLocale::Country countryIsoToCountry(const QString &country) {
 ////////////////////////////////////////   HTML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Extract the html body content and return it. Eg:
+ * Extract the html body content and return it.
+ * The body can will be replaced by default by a P tag but using \e replaceBodyTagByParagraphTag
+ * you can select a SPAN replacement (setting \e replaceBodyTagByParagraphTag to false).
+ *
  * \code
- * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle:;\">BODY <b>CONTENT</b></body></html>");
- * // body = "<p style=\"bodyStyle:;\"><b>BODY CONTENT</b></p>";
+ * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle;\">BODY <b>CONTENT</b></body></html>");
+ * // body = "<p style=\"bodyStyle;\"><b>BODY CONTENT</b></p>";
  * \endcode
+ *
+ * \code
+ * QString body = Utils::htmlBodyContent("<html><header></header><body style=\"bodyStyle;\">BODY <b>CONTENT</b></body></html>", false);
+ * // body = "<span style=\"bodyStyle;\"><b>BODY CONTENT</b></span>";
+ * \endcode
+ *
  * WARNING: This function will create a new HTML paragraph with the body style, including the body content.
  * If there is no body tag in the given argument, the function returns the full text.
  */
-QString htmlBodyContent(const QString &fullHtml)
+QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphTag)
 {
     if (fullHtml.isEmpty())
         return QString::null;
@@ -1356,7 +1365,11 @@ QString htmlBodyContent(const QString &fullHtml)
     if (end < beg)
         end = fullHtml.length();
 
-    return QString("<p%1>%2</p>").arg(style.isEmpty()? "" : QString(" %1").arg(style)).arg(fullHtml.mid(beg, end-beg));
+    QString bodyReplacement = replaceBodyTagByParagraphTag ? "p" : "span";
+    return QString("<%1%2>%3</1>")
+            .arg(bodyReplacement)
+            .arg(style.isEmpty()? "" : QString(" %1").arg(style))
+            .arg(fullHtml.mid(beg, end-beg));
 }
 
 /**
