@@ -914,67 +914,85 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     {
     case NormalVersion:
     case MedinTuxVersion :
-        {
-            for(i=0; i < m->rowCount(); ++i) {
-                tmp = "<li>" + m->data(m->index(i, Prescription::ToHtml)).toString();
-                if (lineBreak)
-                    tmp += "<span style=\"font-size:4pt\"><br /></span>";
-                tmp += "</li>\n\n";
-                if (m->index(i, Prescription::IsALD).data().toBool()) {
-                    ALD += tmp;
-                } else {
-                    nonALD += tmp;
-                }
-                tmp.clear();
+    {
+        QString css;
+        for(i=0; i < m->rowCount(); ++i) {
+            // Get full prescription sentence in HTML
+            tmp = "<li>" + m->data(m->index(i, Prescription::ToHtml)).toString();
+
+            // Extract CSS
+            if (css.isEmpty())
+                css = Utils::htmlTakeAllCssContent(tmp);
+            else
+                Utils::htmlTakeAllCssContent(tmp);
+
+            // Add a line break
+            if (lineBreak)
+                tmp += "<span style=\"font-size:4pt\"><br /></span>";
+            tmp += "</li>\n\n";
+
+            // Sort drugs according to their IsALD value
+            if (m->index(i, Prescription::IsALD).data().toBool()) {
+                ALD += tmp;
+            } else {
+                nonALD += tmp;
             }
-            break;
+
+            tmp.clear();
         }
-    case SimpleVersion :
-        {
-            QHash<QString, QString> tokens_value;
-            for(i=0; i < m->rowCount(); ++i) {
-                tokens_value.insert("DRUG", m->index(i, Drug::Denomination).data().toString());
-                tokens_value.insert("Q_FROM", m->index(i, Prescription::IntakesFrom).data().toString());
-                tokens_value.insert("Q_TO", m->index(i, Prescription::IntakesTo).data().toString());
-                tokens_value.insert("Q_SCHEME", m->index(i, Prescription::IntakesScheme).data().toString());
-                // Manage Daily Scheme See DailySchemeModel::setSerializedContent
-                DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-                day->setSerializedContent(m->index(i, Prescription::SerializedDailyScheme).data().toString());
-                QString d = day->humanReadableDistributedDailyScheme();
-                if (d.isEmpty())
-                    d = day->humanReadableRepeatedDailyScheme();
-                tokens_value.insert("DAILY_SCHEME", d);
-                tmp = "<li>[[DRUG]], [[Q_FROM]][ - [Q_TO]][ [Q_SCHEME]][ [DAILY_SCHEME]]";
-                Utils::replaceTokens(tmp, tokens_value);
-                if (lineBreak)
-                    tmp += "<span style=\"font-size:4pt\"><br /></span>";
-                tmp += "</li>";
-                if (m->index(i, Prescription::IsALD).data().toBool()) {
-                    ALD += tmp;
-                } else {
-                    nonALD += tmp;
-                }
-                tmp.clear();
-            }
-            break;
-        }
-    case DrugsOnlyVersion :
-        {
-            for(i=0; i < m->rowCount(); ++i) {
-                tmp = m->index(i, Drug::Denomination).data().toString();
-                tmp = tmp.mid(0, tmp.indexOf(","));
-                tmp.prepend("<li>");
-                tmp.append("</li>\n");
-                if (m->index(i, Prescription::IsALD).data().toBool()) {
-                    ALD += tmp;
-                } else {
-                    nonALD += tmp;
-                }
-                tmp.clear();
-            }
-            break;
-        }
+        // Reinject CSS content is ALD && nonALD
+        if (!ALD.isEmpty())
+            ALD.prepend(css);
+        if (!nonALD.isEmpty())
+            nonALD.prepend(css);
+        break;
     }
+    case SimpleVersion :
+    {
+        QHash<QString, QString> tokens_value;
+        for(i=0; i < m->rowCount(); ++i) {
+            tokens_value.insert("DRUG", m->index(i, Drug::Denomination).data().toString());
+            tokens_value.insert("Q_FROM", m->index(i, Prescription::IntakesFrom).data().toString());
+            tokens_value.insert("Q_TO", m->index(i, Prescription::IntakesTo).data().toString());
+            tokens_value.insert("Q_SCHEME", m->index(i, Prescription::IntakesScheme).data().toString());
+            // Manage Daily Scheme See DailySchemeModel::setSerializedContent
+            DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
+            day->setSerializedContent(m->index(i, Prescription::SerializedDailyScheme).data().toString());
+            QString d = day->humanReadableDistributedDailyScheme();
+            if (d.isEmpty())
+                d = day->humanReadableRepeatedDailyScheme();
+            tokens_value.insert("DAILY_SCHEME", d);
+            tmp = "<li>[[DRUG]], [[Q_FROM]][ - [Q_TO]][ [Q_SCHEME]][ [DAILY_SCHEME]]";
+            Utils::replaceTokens(tmp, tokens_value);
+            if (lineBreak)
+                tmp += "<span style=\"font-size:4pt\"><br /></span>";
+            tmp += "</li>";
+            if (m->index(i, Prescription::IsALD).data().toBool()) {
+                ALD += tmp;
+            } else {
+                nonALD += tmp;
+            }
+            tmp.clear();
+        }
+        break;
+    }
+    case DrugsOnlyVersion :
+    {
+        for(i=0; i < m->rowCount(); ++i) {
+            tmp = m->index(i, Drug::Denomination).data().toString();
+            tmp = tmp.mid(0, tmp.indexOf(","));
+            tmp.prepend("<li>");
+            tmp.append("</li>\n");
+            if (m->index(i, Prescription::IsALD).data().toBool()) {
+                ALD += tmp;
+            } else {
+                nonALD += tmp;
+            }
+            tmp.clear();
+        }
+        break;
+    }
+    } // switch
 
     if (!bio.isEmpty())
         tmp += QString("<p>%1</p>").arg(bio.join("<br />"));
@@ -1033,7 +1051,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 //                         .arg(QString(prescriptionToXml(m))));
                      .arg(QString(xmldPrescription.toUtf8().toBase64())));
 
-    Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
+    // Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);
