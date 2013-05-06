@@ -844,6 +844,10 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
     if (content.contains("<body"))
         content = content.remove("\n");
 
+    QString css = Utils::htmlTakeAllCssContent(content);
+    content = Utils::htmlReplaceAccents(content);
+    content = Utils::htmlBodyContent(content, false);
+    content.prepend(css);
     settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
     QTextDocument doc;
     doc.setHtml(content);

@@ -1053,9 +1053,6 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     if (mask.isEmpty()) {
         if (toHtml) {
             tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_HTML).toString();
-            QString css = Utils::htmlTakeAllCssContent(tmp);
-            tmp = Utils::htmlBodyContent(tmp, false);
-            tmp = css + tmp;
         } else {
             tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
         }

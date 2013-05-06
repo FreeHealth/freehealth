@@ -159,7 +159,7 @@ void DrugPosologicSentencePreferencesWidget::saveToSettings(Core::ISettings *set
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
     QString css = Utils::htmlTakeAllCssContent(tmp);
     tmp = Utils::htmlReplaceAccents(tmp);
-    tmp = Utils::htmlBodyContent(tmp);
+    tmp = Utils::htmlBodyContent(tmp, false);
     tmp .prepend(css);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
@@ -174,6 +174,10 @@ void DrugPosologicSentencePreferencesWidget::writeDefaultSettings(Core::ISetting
     QString content = getPrescriptionTokenHtmlFileContent();
     QTextDocument doc;
     doc.setHtml(content);
+    QString css = Utils::htmlTakeAllCssContent(content);
+    content = Utils::htmlReplaceAccents(content);
+    content = Utils::htmlBodyContent(content, false);
+    content .prepend(css);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
 }
@@ -243,7 +247,7 @@ void DrugPosologicSentencePreferencesWidget::changeEvent(QEvent *e)
 //    QString tmp = _writer->rawSourceToHtml();
 //    QString css = Utils::htmlTakeAllCssContent(tmp);
 //    tmp = Utils::htmlReplaceAccents(tmp);
-//    tmp = Utils::htmlBodyContent(tmp);
+//    tmp = Utils::htmlBodyContent(tmp, false);
 //    tmp .prepend(css);
 //    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp);
 //    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->rawSourceToPlainText());
@@ -302,10 +306,14 @@ void DrugPosologicSentencePage::apply()
 void DrugPosologicSentencePage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    QString content = getPrescriptionTokenHtmlFileContent();
 
+    QString content = getPrescriptionTokenHtmlFileContent();
     QTextDocument doc;
     doc.setHtml(content);
+    QString css = Utils::htmlTakeAllCssContent(content);
+    content = Utils::htmlReplaceAccents(content);
+    content = Utils::htmlBodyContent(content, false);
+    content .prepend(css);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
 
