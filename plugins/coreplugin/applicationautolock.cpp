@@ -51,6 +51,7 @@ public:
         _initialized(false),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~ApplicationAutoLockPrivate()

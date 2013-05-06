@@ -58,6 +58,7 @@ public:
         _downloadingIndex(-1),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~HttpMultiDownloaderPrivate()
