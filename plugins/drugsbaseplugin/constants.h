@@ -102,8 +102,24 @@ namespace Constants {
 
     const char * const S_ALD_PRE_HTML               = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
     const char * const S_ALD_POST_HTML              = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
-    const char * const S_DEF_ALD_PRE_HTML           = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span></p></td></tr></table>";
-    const char * const S_DEF_ALD_POST_HTML          = "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n<tr>\n<td width=\"100%\">\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span></p></td></tr></table>";
+    const char * const S_DEF_ALD_PRE_HTML           =
+            "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n"
+            "  <tr>\n"
+            "    <td width=\"100%\">\n"
+            "      <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span>\n"
+            "      </p>\n"
+            "    </td>\n"
+            "  </tr>\n"
+            "</table>\n";
+    const char * const S_DEF_ALD_POST_HTML          =
+            "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n"
+            "  <tr>\n"
+            "    <td width=\"100%\">\n"
+            "      <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span>\n"
+            "      </p>\n"
+            "    </td>\n"
+            "  </tr>\n"
+            "</table>\n";
     const char * const S_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
 
     const char * const S_SELECTOR_SHOWDRUGSNAME   = "DrugsWidget/Selector/ShowDrugsName";
