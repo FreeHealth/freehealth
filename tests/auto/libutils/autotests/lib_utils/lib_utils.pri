@@ -7,7 +7,8 @@ SOURCES += \
     $${PWD}/tst_xml.cpp \
     $${PWD}/tst_pass_log.cpp \
     $${PWD}/tst_versionnumber.cpp \
-    $${PWD}/tst_printaxishelper.cpp
+    $${PWD}/tst_printaxishelper.cpp \
+    $${PWD}/tst_httpdownloader.cpp
 
 HEADERS += \
     $${PWD}/testhtmlcontent.h
