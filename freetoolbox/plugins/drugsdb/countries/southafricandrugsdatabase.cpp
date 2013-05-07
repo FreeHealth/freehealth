@@ -242,9 +242,9 @@ bool ZaDrugDatabaseStep::startDownload()
 void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
 {
     static int nb = 0;
-    qWarning() << "get:" << reply->errorString() <<
-                  "finished:" << reply->isFinished() <<
-                  "readable:" << reply->isReadable()
+    qWarning() << "get:" << reply->errorString()
+               << "finished:" << reply->isFinished()
+               << "readable:" << reply->isReadable()
                << "URL:" << reply->url();
     QString content = reply->readAll();
     QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
@@ -292,6 +292,7 @@ void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
         static bool done = false;
         if (!done) {
             done = true;
+            // TODO: use Utils::HttpMultiDownloader
             m_nbOfDowloads = m_Drug_Link.count();
 
             Q_EMIT progressLabelChanged(tr("South African database extraction: reading drugs page"));
