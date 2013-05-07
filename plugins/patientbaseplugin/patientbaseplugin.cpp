@@ -108,32 +108,7 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // This part of the code is executed AFTER the UserManagerPlugin::initialize()
-
     messageSplash(tr("Initializing patients database plugin..."));
-
-    if (!user())
-        return false;
-    if (user()->uuid().isEmpty())
-        return false;
-
-    // Initialize patient base
-    QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
-    dlg.setWindowModality(Qt::WindowModal);
-    dlg.setMinimumDuration(1000);
-    dlg.show();
-    dlg.setFocus();
-    dlg.setValue(0);
-
-    // Initialize Core
-    if (!patientCore()->initialize())
-        return false;
-
-    // Create default virtual patients?
-    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
-        if (!patientCore()->createDefaultVirtualPatients())
-            LOG_ERROR("Unable to create default virtual patients");
-    }
 
     // Add the Photo providers (file & url)
     FilePhotoProvider *filePhotoProvider = new FilePhotoProvider(this);
@@ -149,6 +124,30 @@ void PatientBasePlugin::extensionsInitialized()
         qWarning() << "PatientBasePlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing patients database plugin..."));
+
+    // This part of the code is executed AFTER the UserManagerPlugin::initialize()
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
+
+    // Initialize Core
+    if (!patientCore()->initialize())
+        return;
+
+    // Initialize patient base
+    QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
+    // Create default virtual patients?
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        if (!patientCore()->createDefaultVirtualPatients())
+            LOG_ERROR("Unable to create default virtual patients");
+    }
 
     // Check settings
     prefpage->checkSettingsValidity();
