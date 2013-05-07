@@ -111,6 +111,8 @@ const char * const  TOKEN_CLCRINMLMIN         = "Patient.Biology.CreatininCleara
 const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
 const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
 
+const char * const  TOKEN_DRUGS_CHRONIC_XML  = "Patient.Drugs.ChronicTherapeutics.Xml";
+
 const char * const  TOKEN_DATE              = "DATE";
 const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 // END
