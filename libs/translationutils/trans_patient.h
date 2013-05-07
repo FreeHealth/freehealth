@@ -94,6 +94,8 @@ const char* const SOCIAL_NUMBER_OWNER_ADDRESS = QT_TRANSLATE_NOOP("tkConstants",
 
 const char* const PATIENT_OVERVIEW            = QT_TRANSLATE_NOOP("tkConstants", "Patient overview");
 
+const char* const LONG_TERM_THERAPY  = QT_TRANSLATE_NOOP("tkConstants", "Long term therapy");
+
 } // end Constants
 } // end TranslationUtils
 
