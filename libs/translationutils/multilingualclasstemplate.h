@@ -68,7 +68,9 @@ template <typename T>
 class MultiLingualClass
 {
 public:
-    MultiLingualClass() {}
+    MultiLingualClass()
+    {
+    }
     virtual ~MultiLingualClass()
     {
         m_Hash_T_Lang.clear();
@@ -96,6 +98,8 @@ public:
      */
     T *getLanguage(const QString &language)
     {
+        if (m_Hash_T_Lang.isEmpty())
+            return 0;
         QString tmp = language.left(2);
         if (m_Hash_T_Lang.contains(tmp)) {
             return &m_Hash_T_Lang[tmp];
