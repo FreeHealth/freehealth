@@ -49,6 +49,7 @@ IdentityPlugin::IdentityPlugin() :
     ExtensionSystem::IPlugin()
 //    m_prefPage(0)
 {
+    setObjectName("IdentityPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Identity";
 
@@ -68,6 +69,8 @@ IdentityPlugin::IdentityPlugin() :
 
 IdentityPlugin::~IdentityPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
 }
@@ -76,11 +79,8 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-
-    setObjectName("IdentityPlugin");
-    if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "creating Identity";
-    }
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "IdentityPlugin::initialize";
 
     // Register objects in the plugin manager's object pool
     // Load settings
@@ -116,7 +116,7 @@ bool IdentityPlugin::initialize(const QStringList &arguments, QString *errorStri
 void IdentityPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "Identity::extensionsInitialized";
+        qWarning() << "IdentityPlugin::extensionsInitialized";
     }
 
     // Retrieve other objects from the plugin manager's object pool
@@ -143,6 +143,8 @@ void IdentityPlugin::extensionsInitialized()
 
 void IdentityPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
 }
