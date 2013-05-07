@@ -110,6 +110,10 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing patients database plugin..."));
 
+    // Initialize Core
+    if (!patientCore()->initialize())
+        return false;
+
     // Add the Photo providers (file & url)
     FilePhotoProvider *filePhotoProvider = new FilePhotoProvider(this);
     addAutoReleasedObject(filePhotoProvider);
@@ -129,10 +133,6 @@ void PatientBasePlugin::extensionsInitialized()
     if (!user())
         return;
     if (user()->uuid().isEmpty())
-        return;
-
-    // Initialize Core
-    if (!patientCore()->initialize())
         return;
 
     // Initialize patient base
