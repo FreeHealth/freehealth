@@ -54,6 +54,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
@@ -94,6 +95,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 namespace Editor {
 namespace Internal {
@@ -582,6 +584,11 @@ void TextEditor::fileOpen()
 #ifdef FREEMEDFORMS
     patient()->replaceTokens(str);
     user()->replaceTokens(str);
+
+#ifdef WITH_PAD
+    str = padTools()->processPlainText(str);
+#endif
+
 #endif
     if (Qt::mightBeRichText(str)) {
         textEdit()->setHtml(str);
