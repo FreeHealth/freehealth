@@ -68,7 +68,7 @@ public:
     QTextDocument *document() const;
 
     void setTextWidth( qreal width );
-    bool lessThan( const TextDocumentExtra *h1, const TextDocumentExtra *h2 );
+    bool lessThanPresence(const TextDocumentExtra *h1, const TextDocumentExtra *h2);
 
     QString toXml() const;
     static TextDocumentExtra *fromXml(const QString &xml);

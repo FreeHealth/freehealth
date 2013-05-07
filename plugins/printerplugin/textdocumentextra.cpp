@@ -117,12 +117,9 @@ Printer::Priority TextDocumentExtra::priority() const
 Printer::Presence TextDocumentExtra::presence() const
 { return d->m_Presence; }
 
-bool TextDocumentExtra::lessThan( const TextDocumentExtra *h1, const TextDocumentExtra *h2 )
+bool TextDocumentExtra::lessThanPresence(const TextDocumentExtra *h1, const TextDocumentExtra *h2)
 {
-    // TODO:  ?
-    Q_UNUSED(h1);
-    Q_UNUSED(h2);
-    return true;
+    return h1->presence() < h2->presence();
 }
 
 QString TextDocumentExtra::toXml() const
