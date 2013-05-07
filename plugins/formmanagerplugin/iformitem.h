@@ -330,4 +330,9 @@ private:
 
 } // end Form
 
+//QDebug operator<<(QDebug dbg, const Form::FormItem &c);
+//QDebug operator<<(QDebug dbg, Form::FormItem *c);
+//QDebug operator<<(QDebug dbg, const Form::FormMain &c);
+//QDebug operator<<(QDebug dbg, Form::FormMain *c);
+
 #endif // IFORMITEM_H

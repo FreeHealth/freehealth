@@ -1067,3 +1067,39 @@ QWidget *FormMainDebugPage::createPage(QWidget *parent)
     Q_UNUSED(parent);
     return m_Widget;
 }
+
+//QDebug operator<<(QDebug dbg, const Form::FormItem &c)
+//{
+//    dbg.nospace() << "Form::FormItem("
+//                  << &c
+//                  << "; Uuid:" << c.uuid()
+//                  << ")";
+//    return dbg.space();
+//}
+
+//QDebug operator<<(QDebug dbg, Form::FormItem *c)
+//{
+//    if (!c) {
+//        dbg.nospace() << "Form::FormItem(0x0)";
+//        return dbg.space();
+//    }
+//    return operator<<(dbg, *c);
+//}
+
+//QDebug operator<<(QDebug dbg, const Form::FormMain &c)
+//{
+//    dbg.nospace() << "Form::FormMain("
+//                  << &c
+//                  << "; Uuid:" << c.uuid()
+//                  << ")";
+//    return dbg.space();
+//}
+
+//QDebug operator<<(QDebug dbg, Form::FormMain *c)
+//{
+//    if (!c) {
+//        dbg.nospace() << "Form::FormMain(0x0)";
+//        return dbg.space();
+//    }
+//    return operator<<(dbg, *c);
+//}
