@@ -86,9 +86,9 @@ static inline XmlFormName &formName(const QString &uuid, QHash<QString, XmlFormN
 //////////////////////////////////////////////  XmlFormIO  /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 XmlFormIO::XmlFormIO(QObject *parent) :
-        IFormIO(parent),
-        m_Mute(false),
-        alreadyCheckedForUpdates(false)
+    IFormIO(parent),
+    m_Mute(false),
+    alreadyCheckedForUpdates(false)
 {
     setObjectName("XmlFormIO");
 }
