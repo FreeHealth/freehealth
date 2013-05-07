@@ -65,6 +65,7 @@ class XmlFormContentReader
 public:
     static XmlFormContentReader *instance();
     ~XmlFormContentReader();
+    bool initialize();
 
     void clearCache();
     QStringList cachedForms() {return m_DomDocFormCache.keys();}
@@ -104,7 +105,7 @@ private:
     static XmlFormContentReader *m_Instance;
     QHash<QString, Form::IFormWidgetFactory *> m_PlugsFactories;
     mutable QStringList m_Error;
-    bool m_Mute;
+    bool m_Mute, m_Initialized;
     Form::FormMain *m_ActualForm;
 
     // Caching some data for speed improvements

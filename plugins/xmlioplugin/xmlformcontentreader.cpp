@@ -98,8 +98,15 @@ XmlFormContentReader *XmlFormContentReader::instance()
 }
 
 XmlFormContentReader::XmlFormContentReader() :
-    m_Mute(false)
+    m_Mute(false),
+    m_Initialized(false)
 {
+}
+
+bool XmlFormContentReader::initialize()
+{
+    if (m_Initialized)
+        return true;
    m_ScriptsTypes.clear();
    m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Form::FormItemScripts::Script_OnLoad);
    m_ScriptsTypes.insert(Constants::TAG_SCRIPT_POSTLOAD, Form::FormItemScripts::Script_PostLoad);
@@ -139,6 +146,8 @@ XmlFormContentReader::XmlFormContentReader() :
    for(int i=0; i< Core::IPatient::NumberOfColumns; ++i) {
        m_PatientData.insert(patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)).toLower(), i);
    }
+   m_Initialized = true;
+   return true;
 }
 
 XmlFormContentReader::~XmlFormContentReader()
