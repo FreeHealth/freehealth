@@ -90,7 +90,6 @@ basewidgets.depends += texteditor
 basewidgets.depends += formmanager
 basewidgets.depends += patientbase
 basewidgets.depends += identity
-basewidgets.depends += listview
 
 aggir.subdir   = $${PLUGINS_PATH}/aggirplugin
 aggir.depends += core
