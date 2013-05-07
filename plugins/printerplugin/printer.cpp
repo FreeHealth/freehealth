@@ -657,8 +657,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
 bool PrinterPrivate::simpleDraw()
 {
     if (!m_Content) {
-        Utils::Log::addError("Printer", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw)."),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("Printer", QCoreApplication::translate("tkPrinter", "No content to preview (simpleDraw)."));
         return false;
     }
     m_PrintingDuplicata = false;
@@ -883,6 +882,52 @@ void Printer::setContent(const QTextDocument & docToPrint)
 {
     d->renewContent();
     d->m_Content = docToPrint.clone();
+}
+
+/** Return the html content of the printer. This does not includes header, footer and watermark. */
+QString Printer::htmlContent() const
+{
+    return d->m_Content->toHtml();
+}
+
+QString Printer::toHtml() const
+{
+    QString html, content, css;
+    QTextDocument *doc = 0;
+    // Add Each page header
+    doc = d->header(EachPages);
+    if (doc) {
+        content = doc->toHtml("UTF-8");
+        css = Utils::htmlTakeAllCssContent(content);
+        content = Utils::htmlBodyContent(content);
+        content.prepend(css);
+        html += content;
+    }
+    // Add first page header
+    doc = d->header(FirstPageOnly);
+    if (doc) {
+        content = doc->toHtml("UTF-8");
+        css = Utils::htmlTakeAllCssContent(content);
+        content = Utils::htmlBodyContent(content);
+        content.prepend(css);
+        html += content;
+    }
+    // Add content
+    content = d->m_Content->toHtml("UTF-8");
+    css = Utils::htmlTakeAllCssContent(content);
+    content = Utils::htmlBodyContent(content);
+    content.prepend(css);
+    html += content;
+    // Add Footer
+    doc = d->footer(EachPages);
+    if (doc) {
+        content = doc->toHtml("UTF-8");
+        css = Utils::htmlTakeAllCssContent(content);
+        content = Utils::htmlBodyContent(content);
+        content.prepend(css);
+        html += content;
+    }
+    return html;
 }
 
 /** \brief Try to find the default system printer and use it without annoying user. */

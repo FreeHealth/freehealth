@@ -119,6 +119,8 @@ public:
 
     void setContent(const QString &html);
     void setContent(const QTextDocument & docToPrint);
+    QString htmlContent() const;
+    QString toHtml() const;
 
     void setOrientation(QPrinter::Orientation orientation);
     void setPaperSize(QPrinter::PaperSize size);
