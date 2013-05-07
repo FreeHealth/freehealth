@@ -178,7 +178,9 @@ IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     m_focusedWidget(0),
     _lastTabWidget(0)
 {
+    Q_ASSERT(formItem);
     m_FormItem->setFormWidget(this);
+    m_OldTrans = QLocale().name().left(2);
 }
 
 void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
@@ -215,7 +217,7 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     return hb;
 }
 
-void IFormWidget::changeEvent(QEvent * event)
+void IFormWidget::changeEvent(QEvent *event)
 {
     QString loc = QLocale().name().left(2);
     if ((event->type() == QEvent::LanguageChange) &&
@@ -223,8 +225,8 @@ void IFormWidget::changeEvent(QEvent * event)
         m_OldTrans = loc;
         retranslate();
         event->accept();
-    } else {
-        QWidget::changeEvent(event);
+        return;
     }
+    QWidget::changeEvent(event);
 }
 
