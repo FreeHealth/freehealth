@@ -76,7 +76,12 @@ public:
     }
 
     QVariant testValue() const {return uid();}
-    QVariant value() const {if (patient()) return patient()->data(_ref); return QVariant();}
+    QVariant value() const
+    {
+        if (patient())
+            return patient()->data(_ref);
+        return QVariant();
+    }
 
     int sortIndex() const {return _ref;}
 
@@ -241,6 +246,9 @@ void IPatient::registerPatientTokens()
     _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_DRUGS_CHRONIC_XML, DrugsChronicTherapeutics);
+    t->setUntranslatedHumanReadableName(Trans::Constants::LONG_TERM_THERAPY);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_DRUGS_CHRONIC_HTML, DrugsChronicTherapeuticsHtml);
     t->setUntranslatedHumanReadableName(Trans::Constants::LONG_TERM_THERAPY);
     _tokens << t;
 

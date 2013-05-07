@@ -77,11 +77,28 @@ public:
         _availablePatientData.clear();
         foreach(FormMain *form, emptyRootForms) {
             foreach(FormItem *item, form->flattenedFormItemChildren()) {
-                if (item->itemData())
-                    _availablePatientData << item->patientDataRepresentation();
+                if (item->itemData()) {
+                    switch (item->patientDataRepresentation()) {
+                    case -1:
+                        break;
+                    case Core::IPatient::DrugsAllergiesWithoutPrecision:
+                        _availablePatientData << item->patientDataRepresentation();
+                        _availablePatientData << Core::IPatient::DrugsAllergiesWithoutPrecisionHtml;
+                         break;
+                    case Core::IPatient::DrugsIntolerancesWithoutPrecision:
+                        _availablePatientData << item->patientDataRepresentation();
+                        _availablePatientData << Core::IPatient::DrugsIntolerancesWithoutPrecisionHtml;
+                         break;
+                    case Core::IPatient::DrugsChronicTherapeutics:
+                        _availablePatientData << item->patientDataRepresentation();
+                        _availablePatientData << Core::IPatient::DrugsChronicTherapeuticsHtml;
+                         break;
+                    default:
+                        _availablePatientData << item->patientDataRepresentation();
+                    } // switch
+                }
             }
         }
-        _availablePatientData.removeAll(-1);
     }
 
     // Clear cache then create all EpisodeModel for each available forms empty root
@@ -205,12 +222,34 @@ bool PatientFormItemDataWrapper::isDataAvailable(int ref) const
 
 QVariant PatientFormItemDataWrapper::data(int ref, int role) const
 {
-    Q_UNUSED(role);
     if (!d->_availablePatientData.contains(ref))
         return QVariant();
+    if (role == -1)
+        role = Form::IFormItemData::PatientModelRole;
 
     // Find the FormMain parent that contains the item with the correct 'ref'
     const QList<Form::FormMain*> &forms = d->_episodeModels.uniqueKeys();
+
+    // Specific case
+    // TODO: improve this
+    switch (ref) {
+    case Core::IPatient::DrugsChronicTherapeuticsHtml:
+        qWarning() << "Core::IPatient::DrugsChronicTherapeuticsHtml" << ref << role;
+        ref = Core::IPatient::DrugsChronicTherapeutics;
+        role = Form::IFormItemData::PrintRole;
+        break;
+    case Core::IPatient::DrugsAllergiesWithoutPrecisionHtml:
+        ref = Core::IPatient::DrugsAllergiesWithoutPrecision;
+        role = Form::IFormItemData::PrintRole;
+        break;
+    case Core::IPatient::DrugsIntolerancesWithoutPrecisionHtml:
+        ref = Core::IPatient::DrugsIntolerancesWithoutPrecision;
+        role = Form::IFormItemData::PrintRole;
+        break;
+    } // switch
+
+    qWarning() << ref << role;
+
     foreach(Form::FormMain *main, forms) {
         foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
             if (!item->itemData()
@@ -218,8 +257,8 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
                 continue;
             // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
             if (item->patientDataRepresentation() == ref) {
-                // qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
-                return item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
+                 qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
+                return item->itemData()->data(ref, role);
             }
         }
     }

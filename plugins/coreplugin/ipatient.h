@@ -123,17 +123,20 @@ public:
         // Drugs and diseases
         // Allergies
         DrugsAllergiesWithoutPrecision,
+        DrugsAllergiesWithoutPrecisionHtml,
         DrugsUidAllergies,
         DrugsAtcAllergies,
         DrugsInnAllergies,
         // Intolerances
         DrugsIntolerancesWithoutPrecision,
+        DrugsIntolerancesWithoutPrecisionHtml,
         DrugsUidIntolerances,
         DrugsAtcIntolerances,
         DrugsInnIntolerances,
         DrugsInnAtcIntolerances,
 
         DrugsChronicTherapeutics,
+        DrugsChronicTherapeuticsHtml,
         ICD10Diseases,
 
         // For debugging purpose
