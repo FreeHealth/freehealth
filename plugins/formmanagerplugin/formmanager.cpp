@@ -876,9 +876,6 @@ QString FormManager::formPrintHtmlOutput(Form::FormMain *formMain)
     } else {
         out = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
     }
-
-    qWarning() << out;
-
     return out;
 }
 
@@ -916,7 +913,7 @@ QHash<QString, QVariant> FormManager::formToTokens(Form::FormMain *form) const
     QHash<QString, QVariant> tokens;
 #ifdef WITH_PAD
     // Removes all formitem token from the token pool
-    qWarning() << "____________ formToTokens" << form->uuid();
+    // qWarning() << "____________ formToTokens" << form->uuid();
     // Include all formitems token from the formmain to the token pool
     if (d->_tokens.values(form).isEmpty()) {
         QVector<FormItemToken::ValueType> types;
