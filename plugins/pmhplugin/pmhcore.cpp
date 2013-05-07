@@ -28,9 +28,13 @@
 #include "pmhcategorymodel.h"
 #include "pmhwidgetmanager.h"
 #include "pmhcontentexporter.h"
+#include "pmhtokens.h"
 
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/ipadtools.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -39,6 +43,7 @@
 using namespace PMH;
 using namespace Internal;
 
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
@@ -78,6 +83,7 @@ public:
     PmhCategoryModel *m_PmhCategoryModel;
     PmhWidgetManager *m_PmhWidgetManager;
     PmhContentExporter *m_Exporter;
+    QList<PmhTokens> m_Tokens;
 };
 
 } // namespace Internal
@@ -87,6 +93,19 @@ PmhCore::PmhCore(QObject *parent) :
     QObject(parent), d(new PmhCorePrivate)
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
+#ifdef WITH_PAD
+    PmhTokens *tok = new PmhTokens(this);
+    tok->setOutputType(PmhTokens::HtmlOutput);
+    tok->initialize(d->m_PmhCategoryModel);
+    d->m_Tokens << tok;
+    padTools().tokenPool()->addToken(tok);
+
+    tok = new PmhTokens(this);
+    tok->setOutputType(PmhTokens::PlainTextOutput);
+    tok->initialize(d->m_PmhCategoryModel);
+    d->m_Tokens << tok;
+    padTools().tokenPool()->addToken(tok);
+#endif
     d->m_PmhWidgetManager = new PmhWidgetManager(this);
     d->m_Exporter = new PmhContentExporter(this);
     d->m_Exporter->initialize();
