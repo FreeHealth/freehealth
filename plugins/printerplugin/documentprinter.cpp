@@ -34,9 +34,10 @@
 #include "documentprinter.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipadtools.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
@@ -61,6 +62,7 @@ using namespace Print::Internal;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 DocumentPrinter::DocumentPrinter(QObject *parent) :
         Core::IDocumentPrinter(parent)
@@ -117,17 +119,21 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
         }
 #endif
 #endif
-        // replace user's tokens
+        // Old token style: replace user's tokens
         user()->replaceTokens(header);
     }
     Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QLocale().toString(QDate::currentDate(), QLocale().dateFormat()));
-    // replace patient's tokens
+    // Old token style: replace patient's tokens
     if (patient()) {
         patient()->replaceTokens(header);
     }
-    // replace defined tokens
+    // Old token style: replace defined tokens
     replaceTokens(header, globalTokens);
     replaceTokens(header, headerTokens);
+
+#ifdef WITH_PAD
+    header = padTools()->processPlainText(header);
+#endif
     p->setHeader(header);
 }
 
@@ -149,15 +155,20 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
         }
 #endif
 #endif
-        // replace user's tokens
+        // Old token style: replace user's tokens
         user()->replaceTokens(footer);
     }
-    // replace patient's tokens
+    // Old token style: replace patient's tokens
     if (patient())
         patient()->replaceTokens(footer);
-    // replace defined tokens
+    // Old token style: replace defined tokens
     replaceTokens(footer, globalTokens);
     replaceTokens(footer, footerTokens);
+
+#ifdef WITH_PAD
+    footer = padTools()->processPlainText(footer);
+#endif
+
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
                    .arg(QCoreApplication::translate("Print", "Made with %1.").arg(qApp->applicationName())));
     p->setFooter(footer);
@@ -199,6 +210,11 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
 #endif
 #endif
     }
+
+#ifdef WITH_PAD
+    html = padTools()->processPlainText(html);
+#endif
+
     p->addHtmlWatermark(html,
                        Print::Printer::Presence(presence),
                        Qt::AlignmentFlag(align));
@@ -227,6 +243,7 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
     prepareFooter(&p, papers);
     prepareWatermark(&p, papers);
     // TODO: this can work with PadTools but not with HTML recomposing
+
 //    if (globalTokens.isEmpty()) {
         p.setContent(text);
 //    } else {
@@ -266,6 +283,9 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
     } else {
         QString _html = html;
         Utils::replaceTokens(_html, globalTokens);
+#ifdef WITH_PAD
+        _html = padTools()->processPlainText(_html);
+#endif
         doc.setHtml(_html);
     }
     return print(doc, papers, printDuplicata);
@@ -318,6 +338,9 @@ bool DocumentPrinter::printPreview(const QString &html, const int papers, bool p
     } else {
         QString _html = html;
         Utils::replaceTokens(_html, globalTokens);
+#ifdef WITH_PAD
+        _html = padTools()->processPlainText(_html);
+#endif
         p.setContent(_html);
     }
     p.setPrintWithDuplicata(printDuplicata);
