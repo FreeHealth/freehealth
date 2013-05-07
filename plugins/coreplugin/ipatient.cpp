@@ -240,6 +240,10 @@ void IPatient::registerPatientTokens()
     t->setUntranslatedHumanReadableName(Trans::Constants::SOCIAL_NUMBER_OWNER_ADDRESS);
     _tokens << t;
 
+    t = new PatientToken(Constants::TOKEN_DRUGS_CHRONIC_XML, DrugsChronicTherapeutics);
+    t->setUntranslatedHumanReadableName(Trans::Constants::LONG_TERM_THERAPY);
+    _tokens << t;
+
     if (tokenPool()) {
         LOG("Registering Core::IPatient tokens");
         tokenPool()->addTokens(_tokens);
