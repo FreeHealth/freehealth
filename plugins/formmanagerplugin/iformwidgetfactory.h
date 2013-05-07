@@ -28,6 +28,7 @@
 #define IFORMWIDGETFACTORY_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
+#include <formmanagerplugin/iformitem.h>
 
 #include <QObject>
 #include <QString>
@@ -36,18 +37,17 @@
 #include <QFrame>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPointer>
 
 /**
  * \file iformwidgetfactory.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 13 Sept 2011
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 07 May 2013
 */
 
 namespace Form {
-
 class IFormWidget;
-class FormItem;
 
 class FORM_EXPORT IFormWidgetFactory : public QObject
 {
@@ -94,7 +94,7 @@ public:
     };
 
     IFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
-    virtual ~IFormWidget() {}
+    virtual ~IFormWidget();
 
     virtual void addWidgetToContainer(IFormWidget *) {}
     virtual bool isContainer() const {return false;}
@@ -123,7 +123,7 @@ public Q_SLOTS:
 
 public:
     QLabel *m_Label;
-    Form::FormItem *m_FormItem;
+    QPointer<Form::FormItem> m_FormItem;
     QString m_OldTrans;
     QWidget *m_focusedWidget, *_lastTabWidget;
 };
