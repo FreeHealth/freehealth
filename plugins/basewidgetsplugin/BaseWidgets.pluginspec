@@ -11,6 +11,5 @@
         <dependency name="FormManager" version="0.0.1"/>
         <dependency name="PatientBase" version="0.0.1"/>
         <dependency name="Identity" version="0.0.1"/>
-        <dependency name="ListView" version="0.0.1"/>
     </dependencyList>
 </plugin>
