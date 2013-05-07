@@ -49,7 +49,15 @@ namespace MedicalUtils {
 /** \brief Returns a readable age calculated from the date to now */
 QString readableAge(const QDate &DOB)
 {
-    int daysTo = DOB.daysTo(QDate::currentDate());
+    QDate current = QDate::currentDate();
+    // Check anniversary
+    if (current.month() == DOB.month()
+            && current.day() == DOB.day()) {
+        int years = current.year() - DOB.year();
+        return QString("%1 %2").arg(years).arg(tkTr(YEAR_S, years));
+    }
+    // Compute average age
+    int daysTo = DOB.daysTo(current);
     double age = daysTo / 365.242199;
     QStringList readableAge;
     // years
