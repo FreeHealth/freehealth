@@ -926,7 +926,7 @@ bool PluginSpecPrivate::loadLibrary()
     QString libName = QString("%1/lib%2.so").arg(location).arg(name);
 #endif
 
-#else //Q_NO_DEBUG
+#else //QT_NO_DEBUG
 
 #ifdef Q_OS_WIN
     QString libName = QString("%1/%2_d.dll").arg(location).arg(name); // FreeMedForms Correction
@@ -943,6 +943,9 @@ bool PluginSpecPrivate::loadLibrary()
         hasError = true;
         errorString = QDir::toNativeSeparators(libName)
             + QString::fromLatin1(": ") + loader.errorString();
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     IPlugin *pluginObject = qobject_cast<IPlugin*>(loader.instance());
@@ -950,6 +953,9 @@ bool PluginSpecPrivate::loadLibrary()
         hasError = true;
         errorString = QCoreApplication::translate("PluginSpec", "Plugin is not valid (does not derive from IPlugin)");
         loader.unload();
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     state = PluginSpec::Loaded;
@@ -971,17 +977,26 @@ bool PluginSpecPrivate::initializePlugin()
             return true;
         errorString = QCoreApplication::translate("PluginSpec", "Initializing the plugin failed because state != Loaded");
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     if (!plugin) {
         errorString = QCoreApplication::translate("PluginSpec", "Internal error: have no plugin instance to initialize");
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     QString err;
     if (!plugin->initialize(arguments, &err)) {
         errorString = QCoreApplication::translate("PluginSpec", "Plugin initialization failed: %1").arg(err);
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString << plugin;
+
         return false;
     }
     state = PluginSpec::Initialized;
@@ -1001,11 +1016,17 @@ bool PluginSpecPrivate::initializeExtensions()
             return true;
         errorString = QCoreApplication::translate("PluginSpec", "Cannot perform extensionsInitialized because state != Initialized");
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     if (!plugin) {
         errorString = QCoreApplication::translate("PluginSpec", "Internal error: have no plugin instance to perform extensionsInitialized");
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     plugin->extensionsInitialized();
@@ -1027,6 +1048,9 @@ bool PluginSpecPrivate::delayedInitialize()
     if (!plugin) {
         errorString = QCoreApplication::translate("PluginSpec", "Internal error: have no plugin instance to perform delayedInitialize");
         hasError = true;
+
+        qWarning() << "****ERROR*****" << errorString;
+
         return false;
     }
     return plugin->delayedInitialize();
