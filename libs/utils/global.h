@@ -201,6 +201,7 @@ UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QVar
 UTILS_EXPORT QString testInternetConnection();
 
 // Some database identifiers helpers
+UTILS_EXPORT QString createUid();
 UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
 UTILS_EXPORT QString loginForSQL(const QString &log);
 UTILS_EXPORT QString loginFromSQL(const QVariant &sql);

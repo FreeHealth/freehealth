@@ -53,6 +53,7 @@
 #include <QModelIndex>
 #include <QNetworkConfigurationManager>
 #include <QBuffer>
+#include <QUuid>
 
 /**
   \namespace Utils
@@ -2033,6 +2034,15 @@ QString testInternetConnection()
 //    }
 //    LOG_FOR("Utils", QString("No internet connection"));
     return QString("yes");
+}
+
+/**
+ * Create a database/filename compatible UUID.
+ * This code uses QUuid::createUuid().toString() with some string contraction.
+ */
+QString createUid()
+{
+    return QUuid::createUuid().toString().remove("-").remove("{").remove("}");
 }
 
 /**

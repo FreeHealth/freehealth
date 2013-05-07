@@ -943,10 +943,13 @@ QString Database::connectionName() const
     return d_database->m_ConnectionName;
 }
 
-/** Create an UUID compatible with the Utils::Database manager. This code uses QUuid::createUuid().toString() with some string contraction. */
+/**
+ * Create a database/filename compatible UUID.
+ * This code uses QUuid::createUuid().toString() with some string contraction.
+ */
 QString Database::createUid()
 {
-    return QUuid::createUuid().toString().remove("-").remove("{").remove("}");
+    return Utils::createUid();
 }
 
 /**  returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
