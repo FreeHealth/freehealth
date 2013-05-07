@@ -41,6 +41,7 @@
 #include <QVariant>
 #include <QPointer>
 #include <QHash>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
@@ -59,6 +60,9 @@ class IMode;
 }
 
 namespace Form {
+namespace Internal {
+class FormItemPrivate;
+}
 class IFormWidget;
 class IFormItemData;
 class FormItemIdentifier;
@@ -71,6 +75,7 @@ class FormPlaceHolder;
 class FORM_EXPORT FormItem : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(FormItem)
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
@@ -80,53 +85,43 @@ public:
     Form::FormItem *parentFormItem() const;
     Form::FormMain *parentFormMain() const;
 
-    QString uuid() const {return m_Spec->uuid();}
-    void setUuid(const QString &uuid) {m_Spec->setUuid(uuid);}
+    QString uuid() const;
+    void setUuid(const QString &uuid);
 
-    Form::FormItemSpec *spec() const {return m_Spec;}
-    Form::FormItemScripts *scripts() const {return m_Scripts;}
-    Form::FormItemValues *valueReferences() const {return m_Values;}
+    Form::FormItemSpec *spec() const;
+    Form::FormItemScripts *scripts() const;
+    Form::FormItemValues *valueReferences() const;
 
     // Access to database values. Pointer will not be deleted
-    void setItemData(Form::IFormItemData *data) {m_ItemData = data;}
-    Form::IFormItemData *itemData() {return m_ItemData;}
+    void setItemData(Form::IFormItemData *data);
+    Form::IFormItemData *itemData();
 
     // Access to the user's widget
-    virtual void setFormWidget(Form::IFormWidget *w) {m_FormWidget=w;}
-    virtual IFormWidget *formWidget() {return m_FormWidget;}
+    virtual void setFormWidget(Form::IFormWidget *w);
+    virtual IFormWidget *formWidget();
 
     // Access to the FormItem tree
-    virtual FormMain *createChildForm(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
+    virtual FormMain *createChildForm(const QString &uuid = QString::null);
     virtual FormItem *createChildItem(const QString &uuid = QString::null);
-    virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
+    virtual FormPage *createPage(const QString &uuid = QString::null);
     virtual QList<FormItem *> formItemChildren() const;
     virtual QList<FormItem *> flattenedFormItemChildren() const;
 
     // FormIO extra data
     virtual void addExtraData(const QString &key, const QString &value);
-
-    /*! Returns the FormItem extra data as QHash (keys are all lowercase) */
-    virtual QHash<QString,QString> extraData() const {return m_ExtraData;}
-
-    /*! Clears the internal extra data of the FormItem */
-    virtual void clearExtraData() {m_ExtraData.clear();}
+    virtual QHash<QString,QString> extraData() const;
+    virtual void clearExtraData();
     virtual QStringList getOptions() const;
 
     // Data representation
-    virtual void setPatientDataRepresentation(const int ref) {m_PatientData = ref;}
-    virtual int patientDataRepresentation() const {return m_PatientData;}
+    virtual void setPatientDataRepresentation(const int ref);
+    virtual int patientDataRepresentation() const;
 
 public Q_SLOTS:
     virtual void languageChanged();
 
 private:
-    Form::FormItemSpec *m_Spec;
-    Form::FormItemScripts *m_Scripts;
-    Form::FormItemValues *m_Values;
-    Form::IFormWidget *m_FormWidget;
-    Form::IFormItemData *m_ItemData;
-    QHash<QString, QString> m_ExtraData;
-    int m_PatientData;
+    Internal::FormItemPrivate *d_ifi;
 };
 /** Returns the first level Form::FormItem children. */
 inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const

@@ -418,7 +418,7 @@ FormItemValues::~FormItemValues()
 }
 
 /**
-  \brief Defines a value \e val for one \e type at one specified \e id in a virtual list, for one \e language.
+  \brief Defines a value \e val for one \e type at one specified \e id in a list, for one \e language.
   \e language must be a valid local language name in 2 chars encoding.
 */
 void FormItemValues::setValue(int type, const int id, const QVariant &val, const QString &language)
@@ -547,35 +547,118 @@ void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormItem  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace Form {
+namespace Internal {
+class FormItemPrivate
+{
+public:
+    FormItemPrivate(FormItem *parent) :
+        m_Spec(new FormItemSpec),
+        m_Scripts(new FormItemScripts),
+        m_Values(new FormItemValues),
+        m_FormWidget(0),
+        m_ItemData(0),
+        m_PatientData(-1),
+        q(parent)
+    {
+        Q_UNUSED(q);
+    }
+
+    ~FormItemPrivate()
+    {
+        if (m_Scripts) {
+            delete m_Scripts;
+            m_Scripts = 0;
+        }
+        if (m_Spec) {
+            delete m_Spec;
+            m_Spec = 0;
+        }
+        if (m_Values) {
+            delete m_Values;
+            m_Values = 0;
+        }
+        if (m_ItemData) {
+            delete m_ItemData;
+            m_ItemData = 0;
+        }
+//        if (m_FormWidget) {
+//            delete m_FormWidget;
+//            m_FormWidget = 0;
+//        }
+    }
+
+public:
+    Form::FormItemSpec *m_Spec;
+    Form::FormItemScripts *m_Scripts;
+    Form::FormItemValues *m_Values;
+    QPointer<Form::IFormWidget> m_FormWidget;
+    Form::IFormItemData *m_ItemData;
+    QHash<QString, QString> m_ExtraData;
+    int m_PatientData;
+
+private:
+    FormItem *q;
+};
+}
+}
+
 FormItem::FormItem(QObject *parent) :
     QObject(parent),
-    m_Spec(new FormItemSpec),
-    m_Scripts(new FormItemScripts),
-    m_Values(new FormItemValues),
-    m_FormWidget(0),
-    m_ItemData(0),
-    m_PatientData(-1)
+    d_ifi(new Internal::FormItemPrivate(this))
 {}
 
 FormItem::~FormItem()
 {
-    if (m_Scripts) {
-        delete m_Scripts;
-        m_Scripts = 0;
-    }
-    if (m_Spec) {
-        delete m_Spec;
-        m_Spec = 0;
-    }
-    if (m_Values) {
-        delete m_Values;
-        m_Values = 0;
-    }
-    if (m_ItemData) {
-        delete m_ItemData;
-        m_ItemData = 0;
+    if (d_ifi) {
+        delete d_ifi;
+        d_ifi = 0;
     }
 }
+
+QString FormItem::uuid() const
+{
+    return d_ifi->m_Spec->uuid();
+}
+
+void FormItem::setUuid(const QString &uuid)
+{
+    d_ifi->m_Spec->setUuid(uuid);
+}
+
+Form::FormItemSpec *FormItem::spec() const {return d_ifi->m_Spec;}
+Form::FormItemScripts *FormItem::scripts() const {return d_ifi->m_Scripts;}
+Form::FormItemValues *FormItem::valueReferences() const {return d_ifi->m_Values;}
+
+// Access to database values. Pointer will not be deleted
+void FormItem::setItemData(Form::IFormItemData *data) {d_ifi->m_ItemData = data;}
+Form::IFormItemData *FormItem::itemData() {return d_ifi->m_ItemData;}
+
+// Access to the user's widget
+void FormItem::setFormWidget(Form::IFormWidget *w) {d_ifi->m_FormWidget=w;}
+IFormWidget *FormItem::formWidget() {return d_ifi->m_FormWidget;}
+
+// Access to the FormItem tree
+FormMain *FormItem::createChildForm(const QString &uuid) {Q_UNUSED(uuid); return 0;}
+FormPage *FormItem::createPage(const QString &uuid) {Q_UNUSED(uuid); return 0;}
+
+/*! Returns the FormItem extra data as QHash (keys are all lowercase) */
+QHash<QString,QString> FormItem::extraData() const {return d_ifi->m_ExtraData;}
+
+/*! Clears the internal extra data of the FormItem */
+void FormItem::clearExtraData() {d_ifi->m_ExtraData.clear();}
+
+/**
+ * Define a patient data representation. The reference is taken from
+ * Core::IPatient::PatientDataRepresentation
+ */
+void FormItem::setPatientDataRepresentation(const int ref) {d_ifi->m_PatientData = ref;}
+
+/**
+ * Return the patient data representation of the item.
+ * The reference is taken from Core::IPatient::PatientDataRepresentation.
+ */
+int FormItem::patientDataRepresentation() const {return d_ifi->m_PatientData;}
 
 /*!
  * \brief Adds user defined extra data to the FormItem.
@@ -587,11 +670,11 @@ FormItem::~FormItem()
  */
 void FormItem::addExtraData(const QString &key, const QString &value)
 {
-    if (m_ExtraData.keys().indexOf(key.toLower()) != -1) {
-        QString add = m_ExtraData.value(key.toLower()) + ";" + value;
-        m_ExtraData.insert(key.toLower(), add);
+    if (d_ifi->m_ExtraData.keys().indexOf(key.toLower()) != -1) {
+        QString add = d_ifi->m_ExtraData.value(key.toLower()) + ";" + value;
+        d_ifi->m_ExtraData.insert(key.toLower(), add);
     } else {
-        m_ExtraData.insert(key.toLower(),value);
+        d_ifi->m_ExtraData.insert(key.toLower(), value);
     }
 }
 
@@ -599,8 +682,8 @@ void FormItem::addExtraData(const QString &key, const QString &value)
 QStringList FormItem::getOptions() const
 {
     QStringList l;
-    l = m_ExtraData.value("options").split(";", QString::SkipEmptyParts);
-    l += m_ExtraData.value("option").split(";", QString::SkipEmptyParts);
+    l = d_ifi->m_ExtraData.value("options").split(";", QString::SkipEmptyParts);
+    l += d_ifi->m_ExtraData.value("option").split(";", QString::SkipEmptyParts);
     return l;
 }
 
@@ -872,7 +955,7 @@ FormItemSpec::~FormItemSpec()
 }
 
 /**
-  \brief Defines a value \e val for one \e type at one specified \e id in a virtual list, for one \e language.
+  \brief Defines a value \e val for one \e type at one specified \e id in a list, for one \e language.
   \e language must be a valid local language name in 2 chars encoding.
 */
 void FormItemSpec::setValue(int type, const QVariant &val, const QString &language)
