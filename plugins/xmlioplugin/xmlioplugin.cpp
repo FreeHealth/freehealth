@@ -95,6 +95,10 @@ bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    if (!m_XmlReader->initialize()) {
+        LOG_ERROR("Unable to initialize XmlReader");
+        return false;
+    }
     return true;
 }
 
