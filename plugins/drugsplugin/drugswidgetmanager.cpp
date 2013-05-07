@@ -831,19 +831,25 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
     }
 }
 
-/** Reset the posologic sentence to the default one */
-void DrugsActionHandler::resetPrescriptionSentenceToDefault()
+static QString getPrescriptionTokenHtmlFileContent()
 {
-    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()), Utils::DontWarnUser);
-    if (content.isEmpty()) {
+    QString content;
+    if (QFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower())).exists()) {
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()), Utils::DontWarnUser);
+    } else if (QFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE)).exists()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE), Utils::DontWarnUser);
-        if (content.isEmpty()) {
-            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
-        }
+    } else {
+        LOG_ERROR_FOR("DrugPosologicSentencePreferencesWidget", "No token'd prescription file found");
     }
     if (content.contains("<body"))
         content = content.remove("\n");
+    return content;
+}
 
+/** Reset the posologic sentence to the default one */
+void DrugsActionHandler::resetPrescriptionSentenceToDefault()
+{
+    QString content = getPrescriptionTokenHtmlFileContent();
     QString css = Utils::htmlTakeAllCssContent(content);
     content = Utils::htmlReplaceAccents(content);
     content = Utils::htmlBodyContent(content, false);
