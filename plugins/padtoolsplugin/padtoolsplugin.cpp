@@ -75,7 +75,6 @@ PadToolsPlugin::~PadToolsPlugin()
 
 bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-	qDebug("PadToolsPlugin::initialize");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::initialize";
     Q_UNUSED(arguments);
@@ -86,7 +85,6 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
 
 void PadToolsPlugin::extensionsInitialized()
 {
-	qDebug("PadToolsPlugin::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
