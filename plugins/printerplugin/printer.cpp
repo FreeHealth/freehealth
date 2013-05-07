@@ -904,8 +904,9 @@ QString Printer::toHtml() const
         html += content;
     }
     // Add first page header
-    doc = d->header(FirstPageOnly);
-    if (doc) {
+    QTextDocument *doc2 = 0;
+    doc2 = d->header(FirstPageOnly);
+    if (doc2 && doc2 != doc) {
         content = doc->toHtml("UTF-8");
         css = Utils::htmlTakeAllCssContent(content);
         content = Utils::htmlBodyContent(content);

@@ -67,7 +67,7 @@ protected:
 
 private Q_SLOTS:
     void accept();
-    void toPdf();
+    void toFile(QAction *action);
     void on_duplicates_toggled(bool);
     void on_nup_toggled(bool);
     void on_nextButton_clicked();
@@ -84,6 +84,7 @@ private:
     Print::Printer *m_Printer;
     int m_PreviewingPage;
     QList<QPrinterInfo> m_AvailPrinterAtDialogOpens;
+    QAction *aSavePdf, *aMailPdf, *aSaveHtml, *aMailHtml;
 };
 
 }  // End namespace Internal

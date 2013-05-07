@@ -34,7 +34,7 @@
 #include <printerplugin/constants.h>
 
 #include <utils/log.h>
-#include <utils/database.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 
@@ -46,6 +46,8 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFileDialog>
+#include <QToolButton>
+#include <QAction>
 #if QT_VERSION < 0x050000
 #include <QPrinterInfo>
 #include <QPrinter>
@@ -68,7 +70,9 @@ static inline Core::IDocumentPrinter *docPrinter() {return ExtensionSystem::Plug
 
 PrintDialog::PrintDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Internal::Ui::PrintDialog)
+    ui(new Internal::Ui::PrintDialog),
+    m_Printer(0),
+    aSavePdf(0), aMailPdf(0), aSaveHtml(0), aMailHtml(0)
 {
     ui->setupUi(this);
 //    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -94,9 +98,29 @@ PrintDialog::PrintDialog(QWidget *parent) :
     ui->copies->setText("1");
 
     // Change the buttons of the dialog
-    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
-    QPushButton *topdf = ui->buttonBox->addButton("PDF", QDialogButtonBox::ActionRole);
-    connect(topdf, SIGNAL(clicked()), this, SLOT(toPdf()));
+    QToolButton *toolButton = new QToolButton(this);
+    toolButton->setPopupMode(QToolButton::InstantPopup);
+    toolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    toolButton->setText(tr("File extra"));
+    toolButton->setIcon(theme()->icon(Core::Constants::ICONSAVEAS));
+
+    QAction *a = aSavePdf = new QAction(this);
+    a->setText(tr("Save to PDF"));
+    toolButton->addAction(a);
+//    a = aMailPdf = new QAction(this);
+//    a->setText(tr("Send by mail as PDF"));
+//    toolButton->addAction(a);
+    a = aSaveHtml = new QAction(this);
+    a->setText(tr("Save to HTML"));
+    toolButton->addAction(a);
+//    a = aMailHtml = new QAction(this);
+//    a->setText(tr("Send by mail as HTML"));
+//    toolButton->addAction(a);
+    ui->buttonBox->addButton(toolButton, QDialogButtonBox::ActionRole);
+    connect(toolButton, SIGNAL(triggered(QAction*)), this, SLOT(toFile(QAction*)));
+
+//    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
+//    QPushButton *topdf = ui->buttonBox->addButton("PDF", QDialogButtonBox::ActionRole);
 }
 
 PrintDialog::~PrintDialog()
@@ -126,7 +150,7 @@ void PrintDialog::accept()
 
     // Duplicate to a pdf file
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
-        QString uid = Utils::Database::createUid();
+        QString uid = Utils::createUid();
         QString docName = QString("%1_%2.pdf")
                           .arg(qApp->applicationName())
                           .arg(uid);
@@ -261,17 +285,40 @@ void PrintDialog::previewPage(int n)
     }
 }
 
-void PrintDialog::toPdf()
+//#include <QDesktopServices>
+//#include <QUrl>
+void PrintDialog::toFile(QAction *action)
 {
-    QString f = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                             QDir::homePath(),
-                                             tr("PDF file (*.pdf)"));
-    if (f.isEmpty())
-        return;
-    if (QFileInfo(f).completeSuffix().compare(".pdf", Qt::CaseInsensitive)==0)
-        f.append(".pdf");
-    if (m_Printer)
-        m_Printer->toPdf(f, "DFSDF");
+    if (action == aSavePdf) {
+        QString f = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                                 QDir::homePath(),
+                                                 tr("PDF file (*.pdf)"));
+        if (f.isEmpty())
+            return;
+        if (QFileInfo(f).completeSuffix().compare("pdf", Qt::CaseInsensitive) != 0)
+            f.append(".pdf");
+        if (m_Printer)
+            m_Printer->toPdf(f, "DFSDF");
+    } else if (action == aMailPdf) {
+        // TODO: code this
+//        QString fileName = QString("%1/%2.pdf")
+//                .arg(settings()->path(Core::ISettings::ApplicationTempPath))
+//                .arg(Utils::createUid());
+//        QDesktopServices::openUrl(QUrl(QString("mailto:?&subject=--&attachement=%1").arg("/Users/eric/essai.pdf")));
+    } else if (action == aSaveHtml) {
+        QString f = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                                 QDir::homePath(),
+                                                 tr("HTML file (*.html *.htm)"));
+        if (f.isEmpty())
+            return;
+        if (QFileInfo(f).completeSuffix().compare("html", Qt::CaseInsensitive) != 0
+                && QFileInfo(f).completeSuffix().compare("htm", Qt::CaseInsensitive) != 0)
+            f.append(".html");
+        if (m_Printer)
+            Utils::saveStringToFile(m_Printer->toHtml(), f);
+    } else if (action == aMailHtml) {
+        // TODO: code this
+    }
 }
 
 void PrintDialog::on_duplicates_toggled(bool state)
