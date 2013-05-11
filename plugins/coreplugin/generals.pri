@@ -33,7 +33,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/id.h \
     $${PWD}/ipatientbar.h \
     $${PWD}/ipatientdataexporter.h \
-    $${PWD}/applicationautolock.h
+    $${PWD}/applicationautolock.h \
+    ../coreplugin/applicationversioninformation.h
 
 SOURCES += \
     $${PWD}/icore.cpp \
@@ -49,4 +50,5 @@ SOURCES += \
     $${PWD}/igenericpage.cpp \
     $${PWD}/id.cpp \
     $${PWD}/ipatientdataexporter.cpp \
-    $${PWD}/applicationautolock.cpp
+    $${PWD}/applicationautolock.cpp \
+    ../coreplugin/applicationversioninformation.cpp
