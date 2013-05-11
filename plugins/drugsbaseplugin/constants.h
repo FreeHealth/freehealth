@@ -176,7 +176,19 @@ namespace Constants {
     const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";
 
     // MASKS
-    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =  "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]][; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]";
+    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =
+#ifdef WITH_PAD
+            "{{~Prescription.Protocol.Quantity.Full~}}"//  "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]]"
+            "{{~Prescription.Protocol.DailyScheme.Repeated~}}{{ ~Prescription.Protocol.Meal~}}{{ ~Prescription.Protocol.Period.Full~}}"   // "[ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]]"
+            "{{; ~Prescription.Protocol.Duration.Full~}}{{~Prescription.Protocol.DailyScheme.Distributed~}}"   // "[; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]"
+            ;
+#else
+            "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]]"
+            "[ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]]"
+            "[; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]"
+            ;
+#endif
+
     const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
             "<html>\n"
             "<head>\n"
