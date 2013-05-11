@@ -47,7 +47,8 @@ public:
         LGPL = 0,
         GPLv3,
         BSD,
-        BSDModified
+        BSDModified,
+        NonFree
     };
 
     static QString getTranslatedLicenseTerms(int availableLicense);
