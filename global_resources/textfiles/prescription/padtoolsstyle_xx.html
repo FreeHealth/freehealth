@@ -1,14 +1,12 @@
 <html><body><p style="margin:0px; -qt-block-indent:0; text-indent:0px;">
 <span style="font-weight:600;">{{~Prescription.Drug.brandname~}}</span><span style="font-style:italic;">{{<br />
-Take ~Prescription.Protocol.Quantity.From~}}{{ to ~Prescription.Protocol.Quantity.to~}}
-{{ ~Prescription.Protocol.Quantity.Scheme~}}{{ ~Prescription.Protocol.DailyScheme.Repeated~}}
+Prendre ~Prescription.Protocol.Quantity.Full~}}
+{{ ~Prescription.Protocol.DailyScheme.Repeated~}}{{ (~Prescription.Protocol.DailyScheme.Distributed~)}}
 {{ ~Prescription.Protocol.Meal~}}
-{{ each ~Prescription.Protocol.Period.Value~}}{{ ~Prescription.Protocol.Period.Scheme~}}
-{{ for ~Prescription.Protocol.Duration.From~}}{{ to ~Prescription.Protocol.Duration.To~}}
-{{ ~Prescription.Protocol.Duration.Scheme~}}{{<br />
-Route: ~Prescription.Protocol.Route~}}{{<br />
-Daily Distribution: ~Prescription.Protocol.DailyScheme.Distributed~}}{{<br />
-Minimum interval between intakes: ~Prescription.Protocol.Quantity.MinInterval.Value~ {{~Prescription.Protocol.Quantity.MinInterval.Scheme~}}}}{{<br />
+{{ each ~Prescription.Protocol.Period.Full~}}
+{{ for ~Prescription.Protocol.Duration.Full~}}{{&nbsp;; Route&nbsp;: ~Prescription.Protocol.Route~}}{{<br />
+Minimum interval between intakes: ~Prescription.Protocol.Quantity.MinInterval.Full~}}{{<br />
 ~Prescription.Protocol.Note~ }}{{<br />
-~Prescription.Protocol.Refill~ }}</span></p>
+~Prescription.Protocol.Refill~ }}</span>
+</p>
 </body></html>
