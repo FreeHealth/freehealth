@@ -52,6 +52,7 @@
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_account.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QMetaEnum>
 
@@ -129,6 +130,21 @@ void IPatient::registerPatientTokens()
     TokenNamespace patientInsuranceNs("Insurance");
     patientInsuranceNs.setUntranslatedHumanReadableName(Trans::Constants::INSURANCE);
 
+    TokenNamespace patientDrugsNs("Drugs");
+    patientInsuranceNs.setUntranslatedHumanReadableName(Trans::Constants::DRUGS);
+
+    TokenNamespace patientDrugsLongTermNs("ChronicTherapeutics");
+    patientDrugsLongTermNs.setUntranslatedHumanReadableName(Trans::Constants::LONG_TERM_THERAPY);
+    patientDrugsNs.addChild(patientDrugsLongTermNs);
+
+    TokenNamespace patientDrugsAllergiesNs("Allergies");
+    patientDrugsAllergiesNs.setUntranslatedHumanReadableName(Trans::Constants::DRUGS_ALLERGIES);
+    patientDrugsNs.addChild(patientDrugsAllergiesNs);
+
+    TokenNamespace patientDrugsIntolerancesNs("Intolerances");
+    patientDrugsIntolerancesNs.setUntranslatedHumanReadableName(Trans::Constants::DRUGS_INTOLERANCES);
+    patientDrugsNs.addChild(patientDrugsIntolerancesNs);
+
     patientNs.addChild(patientIdentNs);
     patientNs.addChild(patientAgeNs);
     patientNs.addChild(patientAddressNs);
@@ -136,6 +152,7 @@ void IPatient::registerPatientTokens()
     patientNs.addChild(patientMetricsNs);
     patientNs.addChild(patientBioNs);
     patientNs.addChild(patientInsuranceNs);
+    patientNs.addChild(patientDrugsNs);
     if (tokenPool())
         tokenPool()->registerNamespace(patientNs);
 
