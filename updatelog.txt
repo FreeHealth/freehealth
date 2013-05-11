@@ -18,6 +18,11 @@ FreeMedForms
     * New settings for the patient selector (patient navigation history, new patient default values)
     * When loading a textual file inside a text editor of a patient file, all tokens are replaced (patient tokens, user tokens)
     * Full patient file exportation to HTML/PDF
+    * Adding a new preferences for prescription printing
+      * 'Automatically sort the drugs before printing'
+      * 'Include current patient biometrics' like weight/height/creatinine to the prescription print
+  * Build process
+    * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
     * Allow you to manage html print mask for any items of the forms (MedForms or Item)
       * See French AGGIR for an example (global mask, aggir mask)
@@ -32,10 +37,11 @@ FreeMedForms
     * Corrected: identity widget read-only mode
     * Corrected: running form scripts when inserting new sub-forms
     * Corrected: some data were lost in episode manager
+    * Corrected: patient birthday calculation
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
-    * Improving the french posologic sentence
     * Corrected: Xml exchange-out file now handles the printed PDF files
+    * Improved: default posologic sentence (for the old and the new token manager)
     * Commandline params
       * weight/weightunit are now grouped in weightingrams
       * height/heightunit are now grouped in heightincentimeters
