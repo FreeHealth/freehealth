@@ -856,6 +856,7 @@ bool FormPlaceHolder::saveCurrentEpisode()
  */
 bool FormPlaceHolder::removeCurrentEpisode()
 {
+#ifdef WITH_EPISODE_REMOVAL
     // message box
     bool yes = Utils::yesNoMessageBox(tr("Remove the current episode"),
                                       tr("You can not completely destroy an episode, "
@@ -876,6 +877,9 @@ bool FormPlaceHolder::removeCurrentEpisode()
     d->ui->formDataMapper->setEnabled(false);
     Q_EMIT actionsEnabledStateChanged();
     return ok;
+#else
+    return false;
+#endif
 }
 
 /**

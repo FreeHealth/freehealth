@@ -52,6 +52,19 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000604
 # DEFINES *= WITH_LOGINANDPASSWORD_CACHING
 
 # ***************************************************************************************
+# *                                 Allow episode removal                               *
+# ***************************************************************************************
+# * By default this feature is activated. When activated, users can remove episode if   *
+# they are user validated.                                                              *
+# ***************************************************************************************
+# * We suggest to activate this feature as it does not lead to data lose (all removed   *
+# * episodes are still stored in the database and can be reactivated with a simple code *
+# * adaptation.                                                                         *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+ DEFINES *= WITH_EPISODE_REMOVAL
+
+# ***************************************************************************************
 # *                                   Cheque printing                                   *
 # ***************************************************************************************
 # * By default this feature is activated. When activated, users can print cheques.      *

@@ -271,6 +271,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                   QKeySequence::UnknownKey, false);
     connect(aRenewEpisode, SIGNAL(triggered()), this, SLOT(onRenewEpisodeRequested()));
 
+#ifdef WITH_EPISODE_REMOVAL
     aRemoveEpisode = createAction(this, "aRemoveEpisode", Core::Constants::ICONREMOVE,
                                   Constants::A_REMOVEEPISODE,
                                   ctx,
@@ -279,6 +280,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                   0, "",
                                   QKeySequence::UnknownKey, false);
     connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
+#endif
 
     aTakeScreenshot = createAction(this, "aTakeScreenshot", Core::Constants::ICONTAKESCREENSHOT,
                                    Constants::A_TAKESCREENSHOT,
@@ -422,9 +424,11 @@ void FormActionHandler::onRenewEpisodeRequested()
 
 void FormActionHandler::onRemoveEpisodeRequested()
 {
+#ifdef WITH_EPISODE_REMOVAL
     if (m_CurrentView) {
         m_CurrentView->removeCurrentEpisode();
     }
+#endif
 }
 
 void FormActionHandler::onTakeScreenshotRequested()

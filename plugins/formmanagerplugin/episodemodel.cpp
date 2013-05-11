@@ -680,6 +680,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
 /** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+#ifdef WITH_EPISODE_REMOVAL
     if (d->_readOnly)
         return false;
 
@@ -691,6 +692,9 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     d->_sqlModel->blockSignals(false);
     endRemoveRows();
     return true;
+#else
+    return false;
+#endif
 }
 
 /** Remove all the recorded episode in the model/base */
@@ -758,6 +762,7 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 /** Remove the episode \e index, and return the error state */
 bool EpisodeModel::removeEpisode(const QModelIndex &index)
 {
+#ifdef WITH_EPISODE_REMOVAL
     if (!index.isValid())
         return false;
     beginResetModel();
@@ -768,6 +773,9 @@ bool EpisodeModel::removeEpisode(const QModelIndex &index)
     endResetModel();
     // TODO: add a trace in the episode db
     return ok;
+#else
+    return false;
+#endif
 }
 
 /**
