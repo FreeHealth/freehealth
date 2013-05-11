@@ -95,6 +95,12 @@ QVariant PrescriptionToken::value() const
         return mealTime(v.toInt());
     } else {
         switch (_ref) {
+        case Prescription::IntakesIntervalFullString:
+        {
+            const QVariant &interval = _model->data(_model->index(_row, Prescription::IntakesIntervalOfTime));
+            const QVariant &scheme = _model->data(_model->index(_row, Prescription::IntakesIntervalSchemeIndex));
+            return QString("%1 %2").arg(interval.toInt()).arg(period(scheme.toInt()));
+        }
         case Prescription::IntakesIntervalSchemeIndex:
         {
             const QVariant &v = _model->data(_model->index(_row, _ref));
