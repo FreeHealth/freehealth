@@ -7,6 +7,7 @@ FreeMedForms
     * French AGGIR printing massively improved
     * Massively improved print and export mask of complete forms and some sub-forms
   * FreeMedForms
+    * First release with the new token manager: PadTools
     * Adding a status bar at the top right corner of the patient bar
     * Manage episode validation
     * Allow the renewal of episode (in one click)
