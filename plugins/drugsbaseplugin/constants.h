@@ -64,6 +64,7 @@ namespace Constants {
 
     const char * const  S_PRINTDUPLICATAS        = "DrugsWidget/PrintDuplicatas";
     const char * const  S_AUTOSORT_ON_PRINTING   = "DrugsWidget/PrintAutoSort";
+    const char * const  S_ADD_BIOMETRICS_ON_PRINTS = "DrugsWidget/PrintAddBiometrics";
 
     // DEFAULTS SETTINGS
     const char * const  S_DEF_WATEMARKHTML           = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p align=\"center\"  style=\" font-family:'Lucida Grande'; font-size:12pt; font-weight:bold; font-style:normal; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">Duplicata ne permettant pas la d&eacute;livrance des m&eacute;dicaments</span></p>\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">A adresser &agrave; votre centre de S&eacute;curit&eacute; Sociale.</span></p></body></html>";              /*!< \brief Default value for settings. */

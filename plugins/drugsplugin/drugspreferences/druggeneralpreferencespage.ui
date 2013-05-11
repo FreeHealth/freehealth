@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>499</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -301,6 +301,13 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="autoSort">
+        <property name="text">
+         <string>Automatically sort drugs on printing</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="printDuplicataCheck">
         <property name="text">
@@ -308,10 +315,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="autoSort">
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="addBio">
         <property name="text">
-         <string>Automatically sort drugs on printing</string>
+         <string>Add current patient biometrics to every prescription printing</string>
         </property>
        </widget>
       </item>

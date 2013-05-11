@@ -105,6 +105,7 @@ void DrugGeneralPreferencesWidget::setDataToUi()
     lineBreakCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS).toBool());
     printDuplicataCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTDUPLICATAS).toBool());
     autoSort->setChecked(settings()->value(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING).toBool());
+    addBio->setChecked(settings()->value(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS).toBool());
 }
 
 void DrugGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -150,6 +151,7 @@ void DrugGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
     s->setValue(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING, autoSort->isChecked());
+    s->setValue(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS, addBio->isChecked());
 }
 
 void DrugGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -170,6 +172,7 @@ void DrugGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
     s->setValue(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING, true);
+    s->setValue(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS, true);
 }
 
 void DrugGeneralPreferencesWidget::changeEvent(QEvent *e)
@@ -246,6 +249,7 @@ void DrugGeneralOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
     defaultvalues.insert(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING, true);
+    defaultvalues.insert(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
