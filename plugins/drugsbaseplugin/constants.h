@@ -35,8 +35,8 @@
 /**
  * \file constants.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 02 Mar 2011
+ * \version 0.8.6
+ * \date 12 May 2013
 */
 
 namespace DrugsDB {
