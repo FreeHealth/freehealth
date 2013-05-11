@@ -75,6 +75,8 @@
 #include <QDomDocument>
 #include <QDir>
 
+enum { WarnDrugPosologicSentencePlainTextCache = false };
+
 namespace {
     const char * const ALD_BACKGROUND_COLOR               = "khaki";
     const char * const FORTEST_BACKGROUND_COLOR           = "#EFEFEF";
@@ -147,14 +149,20 @@ public:
         if (column == Constants::Drug::Denomination) {
             if (textualdrug) {
                 textualdrug->setDenomination(value.toString());
+                if (WarnDrugPosologicSentencePlainTextCache)
+                    LOG_FOR(q, QString("[DrugCache] Removing textual drug %1").arg(drug->brandName()));
                 _plainTextPosologicSentenceCache.remove(drug);
                 return true;
             } else {
                 return false;
             }
         }
-        if ((column < Constants::Prescription::Id) || (column > Constants::Prescription::MaxParam))
+        if ((column < Constants::Prescription::Id) || (column > Constants::Prescription::MaxParam)) {
+            if (WarnDrugPosologicSentencePlainTextCache)
+                LOG_FOR(q, QString("[DrugCache] Removing drug %1").arg(drug->brandName()));
+            _plainTextPosologicSentenceCache.remove(drug);
             return false;
+        }
         if (column == Constants::Prescription::Note) {
             drug->setPrescriptionValue(column, value.toString().replace("[","{").replace("]","}"));
         } else {
@@ -164,6 +172,8 @@ public:
 //            }
             drug->setPrescriptionValue(column, value);
         }
+        if (WarnDrugPosologicSentencePlainTextCache)
+            LOG_FOR(q, QString("[DrugCache] Removing %1").arg(drug->brandName()));
         _plainTextPosologicSentenceCache.remove(drug);
         return true;
     }
@@ -697,6 +707,8 @@ void DrugsModel::clearDrugsList()
     d->m_InteractionQuery->clearDrugsList();
     d->m_InteractionResult->clear();
     d->_plainTextPosologicSentenceCache.clear();
+    if (WarnDrugPosologicSentencePlainTextCache)
+        LOG(QString("[DrugCache] Clear cache"));
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     d->m_IsDirty = true;
     endResetModel();
@@ -890,6 +902,8 @@ int DrugsModel::removeDrug(const QVariant &drugId)
     foreach(IDrug * drug, d->m_DrugsList) {
         if (drug->drugId() == drugId) {
             d->m_DrugsList.removeAt(d->m_DrugsList.indexOf(drug));
+            if (WarnDrugPosologicSentencePlainTextCache)
+                LOG(QString("[DrugCache] Removing drug %1 (drug removed)").arg(drug->brandName()));
             d->_plainTextPosologicSentenceCache.remove(drug);
             delete drug;
             ++i;
@@ -910,6 +924,8 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
+    if (WarnDrugPosologicSentencePlainTextCache)
+        LOG(QString("[DrugCache] Removing drug %1 (drug removed)").arg(d->m_DrugsList.last()->brandName()));
     d->_plainTextPosologicSentenceCache.remove(d->m_DrugsList.last());
     delete d->m_DrugsList.last();
     d->m_DrugsList.removeLast();
@@ -945,12 +961,23 @@ void DrugsModel::checkInteractions()
  */
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)
 {
-    if (!toHtml && d->_plainTextPosologicSentenceCache.contains(drug))
+    if (!toHtml && d->_plainTextPosologicSentenceCache.contains(drug)) {
+        if (WarnDrugPosologicSentencePlainTextCache)
+            LOG(QString("[DrugCache] Returning from cache: drug %1; \n  %2")
+                .arg(drug->brandName())
+                .arg(d->_plainTextPosologicSentenceCache.value(drug)));
         return d->_plainTextPosologicSentenceCache.value(drug);
+    }
     QString result;
     result = drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
-    if (!toHtml)
+    if (!toHtml &&
+            mask != Constants::PROTOCOL_AUTOMATIC_LABEL_MASK) {
+        if (WarnDrugPosologicSentencePlainTextCache)
+            LOG(QString("[DrugCache] Inserting in cache: drug %1; \n  %2")
+                .arg(drug->brandName())
+                .arg(result));
         d->_plainTextPosologicSentenceCache.insert(drug, result);
+    }
     return result;
 }
 
