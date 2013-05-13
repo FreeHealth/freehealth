@@ -78,6 +78,7 @@ public:
         foreach(FormMain *form, emptyRootForms) {
             foreach(FormItem *item, form->flattenedFormItemChildren()) {
                 if (item->itemData()) {
+                    item->itemData()->clear();
                     switch (item->patientDataRepresentation()) {
                     case -1:
                         break;
@@ -210,7 +211,7 @@ PatientFormItemDataWrapper::~PatientFormItemDataWrapper()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool PatientFormItemDataWrapper::initialize()
 {
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()), Qt::DirectConnection);
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     onCurrentPatientChanged();
     return true;
 }
@@ -247,8 +248,6 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
         role = Form::IFormItemData::PrintRole;
         break;
     } // switch
-
-    qWarning() << ref << role;
 
     foreach(Form::FormMain *main, forms) {
         foreach(Form::FormItem *item, main->flattenedFormItemChildren()) {
