@@ -68,6 +68,8 @@ public:
     void setVersion(OutputType type);
     OutputType outputType() const;
 
+    // TODO: add more options for the user : select papers, print duplicatas...
+
     bool sortBeforePrinting() const;
     bool addLineBreakBetweenEachDrugs() const;
     bool printDuplicates() const;

@@ -117,6 +117,7 @@ public:
             QString tmp;
             // Get full prescription sentence in HTML
             tmp = job.drugsModel()->data(job.drugsModel()->index(drugIndex, Constants::Prescription::ToHtml)).toString();
+            tmp = tmp.replace("\n", "<br/>");
             // Add a line break
             if (job.addLineBreakBetweenEachDrugs())
                 tmp += "<span style=\"font-size:4pt\"><br /></span>";
@@ -487,9 +488,6 @@ bool PrescriptionPrinter::print(const PrescriptionPrinterJob &job)
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-
-    // TODO: add more options for the user : select papers, print duplicatas...
-
     return p->print(d->prescriptionToHtml(job),
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     job.printDuplicates());
