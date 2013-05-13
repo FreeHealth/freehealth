@@ -47,8 +47,6 @@
 
 #include <texteditorplugin/texteditor.h>
 
-#include <printerplugin/printer.h>
-
 #include <QPixmap>
 
 using namespace DrugsWidget;
