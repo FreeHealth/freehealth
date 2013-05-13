@@ -1,0 +1,89 @@
+<html>
+<body>
+<style type="text/css">
+.__patienFileSynth__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__patienFileSynth__formContent .formHeader {
+}
+
+.__patienFileSynth__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__patienFileSynth__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__patienFileSynth__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__patienFileSynth__formContent .episodeLabel {
+  font-weight: 600;
+  font-size: 14pt;
+  padding: 5px;
+}
+
+.__patienFileSynth__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__patienFileSynth__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+</style>
+
+<div class="__patienFileSynth__formContent">
+
+<div class="formHeader">
+<div class="formLabel">[[EpisodeFormLabel]]</div>
+</div> <!-- formHeader -->
+
+<div class="episodeHeader">
+<!--
+    [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+-->
+  [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+  [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+</div> <!-- episodeHeader -->
+
+<div class="episodeContent">
+
+<style type="text/css">
+.__patienFileSynth__formContent .synthContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__patienFileSynth__formContent .textSynth {
+  margin-left: 1em;
+  /* border: solid 1px black; */
+}
+
+</style>
+
+  <div class="synthContainer">
+    {{<div id="textSynth">~Form.Data.Item.Subs::Tools::SynthesisHelper::PatientFile::Textual::Content~</div>}}
+  </div> <!-- synthContainer -->
+
+</div> <!-- episodeContent -->
+
+</div> <!-- __patienFileSynth__formContent -->
+
+</body>
+</html>
