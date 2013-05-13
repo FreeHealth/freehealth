@@ -47,9 +47,6 @@
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/prescriptiontoken.h>
 
-#include <printerplugin/printer.h>
-#include <printerplugin/constants.h>
-
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
