@@ -83,7 +83,7 @@ public:
     PmhCategoryModel *m_PmhCategoryModel;
     PmhWidgetManager *m_PmhWidgetManager;
     PmhContentExporter *m_Exporter;
-    QList<PmhTokens> m_Tokens;
+    QList<PmhTokens *> m_Tokens;
 };
 
 } // namespace Internal
