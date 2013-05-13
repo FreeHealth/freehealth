@@ -24,48 +24,72 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef MAILUTILS_INTERNAL_MAILACCOUNTWIDGET_H
-#define MAILUTILS_INTERNAL_MAILACCOUNTWIDGET_H
+#ifndef MAILUTILS_MAILACCOUNTMODEL_H
+#define MAILUTILS_MAILACCOUNTMODEL_H
 
-#include <QObject>
+#include "../mail_exporter.h"
+#include <QAbstractTableModel>
 
 /**
- * \file mailaccountwidget.h
+ * \file mailaccountmodel.h
  * \author Eric Maeker
  * \version 0.9.0
  * \date 13 May 2013
 */
 
 namespace Mail {
-namespace Internal {
-class MailAccountModel;
 class MailAccount;
-class MailAccountWidgetPrivate;
+namespace Internal {
+class MailAccountModelPrivate;
 
-class MailAccountWidget : public QObject
+class MAIL_EXPORT MailAccountModel : public QAbstractTableModel
 {
     Q_OBJECT
     
 public:
-    explicit MailAccountWidget(QObject *parent = 0);
-    ~MailAccountWidget();
+    enum ColumnDataRepresentation {
+        Label = 0,
+        Uid,
+        UserFullName,
+        UserAddress,
+        UserLog,
+        UserPass,
+        HostName,
+        HostPort,
+        HostUseSsl,
+        HostUseStartTsl,
+        LastSucceededConnection,
+        ColumnCount
+
+    };
+    explicit MailAccountModel(QObject *parent = 0);
+    ~MailAccountModel();
     bool initialize();
 
-    void setMailAccount(const MailAccount &account);
+    int columnCount(const QModelIndex &) const {return ColumnCount;}
+    int rowCount(const QModelIndex &) const;
 
-    void setMailAccountModel(MailAccountModel *model);
-    void setMailAccountModelIndex(MailAccountModel *model);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
+
+    void addMailAccount(const MailAccount &account);
+    void addMailAccounts(const QList<MailAccount> &accounts);
+
+    const QList<MailAccount> &mailAccounts() const;
 
 Q_SIGNALS:
     
 public Q_SLOTS:
     
 private:
-    MailAccountWidgetPrivate *d;
+    Internal::MailAccountModelPrivate *d;
 };
 
 } // namespace Internal
 } // namespace Mail
 
-#endif // MAILUTILS_INTERNAL_MAILACCOUNTWIDGET_H
+#endif  // MAILUTILS_MAILACCOUNTMODEL_H
 

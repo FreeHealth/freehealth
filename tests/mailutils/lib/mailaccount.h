@@ -27,7 +27,7 @@
 #ifndef MAILUTILS_MAILACCOUNT_H
 #define MAILUTILS_MAILACCOUNT_H
 
-#include "../mail_exporter.h"
+#include "mail_exporter.h"
 #include <QString>
 #include <QDateTime>
 

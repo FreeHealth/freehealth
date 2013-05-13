@@ -34,6 +34,7 @@
 
 #include "mailaccount.h"
 
+//#include <utils/log.h>
 //#include <translationutils/constants.h>
 
 #include <QDomDocument>
@@ -239,7 +240,7 @@ bool MailAccount::fromXml(const QString &xmlContent)
     QString err;
     int l, c;
     if (!doc.setContent(xmlContent, &err, &l, &c)) {
-        LOG_ERROR_FOR("MailAccount", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
+//        LOG_ERROR_FOR("MailAccount", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xmlContent));
         return false;
     }
     QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
@@ -292,6 +293,7 @@ MailAccount &MailAccount::operator=(const MailAccount &other)
     d->_usesSsl = other.d->_usesSsl;
     d->_usesStartTls = other.d->_usesStartTls;
     d->_lastConnection = other.d->_lastConnection;
+    return *this;
 }
 
 bool MailAccount::operator==(const MailAccount &other)

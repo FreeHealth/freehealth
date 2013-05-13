@@ -14,11 +14,12 @@ HEADERS +=\
     src/qxtpop3reply_p.h \
     src/qxtpop3statreply.h \
     src/qxtpop3listreply.h \
-    src/qxtpop3retrreply.h
+    src/qxtpop3retrreply.h \
+
 
 SOURCES +=\
     src/qxtmailattachment.cpp \
     src/qxtmailmessage.cpp \
     src/qxtsmtp.cpp \
     src/qxtpop3.cpp \
-    src/qxtpop3reply.cpp
+    src/qxtpop3reply.cpp \

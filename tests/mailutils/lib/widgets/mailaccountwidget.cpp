@@ -29,6 +29,7 @@
  */
 
 #include "mailaccountwidget.h"
+#include "../models/mailaccountmodel.h"
 
 //#include <translationutils/constants.h>
 
@@ -53,7 +54,7 @@ public:
     }
     
 public:
-    // Put your data here
+    MailAccountModel *_accountModel;
     
 private:
     MailAccountWidget *q;
@@ -83,3 +84,17 @@ bool MailAccountWidget::initialize()
     return true;
 }
 
+void MailAccountWidget::setMailAccount(const MailAccount &account)
+{
+
+}
+
+void MailAccountWidget::setMailAccountModel(MailAccountModel *model)
+{
+    d->_accountModel = model;
+}
+
+void MailAccountWidget::setMailAccountModelIndex(MailAccountModel *model)
+{
+
+}
