@@ -68,6 +68,8 @@ namespace Constants {
 
     // DEFAULTS SETTINGS
     const char * const  S_DEF_WATEMARKHTML           = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p align=\"center\"  style=\" font-family:'Lucida Grande'; font-size:12pt; font-weight:bold; font-style:normal; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">Duplicata ne permettant pas la d&eacute;livrance des m&eacute;dicaments</span></p>\n<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#9c9c9c;\">A adresser &agrave; votre centre de S&eacute;curit&eacute; Sociale.</span></p></body></html>";              /*!< \brief Default value for settings. */
+
+    // OBSOLETE
     const char * const  S_DEF_USERHEADER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n"
                                                                  "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tr>\n"
                                                                  "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-weight:600;\">Dr TRUCMUCHE Bidulle</span>\n<br /><span style=\" font-weight:600;\">M&eacute;decine Machin</span><\n<br /><br /><span style=\" font-size:10pt; font-style:italic;\">Ancien Assistant des h&ocirc;pitaux</span>\n<br /><span style=\" font-size:10pt; font-style:italic;\">Tous mes dipl&ocirc;mes</span>\n<br />----------<br />\n<span style=\" font-size:10pt;\">Mes Consultations sur rendez-vous</span>\n<br />----------\n<br /><span style=\" font-size:10pt; font-style:italic;\">Mon ADELI</span></p></td>\n<td width=\"33%\"></td>\n"
@@ -85,6 +87,7 @@ namespace Constants {
     const char * const S_DEF_PRESCRIPTION_TOKENFILE_1_LANG = "/textfiles/prescription/oldtokenstyle_%1.html";
 #endif
 
+    // OBSOLETE
     const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants",
                                                                               "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">"
                                                                               "[[DRUG]]</span><span style=\"font-style:italic;\">[<br />"
@@ -93,6 +96,7 @@ namespace Constants {
                                                                               "Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />"
                                                                               "Minimum interval between intakes: [MIN_INTERVAL]][<br />"
                                                                               "[NOTE] ]</span></p>");
+    // OBSOLETE
     const char * const S_DEF_PRESCRIPTIONFORMATTING_PLAIN = QT_TRANSLATE_NOOP("mfDrugsConstants",
                                                                               "[[DRUG]][\n"
                                                                               "Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][\n"
@@ -103,24 +107,6 @@ namespace Constants {
 
     const char * const S_ALD_PRE_HTML               = "DrugsWidget/print/ALDPreHtml";             /*!< \brief Key for settings. */
     const char * const S_ALD_POST_HTML              = "DrugsWidget/print/ALDPostHtml";            /*!< \brief Key for settings. */
-    const char * const S_DEF_ALD_PRE_HTML           =
-            "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n"
-            "  <tr>\n"
-            "    <td width=\"100%\">\n"
-            "      <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions relatives au traitement de l'affection de longue dur&eacute;e reconnue (liste ou hors liste)<br />(AFFECTION EXON&Eacute;RANTE)</span>\n"
-            "      </p>\n"
-            "    </td>\n"
-            "  </tr>\n"
-            "</table>\n";
-    const char * const S_DEF_ALD_POST_HTML          =
-            "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-style:solid;\">\n"
-            "  <tr>\n"
-            "    <td width=\"100%\">\n"
-            "      <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-family:Arial;font-size:10pt;color:black;\">Prescriptions SANS RAPPORT avec l'affection de longue dur&eacute;e<br />(MALADIES INTERCURRENTES)</span>\n"
-            "      </p>\n"
-            "    </td>\n"
-            "  </tr>\n"
-            "</table>\n";
     const char * const S_PRINTLINEBREAKBETWEENDRUGS = "DrugsWidget/print/prescription/LineBreakBetweenDrugsWhenPrinting";      /*!< \brief Key for settings. */
 
     const char * const S_SELECTOR_SHOWDRUGSNAME   = "DrugsWidget/Selector/ShowDrugsName";
@@ -176,79 +162,6 @@ namespace Constants {
     // HELP PAGES
     const char * const  H_INTERACTION_SYNTHETISOR = "interactions.html";
 
-    // MASKS
-    const char * const  PROTOCOL_AUTOMATIC_LABEL_MASK =
-#ifdef WITH_PAD
-            "{{~Prescription.Protocol.Quantity.Full~}}"//  "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]]"
-            "{{~Prescription.Protocol.DailyScheme.Repeated~}}{{ ~Prescription.Protocol.Meal~}}{{ ~Prescription.Protocol.Period.Full~}}"   // "[ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]]"
-            "{{; ~Prescription.Protocol.Duration.Full~}}{{~Prescription.Protocol.DailyScheme.Distributed~}}"   // "[; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]"
-            ;
-#else
-            "[[Q_FROM]][-[Q_TO]] [[Q_SCHEME]]"
-            "[ [REPEATED_DAILY_SCHEME]][ [MEAL]][ [[PERIOD] / ][PERIOD_SCHEME]]"
-            "[; [D_FROM]][-[D_TO]][ [D_SCHEME]][; [DISTRIBUTED_DAILY_SCHEME]]"
-            ;
-#endif
-
-    const char * const  ENCODEDHTML_FULLDOC_MEDINTUX =
-            "<html>\n"
-            "<head>\n"
-            "  <meta name=\"qrichtext\" content=\"1\" />\n"
-            "  <meta name=\"charset\" content=\"UTF-8\" />\n"
-            "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
-            "  <title>FreeDiams: Prescription</title>\n"
-            "  <style type=\"text/css\">\n"
-            "    A:link {text-decoration: none}\n"
-            "    A:visited {text-decoration: none}\n"
-            "    A:active {text-decoration: none}\n"
-            "    A:hover {text-decoration: none;}\n"
-            "  </style>\n"
-            "</head>\n"
-            "<body style=\"font-family:Arial;font-size:12pt\">\n\n"
-            "<a style=\"text-decoration:none\" href=\"{ENCODEDPRESCRIPTION}\">\n"
-            "{PRESCRIPTION}\n"
-            "</a>\n\n"
-            "</body>\n"
-            "</html>\n";
-
-        const char * const  ENCODEDHTML_FULLDOC_NON_MEDINTUX =
-                "<html>\n"
-                "<head>\n"
-                "  <meta name=\"qrichtext\" content=\"1\" />\n"
-                "  <meta name=\"charset\" content=\"UTF-8\" />\n"
-                "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
-                "  <meta name=\"prescription\" content=\"{ENCODEDPRESCRIPTION}\" />\n"
-                "  <title>FreeDiams: Prescription</title>\n"
-                "  <style type=\"text/css\">\n"
-                "    A:link {text-decoration: none}\n"
-                "    A:visited {text-decoration: none}\n"
-                "    A:active {text-decoration: none}\n"
-                "    A:hover {text-decoration: none;}\n"
-                "  </style>\n"
-                "</head>\n"
-                "<body style=\"font-family:Arial;font-size:12pt\">\n\n"
-                "{PRESCRIPTION}\n"
-                "</body>\n"
-                "</html>\n";
-
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX =
-            "<table border=0>\n"
-            " <tr>\n"
-            "   <td>\n"
-            "     <ol>\n"
-            "{FULLPRESCRIPTION}\n"
-            "     </ol>\n"
-            "   </td>\n"
-            " </tr>\n"
-            "</table>\n"
-            ;
-
-    const char * const  ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX =
-            "<ol style=\"font-size:10pt;font-weight:bold;\">\n"
-            "{FULLPRESCRIPTION}\n"
-            "</ol>\n";
-
-    const char * const  ENCODEDHTML_FREEDIAMSTAG = "FreeDiamsEncodedPrescription:";          /*!< \brief Default tag prepend to serialized prescription when saving. */
 
     // LIST OF KNOWN LABORATORY FOR INN PRESCRIPTION
     const QStringList LABOS = QStringList()
