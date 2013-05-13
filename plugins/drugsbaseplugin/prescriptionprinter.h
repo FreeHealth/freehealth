@@ -27,6 +27,7 @@
 #ifndef DRUGSBASE_INTERNAL_PRESCRIPTIONPRINTER_H
 #define DRUGSBASE_INTERNAL_PRESCRIPTIONPRINTER_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <QObject>
 #include <QString>
 
@@ -42,8 +43,9 @@ class DrugsModel;
 namespace Internal {
 class PrescriptionPrinterPrivate;
 class PrescriptionPrinterJobPrivate;
+} // namespace Internal
 
-class PrescriptionPrinterJob
+class DRUGSBASE_EXPORT PrescriptionPrinterJob
 {
 public:
     enum OutputType {
@@ -52,10 +54,10 @@ public:
         DrugsNameOnly
     };
 
-    enum DrugLine {
-        HtmlOrderedList = 0,    // uses <ol><li></li></ol>
-        HtmlDiv                 // uses <div style="prescriptionLine">...</div>
-    };
+    // enum DrugLine {
+    //     HtmlOrderedList = 0,    // uses <ol><li></li></ol>
+    //     HtmlDiv                 // uses <div style="prescriptionLine">...</div>
+    // };
 
     PrescriptionPrinterJob();
     ~PrescriptionPrinterJob();
@@ -80,10 +82,10 @@ public:
     DrugsModel *drugsModel() const;
 
 private:
-    PrescriptionPrinterJobPrivate *d;
+    Internal::PrescriptionPrinterJobPrivate *d;
 };
 
-class PrescriptionPrinter : public QObject
+class DRUGSBASE_EXPORT PrescriptionPrinter : public QObject
 {
     Q_OBJECT
     
@@ -94,15 +96,18 @@ public:
     
     QString prescriptionToHtml(DrugsModel *model);
     QString prescriptionToHtml(const PrescriptionPrinterJob &job);
+
+    bool print(DrugsModel *model);
     bool print(const PrescriptionPrinterJob &job);
     
+    void printPreview(DrugsDB::DrugsModel *model);
+
 public Q_SLOTS:
     
 private:
-    PrescriptionPrinterPrivate *d;
+    Internal::PrescriptionPrinterPrivate *d;
 };
 
-} // namespace Internal
 } // namespace DrugsDB
 
 #endif // DRUGSBASE_INTERNAL_PRESCRIPTIONPRINTER_H

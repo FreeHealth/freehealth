@@ -51,6 +51,7 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/idrugengine.h>
+#include <drugsbaseplugin/prescriptionprinter.h>
 
 //#include <drugsbaseplugin/interactionmanager.h>
 //#include <drugsbaseplugin/engines/allergyengine.h>
@@ -105,6 +106,7 @@ static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginM
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
+static inline DrugsDB::PrescriptionPrinter &prescriptionPrinter() {return DrugsDB::DrugBaseCore::instance().prescriptionPrinter();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -606,16 +608,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
             commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux", Qt::CaseInsensitive) == 0) {
             if (format=="html_xml" || format=="html") {
-                tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
+                DrugsDB::PrescriptionPrinterJob job;
+                job.readSettings();
+                job.addXmlExtraData(extraData);
+                job.setDrugsModel(drugModel());
+                tmp = prescriptionPrinter().prescriptionToHtml(job);
                 tmp.replace("font-weight:bold;", "font-weight:600;");
-                Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+                Utils::saveStringToFile(tmp, exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
             }
         } else {
             if (format=="html_xml" || format=="html") {
-                tmp = drugsIo().prescriptionToHtml(drugModel(), extraData, DrugsDB::DrugsIO::MedinTuxVersion);
-                Utils::saveStringToFile(Utils::htmlReplaceAccents(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
+                DrugsDB::PrescriptionPrinterJob job;
+                job.readSettings();
+                job.addXmlExtraData(extraData);
+                job.setDrugsModel(drugModel());
+                tmp = prescriptionPrinter().prescriptionToHtml(job);
+                Utils::saveStringToFile(tmp, exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
             }

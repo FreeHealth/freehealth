@@ -44,6 +44,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
+#include <drugsbaseplugin/prescriptionprinter.h>
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
@@ -85,6 +86,7 @@ using namespace DrugsWidget;
 using namespace Internal;
 
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::PrescriptionPrinter &prescriptionPrinter() {return DrugsDB::DrugBaseCore::instance().prescriptionPrinter();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
@@ -205,7 +207,7 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
     if (withValues && dontPrintEmptyValues(m_FormItem) && m_PrescriptionModel->rowCount()==0) {
         return QString();
     }
-    QString html = Utils::htmlBodyContent(drugsIo().prescriptionToHtml(m_PrescriptionModel));
+    QString html = Utils::htmlBodyContent(prescriptionPrinter().prescriptionToHtml(m_PrescriptionModel));
     html = Utils::htmlRemoveLinkTags(html);
     return QString("<table width=100% border=1 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
                    "<thead>"
@@ -295,7 +297,7 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
 
     if (role == Form::IFormItemData::PrintRole) {
         DrugsDB::DrugsModel *model = m_Widget->m_PrescriptionModel;
-        QString html = drugsIo().prescriptionToHtml(model);
+        QString html = prescriptionPrinter().prescriptionToHtml(model);
         QString css = Utils::htmlTakeAllCssContent(html);
         html = Utils::htmlBodyContent(html);
         html = Utils::htmlRemoveLinkTags(html);

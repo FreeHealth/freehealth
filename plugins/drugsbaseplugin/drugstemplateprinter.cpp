@@ -28,6 +28,7 @@
 #include "drugbasecore.h"
 #include "drugsmodel.h"
 #include "drugsio.h"
+#include "prescriptionprinter.h"
 
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
@@ -41,6 +42,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
+static inline DrugsDB::PrescriptionPrinter &prescriptionPrinter() {return DrugsDB::DrugBaseCore::instance().prescriptionPrinter();}
 
 QString DrugsTemplatePrinter::mimeType() const
 {
@@ -104,7 +106,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
                                   "on a single order?"), "",
                                QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
-            bool ok = drugsIo().printPrescription(model);
+            bool ok = prescriptionPrinter().print(model);
             delete model;
             model = 0;
             return ok;
@@ -116,7 +118,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     model->clearDrugsList();
     foreach(const Templates::ITemplate *t, iTemplates) {
         drugsIo().prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
-        drugsIo().printPrescription(model);
+        prescriptionPrinter().print(model);
     }
     delete model;
     model = 0;

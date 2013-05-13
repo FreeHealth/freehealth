@@ -47,6 +47,7 @@ class ProtocolsBase;
 class InteractionManager;
 class VersionUpdater;
 class DrugsIO;
+class PrescriptionPrinter;
 
 namespace Internal {
 class DrugsBasePlugin;
@@ -71,6 +72,7 @@ public:
     InteractionManager &interactionManager() const;
     VersionUpdater &versionUpdater() const;
     DrugsIO &drugsIo() const;
+    PrescriptionPrinter &prescriptionPrinter() const;
 
 private Q_SLOTS:
     void postCoreInitialization();

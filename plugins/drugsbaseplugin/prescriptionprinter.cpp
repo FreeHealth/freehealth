@@ -120,8 +120,8 @@ public:
             // Add a line break
             if (job.addLineBreakBetweenEachDrugs())
                 tmp += "<span style=\"font-size:4pt\"><br /></span>";
-            // tmp.prepend("<li>");
-            // tmp.append("</li>");
+             tmp.prepend("<li>");
+             tmp.append("</li>");
             tmp += "\n\n";
             return tmp;
         }
@@ -130,8 +130,8 @@ public:
             QString tmp;
             tmp = job.drugsModel()->index(drugIndex, Constants::Drug::Denomination).data().toString();
             tmp = tmp.mid(0, tmp.indexOf(","));
-            // tmp.prepend("<li>");
-            // tmp.append("</li>");
+             tmp.prepend("<li>");
+             tmp.append("</li>");
             tmp += "\n\n";
             return tmp;
         }
@@ -177,7 +177,9 @@ public:
                     "<table border=0>\n"
                     " <tr>\n"
                     "   <td>\n"
-                    "%1"
+                    "<ol>\n"
+                    "%1\n"
+                    "</ol>\n"
                     "   </td>\n"
                     " </tr>\n"
                     "</table>\n"
@@ -259,7 +261,7 @@ public:
         body += getHtmlHeader(xmlBase64);
         body += "<body>\n";
         body += css;
-        body += QString("\n\n<a href=%1%2>\n\n").arg(Constants::ENCODEDHTML_FREEDIAMSTAG).arg(xmlBase64);
+        body += QString("\n\n<a href=%1%2 style=\"color:black\">\n\n").arg(Constants::ENCODEDHTML_FREEDIAMSTAG).arg(xmlBase64);
         body += job.patientBiometricsToHtml();
 
         if (!aldLines.isEmpty()) {
@@ -465,6 +467,20 @@ QString PrescriptionPrinter::prescriptionToHtml(const PrescriptionPrinterJob &jo
  * the HTML drug posologic sentence from the user settings.\n
  * The XML encoded prescription is added inside the HTML code.\n
 */
+bool PrescriptionPrinter::print(DrugsModel *model)
+{
+    PrescriptionPrinterJob job;
+    job.readSettings();
+    job.setDrugsModel(model);
+    return print(job);
+}
+
+/**
+ * \brief Transform prescription to a readable HTML output.
+ * All items of the prescription are translated to HTML using the token manager and
+ * the HTML drug posologic sentence from the user settings.\n
+ * The XML encoded prescription is added inside the HTML code.\n
+*/
 bool PrescriptionPrinter::print(const PrescriptionPrinterJob &job)
 {
     // Create a printing job
@@ -479,4 +495,33 @@ bool PrescriptionPrinter::print(const PrescriptionPrinterJob &job)
     return p->print(d->prescriptionToHtml(job),
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     job.printDuplicates());
+}
+
+/**
+ * Creates a print preview dialog with the prescription
+ * from the DrugsDB::DrugsModel \e model
+*/
+void PrescriptionPrinter::printPreview(DrugsDB::DrugsModel *model)
+{
+    PrescriptionPrinterJob job;
+    job.readSettings();
+    job.setDrugsModel(model);
+
+    Core::IDocumentPrinter *p = printer();
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
+
+    // TODO: add EPISODE_DATE token for FMF
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    // TODO: add more options for the user: select papers, print duplicatas...
+    QString html = d->prescriptionToHtml(job);
+    QString css = Utils::htmlTakeAllCssContent(html);
+    html = Utils::htmlBodyContent(html);
+    html = Utils::htmlRemoveLinkTags(html);
+    html.prepend(css);
+    p->printPreview(html,
+             Core::IDocumentPrinter::Papers_Prescription_User,
+             settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }

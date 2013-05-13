@@ -861,201 +861,201 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *drugModel, const QString &fi
     return true;
 }
 
-/**
- * \brief Transform prescription to a readable HTML output.
- * All items of the prescription are translated to HTML using the token manager and
- * the HTML drug posologic sentence in the user settings.\n
- * Prescription is automatically sorted.\n
- * The XML encoded prescription is added inside the HTML code.\n
-*/
-QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *drugModel, const QString &xmlExtraData, int version)
-{
-    Q_ASSERT(drugModel);
-    // clean the model (sort it, hide testing drugs)
-    if (drugModel->rowCount() <= 0)
-        return QString();
+///**
+// * \brief Transform prescription to a readable HTML output.
+// * All items of the prescription are translated to HTML using the token manager and
+// * the HTML drug posologic sentence in the user settings.\n
+// * Prescription is automatically sorted.\n
+// * The XML encoded prescription is added inside the HTML code.\n
+//*/
+//QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *drugModel, const QString &xmlExtraData, int version)
+//{
+//    Q_ASSERT(drugModel);
+//    // clean the model (sort it, hide testing drugs)
+//    if (drugModel->rowCount() <= 0)
+//        return QString();
 
-    // keep trace of actual state of the model, then hide testing drugs
-    bool testingDrugsVisible = drugModel->testingDrugsAreVisible();
-    drugModel->showTestingDrugs(false);
-    // sort
-    if (settings()->value(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING).toBool())
-        drugModel->sort(0);
+//    // keep trace of actual state of the model, then hide testing drugs
+//    bool testingDrugsVisible = drugModel->testingDrugsAreVisible();
+//    drugModel->showTestingDrugs(false);
+//    // sort
+//    if (settings()->value(DrugsDB::Constants::S_AUTOSORT_ON_PRINTING).toBool())
+//        drugModel->sort(0);
 
-    // Get patient bio(metrics / logy) usefull for the prescription
-    QStringList bio;
-    if (settings()->value(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS).toBool()) {
-        if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()
-                && patient()->data(Core::IPatient::WeightInGrams).toDouble() > 0.) {
-            bio << QString("%1: %2 %3")
-                   .arg(tkTr(Trans::Constants::WEIGHT))
-                   .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 100, 'f', 2))
-                   .arg(tkTr(Trans::Constants::KILOGRAM_S));
-        }
-        if (!patient()->data(Core::IPatient::HeightInCentimeters).toString().isEmpty()
-                && patient()->data(Core::IPatient::HeightInCentimeters).toDouble() > 0.) {
-            bio << QString("%1: %2 %3")
-                   .arg(tkTr(Trans::Constants::HEIGHT))
-                   .arg(QString::number(patient()->data(Core::IPatient::HeightInCentimeters).toDouble(), 'f', 2))
-                   .arg(tkTr(Trans::Constants::CENTIMETER_S));
-        }
-        if (!patient()->data(Core::IPatient::CreatinClearance).toString().isEmpty()
-                && !patient()->data(Core::IPatient::CreatinClearanceUnit).toString().isEmpty()) {
-            bio << tkTr(Trans::Constants::CREATININ_CLEARANCE) + ": " + patient()->data(Core::IPatient::CreatinClearance).toString() + " " + patient()->data(Core::IPatient::CreatinClearanceUnit).toString();
-        }
-    }
-    QString ALD, nonALD;
-    QString tmp;
-    bool lineBreak = settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool();
-    // Add drugs
-    int i;
-    switch (version)
-    {
-    case NormalVersion:
-    case MedinTuxVersion :
-    {
-        QString css;
-        for(i=0; i < drugModel->rowCount(); ++i) {
-            // Get full prescription sentence in HTML
-            tmp = "<li>" + drugModel->data(drugModel->index(i, Prescription::ToHtml)).toString();
+//    // Get patient bio(metrics / logy) usefull for the prescription
+//    QStringList bio;
+//    if (settings()->value(DrugsDB::Constants::S_ADD_BIOMETRICS_ON_PRINTS).toBool()) {
+//        if (!patient()->data(Core::IPatient::WeightInGrams).toString().isEmpty()
+//                && patient()->data(Core::IPatient::WeightInGrams).toDouble() > 0.) {
+//            bio << QString("%1: %2 %3")
+//                   .arg(tkTr(Trans::Constants::WEIGHT))
+//                   .arg(QString::number(patient()->data(Core::IPatient::WeightInGrams).toDouble() / 100, 'f', 2))
+//                   .arg(tkTr(Trans::Constants::KILOGRAM_S));
+//        }
+//        if (!patient()->data(Core::IPatient::HeightInCentimeters).toString().isEmpty()
+//                && patient()->data(Core::IPatient::HeightInCentimeters).toDouble() > 0.) {
+//            bio << QString("%1: %2 %3")
+//                   .arg(tkTr(Trans::Constants::HEIGHT))
+//                   .arg(QString::number(patient()->data(Core::IPatient::HeightInCentimeters).toDouble(), 'f', 2))
+//                   .arg(tkTr(Trans::Constants::CENTIMETER_S));
+//        }
+//        if (!patient()->data(Core::IPatient::CreatinClearance).toString().isEmpty()
+//                && !patient()->data(Core::IPatient::CreatinClearanceUnit).toString().isEmpty()) {
+//            bio << tkTr(Trans::Constants::CREATININ_CLEARANCE) + ": " + patient()->data(Core::IPatient::CreatinClearance).toString() + " " + patient()->data(Core::IPatient::CreatinClearanceUnit).toString();
+//        }
+//    }
+//    QString ALD, nonALD;
+//    QString tmp;
+//    bool lineBreak = settings()->value(S_PRINTLINEBREAKBETWEENDRUGS).toBool();
+//    // Add drugs
+//    int i;
+//    switch (version)
+//    {
+//    case NormalVersion:
+//    case MedinTuxVersion :
+//    {
+//        QString css;
+//        for(i=0; i < drugModel->rowCount(); ++i) {
+//            // Get full prescription sentence in HTML
+//            tmp = "<li>" + drugModel->data(drugModel->index(i, Prescription::ToHtml)).toString();
 
-            // Extract CSS
-            if (css.isEmpty())
-                css = Utils::htmlTakeAllCssContent(tmp);
-            else
-                Utils::htmlTakeAllCssContent(tmp);
+//            // Extract CSS
+//            if (css.isEmpty())
+//                css = Utils::htmlTakeAllCssContent(tmp);
+//            else
+//                Utils::htmlTakeAllCssContent(tmp);
 
-            // Add a line break
-            if (lineBreak)
-                tmp += "<span style=\"font-size:4pt\"><br /></span>";
-            tmp += "</li>\n\n";
+//            // Add a line break
+//            if (lineBreak)
+//                tmp += "<span style=\"font-size:4pt\"><br /></span>";
+//            tmp += "</li>\n\n";
 
-            // Sort drugs according to their IsALD value
-            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
-                ALD += tmp;
-            } else {
-                nonALD += tmp;
-            }
+//            // Sort drugs according to their IsALD value
+//            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
+//                ALD += tmp;
+//            } else {
+//                nonALD += tmp;
+//            }
 
-            tmp.clear();
-        }
-        // Reinject CSS content is ALD && nonALD
-        if (!ALD.isEmpty())
-            ALD.prepend(css);
-        if (!nonALD.isEmpty())
-            nonALD.prepend(css);
-        break;
-    }
-    case SimpleVersion :
-    {
-        QHash<QString, QString> tokens_value;
-        for(i=0; i < drugModel->rowCount(); ++i) {
-            tokens_value.insert("DRUG", drugModel->index(i, Drug::Denomination).data().toString());
-            tokens_value.insert("Q_FROM", drugModel->index(i, Prescription::IntakesFrom).data().toString());
-            tokens_value.insert("Q_TO", drugModel->index(i, Prescription::IntakesTo).data().toString());
-            tokens_value.insert("Q_SCHEME", drugModel->index(i, Prescription::IntakesScheme).data().toString());
-            // Manage Daily Scheme See DailySchemeModel::setSerializedContent
-            DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-            day->setSerializedContent(drugModel->index(i, Prescription::SerializedDailyScheme).data().toString());
-            QString d = day->humanReadableDistributedDailyScheme();
-            if (d.isEmpty())
-                d = day->humanReadableRepeatedDailyScheme();
-            tokens_value.insert("DAILY_SCHEME", d);
-            tmp = "<li>[[DRUG]], [[Q_FROM]][ - [Q_TO]][ [Q_SCHEME]][ [DAILY_SCHEME]]";
-            Utils::replaceTokens(tmp, tokens_value);
-            if (lineBreak)
-                tmp += "<span style=\"font-size:4pt\"><br /></span>";
-            tmp += "</li>";
-            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
-                ALD += tmp;
-            } else {
-                nonALD += tmp;
-            }
-            tmp.clear();
-        }
-        break;
-    }
-    case DrugsOnlyVersion :
-    {
-        for(i=0; i < drugModel->rowCount(); ++i) {
-            tmp = drugModel->index(i, Drug::Denomination).data().toString();
-            tmp = tmp.mid(0, tmp.indexOf(","));
-            tmp.prepend("<li>");
-            tmp.append("</li>\n");
-            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
-                ALD += tmp;
-            } else {
-                nonALD += tmp;
-            }
-            tmp.clear();
-        }
-        break;
-    }
-    } // switch
+//            tmp.clear();
+//        }
+//        // Reinject CSS content is ALD && nonALD
+//        if (!ALD.isEmpty())
+//            ALD.prepend(css);
+//        if (!nonALD.isEmpty())
+//            nonALD.prepend(css);
+//        break;
+//    }
+//    case SimpleVersion :
+//    {
+//        QHash<QString, QString> tokens_value;
+//        for(i=0; i < drugModel->rowCount(); ++i) {
+//            tokens_value.insert("DRUG", drugModel->index(i, Drug::Denomination).data().toString());
+//            tokens_value.insert("Q_FROM", drugModel->index(i, Prescription::IntakesFrom).data().toString());
+//            tokens_value.insert("Q_TO", drugModel->index(i, Prescription::IntakesTo).data().toString());
+//            tokens_value.insert("Q_SCHEME", drugModel->index(i, Prescription::IntakesScheme).data().toString());
+//            // Manage Daily Scheme See DailySchemeModel::setSerializedContent
+//            DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
+//            day->setSerializedContent(drugModel->index(i, Prescription::SerializedDailyScheme).data().toString());
+//            QString d = day->humanReadableDistributedDailyScheme();
+//            if (d.isEmpty())
+//                d = day->humanReadableRepeatedDailyScheme();
+//            tokens_value.insert("DAILY_SCHEME", d);
+//            tmp = "<li>[[DRUG]], [[Q_FROM]][ - [Q_TO]][ [Q_SCHEME]][ [DAILY_SCHEME]]";
+//            Utils::replaceTokens(tmp, tokens_value);
+//            if (lineBreak)
+//                tmp += "<span style=\"font-size:4pt\"><br /></span>";
+//            tmp += "</li>";
+//            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
+//                ALD += tmp;
+//            } else {
+//                nonALD += tmp;
+//            }
+//            tmp.clear();
+//        }
+//        break;
+//    }
+//    case DrugsOnlyVersion :
+//    {
+//        for(i=0; i < drugModel->rowCount(); ++i) {
+//            tmp = drugModel->index(i, Drug::Denomination).data().toString();
+//            tmp = tmp.mid(0, tmp.indexOf(","));
+//            tmp.prepend("<li>");
+//            tmp.append("</li>\n");
+//            if (drugModel->index(i, Prescription::IsALD).data().toBool()) {
+//                ALD += tmp;
+//            } else {
+//                nonALD += tmp;
+//            }
+//            tmp.clear();
+//        }
+//        break;
+//    }
+//    } // switch
 
-    if (!bio.isEmpty())
-        tmp += QString("<p>%1</p>").arg(bio.join("<br />"));
+//    if (!bio.isEmpty())
+//        tmp += QString("<p>%1</p>").arg(bio.join("<br />"));
 
-    if (!ALD.isEmpty()) {
-        // Add ALD Pre text - Keep only body content
-        QString aldPre = settings()->value(S_ALD_PRE_HTML).toString();
-        QString css = Utils::htmlTakeAllCssContent(aldPre);
-        aldPre = Utils::htmlBodyContent(aldPre);
-        aldPre.prepend(css);
-        tmp += "\n\n<!-- PRE ALD --> \n";
-        tmp += aldPre;
-        tmp += "\n<!-- PRE ALD END --> \n\n";
-        // Add drugs to the prescription
-        if (version==MedinTuxVersion)
-            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
-        else
-            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
-        // Add ALD Post text - Keep only body content
-        QString aldPost = settings()->value(S_ALD_POST_HTML).toString();
-        css = Utils::htmlTakeAllCssContent(aldPost);
-        aldPost = Utils::htmlBodyContent(aldPost);
-        aldPost.prepend(css);
-        // Add to the prescription
-        tmp += "\n\n<!-- POST ALD --> \n";
-        tmp += aldPost;
-        tmp += "\n<!-- POST ALD END --> \n\n";
-    }
-    if (!nonALD.isEmpty()) {
-        if (version==MedinTuxVersion)
-            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
-        else
-            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
-        // Keep only body content
-        QString css = Utils::htmlTakeAllCssContent(tmp);
-        tmp = Utils::htmlBodyContent(tmp);
-        tmp.prepend(css);
-    }
+//    if (!ALD.isEmpty()) {
+//        // Add ALD Pre text - Keep only body content
+//        QString aldPre = settings()->value(S_ALD_PRE_HTML).toString();
+//        QString css = Utils::htmlTakeAllCssContent(aldPre);
+//        aldPre = Utils::htmlBodyContent(aldPre);
+//        aldPre.prepend(css);
+//        tmp += "\n\n<!-- PRE ALD --> \n";
+//        tmp += aldPre;
+//        tmp += "\n<!-- PRE ALD END --> \n\n";
+//        // Add drugs to the prescription
+//        if (version==MedinTuxVersion)
+//            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
+//        else
+//            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", ALD);
+//        // Add ALD Post text - Keep only body content
+//        QString aldPost = settings()->value(S_ALD_POST_HTML).toString();
+//        css = Utils::htmlTakeAllCssContent(aldPost);
+//        aldPost = Utils::htmlBodyContent(aldPost);
+//        aldPost.prepend(css);
+//        // Add to the prescription
+//        tmp += "\n\n<!-- POST ALD --> \n";
+//        tmp += aldPost;
+//        tmp += "\n<!-- POST ALD END --> \n\n";
+//    }
+//    if (!nonALD.isEmpty()) {
+//        if (version==MedinTuxVersion)
+//            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
+//        else
+//            tmp += QString(ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX).replace("{FULLPRESCRIPTION}", nonALD);
+//        // Keep only body content
+//        QString css = Utils::htmlTakeAllCssContent(tmp);
+//        tmp = Utils::htmlBodyContent(tmp);
+//        tmp.prepend(css);
+//    }
 
-    // show all drugs (including testing to get the testing drugs)
-    drugModel->showTestingDrugs(testingDrugsVisible);
-    QString toReturn;
-    if (version==MedinTuxVersion)
-        toReturn = QString(ENCODEDHTML_FULLDOC_MEDINTUX);
-    else
-        toReturn = QString(ENCODEDHTML_FULLDOC_NON_MEDINTUX);
+//    // show all drugs (including testing to get the testing drugs)
+//    drugModel->showTestingDrugs(testingDrugsVisible);
+//    QString toReturn;
+//    if (version==MedinTuxVersion)
+//        toReturn = QString(ENCODEDHTML_FULLDOC_MEDINTUX);
+//    else
+//        toReturn = QString(ENCODEDHTML_FULLDOC_NON_MEDINTUX);
 
-    toReturn.replace("{GENERATOR}", qApp->applicationName());
-    toReturn.replace("{PRESCRIPTION}", tmp );
+//    toReturn.replace("{GENERATOR}", qApp->applicationName());
+//    toReturn.replace("{PRESCRIPTION}", tmp );
 
-    // add XML extraData
-    QString xmldPrescription = prescriptionToXml(drugModel, xmlExtraData);
+//    // add XML extraData
+//    QString xmldPrescription = prescriptionToXml(drugModel, xmlExtraData);
 
-    toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
-                     .arg(ENCODEDHTML_FREEDIAMSTAG)
-//                         .arg(QString(prescriptionToXml(m))));
-                     .arg(QString(xmldPrescription.toUtf8().toBase64())));
+//    toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
+//                     .arg(ENCODEDHTML_FREEDIAMSTAG)
+////                         .arg(QString(prescriptionToXml(m))));
+//                     .arg(QString(xmldPrescription.toUtf8().toBase64())));
 
-     // Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
+//     // Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
-    // return to the state of the model
-    drugModel->showTestingDrugs(testingDrugsVisible);
-    return toReturn;
-}
+//    // return to the state of the model
+//    drugModel->showTestingDrugs(testingDrugsVisible);
+//    return toReturn;
+//}
 
 /**
  * \brief Transform a prescription row (one drug) to a readable output.
@@ -1324,47 +1324,47 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraD
     }
 }
 
-/** \brief Print the prescription from the DrugsDB::DrugsModel \e model */
-bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
-{
-    Core::IDocumentPrinter *p = printer();
-    p->clearTokens();
-    QHash<QString, QVariant> tokens;
-    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
-    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    // TODO: add more options for the user : select papers, print duplicatas...
-    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
+///** \brief Print the prescription from the DrugsDB::DrugsModel \e model */
+//bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
+//{
+//    Core::IDocumentPrinter *p = printer();
+//    p->clearTokens();
+//    QHash<QString, QVariant> tokens;
+//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
+//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+//    // TODO: add more options for the user : select papers, print duplicatas...
+//    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
+////    QString css = Utils::htmlTakeAllCssContent(html);
+////    html = Utils::htmlBodyContent(html);
+//    html = Utils::htmlRemoveLinkTags(html);
+//    html = Utils::htmlReplaceAccents(html);
+////    html.prepend(css);
+//    return p->print(html,
+//                    Core::IDocumentPrinter::Papers_Prescription_User,
+//                    settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+//}
+
+///** \brief Creates a print preview dialog with the prescription from the DrugsDB::DrugsModel \e model */
+//void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
+//{
+//    Core::IDocumentPrinter *p = printer();
+//    p->clearTokens();
+//    QHash<QString, QVariant> tokens;
+//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
+
+//    // TODO: add EPISODE_DATE token for FMF
+//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+//    // TODO: add more options for the user: select papers, print duplicatas...
+//    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
 //    QString css = Utils::htmlTakeAllCssContent(html);
 //    html = Utils::htmlBodyContent(html);
-    html = Utils::htmlRemoveLinkTags(html);
-    html = Utils::htmlReplaceAccents(html);
+//    html = Utils::htmlRemoveLinkTags(html);
 //    html.prepend(css);
-    return p->print(html,
-                    Core::IDocumentPrinter::Papers_Prescription_User,
-                    settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-}
-
-/** \brief Creates a print preview dialog with the prescription from the DrugsDB::DrugsModel \e model */
-void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
-{
-    Core::IDocumentPrinter *p = printer();
-    p->clearTokens();
-    QHash<QString, QVariant> tokens;
-    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
-
-    // TODO: add EPISODE_DATE token for FMF
-    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-
-    // TODO: add more options for the user: select papers, print duplicatas...
-    QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
-    QString css = Utils::htmlTakeAllCssContent(html);
-    html = Utils::htmlBodyContent(html);
-    html = Utils::htmlRemoveLinkTags(html);
-    html.prepend(css);
-    p->printPreview(html,
-             Core::IDocumentPrinter::Papers_Prescription_User,
-             settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-}
+//    p->printPreview(html,
+//             Core::IDocumentPrinter::Papers_Prescription_User,
+//             settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
+//}
 
 /**
  * \brief For drag and drop functionnalities, defines the mimeTypes of DrugsIO.

@@ -43,6 +43,7 @@
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/drugsio.h>
+#include <drugsbaseplugin/prescriptionprinter.h>
 
 #include <coreplugin/icore.h>
 
@@ -70,7 +71,8 @@ public:
         m_ProtocolsBase(0),
         m_InteractionManager(0),
         m_VersionUpdater(0),
-        _drugsIo(0)
+        _drugsIo(0),
+        _prescriptionPrinter(0)
     {
     }
 
@@ -79,6 +81,9 @@ public:
         if (m_VersionUpdater)
             delete m_VersionUpdater;
         m_VersionUpdater = 0;
+        if (_prescriptionPrinter)
+            delete _prescriptionPrinter;
+        _prescriptionPrinter = 0;
     }
 
 private:
@@ -90,6 +95,7 @@ public:
     InteractionManager *m_InteractionManager;
     VersionUpdater *m_VersionUpdater;
     DrugsIO *_drugsIo;
+    PrescriptionPrinter *_prescriptionPrinter;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -113,6 +119,7 @@ DrugBaseCore::DrugBaseCore(QObject *parent) :
     d->m_ProtocolsBase = new ProtocolsBase(this);
     d->m_VersionUpdater = new VersionUpdater;
     d->_drugsIo = new DrugsIO(this);
+    d->_prescriptionPrinter = new PrescriptionPrinter();
 
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -133,6 +140,7 @@ bool DrugBaseCore::init()
     d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
     d->_drugsIo->init();
+    d->_prescriptionPrinter->initialize();
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     return true;
 }
@@ -171,6 +179,11 @@ VersionUpdater &DrugBaseCore::versionUpdater() const
 DrugsIO &DrugBaseCore::drugsIo() const
 {
     return *d->_drugsIo;
+}
+
+PrescriptionPrinter &DrugBaseCore::prescriptionPrinter() const
+{
+    return *d->_prescriptionPrinter;
 }
 
 void DrugBaseCore::onCoreDatabaseServerChanged()

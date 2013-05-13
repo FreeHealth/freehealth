@@ -36,7 +36,7 @@
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
-//#include <drugsbaseplugin/interactionmanager.h>
+#include <drugsbaseplugin/prescriptionprinter.h>
 
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
@@ -78,7 +78,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
-//static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
+static inline DrugsDB::PrescriptionPrinter &prescriptionPrinter() {return DrugsDB::DrugBaseCore::instance().prescriptionPrinter();}
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
@@ -261,13 +261,13 @@ void DrugsCentralWidget::changeFontTo(const QFont &font)
 /** Print the prescription */
 bool DrugsCentralWidget::printPrescription()
 {
-    return drugsIo().printPrescription(m_CurrentDrugModel);
+    return prescriptionPrinter().print(m_CurrentDrugModel);
 }
 
 /** Preview the printing of the prescription */
 void DrugsCentralWidget::printPreview()
 {
-    drugsIo().prescriptionPreview(m_CurrentDrugModel);
+    prescriptionPrinter().printPreview(m_CurrentDrugModel);
 }
 
 /** Create a template using the current prescription */
@@ -280,7 +280,7 @@ bool DrugsCentralWidget::createTemplate()
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
-    dlg.setTemplateSummary(drugsIo().prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
+    dlg.setTemplateSummary(prescriptionPrinter().prescriptionToHtml(m_CurrentDrugModel));
     dlg.setTemplateMimeTypes(drugsIo().prescriptionMimeTypes());
     dlg.setUserUuid(user()->uuid());
     dlg.exec();
