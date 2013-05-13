@@ -83,14 +83,7 @@ public:
     bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraData, const QString &toFileName = QString::null);
 
     QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null);
-//    QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null, int version = MedinTuxVersion);
     QString getDrugPrescription(DrugsDB::DrugsModel *model, const int drugRow, bool toHtml = false, const QString &mask = QString::null);
-
-//    bool printPrescription(DrugsDB::DrugsModel *model); //,
-//                                  const QString &header, const QString &footer,
-//                                  const QString &watermark, const int watermarkPresence,
-//                                  const Qt::AlignmentFlag watermarkAlign, bool withDuplicata);
-//    void prescriptionPreview(DrugsDB::DrugsModel *model);
 
     static QStringList prescriptionMimeTypes();
 

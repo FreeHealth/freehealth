@@ -292,8 +292,6 @@ public:
         // Return body
         return body;
     }
-
-public:
     
 private:
     PrescriptionPrinter *q;
