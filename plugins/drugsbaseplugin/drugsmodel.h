@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef MFDRUGSMODEL_H
-#define MFDRUGSMODEL_H
+#ifndef DRUGSBASE_DRUGSMODEL_H
+#define DRUGSBASE_DRUGSMODEL_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/dosagemodel.h>
@@ -164,8 +164,4 @@ private:
 
 }  // End DrugsDB
 
-//DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
-
-
-
-#endif
+#endif  // DRUGSBASE_DRUGSMODEL_H
