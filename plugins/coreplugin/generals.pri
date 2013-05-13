@@ -34,7 +34,7 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/ipatientbar.h \
     $${PWD}/ipatientdataexporter.h \
     $${PWD}/applicationautolock.h \
-    ../coreplugin/applicationversioninformation.h
+#    $${PWD}/applicationversioninformation.h
 
 SOURCES += \
     $${PWD}/icore.cpp \
@@ -51,4 +51,4 @@ SOURCES += \
     $${PWD}/id.cpp \
     $${PWD}/ipatientdataexporter.cpp \
     $${PWD}/applicationautolock.cpp \
-    ../coreplugin/applicationversioninformation.cpp
+#    $${PWD}/applicationversioninformation.cpp
