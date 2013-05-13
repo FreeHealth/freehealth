@@ -119,8 +119,7 @@ PrintDialog::PrintDialog(QWidget *parent) :
     ui->buttonBox->addButton(toolButton, QDialogButtonBox::ActionRole);
     connect(toolButton, SIGNAL(triggered(QAction*)), this, SLOT(toFile(QAction*)));
 
-//    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
-//    QPushButton *topdf = ui->buttonBox->addButton("PDF", QDialogButtonBox::ActionRole);
+    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
 }
 
 PrintDialog::~PrintDialog()
