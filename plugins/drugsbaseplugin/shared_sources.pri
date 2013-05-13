@@ -33,7 +33,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/druginteractioninformationquery.h \
     $${PWD}/iprescription.h \
     $${PWD}/prescriptiontoken.h \
-    $${PWD}/constants_html.h
+    $${PWD}/constants_html.h \
+    $${PWD}/prescriptionprinter.h
 
 
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
@@ -58,7 +59,8 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/druginteractionresult.cpp \
     $${PWD}/druginteractioninformationquery.cpp \
     $${PWD}/idruginteraction.cpp \
-    $${PWD}/prescriptiontoken.cpp
+    $${PWD}/prescriptiontoken.cpp \
+    $${PWD}/prescriptionprinter.cpp
 
 # include translations
 TRANSLATION_NAME = drugsbase
