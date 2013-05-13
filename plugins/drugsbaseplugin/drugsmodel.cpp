@@ -34,6 +34,8 @@
 
 #include "drugsmodel.h"
 
+#include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/constants_html.h>
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/protocolsbase.h>
@@ -43,7 +45,6 @@
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/interactionmanager.h>
-#include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>

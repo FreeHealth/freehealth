@@ -27,9 +27,10 @@
 #include "drugextrapreferences.h"
 
 #include <drugsplugin/constants.h>
+#include <drugsbaseplugin/constants_html.h>
+#include <drugsbaseplugin/idrug.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/drugselector.h>
-#include <drugsbaseplugin/idrug.h>
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>

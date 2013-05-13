@@ -44,15 +44,16 @@
 
 #include "dosagemodel.h"
 
+#include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/constants_html.h>
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
-#include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/idrug.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>

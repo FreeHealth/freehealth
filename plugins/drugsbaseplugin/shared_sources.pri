@@ -32,7 +32,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/idruginteractionalert.h \
     $${PWD}/druginteractioninformationquery.h \
     $${PWD}/iprescription.h \
-    $${PWD}/prescriptiontoken.h
+    $${PWD}/prescriptiontoken.h \
+    $${PWD}/constants_html.h
 
 
 SOURCES += $${PWD}/drugsbaseplugin.cpp \

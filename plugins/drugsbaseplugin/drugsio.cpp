@@ -35,10 +35,11 @@
 
 #include "drugsio.h"
 
+#include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/constants_html.h>
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/protocolsbase.h>
-#include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>
@@ -58,12 +59,12 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/ipadtools.h>
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_units.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/messagesender.h>
 #include <extensionsystem/pluginmanager.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_units.h>
 
 #include <QApplication>
 #include <QHash>
