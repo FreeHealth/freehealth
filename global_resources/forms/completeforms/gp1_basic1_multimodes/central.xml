@@ -26,9 +26,11 @@
         <updateversion from="0.8.2" to="0.8.4">
             <text lang="fr">
             Ajout des masques HTML d'exportation et d'impression plus modernes.
+            Ajout de la synthèse du dossier.
             </text>
             <text lang="en">
             Adding modern HTML export and print masks.
+            Adding patient file synthesis.
             </text>
         </updateversion>
         <updateversion from="0.8.0" to="0.8.2">
@@ -110,6 +112,8 @@
     </MedForm>
 
   </MedForm>
+
+  <file>__subForms__/generic/patientfilesynthesis/central.xml</file>
 
   <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
