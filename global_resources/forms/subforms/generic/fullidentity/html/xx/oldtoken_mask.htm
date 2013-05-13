@@ -1,0 +1,120 @@
+<html>
+<body>
+<style type="text/css">
+.__ident__formContent {
+  font-size: 12pt;
+  color: black;
+  border: 2px solid gray;
+}
+
+.__ident__formContent .formHeader {
+}
+
+.__ident__formContent .formLabel {
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: gray;/* #6d8526; #7f9a2c #6d8526 #A7C942*/
+  color: white;
+  padding: 2px;
+  text-align: center;
+}
+
+.__ident__formContent .episodeHeader {
+  margin: 0 2em 0 0;
+  padding: 0px;
+}
+
+.__ident__formContent .episodeContent {
+  margin-left: 3em;
+}
+
+.__ident__formContent .episodeLabel {
+  font-weight: 600;
+  font-size: 14pt;
+  padding: 5px;
+}
+
+.__ident__formContent .episodeUserCreator {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+.__ident__formContent .episodeUserDate {
+  font-size: 9pt;
+  color: gray;
+  margin-left: 1em;
+}
+
+</style>
+
+<div class="__ident__formContent">
+
+<div class="formHeader">
+<div class="formLabel">[[EpisodeFormLabel]]</div>
+</div> <!-- formHeader -->
+
+<div class="episodeHeader">
+<!--
+    [<div class="episodeLabel">[EpisodeUserLabel] </div> ]
+-->
+  [<span class="episodeUserCreator">[EpisodeUserName.createdBy]</span>]
+  [&nbsp;<span class="episodeUserDate">[EpisodeUserDate]</span>]
+</div> <!-- episodeHeader -->
+
+<div class="episodeContent">
+
+<style type="text/css">
+.__ident__formContent .identityContainer {
+  font-size: 12pt;
+  color: black;
+}
+
+.__ident__formContent .identityContainer #identName {
+  font-weight: 600;
+  font-size: 14pt;
+}
+
+.__ident__formContent .identityContainer #identDob {
+}
+
+.__ident__formContent .identityContainer #identAge {
+}
+
+.__ident__formContent .identityContainer #identAddress {
+}
+
+.__ident__formContent .contactContainer {
+  margin-top: 1em;
+  /* border: solid 1px black; */
+}
+
+</style>
+
+<div class="identityContainer">
+    <span id="identName">[[PATIENTFULLNAME]]</span><br />
+    <span id="identDob">Date of birth: [[PATIENTDATEOFBIRTH]]</span><br />
+    [<span id="identAge">Date of death: [PATIENTDATEOFDEATH]</span><br />]
+    <span id="identAddress">[[PATIENTFULLADDRESS]]</span><br />
+    <span id="identSocialNumber">Social number: [[SOCIALNUMBERS]] [Owned by: [SOCIALNUMBEROWNERNAME]][ [SOCIALNUMBEROWNERADDRESS]] </span>
+</div> <!-- identityContainer -->
+
+<div class="contactContainer">
+    [<span id="contactTels">Tels: [PATIENTTELS]</span><br />]
+    [<span id="contactMobile">Mobile: [PATIENTMOBILEPHONE]</span><br />]
+    [<span id="contactFaxes">Faxes: [PATIENTFAXES]</span><br />]
+    [<span id="contactMails">Mails: [PATIENTMAILS]</span><br />]
+</div> <!-- contactContainer -->
+
+<div class="profContainer">
+    [<span id="profession">[[Subs::Tools::Identity::ProfGroup::Profession.label]]: [Subs::Tools::Identity::ProfGroup::Profession]</span><br />]
+    [<span id="professionSite">[[Subs::Tools::Identity::ProfGroup::ProfessionSite.label]]: [Subs::Tools::Identity::ProfGroup::ProfessionSite]</span><br />]
+    [<span id="professionTels">[[Subs::Tools::Identity::ProfGroup::ProfessionTels.label]]: [Subs::Tools::Identity::ProfGroup::ProfessionTels]</span>]
+</div> <!-- profContainer -->
+
+</div> <!-- episodeContent -->
+
+</div> <!-- __ident__formContent -->
+
+</body>
+</html>
