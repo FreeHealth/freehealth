@@ -36,6 +36,7 @@
 #include <QDebug>
 
 using namespace Core;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace Core {
@@ -68,14 +69,12 @@ private:
 
 /*! Constructor of the Core::ApplicationVersionInformation class */
 ApplicationVersionInformation::ApplicationVersionInformation() :
-    QObject(parent),
     d(new ApplicationVersionInformationPrivate(this))
 {
     d->_currentVersion = PACKAGE_VERSION;
 }
 
 ApplicationVersionInformation::ApplicationVersionInformation(const ApplicationVersionInformation &copy) :
-    QObject(parent),
     d(new ApplicationVersionInformationPrivate(this))
 {
     // TODO: Copy all data of the private part
