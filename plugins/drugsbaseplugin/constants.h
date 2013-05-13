@@ -240,7 +240,8 @@ namespace Constants {
             "     </ol>\n"
             "   </td>\n"
             " </tr>\n"
-            "</table>\n";
+            "</table>\n"
+            ;
 
     const char * const  ENCODEDHTML_FULLPRESCRIPTION_NON_MEDINTUX =
             "<ol style=\"font-size:10pt;font-weight:bold;\">\n"

@@ -1052,7 +1052,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 //                         .arg(QString(prescriptionToXml(m))));
                      .arg(QString(xmldPrescription.toUtf8().toBase64())));
 
-    // Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
+     // Utils::saveStringToFile(toReturn, "/Users/eric/Desktop/essai.html");
 
     // return to the state of the model
     m->showTestingDrugs(testingDrugsVisible);
@@ -1336,10 +1336,11 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     // TODO: add more options for the user : select papers, print duplicatas...
     QString html = DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion);
-    QString css = Utils::htmlTakeAllCssContent(html);
-    html = Utils::htmlBodyContent(html);
+//    QString css = Utils::htmlTakeAllCssContent(html);
+//    html = Utils::htmlBodyContent(html);
     html = Utils::htmlRemoveLinkTags(html);
-    html.prepend(css);
+    html = Utils::htmlReplaceAccents(html);
+//    html.prepend(css);
     return p->print(html,
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
