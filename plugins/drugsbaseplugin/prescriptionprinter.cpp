@@ -69,6 +69,7 @@ class PrescriptionPrinterJobPrivate
 {
 public:
     PrescriptionPrinterJobPrivate(PrescriptionPrinterJob *parent) :
+        _uid(0),
         _drugsModel(0),
         _lineBreakBetweenDrugs(true),
         _sortOnPrinting(true),
@@ -78,7 +79,9 @@ public:
         q(parent)
     {
         Q_UNUSED(q);
-        _uid = Utils::createUid();
+        static int handle = 1;
+        _uid = handle;
+        ++handle;
     }
 
     ~PrescriptionPrinterJobPrivate()
@@ -86,10 +89,11 @@ public:
     }
 
 public:
+    int _uid;
     DrugsModel *_drugsModel;
     bool _lineBreakBetweenDrugs, _sortOnPrinting, _addPatientBiometrics, _printDuplicates;
     PrescriptionPrinterJob::OutputType _outputType;
-    QString _uid, _xmlExtraData;
+    QString _xmlExtraData;
 
 private:
     PrescriptionPrinterJob *q;
