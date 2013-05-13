@@ -76,8 +76,8 @@ private:
 
 
 /*! Constructor of the PMH::Internal::PmhTokens class */
-PmhTokens::PmhTokens(QObject *parent) :
-    Core::IToken(parent),
+PmhTokens::PmhTokens() :
+    Core::IToken(QString::null),
     d(new PmhTokensPrivate(this))
 {
 }
@@ -99,19 +99,19 @@ bool PmhTokens::initialize(PmhCategoryModel *model)
 
 void PmhTokens::setOutputType(OutputType type)
 {
-    _type = type;
+    d->_type = type;
     switch (type) {
     case HtmlOutput:
-        _uid = QString("%1.%2.%3")
-                .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
-                .arg("Pmhx")
-                .arg("Html");
+        setUid(QString("%1.%2.%3")
+               .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
+               .arg("Pmhx")
+               .arg("Html"));
         break;
     case PlainTextOutput:
-        _uid = QString("%1.%2.%3")
-                .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
-                .arg("Pmhx")
-                .arg("PlainText");
+        setUid(QString("%1.%2.%3")
+               .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
+               .arg("Pmhx")
+               .arg("PlainText"));
         break;
     }
 }
@@ -128,7 +128,7 @@ QString PmhTokens::tooltip() const
 
 QVariant PmhTokens::testValue() const
 {
-    return QString("Patient PMHx overview: " + _uid);
+    return QString("Patient PMHx overview: " + uid());
 }
 
 QVariant PmhTokens::value() const

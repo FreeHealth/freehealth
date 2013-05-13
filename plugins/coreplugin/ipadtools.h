@@ -83,6 +83,7 @@ public:
     virtual QString helpText() const;
     virtual QString shortHtmlDescription() const;
 
+    virtual void setUid(const QString &uid) {_uid=uid;}
     virtual void setTrContext(const QString &context) {_trContext=context;}
     virtual void setUntranslatedTooltip(const QString &tooltip) {_tooltip=tooltip;}
     virtual void setUntranslatedHelpText(const QString &help) {_help=help;}

@@ -44,15 +44,13 @@ class PmhTokensPrivate;
 
 class PmhTokens : public Core::IToken
 {
-    Q_OBJECT
-
 public:
     enum OutputType {
         HtmlOutput = 0,
         PlainTextOutput
     };
 
-    explicit PmhTokens(QObject *parent = 0);
+    PmhTokens();
     ~PmhTokens();
     bool initialize(PmhCategoryModel *model);
     

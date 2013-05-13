@@ -77,6 +77,12 @@ public:
         if (m_PmhCategoryModel)
             delete m_PmhCategoryModel;
         m_PmhCategoryModel = 0;
+#ifdef WITH_PAD
+        foreach(PmhTokens *tok, m_Tokens)
+            padTools()->tokenPool()->removeToken(tok);
+        qDeleteAll(m_Tokens);
+        m_Tokens.clear();
+#endif
     }
 
 public:
@@ -94,17 +100,17 @@ PmhCore::PmhCore(QObject *parent) :
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
 #ifdef WITH_PAD
-    PmhTokens *tok = new PmhTokens(this);
+    PmhTokens *tok = new PmhTokens;
     tok->setOutputType(PmhTokens::HtmlOutput);
     tok->initialize(d->m_PmhCategoryModel);
     d->m_Tokens << tok;
-    padTools().tokenPool()->addToken(tok);
+    padTools()->tokenPool()->addToken(tok);
 
-    tok = new PmhTokens(this);
+    tok = new PmhTokens;
     tok->setOutputType(PmhTokens::PlainTextOutput);
     tok->initialize(d->m_PmhCategoryModel);
     d->m_Tokens << tok;
-    padTools().tokenPool()->addToken(tok);
+    padTools()->tokenPool()->addToken(tok);
 #endif
     d->m_PmhWidgetManager = new PmhWidgetManager(this);
     d->m_Exporter = new PmhContentExporter(this);
