@@ -79,9 +79,15 @@ public:
     QVariant testValue() const {return uid();}
     QVariant value() const
     {
-        if (patient())
-            return patient()->data(_ref);
-        return QVariant();
+        if (!patient())
+            return QVariant();
+        const QVariant &val = patient()->data(_ref);
+        if (val.type() == QVariant::Date) {
+            return QLocale().toString(val.toDate(), QLocale::ShortFormat);
+        } else if (val.type() == QVariant::DateTime) {
+            return QLocale().toString(val.toDateTime(), QLocale::ShortFormat);
+        }
+        return val;
     }
 
     int sortIndex() const {return _ref;}
