@@ -763,15 +763,28 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 bool EpisodeModel::removeEpisode(const QModelIndex &index)
 {
 #ifdef WITH_EPISODE_REMOVAL
-    if (!index.isValid())
+    if (!index.isValid()) {
+        qWarning() << "EpisodeModel::removeEpisode: index is not valid";
         return false;
+    }
     beginResetModel();
+
+    // Get some information & log
     QModelIndex uidIndex = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
     const QVariant &uid = d->_sqlModel->data(uidIndex);
+    LOG(QString("Starting episode removal: %1").arg(uid.toString()));
+
+    // Remove episode from database
     bool ok = episodeBase()->removeEpisode(uid);
-    d->updateFilter(patient()->uuid());
-    endResetModel();
     // TODO: add a trace in the episode db
+
+    // Force SQL model filter update
+    d->_currentPatientUuid.clear();
+    d->updateFilter(patient()->uuid());
+
+    // Force reset
+    endResetModel();
+
     return ok;
 #else
     return false;
