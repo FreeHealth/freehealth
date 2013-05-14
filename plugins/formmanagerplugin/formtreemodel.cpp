@@ -43,6 +43,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
@@ -66,6 +67,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline Core::Translators *translators()  { return Core::ICore::instance()->translators(); }
 
 namespace {
 const int SUBFORM_TAG_ROLE = Qt::UserRole + 1;
@@ -254,6 +256,7 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
     d->_rootForms = collection.emptyRootForms();
     d->_modeUid = collection.modeUid();
     setColumnCount(MaxData);
+    connect(translators(), SIGNAL(languageChanged()), this, SLOT(updateFormCount()));
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
