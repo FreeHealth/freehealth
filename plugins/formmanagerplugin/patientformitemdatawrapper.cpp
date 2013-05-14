@@ -177,7 +177,7 @@ public:
         if (!model)
             return;
 
-        // reload the lastepisode from database
+        // Reload the lastepisode from database
         model->refreshFilter();
         model->populateFormWithLatestValidEpisodeContent();
     }
@@ -235,7 +235,6 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
     // TODO: improve this
     switch (ref) {
     case Core::IPatient::DrugsChronicTherapeuticsHtml:
-        qWarning() << "Core::IPatient::DrugsChronicTherapeuticsHtml" << ref << role;
         ref = Core::IPatient::DrugsChronicTherapeutics;
         role = Form::IFormItemData::PrintRole;
         break;
@@ -256,7 +255,7 @@ QVariant PatientFormItemDataWrapper::data(int ref, int role) const
                 continue;
             // TODO: if the lastepisode does not contain the data, try to find the lastest recorded value
             if (item->patientDataRepresentation() == ref) {
-                 qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
+//                 qWarning() << "PATIENTMODEL DATA" << item->itemData() << item->itemData()->data(ref, Form::IFormItemData::PatientModelRole);
                 return item->itemData()->data(ref, role);
             }
         }
@@ -308,6 +307,7 @@ void PatientFormItemDataWrapper::editingModelRowsInserted(const QModelIndex &par
 {
     Q_UNUSED(first);
     Q_UNUSED(last);
+    qWarning() << "PatientFormItemDataWrapper::editingModelRowsInserted" << parent << first << last;
     d->refreshInternals(parent);
 }
 
