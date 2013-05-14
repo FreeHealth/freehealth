@@ -717,6 +717,11 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
         EpisodeData *episode = episodes.at(i);
         if (!episode)
             continue;
+        // No patient uid? -> error
+        if (episode->data(EpisodeData::PatientUuid).toString().isEmpty()) {
+            LOG_ERROR("No patient Uid defined in episode. Episode not saved.");
+            continue;
+        }
         if (!episode->isModified())
             continue;
         if (episode->episodeId()==-1) {
