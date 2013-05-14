@@ -47,6 +47,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -336,6 +337,7 @@ void PmhModeWidget::createPmh()
         }
         dlg.setCategory(catModel()->categoryForIndex(item));
     }
+    Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
     dlg.exec();
 }
 
