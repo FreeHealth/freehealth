@@ -36,6 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipadtools.h>
 
+#include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
@@ -98,8 +99,16 @@ public:
 PmhCore::PmhCore(QObject *parent) :
     QObject(parent), d(new PmhCorePrivate)
 {
+    setObjectName("PmhCore");
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
+    d->m_PmhWidgetManager = new PmhWidgetManager(this);
+    d->m_Exporter = new PmhContentExporter(this);
+    d->m_Exporter->initialize();
+    pluginManager()->addObject(d->m_Exporter);
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
+
 #ifdef WITH_PAD
+    LOG("Creating PMHx tokens");
     PmhTokens *tok = new PmhTokens;
     tok->setOutputType(PmhTokens::HtmlOutput);
     tok->initialize(d->m_PmhCategoryModel);
@@ -112,11 +121,6 @@ PmhCore::PmhCore(QObject *parent) :
     d->m_Tokens << tok;
     padTools()->tokenPool()->addToken(tok);
 #endif
-    d->m_PmhWidgetManager = new PmhWidgetManager(this);
-    d->m_Exporter = new PmhContentExporter(this);
-    d->m_Exporter->initialize();
-    pluginManager()->addObject(d->m_Exporter);
-    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 PmhCore::~PmhCore()

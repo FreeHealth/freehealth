@@ -55,17 +55,11 @@ public:
     bool initialize(PmhCategoryModel *model);
     
     void setOutputType(OutputType type);
-    QString uid() const;
     QString tooltip() const;
 
     QVariant testValue() const;
     QVariant value() const;
 
-
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
 private:
     PmhTokensPrivate *d;
 };

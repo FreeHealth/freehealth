@@ -100,25 +100,22 @@ bool PmhTokens::initialize(PmhCategoryModel *model)
 void PmhTokens::setOutputType(OutputType type)
 {
     d->_type = type;
+    QString uid;
     switch (type) {
     case HtmlOutput:
-        setUid(QString("%1.%2.%3")
+        uid = QString("%1.%2.%3")
                .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
                .arg("Pmhx")
-               .arg("Html"));
+               .arg("Html");
         break;
     case PlainTextOutput:
-        setUid(QString("%1.%2.%3")
+        uid = QString("%1.%2.%3")
                .arg(Core::Constants::TOKEN_PATIENT_NAMESPACE)
                .arg("Pmhx")
-               .arg("PlainText"));
+               .arg("PlainText");
         break;
     }
-}
-
-QString PmhTokens::uid() const
-{
-    return d->_uid;
+    setUid(uid);
 }
 
 QString PmhTokens::tooltip() const
