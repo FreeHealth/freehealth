@@ -118,7 +118,6 @@ ButtonMenuPathItemView::ButtonMenuPathItemView(Form::FormItem *formItem, QWidget
         if (icon.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH, Qt::CaseInsensitive)) {
             icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
         }
-        qWarning() << "----------" << icon;
         _button->setIcon(QIcon(icon));
     }
     // Button label and tooltip
