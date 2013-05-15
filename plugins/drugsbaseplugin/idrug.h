@@ -299,7 +299,6 @@ public:
 
     QString compositionToXml();
     QString toHtml() const;
-    static QString drugsListToHtml(const QList<IDrug*> &list);
 
     static bool lessThan(const IDrug *drug1, const IDrug *drug2);
     bool equals(const IDrug *d);

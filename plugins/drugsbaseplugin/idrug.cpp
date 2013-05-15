@@ -994,46 +994,6 @@ QString IDrug::toHtml() const
     return msg;
 }
 
-QString IDrug::drugsListToHtml(const QList<IDrug*> &list)
-{
-    Q_UNUSED(list);
-    QString msg;
-
-    // TODO: code here
-//    // check interactions of the drugs list
-//    InteractionsManager *im = new_im();
-//    im->setDrugsList(list);
-//    im->checkInteractions();
-
-//    // title
-//    msg = QString("<html>\n"
-//                   "<head>\n"
-//                   "<meta http-equiv=\"content-type \" content=\"text/html; charset=UTF-8\">\n"
-//                   "<title>%1</title>\n"
-//                   "<meta name=\"author\" content=\"%1\">\n"
-//                   "<meta name=\"description\" content=\"%1\">\n"
-//                   "</head>\n"
-//                   "<body>\n")
-//            .arg(qApp->applicationName());
-
-//    msg += QString("<p align=center><b>%1</b></p>\n").arg(qApp->applicationName());
-
-//    foreach(IDrug* d, list) {
-//        msg += d->toHtml() + "<br>\n\n";
-//        if (im->drugHaveInteraction(d)) {
-//            const QList<DrugsInteraction *> &listDI = im->getInteractions(d);
-//            msg.append(im->listToHtml(listDI, true));
-
-//            msg.append("<br></ul>");
-//        }
-//    }
-//    msg.append("</body>\n</html>\n");
-
-//    delete im;
-
-    return msg;
-}
-
 /** \brief Used to sort the drugs list. */
 bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
 {
