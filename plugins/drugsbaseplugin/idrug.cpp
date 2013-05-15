@@ -210,7 +210,7 @@ void IComponent::linkWithComposition(IComponent *link)
     d_component->m_Link = link;
     if (!link->isLinkedWith(this)) {
         link->linkWithComposition(this);
-        bool active = (data(Nature).toString()=="FT");
+        bool active = (data(Nature).toString()=="SA"); // Nature can be SA: ActiveSubstance or FT: TherapeuticFraction
         setDataFromDb(IsActiveSubstance, active);
         link->setIsActiveSubstance(!active);
     }
@@ -947,7 +947,7 @@ QString IDrug::toHtml() const
 //        mark += " | " + value(Table_DRUGS, DRUGS_TYPE_MP).toString();
 //    }
 
-    msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+    msg += QString("<table border=0 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
@@ -973,14 +973,20 @@ QString IDrug::toHtml() const
 
     QString tmp = "";
     QString name;
+    // Add component to the HTML
     foreach(IComponent *compo, d_drug->m_Compo) {
-        if (compo->innName().isEmpty()) {
-            name = compo->moleculeName();
-        } else if (compo->mainInnCode() < 200000) {
-            // TODO: check this innAtcIds? instead of maininncode
-            name = compo->innName();
+        name = compo->moleculeName();
+        if (compo->isActiveSubstance()) {
+            name += "*";
+            if (!compo->innName().isEmpty()) {
+                name = QString("%1 [%2]").arg(compo->innName()).arg(tkTr(Trans::Constants::INN));
+            }
+        } else {
+            name += QString(" [%1]").arg(tkTr(Trans::Constants::THERAPEUTIC_FRACTION));
         }
-        tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(name).arg(compo->dosage());
+        tmp += QString("<tr><td>%1</td><td>%2</td></tr>")
+                .arg(name)
+                .arg(compo->dosage());
         name.clear();
     }
 
