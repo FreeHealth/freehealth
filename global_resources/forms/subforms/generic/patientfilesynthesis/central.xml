@@ -45,12 +45,22 @@
     <MedForm name="Textual">
       <label lang="xx">Textual synthesis</label>
       <label lang="fr">Synthèse textuelle</label>
-      <options>UseFormNameAsNameSpace</options>
       <icon>__theme__/patient.png</icon>
       <file type="htmlprintmask">./html/xx/padtools_textualsynthesis_mask.html</file>
       <file type="htmlexportmask">./html/xx/padtools_textualsynthesis_mask.html</file>
 
-      <Item type="texteditor" name="Content">
+      <Item name="Textual::FileNavigationButton" type="buttonmenupath">
+        <label lang="xx">Select a file (replacement with confirmation)</label>
+        <label lang="fr">Sélectionnez un fichier (replacement avec confirmation)</label>
+        <tooltip lang="xx">Select a file and the its content will be included in the text editor</tooltip>
+        <tooltip lang="fr">Sélectionnez un fichier et son contenu sera insérer dans l'éditeur de texte</tooltip>
+        <icon>__theme__/fileopen.png</icon>
+        <path>__userDocuments__</path>
+        <filter>*.htm;*.html;*.txt;*.rtf</filter>
+        <populate>Subs::Tools::SynthesisHelper::PatientFile::Textual::Content</populate>
+      </Item>
+
+      <Item type="texteditor" name="Textual::Content">
           <label lang="xx">Patient file synthesis textual content</label>
           <label lang="fr">Contenu textuel de la synthèse du dossier patient</label>
           <options>expanded</options>

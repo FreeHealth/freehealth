@@ -26,9 +26,15 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="de">Allgemeinmedizin</specialties>
     <updateinfo>
-      <updateversion from="0.8.2" to="0.8.3">
-        <text lang="fr">Ajout des masques d'impression et d'exportation.</text>
-        <text lang="en">Adding print and export masks.</text>
+      <updateversion from="0.8.2" to="0.8.4">
+        <text lang="fr">
+        Ajout des masques d'impression et d'exportation.
+        Ajout d'un bouton de navigation dans les fichiers pour les inclure rapidement dans l'éditeur de texte.
+        </text>
+        <text lang="en">
+        Adding print and export masks.
+        Adding a button to easily navigate through the local files and to quickly include them in a text editor.
+        </text>
       </updateversion>
       <updateversion from="0.8.0" to="0.8.2">
         <text lang="fr">Définition du jeux de documents utilisateur pour l'impression des prescriptions textuelles.</text>
@@ -171,11 +177,22 @@
       <file type="htmlprintmask">./html/xx/padtools_textual_prescription_mask.html</file>
       <file type="htmlexportmask">./html/xx/padtools_textual_prescription_mask.html</file>
 
+      <Item name="FileNavigationButton" type="buttonmenupath">
+        <label lang="xx">Select a file (replacement with confirmation)</label>
+        <label lang="fr">Sélectionnez un fichier (replacement avec confirmation)</label>
+        <tooltip lang="xx">Select a file and the its content will be included in the text editor</tooltip>
+        <tooltip lang="fr">Sélectionnez un fichier et son contenu sera insérer dans l'éditeur de texte</tooltip>
+        <icon>__theme__/fileopen.png</icon>
+        <path>__userDocuments__</path>
+        <filter>*.htm;*.html;*.txt;*.rtf</filter>
+        <populate>GP::Basic::Prescr::Text::Content</populate>
+      </Item>
+
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
         <label lang="de">Verschreibung</label>
-        <options>FullEditor;DontPrintEmptyValues;PrintDuplicata</options>
+        <options>FullEditor;DontPrintEmptyValues;PrintDuplicata;expanded</options>
         <papers>Prescription</papers>
       </Item>
     </MedForm>
