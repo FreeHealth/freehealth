@@ -698,6 +698,10 @@ p, li { white-space: pre-wrap; }
         <source>Automatically sort drugs on printing</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add current patient biometrics to every prescription printing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::Internal::DrugInfo</name>

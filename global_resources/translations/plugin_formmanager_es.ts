@@ -78,7 +78,7 @@
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="804"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="887"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,7 +86,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="968"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="1051"/>
         <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,27 +99,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1008"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1005"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1009"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1006"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1010"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1007"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1018"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1015"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1019"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1016"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,34 +184,34 @@ Do you really want to validate the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="860"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="861"/>
         <source>Remove the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="861"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="862"/>
         <source>You can not completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be included in the database.
 Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="870"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="871"/>
         <source>Episode (%1) from form (%2) removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="890"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="894"/>
         <source>Images (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="939"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="943"/>
         <source>Remove the current form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="940"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="944"/>
         <source>Trying to remove the sub-form:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2This modification will only affect the current patient:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Do you really want to remove the current sub-form?</source>
         <translation type="unfinished"></translation>
     </message>

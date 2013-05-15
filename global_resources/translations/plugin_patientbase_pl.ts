@@ -170,18 +170,18 @@
 <context>
     <name>Patients::Internal::PatientBasePlugin</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="113"/>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="151"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="111"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="130"/>
         <source>Initializing patients database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="121"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="139"/>
         <source>Initializing patient database...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="121"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="139"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>

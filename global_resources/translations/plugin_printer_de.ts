@@ -207,6 +207,22 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>File extra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save to PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save to HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML file (*.html *.htm)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Print::Internal::PrinterPreferences</name>

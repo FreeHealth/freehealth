@@ -159,10 +159,6 @@ Do you want to add them to the file?</source>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Drugs Prescription</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DrugsDB::DrugsModel</name>
@@ -328,6 +324,13 @@ Do you want to add them to the file?</source>
     </message>
 </context>
 <context>
+    <name>DrugsDB::PrescriptionPrinter</name>
+    <message>
+        <source>Drugs Prescription</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
         <source>Unable to create the Protocol database.</source>
@@ -373,6 +376,13 @@ Do you want to add them to the file?</source>
     </message>
     <message>
         <source>Available Dosages</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PrescriptionPrinter</name>
+    <message>
+        <source>Pharmaceutical Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

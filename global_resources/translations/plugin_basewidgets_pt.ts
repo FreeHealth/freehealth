@@ -4,12 +4,12 @@
 <context>
     <name>BaseFormData</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="534"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="538"/>
         <source>This episode is validated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="535"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="539"/>
         <source>You can not edit its content, neither remove it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,15 +91,29 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1272"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1276"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1273"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1277"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BaseWidgets::Internal::ButtonMenuPathItemView</name>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="187"/>
+        <source>Replace content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/basewidgetsplugin/buttonmenupathitemview.cpp" line="188"/>
+        <source>&lt;b&gt;You are about to replace the content of the form item %1 with the content of the file %2.&lt;/b&gt;
+Are you really sure you want to replace its content?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

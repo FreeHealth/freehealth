@@ -4,7 +4,7 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="162"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="173"/>
         <source>Made with %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -250,13 +250,34 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="266"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="104"/>
+        <source>File extra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="108"/>
+        <source>Save to PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="114"/>
+        <source>Save to HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="292"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="308"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="268"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="294"/>
         <source>PDF file (*.pdf)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="310"/>
+        <source>HTML file (*.html *.htm)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -415,7 +436,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="832"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="831"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>

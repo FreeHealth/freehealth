@@ -750,7 +750,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugGeneralOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="202"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferences.cpp" line="203"/>
         <source>Drug&apos;s general preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -866,12 +866,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="307"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="314"/>
         <source>Print duplicatas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="314"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="321"/>
+        <source>Add current patient biometrics to every prescription printing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/druggeneralpreferencespage.ui" line="307"/>
         <source>Automatically sort drugs on printing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1139,12 +1144,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="128"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="127"/>
         <source>Extras</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="130"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugextrapreferences.cpp" line="129"/>
         <source>Drug&apos;s extra preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1183,12 +1188,12 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsSelectorOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="146"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="144"/>
         <source>Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="148"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorpreferences.cpp" line="146"/>
         <source>Drug&apos;s selector preferences</source>
         <translation type="unfinished"></translation>
     </message>

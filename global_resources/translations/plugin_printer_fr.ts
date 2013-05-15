@@ -12,25 +12,28 @@
     <name>Print::Internal::PrintCorrectionPreferencesPage</name>
     <message>
         <source>Print correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Correction de l&apos;impression</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrintCorrectionPreferencesWidget</name>
     <message>
         <source>Print Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Préférences de l&apos;impression</translation>
     </message>
     <message>
         <source>Print the test page without the correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer une page test sans les corrections</translation>
     </message>
     <message>
         <source>Check print errors of your printer and correct them.&lt;br/&gt;
 First step, print the test page &lt;u&gt;without&lt;/u&gt; the correction and check the marks.&lt;br/&gt;
 Second step, inform the corrections.&lt;br/&gt;
 Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-check the marks.&lt;br/&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifiez les erreurs d&apos;impression de votre imprimante et corrigez les.&lt;br/&gt;
+Premièrement, imprimez la page test &lt;u&gt;sans&lt;/u&gt; les corrections et vérifiez les marques.&lt;br/&gt;
+Deuxièmement, renseignez les correctifs.&lt;br/&gt;
+Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections et re-vérifiez les marques.&lt;br/&gt;</translation>
     </message>
     <message>
         <source>Correction de l&apos;impression</source>
@@ -38,35 +41,35 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
     </message>
     <message>
         <source>To your right (-&gt;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers votre droite (-&gt;)</translation>
     </message>
     <message>
         <source>To your left (&lt;-)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vers votre gauche (&lt;-)</translation>
     </message>
     <message>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <source>Horizontal shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Décalage horizontal</translation>
     </message>
     <message>
         <source>Vertical shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Décalage vertical</translation>
     </message>
     <message>
         <source>Sens de l&apos;impression</source>
-        <translation type="unfinished"></translation>
+        <translation>Sens de l&apos;impression</translation>
     </message>
     <message>
         <source>Distance between horizontal line and the left border of the page, in millimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance entre les lignes horizontales et le bord gauche de la page en millimètres</translation>
     </message>
     <message>
         <source>Your print</source>
-        <translation type="unfinished"></translation>
+        <translation>Votre impression</translation>
     </message>
     <message>
         <source>Du haut vers le bas</source>
@@ -78,51 +81,51 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
     </message>
     <message>
         <source>To the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Depuis le haut de la page</translation>
     </message>
     <message>
         <source>To the bottom of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Depuis le bas de la page</translation>
     </message>
     <message>
         <source>Distance between vertical line and the top of the page, in millimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance entre les lignes verticales et le bord supérieur de la page en millimètres</translation>
     </message>
     <message>
         <source>Print the test page with the correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer une page test avec les corrections</translation>
     </message>
     <message>
         <source>Corrected printing. x shift=%1mm; y shift=%2mm</source>
-        <translation type="unfinished"></translation>
+        <translation>Correction d&apos;impression: décalage x = %1 mm ; décalage y = %2 mm</translation>
     </message>
     <message>
         <source>The above line should be at 50mm to the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne ci-dessus devrait être imprimée à 50 mm du bord supérieur de la page</translation>
     </message>
     <message>
         <source>The above line is printed at _____mm to the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne ci-dessus est imprimée à ______ mm du bord supérieur de la page</translation>
     </message>
     <message>
         <source>The line should be at 50mm to the left of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne devrait être imprimée à 50 mm du bord gauche de la page</translation>
     </message>
     <message>
         <source>The line is printed at _____mm to the left of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne est imprimée à _____ mm du bord gauche de la page</translation>
     </message>
     <message>
         <source>The square should be at 100mm, 270mm to the top left of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Le carré devrait être à 100 mm, 270mm du bord supérieur gauche de la page</translation>
     </message>
     <message>
         <source>The above line is printed at %1mm to the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne ci-dessus est imprimé à %1 mm du haut de la feuille</translation>
     </message>
     <message>
         <source>The line is printed at %1mm to the left of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>La ligne est imprimée à %1 mm du bord gauche de la page</translation>
     </message>
 </context>
 <context>
@@ -206,6 +209,22 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
     <message>
         <source>Pages:</source>
         <translation>Pages :</translation>
+    </message>
+    <message>
+        <source>File extra</source>
+        <translation>Savegarder</translation>
+    </message>
+    <message>
+        <source>Save to PDF</source>
+        <translation>Sauvegarder en PDF</translation>
+    </message>
+    <message>
+        <source>Save to HTML</source>
+        <translation>Sauvegarder en HTML</translation>
+    </message>
+    <message>
+        <source>HTML file (*.html *.htm)</source>
+        <translation>Fichier HTML (*.html *.htm)</translation>
     </message>
 </context>
 <context>

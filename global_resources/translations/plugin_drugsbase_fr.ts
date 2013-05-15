@@ -167,10 +167,6 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
     </message>
-    <message>
-        <source>Drugs Prescription</source>
-        <translation>Prescription Medicamenteuse</translation>
-    </message>
 </context>
 <context>
     <name>DrugsDB::DrugsModel</name>
@@ -336,6 +332,13 @@ Voulez-vous les sauvegarder aussi ?</translation>
     </message>
 </context>
 <context>
+    <name>DrugsDB::PrescriptionPrinter</name>
+    <message>
+        <source>Drugs Prescription</source>
+        <translation>Prescription Medicamenteuse</translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
         <source>Unable to create the Protocol database.</source>
@@ -382,6 +385,13 @@ Voulez-vous les sauvegarder aussi ?</translation>
     <message>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
+    </message>
+</context>
+<context>
+    <name>PrescriptionPrinter</name>
+    <message>
+        <source>Pharmaceutical Drugs Prescription</source>
+        <translation>Prescription médicamenteuse</translation>
     </message>
 </context>
 <context>
@@ -454,7 +464,8 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
     <message>
         <source>This token namespace contains all prescription&apos;s&apos; related tokens.
 It includes the drug brand name and all the items of your protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cet espace de nommage contient toutes les étiquettes relatives aux prescriptions.
+Il inclut le nom des médicaments et l&apos;ensemble des données du protocole.</translation>
     </message>
     <message>
         <source>Drug brand name</source>

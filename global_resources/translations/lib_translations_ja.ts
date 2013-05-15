@@ -1206,106 +1206,126 @@ Place: %2</source>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="40"/>
-        <source>ATC</source>
+        <source>INN prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="41"/>
-        <source>intake(s)</source>
+        <source>ATC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="42"/>
-        <source>View synthetic interactions</source>
+        <source>intake(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="43"/>
-        <source>Allergy to %1</source>
+        <source>View synthetic interactions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="44"/>
-        <source>Intolerance to %1</source>
+        <source>Allergy to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="45"/>
-        <source>No known allergies / intolerances</source>
+        <source>Drugs allergies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="46"/>
-        <source>Known allergies</source>
+        <source>Intolerance to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
-        <source>Known intolerances</source>
+        <source>Drugs intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
-        <source>Refill %1 time(s)</source>
+        <source>No known allergies / intolerances</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="49"/>
+        <source>Known allergies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="50"/>
+        <source>Known intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="51"/>
-        <source>Interaction</source>
+        <source>Refill %1 time(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="52"/>
-        <source>Take into account</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="53"/>
-        <source>Discouraged</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="54"/>
-        <source>Contraindication</source>
+        <source>Therapeutic fraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="55"/>
-        <source>Cytochrome P450 interaction</source>
+        <source>Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="56"/>
-        <source>Glycoprotein-P interaction</source>
+        <source>Take into account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="57"/>
-        <source>Precaution for use</source>
+        <source>Discouraged</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="58"/>
-        <source>Drug duplication</source>
+        <source>Contraindication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="59"/>
-        <source>Molecule duplication</source>
+        <source>Cytochrome P450 interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="60"/>
-        <source>Therapeutic class duplication</source>
+        <source>Glycoprotein-P interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
+        <source>Precaution for use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
+        <source>Drug duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
-        <source>Drug database with interaction database</source>
+        <source>Molecule duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <source>Therapeutic class duplication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <source>Drug database with interaction database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
         <source>Drug database without interaction database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2638,6 +2658,11 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="95"/>
         <source>Patient overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="97"/>
+        <source>Long term therapy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

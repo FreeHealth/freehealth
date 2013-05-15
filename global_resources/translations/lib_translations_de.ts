@@ -2657,5 +2657,25 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>&amp;Lock application</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>INN prescription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drugs allergies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drugs intolerances</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Therapeutic fraction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Long term therapy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

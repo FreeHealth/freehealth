@@ -95,12 +95,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="310"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="311"/>
         <source>Remove PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="311"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="312"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
