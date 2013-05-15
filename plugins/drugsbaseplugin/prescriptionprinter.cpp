@@ -289,7 +289,7 @@ public:
         body += "</body>\n";
         body += "</html>\n";
 
-        Utils::saveStringToFile(body, "/Users/eric/Desktop/essai.html");
+        // Utils::saveStringToFile(body, "/Users/eric/Desktop/essai.html");
 
         // Reset the state of the model
         job.drugsModel()->showTestingDrugs(testingDrugsVisible);
