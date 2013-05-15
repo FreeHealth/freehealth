@@ -95,6 +95,18 @@ QVariant PrescriptionToken::value() const
         return mealTime(v.toInt());
     } else {
         switch (_ref) {
+        case Drug::Denomination:
+        {
+            QModelIndex isInnPrescription = _model->index(_row, Prescription::IsINNPrescription);
+            if (_model->data(isInnPrescription).toBool()) {
+                return QString("%1 %2 (%3)")
+                        .arg(_model->data(_model->index(_row, Drug::MainInnName)).toString())
+                        .arg(_model->data(_model->index(_row, Drug::MainInnDosage)).toString())
+                        .arg(tkTr(Trans::Constants::INN_PRESCRIPTION))
+                        ;
+            }
+            break;
+        }
         case Prescription::IntakesIntervalFullString:
         {
             const QVariant &interval = _model->data(_model->index(_row, Prescription::IntakesIntervalOfTime));
