@@ -234,98 +234,97 @@ QVariant IComponent::data(const int ref, const QString &lang) const
     else
         language = lang;
 
-    switch (ref)
-    {
+    switch (ref) {
     case Strength:
-        {
-            QString s = d_component->m_Content.value(ref).value(language).toString();
-            s.replace(",000","");
-            s.replace(",00","");
-            return s;
-        }
+    {
+        QString s = d_component->m_Content.value(ref).value(language).toString();
+        s.replace(",000","");
+        s.replace(",00","");
+        return s;
+    }
     case FullDosage:
-        {
-            QString strength = data(Strength, language).toString() + data(StrengthUnit, language).toString();
-            QString refDose = data(Dose, language).toString() + data(DoseUnit, language).toString();
-            if (!refDose.isEmpty())
-                return QString(strength + "/" + refDose);
-            return strength;
-        }
+    {
+        QString strength = data(Strength, language).toString() + data(StrengthUnit, language).toString();
+        QString refDose = data(Dose, language).toString() + data(DoseUnit, language).toString();
+        if (!refDose.isEmpty())
+            return QString(strength + "/" + refDose);
+        return strength;
+    }
     case MainAtcId:
-        {
-            // TODO: can have multiple ids
-            if (d_component->m_Link && !isActiveSubstance()) {
-                return d_component->m_Link->data(AtcId, language);
-            }
-            return data(AtcId, language);
+    {
+        // TODO: can have multiple ids
+        if (d_component->m_Link && !isActiveSubstance()) {
+            return d_component->m_Link->data(AtcId, language);
         }
+        return data(AtcId, language);
+    }
     case MainAtcCode:
-        {
-            // TODO: can have multiple codes
-            if (d_component->m_Link && !isActiveSubstance()) {
-                return d_component->m_Link->data(AtcCode, language);
-            }
-            return data(AtcCode, language);
+    {
+        // TODO: can have multiple codes
+        if (d_component->m_Link && !isActiveSubstance()) {
+            return d_component->m_Link->data(AtcCode, language);
         }
+        return data(AtcCode, language);
+    }
     case MainAtcName:
-        {
-            // TODO: can have multiple names?
-            if (d_component->m_Link && !isActiveSubstance()) {
-                return d_component->m_Link->data(AtcLabel, language);
-            }
-            return data(AtcLabel, language);
+    {
+        // TODO: can have multiple names?
+        if (d_component->m_Link && !isActiveSubstance()) {
+            return d_component->m_Link->data(AtcLabel, language);
         }
+        return data(AtcLabel, language);
+    }
     case MainAtcDosage:
-        {
-            if (isActiveSubstance()) {
-                return data(FullDosage,language);
-            } else if (d_component->m_Link) {
-                return d_component->m_Link->data(FullDosage,language);
-            }
-            break;
+    {
+        if (isActiveSubstance()) {
+            return data(FullDosage,language);
+        } else if (d_component->m_Link) {
+            return d_component->m_Link->data(FullDosage,language);
         }
+        break;
+    }
     case AtcId:
-        {
-            // TODO: A component can have multiple AtcIds.
-            if (!d_component->m_7CharAtcIds.isEmpty())
-                return d_component->m_7CharAtcIds.at(0);
-            return -1;
-        }
+    {
+        // TODO: A component can have multiple AtcIds.
+        if (!d_component->m_7CharAtcIds.isEmpty())
+            return d_component->m_7CharAtcIds.at(0);
+        return -1;
+    }
     case AtcLabel:
-        {
-            if (d_component->m_7CharAtcIds.isEmpty())
-                return QString();
-            return drugsBase().getAtcLabel(d_component->m_7CharAtcIds.at(0));
-        }
+    {
+        if (d_component->m_7CharAtcIds.isEmpty())
+            return QString();
+        return drugsBase().getAtcLabel(d_component->m_7CharAtcIds.at(0));
+    }
     case AtcCode:
-        {
-            if (d_component->m_7CharAtcIds.isEmpty())
-                return QString();
-            return drugsBase().getAtcCode(d_component->m_7CharAtcIds.at(0));
-        }
+    {
+        if (d_component->m_7CharAtcIds.isEmpty())
+            return QString();
+        return drugsBase().getAtcCode(d_component->m_7CharAtcIds.at(0));
+    }
     case InteractingClassNames:
-        {
-            QStringList names;
-            for(int i=0; i < d_component->m_InteractingClassAtcIds.count(); ++i) {
-                names << drugsBase().getAtcLabel(d_component->m_InteractingClassAtcIds.at(i));
-            }
-            return names;
+    {
+        QStringList names;
+        for(int i=0; i < d_component->m_InteractingClassAtcIds.count(); ++i) {
+            names << drugsBase().getAtcLabel(d_component->m_InteractingClassAtcIds.at(i));
         }
+        return names;
+    }
     case DebuggingText:
-        {
-            QString tmp;
-            tmp += "IComponent: " + moleculeName()
-                   + "\n     (Form:" + form() + ";\n      INN:" + innName() + ";\n      fullDosage:" + dosage()
-                    + ";\n      nature:" + nature();
-            if (d_component->m_Link) {
-                tmp += ";\n      linkedTo" + d_component->m_Link->moleculeName();
-            }
-            tmp += ";\n      mainInnName:" + mainInnName() + ";\n      mainInnAtcId:" + QString::number(mainInnCode());
-            tmp += ";\n      mainInnDosage:" + mainInnDosage();
-            tmp += ";\n      interactingClasses:" + interactingClasses().join(",");
-            tmp += ")\n";
-            return tmp;
+    {
+        QString tmp;
+        tmp += "IComponent: " + moleculeName()
+                + "\n     (Form:" + form() + ";\n      INN:" + innName() + ";\n      fullDosage:" + dosage()
+                + ";\n      nature:" + nature();
+        if (d_component->m_Link) {
+            tmp += ";\n      linkedTo" + d_component->m_Link->moleculeName();
         }
+        tmp += ";\n      mainInnName:" + mainInnName() + ";\n      mainInnAtcId:" + QString::number(mainInnCode());
+        tmp += ";\n      mainInnDosage:" + mainInnDosage();
+        tmp += ";\n      interactingClasses:" + interactingClasses().join(",");
+        tmp += ")\n";
+        return tmp;
+    }
     default: return d_component->m_Content.value(ref).value(language);
     }
     return d_component->m_Content.value(ref).value(language);
