@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class DrugsModel
+  \class DrugsDB::DrugsModel
   Model asks DrugsBase to check interaction only while passing new *Drugs via addDrugs()
   or while passing QDrugsList via setDrugsList().
   activeModel() , setActiveModel()
