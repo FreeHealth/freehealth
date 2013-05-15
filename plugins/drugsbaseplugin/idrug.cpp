@@ -860,14 +860,15 @@ QString IDrug::innComposition() const
     QString toReturn;
     QString lastInn;
     foreach(IComponent *compo, d_drug->m_Compo) {
-        if (lastInn!=compo->innName())
+        if (lastInn!=compo->innName()
+                && !compo->innName().isEmpty())
             toReturn += QString("%1 %2 + ").arg(compo->innName(), compo->dosage());
         lastInn = compo->innName();
     }
     if (!toReturn.isEmpty()) {
         toReturn.chop(3);
         toReturn = toReturn.toUpper();
-        toReturn += " , " + forms().join(", ");
+        toReturn += ", " + forms().join(", ");
     }
     return toReturn;
 }

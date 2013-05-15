@@ -99,9 +99,10 @@ QVariant PrescriptionToken::value() const
         {
             QModelIndex isInnPrescription = _model->index(_row, Prescription::IsINNPrescription);
             if (_model->data(isInnPrescription).toBool()) {
-                return QString("%1 %2 (%3)")
-                        .arg(_model->data(_model->index(_row, Drug::MainInnName)).toString())
-                        .arg(_model->data(_model->index(_row, Drug::MainInnDosage)).toString())
+                return QString("%1 (%2)")
+                        .arg(_model->data(_model->index(_row, Drug::InnCompositionString)).toString())
+//                        .arg(_model->data(_model->index(_row, Drug::MainInnName)).toString())
+//                        .arg(_model->data(_model->index(_row, Drug::MainInnDosage)).toString())
                         .arg(tkTr(Trans::Constants::INN_PRESCRIPTION))
                         ;
             }
