@@ -21,7 +21,8 @@ HEADERS += basewidgetsplugin.h \
     baselistwidgets.h \
     frenchsocialnumberwidget.h \
     measurementwidget.h \
-    treeviewformitem.h
+    treeviewformitem.h \
+    buttonmenupathitemview.h
 #    basezipcodeswidget.h
 
 SOURCES += basewidgetsplugin.cpp \
@@ -37,7 +38,8 @@ SOURCES += basewidgetsplugin.cpp \
     baselistwidgets.cpp \
     frenchsocialnumberwidget.cpp \
     measurementwidget.cpp \
-    treeviewformitem.cpp
+    treeviewformitem.cpp \
+    buttonmenupathitemview.cpp
 #    basezipcodeswidget.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \

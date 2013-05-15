@@ -32,6 +32,7 @@
 #include "measurementwidget.h"
 //#include "austriansocialnumber.h"
 #include "constants.h"
+#include "buttonmenupathitemview.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -107,6 +108,7 @@ namespace {
         Type_Measurement,
         Type_FrenchNSS,
         Type_AustrianSVNR,
+        Type_ButtonMenuPathItemView,
         Type_MaxType
     };
 
@@ -117,7 +119,8 @@ namespace {
                           << "spin" << "doublespin"
                           << "shorttext" << "longtext" << "helptext" << "file" << "group"
                           << "date" << "moderndate" << "button" << "detailswidget"
-                          << "measurement" << "frenchnss" << "austriansvnr";
+                          << "measurement" << "frenchnss" << "austriansvnr"
+                          << "buttonmenupath";
 }
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
@@ -183,6 +186,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_Measurement: return new MeasurementWidget(formItem, parent);
     case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
 //    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
+    case ::Type_ButtonMenuPathItemView : return new ButtonMenuPathItemView(formItem,parent);
     default: return 0;
     }
     return 0;
