@@ -32,8 +32,11 @@
 #include "constants.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <formmanagerplugin/iformitem.h>
@@ -54,6 +57,9 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 /*! Constructor of the BaseWidgets::Internal:ButtonMenuPathItemView class */
 ButtonMenuPathItemView::ButtonMenuPathItemView(Form::FormItem *formItem, QWidget *parent)
@@ -146,6 +152,7 @@ bool ButtonMenuPathItemView::isContainer() const
 
 QString ButtonMenuPathItemView::printableHtml(bool withValues) const
 {
+    Q_UNUSED(withValues);
     return QString::null;
 }
 
@@ -187,7 +194,15 @@ void ButtonMenuPathItemView::onIndexTriggered(const QModelIndex &index)
                 if (!yes)
                     return;
             }
-            item->itemData()->setData(0, Utils::readTextFile(_model->filePath(index), Utils::DontWarnUser));
+            // Read file
+            QString content = Utils::readTextFile(_model->filePath(index), Utils::DontWarnUser);
+            // Process tokens
+            patient()->replaceTokens(content);
+            user()->replaceTokens(content);
+#ifdef WITH_PAD
+            content = padTools()->processPlainText(content);
+#endif
+            item->itemData()->setData(0, content);
             return;
         }
     }
