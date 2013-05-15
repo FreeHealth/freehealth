@@ -37,6 +37,7 @@ const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants
 const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
 const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
 const char* const INN                           = QT_TRANSLATE_NOOP("tkConstants", "INN");
+const char* const INN_PRESCRIPTION              = QT_TRANSLATE_NOOP("tkConstants", "INN prescription");
 const char* const ATC                           = QT_TRANSLATE_NOOP("tkConstants", "ATC");
 const char* const INTAKES                       = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
 const char* const VIEWINTERACTIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
@@ -48,6 +49,7 @@ const char* const NO_ALLERGIES_INTOLERANCES     = QT_TRANSLATE_NOOP("tkConstants
 const char* const KNOWN_ALLERGIES               = QT_TRANSLATE_NOOP("tkConstants", "Known allergies");
 const char* const KNOWN_INTOLERANCES            = QT_TRANSLATE_NOOP("tkConstants", "Known intolerances");
 const char* const REFILL_1_TIMES                = QT_TRANSLATE_NOOP("tkConstants", "Refill %1 time(s)");
+const char* const THERAPEUTIC_FRACTION          = QT_TRANSLATE_NOOP("tkConstants", "Therapeutic fraction");
 
 // Drugs Interactions
 const char* const INTERACTION                   = QT_TRANSLATE_NOOP("tkConstants", "Interaction");
