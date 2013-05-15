@@ -102,6 +102,7 @@
 #include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QVector>
 #include <QLocale>
@@ -277,9 +278,9 @@ QVariant IComponent::data(const int ref, const QString &lang) const
     case MainAtcDosage:
     {
         if (isActiveSubstance()) {
-            return data(FullDosage,language);
+            return data(FullDosage, language);
         } else if (d_component->m_Link) {
-            return d_component->m_Link->data(FullDosage,language);
+            return d_component->m_Link->data(FullDosage, language);
         }
         break;
     }
@@ -844,14 +845,14 @@ QString IDrug::mainInnDosage() const
 {
     if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
         return QString();
-    QString name = d_drug->m_Compo.at(0)->dosage();
-    if (d_drug->m_Compo.count()==2) {
-        if (d_drug->m_Compo.at(1)->dosage()==name)
-            return name;
-    } else {
-        return name;
+    if (d_drug->m_Compo.count() == 2) {
+        // The two component are linked (only one is the activeSubstance)
+        if (d_drug->m_Compo.at(0)->isActiveSubstance())
+            return d_drug->m_Compo.at(0)->dosage();
+        else
+            return d_drug->m_Compo.at(1)->dosage();
     }
-    return QString();
+    return d_drug->m_Compo.at(0)->dosage();
 }
 
 QString IDrug::innComposition() const
