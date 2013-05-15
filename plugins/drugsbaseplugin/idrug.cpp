@@ -948,7 +948,7 @@ QString IDrug::toHtml() const
 //        mark += " | " + value(Table_DRUGS, DRUGS_TYPE_MP).toString();
 //    }
 
-    msg += QString("<table border=0 cellpadding=2 cellspacing=2 width=100%>\n"
+    msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
                     " <tr>\n"
                     "   <td colspan=2 rowspan=1 align=center>\n"
                     "       <span style=\"font-weight: bold;\">%1</span>\n"
