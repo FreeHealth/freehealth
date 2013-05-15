@@ -6,6 +6,7 @@ FreeMedForms
     * Lab tests result helper
     * French AGGIR printing massively improved
     * Massively improved print and export mask of complete forms and some sub-forms
+    * Adding a patient synthesis part in patient files
   * FreeMedForms
     * First release with the new token manager: PadTools
     * Adding a status bar at the top right corner of the patient bar
@@ -22,6 +23,7 @@ FreeMedForms
     * Adding a new preferences for prescription printing
       * 'Automatically sort the drugs before printing'
       * 'Include current patient biometrics' like weight/height/creatinine to the prescription print
+    * New Menu Button FormItem to easily navigate and include local files to text editors
   * Build process
     * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
