@@ -56,6 +56,7 @@ public:
 
     // Setter for URL
     void setUrls(const QList<QUrl> &urls);
+    void setUrls(const QStringList &urls);
     // TODO: void addUrl(const QUrl &url, const QString &relativeOutputFileName); + QTest
 
     // Getters for URL

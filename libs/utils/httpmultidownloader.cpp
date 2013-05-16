@@ -127,6 +127,15 @@ void HttpMultiDownloader::setUrls(const QList<QUrl> &urls)
     d->_urls = urls;
 }
 
+/** Define the list of urls to download in one pass */
+void HttpMultiDownloader::setUrls(const QStringList &urls)
+{
+    d->_urls.clear();
+    foreach(const QString &url, urls) {
+        d->_urls << QUrl(url);
+    }
+}
+
 /** Start downloading files one by one */
 bool HttpMultiDownloader::startDownload()
 {
