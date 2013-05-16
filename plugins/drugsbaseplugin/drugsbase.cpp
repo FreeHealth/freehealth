@@ -92,7 +92,7 @@
 #include <QSet>
 #include <QCache>
 
-enum { WarnExtractedDrugs=false };
+enum { WarnExtractedDrugs = false };
 
 using namespace DrugsDB;
 using namespace DrugsDB::Internal;
@@ -304,7 +304,7 @@ public:
                 }
                 precedent = compo;
                 if (WarnExtractedDrugs)
-                    qWarning() << compo->data(IComponent::DebuggingText).toString();
+                    qWarning() << compo;
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
@@ -1185,8 +1185,8 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     // get ROUTES
     d->getRoutes(toReturn);
 
-    if (WarnExtractedDrugs && toReturn)
-        qWarning() << toReturn->warnText();
+    if (WarnExtractedDrugs)
+        qWarning() << toReturn;
 
     return toReturn;
 }

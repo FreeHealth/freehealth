@@ -76,12 +76,11 @@ public:
         AtcLabel,
         AtcCode,
         AtcId,
-        MainAtcId,
-        MainAtcCode,
-        MainAtcName,
-        MainAtcDosage,
-        InteractingClassNames,
-        DebuggingText
+//        MainAtcId,
+//        MainAtcCode,
+//        MainAtcName,
+//        MainAtcDosage,
+        InteractingClassNames
     };
 
     IComponent(IDrug *parent);
@@ -91,6 +90,7 @@ public:
 
     virtual void linkWithComposition(IComponent *compo);
     virtual bool isLinkedWith(IComponent *compo) const;
+    virtual IComponent *linkedWith() const;
 
     virtual bool isVirtual() const {return false;}
     IDrug *drug() const;
@@ -98,9 +98,9 @@ public:
     virtual QVariant data(const int ref, const QString &lang = QString::null) const;
 
     QString innName() const {return data(AtcLabel).toString();}
-    virtual QString mainInnName() const {return data(MainAtcName).toString();}
-    virtual QString mainInnDosage() const {return data(MainAtcDosage).toString();}
-    virtual int mainInnCode() const {return data(MainAtcId).toInt();}
+//    virtual QString mainInnName() const {return data(MainAtcName).toString();}
+//    virtual QString mainInnDosage() const {return data(MainAtcDosage).toString();}
+//    virtual int mainInnCode() const {return data(MainAtcId).toInt();}
 
     QStringList interactingClasses() const {return data(InteractingClassNames).toStringList();}
     QString dosage() const {return data(FullDosage).toString();}
@@ -112,10 +112,9 @@ public:
     bool isActiveSubstance() const {return data(IsActiveSubstance).toBool();}
     void setIsActiveSubstance(bool state) {setDataFromDb(IsActiveSubstance, state);}
 
+    bool isMainInn() const;
     QVector<int> innAtcIds() const;
     QVector<int> interactingClassAtcIds() const;
-
-    QString warnText() const {return data(DebuggingText).toString();}
 
     QString toXml() const;
 
@@ -308,12 +307,11 @@ public:
     QVector<int> allAtcIds() const;
     QVector<int> molsIds() const;
 
-    QString warnText() const;
+    QVector<IComponent *> components() const;
 
 protected:
     bool setDataFromDb(const int ref, const QVariant &value, const QString &lang = QString::null);
     void addComponent(IComponent *compo);
-    QVector<IComponent *> components() const;
     void addRoute(DrugRoute *route);
 
     void setAll7CharsAtcIds(const QVector<int> &ids);
