@@ -71,6 +71,7 @@ public:
     Icd10StepPrivate(Icd10Step *parent) :
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~Icd10StepPrivate()
