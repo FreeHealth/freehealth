@@ -295,7 +295,6 @@ DrugBaseEssentials::DrugBaseEssentials():
     addIndex(Table_DRUG_ROUTES, DRUG_ROUTES_RID);
     addIndex(Table_DRUG_FORMS, DRUG_FORMS_DID);
     addIndex(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID);
-    addIndex(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID);
     addIndex(Table_ROUTES, ROUTES_RID);
     addIndex(Table_ROUTES, ROUTES_MASTERLID);
     addIndex(Table_ATC, ATC_CODE);
