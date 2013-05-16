@@ -672,98 +672,97 @@ QVariant IDrug::data(const int ref, const QString &lang) const
 {
     if (ref < 0 || ref > MaxParam)
         return QVariant();
-    switch (ref)
-    {
+    switch (ref) {
     case Name:
-        {
-            if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
-                if (d_drug->m_NoLaboDenomination.isEmpty()) {
-                    if (lang.isEmpty())
-                        d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(QLocale().name().left(2)).toString();
-                    if (d_drug->m_NoLaboDenomination.isEmpty() && lang.isEmpty())
-                        d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(Trans::Constants::ALL_LANGUAGE).toString();
-                    foreach(const QString &name, Constants::LABOS) {
-                        if (d_drug->m_NoLaboDenomination.contains(" " + name + " ")) {
-                            d_drug->m_NoLaboDenomination.remove(" " + name + " ");
-                            return d_drug->m_NoLaboDenomination;
-                        }
+    {
+        if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
+            if (d_drug->m_NoLaboDenomination.isEmpty()) {
+                if (lang.isEmpty())
+                    d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(QLocale().name().left(2)).toString();
+                if (d_drug->m_NoLaboDenomination.isEmpty() && lang.isEmpty())
+                    d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(Trans::Constants::ALL_LANGUAGE).toString();
+                foreach(const QString &name, Constants::LABOS) {
+                    if (d_drug->m_NoLaboDenomination.contains(" " + name + " ")) {
+                        d_drug->m_NoLaboDenomination.remove(" " + name + " ");
+                        return d_drug->m_NoLaboDenomination;
                     }
                 }
-                return d_drug->m_NoLaboDenomination;
             }
-            break;
+            return d_drug->m_NoLaboDenomination;
         }
+        break;
+    }
     case Spc:
-        {
-            QString toReturn;
-            if (lang.isEmpty()) {
-                toReturn = d_drug->m_Content.value(Spc).value(QLocale().name().left(2)).toString();
-                if (toReturn.isEmpty())
-                    toReturn = d_drug->m_Content.value(Spc).value(Trans::Constants::ALL_LANGUAGE).toString();
-            } else {
-                toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
-            }
-            if (!toReturn.isEmpty()) {
-                if (drugsBase().actualDatabaseInformation()->identifier == Constants::DB_DEFAULT_IDENTIFIANT)
-                    toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
-            }
-            return toReturn;
+    {
+        QString toReturn;
+        if (lang.isEmpty()) {
+            toReturn = d_drug->m_Content.value(Spc).value(QLocale().name().left(2)).toString();
+            if (toReturn.isEmpty())
+                toReturn = d_drug->m_Content.value(Spc).value(Trans::Constants::ALL_LANGUAGE).toString();
+        } else {
+            toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
         }
+        if (!toReturn.isEmpty()) {
+            if (drugsBase().actualDatabaseInformation()->identifier == Constants::DB_DEFAULT_IDENTIFIANT)
+                toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
+        }
+        return toReturn;
+    }
     case AllUids:
-        {
-            QStringList list;
-            list << data(Uid1).toString() << data(Uid2).toString() << data(Uid3).toString();
-            return list;
-        }
+    {
+        QStringList list;
+        list << data(Uid1).toString() << data(Uid2).toString() << data(Uid3).toString();
+        return list;
+    }
     case AtcLabel :
-        {
-            // TODO: code here
-            break;
-        }
+    {
+        // TODO: code here
+        break;
+    }
     case Forms:
-        {
-            // for textual and virtual drugs, forms are set using setDataFromDb()
-            if (d_drug->m_Content.value(ref).value(lang).isNull()) {
-                if (d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE).isNull())
-                    return drugsBase().getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
-                else
-                    return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
-            }
-            return d_drug->m_Content.value(ref).value(lang);
+    {
+        // for textual and virtual drugs, forms are set using setDataFromDb()
+        if (d_drug->m_Content.value(ref).value(lang).isNull()) {
+            if (d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE).isNull())
+                return drugsBase().getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+            else
+                return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
         }
+        return d_drug->m_Content.value(ref).value(lang);
+    }
     case Routes:
-        {
-            QStringList routes;
-            for(int i = 0; i < d_drug->m_Routes.count(); ++i) {
-                routes << d_drug->m_Routes.at(i)->label(lang);
-            }
-//            qWarning() << "IDrug::data::Routes" << routes << drugsBase().getRouteLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
-            return routes;
+    {
+        QStringList routes;
+        for(int i = 0; i < d_drug->m_Routes.count(); ++i) {
+            routes << d_drug->m_Routes.at(i)->label(lang);
         }
+        //            qWarning() << "IDrug::data::Routes" << routes << drugsBase().getRouteLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+        return routes;
+    }
     case MainInnCode:
-        {
-            return mainInnCode();
-        }
+    {
+        return mainInnCode();
+    }
     case AllInnsKnown:
-        {
-            foreach(const IComponent *compo, d_drug->m_Compo) {
-                // TODO: code here manage virtual components
-                if (compo->isActiveSubstance()) {
-                    if (compo->innAtcIds().isEmpty())
-                        return false;
-                }
+    {
+        foreach(const IComponent *compo, d_drug->m_Compo) {
+            // TODO: code here manage virtual components
+            if (compo->isActiveSubstance()) {
+                if (compo->innAtcIds().isEmpty())
+                    return false;
             }
-            return true;
         }
+        return true;
+    }
     case All7CharsAtcLabels :
-        {
-            QStringList toReturn;
-            foreach(IComponent *compo, d_drug->m_Compo) {
-                toReturn << compo->innName();
-            }
-            toReturn.removeDuplicates();
-            return toReturn;
+    {
+        QStringList toReturn;
+        foreach(IComponent *compo, d_drug->m_Compo) {
+            toReturn << compo->innName();
         }
+        toReturn.removeDuplicates();
+        return toReturn;
+    }
     case All7CharsAtcCodes:
     {
         QStringList toReturn;
@@ -773,34 +772,34 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         toReturn.removeDuplicates();
         return toReturn;
 
-        }
+    }
     case AllInteractingClasses:
-        {
-            QStringList names;
-            for(int i=0; i < d_drug->m_InteractingClasses.count(); ++i) {
-                names << drugsBase().getAtcLabel(d_drug->m_InteractingClasses.at(i));
-            }
-            return names;
+    {
+        QStringList names;
+        for(int i=0; i < d_drug->m_InteractingClasses.count(); ++i) {
+            names << drugsBase().getAtcLabel(d_drug->m_InteractingClasses.at(i));
         }
+        return names;
+    }
     case AllMoleculeNames :
-        {
-            QStringList toReturn;
-            foreach(const IComponent *compo, d_drug->m_Compo)
-                toReturn << compo->moleculeName();
-            return toReturn;
-        }
+    {
+        QStringList toReturn;
+        foreach(const IComponent *compo, d_drug->m_Compo)
+            toReturn << compo->moleculeName();
+        return toReturn;
+    }
     case AllAtcCodes:
-        {
-            if (d_drug->m_AllAtcCodes.isEmpty()) {
-                for(int i=0; i < d_drug->m_AllIds.count(); ++i) {
-                    QString code = drugsBase().getAtcCode(d_drug->m_AllIds.at(i));
-                    if (!d_drug->m_AllAtcCodes.contains(code))
-                        d_drug->m_AllAtcCodes << code;
-                }
-                d_drug->m_AllAtcCodes << d_drug->m_Content.value(AtcCode).value(Trans::Constants::ALL_LANGUAGE).toString();
+    {
+        if (d_drug->m_AllAtcCodes.isEmpty()) {
+            for(int i=0; i < d_drug->m_AllIds.count(); ++i) {
+                QString code = drugsBase().getAtcCode(d_drug->m_AllIds.at(i));
+                if (!d_drug->m_AllAtcCodes.contains(code))
+                    d_drug->m_AllAtcCodes << code;
             }
-            return d_drug->m_AllAtcCodes;
+            d_drug->m_AllAtcCodes << d_drug->m_Content.value(AtcCode).value(Trans::Constants::ALL_LANGUAGE).toString();
         }
+        return d_drug->m_AllAtcCodes;
+    }
     }
     if (lang.isEmpty())
         return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
