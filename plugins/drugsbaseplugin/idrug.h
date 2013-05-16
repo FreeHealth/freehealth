@@ -359,5 +359,7 @@ public:
 
 DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c);
 DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IComponent *c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IComponent &c);
 
 #endif // DRUGSDB_IDRUG_H

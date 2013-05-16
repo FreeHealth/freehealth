@@ -1194,7 +1194,58 @@ QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c)
 
 QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c)
 {
-    dbg.nospace() << c.warnText();
+    dbg.nospace() << "IDrug[" << c.brandName() << "]("
+                  << "\n    ID:       " << c.drugId().toString()
+                  << "\n    Uids:     " << c.uids().join(";")
+                  << "\n    AtcLabel: " << c.atcLabel()
+                  << "\n    Strength: " << c.strength()
+                  << "\n    Forms:    " << c.forms().join(",")
+                  << "\n    Routes:   " << c.routes().join(",")
+                  << "\n    LinkScp:  " << c.linkToSCP()
+                  << "\n    NbMols:   " << c.numberOfCodeMolecules()
+                  << "\n    NbInns:   " << c.numberOfInn()
+                  << "\n    Mols:     " << c.listOfMolecules().join(";")
+                  << "\n    INN list:       " << c.listOfInnLabels().join(";")
+                  << "\n    DDIClasses:     " << c.listOfInteractingClasses().join(";")
+                  << "\n    MainInnName:    " << c.mainInnName()
+                  << "\n    MainInnDosage:  " << c.mainInnDosage()
+                  << "\n    InnComposition: " << c.innComposition()
+                     ;
+
+    for(int i = 0; i < c.components().count(); ++i) {
+        DrugsDB::IComponent *compo = c.components().at(i);
+        qWarning() << compo;
+    }
+    dbg.nospace() << "\n    ~)IDrug[" << c.brandName() << "]\n";
     return dbg.space();
 }
 
+QDebug operator<<(QDebug dbg, const DrugsDB::IComponent *c)
+{
+    if (!c) {
+        dbg.nospace() << "IComponent(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
+}
+
+QDebug operator<<(QDebug dbg, const DrugsDB::IComponent &c)
+{
+    QString atcIds;
+    for(int i=0; i < c.innAtcIds().count(); ++i) {
+        atcIds += QString("%1; ").arg(c.innAtcIds().at(i));
+    }
+    atcIds.chop(2);
+    dbg.nospace() << "IComponent[" << c.moleculeName() << "]("
+                  << "\n      Form:       " << c.form()
+                  << "\n      INN:        " << c.innName()
+                  << "\n      FullDosage: " << c.dosage()
+                  << "\n      Nature:     " << c.nature()
+                  << "\n      AtcIds:     " << atcIds
+                  << "\n      DDIClasses: " + c.interactingClasses().join("; ");
+                  ;
+    if (c.linkedWith())
+        dbg.nospace() << "\n      Linked:     " << c.linkedWith()->moleculeName();
+    dbg.nospace() << "\n      )";
+    return dbg.space();
+}
