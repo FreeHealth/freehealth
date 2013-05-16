@@ -173,10 +173,8 @@ void QMenuItemView::hovered(QAction *action)
 void QMenuItemView::aboutToShow()
 {
     QMenu *menu = qobject_cast<QMenu*>(sender());
-    qWarning() << "AboutToShow" << menu;
     if (menu) {
         QVariant v = menu->menuAction()->data();
-        qWarning() << " AboutToShow" << v;
         if (v.canConvert<QModelIndex>()) {
             QModelIndex idx = qvariant_cast<QModelIndex>(v);
             d->createMenu(idx, menu, menu);
