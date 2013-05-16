@@ -62,6 +62,7 @@ public:
         _step(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~DataPackPagePrivate()
@@ -74,8 +75,8 @@ public:
 private:
     DataPackPage *q;
 };
-}  // namespace Internal
-} // end namespace DataPackPlugin
+} // namespace Internal
+} // namespace DataPackPlugin
 
 /*!
  * Constructor of the DataPackPlugin::Internal::DataPackPage class.

@@ -71,6 +71,7 @@ public:
         q(parent)
 
     {
+        Q_UNUSED(q);
     }
 
     ~DrugsDBCorePrivate()

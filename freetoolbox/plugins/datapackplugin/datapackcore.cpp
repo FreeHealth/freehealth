@@ -70,6 +70,7 @@ public:
     DataPackCorePrivate(DataPackCore *parent) :
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~DataPackCorePrivate()
@@ -165,8 +166,8 @@ public:
 private:
     DataPackCore *q;
 };
-}  // namespace Internal
-} // end namespace DataPackPlugin
+} // namespace Internal
+} // namespace DataPackPlugin
 
 /*! Constructor of the DataPackPlugin::DataPackCore class */
 DataPackCore::DataPackCore(QObject *parent) :
