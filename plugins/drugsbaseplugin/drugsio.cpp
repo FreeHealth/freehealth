@@ -396,7 +396,8 @@ public:
             QDomElement c = doc.createElement(::XML_COMPOSITION);
             drugRoot.appendChild(c);
             c.setAttribute(::XML_COMPOSITION_INN, compo->innName());
-            c.setAttribute(::XML_COMPOSITION_ATC, compo->data(IComponent::MainAtcCode).toString());
+//            c.setAttribute(::XML_COMPOSITION_ATC, compo->data(IComponent::MainAtcCode).toString());
+            c.setAttribute(::XML_COMPOSITION_ATC, compo->data(IComponent::AtcId).toString());
             c.setAttribute(::XML_COMPOSITION_FORM, compo->form());
             c.setAttribute(::XML_COMPOSITION_ROUTE, drug->routes().join(";"));
             c.setAttribute(::XML_COMPOSITION_STRENGTH, compo->dosage());
