@@ -954,29 +954,36 @@ QString IDrug::toHtml() const
 
     QString tmp = "";
     QString name;
+    QString inn;
     // Add component to the HTML
     foreach(IComponent *compo, d_drug->m_Compo) {
+        // Add each molecule names
         name = compo->moleculeName();
         if (compo->isActiveSubstance()) {
-            name += "*";
-            if (!compo->innName().isEmpty()) {
-                name = QString("%1 [%2]").arg(compo->innName()).arg(tkTr(Trans::Constants::INN));
-            }
+            name += QString(" [%1]").arg(tkTr(Trans::Constants::ACTIVE_SUBSTANCE));
         } else {
             name += QString(" [%1]").arg(tkTr(Trans::Constants::THERAPEUTIC_FRACTION));
         }
         tmp += QString("<tr><td>%1</td><td>%2</td></tr>")
                 .arg(name)
                 .arg(compo->dosage());
+        if (compo->isMainInn())
+            inn += QString("<tr><td>%1: %2</td><td>%3</td></tr>")
+                    .arg(tkTr(Trans::Constants::INN_PRESCRIPTION))
+                    .arg(compo->innName())
+                    .arg(compo->dosage());
         name.clear();
     }
 
+
     msg += QString(" %1\n"
+                   "%2\n"
                    " <tr>\n"
-                   "   <td colspan=2 rowspan=1>%2</td>\n"
+                   "   <td colspan=2 rowspan=1>%3</td>\n"
                    " </tr>\n"
                    "</table>\n\n")
             .arg(tmp)
+            .arg(inn)
             .arg(textClass);
     return msg;
 }
