@@ -1105,6 +1105,7 @@ ITextualDrug::ITextualDrug() :
     setDataFromDb(Uid1, -1);
 }
 
+/** Define the denomination of this textual drug */
 void ITextualDrug::setDenomination(const QString &denomination)
 {
     setDataFromDb(Name, denomination);
