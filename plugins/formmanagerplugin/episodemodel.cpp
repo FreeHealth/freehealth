@@ -827,6 +827,8 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
  */
 void EpisodeModel::refreshFilter()
 {
+    // Force filter updating
+    d->_currentPatientUuid.clear();
     d->updateFilter(patient()->uuid());
 }
 
