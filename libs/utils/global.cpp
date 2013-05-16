@@ -22,6 +22,7 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_msgerror.h>
 #include <utils/log.h>
 
 #include <QApplication>
@@ -1588,6 +1589,37 @@ QString htmlReplaceAccents(const QString &html)
         toReturn.replace(k, accents.value(k));
     }
     return toReturn;
+}
+
+/** Extract and return all CSS content href links */
+QStringList htmlGetLinksToCssContent(const QString &html)
+{
+    // <link rel="stylesheet" href="../style/spstyl01.css" type="text/css">
+    QStringList list;
+    if (html.isEmpty())
+        return list;
+
+    int begin = 0;
+    do {
+        begin = html.indexOf("<link ", begin);
+        if (begin == -1)
+            break;
+        int endTag = html.indexOf(">", begin+6);
+        if (endTag == -1)
+            break;
+        QString content = html.mid(begin, endTag-begin);
+        if (content.contains("css", Qt::CaseInsensitive)
+                && content.contains("href", Qt::CaseInsensitive) ) {
+            // Extract the href content
+            int b = content.indexOf("href");
+            b = content.indexOf("\"", b+4) + 1;
+            int e = content.indexOf("\"", b);
+            list << content.mid(b, e-b);
+        }
+        begin = endTag;
+    } while (begin > 0);
+    list.removeAll("");
+    return list;
 }
 
 /** Capitalize the first letter of a string */

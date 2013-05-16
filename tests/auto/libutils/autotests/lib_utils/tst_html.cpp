@@ -155,8 +155,51 @@ private slots:
 
     void removeLinkTags()
     {
-        // TODO: write me
-        // UTILS_EXPORT QString htmlRemoveLinkTags(const QString &fullHtml);
+        const QString html =
+                "<html>"
+                "<head>"
+                "</head>"
+                "<body>\n"
+                "%1\n"
+                "<div class=\"__ident__formContent\">"
+                "<div class=\"formHeader\">"
+                "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>"
+                "</div> <!-- formHeader -->"
+                "%2\n"
+                "</body>"
+                "</html>";
+
+        in = html.arg("<a href=\"kjlkdjflqkjdflqksdfqdsfq\">").arg("</a>");
+        out = html.arg("").arg("");
+        QVERIFY(Utils::htmlRemoveLinkTags(in) == out);
+    }
+
+    void extractCssFileLinks()
+    {
+        const QString html =
+                "<html>\n"
+                "<head>\n"
+                "<meta>\n"
+                "<link rel=\"stylesheet\" href=\"../style/test1.css\" type=\"text/css\">\n"
+                "<link rel=\"stylesheet\" href=\"../style/test2.css\" type=\"text/css\">\n"
+                "</meta>\n"
+                "</head>\n"
+                "<body>\n"
+                "<div class=\"__ident__formContent\">\n"
+                "<div class=\"formHeader\">\n"
+                "<div class=\"formLabel\">[[EpisodeFormLabel]]</div>\n"
+                "</div> <!-- formHeader -->\n"
+                "</div>\n"
+                "</body>\n"
+                "</html>\n";
+        QStringList correct;
+        correct << "../style/test1.css"
+                << "../style/test2.css";
+        QStringList result = Utils::htmlGetLinksToCssContent(html);
+
+        qWarning() << result;
+
+        QVERIFY(correct == result);
     }
 
     // TODO: code this tests
