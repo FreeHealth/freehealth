@@ -52,6 +52,7 @@ public:
     MoleculesInteractorCompleterPrivate(MoleculesInteractorCompleter *parent) :
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~MoleculesInteractorCompleterPrivate()
@@ -68,6 +69,7 @@ public:
     ClassInteractorCompleterPrivate(ClassInteractorCompleter *parent) :
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~ClassInteractorCompleterPrivate()
@@ -78,8 +80,8 @@ private:
     ClassInteractorCompleter *q;
 };
 
-}  // namespace Internal
-} // end namespace DrugsDB
+} // namespace Internal
+} // namespace DrugsDB
 
 /*! Constructor of the DrugsDB::Internal::InteractorCompleter class */
 MoleculesInteractorCompleter::MoleculesInteractorCompleter(QObject *parent) :

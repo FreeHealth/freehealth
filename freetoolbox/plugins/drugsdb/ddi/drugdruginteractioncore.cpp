@@ -95,6 +95,7 @@ public:
         m_PimDatabaseCreator(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~DrugDrugInteractionCorePrivate()

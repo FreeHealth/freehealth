@@ -64,6 +64,7 @@ public:
         _allowMultipleSelection(false),
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~InteractorSelectorDialogPrivate()
@@ -81,8 +82,8 @@ public:
 private:
     InteractorSelectorDialog *q;
 };
-}  // namespace Internal
-} // end namespace DrugsDB
+} // namespace Internal
+} // namespace DrugsDB
 
 /*!
  * Constructor of the DrugsDB::Internal::InteractorSelectorDialog class. \n
