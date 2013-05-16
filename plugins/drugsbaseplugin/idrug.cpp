@@ -54,13 +54,6 @@
 */
 
 /**
-  \fn QString DrugsDB::IComponent::warnText() const
-  Return the debugging text.
-*/
-
-
-
-/**
   \fn virtual bool DrugsDB::IVirtualComponent::setData(const int ref, const QVariant &value, const QString &lang = QString::null)
   Set the data of the virtual component.
 */
@@ -108,7 +101,6 @@ using namespace Trans::ConstantTranslations;
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
-
 
 namespace DrugsDB {
 namespace Internal {
@@ -263,39 +255,6 @@ QVariant IComponent::data(const int ref, const QString &lang) const
             return QString(strength + "/" + refDose);
         return strength;
     }
-//    case MainAtcId:
-//    {
-//        // TODO: can have multiple ids
-//        if (d_component->m_Link && !isActiveSubstance()) {
-//            return d_component->m_Link->data(AtcId, language);
-//        }
-//        return data(AtcId, language);
-//    }
-//    case MainAtcCode:
-//    {
-//        // TODO: can have multiple codes
-//        if (d_component->m_Link && !isActiveSubstance()) {
-//            return d_component->m_Link->data(AtcCode, language);
-//        }
-//        return data(AtcCode, language);
-//    }
-//    case MainAtcName:
-//    {
-//        // TODO: can have multiple names?
-//        if (d_component->m_Link && !isActiveSubstance()) {
-//            return d_component->m_Link->data(AtcLabel, language);
-//        }
-//        return data(AtcLabel, language);
-//    }
-//    case MainAtcDosage:
-//    {
-//        if (isActiveSubstance()) {
-//            return data(FullDosage, language);
-//        } else if (d_component->m_Link) {
-//            return d_component->m_Link->data(FullDosage, language);
-//        }
-//        break;
-//    }
     case AtcId:
     {
         // TODO: A component can have multiple AtcIds.
@@ -829,28 +788,24 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         return d_drug->m_Content.value(ref).value(lang);
 }
 
+/** Returns the number of molecule the drug contains */
 int IDrug::numberOfCodeMolecules() const
 {
     return d_drug->m_Compo.count();
 }
 
+/**
+ * Return the main ATC id linked with this drug.
+ * \warning some drugs can contains multiple ATC ids.
+*/
 int IDrug::mainInnCode() const
 {
-    // TODO: one drug should manage multiple ATC ids
+    // TODO: Manage multiple ATC drugs
     for(int i=0; i < d_drug->m_Compo.count(); ++i) {
         IComponent *compo = d_drug->m_Compo.at(i);
         if (compo->isMainInn())
             return compo->data(IComponent::AtcId).toInt();
     }
-//    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
-//        return -1;
-//    int id = d_drug->m_Compo.at(0)->data(IComponent::MainAtcId).toInt();
-//    if (d_drug->m_Compo.count()==2) {
-//        if (d_drug->m_Compo.at(1)->data(IComponent::MainAtcId).toInt()==id)
-//            return id;
-//    } else {
-//        return id;
-//    }
     return -1;
 }
 
@@ -860,68 +815,47 @@ int IDrug::mainInnCode() const
  */
 QString IDrug::mainInnName() const
 {
+    // TODO: Manage multiple ATC drugs
     for(int i=0; i < d_drug->m_Compo.count(); ++i) {
         IComponent *compo = d_drug->m_Compo.at(i);
         if (compo->isMainInn())
             return compo->data(IComponent::AtcLabel).toString();
     }
-
-//    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
-//        return QString();
-//    QString name = d_drug->m_Compo.at(0)->innName();
-//    if (d_drug->m_Compo.count()==2) {
-//        if (d_drug->m_Compo.at(1)->innName()==name)
-//            return name;
-//    } else {
-//        return name;
-//    }
     return QString::null;
 }
 
+/**
+ * Returns the main INN dosage of the drug.
+ * This is usable with drugs containing only one INN.
+ */
 QString IDrug::mainInnDosage() const
 {
+    // TODO: Manage multiple ATC drugs
     for(int i=0; i < d_drug->m_Compo.count(); ++i) {
         IComponent *compo = d_drug->m_Compo.at(i);
         if (compo->isMainInn())
             return compo->data(IComponent::FullDosage).toString();
     }
-//    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
-//        return QString();
-//    if (d_drug->m_Compo.count() == 2) {
-//        // The two component are linked (only one is the activeSubstance)
-//        if (d_drug->m_Compo.at(0)->isActiveSubstance())
-//            return d_drug->m_Compo.at(0)->dosage();
-//        else
-//            return d_drug->m_Compo.at(1)->dosage();
-//    }
-//    return d_drug->m_Compo.at(0)->dosage();
     return QString::null;
 }
 
+/**
+ * Returns the INN composition of the drug: ATC label and dosage of the ATC.
+ */
 QString IDrug::innComposition() const
 {
     return QString("%1 %2").arg(mainInnName()).arg(mainInnDosage());
-//    QString toReturn;
-//    QString lastInn;
-//    foreach(IComponent *compo, d_drug->m_Compo) {
-//        if (lastInn!=compo->innName()
-//                && !compo->innName().isEmpty())
-//            toReturn += QString("%1 %2 + ").arg(compo->innName(), compo->dosage());
-//        lastInn = compo->innName();
-//    }
-//    if (!toReturn.isEmpty()) {
-//        toReturn.chop(3);
-//        toReturn = toReturn.toUpper();
-//        toReturn += ", " + forms().join(", ");
-//    }
-//    return toReturn;
 }
 
+/**
+ * Returns all related routes
+ */
 QVector<DrugRoute *> IDrug::drugRoutes() const
 {
     return d_drug->m_Routes;
 }
 
+/** Returns true if the drugs contains the ATC id \e atcId */
 bool IDrug::atcIdsContains(const int atcId)
 {
     return d_drug->m_AllIds.contains(atcId);
@@ -939,7 +873,7 @@ namespace {
     const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";
 }
 
-/** \brief Return the composition of the drug in XML format. */
+/** Returns the composition of the drug in XML format. */
 QString IDrug::compositionToXml()
 {
     QString tmp;
@@ -959,6 +893,7 @@ QString IDrug::compositionToXml()
     return tmp;
 }
 
+/** Return a human readable HTML text representing the data of this drug */
 QString IDrug::toHtml() const
 {
     QString msg;
@@ -1046,7 +981,7 @@ QString IDrug::toHtml() const
     return msg;
 }
 
-/** \brief Used to sort the drugs list. */
+/** Used to sort the drugs list. */
 bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
 {
     bool ald1, ald2;
@@ -1062,7 +997,7 @@ bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
     return drug1->brandName() < drug2->brandName();
 }
 
-/** Test aquality with another drug. */
+/** Test equality with another drug. */
 bool IDrug::equals(const IDrug *d)
 {
     return (this->uids() == d->uids() &&
@@ -1070,6 +1005,7 @@ bool IDrug::equals(const IDrug *d)
             this->brandName() == d->brandName());
 }
 
+/** Insert data from the database */
 bool IDrug::setDataFromDb(const int ref, const QVariant &value, const QString &lang)
 {
     if (lang.isEmpty())
@@ -1079,6 +1015,7 @@ bool IDrug::setDataFromDb(const int ref, const QVariant &value, const QString &l
     return true;
 }
 
+/** Add a DrugsDB::IComponent to this drug */
 void IDrug::addComponent(IComponent *compo)
 {
     d_drug->m_Compo.append(compo);
@@ -1093,6 +1030,7 @@ QVector<IComponent *> IDrug::components() const
     return d_drug->m_Compo;
 }
 
+/** Add a DrugsDB::DrugsRoute to this drug */
 void IDrug::addRoute(DrugRoute *route)
 {
     d_drug->m_Routes << route;
