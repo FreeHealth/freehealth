@@ -286,14 +286,14 @@ public:
             return false;
 
         // Recreate old fashion zips table to avoid version breaking for zipcode autocompleters
-        foreach(const QString &iso, countryIsoCodes) {
+//        foreach(const QString &iso, countryIsoCodes) {
             qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             req =   "INSERT INTO `ZIPS` (`ZIP`, `CITY`, `COUNTRY`) "
                     "SELECT `IMPORT`.`ZIP`, `IMPORT`.`CITY`, `IMPORT`.`COUNTRY` FROM `IMPORT`";
             if (!Utils::Database::executeSQL(req, db)) {
                 LOG_ERROR_FOR(q, "Unable to create the old database version");
             }
-        }
+//        }
 
         // Add version
         if (!setDatabaseVersion(connection, QString(PACKAGE_VERSION), QDate::currentDate())) {
