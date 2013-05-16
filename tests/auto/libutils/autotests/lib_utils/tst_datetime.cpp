@@ -70,16 +70,16 @@ private slots:
         QCOMPARE(Utils::roundDateTime(dt, 15), rd);
 
         int div = 15;
-        int max = 60*15 - 2;
+        int max = 60*div - 2;
         dt = QDateTime(QDate::currentDate(), QTime(12,0,1));
         for(int i = 0; i < max; ++i) {
             dt = dt.addMSecs(1000);
             rd = QDateTime(QDate::currentDate(), QTime(12,15,00));
-            QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+            QCOMPARE(Utils::roundDateTime(dt, div), rd);
         }
         dt = dt.addMSecs(2000);
         rd = QDateTime(QDate::currentDate(), QTime(12,30,00));
-        QCOMPARE(Utils::roundDateTime(dt, 15), rd);
+        QCOMPARE(Utils::roundDateTime(dt, div), rd);
     }
 
     void testInRange()

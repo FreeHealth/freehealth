@@ -38,7 +38,6 @@ public:
 private slots:
     void initTestCase()
     {
-        qWarning() << "Wawww";
     }
 
     // TODO: write these tests
