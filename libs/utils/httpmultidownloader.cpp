@@ -37,6 +37,8 @@
 #include <QUrl>
 #include <QDebug>
 
+// TODO: manage file collition: AskUser, Overwriter, DontDownloadIfExists, DownloadIfNever
+
 using namespace Utils;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
