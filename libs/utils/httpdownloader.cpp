@@ -343,7 +343,6 @@ void HttpDownloaderPrivate::httpFinished()
     networkError = reply->error();
 
     if (httpRequestAborted || networkError != QNetworkReply::NoError) {
-
         if (file) {
             file->close();
             file->remove();
@@ -353,6 +352,7 @@ void HttpDownloaderPrivate::httpFinished()
         reply->deleteLater();
         if (progressDialog)
             progressDialog->hide();
+        Q_EMIT q->downloadFinished();
         return;
     }
 
