@@ -64,12 +64,17 @@
 
 #include <QDebug>
 
+// For your tests, you can limit the number of drugs computed and inserted into the database
+// using this debugging enum. Set to -1 if you want all drugs to be processed
+enum { LimitDrugsTo = -1 };
+
 using namespace DrugsDB;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
-const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
+const char* const FR_DRUGS_DATABASE_NAME    = "FR_AFSSAPS";
+const char* const FRENCH_RPC_LINK           = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
 }
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -272,12 +277,20 @@ bool FrDrugDatatabaseStep::populateDatabase()
         drug->setData(Drug::Routes, line.at(3).split(";"));
         drug->setData(Drug::Authorization, QString(line.at(4) + " ; " + line.at(5)));
         drug->setData(Drug::Marketed, line.at(6).startsWith("Comm"));
-        drug->setData(Drug::Spc, line.at(7));
+        if (line.at(7).isEmpty())
+            drug->setData(Drug::Spc, QString());
+        else
+            drug->setData(Drug::Spc, QString(FRENCH_RPC_LINK).arg(line.at(7).rightJustified(7,'0')));
         drug->setData(Drug::Valid, 1);
         drug->setData(Drug::SID, 1);
         drugs.insert(line.at(0).toInt(), drug);
         if (drugs.count() % 10 == 0) {
             Q_EMIT progress(pos);
+        }
+
+        if (LimitDrugsTo != -1) {
+            if (drugs.count() == LimitDrugsTo)
+                break;
         }
     }
     file.close();
@@ -301,7 +314,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
 //        if (!drugs.keys().contains(line.at(0).toInt()))
 //            continue;
 
-        //60001288	(1)comprim	(2)00468	(3)CODINE (PHOSPHATE DE) SESQUIHYDRAT	(4)15 mg 	(5)un comprim	(6)SA	(7)1
+        // 60001288	(1)comprim	(2)00468	(3)CODINE (PHOSPHATE DE) SESQUIHYDRAT	(4)15 mg 	(5)un comprim	(6)SA	(7)1
         Component *compo = new Component;
         compo->setData(Component::Name, line.at(3));
         compo->setData(Component::Strength, line.at(4));
