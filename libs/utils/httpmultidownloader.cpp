@@ -48,11 +48,12 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 const char *const TAG_ROOT = "MultiDownloader";
+const char *const TAG_SERVER = "Server";
 const char *const TAG_URLROOT = "Url";
-const char *const ATTRIB_URL = "url";
-const char *const ATTRIB_FILENAME = "file";
-const char *const ATTRIB_ERRORMSG = "errormsg";
-const char *const ATTRIB_ERROR = "error";
+const char *const ATTRIB_URL = "u";
+const char *const ATTRIB_FILENAME = "f";
+const char *const ATTRIB_ERRORMSG = "m";
+const char *const ATTRIB_ERROR = "e";
 const char *const DEFAULT_XML_FILENAME = "multidownloader.xml";
 }
 
@@ -72,6 +73,7 @@ public:
         _downloader(0),
         _downloadingIndex(-1),
         _useUidAsFileName(false),
+        _onError(HttpMultiDownloader::OnErrorPursue),
         q(parent)
     {
     }
@@ -104,6 +106,7 @@ public:
     DownloadedUrl _emptyDownloaded;
     int _downloadingIndex;
     bool _useUidAsFileName;
+    HttpMultiDownloader::OnError _onError;
     
 private:
     HttpMultiDownloader *q;
@@ -159,6 +162,29 @@ bool HttpMultiDownloader::useUidAsFileNames() const
     return d->_useUidAsFileName;
 }
 
+void HttpMultiDownloader::setDownloadErrorManagement(OnError onError)
+{
+    d->_onError = onError;
+}
+
+/** Be default, set to HttpMultiDownloader::OnErrorPursue*/
+HttpMultiDownloader::OnError HttpMultiDownloader::downloadErrorManagement() const
+{
+    return d->_onError;
+}
+
+/**
+ * If an XML output file exists in the outputpath it will be deleted.
+ * \sa saveXmlUrlFileLinks(), readXmlUrlFileLinks()
+ */
+bool HttpMultiDownloader::clearXmlUrlFileLinks()
+{
+    QFile xmlFile(QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME));
+    if (xmlFile.exists())
+        xmlFile.remove();
+    return true;
+}
+
 /**
  * Save all information to easily switch from QUrl to local file name in the outputPath(). \n
  * Only available if the setUseUidAsFileNames() was set to \e true.
@@ -167,21 +193,42 @@ bool HttpMultiDownloader::saveXmlUrlFileLinks()
 {
     if (!d->_useUidAsFileName)
         return false;
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progressMessageChanged(tr("Saving cache"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QDomDocument doc("FreeMedForms");
     QDomElement element = doc.createElement(::TAG_ROOT);
     doc.appendChild(element);
     QDir output(outputPath());
+    int count = d->_downloadedUrl.count();
+    int i = 0;
+    // TODO: group url per server and manage the ::TAG_SERVER
+    // The XML structure will then be
+    // <Server u="http://www.common.com/path/of/the/following/url">
+    //   <Url u="./relative/to/common.html" .../>
+    // </Server>
     foreach(const DownloadedUrl &url, d->_downloadedUrl) {
         QDomElement urlElement = doc.createElement(::TAG_URLROOT);
         urlElement.setAttribute(::ATTRIB_URL, url.url.toString());
         urlElement.setAttribute(::ATTRIB_FILENAME, output.relativeFilePath(url.outputFile));
         urlElement.setAttribute(::ATTRIB_ERRORMSG, url.errorMessage);
         urlElement.setAttribute(::ATTRIB_ERROR, url.networkError);
+        ++i;
+        if (i % 10 == 0) {
+            int permille = i/count*1000;
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            Q_EMIT downloadProgressPermille(permille);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        }
         element.appendChild(urlElement);
     }
-    return Utils::saveStringToFile(QString("<?xml version='1.0' encoding='UTF-8'?>\n" + doc.toString(2)),
+    bool ok = Utils::saveStringToFile(QString("<?xml version='1.0' encoding='UTF-8'?>\n" + doc.toString(2)),
                                    QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME),
                                    Utils::Overwrite, Utils::DontWarnUser);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progressMessageChanged(tr("Cache saved"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    return ok;
 }
 
 /**
@@ -189,6 +236,9 @@ bool HttpMultiDownloader::saveXmlUrlFileLinks()
  */
 bool HttpMultiDownloader::readXmlUrlFileLinks()
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progressMessageChanged(tr("Processing cache"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QDomDocument doc;
     if (!doc.setContent(Utils::readTextFile(QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME), Utils::DontWarnUser))) {
         LOG_ERROR("Wrong xml file");
@@ -196,6 +246,8 @@ bool HttpMultiDownloader::readXmlUrlFileLinks()
     }
     QDomElement element = doc.firstChildElement(::TAG_ROOT);
     QDir output(outputPath());
+    int count = element.childNodes().count();
+    int i = 0;
     element = element.firstChildElement(::TAG_URLROOT);
     while (!element.isNull()) {
         DownloadedUrl url;
@@ -205,24 +257,50 @@ bool HttpMultiDownloader::readXmlUrlFileLinks()
         url.networkError = QNetworkReply::NetworkError(element.attribute(::ATTRIB_ERROR).toInt());
         d->_urls << url.url;
         d->_downloadedUrl << url;
+        ++i;
+        if (i % 10 == 0) {
+            int permille = i/count*1000;
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            Q_EMIT downloadProgressPermille(permille);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+        }
         element = element.nextSiblingElement(::TAG_URLROOT);
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    Q_EMIT progressMessageChanged(tr("Cache processed"));
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     return true;
 }
 
-/** Define the list of urls to download in one pass */
+/**
+ * Define the list of urls to download in one pass.
+ * This will overwrite any recorded url to download list but will not
+ * reset the downloaded information (eg if you used readXmlUrlFileLinks()
+ * which populates the downloaded information).
+ */
 void HttpMultiDownloader::setUrls(const QList<QUrl> &urls)
 {
     d->_urls = urls;
 }
 
-/** Define the list of urls to download in one pass */
+/**
+ * Define the list of urls to download in one pass.
+ * This will overwrite any recorded url to download list but will not
+ * reset the downloaded information (eg if you used readXmlUrlFileLinks()
+ * which populates the downloaded information).
+ */
 void HttpMultiDownloader::setUrls(const QStringList &urls)
 {
     d->_urls.clear();
     foreach(const QString &url, urls) {
         d->_urls << QUrl(url);
     }
+}
+
+/** Add a list of urls to download in one pass */
+void HttpMultiDownloader::addUrls(const QList<QUrl> &urls)
+{
+    d->_urls << urls;
 }
 
 /** Returns the list of urls to download */
@@ -236,6 +314,7 @@ bool HttpMultiDownloader::startDownload()
 {
     if (d->_urls.isEmpty()) {
         LOG_ERROR("Nothing to download");
+        Q_EMIT allDownloadFinished();
         return false;
     }
     d->_downloadingIndex = 0;

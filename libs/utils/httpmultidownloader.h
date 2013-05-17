@@ -48,6 +48,11 @@ class UTILS_EXPORT HttpMultiDownloader : public QObject
     Q_OBJECT
 
 public:
+    enum OnError {
+        OnErrorStop = 0,
+        OnErrorPursue
+    };
+
     explicit HttpMultiDownloader(QObject *parent = 0);
     ~HttpMultiDownloader();
     
@@ -57,12 +62,17 @@ public:
     void setUseUidAsFileNames(bool useUidInsteadOfUrlFileName);
     bool useUidAsFileNames() const;
 
+    void setDownloadErrorManagement(OnError onError);
+    OnError downloadErrorManagement() const;
+
+    bool clearXmlUrlFileLinks();
     bool saveXmlUrlFileLinks();
     bool readXmlUrlFileLinks();
 
     // Setter for URL
     void setUrls(const QList<QUrl> &urls);
     void setUrls(const QStringList &urls);
+    void addUrls(const QList<QUrl> &urls);
     // TODO: void addUrl(const QUrl &url, const QString &relativeOutputFileName); + QTest
     const QList<QUrl> &urls() const;
 
@@ -78,6 +88,7 @@ private Q_SLOTS:
     bool onCurrentDownloadFinished();
 
 Q_SIGNALS:
+    void progressMessageChanged(const QString &message);
     void downloadFinished(const QUrl &url);
     void downloadProgressPermille(int);
     void allDownloadFinished();
