@@ -143,6 +143,45 @@ private slots:
         qWarning() << "Utils::HttpMultiDownloader successfully tested";
     }
 
+    void testMultiDownloaderWithXmlFile()
+    {
+        delete _multiDownloader;
+        _multiDownloader = new Utils::HttpMultiDownloader(this);
+        QUrl url1("http://freemedforms.googlecode.com/git/freemedforms.pro");
+        QUrl url2("http://freemedforms.googlecode.com/git/freediams.pro");
+        QList<QUrl> urls;
+        urls << url1 << url2;
+        _multiDownloader->setUrls(urls);
+        _multiDownloader->setUseUidAsFileNames(true);
+
+        QString outputPath = qApp->applicationDirPath() + "/http_test/";
+        QString error;
+        QVERIFY(Utils::removeDirRecursively(outputPath, &error));
+        QVERIFY(QDir().mkpath(outputPath));
+        _multiDownloader->setOutputPath(outputPath);
+
+        // Start download
+        _multiDownloader->startDownload();
+        QVERIFY(waitForSignal(_multiDownloader, SIGNAL(allDownloadFinished()), 100000));
+
+        // Save XML path description
+        _multiDownloader->saveXmlUrlFileLinks();
+
+        // Create another downloader
+        Utils::HttpMultiDownloader *d2 = new Utils::HttpMultiDownloader(this);
+        d2->setOutputPath(_multiDownloader->outputPath());
+        // Read the xml file
+        d2->readXmlUrlFileLinks();
+
+        // Now both downloader should return the same values
+        QVERIFY(_multiDownloader->urls() == d2->urls());
+        foreach(const QUrl &url, d2->urls()) {
+            QVERIFY(_multiDownloader->outputAbsoluteFileName(url) == d2->outputAbsoluteFileName(url));
+            QVERIFY(_multiDownloader->lastErrorString(url) == d2->lastErrorString(url));
+            QVERIFY(_multiDownloader->networkError(url) == d2->networkError(url));
+        }
+    }
+
     void cleanupTestCase()
     {
         delete _downloader;
