@@ -284,9 +284,9 @@ bool HttpDownloaderPrivate::downloadFile()
 
         file = new QFile(fileName);
         if (!file->open(QIODevice::WriteOnly)) {
-            // FIXME: No direct GUI access from a non-GUI class!!!
-            Utils::warningMessageBox(tr("Unable to save the file %1: %2.")
-                                     .arg(fileName).arg(file->errorString()), "");
+            lastError = tr("Unable to save the file %1: %2.")
+                    .arg(fileName).arg(file->errorString());
+            LOG_ERROR(lastError);
             delete file;
             file = 0;
             return false;
