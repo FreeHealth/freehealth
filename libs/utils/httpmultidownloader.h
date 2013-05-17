@@ -54,10 +54,17 @@ public:
     void setOutputPath(const QString &absolutePath);
     QString outputPath() const;
 
+    void setUseUidAsFileNames(bool useUidInsteadOfUrlFileName);
+    bool useUidAsFileNames() const;
+
+    bool saveXmlUrlFileLinks();
+    bool readXmlUrlFileLinks();
+
     // Setter for URL
     void setUrls(const QList<QUrl> &urls);
     void setUrls(const QStringList &urls);
     // TODO: void addUrl(const QUrl &url, const QString &relativeOutputFileName); + QTest
+    const QList<QUrl> &urls() const;
 
     // Getters for URL
     QString lastErrorString(const QUrl &url) const;

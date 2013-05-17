@@ -32,9 +32,12 @@
 #include "httpdownloader.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 
 #include <QUrl>
+#include <QDir>
+#include <QDomDocument>
 #include <QDebug>
 
 // TODO: manage file collition: AskUser, Overwriter, DontDownloadIfExists, DownloadIfNever
@@ -42,6 +45,16 @@
 using namespace Utils;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+namespace {
+const char *const TAG_ROOT = "MultiDownloader";
+const char *const TAG_URLROOT = "Url";
+const char *const ATTRIB_URL = "url";
+const char *const ATTRIB_FILENAME = "file";
+const char *const ATTRIB_ERRORMSG = "errormsg";
+const char *const ATTRIB_ERROR = "error";
+const char *const DEFAULT_XML_FILENAME = "multidownloader.xml";
+}
 
 namespace Utils {
 namespace Internal {
@@ -58,9 +71,9 @@ public:
     HttpMultiDownloaderPrivate(HttpMultiDownloader *parent) :
         _downloader(0),
         _downloadingIndex(-1),
+        _useUidAsFileName(false),
         q(parent)
     {
-        Q_UNUSED(q);
     }
     
     ~HttpMultiDownloaderPrivate()
@@ -69,20 +82,28 @@ public:
 
     const DownloadedUrl &downloadedUrl(const QUrl &url)
     {
-        foreach(const DownloadedUrl &dld, _DownloadedUrl) {
+        foreach(const DownloadedUrl &dld, _downloadedUrl) {
             if (dld.url == url)
                 return dld;
         }
         return _emptyDownloaded;
+    }
+
+    QString uuidFileName(const QUrl &url)
+    {
+        return QString("%1.%2")
+                .arg(Utils::createUid())
+                .arg(QFileInfo(url.toString()).completeSuffix());
     }
     
 public:
     QList<QUrl> _urls;
     QString _outputPath;
     Utils::HttpDownloader *_downloader;
-    QList<DownloadedUrl> _DownloadedUrl;
+    QList<DownloadedUrl> _downloadedUrl;
     DownloadedUrl _emptyDownloaded;
     int _downloadingIndex;
+    bool _useUidAsFileName;
     
 private:
     HttpMultiDownloader *q;
@@ -121,6 +142,74 @@ QString HttpMultiDownloader::outputPath() const
     return d->_outputPath;
 }
 
+/**
+ * To avoid file collition, you can force the downloader to use QUuid as file names instead of the
+ * QUrl filename. You must define this property before any download.\n
+ * To keep a trace of this link (local file <-> url), you can save the XML data using saveXmlUrlFileLinks()
+ * then read this file using readXmlUrlFileLinks(). \n
+ * By default, this property is set to false.
+ */
+void HttpMultiDownloader::setUseUidAsFileNames(bool useUidInsteadOfUrlFileName)
+{
+    d->_useUidAsFileName = useUidInsteadOfUrlFileName;
+}
+
+bool HttpMultiDownloader::useUidAsFileNames() const
+{
+    return d->_useUidAsFileName;
+}
+
+/**
+ * Save all information to easily switch from QUrl to local file name in the outputPath(). \n
+ * Only available if the setUseUidAsFileNames() was set to \e true.
+ */
+bool HttpMultiDownloader::saveXmlUrlFileLinks()
+{
+    if (!d->_useUidAsFileName)
+        return false;
+    QDomDocument doc("FreeMedForms");
+    QDomElement element = doc.createElement(::TAG_ROOT);
+    doc.appendChild(element);
+    QDir output(outputPath());
+    foreach(const DownloadedUrl &url, d->_downloadedUrl) {
+        QDomElement urlElement = doc.createElement(::TAG_URLROOT);
+        urlElement.setAttribute(::ATTRIB_URL, url.url.toString());
+        urlElement.setAttribute(::ATTRIB_FILENAME, output.relativeFilePath(url.outputFile));
+        urlElement.setAttribute(::ATTRIB_ERRORMSG, url.errorMessage);
+        urlElement.setAttribute(::ATTRIB_ERROR, url.networkError);
+        element.appendChild(urlElement);
+    }
+    return Utils::saveStringToFile(QString("<?xml version='1.0' encoding='UTF-8'?>\n" + doc.toString(2)),
+                                   QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME),
+                                   Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/**
+ * Read all information to easily switch from QUrl to local file name from the outputPath().
+ */
+bool HttpMultiDownloader::readXmlUrlFileLinks()
+{
+    QDomDocument doc;
+    if (!doc.setContent(Utils::readTextFile(QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME), Utils::DontWarnUser))) {
+        LOG_ERROR("Wrong xml file");
+        return false;
+    }
+    QDomElement element = doc.firstChildElement(::TAG_ROOT);
+    QDir output(outputPath());
+    element = element.firstChildElement(::TAG_URLROOT);
+    while (!element.isNull()) {
+        DownloadedUrl url;
+        url.url = QUrl(element.attribute(::ATTRIB_URL));
+        url.outputFile = output.absoluteFilePath(element.attribute(::ATTRIB_FILENAME));
+        url.errorMessage = element.attribute(::ATTRIB_ERRORMSG);
+        url.networkError = QNetworkReply::NetworkError(element.attribute(::ATTRIB_ERROR).toInt());
+        d->_urls << url.url;
+        d->_downloadedUrl << url;
+        element = element.nextSiblingElement(::TAG_URLROOT);
+    }
+    return true;
+}
+
 /** Define the list of urls to download in one pass */
 void HttpMultiDownloader::setUrls(const QList<QUrl> &urls)
 {
@@ -136,6 +225,12 @@ void HttpMultiDownloader::setUrls(const QStringList &urls)
     }
 }
 
+/** Returns the list of urls to download */
+const QList<QUrl> &HttpMultiDownloader::urls() const
+{
+    return d->_urls;
+}
+
 /** Start downloading files one by one */
 bool HttpMultiDownloader::startDownload()
 {
@@ -145,6 +240,9 @@ bool HttpMultiDownloader::startDownload()
     }
     d->_downloadingIndex = 0;
     d->_downloader->setUrl(d->_urls.at(d->_downloadingIndex));
+    if (d->_useUidAsFileName) {
+        d->_downloader->setOutputFileName(d->uuidFileName(d->_urls.at(d->_downloadingIndex)));
+    }
     if (!d->_downloader->startDownload()) {
         LOG_ERROR("Download not started");
         return false;
@@ -160,7 +258,7 @@ bool HttpMultiDownloader::onCurrentDownloadFinished()
     dld.errorMessage = d->_downloader->lastErrorString();
     dld.networkError = d->_downloader->networkError();
     dld.outputFile = d->_downloader->outputAbsoluteFileName();
-    d->_DownloadedUrl.append(dld);
+    d->_downloadedUrl.append(dld);
 
     // Emit downloadFinished(url)
     Q_EMIT downloadFinished(dld.url);
@@ -175,6 +273,9 @@ bool HttpMultiDownloader::onCurrentDownloadFinished()
     // Start next url
     ++d->_downloadingIndex;
     d->_downloader->setUrl(d->_urls.at(d->_downloadingIndex));
+    if (d->_useUidAsFileName) {
+        d->_downloader->setOutputFileName(d->uuidFileName(d->_urls.at(d->_downloadingIndex)));
+    }
     if (!d->_downloader->startDownload()) {
         LOG_ERROR("Download not started");
         return false;
@@ -182,18 +283,21 @@ bool HttpMultiDownloader::onCurrentDownloadFinished()
     return true;
 }
 
+/** Returns the error message linked with the \e url */
 QString HttpMultiDownloader::lastErrorString(const QUrl &url) const
 {
     const DownloadedUrl &dld = d->downloadedUrl(url);
     return dld.errorMessage;
 }
 
+/** Returns the error linked with the \e url */
 QNetworkReply::NetworkError HttpMultiDownloader::networkError(const QUrl &url) const
 {
     const DownloadedUrl &dld = d->downloadedUrl(url);
     return dld.networkError;
 }
 
+/** Returns the output filename linked with the \e url */
 QString HttpMultiDownloader::outputAbsoluteFileName(const QUrl &url) const
 {
     const DownloadedUrl &dld = d->downloadedUrl(url);
