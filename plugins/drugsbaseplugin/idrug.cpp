@@ -100,7 +100,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
 
 namespace DrugsDB {
 namespace Internal {
@@ -682,10 +681,6 @@ QVariant IDrug::data(const int ref, const QString &lang) const
                 toReturn = d_drug->m_Content.value(Spc).value(Trans::Constants::ALL_LANGUAGE).toString();
         } else {
             toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
-        }
-        if (!toReturn.isEmpty()) {
-            if (drugsBase().actualDatabaseInformation()->identifier == Constants::DB_DEFAULT_IDENTIFIANT)
-                toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
         }
         return toReturn;
     }
