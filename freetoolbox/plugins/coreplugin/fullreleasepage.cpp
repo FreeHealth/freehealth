@@ -64,6 +64,7 @@ FullReleasePageWidget::FullReleasePageWidget(QWidget *parent) :
     m_FullReleaseProgress(0),
     _currentProcessingStep(-1)
 {
+    setObjectName("FullReleasePageWidget");
     QVBoxLayout *lcont = new QVBoxLayout(this);
     lcont->setMargin(0);
     lcont->setSpacing(0);
@@ -118,12 +119,24 @@ void FullReleasePageWidget::createFullRelease()
 void FullReleasePageWidget::startProcess()
 {
     Core::IFullReleaseStep *step = m_Steps.at(_currentProcessingStep);
-    if (m_FullReleaseProgress) {
-        m_FullReleaseProgress->setLabelText(QString("Starting process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+    QString timing, subProcess;
+    switch (_currentTiming) {
+    case Core::IFullReleaseStep::PreProcess: timing="PreProcess"; break;
+    case Core::IFullReleaseStep::Process: timing="Process"; break;
+    case Core::IFullReleaseStep::PostProcess: timing="PostProcess"; break;
     }
-    LOG(QString("------------- Starting process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+    switch (_currentSubProcess) {
+    case Core::IFullReleaseStep::Initialization: subProcess="Initialization"; break;
+    case Core::IFullReleaseStep::Main: subProcess="Main"; break;
+    case Core::IFullReleaseStep::DataPackSubProcess: subProcess="DataPackSubProcess"; break;
+    case Core::IFullReleaseStep::Final: subProcess="Final"; break;
+    }
+    if (m_FullReleaseProgress) {
+        m_FullReleaseProgress->setLabelText(QString("Starting process: %1 (%2;%3)").arg(step->id()).arg(timing).arg(subProcess));
+    }
+    LOG(QString("----------- Starting process: %1 (%2;%3)").arg(step->id()).arg(timing).arg(subProcess));
     if (!step->startProcessing(_currentTiming, _currentSubProcess))
-        LOG_ERROR(QString("Unable to start process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+        LOG_ERROR(QString("Unable to start process: %1 (%2;%3)").arg(step->id()).arg(timing).arg(subProcess));
 }
 
 void FullReleasePageWidget::onSubProcessFinished(Core::IFullReleaseStep::ProcessTiming timing, Core::IFullReleaseStep::SubProcess subProcess)
