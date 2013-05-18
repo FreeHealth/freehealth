@@ -130,10 +130,11 @@ public:
     virtual bool populateDatabase() = 0; // Cannot be asynchronous
     virtual bool linkMolecules() = 0;  // Cannot be asynchronous
 
+    bool saveDrugSpc(const SpcContent &content);
+
 private Q_SLOTS:
     void onSubProcessFinished();
     bool onAllSpcDownloadFinished();
-    bool saveDrugSpc(const SpcContent &content);
 
 Q_SIGNALS:
     void spcProcessFinished();
