@@ -76,7 +76,8 @@ HEADERS += global_exporter.h \
     numbertostring.h \
     printaxishelper.h \
     httpmultidownloader.h \
-    widgets/qmenuitemview.h
+    widgets/qmenuitemview.h \
+    waitforsignal.h
 
 
 SOURCES += global.cpp \
@@ -138,7 +139,8 @@ SOURCES += global.cpp \
     numbertostring.cpp \
     printaxishelper.cpp \
     httpmultidownloader.cpp \
-    widgets/qmenuitemview.cpp
+    widgets/qmenuitemview.cpp \
+    waitforsignal.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm
