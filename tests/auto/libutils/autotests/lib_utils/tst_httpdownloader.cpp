@@ -26,6 +26,7 @@
 #include <utils/httpdownloader.h>
 #include <utils/httpmultidownloader.h>
 #include <utils/global.h>
+#include <utils/waitforsignal.h>
 
 #include "../../autotest.h"
 
@@ -34,20 +35,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QTest>
-
-static bool waitForSignal(QObject *sender, const char *signal, int timeoutMs = 10000) {
-    QEventLoop loop;
-    QTimer timer;
-    timer.setInterval(timeoutMs);
-    timer.setSingleShot(true);
-
-    loop.connect(sender, signal, SLOT(quit()));
-    loop.connect(&timer, SIGNAL(timeout()), SLOT(quit()));
-    timer.start();
-    loop.exec();
-
-    return timer.isActive();
-}
 
 static const char * MAC_BUNDLE = "/../../../";
 
@@ -95,7 +82,7 @@ private slots:
 
         // Start download
         _downloader->startDownload();
-        QVERIFY(waitForSignal(_downloader, SIGNAL(downloadFinished()), 100000));
+        QVERIFY(Utils::waitForSignal(_downloader, SIGNAL(downloadFinished()), 100000));
 
         // Verify downloaded content
         QVERIFY2(Utils::fileMd5(QString(outputPath + "freemedforms.pro")) == Utils::fileMd5(QString(qApp->applicationDirPath() + MAC_BUNDLE + "/../../freemedforms.pro")),
@@ -123,7 +110,7 @@ private slots:
 
         // Start download
         _multiDownloader->startDownload();
-        QVERIFY(waitForSignal(_multiDownloader, SIGNAL(allDownloadFinished()), 100000));
+        QVERIFY(Utils::waitForSignal(_multiDownloader, SIGNAL(allDownloadFinished()), 100000));
 
         // Verify downloaded content
         QVERIFY(QFile(QString(outputPath + "freemedforms.pro")).exists());
@@ -162,7 +149,7 @@ private slots:
 
         // Start download
         _multiDownloader->startDownload();
-        QVERIFY(waitForSignal(_multiDownloader, SIGNAL(allDownloadFinished()), 100000));
+        QVERIFY(Utils::waitForSignal(_multiDownloader, SIGNAL(allDownloadFinished()), 100000));
 
         // Save XML path description
         _multiDownloader->saveXmlUrlFileLinks();
