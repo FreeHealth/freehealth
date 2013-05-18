@@ -242,8 +242,10 @@ bool FrDrugDatatabaseStep::prepareData()
 /** Read the raw source files and create the drugs database (this does not include the interaction data) */
 bool FrDrugDatatabaseStep::populateDatabase()
 {
-    if (!checkDatabase())
-        return false;
+    if (!checkDatabase()) {
+        if (!createDatabase())
+            return false;
+    }
 
     // check files
     if (!prepareData())
