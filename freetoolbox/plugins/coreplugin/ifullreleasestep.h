@@ -37,6 +37,14 @@
 */
 
 namespace Core {
+namespace Internal {
+// You shouldn't directly access this member.
+// Use The IFullReleaseStep::hasError(), IFullReleaseStep::errorMessage()
+struct SubProcessError {
+    QString errorMsg;
+    int timing, subProcess;
+};
+}
 
 class CORE_EXPORT IFullReleaseStep : public QObject
 {
@@ -55,25 +63,53 @@ public:
         TmpCleaning
     };
 
+    enum ProcessTiming {
+        PreProcess = 0,
+        Process,
+        PostProcess
+    };
+
+    enum SubProcess {
+        Initialization = 0,
+        Main,
+        DataPackSubProcess,
+        Final
+    };
+
     explicit IFullReleaseStep(QObject *parent = 0) : QObject(parent) {}
+    virtual ~IFullReleaseStep() {}
+
     virtual QString id() const = 0;
     virtual Steps stepNumber() const = 0;
 
     virtual bool createTemporaryStorage() = 0;
     virtual bool cleanTemporaryStorage() = 0;
 
-    virtual bool startDownload() = 0;
-    virtual bool postDownloadProcessing();
-    virtual bool process() = 0;
+    virtual bool startProcessing(ProcessTiming timing, SubProcess subProcess) = 0;
 
-    virtual bool registerDataPack() = 0;
+    // Error management
+    virtual void clearErrors();
+    virtual void addError(ProcessTiming timing, SubProcess subProcess, const QString &message);
+    virtual bool hasError() const;
+    virtual bool hasError(ProcessTiming timing, SubProcess subProcess) const;
+    virtual QString errorMessage(ProcessTiming timing, SubProcess subProcess) const;
 
-    virtual QString processMessage() const = 0;
-    virtual QStringList errors() const = 0;
+    // OBSOLETE
+//    virtual bool startDownload() = 0;
+//    virtual bool postDownloadProcessing();
+//    virtual bool process() = 0;
+
+//    virtual bool registerDataPack() = 0;
+
+//    virtual QString processMessage() const = 0;
+//    virtual QStringList errors() const = 0;
+    // END OBSOLETE
 
     static bool lessThan(const IFullReleaseStep *s1, const IFullReleaseStep *s2) {return s1->stepNumber() < s2->stepNumber();}
 
 Q_SIGNALS:
+    void subProcessFinished(Core::IFullReleaseStep::ProcessTiming timing, Core::IFullReleaseStep::SubProcess subProcess);
+
     void downloadFinished();
     void postDownloadProcessingFinished();
     void processFinished();
@@ -82,6 +118,9 @@ Q_SIGNALS:
     void progressLabelChanged(const QString &label);
     void progress(int value);
     void progressRangeChanged(int min, int max);
+
+private:
+    QList<Internal::SubProcessError> _errors;
 };
 
 } //  End namespace Core

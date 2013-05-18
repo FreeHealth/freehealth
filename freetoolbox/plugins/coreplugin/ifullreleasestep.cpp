@@ -33,11 +33,11 @@
  * Classes that implement this interface can provide a data source and storage for arbitrary data
  * that can be used then in FreeMedForms or one of its sub-applications.
  *
- * Life cycle of the object:
+ * Life cycle of the object:\n
  * The Object should be created by your inherited Core::IToolPage classes and added to the
  * plugin manager object pool.
  *
- * Actions & order:
+ * Actions & order:\n
  * When the user selects a "Create Full Release", all IFullReleaseStep objects are retrieved from the
  * plugin manager object pool and actions are called in the following order:
  * - createTemporaryStorage()
@@ -50,18 +50,18 @@
  * and must not depend on or call any UI widgets. The methods should be thread-safe, so any connection to the UI must be
  * done via Qt's Signal/Slot mechanism.
  *
- * Getting connected with the UI:
+ * Getting connected with the UI:\n
  * The whole Step object is a non-GUI object which must not have any direct GUI access. It may run threaded, and
  * direct GUI access is not thread save. Instead you can connect your objects to various signals.
  *
- * DEPRECATED: ***** this should be done by the callee! NO direct UI calls! *****
+ * DEPRECATED: ***** this should be done by the callee! NO direct UI calls! *****\n
  * When a step is started, a modal progress dialog is executed. During all your sub-processes
  * you can adapt this progress dialog using the following signals:
  * - progressRangeChanged() to change the range of the progress dialog
  * - progressLabelChanged() to change the label of the progress dialog
  * - progress() to change the current progress dialog value
  *
- * Managing your own datapacks:
+ * Managing your own datapacks:\n
  * You can register datapacks by overloading the registerDataPack().
  */
 
@@ -144,8 +144,44 @@
  * Provides a comparison of two steps, used by the sort algorythm.
  */
 
-bool Core::IFullReleaseStep::postDownloadProcessing()
+/** Clear all registered errors */
+void Core::IFullReleaseStep::clearErrors()
 {
-    Q_EMIT postDownloadProcessingFinished();
-    return true;
+    _errors.clear();
+}
+
+/** Add an error message \e message for a specific \e timing and \e subProcess */
+void Core::IFullReleaseStep::addError(ProcessTiming timing, SubProcess subProcess, const QString &message)
+{
+    Core::Internal::SubProcessError error;
+    error.timing = timing;
+    error.subProcess = subProcess;
+    error.errorMsg = message;
+    _errors << error;
+}
+
+/** Return \e true there is at least one error registered, otherwise return \e false. */
+bool Core::IFullReleaseStep::hasError() const
+{
+    return (!_errors.isEmpty());
+}
+
+/** Return \e true if an error message is registered for a specific \e timing and \e subProcess, otherwise return \e false. */
+bool Core::IFullReleaseStep::hasError(ProcessTiming timing, SubProcess subProcess) const
+{
+    foreach(const Core::Internal::SubProcessError &error, _errors) {
+        if (error.timing == timing && error.subProcess == subProcess)
+            return true;
+    }
+    return false;
+}
+
+/** Return the error message registered for a specific \e timing and \e subProcess or a null QString. */
+QString Core::IFullReleaseStep::errorMessage(ProcessTiming timing, SubProcess subProcess) const
+{
+    foreach(const Core::Internal::SubProcessError &error, _errors) {
+        if (error.timing == timing && error.subProcess == subProcess)
+            return error.errorMsg;
+    }
+    return QString::null;
 }
