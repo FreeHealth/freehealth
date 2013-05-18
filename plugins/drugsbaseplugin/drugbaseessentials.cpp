@@ -256,16 +256,26 @@ DrugBaseEssentials::DrugBaseEssentials():
     i = Table_CURRENTVERSION;
     types.insertMulti(i, ftype(CURRENTVERSION_ID, FieldIsUniquePrimaryKey));
     types.insertMulti(i, ftype(CURRENTVERSION_NUMBER, FieldIsShortText));
+
 #if DRUGS_DATABASE_VERSION >= 0x000804
     i = Table_DRUG_SPC;
     types.insertMulti(i, ftype(DRUG_SPC_DID,FieldIsInteger));
     types.insertMulti(i, ftype(DRUG_SPC_SPCCONTENT_ID,FieldIsInteger));
     i = Table_SPC_CONTENT;
     types.insertMulti(i, ftype(SPCCONTENT_ID,FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(SPCCONTENT_LABEL,FieldIsLongText));
+    types.insertMulti(i, ftype(SPCCONTENT_LABEL,FieldIsShortText));
     types.insertMulti(i, ftype(SPCCONTENT_URL_SOURCE,FieldIsShortText));
     types.insertMulti(i, ftype(SPCCONTENT_DATEOFDOWNLOAD,FieldIsDateTime));
     types.insertMulti(i, ftype(SPCCONTENT_HTMLCONTENT,FieldIsBlob));
+    types.insertMulti(i, ftype(SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID,FieldIsInteger));
+    i = Table_SPC_CONTENTRESOURCE_LINK;
+    types.insertMulti(i, ftype(SPCCONTENT_RESOURCES_LINK_ID,FieldIsInteger));
+    types.insertMulti(i, ftype(SPCCONTENT_SPCCONTENTRESOURCES_ID,FieldIsInteger));
+    i = Table_SPC_CONTENTRESOURCE;
+    types.insertMulti(i, ftype(SPCCONTENTRESOURCES_ID,FieldIsUniquePrimaryKey));
+    types.insertMulti(i, ftype(SPCCONTENTRESOURCES_TYPE,FieldIsShortText));
+    types.insertMulti(i, ftype(SPCCONTENTRESOURCES_NAME,FieldIsShortText));
+    types.insertMulti(i, ftype(SPCCONTENTRESOURCES_CONTENT,FieldIsBlob));
 #endif
 
     for(int i=0; i < Table_MaxParam; ++i) {
