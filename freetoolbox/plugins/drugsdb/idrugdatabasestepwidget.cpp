@@ -67,6 +67,7 @@ public:
         _progress(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~IDrugDatabaseStepWidgetPrivate()
@@ -124,7 +125,7 @@ void IDrugDatabaseStepWidget::on_startJobs_clicked()
     d->_progress->setWindowModality(Qt::WindowModal);
     d->_progress->setValue(0);
     d->_progress->show();
-    connect(d->_step, SIGNAL(progressRangeChanged(qint64,qint64)), this, SLOT(changeStepProgressRange(qint64,qint64)));
+    connect(d->_step, SIGNAL(progressRangeChanged(int,int)), this, SLOT(changeStepProgressRange(int,int)));
     connect(d->_step, SIGNAL(progress(int)), d->_progress, SLOT(setValue(int)));
     connect(d->_step, SIGNAL(progressLabelChanged(QString)), d->_progress, SLOT(setLabelText(QString)));
 
@@ -172,6 +173,10 @@ void IDrugDatabaseStepWidget::on_startJobs_clicked()
         if (d->_step->addPregnancyCheckingData())
             d->ui->addPreg->setText(d->ui->addPreg->text() + " CORRECTLY DONE");
     }
+    if (d->ui->spc->isChecked()) {
+        if (d->_step->downloadSpcContents())
+            d->ui->spc->setText(d->ui->spc->text() + " CORRECTLY DONE");
+    }
     Utils::Log::messagesToTreeWidget(d->ui->messages);
     Utils::Log::errorsToTreeWidget(d->ui->errors);
 
@@ -196,7 +201,7 @@ void IDrugDatabaseStepWidget::downloadFinished()
     d->ui->download->setEnabled(true);
 }
 
-void IDrugDatabaseStepWidget::changeStepProgressRange(qint64 min, qint64 max)
+void IDrugDatabaseStepWidget::changeStepProgressRange(int min, int max)
 {
     if (d->_step && d->_progress)
         d->_progress->setRange(min, max);

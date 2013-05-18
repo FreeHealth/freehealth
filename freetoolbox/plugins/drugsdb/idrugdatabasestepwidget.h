@@ -54,7 +54,7 @@ private Q_SLOTS:
     void on_startJobs_clicked();
     bool on_download_clicked();
     void downloadFinished();
-    void changeStepProgressRange(qint64 min, qint64 max);
+    void changeStepProgressRange(int min, int max);
 
 private:
     void showEvent(QShowEvent *event);

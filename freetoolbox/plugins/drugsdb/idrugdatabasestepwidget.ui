@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>518</width>
-    <height>473</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -170,13 +170,6 @@
       <string>Non-free part</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="linkMols">
-        <property name="text">
-         <string>Link molecules with ATC</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="addPims">
         <property name="text">
@@ -184,10 +177,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="addAtc">
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="addPreg">
         <property name="text">
-         <string>Add ATC to database</string>
+         <string>Add pregnancy checking</string>
         </property>
        </widget>
       </item>
@@ -198,10 +191,24 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="addPreg">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="linkMols">
         <property name="text">
-         <string>Add pregnancy checking</string>
+         <string>Link molecules with ATC</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="addAtc">
+        <property name="text">
+         <string>Add ATC to database</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="spc">
+        <property name="text">
+         <string>Download SPC</string>
         </property>
        </widget>
       </item>
