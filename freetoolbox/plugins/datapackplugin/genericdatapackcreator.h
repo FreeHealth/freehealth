@@ -51,15 +51,17 @@ public:
     virtual bool createTemporaryStorage();
     virtual bool cleanTemporaryStorage();
 
-    virtual bool startDownload();
-    virtual bool postDownloadProcessing();
-    virtual bool process();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
 
-    virtual bool registerDataPack();
+private:
+    bool registerDataPack();
 
-    virtual QString processMessage() const;
+private Q_SLOTS:
+    void onSubProcessFinished();
 
-    virtual QStringList errors() const;
+private:
+    ProcessTiming _currentTiming;
+    SubProcess _currentSubProcess;
 };
 
 } // namespace Internal

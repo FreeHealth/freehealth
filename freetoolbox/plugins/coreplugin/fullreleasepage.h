@@ -27,10 +27,10 @@
 #define FREETOOLBOX_FULLRELEASEPAGE_H
 
 #include <coreplugin/itoolpage.h>
+#include <coreplugin/ifullreleasestep.h>
 
 #include <QLabel>
 #include <QHash>
-#include <QFutureWatcher>
 QT_BEGIN_NAMESPACE
 class QProgressDialog;
 class QSpacerItem;
@@ -61,24 +61,21 @@ public Q_SLOTS:
     void createFullRelease();
 
 private Q_SLOTS:
+    void startProcess();
+    void onSubProcessFinished(Core::IFullReleaseStep::ProcessTiming timing, Core::IFullReleaseStep::SubProcess subProcess);
     void setProgressRange(int min, int max);
-    void startNextDownload();
-    void startNextProcess();
-    void startNextPostProcessDownload();
 
 private:
-    void addDownloadingProcess(const QString &message, const QString &id);
-    void endDownloadingProcess(const QString &id);
-
     void addRunningProcess(const QString &message);
     void endLastAddedProcess();
 
 private:
     QHash<QString, QLabel *> m_IconLabels;
-    Core::IFullReleaseStep *m_ActiveStep;
-    QFutureWatcher<void> *m_Watcher;
     QProgressDialog *m_FullReleaseProgress;
     QList<Core::IFullReleaseStep*> m_Steps;
+    Core::IFullReleaseStep::ProcessTiming _currentTiming;
+    Core::IFullReleaseStep::SubProcess _currentSubProcess;
+    int _currentProcessingStep;
 };
 
 class FullReleasePage : public Core::IToolPage

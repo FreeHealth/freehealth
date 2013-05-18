@@ -51,13 +51,12 @@ public:
     // Core::IFullReleaseStep Interface
     QString id() const {return objectName();}
     Steps stepNumber() const {return IcdDatabase;}
-
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
 
     bool startDownload();
     bool postDownloadProcessing();
-
     bool process();
     bool createDatabase();
     bool populateDatabaseWithRawSources();
@@ -66,6 +65,9 @@ public:
     bool registerDataPack();
 
     QStringList errors() const;
+
+private Q_SLOTS:
+    void onSubProcessFinished();
 
 private:
     Internal::Icd10StepPrivate *d;

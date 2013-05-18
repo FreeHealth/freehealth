@@ -33,14 +33,26 @@
 /**
  * \file idrugdatabasestep.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date
+ * \version 0.8.4
+ * \date 17 May 2013
 */
 
 namespace DrugsDB {
 class Drug;
 namespace Internal {
 class DrugBaseEssentials;
+
+struct SpcContentResources {
+    QString type, name, content;
+};
+
+struct SpcContent {
+    SpcContent() : did(-1) {}
+
+    int did; // DrugIdentifiant
+    QString html, label, url;
+    QList<SpcContentResources> resources;
+};
 
 class IDrugDatabaseStep : public Core::IFullReleaseStep
 {
@@ -102,18 +114,29 @@ public:
     bool addPims();
     bool addPregnancyCheckingData();
 
+    virtual bool downloadSpcContents();
+
     // Core::IFullReleaseStep interface
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
-    bool createTemporaryStorage();
+    virtual bool createTemporaryStorage();
     virtual bool cleanTemporaryStorage();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
+
+    // Adding specific interface for the UI <-> step connection
     virtual bool startDownload();
     virtual bool unzipFiles();
     virtual bool registerDataPack();
-
-    // Adding specific interface for the UI <-> step connection
     virtual bool prepareData() = 0;
-    virtual bool populateDatabase() = 0;
-    virtual bool linkMolecules() = 0;
+    virtual bool populateDatabase() = 0; // Cannot be asynchronous
+    virtual bool linkMolecules() = 0;  // Cannot be asynchronous
+
+private Q_SLOTS:
+    void onSubProcessFinished();
+    bool onAllSpcDownloadFinished();
+    bool saveDrugSpc(const SpcContent &content);
+
+Q_SIGNALS:
+    void spcProcessFinished();
 
 private:
     LicenseType _licenseType;
@@ -122,6 +145,9 @@ private:
     QString _finalizationScriptPath, _descriptionFilePath, _datapackDescriptionFilePath;
     DrugBaseEssentials *_database;
     int _sid;
+    QList<QUrl> _spcUrls;
+    ProcessTiming _currentTiming;
+    SubProcess _currentSubProcess;
 };
 
 }  // namespace Internal

@@ -48,6 +48,7 @@
 #include <QFile>
 #include <QDir>
 #include <QUrl>
+#include <QTimer>
 
 #include "ui_frenchzipcodeswidget.h"
 
@@ -93,8 +94,7 @@ QWidget *FrenchZipCodesPage::createPage(QWidget *parent)
 // #################### FrenchZipCodesStep #######################
 
 FrenchZipCodesStep::FrenchZipCodesStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
-    m_WithProgress(false)
+    Core::IFullReleaseStep(parent)
 {
     setObjectName("FrenchZipCodesStep");
     createTemporaryStorage();
@@ -129,6 +129,67 @@ bool FrenchZipCodesStep::cleanTemporaryStorage()
     return true;
 }
 
+bool FrenchZipCodesStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+{
+    bool ok = true;
+    _currentTiming = timing;
+    _currentSubProcess = subProcess;
+    switch (subProcess) {
+    case Initialization:
+        switch (timing) {
+        case PreProcess:
+            ok = createTemporaryStorage();
+            break;
+        case Process:
+            ok = startDownload();
+            connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            return ok;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Main:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = process();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case DataPackSubProcess:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Final:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = registerDataPack();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    } // switch
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
+    return true;
+}
+
+void FrenchZipCodesStep::onSubProcessFinished()
+{
+    Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
+}
+
 bool FrenchZipCodesStep::startDownload()
 {
     // TODO: manage progress download */
@@ -145,9 +206,7 @@ bool FrenchZipCodesStep::process()
 {
     unzipFiles();
     prepareData();
-//    createDatabase();
     populateDatabase();
-    Q_EMIT processFinished();
     return true;
 }
 

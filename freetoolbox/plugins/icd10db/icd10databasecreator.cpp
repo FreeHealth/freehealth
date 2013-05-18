@@ -100,7 +100,7 @@ Icd10DatabaseWidget::~Icd10DatabaseWidget()
  * Define the step to use with the UI
  * \sa Icd10::Internal::Icd10DatabasePage
 */
-void Icd10DatabaseWidget::setStep(Core::IFullReleaseStep *step)
+void Icd10DatabaseWidget::setStep(Icd10::Internal::Icd10Step *step)
 {
     _step = step;
     connect(_step, SIGNAL(downloadFinished()), this, SLOT(onDownloadFinished()), Qt::UniqueConnection);

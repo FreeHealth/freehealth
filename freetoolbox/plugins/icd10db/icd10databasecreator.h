@@ -37,12 +37,9 @@ namespace Utils {
 class HttpDownloader;
 }
 
-namespace Core {
-class IFullReleaseStep;
-}
-
 namespace Icd10 {
 namespace Internal {
+class Icd10Step;
 
 class Icd10DatabasePage : public Core::IToolPage
 {
@@ -59,7 +56,7 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 
 private:
-    Core::IFullReleaseStep *_step;
+    Icd10::Internal::Icd10Step *_step;
 };
 
 
@@ -74,7 +71,7 @@ class Icd10DatabaseWidget : public QWidget
 public:
     explicit Icd10DatabaseWidget(QWidget *parent = 0);
     ~Icd10DatabaseWidget();
-    void setStep(Core::IFullReleaseStep *step);
+    void setStep(Icd10::Internal::Icd10Step *step);
 
 private Q_SLOTS:
     bool on_startCreation_clicked();
@@ -85,7 +82,7 @@ protected:
 
 private:
     Ui::Icd10DatabaseWidget *ui;
-    Core::IFullReleaseStep *_step;
+    Icd10::Internal::Icd10Step *_step;
 };
 
 }  //  End namespace Internal

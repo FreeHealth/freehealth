@@ -38,6 +38,7 @@
 
 #include <QDomDocument>
 #include <QFileInfo>
+#include <QTimer>
 
 using namespace DataPackPlugin;
 using namespace Internal;
@@ -85,22 +86,21 @@ bool GenericDataPackCreator::cleanTemporaryStorage()
     return true;
 }
 
-bool GenericDataPackCreator::startDownload()
+bool GenericDataPackCreator::startProcessing(ProcessTiming timing, SubProcess subProcess)
 {
-    Q_EMIT downloadFinished();
+    bool ok = true;
+    _currentTiming = timing;
+    _currentSubProcess = subProcess;
+    if (subProcess == DataPackSubProcess && timing == Process) {
+        ok = createTemporaryStorage() && registerDataPack();
+    }
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
     return true;
 }
 
-bool GenericDataPackCreator::postDownloadProcessing()
+void GenericDataPackCreator::onSubProcessFinished()
 {
-    Q_EMIT postDownloadProcessingFinished();
-    return true;
-}
-
-bool GenericDataPackCreator::process()
-{
-    Q_EMIT processFinished();
-    return true;
+    Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
 }
 
 bool GenericDataPackCreator::registerDataPack()
@@ -117,6 +117,7 @@ bool GenericDataPackCreator::registerDataPack()
     QString error;
     if (!doc.setContent(Utils::readTextFile(descriptionFile, Utils::DontWarnUser), &error, &line, &col)) {
         LOG_ERROR(QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
+        addError(Process, DataPackSubProcess, QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
         return false;
     }
 
@@ -124,6 +125,7 @@ bool GenericDataPackCreator::registerDataPack()
     QDomElement root = doc.documentElement();
     if (root.tagName().compare(::XML_ROOT_TAG, Qt::CaseInsensitive) != 0) {
         LOG_ERROR("Wrong root tag: " + root.tagName() + "; awaiting Automatic_DataPack");
+        addError(Process, DataPackSubProcess, QString("Wrong root tag: " + root.tagName() + "; awaiting Automatic_DataPack"));
         return false;
     }
 
@@ -136,6 +138,7 @@ bool GenericDataPackCreator::registerDataPack()
             packDescrFile.setFile(descriptionFilePath + packDescr);
         if (!packDescrFile.exists()) {
             LOG_ERROR("Pack does not exists: " + packDescrFile.absoluteFilePath());
+            addError(Process, DataPackSubProcess, QString("Pack does not exists: " + packDescrFile.absoluteFilePath()));
             packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
             continue;
         }
@@ -158,6 +161,7 @@ bool GenericDataPackCreator::registerDataPack()
                     dirPath.prepend(descriptionFilePath);
                 if (!JlCompress::compressDir(packDescrFile.absolutePath()+"/pack.zip", dirPath, true)) {
                     LOG_ERROR("Unable to compress dir: "+dirPath);
+                    addError(Process, DataPackSubProcess, QString("Unable to compress dir: "+dirPath));
                 }
                 // Include zipped file into the query
                 query.setOriginalContentFileAbsolutePath(packDescrFile.absolutePath()+"/pack.zip");
@@ -179,20 +183,11 @@ bool GenericDataPackCreator::registerDataPack()
 
         if (!datapackCore()->registerDataPack(query, server)) {
             LOG_ERROR("Datapack not registered: " + query.descriptionFileAbsolutePath());
+            addError(Process, DataPackSubProcess, QString("Datapack not registered: " + query.descriptionFileAbsolutePath()));
         }
 
         // Next sibling
         packElement = packElement.nextSiblingElement(::XML_DATAPACK_TAG);
     }
     return true;
-}
-
-QString GenericDataPackCreator::processMessage() const
-{
-    return tr("Processing automatic datapacks...");
-}
-
-QStringList GenericDataPackCreator::errors() const
-{
-    return QStringList();
 }

@@ -40,6 +40,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/waitforsignal.h>
 #include <translationutils/constants.h>
 #include <datapackutils/packdescription.h>
 #include <datapackutils/serverdescription.h>
@@ -194,9 +195,8 @@ bool DataPackCore::initialize()
 }
 
 /**
- * Call Core::IFullReleaseStep::registerDatapack() on
- * all Core::IFullReleaseStep objects. You can then get the registered datapacks
- * using serverRegisteredDatapacks().\n
+ * Request all Core::IFullReleaseStep to register their datapacks.
+ * You can then get the registered datapacks using serverRegisteredDatapacks().\n
  * Servers uids are stored in constants: Core::Constants::SERVER_*
  */
 bool DataPackCore::refreshServerDataPacks(const QString &serverUid)
@@ -207,8 +207,16 @@ bool DataPackCore::refreshServerDataPacks(const QString &serverUid)
     // ask all steps to register datapacks
     QList<Core::IFullReleaseStep *> steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
     foreach(Core::IFullReleaseStep *step, steps) {
-        if (!step->registerDataPack())
-            return false;
+        qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
+        step->startProcessing(Core::IFullReleaseStep::PreProcess, Core::IFullReleaseStep::DataPackSubProcess);
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+
+        step->startProcessing(Core::IFullReleaseStep::Process, Core::IFullReleaseStep::DataPackSubProcess);
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+
+        step->startProcessing(Core::IFullReleaseStep::PostProcess, Core::IFullReleaseStep::DataPackSubProcess);
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+        QApplication::restoreOverrideCursor();
     }
     return true;
 }

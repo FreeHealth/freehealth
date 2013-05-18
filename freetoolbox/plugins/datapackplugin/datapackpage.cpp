@@ -152,31 +152,16 @@ bool DataPackStep::cleanTemporaryStorage()
     return true;
 }
 
-/** Download files -> nothing to do */
-bool DataPackStep::startDownload()
+bool DataPackStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
 {
-    QTimer::singleShot(10, this, SIGNAL(downloadFinished()));
+    _currentTiming = timing;
+    _currentSubProcess = subProcess;
+    QTimer::singleShot(10, this, SLOT(onSubProcessFinished()));
     return true;
 }
 
-/** Starts all process needed to manage this step */
-bool DataPackStep::process()
+void DataPackStep::onSubProcessFinished()
 {
-    // At this point all IFullReleaseSteps must have registered their datapacks to the datapackcore
-    Q_EMIT processFinished();
-    return true;
+    Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
 }
 
-/**
- * Return the process message. Process message is the message that will be shown in the
- * Core::FullReleasePage view.
- */
-QString DataPackStep::processMessage() const
-{
-    return tr("Processing datapack servers");
-}
-
-bool DataPackStep::registerDataPack()
-{
-    return true;
-}

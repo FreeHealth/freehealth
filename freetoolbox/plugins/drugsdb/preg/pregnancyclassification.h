@@ -58,11 +58,14 @@ public:
     PregnancyDatatabaseStep(QObject *parent = 0);
     ~PregnancyDatatabaseStep();
 
+    // Core::IFullReleaseStep interface
     QString id() const {return "PregnancyDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::PregnancyDatabase;}
-
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
+
+    // Private part
     bool startDownload();
     bool process();
     QString processMessage() const {return tr("Pregnancy && drugs database creation");}
@@ -73,14 +76,12 @@ public:
     bool populateDatabase();
     bool registerDataPack() {return true;}
 
-    QStringList errors() const {return m_Errors;}
-
 private Q_SLOTS:
+    void onSubProcessFinished();
     void emitDownloadProgress(qint64 value, qint64 total);
 private:
-    QStringList m_Errors;
-    bool m_WithProgress;
-
+    ProcessTiming _currentTiming;
+    SubProcess _currentSubProcess;
 };
 
 

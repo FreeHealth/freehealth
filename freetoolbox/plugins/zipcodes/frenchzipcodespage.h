@@ -70,9 +70,10 @@ public:
 
     QString id() const {return "FrenchZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
-
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
+
     bool startDownload();
     bool process();
     QString processMessage() const {return tr("French zip codes database creation");}
@@ -85,11 +86,12 @@ public:
 
     bool registerDataPack();
 
-    QStringList errors() const {return m_Errors;}
+private Q_SLOTS:
+    void onSubProcessFinished();
 
 private:
-    QStringList m_Errors;
-    bool m_WithProgress;
+    ProcessTiming _currentTiming;
+    SubProcess _currentSubProcess;
 };
 
 namespace Ui {

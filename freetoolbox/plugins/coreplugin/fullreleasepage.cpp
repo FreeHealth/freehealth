@@ -61,9 +61,8 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 FullReleasePageWidget::FullReleasePageWidget(QWidget *parent) :
     QWidget(parent),
-    m_ActiveStep(0),
-    m_Watcher(0),
-    m_FullReleaseProgress(0)
+    m_FullReleaseProgress(0),
+    _currentProcessingStep(-1)
 {
     QVBoxLayout *lcont = new QVBoxLayout(this);
     lcont->setMargin(0);
@@ -85,7 +84,6 @@ void FullReleasePageWidget::createFullRelease()
 {
     // Clear all cache
     m_Steps.clear();
-    m_ActiveStep = 0;
     if (m_FullReleaseProgress) {
         delete m_FullReleaseProgress;
         m_FullReleaseProgress = 0;
@@ -98,21 +96,77 @@ void FullReleasePageWidget::createFullRelease()
 
     // get all Core::IFullReleaseSteps
     m_Steps = pluginManager()->getObjects<Core::IFullReleaseStep>();
-    qSort(m_Steps.begin(), m_Steps.end(), Core::IFullReleaseStep::lessThan);
-
-    // Create dirs of all steps
-    foreach(Core::IFullReleaseStep *s, m_Steps) {
-        if (!s->createTemporaryStorage()) {
-            Utils::warningMessageBox(tr("%1 can not create its temporary directory.").arg(s->id()),
-                                     tr("Please report this problem to the devs at: freemedforms@googlegroups.com"));
-            return;
-        }
-        connect(s, SIGNAL(progressLabelChanged(QString)), m_FullReleaseProgress, SLOT(setLabelText(QString)), Qt::UniqueConnection);
-        connect(s, SIGNAL(progress(int)), m_FullReleaseProgress, SLOT(setValue(int)), Qt::UniqueConnection);
-        connect(s, SIGNAL(progressRangeChanged(int,int)), this, SLOT(setProgressRange(int,int)), Qt::UniqueConnection);
+    if (m_Steps.isEmpty()) {
+        LOG_ERROR("No step found");
+        return;
     }
 
-    startNextDownload();
+    // Sort steps
+    qSort(m_Steps.begin(), m_Steps.end(), Core::IFullReleaseStep::lessThan);
+
+    // Connect all steps
+    foreach(Core::IFullReleaseStep *step, m_Steps)
+        connect(step, SIGNAL(subProcessFinished(Core::IFullReleaseStep::ProcessTiming,Core::IFullReleaseStep::SubProcess)), this, SLOT(onSubProcessFinished(Core::IFullReleaseStep::ProcessTiming,Core::IFullReleaseStep::SubProcess)), Qt::UniqueConnection);
+
+    // Start processings
+    _currentProcessingStep = 0;
+    _currentTiming = Core::IFullReleaseStep::PreProcess;
+    _currentSubProcess = Core::IFullReleaseStep::Initialization;
+    startProcess();
+}
+
+void FullReleasePageWidget::startProcess()
+{
+    Core::IFullReleaseStep *step = m_Steps.at(_currentProcessingStep);
+    if (m_FullReleaseProgress) {
+        m_FullReleaseProgress->setLabelText(QString("Starting process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+    }
+    LOG(QString("------------- Starting process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+    if (!step->startProcessing(_currentTiming, _currentSubProcess))
+        LOG_ERROR(QString("Unable to start process: %1 (%2;%3)").arg(step->id()).arg(_currentTiming).arg(_currentSubProcess));
+}
+
+void FullReleasePageWidget::onSubProcessFinished(Core::IFullReleaseStep::ProcessTiming timing, Core::IFullReleaseStep::SubProcess subProcess)
+{
+    // Compute next step
+    switch (timing) {
+    case Core::IFullReleaseStep::PreProcess:
+        _currentTiming=Core::IFullReleaseStep::Process;
+        break;
+    case Core::IFullReleaseStep::Process:
+        _currentTiming=Core::IFullReleaseStep::PostProcess;
+        break;
+    case Core::IFullReleaseStep::PostProcess:
+    {
+        _currentTiming = Core::IFullReleaseStep::PreProcess;
+
+        // Compute the next subprocess
+        switch (subProcess) {
+        case Core::IFullReleaseStep::Initialization:
+            _currentSubProcess = Core::IFullReleaseStep::Main;
+            break;
+        case Core::IFullReleaseStep::Main:
+            _currentSubProcess = Core::IFullReleaseStep::DataPackSubProcess;
+            break;
+        case Core::IFullReleaseStep::DataPackSubProcess:
+            _currentSubProcess = Core::IFullReleaseStep::Final;
+            break;
+        case Core::IFullReleaseStep::Final:
+            // Here we have to switch to the next step or finish the procedure
+            _currentSubProcess = Core::IFullReleaseStep::Initialization;
+            ++_currentProcessingStep;
+
+            // All processes done?
+            if (_currentProcessingStep >= m_Steps.count())
+                return;
+
+            break;
+        }
+        break;
+    }
+    } // switch
+
+    startProcess();
 }
 
 /** Set the range of the progress dialog */
@@ -121,158 +175,6 @@ void FullReleasePageWidget::setProgressRange(int min, int max)
     if (!m_FullReleaseProgress)
         return;
     m_FullReleaseProgress->setRange(min, max);
-}
-
-/**
- * Start a new download from the registered Core::IFullReleaseStep objects
- * in plugin manager object pool.
- */
-void FullReleasePageWidget::startNextDownload()
-{
-    // Get the step to start
-    if (!m_ActiveStep) {
-        m_ActiveStep = m_Steps.first();
-    } else {
-        // Stop running step process
-        endDownloadingProcess(m_ActiveStep->id());
-        int id = m_Steps.indexOf(m_ActiveStep);
-        if (id == (m_Steps.count()-1)) {
-            m_ActiveStep = 0;
-            // All downloads are done, start processes
-            startNextPostProcessDownload();
-            return;
-        }
-        m_ActiveStep = m_Steps.at(id+1);
-    }
-
-    // No steps -> Stop all
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-
-    // Start the downloading
-    addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
-    connect(m_ActiveStep, SIGNAL(downloadFinished()), this, SLOT(startNextDownload()));
-    if (!m_ActiveStep->startDownload()) {
-        // TODO: manage error
-        LOG_ERROR("Download was not started? Step: " + m_ActiveStep->id());
-    }
-}
-
-/** Run the process of the next step (or start the first step) */
-void FullReleasePageWidget::startNextProcess()
-{
-    // Actual process is m_ActiveStep if == 0 start first step
-    if (!m_ActiveStep) {
-        m_ActiveStep = m_Steps.first();
-    } else {
-        // Stop running step process
-        endLastAddedProcess();
-        int id = m_Steps.indexOf(m_ActiveStep);
-        // Finished ?
-        if (id == (m_Steps.count()-1)) {
-            m_ActiveStep = 0;
-            startNextProcess();
-            return;
-        }
-        m_ActiveStep = m_Steps.at(id+1);
-    }
-
-    // No step -> finished
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-
-    // Start the step processing
-    addRunningProcess(m_ActiveStep->processMessage());
-//    if (!m_Watcher) {
-//        m_Watcher = new QFutureWatcher<void>;
-//    }
-//    QFuture<void> future = QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
-    QtConcurrent::run(m_ActiveStep, &Core::IFullReleaseStep::process);
-    connect(m_ActiveStep, SIGNAL(processFinished()), this, SLOT(startNextProcess()));
-//    m_Watcher->setFuture(future);
-
-}
-
-/** Run the post download process of the next step (or start the first step) */
-void FullReleasePageWidget::startNextPostProcessDownload()
-{
-    // Actual process is m_ActiveStep if == 0 start first step
-    if (!m_ActiveStep) {
-        m_ActiveStep = m_Steps.first();
-    } else {
-        // Stop running step process
-        endDownloadingProcess(m_ActiveStep->id());
-        int id = m_Steps.indexOf(m_ActiveStep);
-        if (id==(m_Steps.count()-1)) {
-            // jobs terminated
-            m_ActiveStep = 0;
-            if (m_FullReleaseProgress)
-                delete m_FullReleaseProgress;
-            m_FullReleaseProgress = 0;
-            return;
-        }
-        m_ActiveStep = m_Steps.at(id+1);
-    }
-
-    // No step -> finished
-    if (!m_ActiveStep) {
-        if (m_FullReleaseProgress)
-            delete m_FullReleaseProgress;
-        m_FullReleaseProgress = 0;
-        return;
-    }
-
-    // Start the post download processing
-    addDownloadingProcess(m_ActiveStep->processMessage(), m_ActiveStep->id());
-    connect(m_ActiveStep, SIGNAL(postProcessDownloadFinished()), this, SLOT(startNextPostProcessDownload()));
-    m_ActiveStep->postDownloadProcessing();
-}
-
-/** Add a downloading process to the view */
-void FullReleasePageWidget::addDownloadingProcess(const QString &message, const QString &id)
-{
-    QWidget *w = new QWidget(this);
-    QHBoxLayout *l = new QHBoxLayout(w);
-    w->setLayout(l);
-
-    QLabel *lblMovie = new QLabel(w);
-    lblMovie->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    QMovie *movie = new QMovie(theme()->iconFullPath(Core::Constants::ICONSPINNER));
-    lblMovie->setMovie(movie);
-    movie->start();
-    l->addWidget(lblMovie);
-    m_IconLabels.insert(id, lblMovie);
-
-    QLabel *lbl = new QLabel(w);
-    lbl->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    lbl->setText(message + "... " + tr("Downloading") + "...");
-    l->addWidget(lbl);
-
-    l->addSpacerItem(new QSpacerItem(10,10, QSizePolicy::Expanding));
-
-    this->layout()->addWidget(w);
-}
-
-/** Stops a downloading process (stop the spinner) */
-void FullReleasePageWidget::endDownloadingProcess(const QString &id)
-{
-    // Remove movie
-    QLabel *lbl = m_IconLabels.value(id, 0);
-    if (lbl) {
-        QMovie *movie = lbl->movie();
-        delete movie;
-        movie = 0;
-        lbl->setMovie(0);
-        lbl->setPixmap(theme()->icon(Core::Constants::ICONOK).pixmap(16,16));
-    }
 }
 
 /** Add a running process to the view */

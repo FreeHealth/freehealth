@@ -48,15 +48,18 @@
 
 #include <translationutils/constants.h>
 #include <quazip/global.h>
-#include <utils/httpdownloader.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/waitforsignal.h>
+#include <utils/httpdownloader.h>
+#include <utils/httpmultidownloader.h>
 
 #include <QDir>
 #include <QFile>
 #include <QDomDocument>
 #include <QUrl>
 #include <QProgressBar>
+#include <QTimer>
 
 #include <QDebug>
 
@@ -677,58 +680,6 @@ bool IDrugDatabaseStep::saveDrugsIntoDatabase(QVector<Drug *> drugs)
     return true;
 }
 
-//QHash<int, QString> IDrugDatabaseStep::generateMids(const QStringList &molnames, const int sid, const QString &connection)
-//{
-//    QHash<int, QString> mids;
-//    QSqlDatabase db = QSqlDatabase::database(connection);
-//    if (!db.isOpen())
-//        return mids;
-
-//    db.transaction();
-//    QSqlQuery query(db);
-
-//    foreach(const QString &name, molnames) {
-
-//        // Ask for an existing MID
-//        //        req = QString("SELECT MID FROM MOLS WHERE NAME=\"%1\" AND SID=\"%2\";").arg(name).arg(sid);
-//        QHash<int, QString> w;
-//        w.insert(DrugsDB::Constants::MOLS_NAME, QString("=\"%1\"").arg(name));
-//        w.insert(DrugsDB::Constants::MOLS_SID, QString("='%1'").arg(sid));
-////        req = DrugsDB::Tools::drugBase()->select(DrugsDB::Constants::Table_MOLS, DrugsDB::Constants::MOLS_MID, w);
-////        if (query.exec(req)) {
-////            if (query.next()) {
-////                // is already in the table MOLS
-////                mids.insert(query.value(0).toInt(), name);
-////                continue;
-////            }
-////        } else {
-////            LOG_QUERY_ERROR_FOR("Tools", query);
-////            continue;
-////        }
-//        query.finish();
-
-//        // create a new MID
-//        //        req = QString("INSERT INTO MOLS (MID, SID, NAME) VALUES (NULL,%1,\"%2\");")
-//        //              .arg(sid)
-//        //              .arg(name);
-////        query.prepare(DrugsDB::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_MOLS));
-////        query.bindValue(DrugsDB::Constants::MOLS_MID, QVariant());
-////        query.bindValue(DrugsDB::Constants::MOLS_NAME, name);
-////        query.bindValue(DrugsDB::Constants::MOLS_SID, sid);
-////        query.bindValue(DrugsDB::Constants::MOLS_WWW, QVariant());
-////        if (query.exec()) {
-////            mids.insert(query.lastInsertId().toInt(), name);
-////            continue;
-////        } else {
-////            LOG_QUERY_ERROR_FOR("Tools", query);
-////            continue;
-////        }
-////        query.finish();
-//    }
-//    db.commit();
-//    return mids;
-//}
-
 /** Save a list of molecules and return a hash containing the MoleculeID as key and the molecule name os value */
 QHash<int, QString> IDrugDatabaseStep::saveMoleculeIds(const QStringList &molnames)
 {
@@ -831,6 +782,271 @@ bool IDrugDatabaseStep::addPregnancyCheckingData()
     return true;
 }
 
+/**
+ * Downloads all SPC contents according to the DRUGS_LINK_SPC field.
+ * - Get all disctinct SPC contents
+ * - Download all contents
+ * - Add content to the database (also link drug to spc content)
+ */
+bool IDrugDatabaseStep::downloadSpcContents()
+{
+    // The Summary of Product Characteristics can be automatically downloaded and
+    // inserted in the drugs database. The following code will:
+    // - read all the recorded spc links in the drugs table,
+    // - download all links in a specific output path and create a local cache. If files are
+    //   already available in the path they are not re-downloaded. To force a total update, you
+    //   just have to remove the output path and its content from your local storage.
+    // - populate the database with the SPC contents.
+
+    // Connect the database
+    QSqlDatabase db = _database->database();
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return false;
+        }
+    }
+
+    // Get all drugs SPC links recorded in the database
+    using namespace DrugsDB::Constants;
+    QSqlQuery query(db);
+    QHash<int, QString> where;
+    where.insert(Constants::DRUGS_LINK_SPC, "IS NOT NULL");
+    where.insert(Constants::DRUGS_SID, QString("='%1'").arg(_sid));
+    QString req = _database->selectDistinct(Table_DRUGS, DRUGS_LINK_SPC, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            if (query.value(0).toString().isEmpty())
+                continue;
+            _spcUrls << QUrl(query.value(0).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    LOG(QString("Number of SPC links: %1").arg(_spcUrls.count()));
+
+    // Create the SPC url downloader
+    Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
+    _multiDownloader->setUseUidAsFileNames(true);
+    QDir().mkpath(tempPath() + "/spc/");
+    _multiDownloader->setOutputPath(tempPath() + "/spc/");
+    _multiDownloader->readXmlUrlFileLinks();
+
+    // Remove already downloaded files from the queue
+    for(int i = _spcUrls.count() - 1; i >= 0; --i) {
+        if (_multiDownloader->urls().contains(_spcUrls.at(i)))
+            _spcUrls.removeAt(i);
+    }
+
+    // Start the download
+    _multiDownloader->setUrls(_spcUrls);
+    connect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onAllSpcDownloadFinished()));
+    _multiDownloader->startDownload();
+    return true;
+}
+
+/**
+ * When all SPC files are downloaded, populate the drugs database.
+ */
+bool IDrugDatabaseStep::onAllSpcDownloadFinished()
+{
+    // Here all SPC files are downloaded.
+    // We need to work a bit on HTML files (getting CSS content, JS scripts...)
+
+    // Get the external CSS content of the HTML files (<link ... type="...css"> in the meta/head)
+    // We suppose here that all the downloaded content has the same CSS file set.
+    // So we read the first available file, extract the CSS file names,
+    // download them to the spc output path. Then we must edit all downloaded HTML file and
+    // make them point to these CSS files.
+
+    Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
+    if (!_multiDownloader)
+        return false;
+    disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onAllSpcDownloadFinished()));
+    // Save the HttpMultiDownloader XML cache file (only if there was downloads)
+    if (_spcUrls.count() > 0)
+        _multiDownloader->saveXmlUrlFileLinks();
+    //return true;
+
+    // TODO: manage downloader errors
+
+    // As we have supposed that all HMTL have the same CSS set we only screen one file.
+    // An improvement can be to screen *all* the HTML files, and to manage database to correctly
+    // link HTML and CSS content of SPC documents.
+
+    // Get the first available SPC file in the output dir
+    const QUrl &firstUrl = _multiDownloader->urls().at(0);
+    QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(firstUrl), "ISO-8859-1");
+    QList<QUrl> cssFiles;
+
+    // Extract all stylesheet file from the "<link" tag
+    QStringList tmp = Utils::htmlGetLinksToCssContent(content);
+
+    // Manage relative filePath
+    foreach(const QString &css, tmp) {
+        if (QFileInfo(css).isRelative()) {
+             cssFiles << firstUrl.resolved(QUrl(css)).toString();
+        } else {
+            cssFiles << QUrl(css);
+        }
+    }
+
+    // Download files the stylesheets files with a new downloader
+    Utils::HttpMultiDownloader *_cssMultiDownloader = new Utils::HttpMultiDownloader(this);
+    if (!cssFiles.isEmpty()) {
+        _cssMultiDownloader->setUseUidAsFileNames(true);
+        QDir().mkpath(tempPath() + "/spc/css/");
+        _cssMultiDownloader->setOutputPath(tempPath() + "/spc/css/");
+        _cssMultiDownloader->clearXmlUrlFileLinks();
+        _cssMultiDownloader->setUrls(cssFiles);
+        _cssMultiDownloader->startDownload();
+        Utils::waitForSignal(_cssMultiDownloader, SIGNAL(allDownloadFinished()), 100000);
+    }
+
+    // Create the SPC resources content (CSS, JS...)
+    QList<SpcContentResources> spcResources;
+    foreach(const QUrl &url, cssFiles) {
+        QString absFilePath = _cssMultiDownloader->outputAbsoluteFileName(url);
+        SpcContentResources resource;
+        resource.type = "text/css";
+        resource.name = QFileInfo(absFilePath).fileName();
+        resource.content = Utils::readTextFile(absFilePath, Utils::DontWarnUser);
+        spcResources << resource;
+    }
+
+    // Create the SPC content and send them to the drugs database
+    foreach(const QUrl &url, _multiDownloader->urls()) {
+        SpcContent content;
+        content.url = url.toString();
+        content.html = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
+        content.resources = spcResources;
+        saveDrugSpc(content);
+    }
+
+    QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
+    return true;
+}
+
+/**
+ * Save the SPC content.
+ * \warning code does not manage duplicates
+ */
+bool IDrugDatabaseStep::saveDrugSpc(const SpcContent &content)
+{
+    if (content.html.isEmpty()) {
+        LOG_ERROR("SPC content is empty");
+        return false;
+    }
+
+    if (!checkDatabase())
+        return false;
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    using namespace DrugsDB::Constants;
+    _database->database().transaction();
+    QSqlQuery query(_database->database());
+    // Get Ids
+    int spcId = -1;
+    int resourceLinkId = _database->max(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID).toInt() + 1;
+
+    // Insert the spc content to the SPCCONTENT table
+    query.prepare(_database->prepareInsertQuery(Table_SPC_CONTENT));
+    query.bindValue(SPCCONTENT_ID, QVariant());
+    query.bindValue(SPCCONTENT_LABEL, content.label);
+    query.bindValue(SPCCONTENT_URL_SOURCE, content.url);
+    query.bindValue(SPCCONTENT_DATEOFDOWNLOAD, QDateTime::currentDateTime().toString(Qt::ISODate));
+    query.bindValue(SPCCONTENT_HTMLCONTENT, content.html);
+    query.bindValue(SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID, resourceLinkId);
+    if (query.exec()) {
+        spcId = query.lastInsertId().toInt();
+    } else {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+        query.finish();
+        _database->database().rollback();
+        return false;
+    }
+    query.finish();
+
+    // Insert all resources
+    foreach(const SpcContentResources &resource, content.resources) {
+        int resourceId = -1;
+        // Resource already available?
+        QHash<int, QString> where;
+        where.insert(SPCCONTENTRESOURCES_TYPE, QString("='%1'").arg(resource.type));
+        where.insert(SPCCONTENTRESOURCES_NAME, QString("='%1'").arg(resource.name));
+        if (query.exec(_database->select(Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_ID, where))) {
+            if (query.next())
+                resourceId = query.value(0).toInt();
+        } else {
+            LOG_QUERY_ERROR_FOR("Tools", query);
+            query.finish();
+            _database->database().rollback();
+            return false;
+        }
+        query.finish();
+
+        if (resourceId == -1) {
+            // Add resource to database
+            query.prepare(_database->prepareInsertQuery(Table_SPC_CONTENTRESOURCE));
+            query.bindValue(SPCCONTENTRESOURCES_ID, QVariant());
+            query.bindValue(SPCCONTENTRESOURCES_TYPE, resource.type);
+            query.bindValue(SPCCONTENTRESOURCES_NAME, resource.name);
+            query.bindValue(SPCCONTENTRESOURCES_CONTENT, resource.content);
+            if (query.exec()) {
+                resourceId = query.lastInsertId().toInt();
+            } else {
+                LOG_QUERY_ERROR_FOR("Tools", query);
+                query.finish();
+                _database->database().rollback();
+                return false;
+            }
+            query.finish();
+        }
+
+        // Populate the resources link table
+        query.prepare(_database->prepareInsertQuery(Table_SPC_CONTENTRESOURCE_LINK));
+        query.bindValue(SPCCONTENT_RESOURCES_LINK_ID, resourceLinkId);
+        query.bindValue(SPCCONTENT_SPCCONTENTRESOURCES_ID, resourceId);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR("Tools", query);
+            query.finish();
+            _database->database().rollback();
+            return false;
+        }
+        query.finish();
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+
+    // Insert DRUG_SPC table data
+    int did = -1;
+
+    QHash<int, QString> where;
+    where.insert(DRUGS_LINK_SPC, QString("='%1'").arg(content.url));
+    QString req = _database->select(Table_DRUGS, DRUGS_ID, where);
+    if (query.exec(req)) {
+        if (query.next())
+            did = query.value(0).toInt();
+    } else {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+        query.finish();
+        _database->database().rollback();
+        return false;
+    }
+    query.finish();
+    query.prepare(_database->prepareInsertQuery(Table_DRUG_SPC));
+    query.bindValue(DRUG_SPC_DID, did);
+    query.bindValue(DRUG_SPC_SPCCONTENT_ID, spcId);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+        query.finish();
+        _database->database().rollback();
+        return false;
+    }
+    query.finish();
+
+    _database->database().commit();
+    return true;
+}
+
 /** Create all object path (temp, output, download...) */
 bool IDrugDatabaseStep::createTemporaryStorage()
 {
@@ -858,6 +1074,77 @@ bool IDrugDatabaseStep::cleanTemporaryStorage()
     return true;
 }
 
+bool IDrugDatabaseStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+{
+    bool ok = true;
+    _currentTiming = timing;
+    _currentSubProcess = subProcess;
+    switch (subProcess) {
+    case Initialization:
+        switch (timing) {
+        case PreProcess:
+            ok = createTemporaryStorage();
+            break;
+        case Process:
+            ok = startDownload();
+            connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            return ok;
+        case PostProcess:
+            ok = unzipFiles();
+            break;
+        } // switch
+        break;
+    case Main:
+        switch (timing) {
+        case PreProcess:
+            ok = prepareData();
+            break;
+        case Process:
+            ok = populateDatabase();
+            if (ok && licenseType() == NonFree) {
+                ok = linkMolecules()
+                        && addDrugDrugInteractions()
+                        && addPims()
+                        && addPregnancyCheckingData();
+            }
+            break;
+        case PostProcess:
+            connect(this, SIGNAL(spcProcessFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            ok = downloadSpcContents();
+            return ok;
+        } // switch
+        break;
+    case DataPackSubProcess:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = registerDataPack();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Final:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    } // switch
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
+    return true;
+}
+
+void IDrugDatabaseStep::onSubProcessFinished()
+{
+    Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
+}
+
 /**
  * Download the URL to the tempPath().
  * \sa setDownloadUrl()
@@ -865,9 +1152,6 @@ bool IDrugDatabaseStep::cleanTemporaryStorage()
 bool IDrugDatabaseStep::startDownload()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
-
-//    dld->setMainWindow(mainwindow());
-    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     connect(dld, SIGNAL(downloadProgressPermille(int)), this, SIGNAL(progress(int)));
 

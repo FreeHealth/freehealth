@@ -78,9 +78,10 @@ public:
 
     QString id() const {return "GenericZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
-
     bool createTemporaryStorage();
     bool cleanTemporaryStorage();
+    bool startProcessing(ProcessTiming timing, SubProcess subProcess);
+
     bool startDownload();
 
     bool process();
@@ -102,6 +103,9 @@ public:
 
 Q_SIGNALS:
     void countryListDownloaded();
+
+private Q_SLOTS:
+    void onSubProcessFinished();
 
 private:
     Internal::GenericZipCodesStepPrivate *d;

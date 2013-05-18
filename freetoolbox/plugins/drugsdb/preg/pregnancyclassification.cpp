@@ -38,9 +38,11 @@
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
+
 #include <QScriptEngine>
 #include <QDir>
 #include <QUrl>
+#include <QTimer>
 
 #include "ui_pregnancyclassification.h"
 
@@ -144,8 +146,7 @@ QWidget *PregnancyClassificationPage::createPage(QWidget *parent)
 }
 
 PregnancyDatatabaseStep::PregnancyDatatabaseStep(QObject *parent) :
-    Core::IFullReleaseStep(parent),
-    m_WithProgress(false)
+    Core::IFullReleaseStep(parent)
 {
     setObjectName("PregnancyDatatabaseStep");
 }
@@ -167,10 +168,70 @@ bool PregnancyDatatabaseStep::cleanTemporaryStorage()
     return true;
 }
 
+bool PregnancyDatatabaseStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+{
+    bool ok = true;
+    _currentTiming = timing;
+    _currentSubProcess = subProcess;
+    switch (subProcess) {
+    case Initialization:
+        switch (timing) {
+        case PreProcess:
+            ok = createTemporaryStorage();
+            break;
+        case Process:
+            ok = startDownload();
+            connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            return ok;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Main:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = process();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case DataPackSubProcess:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = registerDataPack();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Final:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    } // switch
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
+    return true;
+}
+
+void PregnancyDatatabaseStep::onSubProcessFinished()
+{
+    Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
+}
+
 bool PregnancyDatatabaseStep::startDownload()
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-//    dld->setMainWindow(mainwindow());
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(PREGNANCY_TGA_URL));
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
@@ -186,8 +247,6 @@ bool PregnancyDatatabaseStep::process()
     prepareData();
     createDatabase();
     populateDatabase();
-//    linkMolecules();
-    Q_EMIT processFinished();
     return true;
 }
 

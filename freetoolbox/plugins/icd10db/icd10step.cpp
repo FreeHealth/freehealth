@@ -83,6 +83,8 @@ public:
 
 public:
     QString _tmpPath, _databaseFileName, _url, _connection, _outputPath, _datapackDescriptionFile;
+    Core::IFullReleaseStep::ProcessTiming _currentTiming;
+    Core::IFullReleaseStep::SubProcess _currentSubProcess;
 
 private:
     Icd10Step *q;
@@ -153,6 +155,68 @@ bool Icd10Step::cleanTemporaryStorage()
     return true;
 }
 
+bool Icd10Step::startProcessing(ProcessTiming timing, SubProcess subProcess)
+{
+    bool ok = true;
+    d->_currentTiming = timing;
+    d->_currentSubProcess = subProcess;
+    switch (subProcess) {
+    case Initialization:
+        switch (timing) {
+        case PreProcess:
+            ok = createTemporaryStorage();
+            break;
+        case Process:
+            ok = startDownload();
+            connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            return ok;
+        case PostProcess:
+            ok = postDownloadProcessing();
+            break;
+        } // switch
+        break;
+    case Main:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = process();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case DataPackSubProcess:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = registerDataPack();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Final:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    } // switch
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
+    return true;
+}
+
+void Icd10Step::onSubProcessFinished()
+{
+    Q_EMIT subProcessFinished(d->_currentTiming, d->_currentSubProcess);
+}
+
 /**
  * \brief Download the URL to the tempPath().
  *
@@ -170,8 +234,6 @@ bool Icd10Step::startDownload()
     }
 
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
-
-//    dld->setMainWindow(mainwindow());
     connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()), Qt::UniqueConnection);
     connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
     connect(dld, SIGNAL(downloadProgressPermill(int)), this, SIGNAL(progress(int)));

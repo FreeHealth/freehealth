@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardItemModel>
+#include <QTimer>
 
 #include <QDebug>
 
@@ -353,6 +354,10 @@ public:
     int m_selectedCountriesCounter;
     QList<PostalInfo> m_postalList;
     Utils::HttpDownloader *m_downloader;
+    Core::IFullReleaseStep::ProcessTiming _currentTiming;
+    Core::IFullReleaseStep::SubProcess _currentSubProcess;
+
+private:
     GenericZipCodesStep *q;
 };
 }  // namespace Internal
@@ -406,6 +411,70 @@ bool GenericZipCodesStep::cleanTemporaryStorage()
         LOG_ERROR("Unable to create outputPath:" + d->tmpPath());
     return true;
 }
+
+bool GenericZipCodesStep::startProcessing(ProcessTiming timing, SubProcess subProcess)
+{
+    bool ok = true;
+    d->_currentTiming = timing;
+    d->_currentSubProcess = subProcess;
+    switch (subProcess) {
+    case Initialization:
+        switch (timing) {
+        case PreProcess:
+            ok = createTemporaryStorage();
+            break;
+        case Process:
+            ok = startDownload();
+            connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            return ok;
+            break;
+        case PostProcess:
+            ok = postDownloadProcessing();
+            break;
+        } // switch
+        break;
+    case Main:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = process();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case DataPackSubProcess:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            ok = registerDataPack();
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    case Final:
+        switch (timing) {
+        case PreProcess:
+            break;
+        case Process:
+            break;
+        case PostProcess:
+            break;
+        } // switch
+        break;
+    } // switch
+    QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
+    return true;
+}
+
+void GenericZipCodesStep::onSubProcessFinished()
+{
+    Q_EMIT subProcessFinished(d->_currentTiming, d->_currentSubProcess);
+}
+
 
 /*!
  * Downloads the list of available countries.
