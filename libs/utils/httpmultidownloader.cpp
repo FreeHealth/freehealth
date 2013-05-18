@@ -329,6 +329,10 @@ bool HttpMultiDownloader::startDownload()
     return true;
 }
 
+/**
+ * Slot connected to URL download finished. Save the current download and start a new one.
+ * Emits allDownloadFinished() if nothing's left to download.
+ */
 bool HttpMultiDownloader::onCurrentDownloadFinished()
 {
     // Store everything in a DownloadedUrl
