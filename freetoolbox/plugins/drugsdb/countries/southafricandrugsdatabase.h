@@ -91,8 +91,11 @@ public:
     QString id() const {return "ZaDrugDatatabaseStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::DrugsDatabase;}
     void setLicenseType(LicenseType type);
+    bool createTemporaryStorage();
 
     bool startDownload();
+    void getAllDrugLinksFromIndexesFiles();
+
     bool process();
     QString processMessage() const;
 
@@ -100,18 +103,13 @@ public:
     bool populateDatabase();
     bool linkMolecules();
 
-    QStringList errors() const {return m_Errors;}
 
 private Q_SLOTS:
-    void replyFinished(QNetworkReply *reply);
+    bool onIndexFilesDownloadFinished();
+    bool onSpcDownloadFinished();
 
 private:
-    QStringList m_Errors;
-    QNetworkAccessManager *manager;
     QMap<QString, QString> m_Drug_Link;
-    int m_nbOfDowloads;
-    QProgressDialog *m_Progress;
-    bool m_WithProgress;
 };
 
 }  //  namespace Internal

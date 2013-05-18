@@ -57,8 +57,9 @@
 
 #include <drugsbaseplugin/drugbaseessentials.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/httpmultidownloader.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
@@ -172,8 +173,7 @@ QWidget *NonFreeSouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
 static char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 ZaDrugDatabaseStep::ZaDrugDatabaseStep(QObject *parent) :
-    DrugsDB::Internal::IDrugDatabaseStep(parent),
-    m_Progress(0), m_WithProgress(false)
+    DrugsDB::Internal::IDrugDatabaseStep(parent)
 {
     setObjectName("ZaDrugDatatabaseStep");
     setTempPath(QString("%1/%2")
@@ -196,8 +196,6 @@ ZaDrugDatabaseStep::ZaDrugDatabaseStep(QObject *parent) :
 
 ZaDrugDatabaseStep::~ZaDrugDatabaseStep()
 {
-    if (m_Progress)
-        delete m_Progress;
 }
 
 void ZaDrugDatabaseStep::setLicenseType(LicenseType type)
@@ -222,147 +220,55 @@ void ZaDrugDatabaseStep::setLicenseType(LicenseType type)
     }
 }
 
+bool ZaDrugDatabaseStep::createTemporaryStorage()
+{
+    QDir().mkpath(tempPath() + "/spc/");
+    QDir().mkpath(tempPath() + "/indexes/");
+    return DrugsDB::Internal::IDrugDatabaseStep::createTemporaryStorage();
+}
+
 bool ZaDrugDatabaseStep::startDownload()
 {
-    // get all tradename html pages from the site
-    manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-
+    // The extraction of the ZA database works in two download sets.
+    // The firstly, we download all html index files from the root server. One index file per alphabetic letter.
+    // Then when all these indexes are downloaded, we can extract from their content
+    // all the SPC links and drugs name. The second step is represented by a massive download of
+    // all locally missing SPC files.
     Q_EMIT progressLabelChanged(tr("South African database extraction: reading indexes"));
-    Q_EMIT progressRangeChanged(0, 26);
-    Q_EMIT progress(0);
 
-    m_nbOfDowloads = 26;
-    for(int i = 0; i < m_nbOfDowloads; ++i) {
-        manager->get(QNetworkRequest(QUrl(QString(ZA_URL).arg(letters[i]))));
+    // Create all indexes URL
+    QList<QUrl> _urls;
+    for(int i = 0; i < 26; ++i) {
+        _urls << QUrl(QString(ZA_URL).arg(letters[i]));
     }
+
+    // Create the multi downloader
+    Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
+    _multiDownloader->setUseUidAsFileNames(true);
+    _multiDownloader->setOutputPath(tempPath() + "/indexes/");
+    _multiDownloader->setUrls(_urls);
+    connect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onIndexFilesDownloadFinished()), Qt::UniqueConnection);
+    _multiDownloader->startDownload();
     return true;
 }
 
-void ZaDrugDatabaseStep::replyFinished(QNetworkReply *reply)
-{
-    static int nb = 0;
-    qWarning() << "get:" << reply->errorString()
-               << "finished:" << reply->isFinished()
-               << "readable:" << reply->isReadable()
-               << "URL:" << reply->url();
-    QString content = reply->readAll();
-    QString fileName = reply->url().toString(QUrl::RemoveScheme|QUrl::RemovePassword|QUrl::RemoveUserInfo);
-    fileName.remove("//home.intekom.com/pharm/index/");
-    //    delete reply;
-
-    // save file
-    {
-        QFile file(tempPath() + QDir::separator() + fileName);
-        if (!QDir(tempPath()  + QDir::separator() + fileName).exists()) {
-            QDir().mkpath(QFileInfo(tempPath()  + QDir::separator() + fileName).absolutePath());
-        }
-
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            LOG_ERROR(QString("ERROR: Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
-            return;
-        }
-        file.write(content.toLatin1());
-    }
-
-    // Get drugs pages
-    int begin = content.indexOf("<UL>");
-    int max = content.indexOf("</UL>");
-    while (begin<max) {
-        begin = content.indexOf("<LI><A HREF=", begin);
-        if (begin==-1)
-            break;
-        begin += 12;
-        // /pharm/aspen-p/a-abac-s.html>ASPEN ABACAVIR 20 mg/mL (oral solution)
-        int end = content.indexOf(">", begin);
-        QString link = content.mid(begin, end-begin);
-        begin = end + 1;
-        end = content.indexOf("</A><BR>", begin);
-        QString drug = content.mid(begin, end-begin);
-        drug.replace("&reg;", "®");
-        drug.replace("&#153;", "™");
-        m_Drug_Link.insert(drug, link);
-    }
-
-    // If the download list is completed
-    ++nb;
-    Q_EMIT progress(nb);
-
-    if (nb==m_nbOfDowloads) {
-        static bool done = false;
-        if (!done) {
-            done = true;
-            // TODO: use Utils::HttpMultiDownloader
-            m_nbOfDowloads = m_Drug_Link.count();
-
-            Q_EMIT progressLabelChanged(tr("South African database extraction: reading drugs page"));
-            Q_EMIT progressRangeChanged(0, m_nbOfDowloads);
-            Q_EMIT progress(0);
-
-            // download the link
-            nb=0;
-            qWarning() << "Downloading" << m_Drug_Link.count();
-            bool downloadStarted = false;
-            foreach(const QString &link, m_Drug_Link.values()) {
-                if (!QFile(tempPath() + "/home.intekom.com/" + link).exists()) {
-                    downloadStarted = true;
-                    manager->get(QNetworkRequest(QUrl(QString("http://home.intekom.com%1").arg(link))));
-                }
-            }
-            if (!downloadStarted) {
-                Q_EMIT downloadFinished();
-            }
-        } else {
-            Q_EMIT downloadFinished();
-        }
-    }
-}
-
-QString ZaDrugDatabaseStep::processMessage() const
-{
-    if (licenseType() == NonFree)
-        return tr("Non-free South African drugs database creation");
-    return tr("Free South African drugs database creation");
-}
-
-bool ZaDrugDatabaseStep::process()
-{
-    prepareData();
-    createDatabase();
-    populateDatabase();
-    linkMolecules();
-    Q_EMIT processFinished();
-    return true;
-}
-
-bool ZaDrugDatabaseStep::prepareData()
+void ZaDrugDatabaseStep::getAllDrugLinksFromIndexesFiles()
 {
     m_Drug_Link.clear();
+    Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
+    _multiDownloader->setUseUidAsFileNames(true);
+    _multiDownloader->setOutputPath(tempPath() + "/indexes/");
+    _multiDownloader->readXmlUrlFileLinks();
 
-    Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
-    Q_EMIT progressRangeChanged(0, 26);
-    Q_EMIT progress(0);
+    // Get all drugs name && spc files URL
+    for(int i = 0; i < 26; ++i) {
+        QUrl url = QUrl(QString(ZA_URL).arg(letters[i]));
+        QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
 
-    for(int i=0; i<26; ++i) {
-        // check files
-        QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
-        if (!QFile::exists(tempPath() + QDir::separator() + fileName)) {
-            LOG_ERROR(QString("Missing " + tempPath() + QDir::separator() + fileName + " file. ZADrugsDB::prepareDatas()"));
-            continue;
-        }
-
-        // read file
-        LOG("Processing file :" + fileName);
-        QString content = Utils::readTextFile(tempPath() + QDir::separator() + fileName);
-        if (content.isEmpty()) {
-            LOG_ERROR("no content");
-            return false;
-        }
-
-        // get all drugsname
+        // Get drugs pages
         int begin = content.indexOf("<UL>");
         int max = content.indexOf("</UL>");
-        while (begin<max) {
+        while (begin < max) {
             begin = content.indexOf("<LI><A HREF=", begin);
             if (begin==-1)
                 break;
@@ -387,12 +293,79 @@ bool ZaDrugDatabaseStep::prepareData()
             drug.replace("&Egrave;","È");
             drug.replace("&#196;","Ä");
             drug.replace("&Iuml;","Ï");
-
             m_Drug_Link.insert(drug, link);
         }
-
-        Q_EMIT progress(i);
     }
+    delete _multiDownloader;
+}
+
+bool ZaDrugDatabaseStep::onIndexFilesDownloadFinished()
+{
+    Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
+    if (!_multiDownloader)
+        return false;
+    _multiDownloader->saveXmlUrlFileLinks();
+    disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onIndexFilesDownloadFinished()));
+    delete _multiDownloader;
+
+    // Here is the second step of the ZA drugs database download: examine all HTML indexes and
+    // extract all drugs name & SPC links. Then start the download of the missing files.
+
+    getAllDrugLinksFromIndexesFiles();
+
+    // Download SPC files
+    Utils::HttpMultiDownloader *_spcDownloader = new Utils::HttpMultiDownloader(this);
+    _spcDownloader->setUseUidAsFileNames(true);
+    _spcDownloader->setOutputPath(tempPath() + "/spc/");
+    _spcDownloader->readXmlUrlFileLinks();
+
+    // Remove already downloaded files from the queue
+    QList<QUrl> urls;
+    foreach(const QString &link, m_Drug_Link.values()) {
+        QUrl url(QString("http://home.intekom.com%1").arg(link));
+        if (!_spcDownloader->urls().contains(url) && !urls.contains(url))
+            urls << url;
+    }
+
+    // Start the download
+    _spcDownloader->setUrls(urls);
+    connect(_spcDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onSpcDownloadFinished()), Qt::UniqueConnection);
+    return _spcDownloader->startDownload();
+}
+
+bool ZaDrugDatabaseStep::onSpcDownloadFinished()
+{
+    Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
+    if (!_multiDownloader)
+        return false;
+    _multiDownloader->saveXmlUrlFileLinks();
+    disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onSpcDownloadFinished()));
+    delete _multiDownloader;
+    return true;
+}
+
+QString ZaDrugDatabaseStep::processMessage() const
+{
+    if (licenseType() == NonFree)
+        return tr("Non-free South African drugs database creation");
+    return tr("Free South African drugs database creation");
+}
+
+bool ZaDrugDatabaseStep::process()
+{
+    prepareData();
+    createDatabase();
+    populateDatabase();
+    linkMolecules();
+    Q_EMIT processFinished();
+    return true;
+}
+
+bool ZaDrugDatabaseStep::prepareData()
+{
+    Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
+    m_Drug_Link.clear();
+    getAllDrugLinksFromIndexesFiles();
     return true;
 }
 
@@ -690,6 +663,12 @@ bool ZaDrugDatabaseStep::populateDatabase()
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
+    // Read url <-> file association
+    Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
+    _multiDownloader->setUseUidAsFileNames(true);
+    _multiDownloader->setOutputPath(tempPath() + "/spc/");
+    _multiDownloader->readXmlUrlFileLinks();
+
     int progr = 0;
     QVector<Drug *> drugs;
     foreach(const QString &drugName, m_Drug_Link.keys()) {
@@ -703,9 +682,14 @@ bool ZaDrugDatabaseStep::populateDatabase()
             qWarning() << "CREATING UID FOR" << drugName << lastUid;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////
         // get the drugs file
-        QString fileName = tempPath() + "/home.intekom.com/" + m_Drug_Link.value(drugName);
-        QString content = Utils::readTextFile(fileName);
+        QString fileName = _multiDownloader->outputAbsoluteFileName(QUrl(m_Drug_Link.value(drugName)));
+        QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
 
         if (content.isEmpty())
             continue;
