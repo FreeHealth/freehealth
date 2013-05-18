@@ -79,6 +79,7 @@ IDrugDatabaseStep::IDrugDatabaseStep(QObject *parent) :
     _database(0),
     _sid(-1)
 {
+    setObjectName("IDrugDatabaseStep");
     _outputFileName = "master.db";
 }
 
@@ -1086,8 +1087,8 @@ bool IDrugDatabaseStep::startProcessing(ProcessTiming timing, SubProcess subProc
             ok = createTemporaryStorage();
             break;
         case Process:
-            ok = startDownload();
             connect(this, SIGNAL(downloadFinished()), this, SLOT(onSubProcessFinished()), Qt::UniqueConnection);
+            ok = startDownload();
             return ok;
         case PostProcess:
             ok = unzipFiles();
@@ -1142,6 +1143,7 @@ bool IDrugDatabaseStep::startProcessing(ProcessTiming timing, SubProcess subProc
 
 void IDrugDatabaseStep::onSubProcessFinished()
 {
+    WARN_FUNC << _currentTiming << _currentSubProcess;
     Q_EMIT subProcessFinished(_currentTiming, _currentSubProcess);
 }
 
@@ -1179,7 +1181,7 @@ bool IDrugDatabaseStep::unzipFiles()
     }
 
     // unzip files using QProcess
-    LOG(QString("Starting unzipping %1 files %1")
+    LOG(QString("Starting unzipping %1 files to: %2")
         .arg(connectionName())
         .arg(fileName));
 

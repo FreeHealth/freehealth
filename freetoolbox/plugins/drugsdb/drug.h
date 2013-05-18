@@ -88,7 +88,7 @@ public:
         Authorization,
         Valid,
         Marketed,
-        Spc,          // summary of product characteristics
+        Spc,          // summary of product characteristics (URL)
         Xml
     };
 
