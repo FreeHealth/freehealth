@@ -115,6 +115,15 @@ class QUAZIP_EXPORT QuaZip {
       csSensitive=1, ///< Case sensitive.
       csInsensitive=2 ///< Case insensitive.
     };
+    /// Returns the actual case sensitivity for the specified QuaZIP one.
+    /**
+      \param cs The value to convert.
+      \returns If CaseSensitivity::csDefault, then returns the default
+      file name case sensitivity for the platform. Otherwise, just
+      returns the appropriate value from the Qt::CaseSensitivity enum.
+      */
+    static Qt::CaseSensitivity convertCaseSensitivity(
+            CaseSensitivity cs);
   private:
     QuaZipPrivate *p;
     // not (and will not be) implemented
@@ -249,8 +258,12 @@ class QUAZIP_EXPORT QuaZip {
     int getEntriesCount() const;
     /// Returns global comment in the ZIP file.
     QString getComment() const;
-    /// Sets global comment in the ZIP file.
-    /** Comment will be written to the archive on close operation.
+    /// Sets the global comment in the ZIP file.
+    /** The comment will be written to the archive on close operation.
+     * QuaZip makes a distinction between a null QByteArray() comment 
+     * and an empty &quot;&quot; comment in the QuaZip::mdAdd mode. 
+     * A null comment is the default and it means &quot;don't change 
+     * the comment&quot;. An empty comment removes the original comment.
      *
      * \sa open()
      **/

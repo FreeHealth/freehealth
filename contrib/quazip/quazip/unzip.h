@@ -52,7 +52,7 @@ extern "C" {
 #endif
 
 #ifndef _ZLIB_H
-#include <zlib.h>
+#include "zlib.h"
 #endif
 
 #ifndef _ZLIBIOAPI_H
@@ -129,7 +129,7 @@ extern int ZEXPORT unzStringFileNameCompare OF ((const char* fileName1,
    If iCaseSenisivity = 1, comparision is case sensitivity (like strcmp)
    If iCaseSenisivity = 2, comparision is not case sensitivity (like strcmpi
                                 or strcasecmp)
-   If iCaseSenisivity = 0, case sensitivity is default of your operating system
+   If iCaseSenisivity = 0, case sensitivity is defaut of your operating system
     (like 1 on Unix, 2 on Windows)
 */
 
