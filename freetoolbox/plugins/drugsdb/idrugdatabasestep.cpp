@@ -74,9 +74,9 @@ static inline DataPackPlugin::DataPackCore *dataPackCore() {return DataPackPlugi
 /*! Constructor of the DrugsDB::IDrugDatabaseStep class */
 IDrugDatabaseStep::IDrugDatabaseStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
+    _database(0),
     _licenseType(Free),
     _serverOwner(Community),
-    _database(0),
     _sid(-1)
 {
     setObjectName("IDrugDatabaseStep");

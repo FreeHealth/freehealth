@@ -139,12 +139,14 @@ private Q_SLOTS:
 Q_SIGNALS:
     void spcProcessFinished();
 
+protected:
+    DrugBaseEssentials *_database;
+
 private:
     LicenseType _licenseType;
     ServerOwner _serverOwner;
     QString _name, _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
     QString _finalizationScriptPath, _descriptionFilePath, _datapackDescriptionFilePath;
-    DrugBaseEssentials *_database;
     int _sid;
     QList<QUrl> _spcUrls;
     ProcessTiming _currentTiming;
