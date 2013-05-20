@@ -78,11 +78,11 @@ static const QString VERSION_MESSAGE =
 
 static inline QString getPluginPaths()
 {
-    QString app = qApp->applicationDirPath();
+    QString app;
 
 #ifdef DEBUG
 #    ifdef Q_OS_MAC
-        app = QDir::cleanPath(app+"/../../../");
+        app = QDir::cleanPath(qApp->applicationDirPath()+"/../../../");
 #    endif
     app += "/plugins/";
     return app;
@@ -95,19 +95,19 @@ static inline QString getPluginPaths()
 
 
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../"+"/plugins/");
+    app = QDir::cleanPath(qApp->applicationDirPath()+"/../"+"/plugins/");
     return app;
 #  endif
 
 // TODO: Add FreeBSD pluginPath */
 
 #  ifdef Q_OS_WIN
-    app = QDir::cleanPath(app + "/plugins/");
+    app = QDir::cleanPath(qApp->applicationDirPath() + "/plugins/");
     return app;
 #  endif
 
 #endif
-    return QDir::cleanPath(app + "/plugins/");
+    return QDir::cleanPath(qApp->applicationDirPath() + "/plugins/");
 }
 
 static inline void defineLibraryPaths()

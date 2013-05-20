@@ -193,7 +193,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     QString msg;
     if (m_Settings->firstTimeRunning()) {
         msg = QCoreApplication::translate("Core", "You are running FreePad for the first time. You need to approve the licence terms.");
-
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         msg = QCoreApplication::translate("Core", "You are running a new version of FreePad, you need to renew the licence agreement.");
     }
@@ -215,7 +214,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     }
 
-        return true;
+    return true;
 }
 
 void CoreImpl::extensionsInitialized()

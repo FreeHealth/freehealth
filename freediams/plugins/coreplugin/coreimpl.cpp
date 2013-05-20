@@ -215,7 +215,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     QString msg;
     if (m_Settings->firstTimeRunning()) {
         msg = QCoreApplication::translate("Core", "You are running FreeDiams for the first time. You need to approve the licence terms.");
-
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         msg = QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement.");
     }

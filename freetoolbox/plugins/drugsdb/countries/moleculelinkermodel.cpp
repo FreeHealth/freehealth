@@ -137,17 +137,17 @@ class MoleculeLinkerModelPrivate
 {
 public:
     MoleculeLinkerModelPrivate(MoleculeLinkerModel *parent) :
-            m_RootItem(0), m_FetchedRows(0), q(parent)
+        m_RootItem(0), m_FetchedRows(0), q(parent)
     {
         QFile file(linkerXmlFile());
         if (file.open(QIODevice::ReadOnly)) {
             QString error;
             int line, col;
             if (!domDocument.setContent(&file, &error,&line,&col)) {
-                Utils::Log::addError(q, q->tr("Can not read XML file content %1").arg(file.fileName()), __FILE__, __LINE__);
-                Utils::Log::addError(q, QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error), __FILE__, __LINE__);
+                LOG_ERROR_FOR(q, q->tr("Can not read XML file content %1").arg(file.fileName()));
+                LOG_ERROR_FOR(q, QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
             } else {
-                Utils::Log::addMessage(q, q->tr("Reading Molecule to ATC linker XML file: %1").arg(file.fileName()));
+                LOG_FOR(q, q->tr("Reading Molecule to ATC linker XML file: %1").arg(file.fileName()));
             }
             file.close();
 
@@ -155,7 +155,7 @@ public:
             m_RootItem = new DomItem(m_RootNode, 0);
 
         } else {
-            Utils::Log::addError(q, q->tr("Can not open XML file %1").arg(file.fileName()), __FILE__, __LINE__);
+            LOG_ERROR_FOR(q, q->tr("Can not open XML file %1").arg(file.fileName()));
         }
 
     }

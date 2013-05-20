@@ -193,11 +193,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // first time runnning ?
     QString msg;
-    bool first = false;
     if (m_Settings->firstTimeRunning()) {
         msg = QCoreApplication::translate("Core", "You are running FreeICD for the first time. You need to approve the licence terms.");
-        first = true;
-
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
         msg = QCoreApplication::translate("Core", "You are running a new version of FreeICD, you need to renew the licence agreement.");
     }
@@ -219,7 +216,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     }
 
-        return true;
+    return true;
 }
 
 void CoreImpl::extensionsInitialized()
