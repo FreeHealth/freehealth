@@ -128,8 +128,11 @@ public:
     QList<int> interactingClassContent(int classId);
     int interactingClassSingleAtcCount(int classId);
 
+    // Bibliography
     QVector<MedicalUtils::EbmData *> getAllBibliographyFromTree(const QList<int> &allInnAndInteractingClassesIds);
 
+    // Summary of Product Characteristics
+    QString getDrugSpc(const QVariant &drugId);
 
 //protected:
 public:

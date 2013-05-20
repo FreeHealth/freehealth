@@ -1713,8 +1713,6 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
 
     QString req = select(Constants::Table_BIB, join, where);
 
-    qWarning() << req;
-
     QStringList links;
     QSqlQuery query(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (query.isActive()) {
@@ -1735,3 +1733,85 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
     }
     return ret;
 }
+
+/**
+ * If available from the database, extracts and returns
+ * absolute filename of the Summary of Product Characteristics (SPC) of the drug.\n
+ * Returns an empty QString if the SPC is not available from the database.\n
+ * The file and all resources files are saved into a specific temporary directory.
+ * This directory has to be deleted. \n
+ * Available since drugs database version 0.8.4.
+ */
+QString DrugsBase::getDrugSpc(const QVariant &drugId)
+{
+#if DRUGS_DATABASE_VERSION < 0x000804
+    return QString::null;
+#endif
+    using namespace DrugsDB::Constants;
+    QSqlDatabase DB = QSqlDatabase::database(DB_DRUGS_NAME);
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+
+    // Get SPC content
+    Utils::FieldList get;
+    get << Utils::Field(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID);
+    get << Utils::Field(Table_SPC_CONTENT, SPCCONTENT_HTMLCONTENT);
+
+    Utils::FieldList cond;
+    cond << Utils::Field(Table_DRUG_SPC, DRUG_SPC_DID, QString("='%1'").arg(drugId.toString()));
+
+    Utils::JoinList joins;
+    joins << Utils::Join(Table_SPC_CONTENT, SPCCONTENT_ID, Table_DRUG_SPC, DRUG_SPC_SPCCONTENT_ID);
+    QString req = select(get, joins, cond);
+
+    QSqlQuery query(DB);
+    QString spc;
+    int resourceLinkId = -1;
+
+    if (query.exec(req)) {
+        if (query.next()) {
+            resourceLinkId = query.value(0).toInt();
+            spc = QString(qUncompress(query.value(1).toByteArray()));
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return QString::null;
+    }
+    query.finish();
+    get.clear();
+    cond.clear();
+    joins.clear();
+
+    if (spc.isEmpty())
+        return QString::null;
+
+    if (resourceLinkId==-1)
+        return spc;
+
+    // Get Resources content
+    get << Utils::Field(Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_CONTENT);
+    get << Utils::Field(Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_NAME);
+
+    cond << Utils::Field(Table_SPC_CONTENTRESOURCE_LINK, SPCCONTENT_RESOURCES_LINK_ID, QString("='%1'").arg(resourceLinkId));
+
+    joins << Utils::Join(Table_SPC_CONTENTRESOURCE_LINK, SPCCONTENT_SPCCONTENTRESOURCES_ID, Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_ID);
+
+    req = select(get, joins, cond);
+
+    qWarning() << req;
+
+    QHash<QString, QString> resources; //K=name V=content
+    if (query.exec(req)) {
+        while (query.next()) {
+            resources.insert(query.value(1).toString(), query.value(0).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    qWarning() << resources;
+
+    return spc;
+}
+
