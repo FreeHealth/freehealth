@@ -947,7 +947,9 @@ bool IDrugDatabaseStep::saveDrugSpc(const SpcContent &content)
     QSqlQuery query(_database->database());
     // Get Ids
     int spcId = -1;
-    int resourceLinkId = _database->max(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID).toInt() + 1;
+    int resourceLinkId = -1;
+    if (content.resources.count() > 0)
+        _database->max(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID).toInt() + 1;
 
     // Insert the spc content to the SPCCONTENT table
     query.prepare(_database->prepareInsertQuery(Table_SPC_CONTENT));
@@ -955,7 +957,7 @@ bool IDrugDatabaseStep::saveDrugSpc(const SpcContent &content)
     query.bindValue(SPCCONTENT_LABEL, content.label);
     query.bindValue(SPCCONTENT_URL_SOURCE, content.url);
     query.bindValue(SPCCONTENT_DATEOFDOWNLOAD, QDateTime::currentDateTime().toString(Qt::ISODate));
-    query.bindValue(SPCCONTENT_HTMLCONTENT, content.html);
+    query.bindValue(SPCCONTENT_HTMLCONTENT, qCompress(content.html.toUtf8(), 9));
     query.bindValue(SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID, resourceLinkId);
     if (query.exec()) {
         spcId = query.lastInsertId().toInt();
