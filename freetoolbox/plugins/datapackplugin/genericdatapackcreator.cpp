@@ -95,7 +95,7 @@ bool GenericDataPackCreator::startProcessing(ProcessTiming timing, SubProcess su
         ok = createTemporaryStorage() && registerDataPack();
     }
     QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
-    return true;
+    return ok;
 }
 
 void GenericDataPackCreator::onSubProcessFinished()

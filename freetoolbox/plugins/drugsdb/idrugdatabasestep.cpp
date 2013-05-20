@@ -1140,7 +1140,7 @@ bool IDrugDatabaseStep::startProcessing(ProcessTiming timing, SubProcess subProc
         break;
     } // switch
     QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
-    return true;
+    return ok;
 }
 
 void IDrugDatabaseStep::onSubProcessFinished()

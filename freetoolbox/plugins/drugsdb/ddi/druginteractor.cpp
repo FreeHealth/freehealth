@@ -411,9 +411,8 @@ public:
                         continue;
                     // if is class -> create a category
                     if (di->isClass()) {
-                        DITreeItem *cat = 0;
                         if (!categories.keys().contains(di->data(DrugInteractor::InitialLabel).toString())) {
-                            cat = new DITreeItem(di, rootItem);
+                            DITreeItem *cat = new DITreeItem(di, rootItem);
                             categories.insert(di->data(DrugInteractor::InitialLabel).toString(), cat);
                         }
                     }
@@ -432,9 +431,8 @@ public:
                 }
 
                 // find parent class
-                DITreeItem *cat = 0;
                 foreach(const QString &id, di->parentIds()) {
-                    cat = categories.value(id, 0);
+                    DITreeItem *cat = categories.value(id, 0);
                     if (!cat)
                         continue;
                     new DITreeItem(di, cat);

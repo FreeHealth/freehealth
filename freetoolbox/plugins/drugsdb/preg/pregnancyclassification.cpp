@@ -221,7 +221,7 @@ bool PregnancyDatatabaseStep::startProcessing(ProcessTiming timing, SubProcess s
         break;
     } // switch
     QTimer::singleShot(1, this, SLOT(onSubProcessFinished()));
-    return true;
+    return ok;
 }
 
 void PregnancyDatatabaseStep::onSubProcessFinished()

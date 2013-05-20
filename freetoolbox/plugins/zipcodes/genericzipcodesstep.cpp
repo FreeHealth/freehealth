@@ -66,6 +66,14 @@ class GenericZipCodesStepPrivate
 {
 public:
     explicit GenericZipCodesStepPrivate(GenericZipCodesStep *parent) :
+        m_WithProgress(false),
+        m_availableCountriesModel(0),
+        m_selectedCountriesModel(0),
+        m_selectedCountry(QLocale().country()),
+        m_selectedCountriesCounter(-1),
+        m_downloader(0),
+        _currentTiming(Core::IFullReleaseStep::PreProcess),
+        _currentSubProcess(Core::IFullReleaseStep::Initialization),
         q(parent)
     {
     }

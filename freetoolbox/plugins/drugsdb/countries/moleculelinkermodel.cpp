@@ -157,7 +157,6 @@ public:
         } else {
             LOG_ERROR_FOR(q, q->tr("Can not open XML file %1").arg(file.fileName()));
         }
-
     }
 
 public:

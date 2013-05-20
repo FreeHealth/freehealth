@@ -140,7 +140,9 @@ class DrugDrugInteractionModelPrivate
 {
 public:
     DrugDrugInteractionModelPrivate(DrugDrugInteractionModel *parent) :
-            q(parent)
+        rootItem(0),
+        m_FetchedRows(0),
+        q(parent)
     {
         rootItem = new DDITreeItem(0);
         m_currentFilter = "--@@##--";

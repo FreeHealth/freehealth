@@ -654,7 +654,9 @@ class AfssapsClassTreeModelPrivate
 {
 public:
     AfssapsClassTreeModelPrivate(AfssapsClassTreeModel *parent) :
-            m_RootItem(0), q(parent)
+        m_RootItem(0),
+        m_FetchedRows(0),
+        q(parent)
     {
         QFile file(afssapsTreeXmlFile());
         if (file.open(QIODevice::ReadOnly)) {

@@ -86,6 +86,7 @@ public:
         ui(0),
         m_DDIModel(0),
         m_Mapper(0),
+        m_ReviewModified(false),
         aSave(0),
         aEdit(0),
         aRemoveCurrent(0),

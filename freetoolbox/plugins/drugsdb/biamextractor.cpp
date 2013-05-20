@@ -477,12 +477,12 @@ void BiamExtractor::indexPageDownloaded(QNetworkReply *reply)
     const int startDelimiterLength = startDelimiter.length();
     QVector<QString> links;
     int begin = 0;
-    int end = 0;
     while (begin != -1) {
         begin = content.indexOf(startDelimiter, begin);
         if (begin==-1)
             break;
         begin += startDelimiterLength;
+        int end = 0;
         end = content.indexOf(endDelimiter, begin);
         const QString &l = content.mid(begin, end-begin);
         if (!links.contains(l))
