@@ -1,13 +1,13 @@
 TEMPLATE  = lib
 TARGET    = freemedforms-quazip-wrapper
 
-# QuaZip version = 0.4.4
-#!win32{VERSION=0.4.4}
+# QuaZip version = 0.5.1
+#!win32{VERSION=0.5.1}
 
 include(../../../libs/libsworkbench.pri)
 include(../quazip_dependencies.pri)
 
-LIBS *= -lz
+LIBS += -lz
 
 DEPENDPATH += .
 INCLUDEPATH += .
