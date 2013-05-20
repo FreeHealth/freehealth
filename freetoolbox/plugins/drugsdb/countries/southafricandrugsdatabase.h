@@ -99,10 +99,11 @@ public:
     bool process();
     QString processMessage() const;
 
+    bool unzipFiles();
     bool prepareData();
     bool populateDatabase();
     bool linkMolecules();
-
+    bool downloadSpcContents();
 
 private Q_SLOTS:
     bool onIndexFilesDownloadFinished();

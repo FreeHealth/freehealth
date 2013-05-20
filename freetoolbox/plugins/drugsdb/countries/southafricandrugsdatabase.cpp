@@ -78,10 +78,14 @@
 #include <QStringList>
 #include <QString>
 #include <QProgressDialog>
-
-#include <QNetworkReply>
+#include <QTimer>
 
 #include <QDebug>
+
+enum {
+    DontDownloadIndexes = true,         // Do not download html indexes files (you have to make sure that files were already downloaded)
+    LimitDrugProcessingTo = -1          // Set to -1 to process all available drugs
+};
 
 using namespace DrugsDB;
 using namespace Internal;
@@ -236,16 +240,22 @@ bool ZaDrugDatabaseStep::startDownload()
     // all locally missing SPC files.
     Q_EMIT progressLabelChanged(tr("South African database extraction: reading indexes"));
 
-    // Create all indexes URL
-    QList<QUrl> _urls;
-    for(int i = 0; i < 26; ++i) {
-        _urls << QUrl(QString(ZA_URL).arg(letters[i]));
-    }
-
     // Create the multi downloader
     Utils::HttpMultiDownloader *_multiDownloader = new Utils::HttpMultiDownloader(this);
     _multiDownloader->setUseUidAsFileNames(true);
     _multiDownloader->setOutputPath(tempPath() + "/indexes/");
+
+    // Create all indexes URL
+    QList<QUrl> _urls;
+    if (DontDownloadIndexes) {
+        _multiDownloader->readXmlUrlFileLinks();
+    } else {
+        for(int i = 0; i < 26; ++i) {
+            _urls << QUrl(QString(ZA_URL).arg(letters[i]));
+        }
+    }
+
+    // Start url downloading
     _multiDownloader->setUrls(_urls);
     connect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onIndexFilesDownloadFinished()), Qt::UniqueConnection);
     _multiDownloader->startDownload();
@@ -264,6 +274,11 @@ void ZaDrugDatabaseStep::getAllDrugLinksFromIndexesFiles()
     for(int i = 0; i < 26; ++i) {
         QUrl url = QUrl(QString(ZA_URL).arg(letters[i]));
         QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
+
+        if (content.isEmpty()) {
+            LOG_ERROR(QString("Index file is empty %1").arg(url.toString()));
+            continue;
+        }
 
         // Get drugs pages
         int begin = content.indexOf("<UL>");
@@ -293,6 +308,7 @@ void ZaDrugDatabaseStep::getAllDrugLinksFromIndexesFiles()
             drug.replace("&Egrave;","È");
             drug.replace("&#196;","Ä");
             drug.replace("&Iuml;","Ï");
+            link.prepend("http://home.intekom.com");
             m_Drug_Link.insert(drug, link);
         }
     }
@@ -301,6 +317,7 @@ void ZaDrugDatabaseStep::getAllDrugLinksFromIndexesFiles()
 
 bool ZaDrugDatabaseStep::onIndexFilesDownloadFinished()
 {
+    qWarning() << "-------------------- onIndexFilesDownloadFinished()";
     Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
     if (!_multiDownloader)
         return false;
@@ -322,7 +339,7 @@ bool ZaDrugDatabaseStep::onIndexFilesDownloadFinished()
     // Remove already downloaded files from the queue
     QList<QUrl> urls;
     foreach(const QString &link, m_Drug_Link.values()) {
-        QUrl url(QString("http://home.intekom.com%1").arg(link));
+        QUrl url(link);
         if (!_spcDownloader->urls().contains(url) && !urls.contains(url))
             urls << url;
     }
@@ -336,11 +353,13 @@ bool ZaDrugDatabaseStep::onIndexFilesDownloadFinished()
 bool ZaDrugDatabaseStep::onSpcDownloadFinished()
 {
     Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
+    qWarning() << "-------------------- onSpcDownloadFinished()" << _multiDownloader;
     if (!_multiDownloader)
         return false;
     _multiDownloader->saveXmlUrlFileLinks();
     disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onSpcDownloadFinished()));
     delete _multiDownloader;
+    Q_EMIT downloadFinished();
     return true;
 }
 
@@ -361,11 +380,36 @@ bool ZaDrugDatabaseStep::process()
     return true;
 }
 
+bool ZaDrugDatabaseStep::unzipFiles()
+{
+    // Nothing to do here
+    return true;
+}
+
+#include <drugsbaseplugin/constants_databaseschema.h>
 bool ZaDrugDatabaseStep::prepareData()
 {
+    WARN_FUNC;
     Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
     m_Drug_Link.clear();
     getAllDrugLinksFromIndexesFiles();
+
+//    qWarning() << "--------------------------------";
+//    QByteArray ba = qCompress(Utils::readTextFile("/Users/eric/Documents/freetoolbox_debug/tmp/ZARawSources/spc/0a8cc51231634ddf8cbedc65126bfa50.html").toUtf8());
+//    qWarning() << "-----" << ba.count() << ba.toBase64().count();
+
+//    if (!checkDatabase())
+//        if (!createDatabase())
+//            LOG_ERROR("dfsdfsf");
+
+//    QSqlQuery query(_database->database());
+//    using namespace DrugsDB::Constants;
+//    if (query.exec(_database->select(Table_SPC_CONTENT, SPCCONTENT_HTMLCONTENT) + " LIMIT 5")) {
+//        while (query.next()) {
+//            qWarning() << "\n\n\n" << query.value(0).toByteArray().count() << qUncompress(query.value(0).toByteArray()).count();
+//            qWarning() << qUncompress(query.value(0).toByteArray());
+//        }
+//    }
     return true;
 }
 
@@ -418,7 +462,6 @@ public:
                 tmp.remove("</I>");
                 tmp.remove("<SUB>");
                 tmp.remove("</SUB>");
-
                 if (!tmp.isEmpty())
                     inns.append(tmp.toUpper());
             }
@@ -630,7 +673,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
     foreach(const QString &drug, names) {
         content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
     }
-    if (!Utils::saveStringToFile(content.toUtf8(), uidFile())) {
+    if (!Utils::saveStringToFile(content.toUtf8(), uidFile(), Utils::Overwrite, Utils::DontWarnUser)) {
         LOG_ERROR_FOR("ZaDrugDatatabaseStep", "Unable to save UID file");
         return false;
     }
@@ -639,12 +682,19 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
 
 bool ZaDrugDatabaseStep::populateDatabase()
 {
-    if (!checkDatabase())
-        return false;
+    WARN_FUNC;
+    if (!checkDatabase()) {
+        if (!createDatabase()) {
+            LOG_ERROR("Unable to create drugs database");
+            return false;
+        }
+    }
 
     // check files
-    if (!prepareData())
+    if (!prepareData()) {
+        LOG_ERROR("Unable to prepare data");
         return false;
+    }
 
     // 27 Oct 2012 : 2723 Drugs
     // 14 Aug 2012 : 2723 Drugs ->
@@ -674,6 +724,8 @@ bool ZaDrugDatabaseStep::populateDatabase()
     foreach(const QString &drugName, m_Drug_Link.keys()) {
         ++progr;
         Q_EMIT progress(progr);
+        if (LimitDrugProcessingTo != -1 && progr == LimitDrugProcessingTo)
+            break;
 
         // Get the FreeDiams uid of the drug
         if (!drugs_uids.keys().contains(drugName)) {
@@ -682,17 +734,15 @@ bool ZaDrugDatabaseStep::populateDatabase()
             qWarning() << "CREATING UID FOR" << drugName << lastUid;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        // get the drugs file
-        QString fileName = _multiDownloader->outputAbsoluteFileName(QUrl(m_Drug_Link.value(drugName)));
+        // Get the drugs file
+        QString spcUrl = m_Drug_Link.value(drugName);
+        QString fileName = _multiDownloader->outputAbsoluteFileName(QUrl(spcUrl));
         QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
 
-        if (content.isEmpty())
+        if (content.isEmpty()) {
+            LOG_ERROR(QString("Content is empty. URL: %1; FileName: %2").arg(spcUrl).arg(fileName));
             continue;
+        }
         if (content.contains("<title>404 Not Found</title>", Qt::CaseInsensitive)) {
             qWarning() << "No HTML file";
             continue;
@@ -706,6 +756,7 @@ bool ZaDrugDatabaseStep::populateDatabase()
         Drug *drug = parser.getDrug();
         drug->setData(Drug::Uid1, drugs_uids.value(drugName));
         drug->setData(Drug::OldUid, drugs_uids.value(drugName));
+        drug->setData(Drug::Spc, spcUrl);
         drugs << drug;
 
         // test contents and create an error HTML output
@@ -732,7 +783,7 @@ bool ZaDrugDatabaseStep::populateDatabase()
     saveUids(drugs_uids);
     QString tmp = QString("<html><body><ol>%1</ol><p>&nbsp;</p><ol>%2</ol></body></html>")
             .arg(regError).arg(compoError);
-    Utils::saveStringToFile(tmp, tempPath() + "/incomplete.html");
+    Utils::saveStringToFile(tmp, tempPath() + "/incomplete.html", Utils::Overwrite, Utils::DontWarnUser);
 
     // save drugs to db
     saveDrugsIntoDatabase(drugs);
@@ -758,6 +809,7 @@ bool ZaDrugDatabaseStep::populateDatabase()
 
 bool ZaDrugDatabaseStep::linkMolecules()
 {
+    WARN_FUNC;
     // 29 Sept 2011
     //    NUMBER OF MOLECULES 1148
     //    CORRECTED BY NAME 23
@@ -870,5 +922,27 @@ bool ZaDrugDatabaseStep::linkMolecules()
     model->saveModel();
     Q_EMIT progress(1);
 
+    return true;
+}
+
+bool ZaDrugDatabaseStep::downloadSpcContents()
+{
+    WARN_FUNC;
+    // The ZA database is created directly using the SPC of drugs.
+    // So SPC files are already downloaded, we just need to send them to the drugs database.
+    Utils::HttpMultiDownloader *_spcDownloader = new Utils::HttpMultiDownloader(this);
+    _spcDownloader->setUseUidAsFileNames(true);
+    _spcDownloader->setOutputPath(tempPath() + "/spc/");
+    _spcDownloader->readXmlUrlFileLinks();
+
+    // Create the SPC content and send them to the drugs database
+    foreach(const QUrl &url, _spcDownloader->urls()) {
+        SpcContent content;
+        content.url = url.toString();
+        content.html = Utils::readTextFile(_spcDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
+        saveDrugSpc(content);
+    }
+
+    QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
     return true;
 }
