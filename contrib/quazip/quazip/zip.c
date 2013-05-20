@@ -777,9 +777,9 @@ extern int ZEXPORT zipOpenNewFileInZip3 (file, filename, zipfi,
     zi->ci.flag = 0;
     if ((level==8) || (level==9))
       zi->ci.flag |= 2;
-    if (level==2)
+    if ((level==2))
       zi->ci.flag |= 4;
-    if (level==1)
+    if ((level==1))
       zi->ci.flag |= 6;
     if (password != NULL)
     {
@@ -875,6 +875,7 @@ extern int ZEXPORT zipOpenNewFileInZip3 (file, filename, zipfi,
                                                                            !=size_extrafield_local)
                 err = ZIP_ERRNO;
 
+    memset(&zi->ci.stream, '\0', sizeof zi->ci.stream);
     zi->ci.stream.avail_in = (uInt)0;
     zi->ci.stream.avail_out = (uInt)Z_BUFSIZE;
     zi->ci.stream.next_out = zi->ci.buffered_data;

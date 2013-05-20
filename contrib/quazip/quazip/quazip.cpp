@@ -191,7 +191,9 @@ void QuaZip::close()
     case mdCreate:
     case mdAppend:
     case mdAdd:
-      p->zipError=zipClose(p->zipFile_f, p->commentCodec->fromUnicode(p->comment).constData());
+      p->zipError=zipClose(p->zipFile_f, 
+          p->comment.isNull() ? NULL
+          : p->commentCodec->fromUnicode(p->comment).constData());
       break;
     default:
       qWarning("QuaZip::close(): unknown mode: %d", (int)p->mode);
@@ -279,14 +281,7 @@ bool QuaZip::setCurrentFile(const QString& fileName, CaseSensitivity cs)
     p->zipError=UNZ_PARAMERROR;
     return false;
   }
-  bool sens;
-  if(cs==csDefault) {
-#ifdef Q_WS_WIN
-    sens=false;
-#else
-    sens=true;
-#endif
-  } else sens=cs==csSensitive;
+  bool sens = convertCaseSensitivity(cs) == Qt::CaseSensitive;
   QString lower, current;
   if(!sens) lower=fileName.toLower();
   p->hasCurrentFile_f=false;
@@ -475,10 +470,10 @@ bool QuaZip::isDataDescriptorWritingEnabled() const
 }
 
 template<typename TFileInfo>
-static TFileInfo getFileInfo(QuaZip *zip, bool *ok);
+TFileInfo QuaZip_getFileInfo(QuaZip *zip, bool *ok);
 
 template<>
-QuaZipFileInfo getFileInfo(QuaZip *zip, bool *ok)
+QuaZipFileInfo QuaZip_getFileInfo(QuaZip *zip, bool *ok)
 {
     QuaZipFileInfo info;
     *ok = zip->getCurrentFileInfo(&info);
@@ -486,7 +481,7 @@ QuaZipFileInfo getFileInfo(QuaZip *zip, bool *ok)
 }
 
 template<>
-QString getFileInfo(QuaZip *zip, bool *ok)
+QString QuaZip_getFileInfo(QuaZip *zip, bool *ok)
 {
     QString name = zip->getCurrentFileName();
     *ok = !name.isEmpty();
@@ -510,7 +505,7 @@ bool QuaZipPrivate::getFileInfoList(QList<TFileInfo> *result) const
   if (q->goToFirstFile()) {
       do {
           bool ok;
-          result->append(getFileInfo<TFileInfo>(q, &ok));
+          result->append(QuaZip_getFileInfo<TFileInfo>(q, &ok));
           if (!ok)
               return false;
       } while (q->goToNextFile());
@@ -518,10 +513,10 @@ bool QuaZipPrivate::getFileInfoList(QList<TFileInfo> *result) const
   if (zipError != UNZ_OK)
       return false;
   if (currentFile.isEmpty()) {
-      if (!q->setCurrentFile(currentFile))
+      if (!q->goToFirstFile())
           return false;
   } else {
-      if (!q->goToFirstFile())
+      if (!q->setCurrentFile(currentFile))
           return false;
   }
   return true;
@@ -543,4 +538,17 @@ QList<QuaZipFileInfo> QuaZip::getFileInfoList() const
         return list;
     else
         return QList<QuaZipFileInfo>();
+}
+
+Qt::CaseSensitivity QuaZip::convertCaseSensitivity(QuaZip::CaseSensitivity cs)
+{
+  if (cs == csDefault) {
+#ifdef Q_WS_WIN
+      return Qt::CaseInsensitive;
+#else
+      return Qt::CaseSensitive;
+#endif
+  } else {
+      return cs == csSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  }
 }
