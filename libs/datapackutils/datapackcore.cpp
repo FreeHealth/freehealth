@@ -43,8 +43,6 @@
 #include <QDir>
 #include <QNetworkProxy>
 
-#include <quazip/global.h>
-
 using namespace DataPack;
 
 namespace  {
@@ -94,12 +92,6 @@ DataPackCore::DataPackCore(QObject *parent) :
 {
     d->m_ServerManager = new Internal::ServerManager(this);
     d->m_PackManager = new Internal::PackManager(this);
-
-    //    qWarning() << QuaZipTools::zipFileNameContent("/Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/http_zip/forms/geriatrics/geriatric_pack01.zip").join("\n");
-//    Pack p;
-//    p.fromXmlFile("/Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/http_zip/forms/geriatrics/packdescription.xml");
-//    p.setInstalledFiles(QuaZipTools::zipFileNameContent("/Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/http_zip/forms/geriatrics/geriatric_pack01.zip"));
-//    qWarning() << p.toXml();
 }
 
 /** Destructor */
@@ -111,6 +103,7 @@ DataPackCore::~DataPackCore()
     }
 }
 
+/** Initialize the datapack core */
 void DataPackCore::init()
 {
     // Avoid infinite looping when using core::instance in servermanager/serverengine constructors
