@@ -9,7 +9,8 @@
 # * We suggest to keep this value unchanged unless you know what you are doing.         *
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
-DEFINES += DRUGS_DATABASE_VERSION=0x000604
+# DEFINES += DRUGS_DATABASE_VERSION=0x000604
+DEFINES += DRUGS_DATABASE_VERSION=0x000804
 
 # ***************************************************************************************
 # *                                    Auto-locking                                     *
@@ -78,9 +79,24 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000604
 # *                            French specific: printing FSP                            *
 # ***************************************************************************************
 # * By default this feature is activated. When activated, users can print french        *
-# 'feuilles de soins'.                                                                  *
+# * 'feuilles de soins'.                                                                *
 # ***************************************************************************************
 # * We suggest to activate this feature if you want to use FreeMedForms in France       *
 # ***************************************************************************************
 # Uncomment the following line to activate the feature
  DEFINES *= WITH_FRENCH_FSP
+
+# ***************************************************************************************
+# *                                       QuaZip                                        *
+# ***************************************************************************************
+# * FreeMedForms uses the external lib QuaZip to manage file/dir (de)compression.       *
+# * On some OS we need to build quazip (like Mac OS and Windows) because it is not      *
+# * already available. On Linux, we can need to build QuaZip or not. A package now      *
+# * exists for the main Linux distro. So if you want to link FreeMedForms with the      *
+# * system's QuaZip lib, then uncomment the following line.                             *
+# ***************************************************************************************
+# * If you don't what you are doing here, keep this line commented.                     *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+# CONFIG += dontbuildquazip
+
