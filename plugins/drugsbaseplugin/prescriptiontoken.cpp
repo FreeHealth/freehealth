@@ -111,6 +111,8 @@ QVariant PrescriptionToken::value() const
         case Prescription::IntakesIntervalFullString:
         {
             const QVariant &interval = _model->data(_model->index(_row, Prescription::IntakesIntervalOfTime));
+            if (interval.isNull() || !interval.isValid() || interval.toInt() <= 0)
+                return QVariant();
             const QVariant &scheme = _model->data(_model->index(_row, Prescription::IntakesIntervalSchemeIndex));
             return QString("%1 %2").arg(interval.toInt()).arg(period(scheme.toInt()));
         }
