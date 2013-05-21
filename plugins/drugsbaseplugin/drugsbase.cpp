@@ -1745,8 +1745,10 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
 QString DrugsBase::getDrugSpc(const QVariant &drugId)
 {
 #if DRUGS_DATABASE_VERSION < 0x000804
+    // If the drugs database version is lower than 0.8.4 -> nothing to build
     return QString::null;
-#endif
+#else
+    // If the drugs database version is >= than 0.8.4 -> build this part
     using namespace DrugsDB::Constants;
     QSqlDatabase DB = QSqlDatabase::database(DB_DRUGS_NAME);
     if (!connectDatabase(DB, __FILE__, __LINE__))
@@ -1813,5 +1815,6 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     qWarning() << resources;
 
     return spc;
+#endif
 }
 
