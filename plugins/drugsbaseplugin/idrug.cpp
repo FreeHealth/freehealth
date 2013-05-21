@@ -300,8 +300,18 @@ QString IComponent::form() const
  */
 bool IComponent::isMainInn() const
 {
-    return (d_component->m_7CharAtcIds.count() > 0
-            && !innName().isEmpty());
+    // Can be the main INN component only component linked with an ATC code & having an innName defined
+    if (d_component->m_7CharAtcIds.count() > 0
+            && !innName().isEmpty()) {
+        // If the component is linked, test the nature of the component. Only
+        // Therapeutic Fraction ('FT') are main INN.
+        if (d_component->m_Link) {
+            return (nature()=="FT");
+        } else {
+            return true;
+        }
+    }
+    return false;
 }
 
 QVector<int> IComponent::innAtcIds() const
