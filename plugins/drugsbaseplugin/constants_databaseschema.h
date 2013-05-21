@@ -30,8 +30,8 @@
 /**
  * \file constants_databaseschema.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 12 Dec 2011
+ * \version 0.8.4
+ * \date 17 May 2013
 */
 
 namespace DrugsDB {
@@ -49,9 +49,14 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
-        Table_MASTER = 0, Table_SOURCES,
-        Table_DRUGS, Table_MOLS, Table_COMPO,
-        Table_DRUG_FORMS, Table_DRUG_ROUTES, Table_ROUTES,
+        Table_MASTER = 0,
+        Table_SOURCES,
+        Table_DRUGS,
+        Table_MOLS,
+        Table_COMPO,
+        Table_DRUG_FORMS,
+        Table_DRUG_ROUTES,
+        Table_ROUTES,
 #if DRUGS_DATABASE_VERSION >= 0x000804
         Table_DRUG_SPC,
         Table_SPC_CONTENT,
@@ -59,9 +64,12 @@ namespace Constants {
         Table_SPC_CONTENTRESOURCE_LINK,
 #endif
         Table_SEARCHENGINES,
-        Table_LABELS, Table_LABELSLINK,
+        Table_LABELS,
+        Table_LABELSLINK,
         Table_PACKAGING,
-        Table_BIB, Table_BIB_LINK, Table_UNITS,
+        Table_BIB,
+        Table_BIB_LINK,
+        Table_UNITS,
 
         Table_ATC, Table_ATC_LABELS, Table_IAM_TREE, Table_LK_MOL_ATC,
         Table_INTERACTIONS, Table_IAKNOWLEDGE, Table_IA_IAK, Table_PIM_SOURCES,
