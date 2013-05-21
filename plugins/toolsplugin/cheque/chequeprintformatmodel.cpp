@@ -31,6 +31,7 @@
 #include "chequeprintformatmodel.h"
 #include "chequeprintformat.h"
 #include "chequeconstants.h"
+#include "chequeprinterdialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -75,7 +76,7 @@ public:
     void readDatapackFiles()
     {
         _formats.clear();
-        QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
+        QDir dir(ChequePrinterDialog::datapackPath());
         if (!dir.exists())
             return;
         QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);

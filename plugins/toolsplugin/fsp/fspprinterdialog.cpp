@@ -513,13 +513,34 @@ bool FspPrinterDialog::initialize(const Fsp &fsp)
     return true;
 }
 
+/** Returns true if the FSP print dialog is available for this configuration */
 bool FspPrinterDialog::isAvailable()  // static
 {
-    QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
-    if (!dir.exists())
+    // Datapack is not installed -> return false
+    const QString &path = datapackPath();
+    if (path.isEmpty())
         return false;
-    QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
+
+    // Check the content of the datapack path
+    QFileInfoList files = Utils::getFiles(QDir(path), "*.xml", Utils::Recursively);
     return !files.isEmpty();
+}
+
+QString FspPrinterDialog::datapackPath() // static
+{
+    QString path;
+    // Check the DataPackInstallPath path first
+    path = settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH;
+    if (QDir(path).exists())
+        return path;
+
+    // Else check the DataPackApplicationInstalled path
+    path = settings()->path(Core::ISettings::DataPackApplicationPath) + Constants::DATAPACK_PATH;
+    if (QDir(path).exists())
+        return path;
+
+    // Not installed
+    return QString::null;
 }
 
 void FspPrinterDialog::toggleView(bool complex)

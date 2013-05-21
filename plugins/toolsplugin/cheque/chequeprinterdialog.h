@@ -56,6 +56,7 @@ public:
     explicit ChequePrinterDialog(QWidget *parent = 0);
     ~ChequePrinterDialog();
     static bool isAvailable();
+    static QString datapackPath();
 
     void initializeWithSettings();
 

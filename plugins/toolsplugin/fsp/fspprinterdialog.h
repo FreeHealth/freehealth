@@ -54,6 +54,7 @@ public:
     bool initialize(const Fsp &fsp);
 
     static bool isAvailable();
+    static QString datapackPath();
 
 private Q_SLOTS:
     void toggleView(bool complex);

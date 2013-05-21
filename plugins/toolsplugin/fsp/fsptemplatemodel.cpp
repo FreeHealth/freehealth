@@ -31,6 +31,7 @@
 #include "fsptemplatemodel.h"
 #include "fspconstants.h"
 #include "fsp.h"
+#include "fspprinterdialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -252,7 +253,7 @@ public:
     {
         _files.clear();
         _fsps.clear();
-        QDir dir(settings()->path(Core::ISettings::DataPackInstallPath) + Constants::DATAPACK_PATH);
+        QDir dir(FspPrinterDialog::datapackPath());
         if (!dir.exists())
             return;
         QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
