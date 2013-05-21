@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                *
+ *  Main Developers:  Eric Maeker <eric.maeker@gmail.com>,                 *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
  *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
@@ -186,7 +186,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
     pad->beginRawSourceAnalyze();
 
 	PadFragment *fragment;
-	int pos;
+    int pos = -1;
     QMap<QString, QVariant> errorTokens;
 
 	_curPos = 0;
