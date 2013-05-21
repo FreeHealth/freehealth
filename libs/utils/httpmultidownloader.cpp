@@ -366,6 +366,15 @@ bool HttpMultiDownloader::onCurrentDownloadFinished()
     return true;
 }
 
+/** Return the full list of downloaded urls (with or without success) */
+QList<QUrl> HttpMultiDownloader::downloadedUrls() const
+{
+    QList<QUrl> urls;
+    foreach(const DownloadedUrl &dld, d->_downloadedUrl)
+        urls << dld.url;
+    return urls;
+}
+
 /** Returns the error message linked with the \e url */
 QString HttpMultiDownloader::lastErrorString(const QUrl &url) const
 {

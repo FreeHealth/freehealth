@@ -77,6 +77,7 @@ public:
     const QList<QUrl> &urls() const;
 
     // Getters for URL
+    QList<QUrl> downloadedUrls() const;
     QString lastErrorString(const QUrl &url) const;
     QNetworkReply::NetworkError networkError(const QUrl &url) const;
     QString outputAbsoluteFileName(const QUrl &url) const;
