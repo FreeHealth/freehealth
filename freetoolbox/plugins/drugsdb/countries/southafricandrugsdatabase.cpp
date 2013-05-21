@@ -502,9 +502,9 @@ public:
         // Paragraph contains only one reg number
         // ...<BR></B>....<BR>
         int begin = registrationNumberParagraph.indexOf("REGISTRATION NUMBER:") + 19;
-        int end = -1;
         int max = registrationNumberParagraph.indexOf("NAME AND BUSINESS ADDRESS OF", begin);
         if (begin > 19) {
+            int end = -1;
             begin = registrationNumberParagraph.indexOf("</B>", begin) + 4;
             end = registrationNumberParagraph.indexOf("<BR>", begin);
             regNumber = registrationNumberParagraph.mid(begin, end-begin);
@@ -573,6 +573,7 @@ public:
         }
         begin += length;
         int end = -1;
+        // FIXME: this code is buggy
         foreach(const QString &endString, ends) {
             end = fullContent.indexOf(endString);
             if (end != -1) {
