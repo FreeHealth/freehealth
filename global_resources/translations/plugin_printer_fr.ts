@@ -212,7 +212,7 @@ Troisièmement, imprimez une page test &lt;u&gt;avec&lt;/u&gt; les corrections e
     </message>
     <message>
         <source>File extra</source>
-        <translation>Savegarder</translation>
+        <translation>Sauvegarder</translation>
     </message>
     <message>
         <source>Save to PDF</source>
