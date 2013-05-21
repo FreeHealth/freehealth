@@ -861,13 +861,23 @@ bool IDrugDatabaseStep::onAllSpcDownloadFinished()
     // make them point to these CSS files.
 
     Utils::HttpMultiDownloader *_multiDownloader = qobject_cast<Utils::HttpMultiDownloader *>(sender());
-    if (!_multiDownloader)
+    if (!_multiDownloader) {
+        QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
         return false;
+    }
     disconnect(_multiDownloader, SIGNAL(allDownloadFinished()), this, SLOT(onAllSpcDownloadFinished()));
+
     // Save the HttpMultiDownloader XML cache file (only if there was downloads)
     if (_spcUrls.count() > 0)
         _multiDownloader->saveXmlUrlFileLinks();
-    //return true;
+
+    // Nothing downloaded -> return
+    const QList<QUrl> &downloadedUrls = _multiDownloader->downloadedUrls();
+    if (downloadedUrls.isEmpty()) {
+        LOG("No SPC file downloaded");
+        QTimer::singleShot(1, this, SIGNAL(spcProcessFinished()));
+        return true;
+    }
 
     // TODO: manage downloader errors
 
@@ -875,8 +885,9 @@ bool IDrugDatabaseStep::onAllSpcDownloadFinished()
     // An improvement can be to screen *all* the HTML files, and to manage database to correctly
     // link HTML and CSS content of SPC documents.
 
+
     // Get the first available SPC file in the output dir
-    const QUrl &firstUrl = _multiDownloader->urls().at(0);
+    const QUrl &firstUrl = downloadedUrls.at(0);
     QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(firstUrl), "ISO-8859-1");
     QList<QUrl> cssFiles;
 
@@ -916,7 +927,7 @@ bool IDrugDatabaseStep::onAllSpcDownloadFinished()
     }
 
     // Create the SPC content and send them to the drugs database
-    foreach(const QUrl &url, _multiDownloader->urls()) {
+    foreach(const QUrl &url, downloadedUrls) {
         SpcContent content;
         content.url = url.toString();
         content.html = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
