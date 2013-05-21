@@ -234,7 +234,8 @@ bool ZaDrugDatabaseStep::createTemporaryStorage()
 bool ZaDrugDatabaseStep::startDownload()
 {
     // The extraction of the ZA database works in two download sets.
-    // The firstly, we download all html index files from the root server. One index file per alphabetic letter.
+    // The firstly, we download all html index files from the root server.
+    // One index file per alphabetic letter.
     // Then when all these indexes are downloaded, we can extract from their content
     // all the SPC links and drugs name. The second step is represented by a massive download of
     // all locally missing SPC files.
@@ -393,23 +394,6 @@ bool ZaDrugDatabaseStep::prepareData()
     Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
     m_Drug_Link.clear();
     getAllDrugLinksFromIndexesFiles();
-
-//    qWarning() << "--------------------------------";
-//    QByteArray ba = qCompress(Utils::readTextFile("/Users/eric/Documents/freetoolbox_debug/tmp/ZARawSources/spc/0a8cc51231634ddf8cbedc65126bfa50.html").toUtf8());
-//    qWarning() << "-----" << ba.count() << ba.toBase64().count();
-
-//    if (!checkDatabase())
-//        if (!createDatabase())
-//            LOG_ERROR("dfsdfsf");
-
-//    QSqlQuery query(_database->database());
-//    using namespace DrugsDB::Constants;
-//    if (query.exec(_database->select(Table_SPC_CONTENT, SPCCONTENT_HTMLCONTENT) + " LIMIT 5")) {
-//        while (query.next()) {
-//            qWarning() << "\n\n\n" << query.value(0).toByteArray().count() << qUncompress(query.value(0).toByteArray()).count();
-//            qWarning() << qUncompress(query.value(0).toByteArray());
-//        }
-//    }
     return true;
 }
 
@@ -465,6 +449,10 @@ public:
                 if (!tmp.isEmpty())
                     inns.append(tmp.toUpper());
             }
+        }
+        if (inns.isEmpty()) {
+            LOG_FOR("ZADB", QString("No composition for %1").arg(name));
+            qWarning() << fullContent;
         }
     }
 
@@ -811,6 +799,16 @@ bool ZaDrugDatabaseStep::populateDatabase()
 bool ZaDrugDatabaseStep::linkMolecules()
 {
     WARN_FUNC;
+    // 21 May 2013
+    //    NUMBER OF MOLECULES 1145
+    //    CORRECTED BY NAME 23
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 559 "
+    //    LINKERMODEL (WithATC:122;WithoutATC:2) 124"
+    //    LINKERNATURE 0
+    //    LEFT 584
+    //    CONFIDENCE INDICE 48.9956
+
     // 29 Sept 2011
     //    NUMBER OF MOLECULES 1148
     //    CORRECTED BY NAME 23
