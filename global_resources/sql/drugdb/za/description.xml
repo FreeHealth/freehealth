@@ -5,13 +5,13 @@
 
   <description>
     <lang>fr_FR</lang>
-    <version>0.6.4</version>
+    <version>0.8.4</version>
     <authors>Eric Maeker, MD (Fr)</authors>
-    <fmfv>0.6.2</fmfv>
-    <fdv>0.6.4</fdv>
+    <fmfv>0.8.4</fmfv>
+    <fdv>0.4.4</fdv>
     <vendor>SAEPI : South African Electronic Package Insert</vendor>
     <cdate>2010-01-01</cdate>
-    <lmdate>2012-08-14</lmdate>
+    <lmdate>2013-05-21</lmdate>
     <weblink>http://home.intekom.com/pharm/</weblink>
     <copyright>SAEPI</copyright>
     <druguidbname>FakeUid</druguidbname>

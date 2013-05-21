@@ -5,16 +5,16 @@
 
   <description>
     <lang>en_US</lang>
-    <version>0.6.4</version>
+    <version>0.8.4</version>
     <authors>Eric Maeker, MD (Fr)</authors>
-    <fmfv>0.6.2</fmfv>
-    <fdv>0.6.4</fdv>
+    <fmfv>0.8.4</fmfv>
+    <fdv>0.8.4</fdv>
     <vendor>FDA</vendor>
     <cdate>2010-01-01</cdate>
-    <lmdate>2011-12-12</lmdate>
+    <lmdate>2013-05-21</lmdate>
     <weblink>http://www.fda.gov/Drugs/</weblink>
     <copyright>(c) Eric Maeker (FDA's data are public domain)</copyright>
-    <license>GPLv3</license>
+    <license>NonFree</license>
     <druguidbname>DRUG_CODE</druguidbname>
     <atcvalid>true</atcvalid>
     <interactionvalid>true</interactionvalid>
