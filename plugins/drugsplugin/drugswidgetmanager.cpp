@@ -446,7 +446,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     aDosagesDatabaseInformation = createAction(this, "aDosagesDatabaseInformation", Core::Constants::ICONHELP,
                                                A_DOSAGESDATABASE_INFORMATION,
-                                               ctx,
+                                               Core::Context(Core::Constants::C_GLOBAL),
                                                Trans::Constants::DOSAGES_DATABASE_INFORMATION, "",
                                                cmd,
                                                hmenu, Core::Constants::G_HELP_DATABASES,
@@ -514,7 +514,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     aShowDrugPrecautions = createAction(this, "aShowDrugPrecautions", I_ALLERGYENGINE,
                                         A_SHOWDRUGPRECAUTIONS,
-                                        ctx,
+                                        Core::Context(Core::Constants::C_GLOBAL),
                                         SHOWDRUGPRECAUTIONS_TEXT, DRUGCONSTANTS_TR_CONTEXT,
                                         cmd,
                                         menu, G_PLUGINS_VIEWS,
