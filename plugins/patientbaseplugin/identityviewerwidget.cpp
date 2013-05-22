@@ -48,24 +48,33 @@
 
 #include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <utils/emailvalidator.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_titles.h>
 #include <translationutils/trans_user.h>
 #include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_current.h>
 
 #include "ui_identityviewer.h"
 
 #include <QFormLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QToolButton>
+#include <QUrl>
+#include <QDesktopServices>
 
 #include <QDebug>
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 using namespace Patients;
 using namespace Internal;
@@ -395,6 +404,7 @@ private:
 
 class ContactViewerWidget : public QWidget
 {
+    Q_OBJECT
 public:
     ContactViewerWidget(QWidget *parent) : QWidget(parent)
     {
@@ -408,7 +418,12 @@ public:
         _tels = new QLabel(this);
         _fax = new QLabel(this);
         _mail = new QLabel(this);
+        _sendMail = new QToolButton(this);
         _mobile = new QLabel(this);
+
+        QHBoxLayout *mailLayout = new QHBoxLayout(this);
+        mailLayout->addWidget(_mail);
+        mailLayout->addWidget(_sendMail);
 
         QFont bold;
         bold.setBold(true);
@@ -416,10 +431,13 @@ public:
         _faxLabel->setFont(bold);
         _mailLabel->setFont(bold);
         _mobileLabel->setFont(bold);
+        _sendMail->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        _sendMail->setIcon(theme()->icon(Core::Constants::ICONNEWMAIL));
+        QObject::connect(_sendMail, SIGNAL(clicked()), this, SLOT(sendMail()));
 
         grid->addRow(_telsLabel, _tels);
         grid->addRow(_faxLabel, _fax);
-        grid->addRow(_mailLabel, _mail);
+        grid->addRow(_mailLabel, mailLayout);
         grid->addRow(_mobileLabel, _mobile);
 
         retranslate();
@@ -451,6 +469,10 @@ public:
 
     void setMail(const QString &txt)
     {
+        Utils::EmailValidator val;
+        int pos = 0;
+        QString _m = txt;
+        _sendMail->setEnabled(val.validate(_m, pos) == Utils::EmailValidator::Acceptable);
         if (txt.isEmpty())
             _mail->setText("--");
         else
@@ -471,6 +493,7 @@ public:
         _faxLabel->setText(tkTr(Trans::Constants::FAX));
         _mailLabel->setText(tkTr(Trans::Constants::MAIL));
         _mobileLabel->setText(tkTr(Trans::Constants::MOBILEPHONE));
+        _sendMail->setToolTip(tkTr(Trans::Constants::SENDMAIL));
     }
 
     void changeEvent(QEvent *e)
@@ -480,10 +503,19 @@ public:
         QWidget::changeEvent(e);
     }
 
+private Q_SLOTS:
+    void sendMail()
+    {
+        if (_mail->text().contains("@"))
+            QDesktopServices::openUrl(QUrl(QString("mailto:%1?subject=[%2]")
+                                           .arg(_mail->text())
+                                           .arg(user()->value(Core::IUser::FullName).toString())));
+    }
+
 private:
     QLabel *_telsLabel, *_faxLabel, *_mailLabel, *_mobileLabel;
     QLabel *_tels, *_fax, *_mail, *_mobile;
-
+    QToolButton *_sendMail;
 };
 
 class FullContactViewerDetails : public QWidget
@@ -792,3 +824,5 @@ void IdentityViewerWidget::setCurrentIndex(const QModelIndex &patientIndex)
     d->clearReadOnlyWidget();
     d->populateReadOnlyWidget(patientIndex.row());
 }
+
+#include "identityviewerwidget.moc"
