@@ -69,6 +69,7 @@ const char* const ISVALID                            = QT_TRANSLATE_NOOP("tkCons
 const char* const ICON                               = QT_TRANSLATE_NOOP("tkConstants", "Icon");
 const char* const ENGINE_REPORT                      = QT_TRANSLATE_NOOP("tkConstants", "Engine report");
 const char* const OVERVIEW                           = QT_TRANSLATE_NOOP("tkConstants", "Overview");
+const char* const SENDMAIL                           = QT_TRANSLATE_NOOP("tkConstants", "Send a mail");
 
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
 const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkConstants", "Token: %1");
