@@ -82,6 +82,7 @@ public:
     void setFinalizationScript(const QString &absPath);
     void setDatabaseDescriptionFile(const QString &absPath);
     void setDatapackDescriptionFile(const QString &absPath);
+    void setSpcHtmlFilesDefaultEncoding(const QString &encoding) {_spcDefaultEncoding=encoding;}
 
     virtual QString displayName() const {return _name;}
     virtual LicenseType licenseType() const {return _licenseType;}
@@ -95,6 +96,7 @@ public:
     QString finalizationScript() const {return _finalizationScriptPath;}
     QString databaseDescriptionFile() const {return _descriptionFilePath;}
     QString datapackDescriptionFile() const {return _datapackDescriptionFilePath;}
+    QString spcHtmlFilesDefaultEncoding() const {return _spcDefaultEncoding;}
     int sourceId() const;
 
     virtual bool checkDatabase();
@@ -147,6 +149,7 @@ private:
     ServerOwner _serverOwner;
     QString _name, _tempPath, _outputPath, _connection, _outputFileName, _downloadingUrl;
     QString _finalizationScriptPath, _descriptionFilePath, _datapackDescriptionFilePath;
+    QString _spcDefaultEncoding;
     int _sid;
     QList<QUrl> _spcUrls;
     ProcessTiming _currentTiming;
