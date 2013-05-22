@@ -549,6 +549,8 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     {
         QString full;
         const QString &from = d_pres->m_PrescriptionValues.value(Prescription::IntakesFrom).toString();
+        if (from.isEmpty())
+            return QVariant();
         const QString &to = d_pres->m_PrescriptionValues.value(Prescription::IntakesTo).toString();
         const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesScheme).toString();
         bool fromTo = d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo).toBool();
@@ -564,6 +566,8 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     {
         QString full;
         const QString &from = d_pres->m_PrescriptionValues.value(Prescription::DurationFrom).toString();
+        if (from.isEmpty())
+            return QVariant();
         const QString &to = d_pres->m_PrescriptionValues.value(Prescription::DurationTo).toString();
         const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::DurationScheme).toString();
         bool fromTo = d_pres->m_PrescriptionValues.value(Prescription::DurationUsesFromTo).toBool();
@@ -579,6 +583,8 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     {
         QString full;
         const QString &val = d_pres->m_PrescriptionValues.value(Prescription::Period).toString();
+        if (val.isEmpty())
+            return QVariant();
         const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::PeriodScheme).toString();
         full = val + " " + scheme;
         return full;
@@ -587,6 +593,8 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
     {
         QString full;
         const QString &val = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalOfTime).toString();
+        if (val.isEmpty())
+            return QVariant();
         const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalSchemeIndex).toString();
         full = val + " " + scheme;
         return full;
