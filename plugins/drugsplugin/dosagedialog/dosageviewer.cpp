@@ -257,7 +257,7 @@ public:
 //            q->dailySchemeView->resizeColumnsToContents();
         }
 
-        // Link to French RCP
+        // Link to SCP
         if (!drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).isNull()) {
             q->monographButton->setEnabled(true);
             q->monographButton->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).toString());
@@ -661,7 +661,13 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
 
 void DosageViewer::on_monographButton_clicked()
 {
+#if DRUGS_DATABASE_VERSION >= 0x000804
+    // Get the SPC from the drugs database
+    QDesktopServices::openUrl(QUrl(drugsBase().getDrugSpc(d->m_DrugId)));
+#else
+    // Open the SPC from the web using the link recorded in the database
     QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).toString()));
+#endif
 }
 
 void DosageViewer::on_tabWidget_currentChanged(int)
