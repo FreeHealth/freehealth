@@ -193,8 +193,8 @@ const char * const  ICONPATIENTOVERVIEW  =  "patientsynthesis.png";
 const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
 const char * const  ICONEXPORTPATIENTFILE  =  "export-patient-file.png";
 const char * const  ICONCHEQUE       = "bank-cheque.png";
-const char * const  ICONNEWMAIL       = "mail-new.png";
-const char * const  ICONSENDMAIL       = "mail-send.png";
+const char * const  ICONNEWMAIL       = "mail_new.png";
+const char * const  ICONSENDMAIL       = "mail_send.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
