@@ -464,12 +464,12 @@ void EditorActionHandler::setCurrentEditor(TextEditor *editor)
 {
     // disconnect old editor
     if (m_CurrentEditor) {
-        disconnect( m_CurrentEditor->textEdit(), SIGNAL( currentCharFormatChanged( const QTextCharFormat & ) ),
-                    this, SLOT( currentCharFormatChanged( const QTextCharFormat & ) ) );
-        disconnect( m_CurrentEditor->textEdit(), SIGNAL( cursorPositionChanged() ),
-                    this, SLOT( cursorPositionChanged() ) );
-        disconnect( m_CurrentEditor->textEdit(), SIGNAL( customContextMenuRequested( const QPoint & ) ),
-                    m_CurrentEditor, SLOT( contextMenu( const QPoint & ) ) );
+        disconnect(m_CurrentEditor->textEdit(), SIGNAL(currentCharFormatChanged(QTextCharFormat)),
+                   this, SLOT(currentCharFormatChanged(QTextCharFormat)));
+        disconnect(m_CurrentEditor->textEdit(), SIGNAL(cursorPositionChanged()),
+                   this, SLOT(cursorPositionChanged()));
+        disconnect(m_CurrentEditor->textEdit(), SIGNAL(customContextMenuRequested(QPoint)),
+                   m_CurrentEditor, SLOT(contextMenu(QPoint)));
         disconnect(m_CurrentEditor->textEdit(), SIGNAL(undoAvailable(bool)), this, SLOT(updateUndoAction()));
         disconnect(m_CurrentEditor->textEdit(), SIGNAL(redoAvailable(bool)), this, SLOT(updateRedoAction()));
         disconnect(m_CurrentEditor->textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(updateCopyAction()));
@@ -483,15 +483,15 @@ void EditorActionHandler::setCurrentEditor(TextEditor *editor)
     }
 
     // reconnect some actions
-    connect( m_CurrentEditor->textEdit(), SIGNAL( currentCharFormatChanged( const QTextCharFormat & ) ),
-             this, SLOT( currentCharFormatChanged( const QTextCharFormat & ) ) );
-    connect( m_CurrentEditor->textEdit(), SIGNAL( cursorPositionChanged() ),
-             this, SLOT( cursorPositionChanged() ) );
-    connect( m_CurrentEditor->textEdit(), SIGNAL( customContextMenuRequested( const QPoint & ) ),
-             m_CurrentEditor, SLOT( contextMenu( const QPoint & ) ) );
-    connect(m_CurrentEditor->textEdit(), SIGNAL(undoAvailable(bool)), this, SLOT(updateUndoAction()));
-    connect(m_CurrentEditor->textEdit(), SIGNAL(redoAvailable(bool)), this, SLOT(updateRedoAction()));
-    connect(m_CurrentEditor->textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(updateCopyAction()));
+    connect(m_CurrentEditor->textEdit(), SIGNAL(currentCharFormatChanged(QTextCharFormat)),
+            this, SLOT(currentCharFormatChanged(QTextCharFormat)), Qt::UniqueConnection);
+    connect(m_CurrentEditor->textEdit(), SIGNAL(cursorPositionChanged()),
+            this, SLOT(cursorPositionChanged()), Qt::UniqueConnection);
+    connect(m_CurrentEditor->textEdit(), SIGNAL(customContextMenuRequested(QPoint)),
+            m_CurrentEditor, SLOT(contextMenu(QPoint)), Qt::UniqueConnection);
+    connect(m_CurrentEditor->textEdit(), SIGNAL(undoAvailable(bool)), this, SLOT(updateUndoAction()), Qt::UniqueConnection);
+    connect(m_CurrentEditor->textEdit(), SIGNAL(redoAvailable(bool)), this, SLOT(updateRedoAction()), Qt::UniqueConnection);
+    connect(m_CurrentEditor->textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(updateCopyAction()), Qt::UniqueConnection);
 
     // show toolbar
     m_CurrentEditor->toogleToolbar(m_CurrentEditor->toolbarIsVisible());
