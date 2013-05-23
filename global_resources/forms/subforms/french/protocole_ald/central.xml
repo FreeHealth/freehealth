@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.8.2</fmfv>
+    <fmfv>0.8.4</fmfv>
     <cdate>2013-01-01</cdate>
-    <lmdate>2013-01-01</lmdate>
+    <lmdate>2013-05-23</lmdate>
     <icon>__theme__/carte_vitale.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -23,7 +23,7 @@
     <specialties lang="xx">Tools</specialties>
 
     <updateinfo>
-      <updateversion from="" to="0.8.2">
+      <updateversion from="" to="0.8.4">
         <text lang="fr">
         Première mise à disposition
         </text>
@@ -33,6 +33,8 @@
       </updateversion>
     </updateinfo>
   </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/ald.js</file>
 
   <MedForm name="Subs::Tools::FrenchSpecific::ALD" uifilename="./ui/xx/ald.ui">
     <label lang="xx">Protocole d'ALD</label>
@@ -117,6 +119,12 @@
       <label lang="xx">Actes et prestations concernant la maladie</label>
       <column>1</column>
       <options>DontPrintEmptyValues;SummaryFontBold;expanded</options>
+
+      <Item type="editablelist" name="Pharma">
+        <uilink label="" widget="" layout="pharmaLayout"/>
+        <maxrow>12</maxrow>
+        <options>DontPrintEmptyValues</options>
+      </Item>
 
       <Item type="editablelist" name="SuiviBio">
         <uilink label="" widget="" layout="bioLayout"/>
@@ -213,23 +221,7 @@
             item.enabled = freemedforms.pdf.isAvailable;
           </onload>
           <onclicked>
-              // get the fremedforms pdf worker
-              var pdf = freemedforms.pdf;
-              if (!pdf.isAvailable) {
-                  freemedforms.log("ALD form", "pdftk not available");
-                  return;
-              }
-
-              // process data
-              var patient = freemedforms.patient;
-              if (!patient.isActive) {
-                  freemedforms.log("ALD form", "patient is not active");
-                  return;
-              }
-
-              //pdf.beginFdfEncoding();
-
-              //freemedforms.forms.namespaceInUse = "Subs::Tools::FrenchSpecific::ALD";
+            namespace.com.freemedforms.subs.french.protocole.ald.generatePdf();
           </onclicked>
         </script>
     </Item>
