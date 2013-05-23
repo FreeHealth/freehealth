@@ -51,9 +51,18 @@ QString Tools::userDocumentPath()
     return QString(settings()->path(Core::ISettings::UserDocumentsPath) + QDir::separator());
 }
 
-QString Tools::dateToString(const QDate &date, const QString &format)
+bool Tools::checkDirCreateIfNotExists(const QString &absolutePath)
 {
-    return date.toString(format);
+    return Utils::checkDir(absolutePath, true, "ScriptTools");
+}
+
+QString Tools::dateToString(const QVariant &date, const QString &format)
+{
+    if (date.canConvert(QVariant::DateTime))
+        return date.toDateTime().toString(format);
+    else if (date.canConvert(QVariant::Date))
+        return date.toDate().toString(format);
+    return format;
 }
 
 QDate Tools::addDays(const QDate &date, int days)

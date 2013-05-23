@@ -51,7 +51,9 @@ public:
 public Q_SLOTS:
     QString userDocumentPath();
 
-    QString dateToString(const QDate &date, const QString &format);
+    bool checkDirCreateIfNotExists(const QString &absolutePath);
+
+    QString dateToString(const QVariant &date, const QString &format);
     QDate addDays(const QDate &date, int days);
     QDate addWeeks(const QDate &date, int weeks);
     int daysTo(const QDate &from, const QDate &to);
