@@ -24,11 +24,13 @@ FreeMedForms
       * 'Automatically sort the drugs before printing'
       * 'Include current patient biometrics' like weight/height/creatinine to the prescription print
     * New Menu Button FormItem to easily navigate and include local files to text editors
+    * Some new scripting functions
   * Build process
     * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
     * Allow you to manage html print mask for any items of the forms (MedForms or Item)
       * See French AGGIR for an example (global mask, aggir mask)
+    * New sub-form: French Procole ALD (with PDF autocompletion)
 
 ===== Bug correction =====
 
@@ -55,8 +57,11 @@ FreeMedForms
       * the height and weight units are not read anymore
   * FreeAccount
   * FreeToolBox
+    * Adding SPC to drugs database
+    * Updated release steps code (which now can be asynchronous)
   * Installation && configuration / databases
   * PMHx
+    * Adding tokens
   * Agenda:
   * DataPack manager
   * Forms
@@ -64,6 +69,8 @@ FreeMedForms
     * UI improvement in obstetrical calendar
   * Debian specific
   * Under the hood
+    * Corrected: QuaZip building & zlib
+    * Updated internal zlib to 1.2.8
   * Various unloggued bug corrected
 
 ===== Packaging and documentation ====
