@@ -7,6 +7,7 @@ FreeMedForms
     * French AGGIR printing massively improved
     * Massively improved print and export mask of complete forms and some sub-forms
     * Adding a patient synthesis part in patient files
+    * New sub-form: French Procole ALD (with PDF autocompletion)
   * FreeMedForms
     * First release with the new token manager: PadTools
     * Adding a status bar at the top right corner of the patient bar
@@ -25,12 +26,13 @@ FreeMedForms
       * 'Include current patient biometrics' like weight/height/creatinine to the prescription print
     * New Menu Button FormItem to easily navigate and include local files to text editors
     * Some new scripting functions
+    * Including drugs SPC (Summary of Product Characteristics) in the drugs database for France and ZA
+    * In the patient selector identity viewer, adding a button to quickly send a mail to the patient
   * Build process
     * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
     * Allow you to manage html print mask for any items of the forms (MedForms or Item)
       * See French AGGIR for an example (global mask, aggir mask)
-    * New sub-form: French Procole ALD (with PDF autocompletion)
 
 ===== Bug correction =====
 
@@ -43,6 +45,8 @@ FreeMedForms
     * Corrected: running form scripts when inserting new sub-forms
     * Corrected: some data were lost in episode manager
     * Corrected: patient birthday calculation
+    * Corrected: TextEditor contextual menu appearing multiple times when called once
+    * Corrected: Insertion of sub-forms (anywhere in the form tree)
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Corrected: Xml exchange-out file now handles the printed PDF files
