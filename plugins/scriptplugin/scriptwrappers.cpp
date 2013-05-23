@@ -82,7 +82,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
     qDeleteAll(m_Wrappers);
     m_Wrappers.clear();
     m_Items.clear();
-    foreach(Form::FormItem *main, formManager().allEmptyRootForms()) {
+    foreach(Form::FormItem *main, formManager().allDuplicatesEmptyRootForms()) {
         const QList<Form::FormItem*> items = main->flattenedFormItemChildren();
         for(int i=0; i < items.count(); ++i) {
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
@@ -97,7 +97,7 @@ void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
 {
     Q_UNUSED(uuid);
     // Get subform EmptyRootForms
-    const Form::FormCollection &coll = formManager().subFormCollection(uuid);
+    const Form::FormCollection &coll = formManager().subFormDuplicateCollection(uuid);
     const QStringList &uuids = m_Items.keys();
 
     // Create all ScriptFormItemWrapper
