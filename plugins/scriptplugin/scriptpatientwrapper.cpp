@@ -103,6 +103,46 @@ bool ScriptPatientWrapper::isFemale() const
 {
     return patient()->data(Core::IPatient::GenderIndex).toInt()==1;
 }
+
+QStringList ScriptPatientWrapper::socialNumbers() const
+{
+    return QStringList()
+            << patient()->data(Core::IPatient::SocialNumber).toString()
+            << patient()->data(Core::IPatient::SocialNumber2).toString()
+            << patient()->data(Core::IPatient::SocialNumber3).toString()
+            << patient()->data(Core::IPatient::SocialNumber4).toString();
+}
+
+QString ScriptPatientWrapper::socialNumber1() const
+{
+    return patient()->data(Core::IPatient::SocialNumber).toString();
+}
+
+QString ScriptPatientWrapper::socialNumber2() const
+{
+    return patient()->data(Core::IPatient::SocialNumber2).toString();
+}
+
+QString ScriptPatientWrapper::socialNumber3() const
+{
+    return patient()->data(Core::IPatient::SocialNumber3).toString();
+}
+
+QString ScriptPatientWrapper::socialNumber4() const
+{
+    return patient()->data(Core::IPatient::SocialNumber4).toString();
+}
+
+QString ScriptPatientWrapper::socialNumberOwnerName() const
+{
+    return patient()->data(Core::IPatient::SocialNumberOwnerFullName).toString();
+}
+
+QString ScriptPatientWrapper::socialNumberOwnerAddress() const
+{
+    return patient()->data(Core::IPatient::SocialNumberOwnerFullAddress).toString();
+}
+
 double ScriptPatientWrapper::weightInGrams() const
 {
     return patient()->data(Core::IPatient::WeightInGrams).toDouble();

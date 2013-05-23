@@ -30,12 +30,13 @@
 #include <QDate>
 #include <QVariant>
 #include <QString>
+#include <QStringList>
 
 /**
  * \file scriptpatientwrapper.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.2
- * \date 30 Dec 2012
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 23 May 2013
 */
 
 namespace Script {
@@ -60,6 +61,15 @@ class ScriptPatientWrapper : public QObject  //, public QScriptClass
     Q_PROPERTY(int      yearsOld    READ yearsOld())
     Q_PROPERTY(bool     isMale      READ isMale())
     Q_PROPERTY(bool     isFemale    READ isFemale())
+
+    Q_PROPERTY(QStringList  socialNumbers    READ socialNumbers())
+    Q_PROPERTY(QString  socialNumber1    READ socialNumber1())
+    Q_PROPERTY(QString  socialNumber2    READ socialNumber2())
+    Q_PROPERTY(QString  socialNumber3    READ socialNumber3())
+    Q_PROPERTY(QString  socialNumber4    READ socialNumber4())
+    Q_PROPERTY(QString  socialNumberOwnerName    READ socialNumberOwnerName())
+    Q_PROPERTY(QString  socialNumberOwnerAddress    READ socialNumberOwnerAddress())
+
     Q_PROPERTY(double   weightInGrams READ weightInGrams())
     Q_PROPERTY(double   heightInCentimeters      READ heightInCentimeters())
 
@@ -89,6 +99,15 @@ public Q_SLOTS:
     int yearsOld() const;
     bool isMale() const;
     bool isFemale() const;
+
+    QStringList socialNumbers() const;
+    QString socialNumber1() const;
+    QString socialNumber2() const;
+    QString socialNumber3() const;
+    QString socialNumber4() const;
+    QString socialNumberOwnerName() const;
+    QString socialNumberOwnerAddress() const;
+
     double weightInGrams() const;
     double heightInCentimeters() const;
     double bmi() const;
