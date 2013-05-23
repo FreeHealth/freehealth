@@ -1400,7 +1400,7 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     if (query.exec(req)) {
         if (query.next()) {
             resourceLinkId = query.value(0).toInt();
-            spc = QString(qUncompress(query.value(1).toByteArray()));
+            spc = QString::fromUtf8(qUncompress(query.value(1).toByteArray()));
         }
     } else {
         LOG_QUERY_ERROR(query);
@@ -1414,8 +1414,17 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     if (spc.isEmpty())
         return QString::null;
 
-    if (resourceLinkId==-1)
-        return spc;
+    // Create the temp dir
+    QString path = settings()->path(Core::ISettings::ApplicationTempPath) + "/drugs/spc/";
+    if (!QDir().mkpath(path))
+        LOG_ERROR(QString("Unable to create path: %1").arg(path));
+    QString spcFileName = path + Utils::createUid() + ".html";
+
+    if (resourceLinkId==-1) {
+        // Save SPC file
+        Utils::saveStringToFile(spc, spcFileName, Utils::Overwrite, Utils::DontWarnUser);
+        return spcFileName;
+    }
 
     // Get Resources content
     get << Utils::Field(Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_CONTENT);
@@ -1424,10 +1433,7 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     cond << Utils::Field(Table_SPC_CONTENTRESOURCE_LINK, SPCCONTENT_RESOURCES_LINK_ID, QString("='%1'").arg(resourceLinkId));
 
     joins << Utils::Join(Table_SPC_CONTENTRESOURCE_LINK, SPCCONTENT_SPCCONTENTRESOURCES_ID, Table_SPC_CONTENTRESOURCE, SPCCONTENTRESOURCES_ID);
-
     req = select(get, joins, cond);
-
-    qWarning() << req;
 
     QHash<QString, QString> resources; //K=name V=content
     if (query.exec(req)) {
@@ -1439,9 +1445,22 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     }
     query.finish();
 
-    qWarning() << resources;
+    // Save the resources
+    QHashIterator<QString, QString> i(resources);
+    while (i.hasNext()) {
+        i.next();
+        const QString &name = i.key();
+        const QString &content = i.value();
+        QString resourceFileName = path + Utils::createUid();
 
-    return spc;
+        spc.replace(name, resourceFileName);
+        Utils::saveStringToFile(content, resourceFileName, Utils::Overwrite, Utils::DontWarnUser);
+    }
+
+    // Save the SPC content
+     Utils::saveStringToFile(spc, spcFileName, Utils::Overwrite, Utils::DontWarnUser);
+
+    return spcFileName;
 #endif
 }
 

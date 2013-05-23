@@ -77,6 +77,7 @@ IDrugDatabaseStep::IDrugDatabaseStep(QObject *parent) :
     _database(0),
     _licenseType(Free),
     _serverOwner(Community),
+    _spcDefaultEncoding("UTF-8"),
     _sid(-1)
 {
     setObjectName("IDrugDatabaseStep");
@@ -159,6 +160,13 @@ void IDrugDatabaseStep::setDatapackDescriptionFile(const QString &absPath)
     // TODO: add some checks
     _datapackDescriptionFilePath = absPath;
 }
+
+/**
+ * \fn void IDrugDatabaseStep::setSpcHtmlFilesDefaultEncoding(const QString &encoding)
+ * Define the default encoding to use to open the newly downloaded SPC HTML files. By default,
+ * all files are read with the UTF-8 encoding.
+ */
+
 
 /** Return the absolute file path of the output database file */
 QString IDrugDatabaseStep::absoluteFilePath() const
@@ -888,14 +896,14 @@ bool IDrugDatabaseStep::onAllSpcDownloadFinished()
 
     // Get the first available SPC file in the output dir
     const QUrl &firstUrl = downloadedUrls.at(0);
-    QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(firstUrl), "ISO-8859-1");
+    QString content = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(firstUrl), _spcDefaultEncoding);
     QList<QUrl> cssFiles;
 
     // Extract all stylesheet file from the "<link" tag
-    QStringList tmp = Utils::htmlGetLinksToCssContent(content);
+    QStringList cssExtractedFileName = Utils::htmlGetLinksToCssContent(content);
 
     // Manage relative filePath
-    foreach(const QString &css, tmp) {
+    foreach(const QString &css, cssExtractedFileName) {
         if (QFileInfo(css).isRelative()) {
              cssFiles << firstUrl.resolved(QUrl(css)).toString();
         } else {
@@ -915,22 +923,54 @@ bool IDrugDatabaseStep::onAllSpcDownloadFinished()
         Utils::waitForSignal(_cssMultiDownloader, SIGNAL(allDownloadFinished()), 100000);
     }
 
+    // Connect the database
+    QSqlDatabase db = _database->database();
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return false;
+        }
+    }
+    // Get all drugs SPC links recorded in the database
+    // This is usefull if the drugs database should not be populated with all
+    // the downloaded SPC files (eg: when testing database generation).
+    using namespace DrugsDB::Constants;
+    QSqlQuery query(db);
+    QHash<int, QString> where;
+    where.insert(Constants::DRUGS_LINK_SPC, "IS NOT NULL");
+    where.insert(Constants::DRUGS_SID, QString("='%1'").arg(_sid));
+    QString req = _database->selectDistinct(Table_DRUGS, DRUGS_LINK_SPC, where);
+    QList<QUrl> spcUrls;
+    if (query.exec(req)) {
+        while (query.next()) {
+            if (query.value(0).toString().isEmpty())
+                continue;
+            spcUrls << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    LOG(QString("Number of SPC links to add in the database: %1").arg(spcUrls.count()));
+
     // Create the SPC resources content (CSS, JS...)
     QList<SpcContentResources> spcResources;
+    int i = 0;
     foreach(const QUrl &url, cssFiles) {
         QString absFilePath = _cssMultiDownloader->outputAbsoluteFileName(url);
         SpcContentResources resource;
         resource.type = "text/css";
-        resource.name = QFileInfo(absFilePath).fileName();
+        resource.name = cssExtractedFileName.at(i); // use the original filepath (the one extracted from the html file)
         resource.content = Utils::readTextFile(absFilePath, Utils::DontWarnUser);
         spcResources << resource;
+        ++i;
     }
 
     // Create the SPC content and send them to the drugs database
-    foreach(const QUrl &url, downloadedUrls) {
+    foreach(const QUrl &url, spcUrls) {
         SpcContent content;
         content.url = url.toString();
-        content.html = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), Utils::DontWarnUser);
+        content.html = Utils::readTextFile(_multiDownloader->outputAbsoluteFileName(url), _spcDefaultEncoding, Utils::DontWarnUser);
+        content.html = Utils::htmlReplaceAccents(content.html);
         content.resources = spcResources;
         saveDrugSpc(content);
     }
@@ -960,7 +1000,7 @@ bool IDrugDatabaseStep::saveDrugSpc(const SpcContent &content)
     int spcId = -1;
     int resourceLinkId = -1;
     if (content.resources.count() > 0)
-        _database->max(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID).toInt() + 1;
+        resourceLinkId = _database->max(Table_SPC_CONTENT, SPCCONTENT_SPCCONTENT_RESOURCES_LINK_ID).toInt() + 1;
 
     // Insert the spc content to the SPCCONTENT table
     query.prepare(_database->prepareInsertQuery(Table_SPC_CONTENT));

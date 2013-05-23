@@ -177,6 +177,7 @@ FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
                                .arg("drugs/fr_noddi/packdescription.xml"));
     setDownloadUrl("http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip");
     setLicenseType(Free);
+    setSpcHtmlFilesDefaultEncoding("ISO-8859-1");
     createTemporaryStorage();
 }
 
