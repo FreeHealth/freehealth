@@ -505,8 +505,6 @@ function franceDeclarationMedTraitant()
 franceDeclarationMedTraitant();
 
 
-
-
 function franceDeclarationAld()
 {
     // get the pdftkwrapper
@@ -607,7 +605,7 @@ function franceDeclarationAld()
         freemedforms.log.error("ALD form", "Arguments not available");
         return;
     }
-    pdf.addFdfValue("arguments", item.currentText, false);  // Max 9 Lines
+    pdf.addFdfValue("arguments", item.currentText.replace(/\n/g, "\\n"), false);  // Max 9 Lines
 
     item = freemedforms.forms.item("Proposition");
     if (!item.isValid) {
@@ -637,34 +635,52 @@ function franceDeclarationAld()
         freemedforms.log.error("ALD form", "SuiviBio not available");
         return;
     }
-    var list = item.currentValue;
+    var list = item.currentText;
     pdf.addFdfValue("suivi bio1", list[0]);
     pdf.addFdfValue("suivi bio2", list[1]);
     pdf.addFdfValue("suivi bio3", list[2]);
 
     // recours à des professionnels de santé para-médicaux
-    pdf.addFdfValue("rec pro1", "rec pro1");
-    pdf.addFdfValue("rec pro2", "rec pro2");
-    pdf.addFdfValue("rec pro3", "rec pro3");
+    item = freemedforms.forms.item("RecoursSpe");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "RecoursSpe not available");
+        return;
+    }
+    list = item.currentText;
+    pdf.addFdfValue("rec pro1", list[0]);
+    pdf.addFdfValue("rec pro2", list[1]);
+    pdf.addFdfValue("rec pro3", list[2]);
 
     // recours à des spécialistes (préciser la spécialité et le type d'acte spécialisé prévu)
-    pdf.addFdfValue("rec spé1", "rec spé1");
-    pdf.addFdfValue("rec spé2", "rec spé2");
-    pdf.addFdfValue("rec spé3", "rec spé3");
+    item = freemedforms.forms.item("RecoursPro");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "RecoursPro not available");
+        return;
+    }
+    list = item.currentText;
+    pdf.addFdfValue("rec spé1", list[0]);
+    pdf.addFdfValue("rec spé2", list[1]);
+    pdf.addFdfValue("rec spé3", list[2]);
 
     // spécialités pharmaceutiques ou classes thérapeutiques ou dispositifs médicaux
-    pdf.addFdfValue("spé phar1", "spé phar1");
-    pdf.addFdfValue("spé phar2", "spé phar2");
-    pdf.addFdfValue("spé phar3", "spé phar3");
-    pdf.addFdfValue("spé phar4", "spé phar4");
-    pdf.addFdfValue("spé phar5", "spé phar5");
-    pdf.addFdfValue("spé phar6", "spé phar6");
-    pdf.addFdfValue("spé phar7", "spé phar7");
-    pdf.addFdfValue("spé phar8", "spé phar8");
-    pdf.addFdfValue("spé phar9", "spé phar9");
-    pdf.addFdfValue("spé phar10", "spé phar10");
-    pdf.addFdfValue("spé phar11", "spé phar11");
-    pdf.addFdfValue("spé phar12", "spé phar12");
+    item = freemedforms.forms.item("Pharma");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "Pharma not available");
+        return;
+    }
+    list = item.currentText;
+    pdf.addFdfValue("spé phar1", list[0]);
+    pdf.addFdfValue("spé phar2", list[1]);
+    pdf.addFdfValue("spé phar3", list[2]);
+    pdf.addFdfValue("spé phar4", list[3]);
+    pdf.addFdfValue("spé phar5", list[4]);
+    pdf.addFdfValue("spé phar6", list[5]);
+    pdf.addFdfValue("spé phar7", list[6]);
+    pdf.addFdfValue("spé phar8", list[7]);
+    pdf.addFdfValue("spé phar9", list[8]);
+    pdf.addFdfValue("spé phar10", list[9]);
+    pdf.addFdfValue("spé phar11", list[10]);
+    pdf.addFdfValue("spé phar12", list[11]);
 
     // Information(s) concernant la maladie (pour le patient)
     item = freemedforms.forms.item("InfoPatients");
@@ -672,7 +688,7 @@ function franceDeclarationAld()
         freemedforms.log.error("ALD form", "InfoPatients not available");
         return;
     }
-    pdf.addFdfValue("infos mal", item.currentText, false); // Max 8 lines
+    pdf.addFdfValue("infos mal", item.currentText.replace(/\n/g, "\\n"), false); // Max 8 lines
     pdf.addFdfValue("infos mal2", ""); // Max 3 lines
 
     // durée prévisible de l'arrêt de travail, s'il y a lieu :
@@ -735,7 +751,7 @@ function franceDeclarationAld()
     pdf.addFdfValue("Case à cocher21", unchecked, false);   // rec pro3 check
 
     // demande de rémunération
-    pdf.addFdfValue("date examen", "date examen"); // date d el'examen
+    pdf.addFdfValue("date examen", freemedforms.tools.dateToString(new Date(), "ddMMyyyy")); // date d el'examen
 
     // Identification du médecin
     var user = freemedforms.user;
@@ -744,7 +760,7 @@ function franceDeclarationAld()
         //return;
     }
 
-    pdf.addFdfValue("IDENTIF MEDECIN", user.fullName + " ; " + user.fullAddress + " ; " + user.identifiants.join("; "));
+    pdf.addFdfValue("IDENTIF MEDECIN", user.fullName.toUpperCase() + "\\n" + user.fullAddress.toUpperCase() + "\\n" + user.identifiants.join("; ").toUpperCase(), false);
     // cachet de l'établissement ou du centre de référence
     // pdf.addFdfValue("IDENTIF ETABLT", "IDENTIF ETABLT");
 
@@ -752,9 +768,9 @@ function franceDeclarationAld()
     pdf.addFdfValue("Recl pro", unchecked, false); // Oui
 
     // identification du médecin traitant établissant le protocole
-    pdf.addFdfValue("ident méd", "ident méd");
-    pdf.addFdfValue("ident méd2", "ident méd2");
-    pdf.addFdfValue("num ident méd", "num ident méd");
+    pdf.addFdfValue("ident méd", user.fullName);
+    pdf.addFdfValue("ident méd2", user.fullAddress);
+    pdf.addFdfValue("num ident méd", user.identifiants.join("; "));
 
     // identification de l'établissement
     // pdf.addFdfValue("nom étab", "nom étab");
