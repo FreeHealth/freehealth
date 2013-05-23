@@ -505,19 +505,21 @@ function franceDeclarationMedTraitant()
 franceDeclarationMedTraitant();
 
 
+
+
 function franceDeclarationAld()
 {
     // get the pdftkwrapper
     var pdf = freemedforms.pdf;
     if (!pdf.isAvailable) {
-        freemedforms.log("ALD form", "Error in french specific ALD form");
+        freemedforms.log.error("ALD form", "Error in french specific ALD form");
         return;
     }
 
     // process data
     var patient = freemedforms.patient;
     if (!patient.isActive) {
-        freemedforms.log("ALD form", "patient is not active");
+        freemedforms.log.error("ALD form", "patient is not active");
         return;
     }
 
@@ -526,23 +528,10 @@ function franceDeclarationAld()
 
     pdf.beginFdfEncoding();
 
-    // NSS / NSS Owner
-    freemedforms.forms.namespaceInUse = "Subs::Tools::Identity";
-    var isNssOwner = freemedforms.forms.item("FrGroup::IsNSSOwner");
-    if (!isNssOwner.isValid) {
-        freemedforms.log("ALD form", "isNSSOwner not available");
-        return;
-    }
-    var nss = freemedforms.forms.item("FrGroup::NSS");
-    if (!nss.isValid) {
-        freemedforms.log("ALD form", "NSS not available");
-        return;
-    }
-
+    // Patient data
     pdf.addFdfValue("nom prénom", patient.usualName + " " + patient.otherNames + " " + patient.firstName);
     pdf.addFdfValue("date naiss", freemedforms.tools.dateToString(patient.dateOfBirth, "ddMMyyyy"));
-
-    // ADDRESS: 2 lines
+    // Address
     var street = patient.street;
     var adresse = "";
     if (street.search("\n")) {
@@ -553,79 +542,76 @@ function franceDeclarationAld()
     }
     adresse += "\n" + patient.city + " " + patient.zipcode + " " + patient.state;
     pdf.addFdfValue("adresse", adresse);
-
-    // NSS / NSS Owner
-    if (!isNssOwner.checked) {
-        var owner = freemedforms.forms.item("FrGroup::OwnerName");
-        if (!owner.isValid) {
-            freemedforms.log("ALD form", "NSS owner not available");
-            return;
-        }
-        pdf.addFdfValue("nom prénom ass", owner.currentText);
-        if (nss.currentText.length == 15) {
+    // Social Number
+    var nss = patient.socialNumber1;
+    if (patient.socialNumberOwnerName.length) {
+        pdf.addFdfValue("nom prénom ass", patient.socialNumberOwnerName);
+        if (nss.length == 15) {
             pdf.addFdfValue("immat ass", nss.currentText.substring(0, 13));
             pdf.addFdfValue("clé ass", nss.currentText.substring(13,15));
         }
     } else {
-        if (nss.currentText.length == 15) {
-            pdf.addFdfValue("immat", nss.currentText.substring(0, 13));
-            pdf.addFdfValue("clé", nss.currentText.substring(13,15));
+        if (nss.length == 15) {
+            pdf.addFdfValue("immat", nss.substring(0, 13));
+            pdf.addFdfValue("clé", nss.substring(13,15));
         }
     }
+
+    freemedforms.forms.namespaceInUse = "Subs::Tools::FrenchSpecific::ALD";
 
     // diagnostic(s) de l'(des) affection(s) de longue durée motivant la demande et sa (leurs) date(s) présumée(s) de début
     item = freemedforms.forms.item("Diagnostic1::Label");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic1::Label not available");
+        freemedforms.log.error("ALD form", "Diagnostic1::Label not available");
         return;
     }
     pdf.addFdfValue("diag1", item.currentText);
 
     item = freemedforms.forms.item("Diagnostic2::Label");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic2::Label not available");
+        freemedforms.log.error("ALD form", "Diagnostic2::Label not available");
         return;
     }
     pdf.addFdfValue("diag2", item.currentText);
 
     item = freemedforms.forms.item("Diagnostic3::Label");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic3::Label not available");
+        freemedforms.log.error("ALD form", "Diagnostic3::Label not available");
         return;
     }
     pdf.addFdfValue("diag3", item.currentText);
 
     item = freemedforms.forms.item("Diagnostic1::Date");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic1::Date not available");
+        freemedforms.log.error("ALD form", "Diagnostic1::Date not available");
         return;
     }
-    pdf.addFdfValue("date diag1", item.currentText);
+    pdf.addFdfValue("date diag1", freemedforms.tools.dateToString(new Date(item.currentValue), "ddMMyyyy"));
 
     item = freemedforms.forms.item("Diagnostic2::Date");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic2::Date not available");
+        freemedforms.log.error("ALD form", "Diagnostic2::Date not available");
         return;
     }
-    pdf.addFdfValue("date diag2", freemedforms.tools.dateToString(item.currentValue.toDate(), "ddMMyyyy"));
+    pdf.addFdfValue("date diag2", freemedforms.tools.dateToString(new Date(item.currentValue), "ddMMyyyy"));
 
     item = freemedforms.forms.item("Diagnostic3::Date");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Diagnostic3::Date not available");
+        freemedforms.log.error("ALD form", "Diagnostic3::Date not available");
         return;
     }
-    pdf.addFdfValue("date diag3", freemedforms.tools.dateToString(item.currentValue.toDate(), "ddMMyyyy"));
+    pdf.addFdfValue("date diag3", freemedforms.tools.dateToString(new Date(item.currentValue), "ddMMyyyy"));
 
     item = freemedforms.forms.item("Arguments");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "Arguments not available");
+        freemedforms.log.error("ALD form", "Arguments not available");
         return;
     }
-    pdf.addFdfValue("arguments", item.currentText);  // Max 9 Lines
+    pdf.addFdfValue("arguments", item.currentText, false);  // Max 9 Lines
 
-    item = freemedforms.forms.item("PropositionDetails");
+    item = freemedforms.forms.item("Proposition");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "PropositionDetails not available");
+        freemedforms.log.error("ALD form", "Proposition not available");
         return;
     }
     pdf.addFdfValue("ALD1", unchecked, false); // "ALD non exonérante"
@@ -648,12 +634,10 @@ function franceDeclarationAld()
     // suivi biologique prévu (type d'actes)
     item = freemedforms.forms.item("SuiviBio");
     if (!item.isValid) {
-        freemedforms.log("ALD form", "SuiviBio not available");
+        freemedforms.log.error("ALD form", "SuiviBio not available");
         return;
     }
     var list = item.currentValue;
-    print("SuiviBio:" + list);
-
     pdf.addFdfValue("suivi bio1", list[0]);
     pdf.addFdfValue("suivi bio2", list[1]);
     pdf.addFdfValue("suivi bio3", list[2]);
@@ -683,13 +667,46 @@ function franceDeclarationAld()
     pdf.addFdfValue("spé phar12", "spé phar12");
 
     // Information(s) concernant la maladie (pour le patient)
-    pdf.addFdfValue("infos mal", "infos mal"); // Max 8 lines
-    pdf.addFdfValue("infos mal2", "infos mal2"); // Max 3 lines
+    item = freemedforms.forms.item("InfoPatients");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "InfoPatients not available");
+        return;
+    }
+    pdf.addFdfValue("infos mal", item.currentText, false); // Max 8 lines
+    pdf.addFdfValue("infos mal2", ""); // Max 3 lines
 
     // durée prévisible de l'arrêt de travail, s'il y a lieu :
-    pdf.addFdfValue("durée arrêt", "durée arrêt");
+    item = freemedforms.forms.item("DureeAT::Value");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "DureeAT::Value not available");
+        return;
+    }
+    if (item.currentValue > 0) {
+        print(item.currentValue);
+        var period = freemedforms.forms.item("DureeAT::Period");
+        if (!period.isValid) {
+            freemedforms.log.error("ALD form", "DureeAT::Period not available");
+            return;
+        }
+        pdf.addFdfValue("durée arrêt", item.currentText + " " + period.currentText);
+    }
+
     // durée prévisible des soins :
-    pdf.addFdfValue("durée soins", "durée soins");
+    item = freemedforms.forms.item("DureeSoins::Value");
+    if (!item.isValid) {
+        freemedforms.log.error("ALD form", "DureeSoins::Value not available");
+        return;
+    }
+    if (item.currentValue > 0) {
+        print(item.currentValue);
+        var period = freemedforms.forms.item("DureeSoins::Period");
+        if (!period.isValid) {
+            freemedforms.log.error("ALD form", "DureeSoins::Period not available");
+            return;
+        }
+        pdf.addFdfValue("durée soins", item.currentText + " " + period.currentText);
+    }
+
 
     // "Case à cocher"
     pdf.addFdfValue("Case à cocher1", unchecked, false); // spé phar 1 check
@@ -710,20 +727,26 @@ function franceDeclarationAld()
     pdf.addFdfValue("Case à cocher15", unchecked, false);   // suivi bio3 check
 
     pdf.addFdfValue("Case à cocher16", unchecked, false);   // rec spé1 check
-    pdf.addFdfValue("Case à cocher17", checked, false);   // rec spé2 check
+    pdf.addFdfValue("Case à cocher17", unchecked, false);   // rec spé2 check
     pdf.addFdfValue("Case à cocher18", unchecked, false);   // rec spé3 check
 
-    pdf.addFdfValue("Case à cocher19", checked, false);   // rec pro1 check
+    pdf.addFdfValue("Case à cocher19", unchecked, false);   // rec pro1 check
     pdf.addFdfValue("Case à cocher20", unchecked, false);   // rec pro2 check
-    pdf.addFdfValue("Case à cocher21", checked, false);   // rec pro3 check
+    pdf.addFdfValue("Case à cocher21", unchecked, false);   // rec pro3 check
 
     // demande de rémunération
     pdf.addFdfValue("date examen", "date examen"); // date d el'examen
 
-    // signature et cachet du médecin traitant
-    pdf.addFdfValue("IDENTIF MEDECIN", "IDENTIF MEDECIN");
+    // Identification du médecin
+    var user = freemedforms.user;
+    if (user.isValid) {
+        freemedforms.log.error("ALD form", "No valid user");
+        //return;
+    }
+
+    pdf.addFdfValue("IDENTIF MEDECIN", user.fullName + " ; " + user.fullAddress + " ; " + user.identifiants.join("; "));
     // cachet de l'établissement ou du centre de référence
-    pdf.addFdfValue("IDENTIF ETABLT", "IDENTIF ETABLT");
+    // pdf.addFdfValue("IDENTIF ETABLT", "IDENTIF ETABLT");
 
     // reclassement professionnel envisagé
     pdf.addFdfValue("Recl pro", unchecked, false); // Oui
@@ -734,12 +757,12 @@ function franceDeclarationAld()
     pdf.addFdfValue("num ident méd", "num ident méd");
 
     // identification de l'établissement
-    pdf.addFdfValue("nom étab", "nom étab");
-    pdf.addFdfValue("adress étab", "adress étab");
-    pdf.addFdfValue("nom chef serv", "nom chef serv");
-    pdf.addFdfValue("num finess", "num finess");
-    pdf.addFdfValue("date entrée", "date entrée"); // si le malade est hospitalisé, date d'entrée
-    pdf.addFdfValue("act", checked, false); // activité privée
+    // pdf.addFdfValue("nom étab", "nom étab");
+    // pdf.addFdfValue("adress étab", "adress étab");
+    // pdf.addFdfValue("nom chef serv", "nom chef serv");
+    // pdf.addFdfValue("num finess", "num finess");
+    // pdf.addFdfValue("date entrée", "date entrée"); // si le malade est hospitalisé, date d'entrée
+    // pdf.addFdfValue("act", checked, false); // activité privée
 
     ///////////////////////////////////////////////////////
     // Unmatched fields
@@ -750,44 +773,40 @@ function franceDeclarationAld()
     ///////////////////////////////////////////////////////
 
     // décision du médecin conseil
-    pdf.addFdfValue("acc1", "acc1");
-    pdf.addFdfValue("acc2", "acc2");
-    pdf.addFdfValue("acc3", "acc3");
-    pdf.addFdfValue("mal1", "mal1");
-    pdf.addFdfValue("mal2", "mal2");
-    pdf.addFdfValue("mal3", "mal3");
-    pdf.addFdfValue("date acc1", "date acc1");
-    pdf.addFdfValue("date acc2", "date acc2");
-    pdf.addFdfValue("date acc3", "date acc3");
-    pdf.addFdfValue("date val1", "date val1");
-    pdf.addFdfValue("date val2", "date val2");
-    pdf.addFdfValue("date val3", "date val3");
-    pdf.addFdfValue("motif refus", "motif refus");
-    pdf.addFdfValue("motif refus2", "motif refus2");
-    pdf.addFdfValue("date pro", "date pro"); // décision du médecin conseil: date
-    pdf.addFdfValue("date val pro", "date val pro"); // décision du médecin conseil: protocole valable jusqu'au
+    // pdf.addFdfValue("acc1", "acc1");
+    // pdf.addFdfValue("acc2", "acc2");
+    // pdf.addFdfValue("acc3", "acc3");
+    // pdf.addFdfValue("mal1", "mal1");
+    // pdf.addFdfValue("mal2", "mal2");
+    // pdf.addFdfValue("mal3", "mal3");
+    // pdf.addFdfValue("date acc1", "date acc1");
+    // pdf.addFdfValue("date acc2", "date acc2");
+    // pdf.addFdfValue("date acc3", "date acc3");
+    // pdf.addFdfValue("date val1", "date val1");
+    // pdf.addFdfValue("date val2", "date val2");
+    // pdf.addFdfValue("date val3", "date val3");
+    // pdf.addFdfValue("motif refus", "motif refus");
+    // pdf.addFdfValue("motif refus2", "motif refus2");
+    // pdf.addFdfValue("date pro", "date pro"); // décision du médecin conseil: date
+    // pdf.addFdfValue("date val pro", "date val pro"); // décision du médecin conseil: protocole valable jusqu'au
 
+    pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
 
-//    var user = freemedforms.user;
-//    if (user.isValid) {
-//        freemedforms.log("ALD form", "No valid user");
-//        //return;
-//    }
-
-//    pdf.addFdfValue("num ident med1", user.identifiants.join("; "));
-//    pdf.addFdfValue("nom medecin", user.usualName + " " + user.otherNames);
-//    pdf.addFdfValue("prénom médecin", user.firstName);
-//    pdf.addFdfValue("identif  medecin", user.identifiants.join("; "));
-
-//    pdf.addFdfValue("date déclaration", freemedforms.tools.dateToString(new Date(), "ddMMyyyy"));
-
-    var filename = "/Volumes/HDD/ald.pdf"
+    var filename = freemedforms.forms.extractFormFile("__subForms__/french/protocole_ald", "./pdf/fr/ald.pdf");
     pdf.endFdfEncoding(filename);
 
-    print(pdf.getFdfContent());
-    pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), "/Volumes/HDD/test_ald.pdf", "ISO-8859-1");
+    var output = freemedforms.tools.userDocumentPath + "protocole_ALD_" + patient.usualName + " " + patient.otherNames + " " + patient.firstName + ".pdf";
+    output = output.replace("  ", " ");
+    output = output.replace(" ", "_");
+
+    print(output);
+
+    pdf.fillPdfWithFdf(filename, pdf.getFdfContent(), output, "ISO-8859-1");
+
+
 }
 
 franceDeclarationAld();
+
 
 */
