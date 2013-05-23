@@ -48,7 +48,7 @@ Tools::Tools(QObject *parent) :
 
 QString Tools::userDocumentPath()
 {
-    return QString(settings()->path(Core::ISettings::UserResourcesPath) + QDir::separator());
+    return QString(settings()->path(Core::ISettings::UserDocumentsPath) + QDir::separator());
 }
 
 QString Tools::dateToString(const QDate &date, const QString &format)
