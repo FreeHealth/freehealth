@@ -77,7 +77,8 @@ HEADERS += global_exporter.h \
     printaxishelper.h \
     httpmultidownloader.h \
     widgets/qmenuitemview.h \
-    waitforsignal.h
+    waitforsignal.h \
+    hprimparser.h
 
 
 SOURCES += global.cpp \
@@ -140,7 +141,8 @@ SOURCES += global.cpp \
     printaxishelper.cpp \
     httpmultidownloader.cpp \
     widgets/qmenuitemview.cpp \
-    waitforsignal.cpp
+    waitforsignal.cpp \
+    hprimparser.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm
