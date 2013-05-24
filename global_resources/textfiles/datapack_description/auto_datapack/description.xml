@@ -15,7 +15,7 @@
   * - file_nonzipped: the file is not zipped and will be automatically zipped
   * - dir: all the content of the dir will be zipped and included into the datapack
   *
-  * WARNING: Actually FreeToolBow can manage only ONE content per datapack.
+  * WARNING: Actually FreeToolBox can manage only ONE content per datapack.
 -->
 
 <Automatic_DataPack>
@@ -33,6 +33,10 @@
 
   <datapack description="./nonfree/cheque/packdescription.xml" server="asso_nonfree">
     <content type="file_nonzipped">./nonfree/cheque/france.zip</content>
+  </datapack>
+
+  <datapack description="./nonfree/french_medical_docs/packdescription.xml" server="asso_nonfree">
+    <content type="dir">./nonfree/french_medical_docs/docs</content>
   </datapack>
 
 </Automatic_DataPack>
