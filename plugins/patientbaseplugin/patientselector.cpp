@@ -299,6 +299,13 @@ void PatientSelector::setPatientModel(PatientModel *m)
     connect(d->m_Model, SIGNAL(currentPatientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
+/** The pointer must not be deleted or shared */
+bool PatientSelector::setFilterPatientModel(const QString &name, const QString &firstName, const QDate &dateOfBirth) const
+{
+    d->m_Model->setFilter(name, firstName);
+    return true;
+}
+
 /** \brief Define the fields to show using the FieldsToShow flag */
 void PatientSelector::setFieldsToShow(const FieldsToShow fields)
 {
@@ -329,7 +336,7 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     if (fields & PatientSelector::DateOfBirth) {
         d->ui->tableView->showColumn(Core::IPatient::DateOfBirth);
     }
-    if (fields & PatientSelector::FullAdress) {
+    if (fields & PatientSelector::FullAddress) {
         d->ui->tableView->showColumn(Core::IPatient::FullAddress);
     }
 }
@@ -353,6 +360,14 @@ void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
     d->ui->tableView->selectRow(index.row());
     updatePatientActions(index);
+}
+
+/**
+ * \brief Define the selected patient using its row inside the table view.
+*/
+void PatientSelector::setSelectedPatient(int row)
+{
+    d->ui->tableView->selectionModel()->select(d->m_Model->index(row, 0), QItemSelectionModel::SelectCurrent);
 }
 
 /**

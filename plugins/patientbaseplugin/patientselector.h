@@ -24,13 +24,20 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTSELECTOR_H
-#define PATIENTSELECTOR_H
+#ifndef PATIENTBASE_PATIENTSELECTOR_H
+#define PATIENTBASE_PATIENTSELECTOR_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
 
 #include <QWidget>
 #include <QModelIndex>
+
+/**
+ * \file patientselector.h
+ * \author Eric Maeker
+ * \version 0.8.4
+ * \date 23 May 2013
+*/
 
 namespace Patients {
 class PatientModel;
@@ -64,7 +71,7 @@ public:
         FirstName   = 0x0004,
         FullName    = 0x0008,
         Gender      = 0x0010,
-        FullAdress  = 0x0020,
+        FullAddress = 0x0020,
         Street      = 0x0040,
         ZipCode     = 0x0080,
         City        = 0x0100,
@@ -74,7 +81,7 @@ public:
         Faxes       = 0x1000,
         Title       = 0x2000,
         DateOfBirth = 0x4000,
-        Default     = Title | FullName | Gender | FullAdress
+        Default     = FullName | Gender | FullAddress | DateOfBirth
     };
     Q_DECLARE_FLAGS(FieldsToShow, FieldToShow)
 
@@ -89,12 +96,10 @@ public:
     void setRefreshSearchResultMethod(RefreshSearchResult method);
 
 public Q_SLOTS:
+    bool setFilterPatientModel(const QString &name, const QString &firstName, const QDate &dateOfBirth) const;
     void setSelectedPatient(const QModelIndex &index);
+    void setSelectedPatient(int row);
     void updatePatientActions(const QModelIndex &index);
-
-//Q_SIGNALS:
-//    void patientSelected(const QString &uuid);
-//    void patientSelected(const QModelIndex &index);
 
 private Q_SLOTS:
     void updateNavigationButton();
@@ -105,15 +110,14 @@ private Q_SLOTS:
     void onUserChanged();
 
 protected:
-//    void changeEvent(QEvent *e);
     bool event(QEvent *event);
 
 private:
     Internal::PatientSelectorPrivate *d;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(PatientSelector::FieldsToShow)
 
 }  // End namespace Patients
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Patients::PatientSelector::FieldsToShow)
 
-#endif // PATIENTSELECTOR_H
+#endif // PATIENTBASE_PATIENTSELECTOR_H
