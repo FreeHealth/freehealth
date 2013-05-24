@@ -720,7 +720,7 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
         return QString::null;
     } else {
         QFile file(correctFileName);
-        if (!file.open(QFile::ReadOnly | QIODevice::Text)) {
+        if (!file.open(QFile::ReadOnly)) {
             LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to open file %2")
                           .arg(correctFileName, file.errorString()));
             return QString::null;
@@ -730,7 +730,6 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
             LOG_ERROR_FOR("Utils", "No codec for " + encoder);
             return QString();
         }
-
         QString str = codec->toUnicode(file.readAll());
         LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
