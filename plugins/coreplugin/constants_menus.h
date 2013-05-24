@@ -319,7 +319,8 @@ const int          P_MODE_PATIENT_HISTORY = 800;
 const int          P_MODE_PATIENT_DRUGS   = 600;
 const int          P_MODE_PATIENT_FILE    = 400;
 const int          P_MODE_USERMANAGER     = 300;
-const int          P_MODE_ACCOUNT         = 200;
+const int          P_MODE_TOOLS           = 200;
+const int          P_MODE_ACCOUNT         = 100;
 
 // Options page sortIndex (per categories)
 const int          OPTIONINDEX_MAIN         = 0;
