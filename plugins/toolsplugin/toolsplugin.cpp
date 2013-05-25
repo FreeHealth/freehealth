@@ -37,6 +37,8 @@
 #include "fsp/fspprinterdialog.h"
 #endif
 
+#include "hprimintegrator/hprimintegrator.h"
+
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
@@ -186,7 +188,9 @@ void ToolsPlugin::extensionsInitialized()
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
 #endif
 
-    // TODO: add action to the mode manager ?
+
+    HprimIntegratorMode *mode = new HprimIntegratorMode(this);
+    addAutoReleasedObject(mode);
 
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 

@@ -58,6 +58,28 @@ contains(DEFINES, WITH_CHEQUE_PRINTING){
         cheque/chequeprinterdialog.ui
 }
 
+# HPRIM integrator
+contains(DEFINES, WITH_FRENCH_HPRIM_INTEGRATOR){
+    QT *= xml
+
+    HEADERS += \
+        hprimintegrator/hprimintegrator.h \
+        hprimintegrator/hprimfilemodel.h \
+        hprimintegrator/hprimpreferences.h \
+        hprimintegrator/constants.h
+
+    SOURCES += \
+        hprimintegrator/hprimintegrator.cpp \
+        hprimintegrator/hprimfilemodel.cpp \
+        hprimintegrator/hprimpreferences.cpp
+
+    FORMS += \
+        hprimintegrator/hprimintegratorwidget.ui \
+        hprimintegrator/hprimpreferences.ui
+}
+
+
+# General code
 HEADERS += \
     constants.h \
     toolsplugin.h \
