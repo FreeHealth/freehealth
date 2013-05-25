@@ -20,11 +20,23 @@
       <enum>Qt::Vertical</enum>
      </property>
      <widget class="QTableView" name="dirContentTableView"/>
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="horizSplitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QPlainTextEdit" name="contentViewer">
+       <property name="minimumSize">
+        <size>
+         <width>760</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>760</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
