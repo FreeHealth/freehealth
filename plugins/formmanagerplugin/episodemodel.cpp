@@ -392,7 +392,7 @@ void EpisodeModel::onPatientFormLoaded()
     beginResetModel();
     d->clearCache();
     d->updateFilter(patient()->uuid());
-    d->_sqlModel->select();
+//    d->_sqlModel->select();
     d->checkModelContent();
     endResetModel();
 }
@@ -671,7 +671,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_FORM_PAGE_UID, d->_formMain->uuid());
     record.setValue(Constants::EPISODES_USERCREATOR, user()->uuid());
     record.setValue(Constants::EPISODES_USERDATE, QDateTime::currentDateTime());
-    record.setValue(Constants::EPISODES_PATIENT_UID, patient()->uuid());
+    record.setValue(Constants::EPISODES_PATIENT_UID, d->_currentPatientUuid);
     record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
     record.setValue(Constants::EPISODES_ISVALID, 1);
     record.setValue(Constants::EPISODES_PRIORITY, Medium);
@@ -828,8 +828,9 @@ QModelIndex EpisodeModel::renewEpisode(const QModelIndex &episodeToRenew)
 void EpisodeModel::refreshFilter()
 {
     // Force filter updating
+    QString patientUid = d->_currentPatientUuid;
     d->_currentPatientUuid.clear();
-    d->updateFilter(patient()->uuid());
+    d->updateFilter(patientUid);
 }
 
 /**
@@ -951,8 +952,8 @@ bool EpisodeModel::populateFormWithLatestValidEpisodeContent()
  */
 bool EpisodeModel::submit()
 {
-    // No active patient ?
-    if (patient()->uuid().isEmpty()) {
+    // No current patient uuid defined?
+    if (d->_currentPatientUuid.isEmpty()) {
         LOG_ERROR("No patient uuid. Unable to submit EpisodeModel.");
         return false;
     }
