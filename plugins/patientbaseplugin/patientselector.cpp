@@ -94,6 +94,12 @@ public:
     PatientSelectorPrivate(PatientSelector *parent) :
             ui(new Ui::PatientSelector),
             m_Model(0),
+            m_SearchToolButton(0),
+            m_NavigationToolButton(0),
+            m_NavigationMenu(0),
+            m_SearchMethod(-1),
+            m_refreshMethod(PatientSelector::WhileTyping),
+            m_SetActivatedPatientAsCurrent(true),
             q(parent)
     {
         // Force a first refresh when calling refreshFilter() with an empty QString
@@ -164,6 +170,7 @@ public:
     int m_SearchMethod;
     QString m_LastSearch;
     PatientSelector::RefreshSearchResult m_refreshMethod;
+    bool m_SetActivatedPatientAsCurrent;
 
 private:
     PatientSelector *q;
@@ -341,6 +348,7 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     }
 }
 
+/** Change the way the search line edit reacts while the user is typing a search string. */
 void PatientSelector::setRefreshSearchResultMethod(RefreshSearchResult method)
 {
     disconnect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter()));
@@ -350,6 +358,21 @@ void PatientSelector::setRefreshSearchResultMethod(RefreshSearchResult method)
         connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter()));
     else
         connect(d->ui->searchLine, SIGNAL(returnPressed()), this, SLOT(refreshFilter()));
+}
+
+/**
+ * When a patient is activated in the view, by default the selector changes the current
+ * patient to the activated one. You can change this behavior by setting this to \e false
+ */
+void PatientSelector::setOnPatientActivatedSetAsCurrent(bool setAsCurrent)
+{
+    d->m_SetActivatedPatientAsCurrent = setAsCurrent;
+}
+
+/** Return the UUID of the currently selected patient in the view */
+QString PatientSelector::selectedPatientUid() const
+{
+    return d->m_Model->patientUuid(d->ui->tableView->currentIndex());
 }
 
 /**
@@ -367,7 +390,7 @@ void PatientSelector::setSelectedPatient(const QModelIndex &index)
 */
 void PatientSelector::setSelectedPatient(int row)
 {
-    d->ui->tableView->selectionModel()->select(d->m_Model->index(row, 0), QItemSelectionModel::SelectCurrent);
+    d->ui->tableView->selectRow(row);
 }
 
 /**
@@ -428,6 +451,9 @@ void PatientSelector::refreshFilter()
  */
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
+    if (!d->m_SetActivatedPatientAsCurrent)
+        return;
+
     // if user click
 //    if (d->m_Model && index == d->m_Model->currentPatient()) {
 //        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);

@@ -94,6 +94,9 @@ public:
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
     void setRefreshSearchResultMethod(RefreshSearchResult method);
+    void setOnPatientActivatedSetAsCurrent(bool setAsCurrent);
+
+    QString selectedPatientUid() const;
 
 public Q_SLOTS:
     bool setFilterPatientModel(const QString &name, const QString &firstName, const QDate &dateOfBirth) const;
