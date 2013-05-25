@@ -1746,6 +1746,18 @@ QString lineWrapString(const QString &in, int lineLength)
     return tempStr;
 }
 
+/** Center a string inside a line using \e fill to fill empty space */
+QString centerString(const QString &in, const QChar &fill, int lineSize)
+{
+    QString out;
+    out.fill(fill, lineSize);
+    int begin = lineSize/2 - in.size()/2;
+    if (begin <= 0)
+        return in;
+    out = out.replace(begin, in.size(), in);
+    return out;
+}
+
 /** Indent a string of \e lineIndent spaces */
 QString indentString(const QString &in, int lineIndent)
 {
