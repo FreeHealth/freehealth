@@ -87,6 +87,18 @@ DEFINES += DRUGS_DATABASE_VERSION=0x000804
  DEFINES *= WITH_FRENCH_FSP
 
 # ***************************************************************************************
+# *                          French specific: HPRIM Integrator                          *
+# ***************************************************************************************
+# * By default this feature is activated. When activated, users can import HPRIM files  *
+# * stored in a specific path into any patient file.                                    *
+# * This feature can be used to quickly import decrypted files from apicrypt for eg.    *
+# ***************************************************************************************
+# * We suggest to activate this feature if you want to use FreeMedForms in France       *
+# ***************************************************************************************
+# Uncomment the following line to activate the feature
+ DEFINES *= WITH_FRENCH_HPRIM_INTEGRATOR
+
+# ***************************************************************************************
 # *                                       QuaZip                                        *
 # ***************************************************************************************
 # * FreeMedForms uses the external lib QuaZip to manage file/dir (de)compression.       *
