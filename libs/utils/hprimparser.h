@@ -31,6 +31,7 @@
 #include <QHash>
 #include <QString>
 #include <QList>
+#include <QDate>
 
 /**
  * \file hprimparser.h
@@ -68,6 +69,12 @@ public:
 
     bool setData(const int ref, const QString &value);
     QString data(const int ref) const;
+
+    QString patientId() const {return data(PatientId);}
+    QString patientName() const {return data(PatientName);}
+    QString patientFirstName() const {return data(PatientFirstName);}
+    QDate patientDateOfBirth() const {return QDate::fromString(data(PatientDateOfBirth), "dd/MM/yyyy");}
+    QDate dateOfExamination() const {return QDate::fromString(data(DateOfExamination), "dd/MM/yyyy");}
 
     void setRawSource(const QString &fullContent);
     QString rawSource() const;
