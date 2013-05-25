@@ -352,16 +352,28 @@ namespace HPRIM {
  */
 HprimMessage &parseHprimRawSource(const QString &fullMessage)
 {
+    HprimMessage *msg = new HprimMessage;
     HprimHeader hdr;
+    HprimRawContent rawContent;
 
     // Parse header
     int line = 0;
     QString full = fullMessage;
+
+    // CR only
+    if (full.contains("\r") && !full.contains("\n"))
+        full = full.replace("\r", "\n");
+
     QTextStream flux(&full, QIODevice::ReadOnly);
     QStringList lines;
     while (!flux.atEnd() && line<12) {
         lines << flux.readLine();
         ++line;
+    }
+    if (line != 12) {
+        msg->setHeader(hdr);
+        msg->setRawContent(rawContent);
+        return *msg;
     }
     hdr.setRawSource(full.left(flux.pos()));
 
@@ -387,11 +399,9 @@ HprimMessage &parseHprimRawSource(const QString &fullMessage)
     hdr.setData(HprimHeader::ReceiverIdentity, lines.at(++i));
 
     // Parse message (removes the EOF tags)
-    HprimRawContent rawContent;
     rawContent.setRawSource(full.mid(flux.pos()));
 
     // Create the message to return
-    HprimMessage *msg = new HprimMessage;
     msg->setHeader(hdr);
     msg->setRawContent(rawContent);
 
