@@ -68,7 +68,7 @@ class FORM_EXPORT EpisodeModel : public QAbstractListModel
     friend class Form::Internal::FormExporterPrivate;
     friend class Patients::Internal::IdentityViewerWidget;
 
-protected:
+public:
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     bool initialize();
 
