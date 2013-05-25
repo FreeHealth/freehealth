@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "hprimpreferences.h"
+#include "constants.h"
 #include "ui_hprimpreferences.h"
 
 #include <translationutils/constants.h>
@@ -42,31 +43,31 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 /* ----------------------  Preferences Widget ---------------------- */
 
 /*! Creates a new preferences widget with a given parent. */
-ToolsPreferencesWidget::ToolsPreferencesWidget(QWidget *parent) :
+HprimPreferencesWidget::HprimPreferencesWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ToolsPreferencesWidget)
+    ui(new Ui::HprimPreferencesWidget)
 {
     ui->setupUi(this);
 }
 
-ToolsPreferencesWidget::~ToolsPreferencesWidget()
+HprimPreferencesWidget::~HprimPreferencesWidget()
 {
     delete ui;
 }
 
 /*! Sets data of a changed data model to the ui's widgets. */
-void ToolsPreferencesWidget::setDataToUi()
+void HprimPreferencesWidget::setDataToUi()
 {
 }
 
 /*! \sa IOptionsPage::matches() */
-QString ToolsPreferencesWidget::searchKeywords() const
+QString HprimPreferencesWidget::searchKeywords() const
 {
     return QString::null;
 }
 
 /*! Saves the settings in the ui to the settings data model. */
-void ToolsPreferencesWidget::saveToSettings(Core::ISettings *sets)
+void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
@@ -74,18 +75,18 @@ void ToolsPreferencesWidget::saveToSettings(Core::ISettings *sets)
 }
 
 /*! Writes the default settings to the data model. */
-void ToolsPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
-    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("ToolsPreferencesWidget"));
+    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
 }
 
 /*! Retranslates the ui widgets to the changed language. */
-void ToolsPreferencesWidget::retranslateUi()
+void HprimPreferencesWidget::retranslateUi()
 {
 }
 
-void ToolsPreferencesWidget::changeEvent(QEvent *e)
+void HprimPreferencesWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -100,21 +101,21 @@ void ToolsPreferencesWidget::changeEvent(QEvent *e)
 /* ----------------------  Preferences Page ---------------------- */
 
 /*!
- * \class Tools::ToolsPreferencesPage
+ * \class Tools::HprimPreferencesPage
  * \brief Generic FreeMedForms preferences page for Tools plugin.
  *
  *  The page is listed in the settings dialog under the category returned by \sa category().
  */
 
 /*! Creates a new preferences page with a given parent. */
-ToolsPreferencesPage::ToolsPreferencesPage(QObject *parent) :
+HprimPreferencesPage::HprimPreferencesPage(QObject *parent) :
     IOptionsPage(parent),
     m_Widget(0)
 {
-    setObjectName("ToolsPreferencesPage");
+    setObjectName("HprimPreferencesPage");
 }
 
-ToolsPreferencesPage::~ToolsPreferencesPage()
+HprimPreferencesPage::~HprimPreferencesPage()
 {
     if (m_Widget)
         delete m_Widget;
@@ -122,44 +123,44 @@ ToolsPreferencesPage::~ToolsPreferencesPage()
 }
 
 /*! Returns the id if the preferences page. */
-QString ToolsPreferencesPage::id() const
+QString HprimPreferencesPage::id() const
 {
     return objectName();
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString ToolsPreferencesPage::displayName() const
+QString HprimPreferencesPage::displayName() const
 {
     return tr("General");
 }
 
 /*! Returns the (translated) category of the preferences page. */
-QString ToolsPreferencesPage::category() const
+QString HprimPreferencesPage::category() const
 {
     return tr("Tools");
 }
 
 /*! Returns the (translated) title of the preferences page. */
-QString ToolsPreferencesPage::title() const
+QString HprimPreferencesPage::title() const
 {
     return tr("HPRIM file integrator");
 }
 
 /*! Returns the sorting order (pages are sorted starting from 0). */
-int ToolsPreferencesPage::sortIndex() const
+int HprimPreferencesPage::sortIndex() const
 {
     return 0;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
-void ToolsPreferencesPage::resetToDefaults()
+void HprimPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDataToUi();
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void ToolsPreferencesPage::apply()
+void HprimPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
@@ -167,7 +168,7 @@ void ToolsPreferencesPage::apply()
     m_Widget->saveToSettings(settings());
 }
 
-void ToolsPreferencesPage::finish()
+void HprimPreferencesPage::finish()
 {
     delete m_Widget;
 }
@@ -176,7 +177,7 @@ void ToolsPreferencesPage::finish()
  *
  * Overloads the interface method. For each empty value the default settings value is written.
  */
-void ToolsPreferencesPage::checkSettingsValidity()
+void HprimPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     //    defaultvalues.insert(%PluginName:c%::Constants::FOO_SETTING_KEY, %PluginName:c%::Constants::FOO_SETTING_VALUE);
@@ -188,17 +189,17 @@ void ToolsPreferencesPage::checkSettingsValidity()
     settings()->sync();
 }
 
-bool ToolsPreferencesPage::matches(const QString &) const
+bool HprimPreferencesPage::matches(const QString &) const
 {
     return false;
 }
 
 /*! Creates the settings page */
-QWidget *ToolsPreferencesPage::createPage(QWidget *parent)
+QWidget *HprimPreferencesPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new ToolsPreferencesWidget(parent);
+    m_Widget = new HprimPreferencesWidget(parent);
     return m_Widget;
 }
 

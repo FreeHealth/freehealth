@@ -24,8 +24,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_INTERNAL_TOOLSPREFERENCES_H
-#define TOOLS_INTERNAL_TOOLSPREFERENCES_H
+#ifndef TOOLS_INTERNAL_HprimPreferences_H
+#define TOOLS_INTERNAL_HprimPreferences_H
 
 #include <coreplugin/ioptionspage.h>
 
@@ -74,11 +74,11 @@ private:
 };
 
 
-class ToolsPreferencesPage : public Core::IOptionsPage
+class HprimPreferencesPage : public Core::IOptionsPage
 {
 public:
-    ToolsPreferencesPage(QObject *parent = 0);
-    ~ToolsPreferencesPage();
+    HprimPreferencesPage(QObject *parent = 0);
+    ~HprimPreferencesPage();
     
     QString id() const;
     QString displayName() const;
@@ -91,7 +91,7 @@ public:
     void apply();
     void finish();
     
-    bool matches(QString &s) const;
+    bool matches(const QString &s) const;
     
     QString helpPage() {return QString();}
     
@@ -108,5 +108,5 @@ private:
 } // namespace Internal
 } // namespace Tools
 
-#endif // TOOLS_INTERNAL_TOOLSPREFERENCES_H
+#endif // TOOLS_INTERNAL_HprimPreferences_H
 
