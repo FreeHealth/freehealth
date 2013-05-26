@@ -30,10 +30,17 @@
 namespace Tools {
 namespace Constants {
 
-const char *const S_DEFAULT_FILE_ENCODING   = "Tools/HprimIntegrator/DefaultFileEncoding";
-const char *const S_PATH_TO_SCAN            = "Tools/HprimIntegrator/PathToScan";
-const char *const S_FORMITEM_UUIDS          = "Tools/HprimIntegrator/FormItemUuids";
-const char *const S_FILE_MANAGEMENT         = "Tools/HprimIntegrator/FileManagement";
+const char *const S_DEFAULT_FILE_ENCODING           = "Tools/HprimIntegrator/DefaultFileEncoding";
+const char *const S_PATH_TO_SCAN                    = "Tools/HprimIntegrator/PathToScan";
+const char *const S_FORMITEM_UUIDS                  = "Tools/HprimIntegrator/FormItemUuids";
+const char *const S_FILE_MANAGEMENT                 = "Tools/HprimIntegrator/FileManagement";
+const char *const S_FILE_MANAGEMENT_STORING_PATH    = "Tools/HprimIntegrator/FileStoringPath";
+
+enum FileManagement {
+    RemoveFileDefinitively = 0,
+    RemoveFileOneMonthAfterIntegration,
+    StoreFileInPath
+};
 
 } // namespace Constants
 } // namespace Tools

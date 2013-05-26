@@ -65,6 +65,9 @@ public:
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
     
+private Q_SLOTS:
+    void onFileManagementChanged(int);
+
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);

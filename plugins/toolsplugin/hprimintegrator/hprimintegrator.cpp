@@ -29,6 +29,7 @@
  */
 
 #include "hprimintegrator.h"
+#include "hprimintegratordialog.h"
 #include "constants.h"
 
 #include "ui_hprimintegratorwidget.h"
@@ -40,22 +41,11 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 
-#include <formmanagerplugin/formcore.h>
-#include <formmanagerplugin/iformitem.h>
-#include <formmanagerplugin/formmanager.h>
-#include <formmanagerplugin/episodemodel.h>
-#include <formmanagerplugin/iformitemdata.h>
-#include <formmanagerplugin/episodemanager.h>
-#include <formmanagerplugin/constants_settings.h>
-
 #include <patientbaseplugin/patientmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/hprimparser.h>
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
-#include <translationutils/trans_patient.h>
 
 #include <QTimer>
 #include <QFileSystemModel>
@@ -65,13 +55,11 @@
 
 using namespace Tools;
 using namespace Internal;
-using namespace Trans::ConstantTranslations;
+//using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
-static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 
 namespace Tools {
 namespace Internal {
@@ -135,7 +123,8 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
     d->_fileModel = new QFileSystemModel(this);
     d->_fileModel->setReadOnly(true);
     d->_fileModel->setResolveSymlinks(false);
-    QModelIndex root = d->_fileModel->setRootPath("/Users/eric/freemedforms/Documents/hprim/");
+    // TODO: should manage multiple path...
+    QModelIndex root = d->_fileModel->setRootPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
 
     d->ui->dirContentTableView->setModel(d->_fileModel);
     d->ui->dirContentTableView->setRootIndex(root);
@@ -149,7 +138,8 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 #endif
-    connect(d->ui->dirContentTableView, SIGNAL(activated(QModelIndex)), this, SLOT(onFileSelected(QModelIndex)));
+    connect(d->ui->dirContentTableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(onFileSelected(QModelIndex, QModelIndex)));
     connect(d->ui->integrate, SIGNAL(clicked()), this, SLOT(onDataIntegrationRequested()));
 }
 
@@ -171,7 +161,7 @@ bool HprimIntegratorWidget::initialize()
  * When a file is selected, read its content and show it in the viewer.
  * Tries also to find the related patient.
  */
-void HprimIntegratorWidget::onFileSelected(const QModelIndex &)
+void HprimIntegratorWidget::onFileSelected(const QModelIndex &, const QModelIndex &)
 {
     // Read the content of the file
     QString content = d->readFileContent();
@@ -184,49 +174,8 @@ void HprimIntegratorWidget::onFileSelected(const QModelIndex &)
 
     if (msg.isValid() && !msg.isNull()) {
         // Populate the viewer with the HPRIM content
-        int justify = 30;
-        QString html;
-        html += "<span style=\"font-weight:600; color: darkblue\"><pre>";
-        html += QString("%1\n*%2*\n%1\n\n")
-                .arg(QString().fill('*', 90))
-                .arg(Utils::centerString(tr("Message header"), ' ', 88));
-        html += QString("%1: %2 %3\n")
-                .arg(tkTr(Trans::Constants::PATIENT).rightJustified(justify, ' '))
-                .arg(msg.header().patientName())
-                .arg(msg.header().patientFirstName());
-        html += QString("%1: %2\n")
-                .arg(tkTr(Trans::Constants::DATE_OF_BIRTH).rightJustified(justify, ' '))
-                .arg(QLocale().toString(msg.header().patientDateOfBirth(), QLocale::LongFormat));
-        html += QString("%1: %2\n")
-                .arg(tkTr(Trans::Constants::SOCIAL_NUMBER).rightJustified(justify, ' '))
-                .arg(msg.header().data(Utils::HPRIM::HprimHeader::PatientSocialNumber));
-        html += QString("%1: %2 %3 (%4 %5)\n")
-                .arg(tkTr(Trans::Constants::FULLADDRESS).rightJustified(justify, ' '))
-                .arg(msg.header().data((Utils::HPRIM::HprimHeader::PatientAddressFirstLine)))
-                .arg(msg.header().data((Utils::HPRIM::HprimHeader::PatientAddressSecondLine)))
-                .arg(msg.header().data((Utils::HPRIM::HprimHeader::PatientAddressZipCode)))
-                .arg(msg.header().data((Utils::HPRIM::HprimHeader::PatientAddressCity)));
-        html += "\n";
-        html += QString("%1: %2\n")
-                .arg(tkTr(Trans::Constants::FROM).rightJustified(justify, ' '))
-                .arg(msg.header().data(Utils::HPRIM::HprimHeader::SenderIdentity));
-        html += QString("%1: %2\n")
-                .arg(tkTr(Trans::Constants::TO).rightJustified(justify, ' '))
-                .arg(msg.header().data(Utils::HPRIM::HprimHeader::ReceiverIdentity));
-        html += QString("%1: %2\n")
-                .arg(tkTr(Trans::Constants::DATE).rightJustified(justify, ' '))
-                .arg(QLocale().toString(msg.header().dateOfExamination(), QLocale::LongFormat));
-        html += "\n";
-        html += "</span></pre>\n";
-        html += "<pre>";
-        html += QString("%1\n*%2*\n%1\n\n")
-                .arg(QString().fill('*', 90))
-                .arg(Utils::centerString(tr("Message content"), ' ', 88));
-        html += msg.rawContent().rawSource();
-        html += "</pre>\n";
-
         d->ui->contentViewer->clear();
-        d->ui->contentViewer->appendHtml(html);
+        d->ui->contentViewer->appendHtml(msg.toBasicHtml());
         QTextCursor cursor = d->ui->contentViewer->textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
         d->ui->contentViewer->setTextCursor(cursor);
@@ -261,60 +210,15 @@ void HprimIntegratorWidget::onFileSelected(const QModelIndex &)
 
 void HprimIntegratorWidget::onDataIntegrationRequested()
 {
-    // Find the FormItem && FormMain where to insert the data
-    QString itemUid = "GP::Basic::Consultation::Results::Textual";
-    QList<Form::FormMain*> emptyRoot = formManager().allDuplicatesEmptyRootForms();
-    Form::FormItem *item = 0;
-    foreach(Form::FormMain *root, emptyRoot) {
-        foreach(Form::FormItem *i, root->flattenedFormItemChildren()) {
-            if (i->uuid() == itemUid) {
-                item = i;
-                break;
-            }
-        }
+    HprimIntegratorDialog dlg(this);
+    dlg.initialize(d->readFileContent());
+    Utils::resizeAndCenter(&dlg, this);
+    if (dlg.exec() == QDialog::Rejected) {
+        // Show a widget with an error
+    } else {
+        // Show a widget with the importation success message
+        // Manage the imported hprim file
     }
-    if (!item) {
-        LOG_ERROR("FormItem not found");
-        return;
-    }
-
-    // Create an episode for the FormMain
-    Form::EpisodeModel *model = new Form::EpisodeModel(item->parentFormMain(), this);
-    model->initialize();
-    model->setCurrentPatient(d->ui->patientSelector->selectedPatientUid());
-
-    if (!model->insertRow(0)) {
-        LOG_ERROR("Unable to create an episode");
-        return;
-    }
-
-    // Label the episode
-    int row = model->rowCount() - 1;
-    model->setData(model->index(row, Form::EpisodeModel::Label), tr("HPRIM Importation"));
-    if (!item->itemData()) {
-        LOG_ERROR("No item data to fill");
-        return;
-    }
-
-    // Add the content of the viewer to the FormItem
-    QString html = "<body><pre>";
-    html += d->ui->contentViewer->toPlainText();
-    html += "</pre><body>";
-    item->itemData()->setData(0, html);
-
-    // getCurrentXmlEpisode()
-    QHash<QString, QString> xmlData;
-    foreach(Form::FormItem *it, item->parentFormMain()->flattenedFormItemChildren()) {
-        if (it->itemData()) {
-            xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
-        }
-    }
-    QString xml = Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
-
-    model->setData(model->index(row, Form::EpisodeModel::XmlContent), xml);
-
-    // Save the episode
-    model->submit();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

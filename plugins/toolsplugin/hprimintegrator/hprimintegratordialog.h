@@ -24,56 +24,45 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TOOLS_INTERNAL_HPRIMINTEGRATOR_H
-#define TOOLS_INTERNAL_HPRIMINTEGRATOR_H
+#ifndef TOOLS_INTERNAL_HPRIMINTEGRATORDIALOG_H
+#define TOOLS_INTERNAL_HPRIMINTEGRATORDIALOG_H
 
-#include <coreplugin/modemanager/imode.h>
-#include <QObject>
-
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
+#include <QDialog>
 
 /**
- * \file hprimintegrator.h
+ * \file hprimintegratordialog.h
  * \author Eric Maeker
  * \version 0.8.4
- * \date 24 May 2013
+ * \date 26 May 2013
 */
 
 namespace Tools {
 namespace Internal {
-class HprimIntegratorWidgetPrivate;
+class HprimIntegratorDialogPrivate;
 
-class HprimIntegratorWidget : public QWidget
+class HprimIntegratorDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit HprimIntegratorWidget(QWidget *parent = 0);
-    ~HprimIntegratorWidget();
+    explicit HprimIntegratorDialog(QWidget *parent = 0);
+    ~HprimIntegratorDialog();
+    bool initialize(const QString &hprimContent);
     
-    bool initialize();
-        
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    void done(int r);
+
 private Q_SLOTS:
-    void onFileSelected(const QModelIndex &index, const QModelIndex &);
-    void onDataIntegrationRequested();
+    void onPatientSelected(const QString &fullName, const QString &uid);
 
 private:
-    HprimIntegratorWidgetPrivate *d;
+    HprimIntegratorDialogPrivate *d;
 };
 
-class HprimIntegratorMode : public Core::IMode
-{
-    Q_OBJECT
-public:
-    HprimIntegratorMode(QObject *parent = 0);
-    ~HprimIntegratorMode();
-
-
-};
 } // namespace Internal
 } // namespace Tools
 
-#endif // TOOLS_INTERNAL_HPRIMINTEGRATOR_H
+#endif // TOOLS_INTERNAL_HPRIMINTEGRATORDIALOG_H
 

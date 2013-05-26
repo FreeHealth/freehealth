@@ -37,7 +37,10 @@
 #include "fsp/fspprinterdialog.h"
 #endif
 
+#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
+#include "hprimintegrator/hprimpreferences.h"
 #include "hprimintegrator/hprimintegrator.h"
+#endif
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -80,7 +83,10 @@ const char* const PRINT_FSP    = QT_TRANSLATE_NOOP("Tools", "Print a french 'FSP
 ToolsPlugin::ToolsPlugin() :
     ExtensionSystem::IPlugin(),
     m_prefPage(0),
-    pdf(0)
+    pdf(0),
+    m_FspPage(0),
+    m_ChequePage(0),
+    m_HprimPage(0)
 {
     setObjectName("ToolsPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -94,11 +100,15 @@ ToolsPlugin::ToolsPlugin() :
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
 #ifdef WITH_CHEQUE_PRINTING
-    addAutoReleasedObject(new ChequePrinterPreferencesPage(this));
+    addAutoReleasedObject(m_ChequePage = new ChequePrinterPreferencesPage(this));
 #endif
 
 #ifdef WITH_FRENCH_FSP
-    addAutoReleasedObject(new FspPrinterPreferencesPage(this));
+    addAutoReleasedObject(m_FspPage = new FspPrinterPreferencesPage(this));
+#endif
+
+#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
+    addAutoReleasedObject(m_HprimPage = new HprimPreferencesPage(this));
 #endif
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -188,9 +198,17 @@ void ToolsPlugin::extensionsInitialized()
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
 #endif
 
-
+#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
     HprimIntegratorMode *mode = new HprimIntegratorMode(this);
     addAutoReleasedObject(mode);
+#endif
+
+    if (m_ChequePage)
+        m_ChequePage->checkSettingsValidity();
+    if (m_FspPage)
+        m_FspPage->checkSettingsValidity();
+    if (m_HprimPage)
+        m_HprimPage->checkSettingsValidity();
 
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 

@@ -34,6 +34,9 @@
 namespace Tools {
 namespace Internal {
 class PdfTkWrapper;
+class FspPrinterPreferencesPage;
+class ChequePrinterPreferencesPage;
+class HprimPreferencesPage;
 
 class ToolsPlugin : public ExtensionSystem::IPlugin
 {
@@ -56,6 +59,9 @@ private Q_SLOTS:
 private:
     ToolsPreferencesPage *m_prefPage;
     PdfTkWrapper *pdf;
+    FspPrinterPreferencesPage *m_FspPage;
+    ChequePrinterPreferencesPage *m_ChequePage;
+    HprimPreferencesPage *m_HprimPage;
 };
 
 } // namespace Internal

@@ -36,18 +36,11 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Data integration</string>
+      <string>Items to use for data integration</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Item to fill</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="formItemUid"/>
+       <widget class="Views::StringListView" name="items" native="true"/>
       </item>
      </layout>
     </widget>
@@ -58,33 +51,27 @@
       <string>Local file management</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>When a file content is integrated into the patient file</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="1">
+         <widget class="Utils::PathChooser" name="pathForIntegratedFiles" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QComboBox" name="fileManagement"/>
         </item>
         <item row="0" column="0">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>When a file content is integrated into the patient file</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1">
-         <widget class="Utils::PathChooser" name="pathForIntegratedFiles" native="true"/>
+         </widget>
         </item>
        </layout>
       </item>
@@ -111,6 +98,12 @@
    <class>Utils::PathChooser</class>
    <extends>QWidget</extends>
    <header location="global">utils/widgets/pathchooser.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Views::StringListView</class>
+   <extends>QWidget</extends>
+   <header location="global">listviewplugin/stringlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

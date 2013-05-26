@@ -28,6 +28,8 @@
 #include "constants.h"
 #include "ui_hprimpreferences.h"
 
+#include <listviewplugin/stringlistmodel.h>
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -48,6 +50,15 @@ HprimPreferencesWidget::HprimPreferencesWidget(QWidget *parent) :
     ui(new Ui::HprimPreferencesWidget)
 {
     ui->setupUi(this);
+    ui->fileManagement->addItem(tr("Definitively remove file from local drive"));
+    ui->fileManagement->addItem(tr("Remove file one month after integration"));
+    ui->fileManagement->addItem(tr("Copy file in a specific path"));
+    Views::StringListModel *model = new Views::StringListModel(this);
+    model->setReadOnly(false);
+    model->setCheckable(false);
+    model->setStringEditable(true);
+    ui->items->setModel(model);
+    connect(ui->fileManagement, SIGNAL(activated(int)), this, SLOT(onFileManagementChanged(int)));
 }
 
 HprimPreferencesWidget::~HprimPreferencesWidget()
@@ -58,6 +69,16 @@ HprimPreferencesWidget::~HprimPreferencesWidget()
 /*! Sets data of a changed data model to the ui's widgets. */
 void HprimPreferencesWidget::setDataToUi()
 {
+    ui->items->setStringList(settings()->value(Constants::S_FORMITEM_UUIDS));
+
+    // Just in case we change the ordre of the filemangement combo content
+    switch (settings()->value(Constants::S_FILE_MANAGEMENT).toInt()) {
+    case Constants::RemoveFileDefinitively: ui->fileManagement->setCurrentIndex(0); break;
+    case Constants::RemoveFileOneMonthAfterIntegration: ui->fileManagement->setCurrentIndex(1); break;
+    case Constants::StoreFileInPath: ui->fileManagement->setCurrentIndex(2); break;
+    }
+    ui->pathForIntegratedFiles->setPath(settings()->value(Constants::S_FILE_MANAGEMENT_STORING_PATH).toString());
+    ui->pathToScan->setPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -72,13 +93,33 @@ void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
     Core::ISettings *s = sets? sets : settings();
+    s->setValue(Constants::S_FORMITEM_UUIDS, ui->items->getStringList());
+
+    // Just in case we change the ordre of the filemangement combo content
+    switch (ui->fileManagement->currentIndex()) {
+    case 0: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileDefinitively); break;
+    case 1: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileOneMonthAfterIntegration); break;
+    case 2: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::StoreFileInPath); break;
+    }
+    settings()->setValue(Constants::S_FILE_MANAGEMENT_STORING_PATH, ui->pathForIntegratedFiles->path());
+    settings()->setValue(Constants::S_PATH_TO_SCAN, ui->pathToScan->path());
 }
 
 /*! Writes the default settings to the data model. */
 void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
-    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
+    // LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
+    // s->setValue(Constants::S_, );
+}
+
+void HprimPreferencesWidget::onFileManagementChanged(int index)
+{
+    switch (index) {
+    case 0: ui->pathForIntegratedFiles->setEnabled(false); break;
+    case 1: ui->pathForIntegratedFiles->setEnabled(false); break;
+    case 2: ui->pathForIntegratedFiles->setEnabled(true); break;
+    }
 }
 
 /*! Retranslates the ui widgets to the changed language. */
@@ -179,14 +220,14 @@ void HprimPreferencesPage::finish()
  */
 void HprimPreferencesPage::checkSettingsValidity()
 {
-    QHash<QString, QVariant> defaultvalues;
-    //    defaultvalues.insert(%PluginName:c%::Constants::FOO_SETTING_KEY, %PluginName:c%::Constants::FOO_SETTING_VALUE);
+    // QHash<QString, QVariant> defaultvalues;
+    // defaultvalues.insert(Constants::FOO_SETTING_KEY, Constants::FOO_SETTING_VALUE);
     
-    foreach(const QString &k, defaultvalues.keys()) {
-        if (settings()->value(k) == QVariant())
-            settings()->setValue(k, defaultvalues.value(k));
-    }
-    settings()->sync();
+    // foreach(const QString &k, defaultvalues.keys()) {
+    //     if (settings()->value(k) == QVariant())
+    //         settings()->setValue(k, defaultvalues.value(k));
+    // }
+    // settings()->sync();
 }
 
 bool HprimPreferencesPage::matches(const QString &) const
