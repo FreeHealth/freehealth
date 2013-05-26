@@ -1543,37 +1543,52 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="58"/>
+        <source>File %1 correctly removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="59"/>
-        <source>Open file</source>
+        <source>File %1 can not be copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="60"/>
-        <source>Opening file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="61"/>
-        <source>Saving file %1</source>
+        <source>File %1 moved to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="62"/>
-        <source>Save file</source>
+        <source>Open file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="63"/>
+        <source>Opening file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="64"/>
-        <source>Wrong number of tags (%1)</source>
+        <source>Saving file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="65"/>
+        <source>Save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="67"/>
+        <source>Wrong number of tags (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="68"/>
         <source>Wrong root tag %1 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="69"/>
         <source>Document type name mismatch.</source>
         <translation type="unfinished"></translation>
     </message>

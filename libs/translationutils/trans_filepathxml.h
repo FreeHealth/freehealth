@@ -55,6 +55,9 @@ const char* const FILE_1_CAN_NOT_BE_CREATED          = QT_TRANSLATE_NOOP("tkCons
 const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
 const char* const FILE_1_LOADED                      = QT_TRANSLATE_NOOP("tkConstants", "File %1 loaded");
 const char* const FILE_1_ISEMPTY                     = QT_TRANSLATE_NOOP("tkConstants", "File %1 is empty");
+const char* const FILE_1_CORRECTLY_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 correctly removed");
+const char* const FILE_1_CAN_NOT_BE_COPIED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be copied");
+const char* const FILE_1_MOVE_TO_2                   = QT_TRANSLATE_NOOP("tkConstants", "File %1 moved to %2");
 
 const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
 const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");

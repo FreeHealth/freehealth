@@ -27,12 +27,12 @@
 <context>
     <name>Tools</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="79"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="81"/>
         <source>Print a cheque</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="80"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="82"/>
         <source>Print a french &apos;FSP&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,7 +331,7 @@ One per line</source>
 <context>
     <name>Tools::Internal::HprimIntegratorMode</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="231"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="270"/>
         <source>HPRIM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -349,36 +349,47 @@ One per line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="187"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="189"/>
         <source>Patient correctly detected: %1; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="191"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="205"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="193"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="207"/>
         <source>No patient found with the following names: %1; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="195"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="197"/>
         <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="257"/>
+        <source>Importation was successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="258"/>
+        <source>Importation was successful. 
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Tools::Internal::HprimPreferencesPage</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="175"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="226"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="181"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="232"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="187"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="238"/>
         <source>HPRIM file integrator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -392,42 +403,67 @@ One per line</source>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="20"/>
-        <source>Scanning process</source>
+        <source>Service activation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="26"/>
-        <source>Path to scan</source>
+        <source>Activation preference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="39"/>
+        <source>Scanning process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="45"/>
+        <source>Path to scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="58"/>
         <source>Items to use for data integration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="51"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="70"/>
         <source>Local file management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="72"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="91"/>
         <source>When a file content is integrated into the patient file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="53"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="58"/>
         <source>Definitively remove file from local drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="54"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="59"/>
         <source>Remove file one month after integration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="55"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="60"/>
         <source>Copy file in a specific path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="62"/>
+        <source>Only for french user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="63"/>
+        <source>Always enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="64"/>
+        <source>Always disabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -470,18 +506,18 @@ One per line</source>
 <context>
     <name>Tools::Internal::ToolsPlugin</name>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="168"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="170"/>
         <source>Initializing Tools...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="184"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="186"/>
         <source>Ctrl+Shift+C</source>
         <extracomment>Translation for the &apos;Print Cheque&apos; action</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="196"/>
+        <location filename="../../plugins/toolsplugin/toolsplugin.cpp" line="198"/>
         <source>Ctrl+Shift+F</source>
         <extracomment>Translation for the &apos;Print FSP&apos; action</extracomment>
         <translation type="unfinished"></translation>

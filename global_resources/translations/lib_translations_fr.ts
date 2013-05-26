@@ -2688,5 +2688,17 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Active substance</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>File %1 correctly removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File %1 can not be copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File %1 moved to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
