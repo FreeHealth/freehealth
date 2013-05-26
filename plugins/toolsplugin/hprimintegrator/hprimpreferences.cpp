@@ -31,6 +31,8 @@
 
 #include <listviewplugin/stringlistmodel.h>
 
+#include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 #include <extensionsystem/pluginmanager.h>
@@ -129,21 +131,37 @@ void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
         pluginManager()->addObject(mode);
     }
 
+    // File management
     switch (ui->fileManagement->currentIndex()) {
     case 0: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileDefinitively); break;
     case 1: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileOneMonthAfterIntegration); break;
     case 2: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::StoreFileInPath); break;
     }
+
+    // Manage path
     settings()->setValue(Constants::S_FILE_MANAGEMENT_STORING_PATH, ui->pathForIntegratedFiles->path());
+    if (!ui->pathForIntegratedFiles->path().isEmpty())
+        Utils::checkDir(ui->pathForIntegratedFiles->path(), true, "HprimPreferencesWidget");
+
     settings()->setValue(Constants::S_PATH_TO_SCAN, ui->pathToScan->path());
+    if (!ui->pathToScan->path().isEmpty())
+        Utils::checkDir(ui->pathToScan->path(), true, "HprimPreferencesWidget");
 }
 
 /*! Writes the default settings to the data model. */
 void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
-    Q_UNUSED(s);
-    // LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
+    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
+    if (!s)
+        s = settings();
+
     s->setValue(Constants::S_ACTIVATION, Constants::OnlyForFrance);
+    s->setValue(Constants::S_FILE_MANAGEMENT, Constants::StoreFileInPath);
+    QString defaultStoringPath = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+            .arg("Hprim/Processed");
+    Utils::checkDir(defaultStoringPath, true, "HprimPreferencesWidget");
+    s->setValue(Constants::S_FILE_MANAGEMENT_STORING_PATH, defaultStoringPath);
 }
 
 void HprimPreferencesWidget::onFileManagementChanged(int index)
@@ -255,6 +273,12 @@ void HprimPreferencesPage::checkSettingsValidity()
 {
      QHash<QString, QVariant> defaultvalues;
      defaultvalues.insert(Constants::S_ACTIVATION, Constants::OnlyForFrance);
+
+     QString defaultStoringPath = QString("%1/%2")
+             .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+             .arg("Hprim/Processed");
+     Utils::checkDir(defaultStoringPath, true, "HprimPreferencesPage");
+     defaultvalues.insert(Constants::S_FILE_MANAGEMENT_STORING_PATH, defaultStoringPath);
 
      foreach(const QString &k, defaultvalues.keys()) {
          if (settings()->value(k) == QVariant())
