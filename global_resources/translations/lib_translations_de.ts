@@ -2677,5 +2677,21 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Long term therapy</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Send a mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Message header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Message content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active substance</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

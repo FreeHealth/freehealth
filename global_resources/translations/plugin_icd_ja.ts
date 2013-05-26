@@ -146,7 +146,7 @@
 <context>
     <name>ICD::IcdDatabase</name>
     <message>
-        <location filename="../../plugins/icdplugin/icddatabase.cpp" line="343"/>
+        <location filename="../../plugins/icdplugin/icddatabase.cpp" line="342"/>
         <source>ICD10 database corrupted, please contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>

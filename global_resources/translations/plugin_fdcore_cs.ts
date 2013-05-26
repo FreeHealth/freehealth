@@ -51,17 +51,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="220"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="219"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="229"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="231"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation type="unfinished"></translation>
     </message>

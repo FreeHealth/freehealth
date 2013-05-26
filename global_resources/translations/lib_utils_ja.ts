@@ -121,61 +121,61 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="423"/>
-        <location filename="../../libs/utils/global.cpp" line="425"/>
+        <location filename="../../libs/utils/global.cpp" line="424"/>
+        <location filename="../../libs/utils/global.cpp" line="426"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="571"/>
+        <location filename="../../libs/utils/global.cpp" line="572"/>
         <source>%1: %2 does not exist. Trying to create it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="574"/>
+        <location filename="../../libs/utils/global.cpp" line="575"/>
         <source>Unable to create the %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="579"/>
+        <location filename="../../libs/utils/global.cpp" line="580"/>
         <source>%1: %2 does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="626"/>
+        <location filename="../../libs/utils/global.cpp" line="627"/>
         <source>File %1 already exists. Do you want de replace it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="631"/>
-        <location filename="../../libs/utils/global.cpp" line="636"/>
-        <location filename="../../libs/utils/global.cpp" line="659"/>
+        <location filename="../../libs/utils/global.cpp" line="632"/>
+        <location filename="../../libs/utils/global.cpp" line="637"/>
+        <location filename="../../libs/utils/global.cpp" line="660"/>
         <source>Error %1 while trying to save file %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="651"/>
-        <location filename="../../libs/utils/global.cpp" line="671"/>
+        <location filename="../../libs/utils/global.cpp" line="652"/>
+        <location filename="../../libs/utils/global.cpp" line="672"/>
         <source>%1 successfully saved (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="653"/>
+        <location filename="../../libs/utils/global.cpp" line="654"/>
         <source>Save file aborted by user (file already exists): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="683"/>
+        <location filename="../../libs/utils/global.cpp" line="684"/>
         <source>Save to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="717"/>
+        <location filename="../../libs/utils/global.cpp" line="718"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="723"/>
+        <location filename="../../libs/utils/global.cpp" line="724"/>
         <source>Error %1 while trying to open file %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,7 +221,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1970"/>
+        <location filename="../../libs/utils/global.cpp" line="2013"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,6 +365,29 @@
     <message>
         <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="76"/>
         <source>Update text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::HttpMultiDownloader</name>
+    <message>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="197"/>
+        <source>Saving cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="229"/>
+        <source>Cache saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="240"/>
+        <source>Processing cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/httpmultidownloader.cpp" line="270"/>
+        <source>Cache processed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -570,7 +593,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="288"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="287"/>
         <source>Unable to save the file %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>

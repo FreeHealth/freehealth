@@ -105,22 +105,22 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1055"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="681"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1057"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="683"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1076"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="702"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1214"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="840"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -128,71 +128,71 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsIO</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="687"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="688"/>
         <source>Dosages transmitted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="690"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="691"/>
         <source>Dosage not successfully transmitted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="733"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="752"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="734"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="753"/>
         <source>You are trying to read a corrupted XML file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="734"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="735"/>
         <source>Error: %1
 Line: %2, Column: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="751"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="752"/>
         <source>Unable to load XML prescription: tag %1 is missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="753"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="754"/>
         <source>Missing tag: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="791"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="792"/>
         <source>Interaction checking will not take these drugs into account.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="792"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="793"/>
         <source>FreeDiams encountered errors while reading the XML prescription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="800"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="801"/>
         <source>Xml prescription successfully read.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="830"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="831"/>
         <source>No file name passed to load prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1043"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1044"/>
         <source>Save test only drugs too?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1044"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1045"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1046"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1047"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -431,27 +431,27 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="925"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="918"/>
         <source>No INN found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="930"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="923"/>
         <source>No interaction class found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="968"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="961"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="969"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="962"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="970"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="963"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>

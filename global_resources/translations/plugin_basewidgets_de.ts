@@ -25,12 +25,12 @@
 <context>
     <name>BaseWidgets::Internal::BaseCombo</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="566"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="569"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="567"/>
+        <location filename="../../plugins/basewidgetsplugin/baselistwidgets.cpp" line="570"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>
