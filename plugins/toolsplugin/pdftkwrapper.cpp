@@ -137,7 +137,7 @@ private:
 //    PdfTkWrapper *q;
 };
 } // namespace Internal
-} // end namespace Tools
+} // namespace Tools
 
 
 /*! Constructor of the Tools::Internal::PdfTkWrapper class */
