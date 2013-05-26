@@ -28,11 +28,16 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_patient.h>
 
 #include <QTextStream>
 #include <QStringList>
 
 #include <QDebug>
+
+using namespace Trans::ConstantTranslations;
 
 namespace {
 const char *const EOF_TAG1 = "****FIN****";
@@ -244,6 +249,52 @@ const HprimRawContent &HprimMessage::rawContent() const
 QString HprimMessage::toRawSource() const
 {
     return QString("%1%2").arg(_header.rawSource()).arg(_rawContent.rawSource());
+}
+
+/** Returns a better readable HPRIM content using basic html (bold only for the header) */
+QString HprimMessage::toBasicHtml() const
+{
+    int justify = 30;
+    QString html;
+    html += "<span style=\"font-weight:600; color: darkblue\"><pre>";
+    html += QString("%1\n*%2*\n%1\n\n")
+            .arg(QString().fill('*', 90))
+            .arg(Utils::centerString(tkTr(Trans::Constants::MESSAGE_HEADER), ' ', 88));
+    html += QString("%1: %2 %3\n")
+            .arg(tkTr(Trans::Constants::PATIENT).rightJustified(justify, ' '))
+            .arg(header().patientName())
+            .arg(header().patientFirstName());
+    html += QString("%1: %2\n")
+            .arg(tkTr(Trans::Constants::DATE_OF_BIRTH).rightJustified(justify, ' '))
+            .arg(QLocale().toString(header().patientDateOfBirth(), QLocale::LongFormat));
+    html += QString("%1: %2\n")
+            .arg(tkTr(Trans::Constants::SOCIAL_NUMBER).rightJustified(justify, ' '))
+            .arg(header().data(Utils::HPRIM::HprimHeader::PatientSocialNumber));
+    html += QString("%1: %2 %3 (%4 %5)\n")
+            .arg(tkTr(Trans::Constants::FULLADDRESS).rightJustified(justify, ' '))
+            .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressFirstLine)))
+            .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressSecondLine)))
+            .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressZipCode)))
+            .arg(header().data((Utils::HPRIM::HprimHeader::PatientAddressCity)));
+    html += "\n";
+    html += QString("%1: %2\n")
+            .arg(tkTr(Trans::Constants::FROM).rightJustified(justify, ' '))
+            .arg(header().data(Utils::HPRIM::HprimHeader::SenderIdentity));
+    html += QString("%1: %2\n")
+            .arg(tkTr(Trans::Constants::TO).rightJustified(justify, ' '))
+            .arg(header().data(Utils::HPRIM::HprimHeader::ReceiverIdentity));
+    html += QString("%1: %2\n")
+            .arg(tkTr(Trans::Constants::DATE).rightJustified(justify, ' '))
+            .arg(QLocale().toString(header().dateOfExamination(), QLocale::LongFormat));
+    html += "\n";
+    html += "</span></pre>\n";
+    html += "<pre>";
+    html += QString("%1\n*%2*\n%1\n\n")
+            .arg(QString().fill('*', 90))
+            .arg(Utils::centerString(tkTr(Trans::Constants::MESSAGE_CONTENT), ' ', 88));
+    html += rawContent().rawSource();
+    html += "</pre>\n";
+    return html;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

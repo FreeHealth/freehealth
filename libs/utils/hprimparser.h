@@ -174,6 +174,7 @@ public:
     const HprimRawContent &rawContent() const;
 
     QString toRawSource() const;
+    QString toBasicHtml() const;
 
 private:
     HprimHeader _header;
