@@ -293,7 +293,7 @@ QString HprimMessage::toBasicHtml() const
             .arg(QString().fill('*', 90))
             .arg(Utils::centerString(tkTr(Trans::Constants::MESSAGE_CONTENT), ' ', 88));
     html += rawContent().rawSource();
-    html += "</pre>\n";
+    html += "</pre>";
     return html;
 }
 
