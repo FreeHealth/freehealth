@@ -35,11 +35,18 @@ const char *const S_PATH_TO_SCAN                    = "Tools/HprimIntegrator/Pat
 const char *const S_FORMITEM_UUIDS                  = "Tools/HprimIntegrator/FormItemUuids";
 const char *const S_FILE_MANAGEMENT                 = "Tools/HprimIntegrator/FileManagement";
 const char *const S_FILE_MANAGEMENT_STORING_PATH    = "Tools/HprimIntegrator/FileStoringPath";
+const char *const S_ACTIVATION                      = "Tools/HprimIntegrator/Activation";
 
 enum FileManagement {
     RemoveFileDefinitively = 0,
     RemoveFileOneMonthAfterIntegration,
     StoreFileInPath
+};
+
+enum ServiceActivation {
+    OnlyForFrance = 0,
+    Enabled,
+    Disabled
 };
 
 } // namespace Constants

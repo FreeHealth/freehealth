@@ -26,12 +26,14 @@
  ***************************************************************************/
 #include "hprimpreferences.h"
 #include "constants.h"
+#include "hprimintegrator.h"
 #include "ui_hprimpreferences.h"
 
 #include <listviewplugin/stringlistmodel.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -41,6 +43,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 /* ----------------------  Preferences Widget ---------------------- */
 
@@ -53,30 +56,42 @@ HprimPreferencesWidget::HprimPreferencesWidget(QWidget *parent) :
     ui->fileManagement->addItem(tr("Definitively remove file from local drive"));
     ui->fileManagement->addItem(tr("Remove file one month after integration"));
     ui->fileManagement->addItem(tr("Copy file in a specific path"));
+
+    ui->activation->addItem(tr("Only for french user"));
+    ui->activation->addItem(tr("Always enabled"));
+    ui->activation->addItem(tr("Always disabled"));
+
     Views::StringListModel *model = new Views::StringListModel(this);
     model->setReadOnly(false);
     model->setCheckable(false);
     model->setStringEditable(true);
     ui->items->setModel(model);
     connect(ui->fileManagement, SIGNAL(activated(int)), this, SLOT(onFileManagementChanged(int)));
+    setDataToUi();
 }
 
 HprimPreferencesWidget::~HprimPreferencesWidget()
 {
     delete ui;
 }
-
+#include <QDebug>
 /*! Sets data of a changed data model to the ui's widgets. */
 void HprimPreferencesWidget::setDataToUi()
 {
     ui->items->setStringList(settings()->value(Constants::S_FORMITEM_UUIDS));
 
-    // Just in case we change the ordre of the filemangement combo content
+    switch (settings()->value(Constants::S_ACTIVATION).toInt()) {
+    case Constants::OnlyForFrance: ui->activation->setCurrentIndex(0); break;
+    case Constants::Enabled: ui->activation->setCurrentIndex(1); break;
+    case Constants::Disabled: ui->activation->setCurrentIndex(2); break;
+    }
+
     switch (settings()->value(Constants::S_FILE_MANAGEMENT).toInt()) {
     case Constants::RemoveFileDefinitively: ui->fileManagement->setCurrentIndex(0); break;
     case Constants::RemoveFileOneMonthAfterIntegration: ui->fileManagement->setCurrentIndex(1); break;
     case Constants::StoreFileInPath: ui->fileManagement->setCurrentIndex(2); break;
     }
+
     ui->pathForIntegratedFiles->setPath(settings()->value(Constants::S_FILE_MANAGEMENT_STORING_PATH).toString());
     ui->pathToScan->setPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
 }
@@ -95,7 +110,25 @@ void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
     Core::ISettings *s = sets? sets : settings();
     s->setValue(Constants::S_FORMITEM_UUIDS, ui->items->getStringList());
 
-    // Just in case we change the ordre of the filemangement combo content
+    // Manage Mode activation
+    switch (ui->activation->currentIndex()) {
+    case 0: settings()->setValue(Constants::S_ACTIVATION, Constants::OnlyForFrance); break;
+    case 1: settings()->setValue(Constants::S_ACTIVATION, Constants::Enabled); break;
+    case 2: settings()->setValue(Constants::S_ACTIVATION, Constants::Disabled); break;
+    }
+    HprimIntegratorMode *mode = pluginManager()->getObject<HprimIntegratorMode>();
+    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
+    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
+                            && QLocale().country() == QLocale::France);
+    if (mode && !enabled) {
+        pluginManager()->removeObject(mode);
+        delete mode;
+        mode = 0;
+    } else if (!mode && enabled) {
+        HprimIntegratorMode *mode = new HprimIntegratorMode(qApp);
+        pluginManager()->addObject(mode);
+    }
+
     switch (ui->fileManagement->currentIndex()) {
     case 0: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileDefinitively); break;
     case 1: settings()->setValue(Constants::S_FILE_MANAGEMENT, Constants::RemoveFileOneMonthAfterIntegration); break;
@@ -110,7 +143,7 @@ void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
     // LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
-    // s->setValue(Constants::S_, );
+    s->setValue(Constants::S_ACTIVATION, Constants::OnlyForFrance);
 }
 
 void HprimPreferencesWidget::onFileManagementChanged(int index)
@@ -220,14 +253,13 @@ void HprimPreferencesPage::finish()
  */
 void HprimPreferencesPage::checkSettingsValidity()
 {
-    // QHash<QString, QVariant> defaultvalues;
-    // defaultvalues.insert(Constants::FOO_SETTING_KEY, Constants::FOO_SETTING_VALUE);
-    
-    // foreach(const QString &k, defaultvalues.keys()) {
-    //     if (settings()->value(k) == QVariant())
-    //         settings()->setValue(k, defaultvalues.value(k));
-    // }
-    // settings()->sync();
+     QHash<QString, QVariant> defaultvalues;
+     defaultvalues.insert(Constants::S_ACTIVATION, Constants::OnlyForFrance);
+
+     foreach(const QString &k, defaultvalues.keys()) {
+         if (settings()->value(k) == QVariant())
+             settings()->setValue(k, defaultvalues.value(k));
+     }
 }
 
 bool HprimPreferencesPage::matches(const QString &) const
