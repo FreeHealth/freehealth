@@ -40,6 +40,7 @@
 #ifdef WITH_FRENCH_HPRIM_INTEGRATOR
 #include "hprimintegrator/hprimpreferences.h"
 #include "hprimintegrator/hprimintegrator.h"
+#include "hprimintegrator/constants.h"
 #endif
 
 #include <coreplugin/icore.h>
@@ -73,6 +74,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 namespace {
@@ -199,8 +201,13 @@ void ToolsPlugin::extensionsInitialized()
 #endif
 
 #ifdef WITH_FRENCH_HPRIM_INTEGRATOR
-    HprimIntegratorMode *mode = new HprimIntegratorMode(this);
-    addAutoReleasedObject(mode);
+    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
+    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
+            && QLocale().country() == QLocale::France);
+    if (enabled) {
+        HprimIntegratorMode *mode = new HprimIntegratorMode(this);
+        addObject(mode);
+    }
 #endif
 
     if (m_ChequePage)
@@ -233,6 +240,19 @@ ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
     // Save settings
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
+
+#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
+    // Because the Hprim mode can be removed by the preferences page
+    // We need to check if the mode is still in the object pool & remove it in needed
+    HprimIntegratorMode *mode = pluginManager()->getObject<HprimIntegratorMode>();
+    qWarning() << mode;
+    if (mode) {
+        removeObject(mode);
+        delete mode;
+        mode = 0;
+    }
+#endif
+
     return SynchronousShutdown;
 }
 
