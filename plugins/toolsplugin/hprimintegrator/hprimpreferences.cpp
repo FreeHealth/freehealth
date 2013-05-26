@@ -82,12 +82,22 @@ void HprimPreferencesWidget::setDataToUi()
 {
     ui->items->setStringList(settings()->value(Constants::S_FORMITEM_UUIDS));
 
-    switch (settings()->value(Constants::S_ACTIVATION).toInt()) {
+    // Activation
+    switch (settings()->value(Constants::S_ACTIVATION, 0).toInt()) {
     case Constants::OnlyForFrance: ui->activation->setCurrentIndex(0); break;
     case Constants::Enabled: ui->activation->setCurrentIndex(1); break;
     case Constants::Disabled: ui->activation->setCurrentIndex(2); break;
     }
 
+    // File encoding
+    switch (settings()->value(Constants::S_DEFAULT_FILE_ENCODING, 0).toInt()) {
+    case Constants::AutoDetect: ui->encoding->setCurrentIndex(0); break;
+    case Constants::ForceUtf8: ui->encoding->setCurrentIndex(1); break;
+    case Constants::ForceMacRoman: ui->encoding->setCurrentIndex(2); break;
+    case Constants::ForceIso8859_1: ui->encoding->setCurrentIndex(3); break;
+    }
+
+    // File management
     switch (settings()->value(Constants::S_FILE_MANAGEMENT).toInt()) {
     case Constants::RemoveFileDefinitively: ui->fileManagement->setCurrentIndex(0); break;
     case Constants::RemoveFileOneMonthAfterIntegration: ui->fileManagement->setCurrentIndex(1); break;
@@ -118,17 +128,13 @@ void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
     case 1: settings()->setValue(Constants::S_ACTIVATION, Constants::Enabled); break;
     case 2: settings()->setValue(Constants::S_ACTIVATION, Constants::Disabled); break;
     }
-    HprimIntegratorMode *mode = pluginManager()->getObject<HprimIntegratorMode>();
-    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
-    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
-                            && QLocale().country() == QLocale::France);
-    if (mode && !enabled) {
-        pluginManager()->removeObject(mode);
-        delete mode;
-        mode = 0;
-    } else if (!mode && enabled) {
-        HprimIntegratorMode *mode = new HprimIntegratorMode(qApp);
-        pluginManager()->addObject(mode);
+
+    // File encoding
+    switch (ui->encoding->currentIndex()) {
+    case 0: settings()->setValue(Constants::S_DEFAULT_FILE_ENCODING, Constants::AutoDetect); break;
+    case 1: settings()->setValue(Constants::S_DEFAULT_FILE_ENCODING, Constants::ForceUtf8); break;
+    case 2: settings()->setValue(Constants::S_DEFAULT_FILE_ENCODING, Constants::ForceMacRoman); break;
+    case 3: settings()->setValue(Constants::S_DEFAULT_FILE_ENCODING, Constants::ForceIso8859_1); break;
     }
 
     // File management
@@ -146,16 +152,38 @@ void HprimPreferencesWidget::saveToSettings(Core::ISettings *sets)
     settings()->setValue(Constants::S_PATH_TO_SCAN, ui->pathToScan->path());
     if (!ui->pathToScan->path().isEmpty())
         Utils::checkDir(ui->pathToScan->path(), true, "HprimPreferencesWidget");
+
+    // Update mode & view
+    HprimIntegratorMode *mode = pluginManager()->getObject<HprimIntegratorMode>();
+    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
+    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
+                            && QLocale().country() == QLocale::France);
+    if (mode) {
+        mode->refreshSettings();
+        if (mode && !enabled) {
+            pluginManager()->removeObject(mode);
+            delete mode;
+            mode = 0;
+        }
+    } else if (enabled) { // no mode but enabled
+        HprimIntegratorMode *mode = new HprimIntegratorMode(qApp);
+        pluginManager()->addObject(mode);
+    }
 }
 
 /*! Writes the default settings to the data model. */
-void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+void HprimPreferencesWidget::writeDefaultSettings(Core::ISettings *s) // static
 {
-    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
+    LOG_FOR("HprimPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("HprimPreferencesWidget"));
     if (!s)
         s = settings();
 
     s->setValue(Constants::S_ACTIVATION, Constants::OnlyForFrance);
+    s->setValue(Constants::S_DEFAULT_FILE_ENCODING, Constants::AutoDetect);
+    QString defaultPath = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+            .arg("Hprim/");
+    s->setValue(Constants::S_PATH_TO_SCAN, defaultPath);
     s->setValue(Constants::S_FILE_MANAGEMENT, Constants::StoreFileInPath);
     QString defaultStoringPath = QString("%1/%2")
             .arg(settings()->path(Core::ISettings::UserDocumentsPath))
@@ -273,6 +301,12 @@ void HprimPreferencesPage::checkSettingsValidity()
 {
      QHash<QString, QVariant> defaultvalues;
      defaultvalues.insert(Constants::S_ACTIVATION, Constants::OnlyForFrance);
+     defaultvalues.insert(Constants::S_DEFAULT_FILE_ENCODING, Constants::AutoDetect);
+
+     QString defaultPath = QString("%1/%2")
+             .arg(settings()->path(Core::ISettings::UserDocumentsPath))
+             .arg("Hprim/");
+     defaultvalues.insert(Constants::S_PATH_TO_SCAN, defaultPath);
 
      QString defaultStoringPath = QString("%1/%2")
              .arg(settings()->path(Core::ISettings::UserDocumentsPath))

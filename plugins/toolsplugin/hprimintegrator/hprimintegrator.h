@@ -54,7 +54,8 @@ public:
     ~HprimIntegratorWidget();
     
     bool initialize();
-        
+    void refreshSettings();
+
 private Q_SLOTS:
     void onFileSelected(const QModelIndex &index, const QModelIndex &);
     void onDataIntegrationRequested();
@@ -70,7 +71,10 @@ public:
     HprimIntegratorMode(QObject *parent = 0);
     ~HprimIntegratorMode();
 
+    void refreshSettings();
 
+private:
+    HprimIntegratorWidget *_widget;
 };
 } // namespace Internal
 } // namespace Tools

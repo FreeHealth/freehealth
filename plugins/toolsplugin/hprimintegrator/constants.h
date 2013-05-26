@@ -49,6 +49,13 @@ enum ServiceActivation {
     Disabled
 };
 
+enum FileEncoding {
+    AutoDetect = 0,
+    ForceUtf8,
+    ForceMacRoman,
+    ForceIso8859_1
+};
+
 } // namespace Constants
 } // namespace Tools
 

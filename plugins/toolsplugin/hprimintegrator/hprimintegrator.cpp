@@ -46,6 +46,8 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/hprimparser.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QTimer>
 #include <QFileSystemModel>
@@ -55,7 +57,7 @@
 
 using namespace Tools;
 using namespace Internal;
-//using namespace Trans::ConstantTranslations;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
@@ -88,7 +90,20 @@ public:
     QString readFileContent()
     {
         QModelIndex index = ui->dirContentTableView->currentIndex();
-        const QString &encoding = settings()->value(Constants::S_DEFAULT_FILE_ENCODING, "MacRoman").toString();
+        QString encoding;
+        switch (settings()->value(Constants::S_DEFAULT_FILE_ENCODING).toInt()) {
+        case Constants::AutoDetect:
+            if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+                encoding = "UTF-8";
+            else if (Utils::isRunningOnMac())
+                encoding = "MacRoman";
+            else if (Utils::isRunningOnWin())
+                encoding = "ISO-8859-1";
+            break;
+        case Constants::ForceUtf8: encoding = "UTF-8"; break;
+        case Constants::ForceMacRoman: encoding = "MacRoman"; break;
+        case Constants::ForceIso8859_1: encoding = "ISO-8859-1"; break;
+        }
         return Utils::readTextFile(_fileModel->fileInfo(index).absoluteFilePath(), encoding);
     }
 
@@ -215,17 +230,63 @@ void HprimIntegratorWidget::onDataIntegrationRequested()
     Utils::resizeAndCenter(&dlg, this);
     if (dlg.exec() == QDialog::Rejected) {
         // Show a widget with an error
-    } else {
-        // Show a widget with the importation success message
+    } else if (dlg.exec() == QDialog::Accepted) {
         // Manage the imported hprim file
+        QModelIndex index = d->ui->dirContentTableView->currentIndex();
+        QString sourceFileName = d->_fileModel->fileInfo(index).absoluteFilePath();
+        QString fileMsg;
+        switch (settings()->value(Constants::S_FILE_MANAGEMENT).toInt()) {
+        case Constants::RemoveFileDefinitively:
+            if (!QFile(sourceFileName).remove())
+                fileMsg = tkTr(Trans::Constants::FILE_1_CANNOT_BE_REMOVED).arg(sourceFileName);
+            else
+                fileMsg = tkTr(Trans::Constants::FILE_1_CORRECTLY_REMOVED).arg(sourceFileName);
+            break;
+        case Constants::RemoveFileOneMonthAfterIntegration:
+            // TODO: manage this
+            break;
+        case Constants::StoreFileInPath:
+        {
+            QFileInfo info(sourceFileName);
+            QString newFileName = QString("%1/%2").arg(settings()->value(Constants::S_FILE_MANAGEMENT_STORING_PATH).toString()).arg(info.fileName());
+            if (!QFile(sourceFileName).copy(newFileName)) {
+                fileMsg += tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_COPIED)
+                        .arg(sourceFileName);
+            } else if (!QFile(sourceFileName).remove()) {
+                fileMsg += tkTr(Trans::Constants::FILE_1_CANNOT_BE_REMOVED).arg(sourceFileName);
+            } else {
+                fileMsg += tkTr(Trans::Constants::FILE_1_MOVE_TO_2)
+                        .arg(sourceFileName)
+                        .arg(newFileName);
+            }
+
+            break;
+        }
+        }
+
+        // Show a widget with the importation success message
+        Utils::informativeMessageBox(tr("Importation was successful"),
+                                     tr("Importation was successful. \n"));
+
     }
 }
+
+void HprimIntegratorWidget::refreshSettings()
+{
+    Q_ASSERT(d->_fileModel);
+    if (!d->_fileModel)
+        return;
+    QModelIndex root = d->_fileModel->setRootPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
+    d->ui->dirContentTableView->setRootIndex(root);
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////     HprimIntegratorMode     ////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 HprimIntegratorMode::HprimIntegratorMode(QObject *parent) :
-    Core::IMode(parent)
+    Core::IMode(parent),
+    _widget(0)
 {
     setEnabled(true);
     setDisplayName(tr("HPRIM"));
@@ -234,7 +295,7 @@ HprimIntegratorMode::HprimIntegratorMode(QObject *parent) :
     setId("HprimIntegratorMode");
     setType("HprimIntegratorMode");
     setPatientBarVisibility(false);
-    setWidget(new HprimIntegratorWidget);
+    setWidget(_widget = new HprimIntegratorWidget);
 }
 
 HprimIntegratorMode::~HprimIntegratorMode()
@@ -244,3 +305,7 @@ HprimIntegratorMode::~HprimIntegratorMode()
     setWidget(0);
 }
 
+void HprimIntegratorMode::refreshSettings()
+{
+    _widget->refreshSettings();
+}
