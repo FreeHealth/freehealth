@@ -72,7 +72,7 @@ public:
     ~PatientSearchEdit();
 
 Q_SIGNALS:
-    void patientSelected(const QString &uid, const QString &fullName);
+    void patientSelected(const QString &fullName, const QString &uid);
 
 private Q_SLOTS:
     void onTextChanged(const QString &newText);
