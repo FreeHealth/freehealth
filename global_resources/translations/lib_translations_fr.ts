@@ -2674,31 +2674,31 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Send a mail</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un courriel</translation>
     </message>
     <message>
         <source>Message header</source>
-        <translation type="unfinished"></translation>
+        <translation>Entête du message</translation>
     </message>
     <message>
         <source>Message content</source>
-        <translation type="unfinished"></translation>
+        <translation>Contenu du message</translation>
     </message>
     <message>
         <source>Active substance</source>
-        <translation type="unfinished"></translation>
+        <translation>Substance active</translation>
     </message>
     <message>
         <source>File %1 correctly removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier %1 correctement supprimé</translation>
     </message>
     <message>
         <source>File %1 can not be copied</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier %1 ne peut être copié</translation>
     </message>
     <message>
         <source>File %1 moved to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier %1 déplacé en %2</translation>
     </message>
 </context>
 </TS>

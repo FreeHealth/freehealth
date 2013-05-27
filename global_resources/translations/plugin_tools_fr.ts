@@ -4,24 +4,24 @@
 <context>
     <name>HprimIntegratorDialog</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="142"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="146"/>
         <source>Patient correctly detected: %1; %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="148"/>
-        <source>No patient found with the following names: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Patient correctement détecté : %1 ; %2</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="152"/>
-        <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
-        <translation type="unfinished"></translation>
+        <source>No patient found with the following names: %1; %2</source>
+        <translation>Aucun patient ne correspond aux noms suivants : %1 ; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="302"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="156"/>
+        <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
+        <translation>Il existe plusieurs patients avec le même nom : %1 ; %2. Vous devrez sélectionner le bon patient.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.cpp" line="311"/>
         <source>You selected the following patient: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez sélectionné le patient suivant : %1</translation>
     </message>
 </context>
 <context>
@@ -306,35 +306,35 @@ Une par ligne</translation>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.ui" line="32"/>
         <source>HPRIM importation</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation de données HPRIM</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.ui" line="49"/>
         <source>Patient</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.ui" line="102"/>
         <source>HPRIM content</source>
-        <translation type="unfinished"></translation>
+        <translation>Contenu HPRIM</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratordialog.ui" line="114"/>
         <source>Patient file item</source>
-        <translation type="unfinished"></translation>
+        <translation>Éléments de formulaire du dossier patient</translation>
     </message>
 </context>
 <context>
     <name>Tools::Internal::HprimIntegratorMode</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="270"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="285"/>
         <source>HPRIM</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -342,57 +342,64 @@ Une par ligne</translation>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratorwidget.ui" line="66"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegratorwidget.ui" line="34"/>
         <source>Integrate into the selected patient file</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer dans le dossier patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="189"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="196"/>
         <source>Patient correctly detected: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Patient correctement détecté : %1 ; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="193"/>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="207"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="200"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="212"/>
         <source>No patient found with the following names: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun patient ne correspond aux noms suivants : %1 ; %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="197"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="204"/>
         <source>There are multiple patient with the same names: %1 %2. You will have to select the correct one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il existe plusieurs patients avec le même nom : %1 ; %2. Vous devrez sélectionner le bon patient.</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="257"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="226"/>
+        <source>Importation failed</source>
+        <translation>Échec de l&apos;importation</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="226"/>
+        <source>Importation failed.</source>
+        <translation>Échec de l&apos;importation.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="261"/>
         <source>Importation was successful</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;importation est complète</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="258"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimintegrator.cpp" line="262"/>
         <source>Importation was successful. 
-</source>
-        <translation type="unfinished"></translation>
+%1</source>
+        <translation>L&apos;importation est complète.
+%1</translation>
     </message>
 </context>
 <context>
     <name>Tools::Internal::HprimPreferencesPage</name>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="226"/>
-        <source>General</source>
-        <translation type="unfinished">Général</translation>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="254"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="266"/>
+        <source>HPRIM file importation</source>
+        <translation>Importation de fichiers HPRIM</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="232"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="260"/>
         <source>Tools</source>
-        <translation type="unfinished">Outils</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="238"/>
-        <source>HPRIM file integrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Outils</translation>
     </message>
 </context>
 <context>
@@ -405,67 +412,92 @@ Une par ligne</translation>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="20"/>
         <source>Service activation</source>
-        <translation type="unfinished"></translation>
+        <translation>Activation du service</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="26"/>
         <source>Activation preference</source>
-        <translation type="unfinished"></translation>
+        <translation>Activation</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="39"/>
         <source>Scanning process</source>
-        <translation type="unfinished"></translation>
+        <translation>Processus de scannage</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="45"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="48"/>
         <source>Path to scan</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire à scanner</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="58"/>
-        <source>Items to use for data integration</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="55"/>
+        <source>File encoding</source>
+        <translation>Encodage des fichiers</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="70"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="63"/>
+        <source>Automatic detection (default)</source>
+        <translation>Détection automatique (par défaut)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="68"/>
+        <source>Force UTF-8 reading (Linux)</source>
+        <translation>Forcer en UTF-8 (Linux)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="73"/>
+        <source>Force MacRoman (Mac)</source>
+        <translation>Forcer en MacRoman (Mac)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="78"/>
+        <source>Force Latin-1 ISO-8859-1 (Windows)</source>
+        <translation>Forcer en Latin-1 ISO-8859-1 (Windows)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="89"/>
+        <source>Items to use for data importation</source>
+        <translation>Éléments de formulaire à utiliser pour l&apos;importation</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="101"/>
         <source>Local file management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion des fichiers locaux</translation>
     </message>
     <message>
-        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="91"/>
+        <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.ui" line="122"/>
         <source>When a file content is integrated into the patient file</source>
-        <translation type="unfinished"></translation>
+        <translation>Quand le contenu d&apos;un fichier a été correctement importé dans le dossier patient</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="58"/>
         <source>Definitively remove file from local drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer définitivement le fichier du disque dur</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="59"/>
         <source>Remove file one month after integration</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le fichier un mois plus tard</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="60"/>
         <source>Copy file in a specific path</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier le fichier dans un répertoire spécifique (recommandé)</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="62"/>
         <source>Only for french user</source>
-        <translation type="unfinished"></translation>
+        <translation>Uniquement pour les utilisateurs français</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="63"/>
         <source>Always enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Toujours activé</translation>
     </message>
     <message>
         <location filename="../../plugins/toolsplugin/hprimintegrator/hprimpreferences.cpp" line="64"/>
         <source>Always disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Toujours désactivé</translation>
     </message>
 </context>
 <context>

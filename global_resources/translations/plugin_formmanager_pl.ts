@@ -86,7 +86,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="1051"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="1057"/>
         <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,32 +94,32 @@
 <context>
     <name>Form::FormManager</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="704"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="703"/>
         <source>Unable to insert sub-form %1 into form %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1005"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1004"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1006"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1005"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1007"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1006"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1015"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1014"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1016"/>
+        <location filename="../../plugins/formmanagerplugin/formmanager.cpp" line="1015"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>
