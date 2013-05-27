@@ -942,10 +942,16 @@ public:
 } // End Internal
 } // End Form
 
+/**
+ * Creates an empty valid object. Some default values are defined:
+ * - Spec_IsIdentityForm : false
+ * - Spec_UseForHprimImportation : false
+ */
 FormItemSpec::FormItemSpec() :
     d(new Form::Internal::FormItemSpecPrivate)
 {
     setValue(Spec_IsIdentityForm, false);
+    setValue(Spec_UseForHprimImportation, false);
 }
 
 FormItemSpec::~FormItemSpec()

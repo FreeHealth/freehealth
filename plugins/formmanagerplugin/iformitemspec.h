@@ -84,7 +84,8 @@ public:
         Spec_IconFileName,
         Spec_Tooltip,
         Spec_PlaceHolder,
-        Spec_IsIdentityForm
+        Spec_IsIdentityForm,
+        Spec_UseForHprimImportation
     };
     FormItemSpec();
     ~FormItemSpec();
@@ -109,6 +110,7 @@ public:
     QString iconFileName(const QString &lang = QString::null) const {return value(Spec_IconFileName,lang).toString();}
     QString tooltip(const QString &lang = QString::null) const {return value(Spec_Tooltip,lang).toString();}
     QString placeHolder(const QString &lang = QString::null) const {return value(Spec_PlaceHolder,lang).toString();}
+    bool useForHprimImportation(const QString &lang = QString::null) const {return value(Spec_UseForHprimImportation,lang).toBool();}
 
     void setEquivalentUuid(const QStringList &list);
     QStringList equivalentUuid() const;

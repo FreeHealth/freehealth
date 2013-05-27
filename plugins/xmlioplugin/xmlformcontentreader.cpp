@@ -140,6 +140,7 @@ bool XmlFormContentReader::initialize()
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PLACEHOLDER, Form::FormItemSpec::Spec_PlaceHolder);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_HPRIM, Form::FormItemSpec::Spec_UseForHprimImportation);
 
    m_PatientData.clear();
    // use the Core::IPatient::enumToString()

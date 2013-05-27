@@ -139,11 +139,11 @@ inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
 inline QList<FormItem *> Form::FormItem::flattenedFormItemChildren() const
 {
     QList<Form::FormItem *> list;
-    foreach(QObject *o, children()) {
-         Form::FormItem *i = qobject_cast<Form::FormItem*>(o);
-         if (i) {
-             list.append(i);
-             list.append(i->flattenedFormItemChildren());
+    foreach(QObject *object, children()) {
+         Form::FormItem *item = qobject_cast<Form::FormItem*>(object);
+         if (item) {
+             list.append(item);
+             list.append(item->flattenedFormItemChildren());
          }
     }
     return list;

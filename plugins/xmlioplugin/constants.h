@@ -121,6 +121,8 @@ const char* const TAG_SPEC_EXTRA        = "extra";
 const char* const TAG_SPEC_UPDATEINFO   = "updateinfo";
 const char* const TAG_SPEC_UPDATEINFOVERSION  = "updateversion";
 const char* const TAG_SPEC_UPDATEINFOVERSIONTEXT  = "text";
+const char* const TAG_SPEC_HPRIM        = "hprim";
+
 const char* const ATTRIB_UPDATEINFOVERSION_FROM  = "from";
 const char* const ATTRIB_UPDATEINFOVERSION_TO    = "to";
 
@@ -148,27 +150,6 @@ const char* const TAG_SCRIPT_ONDEPENDENCIESCHANGED = "ondependencieschanged";
 const char* const TAG_SCRIPT_ONCLICKED          = "onclicked";
 
 const char* const TAG_DATAPATIENT                = "patientdata";
-//const char* const TAG_DATAPATIENT_WEIGHT         = "patient::weight";
-//const char* const TAG_DATAPATIENT_WEIGHTUNIT     = "patient::weightunit";
-//const char* const TAG_DATAPATIENT_HEIGHT         = "patient::height";
-//const char* const TAG_DATAPATIENT_HEIGHTUNIT     = "patient::heightunit";
-//const char* const TAG_DATAPATIENT_EMAIL          = "patient::email";
-//const char* const TAG_DATAPATIENT_FAX            = "patient::fax";
-//const char* const TAG_DATAPATIENT_TELS           = "patient::tels";
-//const char* const TAG_DATAPATIENT_MOBILETEL      = "patient::mobiletel";
-//const char* const TAG_DATAPATIENT_SOCIALNUMBER1  = "patient::socialnumber";
-//const char* const TAG_DATAPATIENT_SOCIALNUMBER2  = "patient::socialnumber2";
-//const char* const TAG_DATAPATIENT_SOCIALNUMBER3  = "patient::socialnumber3";
-//const char* const TAG_DATAPATIENT_SOCIALNUMBER4  = "patient::socialnumber4";
-//const char* const TAG_DATAPATIENT_PROFESSION     = "patient::profession";
-//const char* const TAG_DATAPATIENT_PROFESSIONSITE = "patient::professionsite";
-//const char* const TAG_DATAPATIENT_PROFESSIONALTELS = "patient::professionaltels";
-
-//const char* const TAG_DATAPATIENT_CREAT          = "patient::creatinin";
-//const char* const TAG_DATAPATIENT_CREATUNIT      = "patient::creatininunit";
-
-//const char* const TAG_DATAPATIENT_DRUGSALLERGIES = "drugs::allergies";
-//const char* const TAG_DATAPATIENT_DRUGSCHRONIC   = "drugs::chronic";
 
 const char* const TAG_OPTIONS                   = "options";
 const char* const TAG_OPTION                    = "option";
