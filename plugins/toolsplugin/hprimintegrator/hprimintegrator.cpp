@@ -79,12 +79,6 @@ public:
     {
         delete ui;
     }
-
-    int refreshFileModelInterval() // in ms
-    {
-        // TODO: use a setting
-        return 6000; // 60000 == 1 minute
-    }
     
     // Read the content of the currently selected file
     QString readFileContent()
@@ -128,16 +122,14 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
 
     // Set courrier as font of the viewer
     QFont font = d->ui->contentViewer->font();
-    font.setFamily("Courier");
+    font.setFamily("Courrier");
+    font.setPointSize(font.pointSize() + 2);
     d->ui->contentViewer->setFont(font);
-
-    d->ui->patientSelector->setFieldsToShow(Patients::PatientSelector::FullName | Patients::PatientSelector::DateOfBirth | Patients::PatientSelector::FullAddress);
-    d->ui->patientSelector->setOnPatientActivatedSetAsCurrent(false);
-    d->ui->patientSelector->initialize();
 
     d->_fileModel = new QFileSystemModel(this);
     d->_fileModel->setReadOnly(true);
     d->_fileModel->setResolveSymlinks(false);
+    d->_fileModel->setFilter(QDir::Files);
     // TODO: should manage multiple path...
     QModelIndex root = d->_fileModel->setRootPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
 
@@ -147,11 +139,13 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
     d->ui->dirContentTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     d->ui->dirContentTableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
     d->ui->dirContentTableView->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    d->ui->dirContentTableView->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
 #else
     // Qt5
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    d->ui->dirContentTableView->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
 #endif
     connect(d->ui->dirContentTableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(onFileSelected(QModelIndex, QModelIndex)));
@@ -211,8 +205,6 @@ void HprimIntegratorWidget::onFileSelected(const QModelIndex &, const QModelInde
                                         .arg(msg.header().patientName())
                                         .arg(msg.header().patientFirstName()));
         }
-        d->ui->patientSelector->setFilterPatientModel(msg.header().patientName(), msg.header().patientFirstName(), msg.header().patientDateOfBirth());
-        d->ui->patientSelector->setSelectedPatient(0);
     } else {
         // Populate the viewer with the raw file content
         d->ui->contentViewer->setPlainText(content);
@@ -228,9 +220,11 @@ void HprimIntegratorWidget::onDataIntegrationRequested()
     HprimIntegratorDialog dlg(this);
     dlg.initialize(d->readFileContent());
     Utils::resizeAndCenter(&dlg, this);
-    if (dlg.exec() == QDialog::Rejected) {
+    int r = dlg.exec();
+    if (r == QDialog::Rejected) {
         // Show a widget with an error
-    } else if (dlg.exec() == QDialog::Accepted) {
+        Utils::warningMessageBox(tr("Importation failed"), tr("Importation failed."));
+    } else if (r == QDialog::Accepted) {
         // Manage the imported hprim file
         QModelIndex index = d->ui->dirContentTableView->currentIndex();
         QString sourceFileName = d->_fileModel->fileInfo(index).absoluteFilePath();
@@ -259,15 +253,14 @@ void HprimIntegratorWidget::onDataIntegrationRequested()
                         .arg(sourceFileName)
                         .arg(newFileName);
             }
-
             break;
         }
         }
 
         // Show a widget with the importation success message
         Utils::informativeMessageBox(tr("Importation was successful"),
-                                     tr("Importation was successful. \n"));
-
+                                     tr("Importation was successful. \n%1")
+                                     .arg(fileMsg));
     }
 }
 

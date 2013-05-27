@@ -103,13 +103,17 @@ public:
         if (!_formItemsUidModel) {
             _formItemsUidModel = new QStringListModel(q);
         }
+
+        // Get formUids from the settings
         QStringList itemUid = settings()->value(Constants::S_FORMITEM_UUIDS).toStringList(); //"GP::Basic::Consultation::Results::Textual";
         QStringList itemLabel;
 
-        QList<Form::FormMain*> emptyRoot = formManager().allDuplicatesEmptyRootForms();
+        // Add EmptyRoot FormMain data of the central form
+        QList<Form::FormMain*> emptyRoot = formManager().allEmptyRootForms();
         foreach(Form::FormMain *root, emptyRoot) {
             foreach(Form::FormItem *i, root->flattenedFormItemChildren()) {
-                if (itemUid.contains(i->uuid())) {
+                if (i->spec()->useForHprimImportation()
+                        || itemUid.contains(i->uuid())) {
                     _formItems << i;
                     _itemUidForModel << i->uuid();
                     // Create the full label of the item
@@ -121,7 +125,6 @@ public:
                         parent = parent->parentFormMain();
                     }
                     itemLabel << label;
-                    break;
                 }
             }
         }
@@ -129,7 +132,7 @@ public:
             LOG_ERROR_FOR(q, "No FormItem found");
         _formItemsUidModel->setStringList(itemLabel);
     }
-    
+
     // Return the selected patient for the importation
     // Or a null QString if an error occured
     QString getPatientUid(const Utils::HPRIM::HprimHeader &hdr)

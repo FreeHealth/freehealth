@@ -76,7 +76,7 @@ HprimPreferencesWidget::~HprimPreferencesWidget()
 {
     delete ui;
 }
-#include <QDebug>
+
 /*! Sets data of a changed data model to the ui's widgets. */
 void HprimPreferencesWidget::setDataToUi()
 {
@@ -251,7 +251,7 @@ QString HprimPreferencesPage::id() const
 /*! Returns the (translated) name of the preferences page. */
 QString HprimPreferencesPage::displayName() const
 {
-    return tr("General");
+    return tr("HPRIM file importation");
 }
 
 /*! Returns the (translated) category of the preferences page. */
@@ -263,7 +263,7 @@ QString HprimPreferencesPage::category() const
 /*! Returns the (translated) title of the preferences page. */
 QString HprimPreferencesPage::title() const
 {
-    return tr("HPRIM file integrator");
+    return tr("HPRIM file importation");
 }
 
 /*! Returns the sorting order (pages are sorted starting from 0). */
