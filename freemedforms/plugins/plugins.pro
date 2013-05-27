@@ -211,7 +211,9 @@ with-feedback {
 
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core
-
+tools.depends += formmanager
+tools.depends += patientbase
+tools.depends += listview
 
 # manage non free content
 #include(../buildspecs/config.pri)
