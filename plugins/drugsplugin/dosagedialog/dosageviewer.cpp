@@ -281,10 +281,10 @@ public:
     {
         Q_ASSERT(q);
         q->labelOfDosageLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::AvailableDosages).toString());
-        q->drugNameLabel->setText(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::Denomination).toString());
-        q->drugNameLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::CompositionString).toString());
-        q->interactionLabel->setPixmap(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::Icon).value<QIcon>().pixmap(16,16));
-        q->interactionLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::ToolTip).toString());
+//        q->drugNameLabel->setText(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::Denomination).toString());
+//        q->drugNameLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::CompositionString).toString());
+//        q->interactionLabel->setPixmap(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::Icon).value<QIcon>().pixmap(16,16));
+//        q->interactionLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::ToolTip).toString());
     }
 
     /**
@@ -429,6 +429,8 @@ DosageViewer::DosageViewer(QWidget *parent)
     intakesCombo->setMoveDownLightIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
     // remove last page of tabWidget (TODO page)
     tabWidget->removeTab(tabWidget->count()-1);
+    drugNameLabel->hide();
+    interactionLabel->hide();
 
     // define models
     DrugsDB::DailySchemeModel *model = new DrugsDB::DailySchemeModel(this);
