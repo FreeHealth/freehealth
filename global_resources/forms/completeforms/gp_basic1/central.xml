@@ -29,11 +29,14 @@
             Ajout des masques HTML d'exportation et d'impression plus modernes.
             Ajout de la synthèse du dossier.
             Ajout d'un bouton de navigation dans les fichiers pour les inclure rapidement dans l'éditeur de texte.
+            Refonte de la partie consultation.
+            Ajout des informations d'importation HPRIM.
             </text>
             <text lang="en">
             Adding modern HTML export and print masks.
             Adding patient file synthesis.
             Adding a button to easily navigate through the local files and to quickly include them in a text editor.
+            Refactoring of the consultation part.
             </text>
         </updateversion>
         <updateversion from="0.8.0" to="0.8.2">
@@ -98,9 +101,51 @@
 
     <file>__subForms__/generic/soap_with_biomeasurements/central.xml</file>
 
+    <MedForm name="GP::Basic::Consultation::Reports">
+      <label lang="xx">Consultation reports</label>
+      <label lang="fr">Compte-rendus de consultation</label>
+      <icon>__theme__/edit.png</icon>
+      <options>DontPrintEmptyValues</options>
+      <file type="htmlprintmask">./html/xx/padtools_consultation_results_mask.html</file>
+      <file type="htmlexportmask">./html/xx/padtools_consultation_results_mask.html</file>
+
+      <Item type="texteditor" name="GP::Basic::Consultation::Reports::Textual">
+        <label lang="xx">Textual results</label>
+        <label lang="fr">Résultats textuels</label>
+        <tooltip lang="xx">You can add here results from XRay, specialists consultations...</tooltip>
+        <tooltip lang="fr">Vous pouvez mettre ici les résultats de radiologie, consultations spécialisées...</tooltip>
+        <options>FullEditor;WithIO;WithTable;Expanded;DontPrintEmptyValues;PrintDuplicata</options>
+        <papers>Generic</papers>
+        <hprim>true</hprim>
+      </Item>
+
+    </MedForm>
+
+      <MedForm name="GP::Basic::Consultation::LabResults">
+        <label lang="xx">Lab-tests results (textual)</label>
+        <label lang="fr">Résultats de biologie (textuels)</label>
+        <icon>__theme__/labtest.png</icon>
+        <options>DontPrintEmptyValues</options>
+        <file type="htmlprintmask">./html/xx/padtools_consultation_results_mask.html</file>
+        <file type="htmlexportmask">./html/xx/padtools_consultation_results_mask.html</file>
+
+        <Item type="texteditor" name="GP::Basic::Consultation::LabResults::Textual">
+          <label lang="xx">Textual results</label>
+          <label lang="fr">Résultats textuels</label>
+          <tooltip lang="xx">You can add here results from XRay, specialists consultations...</tooltip>
+          <tooltip lang="fr">Vous pouvez mettre ici les résultats de radiologie, consultations spécialisées...</tooltip>
+          <options>FullEditor;WithIO;WithTable;Expanded;DontPrintEmptyValues;PrintDuplicata</options>
+          <papers>Generic</papers>
+          <hprim>true</hprim>
+        </Item>
+
+      </MedForm>
+
+      <file>__subForms__/generic/labtest_results/central.xml</file>
+
     <MedForm name="GP::Basic::Consultation::Results">
-      <label lang="xx">Textual results</label>
-      <label lang="fr">Résultats textuels</label>
+      <label lang="xx">Various reports</label>
+      <label lang="fr">Compte-rendus divers</label>
       <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
       <file type="htmlprintmask">./html/xx/padtools_consultation_results_mask.html</file>
@@ -109,15 +154,12 @@
       <Item type="texteditor" name="GP::Basic::Consultation::Results::Textual">
         <label lang="xx">Textual results</label>
         <label lang="fr">Résultats textuels</label>
-        <tooltip lang="xx">You can add here results from XRay, specialists consultations...</tooltip>
-        <tooltip lang="fr">Vous pouvez mettre ici les résultats de radiologie, consultations spécialisées...</tooltip>
         <options>FullEditor;WithIO;WithTable;Expanded;DontPrintEmptyValues;PrintDuplicata</options>
         <papers>Generic</papers>
+        <hprim>true</hprim>
       </Item>
 
       </MedForm>
-
-      <file>__subForms__/generic/labtest_results/central.xml</file>
 
   </MedForm> <!-- Consultation -->
 
