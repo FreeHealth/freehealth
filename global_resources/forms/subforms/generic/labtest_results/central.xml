@@ -40,7 +40,7 @@
     <label lang="xx">Labtests results</label>
     <label lang="fr">Résultats de biologie</label>
     <options>UseFormNameAsNameSpace</options>
-    <icon>__theme__/stethoscope.png</icon>
+    <icon>__theme__/labtest.png</icon>
 
         <Item type="detailswidget" name="CBC" uifilename="./ui/xx/cbc.ui">
             <uilink label="" widget="" layout="mainLayout"/>
