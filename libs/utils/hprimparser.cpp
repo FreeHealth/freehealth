@@ -292,7 +292,7 @@ QString HprimMessage::toBasicHtml() const
     html += QString("%1\n*%2*\n%1\n\n")
             .arg(QString().fill('*', 90))
             .arg(Utils::centerString(tkTr(Trans::Constants::MESSAGE_CONTENT), ' ', 88));
-    html += rawContent().rawSource();
+    html += rawContent().rawSource().replace("<", "&lt;");
     html += "</pre>";
     return html;
 }
@@ -449,7 +449,7 @@ HprimMessage &parseHprimRawSource(const QString &fullMessage)
     hdr.setData(HprimHeader::SenderIdentity, lines.at(++i));
     hdr.setData(HprimHeader::ReceiverIdentity, lines.at(++i));
 
-    // Parse message (removes the EOF tags)
+    // Create RawContentMessage
     rawContent.setRawSource(full.mid(flux.pos()));
 
     // Create the message to return
