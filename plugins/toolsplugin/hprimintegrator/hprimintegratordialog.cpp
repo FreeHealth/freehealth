@@ -145,7 +145,7 @@ public:
         if (model->rowCount() == 1) {
             ui->patientInfo->setText(QCoreApplication::translate("HprimIntegratorDialog", "Patient correctly detected: %1; %2")
                                         .arg(model->data(model->index(0, Core::IPatient::FullName)).toString())
-                                        .arg(model->data(model->index(0, Core::IPatient::DateOfBirth)).toString()));
+                                     .arg(QLocale().toString(model->data(model->index(0, Core::IPatient::DateOfBirth)).toDate(), QLocale::LongFormat)));
             QModelIndex index = model->index(0, Core::IPatient::Uid);
             return model->data(index).toString();
         } else if (model->rowCount() == 0) {

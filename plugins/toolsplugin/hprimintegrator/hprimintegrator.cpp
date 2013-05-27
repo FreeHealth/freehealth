@@ -195,7 +195,7 @@ void HprimIntegratorWidget::onFileSelected(const QModelIndex &, const QModelInde
         if (model->rowCount() == 1) {
             d->ui->patientInfo->setText(tr("Patient correctly detected: %1; %2")
                                         .arg(model->data(model->index(0, Core::IPatient::FullName)).toString())
-                                        .arg(model->data(model->index(0, Core::IPatient::DateOfBirth)).toString()));
+                                        .arg(QLocale().toString(model->data(model->index(0, Core::IPatient::DateOfBirth)).toDate(), QLocale::LongFormat)));
         } else if (model->rowCount() == 0) {
             d->ui->patientInfo->setText(tr("No patient found with the following names: %1; %2")
                                         .arg(msg.header().patientName())
