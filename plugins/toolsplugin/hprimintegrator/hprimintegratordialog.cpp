@@ -54,6 +54,7 @@
 
 #include <QStringListModel>
 #include <QCryptographicHash>
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -184,7 +185,8 @@ public:
         }
 
         // Add the content of the viewer to the FormItem
-        item->itemData()->setData(0, _hprimMessage.toBasicHtml());
+        QString html = QString("<pre>%1</pre>").arg(_hprimMessage.toRawSource().replace("<", "&lt;"));
+        item->itemData()->setData(0, html);
 
         // getCurrentXmlEpisode()
         QHash<QString, QString> xmlData;
@@ -295,6 +297,10 @@ bool HprimIntegratorDialog::initialize(const QString &hprimContent)
 
     // Find the related patient
     d->_patientUid = d->getPatientUid(d->_hprimMessage.header());
+
+    QPushButton *ok = d->ui->buttonBox->button(QDialogButtonBox::Ok);
+    if (ok)
+        ok->setEnabled(!d->_patientUid.isEmpty());
     return true;
 }
 
@@ -306,6 +312,9 @@ void HprimIntegratorDialog::onPatientSelected(const QString &fullName, const QSt
                                             "You selected the following patient: %1")
                 .arg(fullName)
                 );
+    QPushButton *ok = d->ui->buttonBox->button(QDialogButtonBox::Ok);
+    if (ok)
+        ok->setEnabled(!d->_patientUid.isEmpty());
 }
 
 void HprimIntegratorDialog::done(int r)
