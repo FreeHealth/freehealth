@@ -28,6 +28,8 @@ FreeMedForms
     * Some new scripting functions
     * Including drugs SPC (Summary of Product Characteristics) in the drugs database for France and ZA
     * In the patient selector identity viewer, adding a button to quickly send a mail to the patient
+    * HPRIM v1 compatibility
+    * HPRIM importation in patient file
   * Build process
     * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
