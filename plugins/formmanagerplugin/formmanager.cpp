@@ -692,7 +692,6 @@ QList<FormMain *> FormManager::allDuplicatesEmptyRootForms() const
     return roots;
 }
 
-
 /**
  * Insert a sub-form to a form to the specified \e insertionPoint.
  * A signal is emitted before Form::FormMain are getting reparented.
