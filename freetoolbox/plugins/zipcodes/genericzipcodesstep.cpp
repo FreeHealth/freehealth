@@ -523,7 +523,7 @@ QString GenericZipCodesStep::processMessage() const
  * Multi-country datapacks: \n
  * If you want to define multi-country datapacks, you can use the file in the
  * source global_resources to add multi-country definition. You can find the file here:
- * <i>global_resources/textfiles/datapack_description/zipcodes/geonames/multi.csv</i>.
+ * <i>global_resources/datapack_description/zipcodes/geonames/multi.csv</i>.
  * This file is self-documented.
  */
 bool GenericZipCodesStep::process()

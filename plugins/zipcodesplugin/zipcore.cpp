@@ -81,7 +81,6 @@ public:
         tmp = settings()->dataPackInstallPath() + dbRelPath;
         if (QFileInfo(tmp).exists())
             return settings()->dataPackInstallPath();
-        tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
         return settings()->dataPackApplicationInstalledPath();
     }
 
