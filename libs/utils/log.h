@@ -26,11 +26,8 @@
 #ifndef TKLOG_H
 #define TKLOG_H
 
-// include toolkit headers
 #include <utils/global_exporter.h>
-class tkLogPrivate;
 
-// include Qt headers
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -40,14 +37,15 @@ class tkLogPrivate;
 #include <QApplication>
 #include <QObject>
 #include <QDebug>
+QT_BEGIN_NAMESPACE
 class QTreeWidget;
-
+QT_END_NAMESPACE
 
 /**
  * \file log.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 05 Feb 2011
+ * \version 0.8.4
+ * \date 28 May 2013
 */
 
 #define LOG_ERROR_FOR(object, message)  Utils::Log::addError(object, message,__FILE__,__LINE__)
@@ -102,6 +100,8 @@ class UTILS_EXPORT Log
     static void addData( const QString &o, const QString &m, const QDateTime &d, const int t );
 
 public:
+    static void logCompilationConfiguration();
+
     static bool warnPluginsCreation();
 
     static void muteConsoleWarnings();

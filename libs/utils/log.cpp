@@ -61,7 +61,24 @@ QList<LogData> Log::m_Messages;
 bool Log::m_HasError = false;
 bool Log::m_MuteConsole = false;
 
-bool Log::warnPluginsCreation() { return false; }
+bool Log::warnPluginsCreation() { return true; }
+
+void Log::logCompilationConfiguration()
+{
+    qWarning() << "\n----------";
+    if (isDebugWithoutInstallCompilation()) {
+        LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
+    } else if (isReleaseCompilation()) {
+        LOG_FOR("Main", "Running release version");
+    } else {
+        LOG_FOR("Main", "Running debug installed version");
+    }
+    if (isLinuxIntegratedCompilation())
+        LOG_FOR("Main", "Linux Integrated");
+
+    LOG_FOR("Main","Libraries in path :\n     " + qApp->libraryPaths().join("\n     "));
+    qWarning() << "----------";
+}
 
 void Log::addData(const QString &o, const QString &m, const QDateTime &d, const int t)
 {
