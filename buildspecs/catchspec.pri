@@ -1,11 +1,11 @@
 message(***  Catching the current specs)
 aix-g++{
   message(aix-g++)
-  CURRENT_SPEC=aix-g++
+  CURRENT_SPEC=aix-gpp
 }
 aix-g++-64{
   message(aix-g++-64)
-  CURRENT_SPEC=aix-g++-64
+  CURRENT_SPEC=aix-gpp-64
 }
 aix-xlc{
   message(aix-xlc)
@@ -25,19 +25,19 @@ blackberry-x86-qcc{
 }
 cygwin-g++{
   message(cygwin-g++)
-  CURRENT_SPEC=cygwin-g++
+  CURRENT_SPEC=cygwin-gpp
 }
 darwin-g++{
   message(darwin-g++)
-  CURRENT_SPEC=darwin-g++
+  CURRENT_SPEC=darwin-gpp
 }
 freebsd-g++{
   message(freebsd-g++)
-  CURRENT_SPEC=freebsd-g++
+  CURRENT_SPEC=freebsd-gpp
 }
 freebsd-g++46{
   message(freebsd-g++46)
-  CURRENT_SPEC=freebsd-g++46
+  CURRENT_SPEC=freebsd-gpp46
 }
 freebsd-icc{
   message(freebsd-icc)
@@ -57,11 +57,11 @@ hpux-acc-o64{
 }
 hpux-g++{
   message(hpux-g++)
-  CURRENT_SPEC=hpux-g++
+  CURRENT_SPEC=hpux-gpp
 }
 hpux-g++-64{
   message(hpux-g++-64)
-  CURRENT_SPEC=hpux-g++-64
+  CURRENT_SPEC=hpux-gpp-64
 }
 hpuxi-acc-32{
   message(hpuxi-acc-32)
@@ -73,11 +73,11 @@ hpuxi-acc-64{
 }
 hpuxi-g++-64{
   message(hpuxi-g++-64)
-  CURRENT_SPEC=hpuxi-g++-64
+  CURRENT_SPEC=hpuxi-gpp-64
 }
 hurd-g++{
   message(hurd-g++)
-  CURRENT_SPEC=hurd-g++
+  CURRENT_SPEC=hurd-gpp
 }
 irix-cc{
   message(irix-cc)
@@ -89,15 +89,15 @@ irix-cc-64{
 }
 irix-g++{
   message(irix-g++)
-  CURRENT_SPEC=irix-g++
+  CURRENT_SPEC=irix-gpp
 }
 irix-g++-64{
   message(irix-g++-64)
-  CURRENT_SPEC=irix-g++-64
+  CURRENT_SPEC=irix-gpp-64
 }
 linux-arm-gnueabi-g++{
   message(linux-arm-gnueabi-g++)
-  CURRENT_SPEC=linux-arm-gnueabi-g++
+  CURRENT_SPEC=linux-arm-gnueabi-gpp
 }
 linux-clang{
   message(linux-clang)
@@ -109,19 +109,19 @@ linux-cxx{
 }
 linux-g++{
   message(linux-g++)
-  CURRENT_SPEC=linux-g++
+  CURRENT_SPEC=linux-gpp
 }
 linux-g++-32{
   message(linux-g++-32)
-  CURRENT_SPEC=linux-g++-32
+  CURRENT_SPEC=linux-gpp-32
 }
 linux-g++-64{
   message(linux-g++-64)
-  CURRENT_SPEC=linux-g++-64
+  CURRENT_SPEC=linux-gpp-64
 }
 linux-g++-maemo{
   message(linux-g++-maemo)
-  CURRENT_SPEC=linux-g++-maemo
+  CURRENT_SPEC=linux-gpp-maemo
 }
 linux-icc{
   message(linux-icc)
@@ -145,7 +145,7 @@ linux-llvm{
 }
 linux-lsb-g++{
   message(linux-lsb-g++)
-  CURRENT_SPEC=linux-lsb-g++
+  CURRENT_SPEC=linux-lsb-gpp
 }
 linux-pgcc{
   message(linux-pgcc)
@@ -153,7 +153,7 @@ linux-pgcc{
 }
 lynxos-g++{
   message(lynxos-g++)
-  CURRENT_SPEC=lynxos-g++
+  CURRENT_SPEC=lynxos-gpp
 }
 macx-clang{
   message(macx-clang)
@@ -165,27 +165,27 @@ macx-clang-32{
 }
 macx-clang-libc++{
   message(macx-clang-libc++)
-  CURRENT_SPEC=macx-clang-libc++
+  CURRENT_SPEC=macx-clang-libcpp
 }
 macx-clang-libc++-32{
   message(macx-clang-libc++-32)
-  CURRENT_SPEC=macx-clang-libc++-32
+  CURRENT_SPEC=macx-clang-libcpp-32
 }
 macx-g++{
   message(macx-g++)
-  CURRENT_SPEC=macx-g++
+  CURRENT_SPEC=macx-gpp
 }
 macx-g++-32{
   message(macx-g++-32)
-  CURRENT_SPEC=macx-g++-32
+  CURRENT_SPEC=macx-gpp-32
 }
 macx-g++40{
   message(macx-g++40)
-  CURRENT_SPEC=macx-g++40
+  CURRENT_SPEC=macx-gpp40
 }
 macx-g++42{
   message(macx-g++42)
-  CURRENT_SPEC=macx-g++42
+  CURRENT_SPEC=macx-gpp42
 }
 macx-icc{
   message(macx-icc)
@@ -205,11 +205,11 @@ modules{
 }
 netbsd-g++{
   message(netbsd-g++)
-  CURRENT_SPEC=netbsd-g++
+  CURRENT_SPEC=netbsd-gpp
 }
 openbsd-g++{
   message(openbsd-g++)
-  CURRENT_SPEC=openbsd-g++
+  CURRENT_SPEC=openbsd-gpp
 }
 qconfig.pri{
   message(qconfig.pri)
@@ -229,7 +229,7 @@ sco-cc{
 }
 sco-g++{
   message(sco-g++)
-  CURRENT_SPEC=sco-g++
+  CURRENT_SPEC=sco-gpp
 }
 solaris-cc{
   message(solaris-cc)
@@ -249,11 +249,11 @@ solaris-cc-stlport{
 }
 solaris-g++{
   message(solaris-g++)
-  CURRENT_SPEC=solaris-g++
+  CURRENT_SPEC=solaris-gpp
 }
 solaris-g++-64{
   message(solaris-g++-64)
-  CURRENT_SPEC=solaris-g++-64
+  CURRENT_SPEC=solaris-gpp-64
 }
 tru64-cxx{
   message(tru64-cxx)
@@ -261,7 +261,7 @@ tru64-cxx{
 }
 tru64-g++{
   message(tru64-g++)
-  CURRENT_SPEC=tru64-g++
+  CURRENT_SPEC=tru64-gpp
 }
 unixware-cc{
   message(unixware-cc)
@@ -269,7 +269,7 @@ unixware-cc{
 }
 unixware-g++{
   message(unixware-g++)
-  CURRENT_SPEC=unixware-g++
+  CURRENT_SPEC=unixware-gpp
 }
 unsupported{
   message(unsupported)
@@ -277,7 +277,7 @@ unsupported{
 }
 win32-g++{
   message(win32-g++)
-  CURRENT_SPEC=win32-g++
+  CURRENT_SPEC=win32-gpp
 }
 win32-icc{
   message(win32-icc)
