@@ -28,14 +28,15 @@
 #include <QTextCodec>
 #include <QDir>
 
-#include <QDebug>
-
 #include <extensionsystem/pluginmanager.h>
 #include <extensionsystem/pluginspec.h>
 #include <extensionsystem/iplugin.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <utils/database.h>
+
+#include <QDebug>
 
 #include <iostream>
 
@@ -74,53 +75,9 @@ static const QString VERSION_MESSAGE =
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 
-
-static inline QString getPluginPaths()
+int main(int argc, char *argv[])
 {
-    QString app;
-
-#ifdef DEBUG_WITHOUT_INSTALL
-#    ifdef Q_OS_MAC
-        app = QDir::cleanPath(qApp->applicationDirPath()+"/../../../");
-#    endif
-    app += "/plugins/";
-    return app;
-#endif
-
-#ifdef LINUX_INTEGRATED
-    app = QString(BINARY_NAME).remove("_debug").toLower();
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(app);
-#endif
-
-#  ifdef Q_OS_MAC
-    app = QDir::cleanPath(qApp->applicationDirPath()+"/../plugins/");
-    return app;
-#  endif
-
-// TODO: Add FreeBSD pluginPath
-
-#  ifdef Q_OS_WIN
-    app = QDir::cleanPath(qApp->applicationDirPath() + "/plugins/");
-    return app;
-#  endif
-
-    return QDir::cleanPath(qApp->applicationDirPath() + "/plugins/");
-}
-
-static inline void defineLibraryPaths()
-{
-#ifdef LINUX_INTEGRATED
-    qApp->addLibraryPath(getPluginPaths());
-#else
-#  ifndef DEBUG_WITHOUT_INSTALL
-    qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
-#  endif
-#endif
-}
-
-int main( int argc, char *argv[] )
-{
-    QApplication app(argc, argv);
+     QApplication app(argc, argv);
 
 #if QT_VERSION < 0x050000
      // Removed in Qt5
@@ -128,69 +85,41 @@ int main( int argc, char *argv[] )
      QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
-    app.setApplicationName( QString("%1").arg(BINARY_NAME));
-    app.setOrganizationName(BINARY_NAME);
-    app.setApplicationVersion(PACKAGE_VERSION);
+     app.setApplicationName(BINARY_NAME);
+     app.setOrganizationName(BINARY_NAME);
+     app.setApplicationVersion(PACKAGE_VERSION);
 
-    QStringList args = qApp->arguments();
-    if (args.contains("--version") ||
-        args.contains("-version") ||
-        args.contains("-v")) {
-        std::cout << qPrintable(VERSION_MESSAGE);
-        return 0;
-    }
+     QStringList args = qApp->arguments();
+     if (args.contains("--version") ||
+         args.contains("-version") ||
+         args.contains("-v")) {
+         std::cout << qPrintable(VERSION_MESSAGE);
+         return 0;
+     }
 
-    ExtensionSystem::PluginManager pluginManager;
-    pluginManager.setFileExtension(QString("pluginspec"));
+     if (args.contains("--help") ||
+         args.contains("-help") ||
+         args.contains("-h")) {
+         std::cout << qPrintable(HELP_MESSAGE);
+         return 0;
+     }
 
-    QString pluginPaths = getPluginPaths();
-    pluginManager.setPluginPaths(QStringList() << pluginPaths);
-
-    // Add some debugging information
-    Utils::Database::logAvailableDrivers();
-
-#ifdef DEBUG
-#   ifdef DEBUG_WITHOUT_INSTALL
-        LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
-#   else
-        LOG_FOR("Main", "Running debug installed version");
-#   endif
+     // Create plugins manager
+     ExtensionSystem::PluginManager pluginManager;
+     pluginManager.setFileExtension(QString("pluginspec"));
+#ifdef LIBRARY_BASENAME
+     pluginManager.setPluginPaths(Utils::applicationPluginsPath(QString(BINARY_NAME), QString(LIBRARY_BASENAME)));
 #else
-    LOG_FOR("Main", "Running release version");
+     pluginManager.setPluginPaths(Utils::applicationPluginsPath(QString(BINARY_NAME), ""));
 #endif
 
-#ifdef LINUX_INTEGRATED
-    Utils::Log::addMessage("Main", "Linux Integrated");
-#endif
+     // Add some debugging information
+     Utils::Log::logCompilationConfiguration();
 
-    defineLibraryPaths();
-    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
+     const PluginSpecSet plugins = pluginManager.plugins();
+     ExtensionSystem::PluginSpec *coreplugin = 0;
 
-//    const QStringList arguments = app.arguments();
-//    QMap<QString, QString> foundAppOptions;
-//    if (arguments.size() > 1) {
-//        QMap<QString, bool> appOptions;
-//        appOptions.insert(QLatin1String(HELP_OPTION1), false);
-//        appOptions.insert(QLatin1String(HELP_OPTION2), false);
-//        appOptions.insert(QLatin1String(HELP_OPTION3), false);
-//        appOptions.insert(QLatin1String(HELP_OPTION4), false);
-//        appOptions.insert(QLatin1String(VERSION_OPTION), false);
-//        appOptions.insert(QLatin1String(CLIENT_OPTION), false);
-//        QString errorMessage;
-//        if (!pluginManager.parseOptions(arguments,
-//                                        appOptions,
-//                                        &foundAppOptions,
-//                                        &errorMessage)) {
-//            displayError(errorMessage);
-//            printHelp(QFileInfo(app.applicationFilePath()).baseName(), pluginManager);
-//            return -1;
-//        }
-//    }
-
-    const PluginSpecSet plugins = pluginManager.plugins();
-    ExtensionSystem::PluginSpec *coreplugin = 0;
-
-    if (WarnAllPluginSpecs) {
+     if (WarnAllPluginSpecs) {
         foreach (ExtensionSystem::PluginSpec *spec, plugins) {
             qWarning() << "PluginSpecs :::"<< spec->filePath() << spec->name() << spec->version();
         }
@@ -199,39 +128,20 @@ int main( int argc, char *argv[] )
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
+            break;
         }
     }
+
     if (!coreplugin) {
-	const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(pluginPaths);
+        const QString reason = QCoreApplication::translate("Application", "Couldn't find 'Core.pluginspec' in %1").arg(qApp->libraryPaths().join("; "));
         qWarning() << reason;
-//        displayError(msgCoreLoadFailure(reason));
         return 1;
     }
+
     if (coreplugin->hasError()) {
         qWarning() << coreplugin->errorString();
-//        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 1;
     }
-
-//    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
-//        printVersion(coreplugin, pluginManager);
-//        return 0;
-//    }
-//    if (foundAppOptions.contains(QLatin1String(HELP_OPTION1))
-//            || foundAppOptions.contains(QLatin1String(HELP_OPTION2))
-//            || foundAppOptions.contains(QLatin1String(HELP_OPTION3))
-//            || foundAppOptions.contains(QLatin1String(HELP_OPTION4))) {
-//        printHelp(QFileInfo(app.applicationFilePath()).baseName(), pluginManager);
-//        return 0;
-//    }
-
-//    const bool isFirstInstance = !app.isRunning();
-//    if (!isFirstInstance && foundAppOptions.contains(QLatin1String(CLIENT_OPTION)))
-//        return sendArguments(app, pluginManager.arguments()) ? 0 : -1;
-
-//    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
-//        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
-//    }
 
     pluginManager.loadPlugins();
     if (WarnAllPluginSpecs) {
@@ -239,20 +149,11 @@ int main( int argc, char *argv[] )
             qWarning() << "PluginSpecs :::"<< spec->name() << "hasError:" << spec->hasError() << spec->errorString();
         }
     }
+
     if (coreplugin->hasError()) {
-        qWarning() << "main" << coreplugin->errorString();
+        qWarning() << coreplugin->errorString();
         return 1;
     }
-
-
-//    if (isFirstInstance) {
-//        // Set up lock and remote arguments for the first instance only.
-//        // Silently fallback to unconnected instances for any subsequent
-//        // instances.
-//        app.initialize();
-//        QObject::connect(&app, SIGNAL(messageReceived(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
-//    }
-//    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)), coreplugin->plugin(), SLOT(remoteArgument(QString)));
 
     // shutdown plugin manager on the exit
     QObject::connect(&app, SIGNAL(aboutToQuit()), &pluginManager, SLOT(shutdown()));
@@ -261,4 +162,3 @@ int main( int argc, char *argv[] )
 //    Utils::Log::saveLog();
     return r;
 }
-
