@@ -309,6 +309,8 @@ void PatientSelector::setPatientModel(PatientModel *m)
 /** The pointer must not be deleted or shared */
 bool PatientSelector::setFilterPatientModel(const QString &name, const QString &firstName, const QDate &dateOfBirth) const
 {
+    Q_UNUSED(dateOfBirth);
+    // TODO: manage DateOfBirth
     d->m_Model->setFilter(name, firstName);
     return true;
 }
