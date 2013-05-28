@@ -106,6 +106,7 @@ UTILS_EXPORT bool isLinuxIntegratedCompilation();
 /** \brief Returns information of 'uname -a' command. Works on Linux, MacOs, FreeBSD */
 UTILS_EXPORT QString uname();
 UTILS_EXPORT QString osName();
+UTILS_EXPORT QStringList applicationPluginsPath(const QString &binaryName, const QString &libraryBaseName);
 
 // Widget geometry
 /** \brief Center a widget \e winToCenter into the \e reference widget. If no \e reference is passed, the \e winToCenter is centered into the desktop. */

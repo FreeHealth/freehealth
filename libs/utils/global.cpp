@@ -440,6 +440,56 @@ QString osName()
     return QString();
 }
 
+/** Returns the application plugin path. */
+QStringList applicationPluginsPath(const QString &binaryName, const QString &libraryBaseName)
+{
+    QString app = qApp->applicationDirPath();
+
+    // Debug with installation compilation
+    // Plugins are stored in the bin path next to the binaries (or binaries.app)
+    // bin
+    //  `- freemedforms (dir)
+    //       |- freemedforms (exec)
+    //       `- plugins (dir - contains all plugins and libs)
+    if (isDebugWithoutInstallCompilation()) {
+        if (isRunningOnMac()) {
+            app.append("/../../../");
+        }
+        app += "/plugins/";
+        return QStringList() << QDir::cleanPath(app);
+    }
+
+    // With the Linux integrated compilation, the 'make install' process is mandatory.
+    // Bins are installed in : /usr/bin (or prefixed path)
+    // Libs are installed in : /usr/lib(arch)/freemedforms-common
+    // Plugins are installed in : /usr/lib(arch)/applicationname
+    if (isLinuxIntegratedCompilation()) {
+        app = QString(binaryName).remove("_debug").toLower();
+        return QStringList() << QString("/usr/%1/%2").arg(libraryBaseName).arg(app);
+    }
+
+    // 'make install' called on debug/release build
+    if (isRunningOnMac()) {
+        // Bundle structure
+        // Application binary is in: application.app/Contents/MacOS
+        // Libs & plugins are in: application.app/Contents/plugins
+        app += "/../plugins/";
+    } else if (isRunningOnWin()) {
+        // In Windows bundle libs and plugins are stored in the 'plugins' path next to the binary
+        app += "/plugins/";
+    } else {
+        // Idem by default
+        app += "/plugins/";
+    }
+    // TODO: Add FreeBSD pluginPath
+
+    if (isReleaseCompilation()) {
+        // In release compilation, return also the installed 'qt' plugins subpath
+        return QStringList() << QDir::cleanPath(app) << QDir::cleanPath(app + "/qt");
+    }
+    return QStringList() << QDir::cleanPath(app);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////   FILES FUNCTIONS   /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
