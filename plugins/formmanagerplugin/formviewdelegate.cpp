@@ -26,13 +26,12 @@
  ***************************************************************************/
 #include "formviewdelegate.h"
 #include "formtreemodel.h"
+#include "iformitem.h"
+#include "iformitemspec.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-
-#include <iformitem.h>
-#include <iformitemspec.h>
 
 #include <QApplication>
 #include <QPainter>
