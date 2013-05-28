@@ -13,7 +13,7 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Var definition
-set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\bin
+set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
 set PATH_TO_MINGW=E:\QtSDK\mingw\bin
@@ -40,7 +40,7 @@ copy %PATH_TO_MYSQL%\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
 
 REM # Copy MinGW lib into the package dir
 copy %PATH_TO_MINGW%\libgcc_s_dw2-1.dll ..\packages\win\%1\
-copy %PATH_TO_MINGW%\libstdc++-6.dll ..\packages\win\%1\
+copy %PATH_TO_MINGW%\libstdc*-6.dll ..\packages\win\%1\
 copy %PATH_TO_MINGW%\mingwm10.dll ..\packages\win\%1\
 
 REM # Create the installer
