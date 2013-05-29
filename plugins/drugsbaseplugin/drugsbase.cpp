@@ -38,7 +38,7 @@
      One UID code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
 
   1. Initialization\n
-  This class is pure static, so you can not instanciate it. To initialize data, just do once \e init().
+  This class is a single instance object. To initialize data, just do once \e initialize().
   isInitialized() alerts you of the state of intialization.
   These two members returns true if all is ok.
 
@@ -120,7 +120,6 @@ namespace {
         int id;
     };
 }
-
 
 namespace DrugsDB {
 namespace Internal {

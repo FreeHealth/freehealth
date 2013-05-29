@@ -45,7 +45,7 @@
 #include <QDir>
 
 using namespace DrugsDB;
-using namespace DrugsDB::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
