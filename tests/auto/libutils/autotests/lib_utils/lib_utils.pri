@@ -1,5 +1,5 @@
 SOURCES += \
-#    $${PWD}/testhtmlcontent.cpp \
+    $${PWD}/testhtmlcontent.cpp \
     $${PWD}/tst_html.cpp \
     $${PWD}/os_config.cpp \
     $${PWD}/tst_fileaccess.cpp \
@@ -9,7 +9,8 @@ SOURCES += \
     $${PWD}/tst_versionnumber.cpp \
     $${PWD}/tst_printaxishelper.cpp \
     $${PWD}/tst_httpdownloader.cpp \
-    $${PWD}/tst_hprim.cpp
+    $${PWD}/tst_hprim.cpp \
+    $${PWD}/tst_databasecsvimport.cpp
 
 #HEADERS += \
 #    $${PWD}/testhtmlcontent.h

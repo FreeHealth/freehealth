@@ -1,0 +1,30 @@
+-- This is a comment line.
+-- The database should contains only three fields and an illimited number of rows
+--
+-- Below the list all fields value
+-- The first line represent the separator to use for fields value
+•#•
+-- The analyzer uses the QString::split(separator) to anaylze the values so
+-- be sure that your separator is not included in fields values.
+-- To ease this process, a \n is added to the separator so that you can write one value per line + separator
+34234•#•
+NON'ESC''APED•#•
+12•#•
+1223•#•
+1231•#•
+&123"
+dfqkhmk
+qsdfjkhmkjqsf
+12&é"123•#•
+34234•#•
+TEXT
+LINE2
+LINE3•#•
+12ffqsdfe""&&"'"&s•#•
+
+
+
+u',•#•
+NON'ESC''APED•#•
+12•#•
+

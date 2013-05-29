@@ -78,8 +78,8 @@ HEADERS += global_exporter.h \
     httpmultidownloader.h \
     widgets/qmenuitemview.h \
     waitforsignal.h \
-    hprimparser.h
-
+    hprimparser.h \
+    databasecsvimportator.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -142,7 +142,8 @@ SOURCES += global.cpp \
     httpmultidownloader.cpp \
     widgets/qmenuitemview.cpp \
     waitforsignal.cpp \
-    hprimparser.cpp
+    hprimparser.cpp \
+    databasecsvimportator.cpp
 
 #macx {
 #    OBJECTIVE_SOURCES += iconbadgealert.mm

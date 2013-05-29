@@ -2144,7 +2144,7 @@ bool Database::createTables() const
 
     QList<int> list = d_database->m_Tables.keys();
     qSort(list);
-    foreach(const int & i, list) {
+    foreach(int i, list) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if(!createTable(i)) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
