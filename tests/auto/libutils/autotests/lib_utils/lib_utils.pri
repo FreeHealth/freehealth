@@ -1,5 +1,5 @@
 SOURCES += \
-    $${PWD}/testhtmlcontent.cpp \
+#    $${PWD}/testhtmlcontent.cpp \
     $${PWD}/tst_html.cpp \
     $${PWD}/os_config.cpp \
     $${PWD}/tst_fileaccess.cpp \
