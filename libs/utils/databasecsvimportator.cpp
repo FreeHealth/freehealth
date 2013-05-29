@@ -66,7 +66,6 @@ public:
         _currentPos(-1),
         _currentFieldStartPos(-1),
         _currentLineStartPos(-1),
-        _currentFieldIsEscaped(false),
         q(parent)
     {
     }
@@ -124,12 +123,12 @@ public:
             return (_currentPos-1 != _currentFieldStartPos);
         }
 
-        // \n -> true
-        if (_currentContent.at(_currentPos) == '\n')
-            return true;
-
         // FieldSeparator -> true
         if (_currentContent.at(_currentPos) == job.fieldSeparator)
+            return true;
+
+        // \n -> true
+        if (_currentContent.at(_currentPos) == '\n')
             return true;
 
         return false;
@@ -163,7 +162,6 @@ public:
         _currentPos = 0;
         _currentFieldStartPos = 0;
         _currentLineStartPos = 0;
-        _currentFieldIsEscaped = false;
 
         // Omit first line of the CSV file?
         if (job.omitFirstLine) {
@@ -195,10 +193,15 @@ public:
                     fields << _currentContent.mid(_currentFieldStartPos, _currentPos-_currentFieldStartPos).replace("'", "''");
                 }
 
+                // If currentChar != '\n' next char is '\n' -> add an empty value
+                if (_currentContent.at(_currentPos) == job.fieldSeparator
+                        && _currentContent.at(_currentPos+1) == '\n' ) {
+                    fields << QString();
+                }
+
                 // Go one step further
                 if (!isCurrentPositionEndOfSqlLine(job))
                     ++_currentPos;
-
                 _currentFieldStartPos = _currentPos;
             }
 
@@ -262,7 +265,6 @@ public:
 public:
     QString _currentContent;
     int _currentPos, _currentFieldStartPos, _currentLineStartPos;
-    bool _currentFieldIsEscaped;
     
     QList<Utils::ImportationJob> _jobs;
     QStringList _sqlCommands;
