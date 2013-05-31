@@ -269,7 +269,7 @@ QString HprimPreferencesPage::title() const
 /*! Returns the sorting order (pages are sorted starting from 0). */
 int HprimPreferencesPage::sortIndex() const
 {
-    return 0;
+    return Core::Constants::OPTIONINDEX_TOOLS;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
