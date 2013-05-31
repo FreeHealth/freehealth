@@ -171,7 +171,6 @@ public:
         // Parse CSV lines
         QString sqllines;
         while (!isCurrentPositionEndOfFile()) {
-
             // New line
             _currentFieldStartPos = _currentPos;
             _currentLineStartPos = _currentPos;
@@ -213,8 +212,6 @@ public:
             ++_currentPos;
         }
         sqllines.chop(2);
-
-
         return true;
     }
 
