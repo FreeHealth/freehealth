@@ -74,7 +74,7 @@ struct UTILS_EXPORT ImportationResult
 class UTILS_EXPORT DatabaseCsvImportator
 {    
 public:
-    explicit DatabaseCsvImportator(QObject *parent = 0);
+    explicit DatabaseCsvImportator();
     ~DatabaseCsvImportator();
     bool initialize();
 

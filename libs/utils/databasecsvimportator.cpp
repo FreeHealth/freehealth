@@ -274,7 +274,7 @@ private:
 
 
 /*! Constructor of the Utils::DatabaseCsvImportator class */
-DatabaseCsvImportator::DatabaseCsvImportator(QObject *parent) :
+DatabaseCsvImportator::DatabaseCsvImportator() :
     d(new DatabaseCsvImportatorPrivate(this))
 {
 }
