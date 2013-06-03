@@ -23,7 +23,8 @@ HEADERS += \
     rctreemodel.h \
     rccriteriasmodel.h \
     rcargumentsdialog.h \
-    sfmgaboutdialog.h
+    sfmgaboutdialog.h \
+    rcusermodel.h
 
 SOURCES += \
     edrcplugin.cpp \
@@ -37,7 +38,8 @@ SOURCES += \
     rctreemodel.cpp \
     rccriteriasmodel.cpp \
     rcargumentsdialog.cpp \
-    sfmgaboutdialog.cpp
+    sfmgaboutdialog.cpp \
+    rcusermodel.cpp
 
 FORMS += \
     edrc_editor_widget.ui \
