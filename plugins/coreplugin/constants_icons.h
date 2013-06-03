@@ -44,6 +44,7 @@ const char * const  FREEICD_SPLASHSCREEN      = "freeicd.png";
 const char * const  FREEGIR_SPLASHSCREEN      = "freegir.png";
 const char * const  FREETOOLBOX_SPLASHSCREEN  = "freetoolbox.png";
 const char * const  FREEPAD_SPLASHSCREEN      = "freepad.png";
+const char * const  FREEDRC_SPLASHSCREEN      = "freedrc.png";
 
 // application icons
 const char * const  ICONFREEMEDFORMS   = "freemedforms.png";
