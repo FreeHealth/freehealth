@@ -61,7 +61,7 @@ class DRUGSBASE_EXPORT DrugBaseCore : public QObject
 
 protected:
     DrugBaseCore(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     static DrugBaseCore &instance();

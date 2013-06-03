@@ -65,7 +65,7 @@ class DRUGSBASE_EXPORT DrugsBase : public QObject, public Internal::DrugBaseEsse
 
 protected:
     DrugsBase(QObject *parent = 0);
-    bool init();
+    bool initialize();
     void onCoreDatabaseServerChanged();
     bool datapackChanged();
 

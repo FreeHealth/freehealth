@@ -134,12 +134,12 @@ DrugBaseCore::~DrugBaseCore()
     }
 }
 
-bool DrugBaseCore::init()
+bool DrugBaseCore::initialize()
 {
-    d->m_DrugsBase->init();
-    d->m_ProtocolsBase->init();
+    d->m_DrugsBase->initialize();
+    d->m_ProtocolsBase->initialize();
     d->m_InteractionManager = new InteractionManager(this);
-    d->_drugsIo->init();
+    d->_drugsIo->initialize();
     d->_prescriptionPrinter->initialize();
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     return true;
@@ -149,7 +149,7 @@ void DrugBaseCore::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
-    init();
+    initialize();
 }
 
 DrugsBase &DrugBaseCore::drugsBase() const

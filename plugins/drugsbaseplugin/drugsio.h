@@ -55,7 +55,7 @@ class DRUGSBASE_EXPORT DrugsIO : public QObject
 
 protected:
     DrugsIO(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     enum Loader {

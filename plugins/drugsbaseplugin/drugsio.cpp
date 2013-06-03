@@ -651,7 +651,7 @@ DrugsIO::~DrugsIO()
  *   - prepare the XML transformation
  *   - create the tokens
  */
-bool DrugsIO::init()
+bool DrugsIO::initialize()
 {
     d->populateXmlTags();
     d->populateTokens();

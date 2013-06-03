@@ -390,7 +390,7 @@ static QString databaseFileName()
 }
 
 /** \brief Initializer for the database. Return the error state. */
-bool DrugsBase::init()
+bool DrugsBase::initialize()
 {
     // only one base can be initialized
     if (d->m_initialized)
@@ -452,7 +452,7 @@ bool DrugsBase::refreshAllDatabases()
     refreshDrugsBase();
 //    d->m_RefreshDosageBase = true;
     Q_EMIT drugsBaseIsAboutToChange();
-    bool r = init();
+    bool r = initialize();
     if (r) {
         Q_EMIT drugsBaseHasChanged();
     }
@@ -466,7 +466,7 @@ bool DrugsBase::datapackChanged()
     // Remove actual QSqlDatabase
     QSqlDatabase::removeDatabase(Constants::DB_DRUGS_NAME);
     // Re-init database
-    init();
+    initialize();
     return true;
 }
 

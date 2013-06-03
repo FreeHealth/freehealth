@@ -33,13 +33,16 @@
 #include "drugsbaseplugin.h"
 #include "drugstemplateprinter.h"
 #include "drugbasecore.h"
+#include "drugsbase.h"
 #include "drugsdatabaseselector.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
@@ -47,6 +50,8 @@
 using namespace DrugsDB::Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ITheme *settings()  { return Core::ICore::instance()->settings(); }
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 DrugsBasePlugin::DrugsBasePlugin() :
@@ -82,7 +87,7 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
 
     // This code is executed AFTER the UserManagerPlugin::initialize()
     messageSplash(tr("Initializing drugs database plugin..."));
-    DrugsDB::DrugBaseCore::instance().init();
+    DrugsDB::DrugBaseCore::instance().initialize();
 
     return true;
 }
@@ -93,6 +98,16 @@ void DrugsBasePlugin::extensionsInitialized()
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
 
     messageSplash(tr("Initializing drugs database plugin..."));
+
+    // Check drugs database version
+    if (!drugsBase().checkDatabaseVersion()) {
+        Utils::warningMessageBox(tr("Wrong drugs database installed"),
+                                 tr("A wrong drugs datbase is installed on your computer. This can "
+                                    "be the result of an application updating. You have to open to the "
+                                    "datapack manager and update or remove the installed drugs database. \n"
+                                    "Please find more documentation on the website %1.")
+                                 .arg(settings()->path(Core::ISettings::WebSiteUrl)));
+    }
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));

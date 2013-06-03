@@ -216,7 +216,7 @@ ProtocolsBase::~ProtocolsBase()
 void ProtocolsBase::onCoreFirstRunCreationRequested()
 {
     disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
-    init();
+    initialize();
 }
 
 QString ProtocolsBase::dosageCreateTableSqlQuery()
@@ -286,7 +286,7 @@ void ProtocolsBase::forceReinitialization()
 }
 
 /** \brief Initializer for the database. Return the error state. */
-bool ProtocolsBase::init()
+bool ProtocolsBase::initialize()
 {
     // only one base can be initialized
     if (d->m_initialized)
@@ -620,7 +620,7 @@ bool ProtocolsBase::onCoreDatabaseServerChanged()
     d->m_initialized = false;
 //    d->m_RefreshDosageBase = true;
     Q_EMIT protocolsBaseIsAboutToChange();
-    bool r = init();
+    bool r = initialize();
     if (r)
         Q_EMIT protocolsBaseHasChanged();
     return r;
