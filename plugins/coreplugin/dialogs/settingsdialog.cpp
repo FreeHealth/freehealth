@@ -83,23 +83,6 @@ SettingsDialog::~SettingsDialog()
 {
 }
 
-void SettingsDialog::accept()
-{
-    m_applied = true;
-    foreach (IOptionsPage *page, m_pages) {
-        page->apply();
-        page->finish();
-    }
-    done(QDialog::Accepted);
-}
-
-void SettingsDialog::reject()
-{
-    foreach (IOptionsPage *page, m_pages)
-        page->finish();
-    done(QDialog::Rejected);
-}
-
 void SettingsDialog::apply()
 {
     foreach (IOptionsPage *page, m_pages)
@@ -129,15 +112,19 @@ void SettingsDialog::showHelp()
 //    HelpDialog::showPage(m_pages.at(index)->helpPage());
 }
 
-bool SettingsDialog::execDialog()
-{
-    m_applied = false;
-    exec();
-    return m_applied;
-}
-
-void SettingsDialog::done(int val)
+void SettingsDialog::done(int r)
 {
     m_ui->widget->saveState();
-    QDialog::done(val);
+    m_ui->buttonBox->setFocus();
+    if (r==QDialog::Accepted) {
+        m_applied = true;
+        foreach (IOptionsPage *page, m_pages) {
+            page->apply();
+            page->finish();
+        }
+    } else { // QDialog::Rejected
+        foreach (IOptionsPage *page, m_pages)
+            page->finish();
+    }
+    QDialog::done(r);
 }

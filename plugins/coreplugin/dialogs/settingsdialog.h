@@ -58,17 +58,10 @@ public:
                    const QString &initialPage = QString());
     ~SettingsDialog();
 
-    // Run the dialog and return true if 'Ok' was chosen or 'Apply' was invoked
-    // at least once
-    bool execDialog();
-
 public Q_SLOTS:
     void done(int);
 
 private Q_SLOTS:
-//    void pageSelected();
-    void accept();
-    void reject();
     void apply();
     void restoreDefaults();
     void showHelp();
