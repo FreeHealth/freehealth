@@ -83,10 +83,13 @@ bool HprimHeader::isNull() const
 bool HprimHeader::setData(const int ref, const QString &value)
 {
     if (ref==PatientDateOfBirth) {
-        // Check the format with a QDate generation
+        // Check the format with a QDate generation (yyyy and yy)
         QDate date = QDate::fromString(value, "dd/MM/yyyy");
-        if (!date.isValid())
-            return false;
+        if (!date.isValid()) {
+            date = QDate::fromString(value, "dd/MM/yy");
+            if (!date.isValid())
+                return false;
+        }
         // Or with a regexp matching "[0-3][0-9]/[0-1][0-09]/[1-2][0-9][0-9][0-9]"
     }
     _data.insert(ref, value);
