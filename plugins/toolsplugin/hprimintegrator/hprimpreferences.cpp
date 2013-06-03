@@ -29,6 +29,8 @@
 #include "hprimintegrator.h"
 #include "ui_hprimpreferences.h"
 
+#include <coreplugin/constants_menus.h>
+
 #include <listviewplugin/stringlistmodel.h>
 
 #include <utils/log.h>
