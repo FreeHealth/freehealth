@@ -121,7 +121,6 @@ public:
             QString tmp;
             // Get full prescription sentence in HTML
             tmp = job.drugsModel()->data(job.drugsModel()->index(drugIndex, Constants::Prescription::ToHtml)).toString();
-            tmp = tmp.replace("\n", "<br/>");
             // Add a line break
             if (job.addLineBreakBetweenEachDrugs())
                 tmp += "<span style=\"font-size:4pt\"><br /></span>";
