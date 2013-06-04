@@ -109,7 +109,7 @@ private Q_SLOTS:
     void openProtocolPreferencesDialog();
     void resetPrescriptionSentenceToDefault();
 
-    void showDrugPrecautions();
+    void toggleDrugPrecautions();
 
     void copyPrescriptionItem();
 
@@ -147,7 +147,7 @@ protected:
     QAction *aOpenDosageDialog;
     QAction *aOpenPrescriptionSentencePreferences;
     QAction *aResetPrescriptionSentenceToDefault;
-    QAction *aShowDrugPrecautions;
+    QAction *aToggleDrugPrecautions;
     QAction *aCopyPrescriptionItem;
 
     QPointer<DrugsCentralWidget> m_CurrentView;

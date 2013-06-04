@@ -151,7 +151,7 @@ void PrescriptionViewer::createActionsAndToolbar()
             << DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS
             << DrugsWidget::Constants::A_VIEW_INTERACTIONS
             << DrugsWidget::Constants::A_CHANGE_DURATION
-            << DrugsWidget::Constants::A_SHOWDRUGPRECAUTIONS;
+            << DrugsWidget::Constants::A_TOGGLEDRUGPRECAUTIONS;
 
     foreach(const QString &s, actionsToAdd) {
         if (s=="--") {

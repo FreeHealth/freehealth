@@ -208,7 +208,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     aOpenDosageDialog(0),
     aOpenPrescriptionSentencePreferences(0),
     aResetPrescriptionSentenceToDefault(0),
-    aShowDrugPrecautions(0),
+    aToggleDrugPrecautions(0),
     aCopyPrescriptionItem(0),
     m_CurrentView(0),
     m_PrecautionDock(0)
@@ -512,14 +512,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
                                                        QKeySequence::UnknownKey, false);
     connect(aResetPrescriptionSentenceToDefault,SIGNAL(triggered()),this,SLOT(resetPrescriptionSentenceToDefault()));
 
-    aShowDrugPrecautions = createAction(this, "aShowDrugPrecautions", I_ALLERGYENGINE,
-                                        A_SHOWDRUGPRECAUTIONS,
+    aToggleDrugPrecautions = createAction(this, "aToggleDrugPrecautions", I_ALLERGYENGINE,
+                                        A_TOGGLEDRUGPRECAUTIONS,
                                         Core::Context(Core::Constants::C_GLOBAL),
-                                        SHOWDRUGPRECAUTIONS_TEXT, DRUGCONSTANTS_TR_CONTEXT,
+                                        TOGGLEDRUGPRECAUTIONS_TEXT, DRUGCONSTANTS_TR_CONTEXT,
                                         cmd,
                                         menu, G_PLUGINS_VIEWS,
                                         QKeySequence::UnknownKey, false);
-    connect(aShowDrugPrecautions, SIGNAL(triggered()), this, SLOT(showDrugPrecautions()));
+    connect(aToggleDrugPrecautions, SIGNAL(triggered()), this, SLOT(toggleDrugPrecautions()));
 
     aCopyPrescriptionItem = createAction(this, "aCopyPrescriptionItem", Core::Constants::ICONCOPY,
                                          A_COPYPRESCRIPTIONITEM,
@@ -861,7 +861,7 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
     DrugsDB::DrugsModel::activeModel()->resetModel();
 }
 
-void DrugsActionHandler::showDrugPrecautions()
+void DrugsActionHandler::toggleDrugPrecautions()
 {
     DrugsDB::IDrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::IDrugAllergyEngine>();
     if (!engine) {
@@ -879,8 +879,10 @@ void DrugsActionHandler::showDrugPrecautions()
         m_PrecautionDock->setFloating(false);
         m_PrecautionDock->setAllowedAreas(Qt::RightDockWidgetArea);
         Core::ICore::instance()->mainWindow()->addDockWidget(Qt::RightDockWidgetArea, m_PrecautionDock);
+        m_PrecautionDock->show();
+    } else {
+        m_PrecautionDock->setVisible(!m_PrecautionDock->isVisible());
     }
-    m_PrecautionDock->show();
 }
 
 void DrugsActionHandler::copyPrescriptionItem()
