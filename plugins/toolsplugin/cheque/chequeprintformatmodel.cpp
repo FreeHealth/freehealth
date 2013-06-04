@@ -84,14 +84,16 @@ public:
         foreach(const QFileInfo &info, files) {
             formats << ChequePrintFormat::fromXmlFile(info.absoluteFilePath());
         }
-        qSort(formats.begin(), formats.end(), ChequePrintFormat::defaultLessThan);
-        ChequePrintFormat defaultFormat = formats.takeFirst();
-        qSort(formats.begin(), formats.end(), ChequePrintFormat::labelLessThan);
-        formats.prepend(defaultFormat);
-        foreach(const ChequePrintFormat &format, formats) {
-            toItem(format);
+        if (!formats.isEmpty()) {
+            qSort(formats.begin(), formats.end(), ChequePrintFormat::defaultLessThan);
+            ChequePrintFormat defaultFormat = formats.takeFirst();
+            qSort(formats.begin(), formats.end(), ChequePrintFormat::labelLessThan);
+            formats.prepend(defaultFormat);
+            foreach(const ChequePrintFormat &format, formats) {
+                toItem(format);
+            }
+            _formats = formats;
         }
-        _formats = formats;
     }
 
 public:
