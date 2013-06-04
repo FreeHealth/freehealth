@@ -47,6 +47,7 @@
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/constants_html.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
