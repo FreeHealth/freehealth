@@ -278,11 +278,6 @@ namespace {
     const char* const WEBSITE              = "http://www.freemedforms.org/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
-#ifdef DEBUG_WITHOUT_INSTALL
-    const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
-#else
-    const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
-#endif
     const char* const READONLYRESOURCES    = "";
     const char* const READONLYDATABASE     = "/databases";
     const char* const TRANSLATIONS_PATH    = "/translations";
@@ -302,11 +297,6 @@ namespace {
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
-#ifdef DEBUG_WITHOUT_INSTALL
-    const char* const MAC_PLUGINSPATH      = "/../../../plugins";
-#else
-    const char* const MAC_PLUGINSPATH      = "/../plugins";
-#endif
     const char* const NONMAC_PLUGINSPATH   = "/plugins";
     const char* const ALL_QTPLUGINSPATH    = "/qt";
     const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
@@ -397,15 +387,18 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         }
     } else {
         // RELEASE OR DEBUG INSTALLED BUILD
-#ifdef LINUX_INTEGRATED
-        setPath(BundleResourcesPath, QString("/usr/share/freemedforms"));
-#else
-        if (Utils::isRunningOnMac()) {
-            setPath(BundleResourcesPath, qApp->applicationDirPath() + "/../" + QString(BUNDLERESOURCE_PATH));
+        if (Utils::isLinuxIntegratedCompilation()) {
+            setPath(BundleResourcesPath, QString("/usr/share/freemedforms"));
         } else {
-            setPath(BundleResourcesPath, qApp->applicationDirPath() + QDir::separator() + QString(BUNDLERESOURCE_PATH));
+            QString bundleResourcesPath;
+            if (!Utils::isDebugWithoutInstallCompilation())
+                bundleResourcesPath = "Resources";  // resources are located into global_resources paths
+
+            if (Utils::isRunningOnMac())
+                setPath(BundleResourcesPath, qApp->applicationDirPath() + "/../" + bundleResourcesPath);
+            else
+                setPath(BundleResourcesPath, qApp->applicationDirPath() + QDir::separator() + bundleResourcesPath);
         }
-#endif
         m_FirstTime = value("FirstTimeRunning", true).toBool();
         setPath(UserResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
     }
@@ -576,15 +569,15 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 if (appname.contains("_d"))
                     appname = appname.left(appname.indexOf("_d"));
             }
-#ifdef LINUX_INTEGRATED
-            if (QDir(QString(LINUX_USERMANUAL_PATH).arg(appname)).exists()) {
-                m_Enum_Path.insert(DocumentationPath, QString(LINUX_USERMANUAL_PATH).arg(appname));
+            if (Utils::isLinuxIntegratedCompilation()) {
+                if (QDir(QString(LINUX_USERMANUAL_PATH).arg(appname)).exists()) {
+                    m_Enum_Path.insert(DocumentationPath, QString(LINUX_USERMANUAL_PATH).arg(appname));
+                } else {
+                    m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
+                }
             } else {
                 m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
             }
-#else
-            m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
-#endif
             break;
         }
         case ApplicationPath :
@@ -593,9 +586,14 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                 break;
             m_Enum_Path.insert(ApplicationPath, absPath);
             if (Utils::isRunningOnMac()) {
+                QString pluginPath;
+                if (Utils::isDebugWithoutInstallCompilation())
+                    pluginPath = "/../../../plugins";
+                else
+                    pluginPath = "/../plugins";
                 m_Enum_Path.insert(QtFrameWorksPath, QDir::cleanPath(absPath + MAC_QTFRAMEWORKPATH));
-                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH));
-                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + MAC_PLUGINSPATH + ALL_QTPLUGINSPATH));
+                m_Enum_Path.insert(FMFPlugInsPath, QDir::cleanPath(absPath + pluginPath));
+                m_Enum_Path.insert(QtPlugInsPath, QDir::cleanPath(absPath + pluginPath + ALL_QTPLUGINSPATH));
                 m_Enum_Path.insert(BundleRootPath, QDir::cleanPath(absPath + MAC_TOBUNDLEROOTPATH));
             } else if (Utils::isRunningOnLinux()) {
 #ifndef LINUX_INTEGRATED
