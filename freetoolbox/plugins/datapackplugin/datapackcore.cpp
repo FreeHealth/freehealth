@@ -209,13 +209,13 @@ bool DataPackCore::refreshServerDataPacks(const QString &serverUid)
     foreach(Core::IFullReleaseStep *step, steps) {
         qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
         step->startProcessing(Core::IFullReleaseStep::PreProcess, Core::IFullReleaseStep::DataPackSubProcess);
-        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(Core::IFullReleaseStep::ProcessTiming, Core::IFullReleaseStep::SubProcess)), 600000); // wait 10 minutes
 
         step->startProcessing(Core::IFullReleaseStep::Process, Core::IFullReleaseStep::DataPackSubProcess);
-        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(Core::IFullReleaseStep::ProcessTiming, Core::IFullReleaseStep::SubProcess)), 600000); // wait 10 minutes
 
         step->startProcessing(Core::IFullReleaseStep::PostProcess, Core::IFullReleaseStep::DataPackSubProcess);
-        Utils::waitForSignal(step, SIGNAL(subProcessFinished(ProcessTiming,SubProcess)), 600000); // wait 10 minutes
+        Utils::waitForSignal(step, SIGNAL(subProcessFinished(Core::IFullReleaseStep::ProcessTiming, Core::IFullReleaseStep::SubProcess)), 600000); // wait 10 minutes
         QApplication::restoreOverrideCursor();
     }
     return true;
