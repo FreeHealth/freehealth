@@ -30,7 +30,7 @@ REM # Go to application source tree
 cd %1
 
 REM # Compil application && install it
-qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release CONFIG+=with-alerts CONFIG+=with-webcam
+qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release CONFIG+=with-alerts CONFIG+=with-pad CONFIG+=with-agenda CONFIG+=with-pmh
 mingw32-make.exe -w
 mingw32-make.exe install
 
