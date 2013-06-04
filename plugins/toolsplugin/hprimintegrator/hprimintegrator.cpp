@@ -133,6 +133,7 @@ HprimIntegratorWidget::HprimIntegratorWidget(QWidget *parent) :
     // TODO: should manage multiple path...
     QModelIndex root = d->_fileModel->setRootPath(settings()->value(Constants::S_PATH_TO_SCAN).toString());
 
+    d->ui->dirContentTableView->setSelectionMode(QAbstractItemView::SelectRows);
     d->ui->dirContentTableView->setModel(d->_fileModel);
     d->ui->dirContentTableView->setRootIndex(root);
 #if QT_VERSION < 0x050000
