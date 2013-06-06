@@ -126,13 +126,10 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     connect(_identity, SIGNAL(languageChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(clearLoginChanged(QString)), this, SLOT(checkCompleteState()));
     connect(_identity, SIGNAL(clearPasswordChanged(QString)), this, SLOT(checkCompleteState()));
-
-//    Utils::resizeAndCenter(this, parent);
 }
 
 UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 {
-//    delete ui;
 }
 
 
