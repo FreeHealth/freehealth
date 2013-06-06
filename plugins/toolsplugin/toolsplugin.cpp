@@ -186,6 +186,9 @@ void ToolsPlugin::extensionsInitialized()
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+C")));
     connect(action, SIGNAL(triggered()), this, SLOT(printCheque()));
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
+
+    if (m_ChequePage)
+        m_ChequePage->checkSettingsValidity();
 #endif
 
 #ifdef WITH_FRENCH_FSP
@@ -198,6 +201,9 @@ void ToolsPlugin::extensionsInitialized()
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+F")));
     connect(action, SIGNAL(triggered()), this, SLOT(printFsp()));
     menu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_PRINT));
+
+    if (m_FspPage)
+        m_FspPage->checkSettingsValidity();
 #endif
 
 #ifdef WITH_FRENCH_HPRIM_INTEGRATOR
@@ -208,14 +214,10 @@ void ToolsPlugin::extensionsInitialized()
         HprimIntegratorMode *mode = new HprimIntegratorMode(this);
         addObject(mode);
     }
-#endif
 
-    if (m_ChequePage)
-        m_ChequePage->checkSettingsValidity();
-    if (m_FspPage)
-        m_FspPage->checkSettingsValidity();
     if (m_HprimPage)
         m_HprimPage->checkSettingsValidity();
+#endif
 
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 
@@ -258,13 +260,16 @@ ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
 
 void ToolsPlugin::printCheque()
 {
+#ifdef WITH_CHEQUE_PRINTING
     ChequePrinterDialog printDialog;
     printDialog.initializeWithSettings();
     printDialog.exec();
+#endif
 }
 
 void ToolsPlugin::printFsp()
 {
+#ifdef WITH_FRENCH_FSP
 //    if (patient()->uuid().isEmpty()) {
 //        Utils::warningMessageBox(tr("No current patient"),
 //                                 tr("In order to print a french 'FSP', you must select a patient first"),
@@ -336,6 +341,7 @@ void ToolsPlugin::printFsp()
 //    QString xml2 = test2.toXml(Fsp::ConditionData | Fsp::AmountData | Fsp::ModelData);
 //    qWarning() << xml2;
 //    qWarning() << "----------" << (xml==xml2);
+#endif
 }
 
 Q_EXPORT_PLUGIN(ToolsPlugin)
