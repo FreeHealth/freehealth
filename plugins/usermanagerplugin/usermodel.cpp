@@ -122,9 +122,11 @@ public:
     // Clear the cache
     void clearCache()
     {
+        // Keep the current user
+        UserData *current = m_Uuid_UserList.take(m_CurrentUserUuid);
         qDeleteAll(m_Uuid_UserList);
         m_Uuid_UserList.clear();
-        m_Uuid_UserList.insert(m_CurrentUserUuid, userBase()->getUserByUuid(m_CurrentUserUuid));
+        m_Uuid_UserList.insert(m_CurrentUserUuid, current);
     }
 
     // Retreive all users data and store it to the cache of the model.
