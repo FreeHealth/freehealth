@@ -643,11 +643,23 @@ void UserManagerWidget::onDeleteUserRequested()
     if (d->ui->userTreeView->currentIndex().row() == userModel()->currentUserIndex().row())
         return;
 
+    // Ask for a confirmation
+    QModelIndex index = d->ui->userTreeView->currentIndex();
+    while (index.parent().isValid()) index = index.parent();
+    bool yes = Utils::yesNoMessageBox(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::DELETE_USER),
+                                      tr("You are about to delete the following user<br><br>"
+                                         "&nbsp;&nbsp;&nbsp;&nbsp;<b>%1</b><br><br>"
+                                         "Do you really want to remove this user?")
+                                      .arg(d->m_model->data(index).toString()));
+    if (!yes)
+        return;
+
     if (userModel()->removeRow(d->ui->userTreeView->currentIndex().row())) {
         LOG(tr("User deleted"));
     } else {
         LOG(tr("User can not be deleted"));
     }
+    d->m_model->setFilter(Internal::UserManagerModelFilter());
     selectuserTreeView(userModel()->currentUserIndex().row());
     d->updateButtons();
 }
