@@ -281,6 +281,7 @@ void UserManagerModel::setFilter(const UserManagerModelFilter &filter)
 {
     // Clear model and apply filter
     clear();
+    beginResetModel();
     d->_sqlModel->setQuery(d->getSqlQuery(filter), userBase()->database());
     if (!d->_sqlModel->query().isActive()) {
         LOG_ERROR("Wrong filtering");
@@ -301,6 +302,7 @@ void UserManagerModel::setFilter(const UserManagerModelFilter &filter)
         invisibleRootItem()->appendRow(item);
         d->appendPages(item);
     }
+    endResetModel();
 }
 
 /** Return all registered UserPlugin::IUserViewerPage found and used in this model */
