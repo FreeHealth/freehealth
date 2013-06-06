@@ -622,29 +622,63 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
     QString lang = QLocale().name().left(2).toLower();
+    QString pad;
+#ifdef WITH_PAD
+    pad = "pad_";
+#endif
     QString fileName;
     if (paperType.isEmpty()) {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+        fileName = QString("%1/profiles/%2/default/%3user_%4_%5.xml")
+                .arg(bundlePath())
+                .arg(profession)
+                .arg(pad)
+                .arg(paper)
+                .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
+        fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
+                .arg(bundlePath())
+                .arg(profession)
+                .arg(pad)
+                .arg(paper)
+                .arg(paperType)
+                .arg(lang);
     }
-    if (QFileInfo(fileName).exists()) {
+    if (QFileInfo(fileName).exists())
         return Utils::readTextFile(fileName);
-    }
+
+    // Try to find all languages files
     lang = Trans::Constants::ALL_LANGUAGE;
     if (paperType.isEmpty()) {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+        fileName = QString("%1/profiles/%2/default/%3user_%4_%5.xml")
+                .arg(bundlePath())
+                .arg(profession)
+                .arg(pad)
+                .arg(paper)
+                .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
+        fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
+                .arg(bundlePath())
+                .arg(profession)
+                .arg(pad)
+                .arg(paper)
+                .arg(paperType)
+                .arg(lang);
     }
-    if (QFileInfo(fileName).exists()) {
+    if (QFileInfo(fileName).exists())
         return Utils::readTextFile(fileName);
-    }
+
+    // No file found neither for the current language nor for all language, try with the paperType
     if (!paperType.isEmpty()) {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
-        if (QFileInfo(fileName).exists()) {
+        fileName = QString("%1/profiles/%2/default/%3user_%4_%5.xml")
+                .arg(bundlePath())
+                .arg(profession)
+                .arg(pad)
+                .arg(paper)
+                .arg(lang);
+        if (QFileInfo(fileName).exists())
             return Utils::readTextFile(fileName);
-        }
     }
     return QString();
 }
