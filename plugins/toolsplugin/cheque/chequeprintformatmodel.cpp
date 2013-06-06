@@ -76,7 +76,10 @@ public:
     void readDatapackFiles()
     {
         _formats.clear();
-        QDir dir(ChequePrinterDialog::datapackPath());
+        const QString &path = ChequePrinterDialog::datapackPath();
+        if (path.isEmpty())
+            return;
+        QDir dir(path);
         if (!dir.exists())
             return;
         QFileInfoList files = Utils::getFiles(dir, "*.xml", Utils::Recursively);
