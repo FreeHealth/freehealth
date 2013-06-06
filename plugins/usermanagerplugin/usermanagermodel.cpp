@@ -351,7 +351,11 @@ QString UserManagerModel::title(const QModelIndex &index) const
  */
 int UserManagerModel::pageIndexFromIndex(const QModelIndex &index) const
 {
+    if (!index.isValid())
+        return -1;
     QStandardItem *item = itemFromIndex(index);
+    if (!item)
+        return -1;
     const QString &id = item->data().toString();
     for(int i=0; i < d->_pages.count(); ++i) {
         if (d->_pages.at(i)->id()==id)
