@@ -605,6 +605,7 @@ void UserManagerWidget::onCreateUserRequested()
         }
     } else {
         onCurrentSelectedIndexChanged(index, d->ui->userTreeView->currentIndex());
+        d->m_model->setFilter(Internal::UserManagerModelFilter());
     }
 }
 
