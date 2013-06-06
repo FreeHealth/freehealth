@@ -39,6 +39,8 @@ FreeMedForms
 ===== Bug correction =====
 
   * FreeMedForms
+    * Corrected: crashes during installation when creating users
+    * Corrected: user manager when removing users
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Corrected: Linux UI form widget management in the form placeholder
     * Corrected: app crash when trying to add sub-forms
