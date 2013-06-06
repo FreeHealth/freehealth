@@ -562,11 +562,18 @@ bool removeDirRecursively(const QString &absPath, QString *error)
 
 /**
  * Search and return all files matching the \e filters from the path \e fromDir.
- * You can search recursively or not using the \e recursive param.
+ * You can search recursively or not using the \e recursive param. \n
+ * If \e fromDir path is "." this function returns an empty file list.
  */
 QFileInfoList getFiles(QDir fromDir, const QStringList &filters, DirSearchType recursive)
 {
     QFileInfoList files;
+    // Don't proceed non-existing dirs
+    if (!fromDir.exists())
+        return files;
+    if (fromDir.path() == ".")
+        return files;
+    // Get content
     foreach (const QFileInfo & file, fromDir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name)) {
         if (file.isFile() && (filters.isEmpty() || QDir::match(filters, file.fileName())))
             files << file;
