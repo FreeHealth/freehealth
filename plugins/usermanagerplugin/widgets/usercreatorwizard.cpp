@@ -330,74 +330,71 @@ void UserCreatorWizard::done(int r)
         return;
     }
 
-    // Dialog is accepted here, but user not saved -> save it
-    if (true) {
+    // Dialog is accepted here and user not saved -> save it
+    // Feed userData with the wizard values
+    d->m_User->setValidity(1);
+    d->m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
+    d->m_User->setClearPassword(field("Password").toString());
+    d->m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
+    d->m_User->setUsualName(field("UsualName"));
+    d->m_User->setOtherNames(field("OtherNames"));
+    d->m_User->setFirstname(field("Firstname"));
+    d->m_User->setTitleIndex(field("Title"));
+    d->m_User->setGenderIndex(field("Gender"));
+    d->m_User->setStreet(field("Address"));
+    d->m_User->setZipcode(field("Zipcode"));
+    d->m_User->setCity(field("City"));
+    d->m_User->setCountry(field("Country"));
+    d->m_User->setLocaleLanguage(QLocale::Language(field("Language").toInt()));
+    d->m_User->setTel1(field("Tel1"));
+    d->m_User->setTel2(field("Tel2"));
+    d->m_User->setTel3(field("Tel3"));
+    d->m_User->setFax(field("Fax"));
+    d->m_User->setMail(field("Mail"));
+    d->m_User->setSpecialty(field("Specialities").toStringList());
+    d->m_User->setQualification(field("Qualifications").toStringList());
+    d->m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
 
-        // Feed userData with the wizard values
-        d->m_User->setValidity(1);
-        d->m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
-        d->m_User->setClearPassword(field("Password").toString());
-        d->m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
-        d->m_User->setUsualName(field("UsualName"));
-        d->m_User->setOtherNames(field("OtherNames"));
-        d->m_User->setFirstname(field("Firstname"));
-        d->m_User->setTitleIndex(field("Title"));
-        d->m_User->setGenderIndex(field("Gender"));
-        d->m_User->setStreet(field("Address"));
-        d->m_User->setZipcode(field("Zipcode"));
-        d->m_User->setCity(field("City"));
-        d->m_User->setCountry(field("Country"));
-        d->m_User->setLocaleLanguage(QLocale::Language(field("Language").toInt()));
-        d->m_User->setTel1(field("Tel1"));
-        d->m_User->setTel2(field("Tel2"));
-        d->m_User->setTel3(field("Tel3"));
-        d->m_User->setFax(field("Fax"));
-        d->m_User->setMail(field("Mail"));
-        d->m_User->setSpecialty(field("Specialities").toStringList());
-        d->m_User->setQualification(field("Qualifications").toStringList());
-        d->m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
+    d->m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ManagerRights)));
+    d->m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::MedicalRights)));
+    d->m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::DrugsRights)));
+    d->m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ParamedicalRights)));
+    d->m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::AdministrativeRights)));
 
-        d->m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ManagerRights)));
-        d->m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::MedicalRights)));
-        d->m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::DrugsRights)));
-        d->m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::ParamedicalRights)));
-        d->m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(d->m_Rights.value(Core::IUser::AdministrativeRights)));
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
 
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeHeader)), Core::IUser::AdministrativeHeader);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeFooter)), Core::IUser::AdministrativeFooter);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeWatermark)), Core::IUser::AdministrativeWatermark);
 
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeHeader)), Core::IUser::AdministrativeHeader);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeFooter)), Core::IUser::AdministrativeFooter);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::AdministrativeWatermark)), Core::IUser::AdministrativeWatermark);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionHeader)), Core::IUser::PrescriptionHeader);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
+    d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
 
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionHeader)), Core::IUser::PrescriptionHeader);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
-        d->m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(d->m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
+    if (d->m_CreateUser) {
+        // Create user in database
+        if (!userBase()->createUser(d->m_User)) {
+            Utils::warningMessageBox(tr("An error occured during database access."),
+                                     tr("Logged errors saved. Please refer to the %1 to manage this error.")
+                                     .arg(Utils::Log::saveLog()),
+                                     "", tr("Error during database access"));
+            QDialog::done(QDialog::Rejected);
+        } else {
+            // Reset the usermodel
+            userModel()->forceReset();
 
-        if (d->m_CreateUser) {
-            // Create user in database
-            if (!userBase()->createUser(d->m_User)) {
-                Utils::warningMessageBox(tr("An error occured during database access."),
-                                         tr("Logged errors saved. Please refer to the %1 to manage this error.")
-                                         .arg(Utils::Log::saveLog()),
-                                         "", tr("Error during database access"));
-                QDialog::done(QDialog::Rejected);
-            } else {
-                // Reset the usermodel
-                //userModel()->forceReset();
-
-                // Submit extra-pages ?
-                for(int i = 0; i < d->m_ExtraPages.count(); ++i) {
-                    d->m_ExtraPages.at(i)->submit(d->m_User->uuid());
-                }
-
-                Utils::informativeMessageBox(tr("User successfully saved into database."),
-                                             tr("The user was successfully created and saved into database."),
-                                             "", tr("User successfully saved into database."));
-                d->m_Saved = true;
-                QDialog::done(r);
+            // Submit extra-pages ?
+            for(int i = 0; i < d->m_ExtraPages.count(); ++i) {
+                d->m_ExtraPages.at(i)->submit(d->m_User->uuid());
             }
+
+            Utils::informativeMessageBox(tr("User successfully saved into database."),
+                                         tr("The user was successfully created and saved into database."),
+                                         "", tr("User successfully saved into database."));
+            d->m_Saved = true;
+            QDialog::done(r);
         }
     }
 }
@@ -630,7 +627,6 @@ UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
     setSubTitle(tr("The user will be created."));
     tree = new QTreeWidget(this);
     tree->header()->hide();
-    // DONE: hide password!
     QVBoxLayout *lay = new QVBoxLayout(this);
     this->setLayout(lay);
     lay->addWidget(tree);
@@ -642,12 +638,12 @@ void UserLastPage::initializePage()
     tree->setColumnCount(2);
     QFont bold;
     bold.setBold(true);
-    QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::GENERAL));
+    QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::GENERAL).remove("&"));
     general->setFont(0, bold);
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LOGIN) << field("Login").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::PASSWORD) << QString(field("Password").toString().count(), QLatin1Char('*')));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::TITLE) << titles().at(field("Title").toInt()));
-    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("UsualName").toString() + " " + field("OtherName").toString() + " " + field("Firstname").toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("UsualName").toString() + " " + field("OtherNames").toString() + " " + field("Firstname").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::GENDER) << genders().at(field("Gender").toInt()));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::M_LANGUAGES_TEXT).remove("&") << QLocale::languageToString(QLocale::Language(field("Language").toInt())) );
 
