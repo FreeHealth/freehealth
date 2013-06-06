@@ -258,10 +258,19 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
             fullname = titleString + name.data().toString() + " - " + otherNames + " " + firstname.data().toString();
         else
             fullname = titleString + name.data().toString() + " " + firstname.data().toString();
-        QString html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
-                               "<span style=\"font-size:small;color:gray\">%3</span>")
-                .arg(fullname)
-                .arg(tr("Last login: %1").arg(d->_sqlModel->data(lastLogin).toString()));
+
+        const QString &lastLog = d->_sqlModel->data(lastLogin).toString();
+        QString html;
+        if (!lastLog.isEmpty())
+            html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
+                                   "<span style=\"font-size:small;color:gray\">%3</span>")
+                    .arg(fullname)
+                    .arg(tr("Last login: %1").arg(d->_sqlModel->data(lastLogin).toString()));
+        else
+            html = QString("<span style=\"font-weight:bold;color:black\">%1</span><br />"
+                                   "<span style=\"font-size:small;color:gray\">%3</span>")
+                    .arg(fullname)
+                    .arg(tr("Never logged"));
         return html;
     }
     case Qt::DecorationRole:
