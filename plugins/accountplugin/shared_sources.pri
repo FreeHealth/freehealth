@@ -1,6 +1,12 @@
 include(../fmf_plugins.pri)
 include(accountplugin_dependencies.pri)
 
+!with-old-account {
+  error(Account Old version plugin included but not in the config var of the qmake process)
+} else {
+  message(Building Old Accountancy plugin)
+}
+
 DEFINES *= ACCOUNT_LIBRARY
 
 #include plugin structure

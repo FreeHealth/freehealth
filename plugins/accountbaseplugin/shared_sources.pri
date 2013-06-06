@@ -3,6 +3,12 @@ DEFINES *= ACCOUNTBASE_LIBRARY
 include(../fmf_plugins.pri)
 include(accountbaseplugin_dependencies.pri)
 
+!with-old-account {
+  error(AccountBase Old version plugin included but not in the config var of the qmake process)
+} else {
+  message(Building Old AccountBase plugin)
+}
+
 HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/accountbase_exporter.h \
     $${PWD}/accountbase.h \

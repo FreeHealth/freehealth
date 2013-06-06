@@ -3,6 +3,13 @@ DEFINES *= ACCOUNT2_LIBRARY
 include(../fmf_plugins.pri)
 include(account2plugin_dependencies.pri)
 
+!with-account {
+  error(Account2 plugin included but not in the config var of the qmake process)
+} else {
+  message(Building New Accountancy plugin)
+}
+
+
 HEADERS += $${PWD}/database/constants_db.h \
     $${PWD}/account2_exporter.h \
     $${PWD}/account2plugin.h \

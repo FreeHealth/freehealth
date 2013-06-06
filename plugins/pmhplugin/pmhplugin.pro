@@ -1,15 +1,16 @@
-!with-pmh{
-    error(PMH plugin not requested)
-} else {
-    message(Building PMH plugin)
-}
-
 TEMPLATE        = lib
 TARGET          = PMH
 
 DEFINES += PMH_LIBRARY
 
 include(../fmf_plugins.pri)
+
+!with-pmh{
+    error(PMH plugin not requested)
+} else {
+    message(Building PMH plugin)
+}
+
 include(pmhplugin_dependencies.pri)
 
 HEADERS = pmhplugin.h \

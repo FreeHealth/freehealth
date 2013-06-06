@@ -1,10 +1,5 @@
-!with-webcam {
-    error(Wrong configuration, please use CONFIG+=with-webcam to compile the WebCam plugin)
-}
-
 TARGET = Webcam
 TEMPLATE = lib
-message(Building WebCam plugin)
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 PROVIDER = FreeMedForms
@@ -12,6 +7,13 @@ PROVIDER = FreeMedForms
 DEFINES += WEBCAM_LIBRARY
 
 include(../fmf_plugins.pri)
+
+!with-webcam{
+    error(WebCam plugin not requested)
+} else {
+    message(Building WebCam plugin)
+}
+
 include(webcam_dependencies.pri)
 include($${SOURCES_BUILDSPECS_PATH}/config_opencv.pri)
 

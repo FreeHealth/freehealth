@@ -4,6 +4,12 @@ message(Building PadTools plugin)
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/padtoolsplugin_dependencies.pri )
 
+!with-pad{
+    error(PadTools plugin not requested)
+} else {
+    message(Building PadTools plugin)
+}
+
 HEADERS +=  \
     $${PWD}/padtoolsplugin.h \
     $${PWD}/padtools_exporter.h \

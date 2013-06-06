@@ -1,9 +1,3 @@
-!with-agenda {
-  message(Agenda plugin included but not in the CONFIG var of the qmake process)
-} else {
-  message(Building Agenda plugin)
-}
-
 TEMPLATE        = lib
 TARGET          = Agenda
 
@@ -11,6 +5,12 @@ DEFINES += AGENDA_LIBRARY
 
 include(../fmf_plugins.pri)
 include( agendaplugin_dependencies.pri )
+
+!with-agenda {
+  error(Agenda plugin included but not in the CONFIG var of the qmake process)
+} else {
+  message(Building Agenda plugin)
+}
 
 HEADERS = agendaplugin.h agenda_exporter.h \
     constants.h \

@@ -1,19 +1,18 @@
-!with-alerts{
-    error(Alert plugin not requested)
-} else {
-    message(Building Alert plugin)
-}
-
 TEMPLATE = lib
 TARGET = Alert
 
-message(Building Alert plugin)
 DEFINES += ALERT_LIBRARY
 
 QT *= sql
 
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/alertplugin_dependencies.pri)
+
+!with-alert{
+    error(Alert plugin not requested)
+} else {
+    message(Alert Feedback plugin)
+}
 
 HEADERS += \
     $${PWD}/constants.h \

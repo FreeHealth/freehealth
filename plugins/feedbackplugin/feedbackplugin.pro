@@ -1,7 +1,3 @@
-!with-feedback {
-    error(Feedback plugin not requested)
-}
-
 TARGET = Feedback
 TEMPLATE = lib
 
@@ -10,6 +6,12 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include(feedback_dependencies.pri)
+
+!with-feedback{
+    error(Feedback plugin not requested)
+} else {
+    message(Building Feedback plugin)
+}
 
 HEADERS += \
     feedbackplugin.h\
