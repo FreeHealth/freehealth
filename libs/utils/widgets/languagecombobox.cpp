@@ -29,7 +29,13 @@
  ***************************************************************************/
 /**
  * \class Utils::LanguageComboBox
- * Displays a combobox populate with all available Qt languages.
+ * Displays a combobox populate with all available Qt languages. The activation
+ * of an item does not lead to a QCoreApplication LanguageChanged event. If you
+ * want to connect the item activation to the QCoreApplication language event,
+ * you need to connect one of the available signals:
+ * currentLanguageChanged(QLocale::Language), currentLanguageNameChanged(QString),
+ * currentLanguageIsoChanged(QString).
+ * \sa Core::Translators
  */
 
 #include "languagecombobox.h"
