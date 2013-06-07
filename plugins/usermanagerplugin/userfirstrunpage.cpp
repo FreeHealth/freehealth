@@ -67,15 +67,14 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
 
-//    ui->userManagerButton->setEnabled(false);
-//    ui->completeWizButton->setEnabled(false);
-
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
     connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
     connect(ui->completeWizButton, SIGNAL(clicked()), this, SLOT(userWizard()));
+
+    retranslate();
 }
 
 UserCreationPage::~UserCreationPage()
@@ -173,7 +172,6 @@ void UserCreationPage::retranslate()
 {
     setTitle(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
     setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
-//    setSubTitle(tr("You can create user inside FreeMedForms at the end of the configuration."));
     ui->userManagerButton->setText(tkTr(Trans::Constants::USERMANAGER_TEXT));
     ui->completeWizButton->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::USER_WIZARD));
 }

@@ -66,6 +66,7 @@ protected Q_SLOTS:
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    void changeEvent(QEvent *event);
 };
 
 

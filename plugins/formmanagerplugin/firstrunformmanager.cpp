@@ -53,8 +53,7 @@ void FirstRunFormManagerWizardPage::retranslate()
 {
     setTitle(tr("General patient form selection"));
     setSubTitle(tr("You can define your own patient form file, or use the default one. "
-                   "Select it from here. All patients will have the same forms, but you can "
-                   "add subforms anywhere in the form."));
+                   "All patients will have the same (central) form."));
 }
 
 void FirstRunFormManagerWizardPage::initializePage()

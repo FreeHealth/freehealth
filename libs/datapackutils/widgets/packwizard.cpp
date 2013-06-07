@@ -478,7 +478,7 @@ void PackDownloadPage::allDownloadFinished()
 PackInstallPage::PackInstallPage(QWidget *parent) :
     PackPage(parent)
 {
-    setTitle(tr("Installing pack(s)"));
+    setTitle(tr("%1 pack(s) to install").arg(packWizard()->installPacks().count()));
     setSubTitle(tr("Please wait until all packs are installed."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
@@ -607,10 +607,8 @@ int PackInstallPage::nextId() const
 PackRemovePage::PackRemovePage(QWidget *parent) :
     PackPage(parent)
 {
-    // TODO: better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages.
-    setTitle(tr("Removing pack(s)"));
-    // TODO: better would be "Please wait until al packs are removed." - be nice to users ;-)
-    setSubTitle(tr("Wait until all removal are done."));
+    setTitle(tr("%1 pack(s) to remove").arg(packWizard()->removePacks().count()));
+    setSubTitle(tr("Please wait until all packs are removed."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);

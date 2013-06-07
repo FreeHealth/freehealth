@@ -191,6 +191,13 @@ void AppConfigWizard::resizeEvent(QResizeEvent *event)
     Utils::centerWidget(this, qApp->desktop());
 }
 
+void AppConfigWizard::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setWindowTitle(tr("Application Configurator Wizard"));
+    }
+    QWizard::changeEvent(event);
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////  CoreConfigPage  /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,8 +223,6 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     // combo install type
     installCombo = new QComboBox(this);
 
-    retranslate();
-
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     layout->addWidget(langLabel, 2, 0, 1, 2);
@@ -227,17 +232,16 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     setLayout(layout);
 
     registerField(::FIELD_TYPEOFINSTALL, installCombo, "currentIndex");
+
+    retranslate();
 }
 
 void CoreConfigPage::retranslate()
 {
     setTitle(tr("Welcome to %1").arg(qApp->applicationName() + " v" + qApp->applicationVersion()));
-    setSubTitle(tr("<b>Welcome to %1</b><br /><br />"
-                   "This wizard will help you to configure the base parameters "
-                   "of the application.<br />"
-                   "At any time, you can cancel this wizard, the default "
-                   "values will be activated "
-                   "for the undefined parameters.")
+    setSubTitle(tr("This wizard will help you to configure the base parameters "
+                   "of the application.\n"
+                   "Select your preferred language and the installation type.")
                 .arg(qApp->applicationName() + " v" + qApp->applicationVersion()));
 
     langLabel->setText(tr("Select your language"));
@@ -410,9 +414,7 @@ void ClientConfigPage::initializePage()
 void ClientConfigPage::retranslate()
 {
     setTitle(tr("Network client configuration"));
-    setSubTitle(tr("There were no automatic server configuration file found.<br />"
-                   "You must configure the server manually.<br />"
-                   "Use your <b>personnal login and password</b> to connect the database."));
+    setSubTitle(tr("You must configure the server using your personnal login and password to connect the database."));
 }
 
 bool ClientConfigPage::isComplete() const
@@ -537,9 +539,7 @@ void ServerConfigPage::initializePage()
 void ServerConfigPage::retranslate()
 {
     setTitle(tr("Network server configuration"));
-    setSubTitle(tr("There were no automatic server configuration file found.<br />"
-                   "You must configure the server manually.<br />"
-                   "Use the <b>server super-administrator login and password</b> to connect the database."));
+    setSubTitle(tr("You must configure the server using the server super-administrator login and password to connect the database."));
 }
 
 bool ServerConfigPage::isComplete() const
