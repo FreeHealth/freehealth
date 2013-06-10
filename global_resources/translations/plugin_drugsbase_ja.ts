@@ -4,25 +4,25 @@
 <context>
     <name>DatabaseUpdater</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="83"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="82"/>
         <source>Your dosage database needs to be updated from version 0.5.0 to version 0.5.4.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="193"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="192"/>
         <source>Your dosage database needs to be updated from version 0.4.0 to version 0.5.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="302"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="301"/>
         <source>Your dosage database needs to be updated from version 0.2.0 to version 0.4.0.
 This will be automatically done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="406"/>
+        <location filename="../../plugins/drugsbaseplugin/versionupdater.cpp" line="405"/>
         <source>Your dosage database needs to be updated from version 0.0.8 to version 0.2.0.
 This will be automatically done.
 Please verify your daily scheme prescriptions and relations to meal.</source>
@@ -95,32 +95,32 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="496"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="495"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="499"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="498"/>
         <source>No drug source detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="681"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="680"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="683"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="682"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="702"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="701"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="840"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="839"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -344,9 +344,20 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DrugsBasePlugin</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="84"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="95"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="89"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="100"/>
         <source>Initializing drugs database plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="104"/>
+        <source>Wrong drugs database installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="105"/>
+        <source>A wrong drugs datbase is installed on your computer. This can be the result of an application updating. You have to open to the datapack manager and update or remove the installed drugs database. 
+Please find more documentation on the website %1.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -402,8 +413,8 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::PrescriptionPrinter</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="493"/>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="513"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="492"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="512"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -472,7 +483,7 @@ Do you want to add them to the file?</source>
 <context>
     <name>PrescriptionPrinter</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="215"/>
+        <location filename="../../plugins/drugsbaseplugin/prescriptionprinter.cpp" line="214"/>
         <source>Pharmaceutical Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>

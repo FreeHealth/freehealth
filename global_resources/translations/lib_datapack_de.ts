@@ -207,7 +207,7 @@ requires an authentication</source>
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="687"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="685"/>
         <source>All Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,8 +216,8 @@ requires an authentication</source>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="481"/>
-        <source>Installing pack(s)</source>
-        <translation>Installiere Paket(e)</translation>
+        <source>%1 pack(s) to install</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="482"/>
@@ -333,14 +333,14 @@ requires an authentication</source>
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="611"/>
-        <source>Removing pack(s)</source>
-        <translation>Entferne Paket(e)</translation>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="610"/>
+        <source>%1 pack(s) to remove</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="613"/>
-        <source>Wait until all removal are done.</source>
-        <translation>Bitte warten Sie, bis alle Pakete entfernt sind.</translation>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="611"/>
+        <source>Please wait until all packs are removed.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -291,6 +291,16 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <source>Initializing drugs database plugin...</source>
         <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>
+    <message>
+        <source>Wrong drugs database installed</source>
+        <translation>Base de données thérapeutiques corrompue</translation>
+    </message>
+    <message>
+        <source>A wrong drugs datbase is installed on your computer. This can be the result of an application updating. You have to open to the datapack manager and update or remove the installed drugs database. 
+Please find more documentation on the website %1.</source>
+        <translation>Une base de données corrompue est intallé sur votre ordinateur. Ce peut être le résultat d&apos;une mise à jour de l&apos;application. Vous devez ouvrir le gestionnaire de paquets de données ou supprimer la base de données installée.
+Trouvez plus d&apos;informations sur notre site internet %1.</translation>
+    </message>
 </context>
 <context>
     <name>DrugsDB::Internal::DrugsTemplatePrinter</name>

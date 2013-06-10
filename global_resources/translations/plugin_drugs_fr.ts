@@ -1177,10 +1177,6 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Réinitialiser la phrase posologique</translation>
     </message>
     <message>
-        <source>Show drug precautions</source>
-        <translation>Montrer les précautions thérapeutiques</translation>
-    </message>
-    <message>
         <source>Drug precautions</source>
         <translation>Précautions thérapeutiques</translation>
     </message>
@@ -1195,6 +1191,10 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <message>
         <source>Clear prescription</source>
         <translation>Effacer la prescription</translation>
+    </message>
+    <message>
+        <source>Toggle drug precautions</source>
+        <translation>Monter/cacher les précautions thérapeutiques</translation>
     </message>
 </context>
 </TS>

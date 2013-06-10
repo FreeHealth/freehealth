@@ -22,10 +22,6 @@
         <translation>Configuration réseau en tant que client</translation>
     </message>
     <message>
-        <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use your &lt;b&gt;personnal login and password&lt;/b&gt; to connect the database.</source>
-        <translation>Il n&apos;existe aucun fichier de configuration automatique de réseau.&lt;br /&gt;Vous devez configurer le serveur manuellement.&lt;br /&gt;Utilisez vos &lt;b&gt;identifiants personnels&lt;/b&gt; pour vous connecter au serveur de données.</translation>
-    </message>
-    <message>
         <source>No FreeMedForms server configuration detected</source>
         <translation>Aucune configuration serveur de FreeMedForms détectée</translation>
     </message>
@@ -47,16 +43,16 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
         <source>Please wait</source>
         <translation>Veuillez patienter</translation>
     </message>
+    <message>
+        <source>You must configure the server using your personnal login and password to connect the database.</source>
+        <translation>Vous devez configurer le serveur en utilisant vos identifiant et mot de passe personnels que vous utilisez pour vous connecter à la base de données.</translation>
+    </message>
 </context>
 <context>
     <name>Core::CoreConfigPage</name>
     <message>
         <source>Welcome to %1</source>
         <translation>Bienvenue, %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Welcome to %1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;This wizard will help you to configure the base parameters of the application.&lt;br /&gt;At any time, you can cancel this wizard, the default values will be activated for the undefined parameters.</source>
-        <translation>&lt;b&gt;Bienvenu, %1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;Cet assistants va vous aider à configurer les paramètres de base de l&apos;application.&lt;br /&gt;À tout moment, vous pouvez annuler l&apos;assistant qui utilisera alors les valeurs par défaut pour les paramètres non définis.</translation>
     </message>
     <message>
         <source>Select your language</source>
@@ -77,6 +73,12 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     <message>
         <source>Network (as server)</source>
         <translation>Réseau (en tant que serveur)</translation>
+    </message>
+    <message>
+        <source>This wizard will help you to configure the base parameters of the application.
+Select your preferred language and the installation type.</source>
+        <translation>Cet assistant va vous aider à configurer les paramètres de la base de données de l&apos;application.
+Sélectionnez votre langage préféré et le type d&apos;installation.</translation>
     </message>
 </context>
 <context>
@@ -739,10 +741,6 @@ Veuillez vérifier et valider les données de paramétrage.</translation>
         <translation>Configuration réseau : serveur</translation>
     </message>
     <message>
-        <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use the &lt;b&gt;server super-administrator login and password&lt;/b&gt; to connect the database.</source>
-        <translation>Il n&apos;existe aucun fichier de configuration automatique de réseau.&lt;br /&gt;Vous devez configurer le serveur manuellement.&lt;br /&gt;Utilisez les &lt;b&gt;identifiants du super-utilisateur réseau&lt;/b&gt; pour vous connecter au serveur de données.</translation>
-    </message>
-    <message>
         <source>Missing files.</source>
         <translation>Fichiers manquants.</translation>
     </message>
@@ -788,6 +786,10 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
     <message>
         <source>The server was successfully configured.</source>
         <translation>Le serveur a été correctement configuré.</translation>
+    </message>
+    <message>
+        <source>You must configure the server using the server super-administrator login and password to connect the database.</source>
+        <translation>Vous devez configurer le serveur en utilisant les identifiants et mot de passe du super-administrateur de la base de données.</translation>
     </message>
 </context>
 <context>

@@ -7,10 +7,6 @@
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Name, Secondname - firstname</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PatientSelector</name>

@@ -8,11 +8,6 @@
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbar.ui" line="179"/>
-        <source>Name, Secondname - firstname</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PatientSelector</name>

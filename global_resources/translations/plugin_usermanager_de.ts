@@ -301,6 +301,10 @@ p, li { white-space: pre-wrap; }
         <source>Last login: %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Never logged</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserManagerPlugin</name>
@@ -394,6 +398,10 @@ Application will stop.</source>
     </message>
     <message>
         <source>Modification correctly cleared</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are about to delete the following user&lt;br&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you really want to remove this user?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

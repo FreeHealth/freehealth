@@ -100,7 +100,7 @@
     </message>
     <message>
         <source>Unable to insert sub-form %1 into form %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;insérer le sous-formulaire %1 dans le formulaire %2</translation>
     </message>
 </context>
 <context>
@@ -200,10 +200,6 @@ Répondre &apos;Non&apos; causera des pertes de données définitive.</translati
         <translation>Sélectionneur de formulaire général pour les patients</translation>
     </message>
     <message>
-        <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
-        <translation>Vous pouvez définir votre propre formulaire patient, ou utiliser le formulaire par défaut. Sélectionnez votre formulaire ici. Tous les patients auront le même formulaire de base, mais vous pouvez ajouter des sous-formulaires.</translation>
-    </message>
-    <message>
         <source>Reading available forms</source>
         <translation>Lecture des formulaires disponibles</translation>
     </message>
@@ -218,6 +214,10 @@ Répondre &apos;Non&apos; causera des pertes de données définitive.</translati
     <message>
         <source>You must select one file to be used by default.</source>
         <translation>Vous devez ne sélectionner qu&apos;un seul formulaire.</translation>
+    </message>
+    <message>
+        <source>You can define your own patient form file, or use the default one. All patients will have the same (central) form.</source>
+        <translation>Vous pouvez définir votre propre dossier patient, ou utiliser les dossiers fournis. Tous les patients auront le même dossier central.</translation>
     </message>
 </context>
 <context>

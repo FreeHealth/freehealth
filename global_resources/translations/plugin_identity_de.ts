@@ -131,17 +131,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.ui" line="49"/>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="75"/>
         <source>Type old password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.ui" line="56"/>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="82"/>
         <source>Type new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/identityplugin/passworddialog.ui" line="63"/>
+        <location filename="../../plugins/identityplugin/passworddialog.ui" line="65"/>
         <source>Confirm new password</source>
         <translation type="unfinished"></translation>
     </message>

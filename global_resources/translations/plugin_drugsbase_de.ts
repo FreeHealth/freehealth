@@ -283,6 +283,15 @@ Do you want to add them to the file?</source>
         <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Wrong drugs database installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A wrong drugs datbase is installed on your computer. This can be the result of an application updating. You have to open to the datapack manager and update or remove the installed drugs database. 
+Please find more documentation on the website %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrugsDB::Internal::DrugsTemplatePrinter</name>

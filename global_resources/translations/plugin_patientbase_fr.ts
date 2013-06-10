@@ -7,10 +7,6 @@
         <source>Form</source>
         <translation></translation>
     </message>
-    <message>
-        <source>Name, Secondname - firstname</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>PatientSelector</name>
@@ -302,23 +298,23 @@ Attention : Si vous utilisez FreeMedForms en réseau, cela peut causer une surch
     </message>
     <message>
         <source>Exporting %1 file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportation du fichier %1</translation>
     </message>
     <message>
         <source>An error occured when saving the HTML patient file</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue durant la sauvegarde du dossier patient en HTML</translation>
     </message>
     <message>
         <source>Patient HTML file correctly created</source>
-        <translation type="unfinished"></translation>
+        <translation>Le dossier patient en HTML a été correctement sauvegardé</translation>
     </message>
     <message>
         <source>An error occured when saving the PDF patient file</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue pendant la sauvegarde du dossier patient en PDF</translation>
     </message>
     <message>
         <source>Patient PDF file correctly created</source>
-        <translation type="unfinished"></translation>
+        <translation>Le dossier patient en PDF a été correctement sauvegardé</translation>
     </message>
 </context>
 <context>

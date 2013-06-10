@@ -309,6 +309,10 @@ p, li { white-space: pre-wrap; }
         <source>Last login: %1</source>
         <translation>Dernière ouverture de session : %1</translation>
     </message>
+    <message>
+        <source>Never logged</source>
+        <translation>Jamais connecté</translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserManagerPlugin</name>
@@ -404,6 +408,10 @@ L&apos;application va s&apos;arrêter.</translation>
     <message>
         <source>Modification correctly cleared</source>
         <translation>Les modifications ont été correctement effacées</translation>
+    </message>
+    <message>
+        <source>You are about to delete the following user&lt;br&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Do you really want to remove this user?</source>
+        <translation>Vous allez supprimer l&apos;utilisateur suivant :&lt;br&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Voulez-vous réellement supprimer cet utilisateur ?</translation>
     </message>
 </context>
 <context>
@@ -658,11 +666,11 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
     <message>
         <source>Setting current user uuid to %1 (su)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Setting current user uuid to %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

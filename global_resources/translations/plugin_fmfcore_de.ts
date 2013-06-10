@@ -22,10 +22,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use your &lt;b&gt;personnal login and password&lt;/b&gt; to connect the database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No FreeMedForms server configuration detected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -44,15 +40,15 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You must configure the server using your personnal login and password to connect the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core::CoreConfigPage</name>
     <message>
         <source>Welcome to %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Welcome to %1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;This wizard will help you to configure the base parameters of the application.&lt;br /&gt;At any time, you can cancel this wizard, the default values will be activated for the undefined parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -73,6 +69,11 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
     </message>
     <message>
         <source>Network (as server)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This wizard will help you to configure the base parameters of the application.
+Select your preferred language and the installation type.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -745,10 +746,6 @@ Please check and validate the proxy settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>There were no automatic server configuration file found.&lt;br /&gt;You must configure the server manually.&lt;br /&gt;Use the &lt;b&gt;server super-administrator login and password&lt;/b&gt; to connect the database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Connection to the server: User rights inadequate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -780,6 +777,10 @@ Please check out the log files and contact your administrator.</source>
     </message>
     <message>
         <source>The server was successfully configured.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must configure the server using the server super-administrator login and password to connect the database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

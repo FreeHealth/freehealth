@@ -196,10 +196,6 @@ Answering &apos;No&apos; will cause deftialtve data loss.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reading available forms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -213,6 +209,10 @@ Answering &apos;No&apos; will cause deftialtve data loss.</source>
     </message>
     <message>
         <source>You must select one file to be used by default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can define your own patient form file, or use the default one. All patients will have the same (central) form.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

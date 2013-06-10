@@ -1175,15 +1175,15 @@ Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show drug precautions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Drug precautions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Copy prescription item to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle drug precautions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
