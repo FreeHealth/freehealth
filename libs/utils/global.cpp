@@ -440,7 +440,7 @@ QString osName()
     return QString();
 }
 
-/** Returns the application plugin path. */
+/** Returns the application plugin path. Also defines the QApplication::libraryPath(). */
 QStringList applicationPluginsPath(const QString &binaryName, const QString &libraryBaseName)
 {
     QString app = qApp->applicationDirPath();
@@ -456,6 +456,7 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
             app.append("/../../../");
         }
         app += "/plugins/";
+        qApp->addLibraryPath(QDir::cleanPath(app));
         return QStringList() << QDir::cleanPath(app);
     }
 
@@ -465,6 +466,7 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
     // Plugins are installed in : /usr/lib(arch)/applicationname
     if (isLinuxIntegratedCompilation()) {
         app = QString(binaryName).remove("_debug").toLower();
+        qApp->addLibraryPath(app);
         return QStringList() << QString("/usr/%1/%2").arg(libraryBaseName).arg(app);
     }
 
@@ -481,13 +483,15 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
         // Idem by default
         app += "/plugins/";
     }
-    // TODO: Add FreeBSD pluginPath
 
-    if (isReleaseCompilation()) {
-        // In release compilation, return also the installed 'qt' plugins subpath
-        return QStringList() << QDir::cleanPath(app) << QDir::cleanPath(app + "/qt");
-    }
-    return QStringList() << QDir::cleanPath(app);
+    // TODO: Manage FreeBSD pluginPath
+
+    // When the application is installed force Qt to search for libs/plugins/QtPlugins inside
+    // the application bundle.
+    QStringList lpath;
+    lpath << QDir::cleanPath(app) << QDir::cleanPath(app + "/qt");
+    qApp->setLibraryPaths(lpath);
+    return lpath;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
