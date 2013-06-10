@@ -109,11 +109,17 @@ int main(int argc, char *argv[])
      // Create plugins manager
      ExtensionSystem::PluginManager pluginManager;
      pluginManager.setFileExtension(QString("pluginspec"));
+
+     // Getting & feeding libraries/plugins path
+     QStringList libpath;
 #ifdef LIBRARY_BASENAME
-     pluginManager.setPluginPaths(Utils::applicationPluginsPath(QString(BINARY_NAME), QString(LIBRARY_BASENAME)));
+     libpath << Utils::applicationPluginsPath(QString(BINARY_NAME), QString(LIBRARY_BASENAME));
 #else
-     pluginManager.setPluginPaths(Utils::applicationPluginsPath(QString(BINARY_NAME), ""));
+     libpath << Utils::applicationPluginsPath(QString(BINARY_NAME), "");
 #endif
+     if (libpath.isEmpty())
+         return 123;
+     pluginManager.setPluginPaths(libpath);
 
      // Add some debugging information
      Utils::Log::logCompilationConfiguration();
