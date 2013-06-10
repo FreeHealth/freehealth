@@ -241,8 +241,7 @@ void CoreConfigPage::retranslate()
     setTitle(tr("Welcome to %1").arg(qApp->applicationName() + " v" + qApp->applicationVersion()));
     setSubTitle(tr("This wizard will help you to configure the base parameters "
                    "of the application.\n"
-                   "Select your preferred language and the installation type.")
-                .arg(qApp->applicationName() + " v" + qApp->applicationVersion()));
+                   "Select your preferred language and the installation type."));
 
     langLabel->setText(tr("Select your language"));
     typeLabel->setText(tr("Select the type of installation"));
