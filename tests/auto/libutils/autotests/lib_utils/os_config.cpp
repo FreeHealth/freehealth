@@ -39,7 +39,7 @@
  * Utils::isRunningOnLinux();
  * Utils::isRunningOnFreebsd();
  * Utils::isLinuxIntegratedCompilation();
- *
+ * Utils::applicationPluginsPath(const QString &binaryName, const QString &libraryBaseName)
  * These function are fundamental for the Core::ISettings object and are depend to the qmake step
  */
 class tst_OsConfig : public QObject
@@ -106,6 +106,28 @@ private slots:
 #ifdef RELEASE
         QVERIFY(Utils::isReleaseCompilation() == true);
         QVERIFY(Utils::isDebugWithoutInstallCompilation() == false);
+#endif
+    }
+
+    void testApplicationLibPath()
+    {
+        QStringList libs = Utils::applicationPluginsPath("freemedforms", "lib64");
+        // TODO: how to simulate a release/debug compilation and different OS?
+#ifdef DEBUG_WITHOUT_INSTALL
+        if (Utils::isRunningOnMac())
+            QVERIFY(libs.contains(qApp->applicationDirPath() + "/../../../plugins", Qt::CaseInsensitive) == true);
+        else if (Utils::isRunningOnLinux())
+            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+        else if (Utils::isRunningOnWin())
+            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+#endif
+#ifdef RELEASE
+        if (Utils::isRunningOnMac())
+            QVERIFY(libs.contains(qApp->applicationDirPath() + "/../plugins", Qt::CaseInsensitive) == true);
+//        else if (Utils::isRunningOnLinux())
+//            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+        else if (Utils::isRunningOnWin())
+            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
 #endif
     }
 
