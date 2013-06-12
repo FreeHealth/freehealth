@@ -3,9 +3,12 @@ DEFINES += SAVERESTORE_LIBRARY
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/saverestoreplugin_dependencies.pri)
 
-HEADERS = $${PWD}/saverestoreplugin.h $${PWD}/saverestore_exporter.h $${PWD}/saverestorepage.h
+HEADERS = $${PWD}/saverestoreplugin.h \
+    $${PWD}/saverestore_exporter.h \
+    $${PWD}/saverestorepage.h
 
-SOURCES = $${PWD}/saverestoreplugin.cpp $${PWD}/saverestorepage.cpp
+SOURCES = $${PWD}/saverestoreplugin.cpp \
+    $${PWD}/saverestorepage.cpp
 
 FORMS = $${PWD}/saverestorepage.ui
 

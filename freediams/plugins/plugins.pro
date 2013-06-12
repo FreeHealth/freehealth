@@ -9,7 +9,7 @@ SUBDIRS = \
     drugsbase \
     templates \
     listview \
-    saverestore \
+#    saverestore \
     datapack \
     ddi
 
@@ -41,8 +41,8 @@ printer.subdir   = printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-saverestore.subdir = saverestoreplugin
-saverestore.depends = core
+#saverestore.subdir = saverestoreplugin
+#saverestore.depends = core
 
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
