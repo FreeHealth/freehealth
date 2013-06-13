@@ -465,9 +465,11 @@ QStringList applicationPluginsPath(const QString &binaryName, const QString &lib
     // Libs are installed in : /usr/lib(arch)/freemedforms-common
     // Plugins are installed in : /usr/lib(arch)/applicationname
     if (isLinuxIntegratedCompilation()) {
-        app = QString(binaryName).remove("_debug").toLower();
+        app = QString("/usr/%1/%2")
+                .arg(libraryBaseName)
+                .arg(QString(binaryName).remove("_debug").toLower());
         qApp->addLibraryPath(app);
-        return QStringList() << QString("/usr/%1/%2").arg(libraryBaseName).arg(app);
+        return QStringList() << app;
     }
 
     // 'make install' called on debug/release build
