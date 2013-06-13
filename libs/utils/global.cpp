@@ -396,8 +396,6 @@ bool isRunningOnFreebsd()
 }
 bool isLinuxIntegratedCompilation()
 {
-    if (!isRunningOnLinux() || !isRunningOnFreebsd())
-        return false;
 #ifdef LINUX_INTEGRATED
     return true;
 #else
