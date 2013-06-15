@@ -48,6 +48,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_user.h>
+#include <translationutils/trans_current.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -529,8 +530,8 @@ void ServerConfigPage::initializePage()
     if (!QFileInfo(serverConfigurationSqlScript()).exists()) {
         Utils::warningMessageBox(tr("Missing files."),
                                  tr("The configuration script is missing. You can not "
-                                    "configure the server without this script.\n\n"
-                                    "<b>Please contact the developement team.</b>"));
+                                    "configure the server without this script.<br><br>"
+                                    "<b>%1</b>").arg(tkTr(Trans::Constants::CONTACT_DEV_TEAM)));
     }
 }
 
