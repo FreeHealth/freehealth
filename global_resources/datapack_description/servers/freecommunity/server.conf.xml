@@ -8,11 +8,11 @@
     <uuid>freemedforms.community.free</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor/>  <!-- leave empty for the freemedforms community -->
-    <version>0.7.0</version>
-    <fmfv>0.7.0</fmfv>
-    <fdv>0.7.0</fdv>
+    <version>0.9.0</version>
+    <fmfv>0.8.9</fmfv>
+    <fdv>0.8.9</fdv>
+    <lmdate>2013-06-15</lmdate>
     <cdate>2011-11-26</cdate>
-    <lmdate>2012-02-21</lmdate>
     <icon>__theme__/freemedforms.png</icon>
     <RecomUpFreq nonParsed="EachMonth">2</RecomUpFreq>
     <weblink></weblink>

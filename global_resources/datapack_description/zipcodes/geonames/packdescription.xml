@@ -7,8 +7,9 @@
     <!-- Non translatable values -->
     <uuid>freemedforms.certified.zipcodes.geonames.nonfree.__COUNTRY_ISO__</uuid>
     <authors>Eric Maeker, MD</authors>
+    <version>0.9.0</version>
+    <lmdate>2013-06-15</lmdate>
     <cdate>2011-11-26</cdate>
-    <lmdate>2012-02-21</lmdate>
     <icon>__theme__/zipcodes.png</icon>
     <file>zipcodes/geonames/__COUNTRY_ISO__/zipcodes.db.zip</file>
     <unziptopath>zipcodes</unziptopath>
@@ -47,6 +48,10 @@
     </htmldescription>
 
     <updateinfo>
+      <updateversion from="0.8.0" to="0.9.0">
+        <text lang="fr">Mise à jour des données.</text>
+        <text lang="en">Data update.</text>
+      </updateversion>
       <updateversion from="0.8.0">
         <text lang="fr">Première mise à disposition.</text>
         <text lang="en">First release.</text>

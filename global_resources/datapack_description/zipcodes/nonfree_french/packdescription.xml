@@ -8,8 +8,9 @@
     <uuid>freemedforms.certified.zipcodes.galichon.FR</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
+    <version>0.9.0</version>
+    <lmdate>2013-06-15</lmdate>
     <cdate>2011-11-26</cdate>
-    <lmdate>2012-02-21</lmdate>
     <icon>__theme__/zipcodes.png</icon>
     <file>zipcodes/galichon-FR/zipcodes.db.zip</file>
     <unziptopath>zipcodes</unziptopath>
@@ -41,6 +42,10 @@
     </htmldescription>
 
     <updateinfo>
+      <updateversion from="0.7.0" to="0.9.0">
+        <text lang="fr">Mise à jour des données.</text>
+        <text lang="en">Data update.</text>
+      </updateversion>
       <updateversion from="0.7.0">
         <text lang="fr">Première mise à disposition.</text>
         <text lang="en">First release.</text>

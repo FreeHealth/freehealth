@@ -8,11 +8,11 @@
     <uuid>freemedforms.certified.drugs.be.noddi</uuid>
     <authors>Eric Maeker, MD</authors>
     <vendor>asso.freemedforms.com</vendor>
-    <version>0.7.0</version>
-    <fmfv>0.7.0</fmfv>
-    <fdv>0.7.0</fdv>
+    <version>0.9.0</version>
+    <fmfv>0.8.9</fmfv>
+    <fdv>0.8.9</fdv>
+    <lmdate>2013-06-15</lmdate>
     <cdate>2011-11-26</cdate>
-    <lmdate>2012-02-21</lmdate>
     <icon>__theme__/drugengine_ddi.png</icon>
     <weblink></weblink>
     <bibliography/>

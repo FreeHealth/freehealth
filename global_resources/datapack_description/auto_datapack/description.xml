@@ -31,8 +31,8 @@
     <content type="file_nonzipped">./nonfree/fsp/fsp_general.xml</content>
   </datapack>
 
-  <datapack description="./nonfree/cheque/packdescription.xml" server="asso_nonfree">
-    <content type="file_nonzipped">./nonfree/cheque/france.zip</content>
+  <datapack description="./nonfree/cheques/packdescription.xml" server="asso_nonfree">
+    <content type="file_nonzipped">./nonfree/cheques/france.zip</content>
   </datapack>
 
   <datapack description="./nonfree/french_medical_docs/packdescription.xml" server="asso_nonfree">
