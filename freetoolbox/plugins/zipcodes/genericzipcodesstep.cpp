@@ -109,7 +109,7 @@ public:
         } else {
             db = QSqlDatabase::addDatabase("QSQLITE", DB_NAME);
             db.setDatabaseName(databaseOutputAbsFilePath());
-            LOG_FOR(q, "using zipcodes database: " + databaseOutputAbsFilePath());
+            LOG_FOR(q, "Using zipcodes database: " + databaseOutputAbsFilePath());
         }
         if (!db.isOpen()) {
             if (!db.open()) {
@@ -140,6 +140,8 @@ public:
         QString csvFile = tmpPath() + "/allCountries.txt";
         if (!Utils::Database::importCsvToDatabase(DB_NAME, csvFile, "IMPORT", "\t"))
             LOG_ERROR_FOR(q, "Unable to import CSV file");
+        else
+            LOG_FOR(q, "CSV data imported to database");
         return true;
     }
 
