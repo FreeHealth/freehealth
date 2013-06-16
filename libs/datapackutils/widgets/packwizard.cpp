@@ -161,6 +161,7 @@ DataPack::PackWizard *PackPage::packWizard() const {return qobject_cast<DataPack
 PackIntroPage::PackIntroPage(QWidget *parent) :
     PackPage(parent)
 {
+    setObjectName("PackIntroPage");
     setTitle(tr("Pack processing"));
     setSubTitle(tr("The following packs will be processed. Please verify all information."));
     m_Browser = new QTextBrowser(this);
@@ -322,6 +323,7 @@ PackDownloadPage::PackDownloadPage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackDownloadPage");
+    setObjectName("PackDownloadPage");
     setTitle(tr("Downloading packs"));
     setSubTitle(tr("Please wait until all packs are downloaded."));
     m_Area = new QScrollArea(this);
@@ -478,6 +480,7 @@ void PackDownloadPage::allDownloadFinished()
 PackInstallPage::PackInstallPage(QWidget *parent) :
     PackPage(parent)
 {
+    setObjectName("PackInstallPage");
     setTitle(tr("%1 pack(s) to install").arg(packWizard()->installPacks().count()));
     setSubTitle(tr("Please wait until all packs are installed."));
     m_Area = new QScrollArea(this);
@@ -607,6 +610,7 @@ int PackInstallPage::nextId() const
 PackRemovePage::PackRemovePage(QWidget *parent) :
     PackPage(parent)
 {
+    setObjectName("PackRemovePage");
     setTitle(tr("%1 pack(s) to remove").arg(packWizard()->removePacks().count()));
     setSubTitle(tr("Please wait until all packs are removed."));
     m_Area = new QScrollArea(this);
@@ -682,6 +686,7 @@ int PackRemovePage::nextId() const
 PackEndPage::PackEndPage(QWidget *parent) :
     PackPage(parent)
 {
+    setObjectName("PackEndPage");
     setTitle(tr("All Pack(s) processed."));
     setFinalPage(true);
 }
