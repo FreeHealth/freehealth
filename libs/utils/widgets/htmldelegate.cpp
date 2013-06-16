@@ -88,14 +88,14 @@ public:
     {
     }
 
-    QString changeColors(const QStyleOptionViewItem &option, QString text)
+    QString changeColors(const QStyleOptionViewItemV4 &optionV4, QString text)
     {
-        if (option.state & QStyle::State_Selected) {
-            text.replace("color:gray", "color:lightgray", Qt::CaseInsensitive);
-            text.replace("color:black", "color:white", Qt::CaseInsensitive);
-            text.replace("color:blue", "color:lightcyan", Qt::CaseInsensitive);
-            text.replace("color:red", "color:bisque", Qt::CaseInsensitive);
-            text.replace("color:maroon", "color:#F2E6E6", Qt::CaseInsensitive);
+        if (optionV4.state & QStyle::State_Selected) {
+            text.replace(QRegExp("color\\s*:\\s*gray", Qt::CaseInsensitive), "color:lightgray");
+            text.replace(QRegExp("color\\s*:\\s*black", Qt::CaseInsensitive), "color:white");
+            text.replace(QRegExp("color\\s*:\\s*blue", Qt::CaseInsensitive), "color:lightcyan");
+            text.replace(QRegExp("color\\s*:\\s*red", Qt::CaseInsensitive), "color:bisque");
+            text.replace(QRegExp("color\\s*:\\s*marron", Qt::CaseInsensitive), "color:#F2E6E6");
         }
         return text;
     }
@@ -226,7 +226,6 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         d_html->setDocumentWidth(index, optionV4);
     }
 
-
     // Painting item without text
     QString backupText = optionV4.text;
     optionV4.text = QString(); // inhibe text displaying
@@ -285,6 +284,11 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     // redefine html rect width
     htmlRect.setWidth(d_html->getMaxWidth(optionV4));
+
+    // Update html colors according to the state
+    // TODO: improve this using a better cache system, instead of using QMap<QPersistentIndexModel, QTextDocument*> use internal struc with {index, state, doc}
+    d_html->setHtml(index, optionV4);
+    d_html->setDocumentWidth(index, optionV4);
 
     // Adapt document width & draw it
     d_html->drawDocument(painter, index, htmlRect);
