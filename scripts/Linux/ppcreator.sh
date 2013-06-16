@@ -4,7 +4,7 @@
 # License : GPLv3
 # Create the Launchpad PPA package for one specific application
 
-SCRIPT_VERSION=0.7.3
+SCRIPT_VERSION=0.9.0
 
 PACKDIR="~/ppa_"
 APP_VERSION=""
@@ -19,7 +19,7 @@ WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
 DPUT_ARGS=""
-SERIES="maverick natty oneiric precise"
+SERIES="precise quantal raring"
 
 showHelp()
 {
@@ -123,6 +123,25 @@ changeToDebHelper8()
   echo "8" > $SOURCEDIR"/debian/compat"
 }
 
+# According to the currently building ubuntu distro,
+# adapt the debian/{control,rules} to use the internal libquazip or
+# the system lib.
+checkQuazip()
+{
+  if [ "$UBUNTU_RELEASE_NAME" = "precise" ]; then
+    echo "    * Patching debian/{control,rules} for libquazip"
+    # Build internal libquazip
+    CONTROL_FILE=$SOURCEDIR"/debian/control"
+    RULES_FILE=$SOURCEDIR"/debian/rules"
+    # Remove build dependency in the control file
+    sed -i "s/Build-Depends: libquazip0-dev (>= 0.4.4)/# Removed libquazip0 build dependency/" $CONTROL_FILE
+    # Update rules
+    sed -i "s/\"CONFIG+=dontbuildquazip\"//" $RULES_FILE
+    return 0;
+  fi
+  # Use system lib: keep control|rules unchanged
+}
+
 # prepare source package using svn-buildpackage
 svnBuildPackage()
 {
@@ -137,6 +156,7 @@ svnBuildPackage()
   SOURCEDIR=$PACKDIR"/trunk"
   changeToDebHelper8
   patchChangelog
+  checkQuazip
   cd $PACKDIR"/trunk"
   echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
   svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore
