@@ -1,397 +1,397 @@
-message(***  Catching the current specs)
+!isEmpty(WARN_SPEC):message(***  Catching the current specs)
 aix-g++{
-  message(aix-g++)
+  !isEmpty(WARN_SPEC):message(aix-g++)
   CURRENT_SPEC=aix-gpp
 }
 aix-g++-64{
-  message(aix-g++-64)
+  !isEmpty(WARN_SPEC):message(aix-g++-64)
   CURRENT_SPEC=aix-gpp-64
 }
 aix-xlc{
-  message(aix-xlc)
+  !isEmpty(WARN_SPEC):message(aix-xlc)
   CURRENT_SPEC=aix-xlc
 }
 aix-xlc-64{
-  message(aix-xlc-64)
+  !isEmpty(WARN_SPEC):message(aix-xlc-64)
   CURRENT_SPEC=aix-xlc-64
 }
 blackberry-armv7le-qcc{
-  message(blackberry-armv7le-qcc)
+  !isEmpty(WARN_SPEC):message(blackberry-armv7le-qcc)
   CURRENT_SPEC=blackberry-armv7le-qcc
 }
 blackberry-x86-qcc{
-  message(blackberry-x86-qcc)
+  !isEmpty(WARN_SPEC):message(blackberry-x86-qcc)
   CURRENT_SPEC=blackberry-x86-qcc
 }
 cygwin-g++{
-  message(cygwin-g++)
+  !isEmpty(WARN_SPEC):message(cygwin-g++)
   CURRENT_SPEC=cygwin-gpp
 }
 darwin-g++{
-  message(darwin-g++)
+  !isEmpty(WARN_SPEC):message(darwin-g++)
   CURRENT_SPEC=darwin-gpp
 }
 freebsd-g++{
-  message(freebsd-g++)
+  !isEmpty(WARN_SPEC):message(freebsd-g++)
   CURRENT_SPEC=freebsd-gpp
 }
 freebsd-g++46{
-  message(freebsd-g++46)
+  !isEmpty(WARN_SPEC):message(freebsd-g++46)
   CURRENT_SPEC=freebsd-gpp46
 }
 freebsd-icc{
-  message(freebsd-icc)
+  !isEmpty(WARN_SPEC):message(freebsd-icc)
   CURRENT_SPEC=freebsd-icc
 }
 hpux-acc{
-  message(hpux-acc)
+  !isEmpty(WARN_SPEC):message(hpux-acc)
   CURRENT_SPEC=hpux-acc
 }
 hpux-acc-64{
-  message(hpux-acc-64)
+  !isEmpty(WARN_SPEC):message(hpux-acc-64)
   CURRENT_SPEC=hpux-acc-64
 }
 hpux-acc-o64{
-  message(hpux-acc-o64)
+  !isEmpty(WARN_SPEC):message(hpux-acc-o64)
   CURRENT_SPEC=hpux-acc-o64
 }
 hpux-g++{
-  message(hpux-g++)
+  !isEmpty(WARN_SPEC):message(hpux-g++)
   CURRENT_SPEC=hpux-gpp
 }
 hpux-g++-64{
-  message(hpux-g++-64)
+  !isEmpty(WARN_SPEC):message(hpux-g++-64)
   CURRENT_SPEC=hpux-gpp-64
 }
 hpuxi-acc-32{
-  message(hpuxi-acc-32)
+  !isEmpty(WARN_SPEC):message(hpuxi-acc-32)
   CURRENT_SPEC=hpuxi-acc-32
 }
 hpuxi-acc-64{
-  message(hpuxi-acc-64)
+  !isEmpty(WARN_SPEC):message(hpuxi-acc-64)
   CURRENT_SPEC=hpuxi-acc-64
 }
 hpuxi-g++-64{
-  message(hpuxi-g++-64)
+  !isEmpty(WARN_SPEC):message(hpuxi-g++-64)
   CURRENT_SPEC=hpuxi-gpp-64
 }
 hurd-g++{
-  message(hurd-g++)
+  !isEmpty(WARN_SPEC):message(hurd-g++)
   CURRENT_SPEC=hurd-gpp
 }
 irix-cc{
-  message(irix-cc)
+  !isEmpty(WARN_SPEC):message(irix-cc)
   CURRENT_SPEC=irix-cc
 }
 irix-cc-64{
-  message(irix-cc-64)
+  !isEmpty(WARN_SPEC):message(irix-cc-64)
   CURRENT_SPEC=irix-cc-64
 }
 irix-g++{
-  message(irix-g++)
+  !isEmpty(WARN_SPEC):message(irix-g++)
   CURRENT_SPEC=irix-gpp
 }
 irix-g++-64{
-  message(irix-g++-64)
+  !isEmpty(WARN_SPEC):message(irix-g++-64)
   CURRENT_SPEC=irix-gpp-64
 }
 linux-arm-gnueabi-g++{
-  message(linux-arm-gnueabi-g++)
+  !isEmpty(WARN_SPEC):message(linux-arm-gnueabi-g++)
   CURRENT_SPEC=linux-arm-gnueabi-gpp
 }
 linux-clang{
-  message(linux-clang)
+  !isEmpty(WARN_SPEC):message(linux-clang)
   CURRENT_SPEC=linux-clang
 }
 linux-cxx{
-  message(linux-cxx)
+  !isEmpty(WARN_SPEC):message(linux-cxx)
   CURRENT_SPEC=linux-cxx
 }
 linux-g++{
-  message(linux-g++)
+  !isEmpty(WARN_SPEC):message(linux-g++)
   CURRENT_SPEC=linux-gpp
 }
 linux-g++-32{
-  message(linux-g++-32)
+  !isEmpty(WARN_SPEC):message(linux-g++-32)
   CURRENT_SPEC=linux-gpp-32
 }
 linux-g++-64{
-  message(linux-g++-64)
+  !isEmpty(WARN_SPEC):message(linux-g++-64)
   CURRENT_SPEC=linux-gpp-64
 }
 linux-g++-maemo{
-  message(linux-g++-maemo)
+  !isEmpty(WARN_SPEC):message(linux-g++-maemo)
   CURRENT_SPEC=linux-gpp-maemo
 }
 linux-icc{
-  message(linux-icc)
+  !isEmpty(WARN_SPEC):message(linux-icc)
   CURRENT_SPEC=linux-icc
 }
 linux-icc-32{
-  message(linux-icc-32)
+  !isEmpty(WARN_SPEC):message(linux-icc-32)
   CURRENT_SPEC=linux-icc-32
 }
 linux-icc-64{
-  message(linux-icc-64)
+  !isEmpty(WARN_SPEC):message(linux-icc-64)
   CURRENT_SPEC=linux-icc-64
 }
 linux-kcc{
-  message(linux-kcc)
+  !isEmpty(WARN_SPEC):message(linux-kcc)
   CURRENT_SPEC=linux-kcc
 }
 linux-llvm{
-  message(linux-llvm)
+  !isEmpty(WARN_SPEC):message(linux-llvm)
   CURRENT_SPEC=linux-llvm
 }
 linux-lsb-g++{
-  message(linux-lsb-g++)
+  !isEmpty(WARN_SPEC):message(linux-lsb-g++)
   CURRENT_SPEC=linux-lsb-gpp
 }
 linux-pgcc{
-  message(linux-pgcc)
+  !isEmpty(WARN_SPEC):message(linux-pgcc)
   CURRENT_SPEC=linux-pgcc
 }
 lynxos-g++{
-  message(lynxos-g++)
+  !isEmpty(WARN_SPEC):message(lynxos-g++)
   CURRENT_SPEC=lynxos-gpp
 }
 macx-clang{
-  message(macx-clang)
+  !isEmpty(WARN_SPEC):message(macx-clang)
   CURRENT_SPEC=macx-clang
 }
 macx-clang-32{
-  message(macx-clang-32)
+  !isEmpty(WARN_SPEC):message(macx-clang-32)
   CURRENT_SPEC=macx-clang-32
 }
 macx-clang-libc++{
-  message(macx-clang-libc++)
+  !isEmpty(WARN_SPEC):message(macx-clang-libc++)
   CURRENT_SPEC=macx-clang-libcpp
 }
 macx-clang-libc++-32{
-  message(macx-clang-libc++-32)
+  !isEmpty(WARN_SPEC):message(macx-clang-libc++-32)
   CURRENT_SPEC=macx-clang-libcpp-32
 }
 macx-g++{
-  message(macx-g++)
+  !isEmpty(WARN_SPEC):message(macx-g++)
   CURRENT_SPEC=macx-gpp
 }
 macx-g++-32{
-  message(macx-g++-32)
+  !isEmpty(WARN_SPEC):message(macx-g++-32)
   CURRENT_SPEC=macx-gpp-32
 }
 macx-g++40{
-  message(macx-g++40)
+  !isEmpty(WARN_SPEC):message(macx-g++40)
   CURRENT_SPEC=macx-gpp40
 }
 macx-g++42{
-  message(macx-g++42)
+  !isEmpty(WARN_SPEC):message(macx-g++42)
   CURRENT_SPEC=macx-gpp42
 }
 macx-icc{
-  message(macx-icc)
+  !isEmpty(WARN_SPEC):message(macx-icc)
   CURRENT_SPEC=macx-icc
 }
 macx-llvm{
-  message(macx-llvm)
+  !isEmpty(WARN_SPEC):message(macx-llvm)
   CURRENT_SPEC=macx-llvm
 }
 macx-xcode{
-  message(macx-xcode)
+  !isEmpty(WARN_SPEC):message(macx-xcode)
   CURRENT_SPEC=macx-xcode
 }
 modules{
-  message(modules)
+  !isEmpty(WARN_SPEC):message(modules)
   CURRENT_SPEC=modules
 }
 netbsd-g++{
-  message(netbsd-g++)
+  !isEmpty(WARN_SPEC):message(netbsd-g++)
   CURRENT_SPEC=netbsd-gpp
 }
 openbsd-g++{
-  message(openbsd-g++)
+  !isEmpty(WARN_SPEC):message(openbsd-g++)
   CURRENT_SPEC=openbsd-gpp
 }
 qconfig.pri{
-  message(qconfig.pri)
+  !isEmpty(WARN_SPEC):message(qconfig.pri)
   CURRENT_SPEC=qconfig.pri
 }
 qnx-armv7le-qcc{
-  message(qnx-armv7le-qcc)
+  !isEmpty(WARN_SPEC):message(qnx-armv7le-qcc)
   CURRENT_SPEC=qnx-armv7le-qcc
 }
 qnx-x86-qcc{
-  message(qnx-x86-qcc)
+  !isEmpty(WARN_SPEC):message(qnx-x86-qcc)
   CURRENT_SPEC=qnx-x86-qcc
 }
 sco-cc{
-  message(sco-cc)
+  !isEmpty(WARN_SPEC):message(sco-cc)
   CURRENT_SPEC=sco-cc
 }
 sco-g++{
-  message(sco-g++)
+  !isEmpty(WARN_SPEC):message(sco-g++)
   CURRENT_SPEC=sco-gpp
 }
 solaris-cc{
-  message(solaris-cc)
+  !isEmpty(WARN_SPEC):message(solaris-cc)
   CURRENT_SPEC=solaris-cc
 }
 solaris-cc-64{
-  message(solaris-cc-64)
+  !isEmpty(WARN_SPEC):message(solaris-cc-64)
   CURRENT_SPEC=solaris-cc-64
 }
 solaris-cc-64-stlport{
-  message(solaris-cc-64-stlport)
+  !isEmpty(WARN_SPEC):message(solaris-cc-64-stlport)
   CURRENT_SPEC=solaris-cc-64-stlport
 }
 solaris-cc-stlport{
-  message(solaris-cc-stlport)
+  !isEmpty(WARN_SPEC):message(solaris-cc-stlport)
   CURRENT_SPEC=solaris-cc-stlport
 }
 solaris-g++{
-  message(solaris-g++)
+  !isEmpty(WARN_SPEC):message(solaris-g++)
   CURRENT_SPEC=solaris-gpp
 }
 solaris-g++-64{
-  message(solaris-g++-64)
+  !isEmpty(WARN_SPEC):message(solaris-g++-64)
   CURRENT_SPEC=solaris-gpp-64
 }
 tru64-cxx{
-  message(tru64-cxx)
+  !isEmpty(WARN_SPEC):message(tru64-cxx)
   CURRENT_SPEC=tru64-cxx
 }
 tru64-g++{
-  message(tru64-g++)
+  !isEmpty(WARN_SPEC):message(tru64-g++)
   CURRENT_SPEC=tru64-gpp
 }
 unixware-cc{
-  message(unixware-cc)
+  !isEmpty(WARN_SPEC):message(unixware-cc)
   CURRENT_SPEC=unixware-cc
 }
 unixware-g++{
-  message(unixware-g++)
+  !isEmpty(WARN_SPEC):message(unixware-g++)
   CURRENT_SPEC=unixware-gpp
 }
 unsupported{
-  message(unsupported)
+  !isEmpty(WARN_SPEC):message(unsupported)
   CURRENT_SPEC=unsupported
 }
 win32-g++{
-  message(win32-g++)
+  !isEmpty(WARN_SPEC):message(win32-g++)
   CURRENT_SPEC=win32-gpp
 }
 win32-icc{
-  message(win32-icc)
+  !isEmpty(WARN_SPEC):message(win32-icc)
   CURRENT_SPEC=win32-icc
 }
 win32-msvc2005{
-  message(win32-msvc2005)
+  !isEmpty(WARN_SPEC):message(win32-msvc2005)
   CURRENT_SPEC=win32-msvc2005
 }
 win32-msvc2008{
-  message(win32-msvc2008)
+  !isEmpty(WARN_SPEC):message(win32-msvc2008)
   CURRENT_SPEC=win32-msvc2008
 }
 win32-msvc2010{
-  message(win32-msvc2010)
+  !isEmpty(WARN_SPEC):message(win32-msvc2010)
   CURRENT_SPEC=win32-msvc2010
 }
 win32-msvc2012{
-  message(win32-msvc2012)
+  !isEmpty(WARN_SPEC):message(win32-msvc2012)
   CURRENT_SPEC=win32-msvc2012
 }
 wince50standard-armv4i-msvc2005{
-  message(wince50standard-armv4i-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince50standard-armv4i-msvc2005)
   CURRENT_SPEC=wince50standard-armv4i-msvc2005
 }
 wince50standard-armv4i-msvc2008{
-  message(wince50standard-armv4i-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince50standard-armv4i-msvc2008)
   CURRENT_SPEC=wince50standard-armv4i-msvc2008
 }
 wince50standard-mipsii-msvc2005{
-  message(wince50standard-mipsii-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince50standard-mipsii-msvc2005)
   CURRENT_SPEC=wince50standard-mipsii-msvc2005
 }
 wince50standard-mipsii-msvc2008{
-  message(wince50standard-mipsii-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince50standard-mipsii-msvc2008)
   CURRENT_SPEC=wince50standard-mipsii-msvc2008
 }
 wince50standard-mipsiv-msvc2005{
-  message(wince50standard-mipsiv-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince50standard-mipsiv-msvc2005)
   CURRENT_SPEC=wince50standard-mipsiv-msvc2005
 }
 wince50standard-mipsiv-msvc2008{
-  message(wince50standard-mipsiv-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince50standard-mipsiv-msvc2008)
   CURRENT_SPEC=wince50standard-mipsiv-msvc2008
 }
 wince50standard-sh4-msvc2005{
-  message(wince50standard-sh4-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince50standard-sh4-msvc2005)
   CURRENT_SPEC=wince50standard-sh4-msvc2005
 }
 wince50standard-sh4-msvc2008{
-  message(wince50standard-sh4-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince50standard-sh4-msvc2008)
   CURRENT_SPEC=wince50standard-sh4-msvc2008
 }
 wince50standard-x86-msvc2005{
-  message(wince50standard-x86-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince50standard-x86-msvc2005)
   CURRENT_SPEC=wince50standard-x86-msvc2005
 }
 wince50standard-x86-msvc2008{
-  message(wince50standard-x86-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince50standard-x86-msvc2008)
   CURRENT_SPEC=wince50standard-x86-msvc2008
 }
 wince60standard-armv4i-msvc2005{
-  message(wince60standard-armv4i-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince60standard-armv4i-msvc2005)
   CURRENT_SPEC=wince60standard-armv4i-msvc2005
 }
 wince60standard-x86-msvc2005{
-  message(wince60standard-x86-msvc2005)
+  !isEmpty(WARN_SPEC):message(wince60standard-x86-msvc2005)
   CURRENT_SPEC=wince60standard-x86-msvc2005
 }
 wince70embedded-armv4i-msvc2008{
-  message(wince70embedded-armv4i-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince70embedded-armv4i-msvc2008)
   CURRENT_SPEC=wince70embedded-armv4i-msvc2008
 }
 wince70embedded-x86-msvc2008{
-  message(wince70embedded-x86-msvc2008)
+  !isEmpty(WARN_SPEC):message(wince70embedded-x86-msvc2008)
   CURRENT_SPEC=wince70embedded-x86-msvc2008
 }
 wincewm50pocket-msvc2005{
-  message(wincewm50pocket-msvc2005)
+  !isEmpty(WARN_SPEC):message(wincewm50pocket-msvc2005)
   CURRENT_SPEC=wincewm50pocket-msvc2005
 }
 wincewm50pocket-msvc2008{
-  message(wincewm50pocket-msvc2008)
+  !isEmpty(WARN_SPEC):message(wincewm50pocket-msvc2008)
   CURRENT_SPEC=wincewm50pocket-msvc2008
 }
 wincewm50smart-msvc2005{
-  message(wincewm50smart-msvc2005)
+  !isEmpty(WARN_SPEC):message(wincewm50smart-msvc2005)
   CURRENT_SPEC=wincewm50smart-msvc2005
 }
 wincewm50smart-msvc2008{
-  message(wincewm50smart-msvc2008)
+  !isEmpty(WARN_SPEC):message(wincewm50smart-msvc2008)
   CURRENT_SPEC=wincewm50smart-msvc2008
 }
 wincewm60professional-msvc2005{
-  message(wincewm60professional-msvc2005)
+  !isEmpty(WARN_SPEC):message(wincewm60professional-msvc2005)
   CURRENT_SPEC=wincewm60professional-msvc2005
 }
 wincewm60professional-msvc2008{
-  message(wincewm60professional-msvc2008)
+  !isEmpty(WARN_SPEC):message(wincewm60professional-msvc2008)
   CURRENT_SPEC=wincewm60professional-msvc2008
 }
 wincewm60standard-msvc2005{
-  message(wincewm60standard-msvc2005)
+  !isEmpty(WARN_SPEC):message(wincewm60standard-msvc2005)
   CURRENT_SPEC=wincewm60standard-msvc2005
 }
 wincewm60standard-msvc2008{
-  message(wincewm60standard-msvc2008)
+  !isEmpty(WARN_SPEC):message(wincewm60standard-msvc2008)
   CURRENT_SPEC=wincewm60standard-msvc2008
 }
 wincewm65professional-msvc2005{
-  message(wincewm65professional-msvc2005)
+  !isEmpty(WARN_SPEC):message(wincewm65professional-msvc2005)
   CURRENT_SPEC=wincewm65professional-msvc2005
 }
 wincewm65professional-msvc2008{
-  message(wincewm65professional-msvc2008)
+  !isEmpty(WARN_SPEC):message(wincewm65professional-msvc2008)
   CURRENT_SPEC=wincewm65professional-msvc2008
 }

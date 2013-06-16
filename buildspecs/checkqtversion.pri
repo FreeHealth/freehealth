@@ -27,5 +27,6 @@ defineTest(minQtVersion) {
 #    error("Use at least Qt 4.7.4.")
 #}
 
+WARN_SPEC=true
 include($${PWD}/catchspec.pri)
 
