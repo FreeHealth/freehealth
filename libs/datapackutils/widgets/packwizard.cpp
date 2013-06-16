@@ -152,8 +152,10 @@ const QList<Pack> &PackWizard::updatePacks() const
     return d->m_UpdatePacks;
 }
 
-DataPack::PackWizard *PackPage::packWizard() const {return qobject_cast<DataPack::PackWizard*>(wizard());}
-
+DataPack::PackWizard *PackPage::packWizard() const
+{
+    return qobject_cast<DataPack::PackWizard*>(wizard());
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////  PackIntroPage  ///////////////////////////////////////
@@ -162,8 +164,6 @@ PackIntroPage::PackIntroPage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackIntroPage");
-    setTitle(tr("Pack processing"));
-    setSubTitle(tr("The following packs will be processed. Please verify all information."));
     m_Browser = new QTextBrowser(this);
     QVBoxLayout *lay = new QVBoxLayout(this);
     setLayout(lay);
@@ -185,6 +185,8 @@ static QString toHtml(const QList<Pack> &packs, const QString &title)
 
 void PackIntroPage::initializePage()
 {
+    setTitle(tr("Pack processing"));
+    setSubTitle(tr("The following packs will be processed. Please verify all information."));
     m_Browser->clear();
     // Create the HTML output of processing packs
     QString html = "<p>";
@@ -228,8 +230,6 @@ PackLicensePage::PackLicensePage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackLicensePage");
-    setTitle(tr("License agreement"));
-    setSubTitle(tr("The following packs need a license agreement."));
     m_Browser = new QTextBrowser(this);
     m_AgreeBox = new QCheckBox(this);
     m_AgreeBox->setText(tr("&Accept all license terms"));
@@ -287,6 +287,8 @@ static QString toHtml(const QList<Pack> &packs)
 
 void PackLicensePage::initializePage()
 {
+    setTitle(tr("License agreement"));
+    setSubTitle(tr("The following packs need a license agreement."));
     m_Browser->clear();
     // Create the HTML output of processing packs
     QString html = "<p>";
@@ -323,9 +325,6 @@ PackDownloadPage::PackDownloadPage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackDownloadPage");
-    setObjectName("PackDownloadPage");
-    setTitle(tr("Downloading packs"));
-    setSubTitle(tr("Please wait until all packs are downloaded."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
@@ -348,6 +347,8 @@ static inline QMovie *movie()
 
 void PackDownloadPage::initializePage()
 {
+    setTitle(tr("Downloading packs"));
+    setSubTitle(tr("Please wait until all packs are downloaded."));
     m_PackDownloaded.clear();
     m_DownloadPacks.clear();
     m_DownloadPacks << packWizard()->installPacks();
@@ -481,8 +482,6 @@ PackInstallPage::PackInstallPage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackInstallPage");
-    setTitle(tr("%1 pack(s) to install").arg(packWizard()->installPacks().count()));
-    setSubTitle(tr("Please wait until all packs are installed."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
@@ -497,6 +496,8 @@ PackInstallPage::PackInstallPage(QWidget *parent) :
 
 void PackInstallPage::initializePage()
 {
+    setTitle(tr("%1 pack(s) to install").arg(packWizard()->installPacks().count()));
+    setSubTitle(tr("Please wait until all packs are installed."));
     m_PackInstalled.clear();
     m_InstallPacks.clear();
     m_InstallPacks << packWizard()->installPacks();
@@ -611,8 +612,6 @@ PackRemovePage::PackRemovePage(QWidget *parent) :
     PackPage(parent)
 {
     setObjectName("PackRemovePage");
-    setTitle(tr("%1 pack(s) to remove").arg(packWizard()->removePacks().count()));
-    setSubTitle(tr("Please wait until all packs are removed."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
@@ -623,6 +622,8 @@ PackRemovePage::PackRemovePage(QWidget *parent) :
 
 void PackRemovePage::initializePage()
 {
+    setTitle(tr("%1 pack(s) to remove").arg(packWizard()->removePacks().count()));
+    setSubTitle(tr("Please wait until all packs are removed."));
     for(int i = 0; i < packWizard()->removePacks().count(); ++i) {
         const Pack &pack = packWizard()->removePacks().at(i);
         // Create a label
