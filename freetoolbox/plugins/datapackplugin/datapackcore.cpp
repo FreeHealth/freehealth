@@ -95,6 +95,16 @@ public:
                 .arg(Core::Constants::PATH_TO_DATAPACK_DESCRIPTION_FILES);
     }
 
+    QString normalizedApplicationVersion()
+    {
+        QString version = qApp->applicationVersion();
+        if (version.contains("~"))
+            version = version.left(version.indexOf("~"));
+        if (version.contains("-"))
+            version = version.left(version.indexOf("-"));
+        return version;
+    }
+
     // Create the default servers
     bool createServers()
     {
@@ -106,21 +116,23 @@ public:
         DataPackServerQuery *freeFrenchAssoServer = new DataPackServerQuery;
         DataPackServerQuery *nonFreeFrenchAssoServer = new DataPackServerQuery;
 
+        const QString &version = normalizedApplicationVersion();
+
         freeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_FREE);
-        freeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/freecommunity/server.conf.xml");
-        freeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/freecommunity");
+        freeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/free/community/server.conf.xml");
+        freeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/free/community/" + version);
 
         nonFreeCommunityServer->setServerInternalUuid(Core::Constants::SERVER_COMMUNITY_NONFREE);
-        nonFreeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfreecommunity/server.conf.xml");
-        nonFreeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfreecommunity");
+        nonFreeCommunityServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfree/community/server.conf.xml");
+        nonFreeCommunityServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfree/community/" + version);
 
         freeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_FREE);
-        freeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/freeasso/server.conf.xml");
-        freeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/freeasso");
+        freeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/free/asso/server.conf.xml");
+        freeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/free/asso/" + version);
 
         nonFreeFrenchAssoServer->setServerInternalUuid(Core::Constants::SERVER_ASSO_NONFREE);
-        nonFreeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfreeasso/server.conf.xml");
-        nonFreeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfreeasso");
+        nonFreeFrenchAssoServer->setOriginalDescriptionFileAbsolutePath(serverDescriptionFileAbsPath() + "/nonfree/asso/server.conf.xml");
+        nonFreeFrenchAssoServer->setOutputServerAbsolutePath(serverOutputAbsPath() + "/nonfree/asso/" + version);
 
         _servers.append(freeCommunityServer);
         _servers.append(nonFreeCommunityServer);
@@ -306,8 +318,8 @@ bool DataPackCore::createServer(const QString &serverUid)
 
     // Check server path
     QString serverPath = server.outputServerAbsolutePath();
-    if (server.autoVersion())
-        serverPath.append(QDir::separator() + QString(PACKAGE_VERSION) + QDir::separator());
+//    if (server.autoVersion())
+//        serverPath.append(QDir::separator() + qApp->applicationVersion() + QDir::separator());
     if (!Utils::checkDir(serverPath, true, "DataPackCore"))
         return false;
 
@@ -346,15 +358,17 @@ bool DataPackCore::createServer(const QString &serverUid)
         descr.setData(DataPack::PackDescription::Md5, Utils::fileMd5(path));
         descr.setData(DataPack::PackDescription::Sha1, Utils::fileSha1(path));
         if (query.autoVersion()) {
-            QString version = QString(PACKAGE_VERSION);
+            // Normalized version only used for path
+            const QString &version = d->normalizedApplicationVersion();
             QString versionnedFileName = descr.data(DataPack::ServerDescription::AbsFileName).toString();
-            if (!versionnedFileName.startsWith(version))
-                versionnedFileName.prepend(version + QDir::separator());
+            if (versionnedFileName.startsWith(version))
+                versionnedFileName.replace(version, ".");
+            // For Description use the qApp->applicationVersion()
             descr.setData(DataPack::ServerDescription::AbsFileName, versionnedFileName);
-            descr.setData(DataPack::ServerDescription::Version, version);
-            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, version);
-            descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, version);
-            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, version);
+            descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
+            descr.setData(DataPack::PackDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::PackDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+            descr.setData(DataPack::PackDescription::FreeAccountCompatVersion, qApp->applicationVersion());
         }
 
         QString outputPackDescriptionFile = QFileInfo(path).absolutePath() + "/packdescription.xml";
@@ -379,10 +393,10 @@ bool DataPackCore::createServer(const QString &serverUid)
     descr.fromXmlFile(server.originalDescriptionFileAbsolutePath());
     descr.setData(DataPack::ServerDescription::LastModificationDate, QDate::currentDate());
     if (server.autoVersion()) {
-        descr.setData(DataPack::ServerDescription::Version, QString(PACKAGE_VERSION));
-        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, QString(PACKAGE_VERSION));
-        descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, QString(PACKAGE_VERSION));
-        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, QString(PACKAGE_VERSION));
+        descr.setData(DataPack::ServerDescription::Version, qApp->applicationVersion());
+        descr.setData(DataPack::ServerDescription::FreeMedFormsCompatVersion, qApp->applicationVersion());
+        descr.setData(DataPack::ServerDescription::FreeDiamsCompatVersion, qApp->applicationVersion());
+        descr.setData(DataPack::ServerDescription::FreeAccountCompatVersion, qApp->applicationVersion());
     }
     // Find final tag of the server description
     QString xml = descr.toXml();
