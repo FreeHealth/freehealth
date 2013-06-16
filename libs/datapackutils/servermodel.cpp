@@ -104,7 +104,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
                         .arg(tkTr(Trans::Constants::LAST_CHECK))
                         .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
             } else {
-                label += QString("<br /><small>%2</small>")
+                label += QString("<br /><span style=\"color:gray; font-size:small;\">%2</span>")
                         .arg(tkTr(Trans::Constants::NOT_CONNECTED));
             }
 
