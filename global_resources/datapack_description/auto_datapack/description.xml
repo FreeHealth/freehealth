@@ -32,7 +32,7 @@
   </datapack>
 
   <datapack description="./nonfree/cheques/packdescription.xml" server="asso_nonfree">
-    <content type="file_nonzipped">./nonfree/cheques/france.zip</content>
+    <content type="file_nonzipped">./nonfree/cheques/france.xml</content>
   </datapack>
 
   <datapack description="./nonfree/french_medical_docs/packdescription.xml" server="asso_nonfree">

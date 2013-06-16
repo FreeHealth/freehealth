@@ -7,13 +7,9 @@
     <!-- Non translatable values -->
     <uuid>freemedforms.certified.drugs.fr.noddi</uuid>
     <authors>Eric Maeker, MD</authors>
-    <vendor>asso.freemedforms.com</vendor>
-    <version>0.9.0</version>
-    <fmfv>0.8.9</fmfv>
-    <fdv>0.8.9</fdv>
     <lmdate>2013-06-15</lmdate>
     <cdate>2011-11-26</cdate>
-    <icon>__theme__/drugengine_ddi.png</icon>
+    <icon>__theme__/freediams.png</icon>
     <weblink></weblink>
     <bibliography/>
     <file>drugs/fr_noddi/master.db.zip</file>
