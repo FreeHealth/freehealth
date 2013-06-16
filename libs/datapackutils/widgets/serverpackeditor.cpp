@@ -270,7 +270,7 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     d->ui->packView->setAlternatingRowColors(true);
     d->ui->packView->setUniformItemSizes(false);
 
-//    // server page
+    // server view/model/delegate
     Utils::HtmlDelegate *serverdelegate = new Utils::HtmlDelegate(this);
     d->m_serverModel = new ServerModel(this);
     d->ui->serverListView->setModel(d->m_serverModel);
@@ -470,9 +470,17 @@ void ServerPackEditor::onPackCategoriesChanged(const QModelIndex &index, const Q
 {
     if (!index.isValid())
         return;
+    // Filter the packmodel according to the selected category
     const QString &vendor = d->m_PackCategoriesModel->vendor(index);
     const QList<Pack::DataType> &type = d->m_PackCategoriesModel->datatype(index);
     d->m_PackModel->filter(vendor, type);
+    // Clear the view
+    d->ui->packName->clear();
+    d->ui->packSummary->clear();
+    // Select the first available row
+    d->ui->packView->setCurrentIndex(d->m_PackModel->index(0,0));
+    d->ui->packView->selectionModel()->select(d->m_PackModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackIndexActivated(d->m_PackModel->index(0,0), QModelIndex());
 }
 
 void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
