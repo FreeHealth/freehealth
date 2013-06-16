@@ -44,7 +44,7 @@ PACKAGES_PATH=""
 
 # Qt Prject file to build (contains absolute file path)
 PROJECT_FILE=""
-BUNDLE_NAME="FreeMedForms FreeDiams FreeAccount"
+BUNDLE_NAME="FreeMedForms FreeDiams"
 PROJECT="" # lowered case of BundleName
 EXTRA_PLUGINS=""
 
