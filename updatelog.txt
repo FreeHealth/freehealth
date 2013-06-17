@@ -1,5 +1,5 @@
 FreeMedForms
-0.8.4
+0.9.0
 ===== News =====
 
   * Forms
@@ -54,6 +54,7 @@ FreeMedForms
   * FreeDiams
     * Corrected: losing intake scheme when navigating inside the dosage tabs
     * Corrected: Xml exchange-out file now handles the printed PDF files
+    * Corrected: build process did not use the optionnalplugins.pri (> 0.9.0~beta1)
     * Improved: default posologic sentence (for the old and the new token manager)
     * Commandline params
       * weight/weightunit are now grouped in weightingrams
