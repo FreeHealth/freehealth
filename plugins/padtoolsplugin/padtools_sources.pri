@@ -1,5 +1,4 @@
 DEFINES += PADTOOLS_LIBRARY
-message(Building PadTools plugin)
 
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/padtoolsplugin_dependencies.pri )
