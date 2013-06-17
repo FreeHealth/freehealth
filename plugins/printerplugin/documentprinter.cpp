@@ -139,6 +139,7 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
 
 void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 {
+    Q_UNUSED(papers);
     QString footer;
     if (user()) {
         // TODO: wrong papers
@@ -176,6 +177,7 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 
 void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) const
 {
+    Q_UNUSED(papers);
     int align = Qt::AlignCenter;
     int presence = Printer::DuplicatesOnly;
     QString html;
