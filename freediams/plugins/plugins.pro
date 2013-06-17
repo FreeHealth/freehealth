@@ -58,6 +58,9 @@ ddi.subdir   = druginteractionsplugin
 ddi.depends += drugsbase
 ddi.depends += core
 
+# optional plugins
+include(../../buildspecs/optionalplugins.pri)
+
 with-pad {
     SUBDIRS += padtools
     padtools.subdir = padtoolsplugin
