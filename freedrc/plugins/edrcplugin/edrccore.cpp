@@ -33,7 +33,7 @@
  */
 
 #include "edrccore.h"
-#include "edrcbase.h"
+#include <edrcplugin/database/edrcbase.h>
 
 #include <translationutils/constants.h>
 

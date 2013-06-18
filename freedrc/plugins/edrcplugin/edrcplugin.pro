@@ -14,37 +14,37 @@ HEADERS += \
     edrc_exporter.h \
     edrcplugin.h \
     edrccore.h \
-    edrcbase.h \
-    rcmodel.h \
-    rcemodel.h \
-    rcitemmodel.h \
-    rcclassmodel.h \
-    edrc_editor_widget.h \
-    rctreemodel.h \
-    rccriteriasmodel.h \
-    rcargumentsdialog.h \
-    sfmgaboutdialog.h \
-    rcusermodel.h
+    database/edrcbase.h \
+    models/rcmodel.h \
+    models/preventablecriticalriskmodel.h \
+    models/rcitemmodel.h \
+    models/rcclassmodel.h \
+    models/rctreemodel.h \
+    models/rcusermodel.h \
+    models/rccriteriasmodel.h \
+    widgets/rcargumentsdialog.h \
+    widgets/sfmgaboutdialog.h \
+    widgets/rceditorwidget.h
 
 SOURCES += \
     edrcplugin.cpp \
     edrccore.cpp \
-    edrcbase.cpp \
-    rcmodel.cpp \
-    rcemodel.cpp \
-    rcitemmodel.cpp \
-    rcclassmodel.cpp \
-    edrc_editor_widget.cpp \
-    rctreemodel.cpp \
-    rccriteriasmodel.cpp \
-    rcargumentsdialog.cpp \
-    sfmgaboutdialog.cpp \
-    rcusermodel.cpp
+    database/edrcbase.cpp \
+    models/rcmodel.cpp \
+    models/preventablecriticalriskmodel.cpp \
+    models/rcitemmodel.cpp \
+    models/rcclassmodel.cpp \
+    models/rctreemodel.cpp \
+    models/rccriteriasmodel.cpp \
+    models/rcusermodel.cpp \
+    widgets/rcargumentsdialog.cpp \
+    widgets/sfmgaboutdialog.cpp \
+    widgets/rceditorwidget.cpp
 
 FORMS += \
-    edrc_editor_widget.ui \
-    rcargumentsdialog.ui \
-    sfmgaboutdialog.ui
+    widgets/rceditorwidget.ui \
+    widgets/rcargumentsdialog.ui \
+    widgets/sfmgaboutdialog.ui
 
 
 OTHER_FILES += eDRC.pluginspec

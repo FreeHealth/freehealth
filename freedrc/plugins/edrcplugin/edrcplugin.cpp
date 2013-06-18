@@ -138,7 +138,7 @@ void EdrcPlugin::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()), Qt::UniqueConnection);
 }
 
-#include "edrc_editor_widget.h"
+#include <edrcplugin/widgets/rceditorwidget.h>
 void EdrcPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
