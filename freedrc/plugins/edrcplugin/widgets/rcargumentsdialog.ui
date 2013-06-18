@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RcArgumentsDialog</class>
- <widget class="QDialog" name="RcArgumentsDialog">
+ <class>eDRC::Internal::RcArgumentsDialog</class>
+ <widget class="QDialog" name="eDRC::Internal::RcArgumentsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -76,7 +76,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RcArgumentsDialog</receiver>
+   <receiver>eDRC::Internal::RcArgumentsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -92,7 +92,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RcArgumentsDialog</receiver>
+   <receiver>eDRC::Internal::RcArgumentsDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

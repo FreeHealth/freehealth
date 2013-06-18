@@ -24,19 +24,20 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "edrc_editor_widget.h"
-#include "edrcbase.h"
-#include "edrccore.h"
-#include "rcclassmodel.h"
-#include "rcmodel.h"
-#include "rcitemmodel.h"
-#include "rctreemodel.h"
-#include "rcemodel.h"
-#include "rccriteriasmodel.h"
-#include "rcargumentsdialog.h"
+#include "rceditorwidget.h"
 #include "sfmgaboutdialog.h"
+#include "rcargumentsdialog.h"
 
-#include "ui_edrc_editor_widget.h"
+#include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/edrcbase.h>
+#include <edrcplugin/models/rcclassmodel.h>
+#include <edrcplugin/models/rcmodel.h>
+#include <edrcplugin/models/rcitemmodel.h>
+#include <edrcplugin/models/rctreemodel.h>
+#include <edrcplugin/models/preventablecriticalriskmodel.h>
+#include <edrcplugin/models/rccriteriasmodel.h>
+
+#include "ui_rceditorwidget.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -106,7 +107,7 @@ public:
         _rcModel(0),
         _rcItemModel(0),
         _rcTreeModel(0),
-        _rceModel(0),
+        _pcrModel(0),
         _rcCritModel(0),
         _rcTreeProxy(0),
         _posDiagGroup(0),
@@ -126,9 +127,9 @@ public:
     Ui::EdrcEditorWidget *ui;
     RCClassModel *_classModel;
     RCModel *_rcModel;
-    RCItemModel *_rcItemModel;
+    RcItemModel *_rcItemModel;
     RcTreeModel *_rcTreeModel;
-    RceModel *_rceModel;
+    PreventableCriticalRiskModel *_pcrModel;
     RcCriteriasModel *_rcCritModel;
     TreeProxyModel *_rcTreeProxy;
     QButtonGroup *_posDiagGroup, *_aldGroup, *_suiviGroup, *_symptoGroup;
@@ -190,20 +191,21 @@ EdrcEditorWidget::EdrcEditorWidget(QWidget *parent) :
     d->ui->treeViewRC->setIndentation(12);
     connect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
 
+    // Creating the search line edit
     d->ui->searchLine->setEditorPlaceholderText("Rechercher un résultat de consultation");
     d->ui->searchLine->setLeftIcon(theme()->icon(Core::Constants::ICONSEARCH));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
 
     // Create the RCItem && RcCriterias model/view
-    d->_rcItemModel = new RCItemModel(this);
+    d->_rcItemModel = new RcItemModel(this);
     d->_rcCritModel = new RcCriteriasModel(this);
     d->ui->listViewItems->setModel(d->_rcCritModel);
     d->ui->listViewItems->setModelColumn(RcCriteriasModel::Label);
 
-    // Create the RCE model/view
-    d->_rceModel = new RceModel(this);
-    d->ui->rceView->setModel(d->_rceModel);
-    d->ui->rceView->setModelColumn(RceModel::Label);
+    // Create the PreventableCriticalRisk model/view
+    d->_pcrModel = new PreventableCriticalRiskModel(this);
+    d->ui->pcrView->setModel(d->_pcrModel);
+    d->ui->pcrView->setModelColumn(PreventableCriticalRiskModel::Label);
 
     connect(d->ui->SFMG, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
     connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
@@ -228,12 +230,11 @@ void EdrcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QMod
 
     // Update models
     int rcId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
-    d->_rceModel->setRcFilter(rcId);
+    d->_pcrModel->setFilterOnRcId(rcId);
     d->_rcItemModel->setFilterOnRcId(rcId);
     d->_rcCritModel->setFilterOnRcId(rcId);
 
     // Update some view
-//    d->ui->argumentaire->setHtml(edrcBase().getRcArguments(rcId, true));
     const QStringList &autDiag = edrcBase().getRcAuthprizedDiagnosis(rcId, true);
     d->ui->radioDiagA->setVisible(autDiag.contains("A"));
     d->ui->radioDiagB->setVisible(autDiag.contains("B"));

@@ -24,10 +24,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rcemodel.h"
-#include "constants.h"
-#include "edrcbase.h"
-#include "edrccore.h"
+/**
+ * \class eDRC::PreventableCriticalRiskModel
+ * Correspond to the "Risque Critique Évitable" in the french SFMG denomination.\n
+ * Represents all preventable critical risk associated with a Result of Consultation (RC).
+ */
+
+#include "preventablecriticalriskmodel.h"
+#include <edrcplugin/constants.h>
+#include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/edrcbase.h>
 
 using namespace eDRC;
 using namespace Internal;
@@ -35,17 +41,17 @@ using namespace Internal;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RceModel::RceModel(QObject *parent) :
+PreventableCriticalRiskModel::PreventableCriticalRiskModel(QObject *parent) :
     QSqlTableModel(parent, edrcBase().database())
 {
     setTable(edrcBase().table(Constants::Table_Ref_RCE));
-    setRcFilter(709);
+    setFilterOnRcId(-1);
 }
 
-RceModel::~RceModel()
+PreventableCriticalRiskModel::~PreventableCriticalRiskModel()
 {}
 
-QVariant RceModel::data(const QModelIndex &index, int role) const
+QVariant PreventableCriticalRiskModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -64,12 +70,13 @@ QVariant RceModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags RceModel::flags(const QModelIndex &index) const
+Qt::ItemFlags PreventableCriticalRiskModel::flags(const QModelIndex &index) const
 {
     return QSqlTableModel::flags(index);
 }
 
-void RceModel::setRcFilter(const int rcId)
+/** Filter the model for a specific RC identifiant \e rcId */
+void PreventableCriticalRiskModel::setFilterOnRcId(const int rcId)
 {
     QHash<int, QString> whereLink;
     whereLink.insert(Constants::RC_LRCE_REF_RC_ID, QString("='%1'").arg(rcId));

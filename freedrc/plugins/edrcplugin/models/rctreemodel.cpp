@@ -33,8 +33,8 @@
  */
 
 #include "rctreemodel.h"
-#include "edrcbase.h"
-#include "edrccore.h"
+#include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/edrcbase.h>
 
 //#include <translationutils/constants.h>
 

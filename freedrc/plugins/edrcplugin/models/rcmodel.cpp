@@ -25,9 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "rcmodel.h"
-#include "constants.h"
-#include "edrcbase.h"
-#include "edrccore.h"
+#include <edrcplugin/constants.h>
+#include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/edrcbase.h>
 
 using namespace eDRC;
 using namespace Internal;

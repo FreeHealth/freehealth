@@ -185,29 +185,6 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_9">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Commentaire sur le RC</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPlainTextEdit" name="commentRC">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>75</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLabel" name="textLabel7">
          <property name="font">
           <font>
@@ -224,7 +201,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="rceView">
+        <widget class="QListView" name="pcrView">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -495,6 +472,29 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           </layout>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Commentaire sur le RC</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="commentRC">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>75</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_7">

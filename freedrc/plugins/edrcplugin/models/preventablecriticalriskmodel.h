@@ -33,7 +33,7 @@
 namespace eDRC {
 namespace Internal {
 
-class RceModel : public QSqlTableModel
+class PreventableCriticalRiskModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -43,14 +43,14 @@ public:
         Label
     };
 
-    RceModel(QObject *parent = 0);
-    ~RceModel();
+    PreventableCriticalRiskModel(QObject *parent = 0);
+    ~PreventableCriticalRiskModel();
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void setRcFilter(const int rcId);
+    void setFilterOnRcId(const int rcId);
 
 };
 

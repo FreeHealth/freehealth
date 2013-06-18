@@ -32,7 +32,7 @@
 namespace eDRC {
 namespace Internal {
 
-class RCItemModel : public QSqlTableModel
+class RcItemModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -42,8 +42,8 @@ public:
         Label
     };
 
-    RCItemModel(QObject *parent = 0);
-    ~RCItemModel();
+    RcItemModel(QObject *parent = 0);
+    ~RcItemModel();
 
     QVariant data(const QModelIndex &index, int role) const;
 

@@ -36,6 +36,7 @@
 #include <QDebug>
 
 using namespace eDRC;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace eDRC {
@@ -60,7 +61,6 @@ private:
 };
 } // namespace Internal
 } // end namespace eDRC
-
 
 /*! Constructor of the eDRC::RcUserModel class */
 RcUserModel::RcUserModel(QObject *parent) :
