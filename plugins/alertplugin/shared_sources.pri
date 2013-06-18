@@ -11,7 +11,7 @@ include($${PWD}/alertplugin_dependencies.pri)
 !with-alert{
     error(Alert plugin not requested)
 } else {
-    message(Alert Feedback plugin)
+    message(Building Alert plugin)
 }
 
 HEADERS += \
