@@ -9,7 +9,7 @@
  *  the Free Software Foundation, either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
- *  This program is distributed in the hope that it will be useful, *
+ *  This program is distributed in the hope that it will be useful,        *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
  *  GNU General Public License for more details.                           *
@@ -24,50 +24,24 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RCCRITERIASMODEL_H
-#define EDRC_INTERNAL_RCCRITERIASMODEL_H
-
-#include <QSqlQueryModel>
-
 /**
- * \file rccriteriasmodel.h
- * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \class eDRC::Internal::ConsultResultValidator
+ * \brief Check the validity of a user coded CR and provide error message (if required).
 */
 
-namespace eDRC {
-namespace Internal {
+#include "consultresultvalidator.h"
 
-class RcCriteriasModel : public QSqlQueryModel
+using namespace eDRC;
+using namespace Internal;
+
+/** Construct an empty invalid object */
+ConsultResultValidator::ConsultResultValidator()
 {
-    Q_OBJECT
+}
 
-public:
-    enum Datarepresentation {
-        Id = 0,
-        Label,
-        ItemWeight, // Pondération
-        Indentation
-    };
+ConsultResultValidator::~ConsultResultValidator()
+{
+}
 
-    RcCriteriasModel(QObject *parent = 0);
-    ~RcCriteriasModel();
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    void setFilterOnRcId(const int crId);
-
-private:
-//    void selectAllParents(const QModelIndex& index);
-//    void deselectAllChilds(const QModelIndex& index);
-
-//    QList<Criteres_Elements>    * m_pListCriteres;
-};
-
-} // namespace eDRC
-} // namespace Internal
-
-#endif  // EDRC_INTERNAL_RCCRITERIASMODEL_H
+bool ConsultResultValidator::isValid(const ConsultResult &cr) const
+{}

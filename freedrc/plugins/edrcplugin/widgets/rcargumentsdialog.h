@@ -29,6 +29,13 @@
 
 #include <QDialog>
 
+/**
+ * \file rcargumentsdialog.h
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 18 June 2013
+*/
+
 namespace eDRC {
 namespace Internal {
 

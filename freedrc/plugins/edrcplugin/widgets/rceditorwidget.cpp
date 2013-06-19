@@ -123,6 +123,33 @@ public:
         delete ui;
     }
 
+    void manageRadioButtons()
+    {
+        QButtonGroup *group = _posDiagGroup = new QButtonGroup(q);
+        group->setExclusive(true);
+        group->addButton(ui->radioDiagA);
+        group->addButton(ui->radioDiagB);
+        group->addButton(ui->radioDiagC);
+        group->addButton(ui->radioDiagD);
+        group->addButton(ui->radioDiagZ);
+
+        group = _aldGroup = new QButtonGroup(q);
+        group->setExclusive(true);
+        group->addButton(ui->radioAldNon);
+        group->addButton(ui->radioAldOui);
+
+        group = _suiviGroup = new QButtonGroup(q);
+        group->setExclusive(true);
+        group->addButton(ui->radioSuiviN);
+        group->addButton(ui->radioSuiviP);
+        group->addButton(ui->radioSuiviR);
+
+        group = _symptoGroup = new QButtonGroup(q);
+        group->setExclusive(true);
+        group->addButton(ui->radioSymptoOui);
+        group->addButton(ui->radioSymptoNon);
+    }
+
 public:
     Ui::RcEditorWidget *ui;
     RCClassModel *_classModel;
@@ -149,36 +176,13 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->arguments->setEnabled(false);
 
     // Create the radio groups
-    QButtonGroup *group = d->_posDiagGroup = new QButtonGroup(this);
-    group->setExclusive(true);
-    group->addButton(d->ui->radioDiagA);
-    group->addButton(d->ui->radioDiagB);
-    group->addButton(d->ui->radioDiagC);
-    group->addButton(d->ui->radioDiagD);
-    group->addButton(d->ui->radioDiagZ);
-
-    group = d->_aldGroup = new QButtonGroup(this);
-    group->setExclusive(true);
-    group->addButton(d->ui->radioAldNon);
-    group->addButton(d->ui->radioAldOui);
-
-    group = d->_suiviGroup = new QButtonGroup(this);
-    group->setExclusive(true);
-    group->addButton(d->ui->radioSuiviN);
-    group->addButton(d->ui->radioSuiviP);
-    group->addButton(d->ui->radioSuiviR);
-
-    group = d->_symptoGroup = new QButtonGroup(this);
-    group->setExclusive(true);
-    group->addButton(d->ui->radioSymptoOui);
-    group->addButton(d->ui->radioSymptoNon);
+    d->manageRadioButtons();
 
     //  Creating RcTreeModel/view
     d->_rcTreeModel = new RcTreeModel(this);
     d->_rcTreeModel->initialize();
     d->_rcTreeProxy = new TreeProxyModel(this);
     d->_rcTreeProxy->setSourceModel(d->_rcTreeModel);
-
     d->ui->treeViewRC->setModel(d->_rcTreeProxy);
     d->ui->treeViewRC->header()->setSectionHidden(RcTreeModel::Id, true);
     d->ui->treeViewRC->header()->hide();
@@ -191,10 +195,12 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
 
     // Create the RCItem && RcCriterias model/view
-    d->_rcItemModel = new RcItemModel(this);
+    // d->_rcItemModel = new RcItemModel(this);
     d->_rcCritModel = new RcCriteriasModel(this);
     d->ui->listViewItems->setModel(d->_rcCritModel);
     d->ui->listViewItems->setModelColumn(RcCriteriasModel::Label);
+    // connect(d->ui->listViewItems->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onCriteriaSelectionChanged(QItemSelection,QItemSelection)));
+    connect(d->ui->listViewItems, SIGNAL(pressed(QModelIndex)), this, SLOT(onCriteriaItemPressed(QModelIndex)));
 
     // Create the PreventableCriticalRisk model/view
     d->_pcrModel = new PreventableCriticalRiskModel(this);
@@ -223,7 +229,7 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     // Update models
     int rcId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
     d->_pcrModel->setFilterOnRcId(rcId);
-    d->_rcItemModel->setFilterOnRcId(rcId);
+    // d->_rcItemModel->setFilterOnRcId(rcId);
     d->_rcCritModel->setFilterOnRcId(rcId);
 
     // Update some view
@@ -247,6 +253,31 @@ void RcEditorWidget::onSearchTextChanged(const QString &text)
 {
     d->_rcTreeProxy->setFilterKeyColumn(RcTreeModel::Label);
     d->_rcTreeProxy->setFilterFixedString(text);
+}
+
+//void RcEditorWidget::onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+//{
+//    QItemSelectionModel *model = d->ui->listViewItems->selectionModel();
+//    qWarning() << "SELECTED" << ;
+//}
+
+/**
+ * When a CR criteria is switched from unselected to selected, we need to check
+ * if the criteria has a parent (using its 'ponderation') and select it if required.
+ */
+void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
+{
+    qWarning() << "PRESSED" << index.data().toString();
+    // Check criteria ItemWeight
+    QModelIndex w = d->_rcCritModel->index(index.row(), RcCriteriasModel::ItemWeight ,index.parent());
+    int weight = d->_rcCritModel->data(w).toInt();
+
+    // Go backward in the model to find the potential parent
+//    while (weight != -1) {
+//        w = d->_rcCritModel->index(index.row(), RcCriteriasModel::ItemWeight, index.parent());
+//        weight = d->_rcCritModel->data(w).toInt();
+//    }
+    // If a parent is found select it
 }
 
 /** Open the SFMG about dialog */

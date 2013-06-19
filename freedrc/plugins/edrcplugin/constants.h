@@ -74,7 +74,6 @@ const char *const DB_VERSION = "0.1";
         NATURE              // Nature du RC :
                             //  1 = RC (accepte unique P[A-Z]
                             //  2 = DPIO v1 (éléments de dépistage et prévention individuels organisés) (accepte uniquement P[1-5]
-
     };
 
     enum FieldsTable_Ref_RCItem {

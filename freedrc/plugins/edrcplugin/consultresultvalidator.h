@@ -9,7 +9,7 @@
  *  the Free Software Foundation, either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
- *  This program is distributed in the hope that it will be useful, *
+ *  This program is distributed in the hope that it will be useful,        *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
  *  GNU General Public License for more details.                           *
@@ -24,13 +24,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RCCRITERIASMODEL_H
-#define EDRC_INTERNAL_RCCRITERIASMODEL_H
+#ifndef EDRC_PLUGIN_CONSULTRESULTVALIDATOR_H
+#define EDRC_PLUGIN_CONSULTRESULTVALIDATOR_H
 
-#include <QSqlQueryModel>
+#include <QList>
 
 /**
- * \file rccriteriasmodel.h
+ * \file resultconsultvalidator.h
  * \author Eric Maeker
  * \version 0.9.0
  * \date 18 June 2013
@@ -38,36 +38,19 @@
 
 namespace eDRC {
 namespace Internal {
+class ConsultResult;
 
-class RcCriteriasModel : public QSqlQueryModel
+class ConsultResultValidator
 {
-    Q_OBJECT
-
 public:
-    enum Datarepresentation {
-        Id = 0,
-        Label,
-        ItemWeight, // Pondération
-        Indentation
-    };
+    ConsultResultValidator();
+    ~ConsultResultValidator();
 
-    RcCriteriasModel(QObject *parent = 0);
-    ~RcCriteriasModel();
+    bool isValid(const ConsultResult &cr) const;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    void setFilterOnRcId(const int crId);
-
-private:
-//    void selectAllParents(const QModelIndex& index);
-//    void deselectAllChilds(const QModelIndex& index);
-
-//    QList<Criteres_Elements>    * m_pListCriteres;
 };
 
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_INTERNAL_RCCRITERIASMODEL_H
+#endif // EDRC_PLUGIN_CONSULTRESULTVALIDATOR_H

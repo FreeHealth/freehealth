@@ -24,7 +24,8 @@ HEADERS += \
     models/rccriteriasmodel.h \
     widgets/rcargumentsdialog.h \
     widgets/sfmgaboutdialog.h \
-    widgets/rceditorwidget.h
+    widgets/rceditorwidget.h \
+    consultresult.h
 
 SOURCES += \
     edrcplugin.cpp \
@@ -39,7 +40,8 @@ SOURCES += \
     models/rcusermodel.cpp \
     widgets/rcargumentsdialog.cpp \
     widgets/sfmgaboutdialog.cpp \
-    widgets/rceditorwidget.cpp
+    widgets/rceditorwidget.cpp \
+    consultresult.cpp
 
 FORMS += \
     widgets/rceditorwidget.ui \

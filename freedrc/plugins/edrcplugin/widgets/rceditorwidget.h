@@ -11,7 +11,15 @@
 #include <QDialog>
 QT_BEGIN_NAMESPACE
 class QModelIndex;
+class QItemSelection;
 QT_END_NAMESPACE
+
+/**
+ * \file rceditorwidget.h
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 18 June 2013
+*/
 
 namespace eDRC {
 namespace Internal {
@@ -27,6 +35,8 @@ public:
 private Q_SLOTS:
       void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
       void onSearchTextChanged(const QString &text);
+      //void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+      void onCriteriaItemPressed(const QModelIndex &index);
       void onSmfgAboutClicked();
       void onArgumentsClicked();
 
