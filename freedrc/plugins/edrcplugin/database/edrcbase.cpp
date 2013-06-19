@@ -35,7 +35,7 @@
  */
 
 #include "edrcbase.h"
-#include "constants.h"
+#include "constants_db.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

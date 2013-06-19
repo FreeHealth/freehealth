@@ -255,29 +255,57 @@ void RcEditorWidget::onSearchTextChanged(const QString &text)
     d->_rcTreeProxy->setFilterFixedString(text);
 }
 
-//void RcEditorWidget::onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
-//{
-//    QItemSelectionModel *model = d->ui->listViewItems->selectionModel();
-//    qWarning() << "SELECTED" << ;
-//}
-
 /**
  * When a CR criteria is switched from unselected to selected, we need to check
  * if the criteria has a parent (using its 'ponderation') and select it if required.
  */
 void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 {
-    qWarning() << "PRESSED" << index.data().toString();
-    // Check criteria ItemWeight
-    QModelIndex w = d->_rcCritModel->index(index.row(), RcCriteriasModel::ItemWeight ,index.parent());
-    int weight = d->_rcCritModel->data(w).toInt();
+    Q_ASSERT(d->ui->listViewItems->selectionModel());
+    if (!d->ui->listViewItems->selectionModel())
+        return;
 
-    // Go backward in the model to find the potential parent
-//    while (weight != -1) {
-//        w = d->_rcCritModel->index(index.row(), RcCriteriasModel::ItemWeight, index.parent());
-//        weight = d->_rcCritModel->data(w).toInt();
+    // Selected item does not have any label -> Deselect
+//    if (d->ui->listViewItems->selectionModel()->isSelected(index) && index.data().toString().trimmed().isEmpty()) {
+//        d->ui->listViewItems->selectionModel()->select(index, QItemSelectionModel::Deselect);
 //    }
-    // If a parent is found select it
+
+    // If the item is now selected && the item has parent, all parent must be selected
+    if (d->ui->listViewItems->selectionModel()->isSelected(index)) {
+        QModelIndex idx = d->_rcCritModel->index(index.row(), RcCriteriasModel::Indentation, index.parent());
+        int indent = d->_rcCritModel->data(idx).toInt();
+        while (indent > 1) {
+            // If previous line is not a label -> break
+            if (d->_rcCritModel->index(idx.row() - 1, RcCriteriasModel::ItemWeight, index.parent()).data().toInt() >= 7)
+                break;
+
+            // Check previous line indentation
+            idx = d->_rcCritModel->index(idx.row() - 1, RcCriteriasModel::Indentation, index.parent());
+            if (d->_rcCritModel->data(idx).toInt() < indent) {
+                indent = d->_rcCritModel->data(idx).toInt();
+                d->ui->listViewItems->selectionModel()->select(d->_rcCritModel->index(idx.row(), RcCriteriasModel::Label, index.parent()), QItemSelectionModel::Select);
+            }
+        }
+    } else {
+        // If the item is now deselected && the item has children, all children must be deselected
+        QModelIndex idx = d->_rcCritModel->index(index.row(), RcCriteriasModel::Indentation, index.parent());
+        int indent = d->_rcCritModel->data(idx).toInt();
+        while (idx.isValid()) {
+            // If next line is not a label -> break
+            if (d->_rcCritModel->index(idx.row() + 1, RcCriteriasModel::ItemWeight, index.parent()).data().toInt() >= 7)
+                break;
+
+            // Check next line indentation
+            idx = d->_rcCritModel->index(idx.row() + 1, RcCriteriasModel::Indentation, index.parent());
+            if (d->_rcCritModel->data(idx).toInt() > indent) {
+                d->ui->listViewItems->selectionModel()->select(d->_rcCritModel->index(idx.row(), RcCriteriasModel::Label, index.parent()), QItemSelectionModel::Deselect);
+            }
+        }
+    }
+
+    // If the label is 'asymptomatique' -> check the radio (these criteria has a weight of 9)
+    if (index.data().toString().contains("asymptomatique"))
+        d->ui->radioSymptoNon->setChecked(true);
 }
 
 /** Open the SFMG about dialog */

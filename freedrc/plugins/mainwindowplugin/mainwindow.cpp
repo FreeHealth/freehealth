@@ -45,7 +45,7 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 
-#include <coreplugin/freeaccount_constants.h>
+#include <edrcplugin/widgets/rceditorwidget.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -163,16 +163,16 @@ void MainWindow::extensionsInitialized()
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Disable some actions when starting as medintux plugin
-    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
+//    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
 //        this->aNew->setEnabled(false);
 //        this->aSave->setEnabled(false);
 //        this->aMedinTux->setEnabled(false);
-    }
+//    }
 
     // If needed read exchange out file
-    const QString &exfile = commandLine()->value(Core::Constants::CL_ExchangeOutFile).toString();
-    if (!exfile.isEmpty()) {
-        messageSplash(tr("Reading exchange file..."));
+//    const QString &exfile = commandLine()->value(Core::Constants::CL_ExchangeOutFile).toString();
+//    if (!exfile.isEmpty()) {
+//        messageSplash(tr("Reading exchange file..."));
 //        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
 //            Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
 //            QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
@@ -194,7 +194,7 @@ void MainWindow::extensionsInitialized()
 //            DrugsDB::DrugsIO::loadPrescription(drugModel(), exfile, extras);
 //            patient()->fromXml(extras);
 //        }
-    }
+//    }
 
     // Start the update checker
 //    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
@@ -225,6 +225,8 @@ void MainWindow::postCoreOpened()
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);
+
+    setCentralWidget(new eDRC::Internal::RcEditorWidget(this));
 
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();

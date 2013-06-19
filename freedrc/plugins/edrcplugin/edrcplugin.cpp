@@ -138,14 +138,10 @@ void EdrcPlugin::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()), Qt::UniqueConnection);
 }
 
-#include <edrcplugin/widgets/rceditorwidget.h>
 void EdrcPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
-
-    RcEditorWidget *w = new RcEditorWidget;
-    w->show();
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()

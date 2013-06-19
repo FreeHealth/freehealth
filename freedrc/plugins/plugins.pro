@@ -16,6 +16,7 @@ core.subdir = coreplugin
 mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += printer
+mainwindow.depends += edrc
 
 printer.subdir   = printerplugin
 printer.depends += core

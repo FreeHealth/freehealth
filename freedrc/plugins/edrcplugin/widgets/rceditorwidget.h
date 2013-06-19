@@ -7,6 +7,10 @@
 #ifndef EDRC_EDRC_EDITOR_WIDGET_H
 #define EDRC_EDRC_EDITOR_WIDGET_H
 
+// FOR TEST ONLY
+#include <edrcplugin/edrc_exporter.h>
+// END
+
 #include <QWidget>
 #include <QDialog>
 QT_BEGIN_NAMESPACE
@@ -25,7 +29,7 @@ namespace eDRC {
 namespace Internal {
 class RcEditorWidgetPrivate;
 
-class RcEditorWidget: public QWidget
+class EDRC_EXPORT RcEditorWidget: public QWidget
 {
     Q_OBJECT
 public:
@@ -35,7 +39,6 @@ public:
 private Q_SLOTS:
       void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
       void onSearchTextChanged(const QString &text);
-      //void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
       void onCriteriaItemPressed(const QModelIndex &index);
       void onSmfgAboutClicked();
       void onArgumentsClicked();

@@ -7,13 +7,13 @@ DEPENDPATH += ../
 DEFINES += EDRC_LIBRARY
 
 include(../../../plugins/fmf_plugins.pri)
-include(edrc_dependencies.pri)
+include(edrcplugin_dependencies.pri)
 
 HEADERS += \
-    constants.h \
     edrc_exporter.h \
     edrcplugin.h \
     edrccore.h \
+    database/constants_db.h \
     database/edrcbase.h \
     models/rcmodel.h \
     models/preventablecriticalriskmodel.h \
@@ -25,7 +25,8 @@ HEADERS += \
     widgets/rcargumentsdialog.h \
     widgets/sfmgaboutdialog.h \
     widgets/rceditorwidget.h \
-    consultresult.h
+    consultresult.h \
+    constants.h
 
 SOURCES += \
     edrcplugin.cpp \

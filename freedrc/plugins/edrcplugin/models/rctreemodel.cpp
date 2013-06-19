@@ -36,12 +36,14 @@
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
 
-//#include <translationutils/constants.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QDebug>
 
 using namespace eDRC;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
@@ -90,13 +92,15 @@ public:
                 value->appendRow(QList<QStandardItem*>()
                                  << rcvalue
                                  << rckey);
-                // May be we can add here the SeeAlso related RC
+                // May be we can add here the SeeAlso related CR
                 QHash<int, QString> sa = edrcBase().getSeeAlsoRcForRc(irc.key());
                 QHashIterator<int, QString> isa(sa);
                 while (isa.hasNext()) {
                     isa.next();
                     QStandardItem *sakey = new QStandardItem(QString::number(isa.key()));
-                    QStandardItem *savalue = new QStandardItem(QString("%1 : %2").arg("Voir aussi").arg(isa.value()));
+                    QStandardItem *savalue = new QStandardItem(QString("%1 : %2")
+                                                               .arg(tkTr(Trans::Constants::SEE_ALSO))
+                                                               .arg(isa.value()));
                     savalue->setToolTip(isa.value());
                     rcvalue->appendRow(QList<QStandardItem*>()
                                      << savalue

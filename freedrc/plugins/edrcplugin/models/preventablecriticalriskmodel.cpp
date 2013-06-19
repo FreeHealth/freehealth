@@ -31,8 +31,8 @@
  */
 
 #include "preventablecriticalriskmodel.h"
-#include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
 
 using namespace eDRC;

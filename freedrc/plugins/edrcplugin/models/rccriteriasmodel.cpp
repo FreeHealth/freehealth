@@ -27,9 +27,16 @@
 #include "rccriteriasmodel.h"
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
+#include <QFont>
+
 // Les libellés peuvent être simplifiés en remplaçant le début
+// Constants::S_CR_USE_MODERNLABEL
 //    retour.replace("++1|", QChar(10112));
 //    retour.replace("++2|", QChar(10113));
 //    retour.replace("++3|", QChar(10114));
@@ -46,6 +53,7 @@
 using namespace eDRC;
 using namespace Internal;
 
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
@@ -74,12 +82,23 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
 
         if (sqlCol == -1)
             return QVariant();
-//        if (index.column() == Label)
-//            return QString("%1; (P:%2; I:%3)")
-//                    .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_LIB_CRITERES_FR, index.parent())).toString())
-//                    .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_PONDER_ID, index.parent())).toString())
-//                    .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_RETRAIT_ID, index.parent())).toString())
-//                    ;
+
+        if (index.column() == Label) {
+            // Append indentation to the label
+            QString indent;
+            indent.fill(' ', QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_RETRAIT_ID, index.parent())).toInt());
+            QString label = indent;
+            label += QSqlQueryModel::data(this->index(index.row(), sqlCol, index.parent())).toString();
+            if (settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool()) {
+                label.replace("++1|", QChar(10112));
+                label.replace("++2|", QChar(10113));
+                label.replace("++3|", QChar(10114));
+                label.replace("++4|", QChar(10115));
+                label.replace("++++", QChar(9745));
+                label.replace("+ -" , QChar(8226));
+            }
+            return label;
+        }
         return QSqlQueryModel::data(this->index(index.row(), sqlCol, index.parent()));
     } else if (role == Qt::ToolTipRole && index.column() == Label) {
         return QString("%1\n  Pond: %2\n  Indent: %3)")
@@ -87,6 +106,15 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
                 .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_PONDER_ID, index.parent())).toString())
                 .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_RETRAIT_ID, index.parent())).toString())
                 ;
+    } else if (role == Qt::FontRole && index.column() == Label) {
+        if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
+            const QString &label = QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_LIB_CRITERES_FR, index.parent())).toString();
+            if (label.startsWith("++++")) {
+                QFont font;
+                font.setBold(true);
+                return font;
+            }
+        }
     }
     return QSqlQueryModel::data(index, role);
 }
