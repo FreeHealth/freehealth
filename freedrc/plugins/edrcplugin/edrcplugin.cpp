@@ -144,7 +144,7 @@ void EdrcPlugin::postCoreInitialization()
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
 
-    EdrcEditorWidget *w = new EdrcEditorWidget;
+    RcEditorWidget *w = new RcEditorWidget;
     w->show();
 }
 

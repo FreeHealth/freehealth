@@ -98,13 +98,13 @@ protected:
     }
 };
 
-class EdrcEditorWidgetPrivate
+class RcEditorWidgetPrivate
 {
 public:
-    EdrcEditorWidgetPrivate(EdrcEditorWidget *parent):
-        ui(new Ui::EdrcEditorWidget),
+    RcEditorWidgetPrivate(RcEditorWidget *parent):
+        ui(new Ui::RcEditorWidget),
         _classModel(0),
-        _rcModel(0),
+        _RcModel(0),
         _rcItemModel(0),
         _rcTreeModel(0),
         _pcrModel(0),
@@ -118,15 +118,15 @@ public:
     {
     }
 
-    ~EdrcEditorWidgetPrivate()
+    ~RcEditorWidgetPrivate()
     {
         delete ui;
     }
 
 public:
-    Ui::EdrcEditorWidget *ui;
+    Ui::RcEditorWidget *ui;
     RCClassModel *_classModel;
-    RCModel *_rcModel;
+    RcModel *_RcModel;
     RcItemModel *_rcItemModel;
     RcTreeModel *_rcTreeModel;
     PreventableCriticalRiskModel *_pcrModel;
@@ -135,14 +135,14 @@ public:
     QButtonGroup *_posDiagGroup, *_aldGroup, *_suiviGroup, *_symptoGroup;
 
 private:
-    EdrcEditorWidget *q;
+    RcEditorWidget *q;
 };
 } // namespace eDRC
 } // namespace Internal
 
-EdrcEditorWidget::EdrcEditorWidget(QWidget *parent) :
+RcEditorWidget::RcEditorWidget(QWidget *parent) :
     QWidget(parent),
-    d(new EdrcEditorWidgetPrivate(this))
+    d(new RcEditorWidgetPrivate(this))
 {
     d->ui->setupUi(this);
     d->ui->SFMG->setIcon(theme()->icon("sfmg_logo.png", Core::ITheme::SmallIcon));
@@ -172,12 +172,6 @@ EdrcEditorWidget::EdrcEditorWidget(QWidget *parent) :
     group->setExclusive(true);
     group->addButton(d->ui->radioSymptoOui);
     group->addButton(d->ui->radioSymptoNon);
-
-    // Create the class model & populate the class combo
-//    d->_classModel = new RCClassModel(this);
-//    d->ui->classCombo->setModel(d->_classModel);
-//    d->ui->classCombo->setModelColumn(RCClassModel::Label);
-//    d->ui->classCombo->setToolTip("Classes de regroupement des résultats de consultation");
 
     //  Creating RcTreeModel/view
     d->_rcTreeModel = new RcTreeModel(this);
@@ -211,14 +205,12 @@ EdrcEditorWidget::EdrcEditorWidget(QWidget *parent) :
     connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
 }
 
-EdrcEditorWidget::~EdrcEditorWidget()
+RcEditorWidget::~RcEditorWidget()
 {
 }
 
-/**
- * When user activate a RC in the RC tree view. Update all models/views
- */
-void EdrcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous)
+/** When user activate a RC in the RC tree view. Update all models/views */
+void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
     // Is the index a RC?
@@ -250,19 +242,22 @@ void EdrcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QMod
     connect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
 }
 
-void EdrcEditorWidget::onSearchTextChanged(const QString &text)
+/** Slot connected to the user search line edition. Update the RC filtering */
+void RcEditorWidget::onSearchTextChanged(const QString &text)
 {
     d->_rcTreeProxy->setFilterKeyColumn(RcTreeModel::Label);
     d->_rcTreeProxy->setFilterFixedString(text);
 }
 
-void EdrcEditorWidget::onSmfgAboutClicked()
+/** Open the SFMG about dialog */
+void RcEditorWidget::onSmfgAboutClicked()
 {
     SfmgAboutDialog dlg(this);
     dlg.exec();
 }
 
-void EdrcEditorWidget::onArgumentsClicked()
+/** Open the argument dialog for the currently selected RC */
+void RcEditorWidget::onArgumentsClicked()
 {
     d->ui->arguments->setEnabled(false);
     QModelIndex current = d->ui->treeViewRC->currentIndex();

@@ -35,7 +35,7 @@ using namespace Internal;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RCModel::RCModel(QObject *parent) :
+RcModel::RcModel(QObject *parent) :
     QSqlTableModel(parent, edrcBase().database())
 {
     setTable(edrcBase().table(Constants::Table_REF_RC));
@@ -45,10 +45,10 @@ RCModel::RCModel(QObject *parent) :
     select();
 }
 
-RCModel::~RCModel()
+RcModel::~RcModel()
 {}
 
-QVariant RCModel::data(const QModelIndex &index, int role) const
+QVariant RcModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -117,7 +117,7 @@ QVariant RCModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags RCModel::flags(const QModelIndex &index) const
+Qt::ItemFlags RcModel::flags(const QModelIndex &index) const
 {
 //    if (!index.isValid())
 //        return Qt::ItemIsEnabled;
@@ -129,7 +129,7 @@ Qt::ItemFlags RCModel::flags(const QModelIndex &index) const
     return QSqlTableModel::flags(index);
 }
 
-bool RCModel::setData(const QModelIndex &index,
+bool RcModel::setData(const QModelIndex &index,
                              const QVariant &value, int role)
 {
     if (!index.isValid())

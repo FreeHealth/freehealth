@@ -33,7 +33,7 @@
 namespace eDRC {
 namespace Internal {
 
-class RCModel : public QSqlTableModel
+class RcModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -61,8 +61,8 @@ public:
 //        SUB_RC_ID,          // RC de substitution (quand item passe de valide à invalide)
     };
 
-    RCModel(QObject *parent = 0);
-    ~RCModel();
+    RcModel(QObject *parent = 0);
+    ~RcModel();
 
 //    int rowCount(const QModelIndex &parent = QModelIndex()) const;
 //    int columnCount(const QModelIndex &parent = QModelIndex()) const;

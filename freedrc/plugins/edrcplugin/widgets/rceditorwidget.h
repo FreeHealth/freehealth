@@ -15,14 +15,14 @@ QT_END_NAMESPACE
 
 namespace eDRC {
 namespace Internal {
-class EdrcEditorWidgetPrivate;
+class RcEditorWidgetPrivate;
 
-class EdrcEditorWidget: public QWidget
+class RcEditorWidget: public QWidget
 {
     Q_OBJECT
 public:
-      EdrcEditorWidget(QWidget *parent = 0);
-      ~EdrcEditorWidget();
+      RcEditorWidget(QWidget *parent = 0);
+      ~RcEditorWidget();
 
 private Q_SLOTS:
       void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -31,7 +31,7 @@ private Q_SLOTS:
       void onArgumentsClicked();
 
 private:
-      EdrcEditorWidgetPrivate *d;
+      RcEditorWidgetPrivate *d;
 };
 
 } // namespace eDRC

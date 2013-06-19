@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Eric MAEKER</author>
- <class>eDRC::Internal::EdrcEditorWidget</class>
- <widget class="QWidget" name="eDRC::Internal::EdrcEditorWidget">
+ <class>eDRC::Internal::RcEditorWidget</class>
+ <widget class="QWidget" name="eDRC::Internal::RcEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
