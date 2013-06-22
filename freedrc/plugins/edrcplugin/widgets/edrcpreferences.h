@@ -46,16 +46,16 @@ class ISettings;
 namespace eDRC {
 namespace Internal {
 namespace Ui {
-class EditorPreferencesWidget;
+class EdrcPreferencesPageWidget;
 }
 
-class EditorPreferencesWidget : public QWidget
+class EdrcPreferencesPageWidget : public QWidget
 {
     Q_OBJECT
     
 public:
-    explicit EditorPreferencesWidget(QWidget *parent = 0);
-    ~EditorPreferencesWidget();
+    explicit EdrcPreferencesPageWidget(QWidget *parent = 0);
+    ~EdrcPreferencesPageWidget();
     
     void setDataToUi();
     QString searchKeywords() const;
@@ -70,15 +70,15 @@ private:
     void changeEvent(QEvent *e);
     
 private:
-    Ui::EditorPreferencesWidget *ui;
+    Ui::EdrcPreferencesPageWidget *ui;
 };
 
 
-class EditorPreferencesPage : public Core::IOptionsPage
+class EdrcPreferencesPage : public Core::IOptionsPage
 {
 public:
-    EditorPreferencesPage(QObject *parent = 0);
-    ~EditorPreferencesPage();
+    EdrcPreferencesPage(QObject *parent = 0);
+    ~EdrcPreferencesPage();
     
     QString id() const;
     QString displayName() const;
@@ -95,12 +95,12 @@ public:
     
     QString helpPage() {return QString();}
     
-    static void writeDefaultSettings(Core::ISettings *s) {EditorPreferencesWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {EdrcPreferencesPageWidget::writeDefaultSettings(s);}
     
     QWidget *createPage(QWidget *parent = 0);
     
 private:
-    QPointer<Internal::EditorPreferencesWidget> m_Widget;
+    QPointer<Internal::EdrcPreferencesPageWidget> m_Widget;
     QString m_searchKeywords;
 };
 

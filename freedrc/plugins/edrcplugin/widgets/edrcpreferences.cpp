@@ -42,25 +42,25 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 /* ----------------------  Preferences Widget ---------------------- */
 
 /*! Creates a new preferences widget with a given parent. */
-EditorPreferencesWidget::EditorPreferencesWidget(QWidget *parent) :
+EdrcPreferencesPageWidget::EdrcPreferencesPageWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::EditorPreferencesWidget)
+    ui(new Ui::EdrcPreferencesPageWidget)
 {
     ui->setupUi(this);
 }
 
-EditorPreferencesWidget::~EditorPreferencesWidget()
+EdrcPreferencesPageWidget::~EdrcPreferencesPageWidget()
 {
     delete ui;
 }
 
 /*! Sets data of a changed data model to the ui's widgets. */
-void EditorPreferencesWidget::setDataToUi()
+void EdrcPreferencesPageWidget::setDataToUi()
 {
 }
 
 /*! \sa IOptionsPage::matches() */
-QString EditorPreferencesWidget::searchKeywords() const
+QString EdrcPreferencesPageWidget::searchKeywords() const
 {
     QString rc;
     // uncomment this lines to add some keywords from UI elements
@@ -73,7 +73,7 @@ QString EditorPreferencesWidget::searchKeywords() const
 }
 
 /*! Saves the settings in the ui to the settings data model. */
-void EditorPreferencesWidget::saveToSettings(Core::ISettings *sets)
+void EdrcPreferencesPageWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
@@ -81,18 +81,18 @@ void EditorPreferencesWidget::saveToSettings(Core::ISettings *sets)
 }
 
 /*! Writes the default settings to the data model. */
-void EditorPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+void EdrcPreferencesPageWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
-    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("EditorPreferencesWidget"));
+    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("EdrcPreferencesPageWidget"));
 }
 
 /*! Retranslates the ui widgets to the changed language. */
-void EditorPreferencesWidget::retranslateUi()
+void EdrcPreferencesPageWidget::retranslateUi()
 {
 }
 
-void EditorPreferencesWidget::changeEvent(QEvent *e)
+void EdrcPreferencesPageWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -107,34 +107,21 @@ void EditorPreferencesWidget::changeEvent(QEvent *e)
 /* ----------------------  Preferences Page ---------------------- */
 
 /*!
- * \class Editor::EditorPreferencesPage
+ * \class Editor::EdrcPreferencesPage
  * \brief Generic FreeMedForms preferences page for Editor plugin.
  *
  *  The page is listed in the settings dialog under the category returned by \sa category().
  */
 
-/*
- * All you have to do is to load this preferences page in the constructor in the Editor plugin.
- * Do this like this:
- * \code
- * EditorPlugin::EditorPlugin():
- *     ExtensionSystem::IPlugin()
- * {
- *     _prefPage = new EditorPreferencesPage(this);
- *     addObject(_prefPage);
- * }
- * \endcode
- */
-
 /*! Creates a new preferences page with a given parent. */
-EditorPreferencesPage::EditorPreferencesPage(QObject *parent) :
+EdrcPreferencesPage::EdrcPreferencesPage(QObject *parent) :
     IOptionsPage(parent),
     m_Widget(0)
 {
-    setObjectName("EditorPreferencesPage");
+    setObjectName("EdrcPreferencesPage");
 }
 
-EditorPreferencesPage::~EditorPreferencesPage()
+EdrcPreferencesPage::~EdrcPreferencesPage()
 {
     if (m_Widget)
         delete m_Widget;
@@ -142,44 +129,44 @@ EditorPreferencesPage::~EditorPreferencesPage()
 }
 
 /*! Returns the id if the preferences page. */
-QString EditorPreferencesPage::id() const
+QString EdrcPreferencesPage::id() const
 {
     return objectName();
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString EditorPreferencesPage::displayName() const
+QString EdrcPreferencesPage::displayName() const
 {
-    return tr("General");
+    return tr("French eDRC");
 }
 
 /*! Returns the (translated) category of the preferences page. */
-QString EditorPreferencesPage::category() const
+QString EdrcPreferencesPage::category() const
 {
-    return tr("EDITOR");
+    return tr("French eDRC");
 }
 
 /*! Returns the (translated) title of the preferences page. */
-QString EditorPreferencesPage::title() const
+QString EdrcPreferencesPage::title() const
 {
-    return tr("%PluginName");
+    return tr("French eDRC preferences");
 }
 
 /*! Returns the sorting order (pages are sorted starting from 0). */
-int EditorPreferencesPage::sortIndex() const
+int EdrcPreferencesPage::sortIndex() const
 {
     return 0;
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
-void EditorPreferencesPage::resetToDefaults()
+void EdrcPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDataToUi();
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void EditorPreferencesPage::apply()
+void EdrcPreferencesPage::apply()
 {
     if (!m_Widget) {
         return;
@@ -187,7 +174,7 @@ void EditorPreferencesPage::apply()
     m_Widget->saveToSettings(settings());
 }
 
-void EditorPreferencesPage::finish()
+void EdrcPreferencesPage::finish()
 {
     delete m_Widget;
 }
@@ -196,7 +183,7 @@ void EditorPreferencesPage::finish()
  *
  * Overloads the interface method. For each empty value the default settings value is written.
  */
-void EditorPreferencesPage::checkSettingsValidity()
+void EdrcPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     //    defaultvalues.insert(%PluginName:c%::Constants::FOO_SETTING_KEY, %PluginName:c%::Constants::FOO_SETTING_VALUE);
@@ -208,17 +195,17 @@ void EditorPreferencesPage::checkSettingsValidity()
     settings()->sync();
 }
 
-bool EditorPreferencesPage::matches(const QString &searchKeyWord) const
+bool EdrcPreferencesPage::matches(const QString &searchKeyWord) const
 {
     return m_searchKeywords.contains(searchKeyWord, Qt::CaseInsensitive);
 }
 
 /*! Creates the settings page */
-QWidget *EditorPreferencesPage::createPage(QWidget *parent)
+QWidget *EdrcPreferencesPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new EditorPreferencesWidget(parent);
+    m_Widget = new EdrcPreferencesPageWidget(parent);
     if (m_searchKeywords.isEmpty())
         m_searchKeywords = m_Widget->searchKeywords();
     return m_Widget;

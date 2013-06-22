@@ -31,6 +31,7 @@
 namespace eDRC {
 class EdrcCore;
 namespace Internal {
+class EdrcPreferencesPage;
 
 class EdrcPlugin : public ExtensionSystem::IPlugin
 {
@@ -50,6 +51,7 @@ private Q_SLOTS:
 
 private:
     EdrcCore *_core;
+    EdrcPreferencesPage *_pref;
 };
 
 } // namespace Internal

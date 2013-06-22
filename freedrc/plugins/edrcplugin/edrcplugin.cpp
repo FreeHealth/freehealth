@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "edrcplugin.h"
 #include "edrccore.h"
+#include <edrcplugin/widgets/edrcpreferences.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -60,7 +61,8 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 EdrcPlugin::EdrcPlugin() :
     ExtensionSystem::IPlugin(),
-    _core(0)
+    _core(0),
+    _pref(0)
 {
     setObjectName("eDRCPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -72,6 +74,9 @@ EdrcPlugin::EdrcPlugin() :
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
     // All preferences pages must be created in this part (before user connection)
+    _pref = new EdrcPreferencesPage(this);
+    addObject(_pref);
+
     // And included in the QObject pool
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
@@ -149,6 +154,8 @@ ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()
     // Save settings
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
+    if (_pref)
+        removeObject(_pref);
 
     return SynchronousShutdown;
 }
