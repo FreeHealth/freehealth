@@ -38,19 +38,47 @@
 
 namespace eDRC {
 namespace Internal {
-class ConsultResult;
+class ConsultResultCriteriaGroup;
+class ConsultResultValidatorPrivate;
+class ConsultResultCriteria;
+
+struct ConsultResultError {
+    enum ErrorType {
+        MissingMandatoryItem = 0,
+        MissingSignifiantItem
+    };
+
+    ConsultResultError() : criteriaId(-1), type(-1) {}
+    ConsultResultError(int _criteriaId, int _type) : criteriaId(_criteriaId), type(_type) {}
+
+    int criteriaId;
+    int type;
+    QString errorShortMessage() const;
+};
 
 class ConsultResultValidator
 {
 public:
     ConsultResultValidator();
+    ConsultResultValidator(int crId, const QList<ConsultResultCriteria> &availableCriterias);
     ~ConsultResultValidator();
 
-    bool isValid(const ConsultResult &cr) const;
+    void setCrId(int crId);
+    void setAvailableCriterias(const QList<ConsultResultCriteria> &availableCriterias);
+    void clearSelectedCriterias();
+    void setSelectedCriterias(const QList<int> &selectedId);
 
+    bool check();
+    QString errorShortMessage(int criteriaId) const;
+    const QList<int> &wrongCriteriaIds() const;
+
+private:
+    ConsultResultValidatorPrivate *d;
 };
 
 } // namespace eDRC
 } // namespace Internal
+
+QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteriaGroup &group);
 
 #endif // EDRC_PLUGIN_CONSULTRESULTVALIDATOR_H

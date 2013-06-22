@@ -27,11 +27,15 @@
 #include "rccriteriasmodel.h"
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
+#include <edrcplugin/consultresult.h>
+#include <edrcplugin/consultresultvalidator.h>
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+
+#include <utils/global.h>
 
 #include <QFont>
 
@@ -57,80 +61,200 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RcCriteriasModel::RcCriteriasModel(QObject *parent):
-    QSqlQueryModel(parent)
+namespace eDRC {
+namespace Internal {
+class RcCriteriasModelPrivate
+{
+public:
+    RcCriteriasModelPrivate(RcCriteriasModel *parent) :
+        _crId(-1),
+        q(parent)
+    {}
+
+    ~RcCriteriasModelPrivate()
+    {}
+
+    void getCriteriasFromDatabase(int crId)
+    {
+        _crId = crId;
+        _criterias.clear();
+        _criterias = edrcBase().getOrderedCriteriasForCR(crId);
+        _validator.setCrId(_crId);
+        _validator.setAvailableCriterias(_criterias);
+    }
+
+public:
+    int _crId;
+    QList<ConsultResultCriteria> _criterias;
+    QList<int> _checkedRows, _checkedIds;
+    ConsultResultValidator _validator;
+
+private:
+    RcCriteriasModel *q;
+};
+}
+}
+
+RcCriteriasModel::RcCriteriasModel(QObject *parent) :
+    QAbstractTableModel(parent),
+    d(new RcCriteriasModelPrivate(this))
 {
     setFilterOnRcId(-1);
 }
 
 RcCriteriasModel::~RcCriteriasModel()
-{}
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+int RcCriteriasModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return d->_criterias.count();
+}
+
+int RcCriteriasModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return ColumnCount;
+}
 
 QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
+    if (!IN_RANGE_STRICT_MAX(index.row(), 0, d->_criterias.count()))
+        return QVariant();
+
+    const ConsultResultCriteria &crit = d->_criterias.at(index.row());
+
     if (role == Qt::DisplayRole) {
-        int sqlCol = -1;
         switch (index.column()) {
-        case Id: sqlCol = Constants::RC_LCRITERES_REF_LRCCRITERES_SEQ; break;
-        case Label: sqlCol = Constants::RC_LCRITERES_LIB_CRITERES_FR; break;
-        case ItemWeight: sqlCol = Constants::RC_LCRITERES_REF_PONDER_ID; break;
-        case Indentation: sqlCol = Constants::RC_LCRITERES_REF_RETRAIT_ID; break;
+        case Id: return crit.id();
+        case Label: return crit.label(settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool());
+        case ItemWeight: return crit.weight();
+        case Indentation: return crit.indentation();
         } // switch
-
-        if (sqlCol == -1)
-            return QVariant();
-
-        if (index.column() == Label) {
-            // Append indentation to the label
-            QString indent;
-            indent.fill(' ', QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_RETRAIT_ID, index.parent())).toInt());
-            QString label = indent;
-            label += QSqlQueryModel::data(this->index(index.row(), sqlCol, index.parent())).toString();
-            if (settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool()) {
-                label.replace("++1|", QChar(10112));
-                label.replace("++2|", QChar(10113));
-                label.replace("++3|", QChar(10114));
-                label.replace("++4|", QChar(10115));
-                label.replace("++++", QChar(9745));
-                label.replace("+ -" , QChar(8226));
-            }
-            return label;
-        }
-        return QSqlQueryModel::data(this->index(index.row(), sqlCol, index.parent()));
     } else if (role == Qt::ToolTipRole && index.column() == Label) {
         return QString("%1\n  Pond: %2\n  Indent: %3)")
-                .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_LIB_CRITERES_FR, index.parent())).toString())
-                .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_PONDER_ID, index.parent())).toString())
-                .arg(QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_REF_RETRAIT_ID, index.parent())).toString())
+                .arg(crit.label(settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool()))
+                .arg(crit.weight())
+                .arg(crit.indentation())
                 ;
     } else if (role == Qt::FontRole && index.column() == Label) {
         if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
-            const QString &label = QSqlQueryModel::data(this->index(index.row(), Constants::RC_LCRITERES_LIB_CRITERES_FR, index.parent())).toString();
-            if (label.startsWith("++++")) {
+            if (crit.weight() == 1) {
                 QFont font;
                 font.setBold(true);
                 return font;
             }
         }
+    } else if (role == Qt::BackgroundRole) {
+        if (d->_checkedRows.contains(index.row()))
+            return QColor(175, 175, 255, 125);
+        if (d->_validator.wrongCriteriaIds().contains(crit.id()))
+            return QColor(255, 125, 125, 125);
+//    } else if (role == Qt::CheckStateRole) {
+//        if (d->_checkedRows.contains(index.row()))
+//            return Qt::Checked;
+//        return Qt::Unchecked;
     }
-    return QSqlQueryModel::data(index, role);
+    return QVariant();
 }
 
+bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    Q_UNUSED(value);
+    if (!index.isValid())
+        return false;
+
+    if (role == Qt::CheckStateRole) {
+
+        if (!IN_RANGE_STRICT_MAX(index.row(), 0, d->_criterias.count()))
+            return false;
+
+        const ConsultResultCriteria &crit = d->_criterias.at(index.row());
+        if (crit.isLineBreak())
+            return true;
+
+        if (!d->_checkedRows.contains(index.row())) {
+            // If the item is now selected && the item has parent, all parent must be selected
+            int indent = crit.indentation();
+            int row = index.row() - 1;
+            while (indent > 1 && row >= 0) {
+                const ConsultResultCriteria &previous = d->_criterias.at(row);
+
+                // If previous line is not a label -> break
+                if (previous.isLineBreak())
+                    break;
+
+                // Check previous line indentation
+                if (previous.indentation() < indent) {
+                    indent = previous.indentation();
+                    d->_checkedRows << row;
+                    d->_checkedIds << previous.id();
+                    Q_EMIT dataChanged(this->index(row, Label), this->index(row, Label));
+                }
+                --row;
+            }
+            d->_checkedRows << index.row();
+            d->_checkedIds << crit.id();
+        } else {
+            // If the item is now deselected && the item has children, all children must be deselected
+            int indent = crit.indentation();
+            int row = index.row() + 1;
+            while (row < d->_criterias.count()) {
+                const ConsultResultCriteria &next = d->_criterias.at(row);
+
+                // If next line is not a label -> break
+                if (next.isLineBreak())
+                    break;
+
+                // Check next line indentation
+                if (next.indentation() > indent) {
+                    d->_checkedRows.removeAll(row);
+                    d->_checkedIds.removeAll(next.id());
+                    Q_EMIT dataChanged(this->index(row, Label), this->index(row, Label));
+                }
+                ++row;
+            }
+            d->_checkedRows.removeAll(index.row());
+            d->_checkedIds.removeAll(crit.id());
+        }
+        Q_EMIT dataChanged(index, index);
+
+        // Update validator
+        d->_validator.setSelectedCriterias(d->_checkedIds);
+        d->_validator.check();
+    }
+    return true;
+}
 
 Qt::ItemFlags RcCriteriasModel::flags(const QModelIndex &index) const
 {
-    return QSqlQueryModel::flags(index);
+    Q_UNUSED(index);
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;// | Qt::ItemIsUserCheckable;
 }
 
 /** Filter CR criterias according to the CR primkey \e crId*/
 void RcCriteriasModel::setFilterOnRcId(const int crId)
 {
-    QHash<int, QString> where;
-    where.insert(Constants::RC_LCRITERES_REF_RC_ID, QString("='%1'").arg(crId));
-    QString req = edrcBase().select(Constants::Table_RC_Link_RC_Criteres, where);
-    req += QString(" ORDER BY %1 ASC;").arg(edrcBase().fieldName(Constants::Table_RC_Link_RC_Criteres, Constants::RC_LCRITERES_AFFICH_ORDRE));
-    setQuery(req, edrcBase().database());
+    beginResetModel();
+    d->_checkedRows.clear();
+    d->_checkedIds.clear();
+    d->getCriteriasFromDatabase(crId);
+    endResetModel();
+}
+
+/**
+ * Test a ConsultResult coding. \e ids are the selected criterias of the CR. \n
+ * After a call to this member, all views must update (BackgroundRole of item can be changed).
+*/
+void RcCriteriasModel::testCoding(const QList<int> &ids)
+{
+    d->_validator.setSelectedCriterias(ids);
+    d->_validator.check();
 }

@@ -26,6 +26,7 @@ HEADERS += \
     widgets/sfmgaboutdialog.h \
     widgets/rceditorwidget.h \
     consultresult.h \
+    consultresultvalidator.h \
     constants.h
 
 SOURCES += \
@@ -42,6 +43,7 @@ SOURCES += \
     widgets/rcargumentsdialog.cpp \
     widgets/sfmgaboutdialog.cpp \
     widgets/rceditorwidget.cpp \
+    consultresultvalidator.cpp \
     consultresult.cpp
 
 FORMS += \

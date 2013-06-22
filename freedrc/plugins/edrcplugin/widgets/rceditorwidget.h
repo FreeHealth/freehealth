@@ -39,9 +39,14 @@ public:
 private Q_SLOTS:
       void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
       void onSearchTextChanged(const QString &text);
+      void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
       void onCriteriaItemPressed(const QModelIndex &index);
       void onSmfgAboutClicked();
       void onArgumentsClicked();
+      void checkConsultResultCoding();
+
+//private:
+//      bool eventFilter(QObject *obj, QEvent *event);
 
 private:
       RcEditorWidgetPrivate *d;

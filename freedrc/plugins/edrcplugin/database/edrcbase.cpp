@@ -36,6 +36,7 @@
 
 #include "edrcbase.h"
 #include "constants_db.h"
+#include <edrcplugin/consultresult.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -609,6 +610,36 @@ QStringList DrcDatabase::getRcIcd10RelatedCodes(const int rcId, bool onlyValid) 
                 toReturn << QString("%1 (%2)").arg(query.value(0).toString()).arg(query.value(1).toString());
             else
                 toReturn << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DrcDatabase", query);
+        return toReturn;
+    }
+    return toReturn;
+}
+
+QList<ConsultResultCriteria> DrcDatabase::getOrderedCriteriasForCR(int crId) const
+{
+    QList<ConsultResultCriteria> toReturn;
+    QSqlDatabase DB = database();
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return toReturn;
+    // Construct SQL query
+    QHash<int, QString> where;
+    where.insert(Constants::RC_LCRITERES_REF_RC_ID, QString("='%1'").arg(crId));
+    QString req = select(Constants::Table_RC_Link_RC_Criteres, where);
+    req += QString(" ORDER BY %1 ASC;").arg(fieldName(Constants::Table_RC_Link_RC_Criteres, Constants::RC_LCRITERES_AFFICH_ORDRE));
+    // Get criterias
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        while (query.next()) {
+            ConsultResultCriteria crit;
+            crit.setId(query.value(Constants::RC_LCRITERES_REF_LRCCRITERES_SEQ).toInt());
+            crit.setIndentation(query.value(Constants::RC_LCRITERES_REF_RETRAIT_ID).toInt());
+            crit.setWeight(query.value(Constants::RC_LCRITERES_REF_PONDER_ID).toInt());
+            crit.setSortIndex(query.value(Constants::RC_LCRITERES_AFFICH_ORDRE).toInt());
+            crit.setLabel(query.value(Constants::RC_LCRITERES_LIB_CRITERES_FR).toString());
+            toReturn << crit;
         }
     } else {
         LOG_QUERY_ERROR_FOR("DrcDatabase", query);

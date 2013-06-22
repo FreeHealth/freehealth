@@ -127,27 +127,17 @@ public:
     {
         QButtonGroup *group = _posDiagGroup = new QButtonGroup(q);
         group->setExclusive(true);
-        group->addButton(ui->radioDiagA);
-        group->addButton(ui->radioDiagB);
-        group->addButton(ui->radioDiagC);
-        group->addButton(ui->radioDiagD);
-        group->addButton(ui->radioDiagZ);
-
-        group = _aldGroup = new QButtonGroup(q);
-        group->setExclusive(true);
-        group->addButton(ui->radioAldNon);
-        group->addButton(ui->radioAldOui);
+        group->addButton(ui->buttonA);
+        group->addButton(ui->buttonB);
+        group->addButton(ui->buttonC);
+        group->addButton(ui->buttonD);
+        group->addButton(ui->buttonZ);
 
         group = _suiviGroup = new QButtonGroup(q);
         group->setExclusive(true);
-        group->addButton(ui->radioSuiviN);
-        group->addButton(ui->radioSuiviP);
-        group->addButton(ui->radioSuiviR);
-
-        group = _symptoGroup = new QButtonGroup(q);
-        group->setExclusive(true);
-        group->addButton(ui->radioSymptoOui);
-        group->addButton(ui->radioSymptoNon);
+        group->addButton(ui->buttonN);
+        group->addButton(ui->buttonP);
+        group->addButton(ui->buttonR);
     }
 
 public:
@@ -178,6 +168,14 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     // Create the radio groups
     d->manageRadioButtons();
 
+    // Manage splitters
+    d->ui->searchSplitter->setStretchFactor(0, 2);
+    d->ui->searchSplitter->setStretchFactor(1, 1);
+    d->ui->centralSplitter->setStretchFactor(0, 1);
+    d->ui->centralSplitter->setStretchFactor(1, 3);
+    d->ui->commentSplitter->setStretchFactor(0, 3);
+    d->ui->commentSplitter->setStretchFactor(1, 1);
+
     //  Creating RcTreeModel/view
     d->_rcTreeModel = new RcTreeModel(this);
     d->_rcTreeModel->initialize();
@@ -197,9 +195,16 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     // Create the RCItem && RcCriterias model/view
     // d->_rcItemModel = new RcItemModel(this);
     d->_rcCritModel = new RcCriteriasModel(this);
+//    d->ui->listViewItems->setStyleSheet("QListView::item:selected {background:#FFFFFF00}");
+//                                        "selection-color: darkblue;"
+//                                        "selection-background-color: white;"
+//                                        "}");
+//    setMouseTracking(true);
+//    d->ui->listViewItems->setMouseTracking(true);
+//    d->ui->listViewItems->installEventFilter(this);
     d->ui->listViewItems->setModel(d->_rcCritModel);
     d->ui->listViewItems->setModelColumn(RcCriteriasModel::Label);
-    // connect(d->ui->listViewItems->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onCriteriaSelectionChanged(QItemSelection,QItemSelection)));
+    connect(d->ui->listViewItems->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onCriteriaSelectionChanged(QItemSelection,QItemSelection)));
     connect(d->ui->listViewItems, SIGNAL(pressed(QModelIndex)), this, SLOT(onCriteriaItemPressed(QModelIndex)));
 
     // Create the PreventableCriticalRisk model/view
@@ -209,6 +214,10 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
 
     connect(d->ui->SFMG, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
     connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
+
+    // TEST
+    connect(d->ui->buttonA, SIGNAL(clicked()), this, SLOT(checkConsultResultCoding()));
+    // END
 }
 
 RcEditorWidget::~RcEditorWidget()
@@ -234,11 +243,11 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
 
     // Update some view
     const QStringList &autDiag = edrcBase().getRcAuthprizedDiagnosis(rcId, true);
-    d->ui->radioDiagA->setVisible(autDiag.contains("A"));
-    d->ui->radioDiagB->setVisible(autDiag.contains("B"));
-    d->ui->radioDiagC->setVisible(autDiag.contains("C"));
-    d->ui->radioDiagD->setVisible(autDiag.contains("D"));
-    d->ui->radioDiagZ->setVisible(autDiag.contains("Z"));
+    d->ui->buttonA->setVisible(autDiag.contains("A"));
+    d->ui->buttonB->setVisible(autDiag.contains("B"));
+    d->ui->buttonC->setVisible(autDiag.contains("C"));
+    d->ui->buttonD->setVisible(autDiag.contains("D"));
+    d->ui->buttonZ->setVisible(autDiag.contains("Z"));
 
     const QStringList &CIM10 = edrcBase().getRcIcd10RelatedCodes(rcId, true);
     d->ui->CIM10->setText(CIM10.join(" ; "));
@@ -255,57 +264,28 @@ void RcEditorWidget::onSearchTextChanged(const QString &text)
     d->_rcTreeProxy->setFilterFixedString(text);
 }
 
+/** Transform criteria view selection to criteria model checkstaterole */
+void RcEditorWidget::onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+//    qWarning() << "SELECTION CHANGED" << selected.indexes().count() << deselected.indexes().count();
+
+//    foreach(const QModelIndex &index, selected.indexes()) {
+//        d->_rcCritModel->setData(index, -1, Qt::CheckStateRole);
+//        d->ui->listViewItems->selectionModel()->blockSignals(true);
+//        d->ui->listViewItems->selectionModel()->select(index, QItemSelectionModel::Deselect);
+//        d->ui->listViewItems->selectionModel()->blockSignals(false);
+//    }
+//    foreach(const QModelIndex &index, deselected.indexes())
+//        d->_rcCritModel->setData(index, -1, Qt::CheckStateRole);
+}
+
 /**
  * When a CR criteria is switched from unselected to selected, we need to check
  * if the criteria has a parent (using its 'ponderation') and select it if required.
  */
 void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 {
-    Q_ASSERT(d->ui->listViewItems->selectionModel());
-    if (!d->ui->listViewItems->selectionModel())
-        return;
-
-    // Selected item does not have any label -> Deselect
-//    if (d->ui->listViewItems->selectionModel()->isSelected(index) && index.data().toString().trimmed().isEmpty()) {
-//        d->ui->listViewItems->selectionModel()->select(index, QItemSelectionModel::Deselect);
-//    }
-
-    // If the item is now selected && the item has parent, all parent must be selected
-    if (d->ui->listViewItems->selectionModel()->isSelected(index)) {
-        QModelIndex idx = d->_rcCritModel->index(index.row(), RcCriteriasModel::Indentation, index.parent());
-        int indent = d->_rcCritModel->data(idx).toInt();
-        while (indent > 1) {
-            // If previous line is not a label -> break
-            if (d->_rcCritModel->index(idx.row() - 1, RcCriteriasModel::ItemWeight, index.parent()).data().toInt() >= 7)
-                break;
-
-            // Check previous line indentation
-            idx = d->_rcCritModel->index(idx.row() - 1, RcCriteriasModel::Indentation, index.parent());
-            if (d->_rcCritModel->data(idx).toInt() < indent) {
-                indent = d->_rcCritModel->data(idx).toInt();
-                d->ui->listViewItems->selectionModel()->select(d->_rcCritModel->index(idx.row(), RcCriteriasModel::Label, index.parent()), QItemSelectionModel::Select);
-            }
-        }
-    } else {
-        // If the item is now deselected && the item has children, all children must be deselected
-        QModelIndex idx = d->_rcCritModel->index(index.row(), RcCriteriasModel::Indentation, index.parent());
-        int indent = d->_rcCritModel->data(idx).toInt();
-        while (idx.isValid()) {
-            // If next line is not a label -> break
-            if (d->_rcCritModel->index(idx.row() + 1, RcCriteriasModel::ItemWeight, index.parent()).data().toInt() >= 7)
-                break;
-
-            // Check next line indentation
-            idx = d->_rcCritModel->index(idx.row() + 1, RcCriteriasModel::Indentation, index.parent());
-            if (d->_rcCritModel->data(idx).toInt() > indent) {
-                d->ui->listViewItems->selectionModel()->select(d->_rcCritModel->index(idx.row(), RcCriteriasModel::Label, index.parent()), QItemSelectionModel::Deselect);
-            }
-        }
-    }
-
-    // If the label is 'asymptomatique' -> check the radio (these criteria has a weight of 9)
-    if (index.data().toString().contains("asymptomatique"))
-        d->ui->radioSymptoNon->setChecked(true);
+    d->_rcCritModel->setData(index, -1, Qt::CheckStateRole);
 }
 
 /** Open the SFMG about dialog */
@@ -331,3 +311,28 @@ void RcEditorWidget::onArgumentsClicked()
     dlg.exec();
     d->ui->arguments->setEnabled(true);
 }
+
+
+void RcEditorWidget::checkConsultResultCoding()
+{
+    qWarning() << "CLICKED";
+    // Get selected criterias id
+    QModelIndexList list = d->ui->listViewItems->selectionModel()->selectedIndexes();
+    QList<int> ids;
+    foreach(const QModelIndex &index, list)
+        ids << d->_rcCritModel->index(index.row(), RcCriteriasModel::Id, index.parent()).data().toInt();
+    qWarning() << ids;
+    d->_rcCritModel->testCoding(ids);
+    d->ui->listViewItems->update();
+}
+
+//bool RcEditorWidget::eventFilter(QObject *obj, QEvent *event)
+//{
+//    qWarning() << "EVENTFILTER" << (obj==d->ui->listViewItems) << event->type();
+//    if (obj == d->ui->listViewItems && event->type() == QEvent::MouseButtonRelease) {
+//        d->ui->listViewItems->selectionModel()->blockSignals(true);
+//        d->ui->listViewItems->selectionModel()->clearSelection();
+//        d->ui->listViewItems->selectionModel()->blockSignals(false);
+//    }
+//    return QObject::eventFilter(obj, event);
+//}

@@ -27,7 +27,7 @@
 #ifndef EDRC_INTERNAL_RCCRITERIASMODEL_H
 #define EDRC_INTERNAL_RCCRITERIASMODEL_H
 
-#include <QSqlQueryModel>
+#include <QAbstractTableModel>
 
 /**
  * \file rccriteriasmodel.h
@@ -38,8 +38,9 @@
 
 namespace eDRC {
 namespace Internal {
+class RcCriteriasModelPrivate;
 
-class RcCriteriasModel : public QSqlQueryModel
+class RcCriteriasModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -48,23 +49,26 @@ public:
         Id = 0,
         Label,
         ItemWeight, // Pondération
-        Indentation
+        Indentation,
+        ColumnCount
     };
 
     RcCriteriasModel(QObject *parent = 0);
     ~RcCriteriasModel();
 
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void setFilterOnRcId(const int crId);
+    void testCoding(const QList<int> &ids);
 
 private:
-//    void selectAllParents(const QModelIndex& index);
-//    void deselectAllChilds(const QModelIndex& index);
-
-//    QList<Criteres_Elements>    * m_pListCriteres;
+    RcCriteriasModelPrivate *d;
 };
 
 } // namespace eDRC

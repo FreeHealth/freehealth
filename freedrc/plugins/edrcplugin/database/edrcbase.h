@@ -32,6 +32,7 @@
 namespace eDRC {
 class EdrcCore;
 namespace Internal {
+class ConsultResultCriteria;
 
 class DrcDatabase : public Utils::Database
 {
@@ -52,6 +53,8 @@ public:
     QString getRcArguments(const int rcId, bool toHtml = false, bool onlyValid = true) const;
     QStringList getRcAuthprizedDiagnosis(const int rcId, bool onlyValid = true) const;
     QStringList getRcIcd10RelatedCodes(const int rcId, bool onlyValid) const;
+
+    QList<ConsultResultCriteria> getOrderedCriteriasForCR(int crId) const;
 
 private:
     bool createDatabase(const QString &connection, const QString &prefixedDbName,
