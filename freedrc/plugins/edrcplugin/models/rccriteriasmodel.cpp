@@ -81,6 +81,8 @@ public:
         _criterias = edrcBase().getOrderedCriteriasForCR(crId);
         _validator.setCrId(_crId);
         _validator.setAvailableCriterias(_criterias);
+        _validator.setSelectedCriterias(_checkedIds);
+        _validator.check();
     }
 
 public:
@@ -145,11 +147,38 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
                 .arg(crit.indentation())
                 ;
     } else if (role == Qt::FontRole && index.column() == Label) {
-        if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
-            if (crit.weight() == 1) {
-                QFont font;
-                font.setBold(true);
-                return font;
+        if (crit.weight() == 1) {
+            if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
+                // Root items
+                if (crit.indentation() == 1) {
+                    QFont font;
+                    font.setBold(true);
+                    return font;
+                } else {
+                    // Return bold only if parent is checked
+                    int indent = crit.indentation();
+                    int row = index.row() - 1;
+
+                    while (indent > 1 && row >= 0) {
+                        const ConsultResultCriteria &previous = d->_criterias.at(row);
+
+                        // If previous line is not a label -> break
+                        if (previous.isLineBreak())
+                            break;
+
+                        // Check previous line indentation
+                        if (previous.indentation() < indent) {
+                            if (d->_checkedRows.contains(row)) {
+                                QFont font;
+                                font.setBold(true);
+                                return font;
+                            } else {
+                                return QVariant();
+                            }
+                        }
+                        --row;
+                    }
+                }
             }
         }
     } else if (role == Qt::BackgroundRole) {

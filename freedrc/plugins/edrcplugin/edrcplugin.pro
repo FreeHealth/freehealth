@@ -25,6 +25,7 @@ HEADERS += \
     widgets/rcargumentsdialog.h \
     widgets/sfmgaboutdialog.h \
     widgets/rceditorwidget.h \
+    widgets/edrcpreferences.h \
     consultresult.h \
     consultresultvalidator.h \
     constants.h
@@ -43,13 +44,15 @@ SOURCES += \
     widgets/rcargumentsdialog.cpp \
     widgets/sfmgaboutdialog.cpp \
     widgets/rceditorwidget.cpp \
+    widgets/edrcpreferences.cpp \
     consultresultvalidator.cpp \
     consultresult.cpp
 
 FORMS += \
     widgets/rceditorwidget.ui \
     widgets/rcargumentsdialog.ui \
-    widgets/sfmgaboutdialog.ui
+    widgets/sfmgaboutdialog.ui \
+    widgets/edrcpreferences.ui
 
 
 OTHER_FILES += eDRC.pluginspec
