@@ -56,3 +56,7 @@ FORMS += \
 
 
 OTHER_FILES += eDRC.pluginspec
+
+# include translations
+TRANSLATION_NAME = edrc
+include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

@@ -48,12 +48,14 @@ public:
 
     void setId(int id) {_id = id;}
     void setLabel(const QString &label) {_label = label;}
+    void setComment(const QString &comment) {_comment = comment;}
     void setIndentation(int indentation);
     void setWeight(int weight) {_weight = weight;}
     void setSortIndex(int sortIndex) {_sortIndex = sortIndex;}
 
     int id() const {return _id;}
     QString label(bool useModernLabelling = false) const;
+    QString comment() const {return  _comment;}
     QString htmlLabel(bool useModernLabelling = false) const;
     int indentation() const {return _indentation;}
     int weight() const {return _weight;}
@@ -65,7 +67,7 @@ public:
 
 private:
     int _id, _weight, _indentation, _sortIndex;
-    QString _label, _indent;
+    QString _label, _indent, _comment;
 };
 
 class ConsultResult

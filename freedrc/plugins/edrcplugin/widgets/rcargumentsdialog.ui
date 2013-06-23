@@ -23,7 +23,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Argumentaire du Résultat de Consultation</string>
+      <string>Arguments for the result of consultation</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

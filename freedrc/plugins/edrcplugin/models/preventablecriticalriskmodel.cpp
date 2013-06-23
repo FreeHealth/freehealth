@@ -56,7 +56,7 @@ QVariant PreventableCriticalRiskModel::data(const QModelIndex &index, int role) 
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
         int sqlCol = -1;
         switch (index.column()) {
         case Id: sqlCol = Constants::REF_RC_SEQ; break;

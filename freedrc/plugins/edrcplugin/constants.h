@@ -39,6 +39,7 @@ namespace Constants {
 
 const char * const S_CR_USE_MODERNLABEL = "edrc/crlabel/modern";
 const char * const S_CR_MANDATORYLABEL_IN_BOLD = "edrc/crlabel/mandatoryinbold";
+const char * const S_REALTIME_CR_CODING_CHECKING = "edrc/coding/realTimeChecking";
 
 } // namespace Constants
 } // namespace eDRC

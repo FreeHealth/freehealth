@@ -69,6 +69,8 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
+
 private:
     MainWindow *m_MainWindow;
     Internal::MainWindowPreferencesPage *prefPage;

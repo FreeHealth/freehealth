@@ -76,6 +76,8 @@ private:
 
 class EdrcPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     EdrcPreferencesPage(QObject *parent = 0);
     ~EdrcPreferencesPage();

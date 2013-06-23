@@ -49,84 +49,7 @@
    </palette>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="2">
-    <widget class="QLabel" name="label_6">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Date d'enregistrement</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QDateTimeEdit" name="ui_date_Cs">
-     <property name="maximumSize">
-      <size>
-       <width>220</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::UpDownArrows</enum>
-     </property>
-     <property name="date">
-      <date>
-       <year>2008</year>
-       <month>1</month>
-       <day>1</day>
-      </date>
-     </property>
-     <property name="currentSection">
-      <enum>QDateTimeEdit::DaySection</enum>
-     </property>
-     <property name="displayFormat">
-      <string>dddd dd MMMM yyyy HH:mm</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="ui_label_Noms">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Médecin:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="4">
+   <item row="0" column="0" colspan="2">
     <widget class="QSplitter" name="centralSplitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -210,7 +133,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </font>
           </property>
           <property name="text">
-           <string>Risques critiques évitables</string>
+           <string>Preventable critical risks</string>
           </property>
           <property name="wordWrap">
            <bool>false</bool>
@@ -251,7 +174,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </font>
           </property>
           <property name="text">
-           <string>CIM10</string>
+           <string>ICD10 coding</string>
           </property>
          </widget>
         </item>
@@ -277,7 +200,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QPushButton" name="arguments">
             <property name="text">
-             <string notr="true">Argumentaire du RC</string>
+             <string>CR arguments</string>
             </property>
            </widget>
           </item>
@@ -319,7 +242,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonA">
             <property name="text">
-             <string>Symptôme</string>
+             <string>Symptom</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -339,7 +262,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonC">
             <property name="text">
-             <string>Tableau de maladie</string>
+             <string>Disease definition</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -349,7 +272,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonD">
             <property name="text">
-             <string>Diagnostic certifié</string>
+             <string>Certified diagnostic</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -359,7 +282,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonZ">
             <property name="text">
-             <string>Non pathologique</string>
+             <string>Not pathological</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -386,7 +309,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonN">
             <property name="text">
-             <string>Nouveau</string>
+             <string>New</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -406,7 +329,27 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
           <item>
            <widget class="QToolButton" name="buttonR">
             <property name="text">
-             <string>Révisé</string>
+             <string>Revised</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="buttonALD">
+            <property name="text">
+             <string>Insurance defined</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="buttonSympto">
+            <property name="text">
+             <string>Symptomatic</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -427,22 +370,24 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="buttonALD">
-            <property name="text">
-             <string>ALD</string>
+           <widget class="QLabel" name="codingResultIcon">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="buttonSympto">
-            <property name="text">
-             <string>Symptomatique</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -470,12 +415,12 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </font>
           </property>
           <property name="text">
-           <string>Commentaire sur le RC</string>
+           <string>Comment on the CR</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="commentRC">
+         <widget class="Editor::TextEditor" name="commentRC">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -505,12 +450,12 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </font>
           </property>
           <property name="text">
-           <string>Commentaire sur les items</string>
+           <string>Comment on criterias</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="commentItem">
+         <widget class="Editor::TextEditor" name="commentItem">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -523,14 +468,6 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
             <height>75</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string>Commentaire pour le résultat de consultation en cours.</string>
-          </property>
-          <property name="whatsThis">
-           <string>Vous pouvez laisser un commentaire concernant le résultat de consultation en cours de construction.
-Ce commentaire sera transmis à la SFMG lors du téléchargement des dossiers.
-Ce commentaire doit toujours être daté et ne peut être modifié pour un résultat de consultation enregistré.</string>
-          </property>
          </widget>
         </item>
        </layout>
@@ -539,11 +476,6 @@ Ce commentaire doit toujours être daté et ne peut être modifié pour un résu
     </widget>
    </item>
   </layout>
-  <zorder>ui_label_Noms</zorder>
-  <zorder>label_5</zorder>
-  <zorder>label_6</zorder>
-  <zorder>ui_date_Cs</zorder>
-  <zorder>centralSplitter</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
@@ -553,12 +485,16 @@ Ce commentaire doit toujours être daté et ne peut être modifié pour un résu
    <extends>QLineEdit</extends>
    <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>Editor::TextEditor</class>
+   <extends>QTextEdit</extends>
+   <header location="global">texteditorplugin/texteditor.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>searchLine</tabstop>
   <tabstop>treeViewRC</tabstop>
   <tabstop>listViewItems</tabstop>
-  <tabstop>ui_date_Cs</tabstop>
  </tabstops>
  <resources/>
  <connections/>

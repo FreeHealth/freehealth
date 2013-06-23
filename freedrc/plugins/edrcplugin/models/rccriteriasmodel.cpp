@@ -24,6 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class eDRC::Internal::RcCriteriasModel
+ * Manage the CR criterias and owns a realtime coding validation. \n
+ * The coding system uses the Qt::CheckStateRole without the values. When setData() is called
+ * with this role, the item checkstate is just toggled (check <-> uncheck). \n
+ * You can get the coding validation status with currentCodingStatus().
+ */
+
 #include "rccriteriasmodel.h"
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
@@ -133,64 +141,86 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
 
     const ConsultResultCriteria &crit = d->_criterias.at(index.row());
 
-    if (role == Qt::DisplayRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    {
         switch (index.column()) {
         case Id: return crit.id();
         case Label: return crit.label(settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool());
         case ItemWeight: return crit.weight();
         case Indentation: return crit.indentation();
         } // switch
-    } else if (role == Qt::ToolTipRole && index.column() == Label) {
-        return QString("%1\n  Pond: %2\n  Indent: %3)")
-                .arg(crit.label(settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool()))
-                .arg(crit.weight())
-                .arg(crit.indentation())
-                ;
-    } else if (role == Qt::FontRole && index.column() == Label) {
-        if (crit.weight() == 1) {
-            if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
-                // Root items
-                if (crit.indentation() == 1) {
-                    QFont font;
-                    font.setBold(true);
-                    return font;
-                } else {
-                    // Return bold only if parent is checked
-                    int indent = crit.indentation();
-                    int row = index.row() - 1;
+        break;
+    }
+    case Qt::ToolTipRole:
+    {
+        if (index.column() == Label) {
+            if (crit.isLineBreak())
+                return QVariant();
+            return QString("%1")
+                    .arg(crit.label(settings()->value(Constants::S_CR_USE_MODERNLABEL, true).toBool()).trimmed())
+                    //                .arg(crit.comment())
+                    //                .arg(crit.weight())
+                    //                .arg(crit.indentation())
+                    ;
+        }
+        break;
+    }
+    case Qt::FontRole:
+    {
+        if (index.column() == Label) {
+            if (crit.weight() == 1) {
+                if (settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true).toBool()) {
+                    // Root items
+                    if (crit.indentation() == 1) {
+                        QFont font;
+                        font.setBold(true);
+                        return font;
+                    } else {
+                        // Return bold only if parent is checked
+                        int indent = crit.indentation();
+                        int row = index.row() - 1;
 
-                    while (indent > 1 && row >= 0) {
-                        const ConsultResultCriteria &previous = d->_criterias.at(row);
+                        while (indent > 1 && row >= 0) {
+                            const ConsultResultCriteria &previous = d->_criterias.at(row);
 
-                        // If previous line is not a label -> break
-                        if (previous.isLineBreak())
-                            break;
+                            // If previous line is not a label -> break
+                            if (previous.isLineBreak())
+                                break;
 
-                        // Check previous line indentation
-                        if (previous.indentation() < indent) {
-                            if (d->_checkedRows.contains(row)) {
-                                QFont font;
-                                font.setBold(true);
-                                return font;
-                            } else {
-                                return QVariant();
+                            // Check previous line indentation
+                            if (previous.indentation() < indent) {
+                                if (d->_checkedRows.contains(row)) {
+                                    QFont font;
+                                    font.setBold(true);
+                                    return font;
+                                } else {
+                                    return QVariant();
+                                }
                             }
+                            --row;
                         }
-                        --row;
                     }
                 }
             }
         }
-    } else if (role == Qt::BackgroundRole) {
+        break;
+    }
+    case Qt::BackgroundRole:
+    {
+        // Selected items
         if (d->_checkedRows.contains(index.row()))
             return QColor(175, 175, 255, 125);
-        if (d->_validator.wrongCriteriaIds().contains(crit.id()))
-            return QColor(255, 125, 125, 125);
-//    } else if (role == Qt::CheckStateRole) {
-//        if (d->_checkedRows.contains(index.row()))
-//            return Qt::Checked;
-//        return Qt::Unchecked;
+        // Wrong coding
+        if (settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING, true).toBool()) {
+            if (d->_validator.wrongCriteriaIds().contains(crit.id()))
+                return QColor(255, 125, 125, 125);
+        }
+        break;
     }
+    default: break;
+    } // switch
+
     return QVariant();
 }
 
@@ -258,6 +288,8 @@ bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, 
         // Update validator
         d->_validator.setSelectedCriterias(d->_checkedIds);
         d->_validator.check();
+
+        qWarning() << d->_validator.wrongCriteriaIds();
     }
     return true;
 }
@@ -278,12 +310,24 @@ void RcCriteriasModel::setFilterOnRcId(const int crId)
     endResetModel();
 }
 
+/** Returns the ConsultResult coding status. This status is available at any time (realtime computation) */
+RcCriteriasModel::CodingStatus RcCriteriasModel::currentCodingStatus() const
+{
+    if (d->_checkedRows.isEmpty())
+        return NoCodingStarted;
+
+    if (d->_validator.wrongCriteriaIds().isEmpty())
+        return ValidCoding;
+
+    return IncompleteCoding;
+}
+
 /**
  * Test a ConsultResult coding. \e ids are the selected criterias of the CR. \n
  * After a call to this member, all views must update (BackgroundRole of item can be changed).
 */
-void RcCriteriasModel::testCoding(const QList<int> &ids)
-{
-    d->_validator.setSelectedCriterias(ids);
-    d->_validator.check();
-}
+//void RcCriteriasModel::testCoding(const QList<int> &ids)
+//{
+//    d->_validator.setSelectedCriterias(ids);
+//    d->_validator.check();
+//}

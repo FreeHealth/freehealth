@@ -53,6 +53,12 @@ public:
         ColumnCount
     };
 
+    enum CodingStatus {
+        NoCodingStarted = 0,
+        IncompleteCoding,
+        ValidCoding
+    };
+
     RcCriteriasModel(QObject *parent = 0);
     ~RcCriteriasModel();
 
@@ -65,7 +71,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void setFilterOnRcId(const int crId);
-    void testCoding(const QList<int> &ids);
+    CodingStatus currentCodingStatus() const;
 
 private:
     RcCriteriasModelPrivate *d;

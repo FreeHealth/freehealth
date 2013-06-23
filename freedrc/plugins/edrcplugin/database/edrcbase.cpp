@@ -639,6 +639,19 @@ QList<ConsultResultCriteria> DrcDatabase::getOrderedCriteriasForCR(int crId) con
             crit.setWeight(query.value(Constants::RC_LCRITERES_REF_PONDER_ID).toInt());
             crit.setSortIndex(query.value(Constants::RC_LCRITERES_AFFICH_ORDRE).toInt());
             crit.setLabel(query.value(Constants::RC_LCRITERES_LIB_CRITERES_FR).toString());
+
+            int crItemId = query.value(Constants::RC_LCRITERES_REF_RCITEM_ID).toInt();
+            where.clear();
+            where.insert(Constants::REF_RCITEM_SEQ, QString("='%1'").arg(crItemId));
+            req = select(Constants::Table_Ref_RCItem, where);
+            QSqlQuery queryItem(DB);
+            if (queryItem.exec(req)) {
+                if (queryItem.next()) {
+                    crit.setComment(queryItem.value(Constants::LIB_RCITEM_FR).toString());
+                }
+            } else {
+                LOG_QUERY_ERROR_FOR("DrcDatabase", query);
+            }
             toReturn << crit;
         }
     } else {

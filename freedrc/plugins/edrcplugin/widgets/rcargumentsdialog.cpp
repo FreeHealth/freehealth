@@ -30,11 +30,16 @@
 
 #include "ui_rcargumentsdialog.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <utils/global.h>
 
 using namespace eDRC;
 using namespace Internal;
 
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
@@ -43,6 +48,8 @@ RcArgumentsDialog::RcArgumentsDialog(QWidget *parent) :
     ui(new Ui::RcArgumentsDialog)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("Result of consultation arguments"));
+    setWindowIcon(theme()->icon("sfmg_logo.png"));
     resize(500, 350);
     Utils::centerWidget(this, parent);
 }

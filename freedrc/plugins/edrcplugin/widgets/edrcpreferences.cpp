@@ -26,12 +26,14 @@
  ***************************************************************************/
 #include "edrcpreferences.h"
 #include "ui_edrcpreferences.h"
+#include <edrcplugin/constants.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_menus.h>
 
 using namespace eDRC;
 using namespace Internal;
@@ -47,6 +49,7 @@ EdrcPreferencesPageWidget::EdrcPreferencesPageWidget(QWidget *parent) :
     ui(new Ui::EdrcPreferencesPageWidget)
 {
     ui->setupUi(this);
+    setDataToUi();
 }
 
 EdrcPreferencesPageWidget::~EdrcPreferencesPageWidget()
@@ -57,6 +60,9 @@ EdrcPreferencesPageWidget::~EdrcPreferencesPageWidget()
 /*! Sets data of a changed data model to the ui's widgets. */
 void EdrcPreferencesPageWidget::setDataToUi()
 {
+    ui->realTimeChecking->setChecked(settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING).toBool());
+    ui->useModernLabelling->setChecked(settings()->value(Constants::S_CR_USE_MODERNLABEL).toBool());
+    ui->mandatoryInBold->setChecked(settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD).toBool());
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -78,6 +84,13 @@ void EdrcPreferencesPageWidget::saveToSettings(Core::ISettings *sets)
     Q_UNUSED(sets);
     // if no sets given as param, take default interface
     Core::ISettings *s = sets? sets : settings();
+
+    s->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, ui->realTimeChecking->isChecked());
+    s->setValue(Constants::S_CR_USE_MODERNLABEL, ui->useModernLabelling->isChecked());
+    s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, ui->mandatoryInBold->isChecked());
+#ifdef FREEDRC
+    s->sync();
+#endif
 }
 
 /*! Writes the default settings to the data model. */
@@ -85,6 +98,13 @@ void EdrcPreferencesPageWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
     //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("EdrcPreferencesPageWidget"));
+
+    s->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, true);
+    s->setValue(Constants::S_CR_USE_MODERNLABEL, true);
+    s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
+#ifdef FREEDRC
+    s->sync();
+#endif
 }
 
 /*! Retranslates the ui widgets to the changed language. */
@@ -155,7 +175,7 @@ QString EdrcPreferencesPage::title() const
 /*! Returns the sorting order (pages are sorted starting from 0). */
 int EdrcPreferencesPage::sortIndex() const
 {
-    return 0;
+    return (Core::Constants::OPTIONINDEX_MAIN + 10);
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
@@ -186,13 +206,14 @@ void EdrcPreferencesPage::finish()
 void EdrcPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    //    defaultvalues.insert(%PluginName:c%::Constants::FOO_SETTING_KEY, %PluginName:c%::Constants::FOO_SETTING_VALUE);
-    
+    defaultvalues.insert(Constants::S_CR_USE_MODERNLABEL, true);
+    defaultvalues.insert(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
+    defaultvalues.insert(Constants::S_REALTIME_CR_CODING_CHECKING, false);
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
-    settings()->sync();
 }
 
 bool EdrcPreferencesPage::matches(const QString &searchKeyWord) const

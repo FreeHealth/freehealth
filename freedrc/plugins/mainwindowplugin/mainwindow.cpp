@@ -70,6 +70,7 @@
 #include <QTreeWidgetItem>
 #include <QDockWidget>
 #include <QMenu>
+#include <QDesktopWidget>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -158,8 +159,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 void MainWindow::extensionsInitialized()
 {
     // Creating MainWindow interface
-    m_ui = new Internal::Ui::MainWindow();
-    m_ui->setupUi(this);
+    ui = new Internal::Ui::MainWindow();
+    ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Disable some actions when starting as medintux plugin
@@ -215,6 +216,8 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    delete centralWidget();
+    setCentralWidget(0);
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
 }
@@ -230,6 +233,10 @@ void MainWindow::postCoreOpened()
 
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();
+
+    resize(800, 600);
+    Utils::centerWidget(this, QDesktopWidget().screen());
+
     raise();
     show();
 }
@@ -286,7 +293,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-//        m_ui->retranslateUi(this);
+//        ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
         refreshPatient();
     }
@@ -384,13 +391,13 @@ void MainWindow::changeFontTo(const QFont &font)
 
 bool MainWindow::print()
 {
-//    return m_ui->m_CentralWidget->printPrescription();
+//    return ui->m_CentralWidget->printPrescription();
     return true;
 }
 
 bool MainWindow::printPreview()
 {
-//    m_ui->m_CentralWidget->printPreview();
+//    ui->m_CentralWidget->printPreview();
     return true;
 }
 

@@ -52,7 +52,7 @@ SfmgAboutDialog::SfmgAboutDialog(QWidget *parent) :
     setWindowIcon(theme()->icon("sfmg_logo.png"));
     setWindowTitle("À propos de la Société Française de Médecine Générale");
     resize(400, 250);
-    Utils::centerWidget(this, parent);
+    Utils::resizeAndCenter(this, parent);
 }
 
 SfmgAboutDialog::~SfmgAboutDialog()

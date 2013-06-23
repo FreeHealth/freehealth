@@ -50,10 +50,11 @@ using namespace MainWin;
 using namespace Internal;
 
 MainWinPlugin::MainWinPlugin() :
-        m_MainWindow(0), prefPage(0)
+    m_MainWindow(0),
+    prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating MainWinPlugin";
+        qWarning() << "creating FREEDRC::MainWinPlugin";
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_famainwindow");
@@ -66,12 +67,6 @@ MainWinPlugin::MainWinPlugin() :
 MainWinPlugin::~MainWinPlugin()
 {
     qWarning() << "MainWinPlugin::~MainWinPlugin()";
-    if (m_MainWindow)
-        delete m_MainWindow;
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
 }
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -98,6 +93,30 @@ void MainWinPlugin::extensionsInitialized()
     addObject(prefPage);
 
     m_MainWindow->extensionsInitialized();
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    if (m_MainWindow->isVisible())
+        m_MainWindow->hide();
+
+    if (m_MainWindow) {
+        delete m_MainWindow;
+        m_MainWindow = 0;
+    }
+
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage;
+        prefPage=0;
+    }
+
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(MainWinPlugin)

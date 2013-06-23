@@ -371,6 +371,7 @@ void ConsultResultValidator::setCrId(int crId)
 void ConsultResultValidator::setAvailableCriterias(const QList<ConsultResultCriteria> &availableCriterias)
 {
     d->_criterias = availableCriterias;
+    d->_groups.clear();
     d->createGroup(0);
     d->joinGroups();
     if (WarnGroupCreation) {

@@ -106,6 +106,10 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
     _core = new EdrcCore(this);
     _core->initialize();
 
+#ifdef FREEDRC
+    _pref->checkSettingsValidity();
+#endif
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
@@ -151,6 +155,8 @@ void EdrcPlugin::postCoreInitialization()
 
 ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     // Save settings
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
@@ -160,6 +166,4 @@ ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-
 Q_EXPORT_PLUGIN(EdrcPlugin)
-

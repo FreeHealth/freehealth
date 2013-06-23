@@ -100,7 +100,7 @@ private Q_SLOTS:
     void postCoreOpened();
 
 public:
-    Internal::Ui::MainWindow *m_ui;
+    Internal::Ui::MainWindow *ui;
 };
 
 } // End Core

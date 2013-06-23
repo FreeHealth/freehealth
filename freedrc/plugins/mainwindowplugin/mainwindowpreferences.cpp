@@ -70,10 +70,25 @@ MainWindowPreferencesPage::~MainWindowPreferencesPage()
     m_Widget = 0;
 }
 
-QString MainWindowPreferencesPage::id() const { return objectName(); }
-QString MainWindowPreferencesPage::displayName() const { return tkTr(Trans::Constants::GENERAL); }
-QString MainWindowPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL); }
-int MainWindowPreferencesPage::sortIndex() const {return 0;}
+QString MainWindowPreferencesPage::id() const
+{
+    return objectName();
+}
+
+QString MainWindowPreferencesPage::displayName() const
+{
+    return tkTr(Trans::Constants::GENERAL).remove("&");
+}
+
+QString MainWindowPreferencesPage::category() const
+{
+    return tkTr(Trans::Constants::GENERAL).remove("&");
+}
+
+int MainWindowPreferencesPage::sortIndex() const
+{
+    return Core::Constants::OPTIONINDEX_MAIN;
+}
 
 void MainWindowPreferencesPage::resetToDefaults()
 {
