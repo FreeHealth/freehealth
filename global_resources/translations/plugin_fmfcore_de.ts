@@ -736,12 +736,6 @@ Please check and validate the proxy settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The configuration script is missing. You can not configure the server without this script.
-
-&lt;b&gt;Please contact the developement team.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Network server configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -781,6 +775,10 @@ Please check out the log files and contact your administrator.</source>
     </message>
     <message>
         <source>You must configure the server using the server super-administrator login and password to connect the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

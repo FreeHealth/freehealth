@@ -745,13 +745,6 @@ Veuillez vérifier et valider les données de paramétrage.</translation>
         <translation>Fichiers manquants.</translation>
     </message>
     <message>
-        <source>The configuration script is missing. You can not configure the server without this script.
-
-&lt;b&gt;Please contact the developement team.&lt;/b&gt;</source>
-        <translation>Le script de configuration est manquant. Vous ne pouvez pas configurer votre serveur sans ce fichier.
-&lt;b&gt;Veuillez contacter l&apos;équipe de développement.&lt;/b&gt;</translation>
-    </message>
-    <message>
         <source>Connection to the server: User rights inadequate</source>
         <translation>Connexion au serveur : droits d&apos;utilisateur inadéquat</translation>
     </message>
@@ -790,6 +783,10 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
     <message>
         <source>You must configure the server using the server super-administrator login and password to connect the database.</source>
         <translation>Vous devez configurer le serveur en utilisant les identifiants et mot de passe du super-administrateur de la base de données.</translation>
+    </message>
+    <message>
+        <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

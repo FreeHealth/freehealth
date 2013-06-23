@@ -134,8 +134,8 @@
         <translation>Sauvegarde dans le fichier</translation>
     </message>
     <message>
+        <location filename="../../libs/utils/global.cpp" line="422"/>
         <location filename="../../libs/utils/global.cpp" line="424"/>
-        <location filename="../../libs/utils/global.cpp" line="426"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation>Erreur en récupérant les données de uname sous %1</translation>
     </message>

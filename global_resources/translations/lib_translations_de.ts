@@ -2705,5 +2705,9 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>File %1 moved to %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>See also</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

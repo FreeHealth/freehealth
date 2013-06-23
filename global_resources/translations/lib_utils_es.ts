@@ -121,8 +121,8 @@
 <context>
     <name>Utils</name>
     <message>
+        <location filename="../../libs/utils/global.cpp" line="422"/>
         <location filename="../../libs/utils/global.cpp" line="424"/>
-        <location filename="../../libs/utils/global.cpp" line="426"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation type="unfinished"></translation>
     </message>
