@@ -62,6 +62,7 @@ ConsultResultCriteria::ConsultResultCriteria() :
 ConsultResultCriteria::~ConsultResultCriteria()
 {}
 
+/** Define the indentation of the criteria */
 void ConsultResultCriteria::setIndentation(int indentation)
 {
     _indentation = indentation;
@@ -70,6 +71,11 @@ void ConsultResultCriteria::setIndentation(int indentation)
         _indent.fill(' ', _indentation);
 }
 
+/**
+ * Return the plain text label of the criteria. You can use the \e useModernLabelling to
+ * to improve the readability of the label. The indentation is included in the
+ * returned string.
+ */
 QString ConsultResultCriteria::label(bool useModernLabelling) const
 {
     if (_label.isEmpty() || !useModernLabelling)
@@ -78,6 +84,7 @@ QString ConsultResultCriteria::label(bool useModernLabelling) const
     if (!_label.contains("++"))
         return QString("%1%2").arg(_indent).arg(_label);
 
+    // Compute the modern label
     QString html = _label;
     html.replace("++1|", QChar(10112));
     html.replace("++2|", QChar(10113));
@@ -88,6 +95,11 @@ QString ConsultResultCriteria::label(bool useModernLabelling) const
     return QString("%1%2").arg(_indent).arg(html);
 }
 
+/**
+ * Return the html label of the criteria. You can use the \e useModernLabelling to
+ * to improve the readability of the label. The indentation is included in the
+ * returned string.
+ */
 QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
 {
     if (_label.isEmpty() || !useModernLabelling)
@@ -96,6 +108,7 @@ QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
     if (!_label.contains("++"))
         return QString("%1%2").arg(_indent).arg(_label);
 
+    // Compute the modern label
     QString html = _label;
     html.replace("++1|", QString("&#%1;").arg(10112));
     html.replace("++2|", QString("&#%1;").arg(10113));
@@ -173,6 +186,7 @@ void ConsultResult::clear()
     _chronicDisease = ChronicDiseaseStateUndefined;
 }
 
+/** Set the CR database \e id */
 void ConsultResult::setConsultResult(int id)
 {
     _crId = id;
@@ -184,21 +198,25 @@ void ConsultResult::setSelectedCriterias(const QList<int> &criteriaIds)
     _selectedCriteriasIds = criteriaIds;
 }
 
+/** Define the diagnostic position using the eDRC::Internal::ConsultResult::DiagnosisPosition enum */
 void ConsultResult::setDiagnosisPosition(int pos)
 {
     _diagnosisPosition = pos;
 }
 
+/** Define the medical follow up code using the eDRC::Internal::ConsultResult::MedicalFollowUp enum */
 void ConsultResult::setMedicalFollowUp(int pos)
 {
     _medicalFollowUp = pos;
 }
 
+/** Define if the CR is linked with a chronic disease (ALD in france) */
 void ConsultResult::setChronicDiseaseState(int pos)
 {
     _chronicDisease = pos;
 }
 
+/** Define if the CR is symptomatic or not */
 void ConsultResult::setSymptomaticState(int pos)
 {
     _symptomatic = pos;
