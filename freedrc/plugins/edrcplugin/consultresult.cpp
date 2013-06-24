@@ -136,13 +136,19 @@ ConsultResult::~ConsultResult()
 /** Test emptyness of the object */
 bool ConsultResult::isEmpty() const
 {
-    return (_crId == -1) || _selectedCriteriasIds.isEmpty();
+    return (_crId == -1) ||
+            (_selectedCriteriasIds.isEmpty() &&
+             _diagnosisPosition == DiagnosisPositionUndefined &&
+             _medicalFollowUp == MedicalFollowUpUndefined &&
+             _symptomatic == SymptomaticStateUndefined &&
+            _chronicDisease == ChronicDiseaseStateUndefined);
 }
 
 /** Test validity of the CR. A valid CR is a CR that can be identified and which all data are defined. */
 bool ConsultResult::isValid() const
 {
     return !isEmpty() &&
+            !_selectedCriteriasIds.isEmpty() &&
             _diagnosisPosition != DiagnosisPositionUndefined &&
             _medicalFollowUp != MedicalFollowUpUndefined &&
             _symptomatic != SymptomaticStateUndefined &&

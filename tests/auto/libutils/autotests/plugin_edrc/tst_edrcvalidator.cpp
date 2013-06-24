@@ -1,0 +1,338 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+#include <utils/global.h>
+#include "../../../../freedrc/plugins/edrcplugin/consultresult.h"
+#include "../../../../freedrc/plugins/edrcplugin/consultresultvalidator.h"
+
+#include "../../autotest.h"
+
+#include <QDebug>
+#include <QTest>
+
+#define CR_CSV_BLANK_LINE
+using namespace eDRC;
+using namespace Internal;
+
+/**
+ * Run tests on the eDRC::Internal::ConsultResultValidator
+*/
+class tst_EdrcValidator : public QObject
+{
+    Q_OBJECT
+public:
+
+private slots:
+    void initTestCase()
+    {
+    }
+
+    static ConsultResultCriteria &criteria(const QString &csv)
+    {
+        // static int internalId = 972342;
+        // CSV == ID;SORT;LABEL;INDENT;WEIGHT
+        QStringList values = csv.split(";");
+        ConsultResultCriteria *crit = new ConsultResultCriteria();
+        crit->setId(values.at(0).toInt());
+        crit->setSortIndex(values.at(1).toInt());
+        crit->setLabel(values.at(2));
+        crit->setIndentation(values.at(3).toInt());
+        crit->setWeight(values.at(4).toInt());
+        return *crit;
+    }
+
+    static void testValidator(ConsultResultValidator *validator, const QList<int> &selectedIds, const QList<int> &wrongIds, const QString &msg)
+    {
+        QWARN(QString("Testing: %1").arg(msg).toUtf8());
+        // Update validator data
+        validator->clearSelectedCriterias();
+        validator->setSelectedCriterias(selectedIds);
+        // Start validator magic
+        validator->check();
+        // Check reported wrong ids
+        qWarning() << "Validator" << validator->wrongCriteriaIds() << "Test" << wrongIds;
+        QVERIFY(wrongIds.count() == validator->wrongCriteriaIds().count());
+        for(int i=0; i < wrongIds.count(); ++i) {
+            QVERIFY(validator->wrongCriteriaIds().contains(wrongIds.at(i)) == true);
+        }
+        QWARN("    Test succeeded");
+    }
+
+    void testConsultResultObject()
+    {
+        ConsultResult r;
+        QVERIFY(r.isEmpty() == true);
+        QVERIFY(r.isValid() == false);
+        r.setConsultResult(1);
+        r.setChronicDiseaseState(ConsultResult::ChronicDisease);
+        r.setDiagnosisPosition(ConsultResult::A);
+        QVERIFY(r.isEmpty() == false);
+        QVERIFY(r.isValid() == false);
+        r.setMedicalFollowUp(ConsultResult::N);
+        r.setSymptomaticState(ConsultResult::Symptomatic);
+        QVERIFY(r.isEmpty() == false);
+        QVERIFY(r.isValid() == false);
+        r.setSelectedCriterias(QList<int>() << 1 << 2);
+        QVERIFY(r.isEmpty() == false);
+        QVERIFY(r.isValid() == true);
+
+        r.clear();
+        QVERIFY(r.isEmpty() == true);
+        QVERIFY(r.isValid() == false);
+    }
+
+    void testValidatorTestOne()
+    {
+        // Create validator & test lists
+        ConsultResultValidator validator;
+        validator.setCrId(1);
+        QList<int> selectedIds;
+        QList<int> wrongIds;
+
+        // Create criterias using csv {ID;SORT;LABEL;INDENT;WEIGHT}
+        QString csv =
+                "0;0;++++ MANDATORY 1;1;1\n"
+                "1;1;++++ MANDATORY 2;1;1\n"
+                "2;2;++++ MANDATORY 3;1;1\n"
+                "3;3;  ++1| MANDATORY 3.CHILD1;2;2\n"
+                "4;4;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "5;5;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "6;6; ;1;8\n"
+                "7;7;+ - OPTIONAL 1;1;6\n"
+                ;
+        QList<ConsultResultCriteria> criterias;
+        foreach(const QString &line, csv.split("\n", QString::SkipEmptyParts))
+            criterias << criteria(line);
+        validator.setAvailableCriterias(criterias);
+
+
+        // Test 1 : missing one mandatory
+        selectedIds << 0 << 2 << 3 << 4 << 5;
+        wrongIds    << 1;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: missing one mandatory 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1bis : missing one mandatory
+        selectedIds << 0 << 1;
+        wrongIds    << 2;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: missing one mandatory 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1ter : missing one mandatory (child selected but not parent)
+        selectedIds << 0 << 1 << 3;
+        wrongIds    << 2;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: missing one mandatory (child selected but not parent)");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 2 : missing children
+        selectedIds << 0 << 1 << 2;
+        wrongIds    << 3 << 4 << 5;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: missing children");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 3 : ok
+        selectedIds << 0 << 1 << 2 << 3;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: Correct coding 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 4 : ok
+        selectedIds << 0 << 1 << 2 << 4;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: Correct coding 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 5 : ok
+        selectedIds << 0 << 1 << 2 << 5;
+        testValidator(&validator, selectedIds, wrongIds, "Test1: Correct coding 3");
+        selectedIds.clear();
+        wrongIds.clear();
+    }
+
+    void testValidatorTestTwo()
+    {
+        // Create validator & test lists
+        ConsultResultValidator validator;
+        validator.setCrId(1);
+        QList<int> selectedIds;
+        QList<int> wrongIds;
+
+        // Create criterias using csv {ID;SORT;LABEL;INDENT;WEIGHT}
+        QString csv =
+                "0;0;++++ MANDATORY 1;1;1\n"
+                "1;1;++++ MANDATORY 2;1;1\n"
+                "2;2;++++ MANDATORY 3;1;1\n"
+                "3;3;  ++1| MANDATORY 3.CHILD1;2;2\n"
+                "4;4;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "5;5;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "6;6; ;1;8\n"
+                "7;7;++1| SIGNIFIANT IN GROUP 1;2;2\n"
+                "8;8;++1| SIGNIFIANT IN GROUP 2;2;2\n"
+                "9;9;++1| SIGNIFIANT IN GROUP 3;2;2\n"
+                "10;10; ;1;8\n"
+                "11;11;+ - OPTIONAL 1;1;6\n"
+                ;
+        QList<ConsultResultCriteria> criterias;
+        foreach(const QString &line, csv.split("\n", QString::SkipEmptyParts))
+            criterias << criteria(line);
+        validator.setAvailableCriterias(criterias);
+
+
+        // Test 1 : missing one mandatory
+        selectedIds << 0 << 2;
+        wrongIds    << 1 << 3 << 4 << 5 << 7 << 8 << 9;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: missing one mandatory 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1bis : missing one mandatory
+        selectedIds << 0 << 1 << 9;
+        wrongIds    << 2;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: missing one mandatory 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1ter : missing one signifiant in the second group
+        selectedIds << 0 << 1 << 2 << 3;
+        wrongIds    << 7 << 8 << 9;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: missing one signifiant in the second group");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 2 : missing children
+        selectedIds << 0 << 1 << 2;
+        wrongIds    << 3 << 4 << 5 << 7 << 8 << 9;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: missing children");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 3 : ok
+        selectedIds << 0 << 1 << 2 << 3 << 7;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: Correct coding 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 4 : ok
+        selectedIds << 0 << 1 << 2 << 4 << 8;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: Correct coding 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 5 : ok
+        selectedIds << 0 << 1 << 2 << 5 << 9;
+        testValidator(&validator, selectedIds, wrongIds, "Test2: Correct coding 3");
+        selectedIds.clear();
+        wrongIds.clear();
+    }
+
+    void testValidatorTestThree()
+    {
+        // Create validator & test lists
+        ConsultResultValidator validator;
+        validator.setCrId(1);
+        QList<int> selectedIds;
+        QList<int> wrongIds;
+
+        // Create criterias using csv {ID;SORT;LABEL;INDENT;WEIGHT}
+        QString csv =
+                "1;2;++1| GROUP 1;1;2\n"
+                "2;3;  ++1| MANDATORY 3.CHILD1;2;2\n"
+                "3;4;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "4;5;  ++1| MANDATORY 3.CHILD2;2;2\n"
+                "20;6; ;1;8\n"
+                "5;7;++1| GROUP 2;1;2\n"
+                "6;8;  ++1| MANDATORY 3.CHILD1;2;2\n"
+                "21;9; ;1;8\n"
+                "7;10;+ - OPTIONAL 1;1;6\n"
+                "8;11;+ - OPTIONAL 2;1;6\n"
+                "9;12;+ - OPTIONAL 3;1;6\n"
+                "10;13; ;1;8\n"
+                "11;14;+ - OPTIONAL 1;1;6\n"
+                ;
+        QList<ConsultResultCriteria> criterias;
+        foreach(const QString &line, csv.split("\n", QString::SkipEmptyParts))
+            criterias << criteria(line);
+        validator.setAvailableCriterias(criterias);
+
+
+        // Test 1 : missing one mandatory
+        selectedIds << 7 << 8 << 9 << 11;
+        wrongIds    << 1 << 5;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: missing one mandatory 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1bis : missing one mandatory
+        selectedIds << 2 << 7 << 8 << 9;
+        wrongIds    << 1 << 5;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: missing one mandatory 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 1ter : missing one signifiant in the second group
+        selectedIds << 1 << 2 << 5;
+        wrongIds    << 6;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: missing one signifiant in the second group");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 2 : missing children
+        selectedIds << 1 << 4 << 5;
+        wrongIds    << 6;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: missing children");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 3 : ok
+        selectedIds << 1 << 2;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: Correct coding 1");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 4 : ok
+        selectedIds << 1 << 2 << 6 << 5;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: Correct coding 2");
+        selectedIds.clear();
+        wrongIds.clear();
+
+        // Test 5 : ok
+        selectedIds << 5 << 6;
+        testValidator(&validator, selectedIds, wrongIds, "Test3: Correct coding 3");
+        selectedIds.clear();
+        wrongIds.clear();
+    }
+
+    void cleanupTestCase()
+    {}
+};
+
+DECLARE_TEST(tst_EdrcValidator)
+#include "tst_edrcvalidator.moc"
+
+
