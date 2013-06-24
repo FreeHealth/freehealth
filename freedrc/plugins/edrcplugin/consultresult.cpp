@@ -42,10 +42,17 @@
 
 #include "consultresult.h"
 
+#include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_filepathxml.h>
+
 #include <QRegExp>
+#include <QDomDocument>
 
 using namespace eDRC;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 /** Construct an empty invalid object */
 ConsultResultCriteria::ConsultResultCriteria() :
@@ -225,4 +232,186 @@ ConsultResult::ChronicDiseaseState ConsultResult::chronicDiseaseState() const
 ConsultResult::SymptomaticState ConsultResult::symptomaticState() const
 {
     return ConsultResult::SymptomaticState(_symptomatic);
+}
+
+namespace {
+const char * const XML_ROOT_TAG = "eDRC";
+const char * const XML_CR_TAG = "CR";
+const char * const XML_CR_COMMENTS = "Comments";
+const char * const XML_CR_COMMENT = "Comment";
+const char * const XML_ATTRIB_ID = "id";
+const char * const XML_ATTRIB_TYPE = "type";
+const char * const XML_ATTRIB_DIAG_POS = "posdiag";
+const char * const XML_ATTRIB_FOLLOWUP = "followup";
+const char * const XML_ATTRIB_CHRONIC = "chronic";
+const char * const XML_ATTRIB_SYMPTOMATIC = "sympto";
+const char * const XML_ATTRIB_CRITERIAS = "criterias";
+const char * const XML_COMMENT_ONCR = "OnCR";
+const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
+
+}
+
+/** Transform object to XML */
+QString ConsultResult::toXml() const
+{
+    // TODO: add the eDRC database version & coding system version
+    QDomDocument doc("FreeMedForms");
+    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    doc.appendChild(root);
+    QDomElement element = doc.createElement(::XML_CR_TAG);
+    root.appendChild(element);
+    element.setAttribute(::XML_ATTRIB_ID, _crId);
+
+    switch (_diagnosisPosition) {
+    case A: element.setAttribute(::XML_ATTRIB_DIAG_POS, "A"); break;
+    case B: element.setAttribute(::XML_ATTRIB_DIAG_POS, "B"); break;
+    case C: element.setAttribute(::XML_ATTRIB_DIAG_POS, "C"); break;
+    case D: element.setAttribute(::XML_ATTRIB_DIAG_POS, "D"); break;
+    case Z: element.setAttribute(::XML_ATTRIB_DIAG_POS, "Z"); break;
+    default: break;
+    }
+    switch (_medicalFollowUp) {
+    case N: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "N"); break;
+    case P: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "P"); break;
+    case R: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "R"); break;
+    default: break;
+    }
+    switch (_symptomatic) {
+    case Symptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "yes"); break;
+    case NotSymptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "no"); break;
+    default: break;
+    }
+    switch (_chronicDisease) {
+    case ChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "yes"); break;
+    case NotChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "no"); break;
+    default: break;
+    }
+
+    // Add criterias
+    if (!_selectedCriteriasIds.isEmpty()) {
+        QString selectedCriterias;
+        foreach(const int id, _selectedCriteriasIds)
+            selectedCriterias += QString("%1;").arg(id);
+        selectedCriterias.chop(1);
+        element.setAttribute(::XML_ATTRIB_CRITERIAS, selectedCriterias);
+    }
+
+    // Add comments
+    QDomElement comments = doc.createElement(::XML_CR_COMMENTS);
+    root.appendChild(comments);
+    if (!_crComment.isEmpty()) {
+        QDomElement comment = doc.createElement(::XML_CR_COMMENT);
+        comment.setAttribute(::XML_ATTRIB_TYPE, ::XML_COMMENT_ONCR);
+        QDomText t = doc.createTextNode(_crComment);
+        comment.appendChild(t);
+        comments.appendChild(comment);
+    }
+    if (!_critComment.isEmpty()) {
+        QDomElement comment = doc.createElement(::XML_CR_COMMENT);
+        comment.setAttribute(::XML_ATTRIB_TYPE, ::XML_COMMENT_ONCRITERIAS);
+        QDomText t = doc.createTextNode(_critComment);
+        comment.appendChild(t);
+        comments.appendChild(comment);
+    }
+    return QString("<?xml version='1.0' encoding='UTF-8'?>\n%1").arg(doc.toString(2));
+}
+
+/** Create a eDRC::Internal::ConsultResult object from XML */
+ConsultResult &ConsultResult::fromXml(const QString &xml)
+{
+    ConsultResult *cr = new ConsultResult;
+    // Prepare XML content
+    QDomDocument doc;
+    QString error;
+    int line, col;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
+        return *cr;
+    }
+    QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
+    if (root.isNull()) {
+        LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_ROOT_TAG));
+        return *cr;
+    }
+    QDomElement element = root.firstChildElement(::XML_CR_TAG);
+    if (element.isNull()) {
+        LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_CR_TAG));
+        return *cr;
+    }
+    // Read CR data
+    cr->setConsultResult(element.attribute(::XML_ATTRIB_ID).toInt());
+
+    // Diagnostic position
+    const QString &posDiag = element.attribute(::XML_ATTRIB_DIAG_POS);
+    if (posDiag.compare("A", Qt::CaseInsensitive)==0) {
+        cr->setDiagnosisPosition(A);
+    } else if (posDiag.compare("B", Qt::CaseInsensitive)==0) {
+        cr->setDiagnosisPosition(B);
+    } else if (posDiag.compare("C", Qt::CaseInsensitive)==0) {
+        cr->setDiagnosisPosition(C);
+    } else if (posDiag.compare("D", Qt::CaseInsensitive)==0) {
+        cr->setDiagnosisPosition(D);
+    } else if (posDiag.compare("Z", Qt::CaseInsensitive)==0) {
+        cr->setDiagnosisPosition(Z);
+    }
+
+    // Follow up
+    const QString &f = element.attribute(::XML_ATTRIB_FOLLOWUP);
+    if (f.compare("N", Qt::CaseInsensitive)==0) {
+        cr->setMedicalFollowUp(N);
+    } else if (f.compare("P", Qt::CaseInsensitive)==0) {
+        cr->setMedicalFollowUp(P);
+    } else if (f.compare("R", Qt::CaseInsensitive)==0) {
+        cr->setMedicalFollowUp(R);
+    }
+
+    // Symptomatic state
+    if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("yes", Qt::CaseInsensitive)==0) {
+        cr->setSymptomaticState(Symptomatic);
+    } else if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("no", Qt::CaseInsensitive)==0) {
+        cr->setSymptomaticState(NotSymptomatic);
+    }
+
+    // Chronic disease state
+    if (element.attribute(::XML_ATTRIB_CHRONIC).compare("yes", Qt::CaseInsensitive)==0) {
+        cr->setChronicDiseaseState(ChronicDisease);
+    } else if (element.attribute(::XML_ATTRIB_CHRONIC).compare("no", Qt::CaseInsensitive)==0) {
+        cr->setSymptomaticState(NotChronicDisease);
+    }
+
+    // Selected criteria ids
+    const QString &crit = element.attribute(::XML_ATTRIB_CRITERIAS);
+    foreach(const QString &c, crit.split(";", QString::SkipEmptyParts))
+        cr->_selectedCriteriasIds.append(c.toInt());
+
+    // Comments
+    element = root.firstChildElement(::XML_CR_COMMENTS);
+    QDomElement comment = element.firstChildElement(::XML_CR_COMMENT);
+    while (!comment.isNull()) {
+        if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCR, Qt::CaseInsensitive)==0) {
+            if (comment.childNodes().count() == 1) {
+                cr->setHtmlCommentOnCR(comment.childNodes().at(0).nodeValue());
+            }
+        } else if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCRITERIAS, Qt::CaseInsensitive)==0) {
+            if (comment.childNodes().count() == 1) {
+                cr->setHtmlCommentOnCriterias(comment.childNodes().at(0).nodeValue());
+            }
+        }
+        comment = comment.nextSiblingElement(::XML_CR_COMMENT);
+    }
+
+    return *cr;
+}
+
+bool ConsultResult::operator==(const ConsultResult &other) const
+{
+    return _crId == other._crId &&
+            _selectedCriteriasIds == other._selectedCriteriasIds &&
+            _diagnosisPosition == other._diagnosisPosition &&
+            _medicalFollowUp == other._medicalFollowUp &&
+            _chronicDisease == other._chronicDisease &&
+            _symptomatic == other._symptomatic &&
+            _crComment == other._crComment &&
+            _critComment == other._critComment
+            ;
 }

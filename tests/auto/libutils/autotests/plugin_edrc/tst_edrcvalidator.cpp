@@ -98,9 +98,95 @@ private slots:
         QVERIFY(r.isEmpty() == false);
         QVERIFY(r.isValid() == true);
 
+        // Check operator==()
+        ConsultResult r2;
+        r2.setConsultResult(1);
+        r2.setChronicDiseaseState(ConsultResult::ChronicDisease);
+        r2.setDiagnosisPosition(ConsultResult::A);
+        r2.setMedicalFollowUp(ConsultResult::N);
+        r2.setSymptomaticState(ConsultResult::Symptomatic);
+        r2.setSelectedCriterias(QList<int>() << 1 << 2);
+        QVERIFY(r == r2);
+        r2.setConsultResult(2);
+        QVERIFY(r != r2);
+        r2.setConsultResult(1);
+
+        QVERIFY(r == r2);
+        r2.setChronicDiseaseState(ConsultResult::NotChronicDisease);
+        QVERIFY(r != r2);
+        r2.setChronicDiseaseState(ConsultResult::ChronicDiseaseStateUndefined);
+        QVERIFY(r != r2);
+        r2.setChronicDiseaseState(ConsultResult::ChronicDisease);
+
+        QVERIFY(r == r2);
+        r2.setDiagnosisPosition(ConsultResult::DiagnosisPositionUndefined);
+        QVERIFY(r != r2);
+        r2.setDiagnosisPosition(ConsultResult::B);
+        QVERIFY(r != r2);
+        r2.setDiagnosisPosition(ConsultResult::C);
+        QVERIFY(r != r2);
+        r2.setDiagnosisPosition(ConsultResult::D);
+        QVERIFY(r != r2);
+        r2.setDiagnosisPosition(ConsultResult::Z);
+        QVERIFY(r != r2);
+        r2.setDiagnosisPosition(ConsultResult::A);
+
+        QVERIFY(r == r2);
+        r2.setMedicalFollowUp(ConsultResult::MedicalFollowUpUndefined);
+        QVERIFY(r != r2);
+        r2.setMedicalFollowUp(ConsultResult::P);
+        QVERIFY(r != r2);
+        r2.setMedicalFollowUp(ConsultResult::R);
+        QVERIFY(r != r2);
+        r2.setMedicalFollowUp(ConsultResult::N);
+
+        QVERIFY(r == r2);
+        r2.setSymptomaticState(ConsultResult::NotSymptomatic);
+        QVERIFY(r != r2);
+        r2.setSymptomaticState(ConsultResult::Symptomatic);
+
+        QVERIFY(r == r2);
+        r2.setSelectedCriterias(QList<int>() << 1 << 3);
+        QVERIFY(r != r2);
+        r2.setSelectedCriterias(QList<int>() << 1 << 2);
+        QVERIFY(r == r2);
+
+        // Check with comments
+        r.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
+        r2.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
+        QVERIFY(r == r2);
+
+        r.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
+        r2.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
+        QVERIFY(r == r2);
+
+        r2.setHtmlCommentOnCR("<p>This another CR<b>comment</b><br></p>");
+        QVERIFY(r != r2);
+
+        r2.setHtmlCommentOnCriterias("<p>This another criteria<b>comment</b><br></p>");
+        QVERIFY(r != r2);
+
         r.clear();
         QVERIFY(r.isEmpty() == true);
         QVERIFY(r.isValid() == false);
+    }
+
+    void testConsultResultXml()
+    {
+        // Test XML
+        ConsultResult r2;
+        r2.setConsultResult(1);
+        r2.setChronicDiseaseState(ConsultResult::ChronicDisease);
+        r2.setDiagnosisPosition(ConsultResult::A);
+        r2.setMedicalFollowUp(ConsultResult::N);
+        r2.setSymptomaticState(ConsultResult::Symptomatic);
+        r2.setSelectedCriterias(QList<int>() << 1 << 2);
+        r2.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
+        r2.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
+
+        ConsultResult r3 = ConsultResult::fromXml(r2.toXml());
+        QVERIFY(r2 == r3);
+        QVERIFY(r2.toXml() == r3.toXml());
     }
 
     void testValidatorTestOne()

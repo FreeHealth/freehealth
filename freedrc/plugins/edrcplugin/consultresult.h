@@ -90,7 +90,8 @@ public:
         A,
         B,
         C,
-        D
+        D,
+        Z
     };
 
     enum MedicalFollowUp {
@@ -114,6 +115,8 @@ public:
     void setMedicalFollowUp(int pos);
     void setChronicDiseaseState(int pos);
     void setSymptomaticState(int pos);
+    void setHtmlCommentOnCR(const QString &htmlComment) {_crComment = htmlComment;}
+    void setHtmlCommentOnCriterias(const QString &htmlComment)  {_critComment = htmlComment;}
 
     int consultResultId() const;
     const QList<int> &selectedCriterias() const;
@@ -121,15 +124,21 @@ public:
     MedicalFollowUp medicalFollowUp() const;
     ChronicDiseaseState chronicDiseaseState() const;
     SymptomaticState symptomaticState() const;
+    QString htmlCommentOnCR() const {return _crComment;}
+    QString htmlCommentOnCriterias() const {return _critComment;}
 
-//    QString toXml() const;
-//    bool fromXml(const QDomElement &root);
+    QString toXml() const;
+    static ConsultResult &fromXml(const QString &xml);
+
+    bool operator==(const ConsultResult &other) const;
+    bool operator!=(const ConsultResult &other) const {return !operator==(other);}
 
 private:
     int _crId;
     QList<int> _selectedCriteriasIds;
     int _diagnosisPosition, _medicalFollowUp;
     int _symptomatic, _chronicDisease;
+    QString _crComment, _critComment;
 };
 
 } // namespace eDRC
