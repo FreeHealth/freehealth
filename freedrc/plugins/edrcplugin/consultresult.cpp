@@ -421,6 +421,7 @@ ConsultResult &ConsultResult::fromXml(const QString &xml)
     return *cr;
 }
 
+/** Compare two CR */
 bool ConsultResult::operator==(const ConsultResult &other) const
 {
     return _crId == other._crId &&

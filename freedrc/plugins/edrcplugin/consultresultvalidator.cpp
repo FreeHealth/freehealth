@@ -26,7 +26,9 @@
  ***************************************************************************/
 /**
  * \class eDRC::Internal::ConsultResultValidator
- * \brief Check the validity of a user coded CR and provide error message (if required).
+ * Check the validity of a user coded CR and provide error message (if required).
+ * The validator only checks the CR criterias selection congruence with the
+ * coding rules of the CR.
 */
 
 #include "consultresultvalidator.h"
@@ -336,6 +338,7 @@ private:
 }
 }
 
+/** Returns a human readable error message */
 QString ConsultResultError::errorShortMessage() const
 {
     switch (type) {
@@ -366,11 +369,16 @@ ConsultResultValidator::~ConsultResultValidator()
     d = 0;
 }
 
+/** Define the unique identifiant of the CR in the database \e crId */
 void ConsultResultValidator::setCrId(int crId)
 {
     d->crId = crId;
 }
 
+/**
+ * Set the ordered list of available criterias for the coding of the CR.
+ * The list must be correctly sorted.
+ */
 void ConsultResultValidator::setAvailableCriterias(const QList<ConsultResultCriteria> &availableCriterias)
 {
     d->_criterias = availableCriterias;
@@ -383,16 +391,36 @@ void ConsultResultValidator::setAvailableCriterias(const QList<ConsultResultCrit
     }
 }
 
+/** Remove the criteria selection */
 void ConsultResultValidator::clearSelectedCriterias()
 {
     d->_selectedCriterias.clear();
 }
 
+/**
+ * Define the selected criteria. The list contains an ordered or unordered list
+ * of criteria database unique identifiants
+ */
 void ConsultResultValidator::setSelectedCriterias(const QList<int> &selectedId)
 {
     d->_selectedCriterias = selectedId;
 }
 
+/**
+ * Check the selection. You must call this member before extracting errors from the validator.
+ * \code
+    ConsultResultValidator validator;
+    validator.setCrId(1);
+    QList<int> selectedIds;
+    validator.clearSelectedCriterias();
+    validator.setSelectedCriterias(selectedIds);
+    validator.check();
+
+    // Check reported wrong ids
+    QList<int> wrongCriteriaIdentifiants = validator.wrongCriteriaIds();
+    ...
+ * \endcode
+ */
 bool ConsultResultValidator::check()
 {
     d->_errors.clear();
@@ -410,6 +438,7 @@ bool ConsultResultValidator::check()
     return d->_errors.isEmpty();
 }
 
+/** Return the error message corresponding to the criteria with the database uid \e criteriaId or an empty string */
 QString ConsultResultValidator::errorShortMessage(int criteriaId) const
 {
     foreach(const ConsultResultError &error, d->_errors) {
@@ -419,11 +448,13 @@ QString ConsultResultValidator::errorShortMessage(int criteriaId) const
     return QString();
 }
 
+/** Return the list of wrong criterias (the one that should/shouldn't be selected) or an empty list */
 const QList<int> &ConsultResultValidator::wrongCriteriaIds() const
 {
     return d->_wrongCriteriaIds;
 }
 
+/** Console debugging */
 QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteriaGroup &group)
 {
     QString out;
