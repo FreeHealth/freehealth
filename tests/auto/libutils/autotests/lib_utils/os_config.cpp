@@ -29,6 +29,7 @@
 
 #include <QDebug>
 #include <QTest>
+#include <QDir>
 
 /**
  * Run unit test on
@@ -114,20 +115,25 @@ private slots:
         QStringList libs = Utils::applicationPluginsPath("freemedforms", "lib64");
         // TODO: how to simulate a release/debug compilation and different OS?
 #ifdef DEBUG_WITHOUT_INSTALL
+        QString test = qApp->applicationDirPath();
         if (Utils::isRunningOnMac())
-            QVERIFY(libs.contains(qApp->applicationDirPath() + "/../../../plugins", Qt::CaseInsensitive) == true);
+            test += "/../../../plugins";
         else if (Utils::isRunningOnLinux())
-            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+            test += "/plugins";
         else if (Utils::isRunningOnWin())
-            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+            test += "/plugins";
+        test = QDir::cleanPath(test);
+        QVERIFY(libs.contains(test, Qt::CaseInsensitive) == true);
 #endif
 #ifdef RELEASE
         if (Utils::isRunningOnMac())
-            QVERIFY(libs.contains(qApp->applicationDirPath() + "/../plugins", Qt::CaseInsensitive) == true);
+            test += "/../plugins";
 //        else if (Utils::isRunningOnLinux())
 //            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
         else if (Utils::isRunningOnWin())
-            QVERIFY(libs.contains(qApp->applicationDirPath() + "/plugins", Qt::CaseInsensitive) == true);
+            test += "/plugins";
+        test = QDir::cleanPath(test);
+        QVERIFY(libs.contains(test, Qt::CaseInsensitive) == true);
 #endif
     }
 
