@@ -196,9 +196,6 @@ private slots:
         correct << "../style/test1.css"
                 << "../style/test2.css";
         QStringList result = Utils::htmlGetLinksToCssContent(html);
-
-        qWarning() << result;
-
         QVERIFY(correct == result);
     }
 

@@ -13,3 +13,5 @@ HEADERS += \
 
 include(lib_utils/lib_utils.pri)
 include(lib_translations/lib_translations.pri)
+
+include(plugin_edrc/plugin_edrc.pri)

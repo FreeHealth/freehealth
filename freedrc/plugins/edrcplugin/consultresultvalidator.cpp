@@ -39,7 +39,7 @@
 
 #include <QDebug>
 
-enum { WarnGroupCreation = false, WarnSelectionChecking = true };
+enum { WarnGroupCreation = false, WarnSelectionChecking = false };
 
 using namespace eDRC;
 using namespace Internal;
@@ -156,15 +156,18 @@ public:
         // Has parent && parent not selected -> nothing to do
         if (_parentId != -1 && !selectedCriteriaIds.contains(_parentId)) {
             if (WarnSelectionChecking)
-                qWarning() << "HAS PARENT AND PARENT NOT SELECTED";
+                qWarning() << "    HAS PARENT AND PARENT NOT SELECTED";
             return errors;
         }
 
         int nbSelected = 0;
         int signifiance = 0;
         foreach(const ConsultResultCriteria &crit, _criterias) {
-            if (WarnSelectionChecking)
-                qWarning() << selectedCriteriaIds.contains(crit.id()) << crit.label();
+            if (WarnSelectionChecking) {
+                QString sel;
+                selectedCriteriaIds.contains(crit.id())? sel="Selected":sel="NotSelected";
+                qWarning() << "    " <<  sel << crit.label();
+            }
 
             if (crit.isSelectionMandatory()) {
                 // All mandatory criterias are selected
