@@ -33,15 +33,24 @@
  */
 
 #include "edrccore.h"
+#include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <translationutils/constants.h>
+
+#include <QFileInfo>
+#include <QDir>
 
 #include <QDebug>
 
 using namespace eDRC;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 namespace eDRC {
 namespace Internal {
@@ -58,6 +67,27 @@ public:
     {
     }
     
+    // Find the database to use. In priority order:
+    // - User datapack
+    // - Application installed datapack
+    QString databasePath() const
+    {
+        QString dbRelPath = QString("/%1/%2").arg(Constants::DB_NAME).arg(Constants::DB_FILENAME);
+        QString tmp;
+        tmp = settings()->dataPackInstallPath() + dbRelPath;
+        if (QFileInfo(tmp).exists())
+            return settings()->dataPackInstallPath();
+        return settings()->dataPackApplicationInstalledPath();
+    }
+
+    // Returns the path to the CSV raw source for the eDRC database
+    QString csvFilesPath() const
+    {
+        QString pathToCsv = settings()->path(Core::ISettings::BundleResourcesPath);
+        pathToCsv += "/nonfree/edrc";
+        return pathToCsv;
+    }
+
 public:
     DrcDatabase *_edrcBase;
     
@@ -102,8 +132,8 @@ EdrcCore::~EdrcCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool EdrcCore::initialize()
 {
-    d->_edrcBase = new DrcDatabase;
-    d->_edrcBase->initialize(true);
+    d->_edrcBase = new DrcDatabase(d->databasePath());
+    d->_edrcBase->initialize(true, d->csvFilesPath());
     return true;
 }
 

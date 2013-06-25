@@ -38,9 +38,6 @@
 #include "constants_db.h"
 #include <edrcplugin/consultresult.h>
 
-#include <coreplugin/icore.h>
-#include <coreplugin/isettings.h>
-
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/databaseconnector.h>
@@ -56,8 +53,6 @@ using namespace eDRC;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
 namespace {
 // Try to connect the database, returns true if correctly connected
 static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
@@ -72,29 +67,12 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
     }
     return true;
 }
-
-// Find the database to use. In priority order:
-// - User datapack
-// - Application installed datapack
-static QString databasePath()
-{
-    QString dbRelPath = QString("/%1/%2").arg(Constants::DB_NAME).arg(Constants::DB_FILENAME);
-    QString tmp;
-    tmp = settings()->dataPackInstallPath() + dbRelPath;
-    if (QFileInfo(tmp).exists())
-        return settings()->dataPackInstallPath();
-    return settings()->dataPackApplicationInstalledPath();
-}
-
-static QString databaseFileName()
-{
-    return databasePath() + QDir::separator() + Constants::DB_FILENAME;
-}
 } // namespace anonymous
 
-DrcDatabase::DrcDatabase() :
+DrcDatabase::DrcDatabase(const QString &absPathToDb) :
     Utils::Database(),
-    _initialized(false)
+    _initialized(false),
+    _databasePath(absPathToDb)
 {
     // Create the eDRC read-only database
     using namespace eDRC::Constants;
@@ -174,15 +152,19 @@ DrcDatabase::~DrcDatabase()
 {}
 
 /**
- * Initialize the database (create it is required). \n
+ * Initialize the database. \n
  * By default, the connection is defined to eDRC::Constants::DB_NAME.
  * If you want your own connection name, you can set it with the
- * setConnectionName() and you must set it \b before calling initialize().
+ * setConnectionName() and you must set it \b before calling initialize(). \n
+ * If you want to create the database from the rawsource CSV, you must set the
+ * \e createIfNotExists to true and set the correct absolute path to the csv files
+ * \e absPathToCsvRawSourceFiles.
  */
-bool DrcDatabase::initialize(bool createIfNotExists)
+bool DrcDatabase::initialize(bool createIfNotExists, const QString &absPathToCsvRawSourceFiles)
 {
     if (_initialized)
         return true;
+    _absPathToCsvRawSourceFiles = absPathToCsvRawSourceFiles;
     setDriver(Utils::Database::SQLite);
 
     // test driver
@@ -196,13 +178,13 @@ bool DrcDatabase::initialize(bool createIfNotExists)
 
     // Connect Database
     Utils::DatabaseConnector connector;
-    connector.setAbsPathToReadOnlySqliteDatabase(databasePath());
-    connector.setHost(QFileInfo(databaseFileName()).fileName());
+    connector.setAbsPathToReadOnlySqliteDatabase(_databasePath);
+    connector.setHost(QFileInfo(_databasePath + QDir::separator() + Constants::DB_FILENAME).fileName());
     connector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
     connector.setDriver(Utils::Database::SQLite);
 
     LOG_FOR("DrcDatabase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2)
-            .arg(connectionName()).arg(databasePath()));
+            .arg(connectionName()).arg(_databasePath));
 
     if (createIfNotExists) {
         createConnection(connectionName(), Constants::DB_FILENAME,
@@ -236,14 +218,6 @@ bool DrcDatabase::initialize(bool createIfNotExists)
     } else {
         LOG_FOR("DrcDatabase", QString("Using database version " + version()));
     }
-
-
-    //    importCsvToDatabase(Constants::DB_NAME,
-    //                        "/Volumes/HDD/Users/eric/Desktop/Programmation/FreeMedForms-Releases/eDRC/csv/referentiel_2005-11901705bf10299b1.csv",
-    //                        "REF_RC",
-    //                        ",",
-    //                        true);
-
 
     _initialized = true;
     return true;
@@ -338,8 +312,6 @@ bool DrcDatabase::createDatabase(const QString &connection, const QString &prefi
     setVersion(Constants::DB_VERSION);
 
     // Populate database with the csv files
-    QString pathToCsv = settings()->path(Core::ISettings::BundleResourcesPath);
-    pathToCsv += "/nonfree/edrc";
     QList<int> tables;
     tables << Constants::Table_REF_RC
            << Constants::Table_Ref_RCItem
@@ -352,11 +324,11 @@ bool DrcDatabase::createDatabase(const QString &connection, const QString &prefi
            << Constants::Table_RC_Link_RC_RCE
            << Constants::Table_RC_Link_VA;
 
-    if (QDir(pathToCsv).exists()) {
+    if (QDir(_absPathToCsvRawSourceFiles).exists()) {
         Utils::DatabaseCsvImportator import;
         foreach(int table, tables) {
             Utils::ImportationJob job;
-            job.absFilePath = QString("%1/%2.csv").arg(pathToCsv).arg(this->table(table));
+            job.absFilePath = QString("%1/%2.csv").arg(_absPathToCsvRawSourceFiles).arg(this->table(table));
             job.databaseConnectionName = connection;
             job.tableName = this->table(table);
             job.fieldSeparator = ',';
@@ -367,6 +339,8 @@ bool DrcDatabase::createDatabase(const QString &connection, const QString &prefi
         Utils::ImportationResult result = import.startJobs();
         if (result.hasError)
             LOG_ERROR_FOR("DrcDatabase", result.errors.join("\n"));
+    } else {
+        LOG_ERROR_FOR("DrcDatabase", "Unable to import CSV files, path does not exists");
     }
 
     // database is readable/writable
@@ -688,625 +662,3 @@ QList<ConsultResultCriteria> DrcDatabase::getOrderedCriteriasForCR(int crId) con
     }
     return toReturn;
 }
-
-//bool DrcDatabase::getRCE_byID(const QString RCE_ID , QString &RCE)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    RCE = "";
-//    QString req = "SELECT `RCE_LIB` FROM `"+ m_NameTable_Ref_RCE +"` WHERE `REF_RCE_SEQ`='"+ RCE_ID +"';";
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { RCE = sqlQuery.value(0).toString();
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-//bool DrcDatabase::getRC_byClassID(QListWidget &pListWidget, QString classeID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `REF_RC_ID` FROM `"+m_NameLinkTable_RC_Class+"` WHERE `REF_CLASSRC_ID`="+ classeID + " ;";
-//    QString RC_ID = "";
-//    QString req2  = "";
-//    QString nom = "";
-//    QString id = "";
-//    pListWidget.clear();
-//    QListWidgetItem* i = 0;
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { while (sqlQuery.next())
-//        { RC_ID = sqlQuery.value(0).toString();
-//            getRC_Lib(RC_ID , nom);
-//            i = new QListWidgetItem(nom, &pListWidget);
-//            i->setData(Qt::UserRole , RC_ID);
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-//bool DrcDatabase::getResultatsConsultation_byLib(QListWidget &pListWidget, QString nom)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    //if (nom == "") {   pListWidget.clear(); return true; }
-//    QString req = "SELECT `LIB_RC_FR`, `REF_RC_SEQ` FROM `"+ m_NameTable_Ref_RC +"` ";
-//    req        += "WHERE  `LIB_RC_FR` LIKE '%"+ nom + "%' AND `VALIDITE`='1' ORDER BY `LIB_RC_FR` ASC;";
-//    QString tmp = "";
-//    QString id  = "";
-//    pListWidget.clear();
-//    QListWidgetItem* i = 0;
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { while (sqlQuery.next())
-//        { tmp = sqlQuery.value(0).toString();
-//            id  = sqlQuery.value(1).toString();
-//            i = new QListWidgetItem(tmp, &pListWidget);
-//            i->setData(Qt::UserRole , id);
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-
-//}
-
-//bool DrcDatabase::getRC_byID(QListWidget &pListWidget, QString RC_ID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    if (RC_ID == "") {   pListWidget.clear(); return false; }
-//    pListWidget.clear();
-//    QString tmp = "";
-//    QListWidgetItem* i = 0;
-//    getRC_Lib(RC_ID , tmp);
-//    i = new QListWidgetItem(tmp, &pListWidget);
-//    i->setData(Qt::UserRole , RC_ID);
-//    return true;
-//}
-
-//bool DrcDatabase::getCIM10_byID(const QString _ID , QString &code)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    if (_ID == "") { code = ""; return false; }
-//    code = "";
-//    QString tmp = "";
-//    QString req = "SELECT `COD_CIM10` FROM `"+ m_NameTable_Ref_CIM10 +"` ";
-//    req        += "WHERE  `REF_CIM10_SEQ`= '"+ _ID + "';";
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { code = sqlQuery.value(0).toString();
-//        }
-//        else { return false; }
-//    }
-//    else { return false; }
-
-//    return true;
-//}
-
-//bool DrcDatabase::getRC_PosDiag_byRCID(QString RC_ID, bool &posA, bool &posB, bool &posC, bool &posD, bool &posZ)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    posA=false; posB=false; posC=false; posD=false;
-//    if (RC_ID == "") { return false; }
-//    QString req = "SELECT PA, PB, PC, PD, PZ FROM `"+ m_NameTable_Ref_RC +"` ";
-//    req        += "WHERE `REF_RC_SEQ`='"+ RC_ID + "' AND `VALIDITE`='1';";
-//    QString lib = "";
-//    QString id  = "";
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { posA = sqlQuery.value(0).toBool();
-//            posB = sqlQuery.value(1).toBool();
-//            posC = sqlQuery.value(2).toBool();
-//            posD = sqlQuery.value(3).toBool();
-//            posZ = sqlQuery.value(4).toBool();
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-//bool DrcDatabase::getFullRCFrom_RC_ID(QString RC_ID, RC_Elements  &el)
-//{
-//    bool retour = true;
-//    el.clear();
-//    el.setId(RC_ID);
-//    QString tmp="";
-//    if (!getRC_Lib(QString::number(el.getId()) , tmp, DoNotCloseBase))
-//        retour = false;
-
-//    el.setLibelle(tmp);
-//    if (!getCIM10_byID (QString::number(el.getId()) , tmp))
-//        retour = false;
-
-//    el.setCIM10(tmp);
-//    // Pos diag autorisées
-//    bool a,b,c,d,z;
-//    if (!getRC_PosDiag_byRCID(QString::number(el.getId()), a,b,c,d,z))
-//        retour = false;
-
-//    el.setAuthorizedPosDiag(a,b,c,d,z);
-//    el.setAuthorizedSuivi(true, true, true);
-
-//    if (!getCriteresFrom_RC_ID(QString::number(el.getId()), el.m_Criteres))
-//        retour = false;
-
-//    return retour;
-//}
-
-
-///*! \brief Récupère toutes les classes disponibles pour les insérer dans le combobox passé en paramètre. Dans le dataUser de chaque Item = QString de l'id de la classe.
-//*/
-//bool DrcDatabase::getClassesForComboBox(QComboBox* cbx)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT * FROM "+ m_NameTable_Ref_ClassRC;
-//    QString lib = "";
-//    QString id  = "";
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { while (sqlQuery.next())
-//        { lib = sqlQuery.value(1).toString();
-//            id  = sqlQuery.value(0).toString();
-//            cbx->addItem(lib, id);
-//        }
-//    }
-//    else qWarning() << sqlQuery.executedQuery() << sqlQuery.lastError().text() << sqlQuery.lastError().driverText ();
-//    m_DataBase.close();
-//    return true;
-//}
-
-
-//bool DrcDatabase::getCriteresFrom_RC_ID(QListWidget &pListWidget, QString RC_ID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT * FROM `"+m_NameLinkTable_RC_Criteres+"` WHERE `REF_RC_ID`='"+RC_ID+"' ORDER BY AFFICH_ORDRE ASC;";
-//    QString tmp = "";
-//    QString id  = "";
-//    pListWidget.clear();
-//    QListWidgetItem* i = 0;
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { while (sqlQuery.next())
-//        { tmp = sqlQuery.value(6).toString();
-//            id  = sqlQuery.value(0).toString();
-//            i = new QListWidgetItem(tmp, &pListWidget);
-//            i->setData(Qt::UserRole , id);
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-///**
-// * \brief Récupère la liste des critères liés à la clé primaire du RC passé en paramètre. Il ne restera plus qu'à construire l'arborescence des critères pour faciliter les vérifications.
-// * @param listCrit : Pointeur sur une liste de Critères
-// * @param RC_ID : Clé primaire de la base de données du RC à récupérer.
-// * @return true si tout est OK, false en cas d'erreur.
-// * @sa RC_Elements::createCriteresTree() , eDRC_Qt4::on_listWidgetRC_itemSelectionChanged()
-// */
-//bool DrcDatabase::getCriteresFrom_RC_ID(const QString RC_ID, QList<Criteres_Elements>  &list)
-//{
-//    list.clear();
-//    if (!connectDatabase(DB, __FILE__, __LINE__)) return false;
-//    QString req = "SELECT REF_LRCCRITERES_SEQ, AFFICH_ORDRE, LIB_CRITERES_FR, "
-//            "REF_RETRAIT_ID, REF_PONDER_ID FROM "
-//            "`"+m_NameLinkTable_RC_Criteres+"` "
-//            "WHERE `REF_RC_ID`='"+RC_ID+
-//            "' ORDER BY AFFICH_ORDRE ASC;";
-//    QString tmp = "";
-//    QString id  = "";
-//    Criteres_Elements *el = 0;
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    {
-//        while (sqlQuery.next())
-//        {
-//            tmp = sqlQuery.value(1).toString();
-//            id  = sqlQuery.value(0).toInt();
-//            el = new Criteres_Elements(sqlQuery.value(0).toInt(), // ID
-//                                       sqlQuery.value(2).toString(), // Lib
-//                                       sqlQuery.value(1).toInt(), // Ordre
-//                                       sqlQuery.value(4).toInt(), // Ponderation
-//                                       sqlQuery.value(3).toInt()      // Retrait
-//                                       );
-//            if (el)
-//            { list.append(*el);
-//                delete el; el=0;
-//            }
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-//bool DrcDatabase::getVoirAussiFrom_RC_ID(QListWidget &pListWidget, QString RC_ID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `VOIR_AUSSI_ID` "
-//            "FROM `"+m_NameLinkTable_RC_VA+"` "
-//            "WHERE `REF_RC_ID`='"+RC_ID+"';";
-//    QString tmp = "";
-//    QString VA_ID  = "";
-//    pListWidget.clear();
-//    QListWidgetItem* i = 0;
-//    QSqlQuery va_query (req , m_DataBase);
-
-//    if (va_query.isActive())
-//    { while (va_query.next())
-//        { VA_ID  = va_query.value(0).toString();
-//            getRC_Lib(VA_ID , tmp, DoNotCloseBase);
-//            i = new QListWidgetItem(tmp, &pListWidget);
-//            i->setData(Qt::UserRole , VA_ID);
-//        }
-//    }
-
-//    pListWidget.sortItems(Qt::AscendingOrder);
-//    m_DataBase.close();
-//    return true;
-//}
-
-//bool DrcDatabase::getRisquesFrom_RC_ID(QListWidget &pListWidget, QString RC_ID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `REF_RCE_ID` FROM `"+ m_NameLinkTable_RC_RCE +"` WHERE `REF_RC_ID`='"+RC_ID+"';";
-//    QString tmp = "";
-//    QString RCE_ID  = "";
-//    pListWidget.clear();
-//    QListWidgetItem* i = 0;
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { while (sqlQuery.next())
-//        { RCE_ID = sqlQuery.value(0).toString();
-//            getRCE_byID(RCE_ID , tmp);
-//            i = new QListWidgetItem(tmp, &pListWidget);
-//            i->setData(Qt::UserRole , RCE_ID);
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-
-//bool DrcDatabase::getCIM10From_RC_ID (QString RC_ID, QString &code)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `REF_CIM10_ID` FROM `"+ m_NameLinkTable_RC_CIM10 +"` WHERE `REF_RC_ID`='"+RC_ID+"';";
-//    QString tmp = "";
-//    QString _ID  = "";
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { _ID = sqlQuery.value(0).toString();
-//            getCIM10_byID(_ID , code);
-//        }
-//    }
-
-//    m_DataBase.close();
-//    return true;
-
-//}
-
-//bool DrcDatabase::getCritere_byID(const QString _ID , QString &retour)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `LIB_CRITERES_FR` FROM `"+ m_NameTable_Ref_Criteres +"` ";
-//    req        += "WHERE  `REF_LRCCRITERES_SEQ`='" + _ID + "';";
-//    retour = "";
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { retour = sqlQuery.value(0).toString();
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-
-//}
-
-//bool DrcDatabase::getArgumentaire_byID(const QString RC_ID , QString &retour)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    QString req = "SELECT `ARGUMENTAIRE` FROM `"+ m_NameTable_Ref_RC +"` WHERE `REF_RC_SEQ`='"+RC_ID+"';";
-//    retour = "";
-
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        { retour = sqlQuery.value(0).toString();
-//        }
-//    }
-//    m_DataBase.close();
-//    return true;
-//}
-
-///**
-// * \brief Récupère la clé primaire de la base eDRC pour le patient depuis son GUID MedinTux. Le GUID doit être renseigné dans la base statique (DRC_Static_Data::m_MedinTux_GUIDPatient).
-// * @return true si tout est OK, false cas contraire.
-// */
-//bool DrcDatabase::getPatientDRCPrimKey()
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    bool retour = true;
-
-//    QString req = "SELECT `ID_PATIENT` FROM `"+ m_NameTable_Patient +"` "
-//            "WHERE  `GUID`='"+ DRC_Static_Data::m_MedinTux_GUIDPatient +"';";
-
-//    QSqlQuery q (req , m_DataBase);
-//    if (q.isActive())
-//    { if (q.next())
-//        {  DRC_Static_Data::m_PatientIdFromBD = q.value(0).toInt();
-//        }
-//        else
-//        {  if (!createNewPatient()) retour = false;
-//        }
-//    }
-//    else
-//    {  DRC_Static_Data::m_PatientIdFromBD = -1;
-//        retour = false;
-//    }
-//    m_DataBase.close();
-//    return retour;
-//}
-
-//bool DrcDatabase::createNewPatient()
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    bool retour = true;
-
-//    QString req = "INSERT INTO `eDRC`.`"+ m_NameTable_Patient +"` (\n"
-//            "`ID_PATIENT` ,\n"
-//            "`GUID` ,\n"
-//            "`DATE_NAISS` ,\n"
-//            "`SEXE`\n"
-//            ")\n"
-//            "VALUES (\n"
-//            "NULL , :GUID, :DDN, :SEXE\n"
-//            ");\n";
-
-//    QSqlQuery q(m_DataBase);
-//    q.prepare(req);
-//    q.bindValue(":GUID", DRC_Static_Data::m_MedinTux_GUIDPatient);
-//    q.bindValue(":DDN", DRC_Static_Data::m_PatientDDN.toString("yyyy-MM-dd"));
-//    q.bindValue(":SEXE", DRC_Static_Data::m_PatientSexe);
-//    if (q.exec()) retour = true; else retour = false;
-
-//    DRC_Static_Data::m_PatientIdFromBD = q.lastInsertId().toInt();
-//    qWarning() << DRC_Static_Data::m_PatientIdFromBD;
-//    return retour;
-//}
-
-//QList<int> DrcDatabase::getSelectedCriterias(const QString  &consult_rc_id)
-//{
-//    QList<int> crit_id;
-//    if (!connectDatabase(DB, __FILE__, __LINE__)) return crit_id;
-//    crit_id.clear();
-
-//    QString req = "SELECT `REF_L_RC_CRITERES_FK` FROM `"+ m_NameTable_Consults_Criteres+"` "
-//            "WHERE `ID_L_CONSULT_RC` = '" + consult_rc_id + "';";
-
-//    QSqlQuery q (m_DataBase);
-//    if (q.exec(req))
-//    { while (q.next())
-//        {  crit_id << q.value(0).toInt();
-//        }
-//    }
-//    else
-//    {  qWarning() << "DrcDatabase::getLinkedCriterias" << q.lastError().text();
-//        return crit_id;
-//    }
-
-//    return crit_id;
-//}
-
-//QString DrcDatabase::getRCView(const QString  &consultID)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return 0;
-
-//    QString retour = "";
-//    QString req = "SELECT `VIEW` FROM `"+ m_NameTable_Consults +"` "
-//            "WHERE  `ID_CONSULT`='"+ consultID +"';";
-//    QSqlQuery sqlQuery (req , m_DataBase);
-//    if (sqlQuery.isActive())
-//    { if (sqlQuery.next())
-//        {  retour.append(sqlQuery.value(0).toString());
-//        }
-//    }
-//    else
-//    {  qWarning() << "DrcDatabase::getRCView" << sqlQuery.lastError().text();
-//        return 0;
-//    }
-
-//    /*
-//  // Récupère tous les RC de la consult
-//  QList<int> crit_id;
-//  crit_id = getSelectedCriterias(consultID);
-
-//  foreach(int i, crit_id)
-//  {  QString req2 = "SELECT `REF_L_RC_CRITERES_FK` FROM `CONSULTS_CRITERES` "
-//                    "WHERE ID_L_CONSULT_RC = '" + QString::number(i) + "';";
-//     QSqlQuery q (m_DataBase);
-//     if (!m_DataBase.open()) return 0;
-//     if (q.exec(req2))
-//     {  while (q.next())
-//        { QString lib;
-//          getCritere_byID(q.value(0).toString() , lib);
-//          retour.append(lib+"<br />");
-//        }
-//     }
-//     else
-//     { qWarning() << q.lastError().text() ; return 0; }
-//       retour.append("<br /><br />");
-//    }
-//*/
-
-//    // m_DataBase.close();
-//    return retour;
-//}
-
-
-///**
-// *
-// * @param list
-// * @return
-// * @todo GESTION DES ERREURS
-// */
-//bool DrcDatabase::saveConsultToBase(QList<RC_Elements>  &list)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return false;
-//    bool retour = true;
-//    QString req="";
-//    QString tmp="";
-
-//    // Créer une consultation
-//    req = "INSERT INTO `eDRC`.`"+m_NameTable_Consults+"` ("
-//            "`ID_CONSULT` , `ID_PATIENT` , `DATE` , `TRANSMIT` , `DATE_TRANS` , `ID_L_CONSULT_RC` ,"
-//            "`ID_TUX_USER`) "
-//            "VALUES (NULL , :ID_PATIENT, :DATE_C, '0', NULL , :ID_L_CONSULT_RC, :ID_TUX_USER"
-//            ");";
-
-//    QSqlQuery q (m_DataBase);
-//    q.prepare(req);
-//    q.bindValue(":ID_PATIENT" , DRC_Static_Data::m_PatientIdFromBD);
-//    q.bindValue(":DATE_C" , DRC_Static_Data::m_ObservDate.toString("yyyy-MM-dd hh:mm:ss"));
-//    q.bindValue(":ID_L_CONSULT_RC" , 1);
-//    q.bindValue(":ID_TUX_USER" , DRC_Static_Data::m_MedinTux_Id_User);
-//    if (!q.exec()) return false;
-//    int id_consult = q.lastInsertId().toInt();
-
-//    // Récupère l'Id de la consultation nouvellement créée
-
-//    // Insère les RC_Elements dans la base
-//    req = "INSERT INTO `eDRC`.`"+m_NameTable_Consults_RC+"` ("
-//            "`ID_CONSULT_RC` , `ID_L_CONSULT_RC` , `REF_RC_FK`, `ALD` , `SYMPTO` , `DIAG` , `SUIVI` ,"
-//            "`COMMENTAIRE`, `CIM10` )"
-//            "VALUES (NULL , :ID_L_CONSULT_RC, :DRC_LINK, :ALD, :SYMPTO, :DIAG, :SUIVI, :COMMENTAIRE,"
-//            ":CIM10);";
-
-//    QString vi = "";
-//    foreach(RC_Elements el, list)
-//    {  QSqlQuery q (m_DataBase) ;
-//        q.prepare(req);
-//        q.bindValue(":ID_L_CONSULT_RC" , id_consult);
-//        q.bindValue(":DRC_LINK" , el.getId());
-//        q.bindValue(":ALD" , el.isALD_Value());
-//        q.bindValue(":SYMPTO" , el.isSymptomatique_Value());
-//        q.bindValue(":DIAG" , el.getSelectedPosDiag());
-//        q.bindValue(":SUIVI" , el.getSelectedSuivi());
-//        q.bindValue(":COMMENTAIRE" , el.getCommentaire());
-//        q.bindValue(":CIM10" , el.getCIM10());
-//        if (!q.exec()) qWarning() << q.lastError().text();
-//        int  id_rc = q.lastInsertId().toInt();
-//        vi.append(el.toFullHtml());
-
-//        foreach (Criteres_Elements cel, el.getSelectedCriteria())
-//        {  if (!cel.isSelected()) continue;
-//            QString r = "INSERT INTO `eDRC`.`"+m_NameTable_Consults_Criteres+"` ("
-//                    "`ID_CONSULT_CRITERE` ,`ID_L_CONSULT_RC` ,"
-//                    "`REF_L_RC_CRITERES_FK` ,`COMMENTAIRE`)"
-//                    "VALUES (NULL , :LINK_RC, :LINK_DRC, :COMM);";
-//            QSqlQuery cq (m_DataBase);
-//            cq.prepare (r);
-//            cq.bindValue(":LINK_RC", id_rc);
-//            cq.bindValue(":LINK_DRC", cel.getId());
-//            cq.bindValue(":COMM", cel.getCommentaire());
-//            if (!cq.exec()) qWarning() << cq.lastError().text();
-//        }
-//    } // Fin foreach
-
-//    // Sauvegarder la vue de la Consultation dans la base
-//    // Préparer le blob pour insertion correcte
-//    vi.replace ("'", "\'");
-//    req = "UPDATE `eDRC`.`"+m_NameTable_Consults+"` "
-//            "SET `VIEW` = '" + vi + "' "
-//            "WHERE `ID_CONSULT` = " + QString::number(id_consult) +
-//            ";";
-
-//    QSqlQuery v (m_DataBase);
-//    if (!v.exec(req)) { qWarning() << v.lastError().text(); qWarning() << v.executedQuery();}
-
-//    //   m_DataBase.close();
-//    return retour;
-//}
-
-//void DrcDatabase::getConsultToListRC(QList<RC_Elements>  &list, const QString  &id_consult)
-//{
-//    if (!connectDatabase(DB, __FILE__, __LINE__))
-//        return ;
-//    QSqlQuery q (m_DataBase);
-//    QString req = "";
-//    list.clear();
-//    QList<int> consult_rc_id;
-
-//    // Récupère les RC de la consultation
-//    req = "SELECT * FROM `"+ m_NameTable_Consults_RC +"` "
-//            "WHERE  `ID_L_CONSULT_RC`='"+ id_consult +"';";
-
-//    if (q.exec(req))
-//    { while (q.next())
-//        {  RC_Elements el;
-//            getFullRCFrom_RC_ID(q.value(ConsultsRCTable_DRC_Link).toString(), el);
-//            // Récupère toutes les valeurs validées par l'utilisateur
-//            el.setALD(q.value(ConsultsRCTable_ALD).toBool());
-//            el.setSymptomatique(q.value(ConsultsRCTable_Sympto).toBool());
-//            el.setQVariant(q.value(ConsultsRCTable_CIM10) , RC_Elements::Col_CIM10);
-//            el.setQVariant(q.value(ConsultsRCTable_Diag)  , RC_Elements::Col_Pos_Diag);
-//            el.setQVariant(q.value(ConsultsRCTable_Suivi) , RC_Elements::Col_Pos_Suivi);
-//            //         el.setQVariant(q.value(ConsultsRCTable_Commentaire).toString() , RC_Elements::Col_Commentaire);
-//            list.append(el);
-//            consult_rc_id << q.value(ConsultsRCTable_Id).toInt();
-//        }
-//    }
-//    else
-//    {  qWarning() << "DrcDatabase::getConsultToListRC" << q.lastError().text();
-//        return ;
-//    }
-
-//    // Récupère les Critères sélectionnés pour tous les RC
-//    int i=0;
-//    foreach (int l_id, consult_rc_id)
-//    {  QList<int> crit_id;
-//        crit_id = getSelectedCriterias(QString::number(l_id));
-//        // Injecte les dans le RC
-//        foreach(int c_id, crit_id)
-//        {  Criteres_Elements proto;
-//            proto.setId(c_id);
-//            if (list[i].m_Criteres.contains(proto))
-//            {  int idInList = list[i].m_Criteres.indexOf(proto);
-//                list[i].m_Criteres[idInList].setSelection(true);
-//            }
-//        } // Fin  foreach
-//        i++; // Avance dans la liste des RC
-//    }
-
-//}
-
-
-

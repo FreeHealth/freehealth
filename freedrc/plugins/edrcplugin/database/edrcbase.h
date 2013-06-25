@@ -29,6 +29,13 @@
 
 #include <utils/database.h>
 
+/**
+ * \file edrcbase.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 25 Jun 2013
+*/
+
 namespace eDRC {
 class EdrcCore;
 namespace Internal {
@@ -36,15 +43,19 @@ class ConsultResultCriteria;
 
 class DrcDatabase : public Utils::Database
 {
+#ifdef QT_TESTLIB_LIB
+public:
+#else
     friend class eDRC::EdrcCore;
-
 protected:
-    DrcDatabase();
-    bool initialize(bool createIfNotExists);
+#endif
+    DrcDatabase(const QString &absPathToDb);
+    bool initialize(bool createIfNotExists, const QString &absPathToCsvRawSourceFiles);
 
 public:
     ~DrcDatabase();
     bool isInitialized() const {return _initialized;}
+    QString version() const;
 
     QHash<int, QString> getRcClasses() const;
     QHash<int, QString> getRcForClasses(int classId) const;
@@ -64,7 +75,6 @@ private:
 
 protected:
     bool setVersion(const QString &version);
-    QString version() const;
     bool checkDatabaseVersion() const;
 
 public:
@@ -75,6 +85,7 @@ private Q_SLOTS:
 //    void onCoreFirstRunCreationRequested();
 private:
     bool _initialized;
+    QString _databasePath, _absPathToCsvRawSourceFiles;
 };
 
 } // namespace Internal
