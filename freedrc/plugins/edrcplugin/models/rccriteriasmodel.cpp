@@ -253,8 +253,10 @@ bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, 
                 // Check previous line indentation
                 if (previous.indentation() < indent) {
                     indent = previous.indentation();
-                    d->_checkedRows << row;
-                    d->_checkedIds << previous.id();
+                    if (!d->_checkedRows.contains(row)) {
+                        d->_checkedRows << row;
+                        d->_checkedIds << previous.id();
+                    }
                     Q_EMIT dataChanged(this->index(row, Label), this->index(row, Label));
                 }
                 --row;
@@ -289,7 +291,7 @@ bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, 
         d->_validator.setSelectedCriterias(d->_checkedIds);
         d->_validator.check();
 
-        qWarning() << d->_validator.wrongCriteriaIds();
+//        qWarning() << d->_validator.wrongCriteriaIds();
     }
     return true;
 }
@@ -350,13 +352,3 @@ QList<int> RcCriteriasModel::currentSelectedCriteriaIds() const
 {
     return d->_checkedIds;
 }
-
-/**
- * Test a ConsultResult coding. \e ids are the selected criterias of the CR. \n
- * After a call to this member, all views must update (BackgroundRole of item can be changed).
-*/
-//void RcCriteriasModel::testCoding(const QList<int> &ids)
-//{
-//    d->_validator.setSelectedCriterias(ids);
-//    d->_validator.check();
-//}
