@@ -41,14 +41,21 @@
 */
 
 #include "consultresult.h"
+#include <edrcplugin/constants.h>
+#include <edrcplugin/consultresultvalidator.h>
+#include <edrcplugin/database/edrcbase.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_current.h>
 
 #include <QRegExp>
 #include <QDomDocument>
+
+#include <QDebug>
 
 using namespace eDRC;
 using namespace Internal;
@@ -116,7 +123,7 @@ QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
     html.replace("++4|", QString("&#%1;").arg(10115));
     html.replace("++++", QString("&#%1;").arg(9745));
     html.replace("+ -" , QString("&#%1;").arg(8226));
-    return QString("%1%2").arg(_indent).arg(html);
+    return QString("%1%2").arg(_indent).arg(Utils::htmlReplaceAccents(html));
 }
 
 /** Returns true if the CR criteria is only a line break (empty line) */
@@ -131,7 +138,6 @@ bool ConsultResultCriteria::isSelectionMandatory() const
     return _label.contains("++++");
 }
 
-#include <QDebug>
 /** Returns true for criteria with a signifiant selection. Coded like '++X|' where X is numeric. */
 bool ConsultResultCriteria::isSelectionSignifiant() const
 {
@@ -253,20 +259,19 @@ ConsultResult::SymptomaticState ConsultResult::symptomaticState() const
 }
 
 namespace {
-const char * const XML_ROOT_TAG = "eDRC";
-const char * const XML_CR_TAG = "CR";
-const char * const XML_CR_COMMENTS = "Comments";
-const char * const XML_CR_COMMENT = "Comment";
-const char * const XML_ATTRIB_ID = "id";
-const char * const XML_ATTRIB_TYPE = "type";
-const char * const XML_ATTRIB_DIAG_POS = "posdiag";
-const char * const XML_ATTRIB_FOLLOWUP = "followup";
-const char * const XML_ATTRIB_CHRONIC = "chronic";
-const char * const XML_ATTRIB_SYMPTOMATIC = "sympto";
-const char * const XML_ATTRIB_CRITERIAS = "criterias";
-const char * const XML_COMMENT_ONCR = "OnCR";
-const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
-
+    const char * const XML_ROOT_TAG = "eDRC";
+    const char * const XML_CR_TAG = "CR";
+    const char * const XML_CR_COMMENTS = "Comments";
+    const char * const XML_CR_COMMENT = "Comment";
+    const char * const XML_ATTRIB_ID = "id";
+    const char * const XML_ATTRIB_TYPE = "type";
+    const char * const XML_ATTRIB_DIAG_POS = "posdiag";
+    const char * const XML_ATTRIB_FOLLOWUP = "followup";
+    const char * const XML_ATTRIB_CHRONIC = "chronic";
+    const char * const XML_ATTRIB_SYMPTOMATIC = "sympto";
+    const char * const XML_ATTRIB_CRITERIAS = "criterias";
+    const char * const XML_COMMENT_ONCR = "OnCR";
+    const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
 }
 
 /** Transform object to XML */
@@ -421,6 +426,110 @@ ConsultResult &ConsultResult::fromXml(const QString &xml)
     return *cr;
 }
 
+/**
+ * Construct an HTML representation of the CR.
+ * You can use two mask:
+ * - \e globalMask where you can use the following old token style:
+ *      - [[CR_DATABASE_VERSION]]
+ *      - [[CR_CODING_VALIDITY]]
+ *      - [[CR_CODING_VALIDATOR_VERSION]]
+ *      - [[CR_ID]]
+ *      - [[CR_LABEL]]
+ *      - [[CR_CRITERIAS]] (includes the mask for the selected criterias)
+ *      - [[CR_DIAGNOSTIC_POSITION_CODE]]
+ *      - [[CR_DIAGNOSTIC_POSITION_FULL_LABEL]]
+ *      - [[CR_FOLLOWUP_CODE]]
+ *      - [[CR_FOLLOWUP_FULL_LABEL]]
+ *      - [[CR_CHRONIC_DISEASE]]
+ *      - [[CR_SYMPTOMATIC_STATE]]
+ *      - [[CR_ICD10_CODES]]
+ *      - [[CR_ICD10_LABELS]]
+ *      - [[CR_ICD10_CODES_AND_LABELS]]
+ * - \e selectedCriteriaItemMask to define the way criterias are presented. You can use the following tokens
+ *      - [[CRITERIA_LABEL]]
+ *      - [[CRITERIA_MODERN_LABEL]]
+ *      - [[CRITERIA_ID]]
+ * This member needs to access to database \e edrcBase and does not manage a cache system.
+ * Calling it many times can be CPU consuming.
+ * \sa eDRC::Constants, eDRC::Constants::TOKEN_CR*
+ */
+QString ConsultResult::toHtml(const QString &globalMask, const QString &selectedCriteriaItemMask, eDRC::Internal::DrcDatabase &edrcBase) const
+{
+    QHash<QString, QVariant> tokens;
+
+    // Prepare selected criterias
+    QString criteriasString;
+    QList<ConsultResultCriteria> criterias = edrcBase.getOrderedCriteriasForCR(_crId);
+    foreach(const ConsultResultCriteria &crit, criterias) {
+        if (_selectedCriteriasIds.contains(crit.id())) {
+            tokens.insert(Constants::TOKEN_CRITERIA_ID, crit.id());
+            tokens.insert(Constants::TOKEN_CRITERIA_DEFAULT_LABEL, crit.htmlLabel(false));
+            tokens.insert(Constants::TOKEN_CRITERIA_MODERN_LABEL, crit.htmlLabel(true));
+            QString tmp = selectedCriteriaItemMask;
+            Utils::replaceTokens(tmp, tokens);
+            criteriasString += tmp;
+        }
+    }
+    tokens.clear();
+
+    // Add CR tokens
+    tokens.insert(Constants::TOKEN_CR_CRITERIAS, criteriasString);
+    tokens.insert(Constants::TOKEN_CR_DATABASE_VERSION, edrcBase.version());
+    tokens.insert(Constants::TOKEN_CR_CODING_VALIDITY, isValid()?tkTr(Trans::Constants::ISVALID):tkTr(Trans::Constants::ISNOTVALID));
+    tokens.insert(Constants::TOKEN_CR_CODING_VALIDATOR_VERSION, ConsultResultValidator::version());
+    tokens.insert(Constants::TOKEN_CR_ID, _crId);
+    tokens.insert(Constants::TOKEN_CR_LABEL, edrcBase.getRcLabel(_crId));
+    QString posDiagCode;
+    QString posDiagLabel;
+    switch (_diagnosisPosition) {
+    case A: posDiagCode="A"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Symptom"); break;
+    case B: posDiagCode="B"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Syndrome"); break;
+    case C: posDiagCode="C"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Disease definition"); break;
+    case D: posDiagCode="D"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Certified diagnostic"); break;
+    case Z: posDiagCode="Z"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Not pathological"); break;
+    default: posDiagCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Diagnostic position is undefined"); break;
+    }
+    tokens.insert(Constants::TOKEN_CR_DIAGNOSTIC_POSITION_CODE, posDiagCode);
+    tokens.insert(Constants::TOKEN_CR_CR_DIAGNOSTIC_POSITION_FULL_LABEL, posDiagLabel);
+    QString fuCode;
+    QString fuLabel;
+    switch (_diagnosisPosition) {
+    case N: fuCode="N"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "New"); break;
+    case P: fuCode="P"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Persistant"); break;
+    case R: fuCode="R"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Revised"); break;
+    default: fuCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Medical follow up is undefined"); break;
+    }
+    tokens.insert(Constants::TOKEN_CR_FOLLOWUP_CODE, fuCode);
+    tokens.insert(Constants::TOKEN_CR_FOLLOWUP_FULL_LABEL, fuLabel);
+
+    switch (_chronicDisease) {
+    case ChronicDisease: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease")); break;
+    case NotChronicDisease: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Not a chronic disease")); break;
+    default: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease is undefined")); break;
+    }
+    switch (_symptomatic) {
+    case Symptomatic: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic")); break;
+    case NotSymptomatic: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Not symptomatic")); break;
+    default: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic state is undefined")); break;
+    }
+
+    // TODO: correctly manage ICD10 labels and codes
+    QString icd10 = edrcBase.getRcIcd10RelatedCodes(_crId, true).join("; ");
+    tokens.insert(Constants::TOKEN_CR_CR_ICD10_CODES, icd10);
+    tokens.insert(Constants::TOKEN_CR_ICD10_LABELS, icd10);
+    tokens.insert(Constants::TOKEN_CR_ICD10_CODES_AND_LABELS, icd10);
+
+    // Comments
+    tokens.insert(Constants::TOKEN_CR_GLOBAL_HTML_COMMENT, htmlCommentOnCR());
+    tokens.insert(Constants::TOKEN_CR_CRITERIAS_HTML_COMMENT, htmlCommentOnCriterias());
+
+    // Process tokens
+    QString tmp = globalMask;
+    Utils::replaceTokens(tmp, tokens);
+    tmp = Utils::htmlReplaceAccents(tmp);
+    return tmp;
+}
+
 /** Compare two CR */
 bool ConsultResult::operator==(const ConsultResult &other) const
 {
@@ -440,10 +549,6 @@ QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
     if (cr.isEmpty()) {
         dbg.nospace() << "ConsultResult(Empty)";
         return dbg.space();
-    }
-    if (!cr.isValid()) {
-        dbg.nospace() << "ConsultResult(Invalid)\n";
-//        return dbg.space();
     }
 
     QString crit;
@@ -469,8 +574,9 @@ QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
     default: fu = "Uncoded"; break;
     }
 
-    dbg.nospace() << QString("ConsultResult(%1; PosDiag:%2; FollowUp:%3; Crit:%4; %5; %6)")
+    dbg.nospace() << QString("ConsultResult(%1%2; PosDiag:%3; FollowUp:%4; Crit:%5; %6; %7)")
                      .arg(cr.consultResultId())
+                     .arg(cr.isValid()?" Valid":" Invalid")
                      .arg(diag)
                      .arg(fu)
                      .arg(crit)

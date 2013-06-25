@@ -33,12 +33,13 @@
 /**
  * \file resultconsult.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.10.0
+ * \date 25 Jun 2013
 */
 
 namespace eDRC {
 namespace Internal {
+class DrcDatabase;
 
 class ConsultResultCriteria
 {
@@ -129,6 +130,8 @@ public:
 
     QString toXml() const;
     static ConsultResult &fromXml(const QString &xml);
+
+    QString toHtml(const QString &globalMask, const QString &selectedCriteriaItemMask, eDRC::Internal::DrcDatabase &edrcBase) const;
 
     bool operator==(const ConsultResult &other) const;
     bool operator!=(const ConsultResult &other) const {return !operator==(other);}

@@ -225,7 +225,6 @@ public:
         ui->searchLine->setText(label);
         ui->treeViewRC->clearSelection();
         ui->treeViewRC->collapseAll();
-        _proxyNeedsRefreshing = true;
 
         // Show only the CR & its classes in the treeview
         for(int i=(_rcTreeProxy->rowCount()-1); i >= 0 ; --i) {
@@ -513,10 +512,19 @@ void RcEditorWidget::updateCodingStatus()
     d->updateCodingStatus();
 }
 
+#include <QTextBrowser>
+#include <utils/global.h>
 void RcEditorWidget::on_debugButton_clicked()
 {
     d->uiToConsultResult(d->_cr);
     qWarning() << d->_cr;
+    QTextBrowser *b = new QTextBrowser(this);
+    b->resize(800,400);
+    b->setHtml(d->_cr.toHtml(
+                   Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/crtohtml_globalmask.html"),
+                   Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/criteriatohtml_itemmask.html"),
+                   edrcBase()));
+    b->show();
 }
 
 void RcEditorWidget::changeEvent(QEvent *event)

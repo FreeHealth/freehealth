@@ -34,7 +34,7 @@
  * \file constants_db.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 28 May 2013
+ * \date 25 Jun 2013
 */
 
 namespace eDRC {
@@ -42,7 +42,7 @@ namespace Constants {
 
 const char *const DB_NAME = "edrc_ro";
 const char *const DB_FILENAME = "edrc.db";
-const char *const DB_VERSION = "0.1";
+const char *const DB_VERSION = "2013.06-eDRC:2005";
 
     enum SfmgBaseTables {
         Table_REF_RC = 0,           // Résultats de consultation (RC)

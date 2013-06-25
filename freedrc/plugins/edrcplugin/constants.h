@@ -37,9 +37,38 @@
 namespace eDRC {
 namespace Constants {
 
+// Some versions
+const char * const VALIDATOR_VERSION = "2013.06";
+
+// Settings params
 const char * const S_CR_USE_MODERNLABEL = "edrc/crlabel/modern";
 const char * const S_CR_MANDATORYLABEL_IN_BOLD = "edrc/crlabel/mandatoryinbold";
 const char * const S_REALTIME_CR_CODING_CHECKING = "edrc/coding/realTimeChecking";
+
+// Tokens old style
+const char * const TOKEN_CR_DATABASE_VERSION = "CR_DATABASE_VERSION";
+const char * const TOKEN_CR_CODING_VALIDITY = "CR_CODING_VALIDITY";
+const char * const TOKEN_CR_CODING_VALIDATOR_VERSION = "CR_CODING_VALIDATOR_VERSION";
+const char * const TOKEN_CR_ID = "CR_ID";
+const char * const TOKEN_CR_LABEL = "CR_LABEL";
+const char * const TOKEN_CR_CRITERIAS = "CR_CRITERIAS";
+const char * const TOKEN_CR_DIAGNOSTIC_POSITION_CODE = "CR_DIAGNOSTIC_POSITION_CODE";
+const char * const TOKEN_CR_CR_DIAGNOSTIC_POSITION_FULL_LABEL = "CR_DIAGNOSTIC_POSITION_FULL_LABEL";
+const char * const TOKEN_CR_FOLLOWUP_CODE = "CR_FOLLOWUP_CODE";
+const char * const TOKEN_CR_FOLLOWUP_FULL_LABEL = "CR_FOLLOWUP_FULL_LABEL";
+const char * const TOKEN_CR_CHRONIC_DISEASE = "CR_CHRONIC_DISEASE";
+const char * const TOKEN_CR_CR_SYMPTOMATIC_STATE = "CR_SYMPTOMATIC_STATE";
+const char * const TOKEN_CR_CR_ICD10_CODES = "CR_ICD10_CODES";
+const char * const TOKEN_CR_ICD10_LABELS = "CR_ICD10_LABELS";
+const char * const TOKEN_CR_ICD10_CODES_AND_LABELS = "CR_ICD10_CODES_AND_LABELS";
+
+const char * const TOKEN_CR_GLOBAL_HTML_COMMENT = "CR_GLOBAL_HTML_COMMENT";
+const char * const TOKEN_CR_CRITERIAS_HTML_COMMENT = "CR_CRITERIAS_HTML_COMMENT";
+
+const char * const TOKEN_CRITERIA_ID = "CRITERIA_ID";
+const char * const TOKEN_CRITERIA_DEFAULT_LABEL = "CRITERIA_LABEL";
+const char * const TOKEN_CRITERIA_MODERN_LABEL = "CRITERIA_MODERN_LABEL";
+// TODO: add CR_DATABASE_VERSION, CR_CODING_VALIDITY
 
 } // namespace Constants
 } // namespace eDRC

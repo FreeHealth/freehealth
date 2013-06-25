@@ -24,8 +24,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include <utils/global.h>
-#include "../../../../freedrc/plugins/edrcplugin/consultresult.h"
-#include "../../../../freedrc/plugins/edrcplugin/consultresultvalidator.h"
+#include <edrcplugin/consultresult.h>
+#include <edrcplugin/consultresultvalidator.h>
+#include <edrcplugin/database/edrcbase.h>
 
 #include "../../autotest.h"
 
@@ -412,6 +413,43 @@ private slots:
         testValidator(&validator, selectedIds, wrongIds, "Test3: Correct coding 3");
         selectedIds.clear();
         wrongIds.clear();
+    }
+
+    void testCrToHtml()
+    {
+        QString out("*      - CR_DATABASE_VERSION: 2013.06-eDRC:2005<br>*      - CR_CODING_VALIDITY: Is valid<br>*      - CR_CODING_VALIDATOR_VERSION: 2013.06<br>*      - CR_ID: 148<br>*      - CR_LABEL: ACCIDENT VASCULAIRE CEREBRAL<br>*      - CR_CRITERIAS: <br><br>*      - CRITERIA_LABEL: ++++ D&Eacute;FICIT NEUROLOGIQUE CENTRAL<br>*      - CRITERIA_MODERN_LABEL: &#9745; D&Eacute;FICIT NEUROLOGIQUE CENTRAL<br>*      - CRITERIA_ID: 124<br>*      - CRITERIA_LABEL: ++++ D'INSTALLATION BRUSQUE<br>*      - CRITERIA_MODERN_LABEL: &#9745; D'INSTALLATION BRUSQUE<br>*      - CRITERIA_ID: 125<br>*      - CRITERIA_LABEL: ++1| TROUBLES DE L'&Eacute;LOCUTION, VOIRE APHASIE<br>*      - CRITERIA_MODERN_LABEL: &#10112; TROUBLES DE L'&Eacute;LOCUTION, VOIRE APHASIE<br>*      - CRITERIA_ID: 128<br>*      - CRITERIA_LABEL: ++++ ABSENCE DE TRAUMATISME D&Eacute;CLENCHANT<br>*      - CRITERIA_MODERN_LABEL: &#9745; ABSENCE DE TRAUMATISME D&Eacute;CLENCHANT<br>*      - CRITERIA_ID: 132<br>*      - CRITERIA_LABEL: + - troubles de la conscience voire coma<br>*      - CRITERIA_MODERN_LABEL: + - troubles de la conscience voire coma<br>*      - CRITERIA_ID: 134<br><br><br>*      - CR_DIAGNOSTIC_POSITION_CODE: C<br>*      - CR_DIAGNOSTIC_POSITION_FULL_LABEL: Disease definition<br>*      - CR_FOLLOWUP_CODE: R<br>*      - CR_FOLLOWUP_FULL_LABEL: Revised<br>*      - CR_CHRONIC_DISEASE: Chronic disease<br>*      - CR_SYMPTOMATIC_STATE: Symptomatic<br>*      - CR_ICD10_CODES: I64<br>*      - CR_ICD10_LABELS: I64<br>*      - CR_ICD10_CODES_AND_LABELS: I64<br>");
+
+        ConsultResult cr;
+        cr.setConsultResult(148);
+        cr.setSymptomaticState(ConsultResult::Symptomatic);
+        cr.setChronicDiseaseState(ConsultResult::ChronicDisease);
+        cr.setDiagnosisPosition(ConsultResult::C);
+        cr.setMedicalFollowUp(ConsultResult::N);
+        cr.setSelectedCriterias(QList<int>() << 124<<125<<128<<132<<134);
+
+        DrcDatabase *edrcBase = new DrcDatabase("/Volumes/RamDisk/eric/freemedforms/global_resources/datapacks/appinstalled/");
+        edrcBase->initialize(true, "");
+
+        QString html = cr.toHtml("*      - CR_DATABASE_VERSION: [[CR_DATABASE_VERSION]]<br>"
+                                 "*      - CR_CODING_VALIDITY: [[CR_CODING_VALIDITY]]<br>"
+                                 "*      - CR_CODING_VALIDATOR_VERSION: [[CR_CODING_VALIDATOR_VERSION]]<br>"
+                                 "*      - CR_ID: [[CR_ID]]<br>"
+                                 "*      - CR_LABEL: [[CR_LABEL]]<br>"
+                                 "*      - CR_CRITERIAS: <br><br>[[CR_CRITERIAS]]<br><br>"
+                                 "*      - CR_DIAGNOSTIC_POSITION_CODE: [[CR_DIAGNOSTIC_POSITION_CODE]]<br>"
+                                 "*      - CR_DIAGNOSTIC_POSITION_FULL_LABEL: [[CR_DIAGNOSTIC_POSITION_FULL_LABEL]]<br>"
+                                 "*      - CR_FOLLOWUP_CODE: [[CR_FOLLOWUP_CODE]]<br>"
+                                 "*      - CR_FOLLOWUP_FULL_LABEL: [[CR_FOLLOWUP_FULL_LABEL]]<br>"
+                                 "*      - CR_CHRONIC_DISEASE: [[CR_CHRONIC_DISEASE]]<br>"
+                                 "*      - CR_SYMPTOMATIC_STATE: [[CR_SYMPTOMATIC_STATE]]<br>"
+                                 "*      - CR_ICD10_CODES: [[CR_ICD10_CODES]]<br>"
+                                 "*      - CR_ICD10_LABELS: [[CR_ICD10_LABELS]]<br>"
+                                 "*      - CR_ICD10_CODES_AND_LABELS: [[CR_ICD10_CODES_AND_LABELS]]<br>",
+                                 "*      - CRITERIA_LABEL: [[CRITERIA_LABEL]]<br>"
+                                 "*      - CRITERIA_MODERN_LABEL: [[CRITERIA_MODERN_LABEL]]<br>"
+                                 "*      - CRITERIA_ID: [[CRITERIA_ID]]<br>",
+                                 *edrcBase);
+        QVERIFY(out == html);
     }
 
     void cleanupTestCase()

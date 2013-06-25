@@ -66,6 +66,7 @@ const char* const URL                                = QT_TRANSLATE_NOOP("tkCons
 const char* const VALUE                              = QT_TRANSLATE_NOOP("tkConstants", "Value");
 const char* const VALUE_1                            = QT_TRANSLATE_NOOP("tkConstants", "Value: %1");
 const char* const ISVALID                            = QT_TRANSLATE_NOOP("tkConstants", "Is valid");
+const char* const ISNOTVALID                         = QT_TRANSLATE_NOOP("tkConstants", "Is not valid");
 const char* const ICON                               = QT_TRANSLATE_NOOP("tkConstants", "Icon");
 const char* const ENGINE_REPORT                      = QT_TRANSLATE_NOOP("tkConstants", "Engine report");
 const char* const OVERVIEW                           = QT_TRANSLATE_NOOP("tkConstants", "Overview");
