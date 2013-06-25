@@ -48,6 +48,7 @@ public:
 
     QHash<int, QString> getRcClasses() const;
     QHash<int, QString> getRcForClasses(int classId) const;
+    QHash<int, QString> getClassesForRc(int crId) const;
     QHash<int, QString> getSeeAlsoRcForRc(int rcId) const;
     QString getRcLabel(const int rcId, bool onlyValid = true) const;
     QString getRcArguments(const int rcId, bool toHtml = false, bool onlyValid = true) const;

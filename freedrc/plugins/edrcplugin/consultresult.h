@@ -144,4 +144,7 @@ private:
 } // namespace eDRC
 } // namespace Internal
 
+QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr);
+QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteria &crit);
+
 #endif // EDRC_PLUGIN_CONSULTRESULT_H

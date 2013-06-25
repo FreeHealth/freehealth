@@ -370,6 +370,13 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
            </spacer>
           </item>
           <item>
+           <widget class="QToolButton" name="debugButton">
+            <property name="text">
+             <string>Debug</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="codingResultIcon">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

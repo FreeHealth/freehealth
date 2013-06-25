@@ -415,6 +415,34 @@ QHash<int, QString> DrcDatabase::getRcForClasses(int classId) const
     return toReturn;
 }
 
+QHash<int, QString> DrcDatabase::getClassesForRc(int crId) const
+{
+    QHash<int, QString> toReturn;
+    QSqlDatabase DB = database();
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return toReturn;
+    Utils::FieldList get;
+    get << Utils::Field(Constants::Table_Ref_ClassRC, Constants::REF_CLASSRC_SEQ);
+    get << Utils::Field(Constants::Table_Ref_ClassRC, Constants::REF_CLASSRC_LIB);
+    Utils::FieldList conds;
+    conds << Utils::Field(Constants::Table_REF_RC, Constants::VALIDITE, "='1'");
+    conds << Utils::Field(Constants::Table_RC_Link_RC_Class, Constants::RC_LCLASS_REF_RC_ID, QString("='%1'").arg(crId));
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_Ref_ClassRC, Constants::REF_CLASSRC_SEQ,
+                         Constants::Table_RC_Link_RC_Class, Constants::RC_LCLASS_REF_CLASSRC_ID);
+    joins << Utils::Join(Constants::Table_REF_RC, Constants::REF_RC_SEQ,
+                         Constants::Table_RC_Link_RC_Class, Constants::RC_LCLASS_REF_RC_ID);
+    QSqlQuery query(DB);
+    if (query.exec(select(get, joins, conds))) {
+        while (query.next()) {
+            if (query.value(1).toString() != "TOUTES") {
+                toReturn.insert(query.value(0).toInt(), query.value(1).toString());
+            }
+        }
+    }
+    return toReturn;
+}
+
 /** Returns all SeeAlso (related) RC ids and labels (unsorted) for a specific RC in a hash */
 QHash<int, QString> DrcDatabase::getSeeAlsoRcForRc(int rcId) const
 {

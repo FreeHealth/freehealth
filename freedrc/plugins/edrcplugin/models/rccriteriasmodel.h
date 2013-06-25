@@ -71,7 +71,10 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void setFilterOnRcId(const int crId);
+    void setSelectedCriteriaIds(const QList<int> &ids);
+    int currentConsulResultId() const;
     CodingStatus currentCodingStatus() const;
+    QList<int> currentSelectedCriteriaIds() const;
 
 private:
     RcCriteriasModelPrivate *d;

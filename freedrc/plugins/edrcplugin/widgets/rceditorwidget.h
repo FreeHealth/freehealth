@@ -4,12 +4,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_EDRC_EDITOR_WIDGET_H
-#define EDRC_EDRC_EDITOR_WIDGET_H
+#ifndef EDRC_PLUGIN_RC_EDITOR_WIDGET_H
+#define EDRC_PLUGIN_RC_EDITOR_WIDGET_H
 
 // FOR TEST ONLY
 #include <edrcplugin/edrc_exporter.h>
 // END
+#include <edrcplugin/consultresult.h>
 
 #include <QWidget>
 #include <QDialog>
@@ -21,8 +22,8 @@ QT_END_NAMESPACE
 /**
  * \file rceditorwidget.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.10.0
+ * \date 24 June 2013
 */
 
 namespace eDRC {
@@ -36,6 +37,11 @@ public:
       RcEditorWidget(QWidget *parent = 0);
       ~RcEditorWidget();
 
+      void setConsultResult(const ConsultResult &cr);
+
+public Q_SLOTS:
+      ConsultResult submit();
+
 private Q_SLOTS:
       void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
       void onSearchTextChanged(const QString &text);
@@ -45,6 +51,7 @@ private Q_SLOTS:
       void onArgumentsClicked();
       void updateCodingStatus();
 
+      void on_debugButton_clicked();
 private:
       void changeEvent(QEvent *event);
 
@@ -55,4 +62,4 @@ private:
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_EDRC_EDITOR_WIDGET_H
+#endif  // EDRC_PLUGIN_RC_EDITOR_WIDGET_H

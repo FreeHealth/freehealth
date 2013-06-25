@@ -310,6 +310,29 @@ void RcCriteriasModel::setFilterOnRcId(const int crId)
     endResetModel();
 }
 
+/** Define the selected criterias using their database unique identifiers */
+void RcCriteriasModel::setSelectedCriteriaIds(const QList<int> &ids)
+{
+    beginResetModel();
+    // Update the selected ids/rows
+    d->_checkedIds = ids;
+    for(int i = 0; i < d->_criterias.count(); ++i) {
+        const ConsultResultCriteria &crit = d->_criterias.at(i);
+        if (ids.contains(crit.id()))
+            d->_checkedRows << i;
+    }
+    // Update validator
+    d->_validator.setSelectedCriterias(ids);
+    d->_validator.check();
+    endResetModel();
+}
+
+/** Returns the current filtered consultation result database unique identifiant */
+int RcCriteriasModel::currentConsulResultId() const
+{
+    return d->_crId;
+}
+
 /** Returns the ConsultResult coding status. This status is available at any time (realtime computation) */
 RcCriteriasModel::CodingStatus RcCriteriasModel::currentCodingStatus() const
 {
@@ -320,6 +343,12 @@ RcCriteriasModel::CodingStatus RcCriteriasModel::currentCodingStatus() const
         return ValidCoding;
 
     return IncompleteCoding;
+}
+
+/** Returns the currently selected (checked) criteria ids in a list */
+QList<int> RcCriteriasModel::currentSelectedCriteriaIds() const
+{
+    return d->_checkedIds;
 }
 
 /**

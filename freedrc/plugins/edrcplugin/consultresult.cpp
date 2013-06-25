@@ -434,3 +434,54 @@ bool ConsultResult::operator==(const ConsultResult &other) const
             _critComment == other._critComment
             ;
 }
+
+QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
+{
+    if (cr.isEmpty()) {
+        dbg.nospace() << "ConsultResult(Empty)";
+        return dbg.space();
+    }
+    if (!cr.isValid()) {
+        dbg.nospace() << "ConsultResult(Invalid)\n";
+//        return dbg.space();
+    }
+
+    QString crit;
+    foreach(int id, cr.selectedCriterias())
+        crit += QString("%1,").arg(id);
+    crit.chop(1);
+
+    QString diag;
+    switch (cr.diagnosisPosition()) {
+    case ConsultResult::A: diag = "A"; break;
+    case ConsultResult::B: diag = "B"; break;
+    case ConsultResult::C: diag = "C"; break;
+    case ConsultResult::D: diag = "D"; break;
+    case ConsultResult::Z: diag = "Z"; break;
+    default: diag = "Uncoded"; break;
+    }
+
+    QString fu;
+    switch (cr.medicalFollowUp()) {
+    case ConsultResult::N: fu = "N"; break;
+    case ConsultResult::P: fu = "P"; break;
+    case ConsultResult::R: fu = "R"; break;
+    default: fu = "Uncoded"; break;
+    }
+
+    dbg.nospace() << QString("ConsultResult(%1; PosDiag:%2; FollowUp:%3; Crit:%4; %5; %6)")
+                     .arg(cr.consultResultId())
+                     .arg(diag)
+                     .arg(fu)
+                     .arg(crit)
+                     .arg(cr.chronicDiseaseState()==ConsultResult::ChronicDisease?"ChronicDisease":"NotChronic")
+                     .arg(cr.symptomaticState()==ConsultResult::Symptomatic?"Symptomatic":"NotSymptomatic")
+                     ;
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteria &crit)
+{
+    return dbg.space();
+}
+

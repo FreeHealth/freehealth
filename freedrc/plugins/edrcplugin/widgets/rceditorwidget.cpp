@@ -140,6 +140,34 @@ public:
         group->addButton(ui->buttonR);
     }
 
+    // Uncheck all button then update visibility according to the current editing CR \e crId
+    void clearButtonCheckState(int crId)
+    {
+        const QStringList &autDiag = edrcBase().getRcAuthprizedDiagnosis(crId, true);
+        ui->buttonA->setVisible(autDiag.contains("A"));
+        ui->buttonB->setVisible(autDiag.contains("B"));
+        ui->buttonC->setVisible(autDiag.contains("C"));
+        ui->buttonD->setVisible(autDiag.contains("D"));
+        ui->buttonZ->setVisible(autDiag.contains("Z"));
+
+        _posDiagGroup->setExclusive(false);
+        ui->buttonA->setChecked(false);
+        ui->buttonB->setChecked(false);
+        ui->buttonC->setChecked(false);
+        ui->buttonD->setChecked(false);
+        ui->buttonZ->setChecked(false);
+        _posDiagGroup->setExclusive(true);
+
+        _suiviGroup->setExclusive(false);
+        ui->buttonN->setChecked(false);
+        ui->buttonP->setChecked(false);
+        ui->buttonR->setChecked(false);
+        _suiviGroup->setExclusive(true);
+
+        ui->buttonALD->setChecked(false);
+        ui->buttonSympto->setChecked(false);
+    }
+
     void updateCodingStatus()
     {
         // Compute the current CR coding status
@@ -185,6 +213,111 @@ public:
         ui->codingResultIcon->setToolTip(tooltip.join("\n"));
     }
 
+    void consultResultToUi(const ConsultResult &cr)
+    {
+        clearButtonCheckState(cr.consultResultId());
+
+        // Get class for RC
+        QStringList crClasses = edrcBase().getClassesForRc(cr.consultResultId()).values();
+        const QString &label = edrcBase().getRcLabel(cr.consultResultId());
+
+        // Prepare the proxy model & the treeview
+        ui->searchLine->setText(label);
+        ui->treeViewRC->clearSelection();
+        ui->treeViewRC->collapseAll();
+        _proxyNeedsRefreshing = true;
+
+        // Show only the CR & its classes in the treeview
+        for(int i=(_rcTreeProxy->rowCount()-1); i >= 0 ; --i) {
+            QModelIndex parent = _rcTreeProxy->index(i, RcTreeModel::Label);
+            if (crClasses.contains(_rcTreeProxy->data(parent).toString())) {
+                ui->treeViewRC->expand(parent);
+                for(int j=(_rcTreeProxy->rowCount(parent)-1); j >= 0 ; --j) {
+                    QModelIndex testMe = _rcTreeProxy->index(j, RcTreeModel::Label, parent);
+                    if (_rcTreeProxy->data(testMe).toString() == label) {
+                        ui->treeViewRC->selectionModel()->select(testMe, QItemSelectionModel::SelectCurrent);
+                        ui->treeViewRC->scrollTo(testMe, QAbstractItemView::EnsureVisible);
+                        break;
+                    } else {
+                        // _rcTreeProxy->removeRows(j, 1, parent);
+                    }
+                }
+            } else {
+                // _rcTreeProxy->removeRows(i, 1);
+            }
+        }
+
+        // Update models
+        _rcCritModel->setFilterOnRcId(cr.consultResultId());
+        _rcCritModel->setSelectedCriteriaIds(cr.selectedCriterias());
+
+        switch (cr.diagnosisPosition()) {
+        case ConsultResult::A: ui->buttonA->setChecked(true); break;
+        case ConsultResult::B: ui->buttonB->setChecked(true); break;
+        case ConsultResult::C: ui->buttonC->setChecked(true); break;
+        case ConsultResult::D: ui->buttonD->setChecked(true); break;
+        case ConsultResult::Z: ui->buttonZ->setChecked(true); break;
+        default: break;
+        }
+
+        switch (cr.medicalFollowUp()) {
+        case ConsultResult::N: ui->buttonN->setChecked(true); break;
+        case ConsultResult::P: ui->buttonP->setChecked(true); break;
+        case ConsultResult::R: ui->buttonR->setChecked(true); break;
+        default: break;
+        }
+
+        if (cr.chronicDiseaseState() == ConsultResult::ChronicDisease)
+            ui->buttonALD->setChecked(true);
+        if (cr.symptomaticState() == ConsultResult::Symptomatic)
+            ui->buttonSympto->setChecked(true);
+        ui->commentRC->setHtml(cr.htmlCommentOnCR());
+        ui->commentItem->setHtml(cr.htmlCommentOnCriterias());
+
+        // Check CR coding status
+        updateCodingStatus();
+
+        // Focus on inactive label
+        ui->codingResultIcon->setFocus();
+    }
+
+    void uiToConsultResult(ConsultResult &cr)
+    {
+        cr.clear();
+        cr.setConsultResult(_rcCritModel->currentConsulResultId());
+        cr.setSelectedCriterias(_rcCritModel->currentSelectedCriteriaIds());
+        if (_posDiagGroup->checkedButton() == ui->buttonA)
+            cr.setDiagnosisPosition(ConsultResult::A);
+        else if (_posDiagGroup->checkedButton() == ui->buttonB)
+            cr.setDiagnosisPosition(ConsultResult::B);
+        else if (_posDiagGroup->checkedButton() == ui->buttonC)
+            cr.setDiagnosisPosition(ConsultResult::C);
+        else if (_posDiagGroup->checkedButton() == ui->buttonD)
+            cr.setDiagnosisPosition(ConsultResult::D);
+        else if (_posDiagGroup->checkedButton() == ui->buttonZ)
+            cr.setDiagnosisPosition(ConsultResult::Z);
+
+        if (_suiviGroup->checkedButton()== ui->buttonN)
+            cr.setMedicalFollowUp(ConsultResult::N);
+        else if (_suiviGroup->checkedButton()== ui->buttonP)
+            cr.setMedicalFollowUp(ConsultResult::P);
+        else if (_suiviGroup->checkedButton()== ui->buttonR)
+            cr.setMedicalFollowUp(ConsultResult::R);
+
+        if (ui->buttonALD->isChecked())
+            cr.setChronicDiseaseState(ConsultResult::ChronicDisease);
+        else
+            cr.setChronicDiseaseState(ConsultResult::NotChronicDisease);
+
+        if (ui->buttonSympto->isChecked())
+            cr.setSymptomaticState(ConsultResult::Symptomatic);
+        else
+            cr.setSymptomaticState(ConsultResult::NotSymptomatic);
+
+        cr.setHtmlCommentOnCR(ui->commentRC->toHtml());
+        cr.setHtmlCommentOnCriterias(ui->commentItem->toHtml());
+    }
+
 public:
     Ui::RcEditorWidget *ui;
     RCClassModel *_classModel;
@@ -194,6 +327,7 @@ public:
     RcCriteriasModel *_rcCritModel;
     TreeProxyModel *_rcTreeProxy;
     QButtonGroup *_posDiagGroup, *_suiviGroup;
+    ConsultResult _cr;
 
 private:
     RcEditorWidget *q;
@@ -251,6 +385,17 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
 
     connect(d->ui->SFMG, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
     connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
+
+    // TEST : ConsultResult(148; PosDiag:Uncoded; FollowUp:Uncoded; Crit:124,125,128,132,134; NotChronic; NotSymptomatic)
+    ConsultResult cr;
+    cr.setConsultResult(148);
+    cr.setSymptomaticState(ConsultResult::Symptomatic);
+    cr.setChronicDiseaseState(ConsultResult::ChronicDisease);
+    cr.setDiagnosisPosition(ConsultResult::C);
+    cr.setMedicalFollowUp(ConsultResult::N);
+    cr.setSelectedCriterias(QList<int>() << 124<<125<<128<<132<<134);
+    setConsultResult(cr);
+    // END
 }
 
 RcEditorWidget::~RcEditorWidget()
@@ -258,6 +403,22 @@ RcEditorWidget::~RcEditorWidget()
     if (d)
         delete d;
     d = 0;
+}
+
+void RcEditorWidget::setConsultResult(const ConsultResult &cr)
+{
+    d->_cr = cr;
+    d->consultResultToUi(cr);
+}
+
+/**
+ * Update the internal consultation result using the current ui selection and return a copy of it.
+ * \sa setConsultResult()
+ */
+ConsultResult RcEditorWidget::submit()
+{
+    d->uiToConsultResult(d->_cr);
+    return d->_cr;
 }
 
 /** When user activate a RC in the RC tree view. Update all models/views */
@@ -273,38 +434,20 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     disconnect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
 
     // Update models
-    int rcId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
-    d->_pcrModel->setFilterOnRcId(rcId);
-    d->_rcCritModel->setFilterOnRcId(rcId);
+    int crId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
+    d->_pcrModel->setFilterOnRcId(crId);
+    d->_rcCritModel->setFilterOnRcId(crId);
 
     // Update buttons & status label
-    const QStringList &autDiag = edrcBase().getRcAuthprizedDiagnosis(rcId, true);
-    d->ui->buttonA->setVisible(autDiag.contains("A"));
-    d->ui->buttonB->setVisible(autDiag.contains("B"));
-    d->ui->buttonC->setVisible(autDiag.contains("C"));
-    d->ui->buttonD->setVisible(autDiag.contains("D"));
-    d->ui->buttonZ->setVisible(autDiag.contains("Z"));
+    d->clearButtonCheckState(crId);
 
-    d->_posDiagGroup->setExclusive(false);
-    d->ui->buttonA->setChecked(false);
-    d->ui->buttonB->setChecked(false);
-    d->ui->buttonC->setChecked(false);
-    d->ui->buttonD->setChecked(false);
-    d->ui->buttonZ->setChecked(false);
-    d->_posDiagGroup->setExclusive(true);
+    d->ui->commentItem->clear();
+    d->ui->commentRC->clear();
 
-    d->_suiviGroup->setExclusive(false);
-    d->ui->buttonN->setChecked(false);
-    d->ui->buttonP->setChecked(false);
-    d->ui->buttonR->setChecked(false);
-    d->_suiviGroup->setExclusive(true);
-
-    d->ui->buttonALD->setChecked(false);
-    d->ui->buttonSympto->setChecked(false);
     d->updateCodingStatus();
 
     // Update the ICD10 code view
-    const QStringList &CIM10 = edrcBase().getRcIcd10RelatedCodes(rcId, true);
+    const QStringList &CIM10 = edrcBase().getRcIcd10RelatedCodes(crId, true);
     d->ui->CIM10->setText(CIM10.join(" ; "));
 
     // Update argument button
@@ -368,6 +511,12 @@ void RcEditorWidget::onArgumentsClicked()
 void RcEditorWidget::updateCodingStatus()
 {
     d->updateCodingStatus();
+}
+
+void RcEditorWidget::on_debugButton_clicked()
+{
+    d->uiToConsultResult(d->_cr);
+    qWarning() << d->_cr;
 }
 
 void RcEditorWidget::changeEvent(QEvent *event)
