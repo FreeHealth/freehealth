@@ -62,6 +62,7 @@ public:
     ConsultResultValidator();
     ConsultResultValidator(int crId, const QList<ConsultResultCriteria> &availableCriterias);
     ~ConsultResultValidator();
+    static QString version();
 
     void setCrId(int crId);
     void setAvailableCriterias(const QList<ConsultResultCriteria> &availableCriterias);

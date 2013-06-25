@@ -28,11 +28,14 @@
  * \class eDRC::Internal::ConsultResultValidator
  * Check the validity of a user coded CR and provide error message (if required).
  * The validator only checks the CR criterias selection congruence with the
- * coding rules of the CR.
+ * coding rules of the CR. \n
+ * The validator as coding rules version. Any update of the internal code will
+ * lead to a new version of the validator.
 */
 
 #include "consultresultvalidator.h"
 #include "consultresult.h"
+#include "constants.h"
 
 #include <utils/global.h>
 
@@ -367,6 +370,12 @@ ConsultResultValidator::~ConsultResultValidator()
     if (d)
         delete d;
     d = 0;
+}
+
+/** Returns the version of the validator */
+QString ConsultResultValidator::version()
+{
+    return Constants::VALIDATOR_VERSION;
 }
 
 /** Define the unique identifiant of the CR in the database \e crId */
