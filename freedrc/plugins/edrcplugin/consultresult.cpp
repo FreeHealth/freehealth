@@ -54,6 +54,7 @@
 
 #include <QRegExp>
 #include <QDomDocument>
+#include <QTextDocument>
 
 #include <QDebug>
 
@@ -520,8 +521,17 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     tokens.insert(Constants::TOKEN_CR_ICD10_CODES_AND_LABELS, icd10);
 
     // Comments
-    tokens.insert(Constants::TOKEN_CR_GLOBAL_HTML_COMMENT, htmlCommentOnCR());
-    tokens.insert(Constants::TOKEN_CR_CRITERIAS_HTML_COMMENT, htmlCommentOnCriterias());
+    QTextDocument doc;
+    doc.setHtml(htmlCommentOnCR());
+    if (!doc.toPlainText().trimmed().isEmpty())
+        tokens.insert(Constants::TOKEN_CR_GLOBAL_HTML_COMMENT, Utils::htmlBodyContent(htmlCommentOnCR(), false));
+    else
+        tokens.insert(Constants::TOKEN_CR_GLOBAL_HTML_COMMENT, QVariant());
+    doc.setHtml(htmlCommentOnCriterias());
+    if (!doc.toPlainText().trimmed().isEmpty())
+        tokens.insert(Constants::TOKEN_CR_CRITERIAS_HTML_COMMENT, Utils::htmlBodyContent(htmlCommentOnCriterias(), false));
+    else
+        tokens.insert(Constants::TOKEN_CR_CRITERIAS_HTML_COMMENT, QVariant());
 
     // Process tokens
     QString tmp = globalMask;
