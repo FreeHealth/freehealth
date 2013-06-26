@@ -358,7 +358,8 @@ const char * const G_EDITOR_ADDTEXT      = "group.Editor.AddText";
 const char * const A_EDITOR_FILEOPEN     = "action.Editor.Open";
 const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
 const char * const A_EDITOR_FILEPRINT    = "action.Editor.Print";
-const char * const A_EDITOR_ADDDATE      = "action.Editor.AddDate";
+const char * const A_EDITOR_ADDDATE_LONG   = "action.Editor.AddDate.LongFormat";
+const char * const A_EDITOR_ADDDATE_SHORT  = "action.Editor.AddDate.ShortFormat";
 const char * const A_EDITOR_ADDUSERNAME    = "action.Editor.AddUserName";
 const char * const A_EDITOR_ADDPATIENTNAME = "action.Editor.AddPatientName";
 

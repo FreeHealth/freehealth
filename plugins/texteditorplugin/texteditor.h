@@ -78,14 +78,19 @@ class EDITOR_EXPORT TextEditor : public TableEditor
     Q_PROPERTY(QString html READ getHtml WRITE setHtml USER true)
 
 public:
+    enum DateFormat {
+        LongFormat,
+        ShortFormat
+    };
+
     enum Type {
         CharFormat        = 0x0001,
         ParagraphFormat   = 0x0002,
         Clipboard         = 0x0004,
         WithTables        = 0x0020,
         WithIO            = 0x0040,
-        WithTextCompleter = 0x0080,
-        Simple            = CharFormat | ParagraphFormat | Clipboard,
+        WithTextCompleter = 0x0080, // insert date, username, patientname
+        Simple            = CharFormat | ParagraphFormat | Clipboard | WithTextCompleter,
         Full              = Simple | WithTables | WithIO | WithTextCompleter
     };
     Q_DECLARE_FLAGS(Types, Type)
@@ -147,7 +152,7 @@ protected Q_SLOTS:
     void textColor();
     void fontFormat();
 
-    void addDate();
+    void addDate(DateFormat format);
     void addUserName();
     void addPatientName();
 

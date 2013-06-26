@@ -158,7 +158,8 @@ private:
     QAction *aMergeCells;
     QAction *aSplitCells;
 
-    QAction *aAddDate;
+    QAction *aAddDateLong;
+    QAction *aAddDateShort;
     QAction *aAddUserName;
     QAction *aAddPatientName;
 
@@ -171,7 +172,7 @@ private:
     Core::ActionContainer *m_TableMenu;
     Core::ActionContainer *m_AddTextMenu;
 
-    Core::Context charContext, paragraphContext, clipboardContext, basicContext, ioContext, tableContext, textAdderContext, allContexts;
+    Core::Context charContext, paragraphContext, clipboardContext, ioContext, tableContext, textAdderContext, allContexts;
 
 private:
     void createContexts();

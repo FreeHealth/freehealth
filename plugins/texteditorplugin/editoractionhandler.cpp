@@ -126,7 +126,7 @@ EditorActionHandler::EditorActionHandler(QObject *parent) :
     aAddRow(0),aAddCol(0),
     aRemoveRow(0), aRemoveCol(0),
     aMergeCells(0), aSplitCells(0),
-    aAddDate(0),
+    aAddDateLong(0), aAddDateShort(0),
     aAddUserName(0),
     aAddPatientName(0),
     m_CurrentEditor(0)
@@ -143,27 +143,18 @@ EditorActionHandler::~EditorActionHandler()
 
 void EditorActionHandler::createContexts()
 {
-//    charContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT);
-//    paragraphContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH);
-//    clipboardContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD);
-//    basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC) << charContext << paragraphContext << clipboardContext;
-//    ioContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_IO);
-//    tableContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE);
-//    textAdderContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT);
-//    allContexts = QList<int>() << basicContext << ioContext << tableContext;
     charContext = Core::Context(Core::Constants::C_EDITOR_CHAR_FORMAT);
     paragraphContext = Core::Context(Core::Constants::C_EDITOR_PARAGRAPH);
     clipboardContext = Core::Context(Core::Constants::C_EDITOR_CLIPBOARD);
-    basicContext = Core::Context(Core::Constants::C_EDITOR_BASIC);
-    basicContext.add(charContext);
-    basicContext.add(paragraphContext);
-    basicContext.add(clipboardContext);
     ioContext = Core::Context(Core::Constants::C_EDITOR_IO);
     tableContext = Core::Context(Core::Constants::C_EDITOR_TABLE);
     textAdderContext = Core::Context(Core::Constants::C_EDITOR_ADDTEXT);
-    allContexts.add(basicContext);
+    allContexts.add(charContext);
+    allContexts.add(paragraphContext);
+    allContexts.add(clipboardContext);
     allContexts.add(ioContext);
     allContexts.add(tableContext);
+    allContexts.add(textAdderContext);
 }
 
 void EditorActionHandler::createMenus()
@@ -355,7 +346,8 @@ void EditorActionHandler::createActions()
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateText);
 
     // Text autocompletion
-    aAddDate = createAction(this, "aAddDate", "", A_EDITOR_ADDDATE, textAdderContext, EDITOR_ADDDATE_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
+    aAddDateLong = createAction(this, "aAddDateLong", "", A_EDITOR_ADDDATE_LONG, textAdderContext, EDITOR_ADDDATE_LONG_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
+    aAddDateShort = createAction(this, "aAddDateShort", "", A_EDITOR_ADDDATE_SHORT, textAdderContext, EDITOR_ADDDATE_SHORT_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
     aAddUserName = createAction(this, "aAddUserName", "", A_EDITOR_ADDUSERNAME, textAdderContext, EDITOR_ADDUSERNAME_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
     aAddPatientName = createAction(this, "aAddPatientName", "", A_EDITOR_ADDPATIENTNAME, textAdderContext, EDITOR_ADDPATIENTNAME_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
 
@@ -394,7 +386,8 @@ void EditorActionHandler::connectActions()
     connect(aSplitCells, SIGNAL(triggered()), this, SLOT(tableSplitCells()));
     connect(aOpen, SIGNAL(triggered()), this, SLOT(fileOpen()));
     connect(aSave, SIGNAL(triggered()), this, SLOT(saveAs()));
-    connect(aAddDate, SIGNAL(triggered()), this, SLOT(addDate()));
+    connect(aAddDateLong, SIGNAL(triggered()), this, SLOT(addDate()));
+    connect(aAddDateShort, SIGNAL(triggered()), this, SLOT(addDate()));
     connect(aAddUserName, SIGNAL(triggered()), this, SLOT(addUserName()));
     connect(aAddPatientName, SIGNAL(triggered()), this, SLOT(addPatientName()));
 
@@ -711,8 +704,16 @@ void EditorActionHandler::tableSplitCells()
 
 void EditorActionHandler::addDate()
 {
-    if (m_CurrentEditor)
-        m_CurrentEditor->addDate();
+    QAction *a = qobject_cast<QAction*>(sender());
+    if (!a)
+        return;
+
+    if (m_CurrentEditor) {
+        if (a == aAddDateLong)
+            m_CurrentEditor->addDate(TextEditor::LongFormat);
+        else if (a == aAddDateShort)
+            m_CurrentEditor->addDate(TextEditor::ShortFormat);
+    }
 }
 
 void EditorActionHandler::addUserName()

@@ -318,8 +318,8 @@ TextEditor::TextEditor(QWidget *parent, Types type) :
 
     // instanciate context for actions
     d->m_Context = new EditorContext(this);
-    setTypes(type);
     Core::ICore::instance()->contextManager()->addContextObject(d->m_Context);
+    setTypes(type);
 
     // create QWidget
     QVBoxLayout * vb = new QVBoxLayout(this);
@@ -357,26 +357,19 @@ void TextEditor::setTextControl(ITextControl *control)
 void TextEditor::setTypes(Types type)
 {
     d->m_Type = type;
-    Core::Context context(Core::Constants::C_EDITOR_BASIC);
-    if (type & TextEditor::CharFormat) {
+    Core::Context context;
+    if (type & TextEditor::CharFormat)
         context.add(Core::Constants::C_EDITOR_CHAR_FORMAT);
-    }
-    if (type & TextEditor::ParagraphFormat) {
+    if (type & TextEditor::ParagraphFormat)
         context.add(Core::Constants::C_EDITOR_PARAGRAPH);
-    }
-    if (type & TextEditor::Clipboard) {
+    if (type & TextEditor::Clipboard)
         context.add(Core::Constants::C_EDITOR_CLIPBOARD);
-    }
-
-    if (type & TextEditor::WithTables) {
+    if (type & TextEditor::WithTables)
         context.add(Core::Constants::C_EDITOR_TABLE);
-    }
-    if (type & TextEditor::WithIO) {
+    if (type & TextEditor::WithIO)
         context.add(Core::Constants::C_EDITOR_IO);
-    }
-    if (type & TextEditor::WithTextCompleter) {
+    if (type & TextEditor::WithTextCompleter)
         context.add(Core::Constants::C_EDITOR_ADDTEXT);
-    }
     d->m_Context->setContext(context);
     // update toolbar
     d->populateToolbar();
@@ -438,7 +431,8 @@ QMenu *TextEditor::getContextMenu()
     if (d->m_Type & WithTextCompleter) {
         QMenu *m = new QMenu(this);
         m->setTitle(tkTr(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT).remove("&"));
-        actions << Core::Constants::A_EDITOR_ADDDATE
+        actions << Core::Constants::A_EDITOR_ADDDATE_LONG
+                << Core::Constants::A_EDITOR_ADDDATE_SHORT
                 << Core::Constants::A_EDITOR_ADDUSERNAME
                 << Core::Constants::A_EDITOR_ADDPATIENTNAME
                 ;
@@ -798,9 +792,12 @@ void TextEditor::textColor()
     d->mergeFormatOnWordOrSelection(fmt);
 }
 
-void TextEditor::addDate()
+void TextEditor::addDate(DateFormat format)
 {
-    textEdit()->insertHtml(QDateTime::currentDateTime().toString(QLocale().dateTimeFormat(QLocale::LongFormat)));
+    if (format==LongFormat)
+        textEdit()->insertHtml(QDateTime::currentDateTime().toString(QLocale().dateTimeFormat(QLocale::LongFormat)));
+    else //if (format==ShortFormat)
+        textEdit()->insertHtml(QDateTime::currentDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
 }
 
 void TextEditor::addUserName()
