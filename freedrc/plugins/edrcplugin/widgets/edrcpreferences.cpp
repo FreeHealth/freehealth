@@ -63,6 +63,7 @@ void EdrcPreferencesPageWidget::setDataToUi()
     ui->realTimeChecking->setChecked(settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING).toBool());
     ui->useModernLabelling->setChecked(settings()->value(Constants::S_CR_USE_MODERNLABEL).toBool());
     ui->mandatoryInBold->setChecked(settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD).toBool());
+    ui->userComments->setChecked(settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool());
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -88,6 +89,7 @@ void EdrcPreferencesPageWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, ui->realTimeChecking->isChecked());
     s->setValue(Constants::S_CR_USE_MODERNLABEL, ui->useModernLabelling->isChecked());
     s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, ui->mandatoryInBold->isChecked());
+    s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, ui->userComments->isChecked());
 #ifdef FREEDRC
     s->sync();
 #endif
@@ -102,8 +104,11 @@ void EdrcPreferencesPageWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, true);
     s->setValue(Constants::S_CR_USE_MODERNLABEL, true);
     s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
+    s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
 #ifdef FREEDRC
     s->sync();
+//#else
+//    s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, false);
 #endif
 }
 
@@ -209,6 +214,7 @@ void EdrcPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_CR_USE_MODERNLABEL, true);
     defaultvalues.insert(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
     defaultvalues.insert(Constants::S_REALTIME_CR_CODING_CHECKING, false);
+    defaultvalues.insert(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())

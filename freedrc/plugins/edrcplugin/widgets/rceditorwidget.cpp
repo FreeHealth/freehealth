@@ -28,6 +28,7 @@
 #include "sfmgaboutdialog.h"
 #include "rcargumentsdialog.h"
 
+#include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
 #include <edrcplugin/models/rcclassmodel.h>
@@ -40,6 +41,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
 
 #include <translationutils/constants.h>
@@ -57,6 +59,7 @@ using namespace Trans::ConstantTranslations;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 namespace eDRC {
 namespace Internal {
@@ -270,8 +273,13 @@ public:
             ui->buttonALD->setChecked(true);
         if (cr.symptomaticState() == ConsultResult::Symptomatic)
             ui->buttonSympto->setChecked(true);
-        ui->commentRC->setHtml(cr.htmlCommentOnCR());
-        ui->commentItem->setHtml(cr.htmlCommentOnCriterias());
+        if (settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
+            ui->commentRC->setHtml(cr.htmlCommentOnCR());
+            ui->commentItem->setHtml(cr.htmlCommentOnCriterias());
+        } else {
+            ui->commentRC->clear();
+            ui->commentItem->clear();
+        }
 
         // Check CR coding status
         updateCodingStatus();
@@ -313,8 +321,10 @@ public:
         else
             cr.setSymptomaticState(ConsultResult::NotSymptomatic);
 
-        cr.setHtmlCommentOnCR(ui->commentRC->toHtml());
-        cr.setHtmlCommentOnCriterias(ui->commentItem->toHtml());
+        if (settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
+            cr.setHtmlCommentOnCR(ui->commentRC->toHtml());
+            cr.setHtmlCommentOnCriterias(ui->commentItem->toHtml());
+        }
     }
 
 public:
@@ -341,6 +351,12 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->setupUi(this);
     d->ui->SFMG->setIcon(theme()->icon("sfmg_logo.png", Core::ITheme::SmallIcon));
     d->ui->arguments->setEnabled(false);
+    if (!settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
+        d->ui->commentOnCrLabel->setVisible(false);
+        d->ui->commentOnCritLabel->setVisible(false);
+        d->ui->commentRC->setVisible(false);
+        d->ui->commentItem->setVisible(false);
+    }
 
     // Manage splitters
     d->ui->searchSplitter->setStretchFactor(0, 2);
@@ -524,6 +540,13 @@ void RcEditorWidget::on_debugButton_clicked()
                    Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/crtohtml_globalmask.html"),
                    Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/criteriatohtml_itemmask.html"),
                    edrcBase()));
+
+    qWarning() << d->_cr.toHtml(
+                      Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/crtohtml_globalmask.html"),
+                      Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/criteriatohtml_itemmask.html"),
+                      edrcBase());
+
+
     b->show();
 }
 

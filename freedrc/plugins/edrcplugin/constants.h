@@ -44,6 +44,7 @@ const char * const VALIDATOR_VERSION = "2013.06";
 const char * const S_CR_USE_MODERNLABEL = "edrc/crlabel/modern";
 const char * const S_CR_MANDATORYLABEL_IN_BOLD = "edrc/crlabel/mandatoryinbold";
 const char * const S_REALTIME_CR_CODING_CHECKING = "edrc/coding/realTimeChecking";
+const char * const S_CR_EDITOR_MANAGES_USERCOMMENTS = "edrc/editor/managesUserComments";
 
 // Tokens old style
 const char * const TOKEN_CR_DATABASE_VERSION = "CR_DATABASE_VERSION";
