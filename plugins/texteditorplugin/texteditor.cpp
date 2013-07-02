@@ -167,6 +167,7 @@ public:
     TextEditorPrivate(QWidget *parent , TextEditor::Types type) :
         m_Type(type),
         m_Context(0),
+        m_ToolBar(0),
         textEdit(0),
         m_Parent(parent),
         m_ToolBarIsVisible(false),

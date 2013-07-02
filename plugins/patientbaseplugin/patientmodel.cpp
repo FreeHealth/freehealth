@@ -417,9 +417,10 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role==Qt::DecorationRole) {
-        using namespace Core;
-        if (index.column() == IPatient::UsualName) {
-            return d->iconizedGender(index);
+        switch (index.column()) {
+        case Core::IPatient::IconizedGender: return d->iconizedGender(index);
+        case Core::IPatient::UsualName: return d->iconizedGender(index);
+        default: break;
         }
     } else if (role==Qt::DisplayRole || role==Qt::ToolTipRole || role==Qt::EditRole) {
         using namespace Core;
@@ -559,11 +560,6 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             return QLocale().toString(r.toDate(), tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL));
         default:
             return r;
-        }
-    }
-    else if (role==Qt::DecorationRole) {
-        switch (index.column()) {
-        case Core::IPatient::IconizedGender: return d->iconizedGender(index);
         }
     } else if (role==Qt::BackgroundRole) {
         if (settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool()) {
