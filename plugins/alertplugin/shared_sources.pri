@@ -8,7 +8,7 @@ QT *= sql
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/alertplugin_dependencies.pri)
 
-!with-alert{
+!with-alerts{
     error(Alert plugin not requested)
 } else {
     message(Building Alert plugin)
