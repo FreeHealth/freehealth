@@ -46,12 +46,11 @@ namespace Internal {
 class DomItem
 {
 public:
-    DomItem(QDomNode &node, int row, DomItem *parent = 0)
+    DomItem(QDomNode &node, int row, DomItem *parent = 0) :
+        domNode(node),
+        parentItem(parent),
+        rowNumber(row)
     {
-        domNode = node;
-        // Record the item's location within its parent.
-        rowNumber = row;
-        parentItem = parent;
     }
 
     ~DomItem()

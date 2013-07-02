@@ -68,7 +68,9 @@ class QButtonLineEditPrivate
 {
 public:
     QButtonLineEditPrivate(QButtonLineEdit *parent) :
-        _leftButton(0), _rightButton(0), _delayed(false),
+        _leftButton(0), _rightButton(0),
+        _timer(0),
+        _delayed(false),
         _rightPadding(0), _leftPadding(0),
         q(parent)
     {}

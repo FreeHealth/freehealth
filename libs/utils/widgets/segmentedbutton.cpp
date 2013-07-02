@@ -105,12 +105,13 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
 {
     QHBoxLayout *lay = _buttonLayout = new QHBoxLayout(this);
     lay->setMargin(0);
-    if (Utils::isRunningOnMac())
+    if (Utils::isRunningOnMac()) {
         lay->setSpacing(11);
-    else if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+    } else if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd()) {
         lay->setSpacing(0);
-    else
+    } else {
         lay->setSpacing(0);
+    }
     setLayout(lay);
 }
 

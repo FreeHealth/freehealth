@@ -65,7 +65,8 @@ class TimeComboBoxPrivate
 {
 public:
     TimeComboBoxPrivate(TimeComboBox *parent) :
-        time(QTime()),
+        combo(0),
+        interval(-1),
         q(parent)
     {
         combo = new QComboBox(q);

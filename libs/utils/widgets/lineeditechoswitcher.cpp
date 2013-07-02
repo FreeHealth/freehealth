@@ -46,7 +46,8 @@ namespace Internal {
 class LineEditEchoSwitcherPrivate
 {
 public:
-    LineEditEchoSwitcherPrivate()
+    LineEditEchoSwitcherPrivate() :
+        m_ToolButton(0)
     {
     }
 
@@ -64,7 +65,8 @@ public:
 }  // End Utils
 
 LineEditEchoSwitcher::LineEditEchoSwitcher(QWidget *parent) :
-        QButtonLineEdit(parent), d(0)
+    QButtonLineEdit(parent),
+    d(0)
 {
     setObjectName("LineEditEchoSwitcher");
     d = new LineEditEchoSwitcherPrivate;

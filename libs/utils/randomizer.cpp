@@ -382,12 +382,11 @@ QDate Randomizer::randomDate(const int minYear, const int minMonth, const int mi
 {
     int r = -1;
     QDate toReturn(minYear, minMonth, minDay);
-    int i = 0;
     int days = toReturn.daysTo(QDate::currentDate());
-    if (randomInt(1, 7) > 5) {
+    if (randomInt(1, 7) > 5)
         days = days / 2;
-    }
     if (days > 1) {
+        int i = 0;
         while (r < 1) {
             r = randomInt(days);
             if (++i == 20)

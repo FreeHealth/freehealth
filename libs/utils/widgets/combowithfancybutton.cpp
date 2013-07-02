@@ -173,7 +173,10 @@ private:
 class ItemDelegate : public QStyledItemDelegate
 {
 public:
-    ItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
+    ItemDelegate(QObject *parent = 0) :
+        QStyledItemDelegate(parent),
+        m_Model(0)
+    {}
 
     void setRemoveLightIcon(const QIcon &icon) {m_RemoveLight = icon;}
 

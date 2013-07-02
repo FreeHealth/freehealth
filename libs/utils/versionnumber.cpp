@@ -69,13 +69,13 @@ VersionNumber::VersionNumber(const QString &version) :
 {
 //    int tilde = version.indexOf("~");
     int dotCount = version.count(".");
-    int dot = 0;
-    int nextDot = 0;
     bool ok;
     if (version.compare("test", Qt::CaseInsensitive) != 0 && !version.isEmpty()) {
         if (dotCount<1) {
             LOG_ERROR_FOR("VersionNumber", "Unknown/invalid version number detected: " + version);
         } else {
+            int dot = 0;
+            int nextDot = 0;
             dot = version.indexOf(".");
             m_Major = version.left(dot).toInt(&ok);
             if (!ok)
@@ -96,7 +96,7 @@ VersionNumber::VersionNumber(const QString &version) :
             } else {
                 // only digits
                 m_Debug = version.mid(dot).toInt();
-                nextDot = dot;
+                // nextDot = dot;
             }
         }
     }

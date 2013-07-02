@@ -37,7 +37,10 @@ namespace Internal {
 class LangageComboBoxDelegatePrivate
 {
 public:
-    LangageComboBoxDelegatePrivate() {}
+    LangageComboBoxDelegatePrivate() :
+        m_DisplayMode(-1)
+    {}
+
     ~LangageComboBoxDelegatePrivate() {}
 
 public:
@@ -48,7 +51,8 @@ public:
 }
 
 LanguageComboBoxDelegate::LanguageComboBoxDelegate(QObject *parent, DisplayMode mode) :
-        QItemDelegate(parent), d(new Internal::LangageComboBoxDelegatePrivate)
+        QItemDelegate(parent),
+        d(new Internal::LangageComboBoxDelegatePrivate)
 {
     d->m_DisplayMode = mode;
 }
