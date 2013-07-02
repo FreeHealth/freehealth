@@ -212,7 +212,7 @@ void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
 }
 
 void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) const {
-    item->setModel((AbstractCalendarModel*)this);
+    item->setModel(const_cast<AbstractCalendarModel*>(this));
 }
 
 //void AbstractCalendarModel::setCalendarIsMine(Calendar::UserCalendar *cal) const {

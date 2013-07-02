@@ -120,7 +120,7 @@ private Q_SLOTS:
 
 
 private:
-    void checkServerUpdatesAfterDownload();
+    // void checkServerUpdatesAfterDownload();
 
 private:
     QVector<Server> m_Servers;

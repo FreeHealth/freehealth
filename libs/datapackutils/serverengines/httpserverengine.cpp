@@ -67,21 +67,21 @@ namespace {
 
 }
 
-ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar)
+ReplyData::ReplyData(QNetworkReply *_reply, Server *_server, Server::FileRequested _fileType, const Pack &_pack, QProgressBar *_progBar) :
+    reply(_reply),
+    server(_server),
+    bar(_progBar),
+    pack(_pack),
+    fileType(_fileType)
 {
-    this->reply = reply;
-    this->server = server;
-    this->fileType = fileType;
-    this->pack = pack;
-    this->bar = progBar;
 }
 
-ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, QProgressBar *progBar)
+ReplyData::ReplyData(QNetworkReply *_reply, Server *_server, Server::FileRequested _fileType, QProgressBar *_progBar) :
+    reply(_reply),
+    server(_server),
+    bar(_progBar),
+    fileType(_fileType)
 {
-    this->reply = reply;
-    this->server = server;
-    this->fileType = fileType;
-    this->bar = progBar;
 }
 
 

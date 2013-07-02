@@ -115,6 +115,7 @@ public:
         aServerRefresh(0), aServerEdit(0), aServerRemove(0), aServerAdd(0),
         aPackRefresh(0), aPackApply(0),
         m_ToolBarPacks(0),
+        bServer(0), bPack(0),
         m_ServerMapper(0),
         _segmented(0), _segPack(0), _segServer(0),
         _toolbarCurrentMode(-1),

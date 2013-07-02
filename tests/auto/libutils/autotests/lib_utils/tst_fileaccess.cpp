@@ -36,8 +36,8 @@
  * Utils::saveStringToFile( const QString &toSave, const QString &toFile, IOMode mode = Overwrite, const Warn warnUser = WarnUser, QWidget *parent=0 );
  * Utils::saveStringToEncodedFile( const QString &toSave, const QString &toFile, const QString &forceEncoding, IOMode mode = Overwrite, const Warn warnUser = WarnUser, QWidget *parent=0 );
  * Utils::saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
- * Utils::readTextFile( const QString &toRead, const QString &encoder, const Warn warnUser = WarnUser, QWidget *parent = 0 );
- * Utils::readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
+ * Utils::readTextFile( const QString &toRead, const QString &encoder, const Warn warnUser = WarnUser);
+ * Utils::readTextFile( const QString &toRead, const Warn warnUser = WarnUser);
  * Utils::isDirExists(const QString &absPath);
  * Utils::isFileExists(const QString &absPath);
  * Utils::fileMd5(const QString &fileName);

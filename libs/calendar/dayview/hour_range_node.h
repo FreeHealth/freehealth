@@ -39,17 +39,10 @@
 
 namespace Calendar {
 
-// this class is used to build a hierarchical structure of items for a day and to manage overlappings
-// the algorithm behavior is inspired from google calendar
-// A DayItemNode is associated with a calendar item.
-// The right item is the item immediately at its right in the visual space and overlaps itself in time. All rights items are forming a chain.
-// The next item is the item immediately following in time (so below in visual space)
-// The colliding item is the first item which overlaps itself in time but is not a right. It belongs to a previous chain of items.
-// Consequently, a node is responsible for freing its right and next nodes but not its colliding one (because it belongs to another chain)
 class HourRangeNode
 {
 public:
-    HourRangeNode(const CalendarItem &item, HourRangeNode *colliding = 0, int index = -1) : m_item(item), m_right(0), m_next(0), m_colliding(colliding), m_index(index), m_maxCount(0) {}
+    HourRangeNode(const CalendarItem &item, HourRangeNode *colliding = 0, int index = -1);
     ~HourRangeNode();
 
     const CalendarItem &item() const { return m_item; }			// the calendar item associates with the node

@@ -573,7 +573,7 @@ void TextEditor::fileOpen()
                                                 &selected);
     if (file.isEmpty())
         return;
-    QString str = Utils::readTextFile(file, Utils::WarnUser, this);
+    QString str = Utils::readTextFile(file, Utils::WarnUser);
     // run token if FreeMedForms
 #ifdef FREEMEDFORMS
     patient()->replaceTokens(str);

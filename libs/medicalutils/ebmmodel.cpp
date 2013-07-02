@@ -63,11 +63,6 @@ QVariant EbmModel::data(const QModelIndex &index, int role) const
 
         switch (index.column()) {
         case Link: return e->link();
-        {
-            QString t = e->link();
-            t = t.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID: ");
-            return t;
-        }
         case References: if (e->references().isEmpty()) return e->data(EbmData::ShortReferences); return e->references();
         case Abstract: if (e->abstract().isEmpty()) return e->data(EbmData::AbstractPlainText); return e->abstract();
         case ShortReferences: return e->data(EbmData::ShortReferences);

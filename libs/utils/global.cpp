@@ -750,24 +750,19 @@ bool saveStringToFile(const QString &toSave, const QString &dirPath, const QStri
     return Utils::saveStringToFile(toSave, fileName, Overwrite, WarnUser, wgt);
 }
 
-QString readTextFile(const QString &toRead, const Warn warnUser, QWidget *parent)
-{return readTextFile(toRead, QString("UTF-8"), warnUser, parent);}
+QString readTextFile(const QString &toRead, const Warn warnUser)
+{return readTextFile(toRead, QString("UTF-8"), warnUser);}
 
 /**
  \brief Return the content of a text file.
   You can choose:
   - to warn the user if an error is encountered.
   - the encoding of the file (using the QTextCodec supported encodings)
-  - the parent widget used for the message box error
 **/
-QString readTextFile(const QString &toRead, const QString &encoder, const Warn warnUser, QWidget *parent)
+QString readTextFile(const QString &toRead, const QString &encoder, const Warn warnUser)
 {
     if (toRead.isEmpty())
         return QString();
-    QWidget *p = parent;
-    if (!p)
-        p = qApp->activeWindow();
-
     // Manage relative paths
     QString correctFileName = toRead;
     QFileInfo info(toRead);
@@ -2057,7 +2052,6 @@ int replaceToken(QString &textToAnalyse, const QString &token, const QString &va
     int begin, end;
     begin = 0;
     end = 0;
-    int beforeBegin, afterEnd;
     int tokenLength = token.length() + QString(Constants::TOKEN_OPEN).length() + QString(Constants::TOKEN_CLOSE).length();
     int toReturn = 0;
     while (true) {
@@ -2067,8 +2061,10 @@ int replaceToken(QString &textToAnalyse, const QString &token, const QString &va
             break;
         end = begin + tokenLength;
         // Find text before '[ BEFORE [TOKEN]]'
+        int beforeBegin;
         beforeBegin = textToAnalyse.lastIndexOf(Constants::TOKEN_OPEN, begin - 1);
         // Find text after '[[TOKEN] AFTER ]'
+        int afterEnd;
         afterEnd = textToAnalyse.indexOf(Constants::TOKEN_CLOSE, end);
         if ((beforeBegin==-1) || (afterEnd==-1)) {
             Utils::Log::addError("Utils", QApplication::translate("Utils", "Token replacement error (%1). Wrong number of parentheses.")

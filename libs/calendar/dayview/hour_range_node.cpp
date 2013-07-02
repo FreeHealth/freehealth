@@ -35,6 +35,31 @@ using namespace Calendar;
 int HourRangeNode::m_hourHeight = 40;
 int HourRangeNode::m_minimumItemHeight = 20;
 
+/**
+ * \class Calendar::HourRangeNode
+ * This class is used to build a hierarchical structure of items for a day and to manage overlappings
+ * the algorithm behavior is inspired from google calendar.
+ * A DayItemNode is associated with a calendar item.
+ * The right item is the item immediately at its right in the visual space and overlaps itself in time.
+ * All rights items are forming a chain.
+ * The next item is the item immediately following in time (so below in visual space)
+ * The colliding item is the first item which overlaps itself in time but is not a right.
+ * It belongs to a previous chain of items.
+ * Consequently, a node is responsible for freing its right and next nodes but not its
+ * colliding one (because it belongs to another chain).
+ */
+HourRangeNode::HourRangeNode(const CalendarItem &item, HourRangeNode *colliding, int index) :
+        m_item(item),
+        m_right(0),
+        m_next(0),
+        m_colliding(colliding),
+        m_index(index),
+        m_maxCount(0),
+        m_maxCountBeforeColliding(0),
+        m_left(0),
+        m_width(0)
+{}
+
 void HourRangeNode::setHourHeight(int value) {
 	if (m_hourHeight == value)
 		return;

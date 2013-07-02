@@ -39,8 +39,8 @@ namespace Internal {
 
 // this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
 struct ReplyData {
-    ReplyData() : reply(0), server(0), bar(0) {}
-    ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar = 0);
+    ReplyData() : reply(0), server(0), bar(0), fileType(Server::NoFile) {}
+    ReplyData(QNetworkReply *_reply, Server *_server, Server::FileRequested _fileType, const Pack &_pack, QProgressBar *_progBar = 0);
     ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, QProgressBar *progBar = 0);
 
     QNetworkReply *reply;

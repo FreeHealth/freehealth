@@ -241,7 +241,7 @@ public:
         }
 
         // Read file
-        _currentContent = Utils::readTextFile(job.absFilePath, job.fileEncoding, Utils::DontWarnUser, 0);
+        _currentContent = Utils::readTextFile(job.absFilePath, job.fileEncoding, Utils::DontWarnUser);
         if (_currentContent.isEmpty()) {
             result->hasError = true;
             result->errors << tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(job.absFilePath);

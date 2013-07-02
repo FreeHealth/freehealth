@@ -78,11 +78,13 @@ public:
 
     DayRangeBodyPrivate(DayRangeBody *parent)
         : m_hourWidget(0),
+          m_rangeWidth(-1),
           m_pressedItemWidget(0),
           m_mouseMode(MouseMode_None),
           m_granularity(30),
           m_itemDefaultDuration(30),
           m_dayScaleHourDivider(2),
+          m_hourHeight(-1),
           _dragLabel(0),
           q(parent)
     {
@@ -540,7 +542,6 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
 
     QDateTime mousePosDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     QRect rect;
-    int secondsDifference, limit;
     QDateTime beginning, ending;
 
     // save last mouse position
@@ -589,6 +590,9 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         d_body->m_pressedItemWidget->setInMotion(true);
 
          // seconds to add - if mouse is above, value is negative
+        int secondsDifference = 0;
+        int limit = 0;
+
         secondsDifference = d_body->m_pressDateTime.time().secsTo(mousePosDateTime.time());
 
         if (event->pos().y() > d_body->m_pressPos.y()) {  // mouse moved down

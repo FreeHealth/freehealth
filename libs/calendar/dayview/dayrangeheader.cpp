@@ -59,6 +59,10 @@ class DayRangeHeaderPrivate
 {
 public:
     DayRangeHeaderPrivate(DayRangeHeader *parent) :
+        m_rangeWidth(0),
+        m_maxDepth(0),
+        m_mouseMode(MouseMode_None),
+        m_pressItemWidget(0),
         q(parent)
     {}
 

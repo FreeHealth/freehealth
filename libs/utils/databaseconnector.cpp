@@ -63,38 +63,44 @@ namespace Internal {
 class DatabaseConnectorPrivate
 {
 public:
+    DatabaseConnectorPrivate() :
+        m_Port(-1),
+        m_DriverIsValid(false),
+        m_Driver(Database::SQLite),
+        m_AccessMode(DatabaseConnector::ReadOnly)
+    {}
 
     bool testDriver(Database::AvailableDrivers drv)
     {
         switch (drv) {
         case Database::MySQL:
-            {
-                if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-                    LOG_ERROR_FOR("DatabaseConnector", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-                    Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                             tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-                                             "", qApp->applicationName());
-                    return false;
-                }
-                break;
-            }
-        case Database::SQLite:
-            {
-                if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-                    LOG_ERROR_FOR("DatabaseConnector", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-                    Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                             tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-                                             "", qApp->applicationName());
-                    return false;
-                }
-                break;
-            }
-        case Database::PostSQL:
-            {
+        {
+            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+                LOG_ERROR_FOR("DatabaseConnector", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                         "", qApp->applicationName());
                 return false;
-                break;
             }
+            break;
         }
+        case Database::SQLite:
+        {
+            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+                LOG_ERROR_FOR("DatabaseConnector", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                         "", qApp->applicationName());
+                return false;
+            }
+            break;
+        }
+        case Database::PostSQL:
+        {
+            return false;
+        }
+        default: return false;
+        } // switch
         return true;
     }
 
@@ -104,9 +110,8 @@ public:
     Database::AvailableDrivers m_Driver;
     DatabaseConnector::AccessMode m_AccessMode;
 };
-}
-
-
+} // namespace Internal
+} // namespace Utils
 
 DatabaseConnector::DatabaseConnector() :
         d(new DatabaseConnectorPrivate)
@@ -115,7 +120,6 @@ DatabaseConnector::DatabaseConnector() :
     d->m_Driver = Database::SQLite;
     d->m_AccessMode = ReadWrite;
     d->m_DriverIsValid = d->testDriver(Database::SQLite);
-}
 }
 
 DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &clearPass, const QString &hostName, const int port) :

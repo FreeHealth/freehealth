@@ -359,7 +359,11 @@ struct NewGirItem {
 class NewGirScorePrivate
 {
 public:
-    NewGirScorePrivate() {}
+    NewGirScorePrivate() :
+        m_testValidity(true),
+        m_valid(false)
+    {}
+
     ~NewGirScorePrivate()
     {
         qDeleteAll(m_Items);
@@ -698,9 +702,8 @@ QString NewGirScore::getCodeGir(Item item) const
 
 QString NewGirScore::getCodeGir(Item item, SubItem subItem) const
 {
-    NewGirItem *girItem = 0;
     for(int i=0; i<d->m_Items.count();++i) {
-        girItem = d->m_Items.at(i);
+        NewGirItem *girItem = d->m_Items.at(i);
         if (girItem->item == item &&
             girItem->subItem == subItem) {
             girItem->computedScore = d->calculateItemScore(girItem);
@@ -1043,8 +1046,10 @@ QString OldGirScore::getGirString() const
     QString chaine = "12345678";
 
     // Cohérence et orientation
-    chaine = d->m_coherence;
-    chaine += d->m_orientation;
+    if (!d->m_coherence.isEmpty())
+        chaine[GIR_coherence] = d->m_coherence.at(0);
+    if (!d->m_orientation.isEmpty())
+        chaine[GIR_orientation] = d->m_orientation.at(0);
 
     // Toilette AA=A CC=C autres=B
     if (d->m_toilette == "AA")

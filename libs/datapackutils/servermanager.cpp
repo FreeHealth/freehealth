@@ -263,13 +263,13 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
     }
 }
 
+// TODO: code this void ServerManager::checkServerUpdates()
 void ServerManager::checkServerUpdates()
 {
-    WARN_FUNC << m_Servers.count();
-    // TODO: code this void ServerManager::checkServerUpdates()
-    // Get installed packs uuid && version
+//    WARN_FUNC << m_Servers.count();
+//    // Get installed packs uuid && version
 
-    // Compare installed pack versions with server description
+//    // Compare installed pack versions with server description
 
 
 //    for(int i=0; i < m_Servers.count(); ++i) {
@@ -376,18 +376,18 @@ void ServerManager::createServerPackList(const Server &server)
     }
 }
 
-void ServerManager::checkServerUpdatesAfterDownload()
-{
-    for(int i=0; i < m_Servers.count(); ++i) {
-        Server &s = m_Servers[i];
-        if (s.updateState() == Server::UpdateAvailable) {
-            qWarning() << "UPDATE" << s.url() << s.localVersion() << s.description().data(ServerDescription::Version).toString();
-        }
-        s.setLastChecked(QDateTime::currentDateTime());
-//        if (s.isConnected())
-//           Q_EMIT serverConnected(s, ServerIdentification());
-//        s.setLocalVersion();
-    }
-    Q_EMIT serverUpdateChecked();
-}
+//void ServerManager::checkServerUpdatesAfterDownload()
+//{
+//    for(int i=0; i < m_Servers.count(); ++i) {
+//        Server &s = m_Servers[i];
+//        if (s.updateState() == Server::UpdateAvailable) {
+//            qWarning() << "UPDATE" << s.url() << s.localVersion() << s.description().data(ServerDescription::Version).toString();
+//        }
+//        s.setLastChecked(QDateTime::currentDateTime());
+////        if (s.isConnected())
+////           Q_EMIT serverConnected(s, ServerIdentification());
+////        s.setLocalVersion();
+//    }
+//    Q_EMIT serverUpdateChecked();
+//}
 
