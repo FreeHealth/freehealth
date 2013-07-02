@@ -768,7 +768,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
     Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid,0);
     if (user) {
         Core::IUser::UserRights umRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
-        if (!umRights & Core::IUser::Delete)
+        if (!umRights.testFlag(Core::IUser::Delete))
             return false;
     } else {
         LOG_ERROR("No current user");
@@ -827,7 +827,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO;
     d->checkNullUser();
-    if (!d->m_CurrentUserRights & Core::IUser::Create)
+    if (!d->m_CurrentUserRights.testFlag(Core::IUser::Create))
         return false;
     int i=0;
     for (i=0; i<count; i++) {

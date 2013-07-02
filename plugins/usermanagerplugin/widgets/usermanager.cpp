@@ -275,6 +275,9 @@ class UserManagerWidgetPrivate {
 public:
     UserManagerWidgetPrivate(UserManagerWidget *parent) :
         ui(new Ui::UserManagerWidget),
+        m_CanModify(false), m_CanCreate(false), m_CanViewAllUsers(false), m_CanViewRestrictedData(false), m_CanDelete(false), m_CanReadOwn(true),
+        m_EditingRow(-1),
+        m_SearchBy(-1),
         m_ToolBar(0),
         m_SearchToolButton(0),
         aCreateUser(0),

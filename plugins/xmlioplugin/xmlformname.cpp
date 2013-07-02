@@ -100,7 +100,11 @@ XmlFormName::XmlFormName(const QString &_uid) :
 
 bool XmlFormName::operator==(const XmlFormName &other) const
 {
-    return (uid==other.uid && isValid==isValid && absFileName==other.absFileName && absPath==other.absPath && modeName==other.modeName);
+    return (uid==other.uid
+            && isValid==other.isValid
+            && absFileName==other.absFileName
+            && absPath==other.absPath
+            && modeName==other.modeName);
 }
 
 QDebug XmlForms::Internal::operator<<(QDebug dbg, const XmlFormName &c)

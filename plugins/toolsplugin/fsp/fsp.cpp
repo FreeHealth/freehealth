@@ -275,11 +275,13 @@ Fsp::Fsp(const Fsp &cp) :
 }
 
 /** Copy operator */
-void Fsp::operator=(const Fsp &cp)
+Fsp &Fsp::operator=(const Fsp &cp)
 {
-    d = new FspPrivate(this);
+    if (cp.d == d)
+        return *this;
     d->_data = cp.d->_data;
     d->_amountLines = cp.d->_amountLines;
+    return *this;
 }
 
 /*! Destructor of the Tools::Internal::Fsp class */

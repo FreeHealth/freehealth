@@ -165,12 +165,11 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         dlg.setFocus();
         dlg.setValue(0);
 
-        bool created = true;
         // Doctors
-        created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
-                                      QStringList() << "Medical Doctor",
-                                      QStringList() << "Chief medical officer USS Enterprise",
-                                      Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+        bool created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+                                                     QStringList() << "Medical Doctor",
+                                                     QStringList() << "Chief medical officer USS Enterprise",
+                                                     Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
         if (created) {
             userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
                                           QStringList() << "Intergalactic medicine",

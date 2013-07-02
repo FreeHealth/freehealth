@@ -144,6 +144,7 @@ public:
     BlockingAlertDialogPrivate(BlockingAlertDialog */*parent*/):
         ui(new Ui::BlockingAlertDialog),
         cui(0),
+        _box(0),
         _overrideButton(0),
         _remindLaterButton(0),
         _overrideCommentRequired(false),

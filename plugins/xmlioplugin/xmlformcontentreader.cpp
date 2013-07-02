@@ -285,8 +285,8 @@ QMultiHash<QString, QString> XmlFormContentReader::readUuidEquivalence(const QDo
     while (!item.isNull()) {
         if (item.attribute(Constants::ATTRIB_OLD_UUID).isEmpty() || item.attribute(Constants::ATTRIB_NEW_UUID).isEmpty()) {
             LOG_ERROR_FOR("XmlFormContentReader", "Field equivalence missing old/new attributes");
-            continue;
             item = item.nextSiblingElement(Constants::TAG_UUID_EQUIVALENCE_ITEM);
+            continue;
         }
         oldToNew.insertMulti(item.attribute(Constants::ATTRIB_OLD_UUID), item.attribute(Constants::ATTRIB_NEW_UUID));
         item = item.nextSiblingElement(Constants::TAG_UUID_EQUIVALENCE_ITEM);

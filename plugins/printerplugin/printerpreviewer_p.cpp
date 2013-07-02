@@ -253,8 +253,10 @@ void PrinterPreviewerPrivate::watermarkToPointer(TextDocumentExtra *extra)
         extra->setPresence(Printer::Presence(watermarkPresence()));
 //        extra->setPriority(Printer::Priority(watermarkPriority()));
     } else {
-        delete extra;
-        extra = 0;
+        if (extra) {
+            delete extra;
+            extra = 0;
+        }
         extra = new TextDocumentExtra();
     }
 }

@@ -116,7 +116,7 @@ public:
 
     Fsp();
     Fsp(const Fsp &cp);
-    void operator=(const Fsp &cp);
+    Fsp &operator=(const Fsp &cp);
 
     ~Fsp();
     void clear();

@@ -141,7 +141,7 @@ public:
         OnRemindLater
     };
 
-    AlertScript() : _id(-1), _valid(true), _modified(false) {}
+    AlertScript() : _id(-1), _valid(true), _type(CheckValidityOfAlert), _modified(false) {}
     AlertScript(const QString &uuid, ScriptType type, const QString &script) :
         _id(-1), _valid(true),
         _type(type), _uid(uuid), _script(script), _modified(true) {}
@@ -186,9 +186,10 @@ private:
 class ALERT_EXPORT AlertValidation
 {
 public:
-    AlertValidation() : _id(-1), _modified(false) {}
+    AlertValidation() : _id(-1), _modified(false), _overridden(false) {}
     AlertValidation(const QDateTime &dateTimeOfValidation, const QString &validatorUid, const QString &validatedUid) :
-        _id(-1), _modified(true),
+        _id(-1),
+        _modified(true),
         _overridden(false),
         _validator(validatorUid), _validated(validatedUid),
         _date(dateTimeOfValidation)
@@ -241,7 +242,7 @@ public:
         RelatedToUserGroup,
         RelatedToApplication
     };
-    AlertRelation() : _id(-1), _modified(false) {}
+    AlertRelation() : _id(-1), _modified(false), _related(RelatedToPatient) {}
     AlertRelation(RelatedTo related, const QString &uuid = QString::null) :
         _id(-1), _modified(true),
         _related(related),
@@ -304,7 +305,7 @@ public:
 
     AlertItem();
     AlertItem(const AlertItem &cp);
-    void operator=(const AlertItem &cp);
+    AlertItem &operator=(const AlertItem &cp);
 
     virtual ~AlertItem();
     virtual bool isValid() const;

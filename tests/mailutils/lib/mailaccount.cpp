@@ -284,6 +284,8 @@ bool MailAccount::fromXml(const QString &xmlContent)
 
 MailAccount &MailAccount::operator=(const MailAccount &other)
 {
+    if (this == &other)
+        return *this;
     d->_userName = other.d->_userName;
     d->_userLog = other.d->_userLog;
     d->_userPass = other.d->_userPass;

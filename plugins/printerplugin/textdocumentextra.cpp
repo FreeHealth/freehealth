@@ -57,7 +57,12 @@ namespace Print {
 namespace Internal {
 class TextDocumentExtraPrivate {
 public:
-    TextDocumentExtraPrivate() : m_Doc(0) {}
+    TextDocumentExtraPrivate() :
+        m_Presence(Printer::EachPages),
+        m_Priority(Printer::First),
+        m_DocCreated(false),
+        m_Doc(0)
+    {}
 
     Printer::Presence  m_Presence;
     Printer::Priority  m_Priority;

@@ -172,9 +172,11 @@ void ToolsPlugin::extensionsInitialized()
     // At this point, user is connected
 
     // Create some menu actions
+#if defined(WITH_CHEQUE_PRINTING) || defined(WITH_FRENCH_FSP)
     Core::ActionContainer *menu = actionManager()->createMenu(Core::Constants::M_GENERAL);
     QAction *action = 0;
     Core::Command *cmd = 0;
+#endif
 
 #ifdef WITH_CHEQUE_PRINTING
     action = new QAction(this);

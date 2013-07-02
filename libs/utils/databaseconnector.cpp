@@ -250,9 +250,8 @@ void DatabaseConnector::fromSettings(const QString &value)
 
 DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)
 {
-    if (this == &in) {
+    if (this == &in)
         return *this;
-    }
     d->m_ClearLog = in.d->m_ClearLog;
     d->m_ClearPass = in.d->m_ClearPass;
     d->m_Driver = in.d->m_Driver;

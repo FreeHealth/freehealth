@@ -154,6 +154,7 @@ class PrinterPrivate
 {
 public:
     PrinterPrivate(Printer */*parent*/) :
+        m_WatermarkPresence(-1),
         m_TwoNUp(false),
         m_Printer(0),
         m_Content(0),
@@ -533,17 +534,13 @@ bool PrinterPrivate::complexDraw()
             // need new page ?
             if ((drawnedSize.height() + blockRect.size().height()) > pageSize.height()) {
 
-                int i = 0;
                 QTextLayout *layout = block.layout();
                 if (layout->lineCount() > 1) {
-
-
                     // TODO --> draw line by line
-
-
 //                    qWarning() << "lines in block" << block.layout()->lineCount();
                     int heightSave = drawnedSize.height();
                     // draw the maximum lines into the page before creating a new one
+                    int i = 0;
                     while (layout->lineAt(i).height() + drawnedSize.height() < pageSize.height()) {
                         //                        layout->lineAt(i).draw(&painter, layout->lineAt(i).position());
                         drawnedSize.setHeight(drawnedSize.height() + layout->lineAt(i).height());
@@ -551,10 +548,7 @@ bool PrinterPrivate::complexDraw()
                         ++i;
                     }
                     drawnedSize.setHeight(heightSave);
-
-
                     // END TODO
-
                 }
                 pageNumber = complexDrawNewPage(painter, headerSize, footerSize, pageSize,
                                                  correctedY, drawnedSize, pageNumber);
@@ -727,7 +721,7 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
                 currentRect.translate(0, currentRect.height());
                 pageNumber++;
             }
-            m_PrintingDuplicata=!m_PrintingDuplicata;
+            m_PrintingDuplicata = !m_PrintingDuplicata;
         } else {
             drawnHeight += currentRect.height();
             // translate the currentRect to the beginning of the next page
@@ -738,10 +732,11 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
         // if there is still something to print --> create a newpage to the printer
         if (currentRect.intersects(contentRect)) {
             if (fromToPage) {
-                if ((pageNumber>=fromToPage) && (pageNumber<=toPage))
+                if ((pageNumber>=fromPage) && (pageNumber<=toPage))
                     m_Printer->newPage();
-            } else
+            } else {
                     m_Printer->newPage();
+            }
         }
         m_Pages.append(pic);
     }

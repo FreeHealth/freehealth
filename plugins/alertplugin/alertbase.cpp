@@ -1847,9 +1847,7 @@ bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
     query.bindValue(Constants::ALERT_PACKS_CREATEDATE, descr.data(AlertPackDescription::CreationDate));
     query.bindValue(Constants::ALERT_PACKS_LASTUPDATE, descr.data(AlertPackDescription::LastModificationDate));
     query.bindValue(Constants::ALERT_PACKS_XTRAXML, QString()); // TODO: descr.extraXml());
-    if (query.exec()) {
-        id = query.lastInsertId().toInt();
-    } else {
+    if (!query.exec()) {
         LOG_QUERY_ERROR(query);
         query.finish();
         database().rollback();

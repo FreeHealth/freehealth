@@ -155,7 +155,6 @@ QString BaseDetailsWidget::printableHtml(bool withValues) const
 
     int i = 0;
 //    int c = 0;
-    int r = 0;
     int previousrow = 0;
     QString header, content;
     // Start with the header of the form
@@ -177,8 +176,8 @@ QString BaseDetailsWidget::printableHtml(bool withValues) const
     int numberColumns = 1;
     foreach(const QString &s, html) {
 //        c = (i % numberColumns);
-        r = (i / numberColumns);
-        if (r>previousrow) {
+        int r = (i / numberColumns);
+        if (r > previousrow) {
             previousrow = r;
             content += "</tr><tr>";
         }

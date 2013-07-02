@@ -323,7 +323,11 @@ class MedicalProcedure : public VariableDatesItem
 {
 
 public:
-    explicit MedicalProcedure() {}
+    explicit MedicalProcedure() :
+        m_country(QLocale().country()),
+        m_amount(.0), m_reimbursement(.0),
+        m_categoryId(-1)
+    {}
     ~MedicalProcedure() {}
 
     QString label() const { return m_label; }

@@ -67,6 +67,8 @@ DataPackQuery::DataPackQuery(const DataPackQuery &copy)
 
 DataPackQuery &DataPackQuery::operator=(const DataPackQuery &copy)
 {
+    if (this == &copy)
+        return *this;
     _zipContentFile = copy._zipContentFile;
     _absPathDescription = copy._absPathDescription;
     _absPathContentFile = copy._absPathContentFile;

@@ -134,13 +134,12 @@ public:
     /** For debugging purpose */
     void toTreeWidget(QTreeWidgetItem *tree) const
     {
-        QTreeWidgetItem *l = 0;
         QFont bold;
         bold.setBold(true);
         QTreeWidgetItem *v = new QTreeWidgetItem(tree, QStringList() << categoryForTreeWiget() );
         v->setFont(0,bold);
         foreach(const QString &lang, m_Hash_T_Lang.keys()) {
-            l = new QTreeWidgetItem(v, QStringList() << "Language" << lang );
+            QTreeWidgetItem *l = new QTreeWidgetItem(v, QStringList() << "Language" << lang );
             l->setFont(0,bold);
             m_Hash_T_Lang.value(lang).toTreeWidgetItem(l);
         }

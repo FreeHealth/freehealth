@@ -398,7 +398,13 @@ public:
     static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvments, stores the link between name of headers/footers/watermark and there index into UserModel \sa UserConstants. */
 
     UserDataPrivate() :
-            m_PasswordChanged(false)
+        m_Modifiable(false),
+        m_Modified(false),
+        m_IsNull(false),
+        m_IsCurrent(false),
+        m_HasModifiedDynamicData(false),
+        m_PersonalLkId(-1),
+        m_PasswordChanged(false)
     {
         if (m_Link_PaperName_ModelIndex.count() == 0)
             feedStaticHash();

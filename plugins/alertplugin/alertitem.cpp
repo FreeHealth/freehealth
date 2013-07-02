@@ -344,24 +344,25 @@ AlertItem::AlertItem() :
 // The copy constructor: we have to copy the content of the private part.
 // The multilingual class does not store pointers so the copy process is automatic.
 AlertItem::AlertItem(const AlertItem &cp) :
-  d(new Internal::AlertItemPrivate(*cp.d))
+    d(new Internal::AlertItemPrivate(*cp.d))
 {
     if (WarnAlertItemConstructionDestruction)
         qWarning() << "AlertItem(cp)" << d->_uid << d;
 }
 
 // The operator()=: we have to copy the content of the private part.
-void AlertItem::operator=(const AlertItem &cp)
+AlertItem &AlertItem::operator=(const AlertItem &cp)
 {
     if (d) {
         // Avoid copying the same
         if (cp.d == d)
-           return;
+           return *this;
         delete d;
     }
     d = new Internal::AlertItemPrivate(*cp.d);
     if (WarnAlertItemConstructionDestruction)
         qWarning() << "AlertItem =()" << d->_uid << d;
+    return *this;
 }
 
 AlertItem::~AlertItem()

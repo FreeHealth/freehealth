@@ -173,7 +173,11 @@ public:
     {}
 
     ~UserCreatorWizardPrivate()
-    {}
+    {
+        if (m_User)
+            delete m_User;
+        m_User = 0;
+    }
 
 public:
     Internal::UserData *m_User;
@@ -208,7 +212,6 @@ static inline QString defaultPaper(const QString &profession, const QString &pap
                 .arg(paper)
                 .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
         fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
                 .arg(bundlePath())
                 .arg(profession)
@@ -230,7 +233,6 @@ static inline QString defaultPaper(const QString &profession, const QString &pap
                 .arg(paper)
                 .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
         fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
                 .arg(bundlePath())
                 .arg(profession)
@@ -316,11 +318,8 @@ UserCreatorWizard::UserCreatorWizard(QWidget *parent) :
 
 UserCreatorWizard::~UserCreatorWizard()
 {
-    if (d->m_User) {
-        delete d->m_User;
-        d->m_User = 0;
-    }
-    delete d;
+    if (d)
+        delete d;
     d = 0;
 }
 
@@ -492,7 +491,10 @@ UserContactPage::~UserContactPage()
 //////////////////////////////    UserProfilePage    ////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 UserProfilePage::UserProfilePage(QWidget *parent) :
-        QWizardPage(parent)
+    QWizardPage(parent),
+    view(0),
+    box(0),
+    next(-1)
 {
     setTitle(tr("Select a profile"));
     setSubTitle(tr("FreeMedForms allows you to create users using predefined profiles. Select your profile and options."));

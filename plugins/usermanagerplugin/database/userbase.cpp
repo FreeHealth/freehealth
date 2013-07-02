@@ -430,7 +430,6 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     case Utils::Database::PostSQL:
         {
             return false;
-            break;
         }
     }
 
@@ -635,7 +634,6 @@ static inline QString defaultPaper(const QString &profession, const QString &pap
                 .arg(paper)
                 .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
         fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
                 .arg(bundlePath())
                 .arg(profession)
@@ -657,7 +655,6 @@ static inline QString defaultPaper(const QString &profession, const QString &pap
                 .arg(paper)
                 .arg(lang);
     } else {
-        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml");
         fileName = QString("%1/profiles/%2/default/%3user_%4_%5_%6.xml")
                 .arg(bundlePath())
                 .arg(profession)
@@ -1011,7 +1008,6 @@ bool UserBase::createUser(UserData *user)
     case Utils::Database::PostSQL:
         {
             return false;
-            break;
         }
     }
 
@@ -1048,7 +1044,6 @@ bool UserBase::saveUser(UserData *user)
         toUpdate = (count(Table_USERS, USER_UUID, getWhereClause(Table_USERS, where)) == 1);
     }
     // construct query
-    bool error = false;
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (toUpdate) {
         // update Table_USERS
@@ -1151,11 +1146,8 @@ bool UserBase::saveUser(UserData *user)
         }
 
         // TODO: code here : --> update UserLkId
-
-        if (!error) {
-            LOG(QCoreApplication::translate("UserBase", "User %1 successfully updated.").arg(user->uuid()));
-            user->setModified(false);
-        }
+        LOG(QCoreApplication::translate("UserBase", "User %1 successfully updated.").arg(user->uuid()));
+        user->setModified(false);
     } else {
         // INSERT USER
         // add Table USERS
@@ -1278,7 +1270,6 @@ bool UserBase::deleteUser(const QString &uuid)
     case Utils::Database::PostSQL:
         {
             return false;
-            break;
         }
     }
 

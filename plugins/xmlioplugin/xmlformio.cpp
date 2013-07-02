@@ -401,7 +401,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         Form::FormMain *root = m_ActualForm = new Form::FormMain;
         root->setModeUniqueName(it.key());
         root->setUuid(form.uid);
-        root->setIoFormReader((XmlFormIO*)this);
+        root->setIoFormReader(const_cast<XmlFormIO*>(this));
         QString fakeFileName;
         QFileInfo info(form.absFileName);
         if (formFile.isDir())

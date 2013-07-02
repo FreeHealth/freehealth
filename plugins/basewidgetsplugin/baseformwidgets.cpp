@@ -407,7 +407,6 @@ QString BaseForm::printableHtml(bool withValues) const
 
     int i = 0;
 //    int c = 0;
-    int r = 0;
     int previousrow = 0;
     QString header, content;
     // Start with the header of the form
@@ -428,7 +427,7 @@ QString BaseForm::printableHtml(bool withValues) const
     // recreate the grid as an html table
     foreach(const QString &s, html) {
 //        c = (i % numberColumns);
-        r = (i / numberColumns);
+        int r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;
             content += "</tr><tr>";
@@ -717,11 +716,10 @@ QString BaseGroup::printableHtml(bool withValues) const
     // recreate the grid as an html table
     int i = 0;
 //    int c = 0;
-    int r = 0;
     int previousrow = 0;
     foreach(const QString &s, html) {
 //        c = (i % numberColumns);
-        r = (i / numberColumns);
+        int r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;
             content += "</tr><tr>";
@@ -1154,7 +1152,6 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     }
 
     m_ButGroup = new QButtonGroup(this);
-    QRadioButton *rb = 0;
     int i = 0;
 
 //    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
@@ -1162,7 +1159,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
 
     const QStringList &uids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible)) {
-        rb = new QRadioButton(this);
+        QRadioButton *rb = new QRadioButton(this);
         m_ButGroup->addButton(rb);
         if (i < uids.count()) {
             rb->setObjectName(uids.at(i));

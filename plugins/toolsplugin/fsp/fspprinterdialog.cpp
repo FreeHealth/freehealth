@@ -74,6 +74,7 @@ public:
         _patientUi(0),
         _condsUi(0),
         _preRecUi(0),
+        _templateModel(0),
         _patientDetailsWidget(0),
         _condDetailsWidget(0),
         _actDetailsWidget(0),
