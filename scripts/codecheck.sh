@@ -84,8 +84,8 @@ runCppCheck()
     echo "** Running code checking on " $CPPDIRSTOSCAN
     CHECKS="all" # "style performance portability information unusedFunction missingInclude"
     for CHECK in $CHECKS ; do
+        echo "$CPPCHECK $CPPOPTIONS --enable=$CHECK $CPPINCLUDES $CPPDIRSTOSCAN 2> $CPPOUTPUT/$CHECK.txt"
         $CPPCHECK $CPPOPTIONS --enable=$CHECK $CPPINCLUDES $CPPDIRSTOSCAN 2> $CPPOUTPUT/$CHECK.txt
-        # echo "$CPPCHECK $CPPOPTIONS --enable=$CHECK $CPPINCLUDES $CPPDIRSTOSCAN 2> $CPPOUTPUT/$CHECK.txt"
     done
 }
 
@@ -105,10 +105,9 @@ runCppCheckPerSubDir()
         if [[ "$PRO" == "libs" ]]; then
             CPPINCLUDES="-I $SOURCES_ROOT_PATH/libs"
             CPPOPTIONS=$CPPOPTIONS" --suppress=unusedFunction"
-            # CPPOPTIONS=$CPPOPTIONS"--template={id},{severity};{file},{line}:{message}"
         elif [[ "$PRO" = "plugins" ]]; then
-            CPPINCLUDES="-I $SOURCES_ROOT_PATH/libs"
-            # CPPOPTIONS=$CPPOPTIONS" --template=\"{id},{severity} | {file},{line}: {message}\""
+            CPPOPTIONS=$CPPOPTIONS" --suppress=unusedFunction"
+            CPPINCLUDES="-I $SOURCES_ROOT_PATH/libs -I $SOURCES_ROOT_PATH/contrib -I $SOURCES_ROOT_PATH/plugins"
         else
             CPPINCLUDES="-I $SOURCES_ROOT_PATH/libs -I $SOURCES_ROOT_PATH/contrib -I $SOURCES_ROOT_PATH/plugins"
         fi
@@ -137,7 +136,6 @@ startCppCheck()
 
     for PRO in $PROJECTS ; do
         echo "** Checking project: "$PRO
-
         if [[ "$PRO" = "libs" || "$PRO" = "plugins" ]]; then
             runCppCheckPerSubDir $PRO
         else
@@ -147,8 +145,6 @@ startCppCheck()
             CPPOUTPUT="$OUTPUT_PATH/$PRO"
             runCppCheck
         fi
-
-        exit 0;
     done
 
 }
