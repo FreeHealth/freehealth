@@ -267,7 +267,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QRegExp>
-
+#include <QDesktopWidget>
 
 /**
   \todo Manage user's settings stored into database
@@ -753,20 +753,19 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
             tmpAppName = tmpAppName.left(tmpAppName.indexOf(" "));
     }
     tmpAppName.prepend(".");
-    if (Utils::isAlpha()) {
+    if (Utils::isAlpha())
         tmpAppName.append("_alpha");
-    }
 
     if (fileName.isEmpty())
         tmpFileName = "config.ini";
 
     // if QApplication args contains "--config=iniFileName.ini" use it if possible
     // retreive command line arguments
-    // TODO: get the command line args through the Core::ICommandLine
+    // TODO: get the command line args through the Core::ICommandLine?
     QStringList list = QCoreApplication::arguments();
     int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
-
     if (index != -1) {
+        // Config file passed
         QString iniFileName = list[index];
         iniFileName = iniFileName.mid(iniFileName.indexOf("=") + 1);
         LOG_FOR("Settings", tr("Passing command line ini file: %1").arg(iniFileName));
@@ -780,73 +779,80 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
             if (info.isWritable()) {
                 LOG_FOR("Settings", tr("Using ini file %1.").arg(iniFileName));
                 return iniFileName;
-            }
-            else
+            } else {
                 LOG_ERROR_FOR("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(iniFileName));
+            }
         } else {
             // can we create and access to ini file ?
             QFile file(iniFileName);
             if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
                 LOG_FOR("Settings", tr("Using ini file %1").arg(iniFileName));
                 return iniFileName;
-            }
-            else
+            } else {
                 LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(iniFileName));
+            }
         }
     }
 
-    // try to use read the 'pathtoconfig.ini' inside the bundle
+    // No config file was passed in the command line
+    // Or the param config file does not exists
+    // -> try to use read the 'pathtoconfig.ini' inside the bundle
     if (QFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath())).exists()) {
         QString content = Utils::readTextFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath()), Utils::DontWarnUser);
         content = content.trimmed();
         if (!content.isEmpty()) {
             LOG_FOR("Settings", tr("Found a configuration file next to the binary. Reading file."));
+            if (content.startsWith("~/"))
+                content.replace("~/", QDir::homePath() + "/");
             if (QDir::isRelativePath(content))
                 content.prepend(qApp->applicationDirPath() + QDir::separator());
             content = QDir::cleanPath(content);
-
             QFileInfo info(content);
             if (info.exists() && info.isReadable()) {
                 if (info.isWritable()) {
                     LOG_FOR("Settings", tr("Using ini file %1.").arg(content));
                     return content;
-                }
-                else
+                } else {
                     LOG_ERROR_FOR("Settings", tr("Ini file %1 is not writable. Can not use it.").arg(content));
+                }
             } else {
                 // can we create and access to ini file ?
+                if (!info.absoluteDir().exists()) {
+                    if (!QDir().mkpath(info.absolutePath()))
+                        LOG_ERROR_FOR("Settings", tr("File does not exists and can not be created: %1").arg(content));
+                }
                 QFile file(content);
                 if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
                     LOG_FOR("Settings", tr("Using ini file %1").arg(content));
                     return content;
-                }
-                else
+                } else {
                     LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(content));
+                }
             }
             LOG_ERROR_FOR("Settings", tr("File does not exists and can not be created: %1").arg(content));
         }
     }
 
     QString iniFile;
-//    if (Utils::isRunningOnMac())
-//        iniFile = QDir::cleanPath(qApp->applicationDirPath() + "/../Resources") + QDir::separator() + tmpFileName;
-//    else
-//        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
-//
-//    // test iniFile
-//    Log::addMessage("Settings", tr("Trying ini file %1").arg(iniFile));
-//    QFile file(iniFile);
-//    QFileInfo info(iniFile);
-//    if (info.exists() && info.isReadable() && info.isWritable()) {
-//        Log::addMessage("Settings", tr("Using ini file %1").arg(iniFile));
-//        return iniFile;
-//    } else {
-//        if ((! info.exists()) &&  file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-//            Log::addMessage("Settings", tr("Using ini file %1").arg(iniFile));
-//            return iniFile;
-//        }
-//        else Log::addError("Settings", tr("Ini file %1 can not be used.").arg(iniFile));
-//    }
+    //    if (Utils::isRunningOnMac())
+    //        iniFile = QDir::cleanPath(qApp->applicationDirPath() + "/../Resources") + QDir::separator() + tmpFileName;
+    //    else
+    //        iniFile = qApp->applicationDirPath() + QDir::separator() + tmpFileName;
+    //
+    //    // test iniFile
+    //    Log::addMessage("Settings", tr("Trying ini file %1").arg(iniFile));
+    //    QFile file(iniFile);
+    //    QFileInfo info(iniFile);
+    //    if (info.exists() && info.isReadable() && info.isWritable()) {
+    //        Log::addMessage("Settings", tr("Using ini file %1").arg(iniFile));
+    //        return iniFile;
+    //    } else {
+    //        if ((! info.exists()) &&  file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    //            Log::addMessage("Settings", tr("Using ini file %1").arg(iniFile));
+    //            return iniFile;
+    //        }
+    //        else Log::addError("Settings", tr("Ini file %1 can not be used.").arg(iniFile));
+    //    }
 
     // Now use the $HOME path
     iniFile = QString("%1/%2/%3").arg(QDir::homePath(), tmpAppName, tmpFileName);
@@ -869,7 +875,6 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
   \fn void Core::ISettings::restoreState(QMainWindow * window, const QString & prefix)
   \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same settings
 */
-#include <QDesktopWidget>
 void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
 {
     if (!window)
