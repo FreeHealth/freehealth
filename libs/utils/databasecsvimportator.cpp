@@ -68,6 +68,7 @@ public:
         _currentLineStartPos(-1),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~DatabaseCsvImportatorPrivate()
@@ -159,6 +160,7 @@ public:
 
     bool parseContent(const ImportationJob &job, Utils::ImportationResult *result)
     {
+        Q_UNUSED(result);
         _currentPos = 0;
         _currentFieldStartPos = 0;
         _currentLineStartPos = 0;

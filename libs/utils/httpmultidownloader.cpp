@@ -76,6 +76,7 @@ public:
         _onError(HttpMultiDownloader::OnErrorPursue),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~HttpMultiDownloaderPrivate()
