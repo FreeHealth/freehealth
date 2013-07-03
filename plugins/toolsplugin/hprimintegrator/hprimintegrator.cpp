@@ -73,6 +73,7 @@ public:
         _fileModel(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~HprimIntegratorWidgetPrivate()

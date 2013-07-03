@@ -117,6 +117,7 @@ bool TreeViewFormItem::isContainer() const
 
 QString TreeViewFormItem::printableHtml(bool withValues) const
 {
+    Q_UNUSED(withValues);
     //    if (m_FormItem->getOptions().contains(Constants::NOT_PRINTABLE))
     //        return QString();
     //    QString content;
@@ -176,12 +177,14 @@ bool TreeViewFormItemData::isModified() const
 
 void TreeViewFormItemData::setModified(bool modified)
 {
+    Q_UNUSED(modified);
     //    if (!modified)
     //        m_OriginalValue = storableData().toStringList();
 }
 
 void TreeViewFormItemData::setReadOnly(bool readOnly)
 {
+    Q_UNUSED(readOnly);
     // TODO: code this: readOnly feature
 }
 
@@ -206,6 +209,8 @@ bool TreeViewFormItemData::setData(const int ref, const QVariant &data, const in
 
 QVariant TreeViewFormItemData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     // This member is mainly used by script and Core::IPatient to
     // access the value of the itemData.
     // Above an example:
@@ -235,6 +240,7 @@ QVariant TreeViewFormItemData::data(const int ref, const int role) const
 
 void TreeViewFormItemData::setStorableData(const QVariant &data)
 {
+    Q_UNUSED(data);
     if (m_Form) {
         // Here you will get the exact value returned by storableData()
         // when an episode is activated. Use this value to populate your widget/itemData

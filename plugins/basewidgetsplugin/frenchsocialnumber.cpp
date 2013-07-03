@@ -196,6 +196,9 @@ bool FrenchSocialNumberFormData::isReadOnly() const
 
 bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(data);
+    Q_UNUSED(role);
 //    qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
