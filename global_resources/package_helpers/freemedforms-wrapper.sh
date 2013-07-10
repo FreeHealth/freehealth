@@ -1,5 +1,41 @@
-#! /bin/sh
+#!/bin/sh
+#/***************************************************************************
+# *  The FreeMedForms project is a set of free, open source medical         *
+# *  applications.                                                          *
+# *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+# *  All rights reserved.                                                   *
+# *  License of this file: BSD-3 clause                                     *
+# ***************************************************************************/
+#/***************************************************************************
+# *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+# *  Contributors:                                                          *
+# *       NAME <MAIL@ADDRESS.COM>                                           *
+# *       NAME <MAIL@ADDRESS.COM>                                           *
+# ***************************************************************************/
+#
+#/***************************************************************************
+# * This code was adapted from the QtCreator source                         *
+# ***************************************************************************
+# * The wrapper sets the LD_LIBRARY_PATH to the correct path when running   *
+# * linux-integrated release build on a linux system.                       *
+# ***************************************************************************/
 
+BINARY="freemedforms.bin"
+PLUGINS_PATH="freemedforms"
+APPLICATION_NAME="FreeMedForms"
+
+# Check if the freemedforms binary is a linux-integrated & a release build
+checkFreeMedFormsBuild()
+{
+    if `/usr/bin/$BINARY -v` | grep -q "Release (Linux Integrated)"; then
+        echo "Found $APPLICATION_NAME binary"
+    else
+        echo "The installed $APPLICATION_NAME binary (in /usr/bin) is not a correct version. You cannot use this wrapper to run your version of $APPLICATION_NAME"
+        return 1;
+    fi
+}
+
+# If the binary is a link, follow it
 makeAbsolute() {
     case $1 in
         /*)
@@ -28,9 +64,16 @@ if test -L "$me"; then
     fi
 fi
 
+checkFreeMedFormsBuild
+
+# Prepare paths
 bindir=`dirname "$me"`
-libdir="/usr/lib/freemedforms-common"
-pluginsdir="/usr/lib/freemedforms"
-LD_LIBRARY_PATH=$libdir:$pluginsdir${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+LIB_DIR="/usr/lib/freemedforms-common"
+PLUG_DIR="/usr/lib/$PLUGINS_PATH"
+
+# Define the LD_LIBRARY_PATH
+LD_LIBRARY_PATH=$LIB_DIR:$PLUG_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
-exec "/usr/bin/freemedforms" ${1+"$@"}
+
+# Launch application
+exec "/usr/bin/$BINARY" ${1+"$@"}
