@@ -116,7 +116,7 @@ Q_SIGNALS:
 //    void alertItemValidated(const AlertItem &alert);
 
 private:
-    void processAlerts(QVector<AlertItem> &alerts);
+    void processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders);
 
 protected:
     void postCoreInitialization();

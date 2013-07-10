@@ -222,7 +222,7 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 
     // Get the alerts
     QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
-    processAlerts(alerts);
+    processAlerts(alerts, true);
     return true;
 }
 
@@ -234,7 +234,7 @@ bool AlertCore::registerAlert(const AlertItem &item)
 {
     QVector<AlertItem> items;
     items << item;
-    processAlerts(items);
+    processAlerts(items, false);
     return true;
 }
 
@@ -352,12 +352,14 @@ AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
    - Execute blocking alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
-void AlertCore::processAlerts(QVector<AlertItem> &alerts)
+void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
-    foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
-        ph->clear();
+    if (clearPlaceHolders) {
+        foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
+            ph->clear();
+    }
 
     // Process alerts
     QList<AlertItem> blockings;
