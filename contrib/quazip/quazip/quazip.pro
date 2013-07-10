@@ -1,13 +1,12 @@
 TEMPLATE  = lib
 TARGET    = freemedforms-quazip-wrapper
 
-# QuaZip version = 0.5.1
-#!win32{VERSION=0.5.1}
+# The version number is defined by the scripts/source.sh script, keep this line unchanged
+# NOT USED
+# VERSION=1.0.0
 
 include(../../../libs/libsworkbench.pri)
 include(../quazip_dependencies.pri)
-
-LIBS += -lz
 
 DEPENDPATH += .
 INCLUDEPATH += .
@@ -24,6 +23,7 @@ CONFIG(dontbuildquazip) {
   LIBS+=-lquazip
 } else {
   # On other OS we need to build the quazip code.
+  # QuaZip version = 0.5.1
   message(Building libquazip)
   include(quazip.pri)
 }
