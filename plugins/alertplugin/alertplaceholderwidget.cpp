@@ -140,6 +140,11 @@ void AlertPlaceHolderWidget::clear()
 
 bool AlertPlaceHolderWidget::addAlert(const AlertItem &alert)
 {
+    // Only non-blocking alerts
+    if (alert.viewType() == AlertItem::BlockingAlert)
+        return false;
+
+    // Avoid duplicates
     if (!containsAlertUuid(alert.uuid())) {
         if (_widget) {
             NonBlockingAlertToolButton *but = new NonBlockingAlertToolButton(_widget);
