@@ -1407,7 +1407,13 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     database().transaction();
     QSqlQuery sqlQuery(database());
     if (sqlQuery.exec(req)) {
+        QStringList includedUid;
         while (sqlQuery.next()) {
+            // Avoid duplicates
+            if (includedUid.contains(sqlQuery.value(Constants::ALERT_UID).toString()))
+                continue;
+            includedUid << sqlQuery.value(Constants::ALERT_UID).toString();
+            // Get the alert
             AlertItem item;
             item.setDb(ItemId, sqlQuery.value(Constants::ALERT_ID));
             item.setDb(RelatedId, sqlQuery.value(Constants::ALERT_REL_ID));
