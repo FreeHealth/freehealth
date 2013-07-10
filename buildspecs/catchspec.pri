@@ -43,6 +43,10 @@ freebsd-icc{
   !isEmpty(WARN_SPEC):message(freebsd-icc)
   CURRENT_SPEC=freebsd-icc
 }
+glibc-g++{
+  !isEmpty(WARN_SPEC):message(glibc-g++)
+  CURRENT_SPEC=glibc-gpp
+}
 hpux-acc{
   !isEmpty(WARN_SPEC):message(hpux-acc)
   CURRENT_SPEC=hpux-acc
