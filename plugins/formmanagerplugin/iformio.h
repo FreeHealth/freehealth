@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IFORMIO_H
-#define IFORMIO_H
+#ifndef FORMMANAGER_PLUGIN_IFORMIO_H
+#define FORMMANAGER_PLUGIN_IFORMIO_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
@@ -191,4 +191,4 @@ public:
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription &c);
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription *c);
 
-#endif // IFORMIO_H
+#endif // FORMMANAGER_PLUGIN_IFORMIO_H
