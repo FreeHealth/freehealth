@@ -247,16 +247,17 @@ bool AlertCore::registerAlert(const AlertItem &item)
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
+    // Inform all non-blocking place holders of the alert update
+    QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+    foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
+        ph->updateAlert(item);
+    }
+
+    // If alert is a blocking one -> execute it?
     if (item.viewType() == AlertItem::BlockingAlert) {
         if (item.isUserValidated() || !item.isValid())
             return true;
         BlockingAlertDialog::executeBlockingAlert(item);
-    } else if (item.viewType() == AlertItem::NonBlockingAlert) {
-        // Get static place holders
-        QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
-        foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
-            ph->updateAlert(item);
-        }
     }
     return true;
 }
