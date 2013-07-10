@@ -214,7 +214,7 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
     } else {
         int maxPriority = AlertItem::Low;
         for(int i=0; i<items.count();++i) {
-            maxPriority = qMax(maxPriority, int(items.at(i).priority()));
+            maxPriority = qMin(maxPriority, int(items.at(i).priority()));
         }
         d->ui->generalIconLabel->setPixmap(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)).pixmap(64,64));
         setWindowIcon(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)));
