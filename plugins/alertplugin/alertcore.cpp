@@ -160,6 +160,7 @@ bool AlertCore::initialize()
 /** Return all the Alert::AlertItem recorded in the database related to the current user. */
 QVector<AlertItem> AlertCore::getAlertItemForCurrentUser() const
 {
+    // TODO: unused?
     Internal::AlertBaseQuery query;
     query.addCurrentUserAlerts();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -169,6 +170,7 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentUser() const
 /** Return all the Alert::AlertItem recorded in the database related to the current patient. */
 QVector<AlertItem> AlertCore::getAlertItemForCurrentPatient() const
 {
+    // TODO: unused?
     Internal::AlertBaseQuery query;
     query.addCurrentPatientAlerts();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -178,6 +180,7 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentPatient() const
 /** Return all the Alert::AlertItem recorded in the database related to the current application. */
 QVector<AlertItem> AlertCore::getAlertItemForCurrentApplication() const
 {
+    // TODO: unused?
     Internal::AlertBaseQuery query;
     query.addApplicationAlerts(qApp->applicationName().toLower());
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -355,7 +358,7 @@ AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
 */
 void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders)
 {
-    // Get static place holders
+    // Get non-blocking alerts place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
     if (clearPlaceHolders) {
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
