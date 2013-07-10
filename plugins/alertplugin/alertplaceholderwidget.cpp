@@ -42,6 +42,7 @@
 #include <coreplugin/constants_icons.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -291,6 +292,7 @@ void AlertPlaceHolderWidget::addNewAlertButton()
 Alert::AlertItem AlertPlaceHolderWidget::getDefaultEmptyAlert() const
 {
     AlertItem item;
+    item.setUuid(Utils::createUid());
     item.setValidity(true);
     item.setEditable(true);
     item.setCreationDate(QDateTime::currentDateTime());
