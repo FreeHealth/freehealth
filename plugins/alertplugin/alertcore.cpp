@@ -311,7 +311,7 @@ bool AlertCore::registerAlertPack(const QString &absPath)
     }
 
     // read all alerts
-    QFileInfoList files = Utils::getFiles(path, "*.xml");
+    QFileInfoList files = Utils::getFiles(path, "*.xml", Utils::Recursively);
     if (files.isEmpty()) {
         LOG_ERROR(tkTr(Trans::Constants::PATH_1_IS_EMPTY));
         return false;
@@ -322,7 +322,9 @@ bool AlertCore::registerAlertPack(const QString &absPath)
         if (info.fileName()==QString(Constants::PACK_DESCRIPTION_FILENAME))
             continue;
         // create the alert from the xml file
-        alerts << AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+        AlertItem alert = AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+        if (alert.isValid())
+            alerts << alert;
     }
     return saveAlerts(alerts);
 }
