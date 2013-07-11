@@ -645,6 +645,8 @@ public:
         m_IdentityWidget(0),
         m_AgeWidget(0),
         m_FullContactWidget(0),
+        _identityForm(0),
+        _episodeModel(0),
         m_PatientModel(0),
         _patientModelIdentityWrapper(0),
         q(parent)

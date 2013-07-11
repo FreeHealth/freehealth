@@ -59,6 +59,7 @@ public:
         _item(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~FormItemTokenPrivate()

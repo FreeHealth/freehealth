@@ -1,6 +1,8 @@
 INCLUDEPATH += $${PWD}
 DEPENDPATH += $${PWD}
 
+LIBS += -lz
+
 HEADERS += \
     $${PWD}/JlCompress.h \
     $${PWD}/crypt.h \

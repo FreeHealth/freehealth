@@ -222,7 +222,7 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 
     // Get the alerts
     QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
-    processAlerts(alerts);
+    processAlerts(alerts, true);
     return true;
 }
 
@@ -234,7 +234,7 @@ bool AlertCore::registerAlert(const AlertItem &item)
 {
     QVector<AlertItem> items;
     items << item;
-    processAlerts(items);
+    processAlerts(items, false);
     return true;
 }
 
@@ -247,16 +247,17 @@ bool AlertCore::registerAlert(const AlertItem &item)
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
+    // Inform all non-blocking place holders of the alert update
+    QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+    foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
+        ph->updateAlert(item);
+    }
+
+    // If alert is a blocking one -> execute it?
     if (item.viewType() == AlertItem::BlockingAlert) {
         if (item.isUserValidated() || !item.isValid())
             return true;
         BlockingAlertDialog::executeBlockingAlert(item);
-    } else if (item.viewType() == AlertItem::NonBlockingAlert) {
-        // Get static place holders
-        QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
-        foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
-            ph->updateAlert(item);
-        }
     }
     return true;
 }
@@ -311,7 +312,7 @@ bool AlertCore::registerAlertPack(const QString &absPath)
     }
 
     // read all alerts
-    QFileInfoList files = Utils::getFiles(path, "*.xml");
+    QFileInfoList files = Utils::getFiles(path, "*.xml", Utils::Recursively);
     if (files.isEmpty()) {
         LOG_ERROR(tkTr(Trans::Constants::PATH_1_IS_EMPTY));
         return false;
@@ -322,7 +323,9 @@ bool AlertCore::registerAlertPack(const QString &absPath)
         if (info.fileName()==QString(Constants::PACK_DESCRIPTION_FILENAME))
             continue;
         // create the alert from the xml file
-        alerts << AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+        AlertItem alert = AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+        if (alert.isValid())
+            alerts << alert;
     }
     return saveAlerts(alerts);
 }
@@ -350,12 +353,14 @@ AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
    - Execute blocking alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
-void AlertCore::processAlerts(QVector<AlertItem> &alerts)
+void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
-    foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
-        ph->clear();
+    if (clearPlaceHolders) {
+        foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
+            ph->clear();
+    }
 
     // Process alerts
     QList<AlertItem> blockings;

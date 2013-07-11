@@ -42,6 +42,7 @@
 #include <coreplugin/constants_icons.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 
@@ -186,11 +187,14 @@ bool AlertPlaceHolderWidget::addAlert(const AlertItem &alert)
 
 bool AlertPlaceHolderWidget::updateAlert(const AlertItem &alert)
 {
-//    qWarning() << "update Alert" << alert.label();
+    // qWarning() << "update Alert" << alert.label();
     if (containsAlertUuid(alert.uuid())) {
         // If alert is validated -> remove it
         // or update the content of the toolbutton
         if (alert.isUserValidated() || !alert.isValid())
+            return removeAlert(alert);
+        // Alert toggle from non-blocking to blocking
+        if (alert.viewType() == AlertItem::BlockingAlert)
             return removeAlert(alert);
         _buttons.value(alert.uuid())->setAlertItem(alert);
     } else {
@@ -291,6 +295,7 @@ void AlertPlaceHolderWidget::addNewAlertButton()
 Alert::AlertItem AlertPlaceHolderWidget::getDefaultEmptyAlert() const
 {
     AlertItem item;
+    item.setUuid(Utils::createUid());
     item.setValidity(true);
     item.setEditable(true);
     item.setCreationDate(QDateTime::currentDateTime());

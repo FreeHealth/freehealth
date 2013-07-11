@@ -98,12 +98,11 @@ public:
             m_NavigationToolButton(0),
             m_NavigationMenu(0),
             m_SearchMethod(-1),
+            m_LastSearch(QString("_##_")),  // Force a first refresh when calling refreshFilter() with an empty QString
             m_refreshMethod(PatientSelector::WhileTyping),
             m_SetActivatedPatientAsCurrent(true),
             q(parent)
     {
-        // Force a first refresh when calling refreshFilter() with an empty QString
-        m_LastSearch = "_##_";
     }
 
     ~PatientSelectorPrivate()
@@ -117,7 +116,6 @@ public:
         m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
         m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
 
-        Core::Command *cmd;
         QStringList actions;
         actions
                 << Constants::A_SEARCH_PATIENTS_BY_NAME
@@ -127,7 +125,7 @@ public:
 
         QList<QAction *> actionList;
         foreach(const QString &a, actions) {
-            cmd = actionManager()->command(Core::Id(a));
+            Core::Command *cmd = actionManager()->command(Core::Id(a));
             m_SearchToolButton->addAction(cmd->action());
             actionList << cmd->action();
         }
