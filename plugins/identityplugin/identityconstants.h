@@ -32,12 +32,12 @@ namespace Constants {
 const char * const ACTION_ID = "Identity.Action";
 const char * const MENU_ID = "Identity.Menu";
 
-const char* const PASSWORD_SUMMARY_NOLOGIN_NOPASSWORD = QT_TRANSLATE_NOOP("UserPlugin", "Please define login and password");
-const char* const PASSWORD_SUMMARY_LOGIN_NOPASSWORD   = QT_TRANSLATE_NOOP("UserPlugin", "Login defined but not the password");
-const char* const PASSWORD_SUMMARY_LOGIN_PASSWORD     = QT_TRANSLATE_NOOP("UserPlugin", "Login and password are defined");
+const char* const PASSWORD_SUMMARY_NOLOGIN_NOPASSWORD = QT_TRANSLATE_NOOP("UserPlugin", "Please choose login and password");
+const char* const PASSWORD_SUMMARY_LOGIN_NOPASSWORD   = QT_TRANSLATE_NOOP("UserPlugin", "Login set, but password not");
+const char* const PASSWORD_SUMMARY_LOGIN_PASSWORD     = QT_TRANSLATE_NOOP("UserPlugin", "Login and password are set");
 
 const char* const UNCRYPTED_PASSWORD_AVAILABLE        = QT_TRANSLATE_NOOP("UserPlugin", "Uncrypted password available");
-const char* const CRYPTED_PASSWORD_AVAILABLE          = QT_TRANSLATE_NOOP("UserPlugin", "Crypted password defined");
+const char* const CRYPTED_PASSWORD_AVAILABLE          = QT_TRANSLATE_NOOP("UserPlugin", "Crypted password set");
 
 } // namespace Identity
 } // namespace Constants
