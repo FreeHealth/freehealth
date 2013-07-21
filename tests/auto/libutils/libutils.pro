@@ -5,5 +5,5 @@ SUBDIRS = \
     appnamedefine \
     libs \
     autotests \
-    qbuttonlineedit
+    #qbuttonlineedit
 
