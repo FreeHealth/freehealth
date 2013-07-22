@@ -124,4 +124,12 @@ ExtensionSystem::IPlugin::ShutdownFlag DrugsBasePlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+#ifdef WITH_TESTS
+void DrugsBasePlugin::test_drugsbase_init()
+{
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   TEST";
+    qWarning() << drugsBase().isInitialized() << drugsBase().actualDatabaseInformation();
+}
+#endif
+
 Q_EXPORT_PLUGIN(DrugsBasePlugin)

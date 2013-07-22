@@ -53,8 +53,11 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
+#ifdef WITH_TESTS
+private slots:
+    void test_drugsbase_init();
+#endif
 };
-
 
 }  // namespace Internal
 }  // namespace DrugsDB
