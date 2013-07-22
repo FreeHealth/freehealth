@@ -9,6 +9,17 @@ isEmpty(LOWERED_APPNAME) {
     error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
 }
 
+# auto-test for plugins
+isEmpty(TEST):CONFIG(debug, debug|release) {
+    !debug_and_release|build_pass {
+        TEST = 1
+    }
+}
+equals(TEST, 1) {
+    QT += testlib
+    DEFINES += WITH_TESTS
+}
+
 # check optional build features
 include(optionalfeatures.pri)
 
