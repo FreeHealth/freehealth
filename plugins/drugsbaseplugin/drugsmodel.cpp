@@ -213,7 +213,7 @@ public:
         {
         case Drug::Denomination :       return drug->brandName();
         case Drug::DrugId :             return drug->drugId();
-        case Drug::UIDs :               return drug->uids().join(";");
+        case Drug::UIDs :               return drug->uids();
         case Drug::UidName:             return drug->drugId();
         case Drug::Form :               return drug->forms().join(", ");
         case Drug::Route :              return drug->routes().join(", ");
