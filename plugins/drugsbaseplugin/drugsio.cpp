@@ -165,8 +165,9 @@ namespace Internal {
 class DrugsIOPrivate
 {
 public:
-    DrugsIOPrivate(DrugsIO *parent)
-        : q(parent)
+    DrugsIOPrivate(DrugsIO *parent) :
+        _initialized(false),
+        q(parent)
     {
     }
 
@@ -617,6 +618,7 @@ public:
     }
 
 public:
+    bool _initialized;
     Utils::MessageSender m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Data;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString> m_PrescriptionXmlTags;
@@ -653,9 +655,18 @@ DrugsIO::~DrugsIO()
  */
 bool DrugsIO::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->populateXmlTags();
     d->populateTokens();
+    d->_initialized = true;
     return true;
+}
+
+/** Returns the initialization state */
+bool DrugsIO::isInitialized() const
+{
+    return d->_initialized;
 }
 
 /**

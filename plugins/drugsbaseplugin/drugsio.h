@@ -70,6 +70,7 @@ public:
     };
 
     ~DrugsIO();
+    bool isInitialized() const;
 
     bool startsDosageTransmission();
     bool isSendingDosage();
