@@ -66,6 +66,7 @@ protected:
 public:
     static DrugBaseCore &instance();
     virtual ~DrugBaseCore();
+    bool isInitialized() const;
 
     DrugsBase &drugsBase() const;
     ProtocolsBase &protocolsBase() const;

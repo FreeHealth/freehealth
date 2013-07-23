@@ -65,15 +65,17 @@ namespace Internal {
 class DrugBaseCorePrivate
 {
 public:
-    DrugBaseCorePrivate(DrugBaseCore */*base*/) :
-//        q(base),
+    DrugBaseCorePrivate(DrugBaseCore *parent) :
+        _initialized(false),
         m_DrugsBase(0),
         m_ProtocolsBase(0),
         m_InteractionManager(0),
         m_VersionUpdater(0),
         _drugsIo(0),
-        _prescriptionPrinter(0)
+        _prescriptionPrinter(0),
+        q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~DrugBaseCorePrivate()
@@ -86,16 +88,18 @@ public:
         _prescriptionPrinter = 0;
     }
 
-private:
-//    DrugBaseCore *q;
-
 public:
+    bool _initialized;
     DrugsBase *m_DrugsBase;
     ProtocolsBase *m_ProtocolsBase;
     InteractionManager *m_InteractionManager;
     VersionUpdater *m_VersionUpdater;
     DrugsIO *_drugsIo;
     PrescriptionPrinter *_prescriptionPrinter;
+
+private:
+    DrugBaseCore *q;
+
 };
 }  // End Internal
 }  // End DrugsDB
@@ -134,15 +138,25 @@ DrugBaseCore::~DrugBaseCore()
     }
 }
 
+/** Initialize all DrugBaseCore objects */
 bool DrugBaseCore::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->m_DrugsBase->initialize();
     d->m_ProtocolsBase->initialize();
     d->m_InteractionManager = new InteractionManager(this);
     d->_drugsIo->initialize();
     d->_prescriptionPrinter->initialize();
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    d->_initialized = true;
     return true;
+}
+
+/** Returns the intialization state of the core */
+bool DrugBaseCore::isInitialized() const
+{
+    return d->_initialized;
 }
 
 void DrugBaseCore::postCoreInitialization()
