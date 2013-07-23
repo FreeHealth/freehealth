@@ -670,7 +670,20 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
     return QString();
 }
 
-/** \brief Retrieve and return the drug according to its uids. */
+/**
+ * Retrieve and return the drug according to its uids.
+ * You can get the first recorded drug using "-1" as first uid: \e uid1.
+ * If you want the Xth available drug from the database just use
+ * the second uid \e uid2
+ * \code
+    // Get the first available drug from the database
+    getDrugByUID("-1");
+    // Get the third
+    getDrugByUID("-1", "3");
+    // Get the tenth
+    getDrugByUID("-1", "10");
+ * \endcode
+ */
 IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
 //    QTime time;
@@ -698,6 +711,8 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     QString newUid3 = uid3.toString();
     if ((newUid1 == "-1" || newUid1.isEmpty()) &&
             (oldUid.toString().isEmpty() || oldUid.toString() == "-1")) {
+        if (newUid2.isEmpty())
+            newUid2 = "1";
         LOG(tr("Asking for a drug without UID"));
         QHash<int, QString> where;
         where.insert(Constants::MASTER_SID, QString("=%1").arg(d->m_DbUids.value(sourceUid)));
@@ -705,7 +720,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
                              << Constants::MASTER_UID1
                              << Constants::MASTER_UID2
                              << Constants::MASTER_UID3
-                             , where) + " LIMIT 1";
+                             , where) + QString(" LIMIT %1, 1").arg(newUid2);
         QSqlQuery q(DB);
         if (q.exec(req)) {
             if (q.next()) {
@@ -741,7 +756,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     condition << Utils::Field(Constants::Table_DRUGS, Constants::DRUGS_SID, QString("='%1'").arg(d->m_DbUids.value(sourceUid)));
     if (oldUid.toString().isEmpty()) {
         condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID1, QString("='%1'").arg(newUid1));
-        if (!uid2.isNull())
+        if (!newUid2.isNull())
             condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID2, QString("='%1'").arg(newUid2));
         if (!uid3.isNull())
             condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3, QString("='%1'").arg(newUid3));
