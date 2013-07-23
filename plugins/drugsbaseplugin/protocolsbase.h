@@ -58,11 +58,13 @@ protected:
     explicit ProtocolsBase(QObject *parent = 0);
     void forceReinitialization();
     bool initialize();
+
 private Q_SLOTS:
     void onCoreFirstRunCreationRequested();
 
 public:
     ~ProtocolsBase();
+    bool isInitialized() const;
 
     QString dosageCreateTableSqlQuery();
     void checkDosageDatabaseVersion();
@@ -72,7 +74,6 @@ public:
 
     QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
     QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
-
 
 private:
     bool createDatabase(const QString & connectionName , const QString & dbName,

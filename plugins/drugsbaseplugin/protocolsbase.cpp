@@ -115,7 +115,9 @@ namespace Internal {
 class ProtocolsBasePrivate
 {
 public:
-    ProtocolsBasePrivate() : m_initialized(false) {}
+    ProtocolsBasePrivate() :
+        m_initialized(false)
+    {}
 
 public:
     bool m_initialized;
@@ -211,6 +213,11 @@ ProtocolsBase::~ProtocolsBase()
     if (d)
         delete d;
     d = 0;
+}
+
+bool ProtocolsBase::isInitialized() const
+{
+    return d->m_initialized;
 }
 
 void ProtocolsBase::onCoreFirstRunCreationRequested()
