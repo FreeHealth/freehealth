@@ -51,63 +51,34 @@ class DRUGSBASE_EXPORT IDrugEngine : public QObject
     Q_OBJECT
 
 public:
-    /** Construct an active empty drug engine*/
     IDrugEngine(QObject *parent) : QObject(parent), m_IsActive(true) {}
     virtual ~IDrugEngine() {}
 
-    /** Initialize the engine. Return true if the engine is initialized. */
     virtual bool init() = 0;
-
-    /** Return true if the engine is active. Inactive engines will not compute interactions. */
     virtual bool isActive() const {return m_IsActive;}
-
-    /** Return true if the engine should be active by default. This state is used for the preferences. */
     virtual bool isActiveByDefault() const = 0;
-
-    /** Return true if the engine is enable to compute interactions. */
     virtual bool canComputeInteractions() const = 0;
 
-    /** Return true if the engine is computing drug-drug interactions. */
     virtual bool isCalculatingDrugDrugInteractions() const = 0;
-    /** Return true if the engine is computing patient-drug interactions. */
     virtual bool isCalculatingPatientDrugInteractions() const = 0;
-    /** Return true if the engine is computing drug allergies and intolerances. */
     virtual bool isCalculatingPatientDrugAllergiesAndIntolerances() const = 0;
 
-    /** Unique identifier of the engine. */
     virtual QString uid() const = 0;
-    /** Complete name of the engine. */
     virtual QString name() const = 0;
-    /** Short name of the engine (eg: DDI, PIM). */
     virtual QString shortName() const = 0;
-    /** Tooltip to use when presenting the engine in UIs. */
     virtual QString tooltip() const = 0;
-    /** Icon of the engine. */
     virtual QIcon icon(const int size = 0) const = 0;
-    /** Path of the icon of the engine. */
     virtual QString iconFullPath(const int size = 0) const = 0;
 
-    /**
-       Start the computation of interactions with the specified drugs list \e drugs.\n
-       Return the number of found interactions.\n
-       The interaction manager will send the drug list once and call the:
-       - getAllInteractionsFound()
-       - getAllAlerts().
-    */
     virtual int calculateInteractions(const QVector<IDrug *> &drugs) = 0;
-    /** Return the found interactions during the calculateInteractions() process. */
     virtual QVector<IDrugInteraction *> getAllInteractionsFound() = 0;
-    /** Return the alerts created during the calculateInteractions() process. */
     virtual QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult) = 0;
 
-    /** Return a model with all synthesis information to use with a treeview/listview. */
     virtual QAbstractItemModel *precautionModel() const = 0;
 
-    /** Return a report on the engine data (for eg the number of available interactions...) */
     virtual QString engineDataReport() const {return QString();}
 
 public Q_SLOTS:
-    /** Define the state of activity of the engine. \sa isActive() */
     virtual void setActive(bool state) {m_IsActive = state;}
 
 protected:
