@@ -90,7 +90,7 @@ DrugsDatabaseSelector *DrugsDatabaseSelector::instance()
 }
 
 DatabaseInfos::DatabaseInfos() :
-        identifier(Constants::DB_DEFAULT_IDENTIFIANT)
+    identifier(Constants::DB_DEFAULT_IDENTIFIANT)
 {
     names.insert("xx", "No drug database available");
 }
@@ -210,9 +210,9 @@ QString DatabaseInfos::translatedName() const
     return QString();
 }
 
-DrugsDatabaseSelector::DrugsDatabaseSelector() : d(0)
+DrugsDatabaseSelector::DrugsDatabaseSelector() :
+    d(new Internal::DrugsDatabaseSelectorPrivate)
 {
-    d = new Internal::DrugsDatabaseSelectorPrivate;
 }
 
 DrugsDatabaseSelector::~DrugsDatabaseSelector()

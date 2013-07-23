@@ -52,7 +52,6 @@ class DRUGSBASE_EXPORT DatabaseInfos
 
 public:
     DatabaseInfos();
-//    void warn();
 
     QString translatedName() const;
 
