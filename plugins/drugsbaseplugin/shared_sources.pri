@@ -52,6 +52,7 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/atctreemodel.cpp \
     $${PWD}/drugsearchengine.cpp \
     $${PWD}/idrug.cpp \
+    $${PWD}/idrugengine.cpp \
     $${PWD}/drugbasecore.cpp \
     $${PWD}/protocolsbase.cpp \
     $${PWD}/idruginteractionalert.cpp \
@@ -61,6 +62,11 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/idruginteraction.cpp \
     $${PWD}/prescriptiontoken.cpp \
     $${PWD}/prescriptionprinter.cpp
+
+equals(TEST, 1) {
+    SOURCES += \
+        $${PWD}/tests/test_drugsbaseplugin.cpp
+}
 
 # include translations
 TRANSLATION_NAME = drugsbase

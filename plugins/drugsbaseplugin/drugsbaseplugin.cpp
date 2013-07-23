@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 
 /**
   \namespace DrugsDB
@@ -123,13 +129,5 @@ ExtensionSystem::IPlugin::ShutdownFlag DrugsBasePlugin::aboutToShutdown()
     // Remove preferences pages to plugins manager object pool
     return SynchronousShutdown;
 }
-
-#ifdef WITH_TESTS
-void DrugsBasePlugin::test_drugsbase_init()
-{
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   TEST";
-    qWarning() << drugsBase().isInitialized() << drugsBase().actualDatabaseInformation();
-}
-#endif
 
 Q_EXPORT_PLUGIN(DrugsBasePlugin)
