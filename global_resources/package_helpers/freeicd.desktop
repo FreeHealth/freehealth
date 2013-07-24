@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Categories=Office;MedicalSoftware
+Categories=Science
 Name=FreeICD
-Comment[en]=ICD10 coding assistant
+Comment=ICD10 coding assistant
 Comment[fr]=Assistant codage CIM10
 TryExec=freeicd
 Exec=freeicd

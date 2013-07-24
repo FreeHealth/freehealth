@@ -1,11 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Categories=Education;Science;
+Categories=Science;
 Name=FreeToolBox
 GenericName=FreeToolBox
 Comment=FreeMedForms scientific assistant
-Comment[en]=FreeMedForms scientific assistant
 Comment[fr]=Assistant scientifique du projet FreeMedForms
 TryExec=freetoolbox
 Exec=freetoolbox

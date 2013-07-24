@@ -1,11 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Categories=Education;Science;
+Categories=Science;
 Name=FreeAccount
 GenericName=FreeAccount
 Comment=Medical billing and accountancy
-Comment[en]=Medical billing and accountancy
 Comment[fr]=Comptabilité médicale
 TryExec=freeaccount
 Exec=freeaccount

@@ -1,12 +1,11 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Categories=Education;Science;
+Categories=Science;
 Name=FreeDiams
 GenericName=Pharmaceutical Drugs Prescriptor
-Comment=Pharmaceutical Drugs Prescriptor
-Comment[en]=Pharmaceutical Drugs Prescriptor
-Comment[fr]=Prescripteur
+Comment=Pharmaceutical drugs prescriptor assistant
+Comment[fr]=Assistant à la prescription médicamenteuse
 TryExec=freediams
 Exec=freediams
 Icon=freediams
