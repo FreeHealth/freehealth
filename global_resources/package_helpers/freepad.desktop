@@ -1,11 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Categories=Education;Science;
+Categories=Science;
 Name=FreePad
 GenericName=FreePad
 Comment=FreeMedForms mask creator assistant
-Comment[en]=FreeMedForms mask creator assistant
 Comment[fr]=Assistant créateur de masque pour FreeMedForms
 TryExec=freepad
 Exec=freepad
