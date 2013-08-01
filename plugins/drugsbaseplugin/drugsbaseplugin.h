@@ -58,6 +58,7 @@ private Q_SLOTS:
     void test_drugsbase_init();
     void test_drugsmodel_add_drug_pointer();
     void test_drugsio_xmloutput();
+    void test_prescriptionTokens();
 #endif
 };
 

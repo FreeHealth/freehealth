@@ -43,11 +43,14 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/idrugengine.h>
+#include <drugsbaseplugin/prescriptiontoken.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipadtools.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <utils/randomizer.h>
@@ -63,6 +66,7 @@ using namespace Trans::ConstantTranslations;
 // static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 // static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 // static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline DrugsDB::DrugBaseCore &drugsCore() {return DrugsDB::DrugBaseCore::instance();}
 static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
@@ -92,6 +96,7 @@ void DrugsBasePlugin::test_drugsbase_init()
 
 static inline DrugsDB::IDrug *getDrug(int row)
 {
+    // TODO: manage Route unit test
     // Create a virtual drug and prescription
     using namespace DrugsDB::Constants;
     DrugsDB::IDrug *drug = drugsBase().getDrugByUID("-1", QString::number(row+1));
@@ -104,6 +109,7 @@ static inline DrugsDB::IDrug *getDrug(int row)
         double intakeTo = r.randomDouble(intakeFrom, intakeFrom + 10.);
         bool intakeFromTo = r.randomBool();
         int period = r.randomInt(1, 10);
+//        int routeId = r.randomInt(0, 42);
         int periodScheme = r.randomInt(Trans::Constants::Time::Seconds, Trans::Constants::Time::Decade);
         int interval = r.randomInt(0, 10);
         int intervalScheme = r.randomInt(Trans::Constants::Time::Seconds, Trans::Constants::Time::Decade);
@@ -112,11 +118,13 @@ static inline DrugsDB::IDrug *getDrug(int row)
         bool durationFromTo = r.randomBool();
         int durationScheme = r.randomInt(Trans::Constants::Time::Seconds, Trans::Constants::Time::Decade);
         int meal = r.randomInt(Trans::Constants::Time::Undefined, Trans::Constants::Time::WithOrWithoutFood);
+        int refill = r.randomInt(0, 10);
 
         drug->setPrescriptionValue(Prescription::IntakesFrom, intakeFrom);
         drug->setPrescriptionValue(Prescription::IntakesTo, intakeTo);
         drug->setPrescriptionValue(Prescription::IntakesScheme, Trans::Constants::INTAKES);
         drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, intakeFromTo);
+//        drug->setPrescriptionValue(Prescription::RouteId, routeId);
         drug->setPrescriptionValue(Prescription::Period, period);
         drug->setPrescriptionValue(Prescription::PeriodScheme, Trans::ConstantTranslations::period(periodScheme));
         drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, interval);
@@ -126,6 +134,7 @@ static inline DrugsDB::IDrug *getDrug(int row)
         drug->setPrescriptionValue(Prescription::DurationScheme, Trans::ConstantTranslations::period(durationScheme));
         drug->setPrescriptionValue(Prescription::DurationUsesFromTo, durationFromTo);
         drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, meal);
+        drug->setPrescriptionValue(Prescription::Refill, refill);
         drug->setPrescriptionValue(Prescription::Note, "This a note to take into account<br />written in two lines...");
         const QStringList &tags = Trans::ConstantTranslations::dailySchemeXmlTagList();
         QString daily = "<" + tags.at(1) + "=1>";
@@ -164,9 +173,13 @@ void DrugsBasePlugin::test_drugsmodel_add_drug_pointer()
             << Prescription::IntakesIntervalSchemeIndex
             << Prescription::DurationFrom
             << Prescription::DurationTo
+               // TODO: manage Route unit test
+//            << Prescription::Route
+//            << Prescription::RouteId
             << Prescription::DurationScheme
             << Prescription::DurationUsesFromTo
             << Prescription::MealTimeSchemeIndex
+            << Prescription::Refill
             << Prescription::Note
                ;
     foreach(int col, columns) {
@@ -203,8 +216,62 @@ void DrugsBasePlugin::test_drugsio_xmloutput()
     delete model2;
 }
 
+void DrugsBasePlugin::test_prescriptionTokens()
+{
+    // PrescriptionToken objects are created by DrugsIO object during its initialization
+    // We just have to overwrite the prescription token drugsmodel & the model row
+    // in order to make some tests
+    DrugsModel *model = new DrugsModel(this);
+    IDrug *drug = getDrug(1);
+    model->addDrug(drug, false);
+    QVERIFY(model->rowCount() == 1);
+    PrescriptionToken::setPrescriptionModel(model);
+    PrescriptionToken::setPrescriptionModelRow(0);
+
+    // Here is the tokened text to test
+    using namespace Core::Constants;
+    using namespace DrugsDB::Constants;
+    QHash<QString, QVariant> token_drugValue;
+    token_drugValue.insert(TOKEN_PRESC_DRUGNAME, drug->brandName());
+    token_drugValue.insert(TOKEN_PRESC_Q_FULL, drug->prescriptionValue(Prescription::IntakesFullString));
+    token_drugValue.insert(TOKEN_PRESC_Q_FROM, drug->prescriptionValue(Prescription::IntakesFrom));
+    token_drugValue.insert(TOKEN_PRESC_Q_TO, drug->prescriptionValue(Prescription::IntakesTo));
+    token_drugValue.insert(TOKEN_PRESC_Q_SCHEME, drug->prescriptionValue(Prescription::IntakesScheme));
+    token_drugValue.insert(TOKEN_PRESC_MEAL, mealTime(drug->prescriptionValue(Prescription::MealTimeSchemeIndex).toInt()));
+    token_drugValue.insert(TOKEN_PRESC_PERIOD_FULL, drug->prescriptionValue(Prescription::PeriodFullString));
+    token_drugValue.insert(TOKEN_PRESC_PERIOD_VALUE, drug->prescriptionValue(Prescription::Period));
+    token_drugValue.insert(TOKEN_PRESC_PERIOD_SCHEME, drug->prescriptionValue(Prescription::PeriodScheme));
+    token_drugValue.insert(TOKEN_PRESC_D_FULL, drug->prescriptionValue(Prescription::DurationFullString));
+    token_drugValue.insert(TOKEN_PRESC_D_FROM, drug->prescriptionValue(Prescription::DurationFrom));
+    token_drugValue.insert(TOKEN_PRESC_D_TO, drug->prescriptionValue(Prescription::DurationTo));
+    token_drugValue.insert(TOKEN_PRESC_D_SCHEME, drug->prescriptionValue(Prescription::DurationScheme));
+    token_drugValue.insert(TOKEN_PRESC_ROUTE, drug->prescriptionValue(Prescription::Route));
+    // TODO: manage dailyscheme tokens unit tests
+//    token_drugValue.insert(TOKEN_PRESC_DISTRIB_DAILYSCHEME, drug->prescriptionValue(Prescription::));
+//    token_drugValue.insert(TOKEN_PRESC_REPEATED_DAILYSCHEME, drug->prescriptionValue(Prescription::));
+    token_drugValue.insert(TOKEN_PRESC_MININTERVAL_FULL, drug->prescriptionValue(Prescription::IntakesIntervalFullString));
+    token_drugValue.insert(TOKEN_PRESC_MININTERVAL_VALUE, drug->prescriptionValue(Prescription::IntakesIntervalOfTime));
+    token_drugValue.insert(TOKEN_PRESC_MININTERVAL_SCHEME, period(drug->prescriptionValue(Prescription::IntakesIntervalSchemeIndex).toInt()));
+    if (drug->prescriptionValue(Prescription::Refill).toInt() > 0)
+        token_drugValue.insert(TOKEN_PRESC_REFILL, tkTr(Trans::Constants::REFILL_1_TIMES).arg(drug->prescriptionValue(Prescription::Refill).toInt()));
+    else
+        token_drugValue.insert(TOKEN_PRESC_REFILL, QString());
+    token_drugValue.insert(TOKEN_PRESC_NOTE, drug->prescriptionValue(Prescription::Note));
+            ;
+    QHashIterator<QString, QVariant> i(token_drugValue);
+    while (i.hasNext()) {
+        i.next();
+        QString token = QString("{{~%1~}}").arg(i.key());
+        token = padTools()->processPlainText(token);
+        QVERIFY(token == i.value().toString());
+    }
+
+    delete model;
+}
+
 // Tests:
 // IDrug / IComponent interfaces
 // DrugsModel (interactions handling)
-// DrugsIO (toHtml)
 // Interactions (create a DrugsDB::IDrugEngine and register it before)
+// DrugsIO (toHtml - XMLupdate & ProtocolBaseUpdate)
+// Prescription tokens
