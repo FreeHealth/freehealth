@@ -595,8 +595,8 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
         const QString &val = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalOfTime).toString();
         if (val.isEmpty())
             return QVariant();
-        const QString &scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalSchemeIndex).toString();
-        full = val + " " + scheme;
+        int scheme = d_pres->m_PrescriptionValues.value(Prescription::IntakesIntervalSchemeIndex).toInt();
+        full = QString("%1 %2").arg(val).arg(period(scheme));
         return full;
     }
     case Prescription::IntakesTo :
