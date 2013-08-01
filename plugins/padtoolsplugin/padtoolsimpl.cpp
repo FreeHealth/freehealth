@@ -65,8 +65,8 @@ Core::ITokenPool *PadToolsImpl::tokenPool() const
  */
 QString PadToolsImpl::processPlainText(const QString &plainText)
 {
-    QTime chr;
-    chr.start();
+//    QTime chr;
+//    chr.start();
 
     PadAnalyzer analyzer;
 //    QString t = templ;
@@ -76,19 +76,19 @@ QString PadToolsImpl::processPlainText(const QString &plainText)
     PadDocument *pad = analyzer.analyze(plainText);
     pad->setContentType(PadDocument::ContentIsPlainText);
 //    errors = analyzer.lastErrors();
-    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze text source");
+//    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze text source");
 
     pad->toOutput(_pool);
     const QString &text = pad->outputDocument()->toPlainText();
-    Utils::Log::logTimeElapsed(chr, "PadTools", "Process text");
+//    Utils::Log::logTimeElapsed(chr, "PadTools", "Process text");
     return text;
 }
 
 /** Process a \e html pad document and return a html string. */
 QString PadToolsImpl::processHtml(const QString &html)
 {
-    QTime chr;
-    chr.start();
+//    QTime chr;
+//    chr.start();
 
     PadAnalyzer analyzer;
     QTextDocument *doc = new QTextDocument(this);
@@ -99,11 +99,11 @@ QString PadToolsImpl::processHtml(const QString &html)
     // Do not use ContentIsHtml or ContentAutoType because QTextDocument will interpret the HTML content of any token value
     pad->setContentType(PadDocument::ContentIsPlainText);
 //    errors = analyzer.lastErrors();
-    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze HTML source");
+//    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze HTML source");
 
     pad->toOutput(_pool);
     const QString &out = pad->outputDocument()->toPlainText();
-    Utils::Log::logTimeElapsed(chr, "PadTools", "Process HTML");
+//    Utils::Log::logTimeElapsed(chr, "PadTools", "Process HTML");
     return out;
 }
 
