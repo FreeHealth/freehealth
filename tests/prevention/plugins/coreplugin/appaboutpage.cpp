@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -43,7 +43,7 @@ using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeICD</b><br />"
-        "(C) 2008-2012 by Eric MAEKER, MD</p>"
+        "(C) 2008-2013 by Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
         "Please refer to web site for more informations.<br />"
