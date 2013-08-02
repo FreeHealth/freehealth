@@ -32,7 +32,7 @@
 
 /**
  * \file alertplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric Maeker
  * \version 0.8.0
  * \date 25 July 2012
 */
@@ -58,6 +58,11 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
+
+#ifdef WITH_TESTS
+private Q_SLOTS:
+
+#endif
 
 private:
     AlertPreferencesPage *_prefPage;

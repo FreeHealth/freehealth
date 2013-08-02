@@ -1209,19 +1209,20 @@ QDebug operator<<(QDebug dbg, const DrugsDB::IComponent *c)
 
 QDebug operator<<(QDebug dbg, const DrugsDB::IComponent &c)
 {
-    QString atcIds;
+    QStringList atcIds, atcLabels;
     for(int i=0; i < c.innAtcIds().count(); ++i) {
-        atcIds += QString("%1; ").arg(c.innAtcIds().at(i));
+        atcIds << QString::number(c.innAtcIds().at(i));
+        atcLabels << drugsBase().getAtcLabel(c.innAtcIds().at(i));
     }
-    atcIds.chop(2);
     dbg.nospace() << "IComponent[" << c.moleculeName() << "]("
                   << "\n      Form:       " << c.form()
                   << "\n      INN:        " << c.innName()
                   << "\n      FullDosage: " << c.dosage()
                   << "\n      Nature:     " << c.nature()
-                  << "\n      AtcIds:     " << atcIds
-                  << "\n      DDIClasses: " + c.interactingClasses().join("; ");
-                  ;
+                  << "\n      AtcIds:     " << atcIds.join("; ")
+                  << "\n      AtcLabels:  " << atcLabels.join("; ")
+                  << "\n      DDIClasses: " << c.interactingClasses().join("; ")
+                     ;
     if (c.linkedWith())
         dbg.nospace() << "\n      Linked:     " << c.linkedWith()->moleculeName();
     dbg.nospace() << "\n      )";

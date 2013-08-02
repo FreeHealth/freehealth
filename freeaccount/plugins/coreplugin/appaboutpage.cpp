@@ -37,6 +37,7 @@
 #include <QApplication>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDate>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -44,7 +45,7 @@ using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to %1</b><br />"
-        "Copyright (C) 2008-2011 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
+        "Copyright (C) 2008-%3 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
         "Please refer to web site for more informations.<br />"
@@ -90,7 +91,7 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
     Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
-    QString tmp = tr(ABOUT_TEXT).arg(qApp->applicationName(), qApp->organizationDomain());
+    QString tmp = tr(ABOUT_TEXT).arg(qApp->applicationName(), qApp->organizationDomain()).arg(QDate::currentDate().year());
     if (up->hasUpdate()) {
         tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
     } else {

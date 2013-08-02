@@ -37,6 +37,7 @@
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
 #include <drugsbaseplugin/prescriptionprinter.h>
+#include <drugsbaseplugin/idrug.h>
 
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
@@ -226,6 +227,9 @@ void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
     query.processTime = DrugsDB::DrugInteractionInformationQuery::BeforePrescription;
     query.result = m_CurrentDrugModel->drugInteractionResult();
     query.relatedDrug = m_CurrentDrugModel->getDrug(drugId);
+
+    qWarning() << (*query.relatedDrug);
+
     DynamicAlert::DialogResult result = DynamicAlert::executeDynamicAlert(query, this);
     if (result==DynamicAlert::DynamicAlertAccepted) {
         m_CurrentDrugModel->removeLastInsertedDrug();

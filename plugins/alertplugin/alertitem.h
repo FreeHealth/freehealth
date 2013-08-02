@@ -21,7 +21,6 @@
 /***************************************************************************
  *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -39,7 +38,7 @@ QT_END_NAMESPACE
 
 /**
  * \file alertitem.h
- * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \author Eric Maeker
  * \version 0.8.0
  * \date 28 May 2012
 */

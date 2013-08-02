@@ -4,12 +4,6 @@
  *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
- *  The FreeAccount plugins are free, open source FreeMedForms' plugins.   *
- *                                                                         *
- *  (C) 2013-now by Christian A Reiter and Eric Maeker                     *
- *  (C) 2010-2012 by Pierre-Marie Desombre and Eric Maeker                 *
- *  All rights reserved.                                                   *
- *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
  *  the Free Software Foundation, either version 3 of the License, or      *

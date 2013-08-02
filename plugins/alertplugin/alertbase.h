@@ -21,7 +21,6 @@
 /***************************************************************************
  *  Main Developers:                                                       *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -40,7 +39,7 @@
 
 /**
  * \file alertbase.h
- * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \author Eric Maeker
  * \version 0.8.0
  * \date 15 July 2012
 */

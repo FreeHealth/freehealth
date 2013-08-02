@@ -26,6 +26,8 @@
 #ifndef CORE_CONSTANTS_TOKENS_SETTINGS_H
 #define CORE_CONSTANTS_TOKENS_SETTINGS_H
 
+// TODO: this part should be moved into the padtools plugin or splitted inside every plugins
+
 /**
  * \file constants_tokensandsettings.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
