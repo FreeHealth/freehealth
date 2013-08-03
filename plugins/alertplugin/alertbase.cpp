@@ -389,8 +389,6 @@ AlertBase::AlertBase(QObject *parent) :
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
@@ -535,66 +533,6 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     DB.commit();
 
     return true;
-}
-
-/** Create a virtual item. For debugging purpose. */
-AlertItem AlertBase::createVirtualItem()
-{
-    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
-
-    AlertItem item;
-    item.setValidity(true);
-    item.setUuid(createUid());
-    if (r.randomBool())
-        item.setCryptedPassword(r.randomWords(1).toUtf8().toBase64());
-
-    // fr, de, en, xx
-    QStringList langs;
-    langs << "en" << "fr" << "de" << "xx";
-    foreach(const QString &l, langs) {
-        item.setLabel(r.randomWords(r.randomInt(2, 10)), l);
-        item.setCategory(r.randomWords(r.randomInt(2, 10)), l);
-        item.setDescription(r.randomWords(r.randomInt(2, 10)), l);
-        item.setComment(r.randomWords(r.randomInt(2, 10)), l);
-    }
-
-    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::NonBlockingAlert)));
-    item.setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
-    item.setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
-    item.setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));
-    if (r.randomBool())
-        item.setLastUpdate(r.randomDateTime(item.creationDate()));
-    item.setThemedIcon(r.randomFile(pix, QStringList() << "*.png").fileName());
-    if (r.randomBool())
-        item.setStyleSheet(r.randomWords(10));
-    if (r.randomBool())
-        item.setExtraXml(QString("<xml>%1</xml>").arg(r.randomWords(r.randomInt(0, r.randomInt(2, 20)))));
-
-    // Add 1 relation
-    AlertRelation rel;
-    rel.setRelatedTo(AlertRelation::RelatedToAllPatients);
-    item.addRelation(rel);
-
-    // Add timing
-    AlertTiming time;
-    time.setValid(true);
-    time.setStart(r.randomDateTime(QDateTime::currentDateTime()));
-    time.setEnd(time.start().addDays(r.randomInt(10, 5000)));
-    if (r.randomBool()) {
-        time.setCycling(true);
-        time.setCyclingDelayInMinutes(r.randomInt(10*24*60, 1000*24*60));
-        time.setNumberOfCycles(r.randomInt(1, 100));
-    }
-    item.addTiming(time);
-
-    // TODO : Add random script
-//    item.addScript();
-
-    // TODO : Add random validation
-//    item.addValidation();
-
-    item.setModified(false);
-    return item;
 }
 
 /** Save or update the Alert::AlertItem in the alert database. Return true in case of success. The AlertItem is modified during this process. */

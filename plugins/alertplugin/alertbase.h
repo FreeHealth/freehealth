@@ -28,7 +28,6 @@
 #define ALERTBASE_H
 
 #include <utils/database.h>
-#include <utils/randomizer.h>
 #include <alertplugin/alertitem.h>
 
 #include <QObject>
@@ -105,17 +104,12 @@ private:
 class AlertBase : public QObject, public Utils::Database
 {
     Q_OBJECT
-#ifdef WITH_TESTS
-    friend class Alert::Internal::AlertPlugin;
-#endif
     friend class Alert::AlertCore;
     friend class Alert::Internal::AlertCorePrivate;
 
 protected:
     AlertBase(QObject * parent = 0);
     bool initialize();
-
-    AlertItem createVirtualItem();
 
 public:
     ~AlertBase();
@@ -168,7 +162,6 @@ private Q_SLOTS:
 
 private:
     bool m_initialized;
-    Utils::Randomizer r;
 };
 
 }  // namespace Internal
