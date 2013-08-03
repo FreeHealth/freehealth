@@ -62,6 +62,11 @@ FORMS += \
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 
+# include tests
+equals(TEST, 1) {
+    SOURCES += tests/tst_alertitem.cpp
+}
+
 # include translations
 TRANSLATION_NAME = alert
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)

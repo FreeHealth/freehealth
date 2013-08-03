@@ -33,8 +33,8 @@
 /**
  * \file alertplugin.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 25 July 2012
+ * \version 0.9.2
+ * \date 05 Aug 2013
 */
 
 namespace Alert {
@@ -61,7 +61,7 @@ private Q_SLOTS:
 
 #ifdef WITH_TESTS
 private Q_SLOTS:
-
+    void test_alertitem_object();
 #endif
 
 private:
