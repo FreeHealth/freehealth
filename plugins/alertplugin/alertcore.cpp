@@ -156,6 +156,14 @@ bool AlertCore::initialize()
     return true;
 }
 
+/** Returns the Alert::Internal::AlertBase single instance object in use (only in unit-test mode) */
+#ifdef WITH_TESTS
+Internal::AlertBase &AlertCore::alertBase() const
+{
+    return *d->_alertBase;
+}
+#endif
+
 /** Return all the Alert::AlertItem recorded in the database related to the current user. */
 QVector<AlertItem> AlertCore::getAlertItemForCurrentUser() const
 {

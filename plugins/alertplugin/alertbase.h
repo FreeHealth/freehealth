@@ -49,6 +49,7 @@ class AlertCore;
 class AlertItem;
 class AlertPackDescription;
 namespace Internal {
+class AlertPlugin;
 class AlertCorePrivate;
 
 class AlertBaseQuery
@@ -104,6 +105,9 @@ private:
 class AlertBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+#ifdef WITH_TESTS
+    friend class Alert::Internal::AlertPlugin;
+#endif
     friend class Alert::AlertCore;
     friend class Alert::Internal::AlertCorePrivate;
 

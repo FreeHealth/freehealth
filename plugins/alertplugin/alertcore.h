@@ -49,6 +49,7 @@ class NonBlockingAlertToolButton;
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
+class AlertBase;
 }
 
 class ALERT_EXPORT AlertCore : public QObject
@@ -108,6 +109,10 @@ public Q_SLOTS:
     //    bool editAlert(AlertItem &alert);
     //    bool createAlert(AlertItem &alert);
 
+#ifdef WITH_TESTS
+public:
+    Internal::AlertBase &alertBase() const;
+#endif
 
 Q_SIGNALS:
 //    void alertItemUpdated(const AlertItem &alert);
