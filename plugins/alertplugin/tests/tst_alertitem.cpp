@@ -351,7 +351,6 @@ void AlertPlugin::test_alertitem_object()
     }
 }
 
-
 void AlertPlugin::test_alertbase()
 {
     // Test the AlertItem interface
@@ -525,13 +524,11 @@ void AlertPlugin::test_alertbase()
     //    AlertItem t = AlertItem::fromXml(item.toXml());
     //    qWarning() << (t.toXml() == item.toXml());
 
-    // To XML
-    if (false) {
-        qWarning() << item.toXml();
-        qWarning() << item11.toXml();
-    }
+    // Remove testing alerts from the database
+}
 
-    // Blocking alerts
+
+// Blocking alerts
 //    if (false) {
 //        item.setViewType(AlertItem::BlockingAlert);
 //        item.setOverrideRequiresUserComment(true);
@@ -545,7 +542,7 @@ void AlertPlugin::test_alertbase()
 //        //    BlockingAlertDialog::executeBlockingAlert(item4);
 //    }
 
-    // Alert editor
+// Alert editor
 //    if (false) {
 //        AlertItemEditorDialog dlg;
 //        dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
@@ -562,7 +559,7 @@ void AlertPlugin::test_alertbase()
 //        qWarning() << item.toXml();
 //    }
 
-    // Alert packs
+// Alert packs
 //    if (true) {
 //        q->registerAlertPack(settings()->path(Core::ISettings::BundledAlertPacks) + "/test");
 //    }
@@ -585,6 +582,4 @@ void AlertPlugin::test_alertbase()
 //        // Exec the dialog
 //        dlg.exec();
 //    }
-
-}
 
