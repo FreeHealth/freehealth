@@ -172,4 +172,22 @@ void %PluginName%Plugin::coreAboutToClose()
     // ICore::user() is still available
 }
 
+//void %PluginName%Plugin::test_your_plugin_unit_test()
+//{
+    // Write your plugin unit test here.
+
+    // Available configuration:
+    // With this unit testing, you can manage all plugin dependencies (Core and others).
+    // All plugins will be fully loaded and initialized *before* tests are executed.
+
+    // File/code organization:
+    // You can include tests in this file, or create a specific path for 'tests'
+    // for your plugin and store there only the cpp file including your tests.
+    // All tests must be private Q_SLOTS of this ExtensionSystem::IPlugin object and
+    // must be named test_*().
+
+    // Test behavior:
+    // If your one of your test fail, the testing process must be stopped.
+//}
+
 Q_EXPORT_PLUGIN(%PluginName%Plugin)

@@ -50,7 +50,12 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
-//    void triggerAction();
+
+// Declare plugin unit tests here
+//#ifdef WITH_TESTS
+//private Q_SLOTS:
+//    void test_your_plugin_unit_test();
+//#endif
 
 private:
     %PluginName:c%PreferencesPage *m_prefPage;
