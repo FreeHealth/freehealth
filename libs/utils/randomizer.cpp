@@ -400,12 +400,17 @@ QDate Randomizer::randomDate(const int minYear, const int minMonth, const int mi
     return toReturn.addDays(r);
 }
 
-QDateTime Randomizer::randomDateTime(const QDateTime &minDate)
+/**
+ * Generate a random QDateTime >= to \e minDateTime.
+ * Note: time is only generated for hours, minutes and seconds (to improve
+ * compatibility with Qt::ISODate format specially for testings).
+ */
+QDateTime Randomizer::randomDateTime(const QDateTime &minDateTime)
 {
-    QDateTime toReturn(randomDate(minDate.date().year(), minDate.date().month(), minDate.date().day()));
-    if (toReturn.date() == minDate.date()) {
+    QDateTime toReturn(randomDate(minDateTime.date().year(), minDateTime.date().month(), minDateTime.date().day()));
+    if (toReturn.date() == minDateTime.date()) {
         int i = 0;
-        while (toReturn < minDate) {
+        while (toReturn < minDateTime) {
             int r = 0;
             int j = 0;
             while (r < 1) {
@@ -420,7 +425,7 @@ QDateTime Randomizer::randomDateTime(const QDateTime &minDate)
                 break;
         }
     } else {
-        toReturn.setTime(QTime(randomInt(23), randomInt(59), randomInt(59), randomInt(99)));
+        toReturn.setTime(QTime(randomInt(23), randomInt(59), randomInt(59)));
     }
     return toReturn;
 }

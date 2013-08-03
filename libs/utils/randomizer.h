@@ -70,7 +70,7 @@ public:
     QString randomWords(int nbOfWords);
 
     QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
-    QDateTime randomDateTime(const QDateTime &mindate);
+    QDateTime randomDateTime(const QDateTime &minDateTime);
     QTime randomTime(const int minHour, const int maxHour);
 
     QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
