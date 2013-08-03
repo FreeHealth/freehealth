@@ -330,7 +330,9 @@ bool Randomizer::randomBool()
 
 int Randomizer::randomInt(int min, int max)
 {
-    Q_ASSERT(min < max);
+    Q_ASSERT_X(min <= max, "Utils::Randomizer", "min > max");
+    if (min == max)
+        return min;
     int i = min - 10;
     int z = 0;
     while (i < min) {
