@@ -62,6 +62,7 @@ private Q_SLOTS:
 #ifdef WITH_TESTS
 private Q_SLOTS:
     void test_alertitem_object();
+    void test_alertbase();
 #endif
 
 private:

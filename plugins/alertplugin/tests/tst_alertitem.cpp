@@ -29,48 +29,191 @@
 #include "../alertcore.h"
 #include "../alertbase.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/randomizer.h>
 
-#include "alertitemeditordialog.h"
-#include "blockingalertdialog.h"
-#include "alertplaceholderwidget.h"
+//#include "alertitemeditordialog.h"
+//#include "blockingalertdialog.h"
+//#include "alertplaceholderwidget.h"
 
-#include <QToolButton>
-#include <QVBoxLayout>
-#include <QPointer>
+#include <QDir>
+#include <QTest>
 
 using namespace Alert;
 using namespace Internal;
 
 //static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 //static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 static inline Alert::Internal::AlertBase &alertBase() {return Alert::AlertCore::instance()->alertBase();}
 
+namespace {
+AlertScript &createVirtualScript(int scriptType, Utils::Randomizer &r)
+{
+    QString script = r.randomWords(r.randomInt(5, 25));
+    script += "<=>+/-_;&\"'!:%*()|\\";
+    AlertScript *alertscript = new AlertScript(Utils::createUid(), AlertScript::ScriptType(scriptType), script);
+    alertscript->setId(r.randomInt(10000000));
+    alertscript->setValid(r.randomBool());
+    alertscript->setModified(false);
+    return *alertscript;
+}
+
+// Creates a virtual item.
+AlertItem &createVirtualItem(bool createAllRelations)
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
+
+    AlertItem *item = new AlertItem;
+    item->setValidity(r.randomBool());
+    item->setUuid(Utils::createUid());
+    if (r.randomBool())
+        item->setCryptedPassword(r.randomWords(1).toUtf8().toBase64());
+
+    // fr, de, en, xx
+    QStringList langs;
+    langs << "en" << "fr" << "de" << "xx";
+    foreach(const QString &l, langs) {
+        item->setLabel(r.randomWords(r.randomInt(2, 10)), l);
+        item->setCategory(r.randomWords(r.randomInt(2, 10)), l);
+        item->setDescription(r.randomWords(r.randomInt(2, 10)), l);
+        item->setComment(r.randomWords(r.randomInt(2, 10)), l);
+    }
+
+    item->setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::NonBlockingAlert)));
+    item->setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
+    item->setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
+    item->setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));
+    if (r.randomBool())
+        item->setLastUpdate(r.randomDateTime(item->creationDate()));
+    item->setThemedIcon(r.randomFile(pix, QStringList() << "*.png").fileName());
+    if (r.randomBool())
+        item->setStyleSheet(r.randomWords(10));
+    if (r.randomBool())
+        item->setExtraXml(QString("<xml>%1</xml>").arg(r.randomWords(r.randomInt(0, r.randomInt(2, 20)))));
+
+    // Add relations
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToAllPatients);
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToPatient);
+        rel.setRelatedToUid("patient1");
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToFamily);
+        rel.setRelatedToUid("family1");
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToAllUsers);
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToUser);
+        rel.setRelatedToUid("user1");
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToUserGroup);
+        rel.setRelatedToUid("userGroup1");
+        item->addRelation(rel);
+    }
+    if (createAllRelations || r.randomBool()) {
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToApplication);
+        rel.setRelatedToUid("application1");
+        item->addRelation(rel);
+    }
+
+    // Add timing
+    AlertTiming time;
+    time.setValid(r.randomBool());
+    time.setStart(r.randomDateTime(QDateTime::currentDateTime()));
+    time.setEnd(time.start().addDays(r.randomInt(10, 5000)));
+    if (r.randomBool()) {
+        time.setCycling(true);
+        time.setCyclingDelayInMinutes(r.randomInt(10*24*60, 1000*24*60));
+        time.setNumberOfCycles(r.randomInt(1, 100));
+    }
+    item->addTiming(time);
+
+    // Add scripts
+    for(int i=0; i < AlertScript::OnRemindLater; ++i) {
+        item->addScript(createVirtualScript(i, r));
+    }
+
+    // TODO : Add random validation
+//    item->addValidation();
+
+    item->setModified(false);
+    return *item;
+}
+
+
+}
 void AlertPlugin::test_alertitem_object()
 {
     // Test the AlertItem interface
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
-    AlertItem item = alertBase().createVirtualItem();
-    item.setLabel(item.label() + " (item)");
+    for(int i=0; i < 10; ++i) {
+        AlertItem item = createVirtualItem(true);
+        qWarning() << item.toXml();
+    }
+}
+
+
+void AlertPlugin::test_alertbase()
+{
+    // Test the AlertItem interface
+    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+
+    AlertItem item; // = alertBase().createVirtualItem();
+    item.setUuid(Utils::Database::createUid());
     item.setThemedIcon("identity.png");
+    item.setLabel(item.label() + " (item)");
+    item.setCategory("Test");
+    item.setDescription("Simple basic non-blocking alert");
     item.setViewType(AlertItem::NonBlockingAlert);
     item.setPriority(AlertItem::High);
     item.setRemindLaterAllowed(true);
     item.clearRelations();
-    item.clearTimings();
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
+    item.clearTimings();
     item.addTiming(AlertTiming(start, expiration));
 
-    AlertItem item2 = alertBase().createVirtualItem();
+    AlertItem item2; // = alertBase().createVirtualItem();
+    item2.setUuid(Utils::Database::createUid());
     item2.setThemedIcon("next.png");
+    item2.setLabel("Just a simple alert (item2)");
+    item2.setCategory("Test");
+    item2.setDescription("Simple basic static alert");
     item2.setViewType(AlertItem::NonBlockingAlert);
+    item2.setPriority(AlertItem::Low);
+    item2.setOverrideRequiresUserComment(true);
     item2.clearRelations();
-    item2.clearTimings();
+    item2.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item2.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient2"));
+    item2.clearTimings();
     item2.addTiming(AlertTiming(start, expiration));
 
     AlertItem item3;
@@ -180,49 +323,36 @@ void AlertPlugin::test_alertitem_object()
                                  "alert.setComment(\"Niah niah niah comment added by the script...\");"
                                  "true;"));
 
-    // Db save/get
-    if (false) {
-        if (!alertBase().saveAlertItem(item))
-            qWarning() << "ITEM WRONG";
-        if (!alertBase().saveAlertItem(item2))
-            qWarning() << "ITEM2 WRONG";
-        if (!alertBase().saveAlertItem(item3))
-            qWarning() << "ITEM3 WRONG";
-        if (!alertBase().saveAlertItem(item4))
-            qWarning() << "ITEM4 WRONG";
-        if (!alertBase().saveAlertItem(item5))
-            qWarning() << "ITEM5 WRONG";
-        if (!alertBase().saveAlertItem(item6))
-            qWarning() << "ITEM6 WRONG";
-        if (!alertBase().saveAlertItem(item7))
-            qWarning() << "ITEM7 WRONG";
-        if (!alertBase().saveAlertItem(item8))
-            qWarning() << "ITEM8 WRONG";
-        if (!alertBase().saveAlertItem(item9))
-            qWarning() << "ITEM9 WRONG";
-        if (!alertBase().saveAlertItem(item10))
-            qWarning() << "ITEM10 WRONG";
-        if (!alertBase().saveAlertItem(item11))
-            qWarning() << "ITEM11 WRONG";
+    // Database saving
+    QVERIFY(alertBase().saveAlertItem(item) == true);
+    QVERIFY(alertBase().saveAlertItem(item2) == true);
+    QVERIFY(alertBase().saveAlertItem(item3) == true);
+    QVERIFY(alertBase().saveAlertItem(item4) == true);
+    QVERIFY(alertBase().saveAlertItem(item5) == true);
+    QVERIFY(alertBase().saveAlertItem(item6) == true);
+    QVERIFY(alertBase().saveAlertItem(item7) == true);
+    QVERIFY(alertBase().saveAlertItem(item8) == true);
+    QVERIFY(alertBase().saveAlertItem(item9) == true);
+    QVERIFY(alertBase().saveAlertItem(item10) == true);
+    QVERIFY(alertBase().saveAlertItem(item11) == true);
 
-        Internal::AlertBaseQuery query;
-        query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
-//        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
-        query.addUserAlerts("user1");
-        query.addUserAlerts("user2");
-        query.addPatientAlerts("patient1");
-        query.addPatientAlerts("patient2");
-        query.addPatientAlerts("patient3");
-//        query.addUserAlerts();
-        QVector<AlertItem> test = alertBase().getAlertItems(query);
-        qWarning() << test.count();
-//        for(int i=0; i < test.count(); ++i) {
-//            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
-//        }
-//        qWarning() << "\n\n";
-        //    AlertItem t = AlertItem::fromXml(item.toXml());
-        //    qWarning() << (t.toXml() == item.toXml());
-    }
+    // Database getting
+    Internal::AlertBaseQuery query;
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    //        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
+    query.addUserAlerts("user1");
+    query.addUserAlerts("user2");
+    query.addPatientAlerts("patient1");
+    query.addPatientAlerts("patient2");
+    query.addPatientAlerts("patient3");
+    QVector<AlertItem> test = alertBase().getAlertItems(query);
+    qWarning() << test.count();
+    //        for(int i=0; i < test.count(); ++i) {
+    //            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
+    //        }
+    //        qWarning() << "\n\n";
+    //    AlertItem t = AlertItem::fromXml(item.toXml());
+    //    qWarning() << (t.toXml() == item.toXml());
 
     // To XML
     if (false) {
@@ -231,35 +361,35 @@ void AlertPlugin::test_alertitem_object()
     }
 
     // Blocking alerts
-    if (false) {
-        item.setViewType(AlertItem::BlockingAlert);
-        item.setOverrideRequiresUserComment(true);
-        QToolButton *test = new QToolButton;
-        test->setText("Houlala");
-        test->setToolTip("kokokokokok");
-        QList<QAbstractButton*> buttons;
-        buttons << test;
+//    if (false) {
+//        item.setViewType(AlertItem::BlockingAlert);
+//        item.setOverrideRequiresUserComment(true);
+//        QToolButton *test = new QToolButton;
+//        test->setText("Houlala");
+//        test->setToolTip("kokokokokok");
+//        QList<QAbstractButton*> buttons;
+//        buttons << test;
 
-        BlockingAlertDialog::executeBlockingAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
-        //    BlockingAlertDialog::executeBlockingAlert(item4);
-    }
+//        BlockingAlertDialog::executeBlockingAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
+//        //    BlockingAlertDialog::executeBlockingAlert(item4);
+//    }
 
     // Alert editor
-    if (false) {
-        AlertItemEditorDialog dlg;
-        dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
-        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
-        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
+//    if (false) {
+//        AlertItemEditorDialog dlg;
+//        dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
+//        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
+//        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
 
-        AlertTiming &time = item.timingAt(0);
-        time.setCycling(true);
-        time.setCyclingDelayInDays(10);
-        dlg.setAlertItem(item);
-        if (dlg.exec()==QDialog::Accepted) {
-            dlg.submit(item);
-        }
-        qWarning() << item.toXml();
-    }
+//        AlertTiming &time = item.timingAt(0);
+//        time.setCycling(true);
+//        time.setCyclingDelayInDays(10);
+//        dlg.setAlertItem(item);
+//        if (dlg.exec()==QDialog::Accepted) {
+//            dlg.submit(item);
+//        }
+//        qWarning() << item.toXml();
+//    }
 
     // Alert packs
 //    if (true) {
