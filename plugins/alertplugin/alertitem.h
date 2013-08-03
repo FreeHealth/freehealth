@@ -76,7 +76,7 @@ public:
     virtual int numberOfCycles() const {return _ncycle;}
     virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; _isCycle=(n>0);}
     virtual QDateTime nextDate() const {return _next;}
-    virtual void setNextDate(const QDateTime &dt) {_modified=true; _next = dt;}
+    virtual void setNextDate(const QDateTime &dt) {_modified=true; _next=dt;}
 
     virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
     virtual void setCyclingDelayInMinutes(const qlonglong delay) {_modified=true; _delay=delay;}
@@ -111,7 +111,8 @@ public:
     virtual void setCycleExpirationDate(const QDateTime &dt) {_cycleExpirationDate=dt;}
 
     virtual QString toXml() const;
-    static AlertTiming fromDomElement(const QDomElement &element);
+    static AlertTiming &fromXml(const QString &xml);
+    static AlertTiming &fromDomElement(const QDomElement &element);
 
 private:
     int _id, _ncycle;
@@ -170,7 +171,8 @@ public:
     static QString typeToXml(ScriptType type);
     static ScriptType typeFromXml(const QString &xml);
     virtual QString toXml() const;
-    static AlertScript fromDomElement(const QDomElement &element);
+    static AlertScript &fromXml(const QString &xml);
+    static AlertScript &fromDomElement(const QDomElement &element);
 
     bool operator<(const AlertScript &script) const;
 
@@ -219,7 +221,8 @@ public:
     virtual void setValidatedUuid(const QString &uid) {_validated=uid;}
 
     virtual QString toXml() const;
-    static AlertValidation fromDomElement(const QDomElement &element);
+    static AlertValidation &fromXml(const QString &xml);
+    static AlertValidation &fromDomElement(const QDomElement &element);
 
 private:
     int _id;
@@ -263,7 +266,8 @@ public:
     virtual void setRelatedToUid(const QString &uid) {_modified=true; _relatedUid=uid;}
 
     virtual QString toXml() const;
-    static AlertRelation fromDomElement(const QDomElement &element);
+    static AlertRelation &fromXml(const QString &xml);
+    static AlertRelation &fromDomElement(const QDomElement &element);
     static QString relationTypeToXml(AlertRelation::RelatedTo rel);
     static RelatedTo relationTypeFromXml(const QString &xmlValue);
 
@@ -408,7 +412,7 @@ public:
     static bool categoryLowerThan(const AlertItem &item1, const AlertItem &item2);
 
     QString toXml() const;
-    static AlertItem fromXml(const QString &xml);
+    static AlertItem &fromXml(const QString &xml);
 
 private:
     Internal::AlertItemPrivate *d;

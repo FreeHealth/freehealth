@@ -98,7 +98,7 @@ AlertItem &createVirtualItem(bool createAllRelations)
     if (r.randomBool())
         item->setStyleSheet(r.randomWords(10));
     if (r.randomBool())
-        item->setExtraXml(QString("<xml>%1</xml>").arg(r.randomWords(r.randomInt(0, r.randomInt(2, 20)))));
+        item->setExtraXml(QString("<xml>%1</xml>").arg(r.randomWords(r.randomInt(1, r.randomInt(2, 20))))); // one word at least otherwise QDocDocument can return </tag> instead of <tag></tag>
 
     // Add relations
     if (createAllRelations || r.randomBool()) {
@@ -165,18 +165,189 @@ AlertItem &createVirtualItem(bool createAllRelations)
     item->setModified(false);
     return *item;
 }
+} // anonymous namespace
 
-
-}
 void AlertPlugin::test_alertitem_object()
 {
-    // Test the AlertItem interface
-    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
-    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    for(int i=0; i < 10; ++i) {
+    int loop = 1000;
+    // Test AlertScript XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertScript script = createVirtualScript(2, r);
+        QString xml = script.toXml();
+        AlertScript script2 = AlertScript::fromXml(xml);
+        QVERIFY(script.id() == script2.id());
+        QVERIFY(script.uuid() == script2.uuid());
+        QVERIFY(script.type() == script2.type());
+        QVERIFY(script.script() == script2.script());
+        QVERIFY(script.isNull() == script2.isNull());
+        QVERIFY(script.isValid() == script2.isValid());
+        QVERIFY(script2.isModified() == false);
+    }
+
+    // Test AlertValidation XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertValidation val;
+        val.setAccepted(r.randomBool());
+        val.setDateOfValidation(r.randomDateTime(QDateTime::currentDateTime()));
+        val.setId(r.randomInt(1000));
+        val.setOverriden(r.randomBool());
+        val.setUserComment(r.randomWords(r.randomInt(10)));
+        val.setValidatedUuid(Utils::createUid());
+        val.setValidatorUuid(Utils::createUid());
+        AlertValidation val2 = AlertValidation::fromXml(val.toXml());
+        QVERIFY(val.id() == val2.id());
+        QVERIFY(val.validatorUid() == val2.validatorUid());
+        QVERIFY(val.userComment() == val2.userComment());
+        QVERIFY(val.isOverriden() == val2.isOverriden());
+        QVERIFY(val.isAccepted() == val2.isAccepted());
+        QVERIFY(val.dateOfValidation() == val2.dateOfValidation());
+        QVERIFY(val.validatedUid() == val2.validatedUid());
+        QVERIFY(val2.isModified() == false);
+    }
+
+    // Test AlertTiming non-cycling XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertTiming t;
+        t.setId(r.randomInt(1000));
+        t.setValid(r.randomBool());
+        QDateTime dt = QDateTime::currentDateTime();
+        dt = r.randomDateTime(dt);
+        t.setStart(r.randomDateTime(dt));
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        t.setEnd(dt);
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        t.setExpiration(dt);
+        t.setCycling(false);
+        AlertTiming t2 = AlertTiming::fromXml(t.toXml());
+        QVERIFY(t.id() == t2.id());
+        QVERIFY(t.isValid() == t2.isValid());
+        QVERIFY(t.start() == t2.start());
+        QVERIFY(t.end() == t2.end());
+        QVERIFY(t.expiration() == t2.expiration());
+        QVERIFY(t.isCycling() == t2.isCycling());
+        QVERIFY(t.numberOfCycles() == t2.numberOfCycles());
+        QVERIFY(t.nextDate() == t2.nextDate());
+        QVERIFY(t.cyclingDelayInMinutes() == t2.cyclingDelayInMinutes());
+        QVERIFY(t.cyclingDelayInHours() == t2.cyclingDelayInHours());
+        QVERIFY(t.cyclingDelayInDays() == t2.cyclingDelayInDays());
+        QVERIFY(t.cyclingDelayInWeeks() == t2.cyclingDelayInWeeks());
+        QVERIFY(t.cyclingDelayInMonth() == t2.cyclingDelayInMonth());
+        QVERIFY(t.cyclingDelayInYears() == t2.cyclingDelayInYears());
+        QVERIFY(t.cyclingDelayInDecades() == t2.cyclingDelayInDecades());
+        QVERIFY(t.cycleStartDate() == t2.cycleStartDate());
+        QVERIFY(t.cycleExpirationDate() == t2.cycleExpirationDate());
+        QVERIFY(t2.isModified() == false);
+    }
+
+    // Test AlertTiming cycling XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertTiming tc;
+        tc.setId(r.randomInt(1000));
+        tc.setValid(r.randomBool());
+        QDateTime dt = QDateTime::currentDateTime();
+        dt = r.randomDateTime(dt);
+        tc.setStart(r.randomDateTime(dt));
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        tc.setEnd(dt);
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        tc.setExpiration(dt);
+        tc.setCycling(true);
+        tc.setNumberOfCycles(r.randomInt(1, 100)); // avoid 0 cycle...
+        tc.setNextDate(r.randomDateTime(dt));
+        tc.setCyclingDelayInMinutes(r.randomInt(100, 100000));
+        tc.setCycleStartDate(r.randomDateTime(dt));
+        dt.addDays(r.randomInt(10));
+        tc.setCycleExpirationDate(dt);
+        tc.setModified(false);
+        AlertTiming tc2 = AlertTiming::fromXml(tc.toXml());
+        QVERIFY(tc.id() == tc2.id());
+        QVERIFY(tc.isValid() == tc2.isValid());
+        QVERIFY(tc.start() == tc2.start());
+        QVERIFY(tc.end() == tc2.end());
+        QVERIFY(tc.expiration() == tc2.expiration());
+        QVERIFY(tc.isCycling() == tc2.isCycling());
+        QVERIFY(tc.numberOfCycles() == tc2.numberOfCycles());
+        QVERIFY(tc.nextDate() == tc2.nextDate());
+        QVERIFY(tc.cyclingDelayInMinutes() == tc2.cyclingDelayInMinutes());
+        QVERIFY(tc.cyclingDelayInHours() == tc2.cyclingDelayInHours());
+        QVERIFY(tc.cyclingDelayInDays() == tc2.cyclingDelayInDays());
+        QVERIFY(tc.cyclingDelayInWeeks() == tc2.cyclingDelayInWeeks());
+        QVERIFY(tc.cyclingDelayInMonth() == tc2.cyclingDelayInMonth());
+        QVERIFY(tc.cyclingDelayInYears() == tc2.cyclingDelayInYears());
+        QVERIFY(tc.cyclingDelayInDecades() == tc2.cyclingDelayInDecades());
+        // Dynamic values
+        // QVERIFY(tc.cycleStartDate() == tc2.cycleStartDate());
+        // QVERIFY(tc.cycleExpirationDate() == tc2.cycleExpirationDate());
+        QVERIFY(tc2.isModified() == false);
+    }
+
+    // Test AlertRelation XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertRelation rel;
+        rel.setId(r.randomInt(1, 100000));
+        rel.setRelatedTo(AlertRelation::RelatedTo(r.randomInt(0, AlertRelation::RelatedToApplication)));
+        rel.setRelatedToUid(r.randomWords(1));
+        AlertRelation rel2 = AlertRelation::fromXml(rel.toXml());
+        QVERIFY(rel.id() == rel2.id());
+        QVERIFY(rel.relatedTo() == rel2.relatedTo());
+        QVERIFY(rel.relationTypeToString() == rel2.relationTypeToString());
+        QVERIFY(rel.relatedToUid() == rel2.relatedToUid());
+        QVERIFY(rel2.isModified() == false);
+    }
+
+    // Test the AlertItem interface
+    for(int i=0; i < loop; ++i) {
         AlertItem item = createVirtualItem(true);
-        qWarning() << item.toXml();
+        AlertItem item2 = AlertItem::fromXml(item.toXml());
+        QVERIFY(item.isValid() == item2.isValid());
+        QVERIFY(item.uuid() == item2.uuid());
+        QVERIFY(item.packUid() == item2.packUid());
+        QVERIFY(item.cryptedPassword() == item2.cryptedPassword());
+        QVERIFY(item.availableLanguages() == item2.availableLanguages());
+        foreach(const QString &l, item.availableLanguages()) {
+            QVERIFY(item.label(l) == item2.label(l));
+            QVERIFY(item.toolTip(l) == item2.toolTip(l));
+            QVERIFY(item.category(l) == item2.category(l));
+            QVERIFY(item.description(l) == item2.description(l));
+            QVERIFY(item.comment(l) == item2.comment(l));
+        }
+        QVERIFY(item.viewType() == item2.viewType());
+        QVERIFY(item.contentType() == item2.contentType());
+        QVERIFY(item.priority() == item2.priority());
+        QVERIFY(item.isOverrideRequiresUserComment() == item2.isOverrideRequiresUserComment());
+        QVERIFY(item.mustBeRead() == item2.mustBeRead());
+        QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
+        QVERIFY(item.isEditable() == item2.isEditable());
+        //QVERIFY(item.creationDate() == item2.creationDate());
+        //QVERIFY(item.lastUpdate() == item2.lastUpdate());
+        QVERIFY(item.themedIcon() == item2.themedIcon());
+        QVERIFY(item.styleSheet() == item2.styleSheet());
+        QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
+        QVERIFY(item.htmlToolTip(true) == item2.htmlToolTip(true));
+        QVERIFY(item.htmlToolTip(false) == item2.htmlToolTip(false));
+
+        if (item.extraXml() != item2.extraXml()) {
+            qWarning() << item.extraXml() << item2.extraXml();
+            qWarning() << item.toXml();
+            qWarning() << item2.toXml();
+        }
+
+        QVERIFY(item.extraXml() == item2.extraXml());
+
+        QVERIFY(item.relations().count() == item2.relations().count());
+        QVERIFY(item.timings().count() == item2.timings().count());
+        QVERIFY(item.scripts().count() == item2.scripts().count());
+        QVERIFY(item.validations().count() == item2.validations().count());
+
+        QVERIFY(item.remindLater() == item2.remindLater());
+        QVERIFY(item.isUserValidated() == item2.isUserValidated());
+
+        QVERIFY(item == item2);
+
+        QVERIFY(item2.isModified() == false);
     }
 }
 

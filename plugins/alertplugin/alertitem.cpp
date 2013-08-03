@@ -86,6 +86,11 @@
  * Alert priority is low
  */
 
+/**
+ * \fn void AlertTiming::setNumberOfCycles(int n)
+ * Defines the number of cycling of the alert, n must be > 0 otherwise the alert will not be cycling.
+ */
+
 #include "alertitem.h"
 #include "alertcore.h"
 #include "alertpackdescription.h"
@@ -103,6 +108,8 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_msgerror.h>
 #include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
@@ -1189,8 +1196,7 @@ bool AlertItem::operator==(const AlertItem &other) const
     // first test
     if (other.uuid() != uuid())
         return false;
-//    if (other.d->_db != d->_db)
-//        return false;
+
     // second test
     if (other.cryptedPassword() != cryptedPassword() ||
             other.creationDate() != creationDate() ||
@@ -1204,6 +1210,7 @@ bool AlertItem::operator==(const AlertItem &other) const
             other.extraXml() != extraXml()
             )
         return false;
+
     // third test (same number of sub-classes)
     if (other.relations().count() != relations().count() ||
             other.scripts().count() != scripts().count() ||
@@ -1219,69 +1226,6 @@ bool AlertItem::operator==(const AlertItem &other) const
 bool AlertItem::operator!=(const AlertItem &other) const
 {
     return !(operator==(other));
-}
-
-QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
-{
-    QStringList s;
-    s << "AlertItem(" + a.uuid();
-    if (a.isValid()) {
-        if (a.isModified())
-            s << "valid*";
-        else
-            s << "valid";
-    } else {
-        if (a.isModified())
-            s << "notValid*";
-        else
-            s << "notValid";
-    }
-    switch (a.priority()) {
-    case AlertItem::High:
-        s << "high";
-        break;
-    case AlertItem::Medium:
-        s << "medium";
-        break;
-    case AlertItem::Low:
-        s << "low";
-        break;
-    }
-    if (!a.cryptedPassword().isEmpty())
-        s << "pass:" + a.cryptedPassword();
-    s << "lbl:" + a.label();
-    s << "cat:" + a.category();
-    s << "availableLang:" + a.availableLanguages().join(";");
-    switch (a.viewType()) {
-    case AlertItem::BlockingAlert:
-        s << "view:blocking";
-        break;
-    case AlertItem::NonBlockingAlert:
-        s << "view:nonblocking";
-        break;
-    default:
-        s << "view:" + QString::number(a.viewType());
-        break;
-    }
-    switch (a.contentType()) {
-    case AlertItem::ApplicationNotification:
-        s << "content:appNotification";
-        break;
-    case AlertItem::PatientCondition:
-        s << "content:patientCondition";
-        break;
-    case AlertItem::UserNotification:
-        s << "content:userNotification";
-        break;
-    default:
-        s << "content:" + QString::number(a.contentType());
-        break;
-    }
-    s << "create:" + a.creationDate().toString(Qt::ISODate);
-    s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
-    dbg.nospace() << s.join(",\n           ")
-                  << ")";
-    return dbg.space();
 }
 
 /** sort helpers */
@@ -1389,27 +1333,26 @@ QString AlertItem::toXml() const
     QString err;
     int l, c;
     if (!doc.setContent(xml, &err, &l, &c))
-        LOG_ERROR_FOR("AlertItem", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
+        LOG_ERROR_FOR("AlertItem", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(l).arg(c).arg(err).arg(xml));
     return doc.toString(2);
 }
 
 /** Create from XML */
-AlertItem AlertItem::fromXml(const QString &xml)
+AlertItem &AlertItem::fromXml(const QString &xml)
 {
-//    ::XML_DESCRIPTION_ROOTTAG;
+    AlertItem *item = new AlertItem();
     QDomDocument doc;
     QString err;
     int l, c;
     if (!doc.setContent(xml, &err, &l, &c)) {
         LOG_ERROR_FOR("AlertItem", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
-        return AlertItem();
+        return *item;
     }
-    AlertItem item;
     QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
 
     // Description
-    item.d->descr.fromDomElement(root.firstChildElement(::XML_DESCRIPTION_ROOTTAG));
-    item.d->feedItemWithXmlDescription();
+    item->d->descr.fromDomElement(root.firstChildElement(::XML_DESCRIPTION_ROOTTAG));
+    item->d->feedItemWithXmlDescription();
 
     // Timings
     QDomElement main = root.firstChildElement(::XML_TIMING_ROOTTAG);
@@ -1417,7 +1360,7 @@ AlertItem AlertItem::fromXml(const QString &xml)
         QDomElement element = main.firstChildElement(::XML_TIMING_ELEMENTTAG);
         while (!element.isNull()) {
             AlertTiming timing = AlertTiming::fromDomElement(element);
-            item.addTiming(timing);
+            item->addTiming(timing);
             element = element.nextSiblingElement(::XML_TIMING_ELEMENTTAG);
         }
     }
@@ -1428,7 +1371,7 @@ AlertItem AlertItem::fromXml(const QString &xml)
         QDomElement element = main.firstChildElement(::XML_RELATED_ELEMENTTAG);
         while (!element.isNull()) {
             AlertRelation rel = AlertRelation::fromDomElement(element);
-            item.addRelation(rel);
+            item->addRelation(rel);
             element = element.nextSiblingElement(::XML_RELATED_ELEMENTTAG);
         }
     }
@@ -1439,7 +1382,7 @@ AlertItem AlertItem::fromXml(const QString &xml)
         QDomElement element = main.firstChildElement(::XML_VALIDATION_ELEMENTTAG);
         while (!element.isNull()) {
             AlertValidation val = AlertValidation::fromDomElement(element);
-            item.addValidation(val);
+            item->addValidation(val);
             element = element.nextSiblingElement(::XML_VALIDATION_ELEMENTTAG);
         }
     }
@@ -1450,7 +1393,7 @@ AlertItem AlertItem::fromXml(const QString &xml)
         QDomElement element = main.firstChildElement(::XML_SCRIPT_ELEMENTTAG);
         while (!element.isNull()) {
             AlertScript scr = AlertScript::fromDomElement(element);
-            item.addScript(scr);
+            item->addScript(scr);
             element = element.nextSiblingElement(::XML_SCRIPT_ELEMENTTAG);
         }
     }
@@ -1458,15 +1401,16 @@ AlertItem AlertItem::fromXml(const QString &xml)
     // Extra-xml
     int begin = xml.indexOf(QString("<%1>").arg(::XML_EXTRAXML_ROOTTAG), Qt::CaseInsensitive);
     if (begin > 0) {
-        begin += QString("<%1>").arg(::XML_EXTRAXML_ROOTTAG).length();
+        begin = xml.indexOf("<", begin+2);
         int end = xml.indexOf(::XML_EXTRAXML_ROOTTAG, begin);
+        end = xml.lastIndexOf(">", end) + 1;
         if (end > begin) {
-            --end;
-            --end;
-            item.d->_extraXml = xml.mid(begin, end-begin);
+            item->d->_extraXml = xml.mid(begin, end-begin);
         }
     }
-    return item;
+
+    item->setModified(false);
+    return *item;
 }
 
 void AlertTiming::cyclingDelay(qlonglong *mins, qlonglong *hours, qlonglong *days, qlonglong *weeks, qlonglong *months, qlonglong *years, qlonglong *decades) const
@@ -1566,43 +1510,63 @@ void AlertTiming::cyclingDelayPeriodModulo(int *period, int *mod) const
 
 QString AlertTiming::toXml() const
 {
-    if (_isCycle)
-        return QString("<%1 id='%2' valid='%3' start='%4' end='%5' "
-                       "isCycle='%6' ncycle='%7' delayInMin='%8' next='%9'/>\n")
-                .arg(::XML_TIMING_ELEMENTTAG)
-                .arg(_id)
-                .arg(_valid)
-                .arg(_start.toString(Qt::ISODate))
-                .arg(_end.toString(Qt::ISODate))
-                .arg(_isCycle)
-                .arg(_ncycle)
-                .arg(QString::number(_delay))
-                .arg(_next.toString(Qt::ISODate))
-                ;
-    return QString("<%1 id='%2' valid='%3' start='%4' end='%5'/>\n")
-            .arg(::XML_TIMING_ELEMENTTAG)
-            .arg(_id)
-            .arg(_valid)
-            .arg(_start.toString(Qt::ISODate))
-            .arg(_end.toString(Qt::ISODate))
-            ;
+    QDomDocument doc;
+    QDomElement el = doc.createElement(::XML_TIMING_ELEMENTTAG);
+    el.setAttribute("id", _id);
+    el.setAttribute("valid", _valid ? "true" : "false");
+    el.setAttribute("start", _start.toString(Qt::ISODate));
+    el.setAttribute("end", _end.toString(Qt::ISODate));
+    el.setAttribute("isCycle", _isCycle ? "true" : "false");
+    if (_isCycle) {
+        el.setAttribute("ncycle", _ncycle);
+        el.setAttribute("delayInMin", _delay);
+        el.setAttribute("next", _next.toString(Qt::ISODate));
+    }
+    doc.appendChild(el);
+    return doc.toString();
 }
 
-AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
+AlertTiming &AlertTiming::fromXml(const QString &xml)
 {
+    // Read the XML content
+    QDomDocument doc;
+    int line = 0;
+    int col = 0;
+    QString error;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("AlertTiming", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                      .arg(error).arg(line).arg(col));
+        AlertTiming *t = new AlertTiming;
+        return *t;
+    }
+    // Find the XML element corresponding to the script
+    QDomElement el = doc.documentElement();
+    if (!el.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+        el = el.firstChildElement(::XML_TIMING_ELEMENTTAG);
+    if (el.isNull()) {
+        LOG_ERROR_FOR("AlertTiming", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_TIMING_ELEMENTTAG));
+        AlertTiming *t = new AlertTiming;
+        return *t;
+    }
+    return fromDomElement(el);
+}
+
+AlertTiming &AlertTiming::fromDomElement(const QDomElement &element)
+{
+    AlertTiming *timing = new AlertTiming;
     if (element.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive)!=0)
-        return AlertTiming();
-    AlertTiming timing;
+        return *timing;
     if (!element.attribute("id").isEmpty())
-        timing.setId(element.attribute("id").toInt());
-    timing.setValid(element.attribute("valid").toInt());
-    timing.setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
-    timing.setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
-    timing.setCycling(element.attribute("isCycle").toInt());
-    timing.setNumberOfCycles(element.attribute("ncycle").toInt());
-    timing.setCyclingDelayInMinutes(element.attribute("delayInMin").toLongLong());
-    timing.setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
-    return timing;
+        timing->setId(element.attribute("id").toInt());
+    timing->setValid(element.attribute("valid").compare("true",Qt::CaseInsensitive)==0);
+    timing->setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
+    timing->setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
+    timing->setCycling(element.attribute("isCycle").compare("true",Qt::CaseInsensitive)==0);
+    timing->setNumberOfCycles(element.attribute("ncycle").toInt());
+    timing->setCyclingDelayInMinutes(element.attribute("delayInMin").toLongLong());
+    timing->setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
+    timing->setModified(false);
+    return *timing;
 }
 
 /** Return a human readable \e type property */
@@ -1679,32 +1643,64 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
 /** Transform the script to XML */
 QString AlertScript::toXml() const
 {
-    // TODO: manage "<" in script
-    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n"
-                   "%6\n"
-                   "</%1>\n")
-            .arg(::XML_SCRIPT_ELEMENTTAG)
-            .arg(_id)
-            .arg(_valid)
-            .arg(typeToXml(_type))
-            .arg(_uid)
-            .arg(_script)
-            ;
+    QDomDocument doc;
+    QDomElement el = doc.createElement(::XML_SCRIPT_ELEMENTTAG);
+    el.setAttribute("id", _id);
+    el.setAttribute("valid", _valid ? "true" : "false");
+    el.setAttribute("type", typeToXml(_type));
+    el.setAttribute("uid", _uid);
+    QDomText text = doc.createTextNode(_script);
+    el.appendChild(text);
+    doc.appendChild(el);
+    return doc.toString();
 }
 
-/** Create a script from XML */
-AlertScript AlertScript::fromDomElement(const QDomElement &element)
+/**
+ * Create a script from XML
+ * \sa fromDomElement(), toXml()
+ */
+AlertScript &AlertScript::fromXml(const QString &xml)
 {
+    // Read the XML content
+    QDomDocument doc;
+    int line = 0;
+    int col = 0;
+    QString error;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("AlertScript", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                      .arg(error).arg(line).arg(col));
+        AlertScript *script = new AlertScript;
+        return *script;
+    }
+    // Find the XML element corresponding to the script
+    QDomElement el = doc.documentElement();
+    if (!el.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+        el = el.firstChildElement(::XML_SCRIPT_ELEMENTTAG);
+    if (el.isNull()) {
+        LOG_ERROR_FOR("AlertScript", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_SCRIPT_ELEMENTTAG));
+        AlertScript *script = new AlertScript;
+        return *script;
+    }
+    return fromDomElement(el);
+}
+
+/**
+ * Create a script from XML
+ * \sa fromXml(), toXml()
+ */
+AlertScript &AlertScript::fromDomElement(const QDomElement &element)
+{
+    AlertScript *script = new AlertScript;
     if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
-        return AlertScript();
-    AlertScript script;
+        return *script;
     if (!element.attribute("id").isEmpty())
-        script.setId(element.attribute("id").toInt());
-    script.setUuid(element.attribute("uid"));
-    script.setValid(element.attribute("valid").toInt());
-    script.setType(typeFromXml(element.attribute("type")));
-    script.setScript(element.text());
-    return script;
+        script->setId(element.attribute("id").toInt());
+    script->setUuid(element.attribute("uid"));
+    script->setValid(element.attribute("valid").compare("true", Qt::CaseInsensitive) == 0);
+    script->setType(typeFromXml(element.attribute("type")));
+    script->setScript(element.text());
+    script->setModified(false);
+    return *script;
 }
 
 /** Sort scripts by type */
@@ -1716,31 +1712,59 @@ bool AlertScript::operator<(const AlertScript &script) const
 /** Transform the validation to XML */
 QString AlertValidation::toXml() const
 {
-    QString comment = _userComment;
-    comment = comment.replace("<", "&lt;");
-    return QString("<%1 id='%2' validator='%3' comment='%4' dt='%5' validated='%6'/>\n")
-            .arg(::XML_VALIDATION_ELEMENTTAG)
-            .arg(_id)
-            .arg(_validator)
-            .arg(comment)
-            .arg(_date.toString(Qt::ISODate))
-            .arg(_validated)
-            ;
+    QDomDocument doc;
+    QDomElement el = doc.createElement(::XML_VALIDATION_ELEMENTTAG);
+    el.setAttribute("id", _id);
+    el.setAttribute("overriden", _overridden ? "true" : "false");
+    el.setAttribute("validator", _validator);
+    el.setAttribute("comment", _userComment);
+    el.setAttribute("dt", _date.toString(Qt::ISODate));
+    el.setAttribute("validated", _validated);
+    doc.appendChild(el);
+    return doc.toString();
 }
 
 /** Create a validation from XML */
-AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
+AlertValidation &AlertValidation::fromXml(const QString &xml)
 {
+    // Read the XML content
+    QDomDocument doc;
+    int line = 0;
+    int col = 0;
+    QString error;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("AlertValidation", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                      .arg(error).arg(line).arg(col));
+        AlertValidation *val = new AlertValidation();
+        return *val;
+    }
+    // Find the XML element corresponding to the script
+    QDomElement el = doc.documentElement();
+    if (!el.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+        el = el.firstChildElement(::XML_VALIDATION_ELEMENTTAG);
+    if (el.isNull()) {
+        LOG_ERROR_FOR("AlertValidation", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_VALIDATION_ELEMENTTAG));
+        AlertValidation *val = new AlertValidation();
+        return *val;
+    }
+    return fromDomElement(el);
+}
+
+/** Create a validation from XML */
+AlertValidation &AlertValidation::fromDomElement(const QDomElement &element)
+{
+    AlertValidation *val = new AlertValidation();
     if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
-        return AlertValidation();
-    AlertValidation val;
+        return *val;
     if (!element.attribute("id").isEmpty())
-        val.setId(element.attribute("id").toInt());
-    val.setValidatorUuid(element.attribute("validator"));
-    val.setUserComment(element.attribute("comment"));
-    val.setValidatedUuid(element.attribute("validated"));
-    val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
-    return val;
+        val->setId(element.attribute("id").toInt());
+    val->setOverriden(element.attribute("overriden").compare("true", Qt::CaseInsensitive)==0);
+    val->setValidatorUuid(element.attribute("validator"));
+    val->setUserComment(element.attribute("comment"));
+    val->setValidatedUuid(element.attribute("validated"));
+    val->setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
+    val->setModified(false);
+    return *val;
 }
 
 /** Return a human readable string of the current relation. */
@@ -1817,34 +1841,123 @@ AlertRelation::RelatedTo AlertRelation::relationTypeFromXml(const QString &xmlVa
 /** Transform the relation to XML */
 QString AlertRelation::toXml() const
 {
-    if (_relatedUid.isEmpty())
-        return QString("<%1 id='%2' to='%3'/>\n")
-                .arg(::XML_RELATED_ELEMENTTAG)
-                .arg(_id)
-                .arg(relationTypeToXml(_related))
-                ;
-    return QString("<%1 id='%2' to='%3' uid='%4'/>\n")
-            .arg(::XML_RELATED_ELEMENTTAG)
-            .arg(_id)
-            .arg(relationTypeToXml(_related))
-            .arg(_relatedUid)
-            ;
+    QDomDocument doc;
+    QDomElement el = doc.createElement(::XML_RELATED_ELEMENTTAG);
+    el.setAttribute("id", _id);
+    el.setAttribute("to", relationTypeToXml(_related));
+    el.setAttribute("uid", _relatedUid);
+    doc.appendChild(el);
+    return doc.toString();
+}
+
+AlertRelation &AlertRelation::fromXml(const QString &xml)
+{
+    // Read the XML content
+    QDomDocument doc;
+    int line = 0;
+    int col = 0;
+    QString error;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("AlertRelation", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
+                      .arg(error).arg(line).arg(col));
+        qWarning() << xml;
+        AlertRelation *rel = new AlertRelation;
+        return *rel;
+    }
+    // Find the XML element corresponding to the script
+    QDomElement el = doc.documentElement();
+    if (!el.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive) == 0)
+        el = el.firstChildElement(::XML_RELATED_ELEMENTTAG);
+    if (el.isNull()) {
+        LOG_ERROR_FOR("AlertRelation", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_RELATED_ELEMENTTAG));
+        AlertRelation *rel = new AlertRelation;
+        return *rel;
+    }
+    return fromDomElement(el);
 }
 
 /** Create a relation from XML */
-AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
+AlertRelation &AlertRelation::fromDomElement(const QDomElement &element)
 {
+    AlertRelation *rel = new AlertRelation;
     if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)
-        return AlertRelation();
-    AlertRelation rel;
+        return *rel;
     if (!element.attribute("id").isEmpty())
-        rel.setId(element.attribute("id").toInt());
-    rel.setRelatedTo(AlertRelation::relationTypeFromXml(element.attribute("to")));
-    rel.setRelatedToUid(element.attribute("uid"));
-    return rel;
+        rel->setId(element.attribute("id").toInt());
+    rel->setRelatedTo(AlertRelation::relationTypeFromXml(element.attribute("to")));
+    rel->setRelatedToUid(element.attribute("uid"));
+    rel->setModified(false);
+    return *rel;
 }
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem *c)
 {
+    if (!c) {
+        dbg.nospace() << "AlertItem(0x0)";
+        return dbg.space();
+    }
     return operator<<(dbg, *c);
+}
+
+QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
+{
+    QStringList s;
+    s << "AlertItem(" + a.uuid();
+    if (a.isValid()) {
+        if (a.isModified())
+            s << "valid*";
+        else
+            s << "valid";
+    } else {
+        if (a.isModified())
+            s << "notValid*";
+        else
+            s << "notValid";
+    }
+    switch (a.priority()) {
+    case AlertItem::High:
+        s << "high";
+        break;
+    case AlertItem::Medium:
+        s << "medium";
+        break;
+    case AlertItem::Low:
+        s << "low";
+        break;
+    }
+    if (!a.cryptedPassword().isEmpty())
+        s << "pass:" + a.cryptedPassword();
+    s << "lbl:" + a.label();
+    s << "cat:" + a.category();
+    s << "availableLang:" + a.availableLanguages().join(";");
+    switch (a.viewType()) {
+    case AlertItem::BlockingAlert:
+        s << "view:blocking";
+        break;
+    case AlertItem::NonBlockingAlert:
+        s << "view:nonblocking";
+        break;
+    default:
+        s << "view:" + QString::number(a.viewType());
+        break;
+    }
+    switch (a.contentType()) {
+    case AlertItem::ApplicationNotification:
+        s << "content:appNotification";
+        break;
+    case AlertItem::PatientCondition:
+        s << "content:patientCondition";
+        break;
+    case AlertItem::UserNotification:
+        s << "content:userNotification";
+        break;
+    default:
+        s << "content:" + QString::number(a.contentType());
+        break;
+    }
+    s << "create:" + a.creationDate().toString(Qt::ISODate);
+    s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
+    dbg.nospace() << s.join(",\n           ")
+                  << ")";
+    return dbg.space();
 }
