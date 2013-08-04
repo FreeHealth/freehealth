@@ -73,12 +73,12 @@ static inline DataPack::IPackManager *packManager() { return dataPackCore().pack
 AlertCore *AlertCore::_instance = 0;
 
 /** Return the instance of the object */
-AlertCore *AlertCore::instance()
+AlertCore &AlertCore::instance()
 {
     Q_ASSERT(_instance);
     if (!_instance)
         _instance = new AlertCore(qApp);
-    return _instance;
+    return *_instance;
 }
 
 namespace Alert {
@@ -87,6 +87,7 @@ class AlertCorePrivate
 {
 public:
     AlertCorePrivate(AlertCore *parent) :
+        _initialized(false),
         _alertBase(0),
         _alertScriptManager(0),
         q(parent)
@@ -99,6 +100,7 @@ public:
     }
 
 public:
+    bool _initialized;
     AlertBase *_alertBase;
     AlertScriptManager *_alertScriptManager;
 
@@ -136,9 +138,18 @@ AlertCore::~AlertCore()
 /** Initialize the core. */
 bool AlertCore::initialize()
 {
+    if (d->_initialized)
+        return true;
     if (!d->_alertBase->initialize())
         return false;
+    d->_initialized = true;
     return true;
+}
+
+/** Returns initialization state of this core */
+bool AlertCore::isInitialized() const
+{
+    return d->_initialized;
 }
 
 /** Returns the Alert::Internal::AlertBase single instance object in use (only in unit-test mode) */
@@ -258,10 +269,10 @@ bool AlertCore::updateAlert(const AlertItem &item)
 }
 
 /**
-  Remove a registered static alert (do nothing with blocking alerts).\n
-  Inform all IAlertPlaceHolder of the removal of the alert.\n
-  The modification are not saved into the database.
-  \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
+ * Remove a registered non-blocking alert (do nothing with blocking alerts).\n
+ * Inform all IAlertPlaceHolder of the removal of the alert.\n
+ * The modification are not saved into the database.
+ * \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
 */
 bool AlertCore::removeAlert(const AlertItem &item)
 {
@@ -401,23 +412,9 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders
 
 void AlertCore::postCoreInitialization()
 {
+    // Member directly called by AlertPlugin object
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
-
-//    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
-//    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
-//    AlertItem item5;
-//    item5.setUuid(Utils::Database::createUid());
-//    item5.setLabel("Simple basic Blocking alert test (item5)");
-//    item5.setCategory("Test");
-//    item5.setDescription("Aoutch this is a Blocking alert !");
-//    item5.setViewType(AlertItem::BlockingAlert);
-//    item5.setRemindLaterAllowed(true);
-//    item5.setOverrideRequiresUserComment(true);
-//    item5.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
-//    item5.addTiming(AlertTiming(start, expiration));
-//    d->_alertBase->saveAlertItem(item5);
-
     if (patient())
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(checkPatientAlerts()));
     if (user())

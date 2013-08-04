@@ -55,7 +55,7 @@ using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
+static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
 
 AlertPlaceHolderWidget::AlertPlaceHolderWidget(QObject *parent) :
     IAlertPlaceHolder(parent),
@@ -318,8 +318,8 @@ void AlertPlaceHolderWidget::createAlert()
          if (!dlg.submit(item)) {
              LOG_ERROR("Unable to submit alert");
          } else {
-             alertCore()->saveAlert(item);
-             alertCore()->registerAlert(item);
+             alertCore().saveAlert(item);
+             alertCore().registerAlert(item);
          }
     }
 }

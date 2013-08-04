@@ -125,7 +125,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
+static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -860,7 +860,7 @@ QString AlertItem::htmlToolTip(bool showCategory) const
 
     // Alert pack description
     if (!packUid().isEmpty()) {
-        AlertPackDescription pack = alertCore()->getAlertPackDescription(packUid());
+        AlertPackDescription pack = alertCore().getAlertPackDescription(packUid());
         content += QString("<span style=\"font-size:small;color:#303030\">%1</span>")
                 .arg(tkTr(Trans::Constants::FROM) + " " + pack.label());
     }
@@ -1023,7 +1023,7 @@ bool AlertItem::remindLater()
 //        }
 //    }
     // inform the core
-    AlertCore::instance()->removeAlert(*this);
+    alertCore().removeAlert(*this);
     return true;
 }
 
@@ -1105,7 +1105,7 @@ bool AlertItem::validateAlert(const QString &validatorUid, bool override, const 
     }
     addValidation(val);
     // inform the core
-    AlertCore::instance()->updateAlert(*this);
+    alertCore().updateAlert(*this);
     return true;
 }
 

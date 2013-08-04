@@ -997,7 +997,7 @@ bool XmlIOBase::registerAlertPacks(const XmlFormName &form)
         LOG_FOR("XmlFormIO","Saving attached alertpacks to database " + form.uid);
         QFileInfoList files = Utils::getFiles(alertPacksPath, "packdescription.xml", Utils::Recursively);
         foreach(const QFileInfo &f, files) {
-            if (!Alert::AlertCore::instance()->registerAlertPack(f.absolutePath())) {
+            if (!Alert::AlertCore::instance().registerAlertPack(f.absolutePath())) {
                 LOG_ERROR("Unable to read alertpack: "+ f.absolutePath());
                 ok = false;
             }

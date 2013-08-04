@@ -72,8 +72,9 @@ public:
     };
     Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
 
-    static AlertCore *instance();
+    static AlertCore &instance();
     ~AlertCore();
+    bool isInitialized() const;
 
     // Getters/Setters
     QVector<AlertItem> getAlertItemForCurrentUser() const;

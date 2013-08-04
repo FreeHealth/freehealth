@@ -52,7 +52,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
+static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
 
 namespace {
 static QIcon getIcon(const AlertItem &item)
@@ -205,12 +205,12 @@ void NonBlockingAlertToolButton::refreshStyleSheet()
  */
 void NonBlockingAlertToolButton::validateAlert()
 {
-    QVariant validate = alertCore()->execute(_item, AlertScript::OnAboutToValidate);
+    QVariant validate = alertCore().execute(_item, AlertScript::OnAboutToValidate);
     if ((validate.isValid() && validate.canConvert(QVariant::Bool) && validate.toBool()) ||
             validate.isNull() || !validate.isValid()) {
         _item.validateAlertWithCurrentUserAndConfirmationDialog();
         if (_autoSave)
-            AlertCore::instance()->saveAlert(_item);
+            alertCore().saveAlert(_item);
     }
 }
 
@@ -228,9 +228,9 @@ void NonBlockingAlertToolButton::editAlert()
     if (dlg.exec() == QDialog::Accepted) {
         dlg.submit(_item);
         // TODO: add a script onEditionFinished
-        AlertCore::instance()->updateAlert(_item);
+        alertCore().updateAlert(_item);
         if (_autoSaveOnEdit)
-            AlertCore::instance()->saveAlert(_item);
+            alertCore().saveAlert(_item);
     }
 }
 
@@ -242,7 +242,7 @@ void NonBlockingAlertToolButton::remindAlert()
 {
     if (!_item.isRemindLaterAllowed())
         return;
-    QVariant remindOk = alertCore()->execute(_item, AlertScript::OnRemindLater);
+    QVariant remindOk = alertCore().execute(_item, AlertScript::OnRemindLater);
     if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
         remindOk.isNull() || !remindOk.isValid()) {
         _item.remindLater();
@@ -256,7 +256,7 @@ void NonBlockingAlertToolButton::remindAlert()
 void NonBlockingAlertToolButton::overrideAlert()
 {
     // TODO: improve the dialog by creating a specific AlertOverridingConfirmationDialog
-    alertCore()->execute(_item, AlertScript::OnAboutToOverride);
+    alertCore().execute(_item, AlertScript::OnAboutToOverride);
     bool yes = Utils::yesNoMessageBox(tr("Override alert"),
                                       tr("Do you really want to override this alert ?"),
                                       tr("By overriding an alert, you report your disagreement "
@@ -278,10 +278,10 @@ void NonBlockingAlertToolButton::overrideAlert()
         if (!_item.validateAlert(validator, true, comment, QDateTime::currentDateTime())) {
             LOG_ERROR("Unable to validate the non-blocking alert");
         } else {
-            alertCore()->execute(_item, AlertScript::OnOverridden);
-            AlertCore::instance()->updateAlert(_item);
+            alertCore().execute(_item, AlertScript::OnOverridden);
+            alertCore().updateAlert(_item);
             if (_autoSave)
-                AlertCore::instance()->saveAlert(_item);
+                alertCore().saveAlert(_item);
         }
     }
 }
@@ -315,7 +315,7 @@ void NonBlockingAlertToolButton::showEvent(QShowEvent *event)
     Q_UNUSED(event);
     // only once
     if (!_aboutToShowScriptExecuted)
-        alertCore()->execute(_item, AlertScript::OnAboutToShow);
+        alertCore().execute(_item, AlertScript::OnAboutToShow);
     _aboutToShowScriptExecuted = true;
 }
 

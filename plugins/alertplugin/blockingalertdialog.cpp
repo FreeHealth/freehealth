@@ -122,7 +122,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
+static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
 
 static QWidget *addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
 {
@@ -198,7 +198,7 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
     // Execute AboutToShow script
     for(int i=0; i < d->_items.count(); ++i) {
         AlertItem &item = d->_items[i];
-        alertCore()->execute(item, AlertScript::OnAboutToShow);
+        alertCore().execute(item, AlertScript::OnAboutToShow);
     }
 
     // Prepare the ui
@@ -402,7 +402,7 @@ void BlockingAlertDialog::done(int result)
         // Overridden
         for(int i=0; i < d->_items.count(); ++i) {
             AlertItem &item = d->_items[i];
-            alertCore()->execute(item, AlertScript::OnOverridden);
+            alertCore().execute(item, AlertScript::OnOverridden);
         }
     }
     QDialog::done(result);
@@ -413,7 +413,7 @@ void BlockingAlertDialog::validate()
     bool canValidate = true;
     for(int i=0; i < d->_items.count(); ++i) {
         AlertItem &item = d->_items[i];
-        QVariant validate = alertCore()->execute(item, AlertScript::OnAboutToValidate);
+        QVariant validate = alertCore().execute(item, AlertScript::OnAboutToValidate);
         if ((validate.isValid() && validate.canConvert(QVariant::Bool) && validate.toBool()) ||
                 validate.isNull() || !validate.isValid()) {
             // ok
@@ -436,7 +436,7 @@ void BlockingAlertDialog::override()
 {
     for(int i=0; i < d->_items.count(); ++i) {
         AlertItem &item = d->_items[i];
-        alertCore()->execute(item, AlertScript::OnAboutToOverride);
+        alertCore().execute(item, AlertScript::OnAboutToOverride);
     }
 
     if (!d->_overrideCommentRequired) {
@@ -552,7 +552,7 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
     if (result.isRemindLaterRequested()) {
         for(int i=0; i < items.count(); ++i) {
             AlertItem &item = items[i];
-            QVariant remindOk = alertCore()->execute(item, AlertScript::OnRemindLater);
+            QVariant remindOk = alertCore().execute(item, AlertScript::OnRemindLater);
             if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
                 remindOk.isNull() || !remindOk.isValid()) {
                 item.remindLater();
