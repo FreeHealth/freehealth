@@ -1149,6 +1149,141 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     return true;
 }
 
+/**
+ * Totally remove all data related the alert \e uuid from the database.
+ * This is not revertable. If you just want to softly remove an alert, you need
+ * to set alert to an invalid state and save it to the database. \n
+ * This member assumes a database transaction.
+ * \sa Alert::AlertItem::setValidity(), Alert::Internal::AlertBase::saveAlertItem()
+ */
+bool AlertBase::purgeAlertItem(const QString &uuid)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlDatabase DB = database();
+    DB.transaction();
+    QSqlQuery query(DB);
+    int id = -1;
+    int relId = -1;
+    int sid = -1;
+    int valId = -1;
+    int timId = -1;
+    int lblId = -1;
+    int catId = -1;
+    int descId = -1;
+    int comId = -1;
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
+    QString req = select(Constants::Table_ALERT, QList<int>()
+                         << Constants::ALERT_ID
+                         << Constants::ALERT_REL_ID
+                         << Constants::ALERT_SID
+                         << Constants::ALERT_VAL_ID
+                         << Constants::ALERT_TIM_ID
+                         << Constants::ALERT_LABEL_LID
+                         << Constants::ALERT_CATEGORY_LID
+                         << Constants::ALERT_DESCRIPTION_LID
+                         << Constants::ALERT_COMMENT_LID
+                         , where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            id = query.value(0).toInt();
+            if (!query.value(1).isNull())
+                relId = query.value(1).toInt();
+            if (!query.value(2).isNull())
+                sid = query.value(2).toInt();
+            if (!query.value(3).isNull())
+                valId = query.value(3).toInt();
+            if (!query.value(4).isNull())
+                timId = query.value(4).toInt();
+            if (!query.value(5).isNull())
+                lblId = query.value(5).toInt();
+            if (!query.value(6).isNull())
+                catId = query.value(6).toInt();
+            if (!query.value(7).isNull())
+                descId = query.value(7).toInt();
+            if (!query.value(8).isNull())
+                comId = query.value(8).toInt();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    // Delete all alert
+    where.clear();
+    where.insert(Constants::ALERT_ID, QString("='%1'").arg(id));
+    if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT, where))) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    // Delete all timings
+    if (timId != -1) {
+        where.clear();
+        where.insert(Constants::ALERT_TIMING_TIM_ID, QString("='%1'").arg(timId));
+        if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT_TIMING, where))) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+    }
+    // Delete all validations
+    if (valId != -1) {
+        where.clear();
+        where.insert(Constants::ALERT_VALIDATION_VAL_ID, QString("='%1'").arg(valId));
+        if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT_VALIDATION, where))) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+    }
+    // Delete all relations
+    if (relId != -1) {
+        where.clear();
+        where.insert(Constants::ALERT_RELATED_REL_ID, QString("='%1'").arg(relId));
+        if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT_RELATED, where))) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+    }
+    // Delete all scripts
+    if (sid != -1) {
+        where.clear();
+        where.insert(Constants::ALERT_SCRIPTS_SID, QString("='%1'").arg(sid));
+        if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT_SCRIPTS, where))) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+    }
+    // Delete all labels
+    QStringList del;
+    del << QString::number(lblId) << QString::number(comId) << QString::number(descId) << QString::number(catId);
+    del.removeAll("-1");
+    if (!del.isEmpty()) {
+        where.clear();
+        where.insert(Constants::ALERT_LABELS_LABELID,
+                     QString("IN (%1)").arg(del.join(", ")));
+        if (!query.exec(prepareDeleteQuery(Constants::Table_ALERT_LABELS, where))) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
 /** Return the Alert::AlertItem corresponding to the Alert::Internal::AlertBaseQuery \e query */
 QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 {
@@ -1573,6 +1708,7 @@ bool AlertBase::getItemTimings(AlertItem &item)
     }
     return true;
 }
+
 bool AlertBase::getItemValidations(AlertItem &item)
 {
     // we are inside a transaction opened by getAlertItem
@@ -2070,5 +2206,3 @@ void AlertBase::toTreeWidget(QTreeWidget *tree) const
     Database::toTreeWidget(tree);
     tree->expandAll();
 }
-
-

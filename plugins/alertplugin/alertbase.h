@@ -118,6 +118,7 @@ public:
     // AlertItem
     bool saveAlertItem(AlertItem &item);
     QVector<AlertItem> getAlertItems(const AlertBaseQuery &query);
+    bool purgeAlertItem(const QString &uuid);
 
     // AlertPacks
     bool saveAlertPackDescription(AlertPackDescription &descr);
