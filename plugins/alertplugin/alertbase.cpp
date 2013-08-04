@@ -123,6 +123,20 @@ AlertBaseQuery::AlertBaseQuery() :
 AlertBaseQuery::~AlertBaseQuery()
 {}
 
+/** Clear query */
+void AlertBaseQuery::clear()
+{
+    _itemUid.clear();
+    _userUids.clear();
+    _patientUids.clear();
+    _appNames.clear();
+    _start = QDate::currentDate();
+    _end = _start.addYears(1);
+    _validity = AlertBaseQuery::ValidAlerts;
+    _viewType = -1;
+    _categories.clear();
+}
+
 /** Define the query to the unique alert item with the \e uuid. All other params are ignored. */
 void AlertBaseQuery::getAlertItemFromUuid(const QString &uuid)
 {

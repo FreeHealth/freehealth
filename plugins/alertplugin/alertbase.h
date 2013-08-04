@@ -62,6 +62,7 @@ public:
 
     AlertBaseQuery();
     ~AlertBaseQuery();
+    void clear();
 
     void getAlertItemFromUuid(const QString &uuid);
     QString alertItemFromUuid() const;
