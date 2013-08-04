@@ -578,43 +578,59 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         }
     }
     query.finish();
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: get ID");
 
+    // AlertItem must be updated
     if (item.db(ItemId).isValid()) {
         bool r = updateAlertItem(item);
 //        Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: item updated");
         return r;
     }
 
+    // AlertItem must be saved
+    // Ensure that all ids of all sub-objects are == -1
+    for(int i=0; i < item.relations().count(); ++i)
+        item.relationAt(i).setId(-1);
+    for(int i=0; i < item.scripts().count(); ++i)
+        item.scriptAt(i).setId(-1);
+    for(int i=0; i < item.timings().count(); ++i)
+        item.timingAt(i).setId(-1);
+    for(int i=0; i < item.validations().count(); ++i)
+        item.validationAt(i).setId(-1);
+    item.setDb(ItemId, -1);
+    item.setDb(RelatedId, -1);
+    item.setDb(CategoryUid, -1);
+    item.setDb(ScriptId, -1);
+    item.setDb(ValidationId, -1);
+    item.setDb(TimingId, -1);
+    item.setDb(LabelLID, -1);
+    item.setDb(CategoryLID, -1);
+    item.setDb(DescrLID, -1);
+    item.setDb(CommentLID, -1);
+
     if (!saveItemRelations(item)) {
         DB.rollback();
         return false;
     }
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save relations");
 
     if (!saveItemScripts(item)) {
         DB.rollback();
         return false;
     }
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save scripts");
 
     if (!saveItemTimings(item)) {
         DB.rollback();
         return false;
     }
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save timings");
 
     if (!saveItemValidations(item)) {
         DB.rollback();
         return false;
     }
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save validations");
 
     if (!saveItemLabels(item)) {
         DB.rollback();
         return false;
     }
-//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save labels");
 
     if (item.uuid().isEmpty())
         item.setUuid(Database::createUid());
@@ -856,9 +872,9 @@ bool AlertBase::saveItemScripts(AlertItem &item)
         id = item.db(ScriptId).toInt();
     }
     QSqlQuery query(database());
-    for(int i=0; i<item.scripts().count(); ++i) {
+    for(int i=0; i < item.scripts().count(); ++i) {
         AlertScript &script = item.scriptAt(i);
-        if (script.id()==-1) {
+        if (script.id() ==-1) {
             // save
             QString req = prepareInsertQuery(Constants::Table_ALERT_SCRIPTS);
             query.prepare(req);
@@ -1005,7 +1021,6 @@ bool AlertBase::saveItemValidations(AlertItem &item)
     } else {
         id = item.db(ValidationId).toInt();
     }
-
     QSqlQuery query(database());
     for(int i=0; i < item.validations().count(); ++i) {
         AlertValidation &validation = item.validationAt(i);
@@ -1526,6 +1541,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             item.setThemedIcon(sqlQuery.value(Constants::ALERT_THEMED_ICON).toString());
             item.setStyleSheet(sqlQuery.value(Constants::ALERT_THEME_CSS).toString());
             item.setExtraXml(sqlQuery.value(Constants::ALERT_EXTRA_XML).toString());
+            item.setModified(false);
             alerts << item;
         }
     } else {
@@ -1541,36 +1557,53 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 
         if (!getItemRelations(item)) {
             database().rollback();
+            item.setModified(false);
             return alerts;
         }
         if (!getItemScripts(item)) {
             database().rollback();
+            item.setModified(false);
             return alerts;
         }
         if (!getItemTimings(item)) {
             database().rollback();
+            item.setModified(false);
             return alerts;
         }
         if (!getItemValidations(item)) {
             database().rollback();
+            item.setModified(false);
             return alerts;
         }
         if (!getItemLabels(item)) {
             database().rollback();
+            item.setModified(false);
             return alerts;
         }
+        item.setModified(false);
     }
     database().commit();
 
     return alerts;
 }
 
-AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
+AlertItem &AlertBase::getAlertItemFromUuid(const QString &uuid)
 {
-    AlertItem item;
-    item.setUuid(uuid);
+    AlertItem *item = new AlertItem;
+    item->setUuid(uuid);
+    item->setDb(ItemId, -1);
+    item->setDb(RelatedId, -1);
+    item->setDb(CategoryUid, -1);
+    item->setDb(ScriptId, -1);
+    item->setDb(ValidationId, -1);
+    item->setDb(TimingId, -1);
+    item->setDb(LabelLID, -1);
+    item->setDb(CategoryLID, -1);
+    item->setDb(DescrLID, -1);
+    item->setDb(CommentLID, -1);
+    item->setModified(false);
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
-        return item;
+        return *item;
 
     if (WarnMemberNames)
         qWarning() << "AlertBase::getAlertItemFromUuid";
@@ -1581,59 +1614,66 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     QSqlQuery query(database());
     if (query.exec(select(Constants::Table_ALERT, where))) {
         if (query.next()) {
-            item.setDb(ItemId, query.value(Constants::ALERT_ID));
-            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID));
-            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID));
-            item.setDb(ScriptId, query.value(Constants::ALERT_SID));
-            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
-            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
-            item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
-            item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
-            item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
-            item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
-            item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
-            item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
-            item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
-            item.setMustBeRead(query.value(Constants::ALERT_MUSTBEREAD).toBool());
-            item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
-            item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
-            item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
-            item.setStyleSheet(query.value(Constants::ALERT_THEME_CSS).toString());
-            item.setExtraXml(query.value(Constants::ALERT_EXTRA_XML).toString());
+            item->setDb(ItemId, query.value(Constants::ALERT_ID));
+            item->setDb(RelatedId, query.value(Constants::ALERT_REL_ID));
+            item->setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID));
+            item->setDb(ScriptId, query.value(Constants::ALERT_SID));
+            item->setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
+            item->setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
+            item->setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
+            item->setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
+            item->setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
+            item->setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
+            item->setValidity(query.value(Constants::ALERT_ISVALID).toBool());
+            item->setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
+            item->setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
+            item->setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
+            item->setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
+            item->setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
+            item->setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
+            item->setMustBeRead(query.value(Constants::ALERT_MUSTBEREAD).toBool());
+            item->setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
+            item->setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
+            item->setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
+            item->setStyleSheet(query.value(Constants::ALERT_THEME_CSS).toString());
+            item->setExtraXml(query.value(Constants::ALERT_EXTRA_XML).toString());
         }
     } else {
         LOG_QUERY_ERROR(query);
         query.finish();
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
 
-    if (!getItemRelations(item)) {
+    if (!getItemRelations(*item)) {
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
-    if (!getItemScripts(item)) {
+    if (!getItemScripts(*item)) {
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
-    if (!getItemTimings(item)) {
+    if (!getItemTimings(*item)) {
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
-    if (!getItemValidations(item)) {
+    if (!getItemValidations(*item)) {
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
-    if (!getItemLabels(item)) {
+    if (!getItemLabels(*item)) {
         database().rollback();
-        return item;
+        item->setModified(false);
+        return *item;
     }
     database().commit();
-    return item;
+    item->setModified(false);
+    return *item;
 }
 
 bool AlertBase::getItemRelations(AlertItem &item)
@@ -1738,16 +1778,16 @@ bool AlertBase::getItemValidations(AlertItem &item)
         return false;
     }
     QSqlQuery query(database());
-    QStringList uids;
-    if (user())
-        uids << user()->uuid();
-    if (patient())
-        uids << patient()->uuid();
-    uids << qApp->applicationName().toLower();
     Utils::FieldList conds;
     // Get only validations related to the current user, patient && application
+    //    QStringList uids;
+    //    if (user())
+    //        uids << user()->uuid();
+    //    if (patient())
+    //        uids << patient()->uuid();
+    //    uids << qApp->applicationName().toLower();
+    //    conds << Utils::Field(Table_ALERT, ALERT_VALIDATION_VALIDATED_UUID, QString("IN ('%1')").arg(uids.join("','")));
     conds << Utils::Field(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
-    conds << Utils::Field(Table_ALERT, ALERT_VALIDATION_VALIDATED_UUID, QString("IN ('%1')").arg(uids.join("','")));
     Utils::Join join(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, Table_ALERT, ALERT_VAL_ID);
     if (query.exec(select(Table_ALERT_VALIDATION, join, conds))) {
         while (query.next()) {

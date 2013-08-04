@@ -393,17 +393,75 @@ void AlertPlugin::test_alertcore_init()
 
 void AlertPlugin::test_alertbase()
 {
-    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
-    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+    QVector<AlertItem> test;
+    Internal::AlertBaseQuery query;
 
-    // Test save then purge
+    // Test save item saving
     AlertItem item = createVirtualItem(true);
     QVERIFY(alertBase().saveAlertItem(item) == true);
     QVERIFY(item.db(0).toInt() >= 0); // Test internal ID
     QVERIFY(item.isModified() == false);
-    QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
+
+    // Test get item from database
+    query.getAlertItemFromUuid(item.uuid());
+    test = alertBase().getAlertItems(query);
+    QVERIFY(test.count() == 1);
+    AlertItem &item2 = test[0];
+    QVERIFY(item.isValid() == item2.isValid());
+    QVERIFY(item.uuid() == item2.uuid());
+    QVERIFY(item.packUid() == item2.packUid());
+    QVERIFY(item.cryptedPassword() == item2.cryptedPassword());
+    QVERIFY(item.availableLanguages() == item2.availableLanguages());
+    foreach(const QString &l, item.availableLanguages()) {
+        QVERIFY(item.label(l) == item2.label(l));
+        QVERIFY(item.toolTip(l) == item2.toolTip(l));
+        QVERIFY(item.category(l) == item2.category(l));
+        QVERIFY(item.description(l) == item2.description(l));
+        QVERIFY(item.comment(l) == item2.comment(l));
+    }
+    QVERIFY(item.viewType() == item2.viewType());
+    QVERIFY(item.contentType() == item2.contentType());
+    QVERIFY(item.priority() == item2.priority());
+    QVERIFY(item.isOverrideRequiresUserComment() == item2.isOverrideRequiresUserComment());
+    QVERIFY(item.mustBeRead() == item2.mustBeRead());
+    QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
+    QVERIFY(item.isEditable() == item2.isEditable());
+    QVERIFY(item.creationDate() == item2.creationDate());
+    QVERIFY(item.lastUpdate() == item2.lastUpdate());
+    QVERIFY(item.themedIcon() == item2.themedIcon());
+    QVERIFY(item.styleSheet() == item2.styleSheet());
+    QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
+    QVERIFY(item.htmlToolTip(true) == item2.htmlToolTip(true));
+    QVERIFY(item.htmlToolTip(false) == item2.htmlToolTip(false));
+
+    if (item.extraXml() != item2.extraXml())
+        qWarning() << item.extraXml() << item2.extraXml();
+    QVERIFY(item.extraXml() == item2.extraXml());
+
+    QVERIFY(item.relations().count() == item2.relations().count());
+    QVERIFY(item.timings().count() == item2.timings().count());
+    QVERIFY(item.scripts().count() == item2.scripts().count());
+    QVERIFY(item.validations().count() == item2.validations().count());
+
+    QVERIFY(item.remindLater() == item2.remindLater());
+    QVERIFY(item.isUserValidated() == item2.isUserValidated());
+
+    QVERIFY(item == item2);
+
+    QVERIFY(item2.isModified() == false);
+    test.clear();
+
+    // purge
+//    QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
+//    test = alertBase().getAlertItems(query);
+//    QVERIFY(test.count() == 0);
+
+    return;
 
     /*
+    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+
     AlertItem item; // = alertBase().createVirtualItem();
     item.setUuid(Utils::Database::createUid());
     item.setThemedIcon("identity.png");
@@ -555,7 +613,7 @@ void AlertPlugin::test_alertbase()
     */
 
     // Database getting
-    Internal::AlertBaseQuery query;
+    query.clear();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
     //        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
     query.addUserAlerts("user1");
@@ -563,7 +621,7 @@ void AlertPlugin::test_alertbase()
     query.addPatientAlerts("patient1");
     query.addPatientAlerts("patient2");
     query.addPatientAlerts("patient3");
-    QVector<AlertItem> test = alertBase().getAlertItems(query);
+    test = alertBase().getAlertItems(query);
     qWarning() << test.count();
     //        for(int i=0; i < test.count(); ++i) {
     //            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();

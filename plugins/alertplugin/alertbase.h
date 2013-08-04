@@ -146,7 +146,7 @@ private:
     bool saveItemValidations(AlertItem &item);
     bool saveItemLabels(AlertItem &item);
 
-    AlertItem getAlertItemFromUuid(const QString &uuid);
+    AlertItem &getAlertItemFromUuid(const QString &uuid);
     bool getItemRelations(AlertItem &item);
     bool getItemScripts(AlertItem &item);
     bool getItemTimings(AlertItem &item);
