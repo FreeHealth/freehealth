@@ -57,7 +57,7 @@ protected:
     AlertScriptManager(QObject *parent = 0);
 
 public:
-    // type is a AlertScript::ScriptType
+    // scriptType is a AlertScript::ScriptType
     QVariant execute(AlertItem &item, const int scriptType);
 
 private:
