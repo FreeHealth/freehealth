@@ -534,7 +534,7 @@ BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertI
 bool BlockingAlertDialog::applyResultToAlerts(AlertItem &item, const BlockingAlertResult &result)
 {
     if (result.isRemindLaterRequested()) {
-        return item.remindLater();
+        return item.setRemindLater();
     }
 
     QString validator;
@@ -555,7 +555,7 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
             QVariant remindOk = alertCore().execute(item, AlertScript::OnRemindLater);
             if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
                 remindOk.isNull() || !remindOk.isValid()) {
-                item.remindLater();
+                item.setRemindLater();
             }
         }
         return true;

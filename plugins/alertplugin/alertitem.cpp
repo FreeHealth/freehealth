@@ -1009,7 +1009,7 @@ void AlertItem::setScripts(const QVector<AlertScript> &scripts)
  * Modification are not saved in the database.
  * \sa  Alert::AlertCore::removeAlert()
 */
-bool AlertItem::remindLater()
+bool AlertItem::setRemindLater()
 {
     // move start date +1 day
 //    QDate today = QDate::currentDate();

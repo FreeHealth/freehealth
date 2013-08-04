@@ -111,7 +111,7 @@ public Q_SLOTS:
     QString themedIcon() const {return _item.themedIcon();}
     void setThemedIcon(const QString &icon) {_item.setThemedIcon(icon);}
 
-    bool remindLater() {return _item.remindLater();}
+    bool setRemindLater() {return _item.setRemindLater();}
     bool validateAlertWithCurrentUserAndConfirmationDialog() {return _item.validateAlertWithCurrentUserAndConfirmationDialog();}
     bool validateAlert(const QString &validatorUid, bool override, const QString &overrideComment, const QDateTime &dateOfValidation) {return _item.validateAlert(validatorUid, override, overrideComment, dateOfValidation);}
 
