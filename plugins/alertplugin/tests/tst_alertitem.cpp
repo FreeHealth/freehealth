@@ -49,10 +49,12 @@ using namespace Internal;
 //static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 //static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
-static inline Alert::Internal::AlertBase &alertBase() {return Alert::AlertCore::instance()->alertBase();}
+static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance();}
+static inline Alert::Internal::AlertBase &alertBase() {return Alert::AlertCore::instance().alertBase();}
 
 namespace {
+const int loop = 1000; // number of test per alertitems
+
 AlertScript &createVirtualScript(int scriptType, Utils::Randomizer &r)
 {
     QString script = r.randomWords(r.randomInt(5, 25));
@@ -167,12 +169,10 @@ AlertItem &createVirtualItem(bool createAllRelations)
 }
 } // anonymous namespace
 
-void AlertPlugin::test_alertitem_object()
+void AlertPlugin::test_alertscript_object()
 {
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-
-    int loop = 1000;
     // Test AlertScript XML interface
     for(int i= 0; i < loop; ++i) {
         AlertScript script = createVirtualScript(2, r);
@@ -186,7 +186,31 @@ void AlertPlugin::test_alertitem_object()
         QVERIFY(script.isValid() == script2.isValid());
         QVERIFY(script2.isModified() == false);
     }
+}
 
+void AlertPlugin::test_alertrelation_object()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    // Test AlertRelation XML interface
+    for(int i= 0; i < loop; ++i) {
+        AlertRelation rel;
+        rel.setId(r.randomInt(1, 100000));
+        rel.setRelatedTo(AlertRelation::RelatedTo(r.randomInt(0, AlertRelation::RelatedToApplication)));
+        rel.setRelatedToUid(r.randomWords(1));
+        AlertRelation rel2 = AlertRelation::fromXml(rel.toXml());
+        QVERIFY(rel.id() == rel2.id());
+        QVERIFY(rel.relatedTo() == rel2.relatedTo());
+        QVERIFY(rel.relationTypeToString() == rel2.relationTypeToString());
+        QVERIFY(rel.relatedToUid() == rel2.relatedToUid());
+        QVERIFY(rel2.isModified() == false);
+    }
+}
+
+void AlertPlugin::test_alertvalidation_object()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
     // Test AlertValidation XML interface
     for(int i= 0; i < loop; ++i) {
         AlertValidation val;
@@ -207,6 +231,14 @@ void AlertPlugin::test_alertitem_object()
         QVERIFY(val.validatedUid() == val2.validatedUid());
         QVERIFY(val2.isModified() == false);
     }
+}
+
+void AlertPlugin::test_alerttiming_object()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    // TODO: test autocomputation of cycling dates
 
     // Test AlertTiming non-cycling XML interface
     for(int i= 0; i < loop; ++i) {
@@ -283,20 +315,12 @@ void AlertPlugin::test_alertitem_object()
         // QVERIFY(tc.cycleExpirationDate() == tc2.cycleExpirationDate());
         QVERIFY(tc2.isModified() == false);
     }
+}
 
-    // Test AlertRelation XML interface
-    for(int i= 0; i < loop; ++i) {
-        AlertRelation rel;
-        rel.setId(r.randomInt(1, 100000));
-        rel.setRelatedTo(AlertRelation::RelatedTo(r.randomInt(0, AlertRelation::RelatedToApplication)));
-        rel.setRelatedToUid(r.randomWords(1));
-        AlertRelation rel2 = AlertRelation::fromXml(rel.toXml());
-        QVERIFY(rel.id() == rel2.id());
-        QVERIFY(rel.relatedTo() == rel2.relatedTo());
-        QVERIFY(rel.relationTypeToString() == rel2.relationTypeToString());
-        QVERIFY(rel.relatedToUid() == rel2.relatedToUid());
-        QVERIFY(rel2.isModified() == false);
-    }
+void AlertPlugin::test_alertitem_object()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
     // Test the AlertItem interface
     for(int i=0; i < loop; ++i) {
@@ -331,8 +355,6 @@ void AlertPlugin::test_alertitem_object()
 
         if (item.extraXml() != item2.extraXml()) {
             qWarning() << item.extraXml() << item2.extraXml();
-            qWarning() << item.toXml();
-            qWarning() << item2.toXml();
         }
 
         QVERIFY(item.extraXml() == item2.extraXml());
@@ -349,6 +371,12 @@ void AlertPlugin::test_alertitem_object()
 
         QVERIFY(item2.isModified() == false);
     }
+}
+
+void AlertPlugin::test_alertcore_init()
+{
+    QVERIFY(alertCore().isInitialized()==true);
+    QVERIFY(alertCore().alertBase().isInitialized()==true);
 }
 
 void AlertPlugin::test_alertbase()

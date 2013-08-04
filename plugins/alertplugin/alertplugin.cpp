@@ -115,7 +115,7 @@ void AlertPlugin::extensionsInitialized()
     messageSplash(tr("Initializing AlertPlugin..."));
 
     // At this point, user is connected
-    AlertCore::instance()->initialize();
+    AlertCore::instance().initialize();
 
     // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 
@@ -137,7 +137,7 @@ void AlertPlugin::postCoreInitialization()
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
 
-    AlertCore::instance()->postCoreInitialization();
+    AlertCore::instance().postCoreInitialization();
 }
 
 void AlertPlugin::coreAboutToClose()

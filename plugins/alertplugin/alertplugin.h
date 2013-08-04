@@ -61,7 +61,12 @@ private Q_SLOTS:
 
 #ifdef WITH_TESTS
 private Q_SLOTS:
+    void test_alertscript_object();
+    void test_alertrelation_object();
+    void test_alertvalidation_object();
+    void test_alerttiming_object();
     void test_alertitem_object();
+    void test_alertcore_init();
     void test_alertbase();
 #endif
 
