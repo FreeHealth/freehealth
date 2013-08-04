@@ -423,6 +423,8 @@ void AlertPlugin::test_alertbase_basics()
         test = alertBase().getAlertItems(query);
         QVERIFY(test.count() == 0);
     }
+
+    // TODO: Check alert updates
 }
 
 void AlertPlugin::test_alertbase_complex_query()
@@ -622,14 +624,13 @@ void AlertPlugin::test_alertbase_complex_query()
         QVERIFY(test.at(i).uuid() != item5.uuid());
         QVERIFY(test.at(i).uuid() != item6.uuid());
     }
-
-    //        for(int i=0; i < test.count(); ++i) {
-    //            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
-    //        }
-    //        qWarning() << "\n\n";
-    //    AlertItem t = AlertItem::fromXml(item.toXml());
-    //    qWarning() << (t.toXml() == item.toXml());
+    // TODO: test date invalid alerts in queries (finished or not started)
+    // TODO: test cycling alert querying
 }
+
+// TODO: test alertscript execution
+// TODO: test alertplaceholder (add, remove, update alerts)
+// TODO: test alertpacks
 
 void AlertPlugin::cleanupTestCase()
 {
