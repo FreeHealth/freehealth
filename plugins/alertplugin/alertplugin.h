@@ -67,7 +67,11 @@ private Q_SLOTS:
     void test_alerttiming_object();
     void test_alertitem_object();
     void test_alertcore_init();
-    void test_alertbase();
+    void test_alertbase_basics();
+    void test_alertbase_complex_query();
+    void cleanupTestCase();
+private:
+    QStringList uidsToPurge;
 #endif
 
 private:

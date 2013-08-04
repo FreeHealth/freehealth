@@ -324,89 +324,8 @@ void AlertPlugin::test_alerttiming_object()
     }
 }
 
-void AlertPlugin::test_alertitem_object()
+static void verifyAlertEquality(const AlertItem &item, const AlertItem &item2)
 {
-    Utils::Randomizer r;
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-
-    // Test the AlertItem interface
-    for(int i=0; i < loop; ++i) {
-        AlertItem item = createVirtualItem(true);
-        QVERIFY(item.relations().count() > 0);
-        QVERIFY(item.timings().count() > 0);
-        QVERIFY(item.scripts().count() > 0);
-        QVERIFY(item.validations().count() > 0);
-
-        AlertItem item2 = AlertItem::fromXml(item.toXml());
-        QVERIFY(item.isValid() == item2.isValid());
-        QVERIFY(item.uuid() == item2.uuid());
-        QVERIFY(item.packUid() == item2.packUid());
-        QVERIFY(item.cryptedPassword() == item2.cryptedPassword());
-        QVERIFY(item.availableLanguages() == item2.availableLanguages());
-        foreach(const QString &l, item.availableLanguages()) {
-            QVERIFY(item.label(l) == item2.label(l));
-            QVERIFY(item.toolTip(l) == item2.toolTip(l));
-            QVERIFY(item.category(l) == item2.category(l));
-            QVERIFY(item.description(l) == item2.description(l));
-            QVERIFY(item.comment(l) == item2.comment(l));
-        }
-        QVERIFY(item.viewType() == item2.viewType());
-        QVERIFY(item.contentType() == item2.contentType());
-        QVERIFY(item.priority() == item2.priority());
-        QVERIFY(item.isOverrideRequiresUserComment() == item2.isOverrideRequiresUserComment());
-        QVERIFY(item.mustBeRead() == item2.mustBeRead());
-        QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
-        QVERIFY(item.isEditable() == item2.isEditable());
-        QVERIFY(item.creationDate() == item2.creationDate());
-        QVERIFY(item.lastUpdate() == item2.lastUpdate());
-        QVERIFY(item.themedIcon() == item2.themedIcon());
-        QVERIFY(item.styleSheet() == item2.styleSheet());
-        QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
-        QVERIFY(item.htmlToolTip(true) == item2.htmlToolTip(true));
-        QVERIFY(item.htmlToolTip(false) == item2.htmlToolTip(false));
-
-        if (item.extraXml() != item2.extraXml()) {
-            qWarning() << item.extraXml() << item2.extraXml();
-        }
-
-        QVERIFY(item.extraXml() == item2.extraXml());
-
-        QVERIFY(item.relations().count() == item2.relations().count());
-        QVERIFY(item.timings().count() == item2.timings().count());
-        QVERIFY(item.scripts().count() == item2.scripts().count());
-        QVERIFY(item.validations().count() == item2.validations().count());
-
-        QVERIFY(item.remindLater() == item2.remindLater());
-        QVERIFY(item.isUserValidated() == item2.isUserValidated());
-
-        QVERIFY(item == item2);
-
-        QVERIFY(item2.isModified() == false);
-    }
-}
-
-void AlertPlugin::test_alertcore_init()
-{
-    QVERIFY(alertCore().isInitialized()==true);
-    QVERIFY(alertCore().alertBase().isInitialized()==true);
-}
-
-void AlertPlugin::test_alertbase()
-{
-    QVector<AlertItem> test;
-    Internal::AlertBaseQuery query;
-
-    // Test save item saving
-    AlertItem item = createVirtualItem(true);
-    QVERIFY(alertBase().saveAlertItem(item) == true);
-    QVERIFY(item.db(0).toInt() >= 0); // Test internal ID
-    QVERIFY(item.isModified() == false);
-
-    // Test get item from database
-    query.getAlertItemFromUuid(item.uuid());
-    test = alertBase().getAlertItems(query);
-    QVERIFY(test.count() == 1);
-    AlertItem &item2 = test[0];
     QVERIFY(item.isValid() == item2.isValid());
     QVERIFY(item.uuid() == item2.uuid());
     QVERIFY(item.packUid() == item2.packUid());
@@ -442,23 +361,75 @@ void AlertPlugin::test_alertbase()
     QVERIFY(item.timings().count() == item2.timings().count());
     QVERIFY(item.scripts().count() == item2.scripts().count());
     QVERIFY(item.validations().count() == item2.validations().count());
-
-    QVERIFY(item.remindLater() == item2.remindLater());
     QVERIFY(item.isUserValidated() == item2.isUserValidated());
 
     QVERIFY(item == item2);
+}
 
-    QVERIFY(item2.isModified() == false);
-    test.clear();
+void AlertPlugin::test_alertitem_object()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    // purge
-//    QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
-//    test = alertBase().getAlertItems(query);
-//    QVERIFY(test.count() == 0);
+    // Test the AlertItem interface
+    for(int i=0; i < loop; ++i) {
+        AlertItem item = createVirtualItem(true);
+        QVERIFY(item.relations().count() > 0);
+        QVERIFY(item.timings().count() > 0);
+        QVERIFY(item.scripts().count() > 0);
+        QVERIFY(item.validations().count() > 0);
+        AlertItem item2 = AlertItem::fromXml(item.toXml());
+        verifyAlertEquality(item, item2);
+        QVERIFY(item2.isModified() == false);
+    }
+}
 
-    return;
+void AlertPlugin::test_alertcore_init()
+{
+    QVERIFY(alertCore().isInitialized()==true);
+    QVERIFY(alertCore().alertBase().isInitialized()==true);
+}
 
-    /*
+void AlertPlugin::test_alertbase_basics()
+{
+    QVector<AlertItem> test;
+    Internal::AlertBaseQuery query;
+
+    // Unique alert test (save, get, purge)
+    for(int i=0; i < loop; ++i) {
+        // Create a virtual alert
+        AlertItem item = createVirtualItem(true);
+
+        // Save it
+        QVERIFY(alertBase().saveAlertItem(item) == true);
+        uidsToPurge << item.uuid();
+        QVERIFY(item.db(0).toInt() >= 0); // Test internal ID
+        QVERIFY(item.isModified() == false);
+
+        // Get it back from database & check equality
+        query.getAlertItemFromUuid(item.uuid());
+        test = alertBase().getAlertItems(query);
+        QVERIFY(test.count() == 1);
+        AlertItem &item2 = test[0];
+        verifyAlertEquality(item, item2);
+        QVERIFY(item2.isModified() == false);
+        test.clear();
+
+        // Purge it
+        QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
+        uidsToPurge.remove(item.uuid());
+
+        // Check that the alert no longuer exists in the database
+        test = alertBase().getAlertItems(query);
+        QVERIFY(test.count() == 0);
+    }
+}
+
+void AlertPlugin::test_alertbase_complex_query()
+{
+    // Test some specifics
+    QVector<AlertItem> test;
+    Internal::AlertBaseQuery query;
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
@@ -600,37 +571,72 @@ void AlertPlugin::test_alertbase()
 
     // Database saving
     QVERIFY(alertBase().saveAlertItem(item) == true);
+    uidsToPurge << item.uuid();
     QVERIFY(alertBase().saveAlertItem(item2) == true);
+    uidsToPurge << item2.uuid();
     QVERIFY(alertBase().saveAlertItem(item3) == true);
+    uidsToPurge << item3.uuid();
     QVERIFY(alertBase().saveAlertItem(item4) == true);
+    uidsToPurge << item4.uuid();
     QVERIFY(alertBase().saveAlertItem(item5) == true);
+    uidsToPurge << item5.uuid();
     QVERIFY(alertBase().saveAlertItem(item6) == true);
+    uidsToPurge << item6.uuid();
     QVERIFY(alertBase().saveAlertItem(item7) == true);
+    uidsToPurge << item7.uuid();
     QVERIFY(alertBase().saveAlertItem(item8) == true);
+    uidsToPurge << item8.uuid();
     QVERIFY(alertBase().saveAlertItem(item9) == true);
+    uidsToPurge << item9.uuid();
     QVERIFY(alertBase().saveAlertItem(item10) == true);
+    uidsToPurge << item10.uuid();
     QVERIFY(alertBase().saveAlertItem(item11) == true);
-    */
+    uidsToPurge << item11.uuid();
 
-    // Database getting
+    // Get all user1 related alerts -> item6
     query.clear();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
-    //        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
     query.addUserAlerts("user1");
-    query.addUserAlerts("user2");
-    query.addPatientAlerts("patient1");
-    query.addPatientAlerts("patient2");
-    query.addPatientAlerts("patient3");
     test = alertBase().getAlertItems(query);
-    qWarning() << test.count();
+    QVERIFY2(test.count() == 1, "Get all user1 related alerts -> item6");
+    QVERIFY(test.at(0).uuid() == item6.uuid());
+
+    // Get all patient1 alerts -> all but item6
+    query.clear();
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    query.addPatientAlerts("patient1");
+    test = alertBase().getAlertItems(query);
+    QVERIFY2(test.count() == 10, "Get all patient1 alerts -> all but item6");
+    for(int i=0; i < test.count(); ++i)
+        QVERIFY(test.at(i).uuid() != item6.uuid());
+
+    // Get all patient2 alerts -> all but item1 3 5 6
+    query.clear();
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    query.addPatientAlerts("patient2");
+    test = alertBase().getAlertItems(query);
+    QVERIFY2(test.count() == 7, "Get all patient2 alerts -> all but item1 3 5 6");
+    for(int i=0; i < test.count(); ++i) {
+        QVERIFY(test.at(i).uuid() != item.uuid());
+        QVERIFY(test.at(i).uuid() != item3.uuid());
+        QVERIFY(test.at(i).uuid() != item5.uuid());
+        QVERIFY(test.at(i).uuid() != item6.uuid());
+    }
+
     //        for(int i=0; i < test.count(); ++i) {
     //            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
     //        }
     //        qWarning() << "\n\n";
     //    AlertItem t = AlertItem::fromXml(item.toXml());
     //    qWarning() << (t.toXml() == item.toXml());
+}
 
-    // Remove testing alerts from the database
+void AlertPlugin::cleanupTestCase()
+{
+    // Database purge
+    foreach(const QStirng &uid, uidsToPurge) {
+        QVERIFY(alertBase().purgeAlertItem(uid) == true);
+    }
 }
 
 
