@@ -53,7 +53,7 @@ static inline Alert::AlertCore &alertCore() {return Alert::AlertCore::instance()
 static inline Alert::Internal::AlertBase &alertBase() {return Alert::AlertCore::instance().alertBase();}
 
 namespace {
-const int loop = 1000; // number of test per alertitems
+const int loop = 10; // number of test per alertitems
 
 AlertScript &createVirtualScript(int scriptType, Utils::Randomizer &r)
 {
@@ -161,8 +161,15 @@ AlertItem &createVirtualItem(bool createAllRelations)
         item->addScript(createVirtualScript(i, r));
     }
 
-    // TODO : Add random validation
-//    item->addValidation();
+    // Add random validation
+    AlertValidation val;
+    val.setId(r.randomInt(1, 10000));
+    val.setOverriden(r.randomBool());
+    val.setDateOfValidation(QDateTime::currentDateTime());
+    val.setUserComment(r.randomWords(r.randomInt(1, 10)));
+    val.setValidatedUuid(Utils::createUid());
+    val.setValidatorUuid(Utils::createUid());
+    item->addValidation(val);
 
     item->setModified(false);
     return *item;
@@ -325,6 +332,11 @@ void AlertPlugin::test_alertitem_object()
     // Test the AlertItem interface
     for(int i=0; i < loop; ++i) {
         AlertItem item = createVirtualItem(true);
+        QVERIFY(item.relations().count() > 0);
+        QVERIFY(item.timings().count() > 0);
+        QVERIFY(item.scripts().count() > 0);
+        QVERIFY(item.validations().count() > 0);
+
         AlertItem item2 = AlertItem::fromXml(item.toXml());
         QVERIFY(item.isValid() == item2.isValid());
         QVERIFY(item.uuid() == item2.uuid());
@@ -345,8 +357,8 @@ void AlertPlugin::test_alertitem_object()
         QVERIFY(item.mustBeRead() == item2.mustBeRead());
         QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
         QVERIFY(item.isEditable() == item2.isEditable());
-        //QVERIFY(item.creationDate() == item2.creationDate());
-        //QVERIFY(item.lastUpdate() == item2.lastUpdate());
+        QVERIFY(item.creationDate() == item2.creationDate());
+        QVERIFY(item.lastUpdate() == item2.lastUpdate());
         QVERIFY(item.themedIcon() == item2.themedIcon());
         QVERIFY(item.styleSheet() == item2.styleSheet());
         QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
@@ -381,10 +393,17 @@ void AlertPlugin::test_alertcore_init()
 
 void AlertPlugin::test_alertbase()
 {
-    // Test the AlertItem interface
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
+    // Test save then purge
+    AlertItem item = createVirtualItem(true);
+    QVERIFY(alertBase().saveAlertItem(item) == true);
+    QVERIFY(item.db(0).toInt() >= 0); // Test internal ID
+    QVERIFY(item.isModified() == false);
+    QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
+
+    /*
     AlertItem item; // = alertBase().createVirtualItem();
     item.setUuid(Utils::Database::createUid());
     item.setThemedIcon("identity.png");
@@ -533,6 +552,7 @@ void AlertPlugin::test_alertbase()
     QVERIFY(alertBase().saveAlertItem(item9) == true);
     QVERIFY(alertBase().saveAlertItem(item10) == true);
     QVERIFY(alertBase().saveAlertItem(item11) == true);
+    */
 
     // Database getting
     Internal::AlertBaseQuery query;

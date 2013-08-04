@@ -280,10 +280,14 @@ private:
 
 namespace Internal {
 class AlertItemPrivate;
+class AlertPlugin;
 class AlertBase;
 }
 class ALERT_EXPORT AlertItem
 {
+#ifdef WITH_TESTS
+    friend class Alert::Internal::AlertPlugin;
+#endif
     friend class Alert::Internal::AlertBase;
 
 protected:
