@@ -549,12 +549,13 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     return true;
 }
 
-/** Save or update the Alert::AlertItem in the alert database. Return true in case of success. The AlertItem is modified during this process. */
+/**
+ * Save or update the Alert::AlertItem in the alert database.
+ * Return true in case of success. The Alert::AlertItem is modified
+ * during this process.
+ */
 bool AlertBase::saveAlertItem(AlertItem &item)
 {
-//    QTime chr;
-//    chr.start();
-
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
 
@@ -598,7 +599,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         item.validationAt(i).setId(-1);
     item.setDb(ItemId, -1);
     item.setDb(RelatedId, -1);
-    item.setDb(CategoryUid, -1);
+//    item.setDb(CategoryUid, -1);
     item.setDb(ScriptId, -1);
     item.setDb(ValidationId, -1);
     item.setDb(TimingId, -1);
@@ -1313,7 +1314,10 @@ bool AlertBase::purgeAlertItem(const QString &uuid)
     return true;
 }
 
-/** Return the Alert::AlertItem corresponding to the Alert::Internal::AlertBaseQuery \e query */
+/**
+ * Return the Alert::AlertItem corresponding to the Alert::Internal::AlertBaseQuery \e query. \n
+ * If no corresponding alerts are found, an empty list is returned.
+ */
 QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 {
     QVector<AlertItem> alerts;
@@ -1326,6 +1330,10 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     // get unique alert by uuid
     if (!query.alertItemFromUuid().isEmpty()) {
         AlertItem item = getAlertItemFromUuid(query.alertItemFromUuid());
+        // if no item was found -> return an empty list
+        if (item.db(ItemId).toInt() == -1)
+            return alerts;
+        // otherwise append the item to the list
         alerts.append(item);
         return alerts;
     }
@@ -1593,7 +1601,7 @@ AlertItem &AlertBase::getAlertItemFromUuid(const QString &uuid)
     item->setUuid(uuid);
     item->setDb(ItemId, -1);
     item->setDb(RelatedId, -1);
-    item->setDb(CategoryUid, -1);
+    item->setDb(CategoryUid, QVariant());
     item->setDb(ScriptId, -1);
     item->setDb(ValidationId, -1);
     item->setDb(TimingId, -1);
@@ -1637,6 +1645,9 @@ AlertItem &AlertBase::getAlertItemFromUuid(const QString &uuid)
             item->setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
             item->setStyleSheet(query.value(Constants::ALERT_THEME_CSS).toString());
             item->setExtraXml(query.value(Constants::ALERT_EXTRA_XML).toString());
+        } else {
+            // no item with the specified uuid
+            return *item;
         }
     } else {
         LOG_QUERY_ERROR(query);
