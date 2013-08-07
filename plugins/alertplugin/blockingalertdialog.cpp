@@ -587,6 +587,12 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
 }
 
 #ifdef WITH_TESTS
+/**
+ * Run internal unit-tests. \n
+ * When testing blocking dialog, if one alert requires user comment
+ * on overriding alerts are overriden with a valid user comment "Override this". \n
+ * In all other cases, alerts are validated.
+ */
 void BlockingAlertDialog::test_dialog()
 {
     QVERIFY(d->_items.count() > 0);
@@ -602,7 +608,7 @@ void BlockingAlertDialog::test_dialog()
             QTest::mouseClick(d->cui->validateComment, Qt::LeftButton);
             QVERIFY(this->isVisible() == true);
             // Add a comment
-            QTest::keyClicks(d->cui->overridingComment, "This is an overriding test string"); //, Qt::NoModifier, 2);
+            QTest::keyClicks(d->cui->overridingComment, "Override this", Qt::NoModifier, 1);
             QTest::mouseClick(d->cui->validateComment, Qt::LeftButton);
             QVERIFY(this->isVisible() == false);
             QVERIFY(this->result() == QDialog::Rejected);
