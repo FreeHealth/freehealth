@@ -69,37 +69,48 @@ AlertItemEditorDialog::~AlertItemEditorDialog()
     delete ui;
 }
 
+/**
+ * Defines the user editable params of the alert.
+ */
 void AlertItemEditorDialog::setEditableParams(EditableParams params)
 {
-    ui->editor->setLabelVisible(params & Label);
-    ui->editor->setCategoryVisible(params & Category);
-    ui->editor->setDescriptionVisible(params & Description);
-    ui->editor->setIconVisible(params & Icon);
-    ui->editor->setRelationVisible(params & Relation);
-    ui->editor->setViewTypeVisible(params & ViewType);
-    ui->editor->setContentTypeVisible(params & ContentType);
-    ui->editor->setPriorityVisible(params & Priority);
-    ui->editor->setOverridingCommentVisible(params & OverrideNeedsComment);
-    if (!(params & Timing))
+    ui->editor->setLabelVisible(params.testFlag(Label));
+    ui->editor->setCategoryVisible(params.testFlag(Category));
+    ui->editor->setDescriptionVisible(params.testFlag(Description));
+    ui->editor->setIconVisible(params.testFlag(Icon));
+    ui->editor->setRelationVisible(params.testFlag(Relation));
+    ui->editor->setViewTypeVisible(params.testFlag(ViewType));
+    ui->editor->setContentTypeVisible(params.testFlag(ContentType));
+    ui->editor->setPriorityVisible(params.testFlag(Priority));
+    ui->editor->setOverridingCommentVisible(params.testFlag(OverrideNeedsComment));
+    if (!(params.testFlag(Timing)))
         ui->editor->hideTimingTab();
-    if (!(params & CSS))
+    if (!(params.testFlag(CSS)))
         ui->editor->hideStyleSheetTab();
-    if (!(params & ExtraXml))
+    if (!(params.testFlag(ExtraXml)))
         ui->editor->hideExtraXmlTab();
-    if (!(params & Scripts))
+    if (!(params.testFlag(Scripts)))
         ui->editor->hideScriptsTab();
 }
 
+/** Define the initial alert to use in the editor */
 void AlertItemEditorDialog::setAlertItem(const AlertItem &item)
 {
     ui->editor->setAlertItem(item);
 }
 
+/**
+ * Reset the editor to the initial alert
+ * \sa setAlertItem()
+*/
 void AlertItemEditorDialog::reset()
 {
     ui->editor->reset();
 }
 
+/**
+ * Submit the content of the editing widget to the item.
+ */
 bool AlertItemEditorDialog::submit(AlertItem &item)
 {
     return ui->editor->submit(item);
