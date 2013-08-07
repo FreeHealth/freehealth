@@ -209,10 +209,11 @@ bool AlertCore::saveAlerts(QList<AlertItem> &items)
 }
 
 /**
-  Check all database recorded alerts for the current patient,
-  the current user and the current application.\n
-  If a script defines the validity of the alert it is executed and the valid state of alert is modified.
-  \sa Alert::AlertScript::CheckValidityOfAlert, Alert::AlertItem::isValid()
+ * Check all database recorded alerts for the current patient,
+ * the current user and the current application.\n
+ * If a script defines the validity of the alert it is executed and the
+ * valid state of alert is modified.
+ * \sa Alert::AlertScript::CheckValidityOfAlert, Alert::AlertItem::isValid()
 */
 bool AlertCore::checkAlerts(AlertsToCheck check)
 {
@@ -233,8 +234,8 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 }
 
 /**
-  Register a new Alert::AlertItem to the core without saving it to the database.
-  \sa Alert::AlertCore::saveAlert()
+ * Register a new Alert::AlertItem to the core without saving it to the database.
+ * \sa Alert::AlertCore::saveAlert()
 */
 bool AlertCore::registerAlert(const AlertItem &item)
 {
@@ -245,11 +246,11 @@ bool AlertCore::registerAlert(const AlertItem &item)
 }
 
 /**
-  Update an already registered Alert::AlertItem. \n
-  If the alert view type is a static alert, inform all IAlertPlaceHolder of the update otherwise
-  execute the blocking alert. \n
-  The modification are not saved into the database.
-  \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
+ * Update an already registered Alert::AlertItem. \n
+ * If the alert view type is a static alert, inform all Alert::IAlertPlaceHolder
+ * of the update otherwise execute the blocking alert. \n
+ * The modification are not saved into the database.
+ * \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
@@ -354,11 +355,11 @@ AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
 }
 
 /**
- Process alerts:\n
-   - Execute check scripts
-   - Execute blocking alerts if needed
-   - Feed Alert::IAlertPlaceHolder
-*/
+ * Process alerts:\n
+ *  - Execute check scripts
+ *  - Execute blocking alerts if needed
+ *  - Feed Alert::IAlertPlaceHolder
+ */
 void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders)
 {
     // Get non-blocking alerts place holders
@@ -382,6 +383,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders
         for(int i =0; i < item.timings().count(); ++i) {
             AlertTiming &timing = item.timingAt(i);
             if (timing.isCycling()) {
+                // Execute alert script for next cycle range computation
                 QVariant startDate = d->_alertScriptManager->execute(item, AlertScript::CyclingStartDate);
                 if (startDate.isValid() && startDate.canConvert(QVariant::DateTime)) {
                     // TODO: correctly the nearest starting date
@@ -389,6 +391,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders
                     timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                 }
             }
+            // TODO: something is missing here: autochecking of next cycle range.
         }
 
         if (item.viewType() == AlertItem::BlockingAlert) {
