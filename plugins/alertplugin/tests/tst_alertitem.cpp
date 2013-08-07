@@ -67,7 +67,7 @@ AlertScript &createVirtualScript(int scriptType, Utils::Randomizer &r)
 }
 
 // Creates a virtual item.
-AlertItem &createVirtualItem(bool createAllRelations)
+AlertItem &createVirtualItem(bool createAllRelations = false)
 {
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
@@ -382,6 +382,48 @@ void AlertPlugin::test_alertitem_object()
         verifyAlertEquality(item, item2);
         QVERIFY(item2.isModified() == false);
     }
+
+    // Test sort interface
+    AlertItem item1 = createVirtualItem();
+    item1.setLabel("1");
+    AlertItem item2 = createVirtualItem();
+    item2.setLabel("2");
+    AlertItem item3 = createVirtualItem();
+    item3.setLabel("3");
+    AlertItem item4 = createVirtualItem();
+    item4.setLabel("4");
+    AlertItem item5 = createVirtualItem();
+    item5.setLabel("5");
+    AlertItem item6 = createVirtualItem();
+    item6.setLabel("6");
+    item1.setPriority(AlertItem::High);
+    item2.setPriority(AlertItem::Low);
+    item3.setPriority(AlertItem::High);
+    item4.setPriority(AlertItem::Low);
+    item5.setPriority(AlertItem::Medium);
+    item6.setPriority(AlertItem::High);
+    QList<AlertItem> items;
+    items << item1 << item2 << item3 << item4 << item5 << item6;
+    qSort(items.begin(), items.end(), AlertItem::priorityLowerThan);
+    AlertItem::Priority p = AlertItem::High;
+    foreach(const AlertItem &i, items) {
+        if (i.priority() == p)
+            continue;
+        QVERIFY(i.priority() > p);
+    }
+    item1.setCategory("R");
+    item2.setCategory("A");
+    item3.setCategory("L");
+    item4.setCategory("S");
+    item5.setCategory("E");
+    item6.setCategory("T");
+    items.clear();
+    items << item1 << item2 << item3 << item4 << item5 << item6;
+    qSort(items.begin(), items.end(), AlertItem::categoryLowerThan);
+    QString out = "AELRST";
+    for(int i = 0; i < items.count(); ++i) {
+        QVERIFY(QString(out.at(i)) == items.at(i).category());
+    }
 }
 
 void AlertPlugin::test_alertcore_init()
@@ -631,6 +673,7 @@ void AlertPlugin::test_alertbase_complex_query()
 // TODO: test alertscript execution
 // TODO: test alertplaceholder (add, remove, update alerts)
 // TODO: test alertpacks
+// TODO: test alerteditor
 
 void AlertPlugin::cleanupTestCase()
 {
