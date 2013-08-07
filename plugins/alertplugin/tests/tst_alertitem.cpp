@@ -28,6 +28,7 @@
 #include "../alertitem.h"
 #include "../alertcore.h"
 #include "../alertbase.h"
+#include "../blockingalertdialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -668,6 +669,51 @@ void AlertPlugin::test_alertbase_complex_query()
     }
     // TODO: test date invalid alerts in queries (finished or not started)
     // TODO: test cycling alert querying
+}
+
+void AlertPlugin::test_blockingalert_dialog()
+{
+    // Alert without required usercomment
+    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+    AlertItem item; // = alertBase().createVirtualItem();
+    item.setUuid(Utils::Database::createUid());
+    item.setThemedIcon("identity.png");
+    item.setLabel(item.label() + " (item)");
+    item.setCategory("Test");
+    item.setDescription("Simple basic blocking alert");
+    item.setViewType(AlertItem::BlockingAlert);
+    item.setPriority(AlertItem::High);
+    item.setOverrideRequiresUserComment(false);
+    item.setRemindLaterAllowed(true);
+    item.clearRelations();
+    item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
+    item.clearTimings();
+    item.addTiming(AlertTiming(start, expiration));
+
+    // see doc of void BlockingAlertDialog::test_dialog()
+    BlockingAlertResult result = BlockingAlertDialog::executeBlockingAlert(item);
+    QVERIFY(result.isAccepted() == true);
+    QVERIFY(result.isOverridenByUser() == false);
+    QVERIFY(result.isRemindLaterRequested() == false);
+    QVERIFY(result.overrideUserComment().isEmpty());
+    // TODO: test QVERIFY(result.alertValidation());
+
+    item.setOverrideRequiresUserComment(true);
+    result = BlockingAlertDialog::executeBlockingAlert(item);
+    QVERIFY(result.isAccepted() == false);
+    QVERIFY(result.isOverridenByUser() == true);
+    QVERIFY(result.isRemindLaterRequested() == false);
+    QVERIFY(!result.overrideUserComment().isEmpty());
+    QVERIFY(result.overrideUserComment() == "Override this");
+
+    // TODO: test dialog with a extra-button
+
+//    QToolButton *test = new QToolButton;
+//    test->setText("Houlala");
+//    test->setToolTip("kokokokokok");
+//    QList<QAbstractButton*> buttons;
+//    buttons << test;
 }
 
 // TODO: test alertscript execution
