@@ -371,7 +371,7 @@ void AlertPlugin::test_alertitem_object()
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    // Test the AlertItem interface
+    // Test the AlertItem XML interface
     for(int i=0; i < loop; ++i) {
         AlertItem item = createVirtualItem(true);
         QVERIFY(item.relations().count() > 0);
@@ -417,7 +417,7 @@ void AlertPlugin::test_alertbase_basics()
 
         // Purge it
         QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
-        uidsToPurge.remove(item.uuid());
+        uidsToPurge.removeAll(item.uuid());
 
         // Check that the alert no longuer exists in the database
         test = alertBase().getAlertItems(query);
@@ -635,7 +635,7 @@ void AlertPlugin::test_alertbase_complex_query()
 void AlertPlugin::cleanupTestCase()
 {
     // Database purge
-    foreach(const QStirng &uid, uidsToPurge) {
+    foreach(const QString &uid, uidsToPurge) {
         QVERIFY(alertBase().purgeAlertItem(uid) == true);
     }
 }

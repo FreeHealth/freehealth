@@ -30,6 +30,10 @@
 
 #include <QtCore/QObject>
 
+#ifdef WITH_TESTS
+#include <QStringList>
+#endif
+
 /**
  * \file alertplugin.h
  * \author Eric Maeker
