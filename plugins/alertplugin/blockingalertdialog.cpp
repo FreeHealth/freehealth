@@ -113,6 +113,11 @@
 
 #include <QDebug>
 
+#ifdef WITH_TESTS
+#include <QTimer>
+#include <QTest>
+#endif
+
 // TODO: log the time an alert is visible to user -> mustBeRead == 5 sec per alert ?
 enum { WithChronoOnAlerts = false };
 
@@ -408,6 +413,7 @@ void BlockingAlertDialog::done(int result)
     QDialog::done(result);
 }
 
+/** Validate alerts */
 void BlockingAlertDialog::validate()
 {
     bool canValidate = true;
@@ -432,6 +438,11 @@ void BlockingAlertDialog::remindLater()
     accept();
 }
 
+/**
+ * Override the current alerts. Check for
+ * a user overriding comment and ask it if required. In other case,
+ * the dialog is done().
+ */
 void BlockingAlertDialog::override()
 {
     for(int i=0; i < d->_items.count(); ++i) {
@@ -494,48 +505,53 @@ bool BlockingAlertDialog::eventFilter(QObject *o, QEvent *e)
 }
 
 /** Execute a blocking alert dialog with the alerts \e item, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
-BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
+BlockingAlertResult &BlockingAlertDialog::executeBlockingAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
     return executeBlockingAlert(QList<AlertItem>() << item, noButtons, themedIcon, parent);
 }
 
 /** Execute a blocking alert dialog with a list of alerts \e items, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
-BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
+BlockingAlertResult &BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
     return executeBlockingAlert(items, noButtons, themedIcon, parent);
 }
 
 /** Execute a blocking alert dialog with a list of alerts \e items, including extra-buttons \e buttons, using a general icon \e themedIcon. Whatever is the result of the dialog, alerts are not modified. */
-BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
+BlockingAlertResult &BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
 {
-    BlockingAlertResult result;
+    BlockingAlertResult *result = new BlockingAlertResult;
     if (!parent)
         parent = qApp->activeWindow();
     BlockingAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
+
+#ifdef WITH_TESTS
+    // Run tests when dialog appears
+    QTimer::singleShot(1, &dlg, SLOT(test_dialog()));
+#endif
+
     if (dlg.exec()==QDialog::Accepted) {
-        result.setAccepted(true);
-        result.setRemindLaterRequested(dlg.isRemindLaterRequested());
+        result->setAccepted(true);
+        result->setRemindLaterRequested(dlg.isRemindLaterRequested());
     } else {
-        result.setAccepted(false);
-        result.setRemindLaterRequested(false);
-        result.setOverriden(true);
-        result.setOverrideUserComment(dlg.overridingComment());
+        result->setAccepted(false);
+        result->setRemindLaterRequested(false);
+        result->setOverriden(true);
+        result->setOverrideUserComment(dlg.overridingComment());
     }
-    return result;
+    return *result;
 }
 
 /**
-  Apply the blocking alert dialog result to alerts \e items. \n
-  Alerts are modified in the list and Alert::AlertCore is informed of the modification.
-  \sa Alert::AlertCore::updateAlert()
-*/
+ * Apply the blocking alert dialog result to alerts \e items. \n
+ * Alerts are modified in the list and Alert::AlertCore is informed of the modification.
+ * \sa Alert::AlertCore::updateAlert()
+ */
 bool BlockingAlertDialog::applyResultToAlerts(AlertItem &item, const BlockingAlertResult &result)
 {
-    if (result.isRemindLaterRequested()) {
+    if (result.isRemindLaterRequested())
         return item.setRemindLater();
-    }
 
     QString validator;
     user() ? validator = user()->uuid() : validator = "UnknownUser";
@@ -543,10 +559,10 @@ bool BlockingAlertDialog::applyResultToAlerts(AlertItem &item, const BlockingAle
 }
 
 /**
-  Apply the blocking alert dialog result to alerts \e items. \n
-  Alerts are modified in the list and Alert::AlertCore is informed of the modification.
-  \sa Alert::AlertCore::updateAlert()
-*/
+ * Apply the blocking alert dialog result to alerts \e items. \n
+ * Alerts are modified in the list and Alert::AlertCore is informed of the modification.
+ * \sa Alert::AlertCore::updateAlert()
+ */
 bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const BlockingAlertResult &result)
 {
     if (result.isRemindLaterRequested()) {
@@ -569,3 +585,43 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
     }
     return ok;
 }
+
+#ifdef WITH_TESTS
+void BlockingAlertDialog::test_dialog()
+{
+    QVERIFY(d->_items.count() > 0);
+    // Check override with user comment
+    foreach(const AlertItem &item, d->_items) {
+        if (item.isOverrideRequiresUserComment()) {
+            // View is up to date
+            QVERIFY(d->cui == 0);
+            // Override alert
+            QTest::mouseClick(d->_overrideButton, Qt::LeftButton);
+            QVERIFY(d->cui != 0);
+            // Try to validate without comment -> dialog does not disappear
+            QTest::mouseClick(d->cui->validateComment, Qt::LeftButton);
+            QVERIFY(this->isVisible() == true);
+            // Add a comment
+            QTest::keyClicks(d->cui->overridingComment, "This is an overriding test string"); //, Qt::NoModifier, 2);
+            QTest::mouseClick(d->cui->validateComment, Qt::LeftButton);
+            QVERIFY(this->isVisible() == false);
+            QVERIFY(this->result() == QDialog::Rejected);
+            return;
+        }
+    }
+
+    // Check remind later button
+    bool remindable = false;
+    foreach(const AlertItem &item, d->_items) {
+        if (item.isRemindLaterAllowed()) {
+            remindable = true;
+            break;
+        }
+    }
+    QVERIFY(d->_remindLaterButton->isVisible() == remindable);
+
+    accept();
+    QVERIFY(this->isVisible() == false);
+    QVERIFY(this->result() == QDialog::Accepted);
+}
+#endif

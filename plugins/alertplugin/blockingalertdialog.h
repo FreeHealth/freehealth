@@ -99,9 +99,9 @@ public:
     bool isRemindLaterRequested() const;
     QString overridingComment() const;
 
-    static BlockingAlertResult executeBlockingAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static BlockingAlertResult executeBlockingAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static BlockingAlertResult executeBlockingAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult &executeBlockingAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult &executeBlockingAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult &executeBlockingAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
 
     static bool applyResultToAlerts(AlertItem &item, const BlockingAlertResult &result);
     static bool applyResultToAlerts(QList<AlertItem> &items, const BlockingAlertResult &result);
@@ -112,6 +112,10 @@ private Q_SLOTS:
     void remindLater();
     void override();
     void validateUserOverridingComment();
+
+#ifdef WITH_TESTS
+    void test_dialog();
+#endif
 
 protected:
     void changeEvent(QEvent *e);
