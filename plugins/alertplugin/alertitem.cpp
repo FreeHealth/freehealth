@@ -1232,6 +1232,21 @@ bool AlertItem::operator==(const AlertItem &other) const
             other.timings().count() != timings().count()
             )
         return false;
+
+    // test all timings
+    for(int i = 0; i < d->_timings.count(); ++i) {
+        const AlertTiming &first = d->_timings.at(i);
+        bool ok = false;
+        for(int j = 0; j < other.d->_timings.count(); ++j) {
+            const AlertTiming &second = other.d->_timings.at(i);
+            if (first == second) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok)
+            return false;
+    }
     // fourth test: test each relations, validations, scripts and timings equality
     // TODO: test each relations, validations, scripts and timings equality
     return true;
@@ -1667,7 +1682,7 @@ bool AlertTiming::operator==(const AlertTiming &other) const
             _valid == other._valid &&
             _isCycle == other._isCycle &&
             _modified == other._modified;
-    // TODO: manage cycleStartDate && cycleExpirationDate
+    // TODO: manage currentCycle && cycleStartDate && cycleExpirationDate
             // &&
             // _cycleStartDate == other._cycleStartDate &&
             // _cycleExpirationDate == other._cycleExpirationDate;

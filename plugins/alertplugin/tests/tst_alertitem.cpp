@@ -470,8 +470,6 @@ void AlertPlugin::test_alertitem_object()
         QVERIFY(item2.isModified() == false);
     }
 
-    // TODO: test operator==() with multiple timings
-
     // Test sort interface
     AlertItem item1 = createVirtualItem();
     item1.setLabel("1");
@@ -513,6 +511,27 @@ void AlertPlugin::test_alertitem_object()
     for(int i = 0; i < items.count(); ++i) {
         QVERIFY(QString(out.at(i)) == items.at(i).category());
     }
+
+    // Test operator==() with multiple timings
+    item1.clearTimings();
+    item2 = item1;
+    QDateTime dt = QDateTime::currentDateTime().addDays(-2);
+    AlertTiming time1(dt, dt.addDays(3));
+    AlertTiming time2(dt, dt.addDays(2));
+    AlertTiming time3(dt.addDays(-2), dt.addDays(10));
+    item1.addTiming(time1);
+    item1.addTiming(time2);
+    item1.addTiming(time3);
+    item2.addTiming(time1);
+    item2.addTiming(time2);
+    item2.addTiming(time3);
+    QVERIFY(item1 == item2);
+    item2.clearTimings();
+    item2.addTiming(time1);
+    item2.addTiming(time2);
+    item2.addTiming(time2);
+    QVERIFY(item1 != item2);
+    // TODO: test operator==() with cycling timing also
 }
 
 void AlertPlugin::test_alertcore_init()
