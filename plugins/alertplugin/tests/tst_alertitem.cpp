@@ -175,6 +175,54 @@ AlertItem &createVirtualItem(bool createAllRelations = false)
     item->setModified(false);
     return *item;
 }
+
+static void verifyAlertEquality(const AlertItem &item, const AlertItem &item2)
+{
+    QVERIFY(item.isValid() == item2.isValid());
+    QVERIFY(item.uuid() == item2.uuid());
+    QVERIFY(item.packUid() == item2.packUid());
+    QVERIFY(item.cryptedPassword() == item2.cryptedPassword());
+    QVERIFY(item.availableLanguages() == item2.availableLanguages());
+    foreach(const QString &l, item.availableLanguages()) {
+        QVERIFY(item.label(l) == item2.label(l));
+        QVERIFY(item.toolTip(l) == item2.toolTip(l));
+        QVERIFY(item.category(l) == item2.category(l));
+        QVERIFY(item.description(l) == item2.description(l));
+        QVERIFY(item.comment(l) == item2.comment(l));
+    }
+    QVERIFY(item.viewType() == item2.viewType());
+    QVERIFY(item.contentType() == item2.contentType());
+    QVERIFY(item.priority() == item2.priority());
+    QVERIFY(item.isOverrideRequiresUserComment() == item2.isOverrideRequiresUserComment());
+    QVERIFY(item.mustBeRead() == item2.mustBeRead());
+    QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
+    QVERIFY(item.isEditable() == item2.isEditable());
+    QVERIFY(item.creationDate() == item2.creationDate());
+    QVERIFY(item.lastUpdate() == item2.lastUpdate());
+    QVERIFY(item.themedIcon() == item2.themedIcon());
+    QVERIFY(item.styleSheet() == item2.styleSheet());
+    QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
+
+    QVERIFY(item.relations().count() == item2.relations().count());
+    QVERIFY(item.timings().count() == item2.timings().count());
+    QVERIFY(item.scripts().count() == item2.scripts().count());
+    QVERIFY(item.validations().count() == item2.validations().count());
+    QVERIFY(item.isUserValidated() == item2.isUserValidated());
+
+//    if (item.htmlToolTip(true) != item2.htmlToolTip(true))
+//        qWarning() << item.htmlToolTip(true) << item2.htmlToolTip(true);
+//    QVERIFY(item.htmlToolTip(true) == item2.htmlToolTip(true));
+
+//    if (item.htmlToolTip(false) != item2.htmlToolTip(false))
+//        qWarning() << item.htmlToolTip(false) << item2.htmlToolTip(false);
+//    QVERIFY(item.htmlToolTip(false) == item2.htmlToolTip(false));
+
+    if (item.extraXml() != item2.extraXml())
+        qWarning() << item.extraXml() << item2.extraXml();
+    QVERIFY(item.extraXml() == item2.extraXml());
+
+    QVERIFY(item == item2);
+}
 } // anonymous namespace
 
 void AlertPlugin::test_alertscript_object()
@@ -248,6 +296,77 @@ void AlertPlugin::test_alerttiming_object()
 
     // TODO: test autocomputation of cycling dates
 
+    // Test operator==() && copy ctor
+    for(int i= 0; i < loop; ++i) {
+        AlertTiming t;
+        t.setId(r.randomInt(1000));
+        t.setValid(r.randomBool());
+        QDateTime dt = QDateTime::currentDateTime();
+        dt = r.randomDateTime(dt);
+        t.setStart(r.randomDateTime(dt));
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        t.setEnd(dt);
+        dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
+        t.setExpiration(dt);
+        t.setCycling(false);
+        AlertTiming t2(t);
+        QVERIFY(t.id() == t2.id());
+        QVERIFY(t.isValid() == t2.isValid());
+        QVERIFY(t.start() == t2.start());
+        QVERIFY(t.end() == t2.end());
+        QVERIFY(t.expiration() == t2.expiration());
+        QVERIFY(t.isCycling() == t2.isCycling());
+        QVERIFY(t.numberOfCycles() == t2.numberOfCycles());
+        QVERIFY(t.nextDate() == t2.nextDate());
+        QVERIFY(t.cyclingDelayInMinutes() == t2.cyclingDelayInMinutes());
+        QVERIFY(t.cyclingDelayInHours() == t2.cyclingDelayInHours());
+        QVERIFY(t.cyclingDelayInDays() == t2.cyclingDelayInDays());
+        QVERIFY(t.cyclingDelayInWeeks() == t2.cyclingDelayInWeeks());
+        QVERIFY(t.cyclingDelayInMonth() == t2.cyclingDelayInMonth());
+        QVERIFY(t.cyclingDelayInYears() == t2.cyclingDelayInYears());
+        QVERIFY(t.cyclingDelayInDecades() == t2.cyclingDelayInDecades());
+        QVERIFY(t.currentCycleStartDate() == t2.currentCycleStartDate());
+        QVERIFY(t.currentCycleExpirationDate() == t2.currentCycleExpirationDate());
+        QVERIFY(t == t2);
+    }
+
+    // Test AlertTiming cycling interface
+    for(int i= 0; i < loop; ++i) {
+        AlertTiming tc;
+        tc.setId(r.randomInt(1000));
+        tc.setValid(r.randomBool());
+        tc.setCycling(true);
+
+        qlonglong delay = r.randomInt(1, 11111111); // avoid 0 duration
+        int ncycle = r.randomInt(1, 10); // avoid 0 cycle...
+        int currentCycle = r.randomInt(1, ncycle);
+
+        QDateTime start = QDateTime::currentDateTime().addSecs(-delay*60*currentCycle - 10);
+        QDateTime end = start.addSecs(delay*60*ncycle + 10);
+        start.setTime(QTime(start.time().hour(), start.time().minute(), start.time().second()));
+        end.setTime(QTime(end.time().hour(), end.time().minute(), end.time().second()));
+
+        tc.setStart(start);
+        tc.setEnd(end);
+        tc.setExpiration(end.addDays(1));
+
+        // TODO: obsolete
+        // tc.setNextDate(r.randomDateTime(dt));
+        // END
+
+        tc.setCyclingDelayInMinutes(delay);
+        tc.setNumberOfCycles(ncycle);
+
+        // Check computed data
+        QVERIFY(tc.isCycling() == true);
+        QVERIFY(tc.numberOfCycles() == ncycle);
+        QVERIFY(tc.cyclingDelayInMinutes() == delay);
+
+        QVERIFY(tc.currentCycle() == currentCycle);
+        QVERIFY(tc.currentCycleStartDate() == start.addSecs(delay*60*currentCycle));
+        QVERIFY(tc.currentCycleExpirationDate() == start.addSecs(delay*60*(currentCycle+1)));
+    }
+
     // Test AlertTiming non-cycling XML interface
     for(int i= 0; i < loop; ++i) {
         AlertTiming t;
@@ -277,9 +396,11 @@ void AlertPlugin::test_alerttiming_object()
         QVERIFY(t.cyclingDelayInMonth() == t2.cyclingDelayInMonth());
         QVERIFY(t.cyclingDelayInYears() == t2.cyclingDelayInYears());
         QVERIFY(t.cyclingDelayInDecades() == t2.cyclingDelayInDecades());
-        QVERIFY(t.cycleStartDate() == t2.cycleStartDate());
-        QVERIFY(t.cycleExpirationDate() == t2.cycleExpirationDate());
+        QVERIFY(t.currentCycleStartDate() == t2.currentCycleStartDate());
+        QVERIFY(t.currentCycleExpirationDate() == t2.currentCycleExpirationDate());
         QVERIFY(t2.isModified() == false);
+        t.setModified(false);
+        QVERIFY(t == t2);
     }
 
     // Test AlertTiming cycling XML interface
@@ -295,12 +416,12 @@ void AlertPlugin::test_alerttiming_object()
         dt.addDays(r.randomInt(1, r.randomInt(2, 20)));
         tc.setExpiration(dt);
         tc.setCycling(true);
-        tc.setNumberOfCycles(r.randomInt(1, 100)); // avoid 0 cycle...
+        // TODO: obsolete
         tc.setNextDate(r.randomDateTime(dt));
-        tc.setCyclingDelayInMinutes(r.randomInt(100, 100000));
-        tc.setCycleStartDate(r.randomDateTime(dt));
-        dt.addDays(r.randomInt(10));
-        tc.setCycleExpirationDate(dt);
+        // END
+
+        tc.setCyclingDelayInMinutes(r.randomInt(100, 100000)); // avoid 0 duration
+        tc.setNumberOfCycles(r.randomInt(1, 100)); // avoid 0 cycle...
         tc.setModified(false);
         AlertTiming tc2 = AlertTiming::fromXml(tc.toXml());
         QVERIFY(tc.id() == tc2.id());
@@ -318,53 +439,16 @@ void AlertPlugin::test_alerttiming_object()
         QVERIFY(tc.cyclingDelayInMonth() == tc2.cyclingDelayInMonth());
         QVERIFY(tc.cyclingDelayInYears() == tc2.cyclingDelayInYears());
         QVERIFY(tc.cyclingDelayInDecades() == tc2.cyclingDelayInDecades());
-        // Dynamic values
-        // QVERIFY(tc.cycleStartDate() == tc2.cycleStartDate());
-        // QVERIFY(tc.cycleExpirationDate() == tc2.cycleExpirationDate());
+        // TODO: manage this
+//        qWarning() << tc.currentCycleStartDate() << tc2.currentCycleStartDate();
+//        qWarning() << tc.currentCycleExpirationDate() << tc2.currentCycleExpirationDate();
+//        QVERIFY(tc.currentCycleStartDate() == tc2.currentCycleStartDate());
+//        QVERIFY(tc.currentCycleExpirationDate() == tc2.currentCycleExpirationDate());
+
         QVERIFY(tc2.isModified() == false);
+        tc.setModified(false);
+        QVERIFY(tc == tc2);
     }
-}
-
-static void verifyAlertEquality(const AlertItem &item, const AlertItem &item2)
-{
-    QVERIFY(item.isValid() == item2.isValid());
-    QVERIFY(item.uuid() == item2.uuid());
-    QVERIFY(item.packUid() == item2.packUid());
-    QVERIFY(item.cryptedPassword() == item2.cryptedPassword());
-    QVERIFY(item.availableLanguages() == item2.availableLanguages());
-    foreach(const QString &l, item.availableLanguages()) {
-        QVERIFY(item.label(l) == item2.label(l));
-        QVERIFY(item.toolTip(l) == item2.toolTip(l));
-        QVERIFY(item.category(l) == item2.category(l));
-        QVERIFY(item.description(l) == item2.description(l));
-        QVERIFY(item.comment(l) == item2.comment(l));
-    }
-    QVERIFY(item.viewType() == item2.viewType());
-    QVERIFY(item.contentType() == item2.contentType());
-    QVERIFY(item.priority() == item2.priority());
-    QVERIFY(item.isOverrideRequiresUserComment() == item2.isOverrideRequiresUserComment());
-    QVERIFY(item.mustBeRead() == item2.mustBeRead());
-    QVERIFY(item.isRemindLaterAllowed() == item2.isRemindLaterAllowed());
-    QVERIFY(item.isEditable() == item2.isEditable());
-    QVERIFY(item.creationDate() == item2.creationDate());
-    QVERIFY(item.lastUpdate() == item2.lastUpdate());
-    QVERIFY(item.themedIcon() == item2.themedIcon());
-    QVERIFY(item.styleSheet() == item2.styleSheet());
-    QVERIFY(item.priorityBackgroundColor() == item2.priorityBackgroundColor());
-    QVERIFY(item.htmlToolTip(true) == item2.htmlToolTip(true));
-    QVERIFY(item.htmlToolTip(false) == item2.htmlToolTip(false));
-
-    if (item.extraXml() != item2.extraXml())
-        qWarning() << item.extraXml() << item2.extraXml();
-    QVERIFY(item.extraXml() == item2.extraXml());
-
-    QVERIFY(item.relations().count() == item2.relations().count());
-    QVERIFY(item.timings().count() == item2.timings().count());
-    QVERIFY(item.scripts().count() == item2.scripts().count());
-    QVERIFY(item.validations().count() == item2.validations().count());
-    QVERIFY(item.isUserValidated() == item2.isUserValidated());
-
-    QVERIFY(item == item2);
 }
 
 void AlertPlugin::test_alertitem_object()
@@ -728,21 +812,6 @@ void AlertPlugin::cleanupTestCase()
         QVERIFY(alertBase().purgeAlertItem(uid) == true);
     }
 }
-
-
-// Blocking alerts
-//    if (false) {
-//        item.setViewType(AlertItem::BlockingAlert);
-//        item.setOverrideRequiresUserComment(true);
-//        QToolButton *test = new QToolButton;
-//        test->setText("Houlala");
-//        test->setToolTip("kokokokokok");
-//        QList<QAbstractButton*> buttons;
-//        buttons << test;
-
-//        BlockingAlertDialog::executeBlockingAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
-//        //    BlockingAlertDialog::executeBlockingAlert(item4);
-//    }
 
 // Alert editor
 //    if (false) {
