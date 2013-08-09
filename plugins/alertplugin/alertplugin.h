@@ -72,7 +72,9 @@ private Q_SLOTS:
     void test_alertitem_object();
     void test_alertcore_init();
     void test_alertbase_basics();
+    void test_alertbase_cycling_alerts();
     void test_alertbase_complex_query();
+    void test_alertbase_complex_query_with_cycling_alerts();
     void test_blockingalert_dialog();
     void cleanupTestCase();
 private:

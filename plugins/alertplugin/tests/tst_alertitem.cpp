@@ -813,6 +813,26 @@ void AlertPlugin::test_alertbase_complex_query()
     // TODO: test cycling alert querying
 }
 
+void AlertPlugin::test_alertbase_complex_query_with_cycling_alerts()
+{
+    QVector<AlertItem> test;
+    Internal::AlertBaseQuery query;
+
+    // Create a valid cycling alert (first cycle)
+    AlertItem item = createVirtualItem();
+    item.setViewType(AlertItem::NonBlockingAlert);
+    item.clearTimings();
+    // Cycling: start one month ago, expire one year later, cycle every month
+    AlertTiming cycling;
+    cycling.setCycling(true);
+    QDateTime start = QDateTime::currentDateTime().addMonths(-1);
+    QDateTime expiration = start.addYears(1);
+    cycling.setStart(start);
+    cycling.setExpiration(expiration);
+    cycling.setCyclingDelayInMonth(1);
+    item.addTiming(cycling);
+}
+
 void AlertPlugin::test_blockingalert_dialog()
 {
     // Alert without required usercomment
