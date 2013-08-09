@@ -1759,12 +1759,17 @@ bool AlertBase::getItemTimings(AlertItem &item)
             AlertTiming time;
             time.setId(query.value(ALERT_TIMING_TIMINGID).toInt());
             time.setValid(query.value(ALERT_TIMING_ISVALID).toBool());
-            time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
+            if (query.value(ALERT_TIMING_STARTDATETIME).toString().length() > 8)
+                time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
             if (query.value(ALERT_TIMING_ENDDATETIME).toString().length() > 8)
                 time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
-            time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
-            time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toLongLong());
-            time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
+            if (query.value(ALERT_TIMING_CYCLES).toInt() > 0) {
+                time.setCycling(true);
+                time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toLongLong());
+                if (query.value(ALERT_TIMING_NEXTCYCLE).toString().length() > 8)
+                    time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
+                time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
+            }
             item.addTiming(time);
         }
     } else {
