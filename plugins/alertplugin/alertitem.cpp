@@ -1643,11 +1643,14 @@ AlertTiming &AlertTiming::fromDomElement(const QDomElement &element)
     if (!element.attribute("id").isEmpty())
         timing->setId(element.attribute("id").toInt());
     timing->setValid(element.attribute("valid").compare("true",Qt::CaseInsensitive)==0);
-    timing->setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
-    timing->setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
+    if (!element.attribute("start").isEmpty())
+        timing->setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
+    if (!element.attribute("end").isEmpty())
+        timing->setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
+    if (!element.attribute("next").isEmpty())
+        timing->setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
     timing->setCycling(element.attribute("isCycle").compare("true",Qt::CaseInsensitive)==0);
     timing->setCyclingDelayInMinutes(element.attribute("delayInMin").toLongLong());
-    timing->setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
     timing->setNumberOfCycles(element.attribute("ncycle").toInt());
     timing->setModified(false);
     return *timing;
