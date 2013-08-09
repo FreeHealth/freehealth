@@ -48,12 +48,14 @@ namespace Alert {
 class ALERT_EXPORT AlertTiming
 {
 public:
-    AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false), _modified(false) {}
+    AlertTiming() : _id(-1), _nCycle(0), _delayInMins(0), _valid(true), _isCycle(false), _modified(false) {}
     AlertTiming(const QDateTime &start, const QDateTime &expirationDate) :
-        _id(-1), _ncycle(0),
-        _start(start), _end(expirationDate),
-        _delay(0), _valid(true), _isCycle(false), _modified(true)
+        _id(-1), _nCycle(0), _currentCycle(-1),
+        _start(QDateTime(start.date(), QTime(start.time().hour(), start.time().minute(), start.time().second()))),
+        _end(QDateTime(expirationDate.date(), QTime(expirationDate.time().hour(), expirationDate.time().minute(), expirationDate.time().second()))),
+        _delayInMins(0), _valid(true), _isCycle(false), _modified(true)
     {}
+    AlertTiming(const AlertTiming &copy);
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
@@ -67,37 +69,41 @@ public:
     virtual QDateTime start() const {return _start;}
     virtual QDateTime end() const {return _end;}
     virtual QDateTime expiration() const {return _end;}
-    virtual void setStart(const QDateTime &dt) {_modified=true; _start = dt;}
-    virtual void setEnd(const QDateTime &dt) {_modified=true; _end = dt;}
-    virtual void setExpiration(const QDateTime &dt) {_modified=true; _end = dt;}
+    virtual void setStart(const QDateTime &dt) {_modified=true; _start = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));}
+    virtual void setEnd(const QDateTime &dt) {_modified=true; _end = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));}
+    virtual void setExpiration(const QDateTime &dt) {_modified=true; _end = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));}
 
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_modified=true; _isCycle=cycle;}
-    virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; _isCycle=(n>0);}
+    virtual int numberOfCycles() const {return _nCycle;}
+    virtual void setNumberOfCycles(int n);
+    int currentCycle() const {return _currentCycle;}
+
+    // TODO: obsolete
     virtual QDateTime nextDate() const {return _next;}
-    virtual void setNextDate(const QDateTime &dt) {_modified=true; _next=dt;}
+    virtual void setNextDate(const QDateTime &dt) {_modified=true; _next=QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));}
+    // END
 
-    virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
-    virtual void setCyclingDelayInMinutes(const qlonglong delay) {_modified=true; _delay=delay;}
+    virtual qlonglong cyclingDelayInMinutes() const {return _delayInMins;}
+    virtual void setCyclingDelayInMinutes(const qlonglong delay) {_modified=true; _delayInMins=delay;}
 
-    virtual qlonglong cyclingDelayInHours() const {return qlonglong(_delay/60);}
-    virtual void setCyclingDelayInHours(const qlonglong delay) {_modified=true; _delay=delay*60;}
+    virtual qlonglong cyclingDelayInHours() const {return qlonglong(_delayInMins/60);}
+    virtual void setCyclingDelayInHours(const qlonglong delay) {_modified=true; _delayInMins=delay*60;}
 
-    virtual qlonglong cyclingDelayInDays() const {return qlonglong(_delay/60/24);}
-    virtual void setCyclingDelayInDays(const qlonglong delay) {_modified=true; _delay=delay*60*24;}
+    virtual qlonglong cyclingDelayInDays() const {return qlonglong(_delayInMins/60/24);}
+    virtual void setCyclingDelayInDays(const qlonglong delay) {_modified=true; _delayInMins=delay*60*24;}
 
-    virtual qlonglong cyclingDelayInWeeks() const {return qlonglong(_delay/60/24/7);}
-    virtual void setCyclingDelayInWeeks(const qlonglong delay) {_modified=true; _delay=delay*60*24*7;}
+    virtual qlonglong cyclingDelayInWeeks() const {return qlonglong(_delayInMins/60/24/7);}
+    virtual void setCyclingDelayInWeeks(const qlonglong delay) {_modified=true; _delayInMins=delay*60*24*7;}
 
-    virtual qlonglong cyclingDelayInMonth() const {return qlonglong(_delay/60/24/30);}
-    virtual void setCyclingDelayInMonth(const qlonglong delay) {_modified=true; _delay=delay*60*24*30;}
+    virtual qlonglong cyclingDelayInMonth() const {return qlonglong(_delayInMins/60/24/30);}
+    virtual void setCyclingDelayInMonth(const qlonglong delay) {_modified=true; _delayInMins=delay*60*24*30;}
 
-    virtual qlonglong cyclingDelayInYears() const {return qlonglong(_delay/60/24/365.25);}
-    virtual void setCyclingDelayInYears(const qlonglong delay) {_modified=true; _delay=qlonglong(delay*60*24*365.25);}
+    virtual qlonglong cyclingDelayInYears() const {return qlonglong(_delayInMins/60/24/365.25);}
+    virtual void setCyclingDelayInYears(const qlonglong delay) {_modified=true; _delayInMins=qlonglong(delay*60*24*365.25);}
 
-    virtual qlonglong cyclingDelayInDecades() const {return qlonglong(_delay/60/24/365.25/10);}
-    virtual void setCyclingDelayInDecades(const qlonglong delay) {_modified=true; _delay=qlonglong(delay*60*24*365.25*10);}
+    virtual qlonglong cyclingDelayInDecades() const {return qlonglong(_delayInMins/60/24/365.25/10);}
+    virtual void setCyclingDelayInDecades(const qlonglong delay) {_modified=true; _delayInMins=qlonglong(delay*60*24*365.25*10);}
 
     virtual void cyclingDelay(qlonglong *min, qlonglong *hours, qlonglong *days, qlonglong *weeks,
                               qlonglong *months, qlonglong *years, qlonglong *decades) const;
@@ -105,19 +111,25 @@ public:
     virtual void cyclingDelayPeriodModulo(int *period, int *mod) const;
 
     // Values not saved in the database, class is not considered as modified when settings these params
-    virtual QDateTime cycleStartDate() const {return _cycleStartDate;}
-    virtual QDateTime cycleExpirationDate() const {return _cycleExpirationDate;}
-    virtual void setCycleStartDate(const QDateTime &dt) {_cycleStartDate=dt;}
-    virtual void setCycleExpirationDate(const QDateTime &dt) {_cycleExpirationDate=dt;}
+    virtual QDateTime currentCycleStartDate() const {return _cycleStartDate;}
+    virtual QDateTime currentCycleExpirationDate() const {return _cycleExpirationDate;}
+    // virtual void setCycleStartDate(const QDateTime &dt) {_cycleStartDate=dt;}
+    // virtual void setCycleExpirationDate(const QDateTime &dt) {_cycleExpirationDate=dt;}
 
     virtual QString toXml() const;
     static AlertTiming &fromXml(const QString &xml);
     static AlertTiming &fromDomElement(const QDomElement &element);
 
+    bool operator==(const AlertTiming &other) const;
+    bool operator!=(const AlertTiming &other) const {return !operator==(other);}
+
 private:
-    int _id, _ncycle;
+    void computeCycle();
+
+private:
+    int _id, _nCycle, _currentCycle;
     QDateTime _start, _end, _next;
-    qlonglong _delay;
+    qlonglong _delayInMins;
     bool _valid, _isCycle;
     bool _modified;
     QDateTime _cycleStartDate, _cycleExpirationDate;
@@ -215,7 +227,7 @@ public:
     virtual bool isAccepted() const {return !_overridden;}
 
     virtual QDateTime dateOfValidation() const {return _date;}
-    virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=dt;}
+    virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));}
 
     virtual QString validatedUid() const {return _validated;}
     virtual void setValidatedUuid(const QString &uid) {_validated=uid;}

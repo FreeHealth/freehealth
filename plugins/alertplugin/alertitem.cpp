@@ -726,7 +726,7 @@ QDateTime AlertItem::creationDate() const
 
 void AlertItem::setCreationDate(const QDateTime &dt)
 {
-    d->_creationDate = dt;
+    d->_creationDate = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));
 }
 
 QDateTime AlertItem::lastUpdate() const
@@ -736,7 +736,7 @@ QDateTime AlertItem::lastUpdate() const
 
 void AlertItem::setLastUpdate(const QDateTime &dt)
 {
-    d->_update = dt;
+    d->_update = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));
 }
 
 QString AlertItem::themedIcon() const
@@ -846,9 +846,9 @@ QString AlertItem::htmlToolTip(bool showCategory) const
         if (timing.isCycling()) {
             // TODO: create a AlertTiming::cycleDelayToString() and use it here
             tim << QString(QApplication::translate("Alert::AlertItem", "Started on: %1<br />Cycling every: %2<br />Expires on: %3"))
-                       .arg(timing.cycleStartDate().toString(QLocale().dateFormat()))
+                       .arg(timing.currentCycleStartDate().toString(QLocale().dateFormat()))
                        .arg(timing.cyclingDelayInDays())
-                       .arg(timing.cycleExpirationDate().toString(QLocale().dateFormat()));
+                       .arg(timing.currentCycleExpirationDate().toString(QLocale().dateFormat()));
         } else {
             tim << QString(QApplication::translate("Alert::AlertItem", "Started on: %1<br />Expires on: %2"))
                        .arg(timing.start().toString(QLocale().dateFormat()))
@@ -1413,9 +1413,18 @@ AlertItem &AlertItem::fromXml(const QString &xml)
     return *item;
 }
 
+AlertTiming::AlertTiming(const AlertTiming &copy) :
+    _id(copy._id), _nCycle(copy._nCycle), _currentCycle(copy._currentCycle),
+    _start(copy._start), _end(copy._end), _next(copy._next),
+    _delayInMins(copy._delayInMins),
+    _valid(copy._valid), _isCycle(copy._isCycle),
+    _modified(copy._modified),
+    _cycleStartDate(copy._cycleStartDate), _cycleExpirationDate(copy._cycleExpirationDate)
+{}
+
 void AlertTiming::cyclingDelay(qlonglong *mins, qlonglong *hours, qlonglong *days, qlonglong *weeks, qlonglong *months, qlonglong *years, qlonglong *decades) const
 {
-    qlonglong tmp = _delay;
+    qlonglong tmp = _delayInMins;
     *decades = cyclingDelayInDecades();
     tmp -= (*decades)*60*24*365.25*10;
 
@@ -1477,12 +1486,12 @@ void AlertTiming::cyclingDelayPeriodModulo(int *period, int *mod) const
     *period = -1;
     *mod = 0;
     for(int i = 0; i < ops.count(); ++i) {
-        if ((_delay % ops.at(i)) == 0) {
+        if ((_delayInMins % ops.at(i)) == 0) {
             *period = i;
         }
     }
     if (*period != -1)
-        *mod = _delay / ops.at(*period);
+        *mod = _delayInMins / ops.at(*period);
     switch (*period) {
     case -1:
         *period = Trans::Constants::Time::Minutes;
@@ -1508,6 +1517,55 @@ void AlertTiming::cyclingDelayPeriodModulo(int *period, int *mod) const
     }
 }
 
+/**
+ * Define the number of cycle of this cycling timing. When defining this,
+ * current cycle is computed. Before, you must defined
+ * - the start and expiration dates of the timing ;
+ * - the delay in cycles.
+ * \sa setStartDate(), setCyclingDelayInMinutes(), setCyclingDelayInHours()
+ * \sa setCyclingDelayInDays(), setCyclingDelayInWeeks(), setCyclingDelayInMonth()
+ * \sa setCyclingDelayInYears()
+ */
+void AlertTiming::setNumberOfCycles(int n)
+{
+    _modified=true;
+    _nCycle=n;
+    _isCycle=(n>0);
+    computeCycle();
+}
+
+/** Compute cycle data range and check internal data */
+void AlertTiming::computeCycle()
+{
+    // Is really cycling?
+    if (!_isCycle || _nCycle <= 0 || _delayInMins <= 0) {
+        _nCycle = 0;
+        _isCycle = false;
+        return;
+    }
+
+    // Already computed?
+    if (_currentCycle > 0 &&
+            _cycleStartDate.isValid() && !_cycleStartDate.isNull() &&
+            _cycleExpirationDate.isValid() && !_cycleExpirationDate.isNull()) {
+        return;
+    }
+
+    _cycleStartDate = QDateTime();
+    _cycleExpirationDate = QDateTime();
+    _currentCycle = 0;
+
+    // Is computation possible?
+    if (!_start.isValid() || _start.isNull()) {
+        return;
+    }
+
+    // Compute current cycle
+    _currentCycle = int((_start.secsTo(QDateTime::currentDateTime())/60) / _delayInMins);
+    _cycleStartDate = _start.addSecs(_delayInMins*60*_currentCycle);
+    _cycleExpirationDate = _start.addSecs(_delayInMins*60*(_currentCycle+1));
+}
+
 QString AlertTiming::toXml() const
 {
     QDomDocument doc;
@@ -1518,8 +1576,8 @@ QString AlertTiming::toXml() const
     el.setAttribute("end", _end.toString(Qt::ISODate));
     el.setAttribute("isCycle", _isCycle ? "true" : "false");
     if (_isCycle) {
-        el.setAttribute("ncycle", _ncycle);
-        el.setAttribute("delayInMin", _delay);
+        el.setAttribute("ncycle", _nCycle);
+        el.setAttribute("delayInMin", _delayInMins);
         el.setAttribute("next", _next.toString(Qt::ISODate));
     }
     doc.appendChild(el);
@@ -1562,11 +1620,28 @@ AlertTiming &AlertTiming::fromDomElement(const QDomElement &element)
     timing->setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
     timing->setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
     timing->setCycling(element.attribute("isCycle").compare("true",Qt::CaseInsensitive)==0);
-    timing->setNumberOfCycles(element.attribute("ncycle").toInt());
     timing->setCyclingDelayInMinutes(element.attribute("delayInMin").toLongLong());
     timing->setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
+    timing->setNumberOfCycles(element.attribute("ncycle").toInt());
     timing->setModified(false);
     return *timing;
+}
+
+bool AlertTiming::operator==(const AlertTiming &other) const
+{
+    return _id == other._id &&
+            _nCycle == other._nCycle &&
+            _start == other._start &&
+            _end == other._end &&
+            _next == other._next &&
+            _delayInMins == other._delayInMins &&
+            _valid == other._valid &&
+            _isCycle == other._isCycle &&
+            _modified == other._modified;
+    // TODO: manage cycleStartDate && cycleExpirationDate
+            // &&
+            // _cycleStartDate == other._cycleStartDate &&
+            // _cycleExpirationDate == other._cycleExpirationDate;
 }
 
 /** Return a human readable \e type property */
