@@ -337,7 +337,7 @@ void AlertPlugin::test_alerttiming_object()
         tc.setValid(r.randomBool());
         tc.setCycling(true);
 
-        qlonglong delay = r.randomInt(1, 11111111); // avoid 0 duration
+        qlonglong delay = r.randomInt(1, 111111); // avoid 0 duration
         int ncycle = r.randomInt(1, 10); // avoid 0 cycle...
         int currentCycle = r.randomInt(1, ncycle);
 
@@ -361,7 +361,6 @@ void AlertPlugin::test_alerttiming_object()
         QVERIFY(tc.isCycling() == true);
         QVERIFY(tc.numberOfCycles() == ncycle);
         QVERIFY(tc.cyclingDelayInMinutes() == delay);
-
         QVERIFY(tc.currentCycle() == currentCycle);
         QVERIFY(tc.currentCycleStartDate() == start.addSecs(delay*60*currentCycle));
         QVERIFY(tc.currentCycleExpirationDate() == start.addSecs(delay*60*(currentCycle+1)));
@@ -386,9 +385,11 @@ void AlertPlugin::test_alerttiming_object()
         QVERIFY(t.start() == t2.start());
         QVERIFY(t.end() == t2.end());
         QVERIFY(t.expiration() == t2.expiration());
+
         QVERIFY(t.isCycling() == t2.isCycling());
-        QVERIFY(t.numberOfCycles() == t2.numberOfCycles());
         QVERIFY(t.nextDate() == t2.nextDate());
+        QVERIFY(t.numberOfCycles() == t2.numberOfCycles());
+
         QVERIFY(t.cyclingDelayInMinutes() == t2.cyclingDelayInMinutes());
         QVERIFY(t.cyclingDelayInHours() == t2.cyclingDelayInHours());
         QVERIFY(t.cyclingDelayInDays() == t2.cyclingDelayInDays());
@@ -396,6 +397,7 @@ void AlertPlugin::test_alerttiming_object()
         QVERIFY(t.cyclingDelayInMonth() == t2.cyclingDelayInMonth());
         QVERIFY(t.cyclingDelayInYears() == t2.cyclingDelayInYears());
         QVERIFY(t.cyclingDelayInDecades() == t2.cyclingDelayInDecades());
+
         QVERIFY(t.currentCycleStartDate() == t2.currentCycleStartDate());
         QVERIFY(t.currentCycleExpirationDate() == t2.currentCycleExpirationDate());
         QVERIFY(t2.isModified() == false);
@@ -467,6 +469,8 @@ void AlertPlugin::test_alertitem_object()
         verifyAlertEquality(item, item2);
         QVERIFY(item2.isModified() == false);
     }
+
+    // TODO: test operator==() with multiple timings
 
     // Test sort interface
     AlertItem item1 = createVirtualItem();
@@ -576,6 +580,7 @@ void AlertPlugin::test_alertbase_cycling_alerts()
         case 4: cycling.setCyclingDelayInMonth(r.randomInt(1, 10)); break;
         case 5: cycling.setCyclingDelayInYears(r.randomInt(1, 10)); break;
         }
+        cycling.setNumberOfCycles(r.randomInt(1, 100));
         item.clearTimings();
         item.addTiming(cycling);
         QVERIFY(item.timingAt(0) == cycling);
