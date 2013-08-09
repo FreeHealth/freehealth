@@ -550,6 +550,59 @@ void AlertPlugin::test_alertbase_basics()
         test = alertBase().getAlertItems(query);
         QVERIFY(test.count() == 0);
     }
+}
+
+void AlertPlugin::test_alertbase_cycling_alerts()
+{
+    QVector<AlertItem> test;
+    Internal::AlertBaseQuery query;
+
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    for(int i=0; i < loop; ++i) {
+        // Create a virtual cycling alert
+        AlertItem item = createVirtualItem(true);
+        AlertTiming cycling;
+        cycling.setCycling(true);
+        QDateTime start = QDateTime::currentDateTime().addMonths(-r.randomInt(1, 10));
+        QDateTime expiration = start.addMonths(r.randomInt(1000, 100000));
+        cycling.setStart(start);
+        cycling.setExpiration(expiration);
+        switch (r.randomInt(0, 5)) {
+        case 0: cycling.setCyclingDelayInMinutes(r.randomInt(1000, 100000)); break;
+        case 1: cycling.setCyclingDelayInHours(r.randomInt(10, 1000)); break;
+        case 2: cycling.setCyclingDelayInDays(r.randomInt(10, 100)); break;
+        case 3: cycling.setCyclingDelayInWeeks(r.randomInt(10, 100)); break;
+        case 4: cycling.setCyclingDelayInMonth(r.randomInt(1, 10)); break;
+        case 5: cycling.setCyclingDelayInYears(r.randomInt(1, 10)); break;
+        }
+        item.clearTimings();
+        item.addTiming(cycling);
+        QVERIFY(item.timingAt(0) == cycling);
+
+        // Save it
+        QVERIFY(alertBase().saveAlertItem(item) == true);
+        uidsToPurge << item.uuid();
+        QVERIFY(item.db(0).toInt() >= 0); // Test internal ID
+        QVERIFY(item.isModified() == false);
+
+        // Get it back from database & check equality
+        query.getAlertItemFromUuid(item.uuid());
+        test = alertBase().getAlertItems(query);
+        QVERIFY(test.count() == 1);
+        AlertItem &item2 = test[0];
+        verifyAlertEquality(item, item2);
+        QVERIFY(item2.isModified() == false);
+        test.clear();
+
+        // Purge it
+        QVERIFY(alertBase().purgeAlertItem(item.uuid()) == true);
+        uidsToPurge.removeAll(item.uuid());
+
+        // Check that the alert no longuer exists in the database
+        test = alertBase().getAlertItems(query);
+        QVERIFY(test.count() == 0);
+    }
 
     // TODO: Check alert updates
 }
