@@ -48,13 +48,8 @@ namespace Alert {
 class ALERT_EXPORT AlertTiming
 {
 public:
-    AlertTiming() : _id(-1), _nCycle(0), _delayInMins(0), _valid(true), _isCycle(false), _modified(false) {}
-    AlertTiming(const QDateTime &start, const QDateTime &expirationDate) :
-        _id(-1), _nCycle(0), _currentCycle(-1),
-        _start(QDateTime(start.date(), QTime(start.time().hour(), start.time().minute(), start.time().second()))),
-        _end(QDateTime(expirationDate.date(), QTime(expirationDate.time().hour(), expirationDate.time().minute(), expirationDate.time().second()))),
-        _delayInMins(0), _valid(true), _isCycle(false), _modified(true)
-    {}
+    AlertTiming();
+    AlertTiming(const QDateTime &start, const QDateTime &expirationDate);
     AlertTiming(const AlertTiming &copy);
     virtual ~AlertTiming() {}
 

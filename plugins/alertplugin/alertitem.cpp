@@ -87,7 +87,21 @@
  */
 
 /**
- * \fn void AlertTiming::setNumberOfCycles(int n)
+ * \class Alert::AlertTiming
+ * Represent a specific timing for the alert. Alert can be one shot (one timing),
+ * multi-defined shots (multi-timings), or cycling alerts. \n
+ * When you define a cycling alert, you must in first define all the cycle data before
+ * defining the total number of cycle (with setNumberOfCycles()). The current cycle:
+ * - number (currentCycle())
+ * - start date (currentCycleStartDate())
+ * - end date (currentCycleExpirationDate())
+ * will be automatically computed.
+ * \note: all QTime milliseconds are lost (set to zero) to ensure a total correspondance
+ * with database saved timings and XML transformation.
+ */
+
+/**
+ * \fn void Alert::AlertTiming::setNumberOfCycles(int n)
  * Defines the number of cycling of the alert, n must be > 0 otherwise the alert will not be cycling.
  */
 
@@ -1412,6 +1426,18 @@ AlertItem &AlertItem::fromXml(const QString &xml)
     item->setModified(false);
     return *item;
 }
+
+AlertTiming::AlertTiming() :
+    _id(-1), _nCycle(0), _currentCycle(-1),
+    _delayInMins(0), _valid(true), _isCycle(false), _modified(false)
+{}
+
+AlertTiming::AlertTiming(const QDateTime &start, const QDateTime &expirationDate) :
+    _id(-1), _nCycle(0), _currentCycle(-1),
+    _start(QDateTime(start.date(), QTime(start.time().hour(), start.time().minute(), start.time().second()))),
+    _end(QDateTime(expirationDate.date(), QTime(expirationDate.time().hour(), expirationDate.time().minute(), expirationDate.time().second()))),
+    _delayInMins(0), _valid(true), _isCycle(false), _modified(true)
+{}
 
 AlertTiming::AlertTiming(const AlertTiming &copy) :
     _id(copy._id), _nCycle(copy._nCycle), _currentCycle(copy._currentCycle),
