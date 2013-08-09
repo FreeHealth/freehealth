@@ -387,8 +387,8 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts, bool clearPlaceHolders
                 QVariant startDate = d->_alertScriptManager->execute(item, AlertScript::CyclingStartDate);
                 if (startDate.isValid() && startDate.canConvert(QVariant::DateTime)) {
                     // TODO: correctly the nearest starting date
-                    timing.setCycleStartDate(startDate.toDateTime());
-                    timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
+                    // timing.setCycleStartDate(startDate.toDateTime());
+                    // timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                 }
             }
             // TODO: something is missing here: autochecking of next cycle range.
