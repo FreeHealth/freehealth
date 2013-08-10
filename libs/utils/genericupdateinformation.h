@@ -24,8 +24,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef GENERICUPDATEINFORMATION_H
-#define GENERICUPDATEINFORMATION_H
+#ifndef UTILS_GENERICUPDATEINFORMATION_H
+#define UTILS_GENERICUPDATEINFORMATION_H
 
 #include <utils/global_exporter.h>
 
@@ -89,4 +89,4 @@ private:
 UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::GenericUpdateInformation &u);
 UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::GenericUpdateInformation *u);
 
-#endif // GENERICUPDATEINFORMATION_H
+#endif // UTILS_GENERICUPDATEINFORMATION_H

@@ -24,8 +24,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACK_GENERICDESCRIPTION_H
-#define DATAPACK_GENERICDESCRIPTION_H
+#ifndef UTILS_GENERICDESCRIPTION_H
+#define UTILS_GENERICDESCRIPTION_H
 
 #include <utils/global_exporter.h>
 #include <utils/genericupdateinformation.h>
@@ -142,7 +142,6 @@ private:
     QHash<QString, QHash<int, QVariant> > m_Data;
 };
 
-}  // End namespace DataPack
+}  // namespace Utils
 
-
-#endif // DATAPACK_GENERICDESCRIPTION_H
+#endif // UTILS_GENERICDESCRIPTION_H
