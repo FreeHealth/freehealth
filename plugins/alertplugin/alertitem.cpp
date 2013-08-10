@@ -1204,7 +1204,12 @@ void AlertItem::addValidation(const AlertValidation &val)
     d->_validations << val;
 }
 
-/** Check equality between two Alert::AlertItem */
+/**
+ * Check equality between two Alert::AlertItem. If item contains
+ * Alert::AlertTiming, Alert::AlertRelation, Alert::AlertScript and/or
+ * Alert::AlertValidation, their equality are also checked (including
+ * their id()).
+ */
 bool AlertItem::operator==(const AlertItem &other) const
 {
     // first test
@@ -1238,7 +1243,7 @@ bool AlertItem::operator==(const AlertItem &other) const
         const AlertTiming &first = d->_timings.at(i);
         bool ok = false;
         for(int j = 0; j < other.d->_timings.count(); ++j) {
-            const AlertTiming &second = other.d->_timings.at(i);
+            const AlertTiming &second = other.d->_timings.at(j);
             if (first == second) {
                 ok = true;
                 break;
@@ -1671,21 +1676,28 @@ AlertTiming &AlertTiming::fromDomElement(const QDomElement &element)
     return *timing;
 }
 
+/** Compares two Alert::AlertTiming (including their id()) */
 bool AlertTiming::operator==(const AlertTiming &other) const
 {
+//    if (_id != other._id) qWarning() << "!=_id";
+//    if (_nCycle != other._nCycle) qWarning() << "!=_nCycle";
+//    if (_start != other._start) qWarning() << "!=_start";
+//    if (_end != other._end) qWarning() << "!=_end";
+//    if (_next != other._next) qWarning() << "!=_next";
+//    if (_delayInMins != other._delayInMins) qWarning() << "!=_delayInMins";
+//    if (_valid != other._valid) qWarning() << "!=_valid";
+//    if (_isCycle != other._isCycle) qWarning() << "!=_isCycle";
+//    if (_modified != other._modified) qWarning() << "!=_modified";
     return _id == other._id &&
             _nCycle == other._nCycle &&
-            _start == other._start &&
-            _end == other._end &&
-            _next == other._next &&
-            _delayInMins == other._delayInMins &&
             _valid == other._valid &&
             _isCycle == other._isCycle &&
-            _modified == other._modified;
-    // TODO: manage currentCycle && cycleStartDate && cycleExpirationDate
-            // &&
-            // _cycleStartDate == other._cycleStartDate &&
-            // _cycleExpirationDate == other._cycleExpirationDate;
+            _modified == other._modified &&
+            _delayInMins == other._delayInMins &&
+            _start == other._start &&
+            _end == other._end &&
+            _next == other._next;
+    // currentCycle && cycleStartDate && cycleExpirationDate shouldn't be tested as they are computed values
 }
 
 /** Return a human readable \e type property */
