@@ -1252,6 +1252,22 @@ bool AlertItem::operator==(const AlertItem &other) const
         if (!ok)
             return false;
     }
+
+    // test all relations
+    for(int i = 0; i < d->_relations.count(); ++i) {
+        const AlertRelation &first = d->_relations.at(i);
+        bool ok = false;
+        for(int j = 0; j < other.d->_relations.count(); ++j) {
+            const AlertRelation &second = other.d->_relations.at(j);
+            if (first == second) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok)
+            return false;
+    }
+
     // fourth test: test each relations, validations, scripts and timings equality
     // TODO: test each relations, validations, scripts and timings equality
     return true;
@@ -2019,6 +2035,52 @@ AlertRelation &AlertRelation::fromDomElement(const QDomElement &element)
     rel->setRelatedToUid(element.attribute("uid"));
     rel->setModified(false);
     return *rel;
+}
+
+/** Compares two Alert::AlertRelation (including their id()) */
+bool AlertRelation::operator==(const AlertRelation &other) const
+{
+//    if (_id != other._id) qWarning() << "!=_id";
+//    if (_modified != other._modified) qWarning() << "!=_modified";
+//    if (_related != other._related) qWarning() << "!=_related";
+//    if (_relatedUid != other._relatedUid) qWarning() << "!=_relatedUid";
+    return _id == other._id &&
+            _related == other._related &&
+            _modified == other._modified &&
+            _relatedUid == other._relatedUid;
+}
+
+QDebug operator<<(QDebug dbg, const Alert::AlertTiming *c)
+{
+    if (!c) {
+        dbg.nospace() << "AlertTiming(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
+}
+
+QDebug operator<<(QDebug dbg, const Alert::AlertTiming &a)
+{
+    QStringList s;
+    s << QString("AlertTiming(%1; %2").arg(a.id()).arg(a.isValid()?"valid":"invalid");
+    if (a.isModified())
+        s << "modified";
+    else
+        s << "non-modified";
+    s << QString("Start: %1").arg(a.start().toString(Qt::ISODate));
+    s << QString("End: %1").arg(a.end().toString(Qt::ISODate));
+    s << QString("Expiration: %1").arg(a.expiration().toString(Qt::ISODate));
+    if (a.isCycling()) {
+        s << "\n             cycling";
+        s << QString("Delay(mins): %1").arg(a.cyclingDelayInMinutes());
+        s << QString("NCycle: %1").arg(a.numberOfCycles());
+        s << QString("currentCycleStart: %1").arg(a.currentCycleStartDate().toString(Qt::ISODate));
+        s << QString("currentCycleExpiration: %1").arg(a.currentCycleExpirationDate().toString(Qt::ISODate));
+        s << QString("currentCycle: %1").arg(a.currentCycle());
+    }
+    dbg.nospace() << s.join("; ")
+                  << ")";
+    return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem *c)

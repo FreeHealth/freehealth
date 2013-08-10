@@ -278,6 +278,9 @@ public:
     static QString relationTypeToXml(AlertRelation::RelatedTo rel);
     static RelatedTo relationTypeFromXml(const QString &xmlValue);
 
+    bool operator==(const AlertRelation &other) const;
+    bool operator!=(const AlertRelation &other) const {return !operator==(other);}
+
 private:
     int _id;
     bool _modified;
@@ -430,6 +433,9 @@ private:
 };
 
 }  // namespace Alert
+
+ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertTiming &c);
+ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertTiming *c);
 
 ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem &c);
 ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem *c);
