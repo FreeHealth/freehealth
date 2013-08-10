@@ -1268,8 +1268,22 @@ bool AlertItem::operator==(const AlertItem &other) const
             return false;
     }
 
-    // fourth test: test each relations, validations, scripts and timings equality
-    // TODO: test each relations, validations, scripts and timings equality
+    // test all validations
+    for(int i = 0; i < d->_validations.count(); ++i) {
+        const AlertValidation &first = d->_validations.at(i);
+        bool ok = false;
+        for(int j = 0; j < other.d->_validations.count(); ++j) {
+            const AlertValidation &second = other.d->_validations.at(j);
+            if (first == second) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok)
+            return false;
+    }
+
+    // TODO: test each scripts
     return true;
 }
 
@@ -1912,6 +1926,25 @@ AlertValidation &AlertValidation::fromDomElement(const QDomElement &element)
     val->setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
     val->setModified(false);
     return *val;
+}
+
+/** Compares two Alert::AlertValidation (including their id()) */
+bool AlertValidation::operator==(const AlertValidation &other) const
+{
+//    if (_id != other._id) qWarning() << "!=_id";
+//    if (_modified != other._modified) qWarning() << "!=_modified";
+//    if (_overridden != other._overridden) qWarning() << "!=_overridden";
+//    if (_validator != other._validator) qWarning() << "!=_validator";
+//    if (_userComment != other._userComment) qWarning() << "!=_userComment";
+//    if (_validated != other._validated) qWarning() << "!=_validated";
+//    if (_date != other._date) qWarning() << "!=_date";
+    return _id == other._id &&
+            _modified == other._modified &&
+            _overridden == other._overridden &&
+            _validator == other._validator &&
+            _userComment == other._userComment &&
+            _validated == other._validated &&
+            _date == other._date;
 }
 
 /** Return a human readable string of the current relation. */

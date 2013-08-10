@@ -231,6 +231,9 @@ public:
     static AlertValidation &fromXml(const QString &xml);
     static AlertValidation &fromDomElement(const QDomElement &element);
 
+    bool operator==(const AlertValidation &other) const;
+    bool operator!=(const AlertValidation &other) const {return !operator==(other);}
+
 private:
     int _id;
     bool _modified, _overridden;
