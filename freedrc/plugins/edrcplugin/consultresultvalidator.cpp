@@ -147,11 +147,11 @@ public:
         return 0;
     }
 
-    int numberOfSelectedItems(const QList<int> &selectedId)
-    {
-        if (selectedId.isEmpty())
-            return 0;
-    }
+//    int numberOfSelectedItems(const QList<int> &selectedId)
+//    {
+//        if (selectedId.isEmpty())
+//            return 0;
+//    }
 
     QList<ConsultResultError> isSelectionValid(const QList<int> &selectedCriteriaIds) const
     {
@@ -217,7 +217,9 @@ public:
     ConsultResultValidatorPrivate(ConsultResultValidator *parent) :
         crId(-1),
         q(parent)
-    {}
+    {
+        Q_UNUSED(q);
+    }
 
     ~ConsultResultValidatorPrivate()
     {}
