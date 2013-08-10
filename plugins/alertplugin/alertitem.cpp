@@ -1283,7 +1283,20 @@ bool AlertItem::operator==(const AlertItem &other) const
             return false;
     }
 
-    // TODO: test each scripts
+    // test all scripts
+    for(int i = 0; i < d->_scripts.count(); ++i) {
+        const AlertScript &first = d->_scripts.at(i);
+        bool ok = false;
+        for(int j = 0; j < other.d->_scripts.count(); ++j) {
+            const AlertScript &second = other.d->_scripts.at(j);
+            if (first == second) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok)
+            return false;
+    }
     return true;
 }
 
@@ -1868,6 +1881,23 @@ AlertScript &AlertScript::fromDomElement(const QDomElement &element)
 bool AlertScript::operator<(const AlertScript &script) const
 {
     return this->type() < script.type();
+}
+
+/** Compares two Alert::AlertScript (including their id()) */
+bool AlertScript::operator==(const AlertScript &other) const
+{
+//    if (_id != other._id) qWarning() << "!=_id";
+//    if (_modified != other._modified) qWarning() << "!=_modified";
+//    if (_valid != other._valid) qWarning() << "!=_valid";
+//    if (_type != other._type) qWarning() << "!=_type";
+//    if (_uid != other._uid) qWarning() << "!=_uid";
+//    if (_script != other._script) qWarning() << "!=_script";
+    return _id == other._id &&
+            _modified == other._modified &&
+            _valid == other._valid &&
+            _type == other._type &&
+            _uid == other._uid &&
+            _script == other._script;
 }
 
 /** Transform the validation to XML */

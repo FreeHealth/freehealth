@@ -182,6 +182,8 @@ public:
     static AlertScript &fromDomElement(const QDomElement &element);
 
     bool operator<(const AlertScript &script) const;
+    bool operator==(const AlertScript &other) const;
+    bool operator!=(const AlertScript &other) const {return !operator==(other);}
 
 private:
     int _id;
