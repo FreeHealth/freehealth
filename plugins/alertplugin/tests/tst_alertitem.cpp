@@ -519,19 +519,108 @@ void AlertPlugin::test_alertitem_object()
     AlertTiming time1(dt, dt.addDays(3));
     AlertTiming time2(dt, dt.addDays(2));
     AlertTiming time3(dt.addDays(-2), dt.addDays(10));
+    time1.setId(1);
+    time3.setId(3);
     item1.addTiming(time1);
     item1.addTiming(time2);
     item1.addTiming(time3);
     item2.addTiming(time1);
-    item2.addTiming(time2);
     item2.addTiming(time3);
-    QVERIFY(item1 == item2);
+    item2.addTiming(time2);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with non-cycling timings");
     item2.clearTimings();
     item2.addTiming(time1);
     item2.addTiming(time2);
     item2.addTiming(time2);
-    QVERIFY(item1 != item2);
-    // TODO: test operator==() with cycling timing also
+    QVERIFY2(item1 != item2, "Checking AlertItem::operator==() with non-cycling timings");
+
+    // Test operator==() with cycling timing also
+    time1 = AlertTiming(dt, dt.addDays(3));
+    time1.setCycling(true);
+    time1.setCyclingDelayInDays(r.randomInt(1, 10));
+    time1.setNumberOfCycles(r.randomInt(1, 20));
+    time2 = AlertTiming(dt, dt.addDays(2));
+    time3 = AlertTiming(dt.addDays(-2), dt.addDays(10));
+    time3.setCycling(true);
+    time3.setCyclingDelayInDays(r.randomInt(1, 10));
+    time3.setNumberOfCycles(r.randomInt(1, 20));
+    item1.clearTimings();
+    item1.addTiming(time1);
+    item1.addTiming(time2);
+    item1.addTiming(time3);
+    item2.clearTimings();
+    item2.addTiming(time3);
+    item2.addTiming(time1);
+    item2.addTiming(time2);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with cycling timings");
+    item2.clearTimings();
+    item2.addTiming(time3);
+    item2.addTiming(time1);
+    item2.addTiming(time1);
+    QVERIFY2(item1 != item2, "Checking AlertItem::operator==() with cycling timings");
+
+    // Test operator==() with multiple relations
+    item1.clearRelations();
+    item1 = item2;
+    AlertRelation rel1(AlertRelation::RelatedToAllPatients);
+    AlertRelation rel2(AlertRelation::RelatedToUser, "user1");
+    AlertRelation rel3(AlertRelation::RelatedToPatient, "patient1");
+    AlertRelation rel4(AlertRelation::RelatedToApplication, "app1");
+    item1.addRelation(rel1);
+    QVERIFY2(item1 != item2, "Checking AlertItem::operator==() with multiple AlertRelations");
+    item2.addRelation(rel1);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertRelations");
+    item1.addRelation(rel2);
+    item2.addRelation(rel2);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertRelations");
+    item1.addRelation(rel3);
+    item1.addRelation(rel4);
+    item2.addRelation(rel4);
+    item2.addRelation(rel3);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertRelations");
+
+    // Test operator==() with multiple validations
+    item1.clearValidations();
+    item1 = item2;
+    AlertValidation val1(QDateTime::currentDateTime(), "oioioi", "sdfsdqfdsf");
+    val1.setAccepted(true);
+    item1.addValidation(val1);
+    QVERIFY2(item1 != item2, "Checking AlertItem::operator==() with multiple AlertValidation");
+    item2.addValidation(val1);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertValidation");
+    AlertValidation val2(QDateTime::currentDateTime(), "oioioi", "sdfsdqfdsf");
+    val2.setAccepted(false);
+    val2.setOverriden(true);
+    val2.setUserComment("My comment é'\"--)°");
+    item1.addValidation(val2);
+    item2.addValidation(val2);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertValidation");
+    AlertValidation val3(QDateTime::currentDateTime(), "dsfdfi", "sdf()àsd");
+    AlertValidation val4(QDateTime::currentDateTime(), "df(di", "''lskdf");
+    item1.addValidation(val3);
+    item1.addValidation(val4);
+    item2.addValidation(val4);
+    item2.addValidation(val3);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertValidation");
+
+    // Test operator==() with multiple scripts
+    item1.clearScripts();
+    item1 = item2;
+    AlertScript script1 = createVirtualScript(r.randomInt(0, 6), r);
+    item1.addScript(script1);
+    QVERIFY2(item1 != item2, "Checking AlertItem::operator==() with multiple AlertScript");
+    item2.addScript(script1);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertScript");
+    AlertScript script2 = createVirtualScript(r.randomInt(0, 6), r);
+    AlertScript script3 = createVirtualScript(r.randomInt(0, 6), r);
+    AlertScript script4 = createVirtualScript(r.randomInt(0, 6), r);
+    item1.addScript(script2);
+    item1.addScript(script3);
+    item1.addScript(script4);
+    item2.addScript(script3);
+    item2.addScript(script4);
+    item2.addScript(script2);
+    QVERIFY2(item1 == item2, "Checking AlertItem::operator==() with multiple AlertScript");
 }
 
 void AlertPlugin::test_alertcore_init()
