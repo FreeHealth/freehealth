@@ -79,6 +79,9 @@ public:
 
     QString toHtml() const;
 
+    bool operator==(const GenericUpdateInformation &other) const;
+    bool operator!=(const GenericUpdateInformation &other) const {return !operator==(other);}
+
 private:
     QString m_From, m_To, m_Date, m_Author;
     QHash<QString, QString> m_TrText;

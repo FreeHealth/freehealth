@@ -183,11 +183,22 @@ bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *doc
     return true;
 }
 
+/** Transform update information to human readable HTML */
 QString GenericUpdateInformation::toHtml() const
 {
     return QString("%1 %2 %3 %4<br /><span style=\"margin-left:10px;\">%5</span><br />")
             .arg(tkTr(Trans::Constants::FROM)).arg(m_From).arg(tkTr(Trans::Constants::TO)).arg(m_To)
             .arg(text());
+}
+
+/** Test equality between two update descriptions. */
+bool GenericUpdateInformation::operator==(const GenericUpdateInformation &other) const
+{
+    return m_From == other.m_From &&
+            m_To == other.m_To &&
+            m_Date == other.m_Date &&
+            m_Author == other.m_Author &&
+            m_TrText == other.m_TrText;
 }
 
 QDebug operator<<(QDebug dbg, const Utils::GenericUpdateInformation &c)
