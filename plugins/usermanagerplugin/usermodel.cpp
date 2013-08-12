@@ -1452,7 +1452,7 @@ bool UserModel::createVirtualUsers(const int count)
         Internal::UserData *u = new Internal::UserData;
 
         int genderIndex = r.randomInt(1);
-        QString name = r.getRandomName();
+        QString name = r.randomName();
         QString firstName = r.getRandomFirstname(genderIndex==1);
 
         u->setUsualName(name);

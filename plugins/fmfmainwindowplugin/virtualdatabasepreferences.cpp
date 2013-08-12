@@ -97,18 +97,18 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         QDate death, dob;
 
         while (name.isEmpty())
-            name = r.getRandomName();
+            name = r.randomName();
         dob = r.randomDate(1910);
 
         if (r.randomInt(2) == 1) {
             g = "F";
             sur= r.getRandomFirstname(false);
-            sec = r.getRandomName();
+            sec = r.randomName();
             title = 2;
         } else {
             g = "M";
             sur= r.getRandomFirstname(true);
-            sec = r.getRandomName();
+            sec = r.randomName();
             title = 1;
         }
 
@@ -196,7 +196,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                 episodeQuery.bindValue(Constants::EPISODES_USERCREATOR, userUid);
                 QString tmp;
                 for(int z=0; z < r.randomInt(6); ++z)
-                    tmp += r.getRandomName() + " ";
+                    tmp += r.randomName() + " ";
                 tmp.chop(1);
                 episodeQuery.bindValue(Constants::EPISODES_LABEL, tmp);
 

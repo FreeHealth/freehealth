@@ -921,7 +921,7 @@ bool AccountBase::createVirtuals(int nb)
         query.bindValue(Constants::BANKDETAILS_ID, QVariant());
         query.bindValue(Constants::BANKDETAILS_USER_UID, user()->uuid());
         query.bindValue(Constants::BANKDETAILS_LABEL, d->r.randomWords(d->r.randomInt(0, 10)));
-        query.bindValue(Constants::BANKDETAILS_OWNER, d->r.getRandomName());
+        query.bindValue(Constants::BANKDETAILS_OWNER, d->r.randomName());
         query.bindValue(Constants::BANKDETAILS_OWNERADRESS, d->r.randomWords(d->r.randomInt(0, 10)));
         query.bindValue(Constants::BANKDETAILS_ACCOUNTNUMBER, d->r.getRandomString(16));
         query.bindValue(Constants::BANKDETAILS_IBAN, d->r.getRandomString(16));

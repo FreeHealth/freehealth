@@ -70,7 +70,7 @@ static inline void createBankAccount(const QString &userUid, Utils::Randomizer *
     query.bindValue(AccountDB::Constants::BANKDETAILS_DEFAULT, QVariant());
     query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, random->getRandomString(15));
     query.bindValue(AccountDB::Constants::BANKDETAILS_ID, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QString("%1 %2").arg(random->getRandomName()).arg(random->getRandomFirstname(1)));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QString("%1 %2").arg(random->randomName()).arg(random->getRandomFirstname(1)));
     query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, random->getRandomFrenchCity().second);
     query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->getRandomString(50));
     query.bindValue(AccountDB::Constants::BANKDETAILS_USER_UID, userUid);
@@ -86,7 +86,7 @@ static inline void createMedicalProcedure(const QString &userUid, Utils::Randomi
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_MedicalProcedure));
     QStringList abstract;
     for(int i = 0 ; i < random->randomInt(4,20); ++i) {
-        abstract << random->getRandomName();
+        abstract << random->randomName();
     }
     query.bindValue(AccountDB::Constants::MP_ABSTRACT, abstract.join(" "));
     query.bindValue(AccountDB::Constants::MP_AMOUNT, random->randomInt(10, 30));
@@ -146,7 +146,7 @@ static inline void createAccount(const QString &userUid, Utils::Randomizer *rand
     query.bindValue(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_TEXT, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,random->randomInt(100));
-    query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_NAME, random->getRandomName());
+    query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_NAME, random->randomName());
     query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_UID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_SITE_ID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_TRACE, QVariant());

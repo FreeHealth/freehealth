@@ -259,7 +259,8 @@ QPair<int, QString> Randomizer::getRandomFrenchCity()
     return p;
 }
 
-QString Randomizer::getRandomName()
+/** Create a random user name */
+QString Randomizer::randomName()
 {
     return randomWords(randomInt(1, 2));
 }
