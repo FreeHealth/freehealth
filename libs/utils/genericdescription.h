@@ -74,7 +74,7 @@ public:
         GeneralIcon,                    //!< Representative Icon of this data
 
         // Translatable data
-        Label,                          //!< Label (translatable)
+        Label,  /*14*/                  //!< Label (translatable)
         Category,                       //!< %Category (translatable)
         ToolTip,                        //!< Tooltip (translatable)
         Specialties,                    //!< Specialities (translatable)
