@@ -396,6 +396,50 @@ void GenericDescription::fillTreeWidget(QTreeWidget *tree) const
     Q_UNUSED(tree);
 }
 
+/** Test equality between two descriptions. */
+bool GenericDescription::operator==(const GenericDescription &other) const
+{
+    // First basic tests
+    if (m_UpdateInfos.count() != other.m_UpdateInfos.count() ||
+            m_RootTag != other.m_RootTag ||
+            m_SourceFileName != other.m_SourceFileName ||
+            m_TranslatableExtra.count() != other.m_TranslatableExtra.count() ||
+            m_NonTranslatableExtra.count() != other.m_NonTranslatableExtra.count())
+        return false;
+
+    // Test extras
+    if (m_TranslatableExtra != other.m_TranslatableExtra)
+        return false;
+    if (m_NonTranslatableExtra != other.m_NonTranslatableExtra)
+        return false;
+
+    // Test datas
+    QStringList lang = m_Data.keys();
+    QStringList other_lang = other.m_Data.keys();
+    if (lang.count() != other_lang.count())
+        return false;
+
+    lang.sort();
+    other_lang.sort();
+    if (lang != other_lang)
+        return false;
+
+    foreach(const QString &l, lang) {
+        const QHash<int, QVariant> &first = m_Data.value(l);
+        const QHash<int, QVariant> &second = other.m_Data.value(l);
+        foreach(int id, first.keys()) {
+            qWarning() << id << first.value(id) << second.value(id) << (first.value(id) == second.value(id));
+        }
+
+        if (first != second)
+            return false;
+    }
+
+    // TODO: Test update infos
+//    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
+    return true;
+}
+
 QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {
     QHash<int, QString> elements;

@@ -131,6 +131,9 @@ public:
 
     virtual void fillTreeWidget(QTreeWidget *tree) const;
 
+    bool operator==(const GenericDescription &other) const;
+    bool operator!=(const GenericDescription &other) const {return !operator==(other);}
+
 private:
     QHash<int, QString> nonTranslatableTagsDataReference() const;
     QHash<int, QString> translatableTagsDataReference() const;
