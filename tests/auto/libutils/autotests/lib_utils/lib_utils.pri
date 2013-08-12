@@ -10,7 +10,8 @@ SOURCES += \
     $${PWD}/tst_printaxishelper.cpp \
     $${PWD}/tst_httpdownloader.cpp \
     $${PWD}/tst_hprim.cpp \
-    $${PWD}/tst_databasecsvimport.cpp
+    $${PWD}/tst_databasecsvimport.cpp \
+    $${PWD}/tst_genericdescription.cpp
 
 #HEADERS += \
 #    $${PWD}/testhtmlcontent.h
