@@ -419,7 +419,6 @@ bool GenericDescription::operator==(const GenericDescription &other) const
     QStringList other_lang = other.m_Data.keys();
     if (lang.count() != other_lang.count())
         return false;
-
     lang.sort();
     other_lang.sort();
     if (lang != other_lang)
@@ -428,10 +427,10 @@ bool GenericDescription::operator==(const GenericDescription &other) const
     foreach(const QString &l, lang) {
         const QHash<int, QVariant> &first = m_Data.value(l);
         const QHash<int, QVariant> &second = other.m_Data.value(l);
-        foreach(int id, first.keys()) {
-            qWarning() << id << first.value(id) << second.value(id) << (first.value(id) == second.value(id));
-        }
-
+//         foreach(int id, first.keys()) {
+//             if (first.value(id) != second.value(id))
+//                 qWarning() << id << l << first.value(id) << second.value(id);
+//         }
         if (first != second)
             return false;
     }
