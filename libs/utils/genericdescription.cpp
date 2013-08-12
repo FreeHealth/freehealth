@@ -69,6 +69,7 @@ const char* const TAG_CATEGORY         = "category";
 const char* const TAG_LICENSE_NAME     = "license";
 const char* const TAG_LICENSE_TERMS    = "licenseterms";
 const char* const TAG_SPECIALTIES      = "specialties";
+const char* const TAG_TYPENAME         = "typename";
 const char* const TAG_CREATIONDATE     = "cdate";
 const char* const TAG_LASTMODIFDATE    = "lmdate";
 const char* const TAG_BIBLIOGRAPHY     = "bibliography";
@@ -474,6 +475,7 @@ QHash<int, QString> GenericDescription::translatableTagsDataReference() const
     elements.insert(GenericDescription::Category, TAG_CATEGORY);
     elements.insert(GenericDescription::ToolTip, TAG_TOOLTIP);
     elements.insert(GenericDescription::Specialties, TAG_SPECIALTIES);
+    elements.insert(GenericDescription::TypeName, TAG_TYPENAME);
     elements.insert(GenericDescription::ShortDescription, TAG_DESCRIPTION);
     elements.insert(GenericDescription::HtmlDescription, TAG_HTMLDESCRIPTION);
     elements.insert(GenericDescription::HtmlSynthesis, TAG_HTMLSYNTHESIS);
