@@ -923,8 +923,8 @@ bool AccountBase::createVirtuals(int nb)
         query.bindValue(Constants::BANKDETAILS_LABEL, d->r.randomWords(d->r.randomInt(0, 10)));
         query.bindValue(Constants::BANKDETAILS_OWNER, d->r.randomName());
         query.bindValue(Constants::BANKDETAILS_OWNERADRESS, d->r.randomWords(d->r.randomInt(0, 10)));
-        query.bindValue(Constants::BANKDETAILS_ACCOUNTNUMBER, d->r.getRandomString(16));
-        query.bindValue(Constants::BANKDETAILS_IBAN, d->r.getRandomString(16));
+        query.bindValue(Constants::BANKDETAILS_ACCOUNTNUMBER, d->r.randomString(16));
+        query.bindValue(Constants::BANKDETAILS_IBAN, d->r.randomString(16));
         query.bindValue(Constants::BANKDETAILS_COMMENT, d->r.randomWords(d->r.randomInt(0, 10)));
         query.bindValue(Constants::BANKDETAILS_DEFAULT, 1);
         if (!query.exec()) {
@@ -939,7 +939,7 @@ bool AccountBase::createVirtuals(int nb)
         fee.setValid(d->r.randomBool());
         fee.setPatientUuid("all");
         fee.setUserUuid("all");
-        fee.setType(d->r.getRandomString(d->r.randomInt(10)));
+        fee.setType(d->r.randomString(d->r.randomInt(10)));
         fee.setAmount(d->r.randomDouble(10., 1000.));
         fee.setLabel(d->r.randomWords(d->r.randomInt(10)));
         fee.setComment(d->r.randomWords(d->r.randomInt(20)));

@@ -63,16 +63,16 @@ static inline void createBankAccount(const QString &userUid, Utils::Randomizer *
 {
     QSqlQuery query(accountBase()->database());
     query.prepare(accountBase()->prepareInsertQuery(AccountDB::Constants::Table_BankDetails));
-    query.bindValue(AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, random->getRandomString(15));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, random->randomString(15));
     query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCE, random->randomInt(-100000, 1239834));
     query.bindValue(AccountDB::Constants::BANKDETAILS_BALANCEDATE, random->randomDateTime(QDateTime::currentDateTime().addDays(-50)).toString(Qt::ISODate));
     query.bindValue(AccountDB::Constants::BANKDETAILS_COMMENT, QVariant());
     query.bindValue(AccountDB::Constants::BANKDETAILS_DEFAULT, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, random->getRandomString(15));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_IBAN, random->randomString(15));
     query.bindValue(AccountDB::Constants::BANKDETAILS_ID, QVariant());
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QString("%1 %2").arg(random->randomName()).arg(random->getRandomFirstname(1)));
-    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, random->getRandomFrenchCity().second);
-    query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->getRandomString(50));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNER, QString("%1 %2").arg(random->randomName()).arg(random->randomFirstName(1)));
+    query.bindValue(AccountDB::Constants::BANKDETAILS_OWNERADRESS, random->randomFrenchCity().second);
+    query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->randomString(50));
     query.bindValue(AccountDB::Constants::BANKDETAILS_USER_UID, userUid);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("VirtualDatabaseCreator", query);

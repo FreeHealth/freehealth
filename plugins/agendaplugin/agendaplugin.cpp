@@ -252,7 +252,7 @@ void AgendaPlugin::createVirtualAppointments(UserCalendar *calendar)
         ev->setData(Constants::Db_XmlOptions, "XmlOptions");
         //    ev->setData(Constants::DbOnly_ComId, );
         ev->setData(Constants::Db_CatId, -1);
-        //            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
+        //            ev->setData(Calendar::CalendarItem::PatientUid, r.randomString(45));
         ev->setData(CalendarItemModel::DateStart, start);
         ev->setData(CalendarItemModel::DateEnd, end);
         ev->setData(CalendarItemModel::Type, 1);
@@ -264,7 +264,7 @@ void AgendaPlugin::createVirtualAppointments(UserCalendar *calendar)
         ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
         ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
         ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
-        ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+        ev->setData(CalendarItemModel::Location, r.randomString(r.randomInt(1,145)));
         ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -300,7 +300,7 @@ void AgendaPlugin::testDatabase()
             ucal = new Agenda::UserCalendar();
             // Create a calendar for the current user
             ucal->setData(Constants::Db_IsValid, 1);
-            ucal->setData(Agenda::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
+            ucal->setData(Agenda::UserCalendar::Password, r.randomString(r.randomInt(0,10)));
             ucal->setData(Agenda::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
             ucal->setData(Agenda::UserCalendar::IsPrivate, r.randomInt(0,1));
             ucal->setData(Agenda::UserCalendar::IsDefault, 0);
@@ -388,7 +388,7 @@ void AgendaPlugin::testDatabase()
             ev->setData(Constants::Db_XmlOptions, "XmlOptions");
             //    ev->setData(Constants::DbOnly_ComId, );
             ev->setData(Constants::Db_CatId, -1);
-//            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
+//            ev->setData(Calendar::CalendarItem::PatientUid, r.randomString(45));
             ev->setData(CalendarItemModel::DateStart, start);
             ev->setData(CalendarItemModel::DateEnd, end);
             ev->setData(CalendarItemModel::Type, 1);
@@ -400,7 +400,7 @@ void AgendaPlugin::testDatabase()
             ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
             ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
             ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
-            ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+            ev->setData(CalendarItemModel::Location, r.randomString(r.randomInt(1,145)));
             ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
             // Add 1 to 3 patients

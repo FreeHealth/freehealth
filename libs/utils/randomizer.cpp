@@ -176,7 +176,7 @@ void Randomizer::setPathToFiles(const QString &p)
     d->m_Path = QDir::cleanPath(p);
 }
 
-QString Randomizer::getRandomFirstname(bool male)
+QString Randomizer::randomFirstName(bool male)
 {
     // Get the database && open it
     QSqlDatabase db;
@@ -226,7 +226,7 @@ QString Randomizer::getRandomFirstname(bool male)
     return QString::null;
 }
 
-QString Randomizer::getRandomString(int length)
+QString Randomizer::randomString(int length)
 {
     static char consonnes[]="BCDFGHJKLMNPQRSTVWXZ";
     static char voyelles[]="AEIOUY";
@@ -248,7 +248,7 @@ QString Randomizer::getRandomString(int length)
     return s;
 }
 
-QPair<int, QString> Randomizer::getRandomFrenchCity()
+QPair<int, QString> Randomizer::randomFrenchCity()
 {
     if (d->zipCodes.isEmpty())
         d->readZipCodes();

@@ -54,12 +54,12 @@ public:
 
     void setPathToFiles(const QString &path);
 
-    QString getRandomString(int length);
+    QString randomString(int length);
 
     QString randomName();
-    QString getRandomFirstname(bool male);
+    QString randomFirstName(bool male);
 
-    QPair<int, QString> getRandomFrenchCity();
+    QPair<int, QString> randomFrenchCity();
 
     int randomInt(int max);
     int randomInt(int min, int max);

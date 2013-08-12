@@ -102,12 +102,12 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
 
         if (r.randomInt(2) == 1) {
             g = "F";
-            sur= r.getRandomFirstname(false);
+            sur= r.randomFirstName(false);
             sec = r.randomName();
             title = 2;
         } else {
             g = "M";
-            sur= r.getRandomFirstname(true);
+            sur= r.randomFirstName(true);
             sec = r.randomName();
             title = 1;
         }
@@ -115,14 +115,14 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         if (r.randomInt(2)) {
             death = r.randomDate(1980);
         }
-        QPair<int, QString> p = r.getRandomFrenchCity();
+        QPair<int, QString> p = r.randomFrenchCity();
         if (r.randomInt(3) == 1)
             lk =  userLkId + 1;
         else
             lk = userLkId;
 
         patientBase()->createVirtualPatient(name,sec, sur,g,title,
-                      dob,"France","",r.getRandomString(65),
+                      dob,"France","",r.randomString(65),
                       QString::number(p.first), p.second,
                       Utils::Database::createUid(), lk, "", death);
 

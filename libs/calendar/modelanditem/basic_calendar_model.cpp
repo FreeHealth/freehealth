@@ -107,9 +107,9 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
             item.setData(CalendarItem::Password, "nopass");
             item.setData(CalendarItem::IsBusy, r.randomInt(0,1));
             item.setData(CalendarItem::IsAGroupEvent, r.randomInt(0,1));
-            item.setData(CalendarItem::Label, r.getRandomString(r.randomInt(2, 15)));
-            item.setData(CalendarItem::Description, r.getRandomString(r.randomInt(10, 500)));
-            item.setData(CalendarItem::Location, r.getRandomString(r.randomInt(1,145)));
+            item.setData(CalendarItem::Label, r.randomString(r.randomInt(2, 15)));
+            item.setData(CalendarItem::Description, r.randomString(r.randomInt(10, 500)));
+            item.setData(CalendarItem::Location, r.randomString(r.randomInt(1,145)));
 //            item.setData(CalendarItem::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
             addCalendarItem(item);
         }
