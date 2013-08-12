@@ -176,7 +176,7 @@ void Randomizer::setPathToFiles(const QString &p)
     d->m_Path = QDir::cleanPath(p);
 }
 
-QString Randomizer::randomFirstName(bool male)
+QString Randomizer::randomFirstName(bool male) const
 {
     // Get the database && open it
     QSqlDatabase db;
@@ -226,7 +226,7 @@ QString Randomizer::randomFirstName(bool male)
     return QString::null;
 }
 
-QString Randomizer::randomString(int length)
+QString Randomizer::randomString(int length) const
 {
     static char consonnes[]="BCDFGHJKLMNPQRSTVWXZ";
     static char voyelles[]="AEIOUY";
@@ -248,7 +248,7 @@ QString Randomizer::randomString(int length)
     return s;
 }
 
-QPair<int, QString> Randomizer::randomFrenchCity()
+QPair<int, QString> Randomizer::randomFrenchCity() const
 {
     if (d->zipCodes.isEmpty())
         d->readZipCodes();
@@ -260,13 +260,13 @@ QPair<int, QString> Randomizer::randomFrenchCity()
 }
 
 /** Create a random user name */
-QString Randomizer::randomName()
+QString Randomizer::randomName() const
 {
     return randomWords(randomInt(1, 2));
 }
 
 /** Returns a fake sentence composed of \e nbOfWords words. */
-QString Randomizer::randomWords(int nbOfWords)
+QString Randomizer::randomWords(int nbOfWords) const
 {
     // Get the database && open it
     QSqlDatabase db;
@@ -315,12 +315,14 @@ QString Randomizer::randomWords(int nbOfWords)
     return t.join(" ");
 }
 
-int Randomizer::randomInt(int max)
+/** Returns a randomly created integer lower thant \e max */
+int Randomizer::randomInt(int max) const
 {
     return makeRand(max);
 }
 
-bool Randomizer::randomBool()
+/** Returns a randomly created boolean */
+bool Randomizer::randomBool() const
 {
     int z = 0;
     for(int i=0; i < randomInt(1, 50); ++i) {
@@ -329,7 +331,7 @@ bool Randomizer::randomBool()
     return (z%1==0);
 }
 
-int Randomizer::randomInt(int min, int max)
+int Randomizer::randomInt(int min, int max) const
 {
     Q_ASSERT_X(min <= max, "Utils::Randomizer", "min > max");
     if (min == max)
@@ -346,7 +348,7 @@ int Randomizer::randomInt(int min, int max)
     return i;
 }
 
-double Randomizer::randomDouble(double min, double max)
+double Randomizer::randomDouble(double min, double max) const
 {
     Q_ASSERT(min < max);
     double i = min - 10.;
@@ -366,7 +368,7 @@ double Randomizer::randomDouble(double min, double max)
 }
 
 // TODO: code qlonglong Randomizer::randomLongLongInt(qlonglong min, qlonglong max)
-//qlonglong Randomizer::randomLongLongInt(qlonglong min, qlonglong max)
+//qlonglong Randomizer::randomLongLongInt(qlonglong min, qlonglong max) const
 //{
 //    Q_ASSERT(min < max);
 //    qlonglong i = min - 10;
@@ -381,7 +383,7 @@ double Randomizer::randomDouble(double min, double max)
 //    return i;
 //}
 
-QDate Randomizer::randomDate(const int minYear, const int minMonth, const int minDay)
+QDate Randomizer::randomDate(const int minYear, const int minMonth, const int minDay) const
 {
     int r = -1;
     QDate toReturn(minYear, minMonth, minDay);
@@ -406,7 +408,7 @@ QDate Randomizer::randomDate(const int minYear, const int minMonth, const int mi
  * Note: time is only generated for hours, minutes and seconds (to improve
  * compatibility with Qt::ISODate format specially for testings).
  */
-QDateTime Randomizer::randomDateTime(const QDateTime &minDateTime)
+QDateTime Randomizer::randomDateTime(const QDateTime &minDateTime) const
 {
     QDateTime toReturn(randomDate(minDateTime.date().year(), minDateTime.date().month(), minDateTime.date().day()));
     if (toReturn.date() == minDateTime.date()) {
@@ -431,7 +433,7 @@ QDateTime Randomizer::randomDateTime(const QDateTime &minDateTime)
     return toReturn;
 }
 
-QTime Randomizer::randomTime(const int minHour, const int maxHour)
+QTime Randomizer::randomTime(const int minHour, const int maxHour) const
 {
     int h = randomInt(minHour, maxHour);
     int m = randomInt(0, 59);
@@ -439,8 +441,25 @@ QTime Randomizer::randomTime(const int minHour, const int maxHour)
     return QTime(h,m,s);
 }
 
-QFileInfo Randomizer::randomFile(const QDir &inDir, const QStringList &filters)
+QFileInfo Randomizer::randomFile(const QDir &inDir, const QStringList &filters) const
 {
     QFileInfoList list = inDir.entryInfoList(filters);
     return list.at(randomInt(0, list.count()));
 }
+
+/** Returns a randomly created version number 100% compatible with Utils::VersionNumber */
+QString Randomizer::randomVersionNumber() const
+{
+    QString v = QString("%1.%2.%3").arg(randomInt(0, 100)).arg(randomInt(0, 100)).arg(randomInt(0, 100));
+    // Add alpha/beta/RC
+    if (randomBool()) {
+        switch (randomInt(0, 3)) {
+        case 0: v += QString("~alpha%1").arg(randomInt(0, 100)); break;
+        case 1: v += QString("~beta%1").arg(randomInt(0, 100)); break;
+        case 2: v += QString("~RC%1").arg(randomInt(0, 100)); break;
+        default: break;
+        }
+    }
+    return v;
+}
+

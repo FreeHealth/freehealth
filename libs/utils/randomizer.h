@@ -54,26 +54,28 @@ public:
 
     void setPathToFiles(const QString &path);
 
-    QString randomString(int length);
+    QString randomString(int length) const;
 
-    QString randomName();
-    QString randomFirstName(bool male);
+    QString randomName() const;
+    QString randomFirstName(bool male) const;
 
-    QPair<int, QString> randomFrenchCity();
+    QPair<int, QString> randomFrenchCity() const;
 
-    int randomInt(int max);
-    int randomInt(int min, int max);
-//    qlonglong randomLongLongInt(qlonglong min, qlonglong max);
-    double randomDouble(double min, double max);
-    bool randomBool();
+    int randomInt(int max) const;
+    int randomInt(int min, int max) const;
+//    qlonglong randomLongLongInt(qlonglong min, qlonglong max) const;
+    double randomDouble(double min, double max) const;
+    bool randomBool() const;
 
-    QString randomWords(int nbOfWords);
+    QString randomWords(int nbOfWords) const;
 
-    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
-    QDateTime randomDateTime(const QDateTime &minDateTime);
-    QTime randomTime(const int minHour, const int maxHour);
+    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1) const;
+    QDateTime randomDateTime(const QDateTime &minDateTime) const;
+    QTime randomTime(const int minHour, const int maxHour) const;
 
-    QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
+    QFileInfo randomFile(const QDir &inDir, const QStringList &filters) const;
+
+    QString randomVersionNumber() const;
 
 private:
     Internal::RandomizerPrivate *d;
