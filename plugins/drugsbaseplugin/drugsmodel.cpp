@@ -25,12 +25,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class DrugsDB::DrugsModel
-  Model asks DrugsBase to check interaction only while passing new *Drugs via addDrugs()
-  or while passing QDrugsList via setDrugsList().
-  activeModel() , setActiveModel()
-  \todo write code documentation
+ * \class DrugsDB::DrugsModel
+ * Model asks DrugsBase to check interaction only while passing new *Drugs via addDrugs()
+ * or while passing QDrugsList via setDrugsList().
+ * activeModel() , setActiveModel()
+ * \note Unit-test partially available (see: DrugsDB:Internal::DrugsBasePlugin)
 */
+// TODO: write code documentation
 
 #include "drugsmodel.h"
 

@@ -26,10 +26,8 @@
  ***************************************************************************/
 /*!
  * \class Utils::DatabaseCsvImportator
- * \brief short description of class
- *
- * Long description of class
- * \sa Utils::
+ * Import a CSV content into a database (SQLite/MySQL are both supported).
+ * \note Unit-test available (see: tests/auto/auto.pro)
  */
 
 #include "databasecsvimportator.h"
@@ -53,12 +51,6 @@ using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 namespace Internal {
-/*!
- * \class Utils::DatabaseCsvImportatorPrivate
- * \brief Private implementation of the Utils::DatabaseCsvImportator class.
- *
- * documentation here
- */
 class DatabaseCsvImportatorPrivate
 {
 public:
@@ -273,7 +265,6 @@ private:
 };
 } // namespace Internal
 } // end namespace Utils
-
 
 /*! Constructor of the Utils::DatabaseCsvImportator class */
 DatabaseCsvImportator::DatabaseCsvImportator() :

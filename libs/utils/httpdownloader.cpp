@@ -38,6 +38,7 @@
  * Using progress bar: \n
  * You can connect the downloadProgressPermille() signal which is emitted each time the
  * permille of the download changes. Remember to set your progress bar range to (0, 1000).
+ * \note Unit-test available (see: tests/auto/auto.pro)
 */
 
 #include "httpdownloader.h"

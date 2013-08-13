@@ -26,6 +26,7 @@
  ***************************************************************************/
 /*!
  * \class Utils::HttpMultiDownloader
+ * \note Unit-test available (see: tests/auto/auto.pro)
  */
 
 #include "httpmultidownloader.h"

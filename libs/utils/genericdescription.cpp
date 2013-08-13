@@ -24,6 +24,12 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Utils::GenericDescription
+ * \note Unit-test available (see: tests/auto/auto.pro)
+ */
+// TODO: write code documentation
+
 #include "genericdescription.h"
 
 #include <utils/log.h>

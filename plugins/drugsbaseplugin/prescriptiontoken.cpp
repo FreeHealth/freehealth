@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::PrescriptionToken
+ * PadTools token for prescription.
+ * \note Unit-test available (see: DrugsDB:Internal::DrugsBasePlugin)
+ */
+
 #include "prescriptiontoken.h"
 
 #ifdef WITH_PAD

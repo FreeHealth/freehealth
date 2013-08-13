@@ -28,6 +28,7 @@
  * \class Alert::AlertCore
  * Central object of the Alert plugin. Manages all singleton objects, alert access,
  * database control...
+ * \note Unit-test available (see: Alert:Internal::AlertPlugin)
  */
 
 #include "alertcore.h"

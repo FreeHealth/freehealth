@@ -57,9 +57,10 @@
 #include <QUuid>
 
 /**
-  \namespace Utils
-  \brief Some global funtions and classes for the applications.
-*/
+ * \namespace Utils
+ * \brief Some global funtions and classes for the applications.
+ * \note Many Unit-tests are available (see: tests/auto/auto.pro)
+ */
 
 using namespace Utils;
 using namespace Trans::ConstantTranslations;

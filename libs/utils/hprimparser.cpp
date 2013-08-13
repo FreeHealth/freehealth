@@ -24,6 +24,26 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Utils::HprimHeader
+ * \note Unit-test available (see: tests/auto/auto.pro)
+ */
+
+/**
+ * \class Utils::HprimRawContent
+ * \note Unit-test available (see: tests/auto/auto.pro)
+ */
+
+/**
+ * \class Utils::Hprim2Content
+ * \note Unit-test available (see: tests/auto/auto.pro)
+ */
+
+/**
+ * \class Utils::HprimMessage
+ * \note Unit-test available (see: tests/auto/auto.pro)
+ */
+
 #include "hprimparser.h"
 
 #include <utils/log.h>

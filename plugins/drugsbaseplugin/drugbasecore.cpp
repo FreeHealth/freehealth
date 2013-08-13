@@ -34,6 +34,7 @@
  *   DrugsDB::VersionUpdater \sa versionUpdater()
  *   DrugsDB::DrugsIO \sa drugsIo()
  * Manages Drug DataPack installation, removal
+ * \note Unit-test available (see: DrugsDB:Internal::DrugsBasePlugin)
  */
 
 #include "drugbasecore.h"

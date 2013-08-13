@@ -25,12 +25,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Alert::BlockingAlertResult
-  Contains the result of a blocking dialog:
-    - user accepted,
-    - override & user override comment,
-    - read alerts (all view alerts are logged)
-    - an AlertValidation to ease the validation process
+ * \class Alert::BlockingAlertResult
+ * Contains the result of a blocking dialog:
+ *   - user accepted,
+ *   - override & user override comment,
+ *   - read alerts (all view alerts are logged)
+ *   - an AlertValidation to ease the validation process
+ * \note Unit-test available (see: Alert:Internal::AlertPlugin)
 */
 
 /**

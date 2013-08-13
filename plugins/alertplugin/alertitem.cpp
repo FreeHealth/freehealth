@@ -27,6 +27,7 @@
 /**
  * \class Alert::AlertItem
  * Represent an alert.
+ * \note Unit-test available (see: Alert:Internal::AlertPlugin)
  */
 
 /**
@@ -98,6 +99,7 @@
  * will be automatically computed.
  * \note: all QTime milliseconds are lost (set to zero) to ensure a total correspondance
  * with database saved timings and XML transformation.
+ * \note Unit-test available (see: Alert:Internal::AlertPlugin)
  */
 
 /**

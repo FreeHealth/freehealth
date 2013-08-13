@@ -25,14 +25,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Alert::Internal::AlertBase
-  Alert database manager. For internal use.
-  \sa Alert::AlertCore
+ * \class Alert::Internal::AlertBase
+ * Alert database manager. For internal use.
+ * \sa Alert::AlertCore
+ * \note Unit-test available (see: Alert:Internal::AlertPlugin)
 */
 
 /**
-  \class Alert::Internal::AlertBaseQuery
-  Construct queries for the Alert::Internal::AlertBase.
+ * \class Alert::Internal::AlertBaseQuery
+ * Construct queries for the Alert::Internal::AlertBase.
 */
 
 #include "alertbase.h"

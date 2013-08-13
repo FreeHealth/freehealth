@@ -25,8 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Utils::GenericUpdateInformation
-  Manage the information about update of items. You can translate the items to XML and vice-versa.
+ * \class Utils::GenericUpdateInformation
+ * Manage the information about update of items. You can translate the
+ * items to XML and vice-versa.
+ * \note Unit-test not yet available (see: tests/auto/auto.pro)
 */
 
 #include "genericupdateinformation.h"

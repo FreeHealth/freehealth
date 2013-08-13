@@ -38,7 +38,6 @@
 #include <utils/randomizer.h>
 
 //#include "alertitemeditordialog.h"
-//#include "blockingalertdialog.h"
 //#include "alertplaceholderwidget.h"
 
 #include <QDir>

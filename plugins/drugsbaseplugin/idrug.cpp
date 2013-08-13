@@ -1,20 +1,45 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Contributors:                                                          *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 /**
-  \class DrugsDB::IComponent
-  \brief Represents a molecular component of a drug directly extracted from the drug database.
-  \sa DrugsDb::IDrug
-
-
-  \class DrugsDB::IVirtualComponent
-  \brief Represents a molecular component of a virtual drug. The virtual component is not extracted form the drug database but is constructed.
-
+ * \class DrugsDB::IComponent
+ * \brief Represents a molecular component of a drug directly extracted from the drug database.
+ * \sa DrugsDb::IDrug
 */
 
+/**
+ * \class DrugsDB::IVirtualComponent
+ * \brief Represents a molecular component of a virtual drug. The virtual component is not extracted form the drug database but is constructed.
+*/
 
 /**
-  \fn DrugsDB::IComponent::IComponent(IDrug *parent)
-  Create a new component and associate it with the IDrug \e drug. When a component is associated to a IDrug,
-  the IDrug manages the deletion of the newly created IComponent.
-  \sa void DrugsDB::IDrug::addComponent()
+ * \fn DrugsDB::IComponent::IComponent(IDrug *parent)
+ * Create a new component and associate it with the IDrug \e drug. When a component is associated to a IDrug,
+ * the IDrug manages the deletion of the newly created IComponent.
+ * \sa void DrugsDB::IDrug::addComponent()
 */
 
 /**
@@ -57,8 +82,6 @@
   \fn virtual bool DrugsDB::IVirtualComponent::setData(const int ref, const QVariant &value, const QString &lang = QString::null)
   Set the data of the virtual component.
 */
-
-
 
 /**
   \class DrugsDB::IDrug

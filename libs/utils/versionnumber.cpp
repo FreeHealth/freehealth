@@ -39,6 +39,7 @@
       - major.minor.debug~betabeta_nb
       - major.minor.debug~RC
       - major.minor.debug~RCrc_nb
+ * \note Unit-test available (see: tests/auto/auto.pro)
 */
 
 using namespace Utils;

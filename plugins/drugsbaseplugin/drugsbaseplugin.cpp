@@ -26,14 +26,14 @@
  ***************************************************************************/
 
 /**
-  \namespace DrugsDB
-  \brief Namespace reserved for the DrugsDB plugin.
-  The DrugsDB namespace includes:
-  - All database accesses
-  - All constants related to drugs
-  - Interaction engines
-  - Save/Load abilities (XML prescription files)
-  - Print abilities
+ * \namespace DrugsDB
+ * \brief Namespace reserved for the DrugsDB plugin.
+ * The DrugsDB namespace includes:
+ * - All database accesses
+ * - All constants related to drugs
+ * - Interaction engines
+ * - Save/Load abilities (XML prescription files)
+ * - Print abilities
 */
 
 #include "drugsbaseplugin.h"

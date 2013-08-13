@@ -36,6 +36,7 @@
   - driver: SQLite
   - accessMode: ReadWrite
   \sa Utils::Database
+  \note Unit-test available (see: tests/auto/auto.pro)
 */
 
 #include "databaseconnector.h"

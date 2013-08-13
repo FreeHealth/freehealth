@@ -24,13 +24,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-
 /**
  * \class DrugsIO
  * \brief Manages the IO operations for the dosages and prescriptions
  * Read/Write prescription from/to XML files.\n
  * Create prints and print preview of prescriptions.\n
  * Manages drugs tokens.
+ * \note Unit-test partially available (see: DrugsDB:Internal::DrugsBasePlugin)
 */
 
 #include "drugsio.h"
