@@ -56,6 +56,8 @@ public:
     void setFromVersion(const QString &version) {m_From = version;}
     void setToVersion(const QString &version) {m_To = version;}
     void setIsoDate(const QString &date) {m_Date = date;}
+    void setDateTime(const QDateTime &dt) {m_Date = dt.toString(Qt::ISODate);}
+    void setDate(const QDate &dt) {m_Date = dt.toString(Qt::ISODate);}
     void setAuthor(const QString &a) {m_Author = a;}
     void setText(const QString &text, const QString &lang = QString::null);
 
