@@ -62,7 +62,7 @@ private slots:
             connector.setDriver(Utils::Database::SQLite);
             connector.setClearLog(r.randomName());
             connector.setClearPass(r.randomString(r.randomInt(10,20)));
-            connector.setHost(r.randomString(r.randomInt(10,20)));
+            connector.setHost(QString("%1%2").arg(r.randomString(r.randomInt(10,20))).arg(":/.?&$"));
             connector.setPort(r.randomInt(0, 1000));
             connector.setAbsPathToReadOnlySqliteDatabase(r.randomString(r.randomInt(10,20)));
             connector.setAbsPathToReadWriteSqliteDatabase(r.randomString(r.randomInt(10,20)));
@@ -74,7 +74,6 @@ private slots:
             // Utils::DatabaseConnector serialization
             Utils::DatabaseConnector connector2;
             connector2.fromSettings(connector.forSettings());
-            qWarning() << connector.forSettings() << connector2.forSettings();
             QVERIFY(connector.forSettings() == connector2.forSettings());
 #ifdef WITH_LOGINANDPASSWORD_CACHING
             QVERIFY(connector.clearLog() == connector2.clearLog());
