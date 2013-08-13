@@ -435,8 +435,8 @@ bool GenericDescription::operator==(const GenericDescription &other) const
             return false;
     }
 
-    // TODO: Test update infos
-//    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
+    // Test update infos /!\ lists must be sorted in the same order...
+    m_UpdateInfos == other.m_UpdateInfos;
     return true;
 }
 

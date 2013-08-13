@@ -108,7 +108,6 @@ QList<GenericUpdateInformation> GenericUpdateInformation::updateInformationForVe
     return toReturn;
 }
 
-
 namespace {
     const char* const TAG_SPEC_UPDATEINFO             = "updateinfo";
     const char* const TAG_SPEC_UPDATEINFOVERSION      = "updateversion";
@@ -148,6 +147,16 @@ QString GenericUpdateInformation::xmlTagName()
 {
     return ::TAG_SPEC_UPDATEINFO;
 }
+
+//QString GenericUpdateInformation::toXml() const
+//{
+//    QDomDocument doc;
+//    QDomElement element = doc.createElement(xmlTagName());
+//    doc.appendChild(element);
+//    if (!toDomElement(&element, &doc))
+//        return QString::null;
+//    return doc.toString(0);
+//}
 
 bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *document) const
 {

@@ -26,6 +26,7 @@
 #include <utils/genericdescription.h>
 #include <utils/global.h>
 #include <utils/randomizer.h>
+#include <utils/versionnumber.h>
 
 #include "../../autotest.h"
 
@@ -65,7 +66,6 @@ public:
         addTranslatableExtraData(Tr5, "Tr5");
     }
 };
-
 }
 
 /**
@@ -247,10 +247,41 @@ private slots:
         }
     }
 
+    void test_updatedescription_xmlbasics()
+    {
+        // TODO: write this
+        Utils::GenericUpdateInformation info1;
+        Utils::VersionNumber ver1(r.randomVersionNumber());
+        Utils::VersionNumber ver2(r.randomVersionNumber());
+        if (ver1 > ver2) {
+            info1.setToVersion(ver2.versionString());
+            info1.setFromVersion(ver1.versionString());
+        } else {
+            info1.setToVersion(ver1.versionString());
+            info1.setFromVersion(ver2.versionString());
+        }
+        info1.setAuthor(r.randomName());
+        info1.setDateTime(r.randomDateTime(QDateTime::currentDateTime().addYears(-1)));
+        info1.setText(r.randomWords(r.randomInt(1, 10)), "xx");
+        info1.setText(r.randomWords(r.randomInt(1, 10)), "fr");
+        info1.setText(r.randomWords(r.randomInt(1, 10)), "de");
+
+        //    QDomDocument doc;
+        //    QDomElement element = doc.createElement(xmlTagName());
+        //    doc.appendChild(element);
+        //    if (!toDomElement(&element, &doc))
+        //        return QString::null;
+
+//        qWarning() << info1.toXml();
+//        QList<Utils::GenericUpdateInformation> fromXml = Utils::GenericUpdateInformation::fromXml(info1.toXml());
+    }
+
     void cleanupTestCase()
     {
     }
 };
+
+// TODO: test with Utils::GenericUpdateInformation
 
 DECLARE_TEST(tst_UtilsGenericDescription)
 #include "tst_genericdescription.moc"

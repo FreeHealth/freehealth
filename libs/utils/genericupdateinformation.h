@@ -77,6 +77,7 @@ public:
 
     static QList<GenericUpdateInformation> fromXml(const QDomElement &xml);
     static QString xmlTagName();
+//    QString toXml() const;
     bool toDomElement(QDomElement *root, QDomDocument *document) const;
 
     QString toHtml() const;
