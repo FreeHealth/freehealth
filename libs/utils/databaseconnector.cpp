@@ -53,7 +53,6 @@ using namespace Utils;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-
 namespace {
     const char *const SEPARATOR = "_@:";
 }
@@ -113,6 +112,7 @@ public:
 } // namespace Internal
 } // namespace Utils
 
+/** Construct an empty invalid connector. */
 DatabaseConnector::DatabaseConnector() :
         d(new DatabaseConnectorPrivate)
 {
@@ -154,14 +154,43 @@ void DatabaseConnector::setDriver(Database::AvailableDrivers driver)
     d->m_Driver = driver;
     d->m_DriverIsValid = d->testDriver(driver);
 }
-void DatabaseConnector::setClearLog(const QString &log) { d->m_ClearLog = log; }
-void DatabaseConnector::setClearPass(const QString &pass) { d->m_ClearPass = pass; }
-void DatabaseConnector::setHost(const QString &host) { d->m_HostName = host; }
-void DatabaseConnector::setPort(const int port) { d->m_Port = port; }
-void DatabaseConnector::setAbsPathToReadOnlySqliteDatabase(const QString &absPath) { d->m_AbsPathToReadOnlySQLiteDb = absPath; }
-void DatabaseConnector::setAbsPathToReadWriteSqliteDatabase(const QString &absPath) { d->m_AbsPathToReadWriteSQLiteDb = absPath; }
-void DatabaseConnector::setAccessMode(const AccessMode mode) { d->m_AccessMode = mode; }
 
+void DatabaseConnector::setClearLog(const QString &log)
+{
+    d->m_ClearLog = log;
+}
+
+void DatabaseConnector::setClearPass(const QString &pass)
+{
+    d->m_ClearPass = pass;
+}
+
+void DatabaseConnector::setHost(const QString &host)
+{
+    d->m_HostName = host;
+}
+
+void DatabaseConnector::setPort(const int port)
+{
+    d->m_Port = port;
+}
+
+void DatabaseConnector::setAbsPathToReadOnlySqliteDatabase(const QString &absPath)
+{
+    d->m_AbsPathToReadOnlySQLiteDb = absPath;
+}
+
+void DatabaseConnector::setAbsPathToReadWriteSqliteDatabase(const QString &absPath)
+{
+    d->m_AbsPathToReadWriteSQLiteDb = absPath;
+}
+
+void DatabaseConnector::setAccessMode(const AccessMode mode)
+{
+    d->m_AccessMode = mode;
+}
+
+/** Clear the internal data. Resulting connector is invalid */
 void DatabaseConnector::clear()
 {
     d->m_ClearLog.clear();
@@ -175,7 +204,14 @@ void DatabaseConnector::clear()
     d->m_AccessMode = ReadWrite;
 }
 
-bool DatabaseConnector::isValid()
+/**
+ * Check validity of the connector:
+ * - a driver is correctly defined and available
+ * - a login is defined
+ * - for SQLite configuration: path to database are defined and exist
+ * - for MySQL configuratin: a host and a port are defined
+ */
+bool DatabaseConnector::isValid() const
 {
     if (!d->m_DriverIsValid)
         return false;
@@ -202,18 +238,74 @@ bool DatabaseConnector::isValid()
     return false;
 }
 
-Database::AvailableDrivers DatabaseConnector::driver() const { return d->m_Driver; }
-QString DatabaseConnector::clearLog() const { return d->m_ClearLog; }
-QString DatabaseConnector::clearPass() const { return d->m_ClearPass; }
-QString DatabaseConnector::cryptedLog() const { return loginForSQL(d->m_ClearLog); }
-QString DatabaseConnector::cryptedPass() const { return d->m_HostName;}
-QString DatabaseConnector::host() const { return d->m_HostName; }
-int DatabaseConnector::port() const { return d->m_Port; }
-QString DatabaseConnector::absPathToSqliteReadOnlyDatabase() const { return d->m_AbsPathToReadOnlySQLiteDb; }
-QString DatabaseConnector::absPathToSqliteReadWriteDatabase() const { return d->m_AbsPathToReadWriteSQLiteDb; }
-Utils::DatabaseConnector::AccessMode DatabaseConnector::accessMode() const { return d->m_AccessMode; }
-bool DatabaseConnector::isDriverValid() const { return d->m_DriverIsValid; }
+Database::AvailableDrivers DatabaseConnector::driver() const
+{
+    return d->m_Driver;
+}
 
+QString DatabaseConnector::clearLog() const
+{
+    return d->m_ClearLog;
+}
+
+QString DatabaseConnector::clearPass() const
+{
+    return d->m_ClearPass;
+}
+
+QString DatabaseConnector::cryptedLog() const
+{
+    return loginForSQL(d->m_ClearLog);
+}
+
+/**
+ * Return the crypted password (computed from the clear password)
+ * \sa setClearPassword()
+*/
+QString DatabaseConnector::cryptedPass() const
+{
+    if (d->m_ClearPass.isEmpty())
+        return QString::null;
+    return Utils::cryptPassword(d->m_ClearPass);
+}
+
+QString DatabaseConnector::host() const
+{
+    return d->m_HostName;
+}
+
+int DatabaseConnector::port() const
+{
+    return d->m_Port;
+}
+
+QString DatabaseConnector::absPathToSqliteReadOnlyDatabase() const
+{
+    return d->m_AbsPathToReadOnlySQLiteDb;
+}
+
+QString DatabaseConnector::absPathToSqliteReadWriteDatabase() const
+{
+    return d->m_AbsPathToReadWriteSQLiteDb;
+}
+
+Utils::DatabaseConnector::AccessMode DatabaseConnector::accessMode() const
+{
+    return d->m_AccessMode;
+}
+
+bool DatabaseConnector::isDriverValid() const
+{
+    return d->m_DriverIsValid;
+}
+
+/**
+ * Serialize the object to a string suitable for the settings storing. \n
+ * NOTE: We have a compilation option: \e WITH_LOGINANDPASSWORD_CACHING.
+ * When this DEFINE is activated, the login & the password are not stored in the
+ * Utils::DatabaseConnector serialization. In the other case, clear password and clear
+ * login are stored in the setting string.
+ */
 QString DatabaseConnector::forSettings() const
 {
     QString tmp;
@@ -221,8 +313,8 @@ QString DatabaseConnector::forSettings() const
     tmp = d->m_ClearLog + QString(SEPARATOR);
     tmp += d->m_ClearPass + QString(SEPARATOR);
 #else
-    tmp = "-" + QString(SEPARATOR);
-    tmp += "-" + QString(SEPARATOR);
+    tmp = QString(SEPARATOR);
+    tmp += QString(SEPARATOR);
 #endif
     tmp += d->m_HostName + QString(SEPARATOR);
     tmp += QString::number(d->m_Port) + QString(SEPARATOR);
@@ -230,6 +322,10 @@ QString DatabaseConnector::forSettings() const
     return Utils::crypt(tmp);
 }
 
+/**
+ * Deserialize a setting value.
+ * \sa forSettings()
+ */
 void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();

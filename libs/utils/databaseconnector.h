@@ -55,7 +55,7 @@ public:
     ~DatabaseConnector();
 
     void clear();
-    bool isValid();
+    bool isValid() const;
 
     void setDriver(const ::Utils::Database::AvailableDrivers driver);
     void setClearLog(const QString &log);
