@@ -27,7 +27,7 @@
 #ifndef TOOLS_INTERNAL_HPRIMFILEMODEL_H
 #define TOOLS_INTERNAL_HPRIMFILEMODEL_H
 
-#include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 #include <QFileSystemModel>
 
 /**
@@ -41,14 +41,33 @@ namespace Tools {
 namespace Internal {
 class HprimFileModelPrivate;
 
-class HprimFileModel : public QAbstractTableModel
+class HprimFileModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
+    enum DataRepresentation {
+        PatientName = 0,
+        PatientDateOfBirth,
+        FileName,
+        FileDate,
+        ColumnCount
+    };
+
     explicit HprimFileModel(QObject *parent = 0);
     ~HprimFileModel();
-    bool initialize(QFileSystemModel *model);
+    bool setRootPath(const QString &path);
+
+    int columnCount(const QModelIndex &) const {return ColumnCount;}
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    QModelIndex fileRootPath() const;
+    QFileInfo fileInfo(const QModelIndex &index) const;
+    QString fileContent(const QModelIndex &index) const;
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private Q_SLOTS:
     void _onDirectoryLoaded(const QString &absPath);
