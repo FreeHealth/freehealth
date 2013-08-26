@@ -57,7 +57,8 @@ public:
     void refreshSettings();
 
 private Q_SLOTS:
-    void onFileSelected(const QModelIndex &index, const QModelIndex &);
+    void onFileSelected(const QModelIndex &current, const QModelIndex &);
+    void onPatientSelected(const QString &fullName, const QString &uid);
     void onDataIntegrationRequested();
 
 private:

@@ -138,7 +138,7 @@ public:
     // Or a null QString if an error occured
     QString getPatientUid(const Utils::HPRIM::HprimHeader &hdr)
     {
-        ui->patientSearch->setText(hdr.patientName() + " " + hdr.patientFirstName());
+        ui->patientSearch->setText(QString("%1 %2").arg(hdr.patientName()).arg(hdr.patientFirstName()));
         // Try to find the correct patient uuid
         Patients::PatientModel *model = new Patients::PatientModel(q);
         model->setFilter(hdr.patientName(), hdr.patientFirstName());

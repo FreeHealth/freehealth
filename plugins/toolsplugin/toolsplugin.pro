@@ -66,19 +66,19 @@ contains(DEFINES, WITH_FRENCH_HPRIM_INTEGRATOR){
         hprimintegrator/hprimintegrator.h \
         hprimintegrator/hprimfilemodel.h \
         hprimintegrator/hprimpreferences.h \
-        hprimintegrator/constants.h \
-        hprimintegrator/hprimintegratordialog.h
+        hprimintegrator/constants.h
+        #hprimintegrator/hprimintegratordialog.h
 
     SOURCES += \
         hprimintegrator/hprimintegrator.cpp \
         hprimintegrator/hprimfilemodel.cpp \
-        hprimintegrator/hprimpreferences.cpp \
-        hprimintegrator/hprimintegratordialog.cpp
+        hprimintegrator/hprimpreferences.cpp
+        #hprimintegrator/hprimintegratordialog.cpp
 
     FORMS += \
         hprimintegrator/hprimintegratorwidget.ui \
-        hprimintegrator/hprimpreferences.ui \
-        hprimintegrator/hprimintegratordialog.ui
+        hprimintegrator/hprimpreferences.ui
+        #hprimintegrator/hprimintegratordialog.ui
 }
 
 

@@ -113,7 +113,7 @@ ToolsPlugin::ToolsPlugin() :
     addAutoReleasedObject(m_HprimPage = new HprimPreferencesPage(this));
 #endif
 
-//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
@@ -208,19 +208,6 @@ void ToolsPlugin::extensionsInitialized()
         m_FspPage->checkSettingsValidity();
 #endif
 
-#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
-    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
-    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
-            && QLocale().country() == QLocale::France);
-    if (enabled) {
-        HprimIntegratorMode *mode = new HprimIntegratorMode(this);
-        addObject(mode);
-    }
-
-    if (m_HprimPage)
-        m_HprimPage->checkSettingsValidity();
-#endif
-
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 
     // Add Tools to ScriptManager
@@ -235,8 +222,18 @@ void ToolsPlugin::extensionsInitialized()
 
 void ToolsPlugin::postCoreInitialization()
 {
-    // Core is fully intialized as well as all plugins
-    // DataPacks are checked
+#ifdef WITH_FRENCH_HPRIM_INTEGRATOR
+    bool enabled = settings()->value(Constants::S_ACTIVATION).toInt() == Constants::Enabled;
+    enabled = enabled || (settings()->value(Constants::S_ACTIVATION).toInt() == Constants::OnlyForFrance
+            && QLocale().country() == QLocale::France);
+    if (enabled) {
+        HprimIntegratorMode *mode = new HprimIntegratorMode(this);
+        addObject(mode);
+    }
+
+    if (m_HprimPage)
+        m_HprimPage->checkSettingsValidity();
+#endif
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag ToolsPlugin::aboutToShutdown()
