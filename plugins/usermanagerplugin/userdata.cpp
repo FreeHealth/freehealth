@@ -32,9 +32,10 @@
   \li datetime value
   \li files and images (coded into database into base64)
   \li integer or double
-  \li a tkTextDocumentExtra pointer or html contents
-  Get information of the database structure in UserBase.
-  \sa UserBase
+  \li a Print::TextDocumentExtra pointer or html contents
+  Get information of the database structure in UserBase. \n
+  Unit-tests are available.
+  \sa UserPlugin::Internal::UserBase, UserPlugin::Internal::UserManagerPlugin
 */
 
 /**
@@ -57,6 +58,9 @@
   - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
   - A editable state can be set/get using seteditable() and isEditable(). If the user is not editable,
   you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
+
+  Unit-tests are available.
+  \sa UserPlugin::Internal::UserData, UserPlugin::Internal::UserBase, UserPlugin::Internal::UserManagerPlugin
 */
 
 #include "userdata.h"
@@ -102,7 +106,7 @@ public:
 
     ~UserDynamicDataPrivate() {}
 
-    /** \brief Defines the Html content of the extraDocument */
+    // Defines the Html content of the extraDocument
     void setDocumentHtml(const QVariant &value)
     {
         if (!m_Doc)
@@ -110,7 +114,7 @@ public:
         m_Doc->setHtml(value.toString());
     }
 
-    /** \brief Defines the Xml of the extraDocument */
+    // Defines the Xml of the extraDocument
     void setDocumentXml(const QVariant &value)
     {
         if (!m_Doc)
@@ -118,6 +122,7 @@ public:
         m_Doc = Print::TextDocumentExtra::fromXml(value.toString());
     }
 
+    // Set this object as dirty (modified)
     void setDirty()
     {
         m_IsNull = false;
@@ -169,12 +174,17 @@ bool UserDynamicData::isModified() const
     return d->m_IsDirty;
 }
 
-/** \brief Define the drity state of the UserDynamicData. */
+/** Define the modification state of the UserDynamicData. */
 void UserDynamicData::setModified(bool state)
 {
     d->m_IsDirty = state;
 }
 
+/**
+ * Returns the type of data. This type is automatically defined
+ * when a value is set.
+ * \sa setValue();
+ */
 UserDynamicData::DynamicDataType UserDynamicData::type() const
 {
     return d->m_Type;
@@ -378,32 +388,47 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
 /** \brief For debugging purpose only */
 void UserDynamicData::warn() const
 {
-    qWarning() << "WARNING UDD" << warnText();
+    qWarning() << "WARNING UDD" << debugText();
 }
 
 /** \brief For debugging purpose only */
-QString UserDynamicData::warnText() const
+QString UserDynamicData::debugText() const
 {
-    QString tmp;
-    tmp = QString("Name: %1, Type: %2, Size: %3, Lang: %4, Dirt %5, Null %6, UserUuid: %7, Id: %8")
-          .arg(name())
-          .arg(type())
-          .arg(value().toString().size())
-          .arg(d->m_Language)
-          .arg(isModified())
-          .arg(isNull())
-          .arg(d->m_UserUuid)
-          .arg(id());
-    return tmp;
+    QStringList tmp;
+    tmp << "UserDynamicData(";
+    tmp << QString("Id: %1").arg(id());
+    tmp << QString("UserUuid: %1").arg(d->m_UserUuid);
+    tmp << QString("Name: %1").arg(name());
+    tmp << QString("Type: %1").arg(type());
+    tmp << QString("Size: %1").arg(value().toString().size());
+    tmp << QString("Lang: %1").arg(d->m_Language);
+    tmp << QString("Dirty: %1").arg(isModified()?"yes":"no");
+    tmp << QString("Null: %1").arg(isNull()?"yes":"no");
+    return QString(tmp.join("\n               ") + ")");
+}
+
+/** Check equality between another UserPlugin::Internal::UserDynamicData. */
+bool UserDynamicData::operator==(const UserDynamicData &other) const
+{
+    if (&other==this)
+        return true;
+    return (other.d->m_Name == d->m_Name &&
+            other.d->m_IsDirty == d->m_IsDirty &&
+            other.d->m_IsNull == d->m_IsNull &&
+            other.d->m_Id == d->m_Id &&
+            other.d->m_Trace == d->m_Trace &&
+            other.d->m_UserUuid == d->m_UserUuid &&
+            other.d->m_Value == d->m_Value &&
+            other.d->m_Language == d->m_Language &&
+            other.d->m_Lastchange == d->m_Lastchange &&
+            other.d->m_Type == d->m_Type &&
+            other.d->m_Doc == d->m_Doc
+            );
 }
 
 namespace UserPlugin {
 namespace Internal {
 
-/**
-  \brief Private part
-  \internal
-*/
 class UserDataPrivate
 {
 public:
@@ -1188,6 +1213,22 @@ QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData *c)
 {
     if (!c) {
         dbg.nospace() << "UserData(0x0)";
+        return dbg.space();
+    }
+    dbg.nospace() << c->debugText();
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserDynamicData &a)
+{
+    dbg.nospace() << a.debugText();
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserDynamicData *c)
+{
+    if (!c) {
+        dbg.nospace() << "UserDynamicData(0x0)";
         return dbg.space();
     }
     dbg.nospace() << c->debugText();

@@ -108,7 +108,9 @@ public:
     void prepareQuery(QSqlQuery &bindedQuery) const;
 
     void warn() const;
-    QString warnText() const;
+    QString debugText() const;
+
+    bool operator==(const UserDynamicData &other) const;
 
 //protected:
     void feedFromSql(const int field, const QVariant& value);
@@ -313,5 +315,7 @@ private:
 
 USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData &c);
 USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData *c);
+USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserDynamicData &c);
+USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserDynamicData *c);
 
 #endif // USERPLUGIN_INTERNAL_USERDATA_H
