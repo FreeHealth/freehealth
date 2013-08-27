@@ -270,6 +270,7 @@ HprimFileModel::~HprimFileModel()
 bool HprimFileModel::setRootPath(const QString &path)
 {
     d->_rootPathIndex = d->_fileModel->setRootPath(path);
+    return d->_rootPathIndex.isValid();
 }
 
 /** Returns the scanned root path index */
