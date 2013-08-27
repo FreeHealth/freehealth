@@ -1024,8 +1024,13 @@ bool UserBase::createUser(UserData *user)
 */
 bool UserBase::saveUser(UserData *user)
 {
-//    qWarning() << Q_FUNC_INFO;
-
+    Q_ASSERT(user);
+    if (!user)
+        return false;
+    if (user->uuid().isEmpty()) {
+        LOG_ERROR("No uuid when saving user");
+        return false;
+    }
     if (!user->isModified())
         return true;
 
