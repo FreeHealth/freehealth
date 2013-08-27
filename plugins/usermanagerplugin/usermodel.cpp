@@ -265,9 +265,17 @@ public:
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
         case Core::IUser::DataPackConfig: toReturn = userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG); break;
 
-        case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
-        case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
-        case Core::IUser::GenericWatermark :  toReturn = user->extraDocumentHtml(Core::IUser::GenericWatermark); break;
+        case Core::IUser::GenericHeader:
+        case Core::IUser::GenericFooter:
+        case Core::IUser::GenericWatermark:
+        case Core::IUser::AdministrativeHeader:
+        case Core::IUser::AdministrativeFooter:
+        case Core::IUser::AdministrativeWatermark:
+        case Core::IUser::PrescriptionHeader:
+        case Core::IUser::PrescriptionFooter:
+        case Core::IUser::PrescriptionWatermark:
+            toReturn = user->extraDocumentHtml(ref);
+            break;
 
         case Core::IUser::GenericHeaderPresence :
         {
@@ -295,10 +303,6 @@ public:
             // TODO: return Watermark alignement
             return Qt::AlignCenter;
         }
-
-        case Core::IUser::AdministrativeHeader : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeHeader); break;
-        case Core::IUser::AdministrativeFooter : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeFooter); break;
-        case Core::IUser::AdministrativeWatermark : toReturn = user->extraDocumentHtml(Core::IUser::AdministrativeWatermark); break;
         case Core::IUser::AdministrativeWatermarkPresence :
         {
             Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeWatermark);
@@ -312,9 +316,6 @@ public:
             return Qt::AlignCenter;
         }
 
-        case Core::IUser::PrescriptionHeader : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionHeader); break;
-        case Core::IUser::PrescriptionFooter : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionFooter); break;
-        case Core::IUser::PrescriptionWatermark : toReturn = user->extraDocumentHtml(Core::IUser::PrescriptionWatermark); break;
         case Core::IUser::PrescriptionHeaderPresence :
         {
             Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::PrescriptionHeader);
@@ -350,8 +351,7 @@ public:
         case Core::IUser::AdministrativeRights : toReturn = user->rightsValue(USER_ROLE_ADMINISTRATIVE); break;
         case Core::IUser::AgendaRights : toReturn = user->rightsValue(USER_ROLE_AGENDA); break;
         case Core::IUser::LoginHistory : toReturn = user->loginHistory(); break;
-        case Core::IUser::Warn : user->warn(); break;
-        case Core::IUser::WarnText : toReturn = user->warnText(); break;
+        case Core::IUser::DebugText : toReturn = user->debugText(); break;
         default : toReturn = QVariant();
     };
         return toReturn;
