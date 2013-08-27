@@ -928,7 +928,9 @@ void UserData::addLoginToHistory()
 //------------------------------------------------ Getters -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /**
-  \todo document
+ * Return the value corresponding to the
+ * \e tableref and \e fieldref of the database scheme.
+ * \sa setValue()
 */
 QVariant UserData::value(const int tableref, const int fieldref) const
 {
@@ -951,7 +953,9 @@ QVariant UserData::dynamicDataValue(const char*name) const
 }
 
 /**
-  \todo document
+ * Returns the database right value associated with
+ * the \e name and \e fieldref of the internal table
+ * \sa UserPlugin::Internal::UserBase, UserPlugin::Constants::RIGHTSfields
 */
 QVariant UserData::rightsValue(const QString &name, const int fieldref) const
 {
@@ -960,35 +964,25 @@ QVariant UserData::rightsValue(const QString &name, const int fieldref) const
 }
 
 /**
-  \todo document
+ * Returns the right value associated with the uid \e name
+ * \sa Core::IUser::UserRight
 */
 QVariant UserData::rightsValue(const char *name) const
 {
     return d->m_Role_Rights.value(name).value(RIGHTS_RIGHTS);
 }
 
+/**
+ * Returns \e true if the user has the right \e rightToTest
+ * associated with the uid \e name
+ * \sa Core::IUser::UserRight
+*/
 bool UserData::hasRight(const char *name, const int rightToTest) const
 {
     Core::IUser::UserRights rights = Core::IUser::UserRights(rightToTest);
     Core::IUser::UserRights rightrole = Core::IUser::UserRights(rightsValue(name).toInt());
     return (rightrole & rights);
 }
-
-
-//QString UserData::lastLogin() const
-//{
-//    if (!value(Table_USERS, USER_LASTLOG).isValid())
-//        return QCoreApplication::translate("tkUSer", "Never logged");
-//    QDateTime d = value(Table_USERS, USER_LASTLOG).toDateTime();
-//    return d.toString(Qt::DefaultLocaleLongDate);
-//}
-
-
-//bool UserData::can(UserManagerRights) const
-//{
-//    // TODO
-//    return true;
-//}
 
 /** \brief Return true if there are modifications to save in the dynamicData. */
 bool UserData::hasModifiedDynamicDataToStore() const
