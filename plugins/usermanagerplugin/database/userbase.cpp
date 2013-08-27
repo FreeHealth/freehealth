@@ -292,6 +292,10 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     }
     query.finish();
 
+    // No user found?
+    if (!toReturn)
+        return 0;
+
     // get RIGHTS table  ***************************************** -1
     QHash<int, QString> where;
     where.insert(RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
@@ -348,15 +352,13 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     query.finish();
 
     if (lkid == -1) {
-        // TODO: WARNING this causes segfault
         LOG_ERROR(QString("No linker for user %1").arg(uuid));
 //        DB.rollback();
 //        return 0;
     }
-    toReturn->setPersonalLkId(lkid);
 
-    if (toReturn)
-        toReturn->setModified(false);
+    toReturn->setPersonalLkId(lkid);
+    toReturn->setModified(false);
 
     DB.commit();
 
