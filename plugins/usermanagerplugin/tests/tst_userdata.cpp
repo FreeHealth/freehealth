@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "../usermanagerplugin.h"
 #include "../userdata.h"
+#include "../usercore.h"
+#include "../database/userbase.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,6 +46,9 @@ using namespace Internal;
 //static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 //static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline UserPlugin::UserCore &userCore() {return UserPlugin::UserCore::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return userCore().userBase();}
+static inline UserPlugin::UserModel *userModel() {return userCore().userModel();}
 
 namespace {
 const int loop = 10; // number of tests per objects
@@ -81,6 +86,21 @@ void UserManagerPlugin::test_userdynamicdata_basics()
         QCOMPARE(data.id(), id);
         QCOMPARE(data.name(), name);
         QCOMPARE(data.value().toString(), value);
+
+        // Test operator==()
+        UserDynamicData data2;
+        data2.setId(id);
+        data2.setName(name);
+        data2.setUserUuid(user);
+        data2.setValue(value);
+        data2.setModified(false);
+        QCOMPARE(data2.id(), data.id());
+        QCOMPARE(data2.name(), data.name());
+        QCOMPARE(data2.value(), data.value());
+        QCOMPARE(data2.type(), data.type());
+        QVERIFY(data2 == data);
+        QVERIFY(data == data);
+        QVERIFY(data2 == data2);
     }
 
     // TODO: test the following members
@@ -252,6 +272,26 @@ void UserManagerPlugin::test_userdata_basics()
         QString prefs = r.randomString(r.randomInt(5, 200));
         data.setPreferences(prefs); CHECK_MODIFIED;
     }
+}
+
+void UserManagerPlugin::test_usercore_initialization()
+{
+    QCOMPARE(userCore().isInitialized(), true);
+    QCOMPARE(userCore().userBase()->isInitialized(), true);
+}
+
+void UserManagerPlugin::test_userbase_basics()
+{
+    //    bool checkDatabaseVersion();
+    //    bool isNewlyCreated() const;
+    //    QString getCurrentVersion() const;
+
+    //    bool createDefaultUser();
+    //    bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
+    //                           const QStringList &specialties, const QStringList &qualifications,
+    //                           int medicalRights = 0, int adminRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
+    //                           QLocale::Language lang = QLocale().language());
+
 }
 
 void UserManagerPlugin::cleanupTestCase()

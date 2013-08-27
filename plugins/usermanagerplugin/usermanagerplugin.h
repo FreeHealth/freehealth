@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERMANAGERPLUGIN_H
-#define USERMANAGERPLUGIN_H
+#ifndef USERPLUGIN_INTERNAL_USERMANAGERPLUGIN_H
+#define USERPLUGIN_INTERNAL_USERMANAGERPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
@@ -35,9 +35,9 @@ class QAction;
 
 /**
  * \file usermanagerplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 25 July 2012
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 27 Aug 2013
 */
 
 namespace UserPlugin {
@@ -76,6 +76,8 @@ private Q_SLOTS:
     void initTestCase();
     void test_userdynamicdata_basics();
     void test_userdata_basics();
+    void test_usercore_initialization();
+    void test_userbase_basics();
     void cleanupTestCase();
 #endif
 
@@ -91,6 +93,6 @@ private:
 };
 
 } // namespace Internal
-}  // End UserPlugin
+} // namespace UserPlugin
 
-#endif  // End USERMANAGERPLUGIN_H
+#endif  // USERPLUGIN_INTERNAL_USERMANAGERPLUGIN_H
