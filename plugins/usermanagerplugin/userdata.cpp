@@ -398,7 +398,7 @@ public:
     static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvments, stores the link between name of headers/footers/watermark and there index into UserModel \sa UserConstants. */
 
     UserDataPrivate() :
-        m_Modifiable(false),
+        m_Editable(false),
         m_Modified(false),
         m_IsNull(false),
         m_IsCurrent(false),
@@ -479,7 +479,7 @@ public:
     QHash< int, QHash<int, QVariant > >       m_Table_Field_Value;
     QHash< QString, QHash<int, QVariant >  >  m_Role_Rights;
 //    QHash< QString, QHash< int, QVariant > >  m_DataName_Data;
-    bool  m_Modifiable, m_Modified,  m_IsNull, m_IsCurrent;
+    bool  m_Editable, m_Modified,  m_IsNull, m_IsCurrent;
     QSet< QString > m_ModifiedRoles;
     QHash<QString, UserDynamicData*> m_DynamicData;
     bool m_HasModifiedDynamicData;
@@ -507,7 +507,7 @@ UserData::UserData() :
     d(0)
 {
     d = new UserDataPrivate();
-    d->m_Modifiable = true;
+    d->m_Editable = true;
     setValue(Table_USERS, USER_ID, -1);
     setValue(Table_USERS, USER_ISVIRTUAL, false);
     setRights(USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::WriteOwn);
@@ -539,7 +539,7 @@ UserData::UserData(const QString & uuid)
 {
     // TODO : add a uuid checker before all
     d = new UserDataPrivate();
-    d->m_Modifiable = true;
+    d->m_Editable = true;
     setValue(Table_USERS, USER_ID, -1);
     setValue(Table_USERS, USER_ISVIRTUAL, false);
     setUuid(uuid);
@@ -565,14 +565,14 @@ UserData::~UserData()
     if (d) delete d; d=0;
 }
 
-void UserData::setModifiable(bool state)
+void UserData::setEditable(bool state)
 {
-    d->m_Modifiable = state;
+    d->m_Editable = state;
 }
 
 bool UserData::isEditable() const
 {
-    return d->m_Modifiable;
+    return d->m_Editable;
 }
 
 void UserData::setModified(bool state)
@@ -630,7 +630,7 @@ bool UserData::isCurrent() const
 /** \brief If user is modifiable and does not have an uuid then create a new one and return true, otherwise return false. */
 bool UserData::createUuid()
 {
-    if (!d->m_Modifiable)
+    if (!d->m_Editable)
         return false;
     if (!uuid().isEmpty())
         return true;
@@ -657,7 +657,7 @@ void UserData::setUuid(const QString & val)
 */
 void UserData::setValue(const int tableref, const int fieldref, const QVariant &val)
 {
-    if (!d->m_Modifiable)
+    if (!d->m_Editable)
         return;
     // if value is the same as the stored value --> return
     if (tableref == Table_USERS && fieldref == USER_PASSWORD) {
@@ -686,7 +686,7 @@ void UserData::setValue(const int tableref, const int fieldref, const QVariant &
 */
 void UserData::addDynamicDataFromDatabase(const QList<UserDynamicData*> &list)
 {
-    if (!d->m_Modifiable)
+    if (!d->m_Editable)
         return;
     d->m_IsNull = false;
     foreach(UserDynamicData *dyn, list) {
@@ -703,7 +703,7 @@ void UserData::addDynamicDataFromDatabase(const QList<UserDynamicData*> &list)
 */
 void UserData::addRightsFromDatabase(const char *roleName, const int fieldref, const QVariant & val)
 {
-    if (!d->m_Modifiable)
+    if (!d->m_Editable)
         return;
     if (fieldref == RIGHTS_USER_UUID)// don't store user's uuid
         return;
@@ -765,7 +765,7 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
     // this member should not be used by database
     if (!val.isValid())
         return;
-    if (!d->m_Modifiable)
+    if (!d->m_Editable)
         return;
 
     // empy or null qvariant into a non existing dynamic data --> return

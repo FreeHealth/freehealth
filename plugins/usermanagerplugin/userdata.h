@@ -128,7 +128,7 @@ public:
     UserData(const QString & uuid);//(QObject * parent = 0);
     ~UserData();
 
-    void setModifiable(bool state);
+    void setEditable(bool state);
     void setModified(bool state);
     void setCurrent(bool state);
 
