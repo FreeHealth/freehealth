@@ -56,7 +56,6 @@ SOURCES += \
     $${PWD}/widgets/usercreatorwizard.cpp \
     $${PWD}/widgets/userlineeditcompletersearch.cpp
 
-
 FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/useridentifier.ui \
     $${PWD}/widgets/usermanager.ui \
@@ -69,6 +68,10 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userviewer_medicalrights.ui \
     $${PWD}/widgets/userviewer_professional.ui \
     $${PWD}/widgets/userviewer_treedelegate.ui
+
+equals(TEST, 1){
+    SOURCES += tests/tst_userdata.cpp
+}
 
 # include translations
 TRANSLATION_NAME = usermanager

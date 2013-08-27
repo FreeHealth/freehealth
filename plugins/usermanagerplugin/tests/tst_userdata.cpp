@@ -19,76 +19,44 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Main Developers:                                                       *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERMANAGERPLUGIN_H
-#define USERMANAGERPLUGIN_H
+#include "../usermanagerplugin.h"
+#include "../userdata.h"
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
-#include <QtCore/QObject>
-#include <QPointer>
-class QAction;
+#include <utils/log.h>
+#include <utils/global.h>
+#include <utils/randomizer.h>
 
-/**
- * \file usermanagerplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 25 July 2012
-*/
+#include <QTest>
 
-namespace UserPlugin {
-class UserManagerDialog;
-class FirstRun_UserConnection;
-class FirstRun_UserCreation;
-class UserManagerMainWindow;
-namespace Internal {
-class UserManagerMode;
+using namespace UserPlugin;
+using namespace Internal;
 
-class UserManagerPlugin : public ExtensionSystem::IPlugin
+//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+//static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
+namespace {
+const int loop = 10; // number of test per alertitems
+} // anonymous namespace
+
+void UserManagerPlugin::initTestCase()
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.UserManagerPlugin" FILE "UserManager.json")
+}
 
-public:
-    UserManagerPlugin();
-    ~UserManagerPlugin();
+//void UserManagerPlugin::test_()
+//{
+//    Utils::Randomizer r;
+//    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+//}
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private:
-    bool identifyUser();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void createUser();
-    void changeCurrentUser();
-    void updateActions();
-    void showUserManager();
-    void showDatabaseInformation();
-
-#ifdef WITH_TESTS
-    void initTestCase();
-    void cleanupTestCase();
-#endif
-
-private:
-    QAction *aCreateUser;
-    QAction *aChangeUser;
-    QAction *aUserManager;
-    QAction *aAboutDatabase;
-
-    FirstRun_UserCreation *m_FirstCreation;
-    Internal::UserManagerMode *m_Mode;
-    UserManagerMainWindow *m_UserManagerMainWin;
-};
-
-} // namespace Internal
-}  // End UserPlugin
-
-#endif  // End USERMANAGERPLUGIN_H
+void UserManagerPlugin::cleanupTestCase()
+{
+}
