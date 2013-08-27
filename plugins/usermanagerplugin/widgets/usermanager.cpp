@@ -740,6 +740,6 @@ void UserManagerWidget::showUserDebugDialog(const QModelIndex &id)
 {
     // FIXME: DO NOT USE USERMODEL()
     QStringList list;
-    list << userModel()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
+    list << userModel()->index(id.row(), Core::IUser::DebugText).data(Qt::DisplayRole).toStringList();
     Utils::quickDebugDialog(list);
 }

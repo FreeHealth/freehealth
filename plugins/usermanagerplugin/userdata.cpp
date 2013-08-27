@@ -55,7 +55,7 @@
   - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
   - setRights() can be used for creating new rights or change the value of the rights.
   - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
-  - A modifiable state can be set/get using setModifiable() and isModifiable(). If the user is not modifiable,
+  - A modifiable state can be set/get using setModifiable() and isEditable(). If the user is not modifiable,
   you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
 */
 
@@ -146,7 +146,9 @@ UserDynamicData::UserDynamicData() : d(0)
 
 UserDynamicData::~UserDynamicData()
 {
-    if (d) delete d; d=0;
+    if (d)
+        delete d;
+    d=0;
 }
 
 /** \brief Returns true if the data is actually null */
@@ -383,8 +385,6 @@ QString UserDynamicData::warnText() const
     return tmp;
 }
 
-
-
 namespace UserPlugin {
 namespace Internal {
 
@@ -496,16 +496,15 @@ public:
 QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
 
 /**
-  \brief Constructor
-  Some default values are defined :
-  \li automatic uuid setting to a fresh new one
-  \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
-  \li no rights for Medical, paramedical, dosage management
-  \li empty password is set encrypted
-  \li locker is unset
+ * Construct a default UserData object with:
+ * \li automatic uuid setting to a fresh new one
+ * \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
+ * \li no rights for Medical, paramedical, dosage management
+ * \li empty password is set encrypted
+ * \li locker is unset
  */
-UserData::UserData()
-    : d(0)
+UserData::UserData() :
+    d(0)
 {
     d = new UserDataPrivate();
     d->m_Modifiable = true;
@@ -571,7 +570,7 @@ void UserData::setModifiable(bool state)
     d->m_Modifiable = state;
 }
 
-bool UserData::isModifiable() const
+bool UserData::isEditable() const
 {
     return d->m_Modifiable;
 }
@@ -1065,36 +1064,50 @@ QString UserData::fullName() const
     return r;
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Viewers -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-/** \brief For debugging purpose only */
-void UserData::warn() const
+//---------------------------------------------------------------------------------------
+//----------------------------------- Debug ---------------------------------------------
+//---------------------------------------------------------------------------------------
+QString UserData::debugText() const
 {
-    foreach(const QString &s, warnText())
-    Utils::Log::addMessage("UserData", s);
-}
+    QStringList s;
+    s << uuid();
+    if (isEmpty())
+        s << "empty";
+    if (isNull())
+        s << "null";
+    if (isCurrent())
+        s << "current";
+    if (isEditable())
+        s << "editable";
+    if (isModified())
+        s << "modified";
 
-QStringList UserData::warnText() const
-{
-    QStringList list;
-    int i;
-    QString tmp;
-    for (i = 0; i < USER_MaxParam; i++)
-        tmp += QString("%1 = %2\n")
+    // Fields value
+    for (int i = 0; i < USER_MaxParam; i++)
+        s << QString("%1: %2\n")
         .arg(userBase()->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
-    tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
-    tmp += QString("%1 = ").arg("LkIds (list)");
-    for(int i = 0; i < d->m_LkIds.count(); ++i) {
-        tmp += QString::number(d->m_LkIds.at(i)) + ";";
+
+    // Modified dynamic data uids
+    if (!hasModifiedDynamicDataToStore()) {
+        s << "no modified dynamic data";
+    } else {
+        const QList<UserDynamicData*> &dynList = modifiedDynamicData();
+        foreach(const UserDynamicData *dyn, dynList) {
+            s << QString("modified dynamic data: %1").arg(dyn->name());
+        }
     }
-    tmp += "\n";
-    list << tmp;
-    tmp.clear();
 
+    return QString("UserData(%1\n)").arg(s.join(",\n           "));
+
+//    tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
+//    tmp += QString("%1 = ").arg("LkIds (list)");
+//    for(int i = 0; i < d->m_LkIds.count(); ++i) {
+//        tmp += QString::number(d->m_LkIds.at(i)) + ";";
+//    }
+
+    /*
     const QList<UserDynamicData*> &dynList = modifiedDynamicData();
-
     foreach(const UserDynamicData *dyn, d->m_DynamicData.values()) {
         tmp += "\nDATA: " + dyn->name() + "\n";
         tmp += QString("%1\n").arg(dyn->warnText());
@@ -1117,7 +1130,7 @@ QStringList UserData::warnText() const
     tmp.clear();
 
     tmp += "  *Values *\n";
-    tmp += QString("%1 = %2\n").arg("m_Modifiable").arg(isModifiable());
+    tmp += QString("%1 = %2\n").arg("Editable").arg(isEditable());
     tmp += QString("%1 = %2\n").arg("m_Modified").arg(isModified());
     tmp += QString("%1 = %2\n").arg("m_IsNull").arg(d->m_IsNull);
     tmp += QString("%1 = %2\n").arg("hasModifiedDynamicData").arg(hasModifiedDynamicDataToStore());
@@ -1128,5 +1141,21 @@ QStringList UserData::warnText() const
     tmp += "\n";
     list << tmp;
     return list;
+    */
 }
 
+QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData &a)
+{
+    dbg.nospace() << a.debugText();
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData *c)
+{
+    if (!c) {
+        dbg.nospace() << "UserData(0x0)";
+        return dbg.space();
+    }
+    dbg.nospace() << c->debugText();
+    return dbg.space();
+}

@@ -116,8 +116,7 @@ public:
         DecryptedLogin,           /*!< \brief Clear human readable login. */
         LoginHistory,             /*!< \brief Full login history of the user. */
         IsModified,
-        Warn,                     /*!< \brief For debugging purpose. */
-        WarnText,                 /*!< \brief For debugging purpose. */
+        DebugText,                 /*!< \brief For debugging purpose. */
         NumberOfColumns
     };
 

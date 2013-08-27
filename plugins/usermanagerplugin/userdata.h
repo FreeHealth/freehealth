@@ -24,24 +24,24 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERDATA_H
-#define USERDATA_H
-
-#include <utils/serializer.h>
-#include <printerplugin/textdocumentextra.h>
-
-#include <coreplugin/iuser.h>
-
+#ifndef USERPLUGIN_INTERNAL_USERDATA_H
+#define USERPLUGIN_INTERNAL_USERDATA_H
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <usermanagerplugin/constants.h>
 
+#include <coreplugin/iuser.h>
+
+#include <printerplugin/textdocumentextra.h>
+
 #include <utils/global.h>
+#include <utils/serializer.h>
 
 #include <QObject>
 #include <QVariant>
 #include <QDateTime>
 #include <QHash>
 #include <QLocale>
+#include <QDebug>
 QT_BEGIN_NAMESPACE
 class QSqlQuery;
 QT_END_NAMESPACE
@@ -65,10 +65,10 @@ namespace Internal {
 class UserDataPrivate;
 class UserDynamicDataPrivate;
 
-
 class USER_EXPORT UserDynamicData
 {
     friend class UserBase;
+
 public:
     /**
        \brief Describe the type of the value.
@@ -133,7 +133,7 @@ public:
     void setCurrent(bool state);
 
     bool isCurrent() const;
-    bool isModifiable() const;
+    bool isEditable() const;
     bool isModified() const;
     bool isPasswordModified() const;
     bool isNull() const;
@@ -269,12 +269,10 @@ public:
 
     // viewers
     void warn() const;
-    QStringList warnText() const;
-
+    QString debugText() const;
 
 protected:
-    // use only with database UserBase / UserCreatorWizard
-
+    // The following should only be used in UserBase / UserCreatorWizard
     // generic setters to use only when retreiving data from database
     void setValue(const int tableref, const int fieldref, const QVariant &val);
     void addDynamicDataFromDatabase(const QList<UserDynamicData*> &list);
@@ -304,7 +302,10 @@ private:
     UserDataPrivate *d;
 };
 
-}  // End Internal
-}  // End namespace UserPlugin
+}  // namespace Internal
+}  // namespace UserPlugin
 
-#endif // TKUSER_H
+USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData &c);
+USER_EXPORT QDebug operator<<(QDebug dbg, const UserPlugin::Internal::UserData *c);
+
+#endif // USERPLUGIN_INTERNAL_USERDATA_H
