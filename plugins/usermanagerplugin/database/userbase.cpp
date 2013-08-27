@@ -1018,9 +1018,13 @@ bool UserBase::createUser(UserData *user)
 }
 
 /**
-  Save users data to the database. \n
-  You can use this function to save a newly created user or to update an already existing user. This function
-  manages both cases.
+ * Save users data to the database. \n
+ * You can use this function to save a newly created user or to update
+ * an already existing user. This function manages both cases. To be correctly
+ * saved into database, the UserData must meet the following criterias:
+ * - an UUID is defined
+ * - a login is defined
+ * - a UserPlugin::Internal::UserData::cryptedPassword() is defined
 */
 bool UserBase::saveUser(UserData *user)
 {
@@ -1033,6 +1037,16 @@ bool UserBase::saveUser(UserData *user)
     }
     if (!user->isModified())
         return true;
+
+    // Check login & password
+    if (user->login64().isEmpty()) {
+        LOG_ERROR("No login defined when saving user");
+        return false;
+    }
+    if (user->cryptedPassword().isEmpty()) {
+        LOG_ERROR("No password defined when saving user");
+        return false;
+    }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
