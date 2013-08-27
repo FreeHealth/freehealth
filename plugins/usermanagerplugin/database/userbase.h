@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERBASE_H
-#define USERBASE_H
+#ifndef USERPLUGIN_INTERNAL_USERBASE_H
+#define USERPLUGIN_INTERNAL_USERBASE_H
 
 #include <utils/database.h>
 
@@ -129,7 +129,7 @@ private:
     bool m_IsNewlyCreated;
 };
 
-}  // End namespace Internal
-}  // End namespace UserPlugin
+}  // namespace Internal
+}  // namespace UserPlugin
 
-#endif // USERBASE_H
+#endif // USERPLUGIN_INTERNAL_USERBASE_H
