@@ -74,6 +74,8 @@ private Q_SLOTS:
 
 #ifdef WITH_TESTS
     void initTestCase();
+    void test_userdynamicdata_basics();
+    void test_userdata_basics();
     void cleanupTestCase();
 #endif
 
