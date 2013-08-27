@@ -48,9 +48,9 @@ QT_END_NAMESPACE
 
 /**
  * \file userdata.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 07 Aug 2011
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 28 Aug 2013
 */
 
 namespace Print {
@@ -64,6 +64,9 @@ class UserCreatorWizard;
 namespace Internal {
 class UserDataPrivate;
 class UserDynamicDataPrivate;
+#ifdef WITH_TESTS
+class UserManagerPlugin;
+#endif
 
 class USER_EXPORT UserDynamicData
 {
@@ -86,8 +89,8 @@ public:
     ~UserDynamicData();
 
     bool isNull() const;
-    bool isDirty() const;
-    void setDirty(bool state);
+    bool isModified() const;
+    void setModified(bool state);
 
     DynamicDataType type() const;
 
@@ -122,6 +125,9 @@ class USER_EXPORT UserData
     friend class UserBase;
     friend class UserPlugin::UserModel;
     friend class UserPlugin::UserCreatorWizard;
+#ifdef WITH_TESTS
+    friend class UserPlugin::Internal::UserManagerPlugin;
+#endif
 
 public:
     UserData();
@@ -149,12 +155,12 @@ public:
 
     // simplified setters (TODO : some must be logged)
     void  setId(const QVariant &val)                  { setValue(Table_USERS, USER_ID, val); }
-    void  setValidity(const QVariant &val)            { setValue(Table_USERS, USER_VALIDITY, val); }
-    void  setVirtual(const QVariant &val)             { setValue(Table_USERS, USER_ISVIRTUAL, val); }
-    void  setLocker(const QVariant &val)              { setValue(Table_USERS, USER_LOCKER ,val); }
+    void  setValidity(bool isvalid)                   { setValue(Table_USERS, USER_VALIDITY, isvalid); }
+    void  setVirtual(bool isvirtual)                  { setValue(Table_USERS, USER_ISVIRTUAL, isvirtual); }
+    void  setLocker(bool locker)                      { setValue(Table_USERS, USER_LOCKER, locker); }
     void  setClearPassword(const QString &val);
-    void  setTitleIndex(const QVariant &val)           { setValue(Table_USERS, USER_TITLE ,val); }
-    void  setGenderIndex(const QVariant &val)          { setValue(Table_USERS, USER_GENDER ,val); }
+    void  setTitleIndex(int index)                    { setValue(Table_USERS, USER_TITLE, index); }
+    void  setGenderIndex(int index)                   { setValue(Table_USERS, USER_GENDER, index); }
     void  setUsualName(const QVariant &val)            { setValue(Table_USERS, USER_USUALNAME, val); }
     void  setOtherNames(const QVariant &val)          { setValue(Table_USERS, USER_OTHERNAMES, val); }
     void  setFirstname(const QVariant &val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }

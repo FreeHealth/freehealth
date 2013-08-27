@@ -55,7 +55,7 @@
   - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
   - setRights() can be used for creating new rights or change the value of the rights.
   - You can set/get unique value using simplified setters and simplified getters. Ex : setId(), id()...
-  - A modifiable state can be set/get using setModifiable() and isEditable(). If the user is not modifiable,
+  - A editable state can be set/get using seteditable() and isEditable(). If the user is not editable,
   you can not set values. The isNull() value is set in the constructor, and change at the first data modification.
 */
 
@@ -90,7 +90,12 @@ namespace Internal {
 class UserDynamicDataPrivate {
 public:
     UserDynamicDataPrivate() :
-            m_IsDirty(false), m_IsNull(true), m_Id(-1), m_Trace(-1), m_Type(UserDynamicData::String),  m_Doc(0)
+        m_IsDirty(false),
+        m_IsNull(true),
+        m_Id(-1),
+        m_Trace(-1),
+        m_Type(UserDynamicData::String),
+        m_Doc(0)
     {
         m_Language = QLocale().name().left(2);
     }
@@ -139,7 +144,8 @@ public:
 }  // End namespace UserPlugin
 
 
-UserDynamicData::UserDynamicData() : d(0)
+UserDynamicData::UserDynamicData() :
+    d(0)
 {
     d = new UserDynamicDataPrivate();
 }
@@ -158,13 +164,13 @@ bool UserDynamicData::isNull() const
 }
 
 /** \brief Returns to if the value has change since last call of feedFromSql(). */
-bool UserDynamicData::isDirty() const
+bool UserDynamicData::isModified() const
 {
     return d->m_IsDirty;
 }
 
 /** \brief Define the drity state of the UserDynamicData. */
-void UserDynamicData::setDirty(bool state)
+void UserDynamicData::setModified(bool state)
 {
     d->m_IsDirty = state;
 }
@@ -187,6 +193,7 @@ void UserDynamicData::setName(const QString &name)
     if (d->m_Name.startsWith(PAPERS_MARK)) {
         d->m_Type = ExtraDocument;
     }
+    d->setDirty();
 }
 
 /** \brief Returns the Id of the UserDynamicData */
@@ -199,12 +206,14 @@ int UserDynamicData::id() const
 void UserDynamicData::setId(const int id)
 {
     d->m_Id = id;
+    d->setDirty();
 }
 
 /** \brief Defines the related user's uuid of UserDynamicData */
 void UserDynamicData::setUserUuid(const QString &uuid)
 {
     d->m_UserUuid = uuid;
+    d->setDirty();
 }
 
 /**
@@ -242,7 +251,7 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value)
     d->m_IsNull = false;
 }
 
-/** \brief Defines this dynamic data as a tkTextDocumentExtra. */
+/** \brief Defines this dynamic data as a Print::TextDocumentExtra. */
 void UserDynamicData::setValue(Print::TextDocumentExtra *extra)
 {
     if (!extra)
@@ -252,10 +261,13 @@ void UserDynamicData::setValue(Print::TextDocumentExtra *extra)
         delete d->m_Doc;
     d->m_Doc = extra;
     d->m_Value = QVariant();
-    d->setDirty();
+    setModified(true);
 }
 
-/** \brief Defines the values of the dynamic data. If it is a tkTextDocumentExtra defines the html code. */
+/**
+ * Defines the values of the dynamic data. If it is a Print::TextDocumentExtra
+ * defines the html code.
+ */
 void UserDynamicData::setValue(const QVariant &value)
 {
     if (d->m_Type==ExtraDocument) {
@@ -378,7 +390,7 @@ QString UserDynamicData::warnText() const
           .arg(type())
           .arg(value().toString().size())
           .arg(d->m_Language)
-          .arg(isDirty())
+          .arg(isModified())
           .arg(isNull())
           .arg(d->m_UserUuid)
           .arg(id());
@@ -501,6 +513,8 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
  * \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
  * \li no rights for Medical, paramedical, dosage management
  * \li empty password is set encrypted
+ * \li user is editable
+ * \li user uuid is defined but not control (duplicate in database can exists)
  * \li locker is unset
  */
 UserData::UserData() :
@@ -525,6 +539,7 @@ UserData::UserData() :
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
+    setModified(false);
 }
 
 /**
@@ -533,6 +548,8 @@ UserData::UserData() :
   \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
   \li empty password is set encrypted
+  \li user is editable
+  \li user uuid is defined but not control (duplicate in database can exists)
   \li locker is unset
  */
 UserData::UserData(const QString & uuid)
@@ -557,6 +574,7 @@ UserData::UserData(const QString & uuid)
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
+    setModified(false);
 }
 
 /** \brief Destructor */
@@ -565,6 +583,11 @@ UserData::~UserData()
     if (d) delete d; d=0;
 }
 
+/**
+ * Define the editable state of the object.
+ * Toggling editable state does not affect the modified state of the object.
+ * \sa isEditable(), iseditable()
+ */
 void UserData::setEditable(bool state)
 {
     d->m_Editable = state;
@@ -580,7 +603,7 @@ void UserData::setModified(bool state)
     d->m_Modified = state;
     if (!state) {
         foreach(UserDynamicData *data, this->modifiedDynamicData()) {
-            data->setDirty(false);
+            data->setModified(false);
         }
         d->m_ModifiedRoles.clear();
         d->m_PasswordChanged = false;
@@ -627,14 +650,14 @@ bool UserData::isCurrent() const
     return d->m_IsCurrent;
 }
 
-/** \brief If user is modifiable and does not have an uuid then create a new one and return true, otherwise return false. */
+/** \brief If user is editable and does not have an uuid then create a new one and return true, otherwise return false. */
 bool UserData::createUuid()
 {
     if (!d->m_Editable)
         return false;
     if (!uuid().isEmpty())
         return true;
-    setUuid(Utils::Database::createUid());
+    setUuid(Utils::createUid());
     return true;
 }
 
@@ -651,19 +674,25 @@ void UserData::setUuid(const QString & val)
 //------------------------------------------------ Setters -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /**
- \brief This member is reserved for database feeding. Only UserBase should use it. \n
- If user is modifiable, set the value \e val for the table \e tableref index and \e fieldref field index. \n
- Values must be determined fields values not dynamicValues.
+ * Reserved for database feeding. Only UserBase should use it. \n
+ * If user is editable, set the value \e val for the table \e tableref index
+ * and \e fieldref field index. \n
+ * Values must be determined fields values not dynamicValues. \n
+ * When a value is defined the modified state of the object set to \e true.
+ * \sa UserPlugin::Constants::Tables
 */
 void UserData::setValue(const int tableref, const int fieldref, const QVariant &val)
 {
     if (!d->m_Editable)
         return;
-    // if value is the same as the stored value --> return
+
+    // Manage password
     if (tableref == Table_USERS && fieldref == USER_PASSWORD) {
         setCryptedPassword(val);
         return;
     }
+
+    // Add to internal values if is not already defined
     if (d->m_Table_Field_Value.count()) {
         if (d->m_Table_Field_Value.keys().contains(tableref)) {
             const QHash<int, QVariant> &table = d->m_Table_Field_Value.value(tableref);
@@ -672,16 +701,14 @@ void UserData::setValue(const int tableref, const int fieldref, const QVariant &
                     return;
         }
     }
-
     d->m_Table_Field_Value[tableref].insert(fieldref, val);
-
     d->m_IsNull = false;
     setModified(true);
 }
 
 /**
  \brief This member is reserved for database feeding. Only UserBase should use it. \n
- If user is modifiable, set the dynamic value \e val named \e name and \e fieldref field index.
+ If user is editable, set the dynamic value \e val named \e name and \e fieldref field index.
  \todo explain dynamicValues / values
 */
 void UserData::addDynamicDataFromDatabase(const QList<UserDynamicData*> &list)
@@ -698,7 +725,7 @@ void UserData::addDynamicDataFromDatabase(const QList<UserDynamicData*> &list)
 
 /**
  \brief This member is reserved for database feeding. Only UserBase should use it. \n
- If user is modifiable, set the dynamic value \e val named \e name and \e fieldref field index.
+ If user is editable, set the dynamic value \e val named \e name and \e fieldref field index.
  \todo explain dynamicValues / values
 */
 void UserData::addRightsFromDatabase(const char *roleName, const int fieldref, const QVariant & val)
@@ -856,6 +883,7 @@ void UserData::setCryptedPassword(const QVariant &val)
         return;
     d->m_Table_Field_Value[Table_USERS].insert(USER_PASSWORD, val);
     d->m_PasswordChanged = true;
+    d->m_Modified = true;
 }
 
 /** Add the current login to the login history of the user. */
@@ -948,7 +976,7 @@ QList<UserDynamicData*> UserData::modifiedDynamicData() const
 {
     QList<UserDynamicData*> list;
     foreach(UserDynamicData *dyn, d->m_DynamicData.values()) {
-        if (dyn->isDirty()) {
+        if (dyn->isModified()) {
             list << dyn;
         }
     }
@@ -989,7 +1017,7 @@ void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index
         d->m_DynamicData.insert(name, data);
     }
     d->m_DynamicData[name]->setValue(extra);
-    d->m_DynamicData[name]->setDirty(true);
+    d->m_DynamicData[name]->setModified(true);
 }
 
 /**
@@ -1009,7 +1037,7 @@ void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
         d->m_DynamicData.insert(name,data);
     }
     d->m_DynamicData[name]->setValue(val);
-    d->m_DynamicData[name]->setDirty(true);
+    d->m_DynamicData[name]->setModified(true);
 }
 
 void UserData::setExtraDocumentPresence(const int presence, const int index)
@@ -1026,7 +1054,7 @@ void UserData::setExtraDocumentPresence(const int presence, const int index)
     }
     Print::TextDocumentExtra *t = d->m_DynamicData.value(name)->extraDocument();
     t->setPresence(Print::Printer::Presence(presence));
-    d->m_DynamicData[name]->setDirty(true);
+    d->m_DynamicData[name]->setModified(true);
 }
 
 QVariant UserData::extraDocumentHtml(const int index) const
@@ -1096,6 +1124,12 @@ QString UserData::debugText() const
         foreach(const UserDynamicData *dyn, dynList) {
             s << QString("modified dynamic data: %1").arg(dyn->name());
         }
+    }
+    // Modified rights
+    if (!hasModifiedRightsToStore()) {
+        s << "no modified rights";
+    } else {
+        s << "modified rights";
     }
 
     return QString("UserData(%1\n)").arg(s.join(",\n           "));

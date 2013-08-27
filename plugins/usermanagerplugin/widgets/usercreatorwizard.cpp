@@ -372,8 +372,8 @@ void UserCreatorWizard::done(int r)
     d->m_User->setUsualName(field("UsualName"));
     d->m_User->setOtherNames(field("OtherNames"));
     d->m_User->setFirstname(field("Firstname"));
-    d->m_User->setTitleIndex(field("Title"));
-    d->m_User->setGenderIndex(field("Gender"));
+    d->m_User->setTitleIndex(field("Title").toInt());
+    d->m_User->setGenderIndex(field("Gender").toInt());
     d->m_User->setStreet(field("Address"));
     d->m_User->setZipcode(field("Zipcode"));
     d->m_User->setCity(field("City"));

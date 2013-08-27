@@ -1100,7 +1100,7 @@ bool UserBase::saveUser(UserData *user)
                     DB.rollback();
                     return false;
                 } else {
-                    dyn->setDirty(false);
+                    dyn->setModified(false);
                 }
                 if (dyn->id() == -1) {
                     dyn->setId(query.lastInsertId().toInt());
@@ -1191,7 +1191,7 @@ bool UserBase::saveUser(UserData *user)
                     return false;
                 } else {
                     dyn->setId(query.lastInsertId().toInt());
-                    dyn->setDirty(false);
+                    dyn->setModified(false);
                 }
                 query.finish();
             }
@@ -1397,7 +1397,7 @@ bool UserBase::savePapers(UserData *user)
             DB.rollback();
             return false;
         } else {
-            dyn->setDirty(false);
+            dyn->setModified(false);
         }
         if (dyn->id() == -1) {
             dyn->setId(query.lastInsertId().toInt());

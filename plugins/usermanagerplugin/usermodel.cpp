@@ -942,7 +942,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     {
     case Core::IUser::Id :  user->setId(value); break;
     case Core::IUser::Uuid :  user->setUuid(value.toString()); break;
-    case Core::IUser::Validity :  user->setValidity(value); break;
+    case Core::IUser::Validity :  user->setValidity(value.toBool()); break;
     case Core::IUser::Login64 :  user->setLogin64(value); break;
     case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toUtf8().toBase64()); break;
     case Core::IUser::ClearPassword :
@@ -957,11 +957,11 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::LastLogin :  user->setLastLogin(value); break;
     case Core::IUser::GenderIndex :
         colsToEmit << Core::IUser::Gender << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
-        user->setGenderIndex(value);
+        user->setGenderIndex(value.toInt());
         break;
     case Core::IUser::TitleIndex :
         colsToEmit << Core::IUser::Title << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
-        user->setTitleIndex(value);
+        user->setTitleIndex(value.toInt());
         break;
     case Core::IUser::UsualName:
         colsToEmit << Core::IUser::FullName<< Core::IUser::FullHtmlContact;
