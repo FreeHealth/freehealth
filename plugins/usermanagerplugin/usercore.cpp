@@ -109,7 +109,10 @@ UserCore::~UserCore()
     d = 0;
 }
 
-/*! Initializes the object with the default values. Return true if initialization was completed. */
+/*!
+ * Initializes the object with the default values.
+ * Return true if initialization was completed.
+ */
 bool UserCore::initialize()
 {
     // Already initialized?
@@ -129,6 +132,18 @@ bool UserCore::initialize()
     connect(settings(), SIGNAL(userSettingsSynchronized()), d->_model, SLOT(updateUserPreferences()), Qt::UniqueConnection);
 
     return true;
+}
+
+/*!
+ * Return true if the core is initialization is completed.
+ */
+bool UserCore::isInitialized() const
+{
+    return (d->_model!=0)
+            && (d->_coreUserModelWrapper!=0)
+            && (Core::ICore::instance()->user()!=0)
+            && d->_base->isInitialized()
+            ;
 }
 
 /**

@@ -63,6 +63,7 @@ public:
     static UserCore &instance();
     ~UserCore();
 
+    bool isInitialized() const;
     Internal::UserBase *userBase() const;
     UserModel *userModel() const;
 
