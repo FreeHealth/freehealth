@@ -39,6 +39,7 @@
 #include <QTest>
 
 #define CHECK_MODIFIED QCOMPARE(data.isModified(), true); data.setModified(false); QCOMPARE(data.isModified(), false);
+#define CHECK_DYNAMICDATA_MODIFIED() QCOMPARE(data.hasModifiedDynamicDataToStore(), true);
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -196,7 +197,7 @@ void UserManagerPlugin::test_userdata_basics()
         data.setLanguageIso(QLocale().name().left(2)); CHECK_MODIFIED;
         data.setMail(mail); CHECK_MODIFIED;
         QDate dob = r.randomDate(QDate::currentDate().year() - 50);
-        data.setDob(dob); CHECK_MODIFIED;
+        data.setDob(dob); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
         // data.setPhoto(const QPixmap &pix);
         QCOMPARE(data.usualName(), usualName);
         QCOMPARE(data.otherNames(), otherName);
@@ -208,10 +209,10 @@ void UserManagerPlugin::test_userdata_basics()
         QString zip = r.randomString(r.randomInt(5, 20));
         QString prov = r.randomString(r.randomInt(5, 20));
         QString city = r.randomString(r.randomInt(5, 20));
-        data.setStreet(street); CHECK_MODIFIED;
-        data.setZipcode(zip); CHECK_MODIFIED;
-        data.setStateProvince(prov); CHECK_MODIFIED;
-        data.setCity(city); CHECK_MODIFIED;
+        data.setStreet(street); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setZipcode(zip); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setStateProvince(prov); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setCity(city); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
         //data.setCountry();
         //data.setCountryIso();
         QCOMPARE(data.street(), street);
@@ -224,10 +225,10 @@ void UserManagerPlugin::test_userdata_basics()
         QString tel2 = r.randomString(r.randomInt(5, 20));
         QString tel3 = r.randomString(r.randomInt(5, 20));
         QString fax = r.randomString(r.randomInt(5, 20));
-        data.setTel1(tel1); CHECK_MODIFIED;
-        data.setTel2(tel2); CHECK_MODIFIED;
-        data.setTel3(tel3); CHECK_MODIFIED;
-        data.setFax(fax); CHECK_MODIFIED;
+        data.setTel1(tel1); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setTel2(tel2); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setTel3(tel3); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setFax(fax); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
         QStringList tels;
         tels << tel1 << tel2 << tel3;
         QCOMPARE(data.tels(), tels);
@@ -235,42 +236,42 @@ void UserManagerPlugin::test_userdata_basics()
 
         QStringList practIds;
         practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-        data.setPractitionerIdentifiant(practIds); CHECK_MODIFIED;
+        data.setPractitionerIdentifiant(practIds); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
         QCOMPARE(data.professionalIdentifiants(), practIds);
 
         QStringList spe;
         spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-        data.setSpecialty(spe); CHECK_MODIFIED;
-        QCOMPARE(data.specialty(), spe);
+        data.setSpecialty(spe); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        QCOMPARE(data.specialties(), spe);
 
         QStringList qual;
         qual << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
-        data.setQualification(qual); CHECK_MODIFIED;
+        data.setQualification(qual); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
         QCOMPARE(data.qualifications(), qual);
 
         QString gh = r.randomString(r.randomInt(5, 200));
         QString gf = r.randomString(r.randomInt(5, 200));
         QString gw = r.randomString(r.randomInt(5, 200));
-        data.setGenericHeader(gh); CHECK_MODIFIED;
-        data.setGenericFooter(gf); CHECK_MODIFIED;
-        data.setGenericWatermark(gw); CHECK_MODIFIED;
+        data.setGenericHeader(gh); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setGenericFooter(gf); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setGenericWatermark(gw); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
 
         QString ah = r.randomString(r.randomInt(5, 200));
         QString af = r.randomString(r.randomInt(5, 200));
         QString aw = r.randomString(r.randomInt(5, 200));
-        data.setAdminHeader(ah); CHECK_MODIFIED;
-        data.setAdminFooter(af); CHECK_MODIFIED;
-        data.setAdminWatermark(aw); CHECK_MODIFIED;
+        data.setAdminHeader(ah); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setAdminFooter(af); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setAdminWatermark(aw); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
 
         QString ph = r.randomString(r.randomInt(5, 200));
         QString pf = r.randomString(r.randomInt(5, 200));
         QString pw = r.randomString(r.randomInt(5, 200));
-        data.setPrescriptionHeader(ph); CHECK_MODIFIED;
-        data.setPrescriptionFooter(pf); CHECK_MODIFIED;
-        data.setPrescriptionWatermark(pw); CHECK_MODIFIED;
+        data.setPrescriptionHeader(ph); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setPrescriptionFooter(pf); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
+        data.setPrescriptionWatermark(pw); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
 
         QString prefs = r.randomString(r.randomInt(5, 200));
-        data.setPreferences(prefs); CHECK_MODIFIED;
+        data.setPreferences(prefs); CHECK_DYNAMICDATA_MODIFIED(); CHECK_MODIFIED;
     }
 }
 
@@ -280,18 +281,318 @@ void UserManagerPlugin::test_usercore_initialization()
     QCOMPARE(userCore().userBase()->isInitialized(), true);
 }
 
+void UserManagerPlugin::test_userbase_test_with_virtualuser()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    QCOMPARE(userCore().userBase()->checkDatabaseVersion(), true);
+    QCOMPARE(userCore().userBase()->checkDatabaseScheme(), true);
+    QCOMPARE(userCore().userBase()->getCurrentVersion(), QString(Constants::USER_DB_VERSION));
+
+    // Test with virtual user
+    UserData data;
+    int id = r.randomInt(1, 1000);
+    bool current = r.randomBool();
+    bool validity = r.randomBool();
+    bool isvirtual = r.randomBool();
+    bool locker = r.randomBool();
+    int titleid = r.randomInt(0, 5);
+    int genderid = r.randomInt(0, 2);
+    data.setId(id); CHECK_MODIFIED;
+    data.setValidity(validity); CHECK_MODIFIED;
+    data.setVirtual(isvirtual); CHECK_MODIFIED;
+    data.setLocker(locker); CHECK_MODIFIED;
+    data.setTitleIndex(titleid); CHECK_MODIFIED;
+    data.setGenderIndex(genderid); CHECK_MODIFIED;
+    data.setCurrent(current); // does not alter modification state
+    QCOMPARE(data.id(), id);
+    QCOMPARE(data.validity(), validity);
+    QCOMPARE(data.isVirtual(), isvirtual);
+    QCOMPARE(data.locker(), locker);
+    QCOMPARE(data.titleIndex(), titleid);
+    QCOMPARE(data.genderIndex(), genderid);
+    QCOMPARE(data.isCurrent(), current);
+
+    QString clearPass = r.randomString(r.randomInt(5, 20));
+    data.setClearPassword(clearPass); CHECK_MODIFIED;
+    QCOMPARE(data.clearPassword(), clearPass);
+
+    QString usualName = r.randomName();
+    QString otherName = r.randomName();
+    QString firstName = r.randomFirstName(r.randomBool());
+    QString mail = QString("%1 <%2>").arg(r.randomString(r.randomInt(10, 50))).arg(r.randomString(r.randomInt(10, 50)));
+    data.setUsualName(usualName); CHECK_MODIFIED;
+    data.setOtherNames(otherName); CHECK_MODIFIED;
+    data.setFirstname(firstName); CHECK_MODIFIED;
+    data.setLanguageIso(QLocale().name().left(2)); CHECK_MODIFIED;
+    data.setMail(mail); CHECK_MODIFIED;
+    QDate dob = r.randomDate(QDate::currentDate().year() - 50);
+    data.setDob(dob); CHECK_MODIFIED;
+    // data.setPhoto(const QPixmap &pix);
+    QCOMPARE(data.usualName(), usualName);
+    QCOMPARE(data.otherNames(), otherName);
+    QCOMPARE(data.firstname(), firstName);
+    QCOMPARE(data.mail(), mail);
+    QCOMPARE(data.dob(), dob);
+
+    QString street = r.randomString(r.randomInt(5, 20));
+    QString zip = r.randomString(r.randomInt(5, 20));
+    QString prov = r.randomString(r.randomInt(5, 20));
+    QString city = r.randomString(r.randomInt(5, 20));
+    data.setStreet(street); CHECK_MODIFIED;
+    data.setZipcode(zip); CHECK_MODIFIED;
+    data.setStateProvince(prov); CHECK_MODIFIED;
+    data.setCity(city); CHECK_MODIFIED;
+    //data.setCountry();
+    //data.setCountryIso();
+    QCOMPARE(data.street(), street);
+    QCOMPARE(data.zipcode(), zip);
+    QCOMPARE(data.stateProvince(), prov);
+    QCOMPARE(data.city(), city);
+    //QCOMPARE(data.country(), country);
+
+    QString tel1 = r.randomString(r.randomInt(5, 20));
+    QString tel2 = r.randomString(r.randomInt(5, 20));
+    QString tel3 = r.randomString(r.randomInt(5, 20));
+    QString fax = r.randomString(r.randomInt(5, 20));
+    data.setTel1(tel1); CHECK_MODIFIED;
+    data.setTel2(tel2); CHECK_MODIFIED;
+    data.setTel3(tel3); CHECK_MODIFIED;
+    data.setFax(fax); CHECK_MODIFIED;
+    QStringList tels;
+    tels << tel1 << tel2 << tel3;
+    QCOMPARE(data.tels(), tels);
+    QCOMPARE(data.fax(), fax);
+
+    QStringList practIds;
+    practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setPractitionerIdentifiant(practIds); CHECK_MODIFIED;
+    QCOMPARE(data.professionalIdentifiants(), practIds);
+
+    QStringList spe;
+    spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setSpecialty(spe); CHECK_MODIFIED;
+    QCOMPARE(data.specialties(), spe);
+
+    QStringList qual;
+    qual << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setQualification(qual); CHECK_MODIFIED;
+    QCOMPARE(data.qualifications(), qual);
+
+    QString gh = r.randomString(r.randomInt(5, 200));
+    QString gf = r.randomString(r.randomInt(5, 200));
+    QString gw = r.randomString(r.randomInt(5, 200));
+    data.setGenericHeader(gh); CHECK_MODIFIED;
+    data.setGenericFooter(gf); CHECK_MODIFIED;
+    data.setGenericWatermark(gw); CHECK_MODIFIED;
+
+    QString ah = r.randomString(r.randomInt(5, 200));
+    QString af = r.randomString(r.randomInt(5, 200));
+    QString aw = r.randomString(r.randomInt(5, 200));
+    data.setAdminHeader(ah); CHECK_MODIFIED;
+    data.setAdminFooter(af); CHECK_MODIFIED;
+    data.setAdminWatermark(aw); CHECK_MODIFIED;
+
+    QString ph = r.randomString(r.randomInt(5, 200));
+    QString pf = r.randomString(r.randomInt(5, 200));
+    QString pw = r.randomString(r.randomInt(5, 200));
+    data.setPrescriptionHeader(ph); CHECK_MODIFIED;
+    data.setPrescriptionFooter(pf); CHECK_MODIFIED;
+    data.setPrescriptionWatermark(pw); CHECK_MODIFIED;
+
+    QString prefs = r.randomString(r.randomInt(5, 200));
+    data.setPreferences(prefs); CHECK_MODIFIED;
+
+    bool ok = userCore().userBase()->createVirtualUser(data.uuid(),
+                                                       data.usualName(),
+                                                       data.firstname(),
+                                                       data.titleIndex(),
+                                                       data.genderIndex(),
+                                                       data.specialties(),
+                                                       data.qualifications(),
+                                                       data.rightsValue(Constants::USER_ROLE_MEDICAL).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_ADMINISTRATIVE).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_USERMANAGER).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_AGENDA).toInt(),
+                                                       data.rightsValue(Constants::USER_ROLE_PARAMEDICAL).toInt(),
+                                                       data.localeLanguage());
+    QCOMPARE(ok, true);
+
+    UserData *fromDb = userCore().userBase()->getUserByUuid(data.uuid());
+    QVERIFY(fromDb != 0);
+    QCOMPARE(fromDb->uuid(), data.uuid());
+    QCOMPARE(fromDb->validity(), data.validity());
+    QCOMPARE(fromDb->isVirtual(), true);
+    QCOMPARE(fromDb->locker(), 0);
+    QCOMPARE(fromDb->titleIndex(), data.titleIndex());
+    QCOMPARE(fromDb->genderIndex(), data.genderIndex());
+    QCOMPARE(fromDb->clearLogin(), Utils::removeAccents(QString(fromDb->usualName()+"."+fromDb->firstname()).toLower()));
+    QCOMPARE(fromDb->usualName(), data.usualName());
+    QCOMPARE(fromDb->firstname(), data.firstname());
+    QVERIFY2(userCore().userBase()->purgeUser(fromDb->uuid()), "Purging virtual user from database");
+    delete fromDb;
+
+    fromDb = userCore().userBase()->getUserByUuid(data.uuid());
+    QVERIFY2(fromDb == 0, "Is virtual user correctly purged from database");
+}
+
 void UserManagerPlugin::test_userbase_basics()
 {
-    //    bool checkDatabaseVersion();
-    //    bool isNewlyCreated() const;
-    //    QString getCurrentVersion() const;
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    //    bool createDefaultUser();
-    //    bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
-    //                           const QStringList &specialties, const QStringList &qualifications,
-    //                           int medicalRights = 0, int adminRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
-    //                           QLocale::Language lang = QLocale().language());
+    // Test user save/get from database
+    UserData data;
+    int id = r.randomInt(1, 1000);
+    bool current = r.randomBool();
+    bool validity = r.randomBool();
+    bool isvirtual = r.randomBool();
+    bool locker = r.randomBool();
+    int titleid = r.randomInt(0, 5);
+    int genderid = r.randomInt(0, 2);
+    data.setId(id);
+    data.setValidity(validity);
+    data.setVirtual(isvirtual);
+    data.setLocker(locker);
+    data.setTitleIndex(titleid);
+    data.setGenderIndex(genderid);
+    data.setCurrent(current); // does not alter modification state
+    QCOMPARE(data.id(), id);
+    QCOMPARE(data.validity(), validity);
+    QCOMPARE(data.isVirtual(), isvirtual);
+    QCOMPARE(data.locker(), locker);
+    QCOMPARE(data.titleIndex(), titleid);
+    QCOMPARE(data.genderIndex(), genderid);
+    QCOMPARE(data.isCurrent(), current);
 
+    QString clearPass = r.randomString(r.randomInt(5, 20));
+    data.setClearPassword(clearPass);
+    QCOMPARE(data.clearPassword(), clearPass);
+    QString clearLog = r.randomString(r.randomInt(5, 20));
+    data.setLogin64(clearLog.toUtf8().toBase64());
+
+    QString usualName = r.randomName();
+    QString otherName = r.randomName();
+    QString firstName = r.randomFirstName(r.randomBool());
+    QString mail = QString("%1 <%2>").arg(r.randomString(r.randomInt(10, 50))).arg(r.randomString(r.randomInt(10, 50)));
+    data.setUsualName(usualName);
+    data.setOtherNames(otherName);
+    data.setFirstname(firstName);
+    data.setLanguageIso(QLocale().name().left(2));
+    data.setMail(mail);
+    QDate dob = r.randomDate(QDate::currentDate().year() - 50);
+    data.setDob(dob);
+    // data.setPhoto(const QPixmap &pix);
+    QCOMPARE(data.usualName(), usualName);
+    QCOMPARE(data.otherNames(), otherName);
+    QCOMPARE(data.firstname(), firstName);
+    QCOMPARE(data.mail(), mail);
+    QCOMPARE(data.dob(), dob);
+
+    QString street = r.randomString(r.randomInt(5, 20));
+    QString zip = r.randomString(r.randomInt(5, 20));
+    QString prov = r.randomString(r.randomInt(5, 20));
+    QString city = r.randomString(r.randomInt(5, 20));
+    data.setStreet(street);
+    data.setZipcode(zip);
+    data.setStateProvince(prov);
+    data.setCity(city);
+    //data.setCountry();
+    //data.setCountryIso();
+    QCOMPARE(data.street(), street);
+    QCOMPARE(data.zipcode(), zip);
+    QCOMPARE(data.stateProvince(), prov);
+    QCOMPARE(data.city(), city);
+    //QCOMPARE(data.country(), country);
+
+    QString tel1 = r.randomString(r.randomInt(5, 20));
+    QString tel2 = r.randomString(r.randomInt(5, 20));
+    QString tel3 = r.randomString(r.randomInt(5, 20));
+    QString fax = r.randomString(r.randomInt(5, 20));
+    data.setTel1(tel1);
+    data.setTel2(tel2);
+    data.setTel3(tel3);
+    data.setFax(fax);
+    QStringList tels;
+    tels << tel1 << tel2 << tel3;
+    QCOMPARE(data.tels(), tels);
+    QCOMPARE(data.fax(), fax);
+
+    QStringList practIds;
+    practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setPractitionerIdentifiant(practIds);
+    QCOMPARE(data.professionalIdentifiants(), practIds);
+
+    QStringList spe;
+    spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setSpecialty(spe);
+    QCOMPARE(data.specialties(), spe);
+
+    QStringList qual;
+    qual << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setQualification(qual);
+    QCOMPARE(data.qualifications(), qual);
+
+    QString gh = r.randomString(r.randomInt(5, 200));
+    QString gf = r.randomString(r.randomInt(5, 200));
+    QString gw = r.randomString(r.randomInt(5, 200));
+    data.setGenericHeader(gh);
+    data.setGenericFooter(gf);
+    data.setGenericWatermark(gw);
+
+    QString ah = r.randomString(r.randomInt(5, 200));
+    QString af = r.randomString(r.randomInt(5, 200));
+    QString aw = r.randomString(r.randomInt(5, 200));
+    data.setAdminHeader(ah);
+    data.setAdminFooter(af);
+    data.setAdminWatermark(aw);
+
+    QString ph = r.randomString(r.randomInt(5, 200));
+    QString pf = r.randomString(r.randomInt(5, 200));
+    QString pw = r.randomString(r.randomInt(5, 200));
+    data.setPrescriptionHeader(ph);
+    data.setPrescriptionFooter(pf);
+    data.setPrescriptionWatermark(pw);
+
+    QString prefs = r.randomString(r.randomInt(5, 200));
+    data.setPreferences(prefs);
+    QVERIFY(data.isModified());
+
+    QVERIFY2(userCore().userBase()->saveUser(&data), "Saving user");
+    UserData *fromDb = userCore().userBase()->getUserByUuid(data.uuid());
+    QVERIFY2(fromDb != 0, "Getting user");
+    QCOMPARE(fromDb->uuid(), data.uuid());
+    QCOMPARE(fromDb->validity(), data.validity());
+    QCOMPARE(fromDb->isVirtual(), data.isVirtual());
+    QCOMPARE(fromDb->locker(), data.locker());
+    QCOMPARE(fromDb->titleIndex(), data.titleIndex());
+    QCOMPARE(fromDb->genderIndex(), data.genderIndex());
+//    QCOMPARE(fromDb->isCurrent(), data.isCurrent());
+//    QCOMPARE(fromDb->clearPassword(), data.clearPassword());
+    QCOMPARE(fromDb->cryptedPassword(), data.cryptedPassword());
+    QCOMPARE(fromDb->clearLogin(), data.clearLogin());
+    QCOMPARE(fromDb->login64(), data.login64());
+    QCOMPARE(fromDb->usualName(), data.usualName());
+    QCOMPARE(fromDb->firstname(), data.firstname());
+    QCOMPARE(fromDb->otherNames(), data.otherNames());
+    QCOMPARE(fromDb->mail(), data.mail());
+    QCOMPARE(fromDb->dob(), data.dob());
+    QCOMPARE(fromDb->street(), data.street());
+    QCOMPARE(fromDb->zipcode(), data.zipcode());
+    QCOMPARE(fromDb->stateProvince(), data.stateProvince());
+    QCOMPARE(fromDb->city(), data.city());
+    QCOMPARE(fromDb->tels(), data.tels());
+    QCOMPARE(fromDb->fax(), data.fax());
+    QCOMPARE(fromDb->professionalIdentifiants(), data.professionalIdentifiants());
+    QCOMPARE(fromDb->specialties(), data.specialties());
+    QCOMPARE(fromDb->qualifications(), data.qualifications());
+    // TODO: test Print::TextDocumentExtra
+
+    QVERIFY2(userCore().userBase()->purgeUser(fromDb->uuid()), "Purging user from database");
+    delete fromDb;
+    fromDb = userCore().userBase()->getUserByUuid(data.uuid());
+    QVERIFY2(fromDb == 0, "Is user correctly purged from database");
 }
 
 void UserManagerPlugin::cleanupTestCase()

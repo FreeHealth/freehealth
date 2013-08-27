@@ -77,6 +77,7 @@ private Q_SLOTS:
     void test_userdynamicdata_basics();
     void test_userdata_basics();
     void test_usercore_initialization();
+    void test_userbase_test_with_virtualuser();
     void test_userbase_basics();
     void cleanupTestCase();
 #endif
