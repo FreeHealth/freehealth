@@ -93,7 +93,7 @@ public:
     // savers
     bool createUser(UserData *user);
     bool saveUser(UserData *user);
-    bool deleteUser(const QString &uuid);
+    bool purgeUser(const QString &uuid);
     bool saveUserPreferences(const QString &uid, const QString &content);
     bool savePapers(UserData *user);
     bool changeUserPassword(UserData *user, const QString &clearPassword);

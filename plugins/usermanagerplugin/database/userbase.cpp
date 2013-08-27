@@ -1245,10 +1245,11 @@ bool UserBase::saveUser(UserData *user)
 }
 
 /**
-  Delete an user identified by its \e uuid from the database.
-  \todo delete the user's LKID
+ * Remove all data of user identified by its \e uuid from the database and
+ * the server (network configuration).
+ * \todo delete the user's LKID
 */
-bool UserBase::deleteUser(const QString &uuid)
+bool UserBase::purgeUser(const QString &uuid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__)) {

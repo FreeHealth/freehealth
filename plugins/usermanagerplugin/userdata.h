@@ -244,7 +244,7 @@ public:
 
 
     QStringList professionalIdentifiants() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_PRACTIDENTIFIANT).toString()); }
-    QStringList specialty() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_SPECIALTY).toString());  }
+    QStringList specialties() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_SPECIALTY).toString());  }
     QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_QUALIFICATION).toString()); }
 
     QStringList adminPapers() const      { return QStringList()

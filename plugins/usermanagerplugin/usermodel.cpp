@@ -259,7 +259,7 @@ public:
         }
 
         case Core::IUser::ProfessionalIdentifiants : toReturn = user->professionalIdentifiants(); break;
-        case Core::IUser::Specialities : toReturn = user->specialty(); break;
+        case Core::IUser::Specialities : toReturn = user->specialties(); break;
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
 
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
@@ -806,7 +806,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
         }
 
         // Delete from real database
-        if (!userBase()->deleteUser(uuid)) {
+        if (!userBase()->purgeUser(uuid)) {
            LOG_ERROR(tr("User can not be deleted from database."));
            noError = false;
         }
