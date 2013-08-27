@@ -349,7 +349,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 
     if (lkid == -1) {
         // TODO: WARNING this causes segfault
-        LOG_ERROR(QString("No linker for user %1").arg(toReturn->uuid()));
+        LOG_ERROR(QString("No linker for user %1").arg(uuid));
 //        DB.rollback();
 //        return 0;
     }
