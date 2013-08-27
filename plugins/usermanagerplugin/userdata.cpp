@@ -558,7 +558,6 @@ UserData::UserData() :
     setLocker(false);
     createUuid();
     d->m_IsNull = true;
-    d->m_Modified = false;
     d->m_IsCurrent = false;
     d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
@@ -593,7 +592,6 @@ UserData::UserData(const QString & uuid)
     setCryptedPassword(Utils::cryptPassword(""));
     setLocker(false);
     d->m_IsNull = true;
-    d->m_Modified = false;
     d->m_IsCurrent = false;
     d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
@@ -1131,7 +1129,7 @@ QString UserData::debugText() const
 
     // Fields value
     for (int i = 0; i < USER_MaxParam; i++)
-        s << QString("%1: %2\n")
+        s << QString("%1: %2")
         .arg(userBase()->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
 
@@ -1151,7 +1149,7 @@ QString UserData::debugText() const
         s << "modified rights";
     }
 
-    return QString("UserData(%1\n)").arg(s.join(",\n           "));
+    return QString("UserData(%1\n           )").arg(s.join(",\n           "));
 
 //    tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
 //    tmp += QString("%1 = ").arg("LkIds (list)");
