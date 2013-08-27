@@ -1012,6 +1012,12 @@ QStringList UserData::modifiedRoles() const
     return d->m_ModifiedRoles.toList();
 }
 
+/**
+ * Return the uncrypted password. Once the user is saved into the database,
+ * when you get it from the database, this uncrypted password is not available
+ * anymore.
+ * \sa UserPlugin::Internal::UserBase::saveUser()
+ */
 QString UserData::clearPassword() const
 {
     return d->m_ClearPassword;
