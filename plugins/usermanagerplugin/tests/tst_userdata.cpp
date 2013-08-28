@@ -55,6 +55,8 @@ namespace {
 const int loop = 10; // number of tests per objects
 } // anonymous namespace
 
+// TODO: write unit-tests for user's print documents
+
 void UserManagerPlugin::initTestCase()
 {
 }
@@ -588,6 +590,47 @@ void UserManagerPlugin::test_userbase_basics()
     QCOMPARE(fromDb->specialties(), data.specialties());
     QCOMPARE(fromDb->qualifications(), data.qualifications());
     // TODO: test Print::TextDocumentExtra
+
+    delete fromDb;
+    fromDb = userCore().userBase()->getUserByLoginPassword(data.login64(), data.cryptedPassword());
+    QVERIFY2(fromDb != 0, "Getting user using login & password");
+    QCOMPARE(fromDb->uuid(), data.uuid());
+    QCOMPARE(fromDb->validity(), data.validity());
+    QCOMPARE(fromDb->isVirtual(), data.isVirtual());
+    QCOMPARE(fromDb->locker(), data.locker());
+    QCOMPARE(fromDb->titleIndex(), data.titleIndex());
+    QCOMPARE(fromDb->genderIndex(), data.genderIndex());
+//    QCOMPARE(fromDb->isCurrent(), data.isCurrent());
+//    QCOMPARE(fromDb->clearPassword(), data.clearPassword());
+    QCOMPARE(fromDb->cryptedPassword(), data.cryptedPassword());
+    QCOMPARE(fromDb->clearLogin(), data.clearLogin());
+    QCOMPARE(fromDb->login64(), data.login64());
+    QCOMPARE(fromDb->usualName(), data.usualName());
+    QCOMPARE(fromDb->firstname(), data.firstname());
+    QCOMPARE(fromDb->otherNames(), data.otherNames());
+    QCOMPARE(fromDb->mail(), data.mail());
+    QCOMPARE(fromDb->dob(), data.dob());
+    QCOMPARE(fromDb->street(), data.street());
+    QCOMPARE(fromDb->zipcode(), data.zipcode());
+    QCOMPARE(fromDb->stateProvince(), data.stateProvince());
+    QCOMPARE(fromDb->city(), data.city());
+    QCOMPARE(fromDb->tels(), data.tels());
+    QCOMPARE(fromDb->fax(), data.fax());
+    QCOMPARE(fromDb->professionalIdentifiants(), data.professionalIdentifiants());
+    QCOMPARE(fromDb->specialties(), data.specialties());
+    QCOMPARE(fromDb->qualifications(), data.qualifications());
+    // TODO: test Print::TextDocumentExtra
+
+    QCOMPARE(userCore().userBase()->getUuid(fromDb->login64(), fromDb->cryptedPassword()), fromDb->uuid());
+    QCOMPARE(userCore().userBase()->getLogin64(fromDb->uuid()), fromDb->login64());
+    QCOMPARE(userCore().userBase()->checkLogin(fromDb->clearLogin(), data.clearPassword()), true);
+    QCOMPARE(userCore().userBase()->isLoginAlreadyExists(fromDb->clearLogin()), true);
+
+    QString oldpass = data.clearPassword();
+    data.setClearPassword("password");
+    QCOMPARE(userCore().userBase()->changeUserPassword(fromDb, data.clearPassword()), true);
+    QCOMPARE(userCore().userBase()->checkLogin(fromDb->clearLogin(), data.clearPassword()), true);
+    QCOMPARE(userCore().userBase()->checkLogin(fromDb->clearLogin(), oldpass), false);
 
     QVERIFY2(userCore().userBase()->purgeUser(fromDb->uuid()), "Purging user from database");
     delete fromDb;
