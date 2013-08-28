@@ -27,6 +27,7 @@
 #include "../usermanagerplugin.h"
 #include "../userdata.h"
 #include "../usercore.h"
+#include "../usermodel.h"
 #include "../database/userbase.h"
 
 #include <coreplugin/icore.h>
@@ -37,6 +38,7 @@
 #include <utils/randomizer.h>
 
 #include <QTest>
+#include <QSignalSpy>
 
 #define CHECK_MODIFIED QCOMPARE(data.isModified(), true); data.setModified(false); QCOMPARE(data.isModified(), false);
 #define CHECK_DYNAMICDATA_MODIFIED() QCOMPARE(data.hasModifiedDynamicDataToStore(), true);
@@ -636,6 +638,143 @@ void UserManagerPlugin::test_userbase_basics()
     delete fromDb;
     fromDb = userCore().userBase()->getUserByUuid(data.uuid());
     QVERIFY2(fromDb == 0, "Is user correctly purged from database");
+}
+
+void UserManagerPlugin::test_usermodel_basics()
+{
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    // Create a fake user
+    UserData data;
+    int id = r.randomInt(1, 1000);
+    bool current = r.randomBool();
+    bool validity = r.randomBool();
+    bool isvirtual = r.randomBool();
+    bool locker = r.randomBool();
+    int titleid = r.randomInt(0, 5);
+    int genderid = r.randomInt(0, 2);
+    data.setId(id);
+    data.setValidity(validity);
+    data.setVirtual(isvirtual);
+    data.setLocker(locker);
+    data.setTitleIndex(titleid);
+    data.setGenderIndex(genderid);
+    data.setCurrent(current);
+
+    QString clearPass = r.randomString(r.randomInt(5, 20));
+    data.setClearPassword(clearPass);
+    QString clearLog = r.randomString(r.randomInt(5, 20));
+    data.setLogin64(clearLog.toUtf8().toBase64());
+
+    QString usualName = r.randomName();
+    QString otherName = r.randomName();
+    QString firstName = r.randomFirstName(r.randomBool());
+    QString mail = QString("%1 <%2>").arg(r.randomString(r.randomInt(10, 50))).arg(r.randomString(r.randomInt(10, 50)));
+    data.setUsualName(usualName);
+    data.setOtherNames(otherName);
+    data.setFirstname(firstName);
+    data.setLanguageIso(QLocale().name().left(2));
+    data.setMail(mail);
+    QDate dob = r.randomDate(QDate::currentDate().year() - 50);
+    data.setDob(dob);
+
+    QString street = r.randomString(r.randomInt(5, 20));
+    QString zip = r.randomString(r.randomInt(5, 20));
+    QString prov = r.randomString(r.randomInt(5, 20));
+    QString city = r.randomString(r.randomInt(5, 20));
+    data.setStreet(street);
+    data.setZipcode(zip);
+    data.setStateProvince(prov);
+    data.setCity(city);
+    //data.setCountry();
+    //data.setCountryIso();
+
+    QString tel1 = r.randomString(r.randomInt(5, 20));
+    QString tel2 = r.randomString(r.randomInt(5, 20));
+    QString tel3 = r.randomString(r.randomInt(5, 20));
+    QString fax = r.randomString(r.randomInt(5, 20));
+    data.setTel1(tel1);
+    data.setTel2(tel2);
+    data.setTel3(tel3);
+    data.setFax(fax);
+    QStringList tels;
+    tels << tel1 << tel2 << tel3;
+
+    QStringList practIds;
+    practIds << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setPractitionerIdentifiant(practIds);
+
+    QStringList spe;
+    spe << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setSpecialty(spe);
+
+    QStringList qual;
+    qual << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20)) << r.randomString(r.randomInt(5, 20));
+    data.setQualification(qual);
+
+    QString gh = r.randomString(r.randomInt(5, 200));
+    QString gf = r.randomString(r.randomInt(5, 200));
+    QString gw = r.randomString(r.randomInt(5, 200));
+    data.setGenericHeader(gh);
+    data.setGenericFooter(gf);
+    data.setGenericWatermark(gw);
+
+    QString ah = r.randomString(r.randomInt(5, 200));
+    QString af = r.randomString(r.randomInt(5, 200));
+    QString aw = r.randomString(r.randomInt(5, 200));
+    data.setAdminHeader(ah);
+    data.setAdminFooter(af);
+    data.setAdminWatermark(aw);
+
+    QString ph = r.randomString(r.randomInt(5, 200));
+    QString pf = r.randomString(r.randomInt(5, 200));
+    QString pw = r.randomString(r.randomInt(5, 200));
+    data.setPrescriptionHeader(ph);
+    data.setPrescriptionFooter(pf);
+    data.setPrescriptionWatermark(pw);
+
+    QString prefs = r.randomString(r.randomInt(5, 200));
+    data.setPreferences(prefs);
+    QVERIFY(data.isModified());
+
+    // Save this user into the database directly from the UserBase
+    QVERIFY2(userCore().userBase()->saveUser(&data), "Saving user");
+    // Get it back and use this one for the tests
+    UserData *fromDb = userCore().userBase()->getUserByUuid(data.uuid());
+    QVERIFY(fromDb != 0);
+
+    QString currentUserUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+    QCOMPARE(userModel()->hasCurrentUser(), true); // one user must be connected to freemedforms to reach this tests
+    QCOMPARE(userModel()->isDirty(), false);
+    QCOMPARE(userModel()->isCorrectLogin(fromDb->clearLogin(), data.clearPassword()), true);
+
+    // Set current user & check signals
+    QSignalSpy spyAboutToConnect(userModel(), SIGNAL(userAboutToConnect(QString)));
+    QSignalSpy spyUserConnected(userModel(), SIGNAL(userConnected(QString)));
+    QSignalSpy spyAboutToDisconnect(userModel(), SIGNAL(userAboutToDisconnect(QString)));
+    QSignalSpy spyUserDisconnected(userModel(), SIGNAL(userDisconnected(QString)));
+//    QSignalSpy spyUserDocChanged(userModel(), SIGNAL(userDocumentsChanged()));
+
+    QList<QVariant> args;
+    QCOMPARE(userModel()->setCurrentUser(fromDb->clearLogin(), data.clearPassword()), true);
+    QCOMPARE(spyAboutToDisconnect.count(), 1);
+    QCOMPARE(spyUserDisconnected.count(), 1);
+    args = spyAboutToDisconnect.takeFirst();
+    QVERIFY(args.at(0).toString() == currentUserUuid);
+    args = spyUserDisconnected.takeFirst();
+    QVERIFY(args.at(0).toString() == currentUserUuid);
+    // TODO: test with a Core::IUserListener
+
+    QCOMPARE(spyAboutToConnect.count(), 1);
+    QCOMPARE(spyUserConnected.count(), 1);
+    args = spyAboutToConnect.takeFirst();
+    QVERIFY(args.at(0).toString() == fromDb->uuid());
+    args = spyUserConnected.takeFirst();
+    QVERIFY(args.at(0).toString() == fromDb->uuid());
+
+    // Test QVariant currentUserData(const int column) const;
+
 }
 
 void UserManagerPlugin::cleanupTestCase()

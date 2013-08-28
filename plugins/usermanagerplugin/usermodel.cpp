@@ -31,9 +31,10 @@
   another user connection) IUserListener registered in the PluginManager are asked.
   Set filter with setFilter().
 
+  Unit-tests are available see UserPlugin::Internal::UserManagerPlugin
+
   \sa UserPlugin::Internal::UserData
   \sa UserPlugin::IUserListener
-
 */
 //TODO: write documentation+++
 //TODO: code LOCKER
