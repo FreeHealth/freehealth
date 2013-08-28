@@ -523,13 +523,15 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     }
 
     // 3. Ask all listeners for the current user disconnection
-    foreach(IUserListener *l, listeners) {
-        if (!l->currentUserAboutToDisconnect())
-            return false;
+    if (!d->m_CurrentUserUuid.isEmpty()) {
+        Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+        foreach(IUserListener *l, listeners) {
+            if (!l->currentUserAboutToDisconnect())
+                return false;
+        }
     }
 
     // 4. Connect new user
-    LOG(tr("Setting current user uuid to %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         // save user preferences
         Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
@@ -538,10 +540,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
                 qWarning() << "Saving user peferences" << d->m_CurrentUserUuid;
             user->setPreferences(settings()->userSettings());
             userBase()->saveUserPreferences(user->uuid(), user->preferences());
-            Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
         }
     }
-    d->m_CurrentUserUuid.clear();
+    Q_EMIT userDisconnected(d->m_CurrentUserUuid);
+
+    Q_EMIT(userAboutToConnect(uuid));
+    LOG(tr("Setting current user uuid to %1").arg(uuid));
     d->m_CurrentUserRights = Core::IUser::NoRights;
     d->m_CurrentUserUuid = uuid;
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values())
@@ -549,8 +553,6 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 
     // 5. If precedent currentUser was SERVER_ADMINISTRATOR_UUID --> remove it from the cache
     // TODO: code here
-
-    Q_EMIT(userAboutToConnect(uuid));
 
     // 6. Feed Core::ISettings with the user's settings
     Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
@@ -561,15 +563,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         user->setCurrent(true);
         user->setLastLogin(QDateTime::currentDateTime());
         user->addLoginToHistory();
-        userBase()->saveUser(user);
-        user->setModified(false);
+        if (!userBase()->saveUser(user))
+            return false;
     }
 
     // TODO: this is not the usermanger role if asked uuid == currentuser
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
-
-    if (WarnAllProcesses || WarnUserConnection)
-        LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
 
     // If we are running with a server, we need to reconnect all databases
     if (settings()->databaseConnector().driver()==Utils::Database::MySQL) {
@@ -585,6 +584,8 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         // emit core signal for server login changed
         Core::ICore::instance()->databaseServerLoginChanged(); // with this signal all databases should reconnect
     }
+    if (WarnAllProcesses || WarnUserConnection)
+        LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
 
     // Refresh the newly connected user's preferences
     if (checkPrefValidity)
@@ -642,17 +643,18 @@ bool UserModel::setCurrentUserIsServerManager()
     }
 
     // 3. Ask all listeners for the current user disconnection
-    foreach(IUserListener *l, listeners) {
-        if (!l->currentUserAboutToDisconnect())
-            return false;
-    }
-
-    // 4. Connect new user
-    LOG(tr("Setting current user uuid to %1 (su)").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+        foreach(IUserListener *l, listeners) {
+            if (!l->currentUserAboutToDisconnect())
+                return false;
+        }
     }
-    d->m_CurrentUserUuid.clear();
+    Q_EMIT userDisconnected(d->m_CurrentUserUuid);
+
+    // 4. Connect new user
+    Q_EMIT(userAboutToConnect(uuid));
+    LOG(tr("Setting current user uuid to %1 (su)").arg(uuid));
     d->m_CurrentUserRights = Core::IUser::AllRights;
     d->m_CurrentUserUuid = uuid;
     foreach(Internal::UserData *user, d->m_Uuid_UserList.values()) {
@@ -664,22 +666,18 @@ bool UserModel::setCurrentUserIsServerManager()
             u = new Internal::UserData(uuid);
             u->setUsualName(tr("Database server administrator"));
             u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
+            u->setCurrent(false);
             d->m_Uuid_UserList.insert(uuid, u);
             break;
         }
         user->setCurrent(false);
     }
     u->setCurrent(true);
-
-    Q_EMIT(userAboutToConnect(uuid));
-
     u->setModified(false);
 
-    foreach(IUserListener *l, listeners) {
-        l->newUserConnected(d->m_CurrentUserUuid);
-    }
-
     LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
+    foreach(IUserListener *l, listeners)
+        l->newUserConnected(d->m_CurrentUserUuid);
     Q_EMIT userConnected(uuid);
     d->checkNullUser();
     return true;
