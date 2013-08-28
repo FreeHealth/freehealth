@@ -126,14 +126,14 @@ public Q_SLOTS:
     virtual bool revertAll();
 
 Q_SIGNALS:
-    void userAboutToConnect(const QString &uuid) const;
-    void userConnected(const QString &uuid) const;
-    void userAboutToDisconnect(const QString &uuid) const;
-    void userDisconnected(const QString &uuid) const;
-    void userDocumentsChanged() const;
+    void userAboutToConnect(const QString &uuid);
+    void userConnected(const QString &uuid);
+    void userAboutToDisconnect(const QString &uuid);
+    void userDisconnected(const QString &uuid);
+    void userDocumentsChanged();
 
 protected:
-    void emitUserConnected() const;
+    void emitUserConnected();
     void checkUserPreferencesValidity();
 
 public Q_SLOTS:

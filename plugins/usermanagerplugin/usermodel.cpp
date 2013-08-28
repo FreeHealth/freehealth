@@ -1471,7 +1471,7 @@ int UserModel::numberOfUsersInMemory() const
 }
 
 /** Used by UserManagerPlugin to inform the currently connected user after Core is opened. */
-void UserModel::emitUserConnected() const
+void UserModel::emitUserConnected()
 {
     Q_EMIT userConnected(d->m_CurrentUserUuid);
 }
