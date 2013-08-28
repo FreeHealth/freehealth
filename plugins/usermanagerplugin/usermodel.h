@@ -56,6 +56,7 @@ class UserViewer;
 
 namespace Internal {
 class UserModelPrivate;
+class UserManagerPlugin; // for tests
 }  // End Internal
 
 class USER_EXPORT UserModel : public QAbstractTableModel
@@ -63,6 +64,9 @@ class USER_EXPORT UserModel : public QAbstractTableModel
     Q_OBJECT
     friend class UserPlugin::UserCore;
     friend class UserPlugin::UserViewer;
+#ifdef WITH_TESTS
+    friend class UserPlugin::Internal::UserManagerPlugin;
+#endif
 
 protected:
     UserModel(QObject *parent);
@@ -79,7 +83,7 @@ public:
     bool hasCurrentUser() const;
     QModelIndex currentUserIndex() const;
 
-    bool isDirty();
+    bool isDirty() const;
 
     virtual void forceReset();
     virtual void clear();
@@ -107,15 +111,13 @@ public:
 
     QString tableName() const;
 
-    QList<int> practionnerLkIds(const QString &uid);
-    int practionnerLkId(const QString &uid);
+    QList<int> practionnerLkIds(const QString &uid) const;
+    int practionnerLkId(const QString &uid) const;
 
     static QHash<QString, QString> getUserNames(const QStringList &uid);
     bool createVirtualUsers(const int count);
 
-    int numberOfUsersInMemory();
-
-    void warn();
+    int numberOfUsersInMemory() const;
 
 public Q_SLOTS:
     virtual bool submitAll();
@@ -124,7 +126,6 @@ public Q_SLOTS:
     virtual bool revertAll();
 
 Q_SIGNALS:
-    void memoryUsageChanged() const;
     void userAboutToConnect(const QString &uuid) const;
     void userConnected(const QString &uuid) const;
     void userAboutToDisconnect(const QString &uuid) const;

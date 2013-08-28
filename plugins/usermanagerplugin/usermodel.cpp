@@ -597,10 +597,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 
     // Update UI Language to the user's language
     Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFERREDLANGUAGE, user->languageIso()).toString());
-
-    Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
-
     d->checkNullUser();
     return true;
 }
@@ -683,7 +680,6 @@ bool UserModel::setCurrentUserIsServerManager()
     }
 
     LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
-    Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
     d->checkNullUser();
     return true;
@@ -816,7 +812,6 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
     beginResetModel();
     d->m_Sql->select();
     endResetModel();
-    Q_EMIT memoryUsageChanged();
     d->checkNullUser();
     return noError;
 }
@@ -866,7 +861,6 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         userBase()->updateMaxLinkId(maxLkId + 1);
         user->setLkIds(QList<int>() << maxLkId+1);
     }
-    Q_EMIT memoryUsageChanged();
     d->checkNullUser();
     return i;
 }
@@ -915,7 +909,6 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     // Get userdata pointer from cache/database
     if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
-        Q_EMIT memoryUsageChanged();
     }
     Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
     if (!user) {
@@ -1143,7 +1136,6 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         // From complete UserData ?
         if (!d->m_Uuid_UserList.keys().contains(uuid)) {
             d->addUserFromDatabase(uuid);
-            Q_EMIT memoryUsageChanged();
         }
         const Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
         Q_ASSERT(user);
@@ -1198,7 +1190,7 @@ Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
 }
 
 /** Returns true if model has dirty rows that need to be saved into database. */
-bool UserModel::isDirty()
+bool UserModel::isDirty() const
 {
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO;
@@ -1232,7 +1224,6 @@ bool UserModel::submitAll()
         if (!submitUser(s))
             toReturn = false;
     }
-    Q_EMIT memoryUsageChanged();
     return toReturn;
 }
 
@@ -1314,7 +1305,6 @@ void UserModel::revertRow(int row)
         d->m_Uuid_UserList.remove(uuid);
     }
     endResetModel();
-    Q_EMIT memoryUsageChanged();
     d->checkNullUser();
 }
 
@@ -1351,7 +1341,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
 }
 
 /** Return the LinkId for the user with uuid \e uid */
-int UserModel::practionnerLkId(const QString &uid)
+int UserModel::practionnerLkId(const QString &uid) const
 {
     // TODO: manage user's groups
     if (d->m_Uuid_UserList.keys().contains(uid)) {
@@ -1378,7 +1368,7 @@ int UserModel::practionnerLkId(const QString &uid)
     return lk_id;
 }
 
-QList<int> UserModel::practionnerLkIds(const QString &uid)
+QList<int> UserModel::practionnerLkIds(const QString &uid) const
 {
 //    qWarning() << "\n\n" << Q_FUNC_INFO << uid;
     // TODO: manage user's groups
@@ -1475,17 +1465,9 @@ bool UserModel::createVirtualUsers(const int count)
 }
 
 /** Returns the number of user stored into the memory. */
-int UserModel::numberOfUsersInMemory()
+int UserModel::numberOfUsersInMemory() const
 {
     return d->m_Uuid_UserList.count();
-}
-
-/** For debugging purpose only */
-void UserModel::warn()
-{
-    qWarning() << "UserModel Warning";
-    qWarning() << "  * Current user uuid" << d->m_CurrentUserUuid;
-    qWarning() << "  * Current users list" << d->m_Uuid_UserList;
 }
 
 /** Used by UserManagerPlugin to inform the currently connected user after Core is opened. */
