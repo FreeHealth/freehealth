@@ -406,44 +406,40 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
 /** Check the couple login/password passed as params. Return true if a user can connect with these identifiants (to the server + to freemedforms). */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword) const
 {
-//    qWarning() << Q_FUNC_INFO << clearLogin << clearPassword;
     m_LastUuid.clear();
     m_LastLogin.clear();
     m_LastPass.clear();
+
     // Connect to drivers
-    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__")) {
+    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__"))
         QSqlDatabase::removeDatabase("__ConnectionTest__");
-    }
+
     switch (driver()) {
     case Utils::Database::MySQL:
-        {
-            // Try to connect with the new identifiers to MySQL server
-            QSqlDatabase connectionTest = database().cloneDatabase(database(), "__ConnectionTest__");
-            connectionTest.setUserName(clearLogin);
-            connectionTest.setPassword(clearPassword);
-            if (!connectionTest.open()) {
-                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword.length()));
-                LOG_ERROR(database().lastError().text());
-                return false;
-            }
-            LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
-            // Reconnect with these identifiers all databases
-            break;
-        }
-    case Utils::Database::SQLite: break;
-    case Utils::Database::PostSQL:
-        {
+    {
+        // Try to connect with the new identifiers to MySQL server
+        QSqlDatabase connectionTest = database().cloneDatabase(database(), "__ConnectionTest__");
+        connectionTest.setUserName(clearLogin);
+        connectionTest.setPassword(clearPassword);
+        if (!connectionTest.open()) {
+            LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword.length()));
+            LOG_ERROR(database().lastError().text());
             return false;
         }
+        LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
+        // Reconnect with these identifiers all databases
+        break;
+    }
+    case Utils::Database::SQLite: break;
+    case Utils::Database::PostSQL: return false; // not implemented
     }
 
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
-    if (!connectDatabase(DB, __LINE__)) {
-        return 0;
-    }
+    if (!connectDatabase(DB, __LINE__))
+        return false;
     DB.transaction();
 
-    // create query
+    // Try to get the uuid and cache it
     QList<int> list;
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;
@@ -457,25 +453,21 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             m_LastLogin = query.value(1).toString();
             m_LastPass = query.value(2).toString();
         } else {
-            LOG_ERROR("No FreeMedForms user. Unable to connect user.");
-            qWarning() << settings()->databaseConnector();
+            // unknown log/pass couple
+            query.finish();
             DB.rollback();
             return false;
         }
     } else {
-        LOG_ERROR("Unable to connect user.");
         LOG_QUERY_ERROR(query);
-        LOG_DATABASE(QSqlDatabase::database(USER_DB_CONNECTION));
+        query.finish();
         DB.rollback();
         return false;
     }
 
-    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__")) {
+    if (QSqlDatabase::connectionNames().contains("__ConnectionTest__"))
         QSqlDatabase::removeDatabase("__ConnectionTest__");
-    }
-
     DB.commit();
-
     return (!m_LastUuid.isEmpty());
 }
 
