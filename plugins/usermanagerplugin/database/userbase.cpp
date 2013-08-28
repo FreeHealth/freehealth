@@ -498,6 +498,8 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
         return m_LastUuid;
     m_LastUuid.clear();
+    m_LastLogin.clear();
+    m_LastPass.clear();
 
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
     if (!connectDatabase(DB, __LINE__)) {
@@ -514,6 +516,8 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
     if (query.exec(req)) {
         if (query.next()) {
             m_LastUuid = query.value(0).toString();
+            m_LastLogin = log64;
+            m_LastPass = cryptpass64;
         }
     } else {
         LOG_ERROR(QApplication::translate("UserBase", "Can not create a new user's UUID, database access error"));
@@ -570,6 +574,8 @@ QString UserBase::getLogin64(const QString &uuid)
     QHash<int, QString> where;
     where.insert(USER_UUID, QString("='%1'").arg(uuid));
     QString req = select(Table_USERS, USER_LOGIN, where);
+    qWarning() <<  req;
+
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {
@@ -582,6 +588,7 @@ QString UserBase::getLogin64(const QString &uuid)
         LOG_ERROR(QApplication::translate("UserBase", "Can not retreive login from the uuid"));
         LOG_QUERY_ERROR(query);
     }
+    query.finish();
     DB.commit();
     return QString();
 }
