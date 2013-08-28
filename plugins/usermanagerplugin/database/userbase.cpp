@@ -25,26 +25,28 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class UserPlugin::Internal::UserBase
-  This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
-
-  1. Initialization\n
-  This class owns a singleton. To instanciate it, use instance(). When instanciate for the first time,
-  the initialize() member is called.
-
-  2. Users retreiver\n
-  You can retreive users using getUserByUuid() or using getUserByLoginPassword().
-
-  3. Users saver\n
-  You can regardless save or update users to database using the unique member : saveUser().
-
-  4. Users data checkers\n
-  You can check the identifiers of users with the checkLogin() member.
-
-  5. Users trace keeper\n
-  The recaordLastLogin() update user's database with the actual login's date and time. It also update the login
-  history data of the user. This login history need to be saved by hand (saveUser()).
-*/
+ * \class UserPlugin::Internal::UserBase
+ * This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
+ *
+ * 1. Initialization\n
+ * This class owns a singleton. To instanciate it, use instance(). When instanciate for the first time,
+ * the initialize() member is called.
+ *
+ * 2. Users retreiver\n
+ * You can retreive users using getUserByUuid() or using getUserByLoginPassword().
+ *
+ * 3. Users saver\n
+ * You can regardless save or update users to database using the unique member : saveUser().
+ *
+ * 4. Users data checkers\n
+ * You can check the identifiers of users with the checkLogin() member.
+ *
+ * 5. Users trace keeper\n
+ * The recaordLastLogin() update user's database with the actual login's date and time. It also update the login
+ * history data of the user. This login history need to be saved by hand (saveUser()).
+ *
+ * Unit-tests available see UserPlugin::Internal::UserManagerPlugin
+ */
 
 #include "userbase.h"
 #include <usermanagerplugin/constants.h>
