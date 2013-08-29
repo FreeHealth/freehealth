@@ -463,12 +463,6 @@ void UserManagerPlugin::test_userbase_basics()
     data.setGenderIndex(genderid);
     data.setCurrent(current); // does not alter modification state
     QCOMPARE(data.id(), id);
-    QCOMPARE(data.validity(), validity);
-    QCOMPARE(data.isVirtual(), isvirtual);
-    QCOMPARE(data.locker(), locker);
-    QCOMPARE(data.titleIndex(), titleid);
-    QCOMPARE(data.genderIndex(), genderid);
-    QCOMPARE(data.isCurrent(), current);
 
     QString clearPass = r.randomString(r.randomInt(5, 20));
     data.setClearPassword(clearPass);
@@ -766,6 +760,7 @@ void UserManagerPlugin::test_usermodel_basics()
     QVERIFY(args.at(0).toString() == currentUserUuid);
     // TODO: test with a Core::IUserListener
 
+    // TODO: test Core::IUser signals also
     QCOMPARE(spyAboutToConnect.count(), 1);
     QCOMPARE(spyUserConnected.count(), 1);
     args = spyAboutToConnect.takeFirst();
@@ -774,7 +769,110 @@ void UserManagerPlugin::test_usermodel_basics()
     QVERIFY(args.at(0).toString() == fromDb->uuid());
 
     // Test QVariant currentUserData(const int column) const;
+    // TODO: test Core::IUser also
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Id), QVariant(fromDb->id()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Uuid), QVariant(fromDb->uuid()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Validity), QVariant(fromDb->validity()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::IsVirtual), QVariant(fromDb->isVirtual()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Login64), QVariant(fromDb->login64()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Password), QVariant(fromDb->cryptedPassword()));
+    // QCOMPARE(userModel()->currentUserData(Core::IUser::LastLogin), QVariant(fromDb->lastLogin()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::UsualName), QVariant(fromDb->usualName()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::OtherNames), QVariant(fromDb->otherNames()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Firstname), QVariant(fromDb->firstname()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::TitleIndex), QVariant(fromDb->titleIndex()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenderIndex), QVariant(fromDb->genderIndex()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Mail), QVariant(fromDb->mail()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::LanguageISO), QVariant(fromDb->languageIso()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Locker), QVariant(fromDb->locker()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::LocaleLanguage), QVariant(fromDb->localeLanguage()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::DateOfBirth), QVariant(fromDb->dob()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::ClearLogin), QVariant(fromDb->clearLogin()));
+    // QCOMPARE(userModel()->currentUserData(Core::IUser::ClearPassword), QVariant(fromDb->clearPassword()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::LocaleCodedLanguage), QVariant(fromDb->localeLanguage()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PersonalLinkId), QVariant(fromDb->personalLinkId()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::FullName), QVariant(fromDb->fullName()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Gender), QVariant(fromDb->gender()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Title), QVariant(fromDb->title()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Street), QVariant(fromDb->street()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Zipcode), QVariant(fromDb->zipcode()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::City), QVariant(fromDb->city()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::StateProvince), QVariant(fromDb->stateProvince()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Country), QVariant(fromDb->country()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::IsoCountry), QVariant(fromDb->countryIso()));
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::FullHtmlAddress), QVariant(fromDb->full));
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::FullAddress), QVariant(fromDb->));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Tel1), QVariant(fromDb->tels().count()>=1?fromDb->tels().at(0):QVariant()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Tel2), QVariant(fromDb->tels().count()>=2?fromDb->tels().at(1):QVariant()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Tel3), QVariant(fromDb->tels().count()>=3?fromDb->tels().at(2):QVariant()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Fax), QVariant(fromDb->fax()));
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::FullHtmlContact), QVariant(fromDb->con));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Specialities), QVariant(fromDb->specialties()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::Qualifications), QVariant(fromDb->qualifications()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::ProfessionalIdentifiants), QVariant(fromDb->professionalIdentifiants()));
+    // TODO: QCOMPARE(userModel()->currentUserData(Core::IUser::Preferences), QVariant(fromDb->preferences()));
 
+    Print::TextDocumentExtra *doc = fromDb->extraDocument(Core::IUser::GenericHeader);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericHeader), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericHeaderPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::GenericFooter);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericFooter), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericFooterPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::GenericWatermark);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericWatermark), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericWatermarkPresence), QVariant(doc->presence()));
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::GenericWatermarkAlignement), QVariant(doc->));
+
+    doc = fromDb->extraDocument(Core::IUser::AdministrativeHeader);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeHeader), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeHeaderPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::AdministrativeFooter);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeFooter), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeFooterPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::AdministrativeWatermark);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeWatermark), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeWatermarkPresence), QVariant(doc->presence()));
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeWatermarkAlignement), QVariant(fromDb->));
+
+    doc = fromDb->extraDocument(Core::IUser::PrescriptionHeader);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionHeader), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionHeaderPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::PrescriptionFooter);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionFooter), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionFooterPresence), QVariant(doc->presence()));
+
+    doc = fromDb->extraDocument(Core::IUser::PrescriptionWatermark);
+    QVERIFY(doc != 0);
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionWatermark), QVariant(doc->toHtml()));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionWatermarkPresence), QVariant(doc->presence()));
+    // QCOMPARE(userModel()->currentUserData(Core::IUser::PrescriptionWatermarkAlignement), QVariant(fromDb->));
+
+//    QCOMPARE(userModel()->currentUserData(Core::IUser::DataPackConfig), QVariant(fromDb->));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::ManagerRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_USERMANAGER)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::DrugsRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_DOSAGES)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::MedicalRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_MEDICAL)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::ParamedicalRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_PARAMEDICAL)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AdministrativeRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_ADMINISTRATIVE)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::AgendaRights), QVariant(fromDb->rightsValue(Constants::USER_ROLE_AGENDA)));
+    QCOMPARE(userModel()->currentUserData(Core::IUser::DecryptedLogin), QVariant(fromDb->decryptedLogin()));
+    // QCOMPARE(userModel()->currentUserData(Core::IUser::LoginHistory), QVariant(fromDb->loginHistory()));
+    // QCOMPARE(userModel()->currentUserData(Core::IUser::IsModified), QVariant(fromDb->isModified()));
+
+    QVERIFY2(userCore().userBase()->purgeUser(fromDb->uuid()), "Purging user from database");
+    delete fromDb;
 }
 
 void UserManagerPlugin::cleanupTestCase()
