@@ -187,6 +187,7 @@ public:
         case Core::IUser::PersonalLinkId: toReturn = user->personalLinkId(); break;
         case Core::IUser::Uuid : toReturn = user->uuid(); break;
         case Core::IUser::Validity : toReturn = user->validity(); break;
+        case Core::IUser::IsVirtual : toReturn = user->isVirtual(); break;
         case Core::IUser::Login64 : toReturn = user->login64(); break;
         case Core::IUser::ClearLogin : toReturn = user->clearLogin(); break;
         case Core::IUser::DecryptedLogin : toReturn = user->decryptedLogin(); break;
@@ -203,6 +204,8 @@ public:
         case Core::IUser::FullName : toReturn = user->fullName(); break;
         case Core::IUser::Mail : toReturn = user->mail(); break;
         case Core::IUser::LanguageISO : toReturn = user->languageIso(); break;
+        case Core::IUser::Locker : toReturn = user->locker(); break;
+        case Core::IUser::LocaleLanguage : toReturn = user->localeLanguage(); break;
         case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
 
         case Core::IUser::PhotoPixmap : toReturn = user->photo(); break;
@@ -303,6 +306,20 @@ public:
         {
             // TODO: return Watermark alignement
             return Qt::AlignCenter;
+        }
+        case Core::IUser::AdministrativeHeaderPresence :
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeHeader);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
+        }
+        case Core::IUser::AdministrativeFooterPresence :
+        {
+            Print::TextDocumentExtra *doc = user->extraDocument(Core::IUser::AdministrativeFooter);
+            if (doc)
+                return doc->presence();
+            return Print::Printer::EachPages;
         }
         case Core::IUser::AdministrativeWatermarkPresence :
         {
