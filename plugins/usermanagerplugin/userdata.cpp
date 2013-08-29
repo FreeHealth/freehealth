@@ -804,10 +804,9 @@ int UserData::personalLinkId() const
 }
 
 /**
-  \brief Stores into cached data the dynamic data of users.
-  This member SHOULD NEVER BE USED by UserBase.
-  Mark the UserDynamicData as dirty if value \e val differs of the stored data.
-  \todo documentation
+ * \brief Stores into this object cache the dynamic data of users.
+ * This member is purely private.
+ * Mark the UserDynamicData as dirty if value \e val differs of the stored data.
 */
 void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDynamicData::DynamicDataType t)
 {
@@ -897,8 +896,9 @@ QPixmap UserData::photo() const
 }
 
 /**
-   Define the crypted password. You should not use this function, but the setClearPassword() instead
-   \sa setClearPassword(), isPasswordModified()
+ * Define the crypted password. You should not use this function,
+ * but the setClearPassword() instead.
+ * \sa setClearPassword(), isPasswordModified(), cryptedPassword(), clearPassword()
 */
 void UserData::setCryptedPassword(const QVariant &val)
 {
@@ -1025,6 +1025,12 @@ QString UserData::clearPassword() const
 
 // HEADER/FOOTER/WATERMARK MANAGEMENT
 
+/**
+ * Set the paper for this user.
+ * The \e index param refers to
+ * Core::IUser::{Generic,Administrative,Prescription}{Header,Footer,Watermark}
+ * \sa Print::TextDocumentExtra, Print::TextDocumentExtra
+ */
 void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index)
 {
     if (!extra)
@@ -1044,8 +1050,10 @@ void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index
 }
 
 /**
-  \brief Defines the header, footer and watermark (exactly in this order) to use for generic printing.
-  \sa Print::TextDocumentExtra, Print::TextDocumentExtra::toXml()
+ * Defines the header, footer and watermark to use for the print processes.
+ * The \e index param refers to
+ * Core::IUser::{Generic,Administrative,Prescription}{Header,Footer,Watermark}
+ * \sa Print::TextDocumentExtra, Print::TextDocumentExtra::toHtml()
 */
 void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
 {
@@ -1094,6 +1102,12 @@ QVariant UserData::extraDocumentHtml(const int index) const
     return QVariant();
 }
 
+/**
+ * Returns the paper to use during the print process for this user.
+ * The \e index param refers to
+ * Core::IUser::{Generic,Administrative,Prescription}{Header,Footer,Watermark}
+ * \sa Print::TextDocumentExtra, Print::TextDocumentExtra
+ */
 Print::TextDocumentExtra *UserData::extraDocument(const int index) const
 {
     QString name = d->documentIndexToName(index);
@@ -1108,6 +1122,7 @@ Print::TextDocumentExtra *UserData::extraDocument(const int index) const
     return 0;
 }
 
+/** Returns a computed full name including title, usual name, firstname and other names */
 QString UserData::fullName() const
 {
     QString r = title() + " " + usualName() + " " + otherNames() + " " + firstname();

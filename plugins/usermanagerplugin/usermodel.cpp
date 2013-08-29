@@ -1073,6 +1073,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     return true;
 }
 
+/** Returns the data refering to the \e column (see Core::IUser::DataRepresentation) */
 QVariant UserModel::currentUserData(const int column) const
 {
     if (WarnAllProcesses)
@@ -1094,7 +1095,7 @@ QVariant UserModel::currentUserData(const int column) const
     return d->getUserData(user, column);
 }
 
-/** Returns the data of users. \sa Core::IUser::Model */
+/** Returns the data of users. \sa Core::IUser::DataRepresentation */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
     if (!item.isValid())
@@ -1177,6 +1178,17 @@ void UserModel::setFilter(const QString &/*filter*/)
 {
 }
 
+/**
+ * \e uuid
+ */
+
+/**
+ * Set the paper for the user.
+ * @param uuid: user uuid
+ * @param ref: refers to Core::IUser::{Generic,Administrative,Prescription}{Header,Footer,Watermark}
+ * @param extra: the Print::TextDocumentExtra
+ * @return \e true if all goods fine
+ */
 bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra)
 {
     if (WarnAllProcesses)
@@ -1187,9 +1199,6 @@ bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocument
         return false;
     user->setExtraDocument(extra, ref);
     user->setModified(true);
-//    foreach(const Internal::UserDynamicData* data, user->modifiedDynamicData())
-//        qWarning() << data->name() << data->isDirty();
-//    qWarning();
     return true;
 }
 
