@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "dayavailability.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
@@ -228,7 +229,7 @@ void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
 bool DayAvailabilityModel::submit()
 {
     // FIXME: Data are not correctly submitted?
-    qDebug() << "DayAvailabilityModel::submit() is a stub.";
+    LOG_ERROR("submit() is not coded.");
     return false;
 }
 
