@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IFORMITEM_H
-#define IFORMITEM_H
+#ifndef FORMMANAGER_PLUGIN_IFORMITEM_H
+#define FORMMANAGER_PLUGIN_IFORMITEM_H
 
 #include <coreplugin/idebugpage.h>
 
@@ -335,4 +335,4 @@ private:
 //QDebug operator<<(QDebug dbg, const Form::FormMain &c);
 //QDebug operator<<(QDebug dbg, Form::FormMain *c);
 
-#endif // IFORMITEM_H
+#endif // FORMMANAGER_PLUGIN_IFORMITEM_H

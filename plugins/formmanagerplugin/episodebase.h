@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EPISODEBASE_H
-#define EPISODEBASE_H
+#ifndef FORMMANAGER_INTERNAL_EPISODEBASE_H
+#define FORMMANAGER_INTERNAL_EPISODEBASE_H
 
 #include <coreplugin/isettings.h>
 #include <formmanagerplugin/formmanager_exporter.h> // Exporter needed by MainWindow::VirtualDatabasePreferences
@@ -37,14 +37,15 @@
 
 /**
  * \file episodebase.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 01 Sept 2012
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 02 Sept 2013
 */
 
 namespace Form {
 class FormIODescription;
 class SubFormInsertionPoint;
+class FormCore;
 
 namespace Internal {
 class FormManagerPlugin;
@@ -119,6 +120,7 @@ class FORM_EXPORT EpisodeBase : public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class Form::Internal::FormManagerPlugin;
+    friend class Form::FormCore;
 
 protected:
     EpisodeBase(QObject *parent = 0);
@@ -184,4 +186,4 @@ private:
 }  // End namespace Internal
 }  // End namespace Form
 
-#endif // PATIENTBASE_H
+#endif // FORMMANAGER_INTERNAL_EPISODEBASE_H

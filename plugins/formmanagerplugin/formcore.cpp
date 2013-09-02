@@ -41,6 +41,7 @@
 #include "episodemanager.h"
 #include "patientformitemdatawrapper.h"
 #include "formcontextualwidgetmanager.h"
+#include "episodebase.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/modemanager/modemanager.h>
@@ -70,6 +71,7 @@ public:
         _widgetManager(0),
         _patientFormItemDataWrapper(0),
         _formExporter(0),
+        _episodeBase(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -86,6 +88,7 @@ public:
     FormContextualWidgetManager *_widgetManager;
     PatientFormItemDataWrapper *_patientFormItemDataWrapper;
     FormExporter *_formExporter, *_identitytFormExporter;
+    EpisodeBase *_episodeBase;
 
 private:
     FormCore *q;
@@ -112,7 +115,7 @@ FormCore::FormCore(QObject *parent) :
     d->_patientFormItemDataWrapper = new PatientFormItemDataWrapper(this);
     d->_formExporter = new FormExporter(false, this);
     d->_identitytFormExporter = new FormExporter(true, this);
-    // TODO: add episodeBase in the core
+    d->_episodeBase = new EpisodeBase(this);
 }
 
 /*! Destructor of the FormCore class */

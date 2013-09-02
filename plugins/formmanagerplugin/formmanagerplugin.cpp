@@ -78,18 +78,18 @@ FormManagerPlugin::FormManagerPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("plugin_formmanager");
 
+    // Create first run pages
     m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
     addObject(m_FirstRun);
 
+    // Create preferences pages
     m_PrefPageSelector = new Internal::FormPreferencesFileSelectorPage(this);
     m_PrefPage = new Internal::FormPreferencesPage(this);
     addAutoReleasedObject(m_PrefPage);
     addAutoReleasedObject(m_PrefPageSelector);
 
-    // Create the core
+    // Create the form core
     _core = new Form::FormCore(this);
-    new Internal::EpisodeBase(this);
-
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
