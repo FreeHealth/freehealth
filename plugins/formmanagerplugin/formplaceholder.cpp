@@ -566,6 +566,14 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
                 && d->ui->episodeView->selectionModel()->hasSelection());
     }
     case Action_RenewCurrentEpisode:
+    {
+        // Renew an episode only if
+        // - form is multi-episode
+        // - an episode is selected
+        bool multiEpisode = d->_formTreeModel->isMultiEpisode(d->_currentEditingForm);
+        bool hasSelection = d->ui->episodeView->selectionModel()->hasSelection();
+        return multiEpisode && hasSelection;
+    }
     case Action_TakeScreenShot:
     {
         // Take screenshot / Renew an episode only if
