@@ -19,64 +19,52 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Main Developers:                                                       *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORM_MANAGER_TPLUGIN_H
-#define FORM_MANAGER_TPLUGIN_H
+#include "../formmanagerplugin.h"
+#include "../formcore.h"
+#include "../formmanager.h"
+#include "../episodemanager.h"
+#include "../patientformitemdatawrapper.h"
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
-#include <QtCore/QObject>
+#include <utils/log.h>
+#include <utils/global.h>
+#include <utils/randomizer.h>
 
-/**
- * \file formmanagerplugin.h
- * \author Eric Maeker
- * \version 0.0.0
- * \date 02 Sept 2013
-*/
+#include <QTest>
+#include <QSignalSpy>
 
-namespace Form {
-class FormCore;
-namespace Internal {
-class FormManagerMode;
-class FirstRunFormManagerConfigPage;
-class FormPreferencesPage;
-class FormPreferencesFileSelectorPage;
+using namespace Form;
+using namespace Internal;
 
-class FormManagerPlugin : public ExtensionSystem::IPlugin
+//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
+
+namespace {
+const int loop = 10; // number of tests per objects
+} // anonymous namespace
+
+
+void FormManagerPlugin::initTestCase()
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.FormManagerPlugin" FILE "FormManager.json")
-
-public:
-    FormManagerPlugin();
-    ~FormManagerPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-
-#ifdef WITH_TESTS
-    void initTestCase();
-    void test_formcore_initialization();
-    void cleanupTestCase();
-#endif
-
-private:
-    FormCore *_core;
-    FormManagerMode *_mode;
-    Internal::FirstRunFormManagerConfigPage *m_FirstRun;
-    Internal::FormPreferencesFileSelectorPage *m_PrefPageSelector;
-    Internal::FormPreferencesPage *m_PrefPage;
-};
-
-}
 }
 
-#endif  // End FORM_MANAGER_TPLUGIN_H
+void FormManagerPlugin::test_formcore_initialization()
+{
+    QCOMPARE(formCore().isInitialized(), true);
+    QCOMPARE(formCore().formManager().isInitialized(), true);
+    QCOMPARE(formCore().episodeManager().isInitialized(), true);
+    QCOMPARE(formCore().patientFormItemDataWrapper().isInitialized(), true);
+}
+
+void FormManagerPlugin::cleanupTestCase()
+{
+}
