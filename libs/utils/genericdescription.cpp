@@ -442,7 +442,7 @@ bool GenericDescription::operator==(const GenericDescription &other) const
     }
 
     // Test update infos /!\ lists must be sorted in the same order...
-    m_UpdateInfos == other.m_UpdateInfos;
+    // TODO: bool updatesAreEqual = (m_UpdateInfos == other.m_UpdateInfos);
     return true;
 }
 
