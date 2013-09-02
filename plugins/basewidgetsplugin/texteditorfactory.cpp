@@ -247,7 +247,12 @@ TextEditorData::~TextEditorData()
 
 void TextEditorData::clear()
 {
-//    WARN_FUNC;
+    // Clear TextCursor
+    m_Editor->clear();
+    QTextCursor cursor(m_Editor->textEdit()->document());
+    m_Editor->setTextCursor(cursor);
+
+    // Reset editor content to default (if one exists)
     setStorableData(m_FormItem->valueReferences()->defaultValue());
 }
 
