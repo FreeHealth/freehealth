@@ -51,8 +51,11 @@ namespace Internal {
 class EpisodeManagerPrivate
 {
 public:
-    EpisodeManagerPrivate(EpisodeManager */*parent*/) //:q(parent)
+    EpisodeManagerPrivate(EpisodeManager *parent) :
+        _initialized(false),
+        q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~EpisodeManagerPrivate()
@@ -60,10 +63,11 @@ public:
     }
 
 public:
+    bool _initialized;
     QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 
 private:
-//    EpisodeManager *q;
+    EpisodeManager *q;
 };
 }  // namespace Internal
 } // end namespace Form
@@ -86,7 +90,14 @@ EpisodeManager::~EpisodeManager()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool EpisodeManager::initialize()
 {
+    d->_initialized = true;
     return true;
+}
+
+/** Returns \e true if the core is initialized (with or without error) */
+bool EpisodeManager::isInitialized() const
+{
+    return d->_initialized;
 }
 
 /**

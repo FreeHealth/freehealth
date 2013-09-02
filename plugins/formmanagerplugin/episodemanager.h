@@ -32,14 +32,16 @@
 
 /**
  * \file episodemanager.h
- * \author Eric MAEKER
- * \version 0.8.0
- * \date 01 Oct 2012
+ * \author Eric Maeker
+ * \version 0.9.0
+ * \date 02 Sept 2013
 */
 
 namespace Form {
 class EpisodeModel;
 class FormMain;
+class FormCore;
+
 namespace Internal {
 class EpisodeManagerPrivate;
 } // namespace Internal
@@ -47,11 +49,15 @@ class EpisodeManagerPrivate;
 class FORM_EXPORT EpisodeManager : public QObject
 {
     Q_OBJECT
-public:
-    explicit EpisodeManager(QObject *parent = 0);
-    ~EpisodeManager();
+    friend class Form::FormCore;
 
+protected:
+    explicit EpisodeManager(QObject *parent = 0);
     bool initialize();
+
+public:
+    ~EpisodeManager();
+    bool isInitialized() const;
 
     EpisodeModel *episodeModel(Form::FormMain *form);
     EpisodeModel *episodeModel(const QString &formUid);

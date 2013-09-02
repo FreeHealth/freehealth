@@ -60,20 +60,19 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 namespace Form {
 namespace Internal {
-/*!
- * \class Form::Internal::FormCorePrivate
- * \brief Private implementation of the Form::FormCore class.
- */
 class FormCorePrivate
 {
 public:
-    FormCorePrivate(FormCore */*parent*/) :
+    FormCorePrivate(FormCore *parent) :
+        _initialized(false),
         _formManager(0),
         _episodeManager(0),
         _widgetManager(0),
         _patientFormItemDataWrapper(0),
-        _formExporter(0)  // , q(parent)
+        _formExporter(0),
+        q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~FormCorePrivate()
@@ -81,6 +80,7 @@ public:
     }
 
 public:
+    bool _initialized;
     FormManager *_formManager;
     EpisodeManager *_episodeManager;
     FormContextualWidgetManager *_widgetManager;
@@ -88,7 +88,7 @@ public:
     FormExporter *_formExporter, *_identitytFormExporter;
 
 private:
-//    FormCore *q;
+    FormCore *q;
 };
 }  // namespace Internal
 } // end namespace Form
@@ -129,6 +129,8 @@ FormCore::~FormCore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool FormCore::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->_formManager->initialize();
     d->_episodeManager->initialize();
     d->_widgetManager = new Internal::FormContextualWidgetManager(this);
@@ -137,7 +139,14 @@ bool FormCore::initialize()
     d->_identitytFormExporter->initialize();
     pluginManager()->addObject(d->_formExporter);
     pluginManager()->addObject(d->_identitytFormExporter);
+    d->_initialized = true;
     return true;
+}
+
+/** Returns \e true if the core is initialized (with or without error) */
+bool FormCore::isInitialized() const
+{
+    return d->_initialized;
 }
 
 /** Return the unique instance of the Form::FormManager */

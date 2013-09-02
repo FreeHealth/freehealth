@@ -571,6 +571,12 @@ bool FormManager::initialize()
     return d->_initialized;
 }
 
+/** Returns \e true if the core is initialized (with or without error) */
+bool FormManager::isInitialized() const
+{
+    return d->_initialized;
+}
+
 /** Return the Form::FormCollection to use for the mode uid \e modeUid */
 const FormCollection &FormManager::centralFormCollection(const QString &modeUId) const
 {

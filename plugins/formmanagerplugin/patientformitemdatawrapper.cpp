@@ -63,6 +63,7 @@ class PatientFormItemDataWrapperPrivate
 {
 public:
     PatientFormItemDataWrapperPrivate(PatientFormItemDataWrapper *parent) :
+        _initialized(false),
         q(parent)
     {
     }
@@ -183,6 +184,7 @@ public:
     }
 
 public:
+    bool _initialized;
     QList<int> _availablePatientData;
     QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 
@@ -211,9 +213,18 @@ PatientFormItemDataWrapper::~PatientFormItemDataWrapper()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool PatientFormItemDataWrapper::initialize()
 {
+    if (d->_initialized)
+        return true;
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     onCurrentPatientChanged();
+    d->_initialized = true;
     return true;
+}
+
+/** Returns \e true if the core is initialized (with or without error) */
+bool PatientFormItemDataWrapper::isInitialized() const
+{
+    return d->_initialized;
 }
 
 bool PatientFormItemDataWrapper::isDataAvailable(int ref) const

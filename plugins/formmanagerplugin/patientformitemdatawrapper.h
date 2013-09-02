@@ -34,11 +34,13 @@
 /**
  * \file patientformitemdatawrapper.h
  * \author Eric Maeker
- * \version 0.8.4
- * \date 03 Apr 2013
+ * \version 0.9.0
+ * \date 02 Sept 2013
 */
 
 namespace Form {
+class FormCore;
+
 namespace Internal {
 class PatientFormItemDataWrapperPrivate;
 } // namespace Internal
@@ -46,11 +48,15 @@ class PatientFormItemDataWrapperPrivate;
 class FORM_EXPORT PatientFormItemDataWrapper : public QObject
 {
     Q_OBJECT
+    friend class Form::FormCore;
+
+protected:
+    explicit PatientFormItemDataWrapper(QObject *parent = 0);
+    bool initialize();
     
 public:
-    explicit PatientFormItemDataWrapper(QObject *parent = 0);
     ~PatientFormItemDataWrapper();
-    bool initialize();
+    bool isInitialized() const;
 
     bool isDataAvailable(int ref) const;
     QVariant data(int ref, int role = -1) const;

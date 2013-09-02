@@ -34,8 +34,8 @@
 /**
  * \file formcore.h
  * \author Eric MAEKER
- * \version 0.8.4
- * \date 20 Apr 2013
+ * \version 0.9.0
+ * \date 02 Sept 2013
 */
 
 namespace Form {
@@ -52,13 +52,15 @@ class FORM_EXPORT FormCore : public QObject
 {
     Q_OBJECT
     friend class Form::Internal::FormManagerPlugin;
+
+protected:
     explicit FormCore(QObject *parent = 0);
+    bool initialize();
 
 public:
     static FormCore &instance();
     ~FormCore();
-
-    bool initialize();
+    bool isInitialized() const;
 
     Form::FormManager &formManager() const;
     Form::EpisodeManager &episodeManager() const;

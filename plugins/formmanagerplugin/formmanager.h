@@ -43,8 +43,8 @@ QT_END_NAMESPACE
 /**
  * \file formmanager.h
  * \author Eric MAEKER
- * \version 0.8.4
- * \date 16 Apr 2013
+ * \version 0.9.0
+ * \date 02 Sept 2013
 */
 
 namespace DataPack {
@@ -79,11 +79,12 @@ class FORM_EXPORT FormManager : public QObject
 protected:
     FormManager(QObject *parent = 0);
     void checkFormUpdates();
+    bool initialize();
 
 public:
     static FormManager *instance();
     ~FormManager();
-    bool initialize();
+    bool isInitialized() const;
 
 //    // Form loading
 //    QList<Form::FormMain *> loadFormFile(const QString &formUid);
