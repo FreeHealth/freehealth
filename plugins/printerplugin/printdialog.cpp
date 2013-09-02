@@ -95,7 +95,6 @@ PrintDialog::PrintDialog(QWidget *parent) :
 
     // Some preparation
     ui->allPages->setChecked(true);
-    ui->copies->setText("1");
 
     // Change the buttons of the dialog
     QToolButton *toolButton = new QToolButton(this);
@@ -130,7 +129,7 @@ PrintDialog::~PrintDialog()
 void PrintDialog::accept()
 {
     // Print the doc
-    int copies = ui->copies->text().toInt();
+    int copies = ui->copies->value();
     m_Printer->printer()->setNumCopies(copies);
     if (ui->allPages->isChecked()) {
         m_Printer->printer()->setPrintRange(QPrinter::AllPages);

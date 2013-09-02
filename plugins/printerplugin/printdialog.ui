@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>359</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -280,7 +280,11 @@
        <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLineEdit" name="copies"/>
+          <widget class="QSpinBox" name="copies">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="sorted">
