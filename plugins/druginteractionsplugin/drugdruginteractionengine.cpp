@@ -854,7 +854,7 @@ public:
 DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
         IDrugEngine(parent), d(new DrugDrugInteractionEnginePrivate)
 {
-    setObjectName("DrugDrugInteractionEngine");
+    setObjectName("DDIEngine");
     m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::DDI_ENGINE_UID);
     d->m_LogChrono = false;
 }

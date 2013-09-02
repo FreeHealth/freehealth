@@ -76,7 +76,7 @@ void Log::logCompilationConfiguration()
     if (isLinuxIntegratedCompilation())
         LOG_FOR("Main", "Linux Integrated");
 
-    LOG_FOR("Main","Libraries in path :\n     " + qApp->libraryPaths().join("\n     "));
+    LOG_FOR("Main","Libraries in path :\n" + qApp->libraryPaths().join("\n"));
     qWarning() << "----------";
 }
 
@@ -93,7 +93,11 @@ void Log::muteConsoleWarnings()
 void Log::addMessage(const QString &object, const QString &msg, bool forceWarning)
 {
     if (!m_MuteConsole || forceWarning) {
-        qWarning() << object << msg;
+        QString m = lineWrapString(msg, 90-26);
+        m = indentString(m, 26).mid(26);
+        qWarning() << QString("%1 %2")
+                      .arg(object.leftJustified(25, QChar(' ')))
+                      .arg(m);
     }
     addData(object, msg, QDateTime::currentDateTime(), LogData::Message);
 }
@@ -107,7 +111,13 @@ void Log::addMessages(const QString &o, const QStringList &msg, bool forceWarnin
 void Log::addError(const QString &object, const QString &err, const QString &file, const int line, bool forceWarning)
 {
     if (!m_MuteConsole || forceWarning) {
-        qWarning() << QString("** ERROR(%1:%2)").arg(QFileInfo(file).fileName()).arg(line) << object << err ;
+        QString e = QString("** ERROR(%1:%2) ** %3")
+                .arg(QFileInfo(file).fileName()).arg(line).arg(err);
+        e = lineWrapString(e, 90-26);
+        e = indentString(e, 26).mid(26);
+        qWarning() << QString("%1 %2")
+                      .arg(object.leftJustified(25, QChar(' ')))
+                      .arg(e);
     }
     addData(object, err, QDateTime::currentDateTime(), LogData::Error);
 }

@@ -23,8 +23,8 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TKLOG_H
-#define TKLOG_H
+#ifndef UTILS_LOG_H
+#define UTILS_LOG_H
 
 #include <utils/global_exporter.h>
 
@@ -143,5 +143,6 @@ private:
     static bool m_MuteConsole;
 };
 
-}  // end Core
-#endif // TKLOG_H
+}  // end Utils
+
+#endif // UTILS_LOG_H
