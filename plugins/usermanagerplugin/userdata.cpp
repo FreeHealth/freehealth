@@ -621,6 +621,7 @@ bool UserData::isEditable() const
     return d->m_Editable;
 }
 
+/** Change the modification state */
 void UserData::setModified(bool state)
 {
     d->m_Modified = state;
@@ -633,6 +634,7 @@ void UserData::setModified(bool state)
     }
 }
 
+/** Returns the modification state */
 bool UserData::isModified() const
 {
     if (d->m_Modified)
@@ -649,11 +651,13 @@ bool UserData::isPasswordModified() const
     return d->m_PasswordChanged;
 }
 
+/** Returns true if the object is null */
 bool UserData::isNull() const
 {
     return d->m_IsNull;
 }
 
+/** Returns true if the object is empty */
 bool UserData::isEmpty() const
 {
     if (id() != -1)
@@ -663,11 +667,19 @@ bool UserData::isEmpty() const
     return false;
 }
 
+/**
+ * Set this user has the current.
+ * This state is modified by the UserPlugin::Internal::UserModel
+ */
 void UserData::setCurrent(bool state)
 {
     d->m_IsCurrent = state;
 }
 
+/**
+ * Returns true if this user was defined has the current one.
+ * This state is modified by the UserPlugin::Internal::UserModel
+ */
 bool UserData::isCurrent() const
 {
     return d->m_IsCurrent;
