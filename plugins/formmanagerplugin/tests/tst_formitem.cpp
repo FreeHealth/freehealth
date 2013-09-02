@@ -27,6 +27,7 @@
 #include "../formmanagerplugin.h"
 #include "../formcore.h"
 #include "../formmanager.h"
+#include "../episodebase.h"
 #include "../episodemanager.h"
 #include "../patientformitemdatawrapper.h"
 
@@ -47,6 +48,7 @@ using namespace Internal;
 //static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 namespace {
 const int loop = 10; // number of tests per objects
@@ -63,6 +65,7 @@ void FormManagerPlugin::test_formcore_initialization()
     QCOMPARE(formCore().formManager().isInitialized(), true);
     QCOMPARE(formCore().episodeManager().isInitialized(), true);
     QCOMPARE(formCore().patientFormItemDataWrapper().isInitialized(), true);
+    QCOMPARE(episodeBase()->isInitialized(), true);
 }
 
 void FormManagerPlugin::cleanupTestCase()
