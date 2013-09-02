@@ -833,6 +833,7 @@ bool FormPlaceHolder::renewEpisode()
         // select the newly created episode
         QModelIndex proxy = d->_proxyModel->mapFromSource(newEpisode);
         d->ui->episodeView->selectRow(proxy.row());
+        d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     }
     Q_EMIT actionsEnabledStateChanged();
     return newEpisode.isValid();
