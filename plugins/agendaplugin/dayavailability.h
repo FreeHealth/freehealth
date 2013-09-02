@@ -84,7 +84,7 @@ public:
 private:
     int m_id;
     int m_WeekDay; // == Qt::DayOfWeek
-    bool m_isAvailable;
+    //bool m_isAvailable;
     QVector<TimeRange> timeRanges;
 };
 

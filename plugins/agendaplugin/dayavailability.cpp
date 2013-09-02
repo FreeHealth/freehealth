@@ -37,8 +37,8 @@ using namespace Trans::ConstantTranslations;
 
 DayAvailability::DayAvailability() :
         m_id(-1),
-        m_WeekDay(-1),
-        m_isAvailable(true)
+        m_WeekDay(-1)
+        //, m_isAvailable(true)
 {}
 
 void DayAvailability::addTimeRange(const QTime &from, const QTime &to)
