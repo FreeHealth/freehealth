@@ -665,7 +665,8 @@ void DosageViewer::on_monographButton_clicked()
 {
 #if DRUGS_DATABASE_VERSION >= 0x000804
     // Get the SPC from the drugs database
-    QDesktopServices::openUrl(QUrl(drugsBase().getDrugSpc(d->m_DrugId)));
+    QString file = QString("file://%1").arg(drugsBase().getDrugSpc(d->m_DrugId));
+    QDesktopServices::openUrl(QUrl(file));
 #else
     // Open the SPC from the web using the link recorded in the database
     QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).toString()));

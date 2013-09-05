@@ -1410,7 +1410,6 @@ QString DrugsBase::getDrugSpc(const QVariant &drugId)
     QSqlQuery query(DB);
     QString spc;
     int resourceLinkId = -1;
-
     if (query.exec(req)) {
         if (query.next()) {
             resourceLinkId = query.value(0).toInt();
