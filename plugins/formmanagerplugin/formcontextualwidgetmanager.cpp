@@ -215,7 +215,6 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     QAction *a = 0;
     Core::Command *cmd = 0;
     Core::Context ctx(Form::Constants::C_FORM_PLUGINS);
-    Core::Context allContexts(Form::Constants::C_FORM_PLUGINS, Core::Constants::C_GLOBAL);
 
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Form::Constants::M_PLUGIN_FORM));
@@ -314,7 +313,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     aShowDatabaseInformation = createAction(this, "aShowDatabaseInformation", Core::Constants::ICONHELP,
                                             Constants::A_DATABASE_INFORMATION,
-                                            allContexts,
+                                            Core::Context(Core::Constants::C_GLOBAL),
                                             Trans::Constants::FORM_DATABASE_INFORMATION, "",
                                             cmd,
                                             hmenu, Core::Constants::G_HELP_DATABASES,

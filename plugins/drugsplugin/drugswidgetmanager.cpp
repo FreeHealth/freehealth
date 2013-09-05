@@ -437,7 +437,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     aDrugsDatabaseInformation = createAction(this, "aDrugsDatabaseInformation", Core::Constants::ICONHELP,
                                              A_DRUGSDATABASE_INFORMATION,
-                                             ctx,
+                                             Core::Context(Core::Constants::C_GLOBAL),
                                              Trans::Constants::DRUGS_DATABASE_INFORMATION, "",
                                              cmd,
                                              hmenu, Core::Constants::G_HELP_DATABASES,
