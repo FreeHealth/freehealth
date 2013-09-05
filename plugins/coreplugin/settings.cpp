@@ -354,8 +354,8 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     Q_ASSERT(!applicationName.isEmpty());
 
     setPath(ApplicationPath, qApp->applicationDirPath());
-    setPath(ApplicationTempPath, QDir::tempPath());
-    setPath(SystemTempPath, QDir::tempPath());
+    setPath(ApplicationTempPath, QString("%1/%2-%3").arg(QDir::tempPath()).arg(qApp->applicationName()).arg(Utils::createUid()));
+    setPath(SystemTempPath, path(ApplicationTempPath));
     setPath(WebSiteUrl, WEBSITE);
     setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
 
@@ -423,6 +423,10 @@ SettingsPrivate::~SettingsPrivate()
         delete m_UserSettings;
         m_UserSettings = 0;
     }
+    QString error;
+    Utils::removeDirRecursively(path(ApplicationTempPath), &error);
+    if (!error.isEmpty())
+        LOG_ERROR(QString("Unable to remove application temporary path: %1; %2").arg(path(ApplicationTempPath)).arg(error));
 }
 
 void SettingsPrivate::setUserSettings(const QString &content)
