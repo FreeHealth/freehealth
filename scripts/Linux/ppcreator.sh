@@ -45,8 +45,9 @@ showHelp()
 # Create the PPA working path using the $PACKDIR variable
 createWorkingDir()
 {
+  echo "    * Creating working path: $PACKDIR"
   if [ ! -e $PACKDIR ]; then
-      mkdir $PACKDIR
+      mkdir -p $PACKDIR
   fi
 }
 
@@ -58,7 +59,14 @@ downloadDebianMedFiles()
   if [ ! -e $SOURCEDIR"/debian" ]; then
     mkdir $SOURCEDIR"/debian"
     echo "    * Downloading Debian Med files"
-    svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/trunk/debian $SOURCEDIR"/debian"
+    STEP=`svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/trunk/debian $SOURCEDIR"/debian"`
+    STEP=$?
+    if [ ! $STEP = 0 ]; then
+      echo "   *** Error: Unable to checkout Debian Med SVN ***"
+      exit 123
+    else
+      echo "      Done"
+    fi
     cp $SOURCEDIR"/debian/changelog" $PACKDIR"/changelog.bkup"
     echo 'cp $SOURCEDIR"/debian/control" $PACKDIR"/control.bkup"'
   fi
@@ -124,22 +132,28 @@ changeToDebHelper8()
 }
 
 # According to the currently building ubuntu distro,
-# adapt the debian/{control,rules} to use the internal libquazip or
-# the system lib.
-checkQuazip()
+# adapt the debian/{control,rules} to use the correct version 
+# of package dependencies (Build, Require...).
+checkDependenciesVersion()
 {
+  CONTROL_FILE=$SOURCEDIR"/debian/control"
+  RULES_FILE=$SOURCEDIR"/debian/rules"
+
+  # Manage QuaZip (experimetal)
   if [ "$UBUNTU_RELEASE_NAME" = "precise" ]; then
     echo "    * Patching debian/{control,rules} for libquazip"
-    # Build internal libquazip
-    CONTROL_FILE=$SOURCEDIR"/debian/control"
-    RULES_FILE=$SOURCEDIR"/debian/rules"
-    # Remove build dependency in the control file
-    sed -i "s/Build-Depends: libquazip0-dev (>= 0.4.4)/# Removed libquazip0 build dependency/" $CONTROL_FILE
-    # Update rules
+    sed -i "s/libopencv-objdetect-dev (>= 2.3),/libopencv-objdetect-dev (>= 2.3)/" $CONTROL_FILE
+    sed -i "/libquazip0-dev (>= 0.4.4)/d" $CONTROL_FILE
     sed -i "s/\"CONFIG+=dontbuildquazip\"//" $RULES_FILE
-    return 0;
   fi
-  # Use system lib: keep control|rules unchanged
+
+  # Manage OpenCV lib: precise/quantal=2.3 ; raring/saucy=2.4
+  if [ "$UBUNTU_RELEASE_NAME" = "raring" ]||[ "$UBUNTU_RELEASE_NAME" = "saucing" ]; then
+    echo "    * Patching debian/{control,rules} for opencv"
+    sed -i "s/libopencv-core2.3 (>= 2.3)/libopencv-core2.4 (>= 2.4)/" $CONTROL_FILE
+    sed -i "s/libopencv-highgui2.3 (>= 2.3)/libopencv-highgui2.4 (>= 2.4)/" $CONTROL_FILE
+    sed -i "s/libopencv-objdetect2.3 (>= 2.3)/libopencv-objdetect2.4 (>= 2.4)/" $CONTROL_FILE
+  fi
 }
 
 # prepare source package using svn-buildpackage
@@ -156,7 +170,7 @@ svnBuildPackage()
   SOURCEDIR=$PACKDIR"/trunk"
   changeToDebHelper8
   patchChangelog
-  checkQuazip
+  checkDependenciesVersion
   cd $PACKDIR"/trunk"
   echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
   svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore
@@ -205,22 +219,20 @@ if [ -e $PGP_KEY ]; then
   exit 3
 fi
 
-# Compute variables
-PACKDIR=`pwd`"/ppa_"$APP_NAME"_"$APP_VERSION
-SOURCEDIR=$PACKDIR"/"$APP_NAME"-"$APP_VERSION
-SOURCEPACK_FULLPATH=$PACKDIR"/"$APP_NAME"_"$APP_VERSION".orig.tar.gz"
-
-echo "*** Processing "$APP_NAME" "$APP_VERSION
-echo "    * Source package: "$SOURCEPACK_FULLPATH
-echo "    * Source path: "$SOURCEDIR
-
-createWorkingDir
 for u in $SERIES
 do
+  # Compute variables
   UBUNTU_RELEASE_NAME=$u
+  PACKDIR=`pwd`"/ppa_"$APP_NAME"_"$APP_VERSION"/"$u
+  SOURCEDIR=$PACKDIR"/"$APP_NAME"-"$APP_VERSION
+  SOURCEPACK_FULLPATH=$PACKDIR"/"$APP_NAME"_"$APP_VERSION".orig.tar.gz"
+
+  echo "*** Processing "$APP_NAME" "$APP_VERSION
+  echo "    * Source package: "$SOURCEPACK_FULLPATH
+  echo "    * Source path: "$SOURCEDIR
+  createWorkingDir
   svnBuildPackage
   uploadToPPA
 done
-
 
 exit 0
