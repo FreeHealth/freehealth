@@ -223,7 +223,7 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The account plugin is still an early alpha (do not use in day-to-day practice).</source>
+        <source>The account plugin is still in an early alpha state (do not use in day-to-day practice).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

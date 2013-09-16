@@ -205,78 +205,78 @@ Thrid step, print the test page &lt;u&gt;with&lt;/u&gt; the correction and re-ch
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="291"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="295"/>
         <source>Sorted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="301"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="305"/>
         <source>Recto verso</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="310"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="314"/>
         <source>Pages:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="320"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="324"/>
         <source>Print with duplicates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="327"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="331"/>
         <source>Two pages per sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="334"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="338"/>
         <source>Create a PDF copy in the cache directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="356"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="360"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="376"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="380"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="392"/>
+        <location filename="../../plugins/printerplugin/printdialog.ui" line="396"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="104"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="103"/>
         <source>File extra</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="108"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="107"/>
         <source>Save to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="114"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="113"/>
         <source>Save to HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="292"/>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="308"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="291"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="307"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="294"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="293"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="310"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="309"/>
         <source>HTML file (*.html *.htm)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -436,7 +436,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="831"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="826"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -484,7 +484,7 @@ Refer to your operating system documentation.</source>
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="660"/>
+        <location filename="../../plugins/printerplugin/printer.cpp" line="654"/>
         <source>No content to preview (simpleDraw).</source>
         <translation type="unfinished"></translation>
     </message>

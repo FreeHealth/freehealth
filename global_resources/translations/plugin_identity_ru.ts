@@ -197,17 +197,17 @@
     <name>UserPlugin</name>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="35"/>
-        <source>Please define login and password</source>
+        <source>Please choose login and password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="36"/>
-        <source>Login defined but not the password</source>
+        <source>Login set, but password not</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="37"/>
-        <source>Login and password are defined</source>
+        <source>Login and password are set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -217,7 +217,7 @@
     </message>
     <message>
         <location filename="../../plugins/identityplugin/identityconstants.h" line="40"/>
-        <source>Crypted password defined</source>
+        <source>Crypted password set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

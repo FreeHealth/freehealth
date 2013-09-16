@@ -4,12 +4,12 @@
 <context>
     <name>BaseFormData</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="538"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="537"/>
         <source>This episode is validated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="539"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="538"/>
         <source>You can not edit its content, neither remove it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,12 +91,12 @@ Number of items of the translation (%3) are wrong.</source>
 <context>
     <name>BaseWidgets::Internal::BaseRadio</name>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1276"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1273"/>
         <source>Wrong form&apos;s translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1277"/>
+        <location filename="../../plugins/basewidgetsplugin/baseformwidgets.cpp" line="1274"/>
         <source>You asked to change the language of the form to %1.
 But this an error while reading translation of %2.
 Number of items of the translation (%3) are wrong.</source>

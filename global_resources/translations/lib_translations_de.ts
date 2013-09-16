@@ -1780,10 +1780,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add current date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add user name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2707,6 +2703,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>See also</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Is not valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interacting classes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add current date (long format)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add current date (short format)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

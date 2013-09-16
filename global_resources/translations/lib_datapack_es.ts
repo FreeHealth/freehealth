@@ -372,72 +372,72 @@ requires an authentication</source>
 <context>
     <name>DataPack::ServerPackEditor</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="328"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="329"/>
         <source>Updating server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="405"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="406"/>
         <source>Update information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="421"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="422"/>
         <source>Dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="438"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="439"/>
         <source>File specification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="441"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="442"/>
         <source>File name or URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="445"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="446"/>
         <source>Unzip pack to path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="507"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="508"/>
         <source>Downloading server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="572"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="573"/>
         <source>Native URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="639"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="640"/>
         <source>Refresh datapack servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="640"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="641"/>
         <source>Server editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="641"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="642"/>
         <source>Add a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="642"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="643"/>
         <source>Remove a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="643"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="644"/>
         <source>Refresh packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="644"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="645"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>

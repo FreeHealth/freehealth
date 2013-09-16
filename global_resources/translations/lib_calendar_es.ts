@@ -44,12 +44,12 @@
 <context>
     <name>Calendar::Internal::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="674"/>
+        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="678"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="676"/>
+        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="680"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -57,12 +57,12 @@
 <context>
     <name>Calendar::Internal::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="388"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="392"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="390"/>
+        <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="394"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>

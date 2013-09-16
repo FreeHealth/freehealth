@@ -4,17 +4,17 @@
 <context>
     <name>Alert::AlertCore</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertcore.cpp" line="293"/>
+        <location filename="../../plugins/alertplugin/alertcore.cpp" line="302"/>
         <source>Registering alert pack: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertcore.cpp" line="303"/>
+        <location filename="../../plugins/alertplugin/alertcore.cpp" line="312"/>
         <source>No alert pack description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertcore.cpp" line="684"/>
+        <location filename="../../plugins/alertplugin/alertcore.cpp" line="442"/>
         <source>Unable to register AlertPack. Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,23 +22,23 @@
 <context>
     <name>Alert::AlertItem</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="841"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="864"/>
         <source>Started on: %1&lt;br /&gt;Cycling every: %2&lt;br /&gt;Expires on: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="846"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="869"/>
         <source>Started on: %1&lt;br /&gt;Expires on: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1032"/>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1038"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1055"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1061"/>
         <source>Alert validation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1033"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1056"/>
         <source>You are about to validate this alert:&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;Do you really want to validate this alert ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -59,17 +59,17 @@
 <context>
     <name>Alert::AlertItemEditorWidget</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="107"/>
+        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="106"/>
         <source>Application notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="108"/>
+        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="107"/>
         <source>Patient bar notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="109"/>
+        <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="108"/>
         <source>Status bar notification</source>
         <translation type="unfinished"></translation>
     </message>
@@ -77,12 +77,12 @@
 <context>
     <name>Alert::AlertItemTimingEditorWidget</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="72"/>
+        <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="71"/>
         <source>Not cycling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="73"/>
+        <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="72"/>
         <source>Cycle every</source>
         <translation type="unfinished"></translation>
     </message>
@@ -90,62 +90,62 @@
 <context>
     <name>Alert::AlertScript</name>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1612"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1752"/>
         <source>Check alert validity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1613"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1753"/>
         <source>Compute cycling starting date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1614"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1754"/>
         <source>About to show alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1615"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1755"/>
         <source>During the alert presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1616"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1756"/>
         <source>About to validate the alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1617"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1757"/>
         <source>On alert about to be overridden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1618"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1758"/>
         <source>On alert overridden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1619"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1759"/>
         <source>On patient about to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1620"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1760"/>
         <source>On user about to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1621"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1761"/>
         <source>On episode about to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1622"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1762"/>
         <source>On episode loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1623"/>
+        <location filename="../../plugins/alertplugin/alertitem.cpp" line="1763"/>
         <source>On remind later requested</source>
         <translation type="unfinished"></translation>
     </message>
@@ -338,46 +338,46 @@
 <context>
     <name>Alert::NonBlockingAlertToolButton</name>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="142"/>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="299"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="141"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="298"/>
         <source>Label: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="145"/>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="301"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="144"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="300"/>
         <source>No category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="147"/>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="303"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="146"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="302"/>
         <source>Category: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="261"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="260"/>
         <source>Override alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="262"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="261"/>
         <source>Do you really want to override this alert ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="263"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="262"/>
         <source>By overriding an alert, you report your disagreement with the alert. The alert will no longer be presented.
 It is sometimes necessary to clarify your arguments.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="270"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="269"/>
         <source>Explain why you override this alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="271"/>
+        <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="270"/>
         <source>Override comment</source>
         <translation type="unfinished"></translation>
     </message>

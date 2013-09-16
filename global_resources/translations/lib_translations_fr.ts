@@ -1326,10 +1326,6 @@ Emplacement : %2</translation>
         <translation>Administrateur logiciel</translation>
     </message>
     <message>
-        <source>Add current date</source>
-        <translation>Ajouter la date du jour</translation>
-    </message>
-    <message>
         <source>Add user name</source>
         <translation>Ajouter le nom de l&apos;utilisateur</translation>
     </message>
@@ -2702,7 +2698,23 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>See also</source>
-        <translation type="unfinished"></translation>
+        <translation>Voir aussi</translation>
+    </message>
+    <message>
+        <source>Is not valid</source>
+        <translation>Invalide</translation>
+    </message>
+    <message>
+        <source>Interacting classes</source>
+        <translation>Classes d&apos;interaction</translation>
+    </message>
+    <message>
+        <source>Add current date (long format)</source>
+        <translation>Ajouter la date courante (format long)</translation>
+    </message>
+    <message>
+        <source>Add current date (short format)</source>
+        <translation>Ajouter la date courante (format court)</translation>
     </message>
 </context>
 </TS>

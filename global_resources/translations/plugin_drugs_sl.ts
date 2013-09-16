@@ -54,12 +54,12 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="298"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="300"/>
         <source>Preparing database and drug engines report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="316"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="318"/>
         <source>Drug engine report: %1</source>
         <translation type="unfinished"></translation>
     </message>
