@@ -37,6 +37,7 @@ const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants
 const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
 const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
 const char* const INN                           = QT_TRANSLATE_NOOP("tkConstants", "INN");
+const char* const INTERACTING_CLASSES           = QT_TRANSLATE_NOOP("tkConstants", "Interacting classes");
 const char* const INN_PRESCRIPTION              = QT_TRANSLATE_NOOP("tkConstants", "INN prescription");
 const char* const ATC                           = QT_TRANSLATE_NOOP("tkConstants", "ATC");
 const char* const INTAKES                       = QT_TRANSLATE_NOOP("tkConstants", "intake(s)");
