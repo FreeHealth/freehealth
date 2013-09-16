@@ -733,8 +733,12 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     }
     case AtcLabel :
     {
-        // TODO: code here
-        break;
+        QStringList toReturn;
+        for(int i = 0; i < d_drug->m_7CharsAtc.count(); ++i) {
+            toReturn << drugsBase().getAtcLabel(d_drug->m_7CharsAtc.at(i));
+        }
+        toReturn.removeDuplicates();
+        return toReturn;
     }
     case Forms:
     {
@@ -764,7 +768,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     {
         foreach(const IComponent *compo, d_drug->m_Compo) {
             // TODO: code here manage virtual components
-            if (compo->isActiveSubstance()) {
+            if (compo->isMainInn()) {
                 if (compo->innAtcIds().isEmpty())
                     return false;
             }
@@ -778,6 +782,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
             toReturn << compo->innName();
         }
         toReturn.removeDuplicates();
+        toReturn.removeAll("");
         return toReturn;
     }
     case All7CharsAtcCodes:
@@ -788,7 +793,6 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         }
         toReturn.removeDuplicates();
         return toReturn;
-
     }
     case AllInteractingClasses:
     {
@@ -1240,6 +1244,7 @@ QDebug operator<<(QDebug dbg, const DrugsDB::IComponent &c)
     dbg.nospace() << "IComponent[" << c.moleculeName() << "]("
                   << "\n      Form:       " << c.form()
                   << "\n      INN:        " << c.innName()
+                  << "\n      IsMain:     " << QString(c.isMainInn()?"true":"false")
                   << "\n      FullDosage: " << c.dosage()
                   << "\n      Nature:     " << c.nature()
                   << "\n      AtcIds:     " << atcIds.join("; ")
