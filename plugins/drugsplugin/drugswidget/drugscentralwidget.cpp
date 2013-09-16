@@ -228,8 +228,6 @@ void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
     query.result = m_CurrentDrugModel->drugInteractionResult();
     query.relatedDrug = m_CurrentDrugModel->getDrug(drugId);
 
-    qWarning() << (*query.relatedDrug);
-
     DynamicAlert::DialogResult result = DynamicAlert::executeDynamicAlert(query, this);
     if (result==DynamicAlert::DynamicAlertAccepted) {
         m_CurrentDrugModel->removeLastInsertedDrug();
