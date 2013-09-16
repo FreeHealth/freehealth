@@ -39,10 +39,10 @@
  * \version 0.8.0
  * \date 16 Aug 2012
 */
+
 namespace Core {
 class ISettings;
 }
-
 
 namespace Templates {
 namespace Internal {
@@ -68,6 +68,8 @@ protected:
 
 class TemplatesPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     TemplatesPreferencesPage(QObject *parent = 0);
     ~TemplatesPreferencesPage();
@@ -92,9 +94,7 @@ private:
     QPointer<Internal::TemplatesPreferencesWidget> m_Widget;
 };
 
-
-}
-}
-
+} // namespace Internal
+} // namespace Templates
 
 #endif // TEMPLATESPREFERENCESPAGES_H

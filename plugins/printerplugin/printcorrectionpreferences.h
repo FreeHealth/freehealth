@@ -82,6 +82,8 @@ private:
 
 class PrintCorrectionPreferencesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     PrintCorrectionPreferencesPage(QObject *parent = 0);
     ~PrintCorrectionPreferencesPage();
@@ -109,7 +111,6 @@ private:
     QPointer<Internal::PrintCorrectionPreferencesWidget> m_Widget;
     QString m_searchKeywords;
 };
-
 
 } // namespace Internal
 } // namespace Print
