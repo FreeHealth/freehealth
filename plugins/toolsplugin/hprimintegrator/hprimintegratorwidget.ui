@@ -20,7 +20,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <widget class="QTableView" name="dirContentTableView"/>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QSplitter" name="splitter">
@@ -57,7 +57,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Patient Name</string>
+              <string notr="true">Patient Name</string>
              </property>
             </widget>
            </item>
@@ -80,7 +80,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Patient DOB</string>
+              <string notr="true">Patient DOB</string>
              </property>
             </widget>
            </item>
@@ -103,7 +103,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>PatientNSS</string>
+              <string notr="true">PatientNSS</string>
              </property>
             </widget>
            </item>
@@ -126,7 +126,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>dateExam</string>
+              <string notr="true">dateExam</string>
              </property>
             </widget>
            </item>
@@ -184,8 +184,11 @@
            </item>
            <item row="1" column="1">
             <widget class="QLabel" name="dbPatientName">
+             <property name="toolTip">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string notr="true">TextLabel</string>
              </property>
             </widget>
            </item>
@@ -208,7 +211,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>db dob</string>
+              <string notr="true">db dob</string>
              </property>
             </widget>
            </item>

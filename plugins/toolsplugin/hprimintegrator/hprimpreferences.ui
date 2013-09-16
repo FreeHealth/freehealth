@@ -10,9 +10,6 @@
     <height>448</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>PadTools Preferences</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_5">
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_4">
