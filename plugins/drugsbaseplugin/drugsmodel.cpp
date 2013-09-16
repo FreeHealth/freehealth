@@ -326,7 +326,15 @@ public:
                     return m_InteractionResult->alertMessagesToHtml(drug, query);
 //                    display.append(interactionManager().listToHtml(m_InteractionResult->getInteractions(drug), false));
                 } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
-                    display = drug->listOfInnLabels().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
+                    display = QString("<b>%1:</b><br/>•&nbsp;%2<br/><br/><b>%3:</b>•&nbsp;%4")
+                            .arg(tkTr(Trans::Constants::INN))
+                            .arg(drug->listOfInnLabels().join("<br/>•&nbsp;").replace(" ", "&nbsp;"))
+                            .arg(tkTr(Trans::Constants::INTERACTING_CLASSES))
+                            .arg(drug->listOfInteractingClasses().join("<br/>•&nbsp;").replace(" ", "&nbsp;"));
+                    // display = QString("<ul %3><li %3>%1</ul><ul %3><li %3>%2</ul>")
+                    // .arg(drug->listOfInnLabels().join("<li>"))
+                    // .arg(drug->listOfInteractingClasses().join("<li>"))
+                    // .arg("style=\"padding:0px;margin:0px;}\"");
                 } else {
                     display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
                 }
