@@ -229,7 +229,7 @@
     <message>
         <location filename="../../libs/utils/licenseterms.cpp" line="189"/>
         <source>Non-Free content. Please ask your reseller.</source>
-        <translation type="unfinished"></translation>
+        <translation>Contenu non libre. Veuillez demander à votre vendeur.</translation>
     </message>
 </context>
 <context>
@@ -374,22 +374,22 @@
     <message>
         <location filename="../../libs/utils/httpmultidownloader.cpp" line="199"/>
         <source>Saving cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauveagrde du cache</translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpmultidownloader.cpp" line="231"/>
         <source>Cache saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Cache sauvegardé</translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpmultidownloader.cpp" line="242"/>
         <source>Processing cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Analyse du cache</translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpmultidownloader.cpp" line="272"/>
         <source>Cache processed</source>
-        <translation type="unfinished"></translation>
+        <translation>Cache analysé</translation>
     </message>
 </context>
 <context>
