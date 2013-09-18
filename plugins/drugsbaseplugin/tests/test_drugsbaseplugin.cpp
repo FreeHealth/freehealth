@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "drugsbaseplugin.h"
+#include <drugsbaseplugin/drugsbaseplugin.h>
 
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/constants_html.h>
