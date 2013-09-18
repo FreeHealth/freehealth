@@ -318,7 +318,6 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                             cmd,
                                             hmenu, Core::Constants::G_HELP_DATABASES,
                                             QKeySequence::UnknownKey, false);
-    aShowDatabaseInformation->setEnabled(false);
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
 
     contextManager()->updateContext();

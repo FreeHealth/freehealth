@@ -262,7 +262,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     a->setObjectName("aShowPatientDatabaseInformation");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Core::Id(Constants::A_VIEWPATIENTDATABASE_INFOS), globalcontext);
-    cmd->setTranslations(Trans::Constants::PATIENT_DATABASE);
+    cmd->setTranslations(Trans::Constants::PATIENT_DATABASE_INFORMATION);
     cmd->retranslate();
     hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
     connect(aShowPatientDatabaseInformation,SIGNAL(triggered()), this, SLOT(showPatientDatabaseInformation()));
