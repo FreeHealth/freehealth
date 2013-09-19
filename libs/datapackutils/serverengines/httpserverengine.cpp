@@ -429,14 +429,24 @@ ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
 /** Reads Server description XML file and start the dowloading of pack description if needed. */
 void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
-//    qWarning() << "ServerConfigDone" << data.server->uuid();
+    qWarning() << "afterServerConfigurationDownload" << data.server->uuid() << data.response.size();
 
 //    bool downloadPackDescriptionNeeded = false;
     Server *server = data.server;
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
-    QStringList packDescriptionToDownload;
 
+    // Dowloaded content is empty -> return
+    if (data.response.size() == 0) {
+        status->hasError = true;
+        status->isSuccessful = false;
+        status->downloadCorrectlyFinished = true;
+        status->engineMessages << tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(data.reply->url().toString());
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(data.reply->url().toString()));
+        return;
+    }
+
+    QStringList packDescriptionToDownload;
     switch (server->urlStyle()) {
     case Server::Http:
     case Server::HttpPseudoSecuredNotZipped:

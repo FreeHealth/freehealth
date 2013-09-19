@@ -25,8 +25,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class DataPack::ServerPackEditor
-  Widget used to modify the server list and the installed packs.
+ * \class DataPack::ServerPackEditor
+ * Widget used to modify the server list and the installed packs.
 */
 
 #include "serverpackeditor.h"
@@ -274,6 +274,7 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     // server view/model/delegate
     Utils::HtmlDelegate *serverdelegate = new Utils::HtmlDelegate(this);
     d->m_serverModel = new ServerModel(this);
+    d->m_serverModel->initialize();
     d->ui->serverListView->setModel(d->m_serverModel);
     d->ui->serverListView->setModelColumn(ServerModel::HtmlLabel);
     d->ui->serverListView->setItemDelegate(serverdelegate);
@@ -303,6 +304,9 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
 
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectFirstRow()));
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
+
+    refreshServerContent();
+    selectFirstRow();
 }
 
 ServerPackEditor::~ServerPackEditor()
@@ -551,30 +555,40 @@ void ServerPackEditor::populateServerView(const int serverId)
     QString summary;
 
     // short description, version date and author
-    summary = QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
-                      "<p style=\"font-size:small;margin-left:20px;color:gray\">"
-                      "%2: %3<br />"
-                      "%4: %5<br />"
-                      "%6: %7<br />"
-                      "%8: %9<br />"
-                      "%10: %11<br />"
-                      "%12: %13<br />"
-                      "</p>"
-                       )
-            .arg(descr.data(ServerDescription::ShortDescription).toString())
-            .arg(tkTr(Trans::Constants::VERSION))
-            .arg(descr.data(ServerDescription::Version).toString())
-            .arg(tkTr(Trans::Constants::LAST_MODIFICATION))
-            .arg(descr.data(ServerDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
-            .arg(tkTr(Trans::Constants::AUTHOR))
-            .arg(descr.data(ServerDescription::Author).toString())
-            .arg(tkTr(Trans::Constants::VENDOR))
-            .arg(descr.data(ServerDescription::Vendor).toString())
-            .arg(tr("Native URL"))
-            .arg(server.nativeUrl())
-            .arg(tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY))
-            .arg(Trans::ConstantTranslations::checkUpdateLabel(server.recommendedUpdateFrequency()))
-            ;
+    if (!server.uuid().isEmpty() && !server.version().isEmpty()) {
+        summary = QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
+                          "<p style=\"font-size:small;margin-left:20px;color:gray\">"
+                          "%2: %3<br />"
+                          "%4: %5<br />"
+                          "%6: %7<br />"
+                          "%8: %9<br />"
+                          "%10: %11<br />"
+                          "%12: %13<br />"
+                          "</p>"
+                          )
+                .arg(descr.data(ServerDescription::ShortDescription).toString())
+                .arg(tkTr(Trans::Constants::VERSION))
+                .arg(descr.data(ServerDescription::Version).toString())
+                .arg(tkTr(Trans::Constants::LAST_MODIFICATION))
+                .arg(descr.data(ServerDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
+                .arg(tkTr(Trans::Constants::AUTHOR))
+                .arg(descr.data(ServerDescription::Author).toString())
+                .arg(tkTr(Trans::Constants::VENDOR))
+                .arg(descr.data(ServerDescription::Vendor).toString())
+                .arg(tr("Native URL"))
+                .arg(server.nativeUrl())
+                .arg(tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY))
+                .arg(Trans::ConstantTranslations::checkUpdateLabel(server.recommendedUpdateFrequency()))
+                ;
+    } else {
+        summary = QString("<p style=\"font-weight:bold;\">%1</p>"
+                          "<p style=\"font-weight:bold;\">%2: %3</p>"
+                          )
+                .arg(tr("No information available. Please check the URL of the server."))
+                .arg(tr("Native URL"))
+                .arg(server.nativeUrl())
+                ;
+    }
 
     // Add description
     summary += descr.data(ServerDescription::HtmlDescription).toString();
@@ -633,6 +647,7 @@ void ServerPackEditor::selectFirstRow()
 
     d->ui->serverListView->setCurrentIndex(d->m_serverModel->index(0,0));
     d->ui->serverListView->selectionModel()->select(d->m_serverModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    populateServerView(0);
 }
 
 void ServerPackEditor::retranslate()

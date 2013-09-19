@@ -87,6 +87,9 @@ void ServerManager::init(const QVector<DataPack::IServerEngine*> &engines)
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Config and path //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * \sa DataPack::IServerManager::setGlobalConfiguration(), DataPack::IServerManager::xmlConfiguration()
+ */
 bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg)
 {
     m_Servers.clear();
@@ -122,6 +125,9 @@ bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *e
     return true;
 }
 
+/**
+ * \sa DataPack::IServerManager::setGlobalConfiguration(), DataPack::IServerManager::xmlConfiguration()
+ */
 QString ServerManager::xmlConfiguration() const
 {
     QDomDocument doc;

@@ -51,6 +51,7 @@ public:
     };
 
     ServerModel(QObject *parent = 0);
+    bool initialize();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return ColumnCount;}

@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setApplicationName("datapack");
-    a.setApplicationVersion("0.7.0");
+    a.setApplicationVersion(PACKAGE_VERSION);
 
     MainWindow w;
     w.show();

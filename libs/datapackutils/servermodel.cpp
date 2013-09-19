@@ -59,12 +59,55 @@ static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::in
 static inline DataPack::IServerManager *serverManager() { return core().serverManager(); }
 static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(DataPackCore::instance().icon(name, path)); }
 
+static QString serverHtmlLabel(const Server &s)
+{
+    // No server info available
+    QString label = s.label();
+    if (s.uuid().isEmpty() && s.version().isEmpty())
+        label = s.nativeUrl();
+    if (s.label().isEmpty())
+        label = QString("%1: %2").arg(tkTr(Trans::Constants::UNKNOWN_SERVER)).arg(s.nativeUrl());
+    label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
+            .arg(label);
+
+    if (s.isConnected()) {
+        if (s.lastChecked().isValid())
+            label += QString("<br /><span style=\"color:gray; font-size:small;\">%2 (%3: %4)</span>")
+                    .arg(tkTr(Trans::Constants::CONNECTED))
+                    .arg(tkTr(Trans::Constants::LAST_CHECK))
+                    .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
+        else
+            label += QString("<br /><span style=\"color:gray; font-size:small;\">%2</span>")
+                    .arg(tkTr(Trans::Constants::CONNECTED));
+    } else {
+        label += QString("<br /><span style=\"color:gray; font-size:small;\">%2</span>")
+                .arg(tkTr(Trans::Constants::NOT_CONNECTED));
+    }
+
+    label += QString("<br /><span style=\"color:gray; font-size:small;\">%1 %2</span>")
+            .arg(serverManager()->getPackForServer(s).count())
+            .arg(tkTr(Trans::Constants::PACKAGES));
+
+    if (!s.errors().isEmpty()) {
+        label += QString("<br /><span style=\"color:marron; font-size:small;\">%1: %2</span>")
+                .arg(tkTr(Trans::Constants::ERRORS))
+                .arg(s.errors().count());
+    }
+    return label;
+}
+
 ServerModel::ServerModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     connect(serverManager(), SIGNAL(serverAdded(int)), SLOT(serverAdded(int)));
     connect(serverManager(), SIGNAL(serverRemoved(int)), SLOT(serverRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), SLOT(allServerDescriptionAvailable()));
+}
+
+bool ServerModel::initialize()
+{
+    allServerDescriptionAvailable();
+    return true;
 }
 
 int ServerModel::rowCount(const QModelIndex &parent) const
@@ -90,29 +133,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
     {
         switch (index.column()) {
         case PlainTextLabel: return s.label();
-        case HtmlLabel:
-        {
-            QString label = s.label();
-            if (s.label().isEmpty())
-                label = tkTr(Trans::Constants::UNKNOWN_SERVER);
-            label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
-                    .arg(label);
-
-            if (s.isConnected()) {
-                label += QString("<br /><span style=\"color:gray; font-size:small;\">%2 (%3: %4)</span>")
-                        .arg(tkTr(Trans::Constants::CONNECTED))
-                        .arg(tkTr(Trans::Constants::LAST_CHECK))
-                        .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
-            } else {
-                label += QString("<br /><span style=\"color:gray; font-size:small;\">%2</span>")
-                        .arg(tkTr(Trans::Constants::NOT_CONNECTED));
-            }
-
-            label += QString("<br /><span style=\"color:gray; font-size:small;\">%1 %2</span>")
-                    .arg(serverManager()->getPackForServer(s).count())
-                    .arg(tkTr(Trans::Constants::PACKAGES));
-            return label;
-        }
+        case HtmlLabel: return serverHtmlLabel(s);
         case Uuid : return s.uuid();
         case Authors: return s.description().data(ServerDescription::Author);
         case Version: return s.version();
@@ -126,7 +147,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
         case RecommendedUpdateFrequencyIndex: return s.recommendedUpdateFrequency();
         case HtmlDescription: return s.description().data(ServerDescription::HtmlDescription);
         case LastUpdateDate: return s.description().data(ServerDescription::LastModificationDate).toDate().toString(QLocale().dateFormat());
-        }// End switch
+        } // switch
     }
     case Qt::ToolTipRole:
     {
