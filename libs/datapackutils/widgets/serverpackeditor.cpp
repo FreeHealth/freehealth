@@ -305,8 +305,8 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectFirstRow()));
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 
-    refreshServerContent();
-    selectFirstRow();
+    //refreshServerContent();
+    //selectFirstRow();
 }
 
 ServerPackEditor::~ServerPackEditor()
