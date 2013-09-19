@@ -334,8 +334,9 @@ bool ServerPackEditor::refreshServerContent()
     d->_progressDialog->setModal(true);
     d->_progressDialog->show();
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(onRefreshServerDone()), Qt::UniqueConnection);
-    connect(d->_progressDialog, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
     // TODO: Connect the cancel button
+    //connect(d->_progressDialog, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
+    //connect(d->_progressDialog, SIGNAL(canceled()), d->_progressDialog, SLOT(deleteLater()));
     serverManager()->getAllDescriptionFile(bar);
 //    dlg.exec();
     return true;
