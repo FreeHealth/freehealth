@@ -135,6 +135,7 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
 HttpServerEngine::~HttpServerEngine()
 {}
 
+/** Returns true if this engine manages this server */
 bool HttpServerEngine::managesServer(const Server &server)
 {
     if (core().isInternetConnectionAvailable())
@@ -142,16 +143,22 @@ bool HttpServerEngine::managesServer(const Server &server)
     return false;
 }
 
+/** Add a dowload to the queue */
 void HttpServerEngine::addToDownloadQueue(const ServerEngineQuery &query)
 {
     m_queue.append(query);
 }
 
+/** Returns the number of downloads included in the queue */
 int HttpServerEngine::downloadQueueCount() const
 {
     return m_queue.count();
 }
 
+/**
+ * Start download
+ * \sa DataPack::IServerEngine::startDownloadQueue()
+ */
 bool HttpServerEngine::startDownloadQueue()
 {
     // Internet connection available ?
@@ -207,6 +214,7 @@ bool HttpServerEngine::startDownloadQueue()
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(serverError(QNetworkReply::NetworkError)));
 
+        // TODO: Remove all direct access to progress bar -> use a signal instead
         QProgressBar *bar = query.progressBar;
         if (bar) {
             bar->setRange(0, 100);
@@ -217,6 +225,7 @@ bool HttpServerEngine::startDownloadQueue()
     return true;
 }
 
+/** Returns the number of running download */
 int HttpServerEngine::runningJobs() const
 {
     return m_replyToData.count();
@@ -243,6 +252,7 @@ bool HttpServerEngine::stopJobsAndClearQueue()
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////  Specific Http code  ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/** Manage progress bar progress value */
 void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 {
     // Retreive progressBar
@@ -260,6 +270,7 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
     }
 }
 
+/** Manage user authentication */
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
     LOG("Server authentication required: " +  reply->url().toString());
@@ -295,6 +306,7 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
     // TODO: manage ServerEngineStatus here
 }
 
+/** Manage proxy authentication */
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
     LOG("Proxy authentication required: " +  proxy.hostName());
@@ -351,8 +363,8 @@ void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 void HttpServerEngine::serverFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-
     qWarning() << "HTTP: serverFinished" << reply->request().url() << reply->error();
+
     if (reply->error() != QNetworkReply::NoError) {
         reply->deleteLater(); // we don't need reply anymore
         m_replyToData.remove(reply);
@@ -406,6 +418,7 @@ void HttpServerEngine::serverFinished()
     }
 }
 
+/** Returns the engine status linked with a reply */
 ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
 {
     if (data.server)
@@ -556,6 +569,10 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
     Q_EMIT packDownloaded(pack, *status);
 }
 
+/**
+ * Creates an internal DataPack::Pack using the stored file \e pathToPackDescription
+ * from the DataPack::Server \e server
+ */
 void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server, const QString &pathToPackDescription)
 {
     Pack p;
@@ -563,6 +580,7 @@ void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server
     serverManager()->registerPack(server, p);
 }
 
+/** Creates the URL to query for this specific server engine */
 QNetworkRequest HttpServerEngine::createRequest(const QString &url)
 {
     QNetworkRequest request(url);
@@ -572,12 +590,20 @@ QNetworkRequest HttpServerEngine::createRequest(const QString &url)
     return request;
 }
 
+/**
+ * Returns the last DataPack::ServerEngineStatus associated with
+ * DataPack::Pack \e pack.
+ */
 const ServerEngineStatus &HttpServerEngine::lastStatus(const Pack &pack)
 {
     const QString &key = statusKey(pack);
     return m_PackStatus[key];
 }
 
+/**
+ * Returns the last DataPack::ServerEngineStatus associated with
+ * DataPack::Server \e server.
+ */
 const ServerEngineStatus &HttpServerEngine::lastStatus(const Server &server)
 {
     const QString &key = statusKey(server);
