@@ -198,17 +198,17 @@ void MainWindow::extensionsInitialized()
 //    }
 
     // Start the update checker
-//    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-//        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEDRC_UPDATE_URL);
-//        if (checkUpdate())
-//            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
-//    }
+    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
+        settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEDRC_UPDATE_URL);
+        if (checkUpdate())
+            settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
+    }
 
     createDockWindows();
     readSettings();
     userChanged();
 
-//    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
