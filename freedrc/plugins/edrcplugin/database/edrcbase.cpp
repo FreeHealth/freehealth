@@ -264,6 +264,14 @@ bool DrcDatabase::checkDatabaseVersion() const
     return (version()==Constants::DB_VERSION);
 }
 
+/**
+ * This member is automatically called by intialize() if you set the \e createIfNotExists to \e true.\n
+ * Creates an empty eDRC database into the Core::DatabaseConnector::absPathToSqliteReadOnlyDatabase()
+ * path. \n
+ * Populate it with CSV files if they are available on the computer. These files
+ * are searched in the path notified in the ctor or in the initialize() member.
+ * \sa DrcDatabase(), initialize()
+ */
 bool DrcDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,
                                  const Utils::DatabaseConnector &connector,
                                  CreationOption createOption
@@ -349,7 +357,7 @@ bool DrcDatabase::createDatabase(const QString &connection, const QString &prefi
 }
 
 /** Returns all RC Classes primKey & label in a hash */
-QHash<int, QString> DrcDatabase::getRcClasses() const
+QHash<int, QString> DrcDatabase::getCrClasses() const
 {
     QHash<int, QString> toReturn;
     QSqlDatabase DB = database();
@@ -365,7 +373,7 @@ QHash<int, QString> DrcDatabase::getRcClasses() const
 }
 
 /** Returns all RC ids and labels (unsorted) for a specific class in a hash */
-QHash<int, QString> DrcDatabase::getRcForClasses(int classId) const
+QHash<int, QString> DrcDatabase::getCrForClasses(int classId) const
 {
     QHash<int, QString> toReturn;
     QSqlDatabase DB = database();
@@ -389,7 +397,8 @@ QHash<int, QString> DrcDatabase::getRcForClasses(int classId) const
     return toReturn;
 }
 
-QHash<int, QString> DrcDatabase::getClassesForRc(int crId) const
+/** Returns all classes id and name for a specific CR \e crId */
+QHash<int, QString> DrcDatabase::getClassesForCr(int crId) const
 {
     QHash<int, QString> toReturn;
     QSqlDatabase DB = database();
@@ -418,7 +427,7 @@ QHash<int, QString> DrcDatabase::getClassesForRc(int crId) const
 }
 
 /** Returns all SeeAlso (related) RC ids and labels (unsorted) for a specific RC in a hash */
-QHash<int, QString> DrcDatabase::getSeeAlsoRcForRc(int rcId) const
+QHash<int, QString> DrcDatabase::getSeeAlsoRcForCr(int rcId) const
 {
     QHash<int, QString> toReturn;
     QSqlDatabase DB = database();
@@ -443,7 +452,7 @@ QHash<int, QString> DrcDatabase::getSeeAlsoRcForRc(int rcId) const
 }
 
 /** Return the label of the RC with the id \e rcId. If \e onlyValid is true, filter only valid RC */
-QString DrcDatabase::getRcLabel(const int rcId, bool onlyValid) const
+QString DrcDatabase::getCrLabel(const int rcId, bool onlyValid) const
 {
     QSqlDatabase DB = database();
     if (!connectDatabase(DB, __FILE__, __LINE__))
@@ -470,7 +479,7 @@ QString DrcDatabase::getRcLabel(const int rcId, bool onlyValid) const
  * Return the arguments of the RC with the id \e rcId.
  * If \e onlyValid is true, filter only valid RC
  */
-QString DrcDatabase::getRcArguments(const int rcId, bool toHtml, bool onlyValid) const
+QString DrcDatabase::getCrArguments(const int rcId, bool toHtml, bool onlyValid) const
 {
     QSqlDatabase DB = database();
     if (!connectDatabase(DB, __FILE__, __LINE__))
@@ -534,7 +543,7 @@ QString DrcDatabase::getRcArguments(const int rcId, bool toHtml, bool onlyValid)
     return content;
 }
 
-QStringList DrcDatabase::getRcAuthprizedDiagnosis(const int rcId, bool onlyValid) const
+QStringList DrcDatabase::getCrAuthorizedDiagnosis(const int rcId, bool onlyValid) const
 {
     QSqlDatabase DB = database();
     if (!connectDatabase(DB, __FILE__, __LINE__))
@@ -587,7 +596,7 @@ QStringList DrcDatabase::getRcAuthprizedDiagnosis(const int rcId, bool onlyValid
     return toReturn;
 }
 
-QStringList DrcDatabase::getRcIcd10RelatedCodes(const int rcId, bool onlyValid) const
+QStringList DrcDatabase::getCrIcd10RelatedCodes(const int rcId, bool onlyValid) const
 {
     QSqlDatabase DB = database();
     if (!connectDatabase(DB, __FILE__, __LINE__))
@@ -620,7 +629,7 @@ QStringList DrcDatabase::getRcIcd10RelatedCodes(const int rcId, bool onlyValid) 
     return toReturn;
 }
 
-QList<ConsultResultCriteria> DrcDatabase::getOrderedCriteriasForCR(int crId) const
+QList<ConsultResultCriteria> DrcDatabase::getOrderedCriteriasForCr(int crId) const
 {
     QList<ConsultResultCriteria> toReturn;
     QSqlDatabase DB = database();

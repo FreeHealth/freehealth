@@ -146,7 +146,7 @@ public:
     // Uncheck all button then update visibility according to the current editing CR \e crId
     void clearButtonCheckState(int crId)
     {
-        const QStringList &autDiag = edrcBase().getRcAuthprizedDiagnosis(crId, true);
+        const QStringList &autDiag = edrcBase().getCrAuthorizedDiagnosis(crId, true);
         ui->buttonA->setVisible(autDiag.contains("A"));
         ui->buttonB->setVisible(autDiag.contains("B"));
         ui->buttonC->setVisible(autDiag.contains("C"));
@@ -221,8 +221,8 @@ public:
         clearButtonCheckState(cr.consultResultId());
 
         // Get class for RC
-        QStringList crClasses = edrcBase().getClassesForRc(cr.consultResultId()).values();
-        const QString &label = edrcBase().getRcLabel(cr.consultResultId());
+        QStringList crClasses = edrcBase().getClassesForCr(cr.consultResultId()).values();
+        const QString &label = edrcBase().getCrLabel(cr.consultResultId());
 
         // Prepare the proxy model & the treeview
         ui->searchLine->setText(label);
@@ -462,7 +462,7 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     d->updateCodingStatus();
 
     // Update the ICD10 code view
-    const QStringList &CIM10 = edrcBase().getRcIcd10RelatedCodes(crId, true);
+    const QStringList &CIM10 = edrcBase().getCrIcd10RelatedCodes(crId, true);
     d->ui->CIM10->setText(CIM10.join(" ; "));
 
     // Update argument button

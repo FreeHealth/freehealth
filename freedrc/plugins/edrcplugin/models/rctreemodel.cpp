@@ -65,7 +65,7 @@ public:
     void populateClasses()
     {
         // Get classes
-        QHash<int, QString> classes = edrcBase().getRcClasses();
+        QHash<int, QString> classes = edrcBase().getCrClasses();
         QFont bold;
         bold.setBold(true);
 
@@ -82,7 +82,7 @@ public:
                                               << key);
 
             // Add RC children
-            QHash<int, QString> rc = edrcBase().getRcForClasses(i.key());
+            QHash<int, QString> rc = edrcBase().getCrForClasses(i.key());
             QHashIterator<int, QString> irc(rc);
             while (irc.hasNext()) {
                 irc.next();
@@ -93,7 +93,7 @@ public:
                                  << rcvalue
                                  << rckey);
                 // May be we can add here the SeeAlso related CR
-                QHash<int, QString> sa = edrcBase().getSeeAlsoRcForRc(irc.key());
+                QHash<int, QString> sa = edrcBase().getSeeAlsoRcForCr(irc.key());
                 QHashIterator<int, QString> isa(sa);
                 while (isa.hasNext()) {
                     isa.next();
@@ -154,10 +154,10 @@ int RcTreeModel::id(const QModelIndex &index) const
 
 QString RcTreeModel::arguments(const QModelIndex &index) const
 {
-    return edrcBase().getRcArguments(id(index));
+    return edrcBase().getCrArguments(id(index));
 }
 
 QStringList RcTreeModel::authorizedDiagnosis(const QModelIndex &index) const
 {
-    return edrcBase().getRcAuthprizedDiagnosis(id(index));
+    return edrcBase().getCrAuthorizedDiagnosis(id(index));
 }

@@ -460,7 +460,7 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
 
     // Prepare selected criterias
     QString criteriasString;
-    QList<ConsultResultCriteria> criterias = edrcBase.getOrderedCriteriasForCR(_crId);
+    QList<ConsultResultCriteria> criterias = edrcBase.getOrderedCriteriasForCr(_crId);
     foreach(const ConsultResultCriteria &crit, criterias) {
         if (_selectedCriteriasIds.contains(crit.id())) {
             tokens.insert(Constants::TOKEN_CRITERIA_ID, crit.id());
@@ -479,7 +479,7 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     tokens.insert(Constants::TOKEN_CR_CODING_VALIDITY, isValid()?tkTr(Trans::Constants::ISVALID):tkTr(Trans::Constants::ISNOTVALID));
     tokens.insert(Constants::TOKEN_CR_CODING_VALIDATOR_VERSION, ConsultResultValidator::version());
     tokens.insert(Constants::TOKEN_CR_ID, _crId);
-    tokens.insert(Constants::TOKEN_CR_LABEL, edrcBase.getRcLabel(_crId));
+    tokens.insert(Constants::TOKEN_CR_LABEL, edrcBase.getCrLabel(_crId));
     QString posDiagCode;
     QString posDiagLabel;
     switch (_diagnosisPosition) {
@@ -515,7 +515,7 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     }
 
     // TODO: correctly manage ICD10 labels and codes
-    QString icd10 = edrcBase.getRcIcd10RelatedCodes(_crId, true).join("; ");
+    QString icd10 = edrcBase.getCrIcd10RelatedCodes(_crId, true).join("; ");
     tokens.insert(Constants::TOKEN_CR_CR_ICD10_CODES, icd10);
     tokens.insert(Constants::TOKEN_CR_ICD10_LABELS, icd10);
     tokens.insert(Constants::TOKEN_CR_ICD10_CODES_AND_LABELS, icd10);

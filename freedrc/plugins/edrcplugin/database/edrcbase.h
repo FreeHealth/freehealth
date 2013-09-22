@@ -57,16 +57,16 @@ public:
     bool isInitialized() const {return _initialized;}
     QString version() const;
 
-    QHash<int, QString> getRcClasses() const;
-    QHash<int, QString> getRcForClasses(int classId) const;
-    QHash<int, QString> getClassesForRc(int crId) const;
-    QHash<int, QString> getSeeAlsoRcForRc(int rcId) const;
-    QString getRcLabel(const int rcId, bool onlyValid = true) const;
-    QString getRcArguments(const int rcId, bool toHtml = false, bool onlyValid = true) const;
-    QStringList getRcAuthprizedDiagnosis(const int rcId, bool onlyValid = true) const;
-    QStringList getRcIcd10RelatedCodes(const int rcId, bool onlyValid) const;
+    QHash<int, QString> getCrClasses() const;
+    QHash<int, QString> getCrForClasses(int classId) const;
+    QHash<int, QString> getClassesForCr(int crId) const;
+    QHash<int, QString> getSeeAlsoRcForCr(int rcId) const;
+    QString getCrLabel(const int rcId, bool onlyValid = true) const;
+    QString getCrArguments(const int rcId, bool toHtml = false, bool onlyValid = true) const;
+    QStringList getCrAuthorizedDiagnosis(const int rcId, bool onlyValid = true) const;
+    QStringList getCrIcd10RelatedCodes(const int rcId, bool onlyValid) const;
 
-    QList<ConsultResultCriteria> getOrderedCriteriasForCR(int crId) const;
+    QList<ConsultResultCriteria> getOrderedCriteriasForCr(int crId) const;
 
 private:
     bool createDatabase(const QString &connection, const QString &prefixedDbName,

@@ -86,7 +86,7 @@ public:
     {
         _crId = crId;
         _criterias.clear();
-        _criterias = edrcBase().getOrderedCriteriasForCR(crId);
+        _criterias = edrcBase().getOrderedCriteriasForCr(crId);
         _validator.setCrId(_crId);
         _validator.setAvailableCriterias(_criterias);
         _validator.setSelectedCriterias(_checkedIds);

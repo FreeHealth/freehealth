@@ -61,6 +61,6 @@ RcArgumentsDialog::~RcArgumentsDialog()
 
 void RcArgumentsDialog::setRcId(const int rcId)
 {
-    ui->rcLabel->setText(edrcBase().getRcLabel(rcId));
-    ui->arguments->setHtml(edrcBase().getRcArguments(rcId, true));
+    ui->rcLabel->setText(edrcBase().getCrLabel(rcId));
+    ui->arguments->setHtml(edrcBase().getCrArguments(rcId, true));
 }
