@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QDir>
+#include <QTimer>
 
 #include <extensionsystem/pluginmanager.h>
 #include <extensionsystem/pluginspec.h>
@@ -123,6 +124,19 @@ int main(int argc, char *argv[])
      // Add some debugging information
      Utils::Log::logCompilationConfiguration();
 
+     // Manage plugin manager options
+     QStringList arguments = app.arguments(); // adapted arguments list is passed to plugin manager later
+     QMap<QString, QString> foundAppOptions;
+     if (arguments.size() > 1) {
+         QMap<QString, bool> appOptions;
+         QString errorMessage;
+         if (!pluginManager.parseOptions(arguments, appOptions, &foundAppOptions, &errorMessage)) {
+             qWarning() << errorMessage;
+             qWarning() << HELP_MESSAGE;
+             return -1;
+         }
+     }
+
      const PluginSpecSet plugins = pluginManager.plugins();
      ExtensionSystem::PluginSpec *coreplugin = 0;
 
@@ -187,6 +201,12 @@ int main(int argc, char *argv[])
 
     // shutdown plugin manager on the exit
     QObject::connect(&app, SIGNAL(aboutToQuit()), &pluginManager, SLOT(shutdown()));
+
+#ifdef WITH_TESTS
+    // Do this after the event loop has started
+    if (pluginManager.runningTests())
+        QTimer::singleShot(100, &pluginManager, SLOT(startTests()));
+#endif
 
     int r = app.exec();
 //    Utils::Log::saveLog();
