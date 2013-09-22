@@ -65,7 +65,7 @@ public:
     }
 
     QVariant testValue() const {return uid();}
-    QVariant value() const {return user()->value(_ref);}
+    QVariant value() const {if (user()) return user()->value(_ref); return QVariant();}
 
     int sortIndex() const {return _ref;}
 
