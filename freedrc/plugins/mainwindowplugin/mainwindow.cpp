@@ -111,6 +111,13 @@ MainWindow::MainWindow( QWidget * parent ) :
     messageSplash(tr("Creating Main Window"));
 }
 
+/**
+ * Initialize the main window:
+ * - creates global menus and actions
+ * - connect actions to default slots
+ * Returns \e true if all goes fine.
+ * \sa Core::IMainWindow, Core::MainWindowActions, Core::MainWindowActionHandler
+ */
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments);
@@ -156,12 +163,16 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     return true;
 }
 
+/**
+ * When all dependent plugins are initialized, start the second initialization.
+ */
 void MainWindow::extensionsInitialized()
 {
     // Creating MainWindow interface
     ui = new Internal::Ui::MainWindow();
     ui->setupUi(this);
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
 
     // Disable some actions when starting as medintux plugin
 //    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
@@ -222,6 +233,15 @@ MainWindow::~MainWindow()
         qWarning() << "MainWindow::~MainWindow()";
 }
 
+/**
+ * When all plugins are correctly initialized and the Core plugin is opened,
+ * start a third initialization.
+ * - set the central widget of the main window
+ * - translate UI, actions and menus
+ * - resize window to default
+ * - show and raise main window
+ * \sa Core::ICore::coreOpened()
+ */
 void MainWindow::postCoreOpened()
 {
     if (Utils::Log::warnPluginsCreation())

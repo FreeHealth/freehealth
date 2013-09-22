@@ -881,8 +881,10 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
 }
 
 /**
-  \fn void Core::ISettings::restoreState(QMainWindow * window, const QString & prefix)
-  \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same settings
+ * \fn void Core::ISettings::restoreState(QMainWindow * window, const QString & prefix)
+ * Main windows restore state. \e prefix can be used if you store multiple main window
+ * in the same settings. If there are no stored geometry, the main window is adapted to
+ * the screen (4:3, 16:9).
 */
 void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
 {
@@ -924,8 +926,9 @@ void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
 }
 
 /**
-  \fn void Core::ISettings::saveState(QMainWindow * window, const QString & prefix)
-  \brief Main windows save state. \e prefix can be used if you store multiple main window in the same Settings
+ * \fn void Core::ISettings::saveState(QMainWindow * window, const QString & prefix)
+ * Save the main windows state. \e prefix can be used if you store multiple main window
+ * in the same Settings.
 */
 void SettingsPrivate::saveState(QMainWindow * window, const QString & prefix)
 {
@@ -940,8 +943,9 @@ void SettingsPrivate::saveState(QMainWindow * window, const QString & prefix)
 }
 
 /**
-  \fn void Core::ISettings::appendToValue(const QString &key, const QString &value)
-  \brief Append a string \e value to the stringlist represented by the \e key in settings assuming no doublon.
+ * \fn void Core::ISettings::appendToValue(const QString &key, const QString &value)
+ * Append a string \e value to the stringlist represented by the \e key in settings
+ * avoiding duplicates.
 */
 void SettingsPrivate::appendToValue(const QString &key, const QString &value)
 {
