@@ -191,6 +191,8 @@ void ConsultResult::clear()
     _medicalFollowUp = MedicalFollowUpUndefined;
     _symptomatic = SymptomaticStateUndefined;
     _chronicDisease = ChronicDiseaseStateUndefined;
+    _crComment.clear();
+    _critComment.clear();
 }
 
 /** Set the CR database \e id */

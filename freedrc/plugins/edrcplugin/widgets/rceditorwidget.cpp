@@ -220,6 +220,8 @@ public:
 
     void consultResultToUi(const ConsultResult &cr)
     {
+        ui->commentRC->clear();
+        ui->commentItem->clear();
         clearButtonCheckState(cr.consultResultId());
 
         // Get class for RC
@@ -351,6 +353,7 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d(new RcEditorWidgetPrivate(this))
 {
     d->ui->setupUi(this);
+    layout()->setMargin(0);
     d->ui->SFMG->setIcon(theme()->icon("sfmg_logo.png", Core::ITheme::SmallIcon));
     d->ui->arguments->setEnabled(false);
     if (!settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
