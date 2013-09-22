@@ -49,6 +49,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/stylehelper.h>
 #include <utils/updatechecker.h>
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -358,18 +359,33 @@ void MainWindow::updateCheckerEnd(bool)
     delete statusBar();
 }
 
-/** \brief Reads main window's settings */
+/** Reads main window's settings */
 void MainWindow::readSettings()
 {
-//    settings()->restoreState(this, Account::Constants::S_STATEPREFIX);
+    // Main Application settings
+    settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
+    fileManager()->getMaximumRecentFilesFromSettings();
+//    m_AutomaticSaveInterval = settings()->value(Core::Constants::S_SAVEINTERVAL, 600).toUInt(); // Default = 10 minutes
+//    m_OpenLastOpenedForm = settings()->value(Core::Constants::S_OPENLAST, true).toBool();
+
+    // Main Widget settings
+//    m_HelpTextShow = settings()->value(Core::Constants::S_SHOWHELPTEXT, true).toBool();
+
+    Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
 }
 
 /** \brief Writes main window's settings */
 void MainWindow::writeSettings()
 {
-//    settings()->saveState(this, Account::Constants::S_STATEPREFIX);
+    settings()->saveState(this);
+    // Recent managers
     fileManager()->saveRecentFiles();
+    // Main Application settings
+//    settings()->setValue(Core::Constants::S_SAVEINTERVAL, m_AutomaticSaveInterval);
+//    settings()->setValue(Core::Constants::S_OPENLAST, m_OpenLastOpenedForm);
+//    // Main Widget settings
+//    settings()->setValue(Core::Constants::S_SHOWHELPTEXT, m_HelpTextShow);
     settings()->sync();
 }
 
