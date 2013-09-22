@@ -57,7 +57,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void setFilterOnRcId(const int rcId);
+    void setFilterOnCrId(const int rcId);
 
 };
 

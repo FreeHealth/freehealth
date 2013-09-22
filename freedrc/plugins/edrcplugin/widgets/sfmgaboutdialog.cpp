@@ -51,8 +51,9 @@ SfmgAboutDialog::SfmgAboutDialog(QWidget *parent) :
                          "O.N.G. agréée auprès de l’O.M.S.</center>");
     setWindowIcon(theme()->icon("sfmg_logo.png"));
     setWindowTitle("À propos de la Société Française de Médecine Générale");
-    resize(400, 250);
-    Utils::resizeAndCenter(this, parent);
+    //resize(250, 250);
+    //Utils::resizeAndCenter(this, parent);
+    Utils::centerWidget(this, parent);
 }
 
 SfmgAboutDialog::~SfmgAboutDialog()

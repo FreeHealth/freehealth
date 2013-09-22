@@ -33,8 +33,8 @@
 /**
  * \file rcmodel.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.9.2
+ * \date 21 Sept 2013
 */
 
 namespace eDRC {
@@ -71,26 +71,10 @@ public:
     RcModel(QObject *parent = 0);
     ~RcModel();
 
-//    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-//    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-//    bool insertRows(int position, int rows, const QModelIndex &parent = QModelIndex() );
-//    bool removeRow ( int row, const QModelIndex & parent = QModelIndex() );
-
-//    RC_Elements getRC(const QModelIndex& index);
-
-// signals:
-//     void dataChanged(const QModelIndex &index1 , const QModelIndex & index2);
-
-
-private:
-//    QList<RC_Elements>    *m_ListRC;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 };
 
 } // namespace Internal

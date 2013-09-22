@@ -45,6 +45,11 @@ RcItemModel::RcItemModel(QObject *parent):
 RcItemModel::~RcItemModel()
 {}
 
+void RcItemModel::clear()
+{
+    setFilterOnCrId(-1);
+}
+
 QVariant RcItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -70,7 +75,7 @@ Qt::ItemFlags RcItemModel::flags(const QModelIndex &index) const
     return QSqlTableModel::flags(index);
 }
 
-void RcItemModel::setFilterOnRcId(const int rcId)
+void RcItemModel::setFilterOnCrId(const int rcId)
 {
     QHash<int, QString> whereLink;
     whereLink.insert(Constants::RC_LCRITERES_REF_RCITEM_ID, QString("='%1'").arg(rcId));

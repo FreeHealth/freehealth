@@ -27,6 +27,7 @@
 #ifndef EDRC_PLUGIN_CONSULTRESULT_H
 #define EDRC_PLUGIN_CONSULTRESULT_H
 
+#include <edrcplugin/edrc_exporter.h>
 #include <QList>
 #include <QString>
 
@@ -34,8 +35,10 @@
  * \file resultconsult.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 25 Jun 2013
+ * \date 21 Sept 2013
 */
+
+// TODO: ConsultResult should not be internal if you use it with the editor...
 
 namespace eDRC {
 namespace Internal {
@@ -71,7 +74,7 @@ private:
     QString _label, _indent, _comment;
 };
 
-class ConsultResult
+class EDRC_EXPORT ConsultResult
 {
 public:
     enum SymptomaticState {
@@ -128,8 +131,8 @@ public:
     QString htmlCommentOnCR() const {return _crComment;}
     QString htmlCommentOnCriterias() const {return _critComment;}
 
-    QString toXml() const;
-    static ConsultResult &fromXml(const QString &xml);
+    QString toXml(const QString &extraXml = QString::null) const;
+    static ConsultResult &fromXml(const QString &xml, QString *extraXmlContent = 0);
 
     QString toHtml(const QString &globalMask, const QString &selectedCriteriaItemMask, eDRC::Internal::DrcDatabase &edrcBase) const;
 
@@ -144,10 +147,10 @@ private:
     QString _crComment, _critComment;
 };
 
-} // namespace eDRC
 } // namespace Internal
+} // namespace eDRC
 
-QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr);
-QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteria &crit);
+QDebug EDRC_EXPORT operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr);
+QDebug EDRC_EXPORT operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteria &crit);
 
 #endif // EDRC_PLUGIN_CONSULTRESULT_H

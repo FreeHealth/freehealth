@@ -46,6 +46,8 @@
 #include <coreplugin/dialogs/helpdialog.h>
 
 #include <edrcplugin/widgets/rceditorwidget.h>
+#include <edrcplugin/constants.h>
+#include <edrcplugin/consultresult.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -55,9 +57,13 @@
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
+#include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_msgerror.h>
 
 #include "ui_mainwindow.h"
 
+#include <QString>
 #include <QTextEdit>
 #include <QTextStream>
 #include <QCloseEvent>
@@ -72,9 +78,14 @@
 #include <QDockWidget>
 #include <QMenu>
 #include <QDesktopWidget>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomText>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
+using namespace eDRC;
+using namespace eDRC::Internal;
 using namespace Trans::ConstantTranslations;
 
 enum { WarnLogMessage = false };
@@ -96,7 +107,12 @@ static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w);
 
 namespace MainWin {
 namespace Internal {
-    static const char* const  SETTINGS_COUNTDOWN = "applicationCountDown";
+const char* const  SETTINGS_COUNTDOWN = "applicationCountDown";
+
+const char* const  XML_PATIENT_NAME = "patient";
+const char* const  XML_DATE = "date";
+const char* const  XML_USERNAME = "user";
+
 } // namespace Internal
 } // namespace Core
 
@@ -108,7 +124,6 @@ MainWindow::MainWindow( QWidget * parent ) :
         Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
-//    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
     messageSplash(tr("Creating Main Window"));
 }
 
@@ -165,15 +180,23 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 }
 
 /**
- * When all dependent plugins are initialized, start the second initialization.
+ * When all dependent plugins are initialized, start the second initialization:
+ * - setup ui
+ * - start update checker
+ * - read settings
  */
 void MainWindow::extensionsInitialized()
 {
     // Creating MainWindow interface
     ui = new Internal::Ui::MainWindow();
     ui->setupUi(this);
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
+    ui->patientName->setPlaceholderText(tkTr(Trans::Constants::PATIENT_NAME));
+    ui->date->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
+    ui->date->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
+    ui->date->setDate(QDate::currentDate());
+
+    ui->clearButton->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
+    connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearUi()));
 
     // Disable some actions when starting as medintux plugin
 //    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
@@ -218,12 +241,11 @@ void MainWindow::extensionsInitialized()
 
     createDockWindows();
     readSettings();
-    userChanged();
 
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
-    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -250,13 +272,10 @@ void MainWindow::postCoreOpened()
 
     finishSplash(this);
 
-    setCentralWidget(new eDRC::Internal::RcEditorWidget(this));
+    //setCentralWidget(new eDRC::Internal::RcEditorWidget(this));
 
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();
-
-    resize(800, 600);
-    Utils::centerWidget(this, QDesktopWidget().screen());
 
     raise();
     show();
@@ -349,9 +368,12 @@ void MainWindow::openRecentFile()
     }
 }
 
-void MainWindow::userChanged()
+/** Clear UI editors */
+void MainWindow::clearUi()
 {
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    ui->date->setDate(QDate::currentDate());
+    ui->patientName->clear();
+    ui->crEditor->clear();
 }
 
 void MainWindow::updateCheckerEnd(bool)
@@ -419,12 +441,6 @@ bool MainWindow::applicationPreferences()
     return true;
 }
 
-void MainWindow::changeFontTo(const QFont &font)
-{
-    Q_UNUSED(font);
-}
-
-
 bool MainWindow::print()
 {
 //    return ui->m_CentralWidget->printPrescription();
@@ -446,51 +462,84 @@ bool MainWindow::configureMedintux()
 
 bool MainWindow::saveAsFile()
 {
-    return true;
+    // get filename
+    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
+                                QDir::homePath(),
+                                tkTr(Core::Constants::FREEDRC_FILEFILTER));
+    if (fileName.isEmpty())
+        return false;
+
+    // Create extra-xml content
+    QDomDocument doc;
+    QDomElement pe = doc.createElement(::XML_PATIENT_NAME);
+    QDomText pet = doc.createTextNode(ui->patientName->text());
+    pe.appendChild(pet);
+    doc.appendChild(pe);
+    QDomElement dt = doc.createElement(::XML_DATE);
+    QDomText dtv = doc.createTextNode(ui->date->date().toString(Qt::ISODate));
+    dt.appendChild(dtv);
+    doc.appendChild(dt);
+
+    // Get full content XML
+    ConsultResult cr = ui->crEditor->submit();
+    QString xml = cr.toXml(doc.toString());
+
+    // Save to file
+    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
+    if (ok) {
+        fileManager()->addToRecentFiles(fileName);
+        fileManager()->setCurrentFile(fileName);
+    }
+    return ok;
 }
 
 bool MainWindow::saveFile()
 {
-    return true;
+    return saveAsFile();
 }
 
 bool MainWindow::openFile()
 {
-//    QString f = QFileDialog::getOpenFileName(this,
-//                                             tkTr(Trans::Constants::OPEN_FILE),
-//                                             QDir::homePath(),
-//                                             tkTr(Core::Constants::FREEDIAMS_FILEFILTER) );
-//    if (f.isEmpty())
-//        return false;
-//    //    QString f = "/Users/eric/prescription.di";
-//    readFile(f);
-//    fileManager()->setCurrentFile(f);
-//    fileManager()->addToRecentFiles(f);
+    QString f = QFileDialog::getOpenFileName(this,
+                                             tkTr(Trans::Constants::OPEN_FILE),
+                                             QDir::homePath(),
+                                             tkTr(Core::Constants::FREEDRC_FILEFILTER) );
+    if (f.isEmpty())
+        return false;
+//        QString f = QString("%1/%2/%3")
+//                .arg(settings()->path(Core::ISettings::BundleResourcesPath))
+//                .arg("textfiles/freedrctest")
+//                .arg("cr_2013_09.cr");
+    readFile(f);
+    fileManager()->addToRecentFiles(f);
+    fileManager()->setCurrentFile(f);
     return true;
 }
 
 void MainWindow::readFile(const QString &file)
 {
     Q_UNUSED(file);
-    // TODO: code here */
-//    QString datas;
-//    if (drugModel()->rowCount() > 0) {
-//        int r = Utils::withButtonsMessageBox(
-//                tr("Opening a prescription : merge or replace ?"),
-//                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
-//                QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
-//                tr("Open a prescription") + " - " + qApp->applicationName());
-//        if (r == 0) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
-//        } else if (r==1) {
-//            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
-//        }
-//    } else {
-//        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
-//    }
-////    qWarning() << datas;
-//    patient()->fromXml(datas);
-//    refreshPatient();
+    QString extra;
+    ConsultResult cr = ConsultResult::fromXml(Utils::readTextFile(file), &extra);
+    extra = extra.simplified();
+    if (!extra.isEmpty()) {
+        QDomDocument doc;
+        QString error;
+        int line = 0;
+        int col = 0;
+        if (!doc.setContent(extra, &error, &line, &col)) {
+            LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
+            LOG_ERROR(QString("Unable to read extra-xml content of file: %1").arg(file));
+        } else {
+            QDomElement extra = doc.firstChildElement(Constants::XML_EXTRA_TAG);
+            QDomElement patient = extra.firstChildElement(::XML_PATIENT_NAME);
+            ui->patientName->setText(patient.text());
+            QDomElement date = extra.firstChildElement(::XML_DATE);
+            ui->date->setDate(QDate::fromString(date.text(), Qt::ISODate));
+        }
+    }
+    ui->crEditor->clear();
+    ui->crEditor->setConsultResult(cr);
 }
 
 void MainWindow::createDockWindows()

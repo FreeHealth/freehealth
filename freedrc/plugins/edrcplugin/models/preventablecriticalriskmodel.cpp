@@ -45,7 +45,7 @@ PreventableCriticalRiskModel::PreventableCriticalRiskModel(QObject *parent) :
     QSqlTableModel(parent, edrcBase().database())
 {
     setTable(edrcBase().table(Constants::Table_Ref_RCE));
-    setFilterOnRcId(-1);
+    setFilterOnCrId(-1);
 }
 
 PreventableCriticalRiskModel::~PreventableCriticalRiskModel()
@@ -76,7 +76,7 @@ Qt::ItemFlags PreventableCriticalRiskModel::flags(const QModelIndex &index) cons
 }
 
 /** Filter the model for a specific RC identifiant \e rcId */
-void PreventableCriticalRiskModel::setFilterOnRcId(const int rcId)
+void PreventableCriticalRiskModel::setFilterOnCrId(const int rcId)
 {
     QHash<int, QString> whereLink;
     whereLink.insert(Constants::RC_LRCE_REF_RC_ID, QString("='%1'").arg(rcId));

@@ -61,6 +61,7 @@ public:
 
     RcCriteriasModel(QObject *parent = 0);
     ~RcCriteriasModel();
+    void clear();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -70,7 +71,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void setFilterOnRcId(const int crId);
+    void setFilterOnCrId(const int crId);
     void setSelectedCriteriaIds(const QList<int> &ids);
     int currentConsulResultId() const;
     CodingStatus currentCodingStatus() const;

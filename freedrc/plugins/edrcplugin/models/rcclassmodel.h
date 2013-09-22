@@ -61,7 +61,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole);
 
-    void setFilterOnRcId(const QString &rcId);
+    void setFilterOnCrId(const QString &rcId);
 
 private:
 //    void selectAllParents(const QModelIndex& index);

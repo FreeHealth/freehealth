@@ -183,6 +183,8 @@ void EdrcPlugin::testConsultResultXml()
     ConsultResult r3 = ConsultResult::fromXml(r2.toXml());
     QVERIFY(r2 == r3);
     QVERIFY(r2.toXml() == r3.toXml());
+
+    // TODO: test with extraXml code
 }
 
 void EdrcPlugin::testValidatorTestOne()

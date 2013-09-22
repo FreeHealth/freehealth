@@ -275,8 +275,11 @@ namespace {
     const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
 }
 
-/** Transform object to XML */
-QString ConsultResult::toXml() const
+/**
+ * Transform object to XML. You can add some extra-xml code \e extraXml.
+ * The extra content is automatically surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
+*/
+QString ConsultResult::toXml(const QString &extraXml) const
 {
     // TODO: add the eDRC database version & coding system version
     QDomDocument doc("FreeMedForms");
@@ -337,11 +340,25 @@ QString ConsultResult::toXml() const
         comment.appendChild(t);
         comments.appendChild(comment);
     }
+
+    // Add extra xml
+    if (!extraXml.isEmpty()) {
+        QString xml = doc.toString(2);
+        int index = xml.lastIndexOf(QString("</%1>").arg(XML_ROOT_TAG));
+        Q_ASSERT(index != -1);
+        xml.insert(index, QString("<%1>%2</%1>").arg(Constants::XML_EXTRA_TAG).arg(extraXml));
+        // TODO: check the validity of the extra xml content before breaking the whole document
+        doc.setContent(xml);
+    }
     return QString("<?xml version='1.0' encoding='UTF-8'?>\n%1").arg(doc.toString(2));
 }
 
-/** Create a eDRC::Internal::ConsultResult object from XML */
-ConsultResult &ConsultResult::fromXml(const QString &xml)
+/**
+ * Create a eDRC::Internal::ConsultResult object from XML. If an extra-xml content is available
+ * in the \e xml code, you will get it in the \e extraXmlContent. Otherwise, this QString
+ * is kept empty. The extra content is surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
+ */
+ConsultResult &ConsultResult::fromXml(const QString &xml, QString *extraXmlContent)
 {
     ConsultResult *cr = new ConsultResult;
     // Prepare XML content
@@ -424,6 +441,15 @@ ConsultResult &ConsultResult::fromXml(const QString &xml)
         comment = comment.nextSiblingElement(::XML_CR_COMMENT);
     }
 
+    // Extra-XML content
+    if (extraXmlContent) {
+        if (xml.contains(QString("<%1>").arg(Constants::XML_EXTRA_TAG))
+                && xml.contains(QString("</%1>").arg(Constants::XML_EXTRA_TAG))) {
+            int b = xml.indexOf(QString("<%1>").arg(Constants::XML_EXTRA_TAG));
+            int e = xml.indexOf(QString("</%1>").arg(Constants::XML_EXTRA_TAG), b) + QString("<%1>").arg(Constants::XML_EXTRA_TAG).size() + 1;
+            *extraXmlContent = xml.mid(b, e-b);
+        }
+    }
     return *cr;
 }
 

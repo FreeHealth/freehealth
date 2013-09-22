@@ -51,12 +51,13 @@ public:
 
     RcItemModel(QObject *parent = 0);
     ~RcItemModel();
+    void clear();
 
     QVariant data(const QModelIndex &index, int role) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void setFilterOnRcId(const int rcId);
+    void setFilterOnCrId(const int rcId);
 
 private:
 //    void selectAllParents(const QModelIndex& index);

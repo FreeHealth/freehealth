@@ -70,13 +70,10 @@ public:
     void readSettings();
     void writeSettings();
     void createStatusBar();
-    void changeFontTo(const QFont &font);
-
 
 public Q_SLOTS: // Interface of MainWidowActionHandler
     bool newFile();
     bool openFile();
-    void readFile(const QString &file);
     bool saveFile();
     bool saveAsFile();
     bool print();
@@ -90,11 +87,14 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     void aboutToShowRecentFiles();
     void openRecentFile();
 
-    void userChanged();
+    void clearUi();
 
 protected:
-    void closeEvent( QCloseEvent *event );
+    void closeEvent(QCloseEvent *event);
     void changeEvent(QEvent *event);
+
+private:
+    void readFile(const QString &file);
 
 private Q_SLOTS:
     void postCoreOpened();

@@ -77,7 +77,9 @@ public:
     RcCriteriasModelPrivate(RcCriteriasModel *parent) :
         _crId(-1),
         q(parent)
-    {}
+    {
+        Q_UNUSED(q);
+    }
 
     ~RcCriteriasModelPrivate()
     {}
@@ -109,7 +111,7 @@ RcCriteriasModel::RcCriteriasModel(QObject *parent) :
     QAbstractTableModel(parent),
     d(new RcCriteriasModelPrivate(this))
 {
-    setFilterOnRcId(-1);
+    setFilterOnCrId(-1);
 }
 
 RcCriteriasModel::~RcCriteriasModel()
@@ -117,6 +119,11 @@ RcCriteriasModel::~RcCriteriasModel()
     if (d)
         delete d;
     d = 0;
+}
+
+void RcCriteriasModel::clear()
+{
+    setFilterOnCrId(-1);
 }
 
 int RcCriteriasModel::rowCount(const QModelIndex &parent) const
@@ -303,7 +310,7 @@ Qt::ItemFlags RcCriteriasModel::flags(const QModelIndex &index) const
 }
 
 /** Filter CR criterias according to the CR primkey \e crId*/
-void RcCriteriasModel::setFilterOnRcId(const int crId)
+void RcCriteriasModel::setFilterOnCrId(const int crId)
 {
     beginResetModel();
     d->_checkedRows.clear();

@@ -40,6 +40,9 @@ namespace Constants {
 // Some versions
 const char * const VALIDATOR_VERSION = "2013.06";
 
+// Xml tags
+const char * const XML_EXTRA_TAG = "CrExtra";
+
 // Settings params
 const char * const S_CR_USE_MODERNLABEL = "edrc/crlabel/modern";
 const char * const S_CR_MANDATORYLABEL_IN_BOLD = "edrc/crlabel/mandatoryinbold";

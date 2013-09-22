@@ -34,29 +34,29 @@ class EDRC_EXPORT RcEditorWidget: public QWidget
 {
     Q_OBJECT
 public:
-      RcEditorWidget(QWidget *parent = 0);
-      ~RcEditorWidget();
-
-      void setConsultResult(const ConsultResult &cr);
+    RcEditorWidget(QWidget *parent = 0);
+    ~RcEditorWidget();
+    void clear();
+    void setConsultResult(const ConsultResult &cr);
 
 public Q_SLOTS:
-      ConsultResult submit();
+    ConsultResult &submit();
 
 private Q_SLOTS:
-      void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
-      void onSearchTextChanged(const QString &text);
-      //void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-      void onCriteriaItemPressed(const QModelIndex &index);
-      void onSmfgAboutClicked();
-      void onArgumentsClicked();
-      void updateCodingStatus();
+    void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
+    void onSearchTextChanged(const QString &text);
+    //void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void onCriteriaItemPressed(const QModelIndex &index);
+    void onSmfgAboutClicked();
+    void onArgumentsClicked();
+    void updateCodingStatus();
 
-      void on_debugButton_clicked();
+    void on_debugButton_clicked();
 private:
-      void changeEvent(QEvent *event);
+    void changeEvent(QEvent *event);
 
 private:
-      RcEditorWidgetPrivate *d;
+    RcEditorWidgetPrivate *d;
 };
 
 } // namespace eDRC

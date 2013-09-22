@@ -128,5 +128,5 @@ Qt::ItemFlags RCClassModel::flags(const QModelIndex &index) const
     return QSqlTableModel::flags(index);
 }
 
-void RCClassModel::setFilterOnRcId(const QString &rcId)
+void RCClassModel::setFilterOnCrId(const QString &rcId)
 {}

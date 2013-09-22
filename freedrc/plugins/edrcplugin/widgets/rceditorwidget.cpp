@@ -42,6 +42,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 
 #include <translationutils/constants.h>
@@ -60,6 +61,7 @@ static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 
 namespace eDRC {
 namespace Internal {
@@ -250,7 +252,7 @@ public:
         }
 
         // Update models
-        _rcCritModel->setFilterOnRcId(cr.consultResultId());
+        _rcCritModel->setFilterOnCrId(cr.consultResultId());
         _rcCritModel->setSelectedCriteriaIds(cr.selectedCriterias());
 
         switch (cr.diagnosisPosition()) {
@@ -420,6 +422,18 @@ RcEditorWidget::~RcEditorWidget()
     d = 0;
 }
 
+/** Clear the editor */
+void RcEditorWidget::clear()
+{
+    d->ui->searchLine->clear();
+    onSearchTextChanged("");
+    d->ui->treeViewRC->collapseAll();
+    d->ui->treeViewRC->selectionModel()->clear();
+    d->_cr.clear();
+    setConsultResult(d->_cr);
+}
+
+/** Set the editing eDRC::ConsulResult to \e cr */
 void RcEditorWidget::setConsultResult(const ConsultResult &cr)
 {
     d->_cr = cr;
@@ -427,10 +441,11 @@ void RcEditorWidget::setConsultResult(const ConsultResult &cr)
 }
 
 /**
- * Update the internal consultation result using the current ui selection and return a copy of it.
+ * Update the internal consultation result using the current ui selection and
+ * return its reference.
  * \sa setConsultResult()
  */
-ConsultResult RcEditorWidget::submit()
+ConsultResult &RcEditorWidget::submit()
 {
     d->uiToConsultResult(d->_cr);
     return d->_cr;
@@ -450,8 +465,8 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
 
     // Update models
     int crId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
-    d->_pcrModel->setFilterOnRcId(crId);
-    d->_rcCritModel->setFilterOnRcId(crId);
+    d->_pcrModel->setFilterOnCrId(crId);
+    d->_rcCritModel->setFilterOnCrId(crId);
 
     // Update buttons & status label
     d->clearButtonCheckState(crId);
@@ -501,7 +516,7 @@ void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 /** Open the SFMG about dialog */
 void RcEditorWidget::onSmfgAboutClicked()
 {
-    SfmgAboutDialog dlg(this);
+    SfmgAboutDialog dlg(mainWindow());
     dlg.exec();
 }
 
@@ -516,7 +531,7 @@ void RcEditorWidget::onArgumentsClicked()
     }
 
     int rcId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
-    RcArgumentsDialog dlg(this->parentWidget());
+    RcArgumentsDialog dlg(mainWindow());
     dlg.setRcId(rcId);
     dlg.exec();
     d->ui->arguments->setEnabled(true);
@@ -536,17 +551,18 @@ void RcEditorWidget::on_debugButton_clicked()
     qWarning() << d->_cr;
     QTextBrowser *b = new QTextBrowser(this);
     b->resize(800,400);
+    QString path = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::BundleResourcesPath))
+            .arg("textfiles/edrc");
     b->setHtml(d->_cr.toHtml(
-                   Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/crtohtml_globalmask.html"),
-                   Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/criteriatohtml_itemmask.html"),
+                   Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")),
+                   Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")),
                    edrcBase()));
 
     qWarning() << d->_cr.toHtml(
-                      Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/crtohtml_globalmask.html"),
-                      Utils::readTextFile("/Volumes/RamDisk/eric/freemedforms/global_resources/textfiles/edrc/criteriatohtml_itemmask.html"),
+                      Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")),
+                      Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")),
                       edrcBase());
-
-
     b->show();
 }
 

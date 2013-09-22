@@ -81,7 +81,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_User(0),
         m_PadTools(0)
 {
-    setObjectName("FreeAccount::Core");
+    setObjectName("FreeDrc::Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDRC_UPDATE_URL);
     m_Settings->setPath(ISettings::Splashscreen, Constants::FREEDRC_SPLASHSCREEN);
