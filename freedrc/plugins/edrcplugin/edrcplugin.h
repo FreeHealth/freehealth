@@ -23,10 +23,17 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_IPLUGIN_H
-#define EDRC_IPLUGIN_H
+#ifndef EDRCPLUGIN_INTERNAL_IPLUGIN_H
+#define EDRCPLUGIN_INTERNAL_IPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
+
+/**
+ * \file edrccore.h
+ * \author Eric Maeker
+ * \version 0.9.2
+ * \date 22 Sept 2013
+*/
 
 namespace eDRC {
 class EdrcCore;
@@ -49,13 +56,25 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
 
+#ifdef WITH_TESTS
+private Q_SLOTS:
+    void initTestCase();
+    void testConsultResultObject();
+    void testConsultResultXml();
+    void testValidatorTestOne();
+    void testValidatorTestTwo();
+    void testValidatorTestThree();
+    void testCrToHtml();
+    void cleanupTestCase();
+#endif
+
 private:
     EdrcCore *_core;
     EdrcPreferencesPage *_pref;
 };
 
 } // namespace Internal
-} // namespace Tools
+} // namespace eDRC
 
-#endif // EDRC_IPLUGIN_H
+#endif // EDRCPLUGIN_INTERNAL_IPLUGIN_H
 

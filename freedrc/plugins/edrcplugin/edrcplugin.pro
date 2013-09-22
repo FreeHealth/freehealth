@@ -54,6 +54,10 @@ FORMS += \
     widgets/sfmgaboutdialog.ui \
     widgets/edrcpreferences.ui
 
+# include tests
+equals(TEST, 1) {
+    SOURCES += tests/tst_edrcvalidator.cpp
+}
 
 OTHER_FILES += eDRC.pluginspec
 
