@@ -31,8 +31,6 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/ipatient.h>
-#include <coreplugin/iuser.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -44,9 +42,11 @@
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <edrcplugin/widgets/rceditorwidget.h>
 #include <edrcplugin/constants.h>
+#include <edrcplugin/edrccore.h>
 #include <edrcplugin/consultresult.h>
 
 #include <utils/log.h>
@@ -97,8 +97,8 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
-static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline eDRC::EdrcCore &edrcCore() { return eDRC::EdrcCore::instance();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 
 // SplashScreen Messagers
@@ -113,6 +113,19 @@ const char* const  XML_PATIENT_NAME = "patient";
 const char* const  XML_DATE = "date";
 const char* const  XML_USERNAME = "user";
 
+//class MainWindowToken : public Core::IToken
+//{
+//public:
+//    MainWindowToken(const QString &name) : Core::IToken(name) {}
+//    void setEditor(QLineEdit *editor) {_editor = editor;}
+
+//    QVariant testValue() const {return uid();}
+//    QVariant value() const {if (_editor) return _editor->text(); return uid();}
+
+//private:
+//    QLineEdit *_editor;
+//};
+
 } // namespace Internal
 } // namespace Core
 
@@ -120,8 +133,9 @@ const char* const  XML_USERNAME = "user";
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-MainWindow::MainWindow( QWidget * parent ) :
-        Core::IMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) :
+    Core::IMainWindow(parent),
+    ui(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -150,25 +164,26 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     Core::MainWindowActions actions;
     actions.setFileActions(
-            Core::MainWindowActions::A_FileOpen |
-            Core::MainWindowActions::A_FileSave |
-            Core::MainWindowActions::A_FileSaveAs |
-            Core::MainWindowActions::A_FilePrintPreview |
-            Core::MainWindowActions::A_FileQuit);
+                Core::MainWindowActions::A_FileOpen |
+                Core::MainWindowActions::A_FileSave |
+                Core::MainWindowActions::A_FileSaveAs |
+                Core::MainWindowActions::A_FilePrint |
+                Core::MainWindowActions::A_FilePrintPreview |
+                Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
-            Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LanguageChange //|
-//            Core::MainWindowActions::A_ConfigureMedinTux
-            );
+                Core::MainWindowActions::A_AppPreferences |
+                Core::MainWindowActions::A_LanguageChange //|
+                //            Core::MainWindowActions::A_ConfigureMedinTux
+                );
     actions.setHelpActions(
-            Core::MainWindowActions::A_AppAbout |
-            Core::MainWindowActions::A_PluginsAbout |
-            Core::MainWindowActions::A_AppHelp |
-            Core::MainWindowActions::A_DebugDialog |
-            Core::MainWindowActions::A_CheckUpdate //|
-//            Core::MainWindowActions::A_QtAbout
-            );
-//    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
+                Core::MainWindowActions::A_AppAbout |
+                Core::MainWindowActions::A_PluginsAbout |
+                Core::MainWindowActions::A_AppHelp |
+                Core::MainWindowActions::A_DebugDialog |
+                Core::MainWindowActions::A_CheckUpdate //|
+                //            Core::MainWindowActions::A_QtAbout
+                );
+    //    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
     actions.createEditActions(false);
     createActions(actions);
 
@@ -271,12 +286,8 @@ void MainWindow::postCoreOpened()
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);
-
-    //setCentralWidget(new eDRC::Internal::RcEditorWidget(this));
-
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();
-
     raise();
     show();
 }
@@ -443,14 +454,32 @@ bool MainWindow::applicationPreferences()
 
 bool MainWindow::print()
 {
-//    return ui->m_CentralWidget->printPrescription();
-    return true;
+    Core::IDocumentPrinter *p = printer();
+    Q_ASSERT(p);
+    p->clearTokens();
+    ConsultResult cr = ui->crEditor->submit();
+    QString html = edrcCore().toHtml(cr);
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    return p->print(html,
+                    Core::IDocumentPrinter::Papers_Generic_User,
+                    false);
 }
 
 bool MainWindow::printPreview()
 {
-//    ui->m_CentralWidget->printPreview();
-    return true;
+    Core::IDocumentPrinter *p = printer();
+    Q_ASSERT(p);
+    p->clearTokens();
+    ConsultResult cr = ui->crEditor->submit();
+    QString html = edrcCore().toHtml(cr);
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    return p->printPreview(html,
+                           Core::IDocumentPrinter::Papers_Generic_User,
+                           false);
 }
 
 /** \brief Runs the MedinTux configurator */

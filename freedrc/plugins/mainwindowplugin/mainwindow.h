@@ -23,14 +23,11 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEACCOUNT_MAINWINDOW_H
-#define FREEACCOUNT_MAINWINDOW_H
+#ifndef FREEDRC_PLUGIN_MAINWINDOW_H
+#define FREEDRC_PLUGIN_MAINWINDOW_H
 
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
-
-// include Qt headers
-#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -47,12 +44,14 @@ QT_END_NAMESPACE
 
 namespace MainWin {
 namespace Internal {
+//class MainWindowToken;
+
 namespace Ui {
 class MainWindow;
 }  // End Ui
 }  // End Internal
 
-class FACCOUNTMAINWIN_EXPORT MainWindow: public Core::IMainWindow
+class FREEDRC_MAINWIN_EXPORT MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
     enum { MaxRecentFiles = 10 };
@@ -101,8 +100,9 @@ private Q_SLOTS:
 
 public:
     Internal::Ui::MainWindow *ui;
+//    Internal::MainWindowToken *_patientToken, *_dateToken;
 };
 
-} // End Core
+} // End MainWin
 
-#endif  // FREEACCOUNT_MAINWINDOW_H
+#endif  // FREEDRC_PLUGIN_MAINWINDOW_H

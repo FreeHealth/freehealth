@@ -32,15 +32,15 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef FACCOUNTMAINWIN_EXPORT_H
-#define FACCOUNTMAINWIN_EXPORT_H
+#ifndef FREEDRC_PLUGIN_MAINWINDOW_EXPORT_H
+#define FREEDRC_PLUGIN_MAINWINDOW_EXPORT_H
 
 #include <qglobal.h>
 
 #if defined(FACCOUNT_MAINWIN_LIBRARY)
-#define FACCOUNTMAINWIN_EXPORT Q_DECL_EXPORT
+#define FREEDRC_MAINWIN_EXPORT Q_DECL_EXPORT
 #else
-#define FACCOUNTMAINWIN_EXPORT Q_DECL_IMPORT
+#define FREEDRC_MAINWIN_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif
+#endif  // FREEDRC_PLUGIN_MAINWINDOW_EXPORT_H
