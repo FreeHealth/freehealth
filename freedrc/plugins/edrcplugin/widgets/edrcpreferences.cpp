@@ -28,12 +28,13 @@
 #include "ui_edrcpreferences.h"
 #include <edrcplugin/constants.h>
 
-#include <translationutils/constants.h>
-#include <translationutils/trans_current.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
+
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 using namespace eDRC;
 using namespace Internal;
@@ -64,6 +65,8 @@ void EdrcPreferencesPageWidget::setDataToUi()
     ui->useModernLabelling->setChecked(settings()->value(Constants::S_CR_USE_MODERNLABEL).toBool());
     ui->mandatoryInBold->setChecked(settings()->value(Constants::S_CR_MANDATORYLABEL_IN_BOLD).toBool());
     ui->userComments->setChecked(settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool());
+    ui->globalMask->setHtml(settings()->value(Constants::S_TOKEN_HTMLGLOBALMASK).toString());
+    ui->criteriaEditor->setHtml(settings()->value(Constants::S_TOKEN_HTMLCRITERIASMASK).toString());
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -100,11 +103,16 @@ void EdrcPreferencesPageWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
     //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("EdrcPreferencesPageWidget"));
-
     s->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, true);
     s->setValue(Constants::S_CR_USE_MODERNLABEL, true);
     s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
     s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
+
+    QString path = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::BundleResourcesPath))
+            .arg("textfiles/edrc");
+    s->setValue(Constants::S_TOKEN_HTMLGLOBALMASK, Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")));
+    s->setValue(Constants::S_TOKEN_HTMLCRITERIASMASK, Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")));
 #ifdef FREEDRC
     s->sync();
 //#else
@@ -215,6 +223,11 @@ void EdrcPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
     defaultvalues.insert(Constants::S_REALTIME_CR_CODING_CHECKING, false);
     defaultvalues.insert(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
+    QString path = QString("%1/%2")
+            .arg(settings()->path(Core::ISettings::BundleResourcesPath))
+            .arg("textfiles/edrc");
+    defaultvalues.insert(Constants::S_TOKEN_HTMLGLOBALMASK, Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")));
+    defaultvalues.insert(Constants::S_TOKEN_HTMLCRITERIASMASK, Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")));
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
