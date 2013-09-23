@@ -33,12 +33,13 @@
 /**
  * \file edrccore.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 28 May 2013
+ * \version 0.9.2
+ * \date 21 Sept 2013
 */
 
 namespace eDRC {
 namespace Internal {
+class ConsultResult;
 class EdrcPlugin;
 class DrcDatabase;
 class EdrcCorePrivate;
@@ -57,6 +58,8 @@ public:
     ~EdrcCore();
     
     bool initialize();
+
+    QString toHtml(const Internal::ConsultResult &cr);
 
 //protected:
     Internal::DrcDatabase &edrcBase() const;

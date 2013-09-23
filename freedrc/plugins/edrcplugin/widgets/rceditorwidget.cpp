@@ -297,6 +297,9 @@ public:
         cr.clear();
         cr.setConsultResult(_rcCritModel->currentConsulResultId());
         cr.setSelectedCriterias(_rcCritModel->currentSelectedCriteriaIds());
+        cr.setDiagnosisPosition(ConsultResult::DiagnosisPositionUndefined);
+        cr.setMedicalFollowUp(ConsultResult::MedicalFollowUpUndefined);
+
         if (_posDiagGroup->checkedButton() == ui->buttonA)
             cr.setDiagnosisPosition(ConsultResult::A);
         else if (_posDiagGroup->checkedButton() == ui->buttonB)
@@ -551,21 +554,9 @@ void RcEditorWidget::updateCodingStatus()
 void RcEditorWidget::on_debugButton_clicked()
 {
     d->uiToConsultResult(d->_cr);
-    qWarning() << d->_cr;
     QTextBrowser *b = new QTextBrowser(this);
     b->resize(800,400);
-    QString path = QString("%1/%2")
-            .arg(settings()->path(Core::ISettings::BundleResourcesPath))
-            .arg("textfiles/edrc");
-    b->setHtml(d->_cr.toHtml(
-                   Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")),
-                   Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")),
-                   edrcBase()));
-
-    qWarning() << d->_cr.toHtml(
-                      Utils::readTextFile(QString("%1/%2").arg(path).arg("crtohtml_globalmask.html")),
-                      Utils::readTextFile(QString("%1/%2").arg(path).arg("criteriatohtml_itemmask.html")),
-                      edrcBase());
+    b->setHtml(edrcCore().toHtml(d->_cr));
     b->show();
 }
 

@@ -35,6 +35,8 @@
 #include "edrccore.h"
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
+#include <edrcplugin/consultresult.h>
+#include <edrcplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -135,6 +137,17 @@ bool EdrcCore::initialize()
     d->_edrcBase = new DrcDatabase(d->databasePath());
     d->_edrcBase->initialize(true, d->csvFilesPath());
     return true;
+}
+
+/**
+ * Transform a eDRC::Internal::ConsultResult to HTML using the current
+ * database and the current settings.
+ */
+QString EdrcCore::toHtml(const Internal::ConsultResult &cr)
+{
+    return cr.toHtml(settings()->value(Constants::S_TOKEN_HTMLGLOBALMASK).toString(),
+                     settings()->value(Constants::S_TOKEN_HTMLCRITERIASMASK).toString(),
+                     *d->_edrcBase);
 }
 
 DrcDatabase &EdrcCore::edrcBase() const
