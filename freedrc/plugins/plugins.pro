@@ -40,3 +40,12 @@ identity.depends += zipcodes
 
 edrc.subdir   = edrcplugin
 edrc.depends += core
+
+# optional plugins
+include(../../buildspecs/optionalplugins.pri)
+
+with-pad {
+    SUBDIRS += padtools
+    padtools.subdir = padtoolsplugin
+    padtools.depends += core
+}
