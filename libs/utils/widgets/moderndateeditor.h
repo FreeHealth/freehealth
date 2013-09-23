@@ -82,7 +82,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void updateDisplayText();
-    void formatActionTriggered(QAction*);
+    void onLeftButtonActionTriggered(QAction*);
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
