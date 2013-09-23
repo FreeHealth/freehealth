@@ -222,6 +222,7 @@ public:
     {
         ui->commentRC->clear();
         ui->commentItem->clear();
+        ui->dateExam->clear();
         clearButtonCheckState(cr.consultResultId());
 
         // Get class for RC
@@ -284,6 +285,7 @@ public:
             ui->commentRC->clear();
             ui->commentItem->clear();
         }
+        ui->dateExam->setDate(cr.dateOfExamination().date());
 
         // Check CR coding status
         updateCodingStatus();
@@ -357,6 +359,8 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
 {
     d->ui->setupUi(this);
     layout()->setMargin(0);
+    d->ui->dateExam->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
+    d->ui->dateExam->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
     d->ui->SFMG->setIcon(theme()->icon("sfmg_logo.png", Core::ITheme::SmallIcon));
     d->ui->arguments->setEnabled(false);
     if (!settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
@@ -408,6 +412,9 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
 
     connect(d->ui->SFMG, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
     connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
+
+    d->ui->validator->setChecked(settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING).toBool());
+    connect(d->ui->validator, SIGNAL(clicked()), this, SLOT(toggleValidator()));
 
     // TEST : ConsultResult(148; PosDiag:Uncoded; FollowUp:Uncoded; Crit:124,125,128,132,134; NotChronic; NotSymptomatic)
     ConsultResult cr;
@@ -547,6 +554,13 @@ void RcEditorWidget::onArgumentsClicked()
 void RcEditorWidget::updateCodingStatus()
 {
     d->updateCodingStatus();
+}
+
+/** Activate/desactivate the criteria validator */
+void RcEditorWidget::toggleValidator()
+{
+    settings()->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, d->ui->validator->isChecked());
+    d->ui->listViewItems->reset();
 }
 
 #include <QTextBrowser>

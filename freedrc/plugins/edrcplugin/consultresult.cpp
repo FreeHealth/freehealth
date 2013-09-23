@@ -193,6 +193,7 @@ void ConsultResult::clear()
     _chronicDisease = ChronicDiseaseStateUndefined;
     _crComment.clear();
     _critComment.clear();
+    _dateOfExamination = QDateTime();
 }
 
 /** Set the CR database \e id */
@@ -229,6 +230,12 @@ void ConsultResult::setChronicDiseaseState(int pos)
 void ConsultResult::setSymptomaticState(int pos)
 {
     _symptomatic = pos;
+}
+
+/** Define the date of examination of the CR (ms are removed). */
+void ConsultResult::setDateOfExamination(const QDateTime &dt)
+{
+    _dateOfExamination = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));
 }
 
 int ConsultResult::consultResultId() const
@@ -273,6 +280,7 @@ namespace {
     const char * const XML_ATTRIB_CHRONIC = "chronic";
     const char * const XML_ATTRIB_SYMPTOMATIC = "sympto";
     const char * const XML_ATTRIB_CRITERIAS = "criterias";
+    const char * const XML_ATTRIB_DATEOFEXAMEN = "dtExam";
     const char * const XML_COMMENT_ONCR = "OnCR";
     const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
 }
@@ -316,6 +324,9 @@ QString ConsultResult::toXml(const QString &extraXml) const
     default: break;
     }
 
+    // Add date
+    element.setAttribute(::XML_ATTRIB_DATEOFEXAMEN, _dateOfExamination.toString(Qt::ISODate));
+
     // Add criterias
     if (!_selectedCriteriasIds.isEmpty()) {
         QString selectedCriterias;
@@ -356,91 +367,101 @@ QString ConsultResult::toXml(const QString &extraXml) const
 }
 
 /**
- * Create a eDRC::Internal::ConsultResult object from XML. If an extra-xml content is available
- * in the \e xml code, you will get it in the \e extraXmlContent. Otherwise, this QString
- * is kept empty. The extra content is surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
+ * Create a list of eDRC::Internal::ConsultResult object from XML.
+ * If an extra-xml content is available in the \e xml code, you will get
+ * it in the \e extraXmlContent. Otherwise, this QString
+ * is kept empty. The extra content is surrounded with a special
+ * tag: eDRC::Constants::XML_EXTRA_TAG.
  */
-ConsultResult &ConsultResult::fromXml(const QString &xml, QString *extraXmlContent)
+QList<ConsultResult> &ConsultResult::fromXml(const QString &xml, QString *extraXmlContent)
 {
-    ConsultResult *cr = new ConsultResult;
+    QList<ConsultResult> *list = new QList<ConsultResult>();
     // Prepare XML content
     QDomDocument doc;
     QString error;
     int line, col;
     if (!doc.setContent(xml, &error, &line, &col)) {
         LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-        return *cr;
+        return *list;
     }
     QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
     if (root.isNull()) {
         LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_ROOT_TAG));
-        return *cr;
+        return *list;
     }
     QDomElement element = root.firstChildElement(::XML_CR_TAG);
-    if (element.isNull()) {
-        LOG_ERROR_FOR("ConsultResult", tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(::XML_CR_TAG));
-        return *cr;
-    }
-    // Read CR data
-    cr->setConsultResult(element.attribute(::XML_ATTRIB_ID).toInt());
+    while (!element.isNull()) {
+        ConsultResult cr;
+        // Read CR data
+        cr.setConsultResult(element.attribute(::XML_ATTRIB_ID).toInt());
 
-    // Diagnostic position
-    const QString &posDiag = element.attribute(::XML_ATTRIB_DIAG_POS);
-    if (posDiag.compare("A", Qt::CaseInsensitive)==0) {
-        cr->setDiagnosisPosition(A);
-    } else if (posDiag.compare("B", Qt::CaseInsensitive)==0) {
-        cr->setDiagnosisPosition(B);
-    } else if (posDiag.compare("C", Qt::CaseInsensitive)==0) {
-        cr->setDiagnosisPosition(C);
-    } else if (posDiag.compare("D", Qt::CaseInsensitive)==0) {
-        cr->setDiagnosisPosition(D);
-    } else if (posDiag.compare("Z", Qt::CaseInsensitive)==0) {
-        cr->setDiagnosisPosition(Z);
-    }
-
-    // Follow up
-    const QString &f = element.attribute(::XML_ATTRIB_FOLLOWUP);
-    if (f.compare("N", Qt::CaseInsensitive)==0) {
-        cr->setMedicalFollowUp(N);
-    } else if (f.compare("P", Qt::CaseInsensitive)==0) {
-        cr->setMedicalFollowUp(P);
-    } else if (f.compare("R", Qt::CaseInsensitive)==0) {
-        cr->setMedicalFollowUp(R);
-    }
-
-    // Symptomatic state
-    if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("yes", Qt::CaseInsensitive)==0) {
-        cr->setSymptomaticState(Symptomatic);
-    } else if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("no", Qt::CaseInsensitive)==0) {
-        cr->setSymptomaticState(NotSymptomatic);
-    }
-
-    // Chronic disease state
-    if (element.attribute(::XML_ATTRIB_CHRONIC).compare("yes", Qt::CaseInsensitive)==0) {
-        cr->setChronicDiseaseState(ChronicDisease);
-    } else if (element.attribute(::XML_ATTRIB_CHRONIC).compare("no", Qt::CaseInsensitive)==0) {
-        cr->setSymptomaticState(NotChronicDisease);
-    }
-
-    // Selected criteria ids
-    const QString &crit = element.attribute(::XML_ATTRIB_CRITERIAS);
-    foreach(const QString &c, crit.split(";", QString::SkipEmptyParts))
-        cr->_selectedCriteriasIds.append(c.toInt());
-
-    // Comments
-    element = root.firstChildElement(::XML_CR_COMMENTS);
-    QDomElement comment = element.firstChildElement(::XML_CR_COMMENT);
-    while (!comment.isNull()) {
-        if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCR, Qt::CaseInsensitive)==0) {
-            if (comment.childNodes().count() == 1) {
-                cr->setHtmlCommentOnCR(comment.childNodes().at(0).nodeValue());
-            }
-        } else if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCRITERIAS, Qt::CaseInsensitive)==0) {
-            if (comment.childNodes().count() == 1) {
-                cr->setHtmlCommentOnCriterias(comment.childNodes().at(0).nodeValue());
-            }
+        // Diagnostic position
+        const QString &posDiag = element.attribute(::XML_ATTRIB_DIAG_POS);
+        if (posDiag.compare("A", Qt::CaseInsensitive)==0) {
+            cr.setDiagnosisPosition(A);
+        } else if (posDiag.compare("B", Qt::CaseInsensitive)==0) {
+            cr.setDiagnosisPosition(B);
+        } else if (posDiag.compare("C", Qt::CaseInsensitive)==0) {
+            cr.setDiagnosisPosition(C);
+        } else if (posDiag.compare("D", Qt::CaseInsensitive)==0) {
+            cr.setDiagnosisPosition(D);
+        } else if (posDiag.compare("Z", Qt::CaseInsensitive)==0) {
+            cr.setDiagnosisPosition(Z);
         }
-        comment = comment.nextSiblingElement(::XML_CR_COMMENT);
+
+        // Follow up
+        const QString &f = element.attribute(::XML_ATTRIB_FOLLOWUP);
+        if (f.compare("N", Qt::CaseInsensitive)==0) {
+            cr.setMedicalFollowUp(N);
+        } else if (f.compare("P", Qt::CaseInsensitive)==0) {
+            cr.setMedicalFollowUp(P);
+        } else if (f.compare("R", Qt::CaseInsensitive)==0) {
+            cr.setMedicalFollowUp(R);
+        }
+
+        // Symptomatic state
+        if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("yes", Qt::CaseInsensitive)==0) {
+            cr.setSymptomaticState(Symptomatic);
+        } else if (element.attribute(::XML_ATTRIB_SYMPTOMATIC).compare("no", Qt::CaseInsensitive)==0) {
+            cr.setSymptomaticState(NotSymptomatic);
+        }
+
+        // Chronic disease state
+        if (element.attribute(::XML_ATTRIB_CHRONIC).compare("yes", Qt::CaseInsensitive)==0) {
+            cr.setChronicDiseaseState(ChronicDisease);
+        } else if (element.attribute(::XML_ATTRIB_CHRONIC).compare("no", Qt::CaseInsensitive)==0) {
+            cr.setSymptomaticState(NotChronicDisease);
+        }
+
+        // Date of examination
+        if (!element.attribute(::XML_ATTRIB_DATEOFEXAMEN).isEmpty()) {
+            QDateTime dt;
+            dt.fromString(element.attribute(::XML_ATTRIB_DATEOFEXAMEN), Qt::ISODate);
+            cr.setDateOfExamination(dt);
+        }
+
+        // Selected criteria ids
+        const QString &crit = element.attribute(::XML_ATTRIB_CRITERIAS);
+        foreach(const QString &c, crit.split(";", QString::SkipEmptyParts))
+            cr._selectedCriteriasIds.append(c.toInt());
+
+        // Comments
+        element = root.firstChildElement(::XML_CR_COMMENTS);
+        QDomElement comment = element.firstChildElement(::XML_CR_COMMENT);
+        while (!comment.isNull()) {
+            if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCR, Qt::CaseInsensitive)==0) {
+                if (comment.childNodes().count() == 1) {
+                    cr.setHtmlCommentOnCR(comment.childNodes().at(0).nodeValue());
+                }
+            } else if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCRITERIAS, Qt::CaseInsensitive)==0) {
+                if (comment.childNodes().count() == 1) {
+                    cr.setHtmlCommentOnCriterias(comment.childNodes().at(0).nodeValue());
+                }
+            }
+            comment = comment.nextSiblingElement(::XML_CR_COMMENT);
+        }
+        list->append(cr);
+        element = element.nextSiblingElement(::XML_CR_TAG);
     }
 
     // Extra-XML content
@@ -452,7 +473,7 @@ ConsultResult &ConsultResult::fromXml(const QString &xml, QString *extraXmlConte
             *extraXmlContent = xml.mid(b, e-b);
         }
     }
-    return *cr;
+    return *list;
 }
 
 /**

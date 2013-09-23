@@ -50,6 +50,7 @@ private Q_SLOTS:
     void onSmfgAboutClicked();
     void onArgumentsClicked();
     void updateCodingStatus();
+    void toggleValidator();
 
     void on_debugButton_clicked();
 private:

@@ -56,8 +56,8 @@ protected:
 public:
     static EdrcCore &instance();
     ~EdrcCore();
-    
     bool initialize();
+    QString currentDatabaseVersion() const;
 
     QString toHtml(const Internal::ConsultResult &cr);
 

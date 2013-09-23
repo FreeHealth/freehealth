@@ -180,9 +180,10 @@ void EdrcPlugin::testConsultResultXml()
     r2.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
     r2.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
 
-    ConsultResult r3 = ConsultResult::fromXml(r2.toXml());
-    QVERIFY(r2 == r3);
-    QVERIFY(r2.toXml() == r3.toXml());
+    QList<ConsultResult> list = ConsultResult::fromXml(r2.toXml());
+    QCOMPARE(list.count(), 1);
+    QVERIFY(r2 == list.at(0));
+    QVERIFY(r2.toXml() == list.at(0).toXml());
 
     // TODO: test with extraXml code
 }

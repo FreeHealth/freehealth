@@ -140,6 +140,18 @@ bool EdrcCore::initialize()
 }
 
 /**
+ * Return the current eDRC database version
+ * \sa eDRC::Internal::DrcDatabase::version()
+*/
+QString EdrcCore::currentDatabaseVersion() const
+{
+    const QString &v = d->_edrcBase->version();
+    if (v.isEmpty())
+        return tr("No eDRC database");
+    return v;
+}
+
+/**
  * Transform a eDRC::Internal::ConsultResult to HTML using the current
  * database and the current settings.
  */
@@ -150,6 +162,7 @@ QString EdrcCore::toHtml(const Internal::ConsultResult &cr)
                      *d->_edrcBase);
 }
 
+/** Returns the single eDRC database instance */
 DrcDatabase &EdrcCore::edrcBase() const
 {
     return *d->_edrcBase;

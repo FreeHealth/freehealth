@@ -205,10 +205,9 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     ui = new Internal::Ui::MainWindow();
     ui->setupUi(this);
+    ui->drcVersionLabel->setText(edrcCore().currentDatabaseVersion());
+    ui->labelInfoIcon->setPixmap(theme()->icon(Core::Constants::ICONABOUT).pixmap(16,16));
     ui->patientName->setPlaceholderText(tkTr(Trans::Constants::PATIENT_NAME));
-    ui->date->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
-    ui->date->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
-    ui->date->setDate(QDate::currentDate());
 
     ui->clearButton->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearUi()));
@@ -382,7 +381,6 @@ void MainWindow::openRecentFile()
 /** Clear UI editors */
 void MainWindow::clearUi()
 {
-    ui->date->setDate(QDate::currentDate());
     ui->patientName->clear();
     ui->crEditor->clear();
 }
@@ -504,10 +502,6 @@ bool MainWindow::saveAsFile()
     QDomText pet = doc.createTextNode(ui->patientName->text());
     pe.appendChild(pet);
     doc.appendChild(pe);
-    QDomElement dt = doc.createElement(::XML_DATE);
-    QDomText dtv = doc.createTextNode(ui->date->date().toString(Qt::ISODate));
-    dt.appendChild(dtv);
-    doc.appendChild(dt);
 
     // Get full content XML
     ConsultResult cr = ui->crEditor->submit();
@@ -549,7 +543,7 @@ void MainWindow::readFile(const QString &file)
 {
     Q_UNUSED(file);
     QString extra;
-    ConsultResult cr = ConsultResult::fromXml(Utils::readTextFile(file), &extra);
+    QList<ConsultResult> list = ConsultResult::fromXml(Utils::readTextFile(file), &extra);
     extra = extra.simplified();
     if (!extra.isEmpty()) {
         QDomDocument doc;
@@ -563,12 +557,11 @@ void MainWindow::readFile(const QString &file)
             QDomElement extra = doc.firstChildElement(Constants::XML_EXTRA_TAG);
             QDomElement patient = extra.firstChildElement(::XML_PATIENT_NAME);
             ui->patientName->setText(patient.text());
-            QDomElement date = extra.firstChildElement(::XML_DATE);
-            ui->date->setDate(QDate::fromString(date.text(), Qt::ISODate));
         }
     }
     ui->crEditor->clear();
-    ui->crEditor->setConsultResult(cr);
+    if (list.count() >= 1)
+        ui->crEditor->setConsultResult(list.last());
 }
 
 void MainWindow::createDockWindows()

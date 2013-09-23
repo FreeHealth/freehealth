@@ -30,12 +30,13 @@
 #include <edrcplugin/edrc_exporter.h>
 #include <QList>
 #include <QString>
+#include <QDateTime>
 
 /**
  * \file resultconsult.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 21 Sept 2013
+ * \date 23 Sept 2013
 */
 
 // TODO: ConsultResult should not be internal if you use it with the editor...
@@ -119,6 +120,7 @@ public:
     void setMedicalFollowUp(int pos);
     void setChronicDiseaseState(int pos);
     void setSymptomaticState(int pos);
+    void setDateOfExamination(const QDateTime &dt);
     void setHtmlCommentOnCR(const QString &htmlComment) {_crComment = htmlComment;}
     void setHtmlCommentOnCriterias(const QString &htmlComment)  {_critComment = htmlComment;}
 
@@ -130,9 +132,10 @@ public:
     SymptomaticState symptomaticState() const;
     QString htmlCommentOnCR() const {return _crComment;}
     QString htmlCommentOnCriterias() const {return _critComment;}
+    QDateTime dateOfExamination() const {return _dateOfExamination;}
 
     QString toXml(const QString &extraXml = QString::null) const;
-    static ConsultResult &fromXml(const QString &xml, QString *extraXmlContent = 0);
+    static QList<ConsultResult> &fromXml(const QString &xml, QString *extraXmlContent = 0);
 
     QString toHtml(const QString &globalMask, const QString &selectedCriteriaItemMask, eDRC::Internal::DrcDatabase &edrcBase) const;
 
@@ -145,6 +148,7 @@ private:
     int _diagnosisPosition, _medicalFollowUp;
     int _symptomatic, _chronicDisease;
     QString _crComment, _critComment;
+    QDateTime _dateOfExamination;
 };
 
 } // namespace Internal

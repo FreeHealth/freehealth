@@ -302,6 +302,48 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
             </property>
            </spacer>
           </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="codingResultIcon">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="validator">
+              <property name="toolTip">
+               <string>Click to toggle the criteria coding validator</string>
+              </property>
+              <property name="text">
+               <string>Validator</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
         </item>
         <item>
@@ -376,28 +418,6 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="codingResultIcon">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
@@ -408,23 +428,63 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="commentOnCrLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Comment on the CR</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="commentOnCrLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Comment on the CR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Date</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Utils::ModernDateEditor" name="dateExam">
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="Editor::TextEditor" name="commentRC">
@@ -487,6 +547,11 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
+  <customwidget>
+   <class>Utils::ModernDateEditor</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/moderndateeditor.h</header>
+  </customwidget>
   <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
