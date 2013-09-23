@@ -45,6 +45,7 @@
 
 #include <QAction>
 #include <QToolButton>
+#include <QTimer>
 #include <QDebug>
 
 using namespace Utils;
@@ -314,9 +315,10 @@ void ModernDateEditor::onLeftButtonActionTriggered(QAction *a)
 {
     if (a==d_de->aToday) {
         setDate(QDate::currentDate());
-    } else {
-        updateDisplayText();
+        // redefine default action using a differed slot to keep QBLE informed
+        QTimer::singleShot(10, d_de->aLongDisplay, SLOT(trigger()));
     }
+    updateDisplayText();
 }
 
 /** Clear the place holder. */
