@@ -522,7 +522,7 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     tokens.insert(Constants::TOKEN_CR_CR_DIAGNOSTIC_POSITION_FULL_LABEL, posDiagLabel);
     QString fuCode;
     QString fuLabel;
-    switch (_diagnosisPosition) {
+    switch (_medicalFollowUp) {
     case N: fuCode="N"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "New"); break;
     case P: fuCode="P"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Persistant"); break;
     case R: fuCode="R"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Revised"); break;
