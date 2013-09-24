@@ -5,9 +5,10 @@ mac:TARGET       = $$quote(FreeDrc)
 BUILD_PATH_POSTFIXE = FreeDrc
 
 # include general configuration
-INSTALL_DRUGS = 0
-INSTALL_ACCOUNT_FILES = 0
 INSTALL_PROFILES_FILES = 0
+INSTALL_DRUGS = 0
+INSTALL_ICD_DATABASE = 0
+INSTALL_ACCOUNT_FILES = 0
 INSTALL_ZIPCODES = 0
 
 include(../../buildspecs/config.pri)
