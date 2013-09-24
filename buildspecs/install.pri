@@ -3,6 +3,12 @@ CONFIG(debug_without_install) {
 
 }else{
 
+# You can set some vars to remove/add some files
+# - INSTALL_PROFILES_FILES : install user profile files (used by the user manager plugin)
+# - INSTALL_DRUGS : install "appinstalled" free drugs datapack
+# - INSTALL_ICD_DATABASE : install "appinstalled" free icd10 datapack
+# - INSTALL_ACCOUNT_FILES install freeaccount/accountancy plugin required files
+# - INSTALL_ZIPCODES : install "appinstalled" free zipcodes datapack
 
 # define some default paths for installation process
 mac:INSTALL_BASENAME_PATH          = mac
@@ -133,49 +139,49 @@ message(    * Extension: $${LIB_EXTENSION})
 
 # Install target
 !isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
-target.path = $${INSTALL_BINARY_PATH}
-#installtarget.files = $${BUILD_BINARY_PATH}/$${BINARY_TARGET}
-INSTALLS += target
+    target.path = $${INSTALL_BINARY_PATH}
+    #installtarget.files = $${BUILD_BINARY_PATH}/$${BINARY_TARGET}
+    INSTALLS += target
 }
 
 macx {
- # Qt 4.7 / MacOS 10.6 patch when not using the Qt macdeploy app
- #$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
- # /Library/Frameworks/QtGui.framework/Resources/qt_menu.nib
- mac10_6.path=$${INSTALL_RESOURCES_PATH}
- mac10_6.files=$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
- INSTALLS+=mac10_6
+    # Qt 4.7 / MacOS 10.6 patch when not using the Qt macdeploy app
+    #$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
+    # /Library/Frameworks/QtGui.framework/Resources/qt_menu.nib
+    mac10_6.path=$${INSTALL_RESOURCES_PATH}
+    mac10_6.files=$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
+    INSTALLS+=mac10_6
 }
 
 # manage binary wrapper
 !isEmpty(INSTALL_BINARY_WRAPPER_NAME){
-bw.path = $${INSTALL_BINARY_PATH}
-bw.files = $${SOURCES_RESOURCES_TEXTFILES}/$${INSTALL_BINARY_WRAPPER_NAME}
-INSTALLS += bw
+    bw.path = $${INSTALL_BINARY_PATH}
+    bw.files = $${SOURCES_RESOURCES_TEXTFILES}/$${INSTALL_BINARY_WRAPPER_NAME}
+    INSTALLS += bw
 }
 
 # Install libs (on Win32 copy from BUILD_LIB_PATH/../ (remove plugins path) )
 !CONFIG(dontinstalllibs):!isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
-applibs.path = $${INSTALL_LIBS_PATH}
-mac:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.*$${LIB_EXTENSION}
-else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}*
-else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
-applibs.CONFIG += no_check_exist
-INSTALLS += applibs
+    applibs.path = $${INSTALL_LIBS_PATH}
+    mac:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.*$${LIB_EXTENSION}
+    else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}*
+    else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
+    applibs.CONFIG += no_check_exist
+    INSTALLS += applibs
 }
 # Install plugins
 !isEmpty(INSTALL_PLUGINS_PATH):!isEmpty(BUILD_PLUGIN_PATH){
-plugs.path = $${INSTALL_PLUGINS_PATH}
-plugs.files = $${BUILD_PLUGIN_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
-plugs.CONFIG += no_check_exist
-INSTALLS += plugs
+    plugs.path = $${INSTALL_PLUGINS_PATH}
+    plugs.files = $${BUILD_PLUGIN_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
+    plugs.CONFIG += no_check_exist
+    INSTALLS += plugs
 }
 # Install plugins specs
 !isEmpty(INSTALL_PLUGINS_PATH):!isEmpty(BUILD_PLUGIN_PATH){
-plugs_specs.path = $${INSTALL_PLUGINS_PATH}
-plugs_specs.files = $${BUILD_PLUGIN_PATH}/*.pluginspec
-plugs_specs.CONFIG += no_check_exist
-INSTALLS += plugs_specs
+    plugs_specs.path = $${INSTALL_PLUGINS_PATH}
+    plugs_specs.files = $${BUILD_PLUGIN_PATH}/*.pluginspec
+    plugs_specs.CONFIG += no_check_exist
+    INSTALLS += plugs_specs
 }
 
 # Install common resources: Theme && Translations
@@ -296,19 +302,19 @@ INSTALLS += plugs_specs
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){
-desk.path=$${INSTALL_DESKTOP_FILES_PATH}
-desk.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/$${LOWERED_APPNAME}.desktop
-desk_icon.path=$${INSTALL_DESKTOP_ICON_PATH}
-desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${LOWERED_APPNAME}.svg
-INSTALLS+= desk desk_icon
+    desk.path=$${INSTALL_DESKTOP_FILES_PATH}
+    desk.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/$${LOWERED_APPNAME}.desktop
+    desk_icon.path=$${INSTALL_DESKTOP_ICON_PATH}
+    desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${LOWERED_APPNAME}.svg
+    INSTALLS+= desk desk_icon
 }
 
 # Documentation
 !isEmpty(INSTALL_DOCS_PATH){
-docs.path=$${INSTALL_DOCS_PATH}
-docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${LOWERED_APPNAME}/*
-docs.CONFIG += no_check_exist
-INSTALLS+=docs
+    docs.path=$${INSTALL_DOCS_PATH}
+    docs.files=$${SOURCES_GLOBAL_RESOURCES}/doc/$${LOWERED_APPNAME}/*
+    docs.CONFIG += no_check_exist
+    INSTALLS+=docs
 }
 
 
