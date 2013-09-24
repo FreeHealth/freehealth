@@ -26,7 +26,9 @@
 #include "appaboutpage.h"
 
 #include <utils/updatechecker.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_spashandupdate.h>
 
 #include <coreplugin/coreimpl.h>
 #include <coreplugin/commandlineparser.h>
@@ -37,20 +39,11 @@
 #include <QApplication>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDate>
 
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
-
-static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
-        "<p align=center><b>Welcome to %1</b><br />"
-        "Copyright (C) 2008-2011 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
-        "<p align=left>This application is a stable release but can still contains some bugs.<br />"
-        "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more informations.<br />"
-        "<a href=\"%2\">Web site</a>"
-        "</p>"
-        );
 
 AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
@@ -74,7 +67,7 @@ QString AppAboutPage::category() const
 
 int AppAboutPage::sortIndex() const
 {
-    return 10;
+    return 1;
 }
 
 QWidget *AppAboutPage::createPage(QWidget *parent)
@@ -90,7 +83,9 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
     Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
-    QString tmp = tr(ABOUT_TEXT).arg(qApp->applicationName(), qApp->organizationDomain());
+    QString tmp = tkTr(Trans::Constants::APPLICATION_ABOUT_YEAR_1_WEB_2)
+                   .arg(QDate::currentDate().year())
+                   .arg(qApp->organizationDomain());
     if (up->hasUpdate()) {
         tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
     } else {
