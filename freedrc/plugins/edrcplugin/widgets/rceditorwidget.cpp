@@ -32,7 +32,6 @@
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
 #include <edrcplugin/models/rcclassmodel.h>
-#include <edrcplugin/models/rcmodel.h>
 #include <edrcplugin/models/rctreemodel.h>
 #include <edrcplugin/models/preventablecriticalriskmodel.h>
 #include <edrcplugin/models/rccriteriasmodel.h>
@@ -112,7 +111,6 @@ public:
     RcEditorWidgetPrivate(RcEditorWidget *parent):
         ui(new Ui::RcEditorWidget),
         _classModel(0),
-        _RcModel(0),
         _rcTreeModel(0),
         _pcrModel(0),
         _rcCritModel(0),
@@ -339,7 +337,6 @@ public:
 public:
     Ui::RcEditorWidget *ui;
     RCClassModel *_classModel;
-    RcModel *_RcModel;
     RcTreeModel *_rcTreeModel;
     PreventableCriticalRiskModel *_pcrModel;
     RcCriteriasModel *_rcCritModel;
