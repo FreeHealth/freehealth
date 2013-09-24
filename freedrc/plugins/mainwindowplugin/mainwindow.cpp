@@ -156,6 +156,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     createFileMenu();
     createFileNewSubMenu();
     Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
+    fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     createEditMenu();
     createFormatMenu();
@@ -349,21 +350,18 @@ void MainWindow::changeEvent(QEvent *event)
     }
 }
 
-
 /** \brief Populate recent files menu */
 void MainWindow::aboutToShowRecentFiles()
 {
     Core::ActionContainer *aci = actionManager()->actionContainer(Core::Constants::M_FILE_RECENTFILES);
-    aci->menu()->clear();
+    aci->clear();
 
-    bool hasRecentFiles = false;
     foreach (const QString &fileName, fileManager()->recentFiles()) {
-        hasRecentFiles = true;
         QAction *action = aci->menu()->addAction(fileName);
         action->setData(fileName);
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
     }
-    aci->menu()->setEnabled(hasRecentFiles);
+    aci->setOnAllDisabledBehavior(Core::ActionContainer::Show);
 }
 
 /** \brief Opens a recent file. This solt must be called by a recent files' menu's action. */
@@ -397,6 +395,7 @@ void MainWindow::readSettings()
     settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
     fileManager()->getMaximumRecentFilesFromSettings();
+
 //    m_AutomaticSaveInterval = settings()->value(Core::Constants::S_SAVEINTERVAL, 600).toUInt(); // Default = 10 minutes
 //    m_OpenLastOpenedForm = settings()->value(Core::Constants::S_OPENLAST, true).toBool();
 

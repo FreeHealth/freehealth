@@ -308,6 +308,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // create menus
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
 
     createEditMenu();
@@ -703,16 +704,15 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::aboutToShowRecentFiles()
 {
     Core::ActionContainer *aci = actionManager()->actionContainer(Core::Constants::M_FILE_RECENTFILES);
-    aci->menu()->clear();
+    aci->clear();
 
-    bool hasRecentFiles = false;
     foreach (const QString &fileName, fileManager()->recentFiles()) {
-        hasRecentFiles = true;
         QAction *action = aci->menu()->addAction(fileName);
         action->setData(fileName);
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
     }
-    aci->menu()->setEnabled(hasRecentFiles);
+    aci->menu()->setEnabled(fileManager()->recentFiles() > 0);
+    aci->setOnAllDisabledBehavior(Core::ActionContainer::Show);
 }
 
 /** \brief Opens a recent file. This solt must be called by a recent files' menu's action. */
