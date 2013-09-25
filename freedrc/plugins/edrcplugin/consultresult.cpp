@@ -603,6 +603,11 @@ bool ConsultResult::operator==(const ConsultResult &other) const
             ;
 }
 
+bool ConsultResult::lessThanByDate(const ConsultResult &one, const ConsultResult &two)
+{
+    return one.dateOfExamination() < two.dateOfExamination();
+}
+
 QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
 {
     if (cr.isEmpty()) {

@@ -142,6 +142,8 @@ public:
     bool operator==(const ConsultResult &other) const;
     bool operator!=(const ConsultResult &other) const {return !operator==(other);}
 
+    static bool lessThanByDate(const ConsultResult &one, const ConsultResult &two);
+
 private:
     int _crId;
     QList<int> _selectedCriteriasIds;
