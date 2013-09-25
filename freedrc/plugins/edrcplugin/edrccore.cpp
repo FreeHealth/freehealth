@@ -63,6 +63,7 @@ public:
         _edrcBase(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
     
     ~EdrcCorePrivate()
