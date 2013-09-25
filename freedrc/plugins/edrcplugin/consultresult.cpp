@@ -574,38 +574,28 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     tokens.insert(Constants::TOKEN_CR_LABEL, edrcBase.getCrLabel(_crId));
     tokens.insert(Constants::TOKEN_CR_DATEEXAMINATION, QLocale().toString(_dateOfExamination.date()));
     QString posDiagCode;
-    QString posDiagLabel;
     switch (_diagnosisPosition) {
-    case A: posDiagCode="A"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Symptom"); break;
-    case B: posDiagCode="B"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Syndrome"); break;
-    case C: posDiagCode="C"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Disease definition"); break;
-    case D: posDiagCode="D"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Certified diagnostic"); break;
-    case Z: posDiagCode="Z"; posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Not pathological"); break;
-    default: posDiagCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); posDiagLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Diagnostic position is undefined"); break;
+    case A: posDiagCode="A"; break;
+    case B: posDiagCode="B"; break;
+    case C: posDiagCode="C"; break;
+    case D: posDiagCode="D"; break;
+    case Z: posDiagCode="Z"; break;
+    default: posDiagCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); break;
     }
     tokens.insert(Constants::TOKEN_CR_DIAGNOSTIC_POSITION_CODE, posDiagCode);
-    tokens.insert(Constants::TOKEN_CR_CR_DIAGNOSTIC_POSITION_FULL_LABEL, posDiagLabel);
+    tokens.insert(Constants::TOKEN_CR_CR_DIAGNOSTIC_POSITION_FULL_LABEL, diagnosisPositionToHumanReadable());
     QString fuCode;
-    QString fuLabel;
     switch (_medicalFollowUp) {
-    case N: fuCode="N"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "New"); break;
-    case P: fuCode="P"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Persistant"); break;
-    case R: fuCode="R"; fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Revised"); break;
-    default: fuCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); fuLabel=QApplication::translate("eDRC::Internal::ConsultResult", "Medical follow up is undefined"); break;
+    case N: fuCode="N"; break;
+    case P: fuCode="P"; break;
+    case R: fuCode="R"; break;
+    default: fuCode=QApplication::translate("eDRC::Internal::ConsultResult", "None"); break;
     }
     tokens.insert(Constants::TOKEN_CR_FOLLOWUP_CODE, fuCode);
-    tokens.insert(Constants::TOKEN_CR_FOLLOWUP_FULL_LABEL, fuLabel);
+    tokens.insert(Constants::TOKEN_CR_FOLLOWUP_FULL_LABEL, medicalFollowUpToHumanReadable());
 
-    switch (_chronicDisease) {
-    case ChronicDisease: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease")); break;
-    case NotChronicDisease: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Not a chronic disease")); break;
-    default: tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease is undefined")); break;
-    }
-    switch (_symptomatic) {
-    case Symptomatic: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic")); break;
-    case NotSymptomatic: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Not symptomatic")); break;
-    default: tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic state is undefined")); break;
-    }
+    tokens.insert(Constants::TOKEN_CR_CHRONIC_DISEASE, chronicDiseaseStateToHumanReadable());
+    tokens.insert(Constants::TOKEN_CR_CR_SYMPTOMATIC_STATE, symptomaticStateToHumanReadable());
 
     // TODO: correctly manage ICD10 labels and codes
     QString icd10 = edrcBase.getCrIcd10RelatedCodes(_crId, true).join("; ");
@@ -652,6 +642,50 @@ bool ConsultResult::operator==(const ConsultResult &other) const
 bool ConsultResult::lessThanByDate(const ConsultResult &one, const ConsultResult &two)
 {
     return one.dateOfExamination() < two.dateOfExamination();
+}
+
+QString ConsultResult::diagnosisPositionToHumanReadable() const
+{
+    switch (_diagnosisPosition) {
+    case A: return QApplication::translate("eDRC::Internal::ConsultResult", "Symptom");
+    case B: return QApplication::translate("eDRC::Internal::ConsultResult", "Syndrome");
+    case C: return QApplication::translate("eDRC::Internal::ConsultResult", "Disease definition");
+    case D: return QApplication::translate("eDRC::Internal::ConsultResult", "Certified diagnostic");
+    case Z: return QApplication::translate("eDRC::Internal::ConsultResult", "Not pathological");
+    default: return QApplication::translate("eDRC::Internal::ConsultResult", "Diagnostic position is undefined"); break;
+    }
+    return QString();
+}
+
+QString ConsultResult::medicalFollowUpToHumanReadable() const
+{
+    switch (_medicalFollowUp) {
+    case N: return QApplication::translate("eDRC::Internal::ConsultResult", "New");
+    case P: return QApplication::translate("eDRC::Internal::ConsultResult", "Persistant");
+    case R: return QApplication::translate("eDRC::Internal::ConsultResult", "Revised");
+    default: return QApplication::translate("eDRC::Internal::ConsultResult", "Medical follow up is undefined"); break;
+    }
+    return QString();
+}
+
+QString ConsultResult::chronicDiseaseStateToHumanReadable() const
+{
+    switch (_chronicDisease) {
+    case ChronicDisease: return QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease");
+    case NotChronicDisease: return QApplication::translate("eDRC::Internal::ConsultResult", "Not a chronic disease");
+    default: return QApplication::translate("eDRC::Internal::ConsultResult", "Chronic disease is undefined");
+    }
+    return QString();
+}
+
+QString ConsultResult::symptomaticStateToHumanReadable() const
+{
+    switch (_symptomatic) {
+    case Symptomatic: return QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic");
+    case NotSymptomatic: return QApplication::translate("eDRC::Internal::ConsultResult", "Not symptomatic");
+    default: return QApplication::translate("eDRC::Internal::ConsultResult", "Symptomatic state is undefined");
+    }
+    return QString();
 }
 
 QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)

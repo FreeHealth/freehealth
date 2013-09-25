@@ -145,6 +145,11 @@ public:
 
     static bool lessThanByDate(const ConsultResult &one, const ConsultResult &two);
 
+    QString diagnosisPositionToHumanReadable() const;
+    QString medicalFollowUpToHumanReadable() const;
+    QString chronicDiseaseStateToHumanReadable() const;
+    QString symptomaticStateToHumanReadable() const;
+
 private:
     int _crId;
     QList<int> _selectedCriteriasIds;
