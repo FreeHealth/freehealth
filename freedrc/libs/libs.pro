@@ -7,9 +7,8 @@ SUBDIRS += \
            ../../libs/extensionsystem \
            ../../libs/translationutils \
            ../../libs/utils \
-           ../../contrib/quazip \
            ../../libs/medicalutils \
-           ../../libs/datapackutils \
-
+#           ../../contrib/quazip \
+#           ../../libs/datapackutils \
 #           ../../libs/medintuxutils \
 
