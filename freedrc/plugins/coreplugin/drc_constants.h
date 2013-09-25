@@ -33,7 +33,7 @@
  * \date 25 Sept 2013
 */
 
-namespace eDRC {
+namespace Core {
 namespace Constants {
 
 // Enum for the command line params that can be used with
@@ -64,6 +64,6 @@ enum CommandLine {
 };
 
 }  // namespace Constants
-}  // namespace eDRC
+}  // namespace Core
 
 #endif // FREEDRC_CONSTANTS_H
