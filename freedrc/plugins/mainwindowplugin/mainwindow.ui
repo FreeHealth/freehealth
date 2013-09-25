@@ -12,23 +12,10 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="2" column="0">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="1" column="0" colspan="3">
-     <widget class="eDRC::Internal::RcEditorWidget" name="crEditor" native="true">
+     <widget class="eDRC::Internal::CrListViewer" name="crEditor" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -102,9 +89,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>eDRC::Internal::RcEditorWidget</class>
+   <class>eDRC::Internal::CrListViewer</class>
    <extends>QWidget</extends>
-   <header location="global">edrcplugin/widgets/rceditorwidget.h</header>
+   <header location="global">edrcplugin/widgets/crlistviewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

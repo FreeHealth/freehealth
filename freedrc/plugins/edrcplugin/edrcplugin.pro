@@ -15,7 +15,7 @@ HEADERS += \
     edrccore.h \
     database/constants_db.h \
     database/edrcbase.h \
-    models/rcmodel.h \
+    models/crtreemodel.h \
     models/preventablecriticalriskmodel.h \
     models/rcitemmodel.h \
     models/rcclassmodel.h \
@@ -26,15 +26,16 @@ HEADERS += \
     widgets/sfmgaboutdialog.h \
     widgets/rceditorwidget.h \
     widgets/edrcpreferences.h \
+    widgets/crlistviewer.h \
     consultresult.h \
     consultresultvalidator.h \
-    constants.h
+    constants.h \
 
 SOURCES += \
     edrcplugin.cpp \
     edrccore.cpp \
     database/edrcbase.cpp \
-    models/rcmodel.cpp \
+    models/crtreemodel.cpp \
     models/preventablecriticalriskmodel.cpp \
     models/rcitemmodel.cpp \
     models/rcclassmodel.cpp \
@@ -45,18 +46,22 @@ SOURCES += \
     widgets/sfmgaboutdialog.cpp \
     widgets/rceditorwidget.cpp \
     widgets/edrcpreferences.cpp \
+    widgets/crlistviewer.cpp \
     consultresultvalidator.cpp \
-    consultresult.cpp
+    consultresult.cpp \
 
 FORMS += \
     widgets/rceditorwidget.ui \
     widgets/rcargumentsdialog.ui \
     widgets/sfmgaboutdialog.ui \
-    widgets/edrcpreferences.ui
+    widgets/edrcpreferences.ui \
+    widgets/crlistviewer.ui
 
 # include tests
 equals(TEST, 1) {
-    SOURCES += tests/tst_edrcvalidator.cpp
+    SOURCES += \
+        tests/tst_edrcvalidator.cpp \
+        tests/tst_consultresult.cpp
 }
 
 OTHER_FILES += eDRC.pluginspec

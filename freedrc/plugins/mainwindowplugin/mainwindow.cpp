@@ -380,7 +380,7 @@ void MainWindow::openRecentFile()
 void MainWindow::clearUi()
 {
     ui->patientName->clear();
-    ui->crEditor->clear();
+//    ui->crEditor->clear();
 }
 
 void MainWindow::updateCheckerEnd(bool)
@@ -451,32 +451,32 @@ bool MainWindow::applicationPreferences()
 
 bool MainWindow::print()
 {
-    Core::IDocumentPrinter *p = printer();
-    Q_ASSERT(p);
-    p->clearTokens();
-    ConsultResult cr = ui->crEditor->submit();
-    QString html = edrcCore().toHtml(cr);
-    QHash<QString, QVariant> tokens;
-    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
-    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    return p->print(html,
-                    Core::IDocumentPrinter::Papers_Generic_User,
-                    false);
+//    Core::IDocumentPrinter *p = printer();
+//    Q_ASSERT(p);
+//    p->clearTokens();
+//    ConsultResult cr = ui->crEditor->submit();
+//    QString html = edrcCore().toHtml(cr);
+//    QHash<QString, QVariant> tokens;
+//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+//    return p->print(html,
+//                    Core::IDocumentPrinter::Papers_Generic_User,
+//                    false);
 }
 
 bool MainWindow::printPreview()
 {
-    Core::IDocumentPrinter *p = printer();
-    Q_ASSERT(p);
-    p->clearTokens();
-    ConsultResult cr = ui->crEditor->submit();
-    QString html = edrcCore().toHtml(cr);
-    QHash<QString, QVariant> tokens;
-    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
-    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    return p->printPreview(html,
-                           Core::IDocumentPrinter::Papers_Generic_User,
-                           false);
+//    Core::IDocumentPrinter *p = printer();
+//    Q_ASSERT(p);
+//    p->clearTokens();
+//    ConsultResult cr = ui->crEditor->submit();
+//    QString html = edrcCore().toHtml(cr);
+//    QHash<QString, QVariant> tokens;
+//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+//    return p->printPreview(html,
+//                           Core::IDocumentPrinter::Papers_Generic_User,
+//                           false);
 }
 
 /** \brief Runs the MedinTux configurator */
@@ -503,16 +503,17 @@ bool MainWindow::saveAsFile()
     doc.appendChild(pe);
 
     // Get full content XML
-    ConsultResult cr = ui->crEditor->submit();
-    QString xml = cr.toXml(doc.toString());
+//    ConsultResult cr = ui->crEditor->submit();
+//    QString xml = cr.toXml(doc.toString());
 
-    // Save to file
-    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
-    if (ok) {
-        fileManager()->addToRecentFiles(fileName);
-        fileManager()->setCurrentFile(fileName);
-    }
-    return ok;
+//    // Save to file
+//    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
+//    if (ok) {
+//        fileManager()->addToRecentFiles(fileName);
+//        fileManager()->setCurrentFile(fileName);
+//    }
+//    return ok;
+    return true;
 }
 
 bool MainWindow::saveFile()
@@ -558,9 +559,9 @@ void MainWindow::readFile(const QString &file)
             ui->patientName->setText(patient.text());
         }
     }
-    ui->crEditor->clear();
-    if (list.count() >= 1)
-        ui->crEditor->setConsultResult(list.last());
+//    ui->crEditor->clear();
+//    if (list.count() >= 1)
+//        ui->crEditor->setConsultResult(list.last());
 }
 
 void MainWindow::createDockWindows()
