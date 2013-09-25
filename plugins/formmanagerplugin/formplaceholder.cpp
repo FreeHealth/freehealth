@@ -442,8 +442,8 @@ private:
 }  // namespace Form
 
 FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
-        FormContextualWidget(parent),
-        d(new Internal::FormPlaceHolderPrivate(this))
+    FormContextualWidget(parent),
+    d(new Internal::FormPlaceHolderPrivate(this))
 {
     d->ui->setupUi(this);
     layout()->setMargin(0);
