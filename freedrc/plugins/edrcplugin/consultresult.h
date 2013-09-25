@@ -135,6 +135,7 @@ public:
     QDateTime dateOfExamination() const {return _dateOfExamination;}
 
     QString toXml(const QString &extraXml = QString::null) const;
+    static QString listToXml(const QList<ConsultResult> &list, const QString &extraXml = QString::null);
     static QList<ConsultResult> &fromXml(const QString &xml, QString *extraXmlContent = 0);
 
     QString toHtml(const QString &globalMask, const QString &selectedCriteriaItemMask, eDRC::Internal::DrcDatabase &edrcBase) const;

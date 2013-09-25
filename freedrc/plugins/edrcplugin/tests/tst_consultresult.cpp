@@ -25,11 +25,16 @@
  ***************************************************************************/
 #include <edrcplugin/edrcplugin.h>
 
+#include <edrcplugin/constants.h>
 #include <edrcplugin/consultresult.h>
 #include <edrcplugin/consultresultvalidator.h>
 #include <edrcplugin/database/edrcbase.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <utils/global.h>
+#include <utils/randomizer.h>
 
 #include <QDebug>
 #include <QTest>
@@ -37,6 +42,8 @@
 #define CR_CSV_BLANK_LINE
 using namespace eDRC;
 using namespace Internal;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace {
 const int loop = 10;
@@ -148,11 +155,16 @@ void EdrcPlugin::testConsultResultObject()
     QVERIFY(r != r2);
     r2.setHtmlCommentOnCriterias("<p>This another criteria<b>comment</b><br></p>");
     QVERIFY(r != r2);
+    r2.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
+    r2.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
 
     // Check date
     QDateTime dt = QDateTime::currentDateTime();
     r.setDateOfExamination(dt);
     r2.setDateOfExamination(dt);
+    QTime time = dt.time();
+    dt.setTime(QTime(time.hour(), time.minute(), time.second()));
+    QCOMPARE(r.dateOfExamination(), dt);
     QCOMPARE(r.dateOfExamination(), r2.dateOfExamination());
     QVERIFY(r == r2);
     r2.setDateOfExamination(dt.addDays(-1));
@@ -165,7 +177,10 @@ void EdrcPlugin::testConsultResultObject()
 
 void EdrcPlugin::testConsultResultXml()
 {
-    // Test XML
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    // Test Unique CR XML
     ConsultResult r2;
     r2.setConsultResult(1);
     r2.setChronicDiseaseState(ConsultResult::ChronicDisease);
@@ -175,11 +190,38 @@ void EdrcPlugin::testConsultResultXml()
     r2.setSelectedCriterias(QList<int>() << 1 << 2);
     r2.setHtmlCommentOnCR("<p>This the CR<b>comment</b><br></p>");
     r2.setHtmlCommentOnCriterias("<p>This the criteria<b>comment</b><br></p>");
+    QDateTime dt = QDateTime::currentDateTime();
+    r2.setDateOfExamination(dt);
+    QTime time = dt.time();
+    dt.time().setHMS(time.hour(), time.minute(), time.second());
+    dt.setTime(time);
 
-    QList<ConsultResult> list = ConsultResult::fromXml(r2.toXml());
+    QString extra;
+    QList<ConsultResult> list = ConsultResult::fromXml(r2.toXml("<xtra>bla bla</xtra>"), &extra);
+    extra = extra.simplified();
     QCOMPARE(list.count(), 1);
+    QString control = QString("<%1> <xtra>bla bla</xtra> </%1>").arg(Constants::XML_EXTRA_TAG);
+    QCOMPARE(extra, control);
     QVERIFY(r2 == list.at(0));
     QVERIFY(r2.toXml() == list.at(0).toXml());
 
-    // TODO: test with extraXml code
+    // Test Multiple CR XML
+    list.clear();
+    for(int i=0; i<10; ++i) {
+        ConsultResult cr;
+        cr.setConsultResult(r.randomInt(1, 300));
+        cr.setDiagnosisPosition(ConsultResult::DiagnosisPosition(r.randomInt(0, 3)));
+        cr.setMedicalFollowUp(ConsultResult::MedicalFollowUp(r.randomInt(0, 2)));
+        cr.setSymptomaticState(ConsultResult::SymptomaticState(r.randomInt(0, 1)));
+        cr.setChronicDiseaseState(ConsultResult::ChronicDiseaseState(r.randomInt(0, 1)));
+        cr.setSelectedCriterias(QList<int>() << r.randomInt(0, 300) << r.randomInt(0, 300));
+        cr.setHtmlCommentOnCR(r.randomString(r.randomInt(10, 500)));
+        cr.setHtmlCommentOnCriterias(r.randomString(r.randomInt(10, 500)));
+        cr.setDateOfExamination(r.randomDateTime(QDateTime::currentDateTime().addMonths(-10)));
+        list << cr;
+    }
+    QString xml = ConsultResult::listToXml(list, "<xtra>bla bla</xtra>");
+    QList<ConsultResult> fromXmlList = ConsultResult::fromXml(xml, &extra);
+    QCOMPARE(list.count(), fromXmlList.count());
+    QCOMPARE(list, fromXmlList);
 }

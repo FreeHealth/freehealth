@@ -38,6 +38,8 @@
  *     - one comment about the CR label itself
  *     - one comment about the selected criterias
  * - the ICD10 code associated with the CR
+ *
+ * Unit-tests are available.
 */
 
 #include "consultresult.h"
@@ -238,11 +240,13 @@ void ConsultResult::setDateOfExamination(const QDateTime &dt)
     _dateOfExamination = QDateTime(dt.date(), QTime(dt.time().hour(), dt.time().minute(), dt.time().second()));
 }
 
+/** Returns the database identifiant of the CR */
 int ConsultResult::consultResultId() const
 {
     return _crId;
 }
 
+/** Returns the user selected criterias of this CR */
 const QList<int> &ConsultResult::selectedCriterias() const
 {
     return _selectedCriteriasIds;
@@ -285,52 +289,45 @@ namespace {
     const char * const XML_COMMENT_ONCRITERIAS = "OnCrit";
 }
 
-/**
- * Transform object to XML. You can add some extra-xml code \e extraXml.
- * The extra content is automatically surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
-*/
-QString ConsultResult::toXml(const QString &extraXml) const
+// Add the CR to the QDomDocument / QDomElement root
+static bool crToDomElement(const ConsultResult &cr, QDomElement &root, QDomDocument &doc)
 {
-    // TODO: add the eDRC database version & coding system version
-    QDomDocument doc("FreeMedForms");
-    QDomElement root = doc.createElement(::XML_ROOT_TAG);
-    doc.appendChild(root);
     QDomElement element = doc.createElement(::XML_CR_TAG);
     root.appendChild(element);
-    element.setAttribute(::XML_ATTRIB_ID, _crId);
+    element.setAttribute(::XML_ATTRIB_ID, cr.consultResultId());
 
-    switch (_diagnosisPosition) {
-    case A: element.setAttribute(::XML_ATTRIB_DIAG_POS, "A"); break;
-    case B: element.setAttribute(::XML_ATTRIB_DIAG_POS, "B"); break;
-    case C: element.setAttribute(::XML_ATTRIB_DIAG_POS, "C"); break;
-    case D: element.setAttribute(::XML_ATTRIB_DIAG_POS, "D"); break;
-    case Z: element.setAttribute(::XML_ATTRIB_DIAG_POS, "Z"); break;
+    switch (cr.diagnosisPosition()) {
+    case ConsultResult::A: element.setAttribute(::XML_ATTRIB_DIAG_POS, "A"); break;
+    case ConsultResult::B: element.setAttribute(::XML_ATTRIB_DIAG_POS, "B"); break;
+    case ConsultResult::C: element.setAttribute(::XML_ATTRIB_DIAG_POS, "C"); break;
+    case ConsultResult::D: element.setAttribute(::XML_ATTRIB_DIAG_POS, "D"); break;
+    case ConsultResult::Z: element.setAttribute(::XML_ATTRIB_DIAG_POS, "Z"); break;
     default: break;
     }
-    switch (_medicalFollowUp) {
-    case N: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "N"); break;
-    case P: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "P"); break;
-    case R: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "R"); break;
+    switch (cr.medicalFollowUp()) {
+    case ConsultResult::N: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "N"); break;
+    case ConsultResult::P: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "P"); break;
+    case ConsultResult::R: element.setAttribute(::XML_ATTRIB_FOLLOWUP, "R"); break;
     default: break;
     }
-    switch (_symptomatic) {
-    case Symptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "yes"); break;
-    case NotSymptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "no"); break;
+    switch (cr.symptomaticState()) {
+    case ConsultResult::Symptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "yes"); break;
+    case ConsultResult::NotSymptomatic: element.setAttribute(::XML_ATTRIB_SYMPTOMATIC, "no"); break;
     default: break;
     }
-    switch (_chronicDisease) {
-    case ChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "yes"); break;
-    case NotChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "no"); break;
+    switch (cr.chronicDiseaseState()) {
+    case ConsultResult::ChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "yes"); break;
+    case ConsultResult::NotChronicDisease: element.setAttribute(::XML_ATTRIB_CHRONIC, "no"); break;
     default: break;
     }
 
     // Add date
-    element.setAttribute(::XML_ATTRIB_DATEOFEXAMEN, _dateOfExamination.toString(Qt::ISODate));
+    element.setAttribute(::XML_ATTRIB_DATEOFEXAMEN, cr.dateOfExamination().toString(Qt::ISODate));
 
     // Add criterias
-    if (!_selectedCriteriasIds.isEmpty()) {
+    if (!cr.selectedCriterias().isEmpty()) {
         QString selectedCriterias;
-        foreach(const int id, _selectedCriteriasIds)
+        foreach(const int id, cr.selectedCriterias())
             selectedCriterias += QString("%1;").arg(id);
         selectedCriterias.chop(1);
         element.setAttribute(::XML_ATTRIB_CRITERIAS, selectedCriterias);
@@ -338,20 +335,66 @@ QString ConsultResult::toXml(const QString &extraXml) const
 
     // Add comments
     QDomElement comments = doc.createElement(::XML_CR_COMMENTS);
-    root.appendChild(comments);
-    if (!_crComment.isEmpty()) {
+    element.appendChild(comments);
+    if (!cr.htmlCommentOnCR().isEmpty()) {
         QDomElement comment = doc.createElement(::XML_CR_COMMENT);
         comment.setAttribute(::XML_ATTRIB_TYPE, ::XML_COMMENT_ONCR);
-        QDomText t = doc.createTextNode(_crComment);
+        QDomText t = doc.createTextNode(cr.htmlCommentOnCR());
         comment.appendChild(t);
         comments.appendChild(comment);
     }
-    if (!_critComment.isEmpty()) {
+    if (!cr.htmlCommentOnCriterias().isEmpty()) {
         QDomElement comment = doc.createElement(::XML_CR_COMMENT);
         comment.setAttribute(::XML_ATTRIB_TYPE, ::XML_COMMENT_ONCRITERIAS);
-        QDomText t = doc.createTextNode(_critComment);
+        QDomText t = doc.createTextNode(cr.htmlCommentOnCriterias());
         comment.appendChild(t);
         comments.appendChild(comment);
+    }
+    return true;
+}
+
+/**
+ * Transform object to XML. You can add some extra-xml code \e extraXml.
+ * The extra content is automatically surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
+ * Warning: the \e extraXml content must be a valid Qt XML code. Otherwise the result of this
+ * transformation is not previsible.
+*/
+QString ConsultResult::toXml(const QString &extraXml) const
+{
+    // TODO: add the eDRC database version & coding system version
+    QDomDocument doc("FreeMedForms");
+    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    doc.appendChild(root);
+    if (!crToDomElement(*this, root, doc))
+        LOG_ERROR_FOR("ConsultResult", "XML coding error");
+
+    // Add extra xml
+    if (!extraXml.isEmpty()) {
+        QString xml = doc.toString(2);
+        int index = xml.lastIndexOf(QString("</%1>").arg(XML_ROOT_TAG));
+        Q_ASSERT(index != -1);
+        xml.insert(index, QString("<%1>%2</%1>").arg(Constants::XML_EXTRA_TAG).arg(extraXml));
+        // TODO: check the validity of the extra xml content before breaking the whole document
+        doc.setContent(xml);
+    }
+    return QString("<?xml version='1.0' encoding='UTF-8'?>\n%1").arg(doc.toString(2));
+}
+
+/**
+ * Transform a list of eDRC::Internal::ConsultResult to XML. You can add some extra-xml code \e extraXml.
+ * The extra content is automatically surrounded with a special tag: eDRC::Constants::XML_EXTRA_TAG.
+ * Warning: the \e extraXml content must be a valid Qt XML code. Otherwise the result of this
+ * transformation is not previsible.
+*/
+QString ConsultResult::listToXml(const QList<ConsultResult> &list, const QString &extraXml)
+{
+    // TODO: add the eDRC database version & coding system version
+    QDomDocument doc("FreeMedForms");
+    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    doc.appendChild(root);
+    foreach(const ConsultResult &cr, list) {
+        if (!crToDomElement(cr, root, doc))
+            LOG_ERROR_FOR("ConsultResult", "XML coding error");
     }
 
     // Add extra xml
@@ -435,8 +478,7 @@ QList<ConsultResult> &ConsultResult::fromXml(const QString &xml, QString *extraX
 
         // Date of examination
         if (!element.attribute(::XML_ATTRIB_DATEOFEXAMEN).isEmpty()) {
-            QDateTime dt;
-            dt.fromString(element.attribute(::XML_ATTRIB_DATEOFEXAMEN), Qt::ISODate);
+            QDateTime dt = QDateTime::fromString(element.attribute(::XML_ATTRIB_DATEOFEXAMEN), Qt::ISODate);
             cr.setDateOfExamination(dt);
         }
 
@@ -446,8 +488,8 @@ QList<ConsultResult> &ConsultResult::fromXml(const QString &xml, QString *extraX
             cr._selectedCriteriasIds.append(c.toInt());
 
         // Comments
-        element = root.firstChildElement(::XML_CR_COMMENTS);
-        QDomElement comment = element.firstChildElement(::XML_CR_COMMENT);
+        QDomElement commentRoot = element.firstChildElement(::XML_CR_COMMENTS);
+        QDomElement comment = commentRoot.firstChildElement(::XML_CR_COMMENT);
         while (!comment.isNull()) {
             if (comment.attribute(::XML_ATTRIB_TYPE).compare(::XML_COMMENT_ONCR, Qt::CaseInsensitive)==0) {
                 if (comment.childNodes().count() == 1) {
@@ -599,10 +641,12 @@ bool ConsultResult::operator==(const ConsultResult &other) const
             _chronicDisease == other._chronicDisease &&
             _symptomatic == other._symptomatic &&
             _crComment == other._crComment &&
-            _critComment == other._critComment
+            _critComment == other._critComment &&
+            _dateOfExamination == other._dateOfExamination
             ;
 }
 
+/** List sorting helper: sort items by date of examination */
 bool ConsultResult::lessThanByDate(const ConsultResult &one, const ConsultResult &two)
 {
     return one.dateOfExamination() < two.dateOfExamination();
@@ -638,7 +682,7 @@ QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
     default: fu = "Uncoded"; break;
     }
 
-    dbg.nospace() << QString("ConsultResult(%1%2; PosDiag:%3; FollowUp:%4; Crit:%5; %6; %7)")
+    dbg.nospace() << QString("ConsultResult(%1%2; PosDiag:%3; FollowUp:%4; Crit:%5; %6; %7; DateExam: %8)")
                      .arg(cr.consultResultId())
                      .arg(cr.isValid()?" Valid":" Invalid")
                      .arg(diag)
@@ -646,6 +690,7 @@ QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
                      .arg(crit)
                      .arg(cr.chronicDiseaseState()==ConsultResult::ChronicDisease?"ChronicDisease":"NotChronic")
                      .arg(cr.symptomaticState()==ConsultResult::Symptomatic?"Symptomatic":"NotSymptomatic")
+                     .arg(cr.dateOfExamination().toString(Qt::ISODate))
                      ;
     return dbg.space();
 }
