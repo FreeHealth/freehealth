@@ -47,13 +47,13 @@ class CrTreeModel : public QStandardItemModel
 
 public:
     enum DataRepresentation {
-        Id = 0,
-        Label,
+        Label = 0,
         DateOfExamination,
         Validity,
         DiagnosisPosition,
         MedicalFollowUp,
         Html,
+        Id,
         Empty1,
         Empty2,
         Empty3,
@@ -65,6 +65,7 @@ public:
 
     void setCrList(const QList<ConsultResult> &cr);
     void addConsultResult(const ConsultResult &cr);
+    void updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate);
 
     const QList<ConsultResult> &consultResultList() const;
 private:

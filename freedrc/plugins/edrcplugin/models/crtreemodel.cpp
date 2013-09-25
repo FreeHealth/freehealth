@@ -36,9 +36,12 @@
 #include <edrcplugin/database/edrcbase.h>
 
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 using namespace eDRC;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
@@ -55,9 +58,21 @@ public:
     QList<QStandardItem *> crToItem(const ConsultResult &cr)
     {
         QList<QStandardItem *> list;
-        QStandardItem *item = new QStandardItem;
-        list << item;
-        return item;
+        for(int i = 0; i < CrTreeModel::ColumnCount; ++i) {
+            list << new QStandardItem("-----");
+        }
+        list[CrTreeModel::Label]->setText(edrcBase().getCrLabel(cr.consultResultId()));
+        list[CrTreeModel::Label]->setToolTip(edrcCore().toHtml(cr));
+        list[CrTreeModel::DateOfExamination]->setText(QLocale().toString(cr.dateOfExamination(), QLocale::ShortFormat));
+        list[CrTreeModel::Validity]->setText(cr.isValid()?tkTr(Trans::Constants::ISVALID):tkTr(Trans::Constants::ISNOTVALID));
+        list[CrTreeModel::DiagnosisPosition]->setText(cr.diagnosisPositionToHumanReadable());
+        list[CrTreeModel::MedicalFollowUp]->setText(cr.medicalFollowUpToHumanReadable());
+//        list[CrTreeModel::Html]->setText(edrcCore().toHtml(cr));
+        list[CrTreeModel::Id]->setText(QString::number(cr.consultResultId()));
+        list[CrTreeModel::Empty1]->setText("");
+        list[CrTreeModel::Empty2]->setText("");
+        list[CrTreeModel::Empty3]->setText("");
+        return list;
     }
 
     void createTree()
@@ -66,18 +81,33 @@ public:
         qSort(_list.begin(), _list.end(), ConsultResult::lessThanByDate);
 
         QDate currentDate;
-        QStandardItem *dateBranch;
+        QStandardItem *dateBranch = 0;
 
         // Add the historic item
-        QStandardItem *historic;
+        QList<QStandardItem *> history;
+        history << new QStandardItem(tkTr(Trans::Constants::HISTORY));
+        for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
+            history << new QStandardItem;
+        }
+        q->invisibleRootItem()->appendRow(history);
 
         // Manage the tree
         for(int i = 0; i < _list.count(); ++i) {
             const ConsultResult &cr = _list.at(i);
-            if (currentDate != cr.dateOfExamination()) {
+            if (currentDate != cr.dateOfExamination().date()) {
                 // New date branch
+                currentDate = cr.dateOfExamination().date();
+                dateBranch = new QStandardItem(QLocale().toString(currentDate, QLocale::LongFormat));
+                QList<QStandardItem *> branch;
+                branch << dateBranch;
+                for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
+                    branch << new QStandardItem;
+                }
+                q->invisibleRootItem()->appendRow(branch);
+
             }
             // Add the CR to the current date branch
+            dateBranch->appendRow(crToItem(cr));
         }
     }
 
@@ -91,7 +121,7 @@ private:
 } // namespace eDRC
 
 CrTreeModel::CrTreeModel(QObject *parent) :
-    QAbstractTableModel(parent),
+    QStandardItemModel(parent),
     d(new CrTreeModelPrivate(this))
 {
 }
