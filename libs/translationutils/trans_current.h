@@ -100,6 +100,8 @@ const char* const NON_BLOCKING_ALERT            = QT_TRANSLATE_NOOP("tkConstants
 const char* const MESSAGE_HEADER                = QT_TRANSLATE_NOOP("tkConstants", "Message header");
 const char* const MESSAGE_CONTENT               = QT_TRANSLATE_NOOP("tkConstants", "Message content");
 
+const char* const HISTORY                       = QT_TRANSLATE_NOOP("tkConstants", "History");
+
 // The "related to"
 const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");
 const char* const RELATED_TO_PATIENT_1          = QT_TRANSLATE_NOOP("tkConstants", "related to patient %1");
