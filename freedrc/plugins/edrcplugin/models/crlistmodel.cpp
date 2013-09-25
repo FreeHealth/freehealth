@@ -24,10 +24,18 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rcmodel.h"
+/**
+ * \class eDRC::CrListModel
+ * Provides a basic CR list read-only table model.
+ */
+
+#include "crlistmodel.h"
 #include <edrcplugin/edrccore.h>
+#include <edrcplugin/consultresult.h>
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
+
+#include <utils/global.h>
 
 using namespace eDRC;
 using namespace Internal;
@@ -35,137 +43,59 @@ using namespace Internal;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RcModel::RcModel(QObject *parent) :
-    QSqlTableModel(parent, edrcBase().database())
+CrListModel::CrListModel(QObject *parent) :
+    QAbstractTableModel(parent)
 {
-    setTable(edrcBase().table(Constants::Table_REF_RC));
-    QHash<int, QString> where;
-    where.insert(Constants::VALIDITE, QString("='1'"));
-    setFilter(edrcBase().getWhereClause(Constants::Table_REF_RC, where));
-    select();
 }
 
-RcModel::~RcModel()
+CrListModel::~CrListModel()
 {}
 
-QVariant RcModel::data(const QModelIndex &index, int role) const
+int CrListModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return _list.count();
+}
+
+int CrListModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return ColumnCount;
+}
+
+QVariant CrListModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+    if (!IN_RANGE_STRICT_MAX(index.row(), 0, _list.count()))
+        return QVariant();
 
     if (role == Qt::DisplayRole) {
-        int sqlCol = -1;
+        const ConsultResult &cr = _list.at(index.row());
         switch (index.column()) {
-        case Id: sqlCol = Constants::REF_RC_SEQ; break;
-        case Label: sqlCol = Constants::LIB_RC_FR; break;
-        case Validity: sqlCol = Constants::VALIDITE; break;
-        case IsDiagPosA: sqlCol = Constants::PA; break;
-        case IsDiagPosB: sqlCol = Constants::PB; break;
-        case IsDiagPosC: sqlCol = Constants::PC; break;
-        case IsDiagPosD: sqlCol = Constants::PD; break;
-        case IsDiagPosZ: sqlCol = Constants::PZ; break;
-        case IsRiskLevel1: sqlCol = Constants::P1; break;
-        case IsRiskLevel2: sqlCol = Constants::P2; break;
-        case IsRiskLevel3: sqlCol = Constants::P3; break;
-        case IsRiskLevel4: sqlCol = Constants::P4; break;
-        case IsRiskLevel5: sqlCol = Constants::P5; break;
-        case DateValidityStart: sqlCol = Constants::VALID_DEBUT; break;
-        case DateValidityEnd: sqlCol = Constants::VALID_FIN; break;
-        case Arguments: sqlCol = Constants::ARGUMENTAIRE; break;
-        case Nature: sqlCol = Constants::NATURE; break;
+        case Id: return cr.consultResultId();
+        case Label: return edrcCore().edrcBase().getCrLabel(cr.consultResultId());
+        case DateOfExamination: return cr.dateOfExamination();
+        case Validity: return cr.isValid();
+        case DiagnosisPosition: return cr.diagnosisPosition();
+        //case RiskLevel: return cr.isValid();
+        case MedicalFollowUp: return cr.medicalFollowUp();
+        case Html: return edrcCore().toHtml(cr);
         } // switch
-        if (sqlCol == -1)
-            return QVariant();
-
-        return QSqlTableModel::data(this->index(index.row(), sqlCol, index.parent()));
     }
-
-
-    //    if (role == Qt::DecorationRole)
-//    {   // Affiche l'icone d'état de complétion du RC
-//        if (idx.column() == RC_Elements::Col_RC)
-//        {  RC_Elements el = m_ListRC->at(idx.row());
-//           QString tmp;
-//           if (!el.isCompleted()) return QPixmap(":/icone_incomplet.png");
-//           else return QPixmap(":/icone_ok.png");
-//        }
-//    }
-///*    else
-//    if ((index.column() == RC_Elements::Col_RC) && (role == Qt::FontRole))
-//    {   RC_Elements el = m_ListRC->at(index.row());
-//        QString msg;
-//        if (el.isCompleted())
-//        {   QFont myFont;
-//            myFont.setBold(true);
-//            QVariant myData = QVariant(myFont);
-//            return myData;
-//        }
-//        else
-//        {   QFont myFont;
-//            myFont.setItalic(true);
-//            QVariant myData = QVariant(myFont);
-//            return myData;
-//        }
-
-//    }
-//*/    else
-//    if (role == Qt::UserRole)   // Retourne les listes d'autorisation pour les pos diag et les suivis
-//    {   RC_Elements el = m_ListRC->at(idx.row());
-//        QVariant qvar = QVariant(el.getAuthorizedPosDiagAndSuivi());
-//        return qvar;
-//    }
     return QVariant();
 }
 
-Qt::ItemFlags RcModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CrListModel::flags(const QModelIndex &index) const
 {
-//    if (!index.isValid())
-//        return Qt::ItemIsEnabled;
-//    RC_Elements el = m_ListRC->at( index.row() );
-//    if (el.getLibelle().length() )
-//    {   return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable; }
-//    else
-//    {   return Qt::ItemIsEditable; }
-    return QSqlTableModel::flags(index);
+    Q_UNUSED(index);
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-bool RcModel::setData(const QModelIndex &index,
-                             const QVariant &value, int role)
+/** Populate the model with the selected \e list of CR */
+void CrListModel::setCrList(const QList<ConsultResult> &list)
 {
-    if (!index.isValid())
-        return false;
-
-//    if (role == Qt::EditRole)
-//    {   // si suivi == N et que PosDiag != Z ==> Sympto = true
-//        RC_Elements el = m_ListRC->at( index.row() );
-//        if ((index.column() == RC_Elements::Col_Pos_Suivi) && (value.toString() == "N"))
-//        {  QModelIndex diagIndex = this->index( index.row(), RC_Elements::Col_Pos_Diag );
-//           QString diag =  el.getSelectedPosDiag();
-//	if ((diag != "Z") && ((diag == "A") || (diag == "B") || (diag == "C") || (diag == "D")) )
-//           {   QModelIndex symptoIndex = this->index( index.row(), RC_Elements::Col_Sympto);
-//               setData( symptoIndex, "O", Qt::EditRole);
-//               el = m_ListRC->at( index.row() );
-//           }
-//        }
-//        // Ajouter la value aux données sauf pour les critères
-//        if (index.column() != RC_Elements::Col_Criteres) el.setQVariant( value, index.column() );
-
-//        // Vérifier état du RC (complet ou non ?)
-//        const QModelIndex i = this->index( index.row(), RC_Elements::Col_RC);
-//        emit dataChanged(i,i);
-
-//        m_ListRC->replace( index.row(), el );
-//        emit dataChanged(index, index);
-//        return true;
-//    }
-//    else
-//    if (role == Qt::UserRole)
-//    { RC_Elements el = m_ListRC->at( index.row() );
-//      el.setAuthorizedPosDiagAndSuivi( value );
-//      m_ListRC->replace( index.row(), el );
-//      emit dataChanged(index, index);
-//      return true;
-//    }
-
-    return false;
+    beginResetModel();
+    _list = list;
+    endResetModel();
 }

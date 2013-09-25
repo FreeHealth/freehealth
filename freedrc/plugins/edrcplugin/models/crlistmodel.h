@@ -24,23 +24,24 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RC_MODEL_H
-#define EDRC_INTERNAL_RC_MODEL_H
+#ifndef EDRC_INTERNAL_CRLISTMODEL_H
+#define EDRC_INTERNAL_CRLISTMODEL_H
 
 #include <QList>
-#include <QSqlTableModel>
+#include <QAbstractTableModel>
 
 /**
- * \file rcmodel.h
+ * \file crlistmodel.h
  * \author Eric Maeker
  * \version 0.9.2
- * \date 21 Sept 2013
+ * \date 23 Sept 2013
 */
 
 namespace eDRC {
 namespace Internal {
+class ConsultResult;
 
-class RcModel : public QSqlTableModel
+class CrListModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -48,36 +49,32 @@ public:
     enum DataRepresentation {
         Id = 0,
         Label,
+        DateOfExamination,
         Validity,
-        IsDiagPosA,
-        IsDiagPosB,
-        IsDiagPosC,
-        IsDiagPosD,
-        IsDiagPosZ,
-        IsRiskLevel1,
-        IsRiskLevel2,
-        IsRiskLevel3,
-        IsRiskLevel4,
-        IsRiskLevel5,
-        DateValidityStart,
-        DateValidityEnd,
-        Arguments,
-        Nature
-//        REG_RC_LIB,         // Libellé du RC de regroupement (quand item passe de valide à invalide)
-//        REG_RC_ID,          // Id du RC de regroupement
-//        SUB_RC_ID,          // RC de substitution (quand item passe de valide à invalide)
+        DiagnosisPosition,
+        //RiskLevel,
+        MedicalFollowUp,
+        Html,
+        ColumnCount
     };
 
-    RcModel(QObject *parent = 0);
-    ~RcModel();
+    CrListModel(QObject *parent = 0);
+    ~CrListModel();
+
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void setCrList(const QList<ConsultResult> &cr);
+
+private:
+    QList<ConsultResult> _list;
 };
 
 } // namespace Internal
 } // namespace eDRC
 
-#endif  // EDRC_INTERNAL_RC_MODEL_H
+#endif  // EDRC_INTERNAL_CRLISTMODEL_H
