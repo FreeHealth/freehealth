@@ -87,10 +87,11 @@ public:
         CharFormat        = 0x0001,
         ParagraphFormat   = 0x0002,
         Clipboard         = 0x0004,
+        Print             = 0x0008,
         WithTables        = 0x0020,
         WithIO            = 0x0040,
         WithTextCompleter = 0x0080, // insert date, username, patientname
-        Simple            = CharFormat | ParagraphFormat | Clipboard | WithTextCompleter,
+        Simple            = CharFormat | ParagraphFormat | Clipboard | Print | WithTextCompleter,
         Full              = Simple | WithTables | WithIO | WithTextCompleter
     };
     Q_DECLARE_FLAGS(Types, Type)

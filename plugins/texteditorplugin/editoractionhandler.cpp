@@ -147,12 +147,14 @@ void EditorActionHandler::createContexts()
     paragraphContext = Core::Context(Core::Constants::C_EDITOR_PARAGRAPH);
     clipboardContext = Core::Context(Core::Constants::C_EDITOR_CLIPBOARD);
     ioContext = Core::Context(Core::Constants::C_EDITOR_IO);
+    printContext = Core::Context(Core::Constants::C_EDITOR_IO);
     tableContext = Core::Context(Core::Constants::C_EDITOR_TABLE);
     textAdderContext = Core::Context(Core::Constants::C_EDITOR_ADDTEXT);
     allContexts.add(charContext);
     allContexts.add(paragraphContext);
     allContexts.add(clipboardContext);
     allContexts.add(ioContext);
+    allContexts.add(printContext);
     allContexts.add(tableContext);
     allContexts.add(textAdderContext);
 }
@@ -238,10 +240,10 @@ void EditorActionHandler::createActions()
 
     // Print
     if (!actionManager()->command(Core::Constants::A_FILE_PRINT)) {
-        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, allContexts, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
+        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, printContext, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
         aPrint->setEnabled(false);
     } else {
-        aPrint = registerAction(Core::Constants::A_FILE_PRINT, allContexts, this);
+        aPrint = registerAction(Core::Constants::A_FILE_PRINT, printContext, this);
     }
 
     // Undo / Redo / Copy / Cut / Paste

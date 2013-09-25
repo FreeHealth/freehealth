@@ -344,6 +344,7 @@ const char* const   C_EDITOR_PARAGRAPH   = "context.Editor.paragraph";
 const char* const   C_EDITOR_CLIPBOARD   = "context.Editor.clipboard";
 const char* const   C_EDITOR_TABLE       = "context.Editor.Table";
 const char* const   C_EDITOR_IO          = "context.Editor.IO";
+const char* const   C_EDITOR_PRINT       = "context.Editor.Print";
 const char* const   C_EDITOR_ADDTEXT     = "context.Editor.AddText";
 const char* const   C_USERMANAGER        = "context.UserManager";
 
