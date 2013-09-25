@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
-    <name>AboutDialog</name>
-    <message>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenue à FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 par Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;Ce logiciel est distribué sans aucune garantie et uniquement à des fins de test.&lt;br/&gt;Veuillez vous référer au &lt;a href=&quot;%2&quot;&gt;site internet&lt;/a&gt; pour plus d&apos;informations.&lt;br /&gt;&lt;/p&gt;</translation>
-    </message>
-</context>
-<context>
     <name>Core::AppConfigWizard</name>
     <message>
         <source>Application Configurator Wizard</source>
@@ -786,7 +779,7 @@ Veuillez vérifier les fichiers journaux et contacter votre administrateur.</tra
     </message>
     <message>
         <source>The configuration script is missing. You can not configure the server without this script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver le script de configuration. Vous ne pouvez pas configurer le serveur sans ce script.&lt;br&gt;&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -872,6 +865,10 @@ but does not contains all other form items.</source>
     <message>
         <source>This token namespace contains all user&apos;s related tokens.</source>
         <translation>Ce nom d&apos;espace d&apos;étiquette contient toutes les informations relatives aux utilisateurs.</translation>
+    </message>
+    <message>
+        <source>FreeDRC Consultation files (*.cr)</source>
+        <translation>FreeDRC fichier de consultation (*.cr)</translation>
     </message>
 </context>
 </TS>

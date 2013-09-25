@@ -784,6 +784,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="155"/>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms project&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD (France)&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_database.h" line="35"/>
         <source>The %1 driver is not available.</source>
         <translation type="unfinished"></translation>

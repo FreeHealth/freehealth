@@ -25,17 +25,12 @@
 #  *       Christian A. Reiter <christian.a.reiter@gmail.com                 *
 #  *       NAME <MAIL@ADDRESS.COM>                                           *
 #  ***************************************************************************
-
-
 # this script redirects the output from the error console to stdout
 # so that the whole output can be filtered via e.g. grep
-
 
 # define colors for highlighting
 WHITE="\033[1;37m"
 NO_COLOUR="\033[0m"
-
-
 
 for i in $( ls plugins ); do
     if [ -f plugins/$i/*plugin.pro ]; then
@@ -46,13 +41,16 @@ for i in $( ls plugins ); do
     fi
 done
 
-for i in $( ls freediams/plugins ); do
-    if [ -f plugins/$i/*plugin.pro ]; then
-        echo
-        echo "$WHITE********* Updating translation for FreeDiams plugin: $i$NO_COLOUR"
-        echo
-        lupdate freediams/plugins/$i/*.pro -no-obsolete  2>&1
-    fi
+APPS="freediams freedrc"
+for a in $APPS; do
+    for i in $( ls $a/plugins ); do
+        if [ -f plugins/$i/*plugin.pro ]; then
+            echo
+            echo "$WHITE********* Updating translation for $a plugin: $i$NO_COLOUR"
+            echo
+            lupdate $a/plugins/$i/*.pro -no-obsolete  2>&1
+        fi
+    done
 done
 
 for i in $( ls libs ); do
@@ -64,3 +62,4 @@ for i in $( ls libs ); do
     fi
 done
 
+exit 0;

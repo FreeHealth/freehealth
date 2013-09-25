@@ -2716,5 +2716,9 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>Add current date (short format)</source>
         <translation>Ajouter la date courante (format court)</translation>
     </message>
+    <message>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms project&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD (France)&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
+        <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenue dans le projet FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 par Dr Eric MAEKER (France)&lt;/p&gt;&lt;p align=left&gt;Ce logiciel est distribué sans aucune garantie et uniquement pour des fins de tests.&lt;br/&gt;Pour plus d&apos;informations, vous pouvez vous référer à notre &lt;a href=&quot;%2&quot;&gt;site internet&lt;/a&gt;.&lt;br /&gt;&lt;/p&gt;</translation>
+    </message>
 </context>
 </TS>
