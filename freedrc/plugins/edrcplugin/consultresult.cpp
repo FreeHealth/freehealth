@@ -527,6 +527,7 @@ QList<ConsultResult> &ConsultResult::fromXml(const QString &xml, QString *extraX
  *      - [[CR_CODING_VALIDATOR_VERSION]]
  *      - [[CR_ID]]
  *      - [[CR_LABEL]]
+ *      - [[CR_DATEEXAMINATION]]
  *      - [[CR_CRITERIAS]] (includes the mask for the selected criterias)
  *      - [[CR_DIAGNOSTIC_POSITION_CODE]]
  *      - [[CR_DIAGNOSTIC_POSITION_FULL_LABEL]]
@@ -571,6 +572,7 @@ QString ConsultResult::toHtml(const QString &globalMask, const QString &selected
     tokens.insert(Constants::TOKEN_CR_CODING_VALIDATOR_VERSION, ConsultResultValidator::version());
     tokens.insert(Constants::TOKEN_CR_ID, _crId);
     tokens.insert(Constants::TOKEN_CR_LABEL, edrcBase.getCrLabel(_crId));
+    tokens.insert(Constants::TOKEN_CR_DATEEXAMINATION, QLocale().toString(_dateOfExamination.date()));
     QString posDiagCode;
     QString posDiagLabel;
     switch (_diagnosisPosition) {
