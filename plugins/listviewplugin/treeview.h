@@ -83,6 +83,9 @@ public:
     void expandAll() {treeView()->expandAll();}
     void expand(const QModelIndex &index) {treeView()->expand(index);}
 
+    int columnWidth(int column) const {return treeView()->columnWidth(column);}
+    void setColumnWidth(int column, int width) {treeView()->setColumnWidth(column, width);}
+
 public Q_SLOTS:
     virtual void addItem();
     virtual void removeItem();
