@@ -23,24 +23,23 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEACCOUNT_CONSTANTS_H
-#define FREEACCOUNT_CONSTANTS_H
+#ifndef FREEDRC_CONSTANTS_H
+#define FREEDRC_CONSTANTS_H
 
 /**
- * \file accountwidgetmanager.h
+ * \file drc_constants.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.5
- * \date 25 Jun 2012
- * \internal
+ * \version 0.9.2
+ * \date 25 Sept 2013
 */
 
-namespace Core {
+namespace eDRC {
 namespace Constants {
 
 // Enum for the command line params that can be used with
 // Core::ICore::instance()->commandLine()
-// Anywhere in the freeaccount code
-enum FreeAccountCommandLine {
+// Anywhere in the code
+enum CommandLine {
     CL_MedinTux = 0,
     CL_Independant,
     CL_Movements,
@@ -63,7 +62,8 @@ enum FreeAccountCommandLine {
     CL_DbPort,
     CL_MaxParam
 };
-}
-}
 
-#endif // FREEACCOUNT_CONSTANTS_H
+}  // namespace Constants
+}  // namespace eDRC
+
+#endif // FREEDRC_CONSTANTS_H
