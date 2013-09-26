@@ -30,6 +30,7 @@ HEADERS += \
     consultresult.h \
     consultresultvalidator.h \
     constants.h \
+    widgets/creditordialog.h
 
 SOURCES += \
     edrcplugin.cpp \
@@ -49,13 +50,15 @@ SOURCES += \
     widgets/crlistviewer.cpp \
     consultresultvalidator.cpp \
     consultresult.cpp \
+    widgets/creditordialog.cpp
 
 FORMS += \
     widgets/rceditorwidget.ui \
     widgets/rcargumentsdialog.ui \
     widgets/sfmgaboutdialog.ui \
     widgets/edrcpreferences.ui \
-    widgets/crlistviewer.ui
+    widgets/crlistviewer.ui \
+    widgets/creditordialog.ui
 
 # include tests
 equals(TEST, 1) {
