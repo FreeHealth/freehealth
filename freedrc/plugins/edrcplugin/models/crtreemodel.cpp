@@ -163,6 +163,7 @@ void CrTreeModel::addConsultResult(const ConsultResult &cr)
 {
     beginResetModel();
     d->_list << cr;
+    clear();
     d->createTree();
     endResetModel();
 }
