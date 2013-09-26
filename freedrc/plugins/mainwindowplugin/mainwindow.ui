@@ -13,7 +13,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="1" column="0" colspan="3">
-     <widget class="eDRC::Internal::CrListViewer" name="crEditor" native="true">
+     <widget class="eDRC::Internal::CrListViewer" name="crListViewer" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>

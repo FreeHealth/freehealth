@@ -42,6 +42,12 @@ QT_END_NAMESPACE
  * \date 03 Oct 2010
 */
 
+namespace eDRC {
+namespace Internal {
+class CrTreeModel;
+} // namespace Internal
+} // namespace eDRC
+
 namespace MainWin {
 namespace Internal {
 //class MainWindowToken;
@@ -100,6 +106,7 @@ private Q_SLOTS:
 
 public:
     Internal::Ui::MainWindow *ui;
+    eDRC::Internal::CrTreeModel *_crTreeModel;
 //    Internal::MainWindowToken *_patientToken, *_dateToken;
 };
 

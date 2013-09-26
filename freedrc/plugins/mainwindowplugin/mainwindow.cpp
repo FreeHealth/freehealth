@@ -48,9 +48,11 @@
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/consultresult.h>
+#include <edrcplugin/models/crtreemodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/randomizer.h>
 #include <utils/stylehelper.h>
 #include <utils/updatechecker.h>
 #include <extensionsystem/pluginerrorview.h>
@@ -135,7 +137,8 @@ const char* const  XML_USERNAME = "user";
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
     Core::IMainWindow(parent),
-    ui(0)
+    ui(0),
+    _crTreeModel(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -212,6 +215,28 @@ void MainWindow::extensionsInitialized()
 
     ui->clearButton->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearUi()));
+
+    // Create models
+    // TEST
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    QList<ConsultResult> list;
+    for(int i=0; i<10; ++i) {
+        ConsultResult cr;
+        cr.setConsultResult(r.randomInt(1, 300));
+        cr.setDiagnosisPosition(ConsultResult::DiagnosisPosition(r.randomInt(0, 3)));
+        cr.setMedicalFollowUp(ConsultResult::MedicalFollowUp(r.randomInt(0, 2)));
+        cr.setSymptomaticState(ConsultResult::SymptomaticState(r.randomInt(0, 1)));
+        cr.setChronicDiseaseState(ConsultResult::ChronicDiseaseState(r.randomInt(0, 1)));
+        cr.setSelectedCriterias(QList<int>() << r.randomInt(0, 300) << r.randomInt(0, 300));
+        cr.setHtmlCommentOnCR(r.randomString(r.randomInt(10, 500)));
+        cr.setHtmlCommentOnCriterias(r.randomString(r.randomInt(10, 500)));
+        cr.setDateOfExamination(r.randomDateTime(QDateTime::currentDateTime().addMonths(-10)));
+        list << cr;
+    }
+    // END TEST
+    _crTreeModel = new CrTreeModel(this);
+    ui->crListViewer->setConsultResultTreeModel(_crTreeModel);
 
     // Disable some actions when starting as medintux plugin
 //    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
@@ -559,9 +584,7 @@ void MainWindow::readFile(const QString &file)
             ui->patientName->setText(patient.text());
         }
     }
-//    ui->crEditor->clear();
-//    if (list.count() >= 1)
-//        ui->crEditor->setConsultResult(list.last());
+    _crTreeModel->setCrList(list);
 }
 
 void MainWindow::createDockWindows()
