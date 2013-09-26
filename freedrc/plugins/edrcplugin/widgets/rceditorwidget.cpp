@@ -361,7 +361,7 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->commentRC->setTypes(Editor::TextEditor::CharFormat | Editor::TextEditor::ParagraphFormat | Editor::TextEditor::Clipboard);
     d->ui->dateExam->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
     d->ui->dateExam->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
-    d->ui->SFMG->setIcon(theme()->icon("sfmg_logo.png", Core::ITheme::SmallIcon));
+    d->ui->SFMG->setIcon(theme()->icon(Constants::ICON_SFMG_LOGO, Core::ITheme::SmallIcon));
     d->ui->arguments->setEnabled(false);
     if (!settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
         d->ui->commentOnCrLabel->setVisible(false);

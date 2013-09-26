@@ -33,13 +33,19 @@
  */
 
 #include "creditordialog.h"
+#include <edrcplugin/constants.h>
 #include <edrcplugin/consultresult.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 
 #include <translationutils/constants.h>
 
 #include <QDebug>
 
 #include "ui_creditordialog.h"
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 using namespace eDRC;
 using namespace Internal;
@@ -79,6 +85,8 @@ CrEditorDialog::CrEditorDialog(QWidget *parent) :
     d(new CrEditorDialogPrivate(this))
 {
     d->ui->setupUi(this);
+    setWindowTitle(tr("Consult result editor and creator dialog"));
+    setWindowIcon(theme()->icon(Constants::ICON_SFMG_LOGO));
 }
 
 /*! Destructor of the eDRC::Internal::CrEditorDialog class */

@@ -223,6 +223,7 @@ CrListViewer::CrListViewer(QWidget *parent) :
 {
     d->ui = new Ui::CrListViewer;
     d->ui->setupUi(this);
+    this->layout()->setMargin(0);
 
     // Manage CrTreeView options & delegate
     d->ui->treeView->treeView()->viewport()->setAttribute(Qt::WA_Hover);

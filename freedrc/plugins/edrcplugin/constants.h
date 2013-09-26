@@ -77,6 +77,9 @@ const char * const TOKEN_CRITERIA_DEFAULT_LABEL = "CRITERIA_LABEL";
 const char * const TOKEN_CRITERIA_MODERN_LABEL = "CRITERIA_MODERN_LABEL";
 // TODO: add CR_DATABASE_VERSION, CR_CODING_VALIDITY
 
+// Icons
+const char * const ICON_SFMG_LOGO = "sfmg_logo.png";
+
 } // namespace Constants
 } // namespace eDRC
 
