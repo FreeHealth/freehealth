@@ -51,11 +51,11 @@ public:
     bool initialize(const ConsultResult &cr);
     
     ConsultResult submit() const;
+    
+private Q_SLOTS:
+    void onSmfgAboutClicked();
+    void onArgumentsClicked();
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
 private:
     CrEditorDialogPrivate *d;
 };

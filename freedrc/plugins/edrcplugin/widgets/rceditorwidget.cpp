@@ -25,8 +25,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "rceditorwidget.h"
-#include "sfmgaboutdialog.h"
-#include "rcargumentsdialog.h"
 
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
@@ -223,6 +221,9 @@ public:
         ui->dateExam->clear();
         clearButtonCheckState(cr.consultResultId());
 
+        ui->crTitle->setText(edrcBase().getCrLabel(cr.consultResultId()));
+        ui->crTitle->setToolTip(edrcBase().getCrLabel(cr.consultResultId()));
+
         // Get class for RC
         QStringList crClasses = edrcBase().getClassesForCr(cr.consultResultId()).values();
         const QString &label = edrcBase().getCrLabel(cr.consultResultId());
@@ -361,8 +362,6 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->commentRC->setTypes(Editor::TextEditor::CharFormat | Editor::TextEditor::ParagraphFormat | Editor::TextEditor::Clipboard);
     d->ui->dateExam->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
     d->ui->dateExam->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
-    d->ui->SFMG->setIcon(theme()->icon(Constants::ICON_SFMG_LOGO, Core::ITheme::SmallIcon));
-    d->ui->arguments->setEnabled(false);
     if (!settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool()) {
         d->ui->commentOnCrLabel->setVisible(false);
         d->ui->commentOnCritLabel->setVisible(false);
@@ -374,7 +373,7 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->searchSplitter->setStretchFactor(0, 2);
     d->ui->searchSplitter->setStretchFactor(1, 1);
     d->ui->centralSplitter->setStretchFactor(0, 1);
-    d->ui->centralSplitter->setStretchFactor(1, 3);
+    d->ui->centralSplitter->setStretchFactor(1, 2);
     d->ui->commentSplitter->setStretchFactor(0, 3);
     d->ui->commentSplitter->setStretchFactor(1, 1);
 
@@ -410,23 +409,20 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     d->ui->pcrView->setModel(d->_pcrModel);
     d->ui->pcrView->setModelColumn(PreventableCriticalRiskModel::Label);
 
-    connect(d->ui->SFMG, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
-    connect(d->ui->arguments, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
-
     d->ui->validator->setChecked(settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING).toBool());
     connect(d->ui->validator, SIGNAL(clicked()), this, SLOT(toggleValidator()));
 
-    // TEST : ConsultResult(148; PosDiag:Uncoded; FollowUp:Uncoded; Crit:124,125,128,132,134; NotChronic; NotSymptomatic)
-    ConsultResult cr;
-    cr.setConsultResult(148);
-    cr.setSymptomaticState(ConsultResult::Symptomatic);
-    cr.setChronicDiseaseState(ConsultResult::ChronicDisease);
-    cr.setDiagnosisPosition(ConsultResult::C);
-    cr.setMedicalFollowUp(ConsultResult::N);
-    cr.setSelectedCriterias(QList<int>() << 124<<125<<128<<132<<134);
-    cr.setDateOfExamination(QDateTime::currentDateTime());
-    setConsultResult(cr);
-    // END
+//    // TEST : ConsultResult(148; PosDiag:Uncoded; FollowUp:Uncoded; Crit:124,125,128,132,134; NotChronic; NotSymptomatic)
+//    ConsultResult cr;
+//    cr.setConsultResult(148);
+//    cr.setSymptomaticState(ConsultResult::Symptomatic);
+//    cr.setChronicDiseaseState(ConsultResult::ChronicDisease);
+//    cr.setDiagnosisPosition(ConsultResult::C);
+//    cr.setMedicalFollowUp(ConsultResult::N);
+//    cr.setSelectedCriterias(QList<int>() << 124<<125<<128<<132<<134);
+//    cr.setDateOfExamination(QDateTime::currentDateTime());
+//    setConsultResult(cr);
+//    // END
 }
 
 RcEditorWidget::~RcEditorWidget()
@@ -454,6 +450,15 @@ void RcEditorWidget::setConsultResult(const ConsultResult &cr)
     d->consultResultToUi(cr);
 }
 
+int RcEditorWidget::currentEditingConsultResultId() const
+{
+    QModelIndex current = d->ui->treeViewRC->currentIndex();
+    // Is the index a RC?
+    if (current.parent() == QModelIndex())
+        return -1;
+    return d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
+}
+
 /**
  * Update the internal consultation result using the current ui selection and
  * return its reference.
@@ -477,8 +482,9 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     // Disconnect the tree view
     disconnect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
 
-    // Update models
+    // Update models & views
     int crId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
+    d->ui->crTitle->setText(edrcBase().getCrLabel(crId));
     d->_pcrModel->setFilterOnCrId(crId);
     d->_rcCritModel->setFilterOnCrId(crId);
 
@@ -494,8 +500,7 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     const QStringList &CIM10 = edrcBase().getCrIcd10RelatedCodes(crId, true);
     d->ui->CIM10->setText(CIM10.join(" ; "));
 
-    // Update argument button
-    d->ui->arguments->setEnabled(true);
+    Q_EMIT currentConsultResultIdChanged(crId);
 
     // Reconnect the treeview
     connect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
@@ -525,30 +530,6 @@ void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 
     // Update coding status label
     d->updateCodingStatus();
-}
-
-/** Open the SFMG about dialog */
-void RcEditorWidget::onSmfgAboutClicked()
-{
-    SfmgAboutDialog dlg(mainWindow());
-    dlg.exec();
-}
-
-/** Open the argument dialog for the currently selected RC */
-void RcEditorWidget::onArgumentsClicked()
-{
-    d->ui->arguments->setEnabled(false);
-    QModelIndex current = d->ui->treeViewRC->currentIndex();
-    // Is the index a RC?
-    if (current.parent() == QModelIndex()) {
-        return;
-    }
-
-    int rcId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
-    RcArgumentsDialog dlg(mainWindow());
-    dlg.setRcId(rcId);
-    dlg.exec();
-    d->ui->arguments->setEnabled(true);
 }
 
 /** Update the CR coding status label */

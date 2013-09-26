@@ -35,11 +35,16 @@
 #include "creditordialog.h"
 #include <edrcplugin/constants.h>
 #include <edrcplugin/consultresult.h>
+#include <edrcplugin/widgets/sfmgaboutdialog.h>
+#include <edrcplugin/widgets/rcargumentsdialog.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constants.h>
+
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -85,6 +90,17 @@ CrEditorDialog::CrEditorDialog(QWidget *parent) :
     d(new CrEditorDialogPrivate(this))
 {
     d->ui->setupUi(this);
+
+    // Create "About SMFG" button
+    QPushButton *sfmg = d->ui->buttonBox->addButton(tr("About SFMG"), QDialogButtonBox::HelpRole);
+    sfmg->setIcon(theme()->icon(Constants::ICON_SFMG_LOGO, Core::ITheme::SmallIcon));
+    connect(sfmg, SIGNAL(clicked()), this, SLOT(onSmfgAboutClicked()));
+
+    // Create "CR Arguments" button
+    QPushButton *args = d->ui->buttonBox->addButton(tr("Consult result arguments"), QDialogButtonBox::HelpRole);
+    args->setIcon(theme()->icon(Core::Constants::ICONINFORMATION, Core::ITheme::SmallIcon));
+    connect(args, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
+
     setWindowTitle(tr("Consult result editor and creator dialog"));
     setWindowIcon(theme()->icon(Constants::ICON_SFMG_LOGO));
 }
@@ -104,7 +120,33 @@ bool CrEditorDialog::initialize(const ConsultResult &cr)
     return true;
 }
 
+/** Submit the content of the editor to a eDRC::ConsultResult object and return it. */
 ConsultResult CrEditorDialog::submit() const
 {
     return d->ui->widget->submit();
 }
+
+/** Open the SFMG about dialog */
+void CrEditorDialog::onSmfgAboutClicked()
+{
+    SfmgAboutDialog dlg(this);
+    dlg.exec();
+}
+
+/** Open the argument dialog for the currently selected RC */
+void CrEditorDialog::onArgumentsClicked()
+{
+    QPushButton *but = qobject_cast<QPushButton*>(sender());
+    Q_ASSERT(but);
+    if (but)
+        but->setEnabled(false);
+    int id = d->ui->widget->currentEditingConsultResultId();
+    if (id == -1)
+        return;
+    RcArgumentsDialog dlg(this);
+    dlg.setRcId(id);
+    dlg.exec();
+    if (but)
+        but->setEnabled(true);
+}
+

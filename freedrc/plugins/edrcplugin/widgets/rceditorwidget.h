@@ -38,17 +38,19 @@ public:
     ~RcEditorWidget();
     void clear();
     void setConsultResult(const ConsultResult &cr);
+    int currentEditingConsultResultId() const;
 
 public Q_SLOTS:
     ConsultResult submit();
+
+Q_SIGNALS:
+    void currentConsultResultIdChanged(int currentId);
 
 private Q_SLOTS:
     void onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous);
     void onSearchTextChanged(const QString &text);
     //void onCriteriaSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void onCriteriaItemPressed(const QModelIndex &index);
-    void onSmfgAboutClicked();
-    void onArgumentsClicked();
     void updateCodingStatus();
     void toggleValidator();
 
