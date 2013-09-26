@@ -140,6 +140,7 @@ const char* const SHOW_SHORT_FORMAT     = QT_TRANSLATE_NOOP("tkConstants", "Show
 const char* const SHOW_NUMERIC_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show numeric date format");
 const char* const ENTER_DATE            = QT_TRANSLATE_NOOP("tkConstants", "Enter a date");
 const char* const ENTER_DATE_FORMAT_1   = QT_TRANSLATE_NOOP("tkConstants", "Enter a date using the formats:<br/>%1");
+const char* const NO_DATE               = QT_TRANSLATE_NOOP("tkConstants", "No date");
 
 const char* const DATE_OF_RELEASE    = QT_TRANSLATE_NOOP("tkConstants", "Date of release");
 const char* const DATE_OF_CREATION   = QT_TRANSLATE_NOOP("tkConstants", "Date of creation");
