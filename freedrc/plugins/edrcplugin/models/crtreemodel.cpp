@@ -38,6 +38,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+#include <translationutils/trans_datetime.h>
 
 using namespace eDRC;
 using namespace Internal;
@@ -94,7 +95,15 @@ public:
         // Manage the tree
         for(int i = 0; i < _list.count(); ++i) {
             const ConsultResult &cr = _list.at(i);
-            if (currentDate != cr.dateOfExamination().date()) {
+            if (currentDate.isNull() && cr.dateOfExamination().isNull() && !dateBranch) {
+                dateBranch = new QStandardItem(tkTr(Trans::Constants::NO_DATE));
+                QList<QStandardItem *> branch;
+                branch << dateBranch;
+                for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
+                    branch << new QStandardItem;
+                }
+                q->invisibleRootItem()->appendRow(branch);
+            } else if (currentDate != cr.dateOfExamination().date()) {
                 // New date branch
                 currentDate = cr.dateOfExamination().date();
                 dateBranch = new QStandardItem(QLocale().toString(currentDate, QLocale::LongFormat));
@@ -104,7 +113,6 @@ public:
                     branch << new QStandardItem;
                 }
                 q->invisibleRootItem()->appendRow(branch);
-
             }
             // Add the CR to the current date branch
             dateBranch->appendRow(crToItem(cr));
@@ -142,6 +150,7 @@ void CrTreeModel::setCrList(const QList<ConsultResult> &list)
 {
     beginResetModel();
     d->_list = list;
+    clear();
     d->createTree();
     endResetModel();
 }

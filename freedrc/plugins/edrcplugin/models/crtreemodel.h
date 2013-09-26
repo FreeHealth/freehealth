@@ -27,13 +27,14 @@
 #ifndef EDRC_INTERNAL_CRTREEMODEL_H
 #define EDRC_INTERNAL_CRTREEMODEL_H
 
+#include <edrcplugin/edrc_exporter.h>
 #include <QStandardItemModel>
 
 /**
  * \file crtreemodel.h
  * \author Eric Maeker
  * \version 0.9.2
- * \date 23 Sept 2013
+ * \date 25 Sept 2013
 */
 
 namespace eDRC {
@@ -41,7 +42,7 @@ namespace Internal {
 class ConsultResult;
 class CrTreeModelPrivate;
 
-class CrTreeModel : public QStandardItemModel
+class EDRC_EXPORT CrTreeModel : public QStandardItemModel
 {
     Q_OBJECT
 
