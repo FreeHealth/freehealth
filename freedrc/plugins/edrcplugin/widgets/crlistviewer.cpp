@@ -41,16 +41,22 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
+#include <coreplugin/idocumentprinter.h>
 
 #include <utils/global.h>
+#include <utils/widgets/htmldelegate.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QStyledItemDelegate>
 #include <QPainter>
 
 #include "ui_crlistviewer.h"
+
+#include <QDebug>
 
 using namespace eDRC;
 using namespace Internal;
@@ -60,6 +66,7 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace {
 const char * const TREEVIEW_SHEET =
@@ -190,7 +197,6 @@ class CrListViewerPrivate
 public:
     CrListViewerPrivate(CrListViewer *parent) :
         ui(0),
-        m_Context(0),
         _crTreeModel(0),
         _delegate(0),
         q(parent)
@@ -206,7 +212,6 @@ public:
 
 public:
     Ui::CrListViewer *ui;
-    eDRCContext *m_Context;
     CrTreeModel *_crTreeModel;
     TreeViewDelegate *_delegate;
 
@@ -218,27 +223,36 @@ private:
 } // namespace eDRC
 
 CrListViewer::CrListViewer(QWidget *parent) :
-    QWidget(parent),
+    EdrcContextualWidget(parent),
     d(new CrListViewerPrivate(this))
 {
     d->ui = new Ui::CrListViewer;
     d->ui->setupUi(this);
-    this->layout()->setMargin(0);
+    if (layout())
+        layout()->setMargin(0);
 
     // Manage CrTreeView options & delegate
+    QStringList commands;
+    commands << Core::Constants::A_FILE_OPEN
+             << Core::Constants::A_FILE_SAVE
+             << eDRC::Constants::A_FILE_SAVEASPDF
+             << "--"
+             << Core::Constants::A_FILE_PRINT
+             << eDRC::Constants::A_LIST_EDIT
+             << Core::Constants::A_LIST_ADD
+             << Core::Constants::A_LIST_REMOVE
+             << Core::Constants::A_LIST_CLEAR
+                ;
+    d->ui->treeView->setActions(0);
+    d->ui->treeView->setCommands(commands);
+    d->ui->treeView->addContext(context()->context());
+    d->ui->treeView->setDeselectable(false);
     d->ui->treeView->treeView()->viewport()->setAttribute(Qt::WA_Hover);
     d->ui->treeView->treeView()->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->ui->treeView->treeView()->setStyleSheet(::TREEVIEW_SHEET);
+    d->ui->treeView->setFocusPolicy(Qt::StrongFocus);
 
     d->_delegate = new TreeViewDelegate(this);
-
-//    Core::Context context(Constants::C_eDRC_PLUGINS);
-//    // Create the context object
-//    d->m_Context = new Internal::eDRCContext(this);
-//    d->m_Context->setContext(context);
-    
-//    // Send it to the contextual manager
-//    contextManager()->addContextObject(d->m_Context);
 
     // Connect buttons to global actions
     Core::Command *cmd;
@@ -246,11 +260,9 @@ CrListViewer::CrListViewer(QWidget *parent) :
     connect(d->ui->openFile, SIGNAL(clicked()), cmd->action(), SLOT(trigger()));
 
     // Connect buttons to local slots
-    connect(d->ui->printHistory, SIGNAL(clicked()), this, SLOT(printHistory()));
-    connect(d->ui->createCr, SIGNAL(clicked()), this, SLOT(createConsultResult()));
+//    connect(d->ui->printHistory, SIGNAL(clicked()), this, SLOT(printHistory()));
+//    connect(d->ui->createCr, SIGNAL(clicked()), this, SLOT(createConsultResult()));
 
-    // Connect TreeView
-    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentItemChanged(QModelIndex,QModelIndex)));
     // Resize splitter
     int width = size().width();
     int third = width/3;
@@ -262,14 +274,7 @@ CrListViewer::~CrListViewer()
     if (d)
         delete d;
     d = 0;
-    // Remove contextual object
-//    contextManager()->removeContextObject(m_Context);
 }
-
-//void CrListViewer::addContexts(const QList<int> &contexts)
-//{
-//    d->m_Context->addContext(contexts);
-//}
 
 /**
  * Set the consult result tree model to use in the viewer
@@ -285,6 +290,7 @@ void CrListViewer::setConsultResultTreeModel(CrTreeModel *model)
 
     // Disconnect old model
     disconnect(d->_crTreeModel, SIGNAL(modelReset()), this, SLOT(onModelReset()));
+    disconnect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentItemChanged(QModelIndex,QModelIndex)));
 
     // Connect new model
     d->_crTreeModel = model;
@@ -294,30 +300,70 @@ void CrListViewer::setConsultResultTreeModel(CrTreeModel *model)
     d->ui->treeView->setModel(d->_crTreeModel);
     d->_delegate->setCrTreeModel(d->_crTreeModel);
     d->ui->treeView->setItemDelegate(d->_delegate);
+    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentItemChanged(QModelIndex,QModelIndex)));
     onModelReset();
 }
 
-void CrListViewer::printHistory()
+void CrListViewer::fileOpen()
+{}
+
+void CrListViewer::fileSave()
+{}
+
+void CrListViewer::fileSaveAs()
+{}
+
+void CrListViewer::fileSavePDF()
+{}
+
+void CrListViewer::filePrint()
 {
-    //    Core::IDocumentPrinter *p = printer();
-    //    Q_ASSERT(p);
-    //    p->clearTokens();
-    //    ConsultResult cr = ui->crEditor->submit();
-    //    QString html = edrcCore().toHtml(cr);
-    //    QHash<QString, QVariant> tokens;
-    //    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
-    //    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    //    return p->print(html,
-    //                    Core::IDocumentPrinter::Papers_Generic_User,
-    //                    false);
+    // Something to print?
+    if (d->ui->crContent->toPlainText().isEmpty())
+        return;
+
+    // Print the current edition (using core patient/user tokens)
+    Core::IDocumentPrinter *p = printer();
+    Q_ASSERT(p);
+    p->clearTokens();
+    QString html = d->_crTreeModel->htmlContent(d->ui->treeView->currentIndex());
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    p->print(html,
+             Core::IDocumentPrinter::Papers_Generic_User,
+             false);
 }
+
+void CrListViewer::filePrintPreview()
+{
+    // Something to print?
+    if (d->ui->crContent->toPlainText().isEmpty())
+        return;
+
+    // Print the current edition (using core patient/user tokens)
+    Core::IDocumentPrinter *p = printer();
+    Q_ASSERT(p);
+    p->clearTokens();
+    QString html = d->_crTreeModel->htmlContent(d->ui->treeView->currentIndex());
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    p->printPreview(html,
+                    Core::IDocumentPrinter::Papers_Generic_User,
+                    false);
+}
+
+void CrListViewer::editItem()
+{}
 
 /**
  * Internal. Opens a consul result creator dialog, if the dialog is accepted
  * send the coded CR to the internal CrTreeModel
  */
-void CrListViewer::createConsultResult()
+void CrListViewer::addItem()
 {
+    qWarning() << "CrListViewer::addItem()";
     CrEditorDialog dlg(this);
     Utils::resizeAndCenter(&dlg, mainWindow());
     ConsultResult cr;
@@ -326,6 +372,24 @@ void CrListViewer::createConsultResult()
     if (dlg.exec() == QDialog::Accepted) {
         d->_crTreeModel->addConsultResult(dlg.submit());
     }
+}
+
+void CrListViewer::removeItem()
+{}
+
+/**
+ * Internal. Remove all eDRC::Internal::ConsultResult of the model.
+ */
+void CrListViewer::clearItems()
+{
+    bool yes = Utils::yesNoMessageBox(tr("Clear the current list"),
+                                      tr("You are about to clear the consult result list. All data will be "
+                                         "definitively lost.\n"
+                                         "Do you really want to clear the list?"));
+    if (!yes)
+        return;
+    d->_crTreeModel->clear();
+    d->ui->crContent->clear();
 }
 
 /**
@@ -356,4 +420,10 @@ void CrListViewer::onModelReset()
 void CrListViewer::onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
+//    if (!d->_crTreeModel->isConsultResult(current) && !d->_crTreeModel->isHistoryIndex(current)) {
+//        d->ui->stackedWidget->setCurrentIndex(0);
+//        return;
+//    }
+    d->ui->stackedWidget->setCurrentIndex(1);
+    d->ui->crContent->setHtml(d->_crTreeModel->htmlContent(current));
 }

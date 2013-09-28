@@ -56,11 +56,13 @@ public:
         q(parent)
     {}
 
-    QList<QStandardItem *> crToItem(const ConsultResult &cr)
+    QList<QStandardItem *> crToItem(const ConsultResult &cr, int listIndex)
     {
         QList<QStandardItem *> list;
         for(int i = 0; i < CrTreeModel::ColumnCount; ++i) {
-            list << new QStandardItem("-----");
+            QStandardItem *item = new QStandardItem(" ");
+            list << item;
+            _itemToListIndex.insert(item, listIndex);
         }
         list[CrTreeModel::Label]->setText(edrcBase().getCrLabel(cr.consultResultId()));
         list[CrTreeModel::Label]->setToolTip(edrcCore().toHtml(cr));
@@ -78,6 +80,7 @@ public:
 
     void createTree()
     {
+        _itemToListIndex.clear();
         // Sort list by date of examination
         qSort(_list.begin(), _list.end(), ConsultResult::lessThanByDate);
 
@@ -115,12 +118,13 @@ public:
                 q->invisibleRootItem()->appendRow(branch);
             }
             // Add the CR to the current date branch
-            dateBranch->appendRow(crToItem(cr));
+            dateBranch->appendRow(crToItem(cr, i));
         }
     }
 
 public:
     QList<ConsultResult> _list;
+    QHash<QStandardItem*, int> _itemToListIndex;
 
 private:
     CrTreeModel *q;
@@ -170,6 +174,47 @@ void CrTreeModel::addConsultResult(const ConsultResult &cr)
 
 void CrTreeModel::updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate)
 {}
+
+bool CrTreeModel::isConsultResult(const QModelIndex &index) const
+{
+    return index.parent().isValid();
+}
+
+bool CrTreeModel::isHistoryIndex(const QModelIndex &index) const
+{
+    return (index.row() == 0 && index.parent() == QModelIndex());
+}
+
+QString CrTreeModel::htmlContent(const QModelIndex &index) const
+{
+    // Return history?
+    if (isHistoryIndex(index)) {
+        QString html;
+        foreach(const ConsultResult &cr, d->_list) {
+            html += edrcCore().toHtml(cr);
+        }
+        return html;
+    }
+
+    // Return only a CR
+    if (isConsultResult(index)) {
+        int listId = d->_itemToListIndex.value(itemFromIndex(index), -1);
+        if (listId == -1)
+            return QString::null;
+        return edrcCore().toHtml(d->_list.at(listId));
+    }
+
+    // Return a history from a date
+    QString html;
+    for(int i=0; i < rowCount(index); ++i) {
+        QModelIndex cr = this->index(i, Label, index);
+        int listId = d->_itemToListIndex.value(itemFromIndex(cr), -1);
+        if (listId == -1)
+            continue;
+        html += edrcCore().toHtml(d->_list.at(listId));
+    }
+    return html;
+}
 
 const QList<ConsultResult> &CrTreeModel::consultResultList() const
 {

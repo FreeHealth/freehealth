@@ -26,15 +26,12 @@
  ***************************************************************************/
 /*!
  * \class eDRC::EdrcCore
- * \brief short description of class
- *
- * Long description of class
- * \sa eDRC::
  */
 
 #include "edrccore.h"
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
+#include <edrcplugin/widgets/edrcwidgetmanager.h>
 #include <edrcplugin/consultresult.h>
 #include <edrcplugin/constants.h>
 
@@ -93,6 +90,7 @@ public:
 
 public:
     DrcDatabase *_edrcBase;
+    EdrcWidgetManager *_widgetManager;
     
 private:
     EdrcCore *q;
@@ -137,7 +135,13 @@ bool EdrcCore::initialize()
 {
     d->_edrcBase = new DrcDatabase(d->databasePath());
     d->_edrcBase->initialize(true, d->csvFilesPath());
+    d->_widgetManager = new EdrcWidgetManager(this);
     return true;
+}
+
+void EdrcCore::extensionInitialized()
+{
+    d->_widgetManager = new EdrcWidgetManager(this);
 }
 
 /**

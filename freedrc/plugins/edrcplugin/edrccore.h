@@ -52,11 +52,13 @@ class EDRC_EXPORT EdrcCore : public QObject
 
 protected:
     explicit EdrcCore(QObject *parent = 0);
-    
+    bool initialize();
+    void extensionInitialized();
+
 public:
     static EdrcCore &instance();
     ~EdrcCore();
-    bool initialize();
+
     QString currentDatabaseVersion() const;
 
     QString toHtml(const Internal::ConsultResult &cr);

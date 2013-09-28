@@ -30,7 +30,9 @@ HEADERS += \
     consultresult.h \
     consultresultvalidator.h \
     constants.h \
-    widgets/creditordialog.h
+    widgets/creditordialog.h \
+    widgets/edrcwidgetmanager.h \
+    widgets/edrcwontextualwidget.h
 
 SOURCES += \
     edrcplugin.cpp \
@@ -50,7 +52,9 @@ SOURCES += \
     widgets/crlistviewer.cpp \
     consultresultvalidator.cpp \
     consultresult.cpp \
-    widgets/creditordialog.cpp
+    widgets/creditordialog.cpp \
+    widgets/edrcwidgetmanager.cpp \
+    widgets/edrcwontextualwidget.cpp
 
 FORMS += \
     widgets/rceditorwidget.ui \

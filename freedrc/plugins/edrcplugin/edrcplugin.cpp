@@ -141,7 +141,7 @@ void EdrcPlugin::extensionsInitialized()
     messageSplash(tr("Initializing eDRC..."));
 
     // At this point, user is connected
-
+    _core->extensionInitialized();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()), Qt::UniqueConnection);

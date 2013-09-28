@@ -487,6 +487,7 @@ bool MainWindow::print()
 //    return p->print(html,
 //                    Core::IDocumentPrinter::Papers_Generic_User,
 //                    false);
+    return true;
 }
 
 bool MainWindow::printPreview()
@@ -502,6 +503,7 @@ bool MainWindow::printPreview()
 //    return p->printPreview(html,
 //                           Core::IDocumentPrinter::Papers_Generic_User,
 //                           false);
+    return true;
 }
 
 /** \brief Runs the MedinTux configurator */
@@ -528,17 +530,16 @@ bool MainWindow::saveAsFile()
     doc.appendChild(pe);
 
     // Get full content XML
-//    ConsultResult cr = ui->crEditor->submit();
-//    QString xml = cr.toXml(doc.toString());
+    const QList<ConsultResult> list = _crTreeModel->consultResultList();
+    QString xml = ConsultResult::listToXml(list, doc.toString());
 
-//    // Save to file
-//    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
-//    if (ok) {
-//        fileManager()->addToRecentFiles(fileName);
-//        fileManager()->setCurrentFile(fileName);
-//    }
-//    return ok;
-    return true;
+    // Save to file
+    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
+    if (ok) {
+        fileManager()->addToRecentFiles(fileName);
+        fileManager()->setCurrentFile(fileName);
+    }
+    return ok;
 }
 
 bool MainWindow::saveFile()

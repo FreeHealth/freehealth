@@ -20,88 +20,51 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developers:                                                      *
- *       Eric Maeker <eric.maeker@gmail.com>                             *
+ *       Eric Maeker <eric.maeker@gmail.com>                               *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_CRLISTVIEWER_H
-#define EDRC_INTERNAL_CRLISTVIEWER_H
-
-#include <edrcplugin/edrc_exporter.h>
-#include <edrcplugin/widgets/edrcwontextualwidget.h>
-#include <QWidget>
-#include <QList>
-#include <QModelIndex>
-#include <QStyledItemDelegate>
 
 /**
- * \file crlistviewer.h
- * \author Eric Maeker
- * \version 0.9.2
- * \date 28 Sept 2013
-*/
+ * \class eDRC::Internal::EdrcContextualWidget
+ * \brief Contextualized widget for the eDRC plugin.
+ *
+ * This contextualized widget has access to all actions that are added in the particular context of
+ * eDRC (e.g. eDRC::Constants::C_eDRC).\n
+ * You can add context identificators to the widget by using the addContexts() method.
+ * The context object is automatically removed from the context manager in its destructor
+ * (no special code needed).
+ * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
+ */
 
-namespace eDRC {
-namespace Internal {
-class CrTreeModel;
-class eDRCContext;
-class CrListViewerPrivate;
-namespace Ui {
-class CrListViewer;
-}  // namespace Ui
+#include "edrcwontextualwidget.h"
+#include <edrcplugin/constants.h>
 
-class TreeViewDelegate : public QStyledItemDelegate
+#include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/icore.h>
+
+using namespace eDRC;
+using namespace Internal;
+
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+
+EdrcContextualWidget::EdrcContextualWidget(QWidget *parent) :
+    QWidget(parent),
+    m_Context(0)
 {
-    Q_OBJECT
-public:
-    TreeViewDelegate(QObject *parent = 0);
-    void setCrTreeModel(CrTreeModel *model);
+    Core::Context context(Constants::C_EDRC_PLUGIN);
+    // Create the context object
+    m_Context = new Internal::EdrcContext(this);
+    m_Context->setContext(context);
+    
+    // Send it to the contextual manager
+    contextManager()->addContextObject(m_Context);
+}
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
-
-public:
-    mutable QModelIndex pressedIndex;
-    CrTreeModel *_crTreeModel;
-};
-
-class EDRC_EXPORT CrListViewer : public EdrcContextualWidget
+EdrcContextualWidget::~EdrcContextualWidget()
 {
-    Q_OBJECT
-    
-public:
-    explicit CrListViewer(QWidget *parent = 0);
-    ~CrListViewer();
+    // Remove contextual object
+    contextManager()->removeContextObject(m_Context);
+}
 
-    void setConsultResultTreeModel(CrTreeModel *model);
-//    void addContexts(const QList<int> &contexts);
-    
-    // Contextual interface
-private Q_SLOTS:
-    void fileOpen();
-    void fileSave();
-    void fileSaveAs();
-    void fileSavePDF();
-    void filePrint();
-    void filePrintPreview();
-    void editItem();
-    void addItem();
-    void removeItem();
-    void clearItems();
-
-private Q_SLOTS:
-    void onModelReset();
-    void onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous);
-
-private:
-    Internal::CrListViewerPrivate *d;
-};
-
-} // namespace Internal
-} // namespace eDRC
-
-#endif // EDRC_INTERNAL_CRLISTVIEWER_H
 

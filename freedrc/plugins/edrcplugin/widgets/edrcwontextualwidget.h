@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -9,7 +9,7 @@
  *  the Free Software Foundation, either version 3 of the License, or      *
  *  (at your option) any later version.                                    *
  *                                                                         *
- *  This program is distributed in the hope that it will be useful, *
+ *  This program is distributed in the hope that it will be useful,        *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
  *  GNU General Public License for more details.                           *
@@ -19,65 +19,71 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *   Main Developers:                                                      *
+ *       Eric Maeker <eric.maeker@gmail.com>                             *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_CRTREEMODEL_H
-#define EDRC_INTERNAL_CRTREEMODEL_H
+#ifndef EDRC_INTERNAL_EDRCCONTEXTUALUALWIDGET_H
+#define EDRC_INTERNAL_EDRCCONTEXTUALUALWIDGET_H
 
-#include <edrcplugin/edrc_exporter.h>
-#include <QStandardItemModel>
+#include <coreplugin/contextmanager/icontext.h>
+#include <QWidget>
+#include <QList>
 
 /**
- * \file crtreemodel.h
+ * \file edrccontextualwidget.h
  * \author Eric Maeker
  * \version 0.9.2
- * \date 25 Sept 2013
+ * \date 28 Sept 2013
 */
+
+#include <QDebug>
 
 namespace eDRC {
 namespace Internal {
-class ConsultResult;
-class CrTreeModelPrivate;
+class EdrcContext;
 
-class EDRC_EXPORT CrTreeModel : public QStandardItemModel
+class EdrcContextualWidget : public QWidget
 {
     Q_OBJECT
-
+    
 public:
-    enum DataRepresentation {
-        Label = 0,
-        DateOfExamination,
-        Validity,
-        DiagnosisPosition,
-        MedicalFollowUp,
-        Html,
-        Id,
-        Empty1,
-        Empty2,
-        Empty3,
-        ColumnCount
-    };
+    explicit EdrcContextualWidget(QWidget *parent = 0);
+    ~EdrcContextualWidget();
 
-    CrTreeModel(QObject *parent = 0);
-    ~CrTreeModel();
+    EdrcContext *context() const {return m_Context;}
 
-    void setCrList(const QList<ConsultResult> &cr);
-    void addConsultResult(const ConsultResult &cr);
-    void updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate);
+public Q_SLOTS:
+    virtual void fileOpen() = 0;
+    virtual void fileSave() = 0;
+    virtual void fileSaveAs() = 0;
+    virtual void fileSavePDF() = 0;
+    virtual void filePrint() = 0;
+    virtual void filePrintPreview() = 0;
+    virtual void editItem() = 0;
+    virtual void addItem() {qWarning() << "addItem";}
+    virtual void removeItem() = 0;
+    virtual void clearItems() = 0;
 
-    bool isConsultResult(const QModelIndex &index) const;
-    bool isHistoryIndex(const QModelIndex &index) const;
-    QString htmlContent(const QModelIndex &index) const;
-
-    const QList<ConsultResult> &consultResultList() const;
 private:
-    CrTreeModelPrivate *d;
+    EdrcContext *m_Context;
+};
+
+class EdrcContext : public Core::IContext
+{
+    Q_OBJECT
+public:
+    EdrcContext(EdrcContextualWidget *w) :
+        Core::IContext(w)
+    {
+        setObjectName("EdrcContext");
+        setWidget(w);
+    }
 };
 
 } // namespace Internal
 } // namespace eDRC
 
-#endif  // EDRC_INTERNAL_CRTREEMODEL_H
+#endif // EDRC_INTERNAL_EDRCCONTEXTUALUALWIDGET_H
+

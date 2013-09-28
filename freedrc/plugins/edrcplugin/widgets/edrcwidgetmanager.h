@@ -24,62 +24,38 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_CRLISTVIEWER_H
-#define EDRC_INTERNAL_CRLISTVIEWER_H
+#ifndef EDRC_INTERNAL_EDRC_CONTEXTUALWIDGET_MANAGER_H
+#define EDRC_INTERNAL_EDRC_CONTEXTUALWIDGET_MANAGER_H
 
-#include <edrcplugin/edrc_exporter.h>
-#include <edrcplugin/widgets/edrcwontextualwidget.h>
-#include <QWidget>
-#include <QList>
-#include <QModelIndex>
-#include <QStyledItemDelegate>
+#include <coreplugin/contextmanager/icontext.h>
+#include <QObject>
+#include <QPointer>
 
 /**
- * \file crlistviewer.h
+ * \file edrcwidgetmanager.h
  * \author Eric Maeker
  * \version 0.9.2
  * \date 28 Sept 2013
 */
 
+namespace Core {
+class IContext;
+}
+
 namespace eDRC {
 namespace Internal {
-class CrTreeModel;
-class eDRCContext;
-class CrListViewerPrivate;
-namespace Ui {
-class CrListViewer;
-}  // namespace Ui
+class EdrcActionManager;
+class EdrcContextualWidget;
 
-class TreeViewDelegate : public QStyledItemDelegate
+class EdrcActionManager : public QObject
 {
     Q_OBJECT
 public:
-    TreeViewDelegate(QObject *parent = 0);
-    void setCrTreeModel(CrTreeModel *model);
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
-
-public:
-    mutable QModelIndex pressedIndex;
-    CrTreeModel *_crTreeModel;
-};
-
-class EDRC_EXPORT CrListViewer : public EdrcContextualWidget
-{
-    Q_OBJECT
+    EdrcActionManager(QObject *parent = 0);
+    virtual ~EdrcActionManager() {}
     
-public:
-    explicit CrListViewer(QWidget *parent = 0);
-    ~CrListViewer();
-
-    void setConsultResultTreeModel(CrTreeModel *model);
-//    void addContexts(const QList<int> &contexts);
+    void setCurrentView(EdrcContextualWidget *view);
     
-    // Contextual interface
 private Q_SLOTS:
     void fileOpen();
     void fileSave();
@@ -91,17 +67,34 @@ private Q_SLOTS:
     void addItem();
     void removeItem();
     void clearItems();
-
+    void showDatabaseInformation();
+    
 private Q_SLOTS:
-    void onModelReset();
-    void onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous);
+    void updateActions();
+    
+protected:
+    QAction *aClear, *aFileOpen, *aFileSave, *aFileSaveAs, *aFileSavePDF, *aFilePrint, *aFilePrintPreview;
+    QAction *aAddItem, *aRemoveItem, *aEditItem;
+    QAction *aShowDatabaseInformation;
+    
+    QPointer<EdrcContextualWidget> m_CurrentView;
+};
 
-private:
-    Internal::CrListViewerPrivate *d;
+class EdrcWidgetManager : public EdrcActionManager
+{
+    Q_OBJECT
+public:
+    explicit EdrcWidgetManager(QObject *parent = 0);
+    ~EdrcWidgetManager();
+    
+    EdrcContextualWidget *currentView() const;
+    
+private Q_SLOTS:
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
 } // namespace Internal
 } // namespace eDRC
 
-#endif // EDRC_INTERNAL_CRLISTVIEWER_H
+#endif // EDRC_INTERNAL_EDRC_CONTEXTUALWIDGET_MANAGER_H
 
