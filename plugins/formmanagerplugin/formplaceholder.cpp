@@ -446,8 +446,10 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d(new Internal::FormPlaceHolderPrivate(this))
 {
     d->ui->setupUi(this);
-    layout()->setMargin(0);
-    layout()->setSpacing(0);
+    if (layout()) {
+        layout()->setMargin(0);
+        layout()->setSpacing(0);
+    }
     d->ui->verticalLayout_2->setMargin(0);
     d->ui->verticalLayout_2->setSpacing(0);
     d->createEpisodeToolBar();
