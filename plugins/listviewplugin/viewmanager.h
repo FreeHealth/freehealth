@@ -42,9 +42,6 @@ class QAction;
 #include <coreplugin/contextmanager/icontext.h>
 #include <listviewplugin/extendedview.h>
 
-#include <QDebug>
-
-
 namespace Views {
 namespace Internal {
 
@@ -87,6 +84,7 @@ protected:
     QAction *aDown;
     QAction *aUp;
     QAction *aEdit;
+    QAction *aClear;
 
     QPointer<IView> m_CurrentView;
 };
