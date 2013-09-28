@@ -80,6 +80,16 @@ const char * const TOKEN_CRITERIA_MODERN_LABEL = "CRITERIA_MODERN_LABEL";
 // Icons
 const char * const ICON_SFMG_LOGO = "sfmg_logo.png";
 
+// Actions & menus & context
+const char * const C_EDRC_PLUGIN = "c.edrcplugin";
+const char * const A_LIST_EDIT = "aEdrc.editCr";
+const char * const A_FILE_SAVEASPDF = "aEdrcSavePdf";
+const char * const A_SHOW_DBINFO = "a.edrc.show.database.information";
+
+const char * const TR_CONTEXT = "eDRC";
+const char * const EDRC_DATABASE_INFORMATION_TEXT = QT_TRANSLATE_NOOP("eDRC", "eDRC database information");
+const char * const SAVEAS_PDF_TEXT = QT_TRANSLATE_NOOP("eDRC", "Save as PDF");
+
 } // namespace Constants
 } // namespace eDRC
 
