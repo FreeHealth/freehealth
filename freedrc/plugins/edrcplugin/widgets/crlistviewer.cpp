@@ -249,6 +249,8 @@ CrListViewer::CrListViewer(QWidget *parent) :
     connect(d->ui->printHistory, SIGNAL(clicked()), this, SLOT(printHistory()));
     connect(d->ui->createCr, SIGNAL(clicked()), this, SLOT(createConsultResult()));
 
+    // Connect TreeView
+    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentItemChanged(QModelIndex,QModelIndex)));
     // Resize splitter
     int width = size().width();
     int third = width/3;
@@ -349,4 +351,9 @@ void CrListViewer::onModelReset()
     d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     d->ui->treeView->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 #endif
+}
+
+void CrListViewer::onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    Q_UNUSED(previous);
 }

@@ -83,6 +83,7 @@ private Q_SLOTS:
     void printHistory();
     void createConsultResult();
     void onModelReset();
+    void onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:
     Internal::CrListViewerPrivate *d;

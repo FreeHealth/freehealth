@@ -202,7 +202,7 @@ Les résultats de la recherche s'affichent dans la liste juste en dessous.</stri
       <widget class="QWidget" name="layoutWidget_2">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
-         <number>0</number>
+         <number>2</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
