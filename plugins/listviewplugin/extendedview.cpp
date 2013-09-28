@@ -191,6 +191,7 @@ void ExtendedView::setCommands(const QStringList &commandsUid)
             continue;
         } else if (uid=="->") {
             QWidget *w = new QWidget(d->m_ToolBar);
+            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             w->setLayout(new QHBoxLayout(w));
             w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
             d->m_ToolBar->addWidget(w);
