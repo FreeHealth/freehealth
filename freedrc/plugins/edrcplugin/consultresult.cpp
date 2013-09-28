@@ -112,11 +112,13 @@ QString ConsultResultCriteria::label(bool useModernLabelling) const
  */
 QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
 {
+    QString htmlIndent = _indent;
+    htmlIndent = htmlIndent.replace(" ", "&nbsp;&nbsp;");
     if (_label.isEmpty() || !useModernLabelling)
-        return QString("%1%2").arg(_indent).arg(_label);
+        return QString("%1%2").arg(htmlIndent).arg(_label);
 
     if (!_label.contains("++"))
-        return QString("%1%2").arg(_indent).arg(_label);
+        return QString("%1%2").arg(htmlIndent).arg(_label);
 
     // Compute the modern label
     QString html = _label;
@@ -126,7 +128,7 @@ QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
     html.replace("++4|", QString("&#%1;").arg(10115));
     html.replace("++++", QString("&#%1;").arg(9745));
     html.replace("+ -" , QString("&#%1;").arg(8226));
-    return QString("%1%2").arg(_indent).arg(Utils::htmlReplaceAccents(html));
+    return QString("%1%2").arg(htmlIndent).arg(Utils::htmlReplaceAccents(html));
 }
 
 /** Returns true if the CR criteria is only a line break (empty line) */
