@@ -152,28 +152,32 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
 QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 {
     Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path set");
-    // retreive transformed FileName (manage size)
-    QString transformedFileName = transformFileName(fileName, size);
+    // Get icon uid
+    QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileName);
 
-    // 0. get icon from cache is possible
-    if (m_IconCache.contains(transformedFileName))
-        return QIcon(*m_IconCache[transformedFileName]);
+    // Check cache
+    if (m_IconCache.contains(uid))
+        return QIcon(*m_IconCache[uid]);
 
-    // 1. test size by size if a path was set else use the absolutePath of the theme
-    QIcon *i = 0;
+    QIcon *i = new QIcon;
+    QString fullName;
 
-    // 2. get icom from file
-    QString fullName = iconFullPath(fileName,size);
-    if (QFile(fullName).exists()) {
-        i = new QIcon(fullName);
-        if (!i->isNull()) {
-            m_IconCache.insert(transformedFileName, i);
-            return QIcon(*i);
-        } else {
-            LOG_ERROR(QCoreApplication::translate("ThemePrivate", "ERROR - Theme: Unable to load icon file %1").arg(fileName));
-        }
-    }
-    return QIcon();
+    // Read all sizes
+    fullName = iconFullPath(fileName, SmallIcon);
+    if (QFile(fullName).exists())
+        i->addFile(fullName, QSize(16,16));
+
+    fullName = iconFullPath(fileName, MediumIcon);
+    if (QFile(fullName).exists())
+        i->addFile(fullName, QSize(32,32));
+
+    fullName = iconFullPath(fileName, BigIcon);
+    if (QFile(fullName).exists())
+        i->addFile(fullName, QSize(64,64));
+
+    // Cache icon
+    m_IconCache.insert(uid, i);
+    return QIcon(*i);
 }
 
 /** \brief Returns the full icon's file name absolute path corresponding to the themed file name \e fileName and the size \e size */
