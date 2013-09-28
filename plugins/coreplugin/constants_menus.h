@@ -189,118 +189,118 @@ const char * const G_DEFAULT_THREE       = "gr.Three";     /*!< \brief Default g
 
 
 // File Menu Action's name (find icon default into tkTheme.h)
-const char * const  A_FILE_NEW               = "actionFileNew";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_OPEN              = "actionFileOpen";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_OPENFORM          = "actionFileOpenForm";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_OPENPRESCRIPTION  = "actionFileOpenPrescription";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVE              = "actionFileSave";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVEFORM          = "actionFileSaveForm";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVEPRESCRIPTION  = "actionFileSavePrescription";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_SAVEAS            = "actionFileSaveAs"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_PRINT             = "actionFilePrint";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_PRINTFORM         = "actionFilePrintForm";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_PRINTPRESCRIPTION = "actionFilePrintPrescription";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_PRINTPREVIEW      = "actionFilePrintPreview";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_LOCKAPPLICATION   = "actionFileLockApplication";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FILE_EXIT              = "actionFileExit";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_NEW               = "aFileNew";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_OPEN              = "aFileOpen";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_OPENFORM          = "aFileOpenForm";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_OPENPRESCRIPTION  = "aFileOpenPrescription";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVE              = "aFileSave";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVEFORM          = "aFileSaveForm";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVEPRESCRIPTION  = "aFileSavePrescription";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_SAVEAS            = "aFileSaveAs"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINT             = "aFilePrint";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINTFORM         = "aFilePrintForm";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINTPRESCRIPTION = "aFilePrintPrescription";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_PRINTPREVIEW      = "aFilePrintPreview";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_LOCKAPPLICATION   = "aFileLockApplication";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FILE_EXIT              = "aFileExit";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Patient actions
-const char * const  A_PATIENT_NEW           = "actionPatientNew";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_PATIENT_REMOVE        = "actionPatientRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_PATIENT_VIEWIDENTITY  = "actionPatientViewIdentity";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_PATIENT_NEW           = "aPatientNew";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_PATIENT_REMOVE        = "aPatientRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_PATIENT_VIEWIDENTITY  = "aPatientViewIdentity";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 
 // Edit Menu Action's name (find icon default into tkTheme.h)
 // A_EDIT_COPY << A_EDIT_CUT << A_EDIT_PASTE << A_EDIT_UNDO << A_EDIT_REDO << A_EDIT_SELECTALL << A_EDIT_DESELECT
-const char * const  A_EDIT_COPY           = "actionEditCopy";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_CUT            = "actionEditCut";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_PASTE          = "actionEditPaste";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_UNDO           = "actionEditUndo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_REDO           = "actionEditRedo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_SELECTALL      = "actionEditSelectAll"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_DESELECT       = "actionEditDeselect";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_EDIT_SEARCH         = "actionEditSearch";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_COPY           = "aEditCopy";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_CUT            = "aEditCut";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_PASTE          = "aEditPaste";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_UNDO           = "aEditUndo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_REDO           = "aEditRedo";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_SELECTALL      = "aEditSelectAll"; /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_DESELECT       = "aEditDeselect";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_EDIT_SEARCH         = "aEditSearch";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // List actions's
-const char * const  A_LIST_ADD            = "actionListAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_REMOVE         = "actionListRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_MOVEUP         = "actionListMoveUp";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_MOVEDOWN       = "actionListMoveDown";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_CLEAR          = "actionListClear";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_LIST_SORT           = "actionListSort";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_ADD            = "aListAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_REMOVE         = "aListRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_MOVEUP         = "aListMoveUp";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_MOVEDOWN       = "aListMoveDown";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_CLEAR          = "aListClear";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_LIST_SORT           = "aListSort";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Templates actions
-const char * const  A_TEMPLATE_CREATE     = "actionTemplateCreate";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_TOGGLEVIEW = "actionTemplateToggleView";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_ADD        = "actionTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_SAVE       = "actionTemplateSave";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_PRINT      = "actionTemplatePrint";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_CATEGORY_ADD        = "actionCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_REMOVE     = "actionTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_EDIT       = "actionTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_CATEGORY_EDIT       = "actionCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_LOCK       = "actionTemplateLock";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_DATABASEINFORMATION = "actionTemplateDBInfo";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_CREATE     = "aTemplateCreate";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_TOGGLEVIEW = "aTemplateToggleView";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_ADD        = "aTemplateAdd";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_SAVE       = "aTemplateSave";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_PRINT      = "aTemplatePrint";        /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_ADD        = "aCategoryAdd";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_REMOVE     = "aTemplateRemove";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_REMOVE     = "aCategoryRemove";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_EDIT       = "aTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CATEGORY_EDIT       = "aCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_LOCK       = "aTemplateLock";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_DATABASEINFORMATION = "aTemplateDBInfo";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
-const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_ITALIC       = "actionFormatItalic";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_UNDERLINE    = "actionFormatUnderline";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_STRIKE       = "actionFormatStrike";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_BIGGER       = "actionFormatBigger";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_SMALLER      = "actionFormatSmaller";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_TYPEWRITERFONT = "actionFormatTypeWriterFont";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_FONT         = "actionFormatFont";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_FONTCOLOR    = "actionFormatFontColor";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_TABLE        = "actionFormatTable";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_FORMAT_IMAGE        = "actionFormatImage";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_BOLD         = "aFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_ITALIC       = "aFormatItalic";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_UNDERLINE    = "aFormatUnderline";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_STRIKE       = "aFormatStrike";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_BIGGER       = "aFormatBigger";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_SMALLER      = "aFormatSmaller";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_TYPEWRITERFONT = "aFormatTypeWriterFont";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_FONT         = "aFormatFont";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_FONTCOLOR    = "aFormatFontColor";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_TABLE        = "aFormatTable";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_FORMAT_IMAGE        = "aFormatImage";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Paragraph Format Action's name
-const char * const  A_ALIGN_CENTER        = "actionAlignCenter";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ALIGN_LEFT          = "actionAlignLeft";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ALIGN_RIGHT         = "actionAlignRight";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ALIGN_JUSTIFY       = "actionAlignJustify";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_CENTER        = "aAlignCenter";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_LEFT          = "aAlignLeft";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_RIGHT         = "aAlignRight";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ALIGN_JUSTIFY       = "aAlignJustify";    /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Tables' actions
-const char * const  A_TABLE_ADDTABLE      = "actionAddTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_TABLEPROP     = "actionTableProperties";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_REMOVETABLE   = "actionRemoveTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_ADDROW        = "actionTableAddRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_REMOVEROW     = "actionTableRemoveRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_ADDCOLUMN     = "actionTableAddCol";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_REMOVECOLUMN  = "actionTableRemoveCol";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_MERGECELLS    = "actionTableMergeCells";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TABLE_SPLITCELLS    = "actionTableSplitCells";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_ADDTABLE      = "aAddTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_TABLEPROP     = "aTableProperties";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_REMOVETABLE   = "aRemoveTable";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_ADDROW        = "aTableAddRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_REMOVEROW     = "aTableRemoveRow";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_ADDCOLUMN     = "aTableAddCol";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_REMOVECOLUMN  = "aTableRemoveCol";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_MERGECELLS    = "aTableMergeCells";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TABLE_SPLITCELLS    = "aTableSplitCells";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 
 // Interpretor Actions
-const char * const  A_INTERPRETOR_GENERAL     = "actionInterpretor";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_INTERPRETOR_GENERAL     = "aInterpretor";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // FreeMedForms Tools Actions
 const char * const  A_USERMANAGER     = "aUserManager";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CREATEUSER      = "aCreateUser";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // About Menu Action's name
-const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_APPWEBSITE         = "actionWebSite";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ABOUTPLUGINS       = "actionPluginsAbout";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_APPLICATIONHELP    = "actionApplicationHelp";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_DEBUGHELPER        = "actionDebugHelper";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_BUGREPORT          = "actionBugReport";         /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_HELPTEXT_TOGGLER   = "actionHelpTextToggler";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUT              = "aAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPWEBSITE         = "aWebSite";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTPLUGINS       = "aPluginsAbout";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTQT            = "aAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_ABOUTFORM          = "aAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPLICATIONHELP    = "aApplicationHelp";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_DEBUGHELPER        = "aDebugHelper";       /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_BUGREPORT          = "aBugReport";         /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_HELPTEXT_TOGGLER   = "aHelpTextToggler";   /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Configuration Menu Action's name
-const char * const  A_PREFERENCES        = "actionConfigure";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_APPCONFIGURATOR    = "actionAppConfigurator";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_PLUGINS_PREFERENCES= "actionPlugPrefs";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_CONFIGURE_MEDINTUX = "actionConfMedintux";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_PREFERENCES        = "aConfigure";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPCONFIGURATOR    = "aAppConfigurator";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_PLUGINS_PREFERENCES= "aPlugPrefs";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CONFIGURE_MEDINTUX = "aConfMedintux";  /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Update Menu Actions' name
-const char * const  A_CHECKUPDATE      = "actionCheckUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_CHECKUPDATE      = "aCheckUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_VIEWUPDATE       = "aViewUpdate";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 
 //modes
@@ -349,20 +349,20 @@ const char* const   C_EDITOR_ADDTEXT     = "context.Editor.AddText";
 const char* const   C_USERMANAGER        = "context.UserManager";
 
 // EDITOR
-const char * const A_EDITOR_TOOGLETOOLBAR= "actionEditorToggleToolbar";
+const char * const A_EDITOR_TOOGLETOOLBAR= "aEditorToggleToolbar";
 const char * const M_EDITOR              = "menu.Editor";
 const char * const M_EDITOR_CONTEXT      = "menu.Popup.Editor";
 const char * const M_EDITOR_ADDTEXT      = "menu.Editor.AddText";
 const char * const G_EDITOR_FILE         = "group.Editor.File";
 const char * const G_EDITOR_CONTEXT      = "group.Editor.Context";
 const char * const G_EDITOR_ADDTEXT      = "group.Editor.AddText";
-const char * const A_EDITOR_FILEOPEN     = "action.Editor.Open";
-const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
-const char * const A_EDITOR_FILEPRINT    = "action.Editor.Print";
-const char * const A_EDITOR_ADDDATE_LONG   = "action.Editor.AddDate.LongFormat";
-const char * const A_EDITOR_ADDDATE_SHORT  = "action.Editor.AddDate.ShortFormat";
-const char * const A_EDITOR_ADDUSERNAME    = "action.Editor.AddUserName";
-const char * const A_EDITOR_ADDPATIENTNAME = "action.Editor.AddPatientName";
+const char * const A_EDITOR_FILEOPEN     = "a.Editor.Open";
+const char * const A_EDITOR_FILESAVE     = "a.Editor.Save";
+const char * const A_EDITOR_FILEPRINT    = "a.Editor.Print";
+const char * const A_EDITOR_ADDDATE_LONG   = "a.Editor.AddDate.LongFormat";
+const char * const A_EDITOR_ADDDATE_SHORT  = "a.Editor.AddDate.ShortFormat";
+const char * const A_EDITOR_ADDUSERNAME    = "a.Editor.AddUserName";
+const char * const A_EDITOR_ADDPATIENTNAME = "a.Editor.AddPatientName";
 
 }  // end Constants
 } // end Core
