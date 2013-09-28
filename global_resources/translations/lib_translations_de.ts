@@ -2725,5 +2725,13 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms project&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD (France)&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No date</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

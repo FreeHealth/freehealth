@@ -12,13 +12,13 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="163"/>
-        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="165"/>
+        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="162"/>
+        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="164"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="219"/>
+        <location filename="../../freedrc/plugins/coreplugin/coreimpl.cpp" line="218"/>
         <source>You are running a new version of %1, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -715,7 +715,7 @@
 <context>
     <name>Core::Internal::ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="244"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="248"/>
         <source>Using splash: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -836,14 +836,6 @@
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="197"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ThemePrivate</name>
-    <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="173"/>
-        <source>ERROR - Theme: Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

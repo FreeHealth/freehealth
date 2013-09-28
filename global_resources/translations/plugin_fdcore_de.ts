@@ -703,13 +703,6 @@
     </message>
 </context>
 <context>
-    <name>ThemePrivate</name>
-    <message>
-        <source>ERROR - Theme: Unable to load icon file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>tkConstants</name>
     <message>
         <source>FreeDiams Prescriptions (*.di)</source>

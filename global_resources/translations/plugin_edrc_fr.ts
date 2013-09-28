@@ -41,7 +41,7 @@
     <message>
         <location filename="../../freedrc/plugins/edrcplugin/widgets/edrcpreferences.ui" line="14"/>
         <source>Editor Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Préférence de l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../../freedrc/plugins/edrcplugin/widgets/edrcpreferences.ui" line="40"/>
