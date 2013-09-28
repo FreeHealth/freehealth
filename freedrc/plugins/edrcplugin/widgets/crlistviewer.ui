@@ -33,76 +33,22 @@
        <bool>false</bool>
       </attribute>
      </widget>
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>1</number>
-      </property>
-      <widget class="QWidget" name="page">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="3" column="1">
-         <widget class="QPushButton" name="aboutSfmg">
-          <property name="text">
-           <string>About SFMG</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QLabel" name="introductionLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QPushButton" name="createCr">
-          <property name="text">
-           <string>Create a new consult result</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QPushButton" name="openFile">
-          <property name="text">
-           <string>Open an existing file</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QPushButton" name="help">
-          <property name="text">
-           <string>Help</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="printHistory">
-          <property name="text">
-           <string>Print consultation history</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_2">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QTextBrowser" name="crContent"/>
-        </item>
-       </layout>
-      </widget>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="headerLayout"/>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="crContent"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
   </layout>
-  <zorder>splitter</zorder>
-  <zorder>crContent</zorder>
-  <zorder>crContent</zorder>
  </widget>
  <customwidgets>
   <customwidget>

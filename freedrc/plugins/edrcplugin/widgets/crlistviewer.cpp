@@ -254,15 +254,6 @@ CrListViewer::CrListViewer(QWidget *parent) :
 
     d->_delegate = new TreeViewDelegate(this);
 
-    // Connect buttons to global actions
-    Core::Command *cmd;
-    cmd = actionManager()->command(Core::Constants::A_FILE_OPEN);
-    connect(d->ui->openFile, SIGNAL(clicked()), cmd->action(), SLOT(trigger()));
-
-    // Connect buttons to local slots
-//    connect(d->ui->printHistory, SIGNAL(clicked()), this, SLOT(printHistory()));
-//    connect(d->ui->createCr, SIGNAL(clicked()), this, SLOT(createConsultResult()));
-
     // Resize splitter
     int width = size().width();
     int third = width/3;
@@ -302,6 +293,12 @@ void CrListViewer::setConsultResultTreeModel(CrTreeModel *model)
     d->ui->treeView->setItemDelegate(d->_delegate);
     connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentItemChanged(QModelIndex,QModelIndex)));
     onModelReset();
+}
+
+/** Allow user to add a header widget up to the CR html content browser */
+void CrListViewer::addHeaderWidget(QWidget *widget)
+{
+    d->ui->headerLayout->addWidget(widget);
 }
 
 void CrListViewer::fileOpen()
@@ -420,10 +417,5 @@ void CrListViewer::onModelReset()
 void CrListViewer::onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-//    if (!d->_crTreeModel->isConsultResult(current) && !d->_crTreeModel->isHistoryIndex(current)) {
-//        d->ui->stackedWidget->setCurrentIndex(0);
-//        return;
-//    }
-    d->ui->stackedWidget->setCurrentIndex(1);
     d->ui->crContent->setHtml(d->_crTreeModel->htmlContent(current));
 }

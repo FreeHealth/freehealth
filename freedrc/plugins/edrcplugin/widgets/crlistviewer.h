@@ -77,7 +77,7 @@ public:
     ~CrListViewer();
 
     void setConsultResultTreeModel(CrTreeModel *model);
-//    void addContexts(const QList<int> &contexts);
+    void addHeaderWidget(QWidget *widget);
     
     // Contextual interface
 private Q_SLOTS:
