@@ -57,7 +57,7 @@ AppAboutPage::~AppAboutPage()
 
 QString AppAboutPage::displayName() const
 {
-    return "1. " + tr("Application");
+    return tr("Application");
 }
 
 QString AppAboutPage::category() const
@@ -97,7 +97,7 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
 
 QString CommandLineAboutPage::displayName() const
 {
-    return "5. " + tr("Command line");
+    return tr("Command line");
 }
 
 QString CommandLineAboutPage::category() const
