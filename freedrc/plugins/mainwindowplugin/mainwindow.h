@@ -54,6 +54,7 @@ namespace Internal {
 
 namespace Ui {
 class MainWindow;
+class HeaderWidget;
 }  // End Ui
 }  // End Internal
 
@@ -81,8 +82,6 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     bool openFile();
     bool saveFile();
     bool saveAsFile();
-    bool print();
-    bool printPreview();
 
     bool applicationPreferences();
     bool configureMedintux();
@@ -91,8 +90,6 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
 
     void aboutToShowRecentFiles();
     void openRecentFile();
-
-    void clearUi();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -106,6 +103,7 @@ private Q_SLOTS:
 
 public:
     Internal::Ui::MainWindow *ui;
+    Internal::Ui::HeaderWidget *_headerWidget;
     eDRC::Internal::CrTreeModel *_crTreeModel;
 //    Internal::MainWindowToken *_patientToken, *_dateToken;
 };

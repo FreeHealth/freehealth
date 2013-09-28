@@ -230,18 +230,19 @@ CrListViewer::CrListViewer(QWidget *parent) :
     d->ui->setupUi(this);
     if (layout())
         layout()->setMargin(0);
+    d->ui->verticalLayout->setMargin(0);
 
     // Manage CrTreeView options & delegate
     QStringList commands;
-    commands << Core::Constants::A_FILE_OPEN
-             << Core::Constants::A_FILE_SAVE
-             << eDRC::Constants::A_FILE_SAVEASPDF
-             << "--"
-             << Core::Constants::A_FILE_PRINT
-             << eDRC::Constants::A_LIST_EDIT
+    commands
              << Core::Constants::A_LIST_ADD
              << Core::Constants::A_LIST_REMOVE
+             << "--"
+             << eDRC::Constants::A_LIST_EDIT
+             << "--"
              << Core::Constants::A_LIST_CLEAR
+             << "--"
+             << Core::Constants::A_FILE_PRINT
                 ;
     d->ui->treeView->setActions(0);
     d->ui->treeView->setCommands(commands);
@@ -360,12 +361,11 @@ void CrListViewer::editItem()
  */
 void CrListViewer::addItem()
 {
-    qWarning() << "CrListViewer::addItem()";
     CrEditorDialog dlg(this);
-    Utils::resizeAndCenter(&dlg, mainWindow());
     ConsultResult cr;
     cr.setDateOfExamination(QDateTime::currentDateTime());
     dlg.initialize(cr);
+    Utils::resizeAndCenter(&dlg, this);
     if (dlg.exec() == QDialog::Accepted) {
         d->_crTreeModel->addConsultResult(dlg.submit());
     }

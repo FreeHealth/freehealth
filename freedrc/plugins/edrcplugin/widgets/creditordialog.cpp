@@ -26,10 +26,6 @@
  ***************************************************************************/
 /*!
  * \class eDRC::Internal::CrEditorDialog
- * \brief short description of class
- *
- * Long description of class
- * \sa eDRC::
  */
 
 #include "creditordialog.h"

@@ -62,8 +62,10 @@
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_filepathxml.h>
 #include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_current.h>
 
 #include "ui_mainwindow.h"
+#include "ui_headerwidget.h"
 
 #include <QString>
 #include <QTextEdit>
@@ -83,6 +85,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomText>
+#include <QToolBar>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -206,35 +209,55 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
  */
 void MainWindow::extensionsInitialized()
 {
-    // Creating MainWindow interface
+    // Creating MainWindow UI
     ui = new Internal::Ui::MainWindow();
     ui->setupUi(this);
-    ui->drcVersionLabel->setText(edrcCore().currentDatabaseVersion());
-    ui->labelInfoIcon->setPixmap(theme()->icon(Core::Constants::ICONABOUT).pixmap(16,16));
-    ui->patientName->setPlaceholderText(tkTr(Trans::Constants::PATIENT_NAME));
+    if (layout())
+        layout()->setMargin(0);
+    QWidget *header = new QWidget(this);
+    _headerWidget = new Internal::Ui::HeaderWidget();
+    _headerWidget->setupUi(header);
+    _headerWidget->edrcVersion->setText(edrcCore().currentDatabaseVersion());
+    _headerWidget->patientName->setPlaceholderText(tkTr(Trans::Constants::PATIENT_NAME));
+    ui->crListViewer->addHeaderWidget(header);
 
-    ui->clearButton->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
-    connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearUi()));
+    // Creating ToolBar
+    QToolBar *bar = new QToolBar(this);
+    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    bar->setIconSize(QSize(32, 32));
+    QStringList uids;
+    uids  << Core::Constants::A_FILE_OPEN
+          << Core::Constants::A_FILE_SAVE
+          << eDRC::Constants::A_FILE_SAVEASPDF
+          << "--"
+          << Core::Constants::A_FILE_PRINT
+          << "->"
+          << eDRC::Constants::A_SHOW_DBINFO
+          << eDRC::Constants::A_ABOUT_SFMG
+             ;
+    foreach(const QString &uid, uids) {
+        if (uid=="--") {
+            bar->addSeparator();
+            continue;
+        } else if (uid=="->") {
+            QWidget *w = new QWidget(bar);
+            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            w->setLayout(new QHBoxLayout(w));
+            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+            bar->addWidget(w);
+            continue;
+        } else {
+            Core::Command *cmd = actionManager()->command(Core::Id(uid));
+            if (cmd)
+                bar->addAction(cmd->action());
+        }
+    }
+    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setUnifiedTitleAndToolBarOnMac(true);
+    addToolBar(bar);
 
     // Create models
-    // TEST
-    Utils::Randomizer r;
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-    QList<ConsultResult> list;
-    for(int i=0; i<10; ++i) {
-        ConsultResult cr;
-        cr.setConsultResult(r.randomInt(1, 300));
-        cr.setDiagnosisPosition(ConsultResult::DiagnosisPosition(r.randomInt(0, 3)));
-        cr.setMedicalFollowUp(ConsultResult::MedicalFollowUp(r.randomInt(0, 2)));
-        cr.setSymptomaticState(ConsultResult::SymptomaticState(r.randomInt(0, 1)));
-        cr.setChronicDiseaseState(ConsultResult::ChronicDiseaseState(r.randomInt(0, 1)));
-        cr.setSelectedCriterias(QList<int>() << r.randomInt(0, 300) << r.randomInt(0, 300));
-        cr.setHtmlCommentOnCR(r.randomString(r.randomInt(10, 500)));
-        cr.setHtmlCommentOnCriterias(r.randomString(r.randomInt(10, 500)));
-        cr.setDateOfExamination(r.randomDateTime(QDateTime::currentDateTime().addMonths(-10)));
-        list << cr;
-    }
-    // END TEST
     _crTreeModel = new CrTreeModel(this);
     ui->crListViewer->setConsultResultTreeModel(_crTreeModel);
 
@@ -282,7 +305,7 @@ void MainWindow::extensionsInitialized()
     createDockWindows();
     readSettings();
 
-    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
@@ -292,6 +315,8 @@ MainWindow::~MainWindow()
 {
     delete centralWidget();
     setCentralWidget(0);
+    delete _headerWidget;
+    delete ui;
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
 }
@@ -329,7 +354,7 @@ void MainWindow::refreshPatient()
   \brief Close the main window and the application
   \todo Add  ICoreListener
 */
-void MainWindow::closeEvent( QCloseEvent *event )
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     LOG("Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
@@ -401,13 +426,6 @@ void MainWindow::openRecentFile()
     }
 }
 
-/** Clear UI editors */
-void MainWindow::clearUi()
-{
-    ui->patientName->clear();
-//    ui->crEditor->clear();
-}
-
 void MainWindow::updateCheckerEnd(bool)
 {
     delete statusBar();
@@ -474,38 +492,6 @@ bool MainWindow::applicationPreferences()
     return true;
 }
 
-bool MainWindow::print()
-{
-//    Core::IDocumentPrinter *p = printer();
-//    Q_ASSERT(p);
-//    p->clearTokens();
-//    ConsultResult cr = ui->crEditor->submit();
-//    QString html = edrcCore().toHtml(cr);
-//    QHash<QString, QVariant> tokens;
-//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
-//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-//    return p->print(html,
-//                    Core::IDocumentPrinter::Papers_Generic_User,
-//                    false);
-    return true;
-}
-
-bool MainWindow::printPreview()
-{
-//    Core::IDocumentPrinter *p = printer();
-//    Q_ASSERT(p);
-//    p->clearTokens();
-//    ConsultResult cr = ui->crEditor->submit();
-//    QString html = edrcCore().toHtml(cr);
-//    QHash<QString, QVariant> tokens;
-//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
-//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-//    return p->printPreview(html,
-//                           Core::IDocumentPrinter::Papers_Generic_User,
-//                           false);
-    return true;
-}
-
 /** \brief Runs the MedinTux configurator */
 bool MainWindow::configureMedintux()
 {
@@ -525,7 +511,7 @@ bool MainWindow::saveAsFile()
     // Create extra-xml content
     QDomDocument doc;
     QDomElement pe = doc.createElement(::XML_PATIENT_NAME);
-    QDomText pet = doc.createTextNode(ui->patientName->text());
+    QDomText pet = doc.createTextNode(_headerWidget->patientName->text());
     pe.appendChild(pet);
     doc.appendChild(pe);
 
@@ -549,6 +535,7 @@ bool MainWindow::saveFile()
 
 bool MainWindow::openFile()
 {
+    qWarning() << "Main::openFile";
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(Trans::Constants::OPEN_FILE),
                                              QDir::homePath(),
@@ -582,7 +569,7 @@ void MainWindow::readFile(const QString &file)
         } else {
             QDomElement extra = doc.firstChildElement(Constants::XML_EXTRA_TAG);
             QDomElement patient = extra.firstChildElement(::XML_PATIENT_NAME);
-            ui->patientName->setText(patient.text());
+            _headerWidget->patientName->setText(patient.text());
         }
     }
     _crTreeModel->setCrList(list);

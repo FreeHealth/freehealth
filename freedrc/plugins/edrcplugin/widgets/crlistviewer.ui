@@ -14,8 +14,14 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
-    <widget class="QSplitter" name="splitter">
+    <widget class="Utils::MiniSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -39,7 +45,11 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QHBoxLayout" name="headerLayout"/>
+        <layout class="QHBoxLayout" name="headerLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+        </layout>
        </item>
        <item>
         <widget class="QTextBrowser" name="crContent"/>
@@ -55,6 +65,12 @@
    <class>Views::TreeView</class>
    <extends>QTreeView</extends>
    <header location="global">listviewplugin/treeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

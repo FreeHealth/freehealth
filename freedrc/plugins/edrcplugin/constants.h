@@ -84,11 +84,13 @@ const char * const ICON_SFMG_LOGO = "sfmg_logo.png";
 const char * const C_EDRC_PLUGIN = "c.edrcplugin";
 const char * const A_LIST_EDIT = "aEdrc.editCr";
 const char * const A_FILE_SAVEASPDF = "aEdrcSavePdf";
-const char * const A_SHOW_DBINFO = "a.edrc.show.database.information";
+const char * const A_SHOW_DBINFO = "aEdrcDbInfo";
+const char * const A_ABOUT_SFMG = "aEdrcAboutSfmg";
 
 const char * const TR_CONTEXT = "eDRC";
 const char * const EDRC_DATABASE_INFORMATION_TEXT = QT_TRANSLATE_NOOP("eDRC", "eDRC database information");
 const char * const SAVEAS_PDF_TEXT = QT_TRANSLATE_NOOP("eDRC", "Save as PDF");
+const char * const ABOUT_SFMG_TEXT = QT_TRANSLATE_NOOP("eDRC", "About SMFG");
 
 } // namespace Constants
 } // namespace eDRC

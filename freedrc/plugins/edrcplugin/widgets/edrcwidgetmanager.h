@@ -68,14 +68,15 @@ private Q_SLOTS:
     void removeItem();
     void clearItems();
     void showDatabaseInformation();
-    
+    void aboutSFMG();
+
 private Q_SLOTS:
     void updateActions();
     
 protected:
     QAction *aClear, *aFileOpen, *aFileSave, *aFileSaveAs, *aFileSavePDF, *aFilePrint, *aFilePrintPreview;
     QAction *aAddItem, *aRemoveItem, *aEditItem;
-    QAction *aShowDatabaseInformation;
+    QAction *aShowDatabaseInformation, *aAboutSFMG;
     
     QPointer<EdrcContextualWidget> m_CurrentView;
 };

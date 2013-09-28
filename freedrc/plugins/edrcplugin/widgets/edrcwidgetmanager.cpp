@@ -34,6 +34,9 @@
 #include "edrcwidgetmanager.h"
 #include "edrcwontextualwidget.h"
 #include <edrcplugin/constants.h>
+#include <edrcplugin/edrccore.h>
+#include <edrcplugin/database/edrcbase.h>
+#include <edrcplugin/widgets/sfmgaboutdialog.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -45,6 +48,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/databaseinformationdialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_database.h>
@@ -64,6 +68,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
 // Register an existing Core action
 static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
@@ -197,7 +202,7 @@ EdrcActionManager::EdrcActionManager(QObject *parent) :
     QObject(parent),
     aClear(0), aFileOpen(0), aFileSave(0), aFileSaveAs(0), aFileSavePDF(0), aFilePrint(0), aFilePrintPreview(0),
     aAddItem(0), aRemoveItem(0), aEditItem(0),
-    aShowDatabaseInformation(0),
+    aShowDatabaseInformation(0), aAboutSFMG(0),
     m_CurrentView(0)
 {
     setObjectName("EdrcActionManager");
@@ -227,12 +232,14 @@ EdrcActionManager::EdrcActionManager(QObject *parent) :
 //    Q_ASSERT(menu);
     
     // Register existing Core action
+#ifndef FREEDRC
     a = aFileOpen = registerAction(Core::Constants::A_FILE_OPEN, ctx, this);
     connect(a, SIGNAL(triggered()), this, SLOT(fileOpen()));
     a = aFileSave = registerAction(Core::Constants::A_FILE_SAVE, ctx, this);
     connect(a, SIGNAL(triggered()), this, SLOT(fileSave()));
     a = aFileSaveAs = registerAction(Core::Constants::A_FILE_SAVEAS, ctx, this);
     connect(a, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
+#endif
     a = aFilePrint = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
     connect(a, SIGNAL(triggered()), this, SLOT(filePrint()));
     a = aFilePrintPreview = registerAction(Core::Constants::A_FILE_PRINTPREVIEW, ctx, this);
@@ -274,6 +281,16 @@ EdrcActionManager::EdrcActionManager(QObject *parent) :
                                             QKeySequence::UnknownKey, false);
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
     
+
+    aAboutSFMG = createAction(this, "eDRC.aAboutSFMG", eDRC::Constants::ICON_SFMG_LOGO,
+                              Constants::A_ABOUT_SFMG,
+                              global,
+                              Constants::ABOUT_SFMG_TEXT, Constants::TR_CONTEXT,
+                              cmd,
+                              hmenu, Core::Constants::G_HELP_ABOUT,
+                              QKeySequence::UnknownKey, false);
+    connect(aAboutSFMG,SIGNAL(triggered()), this, SLOT(aboutSFMG()));
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
@@ -321,6 +338,7 @@ void EdrcActionManager::updateActions()
 
 void EdrcActionManager::fileOpen()
 {
+    qWarning() << "EdrcActionManager::openFile";
     if (m_CurrentView)
         m_CurrentView->fileOpen();
 }
@@ -381,14 +399,14 @@ void EdrcActionManager::clearItems()
 
 void EdrcActionManager::showDatabaseInformation()
 {
-    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    lay.addWidget(&tree);
-    Utils::resizeAndCenter(&dlg);
+    Utils::DatabaseInformationDialog dlg;//(mainWindow());
+    dlg.setTitle(tkTr(Trans::Constants::DRUGS_DATABASE_INFORMATION));
+    dlg.setDatabase(edrcBase());
     dlg.exec();
 }
 
-
+void EdrcActionManager::aboutSFMG()
+{
+    SfmgAboutDialog dlg(m_CurrentView);
+    dlg.exec();
+}
