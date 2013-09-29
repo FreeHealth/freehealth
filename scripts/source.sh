@@ -54,6 +54,7 @@ echo "Options:"
 #echo "  -s  Build the source package"
 #echo "  -c  Create a branch. Specify the revision number using the -r option"
 #echo "  -t  Create the tag. Specify the revision number using the -r option"
+echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
 echo "  -r  Specify the revision number to use for the branches or tags generation"
 echo "  -h  Show this help"
 echo
@@ -121,11 +122,13 @@ global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
 global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/girls_surnames.csv \
+global_resources/textfiles/haarcascade_frontalface_alt2 \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/*.db \
 global_resources/textfiles/freediamstest \
 global_resources/textfiles/oldprescriptionsfiles \
+global_resources/textfiles/edrc \
 global_resources/textfiles/prescription \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
@@ -157,6 +160,8 @@ freeaccount.pro \
 freeaccount \
 freediams.pro \
 freediams \
+freedrc.pro \
+freedrc \
 freeicd.pro \
 freeicd \
 freemedforms.pro \
@@ -211,6 +216,14 @@ tests \
 "
 
 SELECTED_SOURCES=$SCRIPT_SOURCE$RESOURCES$BUILDSPEC_SOURCES$LIBS_SOURCES$APP_SOURCES$PLUGINS_SOURCES$TEST_SOURCES
+}
+
+includeEdrcFiles()
+{
+RESOURCES=$RESOURCES"\
+global_resources/datapacks/appinstalled/edrc/edrc_ro.db \
+global_resources/datapacks/appinstalled/edrc/readme.txt
+"
 }
 
 createSource()
@@ -399,6 +412,8 @@ do
       exit 0
     ;;
     r) SVN_REVISION=$OPTARG
+    ;;
+    d) includeEdrcFiles
     ;;
   esac
 done
