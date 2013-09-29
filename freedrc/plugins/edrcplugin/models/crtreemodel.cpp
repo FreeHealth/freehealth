@@ -245,7 +245,7 @@ bool CrTreeModel::isHistoryIndex(const QModelIndex &index) const
     return (index.row() == 0 && index.parent() == QModelIndex());
 }
 
-const ConsultResult &CrTreeModel::consultResultFromIndex(const QModelIndex &index) const
+ConsultResult CrTreeModel::consultResultFromIndex(const QModelIndex &index) const
 {
     if (!index.isValid())
         return ConsultResult();
