@@ -99,11 +99,9 @@ public:
         // Manage the tree
         for(int i = 0; i < _list.count(); ++i) {
             const ConsultResult &cr = _list.at(i);
-            qWarning()  << currentDate.isNull() << cr.dateOfExamination().date().isNull() << dateBranch;
             if (currentDate.isNull()
                     && cr.dateOfExamination().date().isNull()
                     && !dateBranch) {
-                qWarning() << "NULL DATE";
                 dateBranch = new QStandardItem(tkTr(Trans::Constants::NO_DATE));
                 QList<QStandardItem *> branch;
                 branch << dateBranch;
@@ -120,7 +118,7 @@ public:
                 for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
                     branch << new QStandardItem;
                 }
-                branch[CrTreeModel::DateOfExamination]->setData(currentDate);
+                branch[CrTreeModel::DateOfExamination]->setData(QDateTime(currentDate, QTime(0,0,0)), Qt::DisplayRole);
                 q->invisibleRootItem()->appendRow(branch);
             }
             // Add the CR to the current date branch
