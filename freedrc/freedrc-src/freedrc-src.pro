@@ -28,8 +28,8 @@ QT *= sql \
 DEFINES *= FREEDRC
 
 macx {
-#  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freedrc.icns
-  #QMAKE_INFO_PLIST=Info.plist
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/edrc.icns
+  QMAKE_INFO_PLIST=Info.plist
 }
 win32:RC_FILE=freedrc_win32_icon.rc
 
