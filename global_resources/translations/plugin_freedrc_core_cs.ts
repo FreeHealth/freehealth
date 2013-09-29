@@ -62,8 +62,8 @@
 <context>
     <name>Core::Internal::AppAboutPage</name>
     <message>
-        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="60"/>
-        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="65"/>
+        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="67"/>
+        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="72"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,12 +122,12 @@
 <context>
     <name>Core::Internal::CommandLineAboutPage</name>
     <message>
-        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="100"/>
+        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="128"/>
         <source>Command line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="105"/>
+        <location filename="../../freedrc/plugins/coreplugin/appaboutpage.cpp" line="133"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>

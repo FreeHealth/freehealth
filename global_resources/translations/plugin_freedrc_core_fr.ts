@@ -12,11 +12,11 @@
     <name>Core</name>
     <message>
         <source>Core intialization finished...</source>
-        <translation type="unfinished">Initialisation du Core terminée...</translation>
+        <translation>Initialisation du Core terminée...</translation>
     </message>
     <message>
         <source>You are running a new version of %1, you need to renew the licence agreement.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous utilisez une nouvelle version de %1, vous devez renouveler votre accord de license.</translation>
     </message>
 </context>
 <context>
@@ -102,11 +102,11 @@
     <name>Core::Internal::CommandLineAboutPage</name>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne de commande</translation>
     </message>
     <message>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Application</translation>
     </message>
 </context>
 <context>
