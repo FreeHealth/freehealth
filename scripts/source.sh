@@ -122,7 +122,7 @@ global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
 global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/girls_surnames.csv \
-global_resources/textfiles/haarcascade_frontalface_alt2 \
+global_resources/textfiles/haarcascade_frontalface_alt2.xml \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/*.db \
