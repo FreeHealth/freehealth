@@ -31,6 +31,9 @@
 #include <translationutils/trans_spashandupdate.h>
 
 #include <coreplugin/coreimpl.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
@@ -40,10 +43,14 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QDate>
+#include <QFrame>
 
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
@@ -70,26 +77,47 @@ int AppAboutPage::sortIndex() const
     return 1;
 }
 
+#include <QDebug>
+
 QWidget *AppAboutPage::createPage(QWidget *parent)
 {
     QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setSpacing(0);
     layout->setMargin(0);
+
+    // Splash label
+    QWidget *sw = new QWidget(w);
+    QHBoxLayout *swLayout = new QHBoxLayout(sw);
+    sw->setLayout(swLayout);
+    QLabel *splash = new QLabel(w);
+    splash->setPixmap(theme()->splashScreenPixmap(settings()->path(Core::ISettings::SplashScreen)));
+    splash->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    swLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Expanding));
+    swLayout->addWidget(splash);
+    swLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Expanding));
+    layout->addWidget(sw);
+    QFrame *line = new QFrame(w);
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    layout->addWidget(line);
+    layout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Fixed));
+
+    // Welcome label
     QLabel *label = new QLabel(w);
     label->setWordWrap(true);
     label->setOpenExternalLinks(true);
     layout->addWidget(label);
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
-    Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
+        Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
     QString tmp = tkTr(Trans::Constants::APPLICATION_ABOUT_YEAR_1_WEB_2)
                    .arg(QDate::currentDate().year())
                    .arg(qApp->organizationDomain());
     if (up->hasUpdate()) {
-        tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
+        tmp.append(tkTr(Trans::Constants::UPDATE_AVAILABLE));
     } else {
-        tmp.append("<br /><br />" + tkTr(Trans::Constants::VERSION_UPTODATE));
+        tmp.append(tkTr(Trans::Constants::VERSION_UPTODATE));
     }
     label->setText(tmp);
     return w;
