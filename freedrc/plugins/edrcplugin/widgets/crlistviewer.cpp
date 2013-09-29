@@ -366,12 +366,16 @@ void CrListViewer::addItem()
     ConsultResult cr;
     cr.setDateOfExamination(QDateTime::currentDateTime());
     // Get the current item -> if date-branch -> populate with the date of the branch
-    if (current.isValid()
-            && !d->_crTreeModel->isHistoryIndex(current)
-            && current.parent() == QModelIndex()) {
-        QModelIndex dateIndex = d->_crTreeModel->index(current.row(), CrTreeModel::DateOfExamination, current.parent());
-        const QDateTime &dt = dateIndex.data().toDateTime();
-        cr.setDateOfExamination(dt);
+    if (current.isValid()) {
+        if (d->_crTreeModel->isConsultResult(current))
+            current = current.parent();
+        // Current is a date-branch
+        if (!d->_crTreeModel->isHistoryIndex(current)
+                && current.parent() == QModelIndex()) {
+            QModelIndex dateIndex = d->_crTreeModel->index(current.row(), CrTreeModel::DateOfExamination, current.parent());
+            const QDateTime &dt = dateIndex.data().toDateTime();
+            cr.setDateOfExamination(dt);
+        }
     }
     dlg.initialize(cr);
     if (dlg.exec() == QDialog::Accepted) {
