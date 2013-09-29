@@ -79,4 +79,6 @@ Qt::ItemFlags RCClassModel::flags(const QModelIndex &index) const
 }
 
 void RCClassModel::setFilterOnCrId(const QString &rcId)
-{}
+{
+    Q_UNUSED(rcId);
+}
