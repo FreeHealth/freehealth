@@ -167,12 +167,15 @@ ConsultResult::~ConsultResult()
 /** Test emptyness of the object */
 bool ConsultResult::isEmpty() const
 {
+    qWarning() << _dateOfExamination;
     return (_crId == -1) ||
             (_selectedCriteriasIds.isEmpty() &&
              _diagnosisPosition == DiagnosisPositionUndefined &&
              _medicalFollowUp == MedicalFollowUpUndefined &&
              _symptomatic == SymptomaticStateUndefined &&
-            _chronicDisease == ChronicDiseaseStateUndefined);
+            _chronicDisease == ChronicDiseaseStateUndefined &&
+             (_dateOfExamination.isNull() || !_dateOfExamination.isValid())
+             );
 }
 
 /** Test validity of the CR. A valid CR is a CR that can be identified and which all data are defined. */
