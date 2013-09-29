@@ -94,6 +94,7 @@ private Q_SLOTS:
 
 private Q_SLOTS:
     void onModelReset();
+    void onModelPostReset();
     void onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:

@@ -361,18 +361,28 @@ void CrListViewer::editItem()
  */
 void CrListViewer::addItem()
 {
-    CrEditorDialog dlg(this);
+    QModelIndex current = d->ui->treeView->currentIndex();
+    CrEditorDialog dlg(mainWindow());
     ConsultResult cr;
     cr.setDateOfExamination(QDateTime::currentDateTime());
+    // Get the current item -> if date-branch -> populate with the date of the branch
+    if (current.isValid()
+            && !d->_crTreeModel->isHistoryIndex(current)
+            && current.parent() == QModelIndex()) {
+        QModelIndex dateIndex = d->_crTreeModel->index(current.row(), CrTreeModel::DateOfExamination, current.parent());
+        const QDateTime &dt = dateIndex.data().toDateTime();
+        cr.setDateOfExamination(dt);
+    }
     dlg.initialize(cr);
-    Utils::resizeAndCenter(&dlg, this);
     if (dlg.exec() == QDialog::Accepted) {
         d->_crTreeModel->addConsultResult(dlg.submit());
     }
 }
 
 void CrListViewer::removeItem()
-{}
+{
+    d->_crTreeModel->removeItems(d->ui->treeView->currentIndex());
+}
 
 /**
  * Internal. Remove all eDRC::Internal::ConsultResult of the model.
@@ -388,7 +398,7 @@ void CrListViewer::clearItems()
     d->_crTreeModel->clear();
     d->ui->crContent->clear();
 }
-
+#include <QTimer>
 /**
  * Internal. When the internal eDRC::Internal::CrTreeModel is resetted,
  * update the view:
@@ -397,9 +407,12 @@ void CrListViewer::clearItems()
  */
 void CrListViewer::onModelReset()
 {
+    // Set visible columns
     for(int i=1; i < CrTreeModel::ColumnCount; ++i) {
         d->ui->treeView->header()->setSectionHidden(i, true);
     }
+
+    // Resize columns
     d->ui->treeView->header()->setStretchLastSection(false);
     d->ui->treeView->header()->setSectionHidden(CrTreeModel::Label, false);
     d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
@@ -412,6 +425,19 @@ void CrListViewer::onModelReset()
     d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     d->ui->treeView->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 #endif
+    QTimer::singleShot(2, this, SLOT(onModelPostReset()));
+}
+
+void CrListViewer::onModelPostReset()
+{
+    // Select first row
+    QItemSelection sel;
+    sel.select(d->_crTreeModel->index(0, 0), d->_crTreeModel->index(0, CrTreeModel::ColumnCount-1));
+    d->ui->treeView->selectionModel()->select(sel, QItemSelectionModel::SelectCurrent);
+    onCurrentItemChanged(d->_crTreeModel->index(0, CrTreeModel::Label), QModelIndex());
+
+    // Expand all
+    d->ui->treeView->treeView()->expandAll();
 }
 
 void CrListViewer::onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous)
