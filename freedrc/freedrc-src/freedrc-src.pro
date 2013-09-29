@@ -10,6 +10,7 @@ INSTALL_DRUGS = 0
 INSTALL_ICD_DATABASE = 0
 INSTALL_ACCOUNT_FILES = 0
 INSTALL_ZIPCODES = 0
+INSTALL_EDRC_FILES = 1
 
 include(../../buildspecs/config.pri)
 include($${SOURCES_BUILDSPECS_PATH}/install.pri)

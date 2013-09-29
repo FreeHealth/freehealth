@@ -9,6 +9,7 @@ CONFIG(debug_without_install) {
 # - INSTALL_ICD_DATABASE : install "appinstalled" free icd10 datapack
 # - INSTALL_ACCOUNT_FILES install freeaccount/accountancy plugin required files
 # - INSTALL_ZIPCODES : install "appinstalled" free zipcodes datapack
+# - INSTALL_EDRC_FILES : install "appinstalled" edrc datapack
 
 # define some default paths for installation process
 mac:INSTALL_BASENAME_PATH          = mac
@@ -282,6 +283,12 @@ macx {
   contains(INSTALL_ACCOUNT_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
     accountdb.path = $${INSTALL_FREEDATAPACK_PATH}/account
     accountdb.files = $${SOURCES_FREEDATAPACK_PATH}/account/*
+    INSTALLS += accountdb
+  }
+  # Install FreeDRC datapack files
+  contains(INSTALL_EDRC_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
+    edrcdb.path = $${INSTALL_FREEDATAPACK_PATH}/edrc
+    edrcdb.files = $${SOURCES_FREEDATAPACK_PATH}/edrc/*
     INSTALLS += accountdb
   }
 

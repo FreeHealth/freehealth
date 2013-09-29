@@ -10,6 +10,7 @@ INSTALL_ICD_DATABASE = 1
 INSTALL_ACCOUNT_FILES = 1
 INSTALL_ZIPCODES = 1
 INSTALL_PROFILES_FILES = 1
+INSTALL_EDRC_FILES = 1
 
 # include general configuration
 include(../../buildspecs/config.pri)
