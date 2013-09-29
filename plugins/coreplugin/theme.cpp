@@ -60,16 +60,15 @@ public:
 
 };
 
-static QString transformFileName(const QString &fileName, ThemePrivate::IconSize size)
-{
-    switch (size) {
-        case ThemePrivate::SmallIcon : return fileName+"__S__";
-        case ThemePrivate::MediumIcon : return fileName+"__M__";
-        case ThemePrivate::BigIcon : return fileName+"__B__";
-    }
-    return QString::null;
-}
-
+//static QString transformFileName(const QString &fileName, ThemePrivate::IconSize size)
+//{
+//    switch (size) {
+//        case ThemePrivate::SmallIcon : return fileName+"__S__";
+//        case ThemePrivate::MediumIcon : return fileName+"__M__";
+//        case ThemePrivate::BigIcon : return fileName+"__B__";
+//    }
+//    return QString::null;
+//}
 
 ThemePrivate::ThemePrivate(QObject *parent, const int cacheSize)
     : ITheme(parent), m_Splash(0)
@@ -183,6 +182,8 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 /** \brief Returns the full icon's file name absolute path corresponding to the themed file name \e fileName and the size \e size */
 QString ThemePrivate::iconFullPath(const QString &fileName, IconSize size)
 {
+    // TODO: size is now obsolete
+    Q_UNUSED(size);
     QString path = m_AbsolutePath + QDir::separator() + "pixmap" + QDir::separator();
     if (size == ThemePrivate::SmallIcon) {
         if (!m_SmallIconPath.isEmpty())
