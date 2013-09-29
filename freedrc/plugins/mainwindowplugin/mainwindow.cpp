@@ -165,7 +165,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     createEditMenu();
-    createFormatMenu();
+//    createFormatMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -190,7 +190,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
                 Core::MainWindowActions::A_CheckUpdate //|
                 //            Core::MainWindowActions::A_QtAbout
                 );
-    //    actions.setTemplatesActions( Core::MainWindowActions::A_Templates_New );
     actions.createEditActions(false);
     createActions(actions);
 
