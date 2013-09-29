@@ -22,9 +22,9 @@ ChangesAssociations=yes
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
 SourceDir=e:\freemedforms-__version__\packages\win\freedrc
-SetupIconFile=e:\freemedforms-__version__\freedrc\freedrc-src\edrc.ico
-WizardSmallImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\edrc-128.bmp
-WizardImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\edrc-128.bmp
+SetupIconFile=e:\freemedforms-__version__\freedrc\freedrc-src\freedrc.ico
+WizardSmallImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freedrc-128.bmp
+WizardImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freedrc-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 

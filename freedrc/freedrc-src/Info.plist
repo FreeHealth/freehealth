@@ -8,7 +8,7 @@
                 <key>CFBundleTypeRole</key>
                 <string>Editor</string>
                 <key>CFBundleTypeIconFile</key>
-                <string>edrc.icns</string>
+                <string>freedrc.icns</string>
                 <key>CFBundleTypeExtensions</key>
                 <array>
                         <string>cr</string>
