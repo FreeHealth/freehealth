@@ -40,6 +40,8 @@ texteditor.depends += core
 
 edrc.subdir   = edrcplugin
 edrc.depends += core
+edrc.depends += listview
+edrc.depends += texteditor
 
 # optional plugins
 include(../../buildspecs/optionalplugins.pri)
