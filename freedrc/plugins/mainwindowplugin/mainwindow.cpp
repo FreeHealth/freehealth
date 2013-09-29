@@ -303,7 +303,6 @@ void MainWindow::extensionsInitialized()
     }
 
     createDockWindows();
-    readSettings();
 
     setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
@@ -340,6 +339,7 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
+    readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }
 
 /**
@@ -434,17 +434,9 @@ void MainWindow::updateCheckerEnd(bool)
 /** Reads main window's settings */
 void MainWindow::readSettings()
 {
-    // Main Application settings
     settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
     fileManager()->getMaximumRecentFilesFromSettings();
-
-//    m_AutomaticSaveInterval = settings()->value(Core::Constants::S_SAVEINTERVAL, 600).toUInt(); // Default = 10 minutes
-//    m_OpenLastOpenedForm = settings()->value(Core::Constants::S_OPENLAST, true).toBool();
-
-    // Main Widget settings
-//    m_HelpTextShow = settings()->value(Core::Constants::S_SHOWHELPTEXT, true).toBool();
-
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
 }
 
@@ -452,13 +444,7 @@ void MainWindow::readSettings()
 void MainWindow::writeSettings()
 {
     settings()->saveState(this);
-    // Recent managers
     fileManager()->saveRecentFiles();
-    // Main Application settings
-//    settings()->setValue(Core::Constants::S_SAVEINTERVAL, m_AutomaticSaveInterval);
-//    settings()->setValue(Core::Constants::S_OPENLAST, m_OpenLastOpenedForm);
-//    // Main Widget settings
-//    settings()->setValue(Core::Constants::S_SHOWHELPTEXT, m_HelpTextShow);
     settings()->sync();
 }
 
