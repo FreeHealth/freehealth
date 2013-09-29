@@ -40,6 +40,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
@@ -68,6 +69,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
 // Register an existing Core action
@@ -407,6 +409,6 @@ void EdrcActionManager::showDatabaseInformation()
 
 void EdrcActionManager::aboutSFMG()
 {
-    SfmgAboutDialog dlg(m_CurrentView);
+    SfmgAboutDialog dlg(mainWindow());
     dlg.exec();
 }

@@ -38,6 +38,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
 
 #include <QPushButton>
@@ -98,7 +99,9 @@ CrEditorDialog::CrEditorDialog(QWidget *parent) :
     connect(args, SIGNAL(clicked()), this, SLOT(onArgumentsClicked()));
 
     setWindowTitle(tr("Consult result editor and creator dialog"));
-    setWindowIcon(theme()->icon(Constants::ICON_SFMG_LOGO));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
+
+    Utils::resizeAndCenter(this, parent);
 }
 
 /*! Destructor of the eDRC::Internal::CrEditorDialog class */

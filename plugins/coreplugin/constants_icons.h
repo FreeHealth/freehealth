@@ -54,7 +54,7 @@ const char * const  ICONFREEICD        = "freeicd.png";
 const char * const  ICONFREEGIR        = "freegir.png";
 const char * const  ICONFREETOOLBOX    = "freetoolbox.png";
 const char * const  ICONFREEPAD        = "freepad.png";
-const char * const  ICONFREEDRC        = "freedrc.png";
+const char * const  ICONFREEDRC        = "edrc.png";
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";
