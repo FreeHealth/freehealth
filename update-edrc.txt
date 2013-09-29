@@ -1,4 +1,4 @@
-version=0.9.0~alpha
+version=0.10.0~alpha1
 {
     * Sept, 2013
     * First technology preview release
