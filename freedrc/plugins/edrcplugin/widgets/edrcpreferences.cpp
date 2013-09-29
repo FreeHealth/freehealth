@@ -67,6 +67,10 @@ void EdrcPreferencesPageWidget::setDataToUi()
     ui->userComments->setChecked(settings()->value(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS).toBool());
     ui->globalMask->setHtml(settings()->value(Constants::S_TOKEN_HTMLGLOBALMASK).toString());
     ui->criteriaEditor->setHtml(settings()->value(Constants::S_TOKEN_HTMLCRITERIASMASK).toString());
+    ui->colorErrorBgd->setColor(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_ERROR_BACKGROUND).toString()));
+    ui->colorErrorFgd->setColor(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_ERROR_FOREGROUND).toString()));
+    ui->colorSelBgd->setColor(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND).toString()));
+    ui->colorSelFgd->setColor(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND).toString()));
 }
 
 /*! \sa IOptionsPage::matches() */
@@ -93,6 +97,12 @@ void EdrcPreferencesPageWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Constants::S_CR_USE_MODERNLABEL, ui->useModernLabelling->isChecked());
     s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, ui->mandatoryInBold->isChecked());
     s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, ui->userComments->isChecked());
+
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_ERROR_BACKGROUND, ui->colorErrorBgd->color().name());
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_ERROR_FOREGROUND, ui->colorErrorFgd->color().name());
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND, ui->colorSelBgd->color().name());
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND, ui->colorSelFgd->color().name());
+
 #ifdef FREEDRC
     s->sync();
 #endif
@@ -107,6 +117,11 @@ void EdrcPreferencesPageWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_CR_USE_MODERNLABEL, true);
     s->setValue(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
     s->setValue(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
+
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_ERROR_BACKGROUND, QColor(255, 125, 125).name());
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_ERROR_FOREGROUND, "black");
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND, QColor(175, 175, 255).name());
+    s->setValue(Constants::S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND, "black");
 
     QString path = QString("%1/%2")
             .arg(settings()->path(Core::ISettings::BundleResourcesPath))
@@ -223,6 +238,11 @@ void EdrcPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_CR_MANDATORYLABEL_IN_BOLD, true);
     defaultvalues.insert(Constants::S_REALTIME_CR_CODING_CHECKING, false);
     defaultvalues.insert(Constants::S_CR_EDITOR_MANAGES_USERCOMMENTS, true);
+    defaultvalues.insert(Constants::S_CRVALIDATOR_COLORS_ERROR_BACKGROUND, QColor(255, 125, 125).name());
+    defaultvalues.insert(Constants::S_CRVALIDATOR_COLORS_ERROR_FOREGROUND, "black");
+    defaultvalues.insert(Constants::S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND, QColor(175, 175, 255).name());
+    defaultvalues.insert(Constants::S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND, "black");
+
     QString path = QString("%1/%2")
             .arg(settings()->path(Core::ISettings::BundleResourcesPath))
             .arg("textfiles/edrc");

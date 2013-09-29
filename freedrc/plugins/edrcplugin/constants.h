@@ -50,6 +50,10 @@ const char * const S_REALTIME_CR_CODING_CHECKING = "edrc/coding/realTimeChecking
 const char * const S_CR_EDITOR_MANAGES_USERCOMMENTS = "edrc/editor/managesUserComments";
 const char * const S_TOKEN_HTMLGLOBALMASK = "edrc/htmlmask/global";
 const char * const S_TOKEN_HTMLCRITERIASMASK = "edrc/htmlmask/crit";
+const char * const S_CRVALIDATOR_COLORS_ERROR_BACKGROUND = "edrc/validator/colors/error/bgd";
+const char * const S_CRVALIDATOR_COLORS_ERROR_FOREGROUND = "edrc/validator/colors/error/fgd";
+const char * const S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND = "edrc/validator/colors/sel/bgd";
+const char * const S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND = "edrc/validator/colors/sel/fgd";
 
 // Tokens old style
 const char * const TOKEN_CR_DATABASE_VERSION = "CR_DATABASE_VERSION";

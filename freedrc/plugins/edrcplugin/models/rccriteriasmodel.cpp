@@ -216,12 +216,34 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
     case Qt::BackgroundRole:
     {
         // Selected items
-        if (d->_checkedRows.contains(index.row()))
-            return QColor(175, 175, 255, 125);
+        if (d->_checkedRows.contains(index.row())) {
+            QColor c(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_SELECTED_BACKGROUND).toString()));
+            c.setAlpha(125);
+            return c;
+        }
         // Wrong coding
         if (settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING, true).toBool()) {
-            if (d->_validator.wrongCriteriaIds().contains(crit.id()))
-                return QColor(255, 125, 125, 125);
+            if (d->_validator.wrongCriteriaIds().contains(crit.id())) {
+                QColor c(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_ERROR_BACKGROUND).toString()));
+                c.setAlpha(125);
+                return c;
+            }
+        }
+        break;
+    }
+    case Qt::ForegroundRole:
+    {
+        // Selected items
+        if (d->_checkedRows.contains(index.row())) {
+            QColor c(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_SELECTED_FOREGROUND).toString()));
+            return c;
+        }
+        // Wrong coding
+        if (settings()->value(Constants::S_REALTIME_CR_CODING_CHECKING, true).toBool()) {
+            if (d->_validator.wrongCriteriaIds().contains(crit.id())) {
+                QColor c(QColor(settings()->value(Constants::S_CRVALIDATOR_COLORS_ERROR_FOREGROUND).toString()));
+                return c;
+            }
         }
         break;
     }
