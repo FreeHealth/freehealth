@@ -136,6 +136,7 @@ message(    * Extension: $${LIB_EXTENSION})
     contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
     contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
     contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
+    contains(INSTALL_EDRC_FILES,1):message( Installing eDRC database )
 }
 
 # Install target
@@ -289,7 +290,7 @@ macx {
   contains(INSTALL_EDRC_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
     edrcdb.path = $${INSTALL_FREEDATAPACK_PATH}/edrc
     edrcdb.files = $${SOURCES_FREEDATAPACK_PATH}/edrc/*
-    INSTALLS += accountdb
+    INSTALLS += edrcdb
   }
 
   # Install Zipcodes db  TODO MOVE THIS IN DATAPACKS

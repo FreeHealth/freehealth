@@ -97,6 +97,7 @@ global_resources/doc/freetoolbox \
 global_resources/forms \
 global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freediams* \
+global_resources/package_helpers/freedrc* \
 global_resources/package_helpers/freeicd* \
 global_resources/package_helpers/freemedforms* \
 global_resources/package_helpers/freepad* \
