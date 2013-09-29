@@ -46,7 +46,7 @@ typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 
 
 static const char * COREPLUGINSNAME = "Core";
-static const char * USERMANAGERPLUGINSNAME = "UserManager";
+//static const char * USERMANAGERPLUGINSNAME = "UserManager";
 
 static const QString HELP_MESSAGE =
         QString("");

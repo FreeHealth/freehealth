@@ -73,58 +73,8 @@ QVariant RCClassModel::headerData(int section, Qt::Orientation orientation, int 
         return QString("Row %1").arg(section);
 }
 
-bool RCClassModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-//    if (!index.isValid())
-//    { return false;
-//    }
-
-//    if ( index.row() >= m_pListCriteres->count() )
-//    { return false;
-//    }
-
-//    if (role == Qt::EditRole)
-//    { Criteres_Elements el = m_pListCriteres->at( index.row() );
-//      el.setCommentaire( value.toString() );
-//      el.setSelection( TRUE );
-//      m_pListCriteres->replace( index.row(), el );
-//      emit dataChanged(index, index);
-//      return true;
-//    }
-//    else if (role == Qt::CheckStateRole)
-//    { Criteres_Elements el = m_pListCriteres->at( index.row() );
-//      if (!el.getLibelle().simplified().length()) return false;
-//      if (value.toInt() == -1)
-//      {  el.setSelection( !el.isSelected() );
-//      }
-//      else
-//      {  if (value.toBool()) el.setSelection( true );
-//         else el.setSelection( false );
-//      }
-//      m_pListCriteres->replace( index.row(), el );
-
-//      // Gestion des parents et des enfants
-//      selectAllParents( index );
-//      if ( (!el.isSelected()) && (el.hasChild()) )
-//      {   deselectAllChilds( index );  }
-
-//      // Mise à jour du modèle
-//      emit dataChanged(index, index);
-//      return true;
-//    }
-
-    return false;
-}
-
 Qt::ItemFlags RCClassModel::flags(const QModelIndex &index) const
 {
-//    if (!index.isValid())
-//        return Qt::ItemIsEnabled;
-//    Criteres_Elements el = m_pListCriteres->at( index.row() );
-//    if (el.getLibelle().length() )
-//    {   return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable; }
-//    else
-//    {   return QAbstractItemModel::flags(index); }
     return QSqlTableModel::flags(index);
 }
 

@@ -180,7 +180,11 @@ bool CrTreeModel::addConsultResult(const ConsultResult &cr)
 }
 
 void CrTreeModel::updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate)
-{}
+{
+    // TODO: code me
+    Q_UNUSED(crIndex);
+    Q_UNUSED(crToUpdate);
+}
 
 bool CrTreeModel::removeItems(const QModelIndex &index)
 {

@@ -739,6 +739,7 @@ QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResult &cr)
 QDebug operator<<(QDebug dbg, const eDRC::Internal::ConsultResultCriteria &crit)
 {
     // TODO: write this
+    Q_UNUSED(crit);
     return dbg.space();
 }
 
