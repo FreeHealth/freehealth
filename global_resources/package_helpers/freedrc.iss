@@ -84,7 +84,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freedrc.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/datapacks/appinstalled/edrc/*"; DestDir: "{app}/Resources/datapacks/appinstalled/edrc"; Components: program
+Source: "Resources/datapacks/appinstalled/edrc_ro/*"; DestDir: "{app}/Resources/datapacks/appinstalled/edrc_ro"; Components: program
 Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
