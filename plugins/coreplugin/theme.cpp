@@ -150,6 +150,8 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
 /** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
 QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 {
+    // TODO: size is now obsolete
+    Q_UNUSED(size);
     Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path set");
     // Get icon uid
     QString uid = QString("%1/%2").arg(m_AbsolutePath).arg(fileName);
@@ -182,8 +184,6 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 /** \brief Returns the full icon's file name absolute path corresponding to the themed file name \e fileName and the size \e size */
 QString ThemePrivate::iconFullPath(const QString &fileName, IconSize size)
 {
-    // TODO: size is now obsolete
-    Q_UNUSED(size);
     QString path = m_AbsolutePath + QDir::separator() + "pixmap" + QDir::separator();
     if (size == ThemePrivate::SmallIcon) {
         if (!m_SmallIconPath.isEmpty())
