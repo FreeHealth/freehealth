@@ -84,7 +84,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     setObjectName("FreeAccount::Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);
-    m_Settings->setPath(ISettings::Splashscreen, Constants::FREEACCOUNT_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEACCOUNT_SPLASHSCREEN);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));

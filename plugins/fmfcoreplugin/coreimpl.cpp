@@ -99,7 +99,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
     m_Theme->createSplashScreen(Constants::FREEMEDFORMS_SPLASHSCREEN);
-    m_Settings->setPath(ISettings::Splashscreen, Constants::FREEMEDFORMS_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEMEDFORMS_SPLASHSCREEN);
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));
