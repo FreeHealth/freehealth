@@ -221,9 +221,9 @@ SELECTED_SOURCES=$SCRIPT_SOURCE$RESOURCES$BUILDSPEC_SOURCES$LIBS_SOURCES$APP_SOU
 
 includeEdrcFiles()
 {
-RESOURCES=$RESOURCES"\
-global_resources/datapacks/appinstalled/edrc/edrc_ro.db \
-global_resources/datapacks/appinstalled/edrc/readme.txt
+SELECTED_SOURCES=$SELECTED_SOURCES" \
+global_resources/datapacks/appinstalled/edrc_ro/edrc.db \
+global_resources/datapacks/appinstalled/edrc_ro/readme.txt
 "
 }
 
