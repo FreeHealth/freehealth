@@ -288,8 +288,8 @@ macx {
   }
   # Install FreeDRC datapack files
   contains(INSTALL_EDRC_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
-    edrcdb.path = $${INSTALL_FREEDATAPACK_PATH}/edrc
-    edrcdb.files = $${SOURCES_FREEDATAPACK_PATH}/edrc/*
+    edrcdb.path = $${INSTALL_FREEDATAPACK_PATH}/edrc_ro
+    edrcdb.files = $${SOURCES_FREEDATAPACK_PATH}/edrc_ro/*
     INSTALLS += edrcdb
   }
 
