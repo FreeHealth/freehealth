@@ -352,8 +352,24 @@ void CrListViewer::filePrintPreview()
                     false);
 }
 
+/**
+ * Edit the current CR item (from the treeview). If the dialog is accepted, update the
+ * underlying model.
+ */
 void CrListViewer::editItem()
-{}
+{
+    QModelIndex current = d->ui->treeView->currentIndex();
+    if (!current.isValid())
+        return;
+    if (!d->_crTreeModel->isConsultResult(current))
+        return;
+    CrEditorDialog dlg(mainWindow());
+    ConsultResult cr = d->_crTreeModel->consultResultFromIndex(current);
+    dlg.initialize(cr);
+    if (dlg.exec() == QDialog::Accepted) {
+        d->_crTreeModel->updateConsultResult(current, dlg.submit());
+    }
+}
 
 /**
  * Internal. Opens a consul result creator dialog, if the dialog is accepted

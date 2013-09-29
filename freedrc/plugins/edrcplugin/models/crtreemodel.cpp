@@ -241,6 +241,18 @@ bool CrTreeModel::isHistoryIndex(const QModelIndex &index) const
     return (index.row() == 0 && index.parent() == QModelIndex());
 }
 
+const ConsultResult &CrTreeModel::consultResultFromIndex(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return ConsultResult();
+    if (!isConsultResult(index))
+        return ConsultResult();
+    int listId = d->_itemToListIndex.value(itemFromIndex(index), -1);
+    if (listId == -1)
+        return ConsultResult();
+    return d->_list.at(listId);
+}
+
 QString CrTreeModel::htmlContent(const QModelIndex &index) const
 {
     // Return history?

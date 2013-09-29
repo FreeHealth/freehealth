@@ -73,6 +73,7 @@ public:
     bool isHistoryIndex(const QModelIndex &index) const;
     QString htmlContent(const QModelIndex &index) const;
 
+    const ConsultResult &consultResultFromIndex(const QModelIndex &index) const;
     const QList<ConsultResult> &consultResultList() const;
 private:
     CrTreeModelPrivate *d;
