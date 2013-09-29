@@ -64,9 +64,10 @@ public:
     CrTreeModel(QObject *parent = 0);
     ~CrTreeModel();
 
-    void setCrList(const QList<ConsultResult> &cr);
-    void addConsultResult(const ConsultResult &cr);
+    bool setCrList(const QList<ConsultResult> &cr);
+    bool addConsultResult(const ConsultResult &cr);
     void updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate);
+    bool removeItems(const QModelIndex &index);
 
     bool isConsultResult(const QModelIndex &index) const;
     bool isHistoryIndex(const QModelIndex &index) const;

@@ -35,6 +35,7 @@
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -98,7 +99,11 @@ public:
         // Manage the tree
         for(int i = 0; i < _list.count(); ++i) {
             const ConsultResult &cr = _list.at(i);
-            if (currentDate.isNull() && cr.dateOfExamination().isNull() && !dateBranch) {
+            qWarning()  << currentDate.isNull() << cr.dateOfExamination().date().isNull() << dateBranch;
+            if (currentDate.isNull()
+                    && cr.dateOfExamination().date().isNull()
+                    && !dateBranch) {
+                qWarning() << "NULL DATE";
                 dateBranch = new QStandardItem(tkTr(Trans::Constants::NO_DATE));
                 QList<QStandardItem *> branch;
                 branch << dateBranch;
@@ -115,6 +120,7 @@ public:
                 for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
                     branch << new QStandardItem;
                 }
+                branch[CrTreeModel::DateOfExamination]->setData(currentDate);
                 q->invisibleRootItem()->appendRow(branch);
             }
             // Add the CR to the current date branch
@@ -136,6 +142,7 @@ CrTreeModel::CrTreeModel(QObject *parent) :
     QStandardItemModel(parent),
     d(new CrTreeModelPrivate(this))
 {
+    setObjectName("CrTreeModel");
 }
 
 CrTreeModel::~CrTreeModel()
@@ -150,30 +157,81 @@ CrTreeModel::~CrTreeModel()
  * Populate the model with the selected \e list of CR.
  * The model will be automatically resetted and sorted.
  */
-void CrTreeModel::setCrList(const QList<ConsultResult> &list)
+bool CrTreeModel::setCrList(const QList<ConsultResult> &list)
 {
     beginResetModel();
     d->_list = list;
     clear();
     d->createTree();
     endResetModel();
+    return true;
 }
 
 /**
  * Add the \e cr to the model list of CR.
  * The model will be automatically resetted and sorted.
  */
-void CrTreeModel::addConsultResult(const ConsultResult &cr)
+bool CrTreeModel::addConsultResult(const ConsultResult &cr)
 {
     beginResetModel();
     d->_list << cr;
     clear();
     d->createTree();
     endResetModel();
+    return true;
 }
 
 void CrTreeModel::updateConsultResult(const QModelIndex &crIndex, const ConsultResult &crToUpdate)
 {}
+
+bool CrTreeModel::removeItems(const QModelIndex &index)
+{
+    // History can not be removed
+    if (isHistoryIndex(index))
+        return false;
+
+    // Remove a single CR
+    if (isConsultResult(index)) {
+        int listId = d->_itemToListIndex.value(itemFromIndex(index), -1);
+        if (listId == -1) {
+            LOG_ERROR("No id?");
+            return false;
+        }
+        // Remove cache
+        d->_list.removeAt(listId);
+        for(int i=0; i < ColumnCount; ++i) {
+            QStandardItem *item = itemFromIndex(this->index(index.row(), i, index.parent()));
+            d->_itemToListIndex.remove(item);
+        }
+        // Remove index in model
+        removeRow(index.row(), index.parent());
+        if (rowCount(index.parent()) == 0) {
+            QModelIndex parent = index.parent();
+            removeRow(parent.row(), parent.parent());
+        }
+        return true;
+    }
+
+    // Remove a date-branch
+    for(int i=0; i < rowCount(index); ++i) {
+        QModelIndex cr = this->index(i, Label, index);
+        int listId = d->_itemToListIndex.value(itemFromIndex(cr), -1);
+        if (listId == -1)
+            continue;
+        d->_list.removeAt(listId);
+        for(int i=0; i < ColumnCount; ++i) {
+            QStandardItem *item = itemFromIndex(this->index(cr.row(), i, cr.parent()));
+            d->_itemToListIndex.remove(item);
+        }
+        removeRow(cr.row(), cr.parent());
+        if (rowCount(cr.parent()) == 0) {
+            QModelIndex parent = cr.parent();
+            removeRow(parent.row(), parent.parent());
+        }
+    }
+
+    return true;
+}
 
 bool CrTreeModel::isConsultResult(const QModelIndex &index) const
 {
