@@ -405,7 +405,7 @@ createTag()
 
 prepareFileSelection
 
-while getopts "hr:sct" option
+while getopts "hr:sctd" option
 do
   case $option in
     h) showHelp
