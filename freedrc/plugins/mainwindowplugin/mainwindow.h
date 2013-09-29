@@ -96,6 +96,7 @@ protected:
     void changeEvent(QEvent *event);
 
 private:
+    bool saveFileContent(const QString &file);
     void readFile(const QString &file);
 
 private Q_SLOTS:

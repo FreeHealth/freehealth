@@ -229,7 +229,7 @@ void MainWindow::extensionsInitialized()
     QStringList uids;
     uids  << Core::Constants::A_FILE_OPEN
           << Core::Constants::A_FILE_SAVE
-          << eDRC::Constants::A_FILE_SAVEASPDF
+          << Core::Constants::A_FILE_SAVEAS
           << "--"
           << Core::Constants::A_FILE_PRINT
           << "->"
@@ -437,6 +437,7 @@ void MainWindow::readSettings()
     settings()->restoreState(this);
     fileManager()->getRecentFilesFromSettings();
     fileManager()->getMaximumRecentFilesFromSettings();
+    fileManager()->setCurrentFile(QString::null);
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
 }
 
@@ -456,17 +457,9 @@ void MainWindow::createStatusBar()
 
 bool MainWindow::newFile()
 {
-//    if (drugModel()->drugsList().count()) {
-//        bool yes = Utils::yesNoMessageBox(
-//                tr("Save actual prescription ?"),
-//                tr("The actual prescription is not empty. Do you want to save it before creating a new one ?"));
-//        if (yes) {
-//            saveFile();
-//        }
-//    }
-//    patient()->clear();
-//    refreshPatient();
-//    drugModel()->clearDrugsList();
+    _crTreeModel->clear();
+    _headerWidget->patientName->clear();
+    fileManager()->setCurrentFile(QString::null);
     return true;
 }
 
@@ -494,19 +487,7 @@ bool MainWindow::saveAsFile()
     if (fileName.isEmpty())
         return false;
 
-    // Create extra-xml content
-    QDomDocument doc;
-    QDomElement pe = doc.createElement(::XML_PATIENT_NAME);
-    QDomText pet = doc.createTextNode(_headerWidget->patientName->text());
-    pe.appendChild(pet);
-    doc.appendChild(pe);
-
-    // Get full content XML
-    const QList<ConsultResult> list = _crTreeModel->consultResultList();
-    QString xml = ConsultResult::listToXml(list, doc.toString());
-
-    // Save to file
-    bool ok = Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
+    bool ok = saveFileContent(fileName);
     if (ok) {
         fileManager()->addToRecentFiles(fileName);
         fileManager()->setCurrentFile(fileName);
@@ -516,12 +497,13 @@ bool MainWindow::saveAsFile()
 
 bool MainWindow::saveFile()
 {
-    return saveAsFile();
+    if (fileManager()->currentFile().isEmpty())
+        return saveAsFile();
+    return saveFileContent(fileManager()->currentFile());
 }
 
 bool MainWindow::openFile()
 {
-    qWarning() << "Main::openFile";
     QString f = QFileDialog::getOpenFileName(this,
                                              tkTr(Trans::Constants::OPEN_FILE),
                                              QDir::homePath(),
@@ -538,11 +520,35 @@ bool MainWindow::openFile()
     return true;
 }
 
-void MainWindow::readFile(const QString &file)
+/**
+ * Write XML the content of the CR to the file \e fileName.
+ * File name must be an absolute file path.
+ */
+bool MainWindow::saveFileContent(const QString &fileName)
 {
-    Q_UNUSED(file);
+    // Create extra-xml content
+    QDomDocument doc;
+    QDomElement pe = doc.createElement(::XML_PATIENT_NAME);
+    QDomText pet = doc.createTextNode(_headerWidget->patientName->text());
+    pe.appendChild(pet);
+    doc.appendChild(pe);
+
+    // Get full content XML
+    const QList<ConsultResult> list = _crTreeModel->consultResultList();
+    QString xml = ConsultResult::listToXml(list, doc.toString());
+
+    // Save to file
+    return Utils::saveStringToFile(xml, fileName, Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/**
+ * Read the XML content of the CR \e fileName.
+ * File name must be an absolute file path.
+ */
+void MainWindow::readFile(const QString &fileName)
+{
     QString extra;
-    QList<ConsultResult> list = ConsultResult::fromXml(Utils::readTextFile(file), &extra);
+    QList<ConsultResult> list = ConsultResult::fromXml(Utils::readTextFile(fileName), &extra);
     extra = extra.simplified();
     if (!extra.isEmpty()) {
         QDomDocument doc;
@@ -551,7 +557,7 @@ void MainWindow::readFile(const QString &file)
         int col = 0;
         if (!doc.setContent(extra, &error, &line, &col)) {
             LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-            LOG_ERROR(QString("Unable to read extra-xml content of file: %1").arg(file));
+            LOG_ERROR(QString("Unable to read extra-xml content of file: %1").arg(fileName));
         } else {
             QDomElement extra = doc.firstChildElement(Constants::XML_EXTRA_TAG);
             QDomElement patient = extra.firstChildElement(::XML_PATIENT_NAME);
