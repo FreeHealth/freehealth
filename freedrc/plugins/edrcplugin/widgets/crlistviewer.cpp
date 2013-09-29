@@ -324,7 +324,7 @@ void CrListViewer::filePrint()
     Core::IDocumentPrinter *p = printer();
     Q_ASSERT(p);
     p->clearTokens();
-    QString html = d->_crTreeModel->htmlContent(d->ui->treeView->currentIndex());
+    QString html = d->ui->crContent->toHtml();//d->_crTreeModel->htmlContent(d->ui->treeView->currentIndex());
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("eDRC document"));
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
