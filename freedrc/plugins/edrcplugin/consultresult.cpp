@@ -96,12 +96,15 @@ QString ConsultResultCriteria::label(bool useModernLabelling) const
 
     // Compute the modern label
     QString html = _label;
-    html.replace("++1|", QChar(10112));
-    html.replace("++2|", QChar(10113));
-    html.replace("++3|", QChar(10114));
-    html.replace("++4|", QChar(10115));
-    html.replace("++++", QChar(9745));
-    html.replace("+ -" , QChar(8226));
+    if (!Utils::isRunningOnWin()) {
+        // TODO: using special chars on windows is buggy -> improve this
+        html.replace("++1|", QChar(10112));
+        html.replace("++2|", QChar(10113));
+        html.replace("++3|", QChar(10114));
+        html.replace("++4|", QChar(10115));
+        html.replace("++++", QChar(9745));
+        html.replace("+ -" , QChar(8226));
+    }
     return QString("%1%2").arg(_indent).arg(html);
 }
 
@@ -122,12 +125,15 @@ QString ConsultResultCriteria::htmlLabel(bool useModernLabelling) const
 
     // Compute the modern label
     QString html = _label;
-    html.replace("++1|", QString("&#%1;").arg(10112));
-    html.replace("++2|", QString("&#%1;").arg(10113));
-    html.replace("++3|", QString("&#%1;").arg(10114));
-    html.replace("++4|", QString("&#%1;").arg(10115));
-    html.replace("++++", QString("&#%1;").arg(9745));
-    html.replace("+ -" , QString("&#%1;").arg(8226));
+    if (!Utils::isRunningOnWin()) {
+        // TODO: using special chars on windows is buggy -> improve this
+        html.replace("++1|", QString("&#%1;").arg(10112));
+        html.replace("++2|", QString("&#%1;").arg(10113));
+        html.replace("++3|", QString("&#%1;").arg(10114));
+        html.replace("++4|", QString("&#%1;").arg(10115));
+        html.replace("++++", QString("&#%1;").arg(9745));
+        html.replace("+ -" , QString("&#%1;").arg(8226));
+    }
     return QString("%1%2").arg(htmlIndent).arg(Utils::htmlReplaceAccents(html));
 }
 
