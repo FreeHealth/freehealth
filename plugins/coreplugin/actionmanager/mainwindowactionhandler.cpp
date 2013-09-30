@@ -745,6 +745,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
         cmd->action()->setMenuRole(QAction::QuitRole);
+        cmd->setDefaultKeySequence(QKeySequence::Quit);
         mfile->addAction(cmd, Id(Constants::G_FILE_EXIT));
         connect(aQuit, SIGNAL(triggered()), this, SLOT(close()));
     }
