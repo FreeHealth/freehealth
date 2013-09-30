@@ -7,5 +7,6 @@
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
         <dependency name="Printer" version="0.0.1"/>
+        <dependency name="eDRC" version="0.0.1"/>
     </dependencyList>
 </plugin>
