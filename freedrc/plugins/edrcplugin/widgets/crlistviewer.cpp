@@ -53,6 +53,7 @@
 
 #include <QStyledItemDelegate>
 #include <QPainter>
+#include <QTimer>
 
 #include "ui_crlistviewer.h"
 
@@ -418,7 +419,7 @@ void CrListViewer::clearItems()
     d->_crTreeModel->clear();
     d->ui->crContent->clear();
 }
-#include <QTimer>
+
 /**
  * Internal. When the internal eDRC::Internal::CrTreeModel is resetted,
  * update the view:
@@ -433,18 +434,19 @@ void CrListViewer::onModelReset()
     }
 
     // Resize columns
-    d->ui->treeView->header()->setStretchLastSection(false);
+    d->ui->treeView->header()->setStretchLastSection(true);
     d->ui->treeView->header()->setSectionHidden(CrTreeModel::Label, false);
-    d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
-    d->ui->treeView->setColumnWidth(CrTreeModel::Empty1, 22);
-#if QT_VERSION < 0x050000
-    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->treeView->header()->setResizeMode(1, QHeaderView::Fixed);
-#else
-    // Qt5
-    d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    d->ui->treeView->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-#endif
+    // Due to a assert on windows (Qt4.8.5) I've commented the following
+//    d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
+//    d->ui->treeView->setColumnWidth(CrTreeModel::Empty1, 22);
+//#if QT_VERSION < 0x050000
+//    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+//    d->ui->treeView->header()->setResizeMode(1, QHeaderView::Fixed);
+//#else
+//    // Qt5
+//    d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+//    d->ui->treeView->header()->setSectionResizeMode(1, QHeaderView::Fixed);
+//#endif
     QTimer::singleShot(2, this, SLOT(onModelPostReset()));
 }
 
