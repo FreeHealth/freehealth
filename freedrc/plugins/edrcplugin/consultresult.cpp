@@ -57,6 +57,7 @@
 #include <QRegExp>
 #include <QDomDocument>
 #include <QTextDocument>
+#include <QApplication>
 
 #include <QDebug>
 
