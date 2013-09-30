@@ -90,6 +90,7 @@ global_resources/datapacks/appinstalled/drugs/readme.txt \
 global_resources/datapacks/appinstalled/account/readme.txt \
 global_resources/doc/freeaccount \
 global_resources/doc/freediams \
+global_resources/doc/freedrc \
 global_resources/doc/freeicd \
 global_resources/doc/freemedforms \
 global_resources/doc/freepad \
