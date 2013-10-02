@@ -438,6 +438,9 @@ HprimMessage &parseHprimRawSource(const QString &fullMessage)
     if (full.contains("\r") && !full.contains("\n"))
         full = full.replace("\r", "\n");
 
+    // Correcting wrong encoding
+    full = Utils::correctTextAccentEncoding(full);
+
     QTextStream flux(&full, QIODevice::ReadOnly);
     QStringList lines;
     while (!flux.atEnd() && line<12) {

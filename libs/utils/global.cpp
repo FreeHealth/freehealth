@@ -1688,6 +1688,89 @@ QString firstLetterUpperCase(const QString &s)
     return tmp;
 }
 
+/** Correct wrong accent UTF8 encoding (used by HPRIM code) */
+QString correctTextAccentEncoding(const QString &text)
+{
+    QByteArray ba = text.toUtf8();
+    QHash<QByteArray, QByteArray> conv;
+    conv.insert(QByteArray("Å¡"), QByteArray("š"));
+    conv.insert(QByteArray("Å'"), QByteArray("Œ"));
+    conv.insert(QByteArray("Å\""), QByteArray("œ"));
+    conv.insert(QByteArray("Å¸"), QByteArray("Ÿ"));
+    conv.insert(QByteArray("Ã¿"), QByteArray("ÿ"));
+    conv.insert(QByteArray("Ã€"), QByteArray("À"));
+    QString s;
+    s.append(QChar(195));
+    s.append(QChar(160));
+    conv.insert(s.toUtf8(), QByteArray("à"));
+    conv.insert(QByteArray("Ã¡"), QByteArray("á"));
+    conv.insert(QByteArray("Ã‚"), QByteArray("Â"));
+    conv.insert(QByteArray("Ã¢"), QByteArray("â"));
+    conv.insert(QByteArray("Ãƒ"), QByteArray("Ã"));
+    conv.insert(QByteArray("Ã£"), QByteArray("ã"));
+    conv.insert(QByteArray("Ã„"), QByteArray("Ä"));
+    conv.insert(QByteArray("Ã¤"), QByteArray("ä"));
+    conv.insert(QByteArray("Ã…"), QByteArray("Å"));
+    conv.insert(QByteArray("Ã¥"), QByteArray("å"));
+    conv.insert(QByteArray("Ã†"), QByteArray("Æ"));
+    conv.insert(QByteArray("Ã¦"), QByteArray("æ"));
+    conv.insert(QByteArray("Ã‡"), QByteArray("Ç"));
+    conv.insert(QByteArray("Ã§"), QByteArray("ç"));
+    conv.insert(QByteArray("Ãˆ"), QByteArray("È"));
+    conv.insert(QByteArray("Ã¨"), QByteArray("è"));
+    conv.insert(QByteArray("Ã‰"), QByteArray("É"));
+    conv.insert(QByteArray("Ã©"), QByteArray("é"));
+    conv.insert(QByteArray("ÃŠ"), QByteArray("Ê"));
+    conv.insert(QByteArray("Ãª"), QByteArray("ê"));
+    conv.insert(QByteArray("Ã‹"), QByteArray("Ë"));
+    conv.insert(QByteArray("Ã«"), QByteArray("ë"));
+    conv.insert(QByteArray("ÃŒ"), QByteArray("Ì"));
+    conv.insert(QByteArray("Ã¬"), QByteArray("ì"));
+    conv.insert(QByteArray("Ã"), QByteArray("Í"));
+    conv.insert(QByteArray("Ã­"), QByteArray("í"));
+    conv.insert(QByteArray("ÃŽ"), QByteArray("Î"));
+    conv.insert(QByteArray("Ã®"), QByteArray("î"));
+    conv.insert(QByteArray("Ã¯"), QByteArray("ï"));
+    conv.insert(QByteArray("Ã"), QByteArray("Ð"));
+    conv.insert(QByteArray("Ã°"), QByteArray("ð"));
+    conv.insert(QByteArray("Ã'"), QByteArray("Ñ"));
+    conv.insert(QByteArray("Ã±"), QByteArray("ñ"));
+    conv.insert(QByteArray("Ã'"), QByteArray("Ò"));
+    conv.insert(QByteArray("Ã²"), QByteArray("ò"));
+    conv.insert(QByteArray("Ã\""), QByteArray("Ó"));
+    conv.insert(QByteArray("Ã³"), QByteArray("ó"));
+    conv.insert(QByteArray("Ã\""), QByteArray("Ô"));
+    conv.insert(QByteArray("Ã´"), QByteArray("ô"));
+    conv.insert(QByteArray("Ã•"), QByteArray("Õ"));
+    conv.insert(QByteArray("Ãµ"), QByteArray("õ"));
+    conv.insert(QByteArray("Ã–"), QByteArray("Ö"));
+    conv.insert(QByteArray("Ã˜"), QByteArray("Ø"));
+    conv.insert(QByteArray("Ã¸"), QByteArray("ø"));
+    conv.insert(QByteArray("Ã™"), QByteArray("Ù"));
+    conv.insert(QByteArray("Ã¹"), QByteArray("ù"));
+    conv.insert(QByteArray("Ãš"), QByteArray("Ú"));
+    conv.insert(QByteArray("Ãº"), QByteArray("ú"));
+    conv.insert(QByteArray("Ã›"), QByteArray("Û"));
+    conv.insert(QByteArray("Ã»"), QByteArray("û"));
+    conv.insert(QByteArray("Ãœ"), QByteArray("Ü"));
+    conv.insert(QByteArray("Ã¼"), QByteArray("ü"));
+    conv.insert(QByteArray("Ã½"), QByteArray("ý"));
+    conv.insert(QByteArray("Ãž"), QByteArray("Þ"));
+    conv.insert(QByteArray("Ã¾"), QByteArray("þ"));
+    conv.insert(QByteArray("ÃŸ"), QByteArray("ß"));
+    conv.insert(QByteArray("Ã¶"), QByteArray("ö"));
+//    conv.insert(QByteArray("Ã"), QByteArray("Ï"));
+//    conv.insert(QByteArray("Å "), QByteArray("Š"));
+//    conv.insert(QByteArray("Ã"), QByteArray("Á"));
+//    conv.insert(QByteArray("Ã"), QByteArray("Ý"));
+    QHash<QByteArray, QByteArray>::const_iterator it = conv.constBegin();
+    while (it != conv.constEnd()) {
+        ba = ba.replace(it.key(), it.value());
+        ++it;
+    }
+    return QString::fromUtf8(ba);
+}
+
 /** Removes accent from a UTF8 only string */
 QString removeAccents(const QString &text)
 {

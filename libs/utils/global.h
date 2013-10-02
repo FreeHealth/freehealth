@@ -172,6 +172,7 @@ UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
 UTILS_EXPORT QString htmlReplaceAccents(const QString &html);
 UTILS_EXPORT QStringList htmlGetLinksToCssContent(const QString &html);
 UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
+UTILS_EXPORT QString correctTextAccentEncoding(const QString &text);
 UTILS_EXPORT QString removeAccents(const QString &text);
 UTILS_EXPORT QString lineWrapString(const QString &in, int lineLength);
 UTILS_EXPORT QString centerString(const QString &in, const QChar &fill, int lineSize);

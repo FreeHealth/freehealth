@@ -218,7 +218,9 @@ public:
         case Constants::ForceMacRoman: encoding = "MacRoman"; break;
         case Constants::ForceIso8859_1: encoding = "ISO-8859-1"; break;
         }
-        return Utils::readTextFile(absPath, encoding);
+        QString content = Utils::readTextFile(absPath, encoding);
+        // Correct wrong encoding
+        return Utils::correctTextAccentEncoding(content);
     }
 
     QString patientName(const QModelIndex &fileSystemModel)
