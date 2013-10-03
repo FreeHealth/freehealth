@@ -1,85 +1,29 @@
-FreeMedForms
-0.9.0
+The FreeMedForms project
+0.9.0 -> 0.9.2
+
 ===== News =====
 
   * Forms
-    * Lab tests result helper
-    * French AGGIR printing massively improved
-    * Massively improved print and export mask of complete forms and some sub-forms
-    * Adding a patient synthesis part in patient files
-    * New sub-form: French Procole ALD (with PDF autocompletion)
   * FreeMedForms
-    * First release with the new token manager: PadTools
-    * Adding a status bar at the top right corner of the patient bar
-    * Manage episode validation
-    * Allow the renewal of episode (in one click)
-    * Cheque printing assistant (French specific)
-    * Remove current patient (without any checking)
-    * Manages last measurements of weight and height in tokens and scripts
-    * All last episodes values are accessible throught the Core::IPatient model
-    * New patient data and tokens (SocialNumber, SocialNumberOwnerFullName, WeigthInGrams...)
-    * New settings for the patient selector (patient navigation history, new patient default values)
-    * When loading a textual file inside a text editor of a patient file, all tokens are replaced (patient tokens, user tokens)
-    * Full patient file exportation to HTML/PDF
-    * Adding a new preferences for prescription printing
-      * 'Automatically sort the drugs before printing'
-      * 'Include current patient biometrics' like weight/height/creatinine to the prescription print
-    * New Menu Button FormItem to easily navigate and include local files to text editors
-    * Some new scripting functions
-    * Including drugs SPC (Summary of Product Characteristics) in the drugs database for France and ZA
-    * In the patient selector identity viewer, adding a button to quickly send a mail to the patient
-    * HPRIM v1 compatibility
-    * HPRIM importation in patient file
+    * HPRIM importation: trying to correct wrong char encoding
   * Build process
-    * Adding a easy way to select optional build features and optional plugins to include to the build process
   * XML Forms coding
-    * Allow you to manage html print mask for any items of the forms (MedForms or Item)
-      * See French AGGIR for an example (global mask, aggir mask)
 
 ===== Bug correction =====
 
   * FreeMedForms
-    * Corrected: crashes during installation when creating users
-    * Corrected: user manager when removing users
-    * Corrected: losing intake scheme when navigating inside the dosage tabs
-    * Corrected: Linux UI form widget management in the form placeholder
-    * Corrected: app crash when trying to add sub-forms
-    * Corrected: auto-save feature
-    * Corrected: identity widget read-only mode
-    * Corrected: running form scripts when inserting new sub-forms
-    * Corrected: some data were lost in episode manager
-    * Corrected: patient birthday calculation
-    * Corrected: TextEditor contextual menu appearing multiple times when called once
-    * Corrected: Insertion of sub-forms (anywhere in the form tree)
   * FreeDiams
-    * Corrected: losing intake scheme when navigating inside the dosage tabs
-    * Corrected: Xml exchange-out file now handles the printed PDF files
-    * Corrected: build process did not use the optionnalplugins.pri (> 0.9.0~beta1)
-    * Improved: default posologic sentence (for the old and the new token manager)
-    * Commandline params
-      * weight/weightunit are now grouped in weightingrams
-      * height/heightunit are now grouped in heightincentimeters
-      * the height and weight units are not read anymore
-    * Xml exchange-in file
-      * Weight renamed WeightInGrams and only accepts 'value' attribute
-      * Height renamed HeightInCentimeters and only accepts 'value' attribute
-      * the height and weight units are not read anymore
-  * FreeAccount
+  * FreeDRC
+    * First release
   * FreeToolBox
-    * Adding SPC to drugs database
-    * Updated release steps code (which now can be asynchronous)
-  * Installation && configuration / databases
   * PMHx
-    * Adding tokens
   * Agenda:
   * DataPack manager
+  * HPRIM integrator
+    * Correcting wrong file encoding
   * Forms
-    * Updating labtest helper
-    * UI improvement in obstetrical calendar
   * Debian specific
   * Under the hood
-    * Corrected: QuaZip building & zlib
-    * Updated internal zlib to 1.2.8
   * Various unloggued bug corrected
 
 ===== Packaging and documentation ====
@@ -88,23 +32,4 @@ FreeMedForms
   * Packaging
   * Compilation
   * Documentation
-
-*********************************************************************************************
-===== Nouveautés =====
-
-
-===== Corrections de bug =====
-
-  * Beaucoup de correction de bogues
-  * Beaucoup de traductions corrigées
-
-===== Packaging et documentation ====
-
-  * Sources
-  * Packaging
-    * Correction des dépendances pour les paquets Debian et Ubuntu
-  * Compilation
-  * Documentation
-    * Updating the FreeDiams documentation [French section only]
-    * First version of the FreeMedForms documentation
 
