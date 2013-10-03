@@ -895,6 +895,10 @@ void informativeMessageBox(const QString &text, const QString &infoText, const Q
 void warningMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     LOG_FOR("Warning Dialog", infoText);
+    if (qApp->type() == QApplication::Tty) {
+        qWarning() << "  * Text:" << text << "\n  * detail" << detail << "\n  * title:" << title;
+        return;
+    }
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
