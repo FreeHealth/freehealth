@@ -144,6 +144,7 @@ public:
     bool operator!=(const ConsultResult &other) const {return !operator==(other);}
 
     static bool lessThanByDate(const ConsultResult &one, const ConsultResult &two);
+    static bool greaterThanByDate(const ConsultResult &one, const ConsultResult &two);
 
     QString diagnosisPositionToHumanReadable() const;
     QString medicalFollowUpToHumanReadable() const;

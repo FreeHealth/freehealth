@@ -174,7 +174,6 @@ ConsultResult::~ConsultResult()
 /** Test emptyness of the object */
 bool ConsultResult::isEmpty() const
 {
-    qWarning() << _dateOfExamination;
     return (_crId == -1) ||
             (_selectedCriteriasIds.isEmpty() &&
              _diagnosisPosition == DiagnosisPositionUndefined &&
@@ -654,6 +653,12 @@ bool ConsultResult::operator==(const ConsultResult &other) const
 bool ConsultResult::lessThanByDate(const ConsultResult &one, const ConsultResult &two)
 {
     return one.dateOfExamination() < two.dateOfExamination();
+}
+
+/** List sorting helper: sort items by date of examination */
+bool ConsultResult::greaterThanByDate(const ConsultResult &one, const ConsultResult &two)
+{
+    return one.dateOfExamination() > two.dateOfExamination();
 }
 
 QString ConsultResult::diagnosisPositionToHumanReadable() const
