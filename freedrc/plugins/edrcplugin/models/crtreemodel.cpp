@@ -79,11 +79,22 @@ public:
         return list;
     }
 
+    QList<QStandardItem *> createNoDateBranch()
+    {
+        QList<QStandardItem *> branch;
+        for(int i = 0; i < CrTreeModel::ColumnCount; ++i) {
+            branch << new QStandardItem;
+        }
+        branch[CrTreeModel::Label]->setText(tkTr(Trans::Constants::NO_DATE));
+        branch[CrTreeModel::Label]->setToolTip(tkTr(Trans::Constants::NO_DATE));
+        return branch;
+    }
+
     void createTree()
     {
         _itemToListIndex.clear();
         // Sort list by date of examination
-        qSort(_list.begin(), _list.end(), ConsultResult::lessThanByDate);
+        qSort(_list.begin(), _list.end(), ConsultResult::greaterThanByDate);
 
         QDate currentDate;
         QStandardItem *dateBranch = 0;
@@ -102,23 +113,25 @@ public:
             if (currentDate.isNull()
                     && cr.dateOfExamination().date().isNull()
                     && !dateBranch) {
-                dateBranch = new QStandardItem(tkTr(Trans::Constants::NO_DATE));
-                QList<QStandardItem *> branch;
-                branch << dateBranch;
-                for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
-                    branch << new QStandardItem;
-                }
+                // Starting with a no date branch
+                QList<QStandardItem *> branch = createNoDateBranch();
+                dateBranch = branch[0];
                 q->invisibleRootItem()->appendRow(branch);
             } else if (currentDate != cr.dateOfExamination().date()) {
                 // New date branch
                 currentDate = cr.dateOfExamination().date();
-                dateBranch = new QStandardItem(QLocale().toString(currentDate, QLocale::LongFormat));
                 QList<QStandardItem *> branch;
-                branch << dateBranch;
-                for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
-                    branch << new QStandardItem;
+                if (currentDate.isNull()) {
+                    branch = createNoDateBranch();
+                    dateBranch = branch[0];
+                } else {
+                    dateBranch = new QStandardItem(QLocale().toString(currentDate, QLocale::LongFormat));
+                    branch << dateBranch;
+                    for(int i = 1; i < CrTreeModel::ColumnCount; ++i) {
+                        branch << new QStandardItem;
+                    }
+                    branch[CrTreeModel::DateOfExamination]->setData(QDateTime(currentDate, QTime(0,0,0)), Qt::DisplayRole);
                 }
-                branch[CrTreeModel::DateOfExamination]->setData(QDateTime(currentDate, QTime(0,0,0)), Qt::DisplayRole);
                 q->invisibleRootItem()->appendRow(branch);
             }
             // Add the CR to the current date branch
