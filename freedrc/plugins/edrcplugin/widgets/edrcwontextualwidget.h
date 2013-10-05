@@ -65,6 +65,7 @@ public Q_SLOTS:
     virtual void addItem() {qWarning() << "addItem";}
     virtual void removeItem() = 0;
     virtual void clearItems() = 0;
+    virtual void renewItem() = 0;
 
 private:
     EdrcContext *m_Context;

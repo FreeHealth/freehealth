@@ -91,6 +91,7 @@ private Q_SLOTS:
     void addItem();
     void removeItem();
     void clearItems();
+    void renewItem();
 
 private Q_SLOTS:
     void onModelReset();

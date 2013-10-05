@@ -203,7 +203,7 @@ EdrcContextualWidget *EdrcWidgetManager::currentView() const
 EdrcActionManager::EdrcActionManager(QObject *parent) :
     QObject(parent),
     aClear(0), aFileOpen(0), aFileSave(0), aFileSaveAs(0), aFileSavePDF(0), aFilePrint(0), aFilePrintPreview(0),
-    aAddItem(0), aRemoveItem(0), aEditItem(0),
+    aAddItem(0), aRemoveItem(0), aEditItem(0), aRenewItem(0),
     aShowDatabaseInformation(0), aAboutSFMG(0),
     m_CurrentView(0)
 {
@@ -256,13 +256,22 @@ EdrcActionManager::EdrcActionManager(QObject *parent) :
 
     // Register your own actions
     aEditItem = createAction(this, "eDRC.aEditItem", Core::Constants::ICONEDIT,
-                                Constants::A_LIST_EDIT,
-                                ctx,
-                                Trans::Constants::M_EDIT_TEXT, Constants::TR_CONTEXT,
-                                cmd,
-                                0, "",
-                                QKeySequence::UnknownKey, false);
+                             Constants::A_LIST_EDIT,
+                             ctx,
+                             Trans::Constants::M_EDIT_TEXT, "",
+                             cmd,
+                             0, "",
+                             QKeySequence::UnknownKey, false);
     connect(aEditItem, SIGNAL(triggered()), this,  SLOT(editItem()));
+
+    aRenewItem = createAction(this, "eDRC.aRenewItem", Core::Constants::ICONRENEW,
+                              Constants::A_LIST_RENEW,
+                              ctx,
+                              Constants::RENEW_CR_TEXT, Constants::TR_CONTEXT,
+                              cmd,
+                              0, "",
+                              QKeySequence::UnknownKey, false);
+    connect(aRenewItem, SIGNAL(triggered()), this,  SLOT(renewItem()));
 
     aFileSavePDF = createAction(this, "eDRC.aFileSavePDF", Core::Constants::ICONSAVEAS,
                                 Constants::A_FILE_SAVEASPDF,
@@ -397,6 +406,12 @@ void EdrcActionManager::clearItems()
 {
     if (m_CurrentView)
         m_CurrentView->clearItems();
+}
+
+void EdrcActionManager::renewItem()
+{
+    if (m_CurrentView)
+        m_CurrentView->renewItem();
 }
 
 void EdrcActionManager::showDatabaseInformation()

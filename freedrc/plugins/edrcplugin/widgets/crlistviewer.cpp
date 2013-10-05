@@ -240,6 +240,7 @@ CrListViewer::CrListViewer(QWidget *parent) :
              << Core::Constants::A_LIST_REMOVE
              << "--"
              << eDRC::Constants::A_LIST_EDIT
+             << eDRC::Constants::A_LIST_RENEW
              << "--"
              << Core::Constants::A_LIST_CLEAR
              << "--"
@@ -420,6 +421,25 @@ void CrListViewer::clearItems()
     d->ui->crContent->clear();
 }
 
+/** If the CR tree view as a selection, and the selection is a CR, renew it using the current date */
+void CrListViewer::renewItem()
+{
+    // Check CR tree view selection
+    QModelIndex current = d->ui->treeView->currentIndex();
+    if (!d->_crTreeModel->isConsultResult(current))
+        return;
+
+    // Create the new CR
+    ConsultResult cr = d->_crTreeModel->consultResultFromIndex(current);
+    cr.setDateOfExamination(QDateTime::currentDateTime());
+
+    CrEditorDialog dlg(mainWindow());
+    dlg.initialize(cr);
+    if (dlg.exec() == QDialog::Accepted) {
+        d->_crTreeModel->addConsultResult(dlg.submit());
+    }
+}
+
 /**
  * Internal. When the internal eDRC::Internal::CrTreeModel is resetted,
  * update the view:
@@ -440,12 +460,12 @@ void CrListViewer::onModelReset()
 //    d->ui->treeView->header()->setSectionHidden(CrTreeModel::Empty1, false);
 //    d->ui->treeView->setColumnWidth(CrTreeModel::Empty1, 22);
 //#if QT_VERSION < 0x050000
-//    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-//    d->ui->treeView->header()->setResizeMode(1, QHeaderView::Fixed);
+//    d->ui->treeView->header()->setResizeMode(CrTreeModel::Label, QHeaderView::Stretch);
+//    d->ui->treeView->header()->setResizeMode(CrTreeModel::Empty1, QHeaderView::Fixed);
 //#else
 //    // Qt5
-//    d->ui->treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-//    d->ui->treeView->header()->setSectionResizeMode(1, QHeaderView::Fixed);
+//    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Label, QHeaderView::Stretch);
+//    d->ui->treeView->header()->setSectionResizeMode(CrTreeModel::Empty1, QHeaderView::Fixed);
 //#endif
     QTimer::singleShot(2, this, SLOT(onModelPostReset()));
 }
