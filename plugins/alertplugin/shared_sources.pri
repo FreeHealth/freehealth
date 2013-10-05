@@ -64,7 +64,7 @@ OTHER_FILES += $${PWD}/Alert.pluginspec
 
 # include tests
 equals(TEST, 1) {
-    SOURCES += tests/tst_alertitem.cpp
+    SOURCES += $${PWD}/tests/tst_alertitem.cpp
 }
 
 # include translations
