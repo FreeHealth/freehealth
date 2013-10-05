@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rcitemmodel.h"
+#include "critemmodel.h"
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
@@ -35,22 +35,22 @@ using namespace Internal;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RcItemModel::RcItemModel(QObject *parent):
+CrItemModel::CrItemModel(QObject *parent):
     QSqlTableModel(parent, edrcBase().database())
 {
     setTable(edrcBase().table(Constants::Table_Ref_RCItem));
     select();
 }
 
-RcItemModel::~RcItemModel()
+CrItemModel::~CrItemModel()
 {}
 
-void RcItemModel::clear()
+void CrItemModel::clear()
 {
     setFilterOnCrId(-1);
 }
 
-QVariant RcItemModel::data(const QModelIndex &index, int role) const
+QVariant CrItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -70,12 +70,12 @@ QVariant RcItemModel::data(const QModelIndex &index, int role) const
 }
 
 
-Qt::ItemFlags RcItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CrItemModel::flags(const QModelIndex &index) const
 {
     return QSqlTableModel::flags(index);
 }
 
-void RcItemModel::setFilterOnCrId(const int rcId)
+void CrItemModel::setFilterOnCrId(const int rcId)
 {
     QHash<int, QString> whereLink;
     whereLink.insert(Constants::RC_LCRITERES_REF_RCITEM_ID, QString("='%1'").arg(rcId));

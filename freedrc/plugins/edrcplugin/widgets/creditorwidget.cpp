@@ -24,17 +24,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rceditorwidget.h"
+#include "creditorwidget.h"
 
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
-#include <edrcplugin/models/rcclassmodel.h>
-#include <edrcplugin/models/rctreemodel.h>
+#include <edrcplugin/models/crclassmodel.h>
+#include <edrcplugin/models/classandcrtreemodel.h>
 #include <edrcplugin/models/preventablecriticalriskmodel.h>
-#include <edrcplugin/models/rccriteriasmodel.h>
+#include <edrcplugin/models/crcriteriasmodel.h>
 
-#include "ui_rceditorwidget.h"
+#include "ui_creditorwidget.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -103,13 +103,13 @@ protected:
     }
 };
 
-class RcEditorWidgetPrivate
+class CrEditorWidgetPrivate
 {
 public:
-    RcEditorWidgetPrivate(RcEditorWidget *parent):
-        ui(new Ui::RcEditorWidget),
+    CrEditorWidgetPrivate(CrEditorWidget *parent):
+        ui(new Ui::CrEditorWidget),
         _classModel(0),
-        _rcTreeModel(0),
+        _classAndCrTreeModel(0),
         _pcrModel(0),
         _rcCritModel(0),
         _rcTreeProxy(0),
@@ -119,7 +119,7 @@ public:
     {
     }
 
-    ~RcEditorWidgetPrivate()
+    ~CrEditorWidgetPrivate()
     {
         delete ui;
     }
@@ -177,31 +177,31 @@ public:
 
         // Check diagnosis position & follow up
         if (!_posDiagGroup->checkedButton()) {
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "No diagnosis position code selected");
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "No diagnosis position code selected");
             codingIsOk = false;
         } else {
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Diagnosis position: %1").arg(_posDiagGroup->checkedButton()->text());
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Diagnosis position: %1").arg(_posDiagGroup->checkedButton()->text());
         }
         if (!_suiviGroup->checkedButton()) {
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "No follow up code selected");
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "No follow up code selected");
             codingIsOk = false;
         } else {
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Follow up: %1").arg(_suiviGroup->checkedButton()->text());
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Follow up: %1").arg(_suiviGroup->checkedButton()->text());
         }
-        tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Chronic disease: %1").arg(ui->buttonALD->isChecked()? tkTr(Trans::Constants::YES):tkTr(Trans::Constants::NO));
-        tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Symptomatic: %1").arg(ui->buttonSympto->isChecked()? tkTr(Trans::Constants::YES):tkTr(Trans::Constants::NO));
+        tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Chronic disease: %1").arg(ui->buttonALD->isChecked()? tkTr(Trans::Constants::YES):tkTr(Trans::Constants::NO));
+        tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Symptomatic: %1").arg(ui->buttonSympto->isChecked()? tkTr(Trans::Constants::YES):tkTr(Trans::Constants::NO));
 
         // Manage coding completion labels
         switch (_rcCritModel->currentCodingStatus()) {
-        case RcCriteriasModel::ValidCoding:
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Valid criteria coding");
+        case CrCriteriasModel::ValidCoding:
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Valid criteria coding");
             break;
-        case RcCriteriasModel::IncompleteCoding:
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "Incomplete or incorrect coding of the criterias");
+        case CrCriteriasModel::IncompleteCoding:
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "Incomplete or incorrect coding of the criterias");
             codingIsOk = false;
             break;
-        case RcCriteriasModel::NoCodingStarted:
-            tooltip << QApplication::translate("eDRC::Internal::RcEditorWidget", "No criteria selected");
+        case CrCriteriasModel::NoCodingStarted:
+            tooltip << QApplication::translate("eDRC::Internal::CrEditorWidget", "No criteria selected");
             codingIsOk = false;
             break;
         }
@@ -235,11 +235,11 @@ public:
 
         // Show only the CR & its classes in the treeview
         for(int i=(_rcTreeProxy->rowCount()-1); i >= 0 ; --i) {
-            QModelIndex parent = _rcTreeProxy->index(i, RcTreeModel::Label);
+            QModelIndex parent = _rcTreeProxy->index(i, ClassAndCrTreeModel::Label);
             if (crClasses.contains(_rcTreeProxy->data(parent).toString())) {
                 ui->treeViewRC->expand(parent);
                 for(int j=(_rcTreeProxy->rowCount(parent)-1); j >= 0 ; --j) {
-                    QModelIndex testMe = _rcTreeProxy->index(j, RcTreeModel::Label, parent);
+                    QModelIndex testMe = _rcTreeProxy->index(j, ClassAndCrTreeModel::Label, parent);
                     if (_rcTreeProxy->data(testMe).toString() == label) {
                         ui->treeViewRC->selectionModel()->select(testMe, QItemSelectionModel::SelectCurrent);
                         ui->treeViewRC->scrollTo(testMe, QAbstractItemView::EnsureVisible);
@@ -337,24 +337,24 @@ public:
     }
 
 public:
-    Ui::RcEditorWidget *ui;
-    RCClassModel *_classModel;
-    RcTreeModel *_rcTreeModel;
+    Ui::CrEditorWidget *ui;
+    CrClassModel *_classModel;
+    ClassAndCrTreeModel *_classAndCrTreeModel;
     PreventableCriticalRiskModel *_pcrModel;
-    RcCriteriasModel *_rcCritModel;
+    CrCriteriasModel *_rcCritModel;
     TreeProxyModel *_rcTreeProxy;
     QButtonGroup *_posDiagGroup, *_suiviGroup;
     ConsultResult _cr;
 
 private:
-    RcEditorWidget *q;
+    CrEditorWidget *q;
 };
 } // namespace eDRC
 } // namespace Internal
 
-RcEditorWidget::RcEditorWidget(QWidget *parent) :
+CrEditorWidget::CrEditorWidget(QWidget *parent) :
     QWidget(parent),
-    d(new RcEditorWidgetPrivate(this))
+    d(new CrEditorWidgetPrivate(this))
 {
     d->ui->setupUi(this);
     layout()->setMargin(0);
@@ -382,13 +382,13 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     connect(d->_posDiagGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateCodingStatus()));
     connect(d->_suiviGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateCodingStatus()));
 
-    //  Creating RcTreeModel/view
-    d->_rcTreeModel = new RcTreeModel(this);
-    d->_rcTreeModel->initialize();
+    //  Creating ClassAndCrTreeModel/view
+    d->_classAndCrTreeModel = new ClassAndCrTreeModel(this);
+    d->_classAndCrTreeModel->initialize();
     d->_rcTreeProxy = new TreeProxyModel(this);
-    d->_rcTreeProxy->setSourceModel(d->_rcTreeModel);
+    d->_rcTreeProxy->setSourceModel(d->_classAndCrTreeModel);
     d->ui->treeViewRC->setModel(d->_rcTreeProxy);
-    d->ui->treeViewRC->header()->setSectionHidden(RcTreeModel::Id, true);
+    d->ui->treeViewRC->header()->setSectionHidden(ClassAndCrTreeModel::Id, true);
     d->ui->treeViewRC->header()->hide();
     d->ui->treeViewRC->setIndentation(12);
     connect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
@@ -399,9 +399,9 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
 
     // Create the RCItem && RcCriterias model/view
-    d->_rcCritModel = new RcCriteriasModel(this);
+    d->_rcCritModel = new CrCriteriasModel(this);
     d->ui->listViewItems->setModel(d->_rcCritModel);
-    d->ui->listViewItems->setModelColumn(RcCriteriasModel::Label);
+    d->ui->listViewItems->setModelColumn(CrCriteriasModel::Label);
     connect(d->ui->listViewItems, SIGNAL(pressed(QModelIndex)), this, SLOT(onCriteriaItemPressed(QModelIndex)));
 
     // Create the PreventableCriticalRisk model/view
@@ -425,7 +425,7 @@ RcEditorWidget::RcEditorWidget(QWidget *parent) :
 //    // END
 }
 
-RcEditorWidget::~RcEditorWidget()
+CrEditorWidget::~CrEditorWidget()
 {
     if (d)
         delete d;
@@ -433,7 +433,7 @@ RcEditorWidget::~RcEditorWidget()
 }
 
 /** Clear the editor */
-void RcEditorWidget::clear()
+void CrEditorWidget::clear()
 {
     d->ui->searchLine->clear();
     onSearchTextChanged("");
@@ -444,19 +444,19 @@ void RcEditorWidget::clear()
 }
 
 /** Set the editing eDRC::ConsulResult to \e cr */
-void RcEditorWidget::setConsultResult(const ConsultResult &cr)
+void CrEditorWidget::setConsultResult(const ConsultResult &cr)
 {
     d->_cr = cr;
     d->consultResultToUi(cr);
 }
 
-int RcEditorWidget::currentEditingConsultResultId() const
+int CrEditorWidget::currentEditingConsultResultId() const
 {
     QModelIndex current = d->ui->treeViewRC->currentIndex();
     // Is the index a RC?
     if (current.parent() == QModelIndex())
         return -1;
-    return d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
+    return d->_classAndCrTreeModel->id(d->_rcTreeProxy->mapToSource(current));
 }
 
 /**
@@ -464,14 +464,14 @@ int RcEditorWidget::currentEditingConsultResultId() const
  * return its reference.
  * \sa setConsultResult()
  */
-ConsultResult RcEditorWidget::submit()
+ConsultResult CrEditorWidget::submit()
 {
     d->uiToConsultResult(d->_cr);
     return d->_cr;
 }
 
 /** When user activate a RC in the RC tree view. Update all models/views */
-void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous)
+void CrEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
     // Is the index a RC?
@@ -483,7 +483,7 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
     disconnect(d->ui->treeViewRC->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onCurrentRcChanged(QModelIndex,QModelIndex)));
 
     // Update models & views
-    int crId = d->_rcTreeModel->id(d->_rcTreeProxy->mapToSource(current));
+    int crId = d->_classAndCrTreeModel->id(d->_rcTreeProxy->mapToSource(current));
     d->ui->crTitle->setText(edrcBase().getCrLabel(crId));
     d->_pcrModel->setFilterOnCrId(crId);
     d->_rcCritModel->setFilterOnCrId(crId);
@@ -507,10 +507,10 @@ void RcEditorWidget::onCurrentRcChanged(const QModelIndex &current, const QModel
 }
 
 /** Slot connected to the user search line edition. Update the RC filtering */
-void RcEditorWidget::onSearchTextChanged(const QString &text)
+void CrEditorWidget::onSearchTextChanged(const QString &text)
 {
     // Filter the proxymodel
-    d->_rcTreeProxy->setFilterKeyColumn(RcTreeModel::Label);
+    d->_rcTreeProxy->setFilterKeyColumn(ClassAndCrTreeModel::Label);
     d->_rcTreeProxy->setFilterFixedString(text);
 
     // Count the number of root indexes & expand all if <= 5
@@ -523,7 +523,7 @@ void RcEditorWidget::onSearchTextChanged(const QString &text)
  * When a CR criteria is switched from unselected to selected, we need to check
  * if the criteria has a parent (using its 'ponderation') and select it if required.
  */
-void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
+void CrEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 {
     // Inform the criteria model
     d->_rcCritModel->setData(index, -1, Qt::CheckStateRole);
@@ -533,13 +533,13 @@ void RcEditorWidget::onCriteriaItemPressed(const QModelIndex &index)
 }
 
 /** Update the CR coding status label */
-void RcEditorWidget::updateCodingStatus()
+void CrEditorWidget::updateCodingStatus()
 {
     d->updateCodingStatus();
 }
 
 /** Activate/desactivate the criteria validator */
-void RcEditorWidget::toggleValidator()
+void CrEditorWidget::toggleValidator()
 {
     settings()->setValue(Constants::S_REALTIME_CR_CODING_CHECKING, d->ui->validator->isChecked());
     d->ui->listViewItems->reset();
@@ -547,7 +547,7 @@ void RcEditorWidget::toggleValidator()
 
 #include <QTextBrowser>
 #include <utils/global.h>
-void RcEditorWidget::on_debugButton_clicked()
+void CrEditorWidget::on_debugButton_clicked()
 {
     d->uiToConsultResult(d->_cr);
     QTextBrowser *b = new QTextBrowser(this);
@@ -556,7 +556,7 @@ void RcEditorWidget::on_debugButton_clicked()
     b->show();
 }
 
-void RcEditorWidget::changeEvent(QEvent *event)
+void CrEditorWidget::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         d->ui->retranslateUi(this);

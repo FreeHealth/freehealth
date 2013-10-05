@@ -24,39 +24,39 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_RCARGUMENTSDIALOG_H
-#define EDRC_RCARGUMENTSDIALOG_H
+#ifndef EDRC_CRARGUMENTSDIALOG_H
+#define EDRC_CRARGUMENTSDIALOG_H
 
 #include <QDialog>
 
 /**
- * \file rcargumentsdialog.h
+ * \file crargumentsdialog.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.9.2
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
 
 namespace Ui {
-class RcArgumentsDialog;
+class CrArgumentsDialog;
 }
 
-class RcArgumentsDialog : public QDialog
+class CrArgumentsDialog : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit RcArgumentsDialog(QWidget *parent = 0);
-    ~RcArgumentsDialog();
+    explicit CrArgumentsDialog(QWidget *parent = 0);
+    ~CrArgumentsDialog();
     void setRcId(const int rcId);
 
 private:
-    Ui::RcArgumentsDialog *ui;
+    Ui::CrArgumentsDialog *ui;
 };
 
 } // namespace Internal
 } // namespace eDRC
 
-#endif // EDRC_RCARGUMENTSDIALOG_H
+#endif // EDRC_CRARGUMENTSDIALOG_H

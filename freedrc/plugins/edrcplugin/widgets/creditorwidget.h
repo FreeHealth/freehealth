@@ -4,8 +4,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_PLUGIN_RC_EDITOR_WIDGET_H
-#define EDRC_PLUGIN_RC_EDITOR_WIDGET_H
+#ifndef EDRC_PLUGIN_CR_EDITOR_WIDGET_H
+#define EDRC_PLUGIN_CR_EDITOR_WIDGET_H
 
 // FOR TEST ONLY
 #include <edrcplugin/edrc_exporter.h>
@@ -20,22 +20,22 @@ class QItemSelection;
 QT_END_NAMESPACE
 
 /**
- * \file rceditorwidget.h
+ * \file creditorwidget.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 24 June 2013
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
-class RcEditorWidgetPrivate;
+class CrEditorWidgetPrivate;
 
-class EDRC_EXPORT RcEditorWidget: public QWidget
+class EDRC_EXPORT CrEditorWidget: public QWidget
 {
     Q_OBJECT
 public:
-    RcEditorWidget(QWidget *parent = 0);
-    ~RcEditorWidget();
+    CrEditorWidget(QWidget *parent = 0);
+    ~CrEditorWidget();
     void clear();
     void setConsultResult(const ConsultResult &cr);
     int currentEditingConsultResultId() const;
@@ -59,10 +59,10 @@ private:
     void changeEvent(QEvent *event);
 
 private:
-    RcEditorWidgetPrivate *d;
+    CrEditorWidgetPrivate *d;
 };
 
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_PLUGIN_RC_EDITOR_WIDGET_H
+#endif  // EDRC_PLUGIN_CR_EDITOR_WIDGET_H

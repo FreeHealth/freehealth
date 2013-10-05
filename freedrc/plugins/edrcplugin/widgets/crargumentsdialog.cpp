@@ -24,11 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rcargumentsdialog.h"
+#include "crargumentsdialog.h"
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
 
-#include "ui_rcargumentsdialog.h"
+#include "ui_crargumentsdialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -43,9 +43,9 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RcArgumentsDialog::RcArgumentsDialog(QWidget *parent) :
+CrArgumentsDialog::CrArgumentsDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RcArgumentsDialog)
+    ui(new Ui::CrArgumentsDialog)
 {
     ui->setupUi(this);
     setWindowTitle(tr("Result of consultation arguments"));
@@ -54,12 +54,12 @@ RcArgumentsDialog::RcArgumentsDialog(QWidget *parent) :
     Utils::centerWidget(this, parent);
 }
 
-RcArgumentsDialog::~RcArgumentsDialog()
+CrArgumentsDialog::~CrArgumentsDialog()
 {
     delete ui;
 }
 
-void RcArgumentsDialog::setRcId(const int rcId)
+void CrArgumentsDialog::setRcId(const int rcId)
 {
     ui->rcLabel->setText(edrcBase().getCrLabel(rcId));
     ui->arguments->setHtml(edrcBase().getCrArguments(rcId, true));

@@ -24,22 +24,22 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RCITEMMODEL_H
-#define EDRC_INTERNAL_RCITEMMODEL_H
+#ifndef EDRC_INTERNAL_CRITEMMODEL_H
+#define EDRC_INTERNAL_CRITEMMODEL_H
 
 #include <QSqlTableModel>
 
 /**
- * \file rcitemmodel.h
+ * \file critemmodel.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.9.2
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
 
-class RcItemModel : public QSqlTableModel
+class CrItemModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -49,8 +49,8 @@ public:
         Label
     };
 
-    RcItemModel(QObject *parent = 0);
-    ~RcItemModel();
+    CrItemModel(QObject *parent = 0);
+    ~CrItemModel();
     void clear();
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -58,15 +58,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void setFilterOnCrId(const int rcId);
-
-private:
-//    void selectAllParents(const QModelIndex& index);
-//    void deselectAllChilds(const QModelIndex& index);
-
-//    QList<Criteres_Elements>    * m_pListCriteres;
 };
 
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_INTERNAL_RCITEMMODEL_H
+#endif  // EDRC_INTERNAL_CRITEMMODEL_H

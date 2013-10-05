@@ -24,23 +24,23 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RCCRITERIASMODEL_H
-#define EDRC_INTERNAL_RCCRITERIASMODEL_H
+#ifndef EDRC_INTERNAL_CRCRITERIASMODEL_H
+#define EDRC_INTERNAL_CRCRITERIASMODEL_H
 
 #include <QAbstractTableModel>
 
 /**
- * \file rccriteriasmodel.h
+ * \file crcriteriasmodel.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.9.2
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
-class RcCriteriasModelPrivate;
+class CrCriteriasModelPrivate;
 
-class RcCriteriasModel : public QAbstractTableModel
+class CrCriteriasModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -59,8 +59,8 @@ public:
         ValidCoding
     };
 
-    RcCriteriasModel(QObject *parent = 0);
-    ~RcCriteriasModel();
+    CrCriteriasModel(QObject *parent = 0);
+    ~CrCriteriasModel();
     void clear();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -78,10 +78,10 @@ public:
     QList<int> currentSelectedCriteriaIds() const;
 
 private:
-    RcCriteriasModelPrivate *d;
+    CrCriteriasModelPrivate *d;
 };
 
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_INTERNAL_RCCRITERIASMODEL_H
+#endif  // EDRC_INTERNAL_CRCRITERIASMODEL_H
