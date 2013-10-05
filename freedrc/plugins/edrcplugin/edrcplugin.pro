@@ -16,15 +16,14 @@ HEADERS += \
     database/constants_db.h \
     database/edrcbase.h \
     models/crtreemodel.h \
+    models/classandcrtreemodel.h \
     models/preventablecriticalriskmodel.h \
-    models/rcitemmodel.h \
-    models/rcclassmodel.h \
-    models/rctreemodel.h \
-    models/rcusermodel.h \
-    models/rccriteriasmodel.h \
-    widgets/rcargumentsdialog.h \
+    models/critemmodel.h \
+    models/crclassmodel.h \
+    models/crcriteriasmodel.h \
+    widgets/crargumentsdialog.h \
     widgets/sfmgaboutdialog.h \
-    widgets/rceditorwidget.h \
+    widgets/creditorwidget.h \
     widgets/edrcpreferences.h \
     widgets/crlistviewer.h \
     consultresult.h \
@@ -39,15 +38,14 @@ SOURCES += \
     edrccore.cpp \
     database/edrcbase.cpp \
     models/crtreemodel.cpp \
+    models/classandcrtreemodel.cpp \
     models/preventablecriticalriskmodel.cpp \
-    models/rcitemmodel.cpp \
-    models/rcclassmodel.cpp \
-    models/rctreemodel.cpp \
-    models/rccriteriasmodel.cpp \
-    models/rcusermodel.cpp \
-    widgets/rcargumentsdialog.cpp \
+    models/critemmodel.cpp \
+    models/crclassmodel.cpp \
+    models/crcriteriasmodel.cpp \
+    widgets/crargumentsdialog.cpp \
     widgets/sfmgaboutdialog.cpp \
-    widgets/rceditorwidget.cpp \
+    widgets/creditorwidget.cpp \
     widgets/edrcpreferences.cpp \
     widgets/crlistviewer.cpp \
     consultresultvalidator.cpp \
@@ -57,8 +55,8 @@ SOURCES += \
     widgets/edrcwontextualwidget.cpp
 
 FORMS += \
-    widgets/rceditorwidget.ui \
-    widgets/rcargumentsdialog.ui \
+    widgets/creditorwidget.ui \
+    widgets/crargumentsdialog.ui \
     widgets/sfmgaboutdialog.ui \
     widgets/edrcpreferences.ui \
     widgets/crlistviewer.ui \

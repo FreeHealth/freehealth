@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="eDRC::Internal::RcEditorWidget" name="widget" native="true"/>
+    <widget class="eDRC::Internal::CrEditorWidget" name="widget" native="true"/>
    </item>
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -31,9 +31,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>eDRC::Internal::RcEditorWidget</class>
+   <class>eDRC::Internal::CrEditorWidget</class>
    <extends>QWidget</extends>
-   <header location="global">edrcplugin/widgets/rceditorwidget.h</header>
+   <header location="global">edrcplugin/widgets/creditorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

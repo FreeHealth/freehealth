@@ -44,7 +44,7 @@
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/idocumentprinter.h>
 
-#include <edrcplugin/widgets/rceditorwidget.h>
+#include <edrcplugin/widgets/creditorwidget.h>
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/consultresult.h>

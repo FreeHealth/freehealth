@@ -32,7 +32,7 @@
 #include <edrcplugin/constants.h>
 #include <edrcplugin/consultresult.h>
 #include <edrcplugin/widgets/sfmgaboutdialog.h>
-#include <edrcplugin/widgets/rcargumentsdialog.h>
+#include <edrcplugin/widgets/crargumentsdialog.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -142,7 +142,7 @@ void CrEditorDialog::onArgumentsClicked()
     int id = d->ui->widget->currentEditingConsultResultId();
     if (id == -1)
         return;
-    RcArgumentsDialog dlg(this);
+    CrArgumentsDialog dlg(this);
     dlg.setRcId(id);
     dlg.exec();
     if (but)
