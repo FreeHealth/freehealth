@@ -25,14 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class eDRC::Internal::RcCriteriasModel
+ * \class eDRC::Internal::CrCriteriasModel
  * Manage the CR criterias and owns a realtime coding validation. \n
  * The coding system uses the Qt::CheckStateRole without the values. When setData() is called
  * with this role, the item checkstate is just toggled (check <-> uncheck). \n
  * You can get the coding validation status with currentCodingStatus().
  */
 
-#include "rccriteriasmodel.h"
+#include "crcriteriasmodel.h"
 #include <edrcplugin/constants.h>
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/consultresult.h>
@@ -71,17 +71,17 @@ static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::in
 
 namespace eDRC {
 namespace Internal {
-class RcCriteriasModelPrivate
+class CrCriteriasModelPrivate
 {
 public:
-    RcCriteriasModelPrivate(RcCriteriasModel *parent) :
+    CrCriteriasModelPrivate(CrCriteriasModel *parent) :
         _crId(-1),
         q(parent)
     {
         Q_UNUSED(q);
     }
 
-    ~RcCriteriasModelPrivate()
+    ~CrCriteriasModelPrivate()
     {}
 
     void getCriteriasFromDatabase(int crId)
@@ -102,43 +102,43 @@ public:
     ConsultResultValidator _validator;
 
 private:
-    RcCriteriasModel *q;
+    CrCriteriasModel *q;
 };
 }
 }
 
-RcCriteriasModel::RcCriteriasModel(QObject *parent) :
+CrCriteriasModel::CrCriteriasModel(QObject *parent) :
     QAbstractTableModel(parent),
-    d(new RcCriteriasModelPrivate(this))
+    d(new CrCriteriasModelPrivate(this))
 {
     setFilterOnCrId(-1);
 }
 
-RcCriteriasModel::~RcCriteriasModel()
+CrCriteriasModel::~CrCriteriasModel()
 {
     if (d)
         delete d;
     d = 0;
 }
 
-void RcCriteriasModel::clear()
+void CrCriteriasModel::clear()
 {
     setFilterOnCrId(-1);
 }
 
-int RcCriteriasModel::rowCount(const QModelIndex &parent) const
+int CrCriteriasModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->_criterias.count();
 }
 
-int RcCriteriasModel::columnCount(const QModelIndex &parent) const
+int CrCriteriasModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return ColumnCount;
 }
 
-QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
+QVariant CrCriteriasModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -253,7 +253,7 @@ QVariant RcCriteriasModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool CrCriteriasModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Q_UNUSED(value);
     if (!index.isValid())
@@ -325,14 +325,14 @@ bool RcCriteriasModel::setData(const QModelIndex &index, const QVariant &value, 
     return true;
 }
 
-Qt::ItemFlags RcCriteriasModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CrCriteriasModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;// | Qt::ItemIsUserCheckable;
 }
 
 /** Filter CR criterias according to the CR primkey \e crId*/
-void RcCriteriasModel::setFilterOnCrId(const int crId)
+void CrCriteriasModel::setFilterOnCrId(const int crId)
 {
     beginResetModel();
     d->_checkedRows.clear();
@@ -342,7 +342,7 @@ void RcCriteriasModel::setFilterOnCrId(const int crId)
 }
 
 /** Define the selected criterias using their database unique identifiers */
-void RcCriteriasModel::setSelectedCriteriaIds(const QList<int> &ids)
+void CrCriteriasModel::setSelectedCriteriaIds(const QList<int> &ids)
 {
     beginResetModel();
     // Update the selected ids/rows
@@ -359,13 +359,13 @@ void RcCriteriasModel::setSelectedCriteriaIds(const QList<int> &ids)
 }
 
 /** Returns the current filtered consultation result database unique identifiant */
-int RcCriteriasModel::currentConsulResultId() const
+int CrCriteriasModel::currentConsulResultId() const
 {
     return d->_crId;
 }
 
 /** Returns the ConsultResult coding status. This status is available at any time (realtime computation) */
-RcCriteriasModel::CodingStatus RcCriteriasModel::currentCodingStatus() const
+CrCriteriasModel::CodingStatus CrCriteriasModel::currentCodingStatus() const
 {
     if (d->_checkedRows.isEmpty())
         return NoCodingStarted;
@@ -377,7 +377,7 @@ RcCriteriasModel::CodingStatus RcCriteriasModel::currentCodingStatus() const
 }
 
 /** Returns the currently selected (checked) criteria ids in a list */
-QList<int> RcCriteriasModel::currentSelectedCriteriaIds() const
+QList<int> CrCriteriasModel::currentSelectedCriteriaIds() const
 {
     return d->_checkedIds;
 }

@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "rcclassmodel.h"
+#include "crclassmodel.h"
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/constants_db.h>
 #include <edrcplugin/database/edrcbase.h>
@@ -35,17 +35,17 @@ using namespace Internal;
 static inline eDRC::EdrcCore &edrcCore() {return eDRC::EdrcCore::instance();}
 static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::instance().edrcBase();}
 
-RCClassModel::RCClassModel(QObject *parent):
+CrClassModel::CrClassModel(QObject *parent):
     QSqlTableModel(parent, edrcBase().database())
 {
     setTable(edrcBase().table(Constants::Table_Ref_ClassRC));
     select();
 }
 
-RCClassModel::~RCClassModel()
+CrClassModel::~CrClassModel()
 {}
 
-QVariant RCClassModel::data(const QModelIndex &index, int role) const
+QVariant CrClassModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -62,7 +62,7 @@ QVariant RCClassModel::data(const QModelIndex &index, int role) const
     return QSqlTableModel::data(sql, role);
 }
 
-QVariant RCClassModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant CrClassModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -73,12 +73,12 @@ QVariant RCClassModel::headerData(int section, Qt::Orientation orientation, int 
         return QString("Row %1").arg(section);
 }
 
-Qt::ItemFlags RCClassModel::flags(const QModelIndex &index) const
+Qt::ItemFlags CrClassModel::flags(const QModelIndex &index) const
 {
     return QSqlTableModel::flags(index);
 }
 
-void RCClassModel::setFilterOnCrId(const QString &rcId)
+void CrClassModel::setFilterOnCrId(const QString &rcId)
 {
     Q_UNUSED(rcId);
 }

@@ -24,24 +24,24 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_RCTREEMODEL_H
-#define EDRC_RCTREEMODEL_H
+#ifndef EDRC_CLASSANDClassAndCrTreeModel_H
+#define EDRC_CLASSANDClassAndCrTreeModel_H
 
 #include <QStandardItemModel>
 
 /**
- * \file rctreemodel.h
+ * \file classandcrtreemodel.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 29 May 2013
+ * \version 0.9.2
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
-class RcTreeModelPrivate;
+class ClassAndCrTreeModelPrivate;
 } // namespace Internal
 
-class RcTreeModel : public QStandardItemModel
+class ClassAndCrTreeModel : public QStandardItemModel
 {
     Q_OBJECT
     
@@ -51,8 +51,8 @@ public:
         Id
     };
 
-    explicit RcTreeModel(QObject *parent = 0);
-    ~RcTreeModel();
+    explicit ClassAndCrTreeModel(QObject *parent = 0);
+    ~ClassAndCrTreeModel();
     bool initialize();
 
     int id(const QModelIndex &index) const;
@@ -60,10 +60,10 @@ public:
     QStringList authorizedDiagnosis(const QModelIndex &index) const;
 
 private:
-    Internal::RcTreeModelPrivate *d;
+    Internal::ClassAndCrTreeModelPrivate *d;
 };
 
 } // namespace eDRC
 
-#endif  // EDRC_RCTREEMODEL_H
+#endif  // EDRC_CLASSANDClassAndCrTreeModel_H
 

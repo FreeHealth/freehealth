@@ -25,14 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class eDRC::RcTreeModel
+ * \class eDRC::ClassAndCrTreeModel
  * \brief short description of class
  *
  * Long description of class
  * \sa eDRC::
  */
 
-#include "rctreemodel.h"
+#include "classandcrtreemodel.h"
 #include <edrcplugin/edrccore.h>
 #include <edrcplugin/database/edrcbase.h>
 
@@ -50,15 +50,15 @@ static inline eDRC::Internal::DrcDatabase &edrcBase() {return eDRC::EdrcCore::in
 
 namespace eDRC {
 namespace Internal {
-class RcTreeModelPrivate
+class ClassAndCrTreeModelPrivate
 {
 public:
-    RcTreeModelPrivate(RcTreeModel *parent) :
+    ClassAndCrTreeModelPrivate(ClassAndCrTreeModel *parent) :
         q(parent)
     {
     }
     
-    ~RcTreeModelPrivate()
+    ~ClassAndCrTreeModelPrivate()
     {
     }
 
@@ -118,22 +118,22 @@ public:
     QList<QStandardItem*> _classes;
     
 private:
-    RcTreeModel *q;
+    ClassAndCrTreeModel *q;
 };
 } // namespace Internal
 } // end namespace eDRC
 
 
-/*! Constructor of the eDRC::RcTreeModel class */
-RcTreeModel::RcTreeModel(QObject *parent) :
+/*! Constructor of the eDRC::ClassAndCrTreeModel class */
+ClassAndCrTreeModel::ClassAndCrTreeModel(QObject *parent) :
     QStandardItemModel(parent),
-    d(new RcTreeModelPrivate(this))
+    d(new ClassAndCrTreeModelPrivate(this))
 {
     d->populateClasses();
 }
 
-/*! Destructor of the eDRC::RcTreeModel class */
-RcTreeModel::~RcTreeModel()
+/*! Destructor of the eDRC::ClassAndCrTreeModel class */
+ClassAndCrTreeModel::~ClassAndCrTreeModel()
 {
     if (d)
         delete d;
@@ -141,23 +141,23 @@ RcTreeModel::~RcTreeModel()
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool RcTreeModel::initialize()
+bool ClassAndCrTreeModel::initialize()
 {
     return true;
 }
 
-int RcTreeModel::id(const QModelIndex &index) const
+int ClassAndCrTreeModel::id(const QModelIndex &index) const
 {
     QModelIndex rcIdIndex = this->index(index.row(), Id, index.parent());
     return data(rcIdIndex).toInt();
 }
 
-QString RcTreeModel::arguments(const QModelIndex &index) const
+QString ClassAndCrTreeModel::arguments(const QModelIndex &index) const
 {
     return edrcBase().getCrArguments(id(index));
 }
 
-QStringList RcTreeModel::authorizedDiagnosis(const QModelIndex &index) const
+QStringList ClassAndCrTreeModel::authorizedDiagnosis(const QModelIndex &index) const
 {
     return edrcBase().getCrAuthorizedDiagnosis(id(index));
 }

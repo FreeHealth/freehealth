@@ -24,22 +24,22 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef EDRC_INTERNAL_RCCLASSMODEL_H
-#define EDRC_INTERNAL_RCCLASSMODEL_H
+#ifndef EDRC_INTERNAL_CRCLASSMODEL_H
+#define EDRC_INTERNAL_CRCLASSMODEL_H
 
 #include <QSqlTableModel>
 
 /**
- * \file rcclassmodel.h
+ * \file crclassmodel.h
  * \author Eric Maeker
- * \version 0.9.0
- * \date 18 June 2013
+ * \version 0.9.2
+ * \date 05 Oct 2013
 */
 
 namespace eDRC {
 namespace Internal {
 
-class RCClassModel : public QSqlTableModel
+class CrClassModel : public QSqlTableModel
 {
     Q_OBJECT
 
@@ -49,8 +49,8 @@ public:
         Label
     };
 
-    RCClassModel(QObject *parent = 0);
-    ~RCClassModel();
+    CrClassModel(QObject *parent = 0);
+    ~CrClassModel();
 
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation,
@@ -61,13 +61,9 @@ public:
     void setFilterOnCrId(const QString &rcId);
 
 private:
-//    void selectAllParents(const QModelIndex& index);
-//    void deselectAllChilds(const QModelIndex& index);
-
-//    QList<Criteres_Elements>    * m_pListCriteres;
 };
 
 } // namespace eDRC
 } // namespace Internal
 
-#endif  // EDRC_INTERNAL_RCCLASSMODEL_H
+#endif  // EDRC_INTERNAL_CRCLASSMODEL_H
