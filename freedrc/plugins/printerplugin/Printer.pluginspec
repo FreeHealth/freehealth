@@ -1,8 +1,8 @@
 <plugin name="Printer" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeAccount</vendor>
+    <vendor>FreeDRC</vendor>
     <copyright>(C) 2008-2013 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
-    <description>The printer plugin for FreeDrc.</description>
+    <description>The printer plugin for FreeDRC.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
