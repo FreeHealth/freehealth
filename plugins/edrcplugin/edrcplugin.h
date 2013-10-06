@@ -39,6 +39,9 @@ namespace eDRC {
 class EdrcCore;
 namespace Internal {
 class EdrcPreferencesPage;
+#ifdef FREEMEDFORMS
+class EdrcWidgetFactory;
+#endif
 
 class EdrcPlugin : public ExtensionSystem::IPlugin
 {
@@ -71,6 +74,9 @@ private Q_SLOTS:
 private:
     EdrcCore *_core;
     EdrcPreferencesPage *_pref;
+#ifdef FREEMEDFORMS
+    EdrcWidgetFactory *_factory;
+#endif
 };
 
 } // namespace Internal

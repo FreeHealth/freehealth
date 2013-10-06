@@ -26,6 +26,9 @@
 #include "edrcplugin.h"
 #include "edrccore.h"
 #include <edrcplugin/widgets/edrcpreferences.h>
+#ifdef FREEMEDFORMS
+#include <edrcplugin/freemedforms/edrcwidgetfactory.h>
+#endif
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -62,7 +65,8 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 EdrcPlugin::EdrcPlugin() :
     ExtensionSystem::IPlugin(),
     _core(0),
-    _pref(0)
+    _pref(0),
+    _factory(0)
 {
     setObjectName("eDRCPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -114,6 +118,10 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
     // Initialize database here
     // Initialize the drugs engines
     // Add your Form::IFormWidgetFactory here to the plugin manager object pool
+#ifdef FREEMEDFORMS
+    _factory = new eDRC::Internal::EdrcWidgetFactory(this);
+    _factory->initialize(arguments, errorString);
+#endif
 
     // No user is logged in until here
 
@@ -142,6 +150,9 @@ void EdrcPlugin::extensionsInitialized()
 
     // At this point, user is connected
     _core->extensionInitialized();
+#ifdef FREEMEDFORMS
+    _factory->extensionInitialized();
+#endif
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()), Qt::UniqueConnection);
@@ -162,7 +173,8 @@ ExtensionSystem::IPlugin::ShutdownFlag EdrcPlugin::aboutToShutdown()
     // Hide UI (if you add UI that is not in the main window directly)
     if (_pref)
         removeObject(_pref);
-
+    if (_factory)
+        removeObject(_factory);
     return SynchronousShutdown;
 }
 
