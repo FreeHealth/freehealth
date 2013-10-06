@@ -3,7 +3,7 @@ TARGET          = eDRC
 
 DEFINES += EDRC_LIBRARY
 
-include($${PWD}/../../../plugins/fmf_plugins.pri)
+include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/edrcplugin_dependencies.pri)
 
 HEADERS += \
