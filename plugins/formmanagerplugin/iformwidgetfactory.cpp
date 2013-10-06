@@ -179,6 +179,7 @@ IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     _lastTabWidget(0)
 {
     Q_ASSERT(formItem);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_FormItem->setFormWidget(this);
     m_OldTrans = QLocale().name().left(2);
 }

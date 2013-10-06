@@ -137,9 +137,11 @@ public:
         foreach(FormMain *form, forms) {
             if (form->formWidget()) {
                 QScrollArea *sa = new QScrollArea(_stack->parentWidget());
+                sa->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 sa->setWidgetResizable(true);
                 QWidget *w = new QWidget(sa);
                 sa->setWidget(w);
+                w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 QVBoxLayout *vl = new QVBoxLayout(w);
                 vl->setSpacing(0);
                 vl->setMargin(0);
@@ -217,6 +219,7 @@ FormDataWidgetMapper::FormDataWidgetMapper(QWidget *parent) :
     d(new FormDataWidgetMapperPrivate(this))
 {
     setObjectName("FormDataWidgetMapper");
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 FormDataWidgetMapper::~FormDataWidgetMapper()

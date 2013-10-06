@@ -145,6 +145,7 @@ EdrcWidget::EdrcWidget(const QString &name, Form::FormItem *formItem, QWidget *p
 
     // create main widget
     m_CentralWidget = new CrListViewer(this);
+    m_CentralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_CrTreeModel = new CrTreeModel(this);
     m_CentralWidget->setConsultResultTreeModel(m_CrTreeModel);
 
