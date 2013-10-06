@@ -304,6 +304,13 @@ void CrListViewer::addHeaderWidget(QWidget *widget)
     d->ui->headerLayout->addWidget(widget);
 }
 
+/** Clear the view (also clears the internal model) */
+void CrListViewer::clear()
+{
+    d->_crTreeModel->clear();
+    d->ui->crContent->clear();
+}
+
 void CrListViewer::fileOpen()
 {}
 

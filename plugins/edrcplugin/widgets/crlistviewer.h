@@ -79,6 +79,8 @@ public:
     void setConsultResultTreeModel(CrTreeModel *model);
     void addHeaderWidget(QWidget *widget);
     
+    void clear();
+
     // Contextual interface
 private Q_SLOTS:
     void fileOpen();

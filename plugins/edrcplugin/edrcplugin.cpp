@@ -121,6 +121,7 @@ bool EdrcPlugin::initialize(const QStringList &arguments, QString *errorString)
 #ifdef FREEMEDFORMS
     _factory = new eDRC::Internal::EdrcWidgetFactory(this);
     _factory->initialize(arguments, errorString);
+    addObject(_factory);
 #endif
 
     // No user is logged in until here
