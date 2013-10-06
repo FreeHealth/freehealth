@@ -29,6 +29,13 @@
 
 #include <coreplugin/modemanager/imode.h>
 
+/**
+ * \file drugsmode.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 16 Aug 2012
+*/
+
 namespace Form {
 class FormPlaceHolder;
 }

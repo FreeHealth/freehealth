@@ -54,6 +54,7 @@ echo "Options:"
 #echo "  -s  Build the source package"
 #echo "  -c  Create a branch. Specify the revision number using the -r option"
 #echo "  -t  Create the tag. Specify the revision number using the -r option"
+echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
 echo "  -r  Specify the revision number to use for the branches or tags generation"
 echo "  -h  Show this help"
 echo
@@ -89,6 +90,7 @@ global_resources/datapacks/appinstalled/drugs/readme.txt \
 global_resources/datapacks/appinstalled/account/readme.txt \
 global_resources/doc/freeaccount \
 global_resources/doc/freediams \
+global_resources/doc/freedrc \
 global_resources/doc/freeicd \
 global_resources/doc/freemedforms \
 global_resources/doc/freepad \
@@ -96,6 +98,7 @@ global_resources/doc/freetoolbox \
 global_resources/forms \
 global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freediams* \
+global_resources/package_helpers/freedrc* \
 global_resources/package_helpers/freeicd* \
 global_resources/package_helpers/freemedforms* \
 global_resources/package_helpers/freepad* \
@@ -121,11 +124,13 @@ global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
 global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/girls_surnames.csv \
+global_resources/textfiles/haarcascade_frontalface_alt2.xml \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/*.db \
 global_resources/textfiles/freediamstest \
 global_resources/textfiles/oldprescriptionsfiles \
+global_resources/textfiles/edrc \
 global_resources/textfiles/prescription \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
@@ -157,6 +162,8 @@ freeaccount.pro \
 freeaccount \
 freediams.pro \
 freediams \
+freedrc.pro \
+freedrc \
 freeicd.pro \
 freeicd \
 freemedforms.pro \
@@ -211,6 +218,14 @@ tests \
 "
 
 SELECTED_SOURCES=$SCRIPT_SOURCE$RESOURCES$BUILDSPEC_SOURCES$LIBS_SOURCES$APP_SOURCES$PLUGINS_SOURCES$TEST_SOURCES
+}
+
+includeEdrcFiles()
+{
+SELECTED_SOURCES=$SELECTED_SOURCES" \
+global_resources/datapacks/appinstalled/edrc_ro/edrc.db \
+global_resources/datapacks/appinstalled/edrc_ro/readme.txt
+"
 }
 
 createSource()
@@ -392,13 +407,15 @@ createTag()
 
 prepareFileSelection
 
-while getopts "hr:sct" option
+while getopts "hr:sctd" option
 do
   case $option in
     h) showHelp
       exit 0
     ;;
     r) SVN_REVISION=$OPTARG
+    ;;
+    d) includeEdrcFiles
     ;;
   esac
 done

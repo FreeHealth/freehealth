@@ -26,9 +26,14 @@
 #include "appaboutpage.h"
 
 #include <utils/updatechecker.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_spashandupdate.h>
 
 #include <coreplugin/coreimpl.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
@@ -37,20 +42,15 @@
 #include <QApplication>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDate>
+#include <QFrame>
 
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
 
-static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
-        "<p align=center><b>Welcome to %1</b><br />"
-        "Copyright (C) 2008-2011 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
-        "<p align=left>This application is a stable release but can still contains some bugs.<br />"
-        "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more informations.<br />"
-        "<a href=\"%2\">Web site</a>"
-        "</p>"
-        );
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
@@ -64,7 +64,7 @@ AppAboutPage::~AppAboutPage()
 
 QString AppAboutPage::displayName() const
 {
-    return "1. " + tr("Application");
+    return tr("Application");
 }
 
 QString AppAboutPage::category() const
@@ -74,8 +74,10 @@ QString AppAboutPage::category() const
 
 int AppAboutPage::sortIndex() const
 {
-    return 10;
+    return 1;
 }
+
+#include <QDebug>
 
 QWidget *AppAboutPage::createPage(QWidget *parent)
 {
@@ -83,18 +85,39 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setSpacing(0);
     layout->setMargin(0);
+
+    // Splash label
+    QWidget *sw = new QWidget(w);
+    QHBoxLayout *swLayout = new QHBoxLayout(sw);
+    sw->setLayout(swLayout);
+    QLabel *splash = new QLabel(w);
+    splash->setPixmap(theme()->splashScreenPixmap(settings()->path(Core::ISettings::SplashScreen)));
+    splash->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    swLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Expanding));
+    swLayout->addWidget(splash);
+    swLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Expanding));
+    layout->addWidget(sw);
+    QFrame *line = new QFrame(w);
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    layout->addWidget(line);
+    layout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Fixed));
+
+    // Welcome label
     QLabel *label = new QLabel(w);
     label->setWordWrap(true);
     label->setOpenExternalLinks(true);
     layout->addWidget(label);
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
-    Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
-    QString tmp = tr(ABOUT_TEXT).arg(qApp->applicationName(), qApp->organizationDomain());
+        Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
+    QString tmp = tkTr(Trans::Constants::APPLICATION_ABOUT_YEAR_1_WEB_2)
+                   .arg(QDate::currentDate().year())
+                   .arg(qApp->organizationDomain());
     if (up->hasUpdate()) {
-        tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
+        tmp.append(tkTr(Trans::Constants::UPDATE_AVAILABLE));
     } else {
-        tmp.append("<br /><br />" + tkTr(Trans::Constants::VERSION_UPTODATE));
+        tmp.append(tkTr(Trans::Constants::VERSION_UPTODATE));
     }
     label->setText(tmp);
     return w;
@@ -102,7 +125,7 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
 
 QString CommandLineAboutPage::displayName() const
 {
-    return "5. " + tr("Command line");
+    return tr("Command line");
 }
 
 QString CommandLineAboutPage::category() const

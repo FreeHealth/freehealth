@@ -186,9 +186,21 @@ void ExtendedView::setCommands(const QStringList &commandsUid)
 {
     d->m_Actions = 0;
     foreach(const QString &uid, commandsUid) {
-        Core::Command *cmd = actionManager()->command(Core::Id(uid));
-        if (cmd)
-            d->m_ToolBar->addAction(cmd->action());
+        if (uid=="--") {
+            d->m_ToolBar->addSeparator();
+            continue;
+        } else if (uid=="->") {
+            QWidget *w = new QWidget(d->m_ToolBar);
+            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            w->setLayout(new QHBoxLayout(w));
+            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+            d->m_ToolBar->addWidget(w);
+            continue;
+        } else {
+            Core::Command *cmd = actionManager()->command(Core::Id(uid));
+            if (cmd)
+                d->m_ToolBar->addAction(cmd->action());
+        }
     }
     d->m_ToolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }

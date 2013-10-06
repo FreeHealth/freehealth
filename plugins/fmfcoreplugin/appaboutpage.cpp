@@ -26,6 +26,14 @@
  ***************************************************************************/
 #include "appaboutpage.h"
 
+#include <utils/updatechecker.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_spashandupdate.h>
+
+// TODO: improve this, rename the fmfcoreplugin -> coreplugin and move it into the freemedforms/plugins subdir
+#include <fmfcoreplugin/coreimpl.h>
+
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QSpacerItem>
@@ -34,17 +42,7 @@
 
 using namespace Core;
 using namespace Core::Internal;
-
-static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
-        "<p align=center><b>Welcome to FreeMedForms</b><br />"
-        "(C) 2008-%1 by Eric MAEKER, MD</p>"
-        "<p align=left>"
-//        "This application is an early alpha release. This means that some "
-//        "features are not yet implemented or may not work perfectly and that you may experience some bugs.<br/>"
-        "This software is released without any warranty and only for testing purposal.<br/>"
-        "Please refer to our <a href=\"%2\">web site</a> for more information.<br />"
-        "</p>"
-        );
+using namespace Trans::ConstantTranslations;
 
 AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
@@ -68,6 +66,15 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     layout->addWidget(label);
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
-    label->setText(tr(ABOUT_TEXT).arg(QDate::currentDate().year()).arg(qApp->organizationDomain()));
+    Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
+    QString tmp = tkTr(Trans::Constants::APPLICATION_ABOUT_YEAR_1_WEB_2)
+                   .arg(QDate::currentDate().year())
+                   .arg(qApp->organizationDomain());
+    if (up->hasUpdate()) {
+        tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
+    } else {
+        tmp.append("<br /><br />" + tkTr(Trans::Constants::VERSION_UPTODATE));
+    }
+    label->setText(tmp);
     return w;
 }

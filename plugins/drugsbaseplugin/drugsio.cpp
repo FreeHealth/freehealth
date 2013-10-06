@@ -1088,6 +1088,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *drugModel, const QString
         int index = xml.lastIndexOf(QString("</%1>").arg(XML_ROOT_TAG));
         Q_ASSERT(index != -1);
         xml.insert(index, "\n" + xmlExtraData + "\n");
+        // TODO: check the validity of the extra xml content before breaking the whole document
         doc.setContent(xml);
     }
 

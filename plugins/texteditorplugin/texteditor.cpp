@@ -207,12 +207,12 @@ public:
         if (m_Type & TextEditor::WithIO) {
             actions << Core::Constants::A_EDITOR_FILEOPEN
                     << Core::Constants::A_EDITOR_FILESAVE
-                    << Core::Constants::A_EDITOR_FILEPRINT
                     << "--"
                     ;
         }
 
-        actions << Core::Constants::A_FILE_PRINT
+        if (m_Type & TextEditor::Print)
+            actions << Core::Constants::A_FILE_PRINT
                 << "--";
 
         if (m_Type & TextEditor::Clipboard) {
@@ -365,6 +365,8 @@ void TextEditor::setTypes(Types type)
         context.add(Core::Constants::C_EDITOR_PARAGRAPH);
     if (type & TextEditor::Clipboard)
         context.add(Core::Constants::C_EDITOR_CLIPBOARD);
+    if (type & TextEditor::Print)
+        context.add(Core::Constants::C_EDITOR_PRINT);
     if (type & TextEditor::WithTables)
         context.add(Core::Constants::C_EDITOR_TABLE);
     if (type & TextEditor::WithIO)

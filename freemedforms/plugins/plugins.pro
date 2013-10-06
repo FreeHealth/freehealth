@@ -208,6 +208,13 @@ with-feedback {
     feedback.depends += core
 }
 
+with-edrc {
+    SUBDIRS += edrc
+    edrc.subdir = $${PLUGINS_PATH}/edrcplugin
+    edrc.depends += core
+    edrc.depends += texteditor
+    edrc.depends += listview
+}
 
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
 tools.depends += core

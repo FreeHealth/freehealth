@@ -68,6 +68,7 @@ public:
 
     void setActions(Views::Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);
+//    void setRightCommands(const QStringList &commandsUid);
     void addContext(const Core::Context &context);
 
     void hideButtons() const;

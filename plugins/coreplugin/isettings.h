@@ -99,7 +99,7 @@ public:
         // WWW
         WebSiteUrl,
         UpdateUrl,
-        Splashscreen
+        SplashScreen
     };
 
     ISettings(QObject *parent = 0) : QObject(parent) {}

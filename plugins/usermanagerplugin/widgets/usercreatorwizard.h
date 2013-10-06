@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERWIZARD_H
-#define USERWIZARD_H
+#ifndef USERPLUGIN_USERCREATORWIZARD_H
+#define USERPLUGIN_USERCREATORWIZARD_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
 
@@ -100,4 +100,4 @@ private:
 }  // End namespace UserPlugin
 
 
-#endif // USERWIZARD_H
+#endif // USERPLUGIN_USERCREATORWIZARD_H

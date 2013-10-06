@@ -147,6 +147,7 @@ MainWindow::MainWindow(QWidget *parent) :
 /**
  * Initialize the main window.\n
  * Creates menus, actions and the modeWidget
+ * \sa Core::IMainWindow, Core::MainWindowActions, Core::MainWindowActionHandler
  */
 void MainWindow::init()
 {
@@ -267,6 +268,7 @@ MainWindow::~MainWindow()
  * Third step of initialization after the core gets fuly opened.
  * Manages user, menus and actions translations, finish splashscreen
  * show UI.
+ * \sa Core::ICore::coreOpened()
  */
 void MainWindow::postCoreInitialization()
 {

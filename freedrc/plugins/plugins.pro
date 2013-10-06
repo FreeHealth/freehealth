@@ -6,9 +6,9 @@ SUBDIRS = \
     printer \
     texteditor \
     listview \
-    zipcodes \
-    datapack \
-    identity \
+#    zipcodes \
+#    datapack \
+#    identity \
     edrc
 
 core.subdir = coreplugin
@@ -28,15 +28,26 @@ listview.depends += core
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
 
-zipcodes.subdir = zipcodesplugin
-zipcodes.depends += core
+#zipcodes.subdir = zipcodesplugin
+#zipcodes.depends += core
 
-datapack.subdir = datapackplugin
-datapack.depends += core
+#datapack.subdir = datapackplugin
+#datapack.depends += core
 
-identity.subdir = identityplugin
-identity.depends += core
-identity.depends += zipcodes
+#identity.subdir = identityplugin
+#identity.depends += core
+#identity.depends += zipcodes
 
 edrc.subdir   = edrcplugin
 edrc.depends += core
+edrc.depends += listview
+edrc.depends += texteditor
+
+# optional plugins
+include(../../buildspecs/optionalplugins.pri)
+
+with-pad {
+    SUBDIRS += padtools
+    padtools.subdir = padtoolsplugin
+    padtools.depends += core
+}

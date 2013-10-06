@@ -26,10 +26,11 @@
 #include "appaboutpage.h"
 
 #include <utils/updatechecker.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_spashandupdate.h>
+#include <translationutils/trans_current.h>
 
 #include <coreplugin/coreimpl.h>
-#include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -42,16 +43,6 @@
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
-
-static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
-        "<p align=center><b>Welcome to FreeDiams</b><br />"
-        "(C) 2008-%1 by Eric MAEKER, MD</p>"
-        "<p align=left>This application is a stable release but can still contains some bugs.<br />"
-        "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more information.<br />"
-        "<a href=\"%2\">Web site</a>"
-        "</p>"
-        );
 
 AppAboutPage::AppAboutPage(QObject *parent) :
         IAboutPage(parent)
@@ -76,7 +67,9 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
     Utils::UpdateChecker *up = Core::ICore::instance()->updateChecker();
-    QString tmp = tr(ABOUT_TEXT).arg(QDate::currentDate().year()).arg(qApp->organizationDomain());
+    QString tmp = tkTr(Trans::Constants::APPLICATION_ABOUT_YEAR_1_WEB_2)
+                   .arg(QDate::currentDate().year())
+                   .arg(qApp->organizationDomain());
     if (up->hasUpdate()) {
         tmp.append("<br /><br />" + tkTr(Trans::Constants::UPDATE_AVAILABLE));
     } else {

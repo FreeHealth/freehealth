@@ -143,9 +143,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     m_Text->setDocumentTitle(m_FormItem->spec()->label());
     hb->addWidget(m_Text);
     if (options.contains("expanded", Qt::CaseInsensitive)) {
-        // TODO: add a filterEvent and resize the textEditor to the maximum of the parent's scroolbar content.
         m_Text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_Text->setMinimumHeight(1000);
     }
     if (!options.contains("TabKeepsFocus", Qt::CaseInsensitive)) {
         m_Text->textEdit()->setTabChangesFocus(true);

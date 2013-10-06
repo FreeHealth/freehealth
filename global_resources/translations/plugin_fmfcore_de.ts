@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
-    <name>AboutDialog</name>
-    <message>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Core::AppConfigWizard</name>
     <message>
         <source>Application Configurator Wizard</source>
@@ -840,13 +833,6 @@ Please check out the log files and contact your administrator.</source>
     </message>
 </context>
 <context>
-    <name>ThemePrivate</name>
-    <message>
-        <source>ERROR - Theme: Unable to load icon file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>tkConstants</name>
     <message>
         <source>FreeDiams Prescriptions (*.di)</source>
@@ -864,6 +850,10 @@ but does not contains all other form items.</source>
     </message>
     <message>
         <source>This token namespace contains all user&apos;s related tokens.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FreeDRC Consultation files (*.cr)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

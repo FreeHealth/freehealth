@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "coreimpl.h"
-#include "freeaccount_constants.h"
+#include "drc_constants.h"
 
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>
@@ -81,13 +81,15 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_User(0),
         m_PadTools(0)
 {
-    setObjectName("FreeAccount::Core");
+    setObjectName("FreeDrc::Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDRC_UPDATE_URL);
-    m_Settings->setPath(ISettings::Splashscreen, Constants::FREEDRC_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEDRC_SPLASHSCREEN);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
+
+    m_Theme->createSplashScreen(Constants::FREEDRC_SPLASHSCREEN);
 
     m_Patient = new Patient(this);
 
@@ -109,9 +111,6 @@ CoreImpl::CoreImpl(QObject *parent) :
     bool logChrono = m_CommandLine->value(ICommandLine::Chrono).toBool();
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
-
-    m_Settings->setPath(Core::ISettings::Splashscreen, Constants::FREEACCOUNT_SPLASHSCREEN);
-    m_Theme->createSplashScreen(Constants::FREEACCOUNT_SPLASHSCREEN);
 
     // add translators
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::INITIALIZING_TRANSLATIONS));

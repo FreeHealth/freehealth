@@ -261,6 +261,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         mainLayout->setSpacing(0);
         mainLayout->setMargin(0);
         mainWidget = new QWidget(this);
+        mainWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         // create container layout
         m_ContainerLayout = new QGridLayout(mainWidget);
         // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
@@ -288,7 +289,6 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     }
 
     mainLayout->addWidget(mainWidget);
-    mainLayout->addStretch();
     createActions();
     hideAndClearValidationMessage();
 

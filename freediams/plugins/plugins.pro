@@ -41,9 +41,6 @@ printer.subdir   = printerplugin
 printer.depends += core
 printer.depends += texteditor
 
-#saverestore.subdir = saverestoreplugin
-#saverestore.depends = core
-
 texteditor.subdir   = texteditorplugin
 texteditor.depends += core
 

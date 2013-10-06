@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Categories=Science;
+Name=FreeDRC
+GenericName=eDRC coding assistant
+Comment=eDRC-SFMG coding assistant
+Comment[fr]=Assistant de codage eDRC-SFMG
+TryExec=freedrc
+Exec=freedrc
+Icon=freedrc
+
+

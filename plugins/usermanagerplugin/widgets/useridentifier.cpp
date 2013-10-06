@@ -85,7 +85,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     m_ui->loginWidget->togglePasswordEcho(false);
 
     // Get splash & resize
-    QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::Splashscreen));
+    QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::SplashScreen));
     if (splash.size().width() > 300)
         splash = splash.scaledToWidth(300);
     m_ui->lblAppName->setMinimumSize(splash.size() + QSize(10,10));

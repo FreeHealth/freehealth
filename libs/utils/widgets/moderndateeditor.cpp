@@ -41,9 +41,11 @@
 #include <utils/datevalidator.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/trans_agenda.h>
 
 #include <QAction>
 #include <QToolButton>
+#include <QTimer>
 #include <QDebug>
 
 using namespace Utils;
@@ -90,9 +92,14 @@ public:
 //            _leftButton->setFocusPolicy(Qt::ClickFocus);
             _leftButton->setPopupMode(QToolButton::InstantPopup);
             // Create the menu
+            QAction *sep = new QAction(q);
+            sep->setSeparator(true);
             aShortDisplay = new QAction(q);
             aLongDisplay = new QAction(q);
             aNumericDisplay = new QAction(q);
+            aToday = new QAction(q);
+            _leftButton->addAction(aToday);
+            _leftButton->addAction(sep);
             _leftButton->addAction(aLongDisplay);
             _leftButton->addAction(aShortDisplay);
             _leftButton->addAction(aNumericDisplay);
@@ -100,9 +107,10 @@ public:
             q->retranslate();
             _leftButton->setIcon(QIcon(fullAbsPath));
             q->setLeftButton(_leftButton);
-            QObject::connect(_leftButton, SIGNAL(triggered(QAction*)), q, SLOT(formatActionTriggered(QAction*)));
+            QObject::connect(_leftButton, SIGNAL(triggered(QAction*)), q, SLOT(onLeftButtonActionTriggered(QAction*)));
         }
         _leftButton->setIcon(QIcon(fullAbsPath));
+        aToday->setIcon(QIcon(fullAbsPath));
         aShortDisplay->setIcon(QIcon(fullAbsPath));
         aLongDisplay->setIcon(QIcon(fullAbsPath));
         aNumericDisplay->setIcon(QIcon(fullAbsPath));
@@ -113,7 +121,7 @@ public:
     QDate m_maximumDate;
     QDate m_minimumDate;
     QToolButton *_rightButton, *_leftButton;
-    QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay;
+    QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay, *aToday;
     DateValidator *_validator;
     QString _defaultEditingFormat;
 
@@ -303,9 +311,13 @@ void ModernDateEditor::updateDisplayText()
 }
 
 /** Private slot */
-void ModernDateEditor::formatActionTriggered(QAction *a)
+void ModernDateEditor::onLeftButtonActionTriggered(QAction *a)
 {
-    Q_UNUSED(a);
+    if (a==d_de->aToday) {
+        setDate(QDate::currentDate());
+        // redefine default action using a differed slot to keep QBLE informed
+        QTimer::singleShot(10, d_de->aLongDisplay, SLOT(trigger()));
+    }
     updateDisplayText();
 }
 
@@ -334,6 +346,10 @@ void ModernDateEditor::retranslate()
         d_de->aNumericDisplay->setText(tkTr(Trans::Constants::SHOW_NUMERIC_FORMAT));
         d_de->aNumericDisplay->setToolTip(d_de->aNumericDisplay->text());
         d_de->aNumericDisplay->setData(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    }
+    if (d_de->aToday) {
+        d_de->aToday->setText(tkTr(Trans::Constants::TODAY));
+        d_de->aToday->setToolTip(d_de->aToday->text());
     }
     d_de->_validator->translateFormats();
 }

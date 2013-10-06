@@ -77,6 +77,12 @@ public:
 
     void setAlternatingRowColors(bool enable) {itemView()->setAlternatingRowColors(enable);}
 
+    void setVerticalScrollMode(QAbstractItemView::ScrollMode mode) {itemView()->setVerticalScrollMode(mode);}
+    QAbstractItemView::ScrollMode verticalScrollMode() const {return itemView()->verticalScrollMode();}
+
+    void setItemDelegate(QAbstractItemDelegate *delegate) {itemView()->setItemDelegate(delegate);}
+    QAbstractItemDelegate *itemDelegate() const {return itemView()->itemDelegate();}
+
 protected:
     void setItemView(QAbstractItemView *view);
 

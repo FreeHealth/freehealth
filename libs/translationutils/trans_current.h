@@ -100,6 +100,8 @@ const char* const NON_BLOCKING_ALERT            = QT_TRANSLATE_NOOP("tkConstants
 const char* const MESSAGE_HEADER                = QT_TRANSLATE_NOOP("tkConstants", "Message header");
 const char* const MESSAGE_CONTENT               = QT_TRANSLATE_NOOP("tkConstants", "Message content");
 
+const char* const HISTORY                       = QT_TRANSLATE_NOOP("tkConstants", "History");
+
 // The "related to"
 const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");
 const char* const RELATED_TO_PATIENT_1          = QT_TRANSLATE_NOOP("tkConstants", "related to patient %1");
@@ -150,7 +152,19 @@ const char* const ALERT_PACKS                       = QT_TRANSLATE_NOOP("tkConst
 const char* const BINARY_PACKS                      = QT_TRANSLATE_NOOP("tkConstants", "Binary packs");
 const char* const VARIOUS                           = QT_TRANSLATE_NOOP("tkConstants", "Various");
 
-} // end Constants
-} // end TranslationUtils
+// About page
+const char* const APPLICATION_ABOUT_YEAR_1_WEB_2 =
+        QT_TRANSLATE_NOOP("tkConstants",
+                          "<p align=center><b>Welcome to FreeMedForms project</b><br />"
+                          "(C) 2008-%1 by Eric MAEKER, MD (France)</p>"
+                          "<p align=left>"
+                          "This software is released without any warranty and only "
+                          "for testing purposal.<br/>"
+                          "Please refer to our <a href=\"%2\">web site</a> for more "
+                          "information.<br />"
+                          "</p>");
+
+} // namespace Constants
+} // namespace TranslationUtils
 
 #endif // CONSTANTTRANSLATIONS_CURRENT_H

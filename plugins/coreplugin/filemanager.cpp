@@ -107,7 +107,6 @@ void FileManager::getRecentFilesFromSettings()
 void FileManager::getMaximumRecentFilesFromSettings()
 {
     Core::ISettings *s = settings();
-    m_recentFiles.clear();
     s->beginGroup(Constants::S_RECENTFILES_GROUP);
     if (m_Key.isEmpty())
         m_maxRecentFiles = s->value(Constants::S_RECENTFILES_MAX_KEY, m_maxRecentFiles).toInt();

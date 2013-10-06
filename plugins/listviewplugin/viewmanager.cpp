@@ -121,28 +121,20 @@ void ViewManager::updateContext(Core::IContext *object, const Core::Context &add
 
 /////////////////////////////////////////////////////////////////////////// Action Handler
 ViewActionHandler::ViewActionHandler(QObject *parent) :
-        QObject(parent),
-        aAddRow(0),
-        aRemoveRow(0),
-        aDown(0),
-        aUp(0),
-        aEdit(0),
-        m_CurrentView(0)
+    QObject(parent),
+    aAddRow(0),
+    aRemoveRow(0),
+    aDown(0),
+    aUp(0),
+    aEdit(0),
+    aClear(0),
+    m_CurrentView(0)
 {
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
-    Core::Context basicContext(Constants::C_BASIC);
+//    Core::Context basicContext(Constants::C_BASIC);
     Core::Context addContext(Constants::C_BASIC_ADDREMOVE);
     Core::Context moveContext(Constants::C_BASIC_MOVE);
-
-//    Core::Context allContexts;
-//    allContexts << basicContext << addContext << moveContext;
-//    // register already existing menu actions
-//    aUndo = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
-//    aRedo = registerAction(Core::Constants::A_EDIT_REDO,  allContexts, this);
-//    aCut = registerAction(Core::Constants::A_EDIT_CUT,   allContexts, this);
-//    aCopy = registerAction(Core::Constants::A_EDIT_COPY,  allContexts, this);
-//    aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
 
     // Editor's Contextual Menu
     Core::ActionContainer *editMenu = am->actionContainer(Core::Constants::M_EDIT);
@@ -187,6 +179,13 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
     cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
     connect(a, SIGNAL(triggered()), this, SLOT(moveUp()));
 
+    a = aClear = new QAction(this);
+    a->setObjectName("ListView.aClear");
+    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
+    cmd = am->registerAction(a, Core::Id(Core::Constants::A_LIST_CLEAR), moveContext);
+    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
+    cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
+    // TODO: the clear action cannot be directly connected to views
 }
 
 void ViewActionHandler::setCurrentView(IView *view)

@@ -150,16 +150,27 @@ ListView::~ListView()
     }
 }
 
+/** Returns the QAbstractItemView of this overloaded contextualized listview */
 QAbstractItemView *ListView::itemView() const
 {
     return d->m_ListView;
 }
 
+/** Define the column model to use in the view */
 void ListView::setModelColumn(int column)
 {
     d->m_ListView->setModelColumn(column);
 }
 
+/**
+ * Define the default actions to use in the toolbar.
+ * Actions are presented in the left part of the tool bar.
+ * \code
+ * +------------------------+
+ * | HERE                   |
+ * +------------------------+
+ * \endcode
+*/
 void ListView::setActions(Constants::AvailableActions actions)
 {
     d->m_Actions = actions;
@@ -167,6 +178,15 @@ void ListView::setActions(Constants::AvailableActions actions)
     d->m_ExtView->setActions(actions);
 }
 
+/**
+ * Replace default actions with the Core::Command using their uuid from \e commandsUid.
+ * Actions are presented in the left part of the tool bar.
+ * \code
+ * +------------------------+
+ * | HERE                   |
+ * +------------------------+
+ * \endcode
+*/
 void ListView::setCommands(const QStringList &commandsUid)
 {
     d->m_Actions = 0;
@@ -174,6 +194,10 @@ void ListView::setCommands(const QStringList &commandsUid)
     d->m_ExtView->setCommands(commandsUid);
 }
 
+//void ListView::setRightCommands(const QStringList &commandsUid)
+//{}
+
+/** Add a context to this contextual widget */
 void ListView::addContext(const Core::Context &context)
 {
     Core::Context current = d->m_Context->context();
@@ -191,6 +215,7 @@ void ListView::showButtons()
     d->m_ExtView->showButtons();
 }
 
+/** Show contextual menu in the view using the same actions as the toolbar */
 void ListView::useContextMenu(bool state)
 {
     d->m_ExtView->useContextMenu(state);

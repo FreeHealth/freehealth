@@ -42,6 +42,7 @@ namespace Core {
 namespace Constants {
 
 const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
+const char* const   FREEDRC_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDRC Consultation files (*.cr)");
 const char* const   FREEMEDFORMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeMedForms Forms File (*.xml)");
 
 }  // end Constants

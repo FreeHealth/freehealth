@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 #include "commandlineparser.h"
-#include "freeaccount_constants.h"
+#include "drc_constants.h"
 
 #include <coreplugin/ipatient.h>
 

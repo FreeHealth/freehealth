@@ -49,8 +49,7 @@ namespace Constants {
         DefaultActions = AddRemove,
         AllActions     = AddRemove | MoveUpDown
     };
-    Q_DECLARE_FLAGS( AvailableActions, AvailableAction );
-
+    Q_DECLARE_FLAGS(AvailableActions, AvailableAction)
 
 }  // End namespace Constants
 }  // End namespace Views

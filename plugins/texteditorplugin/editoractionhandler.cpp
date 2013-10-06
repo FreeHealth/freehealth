@@ -147,12 +147,14 @@ void EditorActionHandler::createContexts()
     paragraphContext = Core::Context(Core::Constants::C_EDITOR_PARAGRAPH);
     clipboardContext = Core::Context(Core::Constants::C_EDITOR_CLIPBOARD);
     ioContext = Core::Context(Core::Constants::C_EDITOR_IO);
+    printContext = Core::Context(Core::Constants::C_EDITOR_IO);
     tableContext = Core::Context(Core::Constants::C_EDITOR_TABLE);
     textAdderContext = Core::Context(Core::Constants::C_EDITOR_ADDTEXT);
     allContexts.add(charContext);
     allContexts.add(paragraphContext);
     allContexts.add(clipboardContext);
     allContexts.add(ioContext);
+    allContexts.add(printContext);
     allContexts.add(tableContext);
     allContexts.add(textAdderContext);
 }
@@ -183,7 +185,7 @@ void EditorActionHandler::createMenus()
     if (!m_FormatMenu) {
         rootMenu->appendGroup(Core::Constants::G_FORMAT);
         m_FormatMenu = actionManager()->createMenu(Core::Constants::M_FORMAT);
-        rootMenu->addMenu(m_FormatMenu, Core::Constants::G_FORMAT);
+//        rootMenu->addMenu(m_FormatMenu, Core::Constants::G_FORMAT);
         m_FormatMenu->setTranslations(Trans::Constants::M_FORMAT_TEXT);
         m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT));
         m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_PARAGRAPH));
@@ -195,7 +197,7 @@ void EditorActionHandler::createMenus()
     m_FontMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_FONT);
     if (!m_FontMenu) {
         m_FontMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_FONT);
-        m_FormatMenu->addMenu(m_FontMenu, Core::Constants::G_FORMAT_FONT);
+//        m_FormatMenu->addMenu(m_FontMenu, Core::Constants::G_FORMAT_FONT);
         m_FontMenu->setTranslations(Trans::Constants::M_FORMAT_FONT_TEXT);
         m_FontMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT_BASE));
         m_FontMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT_SIZE));
@@ -205,7 +207,7 @@ void EditorActionHandler::createMenus()
     m_ParagraphMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_PARAGRAPH);
     if (!m_ParagraphMenu) {
         m_ParagraphMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_PARAGRAPH);
-        m_FormatMenu->addMenu(m_ParagraphMenu, Core::Constants::G_FORMAT_PARAGRAPH);
+//        m_FormatMenu->addMenu(m_ParagraphMenu, Core::Constants::G_FORMAT_PARAGRAPH);
         m_ParagraphMenu->setTranslations(Trans::Constants::M_FORMAT_PARAGRAPH_TEXT);
         m_ParagraphMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_PARAGRAPH));
     }
@@ -213,7 +215,7 @@ void EditorActionHandler::createMenus()
     m_TableMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_TABLE);
     if (!m_TableMenu) {
         m_TableMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_TABLE);
-        m_FormatMenu->addMenu(m_TableMenu, Core::Constants::G_FORMAT_TABLE);
+//        m_FormatMenu->addMenu(m_TableMenu, Core::Constants::G_FORMAT_TABLE);
         m_TableMenu->setTranslations(Trans::Constants::M_FORMAT_TABLE_TEXT);
         m_TableMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_TABLE));
 //        m_TableMenu->setEmptyAction(ActionContainer::EA_Hide);
@@ -222,7 +224,7 @@ void EditorActionHandler::createMenus()
     m_AddTextMenu = actionManager()->actionContainer(Core::Constants::M_EDITOR_ADDTEXT);
     if (!m_AddTextMenu) {
         m_AddTextMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_ADDTEXT);
-        m_EditMenu->addMenu(m_AddTextMenu, Core::Constants::G_EDIT_EDITOR);
+//        m_EditMenu->addMenu(m_AddTextMenu, Core::Constants::G_EDIT_EDITOR);
         m_AddTextMenu->setTranslations(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT);
     }
 }
@@ -238,10 +240,10 @@ void EditorActionHandler::createActions()
 
     // Print
     if (!actionManager()->command(Core::Constants::A_FILE_PRINT)) {
-        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, allContexts, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
+        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, printContext, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
         aPrint->setEnabled(false);
     } else {
-        aPrint = registerAction(Core::Constants::A_FILE_PRINT, allContexts, this);
+        aPrint = registerAction(Core::Constants::A_FILE_PRINT, printContext, this);
     }
 
     // Undo / Redo / Copy / Cut / Paste

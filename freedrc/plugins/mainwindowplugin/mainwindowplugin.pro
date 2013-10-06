@@ -19,7 +19,8 @@ SOURCES = mainwindowplugin.cpp \
     mainwindowpreferences.cpp
 
 FORMS = mainwindow.ui \
-    mainwindowpreferenceswidget.ui
+    mainwindowpreferenceswidget.ui \
+    headerwidget.ui
 
 # include translations
 TRANSLATION_NAME = famainwindow

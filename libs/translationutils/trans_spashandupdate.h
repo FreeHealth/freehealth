@@ -39,7 +39,7 @@ enum CheckUpdateRepresentation {  // Never change the order of this enum
     CheckUpdate_Never
 };
 
-// Splashscreen messages
+// SplashScreen messages
 const char* const USING_LIBRARY_1                   = QT_TRANSLATE_NOOP("tkConstants", "Using library: %1");
 const char* const STARTING_APPLICATION_AT_1         = QT_TRANSLATE_NOOP("tkConstants", "Starting application at %1");
 const char* const INITIALIZING_TRANSLATIONS         = QT_TRANSLATE_NOOP("tkConstants", "Initializing translations...");

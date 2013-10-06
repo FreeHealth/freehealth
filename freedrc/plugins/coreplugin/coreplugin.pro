@@ -13,7 +13,7 @@ HEADERS += coreplugin.h \
     appaboutpage.h \
     commandlineparser.h \
     patient.h \
-    freeaccount_constants.h
+    drc_constants.h
 
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
@@ -22,7 +22,7 @@ SOURCES += coreplugin.cpp \
     patient.cpp
 
 # include translations
-TRANSLATION_NAME = facore
+TRANSLATION_NAME = freedrc_core
 include($${SOURCES_ROOT_PATH}/buildspecs/translations.pri)
 
 OTHER_FILES += $${PWD}/Core.pluginspec

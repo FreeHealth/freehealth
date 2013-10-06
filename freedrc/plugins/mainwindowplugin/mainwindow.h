@@ -23,14 +23,11 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEACCOUNT_MAINWINDOW_H
-#define FREEACCOUNT_MAINWINDOW_H
+#ifndef FREEDRC_PLUGIN_MAINWINDOW_H
+#define FREEDRC_PLUGIN_MAINWINDOW_H
 
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
-
-// include Qt headers
-#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -45,14 +42,23 @@ QT_END_NAMESPACE
  * \date 03 Oct 2010
 */
 
+namespace eDRC {
+namespace Internal {
+class CrTreeModel;
+} // namespace Internal
+} // namespace eDRC
+
 namespace MainWin {
 namespace Internal {
+//class MainWindowToken;
+
 namespace Ui {
 class MainWindow;
+class HeaderWidget;
 }  // End Ui
 }  // End Internal
 
-class FACCOUNTMAINWIN_EXPORT MainWindow: public Core::IMainWindow
+class FREEDRC_MAINWIN_EXPORT MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
     enum { MaxRecentFiles = 10 };
@@ -70,17 +76,12 @@ public:
     void readSettings();
     void writeSettings();
     void createStatusBar();
-    void changeFontTo(const QFont &font);
-
 
 public Q_SLOTS: // Interface of MainWidowActionHandler
     bool newFile();
     bool openFile();
-    void readFile(const QString &file);
     bool saveFile();
     bool saveAsFile();
-    bool print();
-    bool printPreview();
 
     bool applicationPreferences();
     bool configureMedintux();
@@ -90,19 +91,24 @@ public Q_SLOTS: // Interface of MainWidowActionHandler
     void aboutToShowRecentFiles();
     void openRecentFile();
 
-    void userChanged();
-
 protected:
-    void closeEvent( QCloseEvent *event );
+    void closeEvent(QCloseEvent *event);
     void changeEvent(QEvent *event);
+
+private:
+    bool saveFileContent(const QString &file);
+    void readFile(const QString &file);
 
 private Q_SLOTS:
     void postCoreOpened();
 
 public:
     Internal::Ui::MainWindow *ui;
+    Internal::Ui::HeaderWidget *_headerWidget;
+    eDRC::Internal::CrTreeModel *_crTreeModel;
+//    Internal::MainWindowToken *_patientToken, *_dateToken;
 };
 
-} // End Core
+} // End MainWin
 
-#endif  // FREEACCOUNT_MAINWINDOW_H
+#endif  // FREEDRC_PLUGIN_MAINWINDOW_H

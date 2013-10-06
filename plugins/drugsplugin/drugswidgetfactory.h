@@ -51,7 +51,7 @@ class QPushButton;
 QT_END_NAMESPACE
 
 /**
- * \file drugswidget.h
+ * \file drugswidgetfactory.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
  * \date 01 Nov 2011
