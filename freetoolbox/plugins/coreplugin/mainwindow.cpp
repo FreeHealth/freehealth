@@ -302,8 +302,8 @@ void MainWindow::preparePages()
 
 //    ui->pageTree->sortItems(0, Qt::AscendingOrder);
 
-//    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->pageTree), 0);
-//    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->layoutWidget), 1);
+    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->pageTree), 1);
+    ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->layoutWidget), 2);
 }
 
 /** When a page is selected shows the corresponding widget */
