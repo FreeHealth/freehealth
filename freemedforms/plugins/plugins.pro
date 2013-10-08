@@ -214,6 +214,7 @@ with-edrc {
     edrc.depends += core
     edrc.depends += texteditor
     edrc.depends += listview
+    edrc.depends += formmanager # FreeMedForms EMR only
 }
 
 tools.subdir   = $${PLUGINS_PATH}/toolsplugin
