@@ -190,6 +190,7 @@ plugins/datapackplugin \
 plugins/druginteractionsplugin \
 plugins/drugsbaseplugin \
 plugins/drugsplugin \
+plugins/edrcplugin \
 plugins/emptyplugin \
 plugins/feedbackplugin \
 plugins/fmfcoreplugin \
