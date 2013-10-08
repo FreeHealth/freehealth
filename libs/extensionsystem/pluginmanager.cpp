@@ -675,11 +675,21 @@ void PluginManager::startTests()
         methods.append("arg0");
         // We only want slots starting with "test"
         for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
+#if QT_VERSION < 0x050000
+            // Qt4
             if (QByteArray(mo->method(i).signature()).startsWith("test") &&
                 !QByteArray(mo->method(i).signature()).endsWith("_data()")) {
                 QString method = QString::fromLatin1(mo->method(i).signature());
                 methods.append(method.left(method.size()-2));
             }
+#else
+            // Qt5
+            if (QByteArray(mo->method(i).methodSignature()).startsWith("test") &&
+                !QByteArray(mo->method(i).methodSignature()).endsWith("_data()")) {
+                QString method = QString::fromLatin1(mo->method(i).methodSignature());
+                methods.append(method.left(method.size()-2));
+            }
+#endif
         }
         // Don't run QTest::qExec with only one argument, that'd run
         // *all* slots as tests.
