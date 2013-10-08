@@ -35,29 +35,25 @@ SOURCES_ROOT_PATH=""
 # Some path definition
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
-  SCRIPT_PATH=`dirname $0`
+    SCRIPT_PATH=`dirname $0`
 else
-  SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
+    SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
 fi
 SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
 
-# get version number of FreeDiams from the project file
+# get version number of the project
 PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
 showHelp()
 {
-echo "$SCRIPT_NAME builds FreeMedForms source package, GIT branches and tags."
-echo "Project version: $PROJECT_VERSION"
-echo
-echo "Usage: $SCRIPT_NAME -r 123"
-echo "Options:"
-#echo "  -s  Build the source package"
-#echo "  -c  Create a branch. Specify the revision number using the -r option"
-#echo "  -t  Create the tag. Specify the revision number using the -r option"
-echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
-echo "  -r  Specify the revision number to use for the branches or tags generation"
-echo "  -h  Show this help"
-echo
+    echo "$SCRIPT_NAME builds FreeMedForms source package, GIT branches and tags."
+    echo "Project version: $PROJECT_VERSION"
+    echo
+    echo "Usage: $SCRIPT_NAME -r 123"
+    echo "Options:"
+    echo "  -d  Include eDRC non-free datapack in datapacks/appinstalled"
+    echo "  -h  Show this help"
+    echo
 }
 
 cd $SCRIPT_PATH"/.."
@@ -231,175 +227,90 @@ global_resources/datapacks/appinstalled/edrc_ro/readme.txt
 
 createSource()
 {
-# create sources tmp path
-PACKPATH=$SCRIPT_PATH/freemedforms-$PROJECT_VERSION
-if [ -e $PACKPATH ]; then
+    # create sources tmp path
+    PACKPATH=$SCRIPT_PATH/freemedforms-$PROJECT_VERSION
+    if [ -e $PACKPATH ]; then
+        rm -R $PACKPATH
+    fi
+    mkdir $PACKPATH
+
+    tar -cf $PACKPATH/sources.tar \
+    --exclude '.git' --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
+    --exclude '_protected' --exclude '__nonfree__' --exclude 'nonfree' \
+    --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'zlib-1.2.3' \
+    --exclude 'rushes' --exclude 'doxygen' \
+    --exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' --exclude '*autosave' \
+    --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
+    --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
+    --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \
+    --exclude 'global_resources/databases' \
+    --exclude 'sources.tar' \
+    $EXCLUSIONS \
+    $SELECTED_SOURCES
+
+    echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
+    tar xf $PACKPATH/sources.tar -C $PACKPATH
+    rm $PACKPATH/sources.tar
+    find $PACKPATH -type f -exec chmod -R 666 {} \;
+
+    echo "   * DEFINING *.ISS FILES APP VERSION"
+    cd $PACKPATH/global_resources/package_helpers
+    FILES=`find ./ -type f -name '*.iss'`
+    for f in $FILES; do
+        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+    done
+    rm *.*bkup
+    echo "   * DEFINING *.BAT FILES APP VERSION"
+    cd $PACKPATH/scripts
+    FILES=`find ./ -type f -name '*.bat'`
+    for f in $FILES; do
+        sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+    done
+    rm *.*bkup
+
+    echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
+    cd $PACKPATH
+    FILES=`find ./ -type f -name '*.pluginspec'`
+    NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' '.' | tr '-' '.' | cut -d"." -f1,2,3`
+    for f in $FILES; do
+        # compatVersion="0.6.0"
+        sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
+        rm $f"bkup"
+        # version="0.6.0"
+        sed -i "bkup" 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
+        rm $f"bkup"
+        sed -i "bkup" 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
+        rm $f"bkup"
+    done
+
+    echo "   * ADDING LIBRARY VERSION NUMBER"
+    cd $PACKPATH/libs
+    find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
+    find . -type f -name '*.probkup' -exec rm {} \;
+
+    echo "   * REMOVING TEST VERSION IN FORMS"
+    cd $PACKPATH/global_resources/forms
+    find . -type f -name '*.xml' -exec sed -i bkup 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
+    find . -type f -name '*.xmlbkup' -exec rm {} \;
+
+    # git version is computed in the buildspecs/githash.pri
+    # but the source package needs a static reference
+    # while source package does not include the git logs
+    GITHASH=`git rev-parse HEAD`
+    echo "   * SETTING GIT revision hash to " $GITHASH
+    sed -i bkup 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
+    rm $PACKPATH/buildspecs/githash.pribkup
+
+    echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
+    cd $SCRIPT_PATH
+    tar czf ../freemedformsfullsources-$PROJECT_VERSION.tgz  ./freemedforms-$PROJECT_VERSION
+
+    echo "**** CLEANING TMP SOURCES PATH ****"
     rm -R $PACKPATH
-fi
-mkdir $PACKPATH
 
-tar -cf $PACKPATH/sources.tar \
---exclude '.git' --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
---exclude '_protected' --exclude '__nonfree__' --exclude 'nonfree' \
---exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'zlib-1.2.3' \
---exclude 'rushes' --exclude 'doxygen' \
---exclude 'Makefile*' --exclude '*.pro.user*' --exclude '*bkup' --exclude '*autosave' \
---exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
---exclude '*.app' --exclude '*.zip' --exclude '*.a' \
---exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' --exclude '*.dylib' \
---exclude 'global_resources/databases' \
---exclude 'sources.tar' \
-$EXCLUSIONS \
-$SELECTED_SOURCES
+    PWD=`pwd`
 
-echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
-tar xf $PACKPATH/sources.tar -C $PACKPATH
-rm $PACKPATH/sources.tar
-find $PACKPATH -type f -exec chmod -R 666 {} \;
-
-echo "   * DEFINING *.ISS FILES APP VERSION"
-cd $PACKPATH/global_resources/package_helpers
-FILES=`find ./ -type f -name '*.iss'`
-for f in $FILES; do
-  sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
-done
-rm *.*bkup
-echo "   * DEFINING *.BAT FILES APP VERSION"
-cd $PACKPATH/scripts
-FILES=`find ./ -type f -name '*.bat'`
-for f in $FILES; do
-  sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
-done
-rm *.*bkup
-
-echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
-cd $PACKPATH
-FILES=`find ./ -type f -name '*.pluginspec'`
-NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' '.' | tr '-' '.' | cut -d"." -f1,2,3`
-for f in $FILES; do
-  # compatVersion="0.6.0"
-  sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
-  rm $f"bkup"
-  # version="0.6.0"
-  sed -i "bkup" 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
-  rm $f"bkup"
-  sed -i "bkup" 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
-  rm $f"bkup"
-done
-
-echo "   * ADDING LIBRARY VERSION NUMBER"
-cd $PACKPATH/libs
-find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
-find . -type f -name '*.probkup' -exec rm {} \;
-
-echo "   * REMOVING TEST VERSION IN FORMS"
-cd $PACKPATH/global_resources/forms
-find . -type f -name '*.xml' -exec sed -i bkup 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
-find . -type f -name '*.xmlbkup' -exec rm {} \;
-
-# git version is computed in the buildspecs/githash.pri
-# but the source package needs a static reference
-# while source package does not include the git logs
-GITHASH=`git rev-parse HEAD`
-echo "   * SETTING GIT revision hash to " $GITHASH
-sed -i bkup 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
-rm $PACKPATH/buildspecs/githash.pribkup
-
-echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
-cd $SCRIPT_PATH
-tar czf ../freemedformsfullsources-$PROJECT_VERSION.tgz  ./freemedforms-$PROJECT_VERSION
-
-echo "**** CLEANING TMP SOURCES PATH ****"
-rm -R $PACKPATH
-
-PWD=`pwd`
-
-echo "*** Source package successfully created at `pwd`./freemedforms-$PROJECT_VERSION"
-}
-
-# params:
-# $1: bundleName
-# $2: fromSVNVersion
-createBranch()
-{
-  echo "Create SVN branch not yet coded"
-  # Manage Branch name
-  SVN_FROM=""
-  BRANCH_NAME=$1"_"$PROJECT_VERSION
-  if [ ! -e $SVN_REVISION ] ; then
-     BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
-     SVN_FROM="-r "$SVN_REVISION
-  fi
-
-  # create a tmp path
-  mkdir $SCRIPT_PATH/tmp/branches
-  cd $SCRIPT_PATH/tmp/branches
-  # create branch
-  if [ ! -e branches/$BRANCH_NAME ] ; then
-    echo mkdir branches/$BRANCH_NAME
-    echo svn add branches
-    # todo: else clear the branch ??
-  fi
-  for n in $SELECTED_SOURCES ; do
-    echo svn copy $SVN_FROM https://freemedforms.googlecode.com/svn/trunk/$n branches/$BRANCH_NAME/$n
-  done
-  echo "svn commit -m \"Creating branch for "$BRANCH_NAME"\""
-
-  # remove tmp path
-  cd ../..
-  echo rm -R $SCRIPT_PATH/tmp/branches
-}
-
-# params:
-# $1: bundleName
-# $2: fromSVNVersion
-createTag()
-{
-  echo "Create SVN tag not yet coded"
-  # Manage Branch name
-  BRANCH_NAME=$1"_"$PROJECT_VERSION
-  if [ ! -e $SVN_REVISION ] ; then
-#     BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
-     SVN_FROM="-r "$SVN_REVISION
-  fi
-
-  echo "svn cp $SVN_FROM https://freemedforms.googlecode.com/svn/trunk \
-                         https://freemedforms.googlecode.com/svn/tags/$BRANCH_NAME \
-           -m \"Tag version: $BRANCH_NAME\""
-
-#  # create tag on the svn
-#  echo "svn mkdir https://freemedforms.googlecode.com/svn/tags/"$BRANCH_NAME" -m \"Creating tag for "$BRANCH_NAME"\""
-
-#  cd $SCRIPT_PATH
-
-#  # checkout in a tmp dir
-#  TMP_PATH=./tmp/tmp_tag_$BRANCH_NAME
-#  if [ ! -e $TMP_PATH ]; then
-#    mkdir $TMP_PATH
-#  fi
-#  svn co https://freemedforms.googlecode.com/svn/tags/$BRANCH_NAME ./$TMP_PATH
-#  cd $TMP_PATH
-
-#  for n in $SELECTED_SOURCES ; do
-#    for f in `svn ls -R $SCRIPT_PATH/../$n`; do
-#      FILE_PATH=`dirname $n`
-#      if [ -d $n ] ; then
-#        FILE_PATH=$n
-#      fi
-
-#      FULL_PATH=`dirname $FILE_PATH/$f`
-#      echo "----> $FULL_PATH"
-
-#      if [ ! -e $FULL_PATH ] && [ $FULL_PATH != "." ]; then
-#        echo "svn mkdir --parents "$FULL_PATH
-#        svn mkdir --parents $FULL_PATH
-#      fi
-
-#      echo "svn copy "$SVN_FROM" "$SCRIPT_PATH"/../"$FILE_PATH"/"$f" "$FILE_PATH"/"$f
-#      svn copy $SVN_FROM $SCRIPT_PATH/../$FILE_PATH/$f $FILE_PATH/$f
-#    done
-#  done
-#  echo "svn commit -m \"tag: "$BRANCH_NAME"\""
+    echo "*** Source package successfully created at `pwd`./freemedforms-$PROJECT_VERSION"
 }
 
 #########################################################################################
@@ -408,13 +319,11 @@ createTag()
 
 prepareFileSelection
 
-while getopts "hr:sctd" option
+while getopts "hd" option
 do
   case $option in
     h) showHelp
       exit 0
-    ;;
-    r) SVN_REVISION=$OPTARG
     ;;
     d) includeEdrcFiles
     ;;
