@@ -120,13 +120,6 @@ FORMS += \
 
 
 OTHER_FILES += \
-    ../global_resources/sql/drugs_schema.sql \
-    ../global_resources/sql/iam_schema.sql \
-    ../global_resources/sql/moleculetoatclinker.xml \
-    ../global_resources/sql/druginfodb/biam2/biam_importer_schema.sql \
-    ../global_resources/sql/druginfodb/druginfos_schema.sql \
-    ../global_resources/sql/drugdb/newdbschema.sql \
-    ../global_resources/sql/drugdb/dbschema060_queries.sql \
     ../global_resources/sql/drugdb/routes.txt \
     ../global_resources/sql/drugdb/be/description.xml \
     ../global_resources/sql/drugdb/be/licenceterms.txt \
@@ -134,12 +127,8 @@ OTHER_FILES += \
     ../global_resources/sql/drugdb/fr/licenceterms.txt \
     ../global_resources/sql/drugdb/za/description.xml \
     ../global_resources/sql/drugdb/za/licenceterms.txt \
-#    ../global_resources/sql/drugdb/ca/canadian_db_creator.sql \
     ../global_resources/sql/drugdb/ca/description.xml \
     ../global_resources/sql/drugdb/ca/licenceterms.txt \
-#    ../global_resources/sql/drugdb/ca/canadian_db_imports.sql \
-#    ../global_resources/sql/drugdb/ca/canadian_db_processing.sql \
-#    ../global_resources/sql/drugdb/ca/canadian_db_tables.sql \
     ../global_resources/sql/drugdb/us/description.xml \
     ../global_resources/sql/drugdb/us/licenceterms.txt \
     ../global_resources/sql/drugdb/za/description.xml \
@@ -148,15 +137,18 @@ OTHER_FILES += \
     ../global_resources/sql/drugdb/pt/description.xml \
     ../global_resources/sql/drugdb/pt/licenceterms.txt \
     ../global_resources/sql/drugdb/pt/pt_uids.csv \
-    ../global_resources/sql/ia/atc_utf8.csv \
-    ../global_resources/sql/ia/thesaurus_interactions.xml \
-    ../global_resources/sql/ia/afssaps_links.xml \
-    ../global_resources/sql/ia/afssaps_classtree.xml \
-    ../global_resources/sql/ia/atc_utf8.csv \
-    ../global_resources/sql/ia/afssaps_links.xml \
-    ../global_resources/sql/ia/afssaps_classtree.xml \
-    ../global_resources/sql/pims/icdlinks.xml \
-    ../global_resources/sql/pims/pims.xml \
+    ../global_resources/nonfree/ddi/atc_utf8.csv \
+    ../global_resources/nonfree/ddi/thesaurus_interactions.xml \
+    ../global_resources/nonfree/ddi/afssaps_links.xml \
+    ../global_resources/nonfree/ddi/afssaps_classtree.xml \
+    ../global_resources/nonfree/ddi/atc_utf8.csv \
+    ../global_resources/nonfree/ddi/afssaps_links.xml \
+    ../global_resources/nonfree/ddi/afssaps_classtree.xml \
+    ../global_resources/nonfree/ddi/moleculetoatclinker.xml \
+    ../global_resources/nonfree/pims/icdlinks.xml \
+    ../global_resources/nonfree/pims/pims.xml \
+    ../global_resources/sql/druginfodb/biam2/biam_importer_schema.sql \
+
 
 OTHER_FILES += DrugsDB.pluginspec
 

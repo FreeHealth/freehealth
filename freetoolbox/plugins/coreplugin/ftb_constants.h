@@ -72,17 +72,17 @@ namespace Constants {
     const char * const  FILE_DRUGINFOS_DATABASE_SCHEME           = "/global_resources/sql/druginfodb/biam2/druginfos_schema.sql";
     const char * const  FILE_DRUGS_ROUTES                        = "/global_resources/sql/drugdb/routes.txt";
 
-    const char * const  MOL_LINK_FILENAME                        = "/global_resources/sql/ia/moleculetoatclinker.xml";
-    const char * const  ATC_FILENAME                             = "/global_resources/sql/ia/atc_utf8.csv";
+    const char * const  MOL_LINK_FILENAME                        = "/global_resources/nonfree/ddi/moleculetoatclinker.xml";
+    const char * const  ATC_FILENAME                             = "/global_resources/nonfree/ddi/atc_utf8.csv";
 
-    const char * const  NEW_INTERACTORS_FILENAME                 = "/global_resources/sql/ia/ddi_interactors_2011.xml";
-    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME           = "/global_resources/sql/ia/afssaps_links.xml";
-    const char * const  AFSSAPS_CLASSTREE_FILENAME               = "/global_resources/sql/ia/afssaps_classtree.xml";
-    const char * const  AFSSAPS_INTERACTIONS_FILENAME            = "/global_resources/sql/ia/thesaurus_interactions.xml";
-    const char * const  NEW_AFSSAPS_INTERACTIONS_FILENAME        = "/global_resources/sql/ia/ddi_2011.xml";
-    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/sql/ia/interaction_text_english_translation_corrections.csv";
-    const char * const  PIMS_FILENAME                            = "/global_resources/sql/pims/pims.xml";
-    const char * const  ICD_GROUP_LINKER_FILENAME                = "/global_resources/sql/pims/icdlinks.xml";
+    const char * const  NEW_INTERACTORS_FILENAME                 = "/global_resources/nonfree/ddi/ddi_interactors_2011.xml";
+    const char * const  AFSSAPS_MOLECULE_LINK_FILENAME           = "/global_resources/nonfree/ddi/afssaps_links.xml";
+    const char * const  AFSSAPS_CLASSTREE_FILENAME               = "/global_resources/nonfree/ddi/afssaps_classtree.xml";
+    const char * const  AFSSAPS_INTERACTIONS_FILENAME            = "/global_resources/nonfree/ddi/thesaurus_interactions.xml";
+    const char * const  NEW_AFSSAPS_INTERACTIONS_FILENAME        = "/global_resources/nonfree/ddi/ddi_2011.xml";
+    const char * const  INTERACTIONS_ENGLISHCORRECTIONS_FILENAME = "/global_resources/nonfree/ddi/interaction_text_english_translation_corrections.csv";
+    const char * const  PIMS_FILENAME                            = "/global_resources/nonfree/pims/pims.xml";
+    const char * const  ICD_GROUP_LINKER_FILENAME                = "/global_resources/nonfree/pims/icdlinks.xml";
 
     const char* const S_WINGEOMETRY      = "MainWin/Geometry";
     const char* const S_WINSTATE         = "MainWin/State";
