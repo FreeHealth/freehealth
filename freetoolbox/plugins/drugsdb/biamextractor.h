@@ -47,6 +47,7 @@ namespace Ui {
 
 class BiamExtractorPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     BiamExtractorPage(QObject *parent) : IToolPage(parent) {}
 

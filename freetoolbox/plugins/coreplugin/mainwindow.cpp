@@ -197,11 +197,12 @@ bool MainWindow::initialize(const QStringList &, QString *)
  */
 void MainWindow::postCoreInitialization()
 {
-    contextManager()->updateContext();
-    actionManager()->retranslateMenusAndActions();
     raise();
     show();
     preparePages();
+
+    contextManager()->updateContext();
+    actionManager()->retranslateMenusAndActions();
 
     const QString &path = settings()->value(Constants::S_GITFILES_PATH).toString();
     if (path.isEmpty() || !QDir(settings()->value(Constants::S_GITFILES_PATH).toString()).exists()) {
@@ -295,13 +296,6 @@ void MainWindow::preparePages()
     }
 
     ui->pageTree->expandAll();
-
-//    QList<int> sizes;
-//    sizes << 150 << 300;
-//    ui->splitter->setSizes(sizes);
-
-//    ui->pageTree->sortItems(0, Qt::AscendingOrder);
-
     ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->pageTree), 1);
     ui->splitter->setStretchFactor(ui->splitter->indexOf(ui->layoutWidget), 2);
 }
