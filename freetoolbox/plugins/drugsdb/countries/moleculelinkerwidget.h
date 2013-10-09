@@ -43,6 +43,7 @@ namespace Ui {
 
 class MoleculeLinkerPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     MoleculeLinkerPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("MoleculeLinkerPage"); }
 

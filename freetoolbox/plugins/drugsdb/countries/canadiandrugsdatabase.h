@@ -43,6 +43,7 @@ class CaDrugDatatabaseStep;
 
 class FreeCanadianDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     FreeCanadianDrugsDatabasePage(QObject *parent = 0);
     ~FreeCanadianDrugsDatabasePage();
@@ -61,6 +62,7 @@ private:
 
 class NonFreeCanadianDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     NonFreeCanadianDrugsDatabasePage(QObject *parent = 0);
     ~NonFreeCanadianDrugsDatabasePage();

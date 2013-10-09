@@ -101,27 +101,32 @@ public:
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
     {
-        if(filterRegExp().isEmpty())
+        if (filterRegExp().isEmpty())
             return true;
 
-        QModelIndex current(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
+        // Force to cycle throw the first column, because other columns does not have children
+        QModelIndex currentParent(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
+        QModelIndex currentToFilter(sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent));
 
-        if(sourceModel()->hasChildren(current)) {
+        if (sourceModel()->data(currentToFilter).toString().contains(filterRegExp()))
+            return true;
+
+        if (sourceModel()->hasChildren(currentParent)) {
             bool atLeastOneValidChild = false;
             int i = 0;
-            while(!atLeastOneValidChild) {
-                const QModelIndex child(current.child(i, current.column()));
+            while (!atLeastOneValidChild) {
+                const QModelIndex child(currentParent.child(i, currentParent.column()));
                 if (!child.isValid())
                     // No valid child
                     break;
 
-                atLeastOneValidChild = filterAcceptsRow(i, current);
+                atLeastOneValidChild = filterAcceptsRow(i, currentParent);
                 i++;
             }
             return atLeastOneValidChild;
         }
 
-        return sourceModel()->data(current).toString().contains(filterRegExp());
+        return false;
     }
 };
 
@@ -382,6 +387,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
 
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
+    retranslateUi();
 }
 
 InteractorEditorWidget::~InteractorEditorWidget()
@@ -824,44 +830,49 @@ void InteractorEditorWidget::nextUnreviewedOrUnlinked()
     }
 }
 
+void InteractorEditorWidget::retranslateUi()
+{
+    // Texts
+    d->aGoogle->setText(tr("Search Google (copy molecule to clipboard)"));
+    d->aWho->setText(tr("Search WHO (copy molecule to clipboard)"));
+    d->aResip->setText(tr("Search RESIP (copy molecule to clipboard)"));
+    d->aCopyClip->setText(tr("Copy molecule name to clipboard"));
+    d->aAtcSearchDialog->setText(tr("Open the ATC search dialog"));
+    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
+    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+    d->aCreateNewClass->setText(tr("Create a new interacting class"));
+    d->aCreateNewInteractor->setText(tr("Create a new interacting molecule"));
+    d->aTranslateThis->setText(tr("Translate current"));
+    d->aCollapseAll->setText(tr("Collapse all"));
+    d->aExpandAll->setText(tr("Expand all"));
+    d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
+    d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
+    d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
+    // Tooltips
+    d->aGoogle->setToolTip(d->aGoogle->text());
+    d->aWho->setToolTip(d->aWho->text());
+    d->aResip->setToolTip(d->aResip->text());
+    d->aCopyClip->setToolTip(d->aCopyClip->text());
+    d->aSave->setToolTip(d->aSave->text());
+    d->aEdit->setToolTip(d->aEdit->text());
+    d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
+    d->aCreateNewClass->setToolTip(d->aCreateNewClass->text());
+    d->aTranslateThis->setToolTip(d->aTranslateThis->text());
+    d->aCreateNewInteractor->setToolTip(d->aCreateNewInteractor->text());
+    d->aAddClassReviewMark->setToolTip(d->aAddClassReviewMark->text());
+    d->aCollapseAll->setToolTip(d->aCollapseAll->text());
+    d->aExpandAll->setToolTip(d->aExpandAll->text());
+    d->aNextUnreviewedOrUnlinked->setToolTip(d->aNextUnreviewedOrUnlinked->text());
+    d->aDownloadAllNeededPmids->setToolTip(d->aDownloadAllNeededPmids->text());
+    d->ui->retranslateUi(this);
+    updateCounts();
+}
+
 void InteractorEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
-        // Texts
-        d->aGoogle->setText(tr("Search Google (copy molecule to clipboard)"));
-        d->aWho->setText(tr("Search WHO (copy molecule to clipboard)"));
-        d->aResip->setText(tr("Search RESIP (copy molecule to clipboard)"));
-        d->aCopyClip->setText(tr("Copy molecule name to clipboard"));
-        d->aAtcSearchDialog->setText(tr("Open the ATC search dialog"));
-        d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
-        d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
-        d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
-        d->aCreateNewClass->setText(tr("Create a new interacting class"));
-        d->aCreateNewInteractor->setText(tr("Create a new interacting molecule"));
-        d->aTranslateThis->setText(tr("Translate current"));
-        d->aCollapseAll->setText(tr("Collapse all"));
-        d->aExpandAll->setText(tr("Expand all"));
-        d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
-        d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
-        d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
-        // Tooltips
-        d->aGoogle->setToolTip(d->aGoogle->text());
-        d->aWho->setToolTip(d->aWho->text());
-        d->aResip->setToolTip(d->aResip->text());
-        d->aCopyClip->setToolTip(d->aCopyClip->text());
-        d->aSave->setToolTip(d->aSave->text());
-        d->aEdit->setToolTip(d->aEdit->text());
-        d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
-        d->aCreateNewClass->setToolTip(d->aCreateNewClass->text());
-        d->aTranslateThis->setToolTip(d->aTranslateThis->text());
-        d->aCreateNewInteractor->setToolTip(d->aCreateNewInteractor->text());
-        d->aAddClassReviewMark->setToolTip(d->aAddClassReviewMark->text());
-        d->aCollapseAll->setToolTip(d->aCollapseAll->text());
-        d->aExpandAll->setToolTip(d->aExpandAll->text());
-        d->aNextUnreviewedOrUnlinked->setToolTip(d->aNextUnreviewedOrUnlinked->text());
-        d->aDownloadAllNeededPmids->setToolTip(d->aDownloadAllNeededPmids->text());
-        d->ui->retranslateUi(this);
-        updateCounts();
+        retranslateUi();
     }
 }
 

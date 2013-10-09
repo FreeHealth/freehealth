@@ -79,6 +79,7 @@ protected Q_SLOTS:
 
 private:
     void setEditorsEnabled(bool state);
+    void retranslateUi();
 
 protected:
     void changeEvent(QEvent *e);

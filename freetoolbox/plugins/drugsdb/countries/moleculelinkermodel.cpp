@@ -144,10 +144,10 @@ public:
             QString error;
             int line, col;
             if (!domDocument.setContent(&file, &error,&line,&col)) {
-                LOG_ERROR_FOR(q, q->tr("Can not read XML file content %1").arg(file.fileName()));
+                LOG_ERROR_FOR(q, QString("Can not read XML file content %1").arg(file.fileName()));
                 LOG_ERROR_FOR(q, QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
             } else {
-                LOG_FOR(q, q->tr("Reading Molecule to ATC linker XML file: %1").arg(file.fileName()));
+                LOG_FOR(q, QString("Reading Molecule to ATC linker XML file: %1").arg(file.fileName()));
             }
             file.close();
 
@@ -155,7 +155,7 @@ public:
             m_RootItem = new DomItem(m_RootNode, 0);
 
         } else {
-            LOG_ERROR_FOR(q, q->tr("Can not open XML file %1").arg(file.fileName()));
+            LOG_ERROR_FOR(q, QString("Can not open XML file %1").arg(file.fileName()));
         }
     }
 

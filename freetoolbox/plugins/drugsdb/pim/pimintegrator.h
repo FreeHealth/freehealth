@@ -36,6 +36,7 @@ class PimTreeModelPrivate;
 
 class PimsTreePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     PimsTreePage(QObject *parent = 0) : Core::IToolPage(parent) { setObjectName("PimsTreePage"); }
 
@@ -51,6 +52,7 @@ public:
 
 class PimTreeModel : public Utils::QAbstractXmlTreeModel
 {
+    Q_OBJECT
 public:
     enum DataRepresentation {
         NameOrTranslatedText = 0,

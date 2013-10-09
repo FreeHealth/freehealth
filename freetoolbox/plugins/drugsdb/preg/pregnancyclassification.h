@@ -35,6 +35,7 @@ namespace DrugInfos {
 
 class PregnancyClassificationPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     PregnancyClassificationPage(QObject *parent) : IToolPage(parent) {}
 

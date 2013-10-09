@@ -35,6 +35,7 @@ namespace DrugsDB {
 
 class InteractorEditorPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     InteractorEditorPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("InteractorEditorPage"); }
 
@@ -77,6 +78,7 @@ private Q_SLOTS:
     void nextUnreviewedOrUnlinked();
 
 private:
+    void retranslateUi();
     void changeEvent(QEvent *e);
 
 private:

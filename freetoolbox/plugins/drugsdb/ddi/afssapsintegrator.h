@@ -37,6 +37,7 @@ namespace DrugsDB {
 
 class AfssapsIntegratorPage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     AfssapsIntegratorPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("AfssapsIntegratorPage"); }
 
@@ -51,6 +52,7 @@ public:
 
 class AfssapsClassTreePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     AfssapsClassTreePage(QObject *parent = 0) : Core::IToolPage(parent) { setObjectName("AfssapsClassTreePage"); }
 
