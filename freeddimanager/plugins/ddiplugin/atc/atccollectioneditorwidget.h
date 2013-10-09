@@ -24,11 +24,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEDDIMANAGER_ATCWIDGET_H
-#define FREEDDIMANAGER_ATCWIDGET_H
+#ifndef FREEDDIMANAGER_ATCCOLLECTIONEDITORWIDGET_H
+#define FREEDDIMANAGER_ATCCOLLECTIONEDITORWIDGET_H
 
-//#include <coreplugin/itoolpage.h>
-//#include <coreplugin/ftb_constants.h>
+#include <ddiplugin/ddi_exporter.h>
 #include <QSortFilterProxyModel>
 
 #include <QWidget>
@@ -40,7 +39,7 @@ class QAction;
 QT_END_NAMESPACE
 
 /**
- * \file atcwidget.h
+ * \file atccollectioneditorwidget.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 09 Oct 2013
@@ -52,46 +51,28 @@ class DetailsWidget;
 
 namespace DDI {
 namespace Internal {
-namespace Ui {
-class AtcWidget;
-}
-}
+class AtcCollectionEditorWidgetPrivate;
+} // Internal
 
-class TreeProxyModel : public QSortFilterProxyModel
+class DDI_EXPORT AtcCollectionEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TreeProxyModel(QObject *parent = 0);
-
-protected:
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-    bool filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const;
-    bool hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const;
-};
-
-class AtcWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit AtcWidget(QWidget *parent = 0);
-    ~AtcWidget();
+    explicit AtcCollectionEditorWidget(QWidget *parent = 0);
+    ~AtcCollectionEditorWidget();
 
 private Q_SLOTS:
     void onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
     void onFilterChanged(const QString &filter);
 
 private:
+    void retranslateUi();
     void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::AtcWidget *ui;
-    Utils::DetailsWidget *_details;
-    TreeProxyModel *_proxyModel;
-    QLineEdit *_code, *_english, *_french, *_deutsch, *_spanish;
-    QToolButton *_left;
-    QAction *aSearchEnglish, *aSearchCode;
+    Internal::AtcCollectionEditorWidgetPrivate *d;
 };
 
 }  //  End namespace DDI
 
-#endif // FREEDDIMANAGER_ATCWIDGET_H
+#endif // FREEDDIMANAGER_ATCCOLLECTIONEDITORWIDGET_H

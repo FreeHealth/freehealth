@@ -270,8 +270,8 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
         query.bindValue(Constants::ATC_EN, vals.at(1).toUpper().remove("\""));
         query.bindValue(Constants::ATC_DE, vals.at(3).toUpper().remove("\""));
         query.bindValue(Constants::ATC_ES, QVariant());
-        query.bindValue(Constants::ATC_DATECREATE, QDate::currentDate());
-        query.bindValue(Constants::ATC_DATEUPDATE, QDate::currentDate());
+        query.bindValue(Constants::ATC_DATECREATE, QDate::currentDate().toString(Qt::ISODate));
+        query.bindValue(Constants::ATC_DATEUPDATE, QDate::currentDate().toString(Qt::ISODate));
         query.bindValue(Constants::ATC_PREVIOUSCODE, QVariant());
         query.bindValue(Constants::ATC_WHOYEARUPDATE, QVariant());
         query.bindValue(Constants::ATC_COMMENT, QVariant());

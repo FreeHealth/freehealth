@@ -66,6 +66,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
 
+    QModelIndex toSourceIndex(const QModelIndex &index) const;
+
 private:
     Internal::AtcTreeProxyModelPrivate *d;
 };

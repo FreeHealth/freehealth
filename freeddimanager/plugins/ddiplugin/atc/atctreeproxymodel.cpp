@@ -70,9 +70,17 @@ public:
     ~AtcTreeProxyModelPrivate()
     {}
 
+    QModelIndex toSourceIndex(const QModelIndex &index)
+    {
+        // Map to Code column
+        QModelIndex code = q->index(index.row(), AtcTreeProxyModel::Code, index.parent());
+        return _toSourceIndex.value(q->itemFromIndex(code), QModelIndex());
+    }
+
     bool getTree(AtcTableModel *sourceModel)
     {
-        // TODO: disconnect old model
+        _toSourceIndex.clear();
+        // TODO: disconnect old model if exists
         _sourceModel = sourceModel;
 
         // Fetch all data in the source model
@@ -82,8 +90,6 @@ public:
         // Sort ?
 
         // Read line by line
-        QString code, tmp, en;
-        QList<QStandardItem*> items;
         QStandardItem *lastOne = 0;
         QStandardItem *lastThree = 0;
         QStandardItem *lastFour = 0;
@@ -98,6 +104,7 @@ public:
             QModelIndex de = _sourceModel->index(i, AtcTableModel::LabelDe);
 
             QStandardItem *item = new QStandardItem(_sourceModel->data(code).toString());
+            _toSourceIndex.insert(item, code);
             cols << item;
             cols <<  new QStandardItem(_sourceModel->data(en).toString());
             cols <<  new QStandardItem(_sourceModel->data(fr).toString());
@@ -106,8 +113,7 @@ public:
 //            cols << new QStandardItem(code + " - " + en);
 
             // Find the parent item
-            switch (_sourceModel->data(code).toString().count())
-            {
+            switch (_sourceModel->data(code).toString().count()) {
             case 1: parent = 0; lastOne = item; break;
             case 3: parent = lastOne;    lastThree = item; break;
             case 4: parent = lastThree;  lastFour = item;  break;
@@ -128,6 +134,7 @@ public:
 public:
     QFont bold;
     QPointer<AtcTableModel> _sourceModel;
+    QHash<QStandardItem *, QPersistentModelIndex> _toSourceIndex;
 
 private:
     AtcTreeProxyModel *q;
@@ -152,33 +159,6 @@ bool AtcTreeProxyModel::initialize(AtcTableModel *sourceModel)
     return true;
 }
 
-//QVariant AtcTreeProxyModel::data(const QModelIndex &index, int role) const
-//{
-//    if (!index.isValid())
-//        return QVariant();
-
-//    if (role == Qt::DisplayRole || role==Qt::EditRole) {
-//        return QStandardItemModel::data(index, role);
-//    } else if (role == Qt::ToolTipRole) {
-//        QModelIndex code = this->index(index.row(), ATC_Code, index.parent());
-//        QModelIndex english = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        QModelIndex french = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        QModelIndex deutsch = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        return QString("<b>ATC: %1</b> <br />"
-//                       "* en: %2 <br />"
-//                       "* fr: %3 <br />"
-//                       "* de: %4")
-//                .arg(code.data().toString())
-//                .arg(english.data().toString())
-//                .arg(french.data().toString())
-//                .arg(deutsch.data().toString());
-//    } else if (role==Qt::FontRole) {
-//        if (index.parent() == QModelIndex())
-//            return d->bold;
-//    }
-//    return QVariant();
-//}
-
 Qt::ItemFlags AtcTreeProxyModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
@@ -198,4 +178,9 @@ QVariant AtcTreeProxyModel::headerData(int section, Qt::Orientation orientation,
         }
     }
     return QVariant();
+}
+
+QModelIndex AtcTreeProxyModel::toSourceIndex(const QModelIndex &index) const
+{
+    return d->toSourceIndex(index);
 }
