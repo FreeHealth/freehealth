@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DrugsDB::InteractionEditorWidget</class>
+ <widget class="QWidget" name="DrugsDB::InteractionEditorWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>767</width>
+    <height>597</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="Utils::MiniSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="treeLayout">
+       <item>
+        <widget class="Utils::QButtonLineEdit" name="searchLine"/>
+       </item>
+       <item>
+        <widget class="Utils::MiniSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QTreeView" name="treeView"/>
+         <widget class="QTextBrowser" name="humanSynthesis">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>246</red>
+                <green>233</green>
+                <blue>182</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>246</red>
+                <green>233</green>
+                <blue>182</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>212</red>
+                <green>208</green>
+                <blue>200</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+          <property name="openLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget2">
+      <layout class="QGridLayout" name="gridLayout__">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="toolbarLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="generalGroupBox">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="margin">
+           <number>5</number>
+          </property>
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <item row="0" column="2" colspan="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>160</width>
+              <height>22</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="updatedOn">
+            <property name="displayFormat">
+             <string>dd/MM/yyyy</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" colspan="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>160</width>
+              <height>22</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="isReviewed">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Reviewed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDateEdit" name="createdOn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="displayFormat">
+             <string>dd/MM/yyyy</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboLevel">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="riskTab">
+          <attribute name="title">
+           <string>Risk, Management</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Risk</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <property name="margin">
+               <number>5</number>
+              </property>
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <item row="3" column="1">
+               <widget class="QTextEdit" name="risk_en">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QTextEdit" name="risk">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string notr="true">FR</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string notr="true">EN</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Management</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <property name="margin">
+               <number>5</number>
+              </property>
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <item row="0" column="1">
+               <widget class="QTextEdit" name="management">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QTextEdit" name="management_en"/>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string notr="true">FR</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string notr="true">EN</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Routes/Doses</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0" colspan="2">
+            <widget class="QLabel" name="firstInteractorLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <layout class="QGridLayout" name="gridLayout_7">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="firstDoseUsesFrom">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>From</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="firstDoseFromValue"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QComboBox" name="firstDoseFromUnits"/>
+             </item>
+             <item row="0" column="3">
+              <widget class="QComboBox" name="firstDoseFromRepart"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="firstDoseUsesTo">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>To</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="firstDoseToValue"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="firstDoseToUnits"/>
+             </item>
+             <item row="1" column="3">
+              <widget class="QComboBox" name="firstDoseToRepart"/>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="1">
+            <widget class="QListView" name="listViewFirstInteractorRoute"/>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="secondInteractorLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="2">
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="secondDoseUsesFrom">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>From</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="secondDoseFromValue"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QComboBox" name="secondDoseFromUnits"/>
+             </item>
+             <item row="0" column="3">
+              <widget class="QComboBox" name="secondDoseFromRepart"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="secondDoseUsesTo">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>To</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="secondDoseToValue"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="secondDoseToUnits"/>
+             </item>
+             <item row="1" column="3">
+              <widget class="QComboBox" name="secondDoseToRepart"/>
+             </item>
+            </layout>
+           </item>
+           <item row="5" column="0">
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="1">
+            <widget class="QListView" name="listViewSecondInteractorRoute"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="biblioTab">
+          <attribute name="title">
+           <string>Science</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Formalized risk</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QTableView" name="formRiskTableView"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string>Bibliography</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_9">
+              <item row="0" column="0">
+               <widget class="Views::TableView" name="bilbioTableView"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::QButtonLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Views::TableView</class>
+   <extends>QTableView</extends>
+   <header location="global">listviewplugin/tableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
