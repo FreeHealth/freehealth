@@ -29,7 +29,6 @@
 
 #include <ddiplugin/ddi_exporter.h>
 #include <QObject>
-#include <QMultiHash>
 
 /**
  * \file ddicore.h
@@ -43,6 +42,7 @@ class AtcTableModel;
 namespace Internal {
 class DDIPlugin;
 class DDICorePrivate;
+class DDIDatabase;
 }  // namespace Internal
 
 class DDI_EXPORT DDICore : public QObject
@@ -59,6 +59,7 @@ public:
     ~DDICore();
 
     AtcTableModel *atcTableModel() const;
+    Internal::DDIDatabase &database() const;
 
 private:
     static DDICore *_instance;

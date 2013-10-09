@@ -117,8 +117,14 @@ bool DDICore::initialize()
     return true;
 }
 
-/** Returns the Atc table model singleton */
+/** Returns the Atc table model single instance */
 AtcTableModel *DDICore::atcTableModel() const
 {
     return d->_atcTableModel;
+}
+
+/** Returns the DDI database single instance */
+Internal::DDIDatabase &DDICore::database() const
+{
+    return *d->_base;
 }
