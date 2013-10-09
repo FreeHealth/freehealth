@@ -116,9 +116,7 @@ void PrescriptionViewer::createActionsAndToolbar()
     Core::Command *cmd = 0;
     // populate toolbar
     m_ToolBar = new QToolBar(this);
-#if QT_VERSION < 0x040600
     m_ToolBar->setIconSize(QSize(16,16));
-#endif
     QStringList actionsToAdd;
 
 #ifdef FREEMEDFORMS

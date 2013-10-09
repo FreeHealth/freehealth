@@ -86,12 +86,11 @@ ButtonMenuPathItemView::ButtonMenuPathItemView(Form::FormItem *formItem, QWidget
         // No Label
     } else {
         // Prepare Widget Layout
-        QHBoxLayout * hb = new QHBoxLayout(this);
+        QHBoxLayout *hb = new QHBoxLayout(this);
         hb->addStretch();
-
         _button = new QToolButton(this);
         _button->setObjectName("ButtonMenuPathItemView_" + m_FormItem->uuid());
-        _button->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        _button->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Fixed);
         hb->addWidget(_button);
     }
 
