@@ -44,6 +44,12 @@
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/idocumentprinter.h>
 
+// TEST
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/atc/atctablemodel.h>
+#include <ddiplugin/atc/atctreeproxymodel.h>
+// END TEST
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/randomizer.h>
@@ -255,6 +261,11 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
+    // TEST
+    DDI::AtcTreeProxyModel *tree = new DDI::AtcTreeProxyModel(this);
+    tree->initialize(DDI::DDICore::instance()->atcTableModel());
+    ui->treeView->setModel(tree);
+    // END TEST
     readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }
 

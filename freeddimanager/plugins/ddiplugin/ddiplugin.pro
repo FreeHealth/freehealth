@@ -15,7 +15,9 @@ HEADERS += \
     ddicore.h \
     database/ddidatabase.h \
     atc/atctablemodel.h \
+    atc/atctreeproxymodel.h \
     atc/atcwidget.h \
+    atc/atceditorwidget.h \
 
 
 SOURCES += \
@@ -23,11 +25,15 @@ SOURCES += \
     ddicore.cpp \
     database/ddidatabase.cpp \
     atc/atctablemodel.cpp \
+    atc/atctreeproxymodel.cpp \
     atc/atcwidget.cpp \
+    atc/atceditorwidget.cpp \
 
 
 FORMS += \
     atc/atcwidget.ui \
+    atc/atceditorwidget.ui \
+
 
 OTHER_FILES += DDIManager.pluginspec
 

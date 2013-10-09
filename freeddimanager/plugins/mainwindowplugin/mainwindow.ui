@@ -19,11 +19,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QRadioButton" name="radioButton">
-      <property name="text">
-       <string>RadioButton</string>
-      </property>
-     </widget>
+     <widget class="QTreeView" name="treeView"/>
     </item>
    </layout>
   </widget>

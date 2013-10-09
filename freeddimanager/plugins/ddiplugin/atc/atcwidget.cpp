@@ -186,10 +186,10 @@ void AtcWidget::onAtcCodeSelectionChanged(const QModelIndex &current, const QMod
     Q_UNUSED(previous);
     QModelIndex source = _proxyModel->mapToSource(current);
     AtcTableModel *model = dbCore()->atcTableModel();
-    QModelIndex code = model->index(source.row(), AtcTableModel::ATC_Code, source.parent());
-    QModelIndex en = model->index(source.row(), AtcTableModel::ATC_EnglishLabel, source.parent());
-    QModelIndex fr = model->index(source.row(), AtcTableModel::ATC_FrenchLabel, source.parent());
-    QModelIndex de = model->index(source.row(), AtcTableModel::ATC_DeutschLabel, source.parent());
+    QModelIndex code = model->index(source.row(), AtcTableModel::Code, source.parent());
+    QModelIndex en = model->index(source.row(), AtcTableModel::LabelEn, source.parent());
+    QModelIndex fr = model->index(source.row(), AtcTableModel::LabelFr, source.parent());
+    QModelIndex de = model->index(source.row(), AtcTableModel::LabelDe, source.parent());
     _details->setSummaryText(code.data().toString() + " - " + en.data().toString());
 //    QModelIndex es = model->index(current.row(), AtcTableModel::ATC_SpanishLabel, current.parent());
     _code->setText(code.data().toString());
@@ -203,9 +203,9 @@ void AtcWidget::onFilterChanged(const QString &filter)
 {
     _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     if (_left->defaultAction() == aSearchCode)
-        _proxyModel->setFilterKeyColumn(AtcTableModel::ATC_Code);
+        _proxyModel->setFilterKeyColumn(AtcTableModel::Code);
     else if (_left->defaultAction() == aSearchEnglish)
-        _proxyModel->setFilterKeyColumn(AtcTableModel::ATC_EnglishLabel);
+        _proxyModel->setFilterKeyColumn(AtcTableModel::LabelEn);
     _proxyModel->setFilterFixedString(filter);
     if (filter.count() > 4)
         ui->atcView->expandAll();
@@ -216,10 +216,10 @@ void AtcWidget::changeEvent(QEvent *e)
     if (e->type()==QEvent::LanguageChange) {
         for(int i = 0; i < dbCore()->atcTableModel()->columnCount(); ++i)
             ui->atcView->setColumnHidden(i, true);
-        ui->atcView->setColumnHidden(AtcTableModel::ATC_Code, false);
+        ui->atcView->setColumnHidden(AtcTableModel::Code, false);
         // TODO: find the current language and set the correct column not hidden
-        ui->atcView->setColumnHidden(AtcTableModel::ATC_EnglishLabel, false);
-        ui->atcView->header()->setResizeMode(AtcTableModel::ATC_Code, QHeaderView::ResizeToContents);
-        ui->atcView->header()->setResizeMode(AtcTableModel::ATC_EnglishLabel, QHeaderView::Stretch);
+        ui->atcView->setColumnHidden(AtcTableModel::LabelEn, false);
+        ui->atcView->header()->setResizeMode(AtcTableModel::Code, QHeaderView::ResizeToContents);
+        ui->atcView->header()->setResizeMode(AtcTableModel::LabelEn, QHeaderView::Stretch);
     }
 }
