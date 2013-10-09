@@ -27,7 +27,8 @@
 #ifndef FREEDDIMANAGER_ATCTABLEMODEL_H
 #define FREEDDIMANAGER_ATCTABLEMODEL_H
 
-#include <QStandardItemModel>
+#include <ddiplugin/ddi_exporter.h>
+#include <QAbstractTableModel>
 
 /**
  * \file atctablemodel.h
@@ -42,7 +43,7 @@ namespace Internal {
 class AtcTableModelPrivate;
 }
 
-class AtcTableModel : public QStandardItemModel
+class DDI_EXPORT AtcTableModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class DDI::Internal::AtcTableModelPrivate;
@@ -54,21 +55,43 @@ protected:
 
 public:
     enum DataRepresentation {
-        ATC_Code = 0,
-        ATC_EnglishLabel,
-        ATC_FrenchLabel,
-        ATC_DeutschLabel,
-        ATC_CodeAndLabel,
+        Id = 0,
+        IsValid,
+        Code,
+        Uid,
+        LabelFr,
+        LabelEn,
+        LabelDe,
+        LabelEs,
+        DateCreation,
+        DateUpdate,
+        PreviousCode,
+        WhoUpdateYear,
+        Comment,
         NumberOfColumn
     };
     ~AtcTableModel();
 
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual void fetchMore(const QModelIndex &parent);
+    virtual bool canFetchMore(const QModelIndex &parent) const;
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const ;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
+//    virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
+//                               int role = Qt::EditRole);
+
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    QStringList getAtcLabel(const QStringList &codes);
-
-    static bool insertAtcCodeToDatabase(const QString &connectionName);
+//    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+//    virtual bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+//    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+//    virtual bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
 
 private:
     static AtcTableModel *_instance;

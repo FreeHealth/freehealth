@@ -24,57 +24,52 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEDDIMANAGER_ATCTREEMODEL_H
-#define FREEDDIMANAGER_ATCTREEMODEL_H
+#ifndef FREEDDIMANAGER_ATCTREEPROXYMODEL_H
+#define FREEDDIMANAGER_ATCTREEPROXYMODEL_H
 
+#include <ddiplugin/ddi_exporter.h>
 #include <QStandardItemModel>
 
 /**
- * \file atctreemodel.h
+ * \file atctreeproxymodel.h
  * \author Eric MAEKER
  * \version 0.10.0
  * \date 09 Oct 2013
 */
 
 namespace DDI {
-class DDICore;
+class AtcTableModel;
 namespace Internal {
-class AtcTreeModelPrivate;
+class AtcTreeProxyModelPrivate;
 }
 
-class AtcTreeModel : public QStandardItemModel
+class DDI_EXPORT AtcTreeProxyModel : public QStandardItemModel
 {
     Q_OBJECT
-    friend class DDI::Internal::AtcTreeModelPrivate;
-    friend class DDI::DrugsDBCore;
-
-protected:
-    AtcTreeModel(QObject * parent = 0);
-    bool initialize();
 
 public:
     enum DataRepresentation {
-        ATC_Code = 0,
-        ATC_EnglishLabel,
-        ATC_FrenchLabel,
-        ATC_DeutschLabel,
-        ATC_CodeAndLabel,
+        Code = 0,
+        LabelEn,
+        LabelFr,
+        LabelDe,
         NumberOfColumn
     };
-    ~AtcTreeModel();
+    AtcTreeProxyModel(QObject * parent = 0);
+    bool initialize(AtcTableModel *sourceModel);
 
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    ~AtcTreeProxyModel();
+
+//    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    QStringList getAtcLabel(const QStringList &codes);
-
-    static bool insertAtcCodeToDatabase(const QString &connectionName);
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
 
 private:
-    static AtcTreeModel *_instance;
-    Internal::AtcTreeModelPrivate *d;
+    Internal::AtcTreeProxyModelPrivate *d;
 };
 
 }  //  End namespace DDI
 
-#endif // FREEDDIMANAGER_ATCTREEMODEL_H
+#endif // FREEDDIMANAGER_ATCTREEPROXYMODEL_H
