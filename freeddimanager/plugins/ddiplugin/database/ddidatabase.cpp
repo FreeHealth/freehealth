@@ -263,7 +263,7 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
         if (vals.at(4).isEmpty())
             vals[4] = vals.at(1);
         query.prepare(prepareInsertQuery(Constants::Table_ATC));
-        query.bindValue(Constants::ATC_ISVALID, QVariant());
+        query.bindValue(Constants::ATC_ISVALID, 1);
         query.bindValue(Constants::ATC_CODE, vals.at(0).toUpper().remove("\""));
         query.bindValue(Constants::ATC_UID, vals.at(2).toUpper().remove("\""));
         query.bindValue(Constants::ATC_FR, vals.at(2).toUpper().remove("\""));
