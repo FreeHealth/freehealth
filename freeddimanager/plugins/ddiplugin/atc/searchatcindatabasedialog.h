@@ -23,15 +23,21 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SEARCHATCINDATABASEDIALOG_H
-#define SEARCHATCINDATABASEDIALOG_H
+#ifndef DDIMANAGER_DDIPLUGIN_SEARCHATCINDATABASEDIALOG_H
+#define DDIMANAGER_DDIPLUGIN_SEARCHATCINDATABASEDIALOG_H
 
 #include <QDialog>
 class QModelIndex;
 
-namespace DrugsDB {
-class SearchAtcInDatabaseDialogPrivate;
+/**
+ * \file searchatcindatabase.h
+ * \author Eric MAEKER
+ * \version 0.10.0
+ * \date 10 Oct 2013
+*/
 
+namespace DDI {
+class SearchAtcInDatabaseDialogPrivate;
 namespace Ui {
     class SearchAtcInDatabaseDialog;
 }
@@ -61,6 +67,6 @@ private:
     SearchAtcInDatabaseDialogPrivate *d;
 };
 
-}  // End namespace DrugsDbCreator
+}  // End namespace DDI
 
-#endif // SEARCHATCINDATABASEDIALOG_H
+#endif // DDIMANAGER_DDIPLUGIN_SEARCHATCINDATABASEDIALOG_H

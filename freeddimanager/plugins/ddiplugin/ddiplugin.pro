@@ -18,6 +18,7 @@ HEADERS += \
     atc/atctreeproxymodel.h \
     atc/atccollectioneditorwidget.h \
     atc/atceditorwidget.h \
+    atc/searchatcindatabasedialog.h \
 
 
 SOURCES += \
@@ -28,11 +29,13 @@ SOURCES += \
     atc/atctreeproxymodel.cpp \
     atc/atccollectioneditorwidget.cpp \
     atc/atceditorwidget.cpp \
+    atc/searchatcindatabasedialog.cpp \
 
 
 FORMS += \
     atc/atccollectioneditorwidget.ui \
     atc/atceditorwidget.ui \
+    atc/searchatcindatabasedialog.ui \
 
 
 OTHER_FILES += DDIManager.pluginspec

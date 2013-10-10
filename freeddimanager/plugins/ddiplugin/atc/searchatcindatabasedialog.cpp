@@ -24,10 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "searchatcindatabasedialog.h"
-#include <drugsdb/tools.h>
 
 #include <coreplugin/icore.h>
-#include <coreplugin/ftb_constants.h>
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
@@ -42,15 +40,12 @@
 
 #include <QDebug>
 
-using namespace DrugsDB;
+using namespace DDI;
 
 static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString databaseAbsPath()  {return QString();}//DrugsDB::Tools::drugsDatabaseAbsFileName();}
-
-namespace DrugsDB {
+namespace DDI {
 class SearchAtcInDatabaseDialogPrivate
 {
 public:
@@ -58,7 +53,6 @@ public:
     QString m_LangFilter;
 };
 }
-
 
 SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QString &term) :
     QDialog(parent),
@@ -68,8 +62,8 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->setupUi(this);
     ui->initial->setText(term);
 
-    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
-        Utils::Log::addError(this, "unable to connect database", __FILE__, __LINE__);
+//    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+//        LOG_ERROR("unable to connect database");
 
     d->m_Model = new QSqlQueryModel(this);
     ui->tableView->setModel(d->m_Model);
@@ -88,18 +82,18 @@ SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()
 
 void SearchAtcInDatabaseDialog::setFilter()
 {
-    QString lang = ui->lang->currentText().left(2).toLower();
-    const QString &term = ui->term->text();
-    QString req = QString("SELECT ATC.CODE, LABELS.LABEL FROM ATC "
-                          "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
-                          "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
-                          "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL like \"%%2%\"; ")
-            .arg(lang).arg(term);
+//    QString lang = ui->lang->currentText().left(2).toLower();
+//    const QString &term = ui->term->text();
+//    QString req = QString("SELECT ATC.CODE, LABELS.LABEL FROM ATC "
+//                          "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+//                          "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+//                          "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+//                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL like \"%%2%\"; ")
+//            .arg(lang).arg(term);
 
-    d->m_Model->setQuery(req, QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
+//    d->m_Model->setQuery(req, QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
 
-    ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
+//    ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
 }
 
 void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &)
@@ -122,29 +116,29 @@ void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &)
 
 QStringList SearchAtcInDatabaseDialog::getSelectedCodes()
 {
-    if (!ui->tableView->selectionModel()->hasSelection())
-        return QStringList();
-    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
+//    if (!ui->tableView->selectionModel()->hasSelection())
+//        return QStringList();
+//    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
     QStringList ret;
-    foreach(const QModelIndex &idx, list) {
-        ret << d->m_Model->index(idx.row(), 0).data().toString();
-    }
-    ret.removeDuplicates();
-    qSort(ret);
+//    foreach(const QModelIndex &idx, list) {
+//        ret << d->m_Model->index(idx.row(), 0).data().toString();
+//    }
+//    ret.removeDuplicates();
+//    qSort(ret);
     return ret;
 }
 
 QStringList SearchAtcInDatabaseDialog::getSelectedLabels()
 {
-    if (!ui->tableView->selectionModel()->hasSelection())
-        return QStringList();
-    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
+//    if (!ui->tableView->selectionModel()->hasSelection())
+//        return QStringList();
+//    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
     QStringList ret;
-    foreach(const QModelIndex &idx, list) {
-        ret << d->m_Model->index(idx.row(), 1).data().toString();
-    }
-    ret.removeDuplicates();
-    qSort(ret);
+//    foreach(const QModelIndex &idx, list) {
+//        ret << d->m_Model->index(idx.row(), 1).data().toString();
+//    }
+//    ret.removeDuplicates();
+//    qSort(ret);
     return ret;
 }
 
