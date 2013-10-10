@@ -128,8 +128,6 @@ public:
             parent->appendRow(cols);
             parent = 0;
         }
-
-//        q->reset();
         return true;
     }
 
@@ -176,7 +174,7 @@ QVariant AtcTreeProxyModel::headerData(int section, Qt::Orientation orientation,
         case LabelEn: return tr("English");
         case LabelFr: return tr("French");
         case LabelDe: return tr("Deustch");
-        // case LabelEs: return tr("Spanish");
+        // case LabelSp: return tr("Spanish");
         }
     }
     return QVariant();
