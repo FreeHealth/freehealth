@@ -80,6 +80,7 @@ AtcTableModel::AtcTableModel(QObject *parent) :
 {
     d->_sql = new QSqlTableModel(this, ddiCore()->database().database());
     d->_sql->setTable(ddiCore()->database().table(Constants::Table_ATC));
+    d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
 }
 
@@ -127,7 +128,7 @@ QVariant AtcTableModel::data(const QModelIndex &index, int role) const
     case LabelFr: sql = Constants::ATC_FR; break;
     case LabelEn: sql = Constants::ATC_EN; break;
     case LabelDe: sql = Constants::ATC_DE; break;
-    case LabelEs: sql = Constants::ATC_ES; break;
+    case LabelSp: sql = Constants::ATC_SP; break;
     case DateCreation: sql = Constants::ATC_DATECREATE; break;
     case DateUpdate: sql = Constants::ATC_DATEUPDATE; break;
     case PreviousCode: sql = Constants::ATC_PREVIOUSCODE; break;
@@ -141,8 +142,30 @@ QVariant AtcTableModel::data(const QModelIndex &index, int role) const
 
 bool AtcTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    return false;
-//    return d->_sql->setData(index, value, role);
+    if (!index.isValid())
+        return false;
+
+    int sql = -1;
+    switch (index.column()) {
+    case Id: sql = Constants::ATC_ID; break;
+    case IsValid: sql = Constants::ATC_ISVALID; break;
+    case Code: sql = Constants::ATC_CODE; break;
+    case Uid: sql = Constants::ATC_UID; break;
+    case LabelFr: sql = Constants::ATC_FR; break;
+    case LabelEn: sql = Constants::ATC_EN; break;
+    case LabelDe: sql = Constants::ATC_DE; break;
+    case LabelSp: sql = Constants::ATC_SP; break;
+    case DateCreation: sql = Constants::ATC_DATECREATE; break;
+    case DateUpdate: sql = Constants::ATC_DATEUPDATE; break;
+    case PreviousCode: sql = Constants::ATC_PREVIOUSCODE; break;
+    case WhoUpdateYear: sql = Constants::ATC_WHOYEARUPDATE; break;
+    case Comment: sql = Constants::ATC_COMMENT; break;
+    };
+    QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
+
+    qWarning() << index << sqlIndex << value << role;
+
+    return d->_sql->setData(sqlIndex, value, role);
 }
 
 QVariant AtcTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -156,7 +179,7 @@ QVariant AtcTableModel::headerData(int section, Qt::Orientation orientation, int
         case LabelFr: return tr("French");
         case LabelEn: return tr("English");
         case LabelDe: return tr("Deustch");
-        case LabelEs: return tr("Spanish");
+        case LabelSp: return tr("Spanish");
         case DateCreation: return tr("Date of creation");
         case DateUpdate: return tr("Date of update");
         case PreviousCode: return tr("Previuous code");
@@ -167,36 +190,16 @@ QVariant AtcTableModel::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
-//QVariant AtcTableModel::data(const QModelIndex &index, int role) const
-//{
-//    if (!index.isValid())
-//        return QVariant();
-
-//    if (role == Qt::DisplayRole || role==Qt::EditRole) {
-//        return QStandardItemModel::data(index, role);
-//    } else if (role == Qt::ToolTipRole) {
-//        QModelIndex code = this->index(index.row(), ATC_Code, index.parent());
-//        QModelIndex english = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        QModelIndex french = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        QModelIndex deutsch = this->index(index.row(), ATC_EnglishLabel, index.parent());
-//        return QString("<b>ATC: %1</b> <br />"
-//                       "* en: %2 <br />"
-//                       "* fr: %3 <br />"
-//                       "* de: %4")
-//                .arg(code.data().toString())
-//                .arg(english.data().toString())
-//                .arg(french.data().toString())
-//                .arg(deutsch.data().toString());
-//    } else if (role==Qt::FontRole) {
-//        if (index.parent() == QModelIndex())
-//            return d->bold;
-//    }
-//    return QVariant();
-//}
-
 Qt::ItemFlags AtcTableModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 }
 
+bool AtcTableModel::submit()
+{
+    bool ok = d->_sql->submitAll();
+    if (ok)
+        d->_sql->database().commit();
+    return ok;
+}

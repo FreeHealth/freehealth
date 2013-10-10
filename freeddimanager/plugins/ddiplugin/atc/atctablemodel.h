@@ -62,7 +62,7 @@ public:
         LabelFr,
         LabelEn,
         LabelDe,
-        LabelEs,
+        LabelSp,
         DateCreation,
         DateUpdate,
         PreviousCode,
@@ -92,6 +92,9 @@ public:
 //    virtual bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
 //    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 //    virtual bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+
+public Q_SLOTS:
+    bool submit();
 
 private:
     static AtcTableModel *_instance;

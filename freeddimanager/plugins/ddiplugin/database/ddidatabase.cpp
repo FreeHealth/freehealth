@@ -88,7 +88,7 @@ DDIDatabase::DDIDatabase():
     addField(Table_ATC, ATC_FR, "FR", FieldIsShortText);
     addField(Table_ATC, ATC_EN, "EN", FieldIsShortText);
     addField(Table_ATC, ATC_DE, "DE", FieldIsShortText);
-    addField(Table_ATC, ATC_ES, "ES", FieldIsShortText);
+    addField(Table_ATC, ATC_SP, "SP", FieldIsShortText);
     addField(Table_ATC, ATC_DATECREATE, "CREATE", FieldIsDate);
     addField(Table_ATC, ATC_DATEUPDATE, "UPDATE", FieldIsDate);
     addField(Table_ATC, ATC_PREVIOUSCODE, "PREVCODE", FieldIsShortText);
@@ -218,6 +218,35 @@ bool DDIDatabase::checkDatabaseVersion() const
     return (version()==::CURRENTVERSION);
 }
 
+QString DDIDatabase::atcLabelForCode(const QString &code, const QString &lang) const
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString();
+
+    QHash<int, QString> where;
+    QString c = code;
+    where.insert(Constants::ATC_CODE, QString("='%1'").arg(c.remove("'")));
+    int langField = Constants::ATC_FR;
+    if (lang.toLower() == "en")
+        langField = Constants::ATC_EN;
+    else if (lang.toLower() == "de")
+        langField = Constants::ATC_DE;
+    else if (lang.toLower() == "sp")
+        langField = Constants::ATC_SP;
+
+    QString req = select(Constants::Table_ATC, langField, where);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    }
+    return QString();
+}
+
 /** Read the raw CSV ATC file and populate the database with. Returns the number of ATC codes inserted. */
 int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
 {
@@ -234,10 +263,6 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
 
     // Clean ATC table from old values
     QString req = prepareDeleteQuery(Constants::Table_ATC);
-
-    qWarning() << "-----------------" ;
-    qWarning() << req;
-
     if (!executeSQL(req, DB))
         LOG_ERROR_FOR("DDIDatabase", "Unable to clear old ATC codes");
 
@@ -245,9 +270,6 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
     DB.transaction();
     QSqlQuery query(DB);
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
-
-    qWarning() << content.size();
-
     int n = 0;
     foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
         if (line.startsWith("--"))
@@ -269,7 +291,7 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
         query.bindValue(Constants::ATC_FR, vals.at(2).toUpper().remove("\""));
         query.bindValue(Constants::ATC_EN, vals.at(1).toUpper().remove("\""));
         query.bindValue(Constants::ATC_DE, vals.at(3).toUpper().remove("\""));
-        query.bindValue(Constants::ATC_ES, QVariant());
+        query.bindValue(Constants::ATC_SP, QVariant());
         query.bindValue(Constants::ATC_DATECREATE, QDate::currentDate().toString(Qt::ISODate));
         query.bindValue(Constants::ATC_DATEUPDATE, QDate::currentDate().toString(Qt::ISODate));
         query.bindValue(Constants::ATC_PREVIOUSCODE, QVariant());

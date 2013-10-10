@@ -53,6 +53,12 @@ public:
     void setAtcTableModel(AtcTableModel *model);
     void setCurrentIndex(const QModelIndex &index);
 
+public Q_SLOTS:
+    bool submit();
+
+private Q_SLOTS:
+    void populateParents();
+
 private:
     Internal::AtcEditorWidgetPrivate *d;
 };

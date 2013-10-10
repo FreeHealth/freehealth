@@ -39,7 +39,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
-#include <utils/widgets/detailswidget.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 
@@ -194,7 +194,13 @@ AtcCollectionEditorWidget::AtcCollectionEditorWidget(QWidget *parent) :
     // Ui connections
     connect(d->ui->atcView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onAtcCodeSelectionChanged(QModelIndex,QModelIndex)));
     connect(d->ui->search, SIGNAL(textChanged(QString)), this, SLOT(onFilterChanged(QString)));
+    connect(d->ui->edit, SIGNAL(clicked()), this, SLOT(toggleDataMapperEnabled()));
+    connect(d->ui->save, SIGNAL(clicked()), this, SLOT(submitDataMapper()));
+    connect(d->ui->restore, SIGNAL(clicked()), this, SLOT(restoreDataMapper()));
 
+    d->ui->editor->setEnabled(false);
+    d->ui->save->setEnabled(false);
+    d->ui->restore->setEnabled(false);
     retranslateUi();
     d->ui->splitter->setStretchFactor(0, 1);
     d->ui->splitter->setStretchFactor(1, 2);
@@ -207,6 +213,7 @@ AtcCollectionEditorWidget::~AtcCollectionEditorWidget()
     d = 0;
 }
 
+/** When an ATC code is selected, populate the data widget mapper */
 void AtcCollectionEditorWidget::onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
@@ -214,6 +221,7 @@ void AtcCollectionEditorWidget::onAtcCodeSelectionChanged(const QModelIndex &cur
     d->ui->editor->setCurrentIndex(d->_atcTreeProxyModel->toSourceIndex(treeModelIndex));
 }
 
+/** Update the atctreemodelproxy filter */
 void AtcCollectionEditorWidget::onFilterChanged(const QString &filter)
 {
     d->_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -224,6 +232,36 @@ void AtcCollectionEditorWidget::onFilterChanged(const QString &filter)
     d->_proxyModel->setFilterFixedString(filter);
     if (filter.count() > 4)
         d->ui->atcView->expandAll();
+}
+
+void AtcCollectionEditorWidget::toggleDataMapperEnabled()
+{
+    if (!d->ui->editor->isEnabled()) {
+        d->ui->editor->setEnabled(true);
+        d->ui->save->setEnabled(true);
+        d->ui->restore->setEnabled(true);
+    }
+}
+
+void AtcCollectionEditorWidget::submitDataMapper()
+{
+    d->ui->save->setEnabled(false);
+    if (!d->ui->editor->submit()) {
+        Utils::warningMessageBox(tr("Unable to submit modification to the model"),
+                                 tr("Changes will not correctly saved. Please check the data and "
+                                    "contact the development team."));
+    } else {
+        Utils::informativeMessageBox(tr("Modification saved"),
+                                 tr("Changes are correctly saved."));
+    }
+    d->ui->editor->setEnabled(false);
+    d->ui->restore->setEnabled(false);
+    d->ui->edit->setEnabled(true);
+}
+
+void AtcCollectionEditorWidget::restoreDataMapper()
+{
+    onAtcCodeSelectionChanged(d->ui->atcView->currentIndex(), QModelIndex());
 }
 
 void AtcCollectionEditorWidget::retranslateUi()

@@ -51,6 +51,8 @@ public:
     QString version() const;
     bool checkDatabaseVersion() const;
 
+    QString atcLabelForCode(const QString &code, const QString &lang) const;
+
     int insertAtcDataFromCsv(const QString &fileName);
 
 private:

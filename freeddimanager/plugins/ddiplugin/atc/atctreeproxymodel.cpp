@@ -109,8 +109,10 @@ public:
             cols <<  new QStandardItem(_sourceModel->data(en).toString());
             cols <<  new QStandardItem(_sourceModel->data(fr).toString());
             cols <<  new QStandardItem(_sourceModel->data(de).toString());
-//            cols << new QStandardItem(tmp);
-//            cols << new QStandardItem(code + " - " + en);
+            if (_sourceModel->data(code).toString().size() == 1) {
+                foreach(QStandardItem *item, cols)
+                    item->setFont(bold);
+            }
 
             // Find the parent item
             switch (_sourceModel->data(code).toString().count()) {
