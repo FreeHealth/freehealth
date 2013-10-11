@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>Debugging tools</source>
-        <translation>Outils de déboggage</translation>
+        <translation>Outils de débogage</translation>
     </message>
     <message>
         <source>&amp;File</source>

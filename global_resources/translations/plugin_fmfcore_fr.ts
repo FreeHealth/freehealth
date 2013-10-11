@@ -561,7 +561,7 @@ Sélectionnez votre langage préféré et le type d&apos;installation.</translat
     </message>
     <message>
         <source>Actual build: Debug</source>
-        <translation>Compilation de déboggage</translation>
+        <translation>Compilation de débogage</translation>
     </message>
     <message>
         <source>Actual build: Release</source>
