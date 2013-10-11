@@ -20,6 +20,7 @@ HEADERS += \
     atc/atceditorwidget.h \
     atc/searchatcindatabasedialog.h \
     interactors/druginteractor.h \
+    interactors/druginteractortablemodel.h \
 
 
 SOURCES += \
@@ -32,6 +33,7 @@ SOURCES += \
     atc/atceditorwidget.cpp \
     atc/searchatcindatabasedialog.cpp \
     interactors/druginteractor.cpp \
+    interactors/druginteractortablemodel.cpp \
 
 
 FORMS += \

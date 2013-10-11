@@ -54,6 +54,7 @@ public:
     QString atcLabelForCode(const QString &code, const QString &lang) const;
 
     int insertAtcDataFromCsv(const QString &fileName);
+    int insertDrugInteractorsDataFromXml(const QString &fileName);
 
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,

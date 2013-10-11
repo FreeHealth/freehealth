@@ -34,11 +34,12 @@
  * \file ddicore.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 09 Oct 2013
+ * \date 11 Oct 2013
 */
 
 namespace DDI {
 class AtcTableModel;
+class DrugInteractorTableModel;
 namespace Internal {
 class DDIPlugin;
 class DDICorePrivate;
@@ -59,6 +60,7 @@ public:
     ~DDICore();
 
     AtcTableModel *atcTableModel() const;
+    DrugInteractorTableModel *drugInteractorTableModel() const;
     Internal::DDIDatabase &database() const;
 
 private:

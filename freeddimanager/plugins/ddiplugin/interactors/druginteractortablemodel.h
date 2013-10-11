@@ -66,6 +66,7 @@ public:
         ATCCodeStringList,
         DateOfCreation,
         DateLastUpdate,
+        DateReview,
         PMIDStringList,
         ChildrenUuid,
         Reference,
@@ -79,22 +80,23 @@ public:
         All
     };
 
-    DrugInteractorTableModel(ShowData show = All, QObject *parent = 0);
+    DrugInteractorTableModel(QObject *parent = 0);
     ~DrugInteractorTableModel();
+    virtual bool initialize();
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual void fetchMore(const QModelIndex &parent);
+    virtual bool canFetchMore(const QModelIndex &parent) const;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     DrugInteractor *createInteractingClass(const QString &initialLabel);
     DrugInteractor *createInteractor(const QString &initialLabel);
@@ -103,7 +105,7 @@ public:
     int numberOfUnlinked() const;
 
 public Q_SLOTS:
-    bool submit();
+    virtual bool submit();
 
 Q_SIGNALS:
     void unreviewedCountChanged();

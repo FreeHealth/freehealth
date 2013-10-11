@@ -125,6 +125,7 @@ QString DrugInteractor::id() const {return data(Id).toString();}
 bool DrugInteractor::isValid() const {return data(IsValid).toBool();}
 bool DrugInteractor::isClass() const {return data(IsClass).toBool();}
 bool DrugInteractor::isReviewed() const {return data(IsReviewed).toBool();}
+bool DrugInteractor::isAutoFound() const {return data(IsAutoFound).toBool();}
 
 /** Add an ATC link for this interactor. Interactor can be linked to multiple ATC codes */
 void DrugInteractor::addAtcLink(const QString &atcCode)

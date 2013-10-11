@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "ddidatabase.h"
 #include <ddiplugin/constants.h>
+#include <ddiplugin/interactors/druginteractor.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -94,6 +95,28 @@ DDIDatabase::DDIDatabase():
     addField(Table_ATC, ATC_PREVIOUSCODE, "PREVCODE", FieldIsShortText);
     addField(Table_ATC, ATC_WHOYEARUPDATE, "WHOYEAR", FieldIsDate);
     addField(Table_ATC, ATC_COMMENT, "COMMENT", FieldIsShortText);
+
+    addTable(Table_Interactors, "INTERACTORS");
+    addField(Table_Interactors, INTERACTOR_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_Interactors, INTERACTOR_UID, "UID", FieldIsShortText);
+    addField(Table_Interactors, INTERACTOR_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_Interactors, INTERACTOR_ISREVIEWED, "ISREVIEW", FieldIsBoolean);
+    addField(Table_Interactors, INTERACTOR_ISAUTOFOUND, "ISAUTOFOUND", FieldIsBoolean);
+    addField(Table_Interactors, INTERACTOR_WARNDUPLICATES, "WARNDUPLICATES", FieldIsBoolean);
+    addField(Table_Interactors, INTERACTOR_ATC, "ATC", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_CHILDREN, "CHILDREN", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_FR, "FR", FieldIsShortText);
+    addField(Table_Interactors, INTERACTOR_EN, "EN", FieldIsShortText);
+    addField(Table_Interactors, INTERACTOR_DE, "DE", FieldIsShortText);
+    addField(Table_Interactors, INTERACTOR_INFO_FR, "INFOFR", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_INFO_EN, "INFOEN", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_INFO_DE, "INFODE", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_DATECREATE, "DATECREATE", FieldIsDate);
+    addField(Table_Interactors, INTERACTOR_DATEUPDATE, "DATEUPDATE", FieldIsDate);
+    addField(Table_Interactors, INTERACTOR_DATEREVIEW, "DATEREVIEW", FieldIsDate);
+    addField(Table_Interactors, INTERACTOR_REF, "REF", FieldIsShortText);
+    addField(Table_Interactors, INTERACTOR_PMIDS, "PMIDS", FieldIsLongText);
+    addField(Table_Interactors, INTERACTOR_COMMENT, "COMMENT", FieldIsShortText);
 
     addTable(Table_CURRENTVERSION, "VERSION");
     addField(Table_CURRENTVERSION, CURRENTVERSION_ID, "ID", FieldIsUniquePrimaryKey);
@@ -312,6 +335,71 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
     }
     DB.commit();
     return true;
+}
+
+int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return false;
+
+    // Check file
+    if (!QFile(fileName).exists()) {
+        LOG_ERROR_FOR("DDIDatabase", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        return false;
+    }
+
+    // Clean DrugInteractor table from old values
+    QString req = prepareDeleteQuery(Constants::Table_Interactors);
+    if (!executeSQL(req, DB))
+        LOG_ERROR_FOR("DDIDatabase", "Unable to clear old DrugInteractor data");
+
+    // Read the XML file
+    DB.transaction();
+    QSqlQuery query(DB);
+    QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
+    QList<DrugInteractor> list = DrugInteractor::listFromXml(content);
+    int n = 0;
+    foreach(const DrugInteractor &di, list) {
+        if (!di.isValid())
+            continue;
+        query.prepare(prepareInsertQuery(Constants::Table_Interactors));
+        query.bindValue(Constants::INTERACTOR_ID, QVariant());
+        query.bindValue(Constants::INTERACTOR_UID, di.data(DrugInteractor::Id));
+        query.bindValue(Constants::INTERACTOR_ISVALID, di.isValid()?"1":"0");
+        query.bindValue(Constants::INTERACTOR_ISREVIEWED, di.isReviewed()?"1":"0");
+        query.bindValue(Constants::INTERACTOR_ISAUTOFOUND, di.isAutoFound()?"1":"0");
+        query.bindValue(Constants::INTERACTOR_WARNDUPLICATES, di.data(DrugInteractor::DoNotWarnDuplicated).toBool()?"1":"0");
+        query.bindValue(Constants::INTERACTOR_ATC, di.data(DrugInteractor::ATCCodeStringList).toStringList().join(";"));
+        query.bindValue(Constants::INTERACTOR_CHILDREN, di.childrenIds().join(";"));
+        query.bindValue(Constants::INTERACTOR_FR, di.data(DrugInteractor::FrLabel));
+        query.bindValue(Constants::INTERACTOR_EN, di.data(DrugInteractor::EnLabel));
+        query.bindValue(Constants::INTERACTOR_DE, di.data(DrugInteractor::DeLabel));
+        query.bindValue(Constants::INTERACTOR_INFO_FR, di.data(DrugInteractor::ClassInformationFr));
+        query.bindValue(Constants::INTERACTOR_INFO_EN, di.data(DrugInteractor::ClassInformationEn));
+        query.bindValue(Constants::INTERACTOR_INFO_DE, di.data(DrugInteractor::ClassInformationDe));
+        query.bindValue(Constants::INTERACTOR_DATECREATE, di.data(DrugInteractor::DateOfCreation));
+        query.bindValue(Constants::INTERACTOR_DATEUPDATE, di.data(DrugInteractor::DateLastUpdate));
+        query.bindValue(Constants::INTERACTOR_DATEREVIEW, di.data(DrugInteractor::DateOfReview));
+        query.bindValue(Constants::INTERACTOR_REF, di.data(DrugInteractor::Reference));
+        query.bindValue(Constants::INTERACTOR_PMIDS, QVariant());
+        query.bindValue(Constants::INTERACTOR_COMMENT, di.data(DrugInteractor::Comment));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        ++n;
+        if (n % 250) {
+            DB.commit();
+            DB.transaction();
+        }
+        query.finish();
+    }
+    DB.commit();
+    return n;
 }
 
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,

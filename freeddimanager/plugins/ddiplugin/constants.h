@@ -59,10 +59,15 @@ const char * const DDIMANAGER_DATABASE_FILENAME  =  "ddimanager.db";
 const char * const DDIMANAGER_DATABASE_NAME      =  "ddimanager";
 
 const char * const ATC_CSV_FILENAME                         = "/nonfree/ddi/atc_utf8.csv";
+const char * const INTERACTORS_XML_FILENAME                 = "/nonfree/ddi/ddi_interactors_latest.xml";
 const char * const ROUTES_CSV_FILENAME                      = "/sql/drugdb/routes.txt";
 
 // Database
-enum Tables { Table_ATC = 0, Table_CURRENTVERSION };
+enum Tables {
+    Table_ATC = 0,
+    Table_Interactors,
+    Table_CURRENTVERSION
+};
 
 enum TableATC_Fields {
     ATC_ID = 0,
@@ -76,6 +81,30 @@ enum TableATC_Fields {
     ATC_WHOYEARUPDATE,
     ATC_COMMENT,
     ATC_MaxParams
+};
+
+enum TableInteractors_Fields {
+    INTERACTOR_ID = 0,
+    INTERACTOR_UID,
+    INTERACTOR_ISVALID,
+    INTERACTOR_ISREVIEWED,
+    INTERACTOR_ISAUTOFOUND,
+    INTERACTOR_WARNDUPLICATES,
+    INTERACTOR_ATC,
+    INTERACTOR_CHILDREN,
+    INTERACTOR_FR,
+    INTERACTOR_EN,
+    INTERACTOR_DE,
+    INTERACTOR_INFO_FR,
+    INTERACTOR_INFO_EN,
+    INTERACTOR_INFO_DE,
+    INTERACTOR_DATECREATE,
+    INTERACTOR_DATEUPDATE,
+    INTERACTOR_DATEREVIEW,
+    INTERACTOR_REF,
+    INTERACTOR_PMIDS,
+    INTERACTOR_COMMENT,
+    INTERACTOR_MaxParam
 };
 
 enum TableVERSION_Fields {

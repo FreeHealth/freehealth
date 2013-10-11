@@ -45,7 +45,7 @@
 using namespace DDI;
 using namespace Internal;
 
-static inline DDI::Internal::DDIDatabase *ddiBase() {return DDI::DDICore::instance()->database();}
+static inline DDI::Internal::DDIDatabase &ddiBase() {return DDI::DDICore::instance()->database();}
 
 namespace DDI {
 namespace Internal {
@@ -210,13 +210,13 @@ private:
 }  // End namespace DDI
 
 
-DrugInteractorTableModel::DrugInteractorTableModel(ShowData show, QObject *parent) :
-    QSqlTableModel(parent),
+DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
+    QAbstractTableModel(parent),
     d(new Internal::DrugInteractorTableModelPrivate(this))
 {
     setObjectName("DrugInteractorTableModel");
-    d->_sql = new QSqlTableModel(this, ddiBase()->database());
-    d->_sql->setTable(ddiBase()->table(Constants::Table_Interactors));
+    d->_sql = new QSqlTableModel(this, ddiBase().database());
+    d->_sql->setTable(ddiBase().table(Constants::Table_Interactors));
     d->_sql->select();
 }
 
@@ -225,6 +225,13 @@ DrugInteractorTableModel::~DrugInteractorTableModel()
     if (d)
         delete d;
     d = 0;
+}
+
+/** Initialize the model. */
+bool DrugInteractorTableModel::initialize()
+{
+    d->_sql->select();
+    return true;
 }
 
 int DrugInteractorTableModel::rowCount(const QModelIndex &parent) const
@@ -237,10 +244,59 @@ int DrugInteractorTableModel::columnCount(const QModelIndex &) const
     return ColumnCount;
 }
 
+void DrugInteractorTableModel::fetchMore(const QModelIndex &parent)
+{
+    d->_sql->fetchMore(parent);
+}
+
+bool DrugInteractorTableModel::canFetchMore(const QModelIndex &parent) const
+{
+    return d->_sql->canFetchMore(parent);
+}
+
+
 QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+
+    int sql = -1;
+    switch (index.column()) {
+    case Id: sql = Constants::INTERACTOR_ID; break;
+    case Uuid: sql = Constants::INTERACTOR_UID; break;
+    case IsInteractingClass: sql = Constants::INTERACTOR_ISVALID; break;
+    case IsReviewed: sql = Constants::INTERACTOR_ISREVIEWED; break;
+    case IsAutoFound: sql = Constants::INTERACTOR_ISAUTOFOUND; break;
+    case DoNotWarnDuplicated: sql = Constants::INTERACTOR_WARNDUPLICATES; break;
+    case TranslatedLabel:
+    {
+        switch (QLocale().language()) {
+        case QLocale::French: sql = Constants::INTERACTOR_FR; break;
+        case QLocale::English: sql = Constants::INTERACTOR_EN; break;
+        case QLocale::German: sql = Constants::INTERACTOR_DE; break;
+        default: sql = Constants::INTERACTOR_EN; break;
+        }
+        break;
+    }
+    case EnLabel: sql = Constants::INTERACTOR_EN; break;
+    case FrLabel: sql = Constants::INTERACTOR_FR; break;
+    case DeLabel: sql = Constants::INTERACTOR_DE; break;
+    case ClassInformationFr: sql = Constants::INTERACTOR_INFO_FR; break;
+    case ClassInformationEn: sql = Constants::INTERACTOR_INFO_EN; break;
+    case ClassInformationDe: sql = Constants::INTERACTOR_INFO_DE; break;
+    case ATCCodeStringList: sql = Constants::INTERACTOR_ATC; break;
+    case DateOfCreation: sql = Constants::INTERACTOR_DATECREATE; break;
+    case DateLastUpdate: sql = Constants::INTERACTOR_DATEUPDATE; break;
+    case DateReview: sql = Constants::INTERACTOR_DATEREVIEW; break;
+    case PMIDStringList: sql = Constants::INTERACTOR_PMIDS; break;
+    case ChildrenUuid: sql = Constants::INTERACTOR_CHILDREN; break;
+    case Reference: sql = Constants::INTERACTOR_REF; break;
+    case Comment: sql = Constants::INTERACTOR_COMMENT; break;
+    };
+
+    QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
+
+    return d->_sql->data(sqlIndex, role);
 
 //    DrugInteractor *di = item->di();
 //    if (!di) {

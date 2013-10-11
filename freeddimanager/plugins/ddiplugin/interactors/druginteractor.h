@@ -83,6 +83,7 @@ public:
     bool isValid() const;
     bool isClass() const;
     bool isReviewed() const;
+    bool isAutoFound() const;
 
     void addAtcLink(const QString &atcCode);
 
@@ -96,10 +97,10 @@ public:
     QStringList childrenIds() const {return m_ChildrenId;}
     int childrenCount() const {return m_ChildrenId.count();}
 
+    // TODO: simplify management of related PMID to the interactor only (not to its children)
     void addChildClassificationPMID(const QString &childId, const QString &pmid) {m_ChildClassifPMIDs.insertMulti(childId, pmid);}
     void addChildClassificationPMIDs(const QString &childId, const QStringList &pmids);
     QStringList childClassificationPMIDs(const QString &childId) const;
-
     QStringList allNeededPMIDs() const;
 
     // Xml members
@@ -111,7 +112,6 @@ public:
     bool operator==(const DrugInteractor &other) const;
     static bool lowerThan(const DrugInteractor &d1, const DrugInteractor &d2);
     static bool lowerThan(DrugInteractor *d1, DrugInteractor *d2) {return lowerThan(*d1, *d2);}
-
 
 private:
     QHash<int, QVariant> _data;

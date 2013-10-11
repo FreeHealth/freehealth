@@ -32,6 +32,7 @@
 #include "ddicore.h"
 #include <ddiplugin/constants.h>
 #include <ddiplugin/atc/atctablemodel.h>
+#include <ddiplugin/interactors/druginteractortablemodel.h>
 #include <ddiplugin/database/ddidatabase.h>
 
 #include <coreplugin/icore.h>
@@ -58,6 +59,7 @@ class DDICorePrivate
 public:
     DDICorePrivate(DDICore *parent) :
         _atcTableModel(0),
+        _drugInteractorTableModel(0),
         _base(0),
         q(parent)
 
@@ -74,6 +76,7 @@ public:
 
 public:
     AtcTableModel *_atcTableModel;
+    DrugInteractorTableModel *_drugInteractorTableModel;
     DDIDatabase *_base;
 
 private:
@@ -111,9 +114,13 @@ bool DDICore::initialize()
     d->_base = new DDIDatabase;
     d->_base->initialize(settings()->databasePath(), true);
 //    d->_base->insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+//    d->_base->insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
 
     d->_atcTableModel = new AtcTableModel(this);
     d->_atcTableModel->initialize();
+
+    d->_drugInteractorTableModel = new DrugInteractorTableModel(this);
+    d->_drugInteractorTableModel->initialize();
     return true;
 }
 
@@ -121,6 +128,11 @@ bool DDICore::initialize()
 AtcTableModel *DDICore::atcTableModel() const
 {
     return d->_atcTableModel;
+}
+
+DrugInteractorTableModel *DDICore::drugInteractorTableModel() const
+{
+    return 0;
 }
 
 /** Returns the DDI database single instance */
