@@ -3,7 +3,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -48,6 +48,7 @@ leave room for the Qt 4 target page.
         <file source="mypluginconstants.h.tpl" target="%PluginName:l%constants.%CppHeaderSuffix%" openeditor="true"/>
         <file source="myplugin.h.tpl" target="%PluginName:l%plugin.%CppHeaderSuffix%" openeditor="true"/>
         <file source="myplugin.cpp.tpl" target="%PluginName:l%plugin.%CppSourceSuffix%" openeditor="true"/>
+        <file source="tests/tests_myplugin.cpp" target="tests/test_%PluginName:l%.%CppSourceSuffix%" openeditor="true"/>
     </files>
     <!-- Create a 2nd wizard page with parameters -->
     <fieldpagetitle>Plugin Information</fieldpagetitle>

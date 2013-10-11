@@ -17,10 +17,10 @@ SOURCES += \
 
 OTHER_FILES = %PluginName%.pluginspec
 
-#FREEMEDFORMS_SOURCES=%FreeMedFormsSources%
-#IDE_BUILD_TREE=%FreeMedFormsBuild%
-
-PROVIDER = %VendorName%
+equals(TEST, 1) {
+    SOURCES += \
+        tests/test_%PluginName:l%plugin.cpp
+}
 
 #include translations
 TRANSLATION_NAME = %PluginName:l%

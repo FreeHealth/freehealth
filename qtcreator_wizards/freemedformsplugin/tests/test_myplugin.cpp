@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,46 +19,30 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *  Main developer:                                                        *
+ *       Eric MAEKER, <eric.maeker@gmail.com>                              *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
-#define %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+#include "%PluginName:l%plugin.%CppHeaderSuffix%"
 
-#include <extensionsystem/iplugin.h>
+#include <utils/log.h>
+#include <utils/randomizer.h>
 
-namespace %PluginName% {
-namespace Internal {
+#include <QTest>
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+using namespace %PluginName%;
+using namespace Internal;
+
+void %PluginName%Plugin::initTestCase()
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeMedForms.%PluginName%Plugin" FILE "%PluginName%.json")
+}
 
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+void %PluginName%Plugin::test_your_plugin_unit_test()
+{
+}
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-
-// Declare plugin unit tests here
-#ifdef WITH_TESTS
-private Q_SLOTS:
-    void initTestCase();
-    void test_your_plugin_unit_test(); // see file tests/test_%PluginName%.cpp
-    void cleanTestCase();
-#endif
-
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_IPLUGIN_%CppHeaderSuffix:u%
+void %PluginName%Plugin::cleanupTestCase()
+{
+}
