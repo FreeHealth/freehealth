@@ -35,6 +35,8 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <quazip/JlCompress.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDomDocument>
 #include <QFileInfo>
@@ -42,6 +44,7 @@
 
 using namespace DataPackPlugin;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 /** --- XML Architecture ---
   <datapack description="" server="">
@@ -116,7 +119,7 @@ bool GenericDataPackCreator::registerDataPack()
     int col = 0;
     QString error;
     if (!doc.setContent(Utils::readTextFile(descriptionFile, Utils::DontWarnUser), &error, &line, &col)) {
-        LOG_ERROR(QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
+        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         addError(Process, DataPackSubProcess, QString("Unable to read file. %1;%2: %3").arg(line).arg(col).arg(error));
         return false;
     }

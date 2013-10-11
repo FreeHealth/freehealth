@@ -47,6 +47,7 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_msgerror.h>
 
 #include "ui_interactoreditorwidget.h"
 
@@ -493,7 +494,7 @@ void InteractorEditorWidget::reformatOldSource()
         int line, col;
         if (!doc.setContent(&file, &error,&line,&col)) {
             LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
-            LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
+            LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         } else {
             LOG(tr("Reading file: %1").arg(file.fileName()));
         }

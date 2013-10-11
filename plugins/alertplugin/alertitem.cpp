@@ -1412,7 +1412,7 @@ QString AlertItem::toXml() const
     QString err;
     int l, c;
     if (!doc.setContent(xml, &err, &l, &c))
-        LOG_ERROR_FOR("AlertItem", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(l).arg(c).arg(err).arg(xml));
+        LOG_ERROR_FOR("AlertItem", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(l).arg(c).arg(err));
     return doc.toString(2);
 }
 
@@ -1424,7 +1424,7 @@ AlertItem &AlertItem::fromXml(const QString &xml)
     QString err;
     int l, c;
     if (!doc.setContent(xml, &err, &l, &c)) {
-        LOG_ERROR_FOR("AlertItem", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
+        LOG_ERROR_FOR("AlertItem", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(l).arg(c).arg(err));
         return *item;
     }
     QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
@@ -1683,8 +1683,7 @@ AlertTiming &AlertTiming::fromXml(const QString &xml)
     int col = 0;
     QString error;
     if (!doc.setContent(xml, &error, &line, &col)) {
-        LOG_ERROR_FOR("AlertTiming", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                      .arg(error).arg(line).arg(col));
+        LOG_ERROR_FOR("AlertTiming", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
         AlertTiming *t = new AlertTiming;
         return *t;
     }
@@ -1843,8 +1842,7 @@ AlertScript &AlertScript::fromXml(const QString &xml)
     int col = 0;
     QString error;
     if (!doc.setContent(xml, &error, &line, &col)) {
-        LOG_ERROR_FOR("AlertScript", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                      .arg(error).arg(line).arg(col));
+        LOG_ERROR_FOR("AlertScript", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
         AlertScript *script = new AlertScript;
         return *script;
     }
@@ -1926,8 +1924,7 @@ AlertValidation &AlertValidation::fromXml(const QString &xml)
     int col = 0;
     QString error;
     if (!doc.setContent(xml, &error, &line, &col)) {
-        LOG_ERROR_FOR("AlertValidation", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                      .arg(error).arg(line).arg(col));
+        LOG_ERROR_FOR("AlertValidation", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
         AlertValidation *val = new AlertValidation();
         return *val;
     }

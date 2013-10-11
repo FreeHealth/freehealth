@@ -33,11 +33,14 @@
 #include "servercontent.h"
 
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDomDocument>
 #include <QDomElement>
 
 using namespace DataPack;
+using namespace Trans::ConstantTranslations;
 
 //<ServerContents>
 //  <Pack serverFileName=""/>
@@ -62,8 +65,10 @@ bool ServerContent::fromXml(const QString &xml)
 {
     m_PackFileNames.clear();
     QDomDocument doc;
-    if (!doc.setContent(xml)) {
-        LOG_ERROR_FOR("ServerContent", "XML Error");
+    QString error;
+    int line, col;
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
     QDomElement root = doc.firstChildElement(::TAG_SERVERCONTENT);

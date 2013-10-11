@@ -355,7 +355,7 @@ bool IDrugDatabaseStep::saveDrugDatabaseDescription()
     int col = 0;
     QString error;
     if (!doc.setContent(Utils::readTextFile(_descriptionFilePath, Utils::DontWarnUser), &error, &line, &col)) {
-        LOG_ERROR_FOR("Tools", QString("Wrong XML: (%1;%2): %3 in file %4").arg(line).arg(col).arg(error).arg(_descriptionFilePath));
+        LOG_ERROR_FOR("Tools", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
     DrugDatabaseDescription descr;

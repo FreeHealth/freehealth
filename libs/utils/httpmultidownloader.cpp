@@ -35,6 +35,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QUrl>
 #include <QDir>
@@ -242,8 +243,11 @@ bool HttpMultiDownloader::readXmlUrlFileLinks()
     Q_EMIT progressMessageChanged(tr("Processing cache"));
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QDomDocument doc;
-    if (!doc.setContent(Utils::readTextFile(QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME), Utils::DontWarnUser))) {
-        LOG_ERROR("Wrong xml file");
+    QString error;
+    int line, col;
+    QString xml = Utils::readTextFile(QString("%1/%2").arg(outputPath()).arg(::DEFAULT_XML_FILENAME), Utils::DontWarnUser);
+    if (!doc.setContent(xml, &error, &line, &col)) {
+        LOG_ERROR_FOR("HttpMultiDownloader", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
     QDomElement element = doc.firstChildElement(::TAG_ROOT);

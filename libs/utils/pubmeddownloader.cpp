@@ -25,7 +25,9 @@
  ***************************************************************************/
 #include "pubmeddownloader.h"
 
-//#include <utils/log.h>
+#include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -35,6 +37,7 @@
 #include <QDomDocument>
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 //
 //  Get textual summary of publication (pubmed)
 //  http://www.ncbi.nlm.nih.gov/pubmed/8148870?dopt=docsum&format=text
@@ -138,7 +141,7 @@ void PubMedDownloader::xmlFinished(QNetworkReply *reply)
     QString error;
     int line, col;
     if (!doc.setContent(content, &error, &line, &col)) {
-        qWarning() << Q_FUNC_INFO << error << line << col;
+        LOG_ERROR_FOR("PubMedDownloader", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
     }
     m_Xml = doc.toString(2);
     manager->disconnect();

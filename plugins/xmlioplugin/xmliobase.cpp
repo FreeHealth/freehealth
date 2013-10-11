@@ -756,8 +756,10 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         // Try to catch file addition
         // File addition is done using the tag ‘file’ or an attrib of the same name
         QDomDocument doc;
-        if (!doc.setContent(content)) {
-            LOG_ERROR("XML Error");
+        QString error;
+        int line, col;
+        if (!doc.setContent(content, &error, &line, &col)) {
+            LOG_ERROR_FOR("XmlIOBase", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
             database().rollback();
             _transaction = false;
             return false;
@@ -919,7 +921,8 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     int col = -1;
     QString error;
     if (!doc.setContent(content, &error, &line, &col)) {
-        LOG_ERROR(QString("Error while loading PMHxCategories XML files.\n  %1: %2;%3").arg(error).arg(line).arg(col));
+        LOG_ERROR(QString("Error while loading PMHxCategories XML files."));
+        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
         return false;
     }
     QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);

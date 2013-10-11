@@ -37,6 +37,7 @@
 #include <utils/versionnumber.h>
 #include <utils/genericupdateinformation.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -48,7 +49,7 @@
 
 using namespace Utils;
 //using namespace Internal;
-//using namespace Trans::ConstantTranslations;
+using namespace Trans::ConstantTranslations;
 
 namespace {
 
@@ -190,8 +191,10 @@ bool GenericDescription::fromXmlContent(const QString &xmlContent)
         return true;
 
     QDomDocument doc;
-    if (!doc.setContent(xmlContent)) {
-        LOG_ERROR_FOR("GenericDescription", "Wrong XML");
+    QString error;
+    int line, col;
+    if (!doc.setContent(xmlContent, &error, &line, &col)) {
+        LOG_ERROR_FOR("GenericDescription", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
     QDomNodeList els = doc.elementsByTagName(m_RootTag);

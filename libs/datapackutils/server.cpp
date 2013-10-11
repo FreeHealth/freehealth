@@ -31,6 +31,7 @@
 #include <utils/versionnumber.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QFileInfo>
 #include <QDomDocument>
@@ -213,8 +214,10 @@ bool Server::requiereAuthentification() const
 void Server::fromXml(const QString &fullServerConfigXml)
 {
     QDomDocument doc;
-    if (!doc.setContent(fullServerConfigXml)) {
-        LOG_ERROR_FOR("DataPack::Server", "Wrong XML");
+    QString error;
+    int line, col;
+    if (!doc.setContent(fullServerConfigXml, &error, &line, &col)) {
+        LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return;
     }
     QDomElement root = doc.firstChildElement(::TAG_ROOT);

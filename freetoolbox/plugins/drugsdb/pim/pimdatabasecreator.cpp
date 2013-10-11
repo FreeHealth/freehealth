@@ -107,7 +107,7 @@ bool PimDatabaseCreator::populateDatabaseWithPims(DrugsDB::Internal::DrugBaseEss
     int line, col;
     QString error;
     if (!doc.setContent(Utils::readTextFile(treeXmlFile()), &error, &line, &col)) {
-        LOG_ERROR(QString("Unable to read PIM XML file: (%1;%2) %3").arg(line).arg(col).arg(error));
+        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return false;
     }
 
