@@ -35,13 +35,9 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
-//#include <coreplugin/contextmanager/icontext.h>
-//#include <coreplugin/actionmanager/command.h>
-//#include <coreplugin/coreconstants.h>
 #include <coreplugin/constants_menus.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_spashandupdate.h>
-//#include <translationutils/constanttranslations.h>
 
 #include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
@@ -63,7 +59,7 @@ FeedbackPlugin::FeedbackPlugin()
         qWarning() << "creating Feedback";
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("feedback");
+    Core::ICore::instance()->translators()->addNewTranslator("plugin_feedback");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
