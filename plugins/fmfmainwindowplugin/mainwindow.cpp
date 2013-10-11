@@ -283,6 +283,8 @@ void MainWindow::postCoreInitialization()
     connect(user(), SIGNAL(reset()), this, SLOT(onCurrentUserChanged()), Qt::UniqueConnection);
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()), Qt::UniqueConnection);
 
+    switchToCurrentUserLanguage();
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 

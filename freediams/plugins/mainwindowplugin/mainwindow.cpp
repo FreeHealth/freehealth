@@ -510,6 +510,7 @@ void MainWindow::postCoreInitialization()
     show();
     raise();
 
+    switchToCurrentUserLanguage();
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     refreshPatient();
