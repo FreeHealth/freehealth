@@ -24,131 +24,52 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREETOOLBOX_DRUGINTERACTOR_H
-#define FREETOOLBOX_DRUGINTERACTOR_H
+#ifndef DDIMANAGER_DDIPLUGIN_DRUGINTERACTORTABLEMODEL_H
+#define DDIMANAGER_DDIPLUGIN_DRUGINTERACTORTABLEMODEL_H
 
-#include <QMultiHash>
-#include <QVariant>
-#include <QString>
-#include <QAbstractItemModel>
-#include <QStringList>
-#include <QDomElement>
+#include <QAbstractTableModel>
 
 /**
- * \file druginteractor.h
+ * \file druginteractortablemodel.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 09 Dec 2012
+ * \version 0.10.0
+ * \date 11 Oct 2013
 */
 
-namespace DrugsDB {
-namespace Internal {
+namespace DDI {
+class DrugInteractor;
 
-class DrugInteractor
+namespace Internal {
+class DrugInteractorTableModelPrivate;
+} // namespace Internal
+
+class DrugInteractorTableModel : public QAbstractTableModel
 {
+    Q_OBJECT
+    friend class DDI::Internal::DrugInteractorTableModelPrivate;
+
 public:
     enum DataRepresentation {
         Id = 0,
-        TranslatedLabel,
-        InitialLabel,
-        EnLabel,
-        FrLabel,
-        DeLabel,
-        EsLabel,
-        IsValid,
-        IsClass,
-        ClassInformationFr,
-        ClassInformationEn,
-        ClassInformationDe,
-        DoNotWarnDuplicated,
-        Reference,
-        PMIDsStringList,
-        ATCCodeStringList,
-        Comment,
-        IsReviewed,
-        ReviewersStringList,
-        DateOfReview,
-        DateOfCreation,
-        DateLastUpdate,
-        IsAutoFound,
-        IsDuplicated
-    };
-
-    DrugInteractor();
-    DrugInteractor(const QDomElement &element);
-    ~DrugInteractor();
-
-    QVariant data(const int reference, const QString &lang = QString::null) const;
-    bool setData(const int reference, const QVariant &value, const QString &lang = QString::null);
-
-    QString label() const {return data(TranslatedLabel).toString();}
-
-    bool isValid() const {return data(IsValid).toBool();}
-    bool isClass() const {return data(IsClass).toBool();}
-    bool isReviewed() const {return data(IsReviewed).toBool();}
-
-    QString id() const {return data(Id).toString();}
-
-    void addAtcLink(const QString &atcCode);
-
-    void addParentId(const QString &id) {m_ParentIds<<id;}
-    QStringList parentIds() const {return m_ParentIds;}
-    void removeParentId(const QString &id) {m_ParentIds.removeAll(id);}
-
-    void setChildId(const QStringList &ids) {m_ChildrenId = ids;}
-    void addChildId(const QString &id) {m_ChildrenId<<id;}
-    void removeChildId(const QString &id) {m_ChildrenId.removeAll(id);}
-    QStringList childrenIds() const {return m_ChildrenId;}
-    int childrenCount() const {return m_ChildrenId.count();}
-
-    void addChildClassificationPMID(const QString &childId, const QString &pmid) {m_ChildClassifPMIDs.insertMulti(childId, pmid);}
-    void addChildClassificationPMIDs(const QString &childId, const QStringList &pmids);
-    QStringList childClassificationPMIDs(const QString &childId) const;
-
-    QStringList allNeededPMIDs() const;
-
-    // Xml members
-    QString toXml() const;
-
-    bool operator==(const DrugInteractor &other) const;
-    static bool lowerThan(const DrugInteractor &d1, const DrugInteractor &d2);
-    static bool lowerThan(DrugInteractor *d1, DrugInteractor *d2) {return lowerThan(*d1, *d2);}
-
-private:
-    QHash<int, QHash<QString, QVariant> > m_TrData;
-    QStringList m_ParentIds, m_ChildrenId, m_AtcLinks;
-    QMultiHash<QString, QString> m_ChildClassifPMIDs;
-};
-
-class DrugInteractorModelPrivate;
-class DrugInteractorModel : public QAbstractItemModel
-{
-    Q_OBJECT
-    friend class DrugsDB::Internal::DrugInteractorModelPrivate;
-
-public:
-    enum DataRepresentation {
-        TrLabel = 0,
-        Id,
         Uuid,
+        IsInteractingClass,
+        IsReviewed,
+        IsAutoFound,
+        DoNotWarnDuplicated,
+        TranslatedLabel,
         EnLabel,
         FrLabel,
         DeLabel,
-        EsLabel,
-        IsInteractingClass,
         ClassInformationFr,
         ClassInformationEn,
         ClassInformationDe,
-        DoNotWarnDuplicated,
         ATCCodeStringList,
-        IsReviewed,
         DateOfCreation,
         DateLastUpdate,
-        IsAutoFound,
-        Comment,
         PMIDStringList,
         ChildrenUuid,
         Reference,
+        Comment,
         ColumnCount
     };
 
@@ -158,8 +79,8 @@ public:
         All
     };
 
-    DrugInteractorModel(ShowData show = All, QObject *parent = 0);
-    ~DrugInteractorModel();
+    DrugInteractorTableModel(ShowData show = All, QObject *parent = 0);
+    ~DrugInteractorTableModel();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
@@ -182,17 +103,16 @@ public:
     int numberOfUnlinked() const;
 
 public Q_SLOTS:
-    bool saveModel();
+    bool submit();
 
 Q_SIGNALS:
     void unreviewedCountChanged();
     void unlinkedCountChanged();
 
 private:
-    DrugInteractorModelPrivate *d;
+    Internal::DrugInteractorTableModelPrivate *d;
 };
 
-}  // namespace Internal
-}  // namespace DrugsDB
+}  // namespace DDI
 
-#endif // FREETOOLBOX_DRUGINTERACTOR_H
+#endif // DDIMANAGER_DDIPLUGIN_DRUGINTERACTORTABLEMODEL_H
