@@ -87,7 +87,7 @@ AtcTableModel::AtcTableModel(QObject *parent) :
 AtcTableModel::~AtcTableModel()
 {}
 
-/** Initialize ATC Model. Read the ATC CSV file in the global_resources */
+/** Initialize the model */
 bool AtcTableModel::initialize()
 {
     d->_sql->select();
