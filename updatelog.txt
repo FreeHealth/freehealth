@@ -6,13 +6,18 @@ The FreeMedForms project
   * Forms
   * FreeMedForms
     * HPRIM importation: trying to correct wrong char encoding
+  * FreeDDIManager
+    * First release
   * Build process
   * XML Forms coding
 
 ===== Bug correction =====
 
   * FreeMedForms
+    * Feedback Plugin is correctly translated
+    * Correctly select user language at startup
   * FreeDiams
+    * Correctly select user language at startup
   * FreeDRC
     * First release
   * FreeToolBox
