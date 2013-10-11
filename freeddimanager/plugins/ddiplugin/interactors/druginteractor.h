@@ -30,7 +30,6 @@
 #include <QMultiHash>
 #include <QVariant>
 #include <QString>
-#include <QAbstractItemModel>
 #include <QStringList>
 #include <QDomElement>
 
@@ -42,14 +41,13 @@
 */
 
 namespace DDI {
-namespace Internal {
 
 class DrugInteractor
 {
 public:
     enum DataRepresentation {
         Id = 0,
-        TranslatedLabel,
+        ReadOnly_TranslatedLabel,
         InitialLabel,
         EnLabel,
         FrLabel,
@@ -78,16 +76,14 @@ public:
     DrugInteractor(const QDomElement &element);
     ~DrugInteractor();
 
-    QVariant data(const int reference, const QString &lang = QString::null) const;
-    bool setData(const int reference, const QVariant &value, const QString &lang = QString::null);
+    QVariant data(const int reference) const;
+    bool setData(const int reference, const QVariant &value);
 
-    QString label() const {return data(TranslatedLabel).toString();}
-
-    bool isValid() const {return data(IsValid).toBool();}
-    bool isClass() const {return data(IsClass).toBool();}
-    bool isReviewed() const {return data(IsReviewed).toBool();}
-
-    QString id() const {return data(Id).toString();}
+    QString label() const;
+    QString id() const;
+    bool isValid() const;
+    bool isClass() const;
+    bool isReviewed() const;
 
     void addAtcLink(const QString &atcCode);
 
@@ -115,12 +111,11 @@ public:
     static bool lowerThan(DrugInteractor *d1, DrugInteractor *d2) {return lowerThan(*d1, *d2);}
 
 private:
-    QHash<int, QHash<QString, QVariant> > m_TrData;
+    QHash<int, QVariant> _data;
     QStringList m_ParentIds, m_ChildrenId, m_AtcLinks;
     QMultiHash<QString, QString> m_ChildClassifPMIDs;
 };
 
-}  // namespace Internal
 }  // namespace DDI
 
 #endif // DDIMANAGER_DDIPLUGIN_DRUGINTERACTOR_H

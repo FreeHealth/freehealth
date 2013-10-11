@@ -52,6 +52,12 @@ public:
 
     ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
 
+#ifdef WITH_TESTS
+private Q_SLOTS:
+    void initTestCase();
+    void test_drugInteractor();
+    void cleanTestCase();
+#endif
 };
 
 } // namespace Internal

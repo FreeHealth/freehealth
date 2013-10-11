@@ -19,6 +19,7 @@ HEADERS += \
     atc/atccollectioneditorwidget.h \
     atc/atceditorwidget.h \
     atc/searchatcindatabasedialog.h \
+    interactors/druginteractor.h \
 
 
 SOURCES += \
@@ -30,6 +31,7 @@ SOURCES += \
     atc/atccollectioneditorwidget.cpp \
     atc/atceditorwidget.cpp \
     atc/searchatcindatabasedialog.cpp \
+    interactors/druginteractor.cpp \
 
 
 FORMS += \
@@ -39,6 +41,11 @@ FORMS += \
 
 
 OTHER_FILES += DDIManager.pluginspec
+
+equals(TEST, 1) {
+    SOURCES += \
+        tests/test_druginteractor.cpp
+}
 
 # include translations
 TRANSLATION_NAME = ddimanager

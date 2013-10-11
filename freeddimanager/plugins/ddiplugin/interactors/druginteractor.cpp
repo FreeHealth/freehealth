@@ -35,13 +35,15 @@
 #include <QDebug>
 
 using namespace DDI;
-using namespace Internal;
 
+/** Create an empty invalid DDI::DrugInteractor */
 DrugInteractor::DrugInteractor()
 {
     setData(IsValid, false);
+    setData(IsClass, false);
+    setData(IsReviewed, false);
+    setData(IsValid, false);
     setData(IsDuplicated, false);
-    setData(DoNotWarnDuplicated, false);
 }
 
 DrugInteractor::DrugInteractor(const QDomElement &element)
@@ -124,41 +126,53 @@ DrugInteractor::DrugInteractor(const QDomElement &element)
 DrugInteractor::~DrugInteractor()
 {}
 
-QVariant DrugInteractor::data(const int reference, const QString &lang) const
+/**
+ * Returns the internal data of this interactor.
+ * Use the DDI::DrugInteractor::DataRepresentation for \e reference.
+ */
+QVariant DrugInteractor::data(const int reference) const
 {
-    QString l = lang;
-    if (lang.isEmpty())
-        l = Trans::Constants::ALL_LANGUAGE;
-    if (reference == TranslatedLabel) {
+    if (reference == ReadOnly_TranslatedLabel) {
         QString loc = QLocale().name().left(2).toLower();
         if (loc=="en")
-            return m_TrData.value(EnLabel).value(l);
+            return _data.value(EnLabel);
         else if (loc=="fr")
-            return m_TrData.value(FrLabel).value(l);
+            return _data.value(FrLabel);
         else if (loc=="de")
-            return m_TrData.value(DeLabel).value(l);
+            return _data.value(DeLabel);
         else if (loc=="es")
-            return m_TrData.value(EsLabel).value(l);
+            return _data.value(EsLabel);
     } else if (reference==ATCCodeStringList) {
-        return m_AtcLinks;
+        if (!m_AtcLinks.isEmpty())
+            return m_AtcLinks;
     }
-    return m_TrData.value(reference).value(l);
+    return _data.value(reference);
 }
 
-bool DrugInteractor::setData(const int reference, const QVariant &value, const QString &lang)
+/**
+ * Define the internal data of this interactor.
+ * Use the DDI::DrugInteractor::DataRepresentation for \e reference.
+ */
+bool DrugInteractor::setData(const int reference, const QVariant &value)
 {
-    QString l = lang;
-    if (lang.isEmpty())
-        l = Trans::Constants::ALL_LANGUAGE;
+    if (reference == ReadOnly_TranslatedLabel)
+        return false;
+
     if (reference==ATCCodeStringList) {
         m_AtcLinks = value.toStringList();
         return true;
     }
-    QHash<QString, QVariant> &data = m_TrData[reference];
-    data.insert(l, value);
+    _data.insert(reference, value);
     return true;
 }
 
+QString DrugInteractor::label() const {return data(ReadOnly_TranslatedLabel).toString();}
+QString DrugInteractor::id() const {return data(Id).toString();}
+bool DrugInteractor::isValid() const {return data(IsValid).toBool();}
+bool DrugInteractor::isClass() const {return data(IsClass).toBool();}
+bool DrugInteractor::isReviewed() const {return data(IsReviewed).toBool();}
+
+/** Add an ATC link for this interactor. Interactor can be linked to multiple ATC codes */
 void DrugInteractor::addAtcLink(const QString &atcCode)
 {
     if (m_AtcLinks.contains(atcCode))
@@ -167,23 +181,34 @@ void DrugInteractor::addAtcLink(const QString &atcCode)
     m_AtcLinks.sort();
 }
 
+/**
+ * Add scientific documentation, using pubmed PMID, for a specific child (\e chilId)
+ * classification into this interactor.\n
+ * Eg: Interactor1 is ClassOne, Interactor2 is a child of this ClassOne, and a scientific
+ * documentation is used to prove this. You can set the PMID here.
+ */
 void DrugInteractor::addChildClassificationPMIDs(const QString &childId, const QStringList &pmids)
 {
     foreach(const QString &pmid, pmids)
         m_ChildClassifPMIDs.insertMulti(childId, pmid);
 }
 
+/**
+ * Returns all PMID related to the \e childId classification into this interactor
+ * \sa addChildClassificationPMIDs()
+ */
 QStringList DrugInteractor::childClassificationPMIDs(const QString &childId) const
 {
     return m_ChildClassifPMIDs.values(childId);
 }
 
-
+/** Returns all needed PMID for this interactor */
 QStringList DrugInteractor::allNeededPMIDs() const
 {
     return m_ChildClassifPMIDs.values();
 }
 
+/** Transform this interactor into XML */
 QString DrugInteractor::toXml() const
 {
     QString xml = QString("\n  <I id=\"%1\" v=\"%2\" c=\"%3\" r=\"%4\" p=\"%5\" dc=\"%6\" lu=\"%7\" nwd=\"%8\">")
@@ -261,11 +286,18 @@ QString DrugInteractor::toXml() const
     return xml;
 }
 
+/** Check interactor equality */
 bool DrugInteractor::operator==(const DrugInteractor &other) const
 {
-    return (other.data(Id).toString()==m_TrData.value(Id).value(Trans::Constants::ALL_LANGUAGE).toString());
+    return (other._data == _data &&
+            other.m_ParentIds ==  m_ParentIds &&
+            other.m_ChildrenId== m_ChildrenId &&
+            other.m_AtcLinks == m_AtcLinks &&
+            other.m_ChildClassifPMIDs == m_ChildClassifPMIDs
+            );
 }
 
+/** Sort helper (using DDI::DrugInteractor::ReadOnly_TranslatedLabel) */
 bool DrugInteractor::lowerThan(const DrugInteractor &d1, const DrugInteractor &d2)
 {
     bool d1IsClass, d2IsClass;
@@ -275,5 +307,5 @@ bool DrugInteractor::lowerThan(const DrugInteractor &d1, const DrugInteractor &d
         return true;
     if (d2IsClass && !d1IsClass)
         return false;
-    return d1.data(DrugInteractor::TranslatedLabel).toString() < d2.data(DrugInteractor::TranslatedLabel).toString();
+    return d1.data(DrugInteractor::ReadOnly_TranslatedLabel).toString() < d2.data(DrugInteractor::ReadOnly_TranslatedLabel).toString();
 }
