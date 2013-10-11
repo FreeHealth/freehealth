@@ -73,7 +73,6 @@ public:
     };
 
     DrugInteractor();
-    DrugInteractor(const QDomElement &element);
     ~DrugInteractor();
 
     QVariant data(const int reference) const;
@@ -105,10 +104,13 @@ public:
 
     // Xml members
     QString toXml() const;
+    static DrugInteractor &fromDomElement(const QDomElement &element);
+//    static QList<DrugInteractor> &fromXml(const QString &xmlContent);
 
     bool operator==(const DrugInteractor &other) const;
     static bool lowerThan(const DrugInteractor &d1, const DrugInteractor &d2);
     static bool lowerThan(DrugInteractor *d1, DrugInteractor *d2) {return lowerThan(*d1, *d2);}
+
 
 private:
     QHash<int, QVariant> _data;

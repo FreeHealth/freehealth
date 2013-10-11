@@ -88,8 +88,6 @@ void DDIPlugin::test_drugInteractor()
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
-    QStringList langs;
-    langs << "en" << "fr" << "de" << "sp" << "xx";
     for(int i=0; i < loop; ++i) {
         DrugInteractor d;
         // test data/setData
@@ -117,20 +115,42 @@ void DDIPlugin::test_drugInteractor()
         words = r.randomWords(r.randomInt(1, 5));
         d.setData(DrugInteractor::ClassInformationDe, words);
         QCOMPARE(d.data(DrugInteractor::ClassInformationDe).toString(), words);
-
-//            d.setData(DrugInteractor::DoNotWarnDuplicated
-//            d.setData(DrugInteractor::Reference
-//            d.setData(DrugInteractor::PMIDsStringList
-//            d.setData(DrugInteractor::ATCCodeStringList
+        words = r.randomWords(r.randomInt(1, 5));
+        d.setData(DrugInteractor::Reference, words);
+        QCOMPARE(d.data(DrugInteractor::Reference).toString(), words);
 
         words = r.randomWords(r.randomInt(1, 5));
         d.setData(DrugInteractor::Comment, words);
         QCOMPARE(d.data(DrugInteractor::Comment).toString(), words);
 
-//            d.setData(DrugInteractor::ReviewersStringList
-//            d.setData(DrugInteractor::DateOfReview
-//            d.setData(DrugInteractor::DateOfCreation
-//            d.setData(DrugInteractor::DateLastUpdate
+        QStringList list;
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            list << r.randomString(r.randomInt(1, 10));
+        }
+        d.setData(DrugInteractor::ReviewersStringList, list);
+        QCOMPARE(d.data(DrugInteractor::ReviewersStringList).toStringList(), list);
+        list.clear();
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            list << r.randomString(r.randomInt(1, 10));
+        }
+        d.setData(DrugInteractor::PMIDsStringList, list);
+        QCOMPARE(d.data(DrugInteractor::PMIDsStringList).toStringList(), list);
+        list.clear();
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            list << r.randomString(r.randomInt(1, 10));
+        }
+        d.setData(DrugInteractor::ATCCodeStringList, list);
+        QCOMPARE(d.data(DrugInteractor::ATCCodeStringList).toStringList(), list);
+
+        QDate date = r.randomDate(2000);
+        d.setData(DrugInteractor::DateOfReview, date);
+        QCOMPARE(d.data(DrugInteractor::DateOfReview).toDate(), date);
+        date = r.randomDate(2000);
+        d.setData(DrugInteractor::DateOfCreation, date);
+        QCOMPARE(d.data(DrugInteractor::DateOfCreation).toDate(), date);
+        date = r.randomDate(2000);
+        d.setData(DrugInteractor::DateLastUpdate, date);
+        QCOMPARE(d.data(DrugInteractor::DateLastUpdate).toDate(), date);
 
         bool rb = r.randomBool();
         d.setData(DrugInteractor::IsAutoFound, rb);
@@ -138,15 +158,39 @@ void DDIPlugin::test_drugInteractor()
         rb = r.randomBool();
         d.setData(DrugInteractor::IsDuplicated, rb);
         QCOMPARE(d.data(DrugInteractor::IsDuplicated).toBool(), rb);
+        rb = r.randomBool();
+        d.setData(DrugInteractor::DoNotWarnDuplicated, rb);
+        QCOMPARE(d.data(DrugInteractor::DoNotWarnDuplicated).toBool(), rb);
 
+        // Test addChildren
+        list.clear();
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            list << r.randomString(r.randomInt(1, 10));
+        }
+        d.setChildId(list);
+        QCOMPARE(d.childrenIds(), list);
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            QString t = r.randomString(r.randomInt(1, 10));
+            list << t;
+            d.addChildId(t);
+        }
+        QCOMPARE(d.childrenIds(), list);
 
+        // Test addChildClassificationPMID(s)
+        QString child = list.first();
+        list.clear();
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            list << r.randomString(r.randomInt(1, 10));
+        }
+        d.addChildClassificationPMIDs(child, list);
+        QCOMPARE(d.childClassificationPMIDs(child), list);
 
-//                      for(int i=0; i < refs.count(); ++i) {
-//            foreach(const QString &lang, langs) {
-//                QVariant variant;
-//                di.setData(i, variant, lang);
-//            }
-//        }
+        for(int i=0; i < r.randomInt(1, 10); ++i) {
+            QString t = r.randomString(r.randomInt(1, 10));
+            list << t;
+            d.addChildClassificationPMID(child, t);
+        }
+        QCOMPARE(d.childClassificationPMIDs(child), list);
     }
 }
 
