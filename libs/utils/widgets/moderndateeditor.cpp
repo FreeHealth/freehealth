@@ -63,6 +63,7 @@ public:
         aShortDisplay(0),
         aLongDisplay(0),
         aNumericDisplay(0),
+        aToday(0),
         _validator(0),
         q(parent)
     {}
