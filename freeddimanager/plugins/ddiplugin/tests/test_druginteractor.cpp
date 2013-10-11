@@ -88,6 +88,7 @@ void DDIPlugin::test_drugInteractor()
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 
+    QList<DrugInteractor> interactors;
     for(int i=0; i < loop; ++i) {
         DrugInteractor d;
         // test data/setData
@@ -191,7 +192,14 @@ void DDIPlugin::test_drugInteractor()
             d.addChildClassificationPMID(child, t);
         }
         QCOMPARE(d.childClassificationPMIDs(child), list);
+        interactors << d;
     }
+
+    // Test XML transformation
+    QString xml = DrugInteractor::listToXml(interactors);
+    QList<DrugInteractor> fromXml = DrugInteractor::listFromXml(xml);
+    QCOMPARE(interactors.count(), fromXml.count());
+    // TODO: QCOMPARE(interactors, fromXml);
 }
 
 void DDIPlugin::cleanTestCase()

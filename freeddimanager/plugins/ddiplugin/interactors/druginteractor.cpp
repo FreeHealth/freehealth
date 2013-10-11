@@ -28,6 +28,8 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDomElement>
 #include <QString>
@@ -35,9 +37,10 @@
 #include <QDebug>
 
 using namespace DDI;
+using namespace Trans::ConstantTranslations;
 
 namespace {
-const char * const XML_ROOT_TAG = "Interactors";
+const char * const XML_ROOT_TAG = "DDI_Interactors";
 const char * const XML_INTERACTOR_TAG = "I";
 const char * const XML_CLASSINFORMATION_TAG = "CI";
 const char * const XML_LABEL_TAG = "L";
@@ -167,22 +170,20 @@ QStringList DrugInteractor::allNeededPMIDs() const
 /** Transform this interactor into XML */
 QString DrugInteractor::toXml() const
 {
-    QDomDocument doc("FreeMedForms");
-    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    QDomDocument doc;
+    QDomElement root = doc.createElement(::XML_INTERACTOR_TAG);
     doc.appendChild(root);
-
-    QDomElement element = doc.createElement(::XML_INTERACTOR_TAG);
-    root.appendChild(element);
-    element.setAttribute(::XML_ID_ATTRIB, data(InitialLabel).toString());
-    element.setAttribute(::XML_VALID_ATTRIB, data(IsValid).toBool());
-    element.setAttribute(::XML_ISCLASS_ATTRIB, data(IsClass).toBool());
-    element.setAttribute(::XML_REFERENCE_ATTRIB, data(Reference).toString());
-    element.setAttribute(::XML_PMIDS_ATTRIB, data(PMIDsStringList).toStringList().join(";"));
-    element.setAttribute(::XML_DATECREATE_ATTRIB, data(DateOfCreation).toDate().toString(Qt::ISODate));
-    element.setAttribute(::XML_DATEUPDATE_ATTRIB, data(DateLastUpdate).toDate().toString(Qt::ISODate));
-    element.setAttribute(::XML_WARNDUPLICATES_ATTRIB, data(DoNotWarnDuplicated).toInt());
+    root.setAttribute(::XML_ID_ATTRIB, data(InitialLabel).toString());
+    root.setAttribute(::XML_VALID_ATTRIB, data(IsValid).toBool());
+    root.setAttribute(::XML_ISCLASS_ATTRIB, data(IsClass).toBool());
+    root.setAttribute(::XML_REFERENCE_ATTRIB, data(Reference).toString());
+    root.setAttribute(::XML_PMIDS_ATTRIB, data(PMIDsStringList).toStringList().join(";"));
+    root.setAttribute(::XML_DATECREATE_ATTRIB, data(DateOfCreation).toDate().toString(Qt::ISODate));
+    root.setAttribute(::XML_DATEUPDATE_ATTRIB, data(DateLastUpdate).toDate().toString(Qt::ISODate));
+    root.setAttribute(::XML_WARNDUPLICATES_ATTRIB, data(DoNotWarnDuplicated).toInt());
 
     // add class information
+    QDomElement element;
     if (isClass()) {
         if (!data(ClassInformationFr).isNull()) {
             element = doc.createElement(::XML_CLASSINFORMATION_TAG);
@@ -254,7 +255,21 @@ QString DrugInteractor::toXml() const
     element.setAttribute(::XML_DATEREVIEW_ATTRIB, data(DateOfReview).toDate().toString(Qt::ISODate));
     element.setAttribute(::XML_ISAUTOFOUND_ATTRIB, data(IsAutoFound).toInt());
 
-    return QString("<?xml version='1.0' encoding='UTF-8'?>\n%1").arg(doc.toString(2));
+    return doc.toString(2);
+}
+
+/** Return the XML code for a list of DDI::DrugInteractor \e interactors */
+QString DrugInteractor::listToXml(const QList<DrugInteractor> &interactors)
+{
+    QString xml;
+    foreach(const DrugInteractor &di, interactors) {
+        xml += di.toXml();
+    }
+    return QString("<?xml version='1.0' encoding='UTF-8'?>\n"
+                   "<!DOCTYPE FreeMedForms>\n"
+                   "<%1>\n%2\n</%1>\n")
+            .arg(::XML_ROOT_TAG)
+            .arg(xml);
 }
 
 /** Create a DDI::DrugInteractor from an XML content \e element */
@@ -334,6 +349,27 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
         child = child.nextSiblingElement("ATC");
     }
     return *di;
+}
+
+/** Returns the list of DDI::DrugInteractor read from the \e xmlContent */
+QList<DrugInteractor> &DrugInteractor::listFromXml(const QString &xmlContent)
+{
+    QList<DrugInteractor> *list = new QList<DrugInteractor>;
+    QDomDocument doc;
+    QString error;
+    int line, col;
+    if (!doc.setContent(xmlContent)) {
+        LOG_ERROR_FOR("DrugInteractor", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
+        return *list;
+    }
+    QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
+    QDomElement element = root.firstChildElement(::XML_INTERACTOR_TAG);
+    while (!element.isNull()) {
+        DrugInteractor di;
+        list->append(di.fromDomElement(element));
+        element = element.nextSiblingElement(::XML_INTERACTOR_TAG);
+    }
+    return *list;
 }
 
 /** Check interactor equality */

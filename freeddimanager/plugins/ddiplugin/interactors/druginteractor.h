@@ -104,8 +104,9 @@ public:
 
     // Xml members
     QString toXml() const;
+    static QString listToXml(const QList<DrugInteractor> &interactors);
     static DrugInteractor &fromDomElement(const QDomElement &element);
-//    static QList<DrugInteractor> &fromXml(const QString &xmlContent);
+    static QList<DrugInteractor> &listFromXml(const QString &xmlContent);
 
     bool operator==(const DrugInteractor &other) const;
     static bool lowerThan(const DrugInteractor &d1, const DrugInteractor &d2);
