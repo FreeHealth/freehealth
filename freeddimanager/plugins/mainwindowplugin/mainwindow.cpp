@@ -255,8 +255,7 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
-    // TEST
-    // END TEST
+
     readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }
 

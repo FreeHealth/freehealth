@@ -59,6 +59,8 @@ public:
     static DDICore *instance();
     ~DDICore();
 
+    bool recreateDatabase();
+
     AtcTableModel *atcTableModel() const;
     DrugInteractorTableModel *drugInteractorTableModel() const;
     Internal::DDIDatabase &database() const;

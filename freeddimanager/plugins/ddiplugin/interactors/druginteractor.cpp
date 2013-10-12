@@ -358,7 +358,7 @@ QList<DrugInteractor> &DrugInteractor::listFromXml(const QString &xmlContent)
     QList<DrugInteractor> *list = new QList<DrugInteractor>;
     QDomDocument doc;
     QString error;
-    int line, col;
+    int line = 0, col = 0;
     if (!doc.setContent(xmlContent)) {
         LOG_ERROR_FOR("DrugInteractor", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return *list;

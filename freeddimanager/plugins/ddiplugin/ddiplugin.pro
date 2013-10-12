@@ -21,6 +21,8 @@ HEADERS += \
     atc/searchatcindatabasedialog.h \
     interactors/druginteractor.h \
     interactors/druginteractortablemodel.h \
+    interactors/druginteractortreeproxymodel.h \
+    interactors/interactoreditorwidget.h \
 
 
 SOURCES += \
@@ -34,12 +36,15 @@ SOURCES += \
     atc/searchatcindatabasedialog.cpp \
     interactors/druginteractor.cpp \
     interactors/druginteractortablemodel.cpp \
+    interactors/druginteractortreeproxymodel.cpp \
+    interactors/interactoreditorwidget.cpp \
 
 
 FORMS += \
     atc/atccollectioneditorwidget.ui \
     atc/atceditorwidget.ui \
     atc/searchatcindatabasedialog.ui \
+    interactors/interactoreditorwidget.ui \
 
 
 OTHER_FILES += DDIManager.pluginspec

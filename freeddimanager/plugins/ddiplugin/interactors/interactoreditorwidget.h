@@ -24,37 +24,25 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef INTERACTOREDITORPAGE_H
-#define INTERACTOREDITORPAGE_H
+#ifndef DDIMANAGER_DDIPLUGIN_INTERACTOREDITORWIDGET_H
+#define DDIMANAGER_DDIPLUGIN_INTERACTOREDITORWIDGET_H
 
-#include <coreplugin/itoolpage.h>
+#include <ddiplugin/ddi_exporter.h>
+#include <QWidget>
 
-class QModelIndex;
+/**
+ * \file interactoreditorwidget.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 12 Oct 2013
+*/
 
-namespace DrugsDB {
-
-class InteractorEditorPage : public Core::IToolPage
-{
-    Q_OBJECT
-public:
-    InteractorEditorPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("InteractorEditorPage"); }
-
-    virtual QString id() const {return "InteractorEditorPage";}
-    virtual QString name() const {return "Interactors Editor";}
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-};
-
+namespace DDI {
 namespace Internal {
 class InteractorEditorWidgetPrivate;
-namespace Ui {
-class InteractorEditorWidget;
-}
+}  // namespace Internal
 
-class InteractorEditorWidget : public QWidget
+class DDI_EXPORT InteractorEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -65,7 +53,6 @@ private:
     void setEditorsEnabled(bool state);
 
 private Q_SLOTS:
-    void reformatOldSource();
     void save();
     void filterDrugInteractorModel(const QString &text);
     void createActionTriggered();
@@ -82,15 +69,9 @@ private:
     void changeEvent(QEvent *e);
 
 private:
-//    bool event(QEvent *e);
-//    void showEvent(QShowEvent *e);
-//    void hideEvent(QHideEvent *e);
-
-private:
     Internal::InteractorEditorWidgetPrivate *d;
 };
 
-}  // End namespace Internal
-}  // End namespace DrugsDB
+}  // namespace DDI
 
-#endif // INTERACTOREDITORPAGE_H
+#endif // DDIMANAGER_DDIPLUGIN_INTERACTOREDITORWIDGET_H

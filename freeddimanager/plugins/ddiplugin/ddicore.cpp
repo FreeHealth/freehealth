@@ -58,6 +58,7 @@ class DDICorePrivate
 {
 public:
     DDICorePrivate(DDICore *parent) :
+        _initialized(false),
         _atcTableModel(0),
         _drugInteractorTableModel(0),
         _base(0),
@@ -75,6 +76,7 @@ public:
     }
 
 public:
+    bool _initialized;
     AtcTableModel *_atcTableModel;
     DrugInteractorTableModel *_drugInteractorTableModel;
     DDIDatabase *_base;
@@ -111,16 +113,39 @@ DDICore::~DDICore()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool DDICore::initialize()
 {
+    if (d->_initialized)
+        return true;
     d->_base = new DDIDatabase;
     d->_base->initialize(settings()->databasePath(), true);
-//    d->_base->insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
-//    d->_base->insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
 
     d->_atcTableModel = new AtcTableModel(this);
     d->_atcTableModel->initialize();
 
     d->_drugInteractorTableModel = new DrugInteractorTableModel(this);
     d->_drugInteractorTableModel->initialize();
+
+    d->_initialized = true;
+    return true;
+}
+
+bool DDICore::recreateDatabase()
+{
+    QString dbFileName = QString("%1/%2/%3").arg(settings()->databasePath())
+            .arg(Constants::DDIMANAGER_DATABASE_NAME)
+            .arg(Constants::DDIMANAGER_DATABASE_FILENAME);;
+    LOG(QString("Removing file %1").arg(dbFileName));
+    if (QFile(dbFileName).exists()) {
+        if (QFile(dbFileName).remove())
+            LOG("Removed");
+    }
+
+    d->_base->forceFullDatabaseRefreshing();
+    if (!d->_base->initialize(settings()->databasePath(), true)) {
+        LOG_ERROR("Unable to initialize database");
+        return false;
+    }
+    d->_base->insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+    d->_base->insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
     return true;
 }
 
@@ -132,7 +157,7 @@ AtcTableModel *DDICore::atcTableModel() const
 
 DrugInteractorTableModel *DDICore::drugInteractorTableModel() const
 {
-    return 0;
+    return d->_drugInteractorTableModel;
 }
 
 /** Returns the DDI database single instance */

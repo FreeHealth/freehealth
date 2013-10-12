@@ -36,8 +36,8 @@
 /**
  * \file druginteractor.h
  * \author Eric Maeker
- * \version 0.10
- * \date 10 Oct 2013
+ * \version 0.10.0
+ * \date 12 Oct 2013
 */
 
 namespace DDI {

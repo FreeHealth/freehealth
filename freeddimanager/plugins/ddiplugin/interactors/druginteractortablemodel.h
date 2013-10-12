@@ -33,7 +33,7 @@
  * \file druginteractortablemodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 11 Oct 2013
+ * \date 12 Oct 2013
 */
 
 namespace DDI {
@@ -52,6 +52,7 @@ public:
     enum DataRepresentation {
         Id = 0,
         Uuid,
+        IsValid,
         IsInteractingClass,
         IsReviewed,
         IsAutoFound,
@@ -97,6 +98,9 @@ public:
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation,
+                                int role = Qt::DisplayRole) const;
 
     DrugInteractor *createInteractingClass(const QString &initialLabel);
     DrugInteractor *createInteractor(const QString &initialLabel);

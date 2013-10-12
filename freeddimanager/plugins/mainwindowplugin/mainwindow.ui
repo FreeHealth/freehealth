@@ -11,24 +11,18 @@
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
-    <property name="margin">
-     <number>0</number>
-    </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="DDI::AtcCollectionEditorWidget" name="widget" native="true"/>
+     <widget class="DDI::InteractorEditorWidget" name="widget" native="true"/>
     </item>
    </layout>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DDI::AtcCollectionEditorWidget</class>
+   <class>DDI::InteractorEditorWidget</class>
    <extends>QWidget</extends>
-   <header location="global">ddiplugin/atc/atccollectioneditorwidget.h</header>
+   <header location="global">ddiplugin/interactors/interactoreditorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

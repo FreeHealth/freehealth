@@ -162,9 +162,6 @@ bool AtcTableModel::setData(const QModelIndex &index, const QVariant &value, int
     case Comment: sql = Constants::ATC_COMMENT; break;
     };
     QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
-
-    qWarning() << index << sqlIndex << value << role;
-
     return d->_sql->setData(sqlIndex, value, role);
 }
 

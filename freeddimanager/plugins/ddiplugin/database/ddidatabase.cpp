@@ -102,6 +102,7 @@ DDIDatabase::DDIDatabase():
     addField(Table_Interactors, INTERACTOR_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_Interactors, INTERACTOR_ISREVIEWED, "ISREVIEW", FieldIsBoolean);
     addField(Table_Interactors, INTERACTOR_ISAUTOFOUND, "ISAUTOFOUND", FieldIsBoolean);
+    addField(Table_Interactors, INTERACTOR_ISCLASS, "ISCLASS", FieldIsBoolean);
     addField(Table_Interactors, INTERACTOR_WARNDUPLICATES, "WARNDUPLICATES", FieldIsBoolean);
     addField(Table_Interactors, INTERACTOR_ATC, "ATC", FieldIsLongText);
     addField(Table_Interactors, INTERACTOR_CHILDREN, "CHILDREN", FieldIsLongText);
@@ -126,6 +127,7 @@ DDIDatabase::DDIDatabase():
 /** Force the re-initialization of the database. Call initialize() after this. */
 void DDIDatabase::forceFullDatabaseRefreshing()
 {
+    QSqlDatabase::removeDatabase(connectionName());
     m_dbcore_initialized = false;
 }
 
@@ -194,7 +196,7 @@ bool DDIDatabase::initialize(const QString &pathToDb, bool createIfNotExists)
         LOG_ERROR_FOR("DDIDatabase", QString("Wrong database version. Db: %1; Current: %2").arg(version()).arg(::CURRENTVERSION));
         return false;
     } else {
-        LOG_FOR("DDIDatabase", QString("Using drug database version " + version()));
+        LOG_FOR("DDIDatabase", QString("Using DDI database version " + version()));
     }
 
     m_dbcore_initialized = true;
@@ -370,6 +372,7 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
         query.bindValue(Constants::INTERACTOR_ISVALID, di.isValid()?"1":"0");
         query.bindValue(Constants::INTERACTOR_ISREVIEWED, di.isReviewed()?"1":"0");
         query.bindValue(Constants::INTERACTOR_ISAUTOFOUND, di.isAutoFound()?"1":"0");
+        query.bindValue(Constants::INTERACTOR_ISCLASS, di.isClass()?"1":"0");
         query.bindValue(Constants::INTERACTOR_WARNDUPLICATES, di.data(DrugInteractor::DoNotWarnDuplicated).toBool()?"1":"0");
         query.bindValue(Constants::INTERACTOR_ATC, di.data(DrugInteractor::ATCCodeStringList).toStringList().join(";"));
         query.bindValue(Constants::INTERACTOR_CHILDREN, di.childrenIds().join(";"));
