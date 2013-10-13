@@ -144,8 +144,6 @@ bool DDICore::recreateDatabase()
         LOG_ERROR("Unable to initialize database");
         return false;
     }
-    d->_base->insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
-    d->_base->insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
     return true;
 }
 

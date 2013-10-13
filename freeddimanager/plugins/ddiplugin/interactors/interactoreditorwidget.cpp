@@ -27,6 +27,7 @@
 #include "interactoreditorwidget.h"
 #include "druginteractor.h"
 #include "druginteractortablemodel.h"
+#include "druginteractortreeproxymodel.h"
 #include <ddiplugin/ddicore.h>
 
 #include <coreplugin/icore.h>
@@ -60,6 +61,17 @@ static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
 
 namespace DDI {
 namespace Internal {
+class __TreeProxyModel : public QSortFilterProxyModel
+{
+public:
+    explicit __TreeProxyModel(QObject *parent = 0);
+
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const;
+    bool hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const;
+};
+
 class InteractorEditorWidgetPrivate
 {
 public:
@@ -204,24 +216,22 @@ public:
     void prepareModelsAndViews()
     {
         // Models and views in the selector
-        // Classes
-//        _proxyClassModel = new TreeProxyModel(q);
-//        _proxyClassModel->setSourceModel(ddiCore()->interactingClassesModel());
+//        DDI::DrugInteractorTreeProxyModel *tree = new DDI::DrugInteractorTreeProxyModel(q);
+//        tree->initialize(DDI::DDICore::instance()->drugInteractorTableModel());
+//        _proxyClassModel = new __TreeProxyModel(q);
+//        _proxyClassModel->setSourceModel(tree);
 //        _proxyClassModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-//        _proxyClassModel->setFilterKeyColumn(DrugInteractorTableModel::TrLabel);
+//        _proxyClassModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
 //        ui->classesTreeView->setModel(_proxyClassModel);
-//        ui->classesTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//        ui->classesTreeView->header()->hide();
-//        for(int i = 0; i < ddiCore()->interactingClassesModel()->columnCount(); ++i) {
-//            ui->classesTreeView->hideColumn(i);
-//        }
-//        ui->classesTreeView->showColumn(DrugInteractorTableModel::TrLabel);
+        ui->classesTreeView->hide();
 
-//        // Molecules
+        // Molecules
         _proxyMoleculeModel = new QSortFilterProxyModel(q);
         _proxyMoleculeModel->setSourceModel(ddiCore()->drugInteractorTableModel());
         _proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         _proxyMoleculeModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
+        _proxyMoleculeModel->setSortRole(Qt::DisplayRole);
+        _proxyMoleculeModel->sort(DrugInteractorTableModel::TranslatedLabel);
         ui->molsListView->setModel(_proxyMoleculeModel);
         ui->molsListView->setModelColumn(DrugInteractorTableModel::TranslatedLabel);
         ui->molsListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -287,6 +297,61 @@ private:
 }  // namespace Internal
 }  // namespace DDI
 
+__TreeProxyModel::__TreeProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
+{
+}
+
+bool __TreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (filterAcceptsRowItself(source_row, source_parent))
+        return true;
+
+    //accept if any of the parents is accepted on it's own merits
+    QModelIndex parent = source_parent;
+    while (parent.isValid()) {
+        if (filterAcceptsRowItself(parent.row(), parent.parent()))
+            return true;
+        parent = parent.parent();
+    }
+
+    //accept if any of the children is accepted on it's own merits
+    if (hasAcceptedChildren(source_row, source_parent)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool __TreeProxyModel::filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const
+{
+    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+}
+
+bool __TreeProxyModel::hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const
+{
+    QModelIndex item = sourceModel()->index(source_row,0,source_parent);
+    if (!item.isValid()) {
+        //qDebug() << "item invalid" << source_parent << source_row;
+        return false;
+    }
+
+    //check if there are children
+    int childCount = item.model()->rowCount(item);
+    if (childCount == 0)
+        return false;
+
+    for (int i = 0; i < childCount; ++i) {
+        if (filterAcceptsRowItself(i, item))
+            return true;
+        //recursive call -> NOTICE that this is depth-first searching, you're probably better off with breadth first search...
+        if (hasAcceptedChildren(i, item))
+            return true;
+    }
+
+    return false;
+}
+
 InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     QWidget(parent),
     d(new InteractorEditorWidgetPrivate(this))
@@ -339,11 +404,9 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
     d->ui->frLabel->setEnabled(state);
     d->ui->enLabel->setEnabled(state);
     d->ui->deLabel->setEnabled(state);
-    d->ui->esLabel->setEnabled(state);
     d->ui->reference->setEnabled(state);
     d->ui->classInfoDe->setEnabled(state);
     d->ui->classInfoEn->setEnabled(state);
-    d->ui->classInfoEs->setEnabled(state);
     d->ui->classInfoFr->setEnabled(state);
     d->_toolButton->setEnabled(state);
 }
@@ -354,34 +417,30 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
  */
 void InteractorEditorWidget::save()
 {
-//    if (d->m_EditingIndex.isValid()) {
-//        d->ui->classesTreeView->setFocus();
-        d->_mapper->submit();
-//        QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
+    if (d->m_EditingIndex.isValid()) {
+        d->ui->molsListView->setFocus();
+
+        QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
 //        // bug with mapper / checkbox in macos
 //        QModelIndex reviewed = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::IsReviewed, d->m_EditingIndex.parent());
 //        model->setData(reviewed, d->ui->isReviewed->isChecked());
 //        QModelIndex notWarnDuplication = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::DoNotWarnDuplicated, d->m_EditingIndex.parent());
 //        model->setData(notWarnDuplication, d->ui->notWarnDuplicated->isChecked());
 
-//        // manage ATC / PMIDs
-//        QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
-//        QStringList codes;
-//        foreach(const QString &code, d->_atcCodesStringListModel->stringList()) {
-//            codes << code.left(code.indexOf(":"));
-//        }
-//        model->setData(atc, codes);
-//        QModelIndex children = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ChildrenUuid, d->m_EditingIndex.parent());
-//        model->setData(children, d->_childrenInteractorsStringListModel->stringList());
+        // manage ATC / PMIDs
+        QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
+        model->setData(atc, d->_atcCodesStringListModel->stringList().join(";"));
 
-//        QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::PMIDStringList, d->m_EditingIndex.parent());
-//        model->setData(pmids, d->_pmidStringListModel->stringList());
+        QModelIndex children = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ChildrenUuid, d->m_EditingIndex.parent());
+        model->setData(children, d->_childrenInteractorsStringListModel->stringList().join(";"));
 
-//        DrugInteractorTableModel *interactorModel = qobject_cast<DrugInteractorTableModel *>(model);
-//        interactorModel->saveModel();
-//    }
+        QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::PMIDStringList, d->m_EditingIndex.parent());
+        model->setData(pmids, d->_pmidStringListModel->stringList().join(";"));
 
-//    setEditorsEnabled(false);
+        d->_mapper->submit();
+    }
+
+    setEditorsEnabled(false);
 }
 
 /**
@@ -460,18 +519,27 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
         LOG_ERROR("No proxymodel found???");
         return;
     }
-    if (model == d->_proxyMoleculeModel) {
-        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), false);
-        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), false);
-    } else if (model == d->_proxyClassModel) {
-        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), true);
-        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), true);
-    } else {
-        LOG_ERROR("NO MODEL???");
-    }
+
+
+//    if (model == d->_proxyMoleculeModel) {
+//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), false);
+//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), false);
+//    } else if (model == d->_proxyClassModel) {
+//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), true);
+//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), true);
+//    } else {
+//        LOG_ERROR("NO MODEL???");
+//    }
+
+    // Get the current source model editing index
+    d->m_EditingIndex = model->mapToSource(index);
+
+    // Adapt UI to editing index -> Class?
+    bool isClass = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::IsInteractingClass).data().toBool();
+    d->ui->classChildrenTableView->setVisible(isClass);
+    d->ui->atcTableView->setVisible(!isClass);
 
     // Set the mapper over the source model
-    d->m_EditingIndex = model->mapToSource(index);
     d->_mapper->setModel(model->sourceModel());
     d->_mapper->addMapping(d->ui->interactorLabel, DrugInteractorTableModel::TranslatedLabel, "text");
     d->_mapper->addMapping(d->ui->commentTextEdit, DrugInteractorTableModel::Comment, "plainText");
@@ -491,33 +559,24 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->_mapper->addMapping(d->ui->isAutoFound, DrugInteractorTableModel::IsAutoFound, "checked");
     d->_mapper->addMapping(d->ui->notWarnDuplicated, DrugInteractorTableModel::DoNotWarnDuplicated, "checked");
 
-    // TODO: map lists
-//    d->_mapper->addMapping(d->ui->atcTableView, DrugInteractorTableModel:, "");
-//    d->_mapper->addMapping(d->ui->classChildrenTableView, DrugInteractorTableModel:, "");
-//    d->_mapper->addMapping(d->ui, DrugInteractorTableModel:, "");
     d->_mapper->setRootIndex(d->m_EditingIndex.parent());
     d->_mapper->setCurrentModelIndex(d->m_EditingIndex);
 
-//    QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorTableModel::ATCCodeStringList, index.parent());
-//    QStringList atcCodes;
-//    foreach(const QString &code, atcCodesIndex.data().toStringList())
-//        atcCodes << code + ": " + dbCore()->atcModel()->getAtcLabel(QStringList() << code).join(";");
-//    d->_atcCodesStringListModel->setStringList(atcCodes);
+    QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorTableModel::ATCCodeStringList, index.parent());
+    d->_atcCodesStringListModel->setStringList(atcCodesIndex.data().toString().split(";"));
 
-//    QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorTableModel::PMIDStringList, index.parent());
-//    QStringList pmids = pmidsIndex.data().toStringList();
-//    d->_pmidStringListModel->setStringList(pmids);
+    QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorTableModel::PMIDStringList, index.parent());
+    d->_pmidStringListModel->setStringList(pmidsIndex.data().toString().split(";"));
 
-//    QModelIndex childrenIndex = model->index(index.row(), DrugInteractorTableModel::ChildrenUuid, index.parent());
-//    QStringList children = childrenIndex.data().toStringList();
-//    d->_childrenInteractorsStringListModel->setStringList(children);
+    QModelIndex childrenIndex = model->index(index.row(), DrugInteractorTableModel::ChildrenUuid, index.parent());
+    d->_childrenInteractorsStringListModel->setStringList(childrenIndex.data().toString().split(";"));
 }
 
 void InteractorEditorWidget::buttonActivated(QAction *selected)
 {
     QModelIndex idx = d->_proxyMoleculeModel->mapToSource(d->m_EditingIndex);
 //    QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
-//    QModelIndex idx = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::TranslatedLabel, d->m_EditingIndex.parent());
+//    QModelIndex idx = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::TranslatedLabel, d->m_EditingIndex.parent());
     QString label = idx.data().toString();
     if (selected == d->aAtcSearchDialog) {
 //        DrugsDB::SearchAtcInDatabaseDialog dlg(this, label);
@@ -558,7 +617,6 @@ void InteractorEditorWidget::bookmarkClassesFromCurrent()
 //            ddiCore()->interactingClassesModel()->setData(idx, false);
 //        }
 //    }
-
 }
 
 void InteractorEditorWidget::updateCounts()

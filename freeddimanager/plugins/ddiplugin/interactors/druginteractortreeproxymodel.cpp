@@ -89,46 +89,72 @@ public:
 
         // Sort ?
 
+        // Read line by line
+        QStandardItem *noClass = new QStandardItem("NO_CLASS");
+        QList<QStandardItem*> cols;
+        cols << noClass;
+        cols << new QStandardItem(QString("No class"));
+        cols << new QStandardItem(QString("No class"));
+        cols << new QStandardItem(QString("No class"));
+        q->invisibleRootItem()->appendRow(cols);
+        cols.clear();
+        for(int i=0; i < _sourceModel->rowCount(); ++i) {
+            QModelIndex uid = _sourceModel->index(i, DrugInteractorTableModel::Uuid);
+            QModelIndex fr = _sourceModel->index(i, DrugInteractorTableModel::FrLabel);
+            QModelIndex en = _sourceModel->index(i, DrugInteractorTableModel::EnLabel);
+            QModelIndex de = _sourceModel->index(i, DrugInteractorTableModel::DeLabel);
+            QModelIndex isClass = _sourceModel->index(i, DrugInteractorTableModel::IsInteractingClass);
 
-//        // Read line by line
-//        QStandardItem *lastOne = 0;
-//        QStandardItem *lastThree = 0;
-//        QStandardItem *lastFour = 0;
-//        QStandardItem *lastFive = 0;
-//        QStandardItem *parent = 0;
-//        QList<QStandardItem*> cols;
-//        for(int i=0; i < _sourceModel->rowCount(); ++i) {
-//            cols.clear();
-//            QModelIndex code = _sourceModel->index(i, DrugInteractorTableModel::Code);
-//            QModelIndex fr = _sourceModel->index(i, DrugInteractorTableModel::LabelFr);
-//            QModelIndex en = _sourceModel->index(i, DrugInteractorTableModel::LabelEn);
-//            QModelIndex de = _sourceModel->index(i, DrugInteractorTableModel::LabelDe);
-
-//            QStandardItem *item = new QStandardItem(_sourceModel->data(code).toString());
-//            _toSourceIndex.insert(item, code);
-//            cols << item;
-//            cols <<  new QStandardItem(_sourceModel->data(en).toString());
-//            cols <<  new QStandardItem(_sourceModel->data(fr).toString());
-//            cols <<  new QStandardItem(_sourceModel->data(de).toString());
-//            if (_sourceModel->data(code).toString().size() == 1) {
-//                foreach(QStandardItem *item, cols)
-//                    item->setFont(bold);
-//            }
-
-//            // Find the parent item
-//            switch (_sourceModel->data(code).toString().count()) {
-//            case 1: parent = 0; lastOne = item; break;
-//            case 3: parent = lastOne;    lastThree = item; break;
-//            case 4: parent = lastThree;  lastFour = item;  break;
-//            case 5: parent = lastFour;   lastFive = item;  break;
-//            case 7: parent = lastFive;    break;
-//            }
-//            // need to be reparented
-//            if (!parent)
-//                parent = q->invisibleRootItem();
-//            parent->appendRow(cols);
-//            parent = 0;
-//        }
+            QStandardItem *item = new QStandardItem(_sourceModel->data(uid).toString());
+            _toSourceIndex.insert(item, uid);
+            cols << item;
+            cols <<  new QStandardItem(_sourceModel->data(en).toString());
+            cols <<  new QStandardItem(_sourceModel->data(fr).toString());
+            cols <<  new QStandardItem(_sourceModel->data(de).toString());
+            if (_sourceModel->data(isClass).toBool()) {
+                // is interacting class --> row to bold
+                foreach(QStandardItem *item, cols)
+                    item->setFont(bold);
+                // get all children and add them to the branch
+                QModelIndex childrenIndex = _sourceModel->index(i, DrugInteractorTableModel::ChildrenUuid);
+                QStringList children = _sourceModel->data(childrenIndex).toString().split(";");
+                foreach(const QString &child, children) {
+                    QList<QStandardItem*> childrenItem;
+                    QModelIndexList list = _sourceModel->match(_sourceModel->index(0, DrugInteractorTableModel::Uuid), Qt::DisplayRole, child);
+                    if (list.count() == 0) {
+                        // _toSourceIndex.insert(childUidItem, uid);
+                        qWarning() << "Child not found" << _sourceModel->data(fr).toString() << child;
+                        childrenItem << new QStandardItem(child);
+                        childrenItem << new QStandardItem(QString("Error child not found: %1").arg(child));
+                        childrenItem << new QStandardItem(QString("Error child not found: %1").arg(child));
+                        childrenItem << new QStandardItem(QString("Error child not found: %1").arg(child));
+                    } else if (list.count() > 1) {
+                        qWarning() << "More than one child found" << _sourceModel->data(fr).toString() << child;
+                        childrenItem << new QStandardItem(child);
+                        childrenItem << new QStandardItem(QString("Error more than one child found: %1").arg(child));
+                        childrenItem << new QStandardItem(QString("Error more than one child found: %1").arg(child));
+                        childrenItem << new QStandardItem(QString("Error more than one child found: %1").arg(child));
+                    } else {
+                        int i = list.at(0).row();
+                        QModelIndex childUid = _sourceModel->index(i, DrugInteractorTableModel::Uuid);
+                        QModelIndex childFr = _sourceModel->index(i, DrugInteractorTableModel::FrLabel);
+                        QModelIndex childEn = _sourceModel->index(i, DrugInteractorTableModel::EnLabel);
+                        QModelIndex childDe = _sourceModel->index(i, DrugInteractorTableModel::DeLabel);
+                        QStandardItem *childUidItem = new QStandardItem(_sourceModel->data(childUid).toString());
+                        _toSourceIndex.insert(childUidItem, uid);
+                        childrenItem << childUidItem;
+                        childrenItem <<  new QStandardItem(_sourceModel->data(childEn).toString());
+                        childrenItem <<  new QStandardItem(_sourceModel->data(childFr).toString());
+                        childrenItem <<  new QStandardItem(_sourceModel->data(childDe).toString());
+                    }
+                    item->appendRow(childrenItem);
+                }
+                q->invisibleRootItem()->appendRow(cols);
+//            } else {
+//                noClass->appendRow(cols);
+            }
+            cols.clear();
+        }
         return true;
     }
 

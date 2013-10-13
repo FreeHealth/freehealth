@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>519</width>
-    <height>579</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,166 +48,6 @@
      </widget>
      <widget class="QWidget" name="widgetContainer" native="true">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="6" column="0" colspan="2">
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="tab">
-          <attribute name="title">
-           <string>ATC</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Fr</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="frLabel"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>En</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="enLabel"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>De</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="deLabel"/>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Es</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="esLabel"/>
-           </item>
-           <item row="4" column="0" colspan="2">
-            <widget class="Views::TableView" name="atcTableView"/>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tabClassInfo">
-          <attribute name="title">
-           <string>ClassInfo</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_6">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Fr</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPlainTextEdit" name="classInfoFr"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>En</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPlainTextEdit" name="classInfoEn"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>De</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPlainTextEdit" name="classInfoDe"/>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Es</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QPlainTextEdit" name="classInfoEs"/>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tabChildren">
-          <attribute name="title">
-           <string>Children</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
-            <widget class="Views::TableView" name="classChildrenTableView"/>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tab_2">
-          <attribute name="title">
-           <string>Other</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QListView" name="pmidListView"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QTextEdit" name="commentTextEdit">
-             <property name="toolTip">
-              <string>Comment</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QListView" name="reviewersListView"/>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="notWarnDuplicated">
-         <property name="text">
-          <string>Do not warn duplication</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="toolbarLayout"/>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="interactorLabel">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QDateEdit" name="dateCreation">
          <property name="toolTip">
@@ -232,13 +72,13 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QDateEdit" name="dateUpdate">
-         <property name="toolTip">
-          <string>Last update</string>
-         </property>
-         <property name="displayFormat">
-          <string>dd/MM/yyyy</string>
+       <item row="0" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="toolbarLayout"/>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="isClass">
+         <property name="text">
+          <string>Is interacting class</string>
          </property>
         </widget>
        </item>
@@ -249,11 +89,166 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QCheckBox" name="isClass">
-         <property name="text">
-          <string>Is interacting class</string>
+       <item row="2" column="1">
+        <widget class="QDateEdit" name="dateUpdate">
+         <property name="toolTip">
+          <string>Last update</string>
          </property>
+         <property name="displayFormat">
+          <string>dd/MM/yyyy</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="interactorLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="notWarnDuplicated">
+         <property name="text">
+          <string>Do not warn duplication</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>ATC</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="2" column="1" colspan="2">
+            <widget class="QLineEdit" name="deLabel"/>
+           </item>
+           <item row="3" column="0" colspan="3">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="Views::TableView" name="atcTableView"/>
+             </item>
+             <item>
+              <widget class="Views::TableView" name="classChildrenTableView"/>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>De</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>En</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" colspan="2">
+            <widget class="QLineEdit" name="enLabel"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Fr</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <widget class="QLineEdit" name="frLabel"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tabClassInfo">
+          <attribute name="title">
+           <string>ClassInfo</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="2" column="1">
+            <widget class="QPlainTextEdit" name="classInfoDe"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPlainTextEdit" name="classInfoEn"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPlainTextEdit" name="classInfoFr"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>De</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>En</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Fr</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Other</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QListView" name="pmidListView"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QTextEdit" name="commentTextEdit">
+             <property name="toolTip">
+              <string>Comment</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QListView" name="reviewersListView"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

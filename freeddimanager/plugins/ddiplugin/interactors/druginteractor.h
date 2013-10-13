@@ -47,6 +47,7 @@ class DrugInteractor
 public:
     enum DataRepresentation {
         Id = 0,
+        Uid,
         ReadOnly_TranslatedLabel,
         InitialLabel,
         EnLabel,

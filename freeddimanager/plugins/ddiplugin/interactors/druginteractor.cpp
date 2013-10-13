@@ -115,6 +115,12 @@ bool DrugInteractor::setData(const int reference, const QVariant &value)
     if (reference==ATCCodeStringList) {
         m_AtcLinks = value.toStringList();
         return true;
+//    } else if (reference==Uid) {
+//        QString uid = value.toString().toUpper();
+//        uid = Utils::removeAccents(uid);
+//        uid.replace(" ", "_");
+//        _data.insert(reference, uid);
+//        return true;
     }
     _data.insert(reference, value);
     return true;
@@ -283,6 +289,7 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
         return *di;
     }
     // get attribs
+    di->setData(Uid, element.attribute("id").replace(" ", "_"));
     di->setData(InitialLabel, element.attribute("id"));
     di->setData(IsValid, element.attribute("v").toInt());
     bool isClass = element.attribute("c").toInt();
@@ -336,9 +343,12 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
     // get children item
     QDomElement child = element.firstChildElement("M");
     while (!child.isNull()) {
-        di->addChildId(child.attribute("n"));
+        QString childUid = child.attribute("n").toUpper();
+        childUid = Utils::removeAccents(childUid);
+        childUid.replace(" ", "_");
+        di->addChildId(childUid);
         if (!child.attribute("p").isEmpty()) {
-            di->addChildClassificationPMIDs(child.attribute("n"), child.attribute("p").split(";"));
+            di->addChildClassificationPMIDs(childUid, child.attribute("p").split(";"));
         }
         child = child.nextSiblingElement("M");
     }

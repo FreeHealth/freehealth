@@ -368,7 +368,7 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
             continue;
         query.prepare(prepareInsertQuery(Constants::Table_Interactors));
         query.bindValue(Constants::INTERACTOR_ID, QVariant());
-        query.bindValue(Constants::INTERACTOR_UID, di.data(DrugInteractor::Id));
+        query.bindValue(Constants::INTERACTOR_UID, di.data(DrugInteractor::Uid));
         query.bindValue(Constants::INTERACTOR_ISVALID, di.isValid()?"1":"0");
         query.bindValue(Constants::INTERACTOR_ISREVIEWED, di.isReviewed()?"1":"0");
         query.bindValue(Constants::INTERACTOR_ISAUTOFOUND, di.isAutoFound()?"1":"0");
@@ -452,7 +452,10 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
         return false;
     }
 
+    // Insert raw data & version
     setVersion(::CURRENTVERSION);
+//    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+    insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
 
     // database is readable/writable
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + prefixedDbName));
