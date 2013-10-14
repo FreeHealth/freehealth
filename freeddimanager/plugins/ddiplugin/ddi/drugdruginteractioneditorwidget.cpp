@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "drugdruginteractioneditorwidget.h"
 #include "drugdruginteractiontablemodel.h"
+#include <ddiplugin/ddicore.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -54,6 +55,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
 //static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
 //static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
 
@@ -223,7 +225,7 @@ public:
         ui->bilbioTableView->horizontalHeader()->hide();
         ui->bilbioTableView->verticalHeader()->hide();
 
-        m_DDIModel = new DrugDrugInteractionTableModel(q);
+        m_DDIModel = ddiCore()->drugDrugInteractionTableModel();
         ui->treeView->setModel(m_DDIModel);
         ui->treeView->setWordWrap(true);
         for(int i = 0; i < m_DDIModel->rowCount(); ++i) {
@@ -451,7 +453,6 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
 
     setEditorsEnabled(false);
 
-    d->m_Mapper->setRootIndex(index.parent());
     d->m_Mapper->setCurrentModelIndex(index);
 
     // set data
