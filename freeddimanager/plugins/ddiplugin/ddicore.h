@@ -40,6 +40,7 @@
 namespace DDI {
 class AtcTableModel;
 class DrugInteractorTableModel;
+class DrugDrugInteractionTableModel;
 namespace Internal {
 class DDIPlugin;
 class DDICorePrivate;
@@ -63,6 +64,8 @@ public:
 
     AtcTableModel *atcTableModel() const;
     DrugInteractorTableModel *drugInteractorTableModel() const;
+    DrugDrugInteractionTableModel *drugDrugInteractionTableModel() const;
+
     Internal::DDIDatabase &database() const;
 
 private:

@@ -33,6 +33,7 @@
 #include <ddiplugin/constants.h>
 #include <ddiplugin/atc/atctablemodel.h>
 #include <ddiplugin/interactors/druginteractortablemodel.h>
+#include <ddiplugin/ddi/drugdruginteractiontablemodel.h>
 #include <ddiplugin/database/ddidatabase.h>
 
 #include <coreplugin/icore.h>
@@ -61,6 +62,7 @@ public:
         _initialized(false),
         _atcTableModel(0),
         _drugInteractorTableModel(0),
+        _drugDrugInteractionTableModel(0),
         _base(0),
         q(parent)
 
@@ -79,6 +81,7 @@ public:
     bool _initialized;
     AtcTableModel *_atcTableModel;
     DrugInteractorTableModel *_drugInteractorTableModel;
+    DrugDrugInteractionTableModel *_drugDrugInteractionTableModel;
     DDIDatabase *_base;
 
 private:
@@ -124,6 +127,9 @@ bool DDICore::initialize()
     d->_drugInteractorTableModel = new DrugInteractorTableModel(this);
     d->_drugInteractorTableModel->initialize();
 
+    d->_drugDrugInteractionTableModel = new DrugDrugInteractionTableModel(this);
+    d->_drugDrugInteractionTableModel->initialize();
+
     d->_initialized = true;
     return true;
 }
@@ -156,6 +162,11 @@ AtcTableModel *DDICore::atcTableModel() const
 DrugInteractorTableModel *DDICore::drugInteractorTableModel() const
 {
     return d->_drugInteractorTableModel;
+}
+
+DrugDrugInteractionTableModel *DDICore::drugDrugInteractionTableModel() const
+{
+    return d->_drugDrugInteractionTableModel;
 }
 
 /** Returns the DDI database single instance */
