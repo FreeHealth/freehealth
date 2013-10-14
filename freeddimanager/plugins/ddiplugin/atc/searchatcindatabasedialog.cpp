@@ -24,6 +24,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "searchatcindatabasedialog.h"
+#include <ddiplugin/constants.h>
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/database/ddidatabase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,6 +47,7 @@ using namespace DDI;
 
 static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DDI::Internal::DDIDatabase &ddiBase() {return DDI::DDICore::instance()->database();}
 
 namespace DDI {
 class SearchAtcInDatabaseDialogPrivate
@@ -62,9 +66,6 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->setupUi(this);
     ui->initial->setText(term);
 
-//    if (!DrugsDB::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
-//        LOG_ERROR("unable to connect database");
-
     d->m_Model = new QSqlQueryModel(this);
     ui->tableView->setModel(d->m_Model);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
@@ -82,18 +83,24 @@ SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()
 
 void SearchAtcInDatabaseDialog::setFilter()
 {
-//    QString lang = ui->lang->currentText().left(2).toLower();
-//    const QString &term = ui->term->text();
-//    QString req = QString("SELECT ATC.CODE, LABELS.LABEL FROM ATC "
-//                          "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
-//                          "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
-//                          "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-//                          "WHERE LABELS.LANG=\"%1\" AND LABELS.LABEL like \"%%2%\"; ")
-//            .arg(lang).arg(term);
+    QString lang = ui->lang->currentText().left(2).toLower();
+    QString term = ui->term->text();
+    QHash<int, QString> where;
+    QString cond = QString("LIKE \"%1%\"").arg(term.remove("\""));
+    int field = Constants::ATC_FR;
+    if (lang=="en")
+        field = Constants::ATC_EN;
+    else if (lang=="de")
+        field = Constants::ATC_DE;
+    where.insert(field, cond);
 
-//    d->m_Model->setQuery(req, QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
-
-//    ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
+    QString req = ddiBase().select(Constants::Table_ATC, QList<int>()
+                                   << Constants::ATC_FR
+                                   << Constants::ATC_EN
+                                   << Constants::ATC_DE
+                                   << Constants::ATC_CODE, where);
+    d->m_Model->setQuery(req, ddiBase().database());
+    ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
 }
 
 void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &)
@@ -104,9 +111,6 @@ void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &)
 void SearchAtcInDatabaseDialog::on_lang_currentIndexChanged(const QString &)
 {
     setFilter();
-//    d->m_Model->setFilter(QString("%1 LIKE '%%2%'").arg(text).arg(ui->term->text()));
-//    d->m_Model->select();
-//    // update tableView visible columns
 }
 
 void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &)
@@ -116,29 +120,33 @@ void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &)
 
 QStringList SearchAtcInDatabaseDialog::getSelectedCodes()
 {
-//    if (!ui->tableView->selectionModel()->hasSelection())
-//        return QStringList();
-//    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
+    if (!ui->tableView->selectionModel()->hasSelection())
+        return QStringList();
+    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
     QStringList ret;
-//    foreach(const QModelIndex &idx, list) {
-//        ret << d->m_Model->index(idx.row(), 0).data().toString();
-//    }
-//    ret.removeDuplicates();
-//    qSort(ret);
+    foreach(const QModelIndex &idx, list)
+        ret << d->m_Model->index(idx.row(), 3).data().toString();
+    ret.removeDuplicates();
+    qSort(ret);
     return ret;
 }
 
 QStringList SearchAtcInDatabaseDialog::getSelectedLabels()
 {
-//    if (!ui->tableView->selectionModel()->hasSelection())
-//        return QStringList();
-//    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
+    if (!ui->tableView->selectionModel()->hasSelection())
+        return QStringList();
+    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
     QStringList ret;
-//    foreach(const QModelIndex &idx, list) {
-//        ret << d->m_Model->index(idx.row(), 1).data().toString();
-//    }
-//    ret.removeDuplicates();
-//    qSort(ret);
+    QString lang = ui->lang->currentText().left(2).toLower();
+    int field = 0;
+    if (lang=="en")
+        field = 1;
+    else if (lang=="de")
+        field = 2;
+    foreach(const QModelIndex &idx, list)
+        ret << d->m_Model->index(idx.row(), field).data().toString();
+    ret.removeDuplicates();
+    qSort(ret);
     return ret;
 }
 

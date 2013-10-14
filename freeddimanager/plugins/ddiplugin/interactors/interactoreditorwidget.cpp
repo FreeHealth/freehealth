@@ -29,6 +29,7 @@
 #include "druginteractortablemodel.h"
 #include "druginteractortreeproxymodel.h"
 #include <ddiplugin/ddicore.h>
+#include <ddiplugin/atc/searchatcindatabasedialog.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -72,6 +73,45 @@ protected:
     bool hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const;
 };
 
+class DrugInteractorProxyModel : public QSortFilterProxyModel
+{
+public:
+    enum ClassMoleculeFilter {
+        ClassesOnly,
+        MoleculesOnly,
+        ClassesAndMolecules
+    };
+
+    explicit DrugInteractorProxyModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent),
+          _classMolFilter(ClassesAndMolecules)
+    {}
+
+    void setClassMolFilter(ClassMoleculeFilter classMolFilter)
+    {
+        _classMolFilter=classMolFilter;
+        //invalidate();
+    }
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &parent) const
+    {
+        if (_classMolFilter==ClassesOnly) {
+            QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
+            if (!isClass.data().toBool())
+                return false;
+        } else if (_classMolFilter==MoleculesOnly) {
+            QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
+            if (isClass.data().toBool())
+                return false;
+        }
+        return QSortFilterProxyModel::filterAcceptsRow(sourceRow, parent);
+    }
+
+private:
+    ClassMoleculeFilter _classMolFilter;
+};
+
 class InteractorEditorWidgetPrivate
 {
 public:
@@ -82,8 +122,7 @@ public:
         _childrenInteractorsStringListModel(0),
         _pmidStringListModel(0),
         _toolBar(0),
-        aExpandAll(0),
-        aCollapseAll(0),
+        aSearchClassOnly(0), aSearchMolsAndClass(0), aSearchMolsOnly(0),
         aSave(0),
         aEdit(0),
         aRemoveCurrent(0),
@@ -127,8 +166,10 @@ public:
         aCopyClip = new QAction(q);
         aAtcSearchDialog = new QAction(q);
 
-        aExpandAll = new QAction(q);
-        aCollapseAll = new QAction(q);
+        aSearchClassOnly = new QAction(q);
+        aSearchMolsAndClass = new QAction(q);
+        aSearchMolsOnly = new QAction(q);
+
         aNextUnreviewedOrUnlinked = new QAction(q);
         aSave = new QAction(q);
         aRemoveCurrent = new QAction(q);
@@ -138,8 +179,9 @@ public:
         aTranslateThis = new QAction(q);
         aAddClassReviewMark = new QAction(q);
         aDownloadAllNeededPmids = new QAction(q);
-        aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
-        aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
+        aSearchClassOnly->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aSearchMolsAndClass->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aSearchMolsOnly->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         aAddClassReviewMark->setIcon(theme()->icon(Core::Constants::ICONBOOKMARK));
         aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
@@ -186,8 +228,6 @@ public:
 
     void connectActions()
     {
-        QObject::connect(aExpandAll, SIGNAL(triggered()), ui->classesTreeView, SLOT(expandAll()));
-        QObject::connect(aCollapseAll, SIGNAL(triggered()), ui->classesTreeView, SLOT(collapseAll()));
         QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
         QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
         QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
@@ -207,10 +247,12 @@ public:
         left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         ui->searchLine->setLeftButton(left);
         QToolButton *right = new QToolButton(q);
-        right->addAction(aExpandAll);
-        right->addAction(aCollapseAll);
-        right->setDefaultAction(aExpandAll);
+        right->addAction(aSearchMolsAndClass);
+        right->addAction(aSearchClassOnly);
+        right->addAction(aSearchMolsOnly);
+        right->setDefaultAction(aSearchMolsAndClass);
         ui->searchLine->setRightButton(right);
+        QObject::connect(right, SIGNAL(triggered(QAction*)), q, SLOT(toggleClassMolsFilter(QAction*)));
     }
 
     void prepareModelsAndViews()
@@ -226,7 +268,7 @@ public:
         ui->classesTreeView->hide();
 
         // Molecules
-        _proxyMoleculeModel = new QSortFilterProxyModel(q);
+        _proxyMoleculeModel = new DrugInteractorProxyModel(q);
         _proxyMoleculeModel->setSourceModel(ddiCore()->drugInteractorTableModel());
         _proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         _proxyMoleculeModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
@@ -271,7 +313,7 @@ public:
     QPersistentModelIndex m_EditingIndex;
 
     QToolBar *_toolBar;
-    QAction *aExpandAll, *aCollapseAll;
+    QAction *aSearchClassOnly, *aSearchMolsAndClass, *aSearchMolsOnly;
     QAction *aSave;
     QAction *aEdit;
     QAction *aRemoveCurrent;
@@ -289,7 +331,8 @@ public:
     QAction *aCopyClip;
     QAction *aAtcSearchDialog;
 
-    QSortFilterProxyModel *_proxyClassModel, *_proxyMoleculeModel;
+    QSortFilterProxyModel *_proxyClassModel;
+    DrugInteractorProxyModel *_proxyMoleculeModel;
 
 private:
     InteractorEditorWidget *q;
@@ -381,7 +424,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(d->ui->classesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
 
-    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorTableModel(QString)));
+    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
     retranslateUi();
 }
 
@@ -450,9 +493,9 @@ void InteractorEditorWidget::save()
 void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
 {
     Q_UNUSED(text);
-//    d->_proxyClassModel->setFilterFixedString(text);
+//    d->_proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+//    d->_proxyMoleculeModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
     d->_proxyMoleculeModel->setFilterFixedString(text);
-    // TODO: code here ??? */
 }
 
 /**
@@ -513,26 +556,8 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    // Find the proxy & its source
-    QSortFilterProxyModel *model = (QSortFilterProxyModel *)index.model();
-    if (!model) {
-        LOG_ERROR("No proxymodel found???");
-        return;
-    }
-
-
-//    if (model == d->_proxyMoleculeModel) {
-//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), false);
-//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), false);
-//    } else if (model == d->_proxyClassModel) {
-//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabClassInfo), true);
-//        d->ui->tabWidget->setTabEnabled(d->ui->tabWidget->indexOf(d->ui->tabChildren), true);
-//    } else {
-//        LOG_ERROR("NO MODEL???");
-//    }
-
     // Get the current source model editing index
-    d->m_EditingIndex = model->mapToSource(index);
+    d->m_EditingIndex = d->_proxyMoleculeModel->mapToSource(index);
 
     // Adapt UI to editing index -> Class?
     bool isClass = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::IsInteractingClass).data().toBool();
@@ -540,7 +565,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->ui->atcTableView->setVisible(!isClass);
 
     // Set the mapper over the source model
-    d->_mapper->setModel(model->sourceModel());
+    d->_mapper->setModel(d->_proxyMoleculeModel->sourceModel());
     d->_mapper->addMapping(d->ui->interactorLabel, DrugInteractorTableModel::TranslatedLabel, "text");
     d->_mapper->addMapping(d->ui->commentTextEdit, DrugInteractorTableModel::Comment, "plainText");
     d->_mapper->addMapping(d->ui->dateCreation, DrugInteractorTableModel::DateOfCreation, "date");
@@ -562,29 +587,29 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->_mapper->setRootIndex(d->m_EditingIndex.parent());
     d->_mapper->setCurrentModelIndex(d->m_EditingIndex);
 
-    QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorTableModel::ATCCodeStringList, index.parent());
+    QModelIndex atcCodesIndex = d->_proxyMoleculeModel->index(index.row(), DrugInteractorTableModel::ATCCodeStringList, index.parent());
     d->_atcCodesStringListModel->setStringList(atcCodesIndex.data().toString().split(";"));
 
-    QModelIndex pmidsIndex = model->index(index.row(), DrugInteractorTableModel::PMIDStringList, index.parent());
+    QModelIndex pmidsIndex = d->_proxyMoleculeModel->index(index.row(), DrugInteractorTableModel::PMIDStringList, index.parent());
     d->_pmidStringListModel->setStringList(pmidsIndex.data().toString().split(";"));
 
-    QModelIndex childrenIndex = model->index(index.row(), DrugInteractorTableModel::ChildrenUuid, index.parent());
+    QModelIndex childrenIndex = d->_proxyMoleculeModel->index(index.row(), DrugInteractorTableModel::ChildrenUuid, index.parent());
     d->_childrenInteractorsStringListModel->setStringList(childrenIndex.data().toString().split(";"));
 }
 
 void InteractorEditorWidget::buttonActivated(QAction *selected)
 {
-    QModelIndex idx = d->_proxyMoleculeModel->mapToSource(d->m_EditingIndex);
+//    QModelIndex idx = d->_proxyMoleculeModel->mapToSource(d->m_EditingIndex);
 //    QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
-//    QModelIndex idx = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::TranslatedLabel, d->m_EditingIndex.parent());
+    QModelIndex idx = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::TranslatedLabel, d->m_EditingIndex.parent());
     QString label = idx.data().toString();
     if (selected == d->aAtcSearchDialog) {
-//        DrugsDB::SearchAtcInDatabaseDialog dlg(this, label);
-//        if (dlg.exec() == QDialog::Accepted) {
-//            QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
-//            model->setData(atc, dlg.getSelectedCodes());
-//            d->_atcCodesStringListModel->setStringList(dlg.getSelectedCodes());
-//        }
+        DDI::SearchAtcInDatabaseDialog dlg(this, label);
+        if (dlg.exec() == QDialog::Accepted) {
+            QModelIndex atc = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
+            ddiCore()->drugInteractorTableModel()->setData(atc, dlg.getSelectedCodes());
+            d->_atcCodesStringListModel->setStringList(dlg.getSelectedCodes());
+        }
     } else if (selected == d->aGoogle) {
         QDesktopServices::openUrl(QUrl(QString("http://www.google.fr/search?rls=en&q=%1+atc&ie=UTF-8&oe=UTF-8&redir_esc=").arg(label)));
     } else if (selected == d->aWho) {
@@ -595,6 +620,18 @@ void InteractorEditorWidget::buttonActivated(QAction *selected)
     } else if (selected == d->aCopyClip) {
         QApplication::clipboard()->setText(label);
     }
+}
+
+void InteractorEditorWidget::toggleClassMolsFilter(QAction *a)
+{
+    if (a==d->aSearchClassOnly) {
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::ClassesOnly);
+    } else if (a==d->aSearchMolsAndClass) {
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::ClassesAndMolecules);
+    } else if (a==d->aSearchMolsOnly) {
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::MoleculesOnly);
+    }
+    d->_proxyMoleculeModel->invalidate();
 }
 
 void InteractorEditorWidget::bookmarkClassesFromCurrent()
@@ -675,8 +712,9 @@ void InteractorEditorWidget::retranslateUi()
     d->aCreateNewClass->setText(tr("Create a new interacting class"));
     d->aCreateNewInteractor->setText(tr("Create a new interacting molecule"));
     d->aTranslateThis->setText(tr("Translate current"));
-    d->aCollapseAll->setText(tr("Collapse all"));
-    d->aExpandAll->setText(tr("Expand all"));
+    d->aSearchClassOnly->setText(tr("Search only classes"));
+    d->aSearchMolsAndClass->setText(tr("Search all"));
+    d->aSearchMolsOnly->setText(tr("Search only molecules"));
     d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
     d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
     d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
@@ -692,8 +730,9 @@ void InteractorEditorWidget::retranslateUi()
     d->aTranslateThis->setToolTip(d->aTranslateThis->text());
     d->aCreateNewInteractor->setToolTip(d->aCreateNewInteractor->text());
     d->aAddClassReviewMark->setToolTip(d->aAddClassReviewMark->text());
-    d->aCollapseAll->setToolTip(d->aCollapseAll->text());
-    d->aExpandAll->setToolTip(d->aExpandAll->text());
+    d->aSearchClassOnly->setToolTip(d->aSearchClassOnly->text());
+    d->aSearchMolsAndClass->setToolTip(d->aSearchMolsAndClass->text());
+    d->aSearchMolsOnly->setToolTip(d->aSearchMolsOnly->text());
     d->aNextUnreviewedOrUnlinked->setToolTip(d->aNextUnreviewedOrUnlinked->text());
     d->aDownloadAllNeededPmids->setToolTip(d->aDownloadAllNeededPmids->text());
     d->ui->retranslateUi(this);
@@ -706,4 +745,3 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         retranslateUi();
     }
 }
-
