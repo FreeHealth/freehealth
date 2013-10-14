@@ -25,6 +25,8 @@
  ***************************************************************************/
 #include "ddiplugin.h"
 #include "ddicore.h"
+#include <ddiplugin/atc/atcmode.h>
+#include <ddiplugin/interactors/interactormode.h>
 #include <ddiplugin/ddi/drugdruginteractionmode.h>
 
 #include <coreplugin/icore.h>
@@ -40,7 +42,10 @@
 using namespace DDI;
 using namespace Internal;
 
-DDIPlugin::DDIPlugin()
+DDIPlugin::DDIPlugin() :
+    _atcMode(0),
+    _interactorMode(0),
+    _ddiMode(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DDIPlugin";
@@ -64,7 +69,9 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
     core->initialize();
 
     // create modes
-    addAutoReleasedObject(new DDIMode(this));
+    addObject(_ddiMode = new DDIMode(this));
+    addObject(_interactorMode = new InteractorMode(this));
+    addObject(_atcMode = new AtcMode(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -89,6 +96,9 @@ ExtensionSystem::IPlugin::ShutdownFlag DDIPlugin::aboutToShutdown()
     // Here you still have a full access to
     //   Core::ICore::instance()
     // And all its objects (user(), patient(), settings(), theme()...).
+    removeObject(_ddiMode);
+    removeObject(_interactorMode);
+    removeObject(_atcMode);
 
     return SynchronousShutdown;
 }

@@ -19,10 +19,12 @@ HEADERS += \
     atc/atccollectioneditorwidget.h \
     atc/atceditorwidget.h \
     atc/searchatcindatabasedialog.h \
+    atc/atcmode.h \
     interactors/druginteractor.h \
     interactors/druginteractortablemodel.h \
     interactors/druginteractortreeproxymodel.h \
     interactors/interactoreditorwidget.h \
+    interactors/interactormode.h \
     ddi/drugdruginteractionmode.h \
     ddi/drugdruginteraction.h \
     ddi/drugdruginteractiontablemodel.h \
@@ -38,10 +40,12 @@ SOURCES += \
     atc/atccollectioneditorwidget.cpp \
     atc/atceditorwidget.cpp \
     atc/searchatcindatabasedialog.cpp \
+    atc/atcmode.cpp \
     interactors/druginteractor.cpp \
     interactors/druginteractortablemodel.cpp \
     interactors/druginteractortreeproxymodel.cpp \
     interactors/interactoreditorwidget.cpp \
+    interactors/interactormode.cpp \
     ddi/drugdruginteractionmode.cpp \
     ddi/drugdruginteraction.cpp \
     ddi/drugdruginteractiontablemodel.cpp \

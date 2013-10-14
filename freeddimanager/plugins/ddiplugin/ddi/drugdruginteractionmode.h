@@ -19,56 +19,42 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
+ *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_H
-#define DDIMANAGER_DDIPLUGIN_H
+#ifndef DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONMODE_H
+#define DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONMODE_H
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/modemanager/imode.h>
+
+#include <QObject>
 
 /**
- * \file ddiplugin.h
+ * \file drugdruginteractionmode.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 09 Oct 2013
+ * \date 14 Oct 2013
 */
 
 namespace DDI {
+class DrugDrugInteractionEditorWidget;
 namespace Internal {
-class AtcMode;
-class InteractorMode;
-class DDIMode;
-
-class DDIPlugin : public ExtensionSystem::IPlugin
+class DDIMode : public Core::IMode
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeDDIManager.DDIManagerPlugin" FILE "DDIManager.json")
-
 public:
-    DDIPlugin();
-    ~DDIPlugin();
+    DDIMode(QObject *parent);
+    ~DDIMode();
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
-
-    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
-
-#ifdef WITH_TESTS
-private Q_SLOTS:
-    void initTestCase();
-    void test_drugInteractor();
-    void cleanTestCase();
-#endif
+    void postCoreInitialization();
 
 private:
-    AtcMode *_atcMode;
-    InteractorMode *_interactorMode;
-    DDIMode *_ddiMode;
+    DrugDrugInteractionEditorWidget *_widget;
 };
 
 } // namespace Internal
 } // namespace DDI
 
-#endif // DDIMANAGER_DDIPLUGIN_H
+#endif // DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONMODE_H

@@ -246,6 +246,9 @@ MainWindow::~MainWindow()
 //    delete ui;
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
+    // delete ui components
+    delete m_modeStack;
+    m_modeStack = 0;
 }
 
 /**
