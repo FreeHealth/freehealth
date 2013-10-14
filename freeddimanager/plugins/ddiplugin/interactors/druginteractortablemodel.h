@@ -33,7 +33,7 @@
  * \file druginteractortablemodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 12 Oct 2013
+ * \date 14 Oct 2013
 */
 
 namespace DDI {
@@ -73,12 +73,6 @@ public:
         Reference,
         Comment,
         ColumnCount
-    };
-
-    enum ShowData {
-        InteractingClasses,
-        InteractingMolecules,
-        All
     };
 
     DrugInteractorTableModel(QObject *parent = 0);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DrugsDB::InteractionEditorWidget</class>
- <widget class="QWidget" name="DrugsDB::InteractionEditorWidget">
+ <class>DDI::DrugDrugInteractionEditorWidget</class>
+ <widget class="QWidget" name="DDI::DrugDrugInteractionEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

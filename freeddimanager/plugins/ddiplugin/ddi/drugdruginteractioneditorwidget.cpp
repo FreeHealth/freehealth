@@ -23,19 +23,13 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "interactioneditorpage.h"
-#include "drugdruginteractionmodel.h"
-#include "drugdruginteraction.h"
-#include "interactorselectordialog.h"
+#include "drugdruginteractioneditorwidget.h"
+#include "drugdruginteractiontablemodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
-
-#include <drugsdb/tools.h>
-#include <drugsdb/routesmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -52,16 +46,16 @@
 #include <QStringListModel>
 #include <QToolButton>
 
-#include "ui_interactioneditorwidget.h"
+#include "ui_drugdruginteractioneditorwidget.h"
 
-using namespace DrugsDB;
+using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
-static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
+//static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
+//static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
 
 namespace {
 // INTERACTIONS ICONS
@@ -77,12 +71,12 @@ const char * const  INTERACTION_ICONGPG =              "gpgiam.png";            
 
 }  // namespace anonymous
 
-namespace DrugsDB {
+namespace DDI {
 namespace Internal {
-class InteractionEditorWidgetPrivate
+class DrugDrugInteractionEditorWidgetPrivate
 {
 public:
-    InteractionEditorWidgetPrivate(InteractionEditorWidget *parent):
+    DrugDrugInteractionEditorWidgetPrivate(DrugDrugInteractionEditorWidget *parent):
         ui(0),
         m_DDIModel(0),
         m_Mapper(0),
@@ -98,17 +92,17 @@ public:
         aExpandAll(0),
         aCollapseAll(0),
         googleTranslator(0),
-        firstInteractorRoutes(0), secondInteractorRoutes(0),
+//        firstInteractorRoutes(0), secondInteractorRoutes(0),
         biblioModel(0),
         q(parent)
     {}
 
-    ~InteractionEditorWidgetPrivate()
+    ~DrugDrugInteractionEditorWidgetPrivate()
     {}
 
     void setupUi()
     {
-        ui = new Ui::InteractionEditorWidget;
+        ui = new Ui::DrugDrugInteractionEditorWidget;
         ui->setupUi(q);
         // Some ui settings
         ui->treeLayout->setMargin(0);
@@ -206,21 +200,21 @@ public:
     {
         // Manage combos && views
         setLevelNamesToCombo(ui->comboLevel);
-        ui->firstDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-        ui->firstDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-        ui->firstDoseToUnits->addItems(DrugDrugInteractionModel::units());
-        ui->firstDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
-        ui->secondDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-        ui->secondDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-        ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
-        ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
+        ui->firstDoseFromUnits->addItems(DrugDrugInteractionTableModel::units());
+        ui->firstDoseFromRepart->addItems(DrugDrugInteractionTableModel::repartitions());
+        ui->firstDoseToUnits->addItems(DrugDrugInteractionTableModel::units());
+        ui->firstDoseToRepart->addItems(DrugDrugInteractionTableModel::repartitions());
+        ui->secondDoseFromUnits->addItems(DrugDrugInteractionTableModel::units());
+        ui->secondDoseFromRepart->addItems(DrugDrugInteractionTableModel::repartitions());
+        ui->secondDoseToUnits->addItems(DrugDrugInteractionTableModel::units());
+        ui->secondDoseToRepart->addItems(DrugDrugInteractionTableModel::repartitions());
 
-        firstInteractorRoutes = new DrugsDB::RoutesModel(q);
-        ui->listViewFirstInteractorRoute->setModel(firstInteractorRoutes);
-        ui->listViewFirstInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
-        secondInteractorRoutes = new DrugsDB::RoutesModel(q);
-        ui->listViewSecondInteractorRoute->setModel(secondInteractorRoutes);
-        ui->listViewSecondInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
+//        firstInteractorRoutes = new DrugsDB::RoutesModel(q);
+//        ui->listViewFirstInteractorRoute->setModel(firstInteractorRoutes);
+//        ui->listViewFirstInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
+//        secondInteractorRoutes = new DrugsDB::RoutesModel(q);
+//        ui->listViewSecondInteractorRoute->setModel(secondInteractorRoutes);
+//        ui->listViewSecondInteractorRoute->setModelColumn(DrugsDB::RoutesModel::FirstTranslatedName);
 
         biblioModel = new QStringListModel(q);
         ui->bilbioTableView->setModel(biblioModel);
@@ -229,7 +223,7 @@ public:
         ui->bilbioTableView->horizontalHeader()->hide();
         ui->bilbioTableView->verticalHeader()->hide();
 
-        m_DDIModel = new DrugDrugInteractionModel(q);
+        m_DDIModel = new DrugDrugInteractionTableModel(q);
         ui->treeView->setModel(m_DDIModel);
         ui->treeView->setWordWrap(true);
         for(int i = 0; i < m_DDIModel->rowCount(); ++i) {
@@ -247,37 +241,37 @@ public:
         m_Mapper = new QDataWidgetMapper(q);
         m_Mapper->setModel(m_DDIModel);
         m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-        m_Mapper->addMapping(ui->risk, DrugDrugInteractionModel::RiskFr, "plainText");
-        m_Mapper->addMapping(ui->risk_en, DrugDrugInteractionModel::RiskEn, "plainText");
-        m_Mapper->addMapping(ui->management, DrugDrugInteractionModel::ManagementFr, "plainText");
-        m_Mapper->addMapping(ui->management_en, DrugDrugInteractionModel::ManagementEn, "plainText");
-        m_Mapper->addMapping(ui->createdOn, DrugDrugInteractionModel::DateCreation, "date");
-        m_Mapper->addMapping(ui->updatedOn, DrugDrugInteractionModel::DateLastUpdate, "date");
-        m_Mapper->addMapping(ui->comboLevel, DrugDrugInteractionModel::LevelComboIndex, "currentIndex");
+        m_Mapper->addMapping(ui->risk, DrugDrugInteractionTableModel::RiskFr, "plainText");
+        m_Mapper->addMapping(ui->risk_en, DrugDrugInteractionTableModel::RiskEn, "plainText");
+        m_Mapper->addMapping(ui->management, DrugDrugInteractionTableModel::ManagementFr, "plainText");
+        m_Mapper->addMapping(ui->management_en, DrugDrugInteractionTableModel::ManagementEn, "plainText");
+        m_Mapper->addMapping(ui->createdOn, DrugDrugInteractionTableModel::DateCreation, "date");
+        m_Mapper->addMapping(ui->updatedOn, DrugDrugInteractionTableModel::DateLastUpdate, "date");
+        m_Mapper->addMapping(ui->comboLevel, DrugDrugInteractionTableModel::LevelComboIndex, "currentIndex");
 
-        m_Mapper->addMapping(ui->firstDoseFromValue, DrugDrugInteractionModel::FirstDoseFromValue, "text");
-        m_Mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionModel::FirstDoseFromUnits, "currentIndex");
-        m_Mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionModel::FirstDoseFromRepartition, "currentIndex");
-        m_Mapper->addMapping(ui->firstDoseToValue, DrugDrugInteractionModel::FirstDoseToValue, "text");
-        m_Mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionModel::FirstDoseToUnits, "currentIndex");
-        m_Mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionModel::FirstDoseToRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseFromValue, DrugDrugInteractionTableModel::FirstDoseFromValue, "text");
+        m_Mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionTableModel::FirstDoseFromUnits, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionTableModel::FirstDoseFromRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseToValue, DrugDrugInteractionTableModel::FirstDoseToValue, "text");
+        m_Mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionTableModel::FirstDoseToUnits, "currentIndex");
+        m_Mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionTableModel::FirstDoseToRepartition, "currentIndex");
 
-        m_Mapper->addMapping(ui->secondDoseFromValue, DrugDrugInteractionModel::SecondDoseFromValue, "text");
-        m_Mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionModel::SecondDoseFromUnits, "currentIndex");
-        m_Mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionModel::SecondDoseFromRepartition, "currentIndex");
-        m_Mapper->addMapping(ui->secondDoseToValue, DrugDrugInteractionModel::SecondDoseToValue, "text");
-        m_Mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionModel::SecondDoseToUnits, "currentIndex");
-        m_Mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionModel::SecondDoseToRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseFromValue, DrugDrugInteractionTableModel::SecondDoseFromValue, "text");
+        m_Mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionTableModel::SecondDoseFromUnits, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionTableModel::SecondDoseFromRepartition, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseToValue, DrugDrugInteractionTableModel::SecondDoseToValue, "text");
+        m_Mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionTableModel::SecondDoseToUnits, "currentIndex");
+        m_Mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionTableModel::SecondDoseToRepartition, "currentIndex");
 
-        m_Mapper->addMapping(ui->humanSynthesis, DrugDrugInteractionModel::HumanReadableSynthesis, "html");
+//        m_Mapper->addMapping(ui->humanSynthesis, DrugDrugInteractionTableModel::HumanReadableSynthesis, "html");
 
-        //    m_Mapper->addMapping(ui->comboFirstInteractorRoute, DrugDrugInteractionModel::FirstInteractorRouteIndex, "currentIndex");
-        //    m_Mapper->addMapping(ui->comboSecondInteractorRoute, DrugDrugInteractionModel::SecondInteractorRouteIndex, "currentIndex");
+        //    m_Mapper->addMapping(ui->comboFirstInteractorRoute, DrugDrugInteractionTableModel::FirstInteractorRouteIndex, "currentIndex");
+        //    m_Mapper->addMapping(ui->comboSecondInteractorRoute, DrugDrugInteractionTableModel::SecondInteractorRouteIndex, "currentIndex");
     }
 
 public:
-    Ui::InteractionEditorWidget *ui;
-    DrugDrugInteractionModel *m_DDIModel;
+    Ui::DrugDrugInteractionEditorWidget *ui;
+    DrugDrugInteractionTableModel *m_DDIModel;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex m_EditingIndex;
     bool m_ReviewModified;
@@ -292,34 +286,18 @@ public:
     QAction *aExpandAll;
     QAction *aCollapseAll;
     Utils::GoogleTranslator *googleTranslator;
-    DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
+//    DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
     QStringListModel *biblioModel;
 
 private:
-    InteractionEditorWidget *q;
+    DrugDrugInteractionEditorWidget *q;
 };
 }  // namespace Internal
-}  // namespace DrugsDB
+}  // namespace DDI
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////  InteractionEditorPage  //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-QString InteractionEditorPage::category() const
-{
-    return tkTr(Trans::Constants::DRUGS) + "|" + tkTr(Trans::Constants::INTERACTIONS_DATABASE);
-}
-
-QWidget *InteractionEditorPage::createPage(QWidget *parent)
-{
-    return new InteractionEditorWidget(parent);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////  InteractionEditorWidget  /////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
+DrugDrugInteractionEditorWidget::DrugDrugInteractionEditorWidget(QWidget *parent) :
     QWidget(parent),
-    d(new InteractionEditorWidgetPrivate(this))
+    d(new DrugDrugInteractionEditorWidgetPrivate(this))
 {
     d->setupUi();
     layout()->setMargin(0);
@@ -333,11 +311,11 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     setEditorsEnabled(false);
 
     connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
-    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionModel(QString)));
+    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionTableModel(QString)));
     retranslateUi();
 }
 
-InteractionEditorWidget::~InteractionEditorWidget()
+DrugDrugInteractionEditorWidget::~DrugDrugInteractionEditorWidget()
 {
     if (d) {
         delete d->ui;
@@ -347,7 +325,7 @@ InteractionEditorWidget::~InteractionEditorWidget()
 }
 
 /** Enable/Disable the whole editor user interface */
-void InteractionEditorWidget::setEditorsEnabled(bool state)
+void DrugDrugInteractionEditorWidget::setEditorsEnabled(bool state)
 {
     d->ui->generalGroupBox->setEnabled(state);
     d->ui->risk->setEnabled(state);
@@ -377,84 +355,81 @@ void InteractionEditorWidget::setEditorsEnabled(bool state)
 }
 
 /** Create a new drugdruginteraction */
-void InteractionEditorWidget::createNewDDI()
+void DrugDrugInteractionEditorWidget::createNewDDI()
 {
-    // get the first interactor
-    QModelIndex index = d->ui->treeView->currentIndex();
-    while (index.parent().isValid())
-        index = index.parent();
+//    // get the first interactor
+//    QModelIndex index = d->ui->treeView->currentIndex();
+//    while (index.parent().isValid())
+//        index = index.parent();
 
-    DrugDrugInteraction ddi;
-    QString first;
-    // Can not find the first interactor -> ask user
-    if (!index.isValid()) {
-        Internal::InteractorSelectorDialog dlg(this);
-        dlg.setTitle(tr("Select the first interactor"));
-        dlg.initialize();
-        if (dlg.exec() == QDialog::Accepted) {
-            if (dlg.selectedNames().count() == 1)
-                first = dlg.selectedNames().at(0);
-        }
-        if (first.isEmpty())
-            return;
-        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
-    } else {
-        first = index.data().toString();
-        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
-    }
+//    DrugDrugInteraction ddi;
+//    QString first;
+//    // Can not find the first interactor -> ask user
+//    if (!index.isValid()) {
+//        Internal::InteractorSelectorDialog dlg(this);
+//        dlg.setTitle(tr("Select the first interactor"));
+//        dlg.initialize();
+//        if (dlg.exec() == QDialog::Accepted) {
+//            if (dlg.selectedNames().count() == 1)
+//                first = dlg.selectedNames().at(0);
+//        }
+//        if (first.isEmpty())
+//            return;
+//        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
+//    } else {
+//        first = index.data().toString();
+//        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
+//    }
 
-    // ask for the second interactor
-    Internal::InteractorSelectorDialog dlg(this);
-    dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
-    dlg.initialize();
-    QString second;
-    if (dlg.exec() == QDialog::Accepted) {
-        if (dlg.selectedNames().count() == 1)
-            second = dlg.selectedNames().at(0);
-    }
-    if (second.isEmpty())
-        return;
+//    // ask for the second interactor
+//    Internal::InteractorSelectorDialog dlg(this);
+//    dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
+//    dlg.initialize();
+//    QString second;
+//    if (dlg.exec() == QDialog::Accepted) {
+//        if (dlg.selectedNames().count() == 1)
+//            second = dlg.selectedNames().at(0);
+//    }
+//    if (second.isEmpty())
+//        return;
 
-    // ask for a confirmation
-    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
-                                         "- %1<br />"
-                                         "- %2 <br />").arg(first).arg(second),
-                                      "", "", tr("Drug-drug interaction creation"));
-    if (!yes)
-        return;
-    ddi.setData(DrugDrugInteraction::SecondInteractorName, second);
-    ddi.setData(DrugDrugInteraction::DateCreation, QDate::currentDate());
-    ddi.setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
+//    // ask for a confirmation
+//    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
+//                                         "- %1<br />"
+//                                         "- %2 <br />").arg(first).arg(second),
+//                                      "", "", tr("Drug-drug interaction creation"));
+//    if (!yes)
+//        return;
+//    ddi.setData(DrugDrugInteraction::SecondInteractorName, second);
+//    ddi.setData(DrugDrugInteraction::DateCreation, QDate::currentDate());
+//    ddi.setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
 
-    if (!d->m_DDIModel->addDrugDrugInteraction(ddi))
-        LOG_ERROR(QString("Unable to add the DDI: %1 <-> %2").arg(ddi.firstInteractor()));
+//    if (!d->m_DDIModel->addDrugDrugInteraction(ddi))
+//        LOG_ERROR(QString("Unable to add the DDI: %1 <-> %2").arg(ddi.firstInteractor()));
 
-    // select the first interactor in the view
-    d->ui->searchLine->setText(first);
-    filterDrugDrugInteractionModel(first);
-    LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
+//    // select the first interactor in the view
+//    d->ui->searchLine->setText(first);
+//    filterDrugDrugInteractionTableModel(first);
+//    LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
 }
 
 /** Filter the DDI model with the search terms \e filter */
-void InteractionEditorWidget::filterDrugDrugInteractionModel(const QString &filter)
+void DrugDrugInteractionEditorWidget::filterDrugDrugInteractionTableModel(const QString &filter)
 {
-    d->m_DDIModel->filterInteractionsForInteractor(filter);
+//    d->m_DDIModel->filterInteractionsForInteractor(filter);
     d->ui->treeView->expandAll();
 }
 
 /** Edit the current selected DDI */
-void InteractionEditorWidget::edit()
+void DrugDrugInteractionEditorWidget::edit()
 {
-    if (d->m_DDIModel->hasChildren(d->ui->treeView->currentIndex()))
-        setEditorsEnabled(false);
     setEditorsEnabled(true);
 }
 
 /**
- * \internal
  * Activated a specific DDI
  */
-void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
+void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &index)
 {
     if (d->m_EditingIndex==index)
         return;
@@ -481,78 +456,78 @@ void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
 
     // set data
     // manage a OSX bug with checkboxes in mappers
-    QModelIndex rev = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::IsReviewedCheckState, index.parent());
-    d->ui->isReviewed->setChecked(rev.data().toBool());
-    QModelIndex dose1from = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::FirstDoseUseFrom, index.parent());
-    d->ui->firstDoseUsesFrom->setChecked(dose1from.data().toBool());
-    QModelIndex dose1to = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::FirstDoseUsesTo, index.parent());
-    d->ui->firstDoseUsesTo->setChecked(dose1to.data().toBool());
-    QModelIndex dose2from = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::SecondDoseUseFrom, index.parent());
-    d->ui->secondDoseUsesFrom->setChecked(dose2from.data().toBool());
-    QModelIndex dose2to = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::SecondDoseUsesTo, index.parent());
-    d->ui->secondDoseUsesTo->setChecked(dose2to.data().toBool());
+//    QModelIndex rev = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::IsReviewedCheckState, index.parent());
+//    d->ui->isReviewed->setChecked(rev.data().toBool());
+//    QModelIndex dose1from = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstDoseUseFrom, index.parent());
+//    d->ui->firstDoseUsesFrom->setChecked(dose1from.data().toBool());
+//    QModelIndex dose1to = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstDoseUsesTo, index.parent());
+//    d->ui->firstDoseUsesTo->setChecked(dose1to.data().toBool());
+//    QModelIndex dose2from = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondDoseUseFrom, index.parent());
+//    d->ui->secondDoseUsesFrom->setChecked(dose2from.data().toBool());
+//    QModelIndex dose2to = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondDoseUsesTo, index.parent());
+//    d->ui->secondDoseUsesTo->setChecked(dose2to.data().toBool());
 
     // manage routes of interactors
-    d->firstInteractorRoutes->clear();
-    d->secondInteractorRoutes->clear();
-    QModelIndex i1routes = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::FirstInteractorRouteOfAdministrationIds, index.parent());
-    if (!i1routes.data().isNull()) {
-        d->firstInteractorRoutes->setCheckedRouteIds(i1routes.data().toList());
-    }
-    QModelIndex i2routes = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::SecondInteractorRouteOfAdministrationIds, index.parent());
-    if (!i2routes.data().isNull()) {
-        d->secondInteractorRoutes->setCheckedRouteIds(i2routes.data().toList());
-    }
-    // and bibliography
-    QModelIndex pmids = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::PMIDStringList, index.parent());
-    d->biblioModel->setStringList(pmids.data().toStringList());
+//    d->firstInteractorRoutes->clear();
+//    d->secondInteractorRoutes->clear();
+//    QModelIndex i1routes = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstInteractorRouteOfAdministrationIds, index.parent());
+//    if (!i1routes.data().isNull()) {
+//        d->firstInteractorRoutes->setCheckedRouteIds(i1routes.data().toList());
+//    }
+//    QModelIndex i2routes = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondInteractorRouteOfAdministrationIds, index.parent());
+//    if (!i2routes.data().isNull()) {
+//        d->secondInteractorRoutes->setCheckedRouteIds(i2routes.data().toList());
+//    }
+//    // and bibliography
+//    QModelIndex pmids = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::PMIDStringList, index.parent());
+//    d->biblioModel->setStringList(pmids.data().toStringList());
 
     // Manage readonly data
-    QModelIndex ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::InternalUidWithInteractors, index.parent());
-    d->ui->generalGroupBox->setTitle(ro.data().toString());
-    ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::FirstInteractorName, index.parent());
-    d->ui->firstInteractorLabel->setText(ro.data().toString());
-    ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::SecondInteractorName, index.parent());
-    d->ui->secondInteractorLabel->setText(ro.data().toString());
+//    QModelIndex ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::InternalUidWithInteractors, index.parent());
+//    d->ui->generalGroupBox->setTitle(ro.data().toString());
+//    ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstInteractorName, index.parent());
+//    d->ui->firstInteractorLabel->setText(ro.data().toString());
+//    ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondInteractorName, index.parent());
+//    d->ui->secondInteractorLabel->setText(ro.data().toString());
 
     d->m_EditingIndex = index;
 }
 
 /** Save the DDI model and all its changes */
-void InteractionEditorWidget::save()
+void DrugDrugInteractionEditorWidget::save()
 {
-    if (d->m_EditingIndex.isValid()) {
-        d->ui->treeView->setFocus();
-        d->m_Mapper->submit();
-        // bug with mapper / checkbox in macos
-        QModelIndex reviewed = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::IsReviewedCheckState,d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(reviewed, d->ui->isReviewed->isChecked());
-        QModelIndex dose1from = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::FirstDoseUseFrom, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(dose1from, d->ui->firstDoseUsesFrom->isChecked());
-        QModelIndex dose1to = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::FirstDoseUsesTo, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(dose1to, d->ui->firstDoseUsesTo->isChecked());
-        QModelIndex dose2from = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::SecondDoseUseFrom, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(dose2from, d->ui->secondDoseUsesFrom->isChecked());
-        QModelIndex dose2to = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::SecondDoseUsesTo, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(dose2to, d->ui->secondDoseUsesTo->isChecked());
+//    if (d->m_EditingIndex.isValid()) {
+//        d->ui->treeView->setFocus();
+//        d->m_Mapper->submit();
+//        // bug with mapper / checkbox in macos
+//        QModelIndex reviewed = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::IsReviewedCheckState,d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(reviewed, d->ui->isReviewed->isChecked());
+//        QModelIndex dose1from = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::FirstDoseUseFrom, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(dose1from, d->ui->firstDoseUsesFrom->isChecked());
+//        QModelIndex dose1to = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::FirstDoseUsesTo, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(dose1to, d->ui->firstDoseUsesTo->isChecked());
+//        QModelIndex dose2from = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::SecondDoseUseFrom, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(dose2from, d->ui->secondDoseUsesFrom->isChecked());
+//        QModelIndex dose2to = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::SecondDoseUsesTo, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(dose2to, d->ui->secondDoseUsesTo->isChecked());
 
-        // manage interactor routes
-        QModelIndex i1routes = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::FirstInteractorRouteOfAdministrationIds, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(i1routes, d->firstInteractorRoutes->checkedRouteIdsInVariant());
-        QModelIndex i2routes = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::SecondInteractorRouteOfAdministrationIds, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(i2routes, d->secondInteractorRoutes->checkedRouteIdsInVariant());
+//        // manage interactor routes
+//        QModelIndex i1routes = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::FirstInteractorRouteOfAdministrationIds, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(i1routes, d->firstInteractorRoutes->checkedRouteIdsInVariant());
+//        QModelIndex i2routes = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::SecondInteractorRouteOfAdministrationIds, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(i2routes, d->secondInteractorRoutes->checkedRouteIdsInVariant());
 
-        // manage bibliography
-        QModelIndex pmids = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::PMIDStringList, d->m_EditingIndex.parent());
-        d->m_DDIModel->setData(pmids, d->biblioModel->stringList());
-    }
-    d->m_DDIModel->saveModel();
+//        // manage bibliography
+//        QModelIndex pmids = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::PMIDStringList, d->m_EditingIndex.parent());
+//        d->m_DDIModel->setData(pmids, d->biblioModel->stringList());
+//    }
+//    d->m_DDIModel->saveModel();
 
-    setEditorsEnabled(false);
+//    setEditorsEnabled(false);
 }
 
 /** Remove the current selected DDI */
-void InteractionEditorWidget::removeCurrent()
+void DrugDrugInteractionEditorWidget::removeCurrent()
 {
     if (d->m_EditingIndex.isValid()) {
         d->m_DDIModel->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
@@ -560,7 +535,7 @@ void InteractionEditorWidget::removeCurrent()
 }
 
 /** Translated DDI texts of the currently selected one */
-void InteractionEditorWidget::translateCurrent()
+void DrugDrugInteractionEditorWidget::translateCurrent()
 {
     if (!d->googleTranslator) {
         d->googleTranslator = new Utils::GoogleTranslator(this);
@@ -568,9 +543,9 @@ void InteractionEditorWidget::translateCurrent()
     }
 
     QModelIndex index = d->ui->treeView->currentIndex();
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::RiskFr, index.parent());
+    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskFr, index.parent());
     const QString &risk = d->m_DDIModel->data(index).toString();
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::ManagementFr, index.parent());
+    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementFr, index.parent());
     const QString &management = d->m_DDIModel->data(index).toString();
 
     QString trans = risk + ".........." + management;
@@ -581,7 +556,7 @@ void InteractionEditorWidget::translateCurrent()
  * \internal
  * Acts when translations are downloaded
  */
-void InteractionEditorWidget::translationDone(const QString &trans)
+void DrugDrugInteractionEditorWidget::translationDone(const QString &trans)
 {
     qWarning() << "translationDone" << trans;
     if (trans.startsWith(" null")) {
@@ -594,12 +569,12 @@ void InteractionEditorWidget::translationDone(const QString &trans)
     QStringList val = tmp.split("||");
     QString riskEn = val.at(0).simplified();
     QModelIndex index = d->m_EditingIndex;
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::RiskEn, index.parent());
+    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskEn, index.parent());
     d->m_DDIModel->setData(index, riskEn);
 
     if (val.count() == 2) {
         QString managementEn = val.at(1).simplified();
-        index = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::ManagementEn, index.parent());
+        index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementEn, index.parent());
         d->m_DDIModel->setData(index, managementEn);
     }
 }
@@ -608,7 +583,7 @@ void InteractionEditorWidget::translationDone(const QString &trans)
  * \internal
  * DISCONNECTED
  */
-void InteractionEditorWidget::translateAll()
+void DrugDrugInteractionEditorWidget::translateAll()
 {
 //    InteractionModel *model = InteractionModel::instance();
 //    model->correctTranslations();
@@ -616,195 +591,26 @@ void InteractionEditorWidget::translateAll()
 
 /**
  * \internal
- * OBSOLETE CODE
- */
-void InteractionEditorWidget::reformatOldXmlSource()
-{
-    // read the old thesaurus XML
-    QDomDocument doc;
-    QFile file(afssapsIamXmlFile());
-    if (file.open(QIODevice::ReadOnly)) {
-        QString error;
-        int line, col;
-        if (!doc.setContent(&file, &error,&line,&col)) {
-            LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
-            LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
-        } else {
-            LOG(tr("Reading file: %1").arg(file.fileName()));
-        }
-        file.close();
-    } else {
-        LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
-    }
-    QDomElement rootNode = doc.firstChildElement("InteractionModel");
-    QDomElement mainNode = rootNode.firstChildElement("MainInteractor");
-
-    QList<DrugDrugInteraction> ddis;
-    QTime chrono;
-    chrono.start();
-
-    // create the drugdruginteractions objects
-    while (!mainNode.isNull()) {
-
-        // get the second interaction
-        QDomElement interactorNode = mainNode.firstChildElement("Interactor");
-        while (!interactorNode.isNull()) {
-            DrugDrugInteraction ddi;
-            ddi.setData(DrugDrugInteraction::FirstInteractorName, mainNode.attribute("name"));
-            ddi.setData(DrugDrugInteraction::SecondInteractorName, interactorNode.attribute("name"));
-            ddi.setData(DrugDrugInteraction::LevelCode, interactorNode.attribute("level"));
-
-            if (mainNode.attribute("added").isEmpty()) {
-                if (interactorNode.attribute("added").isEmpty()) {
-                    ddi.setData(DrugDrugInteraction::DateCreation, "01-01-2010");
-                } else {
-                    ddi.setData(DrugDrugInteraction::DateCreation, interactorNode.attribute("added"));
-                }
-            } else {
-                ddi.setData(DrugDrugInteraction::DateCreation, mainNode.attribute("added"));
-            }
-
-            if (mainNode.attribute("updated").isEmpty()) {
-                if (!interactorNode.attribute("updated").isEmpty()) {
-                    ddi.setData(DrugDrugInteraction::DateLastUpdate, "01-01-2010");
-                }
-            } else {
-                ddi.setData(DrugDrugInteraction::DateLastUpdate, mainNode.attribute("updated"));
-            }
-
-            // get risk // management
-            QDomElement riskNode = interactorNode.firstChildElement("Risk");
-            while (!riskNode.isNull()) {
-                ddi.setRisk(riskNode.attribute("text"), riskNode.attribute("lang"));
-                riskNode = riskNode.nextSiblingElement("Risk");
-            }
-
-            QDomElement managementNode = interactorNode.firstChildElement("Management");
-            while (!managementNode.isNull()) {
-                ddi.setManagement(managementNode.attribute("text"), managementNode.attribute("lang"));
-                managementNode = managementNode.nextSiblingElement("Management");
-            }
-
-            // get FormalizedRisk
-            QDomElement formalizedNode = interactorNode.firstChildElement("FormalizedRisk");
-            if (!formalizedNode.isNull()) {
-                QDomNamedNodeMap attributeMap = formalizedNode.attributes();
-                for(int i=0; i < attributeMap.size(); ++i) {
-                    ddi.addFormalized(attributeMap.item(i).nodeName(), attributeMap.item(i).nodeValue());
-                }
-            }
-
-            ddis << ddi;
-
-            // go next interactor
-            interactorNode = interactorNode.nextSiblingElement("Interactor");
-        }
-
-        // go next maininteractor
-        mainNode = mainNode.nextSiblingElement("MainInteractor");
-//        if (ddis.count() > 1000) {
-//            break;
-//        }
-    }
-
-    Utils::Log::logTimeElapsed(chrono, "DDI", "Sources reading");
-    chrono.restart();
-
-    // check duplicates
-    QList<int> remove;
-    for(int i=0; i < ddis.count(); ++i) {
-        DrugDrugInteraction &first = ddis[i];
-        if (first.data(DrugDrugInteraction::IsDuplicated).toBool()) {
-            continue;
-        }
-
-        for(int j=0; j < ddis.count(); ++j) {
-            // don't test the same DDI...
-            if (i==j) {
-                continue;
-            }
-            DrugDrugInteraction &second = ddis[j];
-            if (second.data(DrugDrugInteraction::IsDuplicated).toBool()) {
-                continue;
-            }
-            if (first==second) {
-                // Test the DateLastUpdate on the duplicates an keep the most recent one
-                if (first.data(DrugDrugInteraction::DateLastUpdate).toDate() > second.data(DrugDrugInteraction::DateLastUpdate).toDate()) {
-                    // keep first (i)
-                    remove << j;
-                    second.setData(DrugDrugInteraction::IsDuplicated, true);
-                } else {
-                    // keep second (j)
-                    remove << i;
-                    first.setData(DrugDrugInteraction::IsDuplicated, true);
-//                    break;
-                }
-//                qWarning() << "Duplication "
-//                           << first.firstInteractor()
-//                           << first.secondInteractor()
-//                           << first.levelName();
-            }
-        }
-    }
-
-    Utils::Log::logTimeElapsed(chrono, "DDI", "Remove duplicates: " + QString::number(remove.count()));
-    chrono.restart();
-
-    qSort(ddis.begin(), ddis.end(), DrugDrugInteraction::lowerThan);
-
-    // save the resulting XML
-    QString xml;
-    for(int i=0; i < ddis.count(); ++i) {
-//        if (remove.contains(i))
-//            continue;
-        if (ddis.at(i).data(DrugDrugInteraction::IsDuplicated).toBool()) {
-            qWarning() << "**" << ddis.at(i).firstInteractor()
-                          << ddis.at(i).secondInteractor();
-            continue;
-        }
-        xml += ddis.at(i).toXml();
-    }
-
-    Utils::Log::logTimeElapsed(chrono, "DDI", "to Xml");
-    xml.prepend("<?xml version='1.0' encoding='UTF-8'?>\n"
-            "<!-- date format = yyyy-MM-dd -->\n"
-            "<!--\n"
-            "  Interaction levels :\n"
-            "     P: Precaution\n"
-            "     C: ContreIndication\n"
-            "     D: Deconseille\n"
-            "     T: APrendreEnCompte Take into Account\n"
-            "     450: P450\n"
-            "     I: Information\n"
-            "     Y: Glycoprotein P\n"
-            "-->\n"
-            "<DrugDrugInteractions>\n");
-    xml.append("</DrugDrugInteractions>\n");
-    Utils::saveStringToFile(xml, afssapsNewIamXmlFile());
-}
-
-/**
- * \internal
  * When a DDI has multiple levels (contraindication, precaution...)
  * splits this DDI into each level.
  */
-void InteractionEditorWidget::splitCurrent()
+void DrugDrugInteractionEditorWidget::splitCurrent()
 {
     // Not acting on categories
-    if (d->m_DDIModel->hasChildren(d->m_EditingIndex))
-        return;
-    // Test LevelCode
-    QModelIndex index = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionModel::LevelCode, d->m_EditingIndex.parent());
-    const QString &l = index.data().toString();
-    if (l=="450" || l.size()==1)
-        return;
-    // tell the model to split this interaction
-    d->m_DDIModel->splitMultipleLevelInteraction(d->m_EditingIndex);
-    qWarning() << "Split Me";
+//    if (d->m_DDIModel->hasChildren(d->m_EditingIndex))
+//        return;
+//    // Test LevelCode
+//    QModelIndex index = d->m_DDIModel->index(d->m_EditingIndex.row(), DrugDrugInteractionTableModel::LevelCode, d->m_EditingIndex.parent());
+//    const QString &l = index.data().toString();
+//    if (l=="450" || l.size()==1)
+//        return;
+//    // tell the model to split this interaction
+//    d->m_DDIModel->splitMultipleLevelInteraction(d->m_EditingIndex);
+//    qWarning() << "Split Me";
 
 }
 
-void InteractionEditorWidget::retranslateUi()
+void DrugDrugInteractionEditorWidget::retranslateUi()
 {
     d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
     d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
@@ -832,7 +638,7 @@ void InteractionEditorWidget::retranslateUi()
     d->ui->comboLevel->setCurrentIndex(current);
 }
 
-void InteractionEditorWidget::changeEvent(QEvent *e)
+void DrugDrugInteractionEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
         retranslateUi();

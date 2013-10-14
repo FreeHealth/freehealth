@@ -216,7 +216,7 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
 {
     setObjectName("DrugInteractorTableModel");
     d->_sql = new QSqlTableModel(this, ddiBase().database());
-    d->_sql->setTable(ddiBase().table(Constants::Table_Interactors));
+    d->_sql->setTable(ddiBase().table(Constants::Table_INTERACTORS));
 }
 
 DrugInteractorTableModel::~DrugInteractorTableModel()
@@ -509,7 +509,7 @@ int DrugInteractorTableModel::numberOfUnreviewed() const
     // directly ask the database instead of screening the model
     QHash<int, QString> where;
     where.insert(Constants::INTERACTOR_ISREVIEWED, "=0");
-    return ddiBase().count(Constants::Table_Interactors, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_Interactors, where));
+    return ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
 }
 
 /** Returns the number of ATC unlinked DDI::DrugInteractor from the database. */
@@ -519,7 +519,7 @@ int DrugInteractorTableModel::numberOfUnlinked() const
     QHash<int, QString> where;
     where.insert(Constants::INTERACTOR_ISCLASS, "=0");
     where.insert(Constants::INTERACTOR_ATC, "IS NULL");
-    return ddiBase().count(Constants::Table_Interactors, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_Interactors, where));
+    return ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
 }
 
 /** Submit changes directly to the database */

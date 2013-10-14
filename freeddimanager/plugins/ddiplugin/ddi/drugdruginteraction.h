@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREETOOLBOX_DRUGDRUGINTERACTION_H
-#define FREETOOLBOX_DRUGDRUGINTERACTION_H
+#ifndef DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H
+#define DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H
 
 #include <QVariant>
 #include <QHash>
@@ -34,11 +34,11 @@
 /**
  * \file drugdruginteraction.h
  * \author Eric Maeker
- * \version 0.8.0
- * \date 09 Dec 2012
+ * \version 0.10.0
+ * \date 14 Oct 2013
 */
 
-namespace DrugsDB {
+namespace DDI {
 namespace Internal {
 class DrugDrugInteractionDose {
 public:
@@ -136,6 +136,6 @@ private:
     DrugDrugInteractionDose m_FirstDose, m_SecondDose;
 };
 }  // namespace Internal
-}  // namespace DrugsDB
+}  // namespace DDI
 
-#endif // FREETOOLBOX_DRUGDRUGINTERACTION_H
+#endif // DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H

@@ -23,55 +23,40 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef INTERACTIONEDITORPAGE_H
-#define INTERACTIONEDITORPAGE_H
+#ifndef DDIMANAGER_DDIPLUGIN_DrugDrugInteractionEditorWidget_H
+#define DDIMANAGER_DDIPLUGIN_DrugDrugInteractionEditorWidget_H
 
-#include <coreplugin/itoolpage.h>
+#include <QWidget>
+#include <QModelIndex>
 
-#include <QObject>
-#include <QIcon>
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
+/**
+ * \file drugdruginteractioneditorwiddet.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 14 Oct 2013
+*/
 
-namespace DrugsDB {
+namespace DDI {
 namespace Internal {
-class InteractionEditorPage : public Core::IToolPage
-{
-    Q_OBJECT
+class DrugDrugInteractionEditorWidgetPrivate;
+}
 
-public:
-    InteractionEditorPage(QObject *parent = 0) : IToolPage(parent) {}
-    ~InteractionEditorPage() {}
-
-    virtual QString id() const {return "InteractionEditorPage";}
-    virtual QString name() const {return "Interactions editor";}
-    virtual QString category() const;
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-};
-
-class InteractionEditorWidgetPrivate;
-
-class InteractionEditorWidget : public QWidget
+class DrugDrugInteractionEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    InteractionEditorWidget(QWidget *parent = 0);
-    ~InteractionEditorWidget();
+    DrugDrugInteractionEditorWidget(QWidget *parent = 0);
+    ~DrugDrugInteractionEditorWidget();
 
 protected Q_SLOTS:
     void createNewDDI();
-    void filterDrugDrugInteractionModel(const QString &filter);
+    void filterDrugDrugInteractionTableModel(const QString &filter);
     void edit();
     void interactionActivated(const QModelIndex &index);
     void save();
     void removeCurrent();
     void translateCurrent();
     void translateAll();
-    void reformatOldXmlSource();
     void splitCurrent();
 
 protected Q_SLOTS:
@@ -85,10 +70,9 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    InteractionEditorWidgetPrivate *d;
+    Internal::DrugDrugInteractionEditorWidgetPrivate *d;
 };
 
-}  // namespace Internal
-}  // namespace DrugsDB
+}  // namespace DDI
 
-#endif // INTERACTIONEDITORPAGE_H
+#endif // DDIMANAGER_DDIPLUGIN_DrugDrugInteractionEditorWidget_H

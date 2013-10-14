@@ -31,13 +31,15 @@
 #include <coreplugin/itheme.h>
 
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QStringList>
 
 #include <QDebug>
 
-using namespace DrugsDB;
+using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
@@ -83,7 +85,8 @@ static QString levelName(const QString &levelUid)
     return tmp.join( ", " );
 }
 
-static int languageIndex(const QString &lang) {
+static int languageIndex(const QString &lang)
+{
     if (lang=="en")
         return 1;
     if (lang=="fr")
@@ -134,8 +137,7 @@ DrugDrugInteraction::DrugDrugInteraction()
     m_Data.insert(IsDuplicated, false);
     m_Data.insert(IsValid, true);
     m_Data.insert(IsReviewed, false);
-    m_Data.insert(DateCreation, QDate(2010,01,01));
-    m_Data.insert(DateLastUpdate, QDate(2010,01,01));
+    m_Data.insert(DateCreation, QDate::currentDate());
     // Manage doses
     static int doseUid = 0;
     m_FirstDose.setData(DrugDrugInteractionDose::Uid, ++doseUid);

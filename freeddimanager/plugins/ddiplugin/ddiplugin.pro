@@ -23,6 +23,9 @@ HEADERS += \
     interactors/druginteractortablemodel.h \
     interactors/druginteractortreeproxymodel.h \
     interactors/interactoreditorwidget.h \
+    ddi/drugdruginteraction.h \
+    ddi/drugdruginteractiontablemodel.h \
+    ddi/drugdruginteractioneditorwidget.h \
 
 
 SOURCES += \
@@ -38,6 +41,9 @@ SOURCES += \
     interactors/druginteractortablemodel.cpp \
     interactors/druginteractortreeproxymodel.cpp \
     interactors/interactoreditorwidget.cpp \
+    ddi/drugdruginteraction.cpp \
+    ddi/drugdruginteractiontablemodel.cpp \
+    ddi/drugdruginteractioneditorwidget.cpp \
 
 
 FORMS += \
@@ -45,6 +51,7 @@ FORMS += \
     atc/atceditorwidget.ui \
     atc/searchatcindatabasedialog.ui \
     interactors/interactoreditorwidget.ui \
+    ddi/drugdruginteractioneditorwidget.ui \
 
 
 OTHER_FILES += DDIManager.pluginspec

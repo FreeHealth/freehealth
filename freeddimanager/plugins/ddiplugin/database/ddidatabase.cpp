@@ -96,28 +96,65 @@ DDIDatabase::DDIDatabase():
     addField(Table_ATC, ATC_WHOYEARUPDATE, "WHOYEAR", FieldIsDate);
     addField(Table_ATC, ATC_COMMENT, "COMMENT", FieldIsShortText);
 
-    addTable(Table_Interactors, "INTERACTORS");
-    addField(Table_Interactors, INTERACTOR_ID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_Interactors, INTERACTOR_UID, "UID", FieldIsShortText);
-    addField(Table_Interactors, INTERACTOR_ISVALID, "ISVALID", FieldIsBoolean);
-    addField(Table_Interactors, INTERACTOR_ISREVIEWED, "ISREVIEW", FieldIsBoolean);
-    addField(Table_Interactors, INTERACTOR_ISAUTOFOUND, "ISAUTOFOUND", FieldIsBoolean);
-    addField(Table_Interactors, INTERACTOR_ISCLASS, "ISCLASS", FieldIsBoolean);
-    addField(Table_Interactors, INTERACTOR_WARNDUPLICATES, "WARNDUPLICATES", FieldIsBoolean);
-    addField(Table_Interactors, INTERACTOR_ATC, "ATC", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_CHILDREN, "CHILDREN", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_FR, "FR", FieldIsShortText);
-    addField(Table_Interactors, INTERACTOR_EN, "EN", FieldIsShortText);
-    addField(Table_Interactors, INTERACTOR_DE, "DE", FieldIsShortText);
-    addField(Table_Interactors, INTERACTOR_INFO_FR, "INFOFR", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_INFO_EN, "INFOEN", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_INFO_DE, "INFODE", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_DATECREATE, "DATECREATE", FieldIsDate);
-    addField(Table_Interactors, INTERACTOR_DATEUPDATE, "DATEUPDATE", FieldIsDate);
-    addField(Table_Interactors, INTERACTOR_DATEREVIEW, "DATEREVIEW", FieldIsDate);
-    addField(Table_Interactors, INTERACTOR_REF, "REF", FieldIsShortText);
-    addField(Table_Interactors, INTERACTOR_PMIDS, "PMIDS", FieldIsLongText);
-    addField(Table_Interactors, INTERACTOR_COMMENT, "COMMENT", FieldIsShortText);
+    addTable(Table_INTERACTORS, "INTERACTORS");
+    addField(Table_INTERACTORS, INTERACTOR_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_INTERACTORS, INTERACTOR_UID, "UID", FieldIsShortText);
+    addField(Table_INTERACTORS, INTERACTOR_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_INTERACTORS, INTERACTOR_ISREVIEWED, "ISREVIEW", FieldIsBoolean);
+    addField(Table_INTERACTORS, INTERACTOR_ISAUTOFOUND, "ISAUTOFOUND", FieldIsBoolean);
+    addField(Table_INTERACTORS, INTERACTOR_ISCLASS, "ISCLASS", FieldIsBoolean);
+    addField(Table_INTERACTORS, INTERACTOR_WARNDUPLICATES, "WARNDUPLICATES", FieldIsBoolean);
+    addField(Table_INTERACTORS, INTERACTOR_ATC, "ATC", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_CHILDREN, "CHILDREN", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_FR, "FR", FieldIsShortText);
+    addField(Table_INTERACTORS, INTERACTOR_EN, "EN", FieldIsShortText);
+    addField(Table_INTERACTORS, INTERACTOR_DE, "DE", FieldIsShortText);
+    addField(Table_INTERACTORS, INTERACTOR_INFO_FR, "INFOFR", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_INFO_EN, "INFOEN", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_INFO_DE, "INFODE", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_DATECREATE, "DATECREATE", FieldIsDate);
+    addField(Table_INTERACTORS, INTERACTOR_DATEUPDATE, "DATEUPDATE", FieldIsDate);
+    addField(Table_INTERACTORS, INTERACTOR_DATEREVIEW, "DATEREVIEW", FieldIsDate);
+    addField(Table_INTERACTORS, INTERACTOR_REF, "REF", FieldIsShortText);
+    addField(Table_INTERACTORS, INTERACTOR_PMIDS, "PMIDS", FieldIsLongText);
+    addField(Table_INTERACTORS, INTERACTOR_COMMENT, "COMMENT", FieldIsShortText);
+
+    addTable(Table_DDI, "DDI");
+    addField(Table_DDI, DDI_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_DDI, DDI_UID, "UID", FieldIsUUID);
+    addField(Table_DDI, DDI_FIRSTINTERACTORUID, "FIRST", FieldIsShortText);
+    addField(Table_DDI, DDI_SECONDINTERACTORUID, "SECOND", FieldIsShortText);
+    addField(Table_DDI, DDI_ISREVIEWED, "ISREVIEWED", FieldIsBoolean);
+    addField(Table_DDI, DDI_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_DDI, DDI_LEVELCODE, "LEVELCODE", FieldIsShortText);
+    addField(Table_DDI, DDI_DATECREATION, "DATECREATION", FieldIsDate);
+    addField(Table_DDI, DDI_DATELASTUPDATE, "DATELASTUPDATE", FieldIsDate);
+    addField(Table_DDI, DDI_RISKFR, "RISKFR", FieldIsLongText);
+    addField(Table_DDI, DDI_RISKEN, "RISKEN", FieldIsLongText);
+    addField(Table_DDI, DDI_MANAGEMENTFR, "MANAGEMENTFR", FieldIsLongText);
+    addField(Table_DDI, DDI_MANAGEMENTEN, "MANAGEMENTEN", FieldIsLongText);
+    addField(Table_DDI, DDI_REVIEWERSSTRINGLIST, "REVIEWERS", FieldIsLongText);
+    addField(Table_DDI, DDI_SOURCE, "SOURCE", FieldIsShortText);
+    addField(Table_DDI, DDI_COMMENT, "COMMENT", FieldIsLongText);
+    addField(Table_DDI, DDI_FIRSTINTERACTORROUTEOFADMINISTRATIONIDS, "FIRSTROUTES", FieldIsLongText);
+    addField(Table_DDI, DDI_SECONDINTERACTORROUTEOFADMINISTRATIONIDS, "SECONDROUTES", FieldIsLongText);
+    addField(Table_DDI, DDI_FIRSTDOSEUSEFROM, "FIRSTDOSEUSEFROM", FieldIsBoolean);
+    addField(Table_DDI, DDI_FIRSTDOSEUSESTO, "FIRSTDOSEUSESTO", FieldIsBoolean);
+    addField(Table_DDI, DDI_FIRSTDOSEFROMVALUE, "FIRSTDOSEFROMVALUE", FieldIsReal);
+    addField(Table_DDI, DDI_FIRSTDOSEFROMUNITS, "FIRSTDOSEFROMUNITS", FieldIsShortText);
+    addField(Table_DDI, DDI_FIRSTDOSEFROMREPARTITION, "FIRSTDOSEFROMREPARTITION", FieldIsShortText);
+    addField(Table_DDI, DDI_FIRSTDOSETOVALUE, "FIRSTDOSETOVALUE", FieldIsReal);
+    addField(Table_DDI, DDI_FIRSTDOSETOUNITS, "FIRSTDOSETOUNITS", FieldIsShortText);
+    addField(Table_DDI, DDI_FIRSTDOSETOREPARTITION, "FIRSTDOSETOREPARTITION", FieldIsShortText);
+    addField(Table_DDI, DDI_SECONDDOSEUSEFROM, "SECONDDOSEUSEFROM", FieldIsBoolean);
+    addField(Table_DDI, DDI_SECONDDOSEUSESTO, "SECONDDOSEUSESTO", FieldIsBoolean);
+    addField(Table_DDI, DDI_SECONDDOSEFROMVALUE, "SECONDDOSEFROMVALUE", FieldIsReal);
+    addField(Table_DDI, DDI_SECONDDOSEFROMUNITS, "SECONDDOSEFROMUNITS", FieldIsShortText);
+    addField(Table_DDI, DDI_SECONDDOSEFROMREPARTITION, "SECONDDOSEFROMREPARTITION", FieldIsShortText);
+    addField(Table_DDI, DDI_SECONDDOSETOVALUE, "SECONDDOSETOVALUE", FieldIsReal);
+    addField(Table_DDI, DDI_SECONDDOSETOUNITS, "SECONDDOSETOUNITS", FieldIsShortText);
+    addField(Table_DDI, DDI_SECONDDOSETOREPARTITION, "SECONDDOSETOREPARTITION", FieldIsShortText);
+    addField(Table_DDI, DDI_PMIDSTRINGLIST, "PMIDSTRINGLIST", FieldIsLongText);
 
     addTable(Table_CURRENTVERSION, "VERSION");
     addField(Table_CURRENTVERSION, CURRENTVERSION_ID, "ID", FieldIsUniquePrimaryKey);
@@ -378,7 +415,7 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
     }
 
     // Clean DrugInteractor table from old values
-    QString req = prepareDeleteQuery(Constants::Table_Interactors);
+    QString req = prepareDeleteQuery(Constants::Table_INTERACTORS);
     if (!executeSQL(req, DB))
         LOG_ERROR_FOR("DDIDatabase", "Unable to clear old DrugInteractor data");
 
@@ -391,7 +428,7 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
     foreach(const DrugInteractor &di, list) {
         if (!di.isValid())
             continue;
-        query.prepare(prepareInsertQuery(Constants::Table_Interactors));
+        query.prepare(prepareInsertQuery(Constants::Table_INTERACTORS));
         query.bindValue(Constants::INTERACTOR_ID, QVariant());
         query.bindValue(Constants::INTERACTOR_UID, di.data(DrugInteractor::Uid));
         query.bindValue(Constants::INTERACTOR_ISVALID, di.isValid()?"1":"0");

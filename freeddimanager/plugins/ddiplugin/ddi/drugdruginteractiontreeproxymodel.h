@@ -24,51 +24,49 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONTABLEMODEL_H
-#define DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONTABLEMODEL_H
+#ifndef FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H
+#define FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H
 
-#include <QAbstractTableModel>
+#include <QAbstractItemModel>
 
 /**
- * \file drugdruginteractiontablemodel.h
+ * \file drugdruginteractionmodel.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 14 Oct 2013
 */
 
 namespace DDI {
-class DrugInteractor;
-
 namespace Internal {
-class DrugDrugInteractionTableModelPrivate;
-} // namespace Internal
+class DrugDrugInteraction;
+class DrugDrugInteractionModelPrivate;
+}  // namespace Internal
 
-class DrugDrugInteractionTableModel : public QAbstractTableModel
+class DrugDrugInteractionModel : public QAbstractItemModel
 {
     Q_OBJECT
-    friend class DDI::Internal::DrugDrugInteractionTableModelPrivate;
-
 public:
     enum DataRepresentation {
-        Id = 0,
-        Uid,
-        FirstInteractorUid,
-        SecondInteractorUid,
-        IsReviewed,
-        IsValid,
+        GeneralLabel = 0, // use it as a READ-ONLY data for the tree view
+        HumanReadableSynthesis,     // same as the tooltip
+        FirstInteractorName,
+        SecondInteractorName,
         LevelCode,
         LevelName,
         LevelComboIndex,
         DateCreation,
         DateLastUpdate,
+        ListOfUpdates,
         RiskFr,
         RiskEn,
         ManagementFr,
         ManagementEn,
+        IsReviewed,
+        IsReviewedCheckState,
         ReviewersStringList,
-        Source,
         Comment,
         InternalUid,
+        InternalUidWithInteractors,
         FirstInteractorRouteOfAdministrationIds,
         SecondInteractorRouteOfAdministrationIds,
 
@@ -94,45 +92,45 @@ public:
         ColumnCount
     };
 
-    DrugDrugInteractionTableModel(QObject *parent = 0);
-    ~DrugDrugInteractionTableModel();
-    virtual bool initialize();
+    explicit DrugDrugInteractionModel(QObject *parent = 0);
+    ~DrugDrugInteractionModel();
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
 
-    virtual void fetchMore(const QModelIndex &parent);
-    virtual bool canFetchMore(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
-//    virtual QVariant headerData(int section, Qt::Orientation orientation,
-//                                int role = Qt::DisplayRole) const;
+    bool splitMultipleLevelInteraction(const QModelIndex &index, bool splitMirrored = true);
 
     static QStringList units();
     static QStringList repartitions();
     static QString unit(int index);
     static QString repartition(int index);
 
-    int numberOfUnreviewed() const;
+//    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+//    void fetchMore(const QModelIndex &parent = QModelIndex());
+
+    QHash<QString, int> getLevelStatistics() const;
 
 public Q_SLOTS:
-    virtual bool submit();
-
-Q_SIGNALS:
-    void unreviewedCountChanged();
-    void unlinkedCountChanged();
+    bool addDrugDrugInteraction(const Internal::DrugDrugInteraction &ddi);
+    void filterInteractionsForInteractor(const QString &interactorName);
+    void setActualReviewer(const QString &name);
+    bool saveModel();
 
 private:
-    Internal::DrugDrugInteractionTableModelPrivate *d;
+    Internal::DrugDrugInteractionModelPrivate *d;
 };
 
-}  // namespace DDI
+}  // End namespace DDI
 
-#endif // DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONTABLEMODEL_H
+#endif // FREETOOLBOX_DRUGDRUGINTERACTIONMODEL_H
