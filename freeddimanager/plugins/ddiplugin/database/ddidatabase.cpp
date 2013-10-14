@@ -303,12 +303,28 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
         QStringList vals = line.split(";");
         while (vals.count() < 5)
             vals << QString();
-        if (vals.at(2).isEmpty())
-            vals[2] = vals.at(1);
-        if (vals.at(3).isEmpty())
-            vals[3] = vals.at(1);
-        if (vals.at(4).isEmpty())
-            vals[4] = vals.at(1);
+        // All language not defined?
+        for(int i=0; i < vals.count(); ++i)
+            vals[i] = vals[i].remove("\"");
+        if (vals.at(1).isEmpty() ||
+                vals.at(2).isEmpty() ||
+                vals.at(3).isEmpty()) {
+            // find the defined one (fr or en)
+            QString defined;
+            if (!vals.at(1).isEmpty()) // EN
+                defined = vals.at(1);
+            else if (!vals.at(2).isEmpty()) // FR
+                defined = vals.at(2);
+            else if (!vals.at(3).isEmpty())
+                defined = vals.at(3);
+            // Then define the non defined
+            if (vals.at(1).isEmpty())
+                vals[1] = defined;
+            if (vals.at(2).isEmpty())
+                vals[2] = defined;
+            if (vals.at(3).isEmpty())
+                vals[3] = defined;
+        }
         query.prepare(prepareInsertQuery(Constants::Table_ATC));
         query.bindValue(Constants::ATC_ISVALID, 1);
         query.bindValue(Constants::ATC_CODE, vals.at(0).toUpper().remove("\""));
@@ -454,7 +470,7 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
 
     // Insert raw data & version
     setVersion(::CURRENTVERSION);
-//    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
     insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
 
     // database is readable/writable
