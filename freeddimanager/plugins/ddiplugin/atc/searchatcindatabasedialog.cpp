@@ -68,7 +68,6 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
 
     d->m_Model = new QSqlQueryModel(this);
     ui->tableView->setModel(d->m_Model);
-    ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->term->setText(term);
     ui->lang->setCurrentIndex(settings()->value(::S_LANGUAGE).toInt());
 }
@@ -101,6 +100,12 @@ void SearchAtcInDatabaseDialog::setFilter()
                                    << Constants::ATC_CODE, where);
     d->m_Model->setQuery(req, ddiBase().database());
     ui->searchLabel->setText("Found: " + QString::number(d->m_Model->rowCount()));
+
+    ui->tableView->horizontalHeader()->setStretchLastSection(false);
+    ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
 }
 
 void SearchAtcInDatabaseDialog::on_term_textChanged(const QString &)
