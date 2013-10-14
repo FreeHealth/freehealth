@@ -35,6 +35,14 @@
  * \date 09 Oct 2013
 */
 
+namespace Utils {
+class FancyTabWidget;
+}
+
+namespace Core {
+class IMode;
+}
+
 namespace MainWin {
 namespace Internal {
 namespace Ui {
@@ -61,7 +69,8 @@ public:
     void writeSettings();
     void createStatusBar();
 
-public Q_SLOTS: // Interface of MainWidowActionHandler
+public Q_SLOTS:
+    void onCurrentModeChanged(Core::IMode *newMode);
     bool newFile();
     bool openFile();
     bool saveFile();
@@ -87,6 +96,7 @@ private Q_SLOTS:
     void postCoreOpened();
 
 public:
+    Utils::FancyTabWidget *m_modeStack;
     Internal::Ui::MainWindow *ui;
 };
 

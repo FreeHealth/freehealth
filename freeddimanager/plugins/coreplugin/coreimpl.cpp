@@ -31,6 +31,7 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/theme.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager_p.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
@@ -78,6 +79,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
+        m_ModeManager(0),
         m_User(0),
         m_PadTools(0)
 {
@@ -175,6 +177,7 @@ CoreImpl::~CoreImpl()
 
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
+ModeManager *CoreImpl::modeManager() const {return m_ModeManager;}
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const { return m_Settings; }
@@ -186,9 +189,11 @@ void CoreImpl::setMainWindow(IMainWindow *win)
     Q_ASSERT(m_MainWindow==0);
     Q_ASSERT(m_ActionManager==0);
     Q_ASSERT(m_ContextManager==0);
+    Q_ASSERT(m_ModeManager==0);
     m_MainWindow = win;
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
+    m_ModeManager = new ModeManager(m_MainWindow);
 }
 
 //FormManager *CoreImpl::formManager() const { return m_FormManager; }

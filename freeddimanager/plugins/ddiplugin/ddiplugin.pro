@@ -23,6 +23,7 @@ HEADERS += \
     interactors/druginteractortablemodel.h \
     interactors/druginteractortreeproxymodel.h \
     interactors/interactoreditorwidget.h \
+    ddi/drugdruginteractionmode.h \
     ddi/drugdruginteraction.h \
     ddi/drugdruginteractiontablemodel.h \
     ddi/drugdruginteractioneditorwidget.h \
@@ -41,6 +42,7 @@ SOURCES += \
     interactors/druginteractortablemodel.cpp \
     interactors/druginteractortreeproxymodel.cpp \
     interactors/interactoreditorwidget.cpp \
+    ddi/drugdruginteractionmode.cpp \
     ddi/drugdruginteraction.cpp \
     ddi/drugdruginteractiontablemodel.cpp \
     ddi/drugdruginteractioneditorwidget.cpp \

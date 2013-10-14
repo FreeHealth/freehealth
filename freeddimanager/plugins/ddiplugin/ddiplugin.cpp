@@ -23,11 +23,13 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "DDIPlugin.h"
+#include "ddiplugin.h"
 #include "ddicore.h"
-#include <coreplugin/dialogs/pluginaboutpage.h>
+#include <ddiplugin/ddi/drugdruginteractionmode.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/dialogs/pluginaboutpage.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -60,6 +62,9 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
     // create the core
     DDICore *core = new DDICore(this);
     core->initialize();
+
+    // create modes
+    addAutoReleasedObject(new DDIMode(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

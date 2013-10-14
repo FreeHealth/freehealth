@@ -34,6 +34,7 @@
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -49,6 +50,8 @@
 #include <utils/randomizer.h>
 #include <utils/stylehelper.h>
 #include <utils/updatechecker.h>
+#include <utils/widgets/fancyactionbar.h>
+#include <utils/widgets/fancytabwidget.h>
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -95,6 +98,7 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -161,6 +165,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
+    // Create Mode stack
+    m_modeStack = new Utils::FancyTabWidget(this);
+    modeManager()->init(m_modeStack);
+
     return true;
 }
 
@@ -172,45 +180,45 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
  */
 void MainWindow::extensionsInitialized()
 {
-    // Creating MainWindow UI
-    ui = new Internal::Ui::MainWindow();
-    ui->setupUi(this);
-    if (layout())
-        layout()->setMargin(0);
+//    // Creating MainWindow UI
+//    ui = new Internal::Ui::MainWindow();
+//    ui->setupUi(this);
+//    if (layout())
+//        layout()->setMargin(0);
 
-    // Creating ToolBar
-    QToolBar *bar = new QToolBar(this);
-    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    bar->setIconSize(QSize(32, 32));
-    QStringList uids;
-//    uids  << Core::Constants::A_FILE_OPEN
-//          << Core::Constants::A_FILE_SAVE
-//          << Core::Constants::A_FILE_SAVEAS
-//          << "--"
-//          << Core::Constants::A_FILE_PRINT
-//          << "->"
-//             ;
-    foreach(const QString &uid, uids) {
-        if (uid=="--") {
-            bar->addSeparator();
-            continue;
-        } else if (uid=="->") {
-            QWidget *w = new QWidget(bar);
-            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            w->setLayout(new QHBoxLayout(w));
-            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
-            bar->addWidget(w);
-            continue;
-        } else {
-            Core::Command *cmd = actionManager()->command(Core::Id(uid));
-            if (cmd)
-                bar->addAction(cmd->action());
-        }
-    }
-    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    setUnifiedTitleAndToolBarOnMac(true);
-    addToolBar(bar);
+//    // Creating ToolBar
+//    QToolBar *bar = new QToolBar(this);
+//    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+//    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+//    bar->setIconSize(QSize(32, 32));
+//    QStringList uids;
+////    uids  << Core::Constants::A_FILE_OPEN
+////          << Core::Constants::A_FILE_SAVE
+////          << Core::Constants::A_FILE_SAVEAS
+////          << "--"
+////          << Core::Constants::A_FILE_PRINT
+////          << "->"
+////             ;
+//    foreach(const QString &uid, uids) {
+//        if (uid=="--") {
+//            bar->addSeparator();
+//            continue;
+//        } else if (uid=="->") {
+//            QWidget *w = new QWidget(bar);
+//            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+//            w->setLayout(new QHBoxLayout(w));
+//            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+//            bar->addWidget(w);
+//            continue;
+//        } else {
+//            Core::Command *cmd = actionManager()->command(Core::Id(uid));
+//            if (cmd)
+//                bar->addAction(cmd->action());
+//        }
+//    }
+//    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+//    setUnifiedTitleAndToolBarOnMac(true);
+//    addToolBar(bar);
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
@@ -218,6 +226,10 @@ void MainWindow::extensionsInitialized()
         if (checkUpdate())
             settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
+
+    //m_modeStack->insertTopWidget(patientCore()->patientBar());
+    m_modeStack->statusBar()->hide();
+    setCentralWidget(m_modeStack);
 
     createDockWindows();
 
@@ -229,9 +241,9 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    delete centralWidget();
-    setCentralWidget(0);
-    delete ui;
+//    delete centralWidget();
+//    setCentralWidget(0);
+//    delete ui;
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
 }
@@ -258,8 +270,9 @@ void MainWindow::postCoreOpened()
     raise();
     show();
 
-    // TEST
-    // END TEST
+//    manageIModeEnabledState();
+    connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(onCurrentModeChanged(Core::IMode*)), Qt::UniqueConnection);
+//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
 
     readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }
@@ -348,6 +361,18 @@ void MainWindow::writeSettings()
 void MainWindow::createStatusBar()
 {
 //    statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
+}
+
+/** When the current Core::IMode is beeing updated, check the patient visibility */
+void MainWindow::onCurrentModeChanged(Core::IMode *newMode)
+{
+    Q_ASSERT(newMode);
+//    if (!newMode)
+//        return;
+//    if (newMode->patientBarVisibility())
+//        patient()->showPatientBar();
+//    else
+//        patient()->hidePatientBar();
 }
 
 bool MainWindow::newFile()

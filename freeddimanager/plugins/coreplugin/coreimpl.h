@@ -61,6 +61,7 @@ public:
 
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
+    ModeManager *modeManager() const;
 
     ITheme *theme() const;
     Translators *translators() const;
@@ -96,6 +97,7 @@ private:
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;
+    ModeManager *m_ModeManager;
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
