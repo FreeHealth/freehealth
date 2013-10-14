@@ -313,10 +313,10 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
     } else if (role==Qt::ForegroundRole) {
         QModelIndex classIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ISCLASS);
         QModelIndex childIndex = d->_sql->index(index.row(), Constants::INTERACTOR_CHILDREN);
-        QModelIndex atcIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ATC);
+        //QModelIndex atcIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ATC);
         bool isClass = d->_sql->data(classIndex).toBool();
         const QVariant &children = d->_sql->data(childIndex);
-        const QVariant &atc = d->_sql->data(atcIndex);
+        //const QVariant &atc = d->_sql->data(atcIndex);
         if (isClass) {
             // Class without children?
             if (children.isNull()) {
@@ -408,21 +408,14 @@ bool DrugInteractorTableModel::insertRows(int row, int count, const QModelIndex 
     return d->_sql->insertRows(row, count, parent);
 }
 
-// todo remove mirrored
 bool DrugInteractorTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    // only remove rows with a category parent
-//    if (!parent.isValid())
-//        return false;
-//    beginRemoveRows(parent, row, row+count);
-//    DITreeItem *parentItem = d->getItem(parent);
-//    for(int i = 0; i < count; ++i) {
-////        const QString &interactor = parentItem->child(row+i)->ddi()->data(DrugDrugInteraction::IsValid, false);
-//        parentItem->child(row+i)->di()->setData(DrugInteractor::IsValid, false);
-//        parentItem->removeChild(row+i);
-//        // remove mirrored
-//    }
-//    endRemoveRows();
+    if (!parent.isValid())
+        return false;
+    beginRemoveRows(parent, row, row+count);
+    for(int i = 0; i < count; ++i)
+        d->_sql->setData(d->_sql->index(row+i, IsValid), 0);
+    endRemoveRows();
     return true;
 }
 
