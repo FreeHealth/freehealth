@@ -272,7 +272,11 @@ QString DDIDatabase::atcLabelForCode(const QString &code, const QString &lang) c
     return QString();
 }
 
-/** Read the raw CSV ATC file and populate the database with. Returns the number of ATC codes inserted. */
+/**
+ * Read the raw CSV ATC file and populate the database with its data.
+ * Returns the number of ATC codes inserted. \n
+ * \note The raw ATC file is not included in the git repository, you should ask the mailing list freemedforms-dev@googlegroups.com for it.
+ */
 int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
 {
     // Check database
@@ -355,6 +359,11 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
     return true;
 }
 
+/**
+ * Read the raw DrugInteractor file and populate the database with its data.
+ * Returns the number of interactor inserted. \n
+ * \note The raw file is not included in the git repository, you should ask the mailing list freemedforms-dev@googlegroups.com for it.
+ */
 int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
 {
     // Check database

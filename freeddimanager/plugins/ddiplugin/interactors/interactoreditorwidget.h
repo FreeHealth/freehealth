@@ -61,7 +61,6 @@ private Q_SLOTS:
     void interactorActivated(const QModelIndex &index);
     void buttonActivated(QAction*);
     void toggleClassMolsFilter(QAction*);
-    void bookmarkClassesFromCurrent();
     void updateCounts();
     void nextUnreviewedOrUnlinked();
 

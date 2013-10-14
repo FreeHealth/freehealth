@@ -245,6 +245,8 @@ MainWindow::~MainWindow()
  * - show and raise main window
  * \sa Core::ICore::coreOpened()
  */
+// TEST
+// END TEST
 void MainWindow::postCoreOpened()
 {
     if (Utils::Log::warnPluginsCreation())
@@ -255,6 +257,9 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
+
+    // TEST
+    // END TEST
 
     readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }

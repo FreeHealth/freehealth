@@ -103,7 +103,7 @@ public:
                                 int role = Qt::DisplayRole) const;
 
     DrugInteractor *createInteractingClass(const QString &initialLabel);
-    DrugInteractor *createInteractor(const QString &initialLabel);
+    bool createInteractor(const QString &initialLabel);
 
     int numberOfUnreviewed() const;
     int numberOfUnlinked() const;

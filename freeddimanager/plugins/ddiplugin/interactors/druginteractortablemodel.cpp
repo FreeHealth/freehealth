@@ -56,6 +56,7 @@ public:
         _sql(0),
         q(parent)
     {
+        Q_UNUSED(q);
     }
 
     ~DrugInteractorTableModelPrivate()
@@ -225,10 +226,16 @@ DrugInteractorTableModel::~DrugInteractorTableModel()
     d = 0;
 }
 
-/** Initialize the model. */
+/** Initialize the model (fetch all interactors from database). */
 bool DrugInteractorTableModel::initialize()
 {
+    // Select
     d->_sql->select();
+
+    // Fetch all data in the source model
+    while (d->_sql->canFetchMore(index(0, d->_sql->rowCount())))
+        d->_sql->fetchMore(index(0, d->_sql->rowCount()));
+
     return true;
 }
 
@@ -251,7 +258,6 @@ bool DrugInteractorTableModel::canFetchMore(const QModelIndex &parent) const
 {
     return d->_sql->canFetchMore(parent);
 }
-
 
 QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) const
 {
@@ -314,7 +320,7 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         if (isClass) {
             // Class without children?
             if (children.isNull()) {
-                qWarning() << "class without children" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
+                qWarning() << "DrugInteractor: class without children" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
                 return QColor(255,50,50,150);
             }
             // Children without ATC code
@@ -323,7 +329,7 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         } else {
             // Children without being a class?
             if (!children.isNull()) {
-                qWarning() << "children without isclass" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
+                qWarning() << "DrugInteractor: children defined without isclass" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
                 qWarning() << children;
                 return QColor(255,50,50,150);
             }
@@ -399,23 +405,7 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
 
 bool DrugInteractorTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    // insert row to categories only
-//    if (!parent.isValid())
-//        return false;
-//    DITreeItem *parentItem = d->getItem(parent);
-//    if (parentItem->childCount()==0)  // parent is an interactor not a category
-//        return false;
-//    beginInsertRows(parent, row, row+count);
-//    for(int i = 0; i < count; ++i) {
-//        DrugInteractor *di = new DrugInteractor;
-//        d->m_interactors.append(di);
-//        di->setData(DrugInteractor::Id, core()->createInternalUuid());
-//        DITreeItem *item = new DITreeItem(di, parentItem);
-//        parentItem->removeChild(item);
-//        parentItem->insertChild(row+i, item);
-//    }
-//    endInsertRows();
-    return true;
+    return d->_sql->insertRows(row, count, parent);
 }
 
 // todo remove mirrored
@@ -499,12 +489,8 @@ DrugInteractor *DrugInteractorTableModel::createInteractingClass(const QString &
 //    return di;
 }
 
-/**
- * Creates a new interactor and store it in the model.
- * In case of success, return the created DrugsDB::DrugInteractor pointer
- * else return 0.
- */
-DrugInteractor *DrugInteractorTableModel::createInteractor(const QString &initialLabel)
+/** Creates a new interactor and store it in the model. */
+bool DrugInteractorTableModel::createInteractor(const QString &initialLabel)
 {
 //    for(int i=0; i < d->m_interactors.count(); ++i) {
 //        if (d->m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString() == initialLabel.toUpper()) {
@@ -521,30 +507,29 @@ DrugInteractor *DrugInteractorTableModel::createInteractor(const QString &initia
 //    d->m_interactors.append(di);
 //    d->onInteractorCreated();
 //    return di;
+    return true;
 }
 
+/** Returns the number of unreviewed DDI::DrugInteractor from the database. */
 int DrugInteractorTableModel::numberOfUnreviewed() const
 {
-//    int result = 0;
-//    for(int i=0; i < d->m_interactors.count();++i) {
-//        if (d->m_interactors.at(i)->isValid() && !d->m_interactors.at(i)->isReviewed())
-//            ++result;
-//    }
-//    return result;
-    return 0;
+    // directly ask the database instead of screening the model
+    QHash<int, QString> where;
+    where.insert(Constants::INTERACTOR_ISREVIEWED, "=0");
+    return ddiBase().count(Constants::Table_Interactors, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_Interactors, where));
 }
 
+/** Returns the number of ATC unlinked DDI::DrugInteractor from the database. */
 int DrugInteractorTableModel::numberOfUnlinked() const
 {
-//    int result = 0;
-//    for(int i=0; i < d->m_interactors.count();++i) {
-//        if (d->m_interactors.at(i)->isValid() && d->m_interactors.at(i)->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty())
-//            ++result;
-//    }
-//    return result;
-    return 0;
+    // directly ask the database instead of screening the model
+    QHash<int, QString> where;
+    where.insert(Constants::INTERACTOR_ISCLASS, "=0");
+    where.insert(Constants::INTERACTOR_ATC, "IS NULL");
+    return ddiBase().count(Constants::Table_Interactors, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_Interactors, where));
 }
 
+/** Submit changes directly to the database */
 bool DrugInteractorTableModel::submit()
 {
     bool ok = d->_sql->submitAll();
