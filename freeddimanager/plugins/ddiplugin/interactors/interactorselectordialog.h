@@ -55,15 +55,16 @@ public:
     bool initialize();
 
     void setAllowMoleculeInteractorCreation(bool allow);
-    void setAllowMultipleSelection(bool allow);
+    void setAllowMultipleSelection(int maximumOfItemSelected);
     void setTitle(const QString &title);
 
-    QStringList selectedNames() const;
+    QList< QPair<QString, QString> > selectedInteractors() const;
 
 private Q_SLOTS:
     void onSearchActionChanged(QAction *a);
     void onButtonClicked(QAbstractButton *button);
     void onMoleculeInteractorActivated(const QModelIndex &index);
+    void onSelectedListActivated(const QModelIndex &index);
     void onSearchTextchanged(const QString &text);
 
 private:

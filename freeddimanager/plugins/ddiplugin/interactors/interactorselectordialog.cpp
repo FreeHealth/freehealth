@@ -64,9 +64,10 @@ public:
     InteractorSelectorDialogPrivate(InteractorSelectorDialog *parent) :
         ui(0),
         _selectedNames(0),
+        _selectedUids(0),
         _molProxyModel(0),
         _allowMoleculeCreation(false),
-        _allowMultipleSelection(false),
+        _allowMultipleSelection(0),
         aSearchAll(0), aSearchMols(0), aSearchClasses(0),
         q(parent)
     {
@@ -80,9 +81,10 @@ public:
 
 public:
     Ui::InteractorSelectorWidget *ui;
-    QStringListModel *_selectedNames;
+    QStringListModel *_selectedNames, *_selectedUids;
     DrugInteractorSortFilterProxyModel *_molProxyModel;
-    bool _allowMoleculeCreation, _allowMultipleSelection;
+    bool _allowMoleculeCreation;
+    int _allowMultipleSelection;
     QAction *aSearchAll, *aSearchMols, *aSearchClasses;
 
 private:
@@ -101,6 +103,7 @@ InteractorSelectorDialog::InteractorSelectorDialog(QWidget *parent) :
 {
     d->ui = new Ui::InteractorSelectorWidget;
     d->ui->setupUi(this);
+    setWindowTitle(tr("Drug interactor selector"));
 
     // Prepare search tool button
     d->aSearchAll = new QAction(this);
@@ -124,7 +127,9 @@ InteractorSelectorDialog::InteractorSelectorDialog(QWidget *parent) :
     d->ui->label->setText(tr("Interator selector"));
     d->ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::Reset);
     d->_selectedNames = new QStringListModel(this);
+    d->_selectedUids = new QStringListModel(this);
     d->ui->selectedList->setModel(d->_selectedNames);
+    d->ui->selectedUids->setModel(d->_selectedUids);
 
     // Prepare drug interactors model & view
     d->_molProxyModel = new DrugInteractorSortFilterProxyModel(this);
@@ -141,12 +146,13 @@ InteractorSelectorDialog::InteractorSelectorDialog(QWidget *parent) :
     connect(d->ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(d->ui->moleculeView, SIGNAL(activated(QModelIndex)), this, SLOT(onMoleculeInteractorActivated(QModelIndex)));
+    connect(d->ui->selectedList, SIGNAL(activated(QModelIndex)), this, SLOT(onSelectedListActivated(QModelIndex)));
 
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextchanged(QString)));
 
     // Managing defaults
     setAllowMoleculeInteractorCreation(false);
-    setAllowMultipleSelection(false);
+    setAllowMultipleSelection(0);
 }
 
 /*! Destructor of the DDI::InteractorSelectorDialog class */
@@ -170,10 +176,10 @@ void InteractorSelectorDialog::setAllowMoleculeInteractorCreation(bool allow)
 }
 
 /** Allow user to multiple interactors. By default, set to false. */
-void InteractorSelectorDialog::setAllowMultipleSelection(bool allow)
+void InteractorSelectorDialog::setAllowMultipleSelection(int maximumOfItemSelected)
 {
-    d->_allowMultipleSelection = allow;
-    d->ui->selectedList->setVisible(allow);
+    d->_allowMultipleSelection = maximumOfItemSelected;
+    d->ui->selectedList->setVisible(maximumOfItemSelected>0);
 }
 
 /** Set the title inside of the dialog. */
@@ -182,25 +188,17 @@ void InteractorSelectorDialog::setTitle(const QString &title)
     d->ui->label->setText(title);
 }
 
-/** Return the selected interactors. All accents are removed */
-QStringList InteractorSelectorDialog::selectedNames() const
+/** Return the selected interactors within a list of pairs. pair first is the name, second the uid. */
+QList< QPair<QString, QString> > InteractorSelectorDialog::selectedInteractors() const
 {
-    // TODO: code here
-//    QStringList toReturn;
-//    if (!d->_allowMultipleSelection) {
-//        if (d->ui->classView->selectionModel()->hasSelection())
-//            toReturn << d->ui->classView->selectionModel()->currentIndex().data().toString();
-//        if (d->ui->moleculeView->selectionModel()->hasSelection())
-//            toReturn << d->ui->moleculeView->selectionModel()->currentIndex().data().toString();
-//    } else {
-//        toReturn = d->_selectedNames->stringList();
-//    }
-
-    QStringList noAccent;
-//    foreach(const QString &r, toReturn)
-//        noAccent << Utils::removeAccents(r);
-
-    return noAccent;
+    QList< QPair<QString, QString> > toReturn;
+    for(int i=0; i < d->_selectedNames->rowCount(); ++i) {
+        QPair<QString, QString> pair;
+        pair.first = d->_selectedNames->data(d->_selectedNames->index(i), Qt::DisplayRole).toString();
+        pair.second = d->_selectedUids->data(d->_selectedUids->index(i), Qt::DisplayRole).toString();
+        toReturn << pair;
+    }
+    return toReturn;
 }
 
 void InteractorSelectorDialog::onButtonClicked(QAbstractButton *button)
@@ -228,15 +226,33 @@ void InteractorSelectorDialog::onMoleculeInteractorActivated(const QModelIndex &
 {
     if (!index.isValid())
         return;
-//    QModelIndex sourceIndex = d->_molProxyModel->mapToSource(index);
-//    const QString &name = sourceIndex.data().toString();
-//    if (!d->_selectedNames->stringList().contains(name)) {
-//        if (!d->_allowMultipleSelection)
-//            d->_selectedNames->removeRows(0, d->_selectedNames->rowCount());
-//        int row = d->_selectedNames->rowCount();
-//        d->_selectedNames->insertRow(row);
-//        d->_selectedNames->setData(d->_selectedNames->index(row), name);
-//    }
+    if (d->_allowMultipleSelection && d->_selectedNames->rowCount() >= d->_allowMultipleSelection)
+        return;
+
+    QModelIndex sourceIndex = d->_molProxyModel->mapToSource(index);
+    QModelIndex uidIndex = ddiCore()->drugInteractorTableModel()->index(sourceIndex.row(), DrugInteractorTableModel::Uuid);
+    const QString &name = sourceIndex.data().toString();
+    const QString &uid = uidIndex.data().toString();
+    if (!d->_selectedNames->stringList().contains(name)) {
+        if (!d->_allowMultipleSelection) {
+            d->_selectedNames->removeRows(0, d->_selectedNames->rowCount());
+            d->_selectedUids->removeRows(0, d->_selectedNames->rowCount());
+        }
+        int row = d->_selectedNames->rowCount();
+        d->_selectedNames->insertRow(row);
+        d->_selectedNames->setData(d->_selectedNames->index(row), name);
+        d->_selectedUids->insertRow(row);
+        d->_selectedUids->setData(d->_selectedUids->index(row), uid);
+    }
+}
+
+void InteractorSelectorDialog::onSelectedListActivated(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+    int row = index.row();
+    d->_selectedNames->removeRow(row);
+    d->_selectedUids->removeRow(row);
 }
 
 void InteractorSelectorDialog::onSearchTextchanged(const QString &text)
