@@ -26,6 +26,7 @@
 #include "drugdruginteractioneditorwidget.h"
 #include "drugdruginteractiontablemodel.h"
 #include <ddiplugin/ddicore.h>
+#include <ddiplugin/interactors/interactorselectordialog.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -90,7 +91,6 @@ public:
         aCreateNew(0),
         aTranslateAll(0),
         aTranslateThis(0),
-        aReformatOldXmlSources(0),
         aSplitInteractionAccordingToLevel(0),
         googleTranslator(0),
 //        firstInteractorRoutes(0), secondInteractorRoutes(0),
@@ -119,7 +119,6 @@ public:
         aEdit = new QAction(q);
         aTranslateAll = new QAction(q);
         aTranslateThis = new QAction(q);
-        aReformatOldXmlSources = new QAction(q);
         aCreateNew = new QAction(q);
         aSplitInteractionAccordingToLevel = new QAction(q);
 
@@ -134,17 +133,19 @@ public:
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
         aTranslateAll->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
         aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
-        aReformatOldXmlSources->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
         aCreateNew->setIcon(theme()->icon(Core::Constants::ICONADD));
         aSplitInteractionAccordingToLevel->setIcon(theme()->icon("splitfile.png"));
 
+        b->addAction(aCreateNew);
+        b->addSeparator();
         b->addAction(aRemoveCurrent);
+        b->addSeparator();
         b->addAction(aEdit);
+        b->addAction(aSplitInteractionAccordingToLevel);
         b->addAction(aTranslateThis);
+        b->addSeparator();
         b->addAction(aSave);
         b->addAction(aTranslateAll);
-        b->addAction(aReformatOldXmlSources);
-        b->addAction(aSplitInteractionAccordingToLevel);
     }
 
     void connectActions()
@@ -155,7 +156,6 @@ public:
         QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
         QObject::connect(aTranslateAll, SIGNAL(triggered()), q, SLOT(translateAll()));
         QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
-        QObject::connect(aReformatOldXmlSources, SIGNAL(triggered()), q, SLOT(reformatOldXmlSource()));
         QObject::connect(aSplitInteractionAccordingToLevel, SIGNAL(triggered()), q, SLOT(splitCurrent()));
     }
 
@@ -166,12 +166,12 @@ public:
         QToolButton *left = new QToolButton(q);
         left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         ui->searchLine->setLeftButton(left);
-        QToolButton *right = new QToolButton(q);
-        right->addAction(aCreateNew);
-        right->setDefaultAction(aCreateNew);
-        right->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        right->setPopupMode(QToolButton::InstantPopup);
-        ui->searchLine->setRightButton(right);
+//        QToolButton *right = new QToolButton(q);
+//        right->addAction(aCreateNew);
+//        right->setDefaultAction(aCreateNew);
+//        right->setToolButtonStyle(Qt::ToolButtonIconOnly);
+//        right->setPopupMode(QToolButton::InstantPopup);
+//        ui->searchLine->setRightButton(right);
     }
 
     void setLevelNamesToCombo(QComboBox *box)
@@ -282,7 +282,6 @@ public:
     QAction *aCreateNew;
     QAction *aTranslateAll;
     QAction *aTranslateThis;
-    QAction *aReformatOldXmlSources;
     QAction *aSplitInteractionAccordingToLevel;
     Utils::GoogleTranslator *googleTranslator;
 //    DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
@@ -353,52 +352,33 @@ void DrugDrugInteractionEditorWidget::setEditorsEnabled(bool state)
     d->ui->secondDoseToRepart->setEnabled(state);
 }
 
-/** Create a new drugdruginteraction */
+/** Create a new drug-drug interaction */
 void DrugDrugInteractionEditorWidget::createNewDDI()
 {
-//    // get the first interactor
-//    QModelIndex index = d->ui->treeView->currentIndex();
-//    while (index.parent().isValid())
-//        index = index.parent();
+    // Ask for interactors
+    QPair<QString, QString> first, second;
+    InteractorSelectorDialog dlg(this);
+    dlg.setTitle(tr("Select the interactors (two only)"));
+    dlg.setAllowMultipleSelection(2);
+    dlg.initialize();
+    if (dlg.exec() == QDialog::Accepted) {
+        qWarning() << dlg.selectedInteractors();
+        if (dlg.selectedInteractors().count() != 2)
+            return;
+        first = dlg.selectedInteractors().at(0);
+        second = dlg.selectedInteractors().at(1);
+    }
+    if (first.first.isEmpty() || second.first.isEmpty())
+        return;
 
-//    DrugDrugInteraction ddi;
-//    QString first;
-//    // Can not find the first interactor -> ask user
-//    if (!index.isValid()) {
-//        Internal::InteractorSelectorDialog dlg(this);
-//        dlg.setTitle(tr("Select the first interactor"));
-//        dlg.initialize();
-//        if (dlg.exec() == QDialog::Accepted) {
-//            if (dlg.selectedNames().count() == 1)
-//                first = dlg.selectedNames().at(0);
-//        }
-//        if (first.isEmpty())
-//            return;
-//        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
-//    } else {
-//        first = index.data().toString();
-//        ddi.setData(DrugDrugInteraction::FirstInteractorName, first);
-//    }
+    // Ask for a confirmation
+    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
+                                         "- %1<br />"
+                                         "- %2 <br />").arg(first.first).arg(second.first),
+                                      "", "", tr("Drug-drug interaction creation"));
+    if (!yes)
+        return;
 
-//    // ask for the second interactor
-//    Internal::InteractorSelectorDialog dlg(this);
-//    dlg.setTitle(tr("Select the second interactor (first: %1)").arg(first));
-//    dlg.initialize();
-//    QString second;
-//    if (dlg.exec() == QDialog::Accepted) {
-//        if (dlg.selectedNames().count() == 1)
-//            second = dlg.selectedNames().at(0);
-//    }
-//    if (second.isEmpty())
-//        return;
-
-//    // ask for a confirmation
-//    bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
-//                                         "- %1<br />"
-//                                         "- %2 <br />").arg(first).arg(second),
-//                                      "", "", tr("Drug-drug interaction creation"));
-//    if (!yes)
-//        return;
 //    ddi.setData(DrugDrugInteraction::SecondInteractorName, second);
 //    ddi.setData(DrugDrugInteraction::DateCreation, QDate::currentDate());
 //    ddi.setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
@@ -617,7 +597,6 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
     d->aTranslateAll->setText(tr("Translate all untranslated"));
     d->aTranslateThis->setText(tr("Translate current"));
-    d->aReformatOldXmlSources->setText(tr("Reformat old XML thesaurus"));
     d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
     d->aCreateNew->setToolTip(d->aCreateNew->text());
     d->aSave->setToolTip(d->aSave->text());
@@ -625,7 +604,6 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
     d->aTranslateAll->setToolTip(d->aTranslateAll->text());
     d->aTranslateThis->setToolTip(d->aTranslateThis->text());
-    d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
     d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
     d->ui->retranslateUi(this);
     int current = d->ui->comboLevel->currentIndex();
