@@ -25,32 +25,38 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class DrugsDB::Internal::InteractorSelectorDialog
+ * \class DDI::InteractorSelectorDialog
  * Dialog to select an interacting molecule or class already recorded in the models.
- * \n FreeToolBox specific class.
  */
 
 #include "interactorselectordialog.h"
-#include "drugdruginteractioncore.h"
-#include "druginteractor.h"
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/interactors/druginteractor.h>
+#include <ddiplugin/interactors/druginteractortablemodel.h>
+#include <ddiplugin/interactors/druginteractorsortfilterproxymodel.h>
 
-#include <translationutils/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <utils/global.h>
+#include <translationutils/constants.h>
 
 #include <QStringListModel>
-#include <QSortFilterProxyModel>
+#include <QToolButton>
 
 #include <QDebug>
 
 #include "ui_interactorselectorwidget.h"
 
-using namespace DrugsDB;
+using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline DrugsDB::DrugDrugInteractionCore *ddiCore() {return DrugsDB::DrugDrugInteractionCore::instance();}
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
-namespace DrugsDB {
+namespace DDI {
 namespace Internal {
 class InteractorSelectorDialogPrivate
 {
@@ -58,10 +64,10 @@ public:
     InteractorSelectorDialogPrivate(InteractorSelectorDialog *parent) :
         ui(0),
         _selectedNames(0),
-        _classProxyModel(0),
         _molProxyModel(0),
         _allowMoleculeCreation(false),
         _allowMultipleSelection(false),
+        aSearchAll(0), aSearchMols(0), aSearchClasses(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -75,9 +81,9 @@ public:
 public:
     Ui::InteractorSelectorWidget *ui;
     QStringListModel *_selectedNames;
-    QSortFilterProxyModel *_classProxyModel, *_molProxyModel;
-
+    DrugInteractorSortFilterProxyModel *_molProxyModel;
     bool _allowMoleculeCreation, _allowMultipleSelection;
+    QAction *aSearchAll, *aSearchMols, *aSearchClasses;
 
 private:
     InteractorSelectorDialog *q;
@@ -86,7 +92,7 @@ private:
 } // namespace DrugsDB
 
 /*!
- * Constructor of the DrugsDB::Internal::InteractorSelectorDialog class. \n
+ * Constructor of the DDI::InteractorSelectorDialog class. \n
  * By default, the dialog does not allow neither multiple selection, nor molecule creation.
  */
 InteractorSelectorDialog::InteractorSelectorDialog(QWidget *parent) :
@@ -96,47 +102,54 @@ InteractorSelectorDialog::InteractorSelectorDialog(QWidget *parent) :
     d->ui = new Ui::InteractorSelectorWidget;
     d->ui->setupUi(this);
 
+    // Prepare search tool button
+    d->aSearchAll = new QAction(this);
+    d->aSearchAll->setText(tr("Search an interactor: class or molecule name"));
+    d->aSearchAll->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    d->aSearchMols = new QAction(this);
+    d->aSearchMols->setText(tr("Search an interactor: molecule name only"));
+    d->aSearchMols->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    d->aSearchClasses = new QAction(this);
+    d->aSearchClasses->setText(tr("Search an interactor: class name only"));
+    d->aSearchClasses->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    QToolButton *left = new QToolButton(this);
+    left->addAction(d->aSearchAll);
+    left->addAction(d->aSearchMols);
+    left->addAction(d->aSearchClasses);
+    left->setDefaultAction(d->aSearchAll);
+    d->ui->searchLine->setLeftButton(left);
+    connect(left, SIGNAL(triggered(QAction*)), this, SLOT(onSearchActionChanged(QAction*)));
+
+    // Some ui comestics
     d->ui->label->setText(tr("Interator selector"));
-
     d->ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::Reset);
-
     d->_selectedNames = new QStringListModel(this);
     d->ui->selectedList->setModel(d->_selectedNames);
 
-    d->_classProxyModel = new QSortFilterProxyModel(this);
-    d->_classProxyModel->setSourceModel(ddiCore()->interactingClassesModel());
-    d->_classProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    d->_classProxyModel->setSortRole(Qt::DisplayRole);
-    d->_classProxyModel->setFilterKeyColumn(DrugInteractorModel::TrLabel);
-    d->_classProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-    d->ui->classView->setModel(d->_classProxyModel);
-    d->ui->classView->setModelColumn(DrugInteractorModel::TrLabel);
-
-    d->_molProxyModel = new QSortFilterProxyModel(this);
-    d->_molProxyModel->setSourceModel(ddiCore()->interactingMoleculesModel());
+    // Prepare drug interactors model & view
+    d->_molProxyModel = new DrugInteractorSortFilterProxyModel(this);
+    d->_molProxyModel->setSourceModel(ddiCore()->drugInteractorTableModel());
     d->_molProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     d->_molProxyModel->setSortRole(Qt::DisplayRole);
-    d->_molProxyModel->setFilterKeyColumn(DrugInteractorModel::TrLabel);
+    d->_molProxyModel->sort(DrugInteractorTableModel::TranslatedLabel, Qt::AscendingOrder);
+    d->_molProxyModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
     d->_molProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
     d->ui->moleculeView->setModel(d->_molProxyModel);
-    d->ui->moleculeView->setModelColumn(DrugInteractorModel::TrLabel);
+    d->ui->moleculeView->setModelColumn(DrugInteractorTableModel::TranslatedLabel);
 
     connect(d->ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
     connect(d->ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(d->ui->classView, SIGNAL(activated(QModelIndex)), this, SLOT(onClassInteractorActivated(QModelIndex)));
     connect(d->ui->moleculeView, SIGNAL(activated(QModelIndex)), this, SLOT(onMoleculeInteractorActivated(QModelIndex)));
 
-    connect(d->ui->classSearchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextchanged(QString)));
+    connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextchanged(QString)));
 
     // Managing defaults
     setAllowMoleculeInteractorCreation(false);
     setAllowMultipleSelection(false);
 }
 
-/*! Destructor of the DrugsDB::Internal::InteractorSelectorDialog class */
+/*! Destructor of the DDI::InteractorSelectorDialog class */
 InteractorSelectorDialog::~InteractorSelectorDialog()
 {
     if (d)
@@ -172,20 +185,20 @@ void InteractorSelectorDialog::setTitle(const QString &title)
 /** Return the selected interactors. All accents are removed */
 QStringList InteractorSelectorDialog::selectedNames() const
 {
-    // FIXME: get the InitialLabel (as they are like UUID)
-    QStringList toReturn;
-    if (!d->_allowMultipleSelection) {
-        if (d->ui->classView->selectionModel()->hasSelection())
-            toReturn << d->ui->classView->selectionModel()->currentIndex().data().toString();
-        if (d->ui->moleculeView->selectionModel()->hasSelection())
-            toReturn << d->ui->moleculeView->selectionModel()->currentIndex().data().toString();
-    } else {
-        toReturn = d->_selectedNames->stringList();
-    }
+    // TODO: code here
+//    QStringList toReturn;
+//    if (!d->_allowMultipleSelection) {
+//        if (d->ui->classView->selectionModel()->hasSelection())
+//            toReturn << d->ui->classView->selectionModel()->currentIndex().data().toString();
+//        if (d->ui->moleculeView->selectionModel()->hasSelection())
+//            toReturn << d->ui->moleculeView->selectionModel()->currentIndex().data().toString();
+//    } else {
+//        toReturn = d->_selectedNames->stringList();
+//    }
 
     QStringList noAccent;
-    foreach(const QString &r, toReturn)
-        noAccent << Utils::removeAccents(r);
+//    foreach(const QString &r, toReturn)
+//        noAccent << Utils::removeAccents(r);
 
     return noAccent;
 }
@@ -200,48 +213,41 @@ void InteractorSelectorDialog::onButtonClicked(QAbstractButton *button)
     }
 }
 
-void InteractorSelectorDialog::onClassInteractorActivated(const QModelIndex &index)
+void InteractorSelectorDialog::onSearchActionChanged(QAction *a)
 {
-    if (!index.isValid())
-        return;
-    QModelIndex sourceIndex = d->_classProxyModel->mapToSource(index);
-    const QString &name = sourceIndex.data().toString();
-    if (!d->_selectedNames->stringList().contains(name)) {
-        if (!d->_allowMultipleSelection)
-            d->_selectedNames->removeRows(0, d->_selectedNames->rowCount());
-        int row = d->_selectedNames->rowCount();
-        d->_selectedNames->insertRow(row);
-        d->_selectedNames->setData(d->_selectedNames->index(row), name);
-    }
+    if (a==d->aSearchAll)
+        d->_molProxyModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::ClassesAndMolecules);
+    else if (a==d->aSearchMols)
+        d->_molProxyModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::MoleculesOnly);
+    else if (a==d->aSearchClasses)
+        d->_molProxyModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::ClassesOnly);
+    d->_molProxyModel->invalidate();
 }
 
 void InteractorSelectorDialog::onMoleculeInteractorActivated(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
-    QModelIndex sourceIndex = d->_molProxyModel->mapToSource(index);
-    const QString &name = sourceIndex.data().toString();
-    if (!d->_selectedNames->stringList().contains(name)) {
-        if (!d->_allowMultipleSelection)
-            d->_selectedNames->removeRows(0, d->_selectedNames->rowCount());
-        int row = d->_selectedNames->rowCount();
-        d->_selectedNames->insertRow(row);
-        d->_selectedNames->setData(d->_selectedNames->index(row), name);
-    }
+//    QModelIndex sourceIndex = d->_molProxyModel->mapToSource(index);
+//    const QString &name = sourceIndex.data().toString();
+//    if (!d->_selectedNames->stringList().contains(name)) {
+//        if (!d->_allowMultipleSelection)
+//            d->_selectedNames->removeRows(0, d->_selectedNames->rowCount());
+//        int row = d->_selectedNames->rowCount();
+//        d->_selectedNames->insertRow(row);
+//        d->_selectedNames->setData(d->_selectedNames->index(row), name);
+//    }
 }
 
 void InteractorSelectorDialog::onSearchTextchanged(const QString &text)
 {
     if (text.contains("*")) {
-        d->_classProxyModel->setFilterWildcard(text);
         d->_molProxyModel->setFilterWildcard(text);
     } else if (text.contains("%")) {
         QString w = text;
         w = w.replace("%", "*");
-        d->_classProxyModel->setFilterWildcard(w);
         d->_molProxyModel->setFilterWildcard(w);
     } else {
-        d->_classProxyModel->setFilterFixedString(text);
         d->_molProxyModel->setFilterFixedString(text);
     }
 }

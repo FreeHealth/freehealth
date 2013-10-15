@@ -19,58 +19,42 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric Maeker
+ *  Main Developer: Eric MAEKER, MD <eric.maeker@gmail.com>                *
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_INTERACTORSELECTORDIALOG_H
-#define DDIMANAGER_DDIPLUGIN_INTERACTORSELECTORDIALOG_H
+#ifndef DDIMANAGER_DDIPLUGIN_DRUGINTERACTORSORTFILTERPROXYMODEL_H
+#define DDIMANAGER_DDIPLUGIN_DRUGINTERACTORSORTFILTERPROXYMODEL_H
 
-#include <QDialog>
-
-QT_BEGIN_NAMESPACE
-class QAbstractButton;
-class QModelIndex;
-QT_END_NAMESPACE
+#include <ddiplugin/ddi_exporter.h>
+#include <QSortFilterProxyModel>
 
 /**
- * \file interactorselectordialog.h
+ * \file druginteractorsortfilterproxymodel.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 15 Oct 2013
 */
 
 namespace DDI {
-namespace Internal {
-class InteractorSelectorDialogPrivate;
-} // namespace Internal
-
-class InteractorSelectorDialog : public QDialog
+class DDI_EXPORT DrugInteractorSortFilterProxyModel : public QSortFilterProxyModel
 {
-    Q_OBJECT
 public:
-    explicit InteractorSelectorDialog(QWidget *parent = 0);
-    ~InteractorSelectorDialog();
-    bool initialize();
+    enum ClassMoleculeFilter {
+        ClassesOnly,
+        MoleculesOnly,
+        ClassesAndMolecules
+    };
+    explicit DrugInteractorSortFilterProxyModel(QObject *parent = 0);
+    void setClassMolFilter(ClassMoleculeFilter classMolFilter);
 
-    void setAllowMoleculeInteractorCreation(bool allow);
-    void setAllowMultipleSelection(bool allow);
-    void setTitle(const QString &title);
-
-    QStringList selectedNames() const;
-
-private Q_SLOTS:
-    void onSearchActionChanged(QAction *a);
-    void onButtonClicked(QAbstractButton *button);
-    void onMoleculeInteractorActivated(const QModelIndex &index);
-    void onSearchTextchanged(const QString &text);
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &parent) const;
 
 private:
-    Internal::InteractorSelectorDialogPrivate *d;
+    ClassMoleculeFilter _classMolFilter;
 };
+}  // namespace DDI
 
-} // namespace DDI
-
-#endif // DDIMANAGER_DDIPLUGIN_INTERACTORSELECTORDIALOG_H
-
+#endif // DDIMANAGER_DDIPLUGIN_DRUGINTERACTORSORTFILTERPROXYMODEL_H

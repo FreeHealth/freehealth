@@ -28,6 +28,7 @@
 #include "druginteractor.h"
 #include "druginteractortablemodel.h"
 #include "druginteractortreeproxymodel.h"
+#include "druginteractorsortfilterproxymodel.h"
 #include <ddiplugin/ddicore.h>
 #include <ddiplugin/atc/searchatcindatabasedialog.h>
 
@@ -62,45 +63,6 @@ static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
 
 namespace DDI {
 namespace Internal {
-class DrugInteractorProxyModel : public QSortFilterProxyModel
-{
-public:
-    enum ClassMoleculeFilter {
-        ClassesOnly,
-        MoleculesOnly,
-        ClassesAndMolecules
-    };
-
-    explicit DrugInteractorProxyModel(QObject *parent = 0)
-        : QSortFilterProxyModel(parent),
-          _classMolFilter(ClassesAndMolecules)
-    {}
-
-    void setClassMolFilter(ClassMoleculeFilter classMolFilter)
-    {
-        _classMolFilter=classMolFilter;
-        //invalidate();
-    }
-
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &parent) const
-    {
-        if (_classMolFilter==ClassesOnly) {
-            QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
-            if (!isClass.data().toBool())
-                return false;
-        } else if (_classMolFilter==MoleculesOnly) {
-            QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
-            if (isClass.data().toBool())
-                return false;
-        }
-        return QSortFilterProxyModel::filterAcceptsRow(sourceRow, parent);
-    }
-
-private:
-    ClassMoleculeFilter _classMolFilter;
-};
-
 class InteractorEditorWidgetPrivate
 {
 public:
@@ -244,7 +206,7 @@ public:
         ui->classesTreeView->hide();
 
         // Molecules
-        _proxyMoleculeModel = new DrugInteractorProxyModel(q);
+        _proxyMoleculeModel = new DrugInteractorSortFilterProxyModel(q);
         _proxyMoleculeModel->setSourceModel(ddiCore()->drugInteractorTableModel());
         _proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         _proxyMoleculeModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
@@ -306,7 +268,7 @@ public:
     QAction *aCopyClip;
     QAction *aAtcSearchDialog;
 
-    DrugInteractorProxyModel *_proxyMoleculeModel;
+    DrugInteractorSortFilterProxyModel *_proxyMoleculeModel;
 
 private:
     InteractorEditorWidget *q;
@@ -583,11 +545,11 @@ void InteractorEditorWidget::buttonActivated(QAction *selected)
 void InteractorEditorWidget::toggleClassMolsFilter(QAction *a)
 {
     if (a==d->aSearchClassOnly) {
-        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::ClassesOnly);
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::ClassesOnly);
     } else if (a==d->aSearchMolsAndClass) {
-        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::ClassesAndMolecules);
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::ClassesAndMolecules);
     } else if (a==d->aSearchMolsOnly) {
-        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorProxyModel::MoleculesOnly);
+        d->_proxyMoleculeModel->setClassMolFilter(DrugInteractorSortFilterProxyModel::MoleculesOnly);
     }
     d->_proxyMoleculeModel->invalidate();
 }

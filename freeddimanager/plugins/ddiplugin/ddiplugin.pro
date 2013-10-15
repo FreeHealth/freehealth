@@ -25,6 +25,8 @@ HEADERS += \
     interactors/druginteractortreeproxymodel.h \
     interactors/interactoreditorwidget.h \
     interactors/interactormode.h \
+    interactors/interactorselectordialog.h \
+    interactors/druginteractorsortfilterproxymodel.h \
     ddi/drugdruginteractionmode.h \
     ddi/drugdruginteraction.h \
     ddi/drugdruginteractiontablemodel.h \
@@ -46,6 +48,8 @@ SOURCES += \
     interactors/druginteractortreeproxymodel.cpp \
     interactors/interactoreditorwidget.cpp \
     interactors/interactormode.cpp \
+    interactors/interactorselectordialog.cpp \
+    interactors/druginteractorsortfilterproxymodel.cpp \
     ddi/drugdruginteractionmode.cpp \
     ddi/drugdruginteraction.cpp \
     ddi/drugdruginteractiontablemodel.cpp \
@@ -57,6 +61,7 @@ FORMS += \
     atc/atceditorwidget.ui \
     atc/searchatcindatabasedialog.ui \
     interactors/interactoreditorwidget.ui \
+    interactors/interactorselectorwidget.ui \
     ddi/drugdruginteractioneditorwidget.ui \
 
 
