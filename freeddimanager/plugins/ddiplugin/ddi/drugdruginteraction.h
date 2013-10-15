@@ -110,8 +110,8 @@ public:
     QString risk(const QString &lang) const;
     QString management(const QString &lang) const;
 
-    DrugDrugInteractionDose &firstInteractorDose() {return m_FirstDose;}
-    DrugDrugInteractionDose &secondInteractorDose() {return m_SecondDose;}
+    const DrugDrugInteractionDose &firstInteractorDose() const {return m_FirstDose;}
+    const DrugDrugInteractionDose &secondInteractorDose() const {return m_SecondDose;}
 
     QIcon levelIcon() const;
     void addReviewer(const QString &name);
@@ -126,6 +126,7 @@ public:
 
     QString toXml() const;
     bool updateDomElement(QDomElement *element, QDomDocument *doc) const;
+    static QList<DrugDrugInteraction> &listFromXml(const QString &xml);
 
     bool operator==(const DrugDrugInteraction &other) const;
     static bool lowerThan(const DrugDrugInteraction &d1, const DrugDrugInteraction &d2);

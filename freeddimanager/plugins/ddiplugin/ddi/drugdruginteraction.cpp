@@ -97,6 +97,8 @@ static int languageIndex(const QString &lang)
 DrugDrugInteractionDose::DrugDrugInteractionDose(const QVariant &uid):
     m_uid(uid)
 {
+    m_Data.insert(UsesFrom, false);
+    m_Data.insert(UsesTo, false);
 }
 
 DrugDrugInteractionDose::~DrugDrugInteractionDose()
@@ -105,7 +107,12 @@ DrugDrugInteractionDose::~DrugDrugInteractionDose()
 
 bool DrugDrugInteractionDose::isEmpty() const
 {
-    return (m_Data.isEmpty());
+    return (m_Data.value(FromValue).isNull() &&
+            m_Data.value(FromUnits).isNull() &&
+            m_Data.value(FromRepartition).isNull() &&
+            m_Data.value(ToValue).isNull() &&
+            m_Data.value(ToUnits).isNull() &&
+            m_Data.value(ToRepartition).isNull());
 }
 
 bool DrugDrugInteractionDose::isValid() const
@@ -522,6 +529,26 @@ bool DrugDrugInteraction::updateDomElement(QDomElement *element, QDomDocument *d
         }
     }
     return true;
+}
+
+QList<DrugDrugInteraction> &DrugDrugInteraction::listFromXml(const QString &xml)
+{
+    QList<DrugDrugInteraction> *list = new QList<DrugDrugInteraction>;
+    QDomDocument doc;
+    QString error;
+    int line = 0, col = 0;
+    if (!doc.setContent(xml)) {
+        LOG_ERROR_FOR("DrugDrugInteraction", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
+        return *list;
+    }
+    QDomElement root = doc.firstChildElement("DrugDrugInteractions");
+    QDomElement element = root.firstChildElement("DDI");
+    while (!element.isNull()) {
+        DrugDrugInteraction di(element);
+        list->append(di);
+        element = element.nextSiblingElement("DDI");
+    }
+    return *list;
 }
 
 /** Return true if DDI are equal */

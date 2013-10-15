@@ -27,6 +27,7 @@
 #include "ddidatabase.h"
 #include <ddiplugin/constants.h>
 #include <ddiplugin/interactors/druginteractor.h>
+#include <ddiplugin/ddi/drugdruginteraction.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -467,6 +468,91 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
     return n;
 }
 
+/**
+ * Read the raw DrugDrugInteraction file and populate the database with its data.
+ * Returns the number of interaction inserted. \n
+ * \note The raw file is not included in the git repository, you should ask the mailing list freemedforms-dev@googlegroups.com for it.
+ */
+int DDIDatabase::insertDrugDrugInteractionDataFromXml(const QString &fileName)
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return false;
+
+    // Check file
+    if (!QFile(fileName).exists()) {
+        LOG_ERROR_FOR("DDIDatabase", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        return false;
+    }
+
+    // Clean DDI table from old values
+    QString req = prepareDeleteQuery(Constants::Table_DDI);
+    if (!executeSQL(req, DB))
+        LOG_ERROR_FOR("DDIDatabase", "Unable to clear old DrugInteractor data");
+
+    // Read the XML file
+    DB.transaction();
+    QSqlQuery query(DB);
+    QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
+    QList<DrugDrugInteraction> list = DrugDrugInteraction::listFromXml(content);
+    int n = 0;
+    foreach(const DrugDrugInteraction &di, list) {
+        if (!di.isValid())
+            continue;
+        query.prepare(prepareInsertQuery(Constants::Table_DDI));
+        query.bindValue(Constants::DDI_ID, QVariant());
+        query.bindValue(Constants::DDI_UID, Utils::createUid());
+        query.bindValue(Constants::DDI_FIRSTINTERACTORUID, di.data(DrugDrugInteraction::FirstInteractorName));
+        query.bindValue(Constants::DDI_SECONDINTERACTORUID, di.data(DrugDrugInteraction::SecondInteractorName));
+        query.bindValue(Constants::DDI_ISREVIEWED, di.isReviewed()?"1":"0");
+        query.bindValue(Constants::DDI_ISVALID, di.isValid()?"1":"0");
+        query.bindValue(Constants::DDI_LEVELCODE, di.data(DrugDrugInteraction::LevelCode));
+        query.bindValue(Constants::DDI_DATECREATION, di.data(DrugDrugInteraction::DateCreation).toDate().toString(Qt::ISODate));
+        query.bindValue(Constants::DDI_DATELASTUPDATE, di.data(DrugDrugInteraction::DateLastUpdate).toDate().toString(Qt::ISODate));
+        query.bindValue(Constants::DDI_RISKFR, di.risk("fr"));
+        query.bindValue(Constants::DDI_RISKEN, di.risk("en"));
+        query.bindValue(Constants::DDI_MANAGEMENTFR, di.management("fr"));
+        query.bindValue(Constants::DDI_MANAGEMENTEN, di.management("en"));
+        query.bindValue(Constants::DDI_REVIEWERSSTRINGLIST, di.data(DrugDrugInteraction::ReviewersStringList));
+        query.bindValue(Constants::DDI_SOURCE, "FreeMedForms");
+        query.bindValue(Constants::DDI_COMMENT, di.data(DrugDrugInteraction::Comment));
+        query.bindValue(Constants::DDI_FIRSTINTERACTORROUTEOFADMINISTRATIONIDS, di.data(DrugDrugInteraction::FirstInteractorRouteOfAdministrationIds));
+        query.bindValue(Constants::DDI_SECONDINTERACTORROUTEOFADMINISTRATIONIDS, di.data(DrugDrugInteraction::SecondInteractorRouteOfAdministrationIds));
+        query.bindValue(Constants::DDI_FIRSTDOSEUSEFROM, di.firstInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()?1:0);
+        query.bindValue(Constants::DDI_FIRSTDOSEUSESTO, di.firstInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()?1:0);
+        query.bindValue(Constants::DDI_FIRSTDOSEFROMVALUE, di.firstInteractorDose().data(DrugDrugInteractionDose::FromValue));
+        query.bindValue(Constants::DDI_FIRSTDOSEFROMUNITS, di.firstInteractorDose().data(DrugDrugInteractionDose::FromUnits));
+        query.bindValue(Constants::DDI_FIRSTDOSEFROMREPARTITION, di.firstInteractorDose().data(DrugDrugInteractionDose::FromRepartition));
+        query.bindValue(Constants::DDI_FIRSTDOSETOVALUE, di.firstInteractorDose().data(DrugDrugInteractionDose::ToValue));
+        query.bindValue(Constants::DDI_FIRSTDOSETOUNITS, di.firstInteractorDose().data(DrugDrugInteractionDose::ToUnits));
+        query.bindValue(Constants::DDI_FIRSTDOSETOREPARTITION, di.firstInteractorDose().data(DrugDrugInteractionDose::ToRepartition));
+        query.bindValue(Constants::DDI_SECONDDOSEUSEFROM, di.secondInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()?1:0);
+        query.bindValue(Constants::DDI_SECONDDOSEUSESTO, di.secondInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()?1:0);
+        query.bindValue(Constants::DDI_SECONDDOSEFROMVALUE, di.secondInteractorDose().data(DrugDrugInteractionDose::FromValue));
+        query.bindValue(Constants::DDI_SECONDDOSEFROMUNITS, di.secondInteractorDose().data(DrugDrugInteractionDose::FromUnits));
+        query.bindValue(Constants::DDI_SECONDDOSEFROMREPARTITION, di.secondInteractorDose().data(DrugDrugInteractionDose::FromRepartition));
+        query.bindValue(Constants::DDI_SECONDDOSETOVALUE, di.secondInteractorDose().data(DrugDrugInteractionDose::ToValue));
+        query.bindValue(Constants::DDI_SECONDDOSETOUNITS, di.secondInteractorDose().data(DrugDrugInteractionDose::ToUnits));
+        query.bindValue(Constants::DDI_SECONDDOSETOREPARTITION, di.secondInteractorDose().data(DrugDrugInteractionDose::ToRepartition));
+        query.bindValue(Constants::DDI_PMIDSTRINGLIST, di.data(DrugDrugInteraction::PMIDsStringList));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        ++n;
+        if (n % 250) {
+            DB.commit();
+            DB.transaction();
+        }
+        query.finish();
+    }
+    DB.commit();
+    return n;
+}
+
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
@@ -516,8 +602,9 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
 
     // Insert raw data & version
     setVersion(::CURRENTVERSION);
-    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
-    insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
+//    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+//    insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
+    insertDrugDrugInteractionDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTIONS_XML_FILENAME);
 
     // database is readable/writable
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + prefixedDbName));
