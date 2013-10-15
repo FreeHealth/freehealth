@@ -60,6 +60,7 @@ const char * const DDIMANAGER_DATABASE_NAME      =  "ddimanager";
 
 const char * const ATC_CSV_FILENAME                         = "/nonfree/ddi/atc_utf8.csv";
 const char * const INTERACTORS_XML_FILENAME                 = "/nonfree/ddi/ddi_interactors_latest.xml";
+const char * const INTERACTIONS_XML_FILENAME                = "/nonfree/ddi/ddi_latest.xml";
 const char * const ROUTES_CSV_FILENAME                      = "/sql/drugdb/routes.txt";
 
 // Database
@@ -126,7 +127,6 @@ enum TableDDI_Fields {
     DDI_REVIEWERSSTRINGLIST,
     DDI_SOURCE,
     DDI_COMMENT,
-    DDI_INTERNALUID,
     DDI_FIRSTINTERACTORROUTEOFADMINISTRATIONIDS,
     DDI_SECONDINTERACTORROUTEOFADMINISTRATIONIDS,
     DDI_FIRSTDOSEUSEFROM,
