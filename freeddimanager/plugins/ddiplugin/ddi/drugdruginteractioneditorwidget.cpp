@@ -46,6 +46,7 @@
 #include <QDir>
 #include <QStringListModel>
 #include <QToolButton>
+#include <QSortFilterProxyModel>
 
 #include "ui_drugdruginteractioneditorwidget.h"
 
@@ -80,7 +81,7 @@ class DrugDrugInteractionEditorWidgetPrivate
 public:
     DrugDrugInteractionEditorWidgetPrivate(DrugDrugInteractionEditorWidget *parent):
         ui(0),
-        m_DDIModel(0),
+        m_DDIProxyModel(0),
         m_Mapper(0),
         m_ReviewModified(false),
         aSave(0),
@@ -91,8 +92,6 @@ public:
         aTranslateThis(0),
         aReformatOldXmlSources(0),
         aSplitInteractionAccordingToLevel(0),
-        aExpandAll(0),
-        aCollapseAll(0),
         googleTranslator(0),
 //        firstInteractorRoutes(0), secondInteractorRoutes(0),
         biblioModel(0),
@@ -106,9 +105,6 @@ public:
     {
         ui = new Ui::DrugDrugInteractionEditorWidget;
         ui->setupUi(q);
-        // Some ui settings
-        ui->treeLayout->setMargin(0);
-        ui->treeLayout->setSpacing(0);
         ui->tabWidget->setCurrentIndex(0);
     }
 
@@ -126,8 +122,6 @@ public:
         aReformatOldXmlSources = new QAction(q);
         aCreateNew = new QAction(q);
         aSplitInteractionAccordingToLevel = new QAction(q);
-        aExpandAll = new QAction(q);
-        aCollapseAll = new QAction(q);
 
         aSave->setEnabled(false);
         aEdit->setEnabled(false);
@@ -143,8 +137,6 @@ public:
         aReformatOldXmlSources->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
         aCreateNew->setIcon(theme()->icon(Core::Constants::ICONADD));
         aSplitInteractionAccordingToLevel->setIcon(theme()->icon("splitfile.png"));
-        aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
-        aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
 
         b->addAction(aRemoveCurrent);
         b->addAction(aEdit);
@@ -165,8 +157,6 @@ public:
         QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
         QObject::connect(aReformatOldXmlSources, SIGNAL(triggered()), q, SLOT(reformatOldXmlSource()));
         QObject::connect(aSplitInteractionAccordingToLevel, SIGNAL(triggered()), q, SLOT(splitCurrent()));
-        QObject::connect(aExpandAll, SIGNAL(triggered()), ui->treeView, SLOT(expandAll()));
-        QObject::connect(aCollapseAll, SIGNAL(triggered()), ui->treeView, SLOT(collapseAll()));
     }
 
     void prepareSearchLine()
@@ -178,8 +168,6 @@ public:
         ui->searchLine->setLeftButton(left);
         QToolButton *right = new QToolButton(q);
         right->addAction(aCreateNew);
-        right->addAction(aExpandAll);
-        right->addAction(aCollapseAll);
         right->setDefaultAction(aCreateNew);
         right->setToolButtonStyle(Qt::ToolButtonIconOnly);
         right->setPopupMode(QToolButton::InstantPopup);
@@ -225,24 +213,35 @@ public:
         ui->bilbioTableView->horizontalHeader()->hide();
         ui->bilbioTableView->verticalHeader()->hide();
 
-        m_DDIModel = ddiCore()->drugDrugInteractionTableModel();
-        ui->treeView->setModel(m_DDIModel);
-        ui->treeView->setWordWrap(true);
-        for(int i = 0; i < m_DDIModel->rowCount(); ++i) {
-            ui->treeView->hideColumn(i);
+        m_DDIProxyModel = new QSortFilterProxyModel(q);
+        m_DDIProxyModel->setSourceModel(ddiCore()->drugDrugInteractionTableModel());
+        ui->tableView->setModel(m_DDIProxyModel);
+        ui->tableView->setWordWrap(true);
+        for(int i = 0; i < m_DDIProxyModel->rowCount(); ++i) {
+            ui->tableView->hideColumn(i);
         }
-        ui->treeView->showColumn(0);
-        ui->treeView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
-        ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        ui->treeView->header()->hide();
+        ui->tableView->showColumn(DrugDrugInteractionTableModel::FirstInteractorUid);
+        ui->tableView->showColumn(DrugDrugInteractionTableModel::SecondInteractorUid);
+        ui->tableView->showColumn(DrugDrugInteractionTableModel::LevelCode);
+        ui->tableView->horizontalHeader()->setResizeMode(DrugDrugInteractionTableModel::FirstInteractorUid, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(DrugDrugInteractionTableModel::SecondInteractorUid, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setResizeMode(DrugDrugInteractionTableModel::LevelCode, QHeaderView::ResizeToContents);
+        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui->tableView->horizontalHeader()->hide();
     }
 
     void createMapper()
     {
         // Create DDI Model && manage Mapper
         m_Mapper = new QDataWidgetMapper(q);
-        m_Mapper->setModel(m_DDIModel);
+        m_Mapper->setModel(m_DDIProxyModel);
         m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+
+        m_Mapper->addMapping(ui->firstInteractor, DrugDrugInteractionTableModel::FirstInteractorUid, "text");
+        m_Mapper->addMapping(ui->secondInteractor, DrugDrugInteractionTableModel::SecondInteractorUid, "text");
+        m_Mapper->addMapping(ui->firstInteractor2, DrugDrugInteractionTableModel::FirstInteractorUid, "text");
+        m_Mapper->addMapping(ui->secondInteractor2, DrugDrugInteractionTableModel::SecondInteractorUid, "text");
+
         m_Mapper->addMapping(ui->risk, DrugDrugInteractionTableModel::RiskFr, "plainText");
         m_Mapper->addMapping(ui->risk_en, DrugDrugInteractionTableModel::RiskEn, "plainText");
         m_Mapper->addMapping(ui->management, DrugDrugInteractionTableModel::ManagementFr, "plainText");
@@ -273,7 +272,7 @@ public:
 
 public:
     Ui::DrugDrugInteractionEditorWidget *ui;
-    DrugDrugInteractionTableModel *m_DDIModel;
+    QSortFilterProxyModel *m_DDIProxyModel;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex m_EditingIndex;
     bool m_ReviewModified;
@@ -285,8 +284,6 @@ public:
     QAction *aTranslateThis;
     QAction *aReformatOldXmlSources;
     QAction *aSplitInteractionAccordingToLevel;
-    QAction *aExpandAll;
-    QAction *aCollapseAll;
     Utils::GoogleTranslator *googleTranslator;
 //    DrugsDB::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
     QStringListModel *biblioModel;
@@ -312,7 +309,7 @@ DrugDrugInteractionEditorWidget::DrugDrugInteractionEditorWidget(QWidget *parent
     d->createMapper();
     setEditorsEnabled(false);
 
-    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
+    connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionTableModel(QString)));
     retranslateUi();
 }
@@ -418,8 +415,9 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
 /** Filter the DDI model with the search terms \e filter */
 void DrugDrugInteractionEditorWidget::filterDrugDrugInteractionTableModel(const QString &filter)
 {
-//    d->m_DDIModel->filterInteractionsForInteractor(filter);
-    d->ui->treeView->expandAll();
+    d->m_DDIProxyModel->setFilterRole(Qt::DisplayRole);
+    d->m_DDIProxyModel->setFilterKeyColumn(DrugDrugInteractionTableModel::FirstInteractorUid);
+    d->m_DDIProxyModel->setFilterFixedString(filter);
 }
 
 /** Edit the current selected DDI */
@@ -530,27 +528,27 @@ void DrugDrugInteractionEditorWidget::save()
 /** Remove the current selected DDI */
 void DrugDrugInteractionEditorWidget::removeCurrent()
 {
-    if (d->m_EditingIndex.isValid()) {
-        d->m_DDIModel->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
-    }
+//    if (d->m_EditingIndex.isValid()) {
+//        d->m_DDIProxyModel->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
+//    }
 }
 
 /** Translated DDI texts of the currently selected one */
 void DrugDrugInteractionEditorWidget::translateCurrent()
 {
-    if (!d->googleTranslator) {
-        d->googleTranslator = new Utils::GoogleTranslator(this);
-        connect(d->googleTranslator, SIGNAL(translationComplete(QString)), this, SLOT(translationDone(QString)));
-    }
+//    if (!d->googleTranslator) {
+//        d->googleTranslator = new Utils::GoogleTranslator(this);
+//        connect(d->googleTranslator, SIGNAL(translationComplete(QString)), this, SLOT(translationDone(QString)));
+//    }
 
-    QModelIndex index = d->ui->treeView->currentIndex();
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskFr, index.parent());
-    const QString &risk = d->m_DDIModel->data(index).toString();
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementFr, index.parent());
-    const QString &management = d->m_DDIModel->data(index).toString();
+//    QModelIndex index = d->ui->treeView->currentIndex();
+//    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskFr, index.parent());
+//    const QString &risk = d->m_DDIModel->data(index).toString();
+//    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementFr, index.parent());
+//    const QString &management = d->m_DDIModel->data(index).toString();
 
-    QString trans = risk + ".........." + management;
-    d->googleTranslator->startTranslation("fr", "en", trans);
+//    QString trans = risk + ".........." + management;
+//    d->googleTranslator->startTranslation("fr", "en", trans);
 }
 
 /**
@@ -559,25 +557,25 @@ void DrugDrugInteractionEditorWidget::translateCurrent()
  */
 void DrugDrugInteractionEditorWidget::translationDone(const QString &trans)
 {
-    qWarning() << "translationDone" << trans;
-    if (trans.startsWith(" null")) {
-        return;
-    }
+//    qWarning() << "translationDone" << trans;
+//    if (trans.startsWith(" null")) {
+//        return;
+//    }
 
-    QString tmp = trans;
-    tmp.replace("...........", ".||");
-    tmp.replace("..........", "||");
-    QStringList val = tmp.split("||");
-    QString riskEn = val.at(0).simplified();
-    QModelIndex index = d->m_EditingIndex;
-    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskEn, index.parent());
-    d->m_DDIModel->setData(index, riskEn);
+//    QString tmp = trans;
+//    tmp.replace("...........", ".||");
+//    tmp.replace("..........", "||");
+//    QStringList val = tmp.split("||");
+//    QString riskEn = val.at(0).simplified();
+//    QModelIndex index = d->m_EditingIndex;
+//    index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::RiskEn, index.parent());
+//    d->m_DDIModel->setData(index, riskEn);
 
-    if (val.count() == 2) {
-        QString managementEn = val.at(1).simplified();
-        index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementEn, index.parent());
-        d->m_DDIModel->setData(index, managementEn);
-    }
+//    if (val.count() == 2) {
+//        QString managementEn = val.at(1).simplified();
+//        index = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::ManagementEn, index.parent());
+//        d->m_DDIModel->setData(index, managementEn);
+//    }
 }
 
 /**
@@ -621,8 +619,6 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aTranslateThis->setText(tr("Translate current"));
     d->aReformatOldXmlSources->setText(tr("Reformat old XML thesaurus"));
     d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
-    d->aCollapseAll->setText(tr("Collapse all"));
-    d->aExpandAll->setText(tr("Expand all"));
     d->aCreateNew->setToolTip(d->aCreateNew->text());
     d->aSave->setToolTip(d->aSave->text());
     d->aEdit->setToolTip(d->aEdit->text());
@@ -631,8 +627,6 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aTranslateThis->setToolTip(d->aTranslateThis->text());
     d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
     d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
-    d->aCollapseAll->setToolTip(d->aCollapseAll->text());
-    d->aExpandAll->setToolTip(d->aExpandAll->text());
     d->ui->retranslateUi(this);
     int current = d->ui->comboLevel->currentIndex();
     d->setLevelNamesToCombo(d->ui->comboLevel);

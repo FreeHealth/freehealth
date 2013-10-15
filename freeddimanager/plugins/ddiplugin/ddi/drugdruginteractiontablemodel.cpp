@@ -86,7 +86,6 @@ public:
         case DrugDrugInteractionTableModel::ReviewersStringList: sql = Constants::DDI_REVIEWERSSTRINGLIST; break;
         case DrugDrugInteractionTableModel::Source: sql = Constants::DDI_SOURCE; break;
         case DrugDrugInteractionTableModel::Comment: sql = Constants::DDI_COMMENT; break;
-        case DrugDrugInteractionTableModel::InternalUid: sql = Constants::DDI_INTERNALUID; break;
         case DrugDrugInteractionTableModel::FirstInteractorRouteOfAdministrationIds: sql = Constants::DDI_FIRSTINTERACTORROUTEOFADMINISTRATIONIDS; break;
         case DrugDrugInteractionTableModel::SecondInteractorRouteOfAdministrationIds: sql = Constants::DDI_SECONDINTERACTORROUTEOFADMINISTRATIONIDS; break;
         case DrugDrugInteractionTableModel::FirstDoseUseFrom: sql = Constants::DDI_FIRSTDOSEUSEFROM; break;
@@ -174,6 +173,7 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
     if (!index.isValid())
         return QVariant();
 
+    // TODO: FIRST/SECOND interactors are UID not LABELS ==> Get the label of the interactors
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         return d->_sql->data(sqlIndex, role);
@@ -187,7 +187,7 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
     } else if (role==Qt::ForegroundRole) {
         QModelIndex isRev = d->_sql->index(index.row(), Constants::DDI_ISREVIEWED);
         if (!d->_sql->data(isRev).toBool()) {
-            return QColor(50,250,50,150);
+            return QColor(20,250,20).dark();
         }
     }
     return QVariant();

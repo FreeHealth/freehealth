@@ -68,7 +68,6 @@ public:
         ReviewersStringList,
         Source,
         Comment,
-        InternalUid,
         FirstInteractorRouteOfAdministrationIds,
         SecondInteractorRouteOfAdministrationIds,
 
