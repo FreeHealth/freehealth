@@ -64,7 +64,7 @@ AtcMode::AtcMode(QObject *parent) :
 {
     setDisplayName("ATC");
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
-    setPriority(10);
+    setPriority(1000);
     setId(Core::Constants::MODE_PATIENT_SEARCH);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);
