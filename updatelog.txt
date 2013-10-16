@@ -16,10 +16,13 @@ The FreeMedForms project
   * FreeMedForms
     * Feedback Plugin is correctly translated
     * Correctly select user language at startup
+    * Correctly define the default print-to-PDF-cache path in the user documents path
   * FreeDiams
     * Correctly select user language at startup
+    * Correctly define the default print-to-PDF-cache path in the user documents path
   * FreeDRC
     * First release
+    * Correctly define the default print-to-PDF-cache path in the user documents path
   * FreeToolBox
   * PMHx
   * Agenda:
