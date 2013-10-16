@@ -31,6 +31,7 @@
 #include <translationutils/trans_current.h>
 
 #include <coreplugin/coreimpl.h>
+#include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -89,7 +90,7 @@ QWidget *CommandLineAboutPage::createPage(QWidget *parent)
     tree->setColumnCount(2);
     layout->addWidget(tree);
 
-    for(int i=0; i<CommandLine::CL_MaxParam;++i) {
+    for(int i=0; i<CommandLine::CL_MaxParam; ++i) {
         new QTreeWidgetItem(tree, QStringList()
                             << CoreImpl::instance()->commandLine()->paramName(i)
                             << CoreImpl::instance()->commandLine()->value(i, QString("not defined")).toString());
