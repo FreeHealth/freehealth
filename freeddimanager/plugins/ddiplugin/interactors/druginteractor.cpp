@@ -289,7 +289,7 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
         return *di;
     }
     // get attribs
-    di->setData(Uid, element.attribute("id").replace(" ", "_"));
+    di->setData(Uid, element.attribute("id").replace(" ", "_").replace("'", "_"));
     di->setData(InitialLabel, element.attribute("id"));
     di->setData(IsValid, element.attribute("v").toInt());
     bool isClass = element.attribute("c").toInt();

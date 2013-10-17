@@ -166,8 +166,8 @@ DrugDrugInteraction::DrugDrugInteraction(const QDomElement &element)
     if (element.tagName()!="DDI") {
         LOG_ERROR_FOR("DrugDrugInteraction", "Wrong XML Element");
     } else {
-        m_Data.insert(FirstInteractorName, element.attribute("i1"));
-        m_Data.insert(SecondInteractorName, element.attribute("i2"));
+        m_Data.insert(FirstInteractorName, element.attribute("i1").replace(" ", "_").replace("'", "_"));
+        m_Data.insert(SecondInteractorName, element.attribute("i2").replace(" ", "_").replace("'", "_"));
         m_Data.insert(FirstInteractorRouteOfAdministrationIds, element.attribute("i1ra").split(";"));
         m_Data.insert(SecondInteractorRouteOfAdministrationIds, element.attribute("i2ra").split(";"));
         m_Data.insert(LevelCode, element.attribute("l"));
