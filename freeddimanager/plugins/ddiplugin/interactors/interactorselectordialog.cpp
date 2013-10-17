@@ -201,6 +201,7 @@ QList< QPair<QString, QString> > InteractorSelectorDialog::selectedInteractors()
     return toReturn;
 }
 
+/** React on button clicked (help, remove) */
 void InteractorSelectorDialog::onButtonClicked(QAbstractButton *button)
 {
     QDialogButtonBox::StandardButton but = d->ui->buttonBox->standardButton(button);
@@ -211,6 +212,7 @@ void InteractorSelectorDialog::onButtonClicked(QAbstractButton *button)
     }
 }
 
+/** Toggle the model filtering according to the trigerred search action  */
 void InteractorSelectorDialog::onSearchActionChanged(QAction *a)
 {
     if (a==d->aSearchAll)
@@ -222,6 +224,7 @@ void InteractorSelectorDialog::onSearchActionChanged(QAction *a)
     d->_molProxyModel->invalidate();
 }
 
+/** When a molecule is activated -> add it to the selected list */
 void InteractorSelectorDialog::onMoleculeInteractorActivated(const QModelIndex &index)
 {
     if (!index.isValid())
