@@ -91,6 +91,8 @@ AtcTableModel::~AtcTableModel()
 bool AtcTableModel::initialize()
 {
     d->_sql->select();
+    while (d->_sql->canFetchMore(index(d->_sql->rowCount(), 0)))
+        d->_sql->fetchMore(index(d->_sql->rowCount(), 0));
     return true;
 }
 

@@ -233,8 +233,8 @@ bool DrugInteractorTableModel::initialize()
     d->_sql->select();
 
     // Fetch all data in the source model
-    while (d->_sql->canFetchMore(index(0, d->_sql->rowCount())))
-        d->_sql->fetchMore(index(0, d->_sql->rowCount()));
+    while (d->_sql->canFetchMore(index(d->_sql->rowCount(), 0)))
+        d->_sql->fetchMore(index(d->_sql->rowCount(), 0));
 
     return true;
 }
