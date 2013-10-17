@@ -39,6 +39,7 @@
 #include <QDate>
 #include <QColor>
 #include <QSqlTableModel>
+#include <QSqlRecord>
 
 #include <QDebug>
 
@@ -126,6 +127,9 @@ DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     setObjectName("DrugDrugInteractionTableModel");
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_DDI));
+    d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
+    connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
 }
 
 DrugDrugInteractionTableModel::~DrugDrugInteractionTableModel()
@@ -175,6 +179,19 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
 
     // TODO: FIRST/SECOND interactors are UID not LABELS ==> Get the label of the interactors
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        if (index.column() == LevelComboIndex) {
+            // Be aware that DrugDrugInteractionEditorWidget ui->comboLevel must be sync with this part !!!
+            QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::DDI_LEVELCODE);
+            QString levelCode = d->_sql->data(sqlIndex).toString();
+            if (levelCode=="C")   return 0;
+            if (levelCode=="D")   return 1;
+            if (levelCode=="450") return 2;
+            if (levelCode=="Y")   return 3;
+            if (levelCode=="T")   return 4;
+            if (levelCode=="P")   return 5;
+            if (levelCode=="I")   return 6;
+            return -1;
+        }
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         return d->_sql->data(sqlIndex, role);
 //    } else if (role == Qt::FontRole) {
@@ -209,6 +226,7 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
             break;
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
+        qWarning() << index.isValid() << sqlIndex.isValid() << value;
         return ok;
     }
     return false;
@@ -216,7 +234,10 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
 
 bool DrugDrugInteractionTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    return d->_sql->insertRows(row, count, parent);
+    bool ok = d->_sql->insertRows(row, count, parent);
+    if (!ok)
+        LOG_ERROR(d->_sql->lastError().text());
+    return ok;
 }
 
 bool DrugDrugInteractionTableModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -267,6 +288,29 @@ Qt::ItemFlags DrugDrugInteractionTableModel::flags(const QModelIndex &index) con
         return 0;
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
     return f;
+}
+
+void DrugDrugInteractionTableModel::populateNewRowWithDefault(int row, QSqlRecord &record)
+{
+    Q_UNUSED(row);
+    record.clearValues();
+    for(int i = 0; i < d->_sql->columnCount(); ++i) {
+        record.setGenerated(i, true);
+        record.setValue(i, QVariant());
+    }
+    // We need to force the DDI_ID in the record (we can not let the db chose the ID value)
+    record.setValue(Constants::DDI_ID, ddiBase().max(Constants::Table_DDI, Constants::DDI_ID).toInt() + 1);
+    record.setValue(Constants::DDI_UID, Utils::createUid());
+    record.setValue(Constants::DDI_ISREVIEWED, 0);
+    record.setValue(Constants::DDI_ISVALID, 1);
+    record.setValue(Constants::DDI_LEVELCODE, "P");
+    record.setValue(Constants::DDI_DATECREATION, QDate::currentDate());
+    record.setValue(Constants::DDI_DATELASTUPDATE, QDate::currentDate());
+    record.setValue(Constants::DDI_SOURCE, "FreeMedForms");
+    record.setValue(Constants::DDI_FIRSTDOSEUSEFROM, 0);
+    record.setValue(Constants::DDI_FIRSTDOSEUSESTO, 0);
+    record.setValue(Constants::DDI_SECONDDOSEUSEFROM, 0);
+    record.setValue(Constants::DDI_SECONDDOSEUSESTO, 0);
 }
 
 QStringList DrugDrugInteractionTableModel::units()
@@ -320,10 +364,18 @@ int DrugDrugInteractionTableModel::numberOfUnreviewed() const
 }
 
 /** Submit changes directly to the database */
-bool DrugDrugInteractionTableModel::submit()
+bool DrugDrugInteractionTableModel::submitAll()
 {
-    bool ok = d->_sql->submitAll();
-    if (ok)
+    if (!d->_sql->isDirty())
+        return true;
+
+    bool ok = d->_sql->submit();
+    if (!ok) {
+        LOG_ERROR(d->_sql->lastError().text());
+    } else {
+        d->_sql->submitAll();
+        qWarning() << "submitAll" << ok << d->_sql->rowCount() << rowCount();
         d->_sql->database().commit();
+    }
     return ok;
 }

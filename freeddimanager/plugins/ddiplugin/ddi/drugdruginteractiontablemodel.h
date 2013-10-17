@@ -28,12 +28,15 @@
 #define DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONTABLEMODEL_H
 
 #include <QAbstractTableModel>
+QT_BEGIN_NAMESPACE
+class QSqlRecord;
+QT_END_NAMESPACE
 
 /**
  * \file drugdruginteractiontablemodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 14 Oct 2013
+ * \date 17 Oct 2013
 */
 
 namespace DDI {
@@ -122,7 +125,10 @@ public:
     int numberOfUnreviewed() const;
 
 public Q_SLOTS:
-    virtual bool submit();
+    virtual bool submitAll();
+
+private Q_SLOTS:
+    void populateNewRowWithDefault(int row, QSqlRecord &record);
 
 Q_SIGNALS:
     void unreviewedCountChanged();

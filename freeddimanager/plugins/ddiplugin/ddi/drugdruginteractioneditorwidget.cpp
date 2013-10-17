@@ -215,6 +215,7 @@ public:
 
         m_DDIProxyModel = new QSortFilterProxyModel(q);
         m_DDIProxyModel->setSourceModel(ddiCore()->drugDrugInteractionTableModel());
+        m_DDIProxyModel->setDynamicSortFilter(true);
         ui->tableView->setModel(m_DDIProxyModel);
         ui->tableView->setWordWrap(true);
         for(int i = 0; i < m_DDIProxyModel->rowCount(); ++i) {
@@ -250,6 +251,8 @@ public:
         m_Mapper->addMapping(ui->updatedOn, DrugDrugInteractionTableModel::DateLastUpdate, "date");
         m_Mapper->addMapping(ui->comboLevel, DrugDrugInteractionTableModel::LevelComboIndex, "currentIndex");
 
+        m_Mapper->addMapping(ui->firstDoseUsesFrom, DrugDrugInteractionTableModel::FirstDoseUseFrom, "checked");
+        m_Mapper->addMapping(ui->firstDoseUsesTo, DrugDrugInteractionTableModel::FirstDoseUsesTo, "checked");
         m_Mapper->addMapping(ui->firstDoseFromValue, DrugDrugInteractionTableModel::FirstDoseFromValue, "text");
         m_Mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionTableModel::FirstDoseFromUnits, "currentIndex");
         m_Mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionTableModel::FirstDoseFromRepartition, "currentIndex");
@@ -257,6 +260,8 @@ public:
         m_Mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionTableModel::FirstDoseToUnits, "currentIndex");
         m_Mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionTableModel::FirstDoseToRepartition, "currentIndex");
 
+        m_Mapper->addMapping(ui->secondDoseUsesFrom, DrugDrugInteractionTableModel::SecondDoseUseFrom, "checked");
+        m_Mapper->addMapping(ui->secondDoseUsesTo, DrugDrugInteractionTableModel::SecondDoseUsesTo, "checked");
         m_Mapper->addMapping(ui->secondDoseFromValue, DrugDrugInteractionTableModel::SecondDoseFromValue, "text");
         m_Mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionTableModel::SecondDoseFromUnits, "currentIndex");
         m_Mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionTableModel::SecondDoseFromRepartition, "currentIndex");
@@ -268,6 +273,43 @@ public:
 
         //    m_Mapper->addMapping(ui->comboFirstInteractorRoute, DrugDrugInteractionTableModel::FirstInteractorRouteIndex, "currentIndex");
         //    m_Mapper->addMapping(ui->comboSecondInteractorRoute, DrugDrugInteractionTableModel::SecondInteractorRouteIndex, "currentIndex");
+    }
+
+    void clearUi()
+    {
+        ui->firstInteractor->clear();
+        ui->secondInteractor->clear();
+        ui->firstInteractor2->clear();
+        ui->secondInteractor2->clear();
+        ui->humanSynthesis->clear();
+        ui->comboLevel->setCurrentIndex(-1);
+        ui->createdOn->clear();
+        ui->updatedOn->clear();
+        ui->isReviewed->setChecked(false);
+        ui->risk->clear();
+        ui->risk_en->clear();
+        ui->management->clear();
+        ui->management_en->clear();
+        // ui->formRiskTableView->clear();
+        // ui->bilbioTableView->setEnabled(state);
+        // ui->listViewFirstInteractorRoute->setEnabled(state);
+        // ui->listViewSecondInteractorRoute->setEnabled(state);
+        ui->firstDoseUsesFrom->setChecked(false);
+        ui->firstDoseUsesTo->setChecked(false);
+        ui->firstDoseFromValue->clear();
+        ui->firstDoseFromUnits->setCurrentIndex(-1);
+        ui->firstDoseFromRepart->setCurrentIndex(-1);
+        ui->firstDoseToValue->clear();
+        ui->firstDoseToUnits->setCurrentIndex(-1);
+        ui->firstDoseToRepart->setCurrentIndex(-1);
+        ui->secondDoseUsesFrom->setChecked(false);
+        ui->secondDoseUsesTo->setChecked(false);
+        ui->secondDoseFromValue->setEnabled(state);
+        ui->secondDoseFromUnits->setCurrentIndex(-1);
+        ui->secondDoseFromRepart->setCurrentIndex(-1);
+        ui->secondDoseToValue->clear();
+        ui->secondDoseToUnits->setCurrentIndex(-1);
+        ui->secondDoseToRepart->setCurrentIndex(-1);
     }
 
 public:
@@ -362,7 +404,6 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
     dlg.setAllowMultipleSelection(2);
     dlg.initialize();
     if (dlg.exec() == QDialog::Accepted) {
-        qWarning() << dlg.selectedInteractors();
         if (dlg.selectedInteractors().count() != 2)
             return;
         first = dlg.selectedInteractors().at(0);
@@ -370,6 +411,8 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
     }
     if (first.first.isEmpty() || second.first.isEmpty())
         return;
+
+    // TODO: Ask for the level
 
     // Ask for a confirmation
     bool yes = Utils::yesNoMessageBox(tr("Do you really want to create the following drug-drug interaction:<br />"
@@ -379,17 +422,32 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
     if (!yes)
         return;
 
-//    ddi.setData(DrugDrugInteraction::SecondInteractorName, second);
-//    ddi.setData(DrugDrugInteraction::DateCreation, QDate::currentDate());
-//    ddi.setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
+    DrugDrugInteractionTableModel *model = ddiCore()->drugDrugInteractionTableModel();
+    int row = 0;
+    if (!model->insertRow(row)) {
+        LOG_ERROR("Unable to create a new DDI");
+        return;
+    }
 
-//    if (!d->m_DDIModel->addDrugDrugInteraction(ddi))
-//        LOG_ERROR(QString("Unable to add the DDI: %1 <-> %2").arg(ddi.firstInteractor()));
+    QModelIndex f = model->index(row, DrugDrugInteractionTableModel::FirstInteractorUid);
+    QModelIndex s = model->index(row, DrugDrugInteractionTableModel::SecondInteractorUid);
+    model->setData(f, first.first);
+    model->setData(s, second.first);
+    if (!model->submitAll()) {
+        LOG_ERROR("Unable to create a new DDI");
+        return;
+    }
 
-//    // select the first interactor in the view
-//    d->ui->searchLine->setText(first);
-//    filterDrugDrugInteractionTableModel(first);
-//    LOG(tr("Interaction added: %1 - %2").arg(first).arg(second));
+    // When model is submitted we need to re-fetch all rows
+    model->initialize();
+    // the last inserted row is the last row of unsorted the model
+    f = model->index(model->rowCount() - 1, DrugDrugInteractionTableModel::FirstInteractorUid);
+
+    // Select newly created interaction in the view
+    d->ui->searchLine->setText("");
+    filterDrugDrugInteractionTableModel("");
+    d->ui->tableView->selectRow(d->m_DDIProxyModel->mapFromSource(f).row());
+    interactionActivated(d->m_DDIProxyModel->mapFromSource(f));
 }
 
 /** Filter the DDI model with the search terms \e filter */
@@ -398,6 +456,7 @@ void DrugDrugInteractionEditorWidget::filterDrugDrugInteractionTableModel(const 
     d->m_DDIProxyModel->setFilterRole(Qt::DisplayRole);
     d->m_DDIProxyModel->setFilterKeyColumn(DrugDrugInteractionTableModel::FirstInteractorUid);
     d->m_DDIProxyModel->setFilterFixedString(filter);
+    d->m_DDIProxyModel->sort(DrugDrugInteractionTableModel::FirstInteractorUid);
 }
 
 /** Edit the current selected DDI */
@@ -413,7 +472,7 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
 {
     if (d->m_EditingIndex==index)
         return;
-
+    d->clearUi();
     d->aEdit->setEnabled(true);
     d->aSave->setEnabled(true);
     d->aTranslateThis->setEnabled(true);
@@ -432,19 +491,6 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
     setEditorsEnabled(false);
 
     d->m_Mapper->setCurrentModelIndex(index);
-
-    // set data
-    // manage a OSX bug with checkboxes in mappers
-//    QModelIndex rev = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::IsReviewedCheckState, index.parent());
-//    d->ui->isReviewed->setChecked(rev.data().toBool());
-//    QModelIndex dose1from = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstDoseUseFrom, index.parent());
-//    d->ui->firstDoseUsesFrom->setChecked(dose1from.data().toBool());
-//    QModelIndex dose1to = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::FirstDoseUsesTo, index.parent());
-//    d->ui->firstDoseUsesTo->setChecked(dose1to.data().toBool());
-//    QModelIndex dose2from = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondDoseUseFrom, index.parent());
-//    d->ui->secondDoseUsesFrom->setChecked(dose2from.data().toBool());
-//    QModelIndex dose2to = d->m_DDIModel->index(index.row(), DrugDrugInteractionTableModel::SecondDoseUsesTo, index.parent());
-//    d->ui->secondDoseUsesTo->setChecked(dose2to.data().toBool());
 
     // manage routes of interactors
 //    d->firstInteractorRoutes->clear();
