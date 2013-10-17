@@ -217,6 +217,8 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     setObjectName("DrugInteractorTableModel");
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_INTERACTORS));
+    d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
 }
 
 DrugInteractorTableModel::~DrugInteractorTableModel()
