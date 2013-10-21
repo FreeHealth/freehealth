@@ -86,12 +86,12 @@ CoreImpl::CoreImpl(QObject *parent) :
     setObjectName("FreeDDIManager::Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDDIMANAGER_UPDATE_URL);
-    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEDRC_SPLASHSCREEN);
+    m_Settings->setPath(ISettings::SplashScreen, Constants::FREEDDIMANAGER_SPLASHSCREEN);
 
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
 
-    m_Theme->createSplashScreen(Constants::FREEDRC_SPLASHSCREEN);
+    m_Theme->createSplashScreen(Constants::FREEDDIMANAGER_SPLASHSCREEN);
 
     m_Patient = new Patient(this);
 
