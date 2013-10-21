@@ -25,11 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "routesmodel.h"
-#include <drugsdb/tools.h>
+#include <ddiplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/ftb_constants.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -37,13 +36,19 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
-using namespace DrugsDB;
+using namespace DDI;
+using namespace Internal;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 namespace {
 const int ALL_IV_ID = 100001;
 const int ALL_ORAL_ID = 100002;
+
+QString routeCsvAbsoluteFile()
+{
+    return QString(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ROUTES_CSV_FILENAME);
+}
 }
 
 bool Internal::Route::operator<(const Internal::Route &second) const
@@ -53,7 +58,8 @@ bool Internal::Route::operator<(const Internal::Route &second) const
 }
 
 RoutesModel::RoutesModel(QObject *parent) :
-    QAbstractTableModel(parent)
+    QAbstractTableModel(parent),
+    _initialized(false)
 {
     // Read file
     QString content = Utils::readTextFile(routeCsvAbsoluteFile());
@@ -111,15 +117,14 @@ RoutesModel::RoutesModel(QObject *parent) :
 RoutesModel::~RoutesModel()
 {}
 
-/** Return the absolute path to the CSV route text file using the Core::ISettings::value() of Core::Constants::S_GITFILES_PATH. */
-QString RoutesModel::routeCsvAbsoluteFile()
+bool RoutesModel::initialize()
 {
-    return settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
-            QString(Core::Constants::FILE_DRUGS_ROUTES);
+    if (_initialized)
+        return true;
+    // TODO: read database content
+    _initialized = true;
+    return true;
 }
-
-void RoutesModel::initialize()
-{}
 
 void RoutesModel::clear()
 {
@@ -263,7 +268,7 @@ QList<int> RoutesModel::routeId(const QStringList &routeName) const
     return ids;
 }
 
-QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route)
+QDebug operator<<(QDebug debug, const DDI::Internal::Route &route)
 {
     debug.nospace() << "Route(" << route.id << "," << route.trLabels << ")";
     return debug.nospace();

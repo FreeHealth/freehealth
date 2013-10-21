@@ -31,6 +31,7 @@ HEADERS += \
     ddi/drugdruginteraction.h \
     ddi/drugdruginteractiontablemodel.h \
     ddi/drugdruginteractioneditorwidget.h \
+    routes/routesmodel.h \
 
 
 SOURCES += \
@@ -54,6 +55,7 @@ SOURCES += \
     ddi/drugdruginteraction.cpp \
     ddi/drugdruginteractiontablemodel.cpp \
     ddi/drugdruginteractioneditorwidget.cpp \
+    routes/routesmodel.cpp \
 
 
 FORMS += \

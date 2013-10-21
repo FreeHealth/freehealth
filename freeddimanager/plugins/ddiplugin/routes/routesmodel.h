@@ -24,15 +24,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ROUTESMODEL_H
-#define ROUTESMODEL_H
+#ifndef DDIMANAGER_DDIPLUGIN_ROUTESMODEL_H
+#define DDIMANAGER_DDIPLUGIN_ROUTESMODEL_H
 
 #include <QAbstractTableModel>
 #include <QMultiHash>
 #include <QString>
 #include <QList>
 
-namespace DrugsDB {
+namespace DDI {
 namespace Internal {
 
 struct Route {
@@ -64,9 +64,7 @@ public:
     RoutesModel(QObject *parent = 0);
     ~RoutesModel();
 
-    static QString routeCsvAbsoluteFile();
-
-    void initialize();
+    bool initialize();
     void clear();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -85,12 +83,13 @@ public:
     QList<int> routeId(const QStringList &routeName) const;
 
 private:
+    bool _initialized;
     QList<Internal::Route> m_Routes;
     QList<int> m_CheckedIds;
 };
 
-}  // End namespace DrugsDB
+}  // End namespace DDI
 
-QDebug operator<<(QDebug debug, const DrugsDB::Internal::Route &route);
+QDebug operator<<(QDebug debug, const DDI::Internal::Route &route);
 
-#endif // ROUTESMODEL_H
+#endif // DDIMANAGER_DDIPLUGIN_ROUTESMODEL_H
