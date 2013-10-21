@@ -31,6 +31,7 @@ HEADERS += \
     ddi/drugdruginteraction.h \
     ddi/drugdruginteractiontablemodel.h \
     ddi/drugdruginteractioneditorwidget.h \
+    ddi/drugdruginteractionsortfilterproxymodel.h \
     routes/routesmodel.h \
 
 
@@ -55,6 +56,7 @@ SOURCES += \
     ddi/drugdruginteraction.cpp \
     ddi/drugdruginteractiontablemodel.cpp \
     ddi/drugdruginteractioneditorwidget.cpp \
+    ddi/drugdruginteractionsortfilterproxymodel.cpp \
     routes/routesmodel.cpp \
 
 

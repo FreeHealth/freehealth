@@ -444,7 +444,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="generalGroupBox">
          <property name="title">
-          <string>GroupBox</string>
+          <string>General information</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <property name="margin">
@@ -461,7 +461,7 @@
            </widget>
           </item>
           <item row="2" column="2" rowspan="2">
-           <widget class="QTextBrowser" name="humanSynthesis">
+           <widget class="QTextBrowser" name="overview">
             <property name="maximumSize">
              <size>
               <width>16777215</width>

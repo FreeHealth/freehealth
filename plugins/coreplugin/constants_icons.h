@@ -76,6 +76,7 @@ const char * const  ICONMOVEUPLIGHT=   "arrowuplight.png";
 const char * const  ICONMOVEDOWNLIGHT= "arrowdownlight.png";
 const char * const  ICONPROCESS=       "run.png";
 const char * const  ICONSPINNER=       "spinner.gif";
+const char * const  ICONSPLITFILE =    "splitfile.png";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";
