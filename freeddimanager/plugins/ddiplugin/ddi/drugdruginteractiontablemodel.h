@@ -123,7 +123,8 @@ public:
     static QString repartition(int index);
     bool isMultiLevel(int row) const;
     bool splitMultiLevel(int row);
-    bool isUntranslated(int row);
+    bool isUntranslated(int row) const;
+    QString humanReadableDrugDrugInteractionOverView(int row) const;
 
     int numberOfUnreviewed() const;
 

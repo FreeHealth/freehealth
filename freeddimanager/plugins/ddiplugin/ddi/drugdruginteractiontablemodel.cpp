@@ -33,6 +33,8 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QFont>
 #include <QLocale>
@@ -83,9 +85,9 @@ public:
         case DrugDrugInteractionTableModel::FirstInteractorUid: sql = Constants::DDI_FIRSTINTERACTORUID; break;
         case DrugDrugInteractionTableModel::SecondInteractorUid: sql = Constants::DDI_SECONDINTERACTORUID; break;
         case DrugDrugInteractionTableModel::IsReviewed: sql = Constants::DDI_ISREVIEWED; break;
-        case DrugDrugInteractionTableModel::LevelCode: sql = Constants::DDI_LEVELCODE; break;
-        //case DrugDrugInteractionTableModel::LevelName: sql = Constants::INTERACTOR_ISVALID; break;
-        //case DrugDrugInteractionTableModel::LevelComboIndex: sql = Constants::INTERACTOR_ISVALID; break;
+        case DrugDrugInteractionTableModel::LevelCode:
+        case DrugDrugInteractionTableModel::LevelName:
+        case DrugDrugInteractionTableModel::LevelComboIndex: sql = Constants::DDI_LEVELCODE; break;
         case DrugDrugInteractionTableModel::DateCreation: sql = Constants::DDI_DATECREATION; break;
         case DrugDrugInteractionTableModel::DateLastUpdate: sql = Constants::DDI_DATELASTUPDATE; break;
         case DrugDrugInteractionTableModel::RiskFr: sql = Constants::DDI_RISKFR; break;
@@ -138,6 +140,32 @@ public:
             return "450";
 
         return levelCode.at(0);
+    }
+
+    QString levelName(QString levelCode)
+    {
+        QString level = firstLevelCode(levelCode);
+        QStringList names;
+        while (!level.isEmpty()) {
+            if (level == "C")
+                names << tkTr(Trans::Constants::CONTRAINDICATION);
+            else if (level == "D")
+                names << tkTr(Trans::Constants::DISCOURAGED);
+            else if (level == "450")
+                names << tkTr(Trans::Constants::P450_IAM);
+            else if (level == "Y")
+                names << tkTr(Trans::Constants::GPG_IAM);
+            else if (level == "T")
+                names << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
+            else if (level == "P")
+                names << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+            else if (level == "I")
+                names << tkTr(Trans::Constants::INFORMATION);
+
+            level = levelCode.remove(0, level.size());
+            level = firstLevelCode(level);
+        }
+        return names.join(", ");
     }
 
 public:
@@ -222,6 +250,8 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
         }
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         switch (index.column()) {
+        case LevelName: return d->levelName(d->_sql->data(sqlIndex).toString());
+        case LevelComboIndex: return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
         case PMIDStringList: return d->_sql->data(sqlIndex, role).toString().split(";");
         default: return d->_sql->data(sqlIndex, role);
         }
@@ -441,32 +471,24 @@ bool DrugDrugInteractionTableModel::splitMultiLevel(int row)
 }
 
 /** Returns true is the DDI miss at least one translation */
-bool DrugDrugInteractionTableModel::isUntranslated(int row)
+bool DrugDrugInteractionTableModel::isUntranslated(int row) const
 {
     QModelIndex riskFr = index(row, RiskFr);
     QModelIndex riskEn = index(row, RiskEn);
     QModelIndex managementFr = index(row, ManagementFr);
     QModelIndex managementEn = index(row, ManagementEn);
-    return (riskFr.data().toString().size() != riskEn.data().toString().size() ||
-            managementFr.data().toString().size() != managementEn.data().toString().size());
-}
-
-/** Returns the number of unreviewed DDI::DrugInteractor from the database. */
-int DrugDrugInteractionTableModel::numberOfUnreviewed() const
-{
-    // directly ask the database instead of screening the model
-    QHash<int, QString> where;
-    where.insert(Constants::DDI_ISREVIEWED, "=0");
-    return ddiBase().count(Constants::Table_DDI, Constants::DDI_ID, ddiBase().getWhereClause(Constants::Table_DDI, where));
+    return (riskFr.data().toString().isEmpty() != riskEn.data().toString().isEmpty() ||
+            managementFr.data().toString().isEmpty() != managementEn.data().toString().isEmpty());
 }
 
 /** */
-QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(int row)
+QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(int row) const
 {
     QString tmp;
-    tmp += QString("<span style=\"color:#980000\"><b>%1 / %2</b> <br />%3</span><br />"
-                   "<br /><span style=\"color:#0033CC\"><u>Risk:</u> %4</span><br />"
-                   "<br /><span style=\"color:#336600\"><u>Management:</u> %5</span><br />")
+    tmp += QString("<b>%1 / %2</b><br />"
+                   "<b>%3</b><br />"
+                   "<u>Risk:</u> %4<br />"
+                   "<u>Management:</u> %5<br />")
             .arg(data(index(row, FirstInteractorUid)).toString())
             .arg(data(index(row, SecondInteractorUid)).toString())
             .arg(data(index(row, LevelName)).toString())
@@ -517,40 +539,55 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
     //        }
     //    dose.clear();
     const QStringList &pmids = data(index(row, PMIDStringList)).toStringList();
-    QString pmidText;
+    QStringList pmidText;
     if (pmids.count() > 0) {
         if (!pmids.at(0).isEmpty()) {
-            foreach(const QString &pmid, pmids) {
-                pmidText += QString("<br />* PMID: <a href=\"http://www.ncbi.nlm.nih.gov/pubmed/%1\">%1</a>").arg(pmid);
-            }
+            foreach(const QString &pmid, pmids)
+                pmidText << QString("<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/%1\">%1</a>").arg(pmid);
         }
     }
     if (!pmidText.isEmpty())
-        tmp += QString("<br /><span style=\"color:#003333\"><u>Bibliography:</u> %1</span><br />").arg(pmidText);
+        tmp += QString("<span style=\"color:#003333\"><b>%1</b><ul><li>%2</li></ul></span><br />")
+                .arg(tr("Bibliography:"))
+                .arg(pmidText.join("</li><li>"));
 
     // Check DDI
     // ---> IsReviewed?
     QStringList errors;
-    if (!data(index(row, IsReviewed)).toBool()) {
+    if (index(row, DrugDrugInteractionTableModel::RiskEn).data().toString().isEmpty()
+            && index(row, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty())
+        errors << QString("Needs a risk definition");
+    if (!data(index(row, IsReviewed)).toBool())
         errors << QString("Needs a review");
-    }
-    if (!isMultiLevel(row)) {
-        errors << QString("Multi-interaction level: needs to be splitted into multiple interactions");
-    }
-    if (!isUntranslated(row)) {
+    if (isMultiLevel(row))
+        errors << QString("Multi-interaction level");
+    if (isUntranslated(row))
         errors << QString("Needs translations");
-    }
+    if (pmidText.isEmpty())
+        errors << QString("Needs bibliographic references");
+    tmp = QString("<table border=0><tr><td>%1").arg(tmp);
     if (errors.isEmpty())
-        tmp += QString("<br /><span style=\"color:#FF2020\">%1</span><br />").arg(tr("Interaction looks sane"));
+        tmp += QString("</td><td>%1</td>")
+                .arg(tr("Interaction looks sane"));
     else
-        tmp += QString("<br /><span style=\"color:#FF2020\"><ul>%1<li>%2</li></ul></span>")
+        tmp += QString("</td><td style=\"color: marroon;\">%1<ul><li>%2</li></ul></td>")
                 .arg(tr("Interaction errors:"))
                 .arg(errors.join("</li><li>"));
+    tmp += "</tr></table>";
 
-    tmp.chop(6);
     return tmp;
 
 }
+
+/** Returns the number of unreviewed DDI::DrugInteractor from the database. */
+int DrugDrugInteractionTableModel::numberOfUnreviewed() const
+{
+    // directly ask the database instead of screening the model
+    QHash<int, QString> where;
+    where.insert(Constants::DDI_ISREVIEWED, "=0");
+    return ddiBase().count(Constants::Table_DDI, Constants::DDI_ID, ddiBase().getWhereClause(Constants::Table_DDI, where));
+}
+
 
 /** Submit changes directly to the database */
 bool DrugDrugInteractionTableModel::submitAll()
