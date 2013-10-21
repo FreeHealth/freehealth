@@ -121,6 +121,9 @@ public:
     static QStringList repartitions();
     static QString unit(int index);
     static QString repartition(int index);
+    bool isMultiLevel(int row) const;
+    bool splitMultiLevel(int row);
+    bool isUntranslated(int row);
 
     int numberOfUnreviewed() const;
 

@@ -55,6 +55,7 @@ protected Q_SLOTS:
     void interactionActivated(const QModelIndex &index);
     void save();
     void removeCurrent();
+    void onNextActionTriggered(QAction*);
     void translateCurrent();
     void translateAll();
     void splitCurrent();

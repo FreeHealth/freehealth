@@ -59,6 +59,14 @@ public:
         q(parent)
     {
         Q_UNUSED(q);
+        // Be aware that DrugDrugInteractionEditorWidget ui->comboLevel must be sync with this part !!!
+        _levelsToComboIndex.insert("C", 0);
+        _levelsToComboIndex.insert("D", 1);
+        _levelsToComboIndex.insert("450", 2);
+        _levelsToComboIndex.insert("Y", 3);
+        _levelsToComboIndex.insert("T", 4);
+        _levelsToComboIndex.insert("P", 5);
+        _levelsToComboIndex.insert("I", 6);
     }
 
     ~DrugDrugInteractionTableModelPrivate()
@@ -110,8 +118,31 @@ public:
         return sql;
     }
 
+    int numberOfLevels(const QString &levelCode)
+    {
+        int n = 0;
+        foreach(const QString &level, _levelsToComboIndex.uniqueKeys())
+            if (levelCode.contains(level))
+                ++n;
+        return n;
+    }
+
+    QString firstLevelCode(const QString &levelCode)
+    {
+        // Assuming that levels are one char excepts cytochrome p450 DDI,
+        // We just have to return the first char of the \e levelCode or "450"
+        if (levelCode.isEmpty())
+            return QString();
+
+        if (levelCode.at(0).isDigit())
+            return "450";
+
+        return levelCode.at(0);
+    }
+
 public:
     QSqlTableModel *_sql;
+    QHash<QString, int> _levelsToComboIndex;
 
 private:
     DrugDrugInteractionTableModel *q;
@@ -119,7 +150,10 @@ private:
 }  // End namespace Internal
 }  // End namespace DDI
 
-
+/**
+ * Creates a Drug-drug interaction table model database wrapper.
+ * The model is empty, you can populate it using intialize()
+ */
 DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     QAbstractTableModel(parent),
     d(new Internal::DrugDrugInteractionTableModelPrivate(this))
@@ -128,6 +162,7 @@ DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_DDI));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    d->_sql->setSort(FirstInteractorUid, Qt::AscendingOrder);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
 }
@@ -180,20 +215,16 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
     // TODO: FIRST/SECOND interactors are UID not LABELS ==> Get the label of the interactors
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         if (index.column() == LevelComboIndex) {
-            // Be aware that DrugDrugInteractionEditorWidget ui->comboLevel must be sync with this part !!!
             QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::DDI_LEVELCODE);
             QString levelCode = d->_sql->data(sqlIndex).toString();
-            if (levelCode=="C")   return 0;
-            if (levelCode=="D")   return 1;
-            if (levelCode=="450") return 2;
-            if (levelCode=="Y")   return 3;
-            if (levelCode=="T")   return 4;
-            if (levelCode=="P")   return 5;
-            if (levelCode=="I")   return 6;
-            return -1;
+            // TODO: how to manage multilevels DDI?
+            return d->_levelsToComboIndex.value(levelCode, -1);
         }
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
-        return d->_sql->data(sqlIndex, role);
+        switch (index.column()) {
+        case PMIDStringList: return d->_sql->data(sqlIndex, role).toString().split(";");
+        default: return d->_sql->data(sqlIndex, role);
+        }
 //    } else if (role == Qt::FontRole) {
 //        QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ISCLASS);
 //        if (d->_sql->data(sqlIndex).toBool()) {
@@ -224,9 +255,11 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
         case IsReviewed:
             ok = d->_sql->setData(sqlIndex, value.toBool()?1:0, role);
             break;
+        case PMIDStringList:
+            ok = d->_sql->setData(sqlIndex, value.toStringList().join(";"), role);
+            break;
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
-        qWarning() << index.isValid() << sqlIndex.isValid() << value;
         return ok;
     }
     return false;
@@ -353,6 +386,70 @@ QString DrugDrugInteractionTableModel::repartition(int index)
     return QString();
 }
 
+/**
+ * Returns true if the DDI at row \e row is a multi-level DDI. You can then split this DDI
+ * into severals ones (with one unique level) using splitMultiLevel().
+ */
+bool DrugDrugInteractionTableModel::isMultiLevel(int row) const
+{
+    QModelIndex index = this->index(row, LevelCode);
+    return (d->numberOfLevels(index.data().toString()) > 1);
+}
+
+/** Splits a single multi-level DDI into multiple DDI with a single level */
+bool DrugDrugInteractionTableModel::splitMultiLevel(int row)
+{
+    if (!isMultiLevel(row))
+        return false;
+
+    while (isMultiLevel(row)) {
+        // Compute the LevelCode of both DDI
+        QModelIndex fromLevelCode = index(row, LevelCode);
+        QString fromLevel = fromLevelCode.data().toString();
+        QString newDDILevel = d->firstLevelCode(fromLevel);
+        setData(fromLevelCode, fromLevel.remove(0, newDDILevel.size()));
+
+        // Create a QSqlQuery with an insert method
+        QSqlQuery query(ddiBase().database());
+        QString req = ddiBase().prepareInsertQuery(Constants::Table_DDI);
+        query.prepare(req);
+        for(int i=0; i < Constants::DDI_MaxParam; ++i) {
+            QModelIndex fromIndex = index(row, i);
+            query.bindValue(i, d->_sql->data(fromIndex));
+        }
+        query.bindValue(Constants::DDI_ID, QVariant());
+        query.bindValue(Constants::DDI_UID, Utils::createUid());
+        query.bindValue(Constants::DDI_LEVELCODE, newDDILevel);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            ddiBase().database().rollback();
+            return false;
+        }
+    }
+
+    // Submit the new DDI level
+    if (!d->_sql->submitAll()) {
+        LOG_ERROR("Unable to submit DDI");
+        return false;
+    }
+
+    // Reset the model
+    initialize();
+
+    return true;
+}
+
+/** Returns true is the DDI miss at least one translation */
+bool DrugDrugInteractionTableModel::isUntranslated(int row)
+{
+    QModelIndex riskFr = index(row, RiskFr);
+    QModelIndex riskEn = index(row, RiskEn);
+    QModelIndex managementFr = index(row, ManagementFr);
+    QModelIndex managementEn = index(row, ManagementEn);
+    return (riskFr.data().toString().size() != riskEn.data().toString().size() ||
+            managementFr.data().toString().size() != managementEn.data().toString().size());
+}
 
 /** Returns the number of unreviewed DDI::DrugInteractor from the database. */
 int DrugDrugInteractionTableModel::numberOfUnreviewed() const
@@ -361,6 +458,98 @@ int DrugDrugInteractionTableModel::numberOfUnreviewed() const
     QHash<int, QString> where;
     where.insert(Constants::DDI_ISREVIEWED, "=0");
     return ddiBase().count(Constants::Table_DDI, Constants::DDI_ID, ddiBase().getWhereClause(Constants::Table_DDI, where));
+}
+
+/** */
+QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(int row)
+{
+    QString tmp;
+    tmp += QString("<span style=\"color:#980000\"><b>%1 / %2</b> <br />%3</span><br />"
+                   "<br /><span style=\"color:#0033CC\"><u>Risk:</u> %4</span><br />"
+                   "<br /><span style=\"color:#336600\"><u>Management:</u> %5</span><br />")
+            .arg(data(index(row, FirstInteractorUid)).toString())
+            .arg(data(index(row, SecondInteractorUid)).toString())
+            .arg(data(index(row, LevelName)).toString())
+            .arg(data(index(row, RiskFr)).toString())
+            .arg(data(index(row, ManagementFr)).toString());
+
+    // dose related ?
+    //    QString dose;
+    //    if (ddi->firstInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()) {
+    //        dose += QString("<br />* From: %1 %2 %3 <br />")
+    //                .arg(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromValue).toString())
+    //                .arg(DrugDrugInteractionModel::unit(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromUnits).toInt()))
+    //                .arg(DrugDrugInteractionModel::repartition(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromRepartition).toInt()));
+    //    }
+    //    if (ddi->firstInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()) {
+    //        dose += QString("<br />* To: %1 %2 %3 <br />")
+    //                .arg(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToValue).toString())
+    //                .arg(DrugDrugInteractionModel::unit(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToUnits).toInt()))
+    //                .arg(DrugDrugInteractionModel::repartition(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToRepartition).toInt()));
+    //    }
+    //    if (!dose.isEmpty()) {
+    //        tmp += QString("<br /><span style=\"color:#666600\"><u>First Molecule Dose:</u> %1</span><br />").arg(dose);
+    //        dose.clear();
+    //    }
+    //    if (ddi->secondInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()) {
+    //        dose += QString("* From: %1 %2 %3 <br />")
+    //                .arg(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromValue).toString())
+    //                .arg(DrugDrugInteractionModel::unit(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromUnits).toInt()))
+    //                .arg(DrugDrugInteractionModel::repartition(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromRepartition).toInt()));
+    //    }
+    //    if (ddi->secondInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()) {
+    //        dose += QString("* To: %1 %2 %3 <br />")
+    //                .arg(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToValue).toString())
+    //                .arg(DrugDrugInteractionModel::unit(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToUnits).toInt()))
+    //                .arg(DrugDrugInteractionModel::repartition(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToRepartition).toInt()));
+    //    }
+    //    if (!dose.isEmpty()) {
+    //        tmp += QString("<br /><span style=\"color:#666600\"><u>Second Molecule Dose:</u> %1</span><br />").arg(dose);
+    //        dose.clear();
+    //    }
+    //        dose.clear();
+    //        const QStringList &routes = ddi->data(DrugDrugInteractionModel::FirstInteractorRouteOfAdministrationIds).toStringList();
+    //        if (routes.count() > 0) {
+    //            if (!routes.at(0).isEmpty()) {
+    //                dose += QString("* Routes: %1<br />")
+    //                        .arg(routes.join(";"));
+    //            }
+    //        }
+    //    dose.clear();
+    const QStringList &pmids = data(index(row, PMIDStringList)).toStringList();
+    QString pmidText;
+    if (pmids.count() > 0) {
+        if (!pmids.at(0).isEmpty()) {
+            foreach(const QString &pmid, pmids) {
+                pmidText += QString("<br />* PMID: <a href=\"http://www.ncbi.nlm.nih.gov/pubmed/%1\">%1</a>").arg(pmid);
+            }
+        }
+    }
+    if (!pmidText.isEmpty())
+        tmp += QString("<br /><span style=\"color:#003333\"><u>Bibliography:</u> %1</span><br />").arg(pmidText);
+
+    // Check DDI
+    // ---> IsReviewed?
+    QStringList errors;
+    if (!data(index(row, IsReviewed)).toBool()) {
+        errors << QString("Needs a review");
+    }
+    if (!isMultiLevel(row)) {
+        errors << QString("Multi-interaction level: needs to be splitted into multiple interactions");
+    }
+    if (!isUntranslated(row)) {
+        errors << QString("Needs translations");
+    }
+    if (errors.isEmpty())
+        tmp += QString("<br /><span style=\"color:#FF2020\">%1</span><br />").arg(tr("Interaction looks sane"));
+    else
+        tmp += QString("<br /><span style=\"color:#FF2020\"><ul>%1<li>%2</li></ul></span>")
+                .arg(tr("Interaction errors:"))
+                .arg(errors.join("</li><li>"));
+
+    tmp.chop(6);
+    return tmp;
+
 }
 
 /** Submit changes directly to the database */
