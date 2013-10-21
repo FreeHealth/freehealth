@@ -66,6 +66,7 @@ const char * const ROUTES_CSV_FILENAME                      = "/sql/drugdb/route
 // Database
 enum Tables {
     Table_ATC = 0,
+    Table_ROUTES,
     Table_INTERACTORS,
     Table_DDI,
     Table_CURRENTVERSION
@@ -83,6 +84,14 @@ enum TableATC_Fields {
     ATC_WHOYEARUPDATE,
     ATC_COMMENT,
     ATC_MaxParams
+};
+
+enum TableRoutes_Fields {
+    ROUTES_ID = 0,
+    ROUTES_FR,  // Labels can contain stringlists
+    ROUTES_EN,  // Labels can contain stringlists
+    ROUTES_DE,  // Labels can contain stringlists
+    ROUTES_ISSYSTEMIC
 };
 
 enum TableInteractors_Fields {

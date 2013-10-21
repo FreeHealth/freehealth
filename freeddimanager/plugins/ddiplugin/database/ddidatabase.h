@@ -56,6 +56,7 @@ public:
     int insertAtcDataFromCsv(const QString &fileName);
     int insertDrugInteractorsDataFromXml(const QString &fileName);
     int insertDrugDrugInteractionDataFromXml(const QString &fileName);
+    int insertRoutesDataFromCsvRawFile(const QString &fileName);
 
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,

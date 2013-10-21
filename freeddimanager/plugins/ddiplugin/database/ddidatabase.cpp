@@ -28,6 +28,7 @@
 #include <ddiplugin/constants.h>
 #include <ddiplugin/interactors/druginteractor.h>
 #include <ddiplugin/ddi/drugdruginteraction.h>
+#include <ddiplugin/routes/routesmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -96,6 +97,13 @@ DDIDatabase::DDIDatabase():
     addField(Table_ATC, ATC_PREVIOUSCODE, "PREVCODE", FieldIsShortText);
     addField(Table_ATC, ATC_WHOYEARUPDATE, "WHOYEAR", FieldIsDate);
     addField(Table_ATC, ATC_COMMENT, "COMMENT", FieldIsShortText);
+
+    addTable(Table_ROUTES, "ROUTES");
+    addField(Table_ROUTES, ROUTES_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_ROUTES, ROUTES_FR, "FR", FieldIsLongText);
+    addField(Table_ROUTES, ROUTES_EN, "EN", FieldIsLongText);
+    addField(Table_ROUTES, ROUTES_DE, "DE", FieldIsLongText);
+    addField(Table_ROUTES, ROUTES_ISSYSTEMIC, "SYS", FieldIsBoolean);
 
     addTable(Table_INTERACTORS, "INTERACTORS");
     addField(Table_INTERACTORS, INTERACTOR_ID, "ID", FieldIsUniquePrimaryKey);
@@ -281,6 +289,7 @@ bool DDIDatabase::checkDatabaseVersion() const
     return (version()==::CURRENTVERSION);
 }
 
+/** Return the ATC label corresponding to the ATC \e code and for the specified \e lang */
 QString DDIDatabase::atcLabelForCode(const QString &code, const QString &lang) const
 {
     QSqlDatabase DB = QSqlDatabase::database(connectionName());
@@ -553,6 +562,100 @@ int DDIDatabase::insertDrugDrugInteractionDataFromXml(const QString &fileName)
     return n;
 }
 
+/**
+ * Read the raw routes file and populate the database with its data.
+ * Returns the number of routes inserted. \n
+ * \note The raw file is not included in the git repository, you should ask the mailing list freemedforms-dev@googlegroups.com for it.
+ */
+int DDIDatabase::insertRoutesDataFromCsvRawFile(const QString &fileName)
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return 0;
+
+    // Check file
+    if (!QFile(fileName).exists()) {
+        LOG_ERROR_FOR("DDIDatabase", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        return 0;
+    }
+
+    // Clean Routes table from old values
+    QString req = prepareDeleteQuery(Constants::Table_ROUTES);
+    if (!executeSQL(req, DB))
+        LOG_ERROR_FOR("DDIDatabase", "Unable to clear old DrugInteractor data");
+
+    // Read file
+//    DB.transaction();
+//    QSqlQuery query(DB);
+//    QString content = Utils::readTextFile(fileName);
+//    if (content.isEmpty()) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(fileName));
+//        return 0;
+//    }
+
+//    foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
+//        if (line.startsWith("--"))
+//            continue;
+//        QMultiHash<QString, QString> labels;
+//        int id = 0;
+//        foreach(QString value, line.split(",")) {
+//            value = value.trimmed();
+//            if (id==0) {
+//                id = value.toInt();
+//                ++id;
+//                continue;
+//            }
+//            ++id;
+//            value = value.remove("\"");
+//            int sep = value.indexOf(":");
+//            QString lang = value.left(sep);
+//            if (lang.compare("systemic") != 0) {
+//                route.trLabels.insertMulti(lang, value.mid(sep + 1));
+//            }
+//        }
+//    query.prepare(prepareInsertQuery(Constants::Table_INTERACTORS));
+//    query.bindValue(Constants::INTERACTOR_ID, QVariant());
+//        route.checkState = Qt::Unchecked;
+//        m_Routes.append(route);
+//    }
+//    qSort(m_Routes);
+//    if (!query.exec()) {
+//        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+//        query.finish();
+//        DB.rollback();
+//        return false;
+//    }
+//    ++n;
+//    if (n % 250) {
+//        DB.commit();
+//        DB.transaction();
+//    }
+//    query.finish();
+//}
+//DB.commit();
+//return n;
+//    // add helpers
+//    Internal::Route allIv;
+//    allIv.id = ALL_IV_ID;
+//    allIv.isHelper = true;
+//    allIv.trLabels.insert("fr", "Toutes les voies intra-veineuses");
+//    allIv.trLabels.insert("en", "All intraveinous routes");
+//    allIv.trLabels.insert("de", "All intraveinous routes");
+//    allIv.checkState = Qt::Unchecked;
+//    m_Routes.prepend(allIv);
+//    Internal::Route allOral;
+//    allOral.id = ALL_ORAL_ID;
+//    allOral.isHelper = true;
+//    allOral.trLabels.insert("fr", "Toutes les voies orales");
+//    allOral.trLabels.insert("en", "All oral routes");
+//    allOral.trLabels.insert("de", "All oral routes");
+//    allOral.checkState = Qt::Unchecked;
+//    m_Routes.prepend(allOral);
+
+    return 0;
+}
+
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
@@ -602,8 +705,8 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
 
     // Insert raw data & version
     setVersion(::CURRENTVERSION);
-//    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
-//    insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
+    insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
+    insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
     insertDrugDrugInteractionDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTIONS_XML_FILENAME);
 
     // database is readable/writable
