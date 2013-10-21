@@ -67,6 +67,7 @@ private Q_SLOTS:
     void toggleDataMapperEnabled();
     void submitDataMapper();
     void restoreDataMapper();
+    void onNewItemRequested();
 
 private:
     void retranslateUi();

@@ -80,8 +80,10 @@ public:
         _proxyModel(0),
         _atcTreeProxyModel(0),
         _left(0),
+        _right(0),
         aSearchEnglish(0),
         aSearchCode(0),
+        aNewItem(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -96,8 +98,9 @@ public:
     Ui::AtcCollectionEditorWidget *ui;
     TreeProxyModel *_proxyModel;
     AtcTreeProxyModel *_atcTreeProxyModel;
-    QToolButton *_left;
+    QToolButton *_left, *_right;
     QAction *aSearchEnglish, *aSearchCode;
+    QAction *aNewItem;
 
 private:
     AtcCollectionEditorWidget *q;
@@ -178,6 +181,14 @@ AtcCollectionEditorWidget::AtcCollectionEditorWidget(QWidget *parent) :
     d->_left->addAction(d->aSearchCode);
     d->_left->setDefaultAction(d->aSearchEnglish);
     d->ui->search->setLeftButton(d->_left);
+
+    d->_right = new QToolButton(d->ui->search);
+    d->aNewItem = new QAction(this);
+    d->aNewItem->setIcon(theme()->icon(Core::Constants::ICONADD));
+    d->_right->addAction(d->aNewItem);
+    d->_right->setDefaultAction(d->aNewItem);
+    d->ui->search->setRightButton(d->_right);
+    connect(d->aNewItem, SIGNAL(triggered()), this, SLOT(onNewItemRequested()));
 
     // Managing proxy models
     d->_proxyModel = new TreeProxyModel(this);
@@ -264,17 +275,20 @@ void AtcCollectionEditorWidget::restoreDataMapper()
     onAtcCodeSelectionChanged(d->ui->atcView->currentIndex(), QModelIndex());
 }
 
+void AtcCollectionEditorWidget::onNewItemRequested()
+{
+    // Ask for the code & labels
+}
+
 void AtcCollectionEditorWidget::retranslateUi()
 {
     d->aSearchEnglish->setText(tr("Filter on the english labels"));
     d->aSearchCode->setText(tr("Filter on the ATC code"));
-//    for(int i = 0; i < dbCore()->atcTableModel()->columnCount(); ++i)
-//        d->ui->atcView->setColumnHidden(i, true);
-//    d->ui->atcView->setColumnHidden(AtcTableModel::Code, false);
-//    // TODO: find the current language and set the correct column not hidden
-//    d->ui->atcView->setColumnHidden(AtcTableModel::LabelEn, false);
-//    d->ui->atcView->header()->setResizeMode(AtcTableModel::Code, QHeaderView::ResizeToContents);
-//    d->ui->atcView->header()->setResizeMode(AtcTableModel::LabelEn, QHeaderView::Stretch);
+    d->aNewItem->setText(tr("Create a new ATC item"));
+
+    d->aSearchEnglish->setToolTip(d->aSearchEnglish->text());
+    d->aSearchCode->setToolTip(d->aSearchCode->text());
+    d->aNewItem->setToolTip(d->aNewItem->text());
 }
 
 void AtcCollectionEditorWidget::changeEvent(QEvent *e)

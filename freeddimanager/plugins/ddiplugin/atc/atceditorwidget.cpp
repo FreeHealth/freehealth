@@ -26,7 +26,8 @@
  ***************************************************************************/
 /**
  * \class DDI::AtcEditorWidget
- * ATC classification editor widget. Data mapper over the DDI::AtcTableModel
+ * ATC classification editor widget.
+ * Data mapper over the DDI::AtcTableModel for one row
  */
 
 #include "atceditorwidget.h"

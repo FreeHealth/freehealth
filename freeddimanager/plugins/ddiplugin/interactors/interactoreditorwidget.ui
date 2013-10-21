@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
+    <width>631</width>
     <height>600</height>
    </rect>
   </property>
@@ -14,13 +14,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="Utils::MiniSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="treeLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="Utils::QButtonLineEdit" name="searchLine"/>
        </item>
@@ -48,9 +51,9 @@
      </widget>
      <widget class="QWidget" name="widgetContainer" native="true">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="toolbarLayout"/>
-       </item>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="interactorLabel">
          <property name="font">
@@ -273,6 +276,43 @@
        </item>
        <item row="2" column="0">
         <widget class="QTextBrowser" name="messages">
+         <property name="palette">
+          <palette>
+           <active>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>253</red>
+               <green>255</green>
+               <blue>206</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </active>
+           <inactive>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>253</red>
+               <green>255</green>
+               <blue>206</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </inactive>
+           <disabled>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>212</red>
+               <green>208</green>
+               <blue>200</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </disabled>
+          </palette>
+         </property>
          <property name="html">
           <string notr="true">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -285,6 +325,9 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="toolbarLayout"/>
    </item>
   </layout>
  </widget>
