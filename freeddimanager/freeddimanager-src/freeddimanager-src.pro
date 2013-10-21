@@ -28,8 +28,8 @@ QT *= sql \
 DEFINES *= FREEDDDIMANAGER
 
 macx {
-#  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freedddimanager.icns
-#  QMAKE_INFO_PLIST=Info.plist
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freeddimanager.icns
+  QMAKE_INFO_PLIST=Info.plist
 }
 win32:RC_FILE=freeddimanager_win32_icon.rc
 
