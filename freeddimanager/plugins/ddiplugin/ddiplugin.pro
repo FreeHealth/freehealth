@@ -58,6 +58,7 @@ SOURCES += \
     ddi/drugdruginteractioneditorwidget.cpp \
     ddi/drugdruginteractionsortfilterproxymodel.cpp \
     routes/routesmodel.cpp \
+    constants.cpp
 
 
 FORMS += \

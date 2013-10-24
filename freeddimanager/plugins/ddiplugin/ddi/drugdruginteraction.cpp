@@ -25,12 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "drugdruginteraction.h"
+#include <ddiplugin/constants.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_msgerror.h>
@@ -166,8 +168,8 @@ DrugDrugInteraction::DrugDrugInteraction(const QDomElement &element)
     if (element.tagName()!="DDI") {
         LOG_ERROR_FOR("DrugDrugInteraction", "Wrong XML Element");
     } else {
-        m_Data.insert(FirstInteractorName, element.attribute("i1").replace(" ", "_").replace("'", "_"));
-        m_Data.insert(SecondInteractorName, element.attribute("i2").replace(" ", "_").replace("'", "_"));
+        m_Data.insert(FirstInteractorName, Constants::correctedUid(Utils::removeAccents(element.attribute("i1"))));
+        m_Data.insert(SecondInteractorName, Constants::correctedUid(Utils::removeAccents(element.attribute("i2"))));
         m_Data.insert(FirstInteractorRouteOfAdministrationIds, element.attribute("i1ra").split(";"));
         m_Data.insert(SecondInteractorRouteOfAdministrationIds, element.attribute("i2ra").split(";"));
         m_Data.insert(LevelCode, element.attribute("l"));

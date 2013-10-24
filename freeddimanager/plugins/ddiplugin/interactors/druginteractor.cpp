@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "druginteractor.h"
+#include <ddiplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -289,7 +290,7 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
         return *di;
     }
     // get attribs
-    di->setData(Uid, element.attribute("id").replace(" ", "_").replace("'", "_"));
+    di->setData(Uid, Constants::correctedUid(element.attribute("id")));
     di->setData(InitialLabel, element.attribute("id"));
     di->setData(IsValid, element.attribute("v").toInt());
     bool isClass = element.attribute("c").toInt();
@@ -344,8 +345,7 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
     QDomElement child = element.firstChildElement("M");
     while (!child.isNull()) {
         QString childUid = child.attribute("n").toUpper();
-        childUid = Utils::removeAccents(childUid);
-        childUid.replace(" ", "_");
+        childUid = Constants::correctedUid(Utils::removeAccents(childUid));
         di->addChildId(childUid);
         if (!child.attribute("p").isEmpty()) {
             di->addChildClassificationPMIDs(childUid, child.attribute("p").split(";"));
