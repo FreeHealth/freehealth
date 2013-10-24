@@ -28,6 +28,7 @@
 #include <ddiplugin/ddicore.h>
 #include <ddiplugin/constants.h>
 #include <ddiplugin/database/ddidatabase.h>
+#include <ddiplugin/interactors/druginteractortablemodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -49,6 +50,7 @@ using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 static inline DDI::Internal::DDIDatabase &ddiBase() {return DDI::DDICore::instance()->database();}
 
 namespace DDI {
@@ -168,9 +170,34 @@ public:
         return names.join(", ");
     }
 
+    // Check DDI sanity and store error messages into _rowErrors
+    void checkInteractionErrors(int row)
+    {
+        // TODO: get data directly from the sql model
+        DrugDrugInteractionTableModel::DrugDrugInteractionErrors errors;
+        if (q->index(row, DrugDrugInteractionTableModel::RiskEn).data().toString().isEmpty()
+                && q->index(row, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty())
+            errors |= DrugDrugInteractionTableModel::NoRiskDefined;
+        if (!q->data(q->index(row, DrugDrugInteractionTableModel::IsReviewed)).toBool())
+            errors |= DrugDrugInteractionTableModel::NotReviewed;
+        if (q->isMultiLevel(row))
+            errors |= DrugDrugInteractionTableModel::IsMultilevel;
+        if (q->isUntranslated(row))
+            errors |= DrugDrugInteractionTableModel::TranslationMissing;
+        if (q->data(q->index(row, DrugDrugInteractionTableModel::PMIDStringList)).toStringList().isEmpty())
+            errors |= DrugDrugInteractionTableModel::NoBibliographicReferences;
+        if (!ddiCore()->drugInteractorTableModel()->interactorUidExists(q->data(q->index(row, DrugDrugInteractionTableModel::FirstInteractorUid)).toString()))
+            errors |= DrugDrugInteractionTableModel::FirstInteractorDoesNotExists;
+        if (!ddiCore()->drugInteractorTableModel()->interactorUidExists(q->data(q->index(row, DrugDrugInteractionTableModel::SecondInteractorUid)).toString()))
+            errors |= DrugDrugInteractionTableModel::SecondInteractorDoesNotExists;
+        QPersistentModelIndex pi = q->index(row, 0);
+        _rowErrors.insert(pi, errors);
+    }
+
 public:
     QSqlTableModel *_sql;
     QHash<QString, int> _levelsToComboIndex;
+    QHash<QPersistentModelIndex, DrugDrugInteractionTableModel::DrugDrugInteractionErrors> _rowErrors; // index column==0
 
 private:
     DrugDrugInteractionTableModel *q;
@@ -205,13 +232,24 @@ DrugDrugInteractionTableModel::~DrugDrugInteractionTableModel()
 /** Initialize the model (fetch all interactors from database). */
 bool DrugDrugInteractionTableModel::initialize()
 {
-    // Select
+    d->_rowErrors.clear();
     d->_sql->select();
 
     // Fetch all data in the source model
     while (d->_sql->canFetchMore(index(d->_sql->rowCount(), 0)))
         d->_sql->fetchMore(index(d->_sql->rowCount(), 0));
 
+    return true;
+}
+
+/**
+ * Check all DDI errors, this can be a long processing. Model is not resetted but
+ * item colors can change. Use QAbstractItemView::update() to force view update.
+*/
+bool DrugDrugInteractionTableModel::checkInteractionErrors()
+{
+    for(int i=0; i < rowCount(); ++i)
+        d->checkInteractionErrors(i);
     return true;
 }
 
@@ -263,10 +301,11 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
 //            return bold;
 //        }
     } else if (role==Qt::ForegroundRole) {
-        QModelIndex isRev = d->_sql->index(index.row(), Constants::DDI_ISREVIEWED);
-        if (!d->_sql->data(isRev).toBool()) {
+        QModelIndex error = this->index(index.row(), 0);
+        if (!d->_rowErrors.contains(error))
+            return QVariant();
+        if (!d->_rowErrors.value(error).testFlag(NoError))
             return QColor(20,250,20).dark();
-        }
     }
     return QVariant();
 }
@@ -353,6 +392,7 @@ Qt::ItemFlags DrugDrugInteractionTableModel::flags(const QModelIndex &index) con
     return f;
 }
 
+/** React at primeInsert() signal, populate the newly created row with the default values */
 void DrugDrugInteractionTableModel::populateNewRowWithDefault(int row, QSqlRecord &record)
 {
     Q_UNUSED(row);
@@ -414,6 +454,11 @@ QString DrugDrugInteractionTableModel::repartition(int index)
     if (index < l.count() && index >= 0)
         return l.at(index);
     return QString();
+}
+
+bool DrugDrugInteractionTableModel::hasError(int row, DrugDrugInteractionError error)
+{
+    return d->_rowErrors.value(index(row, 0)).testFlag(error);
 }
 
 /**
@@ -538,6 +583,8 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
     //            }
     //        }
     //    dose.clear();
+
+    // Append clickable bibliography
     const QStringList &pmids = data(index(row, PMIDStringList)).toStringList();
     QStringList pmidText;
     if (pmids.count() > 0) {
@@ -551,20 +598,26 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
                 .arg(tr("Bibliography:"))
                 .arg(pmidText.join("</li><li>"));
 
-    // Check DDI
-    // ---> IsReviewed?
+    // Check Interaction sanity
+    d->checkInteractionErrors(row);
+    DrugDrugInteractionErrors errorflag = d->_rowErrors.value(index(row, 0));
     QStringList errors;
-    if (index(row, DrugDrugInteractionTableModel::RiskEn).data().toString().isEmpty()
-            && index(row, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty())
-        errors << QString("Needs a risk definition");
-    if (!data(index(row, IsReviewed)).toBool())
-        errors << QString("Needs a review");
-    if (isMultiLevel(row))
-        errors << QString("Multi-interaction level");
-    if (isUntranslated(row))
-        errors << QString("Needs translations");
-    if (pmidText.isEmpty())
-        errors << QString("Needs bibliographic references");
+    if (!errorflag.testFlag(NoError)) {
+        if (errorflag.testFlag(NoRiskDefined))
+            errors << tr("No risk defined");
+        if (errorflag.testFlag(NotReviewed))
+            errors << tr("Not reviewed");
+        if (errorflag.testFlag(IsMultilevel))
+            errors << tr("Is multi-level");
+        if (errorflag.testFlag(TranslationMissing))
+            errors << tr("Translation missing");
+        if (errorflag.testFlag(NoBibliographicReferences))
+            errors << tr("No biliographic references");
+        if (errorflag.testFlag(FirstInteractorDoesNotExists))
+            errors << tr("First interactor uid does not exists");
+        if (errorflag.testFlag(SecondInteractorDoesNotExists))
+            errors << tr("Second interactor uid does not exists");
+    }
     tmp = QString("<table border=0><tr><td>%1").arg(tmp);
     if (errors.isEmpty())
         tmp += QString("</td><td>%1</td>")

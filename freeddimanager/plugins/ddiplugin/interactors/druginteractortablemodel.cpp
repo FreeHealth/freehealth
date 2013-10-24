@@ -202,6 +202,7 @@ public:
 
 public:
     QSqlTableModel *_sql;
+    QStringList _distinctUids;
 
 private:
     DrugInteractorTableModel *q;
@@ -209,7 +210,7 @@ private:
 }  // End namespace Internal
 }  // End namespace DDI
 
-
+/** Table Model over the database interactor table. The model is uid sorted */
 DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     QAbstractTableModel(parent),
     d(new Internal::DrugInteractorTableModelPrivate(this))
@@ -218,6 +219,7 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_INTERACTORS));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
 }
 
@@ -237,6 +239,8 @@ bool DrugInteractorTableModel::initialize()
     // Fetch all data in the source model
     while (d->_sql->canFetchMore(index(d->_sql->rowCount(), 0)))
         d->_sql->fetchMore(index(d->_sql->rowCount(), 0));
+
+    d->_distinctUids = ddiBase().interactorDistinctUids();
 
     return true;
 }
@@ -522,6 +526,15 @@ int DrugInteractorTableModel::numberOfUnlinked() const
     where.insert(Constants::INTERACTOR_ISCLASS, "=0");
     where.insert(Constants::INTERACTOR_ATC, "IS NULL");
     return ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
+}
+
+/**
+ * Returns \e true if the interactor with the \e uid exists.
+ */
+bool DrugInteractorTableModel::interactorUidExists(const QString &uid) const
+{
+    qWarning() << uid << d->_distinctUids.count() << d->_distinctUids.contains(uid);
+    return d->_distinctUids.contains(uid);
 }
 
 /** Submit changes directly to the database */

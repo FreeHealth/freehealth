@@ -102,6 +102,8 @@ public:
     int numberOfUnreviewed() const;
     int numberOfUnlinked() const;
 
+    bool interactorUidExists(const QString &uid) const;
+
 public Q_SLOTS:
     virtual bool submit();
 

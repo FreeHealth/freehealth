@@ -87,6 +87,7 @@ public:
         m_DDIProxyModel(0),
         m_Mapper(0),
         m_ReviewModified(false),
+        aCheckModelErrors(0),
         aSave(0),
         aEdit(0),
         aRemoveCurrent(0),
@@ -94,8 +95,12 @@ public:
         aTranslateAll(0),
         aTranslateThis(0),
         aSplitInteractionAccordingToLevel(0),
-        aNextProblematic(0), aNextMultiLevel(0), aNextUntranslated(0), aNextUnreviewed(0),
+        aNextProblematic(0),
+        aNextMultiLevel(0),
+        aNextUntranslated(0),
+        aNextUnreviewed(0),
         aNextNoRisk(0),
+        aNextUnknownInteractors(0),
         _nextButton(0),
         googleTranslator(0),
         firstInteractorRoutes(0), secondInteractorRoutes(0),
@@ -119,6 +124,7 @@ public:
         ui->toolbarLayout->addWidget(b);
         b->setIconSize(QSize(16,16));
 
+        aCheckModelErrors = new QAction(q);
         aSave = new QAction(q);
         aRemoveCurrent = new QAction(q);
         aEdit = new QAction(q);
@@ -131,6 +137,7 @@ public:
         aNextUntranslated = new QAction(q);
         aNextUnreviewed = new QAction(q);
         aNextNoRisk = new QAction(q);
+        aNextUnknownInteractors = new QAction(q);
 
         aSave->setEnabled(false);
         aEdit->setEnabled(false);
@@ -138,6 +145,7 @@ public:
         aRemoveCurrent->setEnabled(false);
         aSplitInteractionAccordingToLevel->setEnabled(false);
 
+        aCheckModelErrors->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
         aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
@@ -150,6 +158,7 @@ public:
         aNextUntranslated->setIcon(theme()->icon(Core::Constants::ICONNEXT));
         aNextUnreviewed->setIcon(theme()->icon(Core::Constants::ICONNEXT));
         aNextNoRisk->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+        aNextUnknownInteractors->setIcon(theme()->icon(Core::Constants::ICONNEXT));
 
         _nextButton = new QToolButton(q);
         _nextButton->addAction(aNextProblematic);
@@ -157,9 +166,11 @@ public:
         _nextButton->addAction(aNextMultiLevel);
         _nextButton->addAction(aNextUnreviewed);
         _nextButton->addAction(aNextUntranslated);
+        _nextButton->addAction(aNextUnknownInteractors);
         _nextButton->setPopupMode(QToolButton::MenuButtonPopup);
         _nextButton->setDefaultAction(aNextProblematic);
 
+        b->addAction(aCheckModelErrors);
         b->addWidget(_nextButton);
         b->addSeparator();
         b->addAction(aCreateNew);
@@ -176,6 +187,7 @@ public:
 
     void connectActions()
     {
+        QObject::connect(aCheckModelErrors, SIGNAL(triggered()), q, SLOT(onCheckInteractionErrorsRequested()));
         QObject::connect(aCreateNew, SIGNAL(triggered()), q, SLOT(createNewDDI()));
         QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
         QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
@@ -344,6 +356,7 @@ public:
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex m_EditingIndex;
     bool m_ReviewModified;
+    QAction *aCheckModelErrors;
     QAction *aSave;
     QAction *aEdit;
     QAction *aRemoveCurrent;
@@ -351,7 +364,12 @@ public:
     QAction *aTranslateAll;
     QAction *aTranslateThis;
     QAction *aSplitInteractionAccordingToLevel;
-    QAction *aNextProblematic, *aNextMultiLevel, *aNextUntranslated, *aNextUnreviewed, *aNextNoRisk;
+    QAction *aNextProblematic;
+    QAction *aNextMultiLevel;
+    QAction *aNextUntranslated;
+    QAction *aNextUnreviewed;
+    QAction *aNextNoRisk;
+    QAction *aNextUnknownInteractors;
     QToolButton *_nextButton;
     Utils::GoogleTranslator *googleTranslator;
     DDI::RoutesModel *firstInteractorRoutes, *secondInteractorRoutes;
@@ -598,6 +616,7 @@ void DrugDrugInteractionEditorWidget::onNextActionTriggered(QAction *a)
     QModelIndex untr;
     QModelIndex unrev;
     QModelIndex norisk;
+    QModelIndex wronguid;
     QModelIndex next;
     int rowCount = ddiCore()->drugDrugInteractionTableModel()->rowCount();
     int currentRow = qMax(d->m_DDIProxyModel->mapToSource(d->ui->tableView->currentIndex()).row() + 1, 0);
@@ -617,6 +636,12 @@ void DrugDrugInteractionEditorWidget::onNextActionTriggered(QAction *a)
                 && ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty()) {
             norisk = ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::FirstInteractorUid);
         }
+        if (!wronguid.isValid()
+                && (ddiCore()->drugDrugInteractionTableModel()->hasError(i, DrugDrugInteractionTableModel::FirstInteractorDoesNotExists)
+                    || ddiCore()->drugDrugInteractionTableModel()->hasError(i, DrugDrugInteractionTableModel::SecondInteractorDoesNotExists)
+                    )) {
+            wronguid = ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::FirstInteractorUid);
+        }
     }
     // From beginning of the model to current row
     --currentRow;
@@ -635,6 +660,12 @@ void DrugDrugInteractionEditorWidget::onNextActionTriggered(QAction *a)
                 && ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty()) {
             norisk = ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::FirstInteractorUid);
         }
+        if (!wronguid.isValid()
+                && (ddiCore()->drugDrugInteractionTableModel()->hasError(i, DrugDrugInteractionTableModel::FirstInteractorDoesNotExists)
+                    || ddiCore()->drugDrugInteractionTableModel()->hasError(i, DrugDrugInteractionTableModel::SecondInteractorDoesNotExists)
+                    )) {
+            wronguid = ddiCore()->drugDrugInteractionTableModel()->index(i, DrugDrugInteractionTableModel::FirstInteractorUid);
+        }
     }
 
     d->ui->searchLine->setText("");
@@ -647,6 +678,8 @@ void DrugDrugInteractionEditorWidget::onNextActionTriggered(QAction *a)
         next = unrev;
     } else if (a==d->aNextNoRisk) {
         next = norisk;
+    } else if (a==d->aNextUnknownInteractors) {
+        next = wronguid;
     } else {
         int row = qMin(multi.row(), untr.row());
         row = qMin(row, unrev.row());
@@ -730,6 +763,14 @@ void DrugDrugInteractionEditorWidget::splitCurrent()
     // TODO: keep the currentIndex to the splitted DDI and its mirrored DDIs
 }
 
+void DrugDrugInteractionEditorWidget::onCheckInteractionErrorsRequested()
+{
+//    QProgressDialog dlg(this);
+//    dlg.show();
+    ddiCore()->drugDrugInteractionTableModel()->checkInteractionErrors();
+    d->ui->tableView->update();
+}
+
 void DrugDrugInteractionEditorWidget::retranslateUi()
 {
     d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
@@ -745,6 +786,7 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aNextUntranslated->setText(tr("Next untranslated interaction"));
     d->aNextUnreviewed->setText(tr("Next unreviewed interaction"));
     d->aNextNoRisk->setText(tr("Next 'no risk' interaction"));
+    d->aNextUnknownInteractors->setText(tr("Next unknown interactor"));
 
     d->aCreateNew->setToolTip(d->aCreateNew->text());
     d->aSave->setToolTip(d->aSave->text());
@@ -759,6 +801,7 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aNextUntranslated->setToolTip(d->aNextUntranslated->text());
     d->aNextUnreviewed->setToolTip(d->aNextUnreviewed->text());
     d->aNextNoRisk->setToolTip(d->aNextNoRisk->text());
+    d->aNextUnknownInteractors->setToolTip(d->aNextUnknownInteractors->text());
 
     d->ui->retranslateUi(this);
     int current = d->ui->comboLevel->currentIndex();

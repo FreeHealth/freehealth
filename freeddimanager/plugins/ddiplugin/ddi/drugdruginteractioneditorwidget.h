@@ -59,9 +59,8 @@ protected Q_SLOTS:
     void translateCurrent();
     void translateAll();
     void splitCurrent();
-
-protected Q_SLOTS:
     void translationDone(const QString &trans);
+    void onCheckInteractionErrorsRequested();
 
 private:
     void setEditorsEnabled(bool state);

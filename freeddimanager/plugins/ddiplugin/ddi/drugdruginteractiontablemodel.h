@@ -96,9 +96,23 @@ public:
         ColumnCount
     };
 
+    enum DrugDrugInteractionError {
+        ErrorsNotChecked                = 0x0000,
+        NoError                         = 0x0001,
+        NoRiskDefined                   = 0x0002,
+        NotReviewed                     = 0x0004,
+        IsMultilevel                    = 0x0008,
+        TranslationMissing              = 0x0010,
+        NoBibliographicReferences       = 0x0020,
+        FirstInteractorDoesNotExists    = 0x0040,
+        SecondInteractorDoesNotExists   = 0x0080
+    };
+    Q_DECLARE_FLAGS(DrugDrugInteractionErrors, DrugDrugInteractionError)
+
     DrugDrugInteractionTableModel(QObject *parent = 0);
     ~DrugDrugInteractionTableModel();
     virtual bool initialize();
+    bool checkInteractionErrors();
 
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -121,6 +135,9 @@ public:
     static QStringList repartitions();
     static QString unit(int index);
     static QString repartition(int index);
+
+    bool hasError(int row, DrugDrugInteractionError error);
+
     bool isMultiLevel(int row) const;
     bool splitMultiLevel(int row);
     bool isUntranslated(int row) const;
@@ -143,5 +160,7 @@ private:
 };
 
 }  // namespace DDI
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(DDI::DrugDrugInteractionTableModel::DrugDrugInteractionErrors)
 
 #endif // DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTIONTABLEMODEL_H
