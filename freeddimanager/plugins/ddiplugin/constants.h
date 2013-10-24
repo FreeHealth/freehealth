@@ -37,13 +37,15 @@
  *  Contributors:                                                          *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_PLUGIN_CONSTANTS_H
-#define DDIMANAGER_PLUGIN_CONSTANTS_H
+#ifndef DDIMANAGER_DDIPLUGIN_CONSTANTS_H
+#define DDIMANAGER_DDIPLUGIN_CONSTANTS_H
 
 #include <QString>
 
 namespace DDI {
 namespace Constants {
+
+QString correctedUid(QString uid);
 
 #ifdef Q_OS_MAC
 const QString MACBUNDLE = "/../../../";
@@ -190,4 +192,4 @@ const char* const S_WINSPLITTER      = "MainWin/Splitter";
 }  //  End namespace Constants
 }  //  End namespace DDI
 
-#endif // DDIMANAGER_PLUGIN_CONSTANTS_H
+#endif // DDIMANAGER_DDIPLUGIN_CONSTANTS_H
