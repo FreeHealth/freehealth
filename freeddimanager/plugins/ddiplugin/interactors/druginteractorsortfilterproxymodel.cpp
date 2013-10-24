@@ -33,6 +33,9 @@
 #include "druginteractorsortfilterproxymodel.h"
 #include "druginteractortablemodel.h"
 
+#include <QVariant>
+#include <QStringList>
+
 using namespace DDI;
 
 DrugInteractorSortFilterProxyModel::DrugInteractorSortFilterProxyModel(QObject *parent)
@@ -48,13 +51,20 @@ void DrugInteractorSortFilterProxyModel::setClassMolFilter(ClassMoleculeFilter c
 
 bool DrugInteractorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &parent) const
 {
+    // First of all, search the string in the class children uids
+    QModelIndex isClassIndex = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
+    bool isClass = isClassIndex.data().toBool();
+    if (isClass) {
+        QModelIndex children = sourceModel()->index(sourceRow, DrugInteractorTableModel::ChildrenUuid);
+        if (children.data().toStringList().filter(filterRegExp()).count() > 0)
+            return true;
+    }
+    // Then filter according to the extra-search filter
     if (_classMolFilter==ClassesOnly) {
-        QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
-        if (!isClass.data().toBool())
+        if (!isClass)
             return false;
     } else if (_classMolFilter==MoleculesOnly) {
-        QModelIndex isClass = sourceModel()->index(sourceRow, DrugInteractorTableModel::IsInteractingClass);
-        if (isClass.data().toBool())
+        if (isClass)
             return false;
     }
     return QSortFilterProxyModel::filterAcceptsRow(sourceRow, parent);
