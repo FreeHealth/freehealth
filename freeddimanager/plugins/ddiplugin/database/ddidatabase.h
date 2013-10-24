@@ -27,7 +27,6 @@
 #ifndef DDDIPLUGIN_INTERNAL_DDIDATABASE_H
 #define DDDIPLUGIN_INTERNAL_DDIDATABASE_H
 
-//#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <utils/database.h>
 
 /**
@@ -51,8 +50,16 @@ public:
     QString version() const;
     bool checkDatabaseVersion() const;
 
+    // ATC
+    bool isAtcCodeExists(const QString &code) const;
+    bool isAtcUidExists(const QString &code) const;
     QString atcLabelForCode(const QString &code, const QString &lang) const;
+    bool createAtcItem(const QString &code, const QString &uid);
 
+    // INTERACTORS
+    QStringList interactorDistinctUids() const;
+
+    // OLD DATA INSERTION
     int insertAtcDataFromCsv(const QString &fileName);
     int insertDrugInteractorsDataFromXml(const QString &fileName);
     int insertDrugDrugInteractionDataFromXml(const QString &fileName);

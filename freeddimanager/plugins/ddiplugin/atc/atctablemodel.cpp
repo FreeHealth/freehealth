@@ -195,6 +195,27 @@ Qt::ItemFlags AtcTableModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 }
 
+/** \sa DDI::Internal::DDIDatabase::isAtcCodeExists() */
+bool AtcTableModel::isCodeExists(const QString &code) const
+{
+    return ddiCore()->database().isAtcCodeExists(code);
+}
+
+/** \sa DDI::Internal::DDIDatabase::isAtcUidExists() */
+bool AtcTableModel::isUidExists(const QString &uid) const
+{
+    return ddiCore()->database().isAtcUidExists(uid);
+}
+
+/** \sa DDI::Internal::DDIDatabase::createAtcItem() */
+QModelIndex AtcTableModel::createAtcCode(const QString &code, const QString &uid)
+{
+    if (!ddiCore()->database().createAtcItem(code, uid))
+        return QModelIndex();
+    // TODO: code here
+    return QModelIndex();
+}
+
 bool AtcTableModel::submit()
 {
     bool ok = d->_sql->submitAll();

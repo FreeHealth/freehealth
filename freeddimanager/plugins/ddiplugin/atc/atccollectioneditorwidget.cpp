@@ -57,7 +57,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline DDI::DDICore *dbCore() {return DDI::DDICore::instance();}
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 
 namespace DDI {
 namespace Internal {
@@ -193,11 +193,11 @@ AtcCollectionEditorWidget::AtcCollectionEditorWidget(QWidget *parent) :
     // Managing proxy models
     d->_proxyModel = new TreeProxyModel(this);
     d->_atcTreeProxyModel = new AtcTreeProxyModel(this);
-    d->_atcTreeProxyModel->initialize(dbCore()->atcTableModel());
-    d->ui->editor->setAtcTableModel(dbCore()->atcTableModel());
+    d->_atcTreeProxyModel->initialize(ddiCore()->atcTableModel());
+    d->ui->editor->setAtcTableModel(ddiCore()->atcTableModel());
     d->_proxyModel->setSourceModel(d->_atcTreeProxyModel);
     d->ui->atcView->setModel(d->_proxyModel);
-    for(int i = 0; i < dbCore()->atcTableModel()->columnCount(); ++i)
+    for(int i = 0; i < ddiCore()->atcTableModel()->columnCount(); ++i)
         d->ui->atcView->setColumnHidden(i, true);
     d->ui->atcView->setColumnHidden(AtcTreeProxyModel::Code, false);
     d->ui->atcView->setColumnHidden(AtcTreeProxyModel::LabelEn, false);
@@ -275,9 +275,26 @@ void AtcCollectionEditorWidget::restoreDataMapper()
     onAtcCodeSelectionChanged(d->ui->atcView->currentIndex(), QModelIndex());
 }
 
+/** Create a new ATC */
 void AtcCollectionEditorWidget::onNewItemRequested()
 {
-    // Ask for the code & labels
+    // Ask for the code
+    QString code = Utils::askUser(tr("New ATC code"), tr("New ATC code:"));
+    if (ddiCore()->atcTableModel()->isCodeExists(code)) {
+        Utils::warningMessageBox(tr("New ATC code already exists"),
+                                 tr("The code %1 already exists in the ATC database.").arg(code));
+        return;
+    }
+    // Ask for the Uid
+    QString uid = Utils::askUser(tr("New ATC Uid"), tr("New ATC uid:"));
+    if (ddiCore()->atcTableModel()->isUidExists(uid)) {
+        Utils::warningMessageBox(tr("New ATC uid already exists"),
+                                 tr("The uid %1 already exists in the ATC database.").arg(uid));
+        return;
+    }
+    // TODO: code here
+    // Create a new ATC
+    // Select & Edit
 }
 
 void AtcCollectionEditorWidget::retranslateUi()

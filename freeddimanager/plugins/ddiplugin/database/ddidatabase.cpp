@@ -289,6 +289,22 @@ bool DDIDatabase::checkDatabaseVersion() const
     return (version()==::CURRENTVERSION);
 }
 
+/** Returns \e true if the \e code is already in use in the ATC database */
+bool DDIDatabase::isAtcCodeExists(const QString &code) const
+{
+    QHash<int, QString> where;
+    where.insert(Constants::ATC_CODE, QString("=\"%1\"").arg(code));
+    return (count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where)) > 0);
+}
+
+/** Returns \e true if the \e uid is already in use in the ATC database */
+bool DDIDatabase::isAtcUidExists(const QString &uid) const
+{
+    QHash<int, QString> where;
+    where.insert(Constants::ATC_UID, QString("=\"%1\"").arg(uid));
+    return (count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where)) > 0);
+}
+
 /** Return the ATC label corresponding to the ATC \e code and for the specified \e lang */
 QString DDIDatabase::atcLabelForCode(const QString &code, const QString &lang) const
 {
@@ -317,6 +333,73 @@ QString DDIDatabase::atcLabelForCode(const QString &code, const QString &lang) c
         LOG_QUERY_ERROR_FOR("DDIDatabase", query);
     }
     return QString();
+}
+
+/**
+ * Creates a new ATC item with the specified \e code and \e uid.
+ * You can not create duplicates (code or uid or both).
+ * Returns \e true if all goes fine.
+ */
+bool DDIDatabase::createAtcItem(const QString &code, const QString &uid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return false;
+
+    if (isAtcCodeExists(code))
+        return false;
+    if (isAtcUidExists(uid))
+        return false;
+
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_ATC));
+    query.bindValue(Constants::ATC_ISVALID, 1);
+    query.bindValue(Constants::ATC_CODE, code.toUpper().remove("\""));
+    query.bindValue(Constants::ATC_UID, uid.toUpper().remove("\""));
+    query.bindValue(Constants::ATC_FR, uid.toUpper().remove("\""));
+    query.bindValue(Constants::ATC_EN, uid.toUpper().remove("\""));
+    query.bindValue(Constants::ATC_DE, uid.toUpper().remove("\""));
+    query.bindValue(Constants::ATC_SP, QVariant());
+    query.bindValue(Constants::ATC_DATECREATE, QDate::currentDate().toString(Qt::ISODate));
+    query.bindValue(Constants::ATC_DATEUPDATE, QDate::currentDate().toString(Qt::ISODate));
+    query.bindValue(Constants::ATC_PREVIOUSCODE, QVariant());
+    query.bindValue(Constants::ATC_WHOYEARUPDATE, QVariant());
+    query.bindValue(Constants::ATC_COMMENT, QVariant());
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/** Returns all available distinct interactor uids */
+QStringList DDIDatabase::interactorDistinctUids() const
+{
+    QStringList toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return toReturn;
+    DB.transaction();
+    QString req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        while (query.next()) {
+            toReturn << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+        query.finish();
+        DB.rollback();
+        return toReturn;
+    }
+    query.finish();
+    DB.commit();
+    return toReturn;
 }
 
 /**

@@ -93,6 +93,10 @@ public:
 //    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 //    virtual bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
 
+    bool isCodeExists(const QString &code) const;
+    bool isUidExists(const QString &uid) const;
+    QModelIndex createAtcCode(const QString &code, const QString &uid);
+
 public Q_SLOTS:
     bool submit();
 
