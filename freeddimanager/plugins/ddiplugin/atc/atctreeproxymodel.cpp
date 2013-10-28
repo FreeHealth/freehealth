@@ -156,6 +156,7 @@ AtcTreeProxyModel::~AtcTreeProxyModel()
 bool AtcTreeProxyModel::initialize(AtcTableModel *sourceModel)
 {
     d->getTree(sourceModel);
+    connect(sourceModel, SIGNAL(modelReset()), this, SLOT(onInternalModelReset()));
     return true;
 }
 
@@ -183,4 +184,9 @@ QVariant AtcTreeProxyModel::headerData(int section, Qt::Orientation orientation,
 QModelIndex AtcTreeProxyModel::toSourceIndex(const QModelIndex &index) const
 {
     return d->toSourceIndex(index);
+}
+
+void AtcTreeProxyModel::onInternalModelReset()
+{
+    initialize(d->_sourceModel);
 }

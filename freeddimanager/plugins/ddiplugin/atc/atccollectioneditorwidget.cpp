@@ -33,6 +33,8 @@
 #include "atctablemodel.h"
 //#include "atctreemodel.h"
 #include <ddiplugin/ddicore.h>
+#include <ddiplugin/constants.h>
+#include <ddiplugin/database/ddidatabase.h>
 #include <ddiplugin/atc/atctreeproxymodel.h>
 
 #include <coreplugin/icore.h>
@@ -49,6 +51,7 @@
 #include <QFormLayout>
 #include <QLineEdit>
 #include <QToolButton>
+#include <QToolBar>
 
 #include <QDebug>
 
@@ -80,13 +83,15 @@ public:
         _proxyModel(0),
         _atcTreeProxyModel(0),
         _left(0),
-        _right(0),
         aSearchEnglish(0),
         aSearchCode(0),
         aNewItem(0),
+        aEditItem(0),
+        aSaveItem(0),
+        aRestoreItem(0),
+        _toolBar(0),
         q(parent)
     {
-        Q_UNUSED(q);
     }
 
     ~AtcCollectionEditorWidgetPrivate()
@@ -94,13 +99,86 @@ public:
         delete ui;
     }
 
+    void createActionsAndToolBar()
+    {
+        aSearchEnglish = new QAction(q);
+        aSearchCode = new QAction(q);
+        aNewItem = new QAction(q);
+        aEditItem = new QAction(q);
+        aSaveItem = new QAction(q);
+        aRestoreItem = new QAction(q);
+
+        aSearchEnglish->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aSearchCode->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aNewItem->setIcon(theme()->icon(Core::Constants::ICONADD));
+        aEditItem->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+        aSaveItem->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+        aRestoreItem->setIcon(theme()->icon(Core::Constants::ICONPREVIOUS));
+
+        aSaveItem->setEnabled(false);
+        aRestoreItem->setEnabled(false);
+
+        _toolBar = new QToolBar(q);
+        _toolBar->setIconSize(QSize(32, 32));
+        _toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+        _toolBar->addAction(aNewItem);
+        _toolBar->addSeparator();
+        _toolBar->addAction(aEditItem);
+        _toolBar->addSeparator();
+        _toolBar->addAction(aSaveItem);
+         _toolBar->addSeparator();
+         _toolBar->addAction(aRestoreItem);
+        ui->toolbarLayout->addWidget(_toolBar);
+
+        _left = new QToolButton(ui->search);
+        _left->addAction(aSearchEnglish);
+        _left->addAction(aSearchCode);
+        _left->setDefaultAction(aSearchEnglish);
+        ui->search->setLeftButton(_left);
+    }
+
+    void createModelsAndPopulateViews()
+    {
+        ui->atcView->setIndentation(10);
+        ui->atcView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+        _atcTreeProxyModel = new AtcTreeProxyModel(q);
+        _atcTreeProxyModel->initialize(ddiCore()->atcTableModel());
+        _proxyModel = new TreeProxyModel(q);
+        _proxyModel->setSourceModel(_atcTreeProxyModel);
+
+        ui->editor->setAtcTableModel(ddiCore()->atcTableModel());
+        ui->atcView->setModel(_proxyModel);
+
+        for(int i = 0; i < ddiCore()->atcTableModel()->columnCount(); ++i)
+            ui->atcView->setColumnHidden(i, true);
+        ui->atcView->setColumnHidden(AtcTreeProxyModel::Code, false);
+        ui->atcView->setColumnHidden(AtcTreeProxyModel::LabelEn, false);
+    }
+
+    void connectActionsAndUi()
+    {
+        QObject::connect(aNewItem, SIGNAL(triggered()), q, SLOT(onNewItemRequested()));
+        QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(toggleDataMapperEnabled()));
+        QObject::connect(aSaveItem, SIGNAL(triggered()), q, SLOT(submitDataMapper()));
+        QObject::connect(aRestoreItem, SIGNAL(triggered()), q, SLOT(restoreDataMapper()));
+
+        QObject::connect(ui->search, SIGNAL(textChanged(QString)), q, SLOT(onFilterChanged(QString)));
+        QObject::connect(ui->atcView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(onAtcCodeSelectionChanged(QModelIndex,QModelIndex)));
+    }
+
 public:
     Ui::AtcCollectionEditorWidget *ui;
     TreeProxyModel *_proxyModel;
     AtcTreeProxyModel *_atcTreeProxyModel;
-    QToolButton *_left, *_right;
+    QToolButton *_left;
     QAction *aSearchEnglish, *aSearchCode;
     QAction *aNewItem;
+    QAction *aEditItem;
+    QAction *aSaveItem;
+    QAction *aRestoreItem;
+    QToolBar *_toolBar;
 
 private:
     AtcCollectionEditorWidget *q;
@@ -170,48 +248,12 @@ AtcCollectionEditorWidget::AtcCollectionEditorWidget(QWidget *parent) :
     d->ui = new Ui::AtcCollectionEditorWidget;
     // Creating UI
     d->ui->setupUi(this);
-    d->ui->atcView->setIndentation(7);
-    d->ui->atcView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    d->_left = new QToolButton(d->ui->search);
-    d->aSearchEnglish = new QAction(this);
-    d->aSearchEnglish->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    d->aSearchCode = new QAction(this);
-    d->aSearchCode->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    d->_left->addAction(d->aSearchEnglish);
-    d->_left->addAction(d->aSearchCode);
-    d->_left->setDefaultAction(d->aSearchEnglish);
-    d->ui->search->setLeftButton(d->_left);
 
-    d->_right = new QToolButton(d->ui->search);
-    d->aNewItem = new QAction(this);
-    d->aNewItem->setIcon(theme()->icon(Core::Constants::ICONADD));
-    d->_right->addAction(d->aNewItem);
-    d->_right->setDefaultAction(d->aNewItem);
-    d->ui->search->setRightButton(d->_right);
-    connect(d->aNewItem, SIGNAL(triggered()), this, SLOT(onNewItemRequested()));
+    d->createActionsAndToolBar();
+    d->createModelsAndPopulateViews();
+    d->connectActionsAndUi();
 
-    // Managing proxy models
-    d->_proxyModel = new TreeProxyModel(this);
-    d->_atcTreeProxyModel = new AtcTreeProxyModel(this);
-    d->_atcTreeProxyModel->initialize(ddiCore()->atcTableModel());
-    d->ui->editor->setAtcTableModel(ddiCore()->atcTableModel());
-    d->_proxyModel->setSourceModel(d->_atcTreeProxyModel);
-    d->ui->atcView->setModel(d->_proxyModel);
-    for(int i = 0; i < ddiCore()->atcTableModel()->columnCount(); ++i)
-        d->ui->atcView->setColumnHidden(i, true);
-    d->ui->atcView->setColumnHidden(AtcTreeProxyModel::Code, false);
-    d->ui->atcView->setColumnHidden(AtcTreeProxyModel::LabelEn, false);
-
-    // Ui connections
-    connect(d->ui->atcView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onAtcCodeSelectionChanged(QModelIndex,QModelIndex)));
-    connect(d->ui->search, SIGNAL(textChanged(QString)), this, SLOT(onFilterChanged(QString)));
-    connect(d->ui->edit, SIGNAL(clicked()), this, SLOT(toggleDataMapperEnabled()));
-    connect(d->ui->save, SIGNAL(clicked()), this, SLOT(submitDataMapper()));
-    connect(d->ui->restore, SIGNAL(clicked()), this, SLOT(restoreDataMapper()));
-
-    d->ui->editor->setEnabled(false);
-    d->ui->save->setEnabled(false);
-    d->ui->restore->setEnabled(false);
+    d->ui->editor->setEditorEnabled(false);
     retranslateUi();
     d->ui->splitter->setStretchFactor(0, 1);
     d->ui->splitter->setStretchFactor(1, 2);
@@ -248,15 +290,15 @@ void AtcCollectionEditorWidget::onFilterChanged(const QString &filter)
 void AtcCollectionEditorWidget::toggleDataMapperEnabled()
 {
     if (!d->ui->editor->isEnabled()) {
-        d->ui->editor->setEnabled(true);
-        d->ui->save->setEnabled(true);
-        d->ui->restore->setEnabled(true);
+        d->ui->editor->setEditorEnabled(true);
+        d->aSaveItem->setEnabled(true);
+        d->aRestoreItem->setEnabled(true);
     }
 }
 
 void AtcCollectionEditorWidget::submitDataMapper()
 {
-    d->ui->save->setEnabled(false);
+    d->aSaveItem->setEnabled(false);
     if (!d->ui->editor->submit()) {
         Utils::warningMessageBox(tr("Unable to submit modification to the model"),
                                  tr("Changes will not correctly saved. Please check the data and "
@@ -265,9 +307,9 @@ void AtcCollectionEditorWidget::submitDataMapper()
         Utils::informativeMessageBox(tr("Modification saved"),
                                  tr("Changes are correctly saved."));
     }
-    d->ui->editor->setEnabled(false);
-    d->ui->restore->setEnabled(false);
-    d->ui->edit->setEnabled(true);
+    d->ui->editor->setEditorEnabled(false);
+    d->aRestoreItem->setEnabled(false);
+    d->aEditItem->setEnabled(true);
 }
 
 void AtcCollectionEditorWidget::restoreDataMapper()
@@ -280,32 +322,50 @@ void AtcCollectionEditorWidget::onNewItemRequested()
 {
     // Ask for the code
     QString code = Utils::askUser(tr("New ATC code"), tr("New ATC code:"));
+    if (code.isEmpty())
+        return;
     if (ddiCore()->atcTableModel()->isCodeExists(code)) {
         Utils::warningMessageBox(tr("New ATC code already exists"),
                                  tr("The code %1 already exists in the ATC database.").arg(code));
         return;
     }
+
     // Ask for the Uid
     QString uid = Utils::askUser(tr("New ATC Uid"), tr("New ATC uid:"));
+    if (uid.isEmpty())
+        return;
+    uid = Constants::correctedUid(uid);
     if (ddiCore()->atcTableModel()->isUidExists(uid)) {
         Utils::warningMessageBox(tr("New ATC uid already exists"),
                                  tr("The uid %1 already exists in the ATC database.").arg(uid));
         return;
     }
-    // TODO: code here
+
     // Create a new ATC
-    // Select & Edit
+    if (!ddiCore()->atcTableModel()->createAtcCode(code, uid))
+        return;
+
+    // Find the newly created ATC code
+    d->ui->search->setText(code);
+    d->aSearchCode->trigger();
+    onFilterChanged(code);
 }
 
 void AtcCollectionEditorWidget::retranslateUi()
 {
     d->aSearchEnglish->setText(tr("Filter on the english labels"));
     d->aSearchCode->setText(tr("Filter on the ATC code"));
-    d->aNewItem->setText(tr("Create a new ATC item"));
+    d->aNewItem->setText(tr("New ATC"));
+    d->aEditItem->setText(tr("Edit ATC"));
+    d->aSaveItem->setText(tr("Save ATC"));
+    d->aRestoreItem->setText(tr("Restore ATC"));
 
     d->aSearchEnglish->setToolTip(d->aSearchEnglish->text());
     d->aSearchCode->setToolTip(d->aSearchCode->text());
     d->aNewItem->setToolTip(d->aNewItem->text());
+    d->aEditItem->setToolTip(d->aEditItem->text());
+    d->aSaveItem->setToolTip(d->aSaveItem->text());
+    d->aRestoreItem->setToolTip(d->aRestoreItem->text());
 }
 
 void AtcCollectionEditorWidget::changeEvent(QEvent *e)

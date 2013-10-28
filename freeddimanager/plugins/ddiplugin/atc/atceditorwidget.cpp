@@ -144,6 +144,20 @@ void AtcEditorWidget::setAtcTableModel(AtcTableModel *model)
     d->_mapper->addMapping(d->ui->comment, AtcTableModel::Comment, "text");
 }
 
+void AtcEditorWidget::setEditorEnabled(bool enabled)
+{
+    d->ui->code->setEnabled(enabled);
+    d->ui->uid->setEnabled(enabled);
+    d->ui->fr->setEnabled(enabled);
+    d->ui->en->setEnabled(enabled);
+    d->ui->de->setEnabled(enabled);
+    d->ui->sp->setEnabled(enabled);
+    d->ui->dateCreation->setEnabled(enabled);
+    d->ui->dateUpdate->setEnabled(enabled);
+    d->ui->whoYear->setEnabled(enabled);
+    d->ui->comment->setEnabled(enabled);
+}
+
 /** Set the current editing ATC to \e index */
 void AtcEditorWidget::setCurrentIndex(const QModelIndex &index)
 {

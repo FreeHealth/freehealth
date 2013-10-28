@@ -51,6 +51,7 @@ public:
     void clear();
 
     void setAtcTableModel(AtcTableModel *model);
+    void setEditorEnabled(bool enabled);
     void setCurrentIndex(const QModelIndex &index);
 
 public Q_SLOTS:

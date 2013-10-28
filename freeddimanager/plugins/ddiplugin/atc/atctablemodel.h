@@ -95,7 +95,7 @@ public:
 
     bool isCodeExists(const QString &code) const;
     bool isUidExists(const QString &uid) const;
-    QModelIndex createAtcCode(const QString &code, const QString &uid);
+    bool createAtcCode(const QString &code, const QString &uid);
 
 public Q_SLOTS:
     bool submit();

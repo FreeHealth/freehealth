@@ -168,7 +168,8 @@ public:
         _toolBar->addSeparator();
         _toolBar->addAction(aSave);
         _toolBar->addWidget(_toolButton);
-        _toolBar->setIconSize(QSize(16,16));
+        _toolBar->setIconSize(QSize(32, 32));
+        _toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         ui->toolbarLayout->addWidget(_toolBar);
     }
 
@@ -177,9 +178,9 @@ public:
         QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
         QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
         QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
-//        QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
+        // QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
-        QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
+        // QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
         QObject::connect(_toolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
         QObject::connect(aCreateNewClass, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
         QObject::connect(aCreateNewInteractor, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
@@ -618,14 +619,14 @@ void InteractorEditorWidget::retranslateUi()
     d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
     d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
     d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
-    d->aCreateNewClass->setText(tr("Create a new interacting class"));
-    d->aCreateNewInteractor->setText(tr("Create a new interacting molecule"));
+    d->aCreateNewClass->setText(tr("Create class"));
+    d->aCreateNewInteractor->setText(tr("Create molecule"));
     d->aTranslateThis->setText(tr("Translate current"));
     d->aSearchClassOnly->setText(tr("Search only classes"));
     d->aSearchMolsAndClass->setText(tr("Search all"));
     d->aSearchMolsOnly->setText(tr("Search only molecules"));
-    d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
-    d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
+    d->aNextUnreviewedOrUnlinked->setText(tr("Next problematic"));
+    d->aDownloadAllNeededPmids->setText(tr("Download publications"));
     // Tooltips
     d->aGoogle->setToolTip(d->aGoogle->text());
     d->aWho->setToolTip(d->aWho->text());

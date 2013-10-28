@@ -122,7 +122,8 @@ public:
     {
         QToolBar *b = new QToolBar(q);
         ui->toolbarLayout->addWidget(b);
-        b->setIconSize(QSize(16,16));
+        b->setIconSize(QSize(32, 32));
+        b->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
         aCheckModelErrors = new QAction(q);
         aSave = new QAction(q);
@@ -161,6 +162,7 @@ public:
         aNextUnknownInteractors->setIcon(theme()->icon(Core::Constants::ICONNEXT));
 
         _nextButton = new QToolButton(q);
+        _nextButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         _nextButton->addAction(aNextProblematic);
         _nextButton->addAction(aNextNoRisk);
         _nextButton->addAction(aNextMultiLevel);
@@ -777,16 +779,17 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
     d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
     d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
-    d->aTranslateAll->setText(tr("Translate all untranslated"));
+    d->aTranslateAll->setText(tr("Translate all"));
     d->aTranslateThis->setText(tr("Translate current"));
-    d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
+    d->aSplitInteractionAccordingToLevel->setText(tr("Split multi-level"));
 
-    d->aNextProblematic->setText(tr("Next problematic interaction"));
-    d->aNextMultiLevel->setText(tr("Next multi-level interaction"));
-    d->aNextUntranslated->setText(tr("Next untranslated interaction"));
-    d->aNextUnreviewed->setText(tr("Next unreviewed interaction"));
-    d->aNextNoRisk->setText(tr("Next 'no risk' interaction"));
-    d->aNextUnknownInteractors->setText(tr("Next unknown interactor"));
+    d->aNextProblematic->setText(tr("Next problematic"));
+    d->aNextMultiLevel->setText(tr("Next multi-level"));
+    d->aNextUntranslated->setText(tr("Next untranslated"));
+    d->aNextUnreviewed->setText(tr("Next unreviewed"));
+    d->aNextNoRisk->setText(tr("Next 'no risk'"));
+    d->aNextUnknownInteractors->setText(tr("Next unknown"));
+    d->aCheckModelErrors->setText(tr("Check errors"));
 
     d->aCreateNew->setToolTip(d->aCreateNew->text());
     d->aSave->setToolTip(d->aSave->text());
@@ -802,6 +805,7 @@ void DrugDrugInteractionEditorWidget::retranslateUi()
     d->aNextUnreviewed->setToolTip(d->aNextUnreviewed->text());
     d->aNextNoRisk->setToolTip(d->aNextNoRisk->text());
     d->aNextUnknownInteractors->setToolTip(d->aNextUnknownInteractors->text());
+    d->aCheckModelErrors->setToolTip(d->aCheckModelErrors->text());
 
     d->ui->retranslateUi(this);
     int current = d->ui->comboLevel->currentIndex();

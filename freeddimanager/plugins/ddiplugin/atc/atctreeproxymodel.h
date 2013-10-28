@@ -68,6 +68,9 @@ public:
 
     QModelIndex toSourceIndex(const QModelIndex &index) const;
 
+private Q_SLOTS:
+    void onInternalModelReset();
+
 private:
     Internal::AtcTreeProxyModelPrivate *d;
 };

@@ -24,6 +24,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DDI::AtcTableModel
+ * Table model over the ATC database. The model is sorted by code and can be used
+ * to create a DDI::AtcTreeProxyModel. \n
+ * Do not use insertRow(), removeRow() to create or remove an ATC code. You must
+ * instead use the createAtcCode() and removeAtcCode().
+ */
+
+
 #include "atctablemodel.h"
 #include <ddiplugin/database/ddidatabase.h>
 #include <ddiplugin/ddicore.h>
@@ -81,6 +90,7 @@ AtcTableModel::AtcTableModel(QObject *parent) :
     d->_sql = new QSqlTableModel(this, ddiCore()->database().database());
     d->_sql->setTable(ddiCore()->database().table(Constants::Table_ATC));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    d->_sql->setSort(Constants::ATC_CODE, Qt::AscendingOrder);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
 }
 
@@ -208,12 +218,16 @@ bool AtcTableModel::isUidExists(const QString &uid) const
 }
 
 /** \sa DDI::Internal::DDIDatabase::createAtcItem() */
-QModelIndex AtcTableModel::createAtcCode(const QString &code, const QString &uid)
+bool AtcTableModel::createAtcCode(const QString &code, const QString &uid)
 {
-    if (!ddiCore()->database().createAtcItem(code, uid))
-        return QModelIndex();
-    // TODO: code here
-    return QModelIndex();
+    beginResetModel();
+    if (!ddiCore()->database().createAtcItem(code, uid)) {
+        LOG_ERROR(tr("Unable to create new ATC %1:%2").arg(code).arg(uid));
+        return false;
+    }
+    initialize();
+    endResetModel();
+    return true;
 }
 
 bool AtcTableModel::submit()
