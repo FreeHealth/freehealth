@@ -533,7 +533,6 @@ int DrugInteractorTableModel::numberOfUnlinked() const
  */
 bool DrugInteractorTableModel::interactorUidExists(const QString &uid) const
 {
-    qWarning() << uid << d->_distinctUids.count() << d->_distinctUids.contains(uid);
     return d->_distinctUids.contains(uid);
 }
 
