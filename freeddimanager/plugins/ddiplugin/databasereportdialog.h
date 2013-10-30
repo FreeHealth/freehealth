@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,34 +19,47 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
+ *   Main developers : Eric Maeker
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CORE_CONSTANTS_H
-#define CORE_CONSTANTS_H
+#ifndef DDIMANAGER_DDIPLUGIN_DATABASEREPORTDIALOG_H
+#define DDIMANAGER_DDIPLUGIN_DATABASEREPORTDIALOG_H
 
-#include <coreplugin/constants_menus.h>
-#include <coreplugin/constants_icons.h>
-#include <coreplugin/constants_tokensandsettings.h>
-#include <coreplugin/constants_trans.h>
+#include <ddiplugin/ddi_exporter.h>
+#include <QDialog>
 
 /**
- * \file constants.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 13 June 2010
+ * \file databasereportdialog.h
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 30 Oct 2013
 */
 
-namespace Core {
-namespace Constants {
+namespace DDI {
+namespace Internal {
+class DatabaseReportDialogPrivate;
+} // namespace Internal
 
-const char* const   FREEDIAMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDiams Prescriptions (*.di)");
-const char* const   FREEDRC_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDRC Consultation files (*.cr)");
-const char* const   FREEMEDFORMS_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeMedForms Forms File (*.xml)");
-const char* const   FREEDDIMANAGER_FILEFILTER = QT_TRANSLATE_NOOP("tkConstants", "FreeDDIManager files (*.ddi)");
+class DDI_EXPORT DatabaseReportDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    explicit DatabaseReportDialog(QWidget *parent = 0);
+    ~DatabaseReportDialog();
+    
+    bool initialize();
+    
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    
+private:
+    Internal::DatabaseReportDialogPrivate *d;
+};
 
-}  // end Constants
-} // end Core
+} // namespace DDI
 
-#endif // CORE_CONSTANTS_H
+#endif  // DDIMANAGER_DDIPLUGIN_DATABASEREPORTDIALOG_H
+

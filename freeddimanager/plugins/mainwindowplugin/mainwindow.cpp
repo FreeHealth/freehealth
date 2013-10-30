@@ -47,6 +47,7 @@
 #include <coreplugin/idocumentprinter.h>
 
 #include <ddiplugin/constants.h>
+#include <ddiplugin/databasereportdialog.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -63,6 +64,7 @@
 #include <translationutils/trans_filepathxml.h>
 #include <translationutils/trans_msgerror.h>
 #include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
 
 #include "ui_mainwindow.h"
 
@@ -135,12 +137,12 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
-    createFileNewSubMenu();
-    Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
-    fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
-    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-    createEditMenu();
-//    createFormatMenu();
+    // createFileNewSubMenu();
+    // Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
+    // fmenu->setOnAllDisabledBehavior(Core::ActionContainer::Show);
+    // connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+    // createEditMenu();
+    // createFormatMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -148,22 +150,20 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     actions.setFileActions(
                 Core::MainWindowActions::A_FileOpen |
                 Core::MainWindowActions::A_FileSave |
-                Core::MainWindowActions::A_FileSaveAs |
+                // Core::MainWindowActions::A_FileSaveAs |
                 Core::MainWindowActions::A_FilePrint |
-                Core::MainWindowActions::A_FilePrintPreview |
+                // Core::MainWindowActions::A_FilePrintPreview |
                 Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
                 Core::MainWindowActions::A_AppPreferences |
                 Core::MainWindowActions::A_LanguageChange //|
-                //            Core::MainWindowActions::A_ConfigureMedinTux
                 );
     actions.setHelpActions(
                 Core::MainWindowActions::A_AppAbout |
                 Core::MainWindowActions::A_PluginsAbout |
                 Core::MainWindowActions::A_AppHelp |
                 Core::MainWindowActions::A_DebugDialog |
-                Core::MainWindowActions::A_CheckUpdate //|
-                //            Core::MainWindowActions::A_QtAbout
+                Core::MainWindowActions::A_CheckUpdate
                 );
     actions.createEditActions(false);
     createActions(actions);
@@ -171,6 +171,24 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
+
+    // Create some specific actions
+    QAction *a = 0;
+    Core::Command *cmd = 0;
+    Core::Context ctx(Core::Constants::C_GLOBAL);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    Q_ASSERT(menu);
+    if (menu) {
+        Core::Id group(Core::Constants::G_FILE_PROJECT);
+        // View database report
+        a = new QAction(this);
+        a->setObjectName("aMainWinViewDatabaseReport");
+        a->setIcon(QIcon(Core::Constants::ICONINFORMATION));
+        cmd = actionManager()->registerAction(a, "aMainWinViewDatabaseReport", ctx);
+        cmd->setTranslations(Trans::Constants::DATABASE_INFORMATION);
+        menu->addAction(cmd, group);
+        connect(cmd->action(), SIGNAL(triggered()), this, SLOT(onDatabaseReportRequested()));
+    }
 
     // Create Mode stack
     m_modeStack = new Utils::FancyTabWidget(this);
@@ -187,73 +205,30 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
  */
 void MainWindow::extensionsInitialized()
 {
-//    // Creating MainWindow UI
-//    ui = new Internal::Ui::MainWindow();
-//    ui->setupUi(this);
-//    if (layout())
-//        layout()->setMargin(0);
-
-//    // Creating ToolBar
-//    QToolBar *bar = new QToolBar(this);
-//    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-//    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-//    bar->setIconSize(QSize(32, 32));
-//    QStringList uids;
-////    uids  << Core::Constants::A_FILE_OPEN
-////          << Core::Constants::A_FILE_SAVE
-////          << Core::Constants::A_FILE_SAVEAS
-////          << "--"
-////          << Core::Constants::A_FILE_PRINT
-////          << "->"
-////             ;
-//    foreach(const QString &uid, uids) {
-//        if (uid=="--") {
-//            bar->addSeparator();
-//            continue;
-//        } else if (uid=="->") {
-//            QWidget *w = new QWidget(bar);
-//            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-//            w->setLayout(new QHBoxLayout(w));
-//            w->layout()->addItem(new QSpacerItem(10,10, QSizePolicy::Expanding, QSizePolicy::Expanding));
-//            bar->addWidget(w);
-//            continue;
-//        } else {
-//            Core::Command *cmd = actionManager()->command(Core::Id(uid));
-//            if (cmd)
-//                bar->addAction(cmd->action());
-//        }
-//    }
-//    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-//    setUnifiedTitleAndToolBarOnMac(true);
-//    addToolBar(bar);
-
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEDDIMANAGER_UPDATE_URL);
         if (checkUpdate())
             settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
-
-    //m_modeStack->insertTopWidget(patientCore()->patientBar());
     m_modeStack->statusBar()->hide();
     setCentralWidget(m_modeStack);
-
-    createDockWindows();
+    // createDockWindows();
 
     setWindowTitle(QString("%1 %2 - (c) %3").arg(qApp->applicationName()).arg(qApp->applicationVersion()).arg(tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY)));
-    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDRC));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFREEDDIMANAGER));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
 
 MainWindow::~MainWindow()
 {
-//    delete centralWidget();
-//    setCentralWidget(0);
-//    delete ui;
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWindow::~MainWindow()";
-    // delete ui components
+    // We need to delete UI components before the mainwindow is destroy
+    // because all mainwindow Core components (action manager, mode manager...)
+    // are deleted with the main window object but some widgets
+    // can need a last access to these Core components
     delete m_modeStack;
     m_modeStack = 0;
 }
@@ -277,8 +252,7 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
-    connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(onCurrentModeChanged(Core::IMode*)), Qt::UniqueConnection);
-    readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
+    readSettings();
 }
 
 /**
@@ -338,6 +312,13 @@ void MainWindow::openRecentFile()
     }
 }
 
+void MainWindow::onDatabaseReportRequested()
+{
+    DDI::DatabaseReportDialog dlg(this);
+    dlg.initialize();
+    dlg.exec();
+}
+
 void MainWindow::updateCheckerEnd(bool)
 {
     delete statusBar();
@@ -363,83 +344,47 @@ void MainWindow::writeSettings()
     settings()->sync();
 }
 
-/** \obsolete */
-void MainWindow::createStatusBar()
-{
-//    statusBar()->showMessage( tkTr(Trans::Constants::READY), 2000 );
-}
-
-/** When the current Core::IMode is beeing updated, check the patient visibility */
-void MainWindow::onCurrentModeChanged(Core::IMode *newMode)
-{
-    Q_ASSERT(newMode);
-//    if (!newMode)
-//        return;
-//    if (newMode->patientBarVisibility())
-//        patient()->showPatientBar();
-//    else
-//        patient()->hidePatientBar();
-}
-
-bool MainWindow::newFile()
-{
-    return true;
-}
-
-/** Open the preferences dialog */
-bool MainWindow::applicationPreferences()
-{
-    Core::SettingsDialog dlg(this);
-    dlg.exec();
-    return true;
-}
-
-/** \brief Runs the MedinTux configurator */
-bool MainWindow::configureMedintux()
-{
-//    Internal::configureMedinTux();
-    return true;
-}
-
 bool MainWindow::saveAsFile()
 {
-    // get filename
-    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
-                                QDir::homePath(),
-                                tkTr(Core::Constants::FREEDRC_FILEFILTER));
-    if (fileName.isEmpty())
-        return false;
+//    // get filename
+//    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
+//                                QDir::homePath(),
+//                                tkTr(Core::Constants::FREEDDIMANAGER_FILEFILTER));
+//    if (fileName.isEmpty())
+//        return false;
 
-    bool ok = saveFileContent(fileName);
-    if (ok) {
-        fileManager()->addToRecentFiles(fileName);
-        fileManager()->setCurrentFile(fileName);
-    }
-    return ok;
+//    bool ok = saveFileContent(fileName);
+//    if (ok) {
+//        fileManager()->addToRecentFiles(fileName);
+//        fileManager()->setCurrentFile(fileName);
+//    }
+//    return ok;
+    return true;
 }
 
 bool MainWindow::saveFile()
 {
-    if (fileManager()->currentFile().isEmpty())
-        return saveAsFile();
-    return saveFileContent(fileManager()->currentFile());
+//    if (fileManager()->currentFile().isEmpty())
+//        return saveAsFile();
+//    return saveFileContent(fileManager()->currentFile());
+    return true;
 }
 
 bool MainWindow::openFile()
 {
-    QString f = QFileDialog::getOpenFileName(this,
-                                             tkTr(Trans::Constants::OPEN_FILE),
-                                             QDir::homePath(),
-                                             tkTr(Core::Constants::FREEDRC_FILEFILTER) );
-    if (f.isEmpty())
-        return false;
+//    QString f = QFileDialog::getOpenFileName(this,
+//                                             tkTr(Trans::Constants::OPEN_FILE),
+//                                             QDir::homePath(),
+//                                             tkTr(Core::Constants::FREEDDIMANAGER_FILEFILTER) );
+//    if (f.isEmpty())
+//        return false;
 //        QString f = QString("%1/%2/%3")
 //                .arg(settings()->path(Core::ISettings::BundleResourcesPath))
 //                .arg("textfiles/freedrctest")
 //                .arg("cr_2013_09.cr");
-    readFile(f);
-    fileManager()->addToRecentFiles(f);
-    fileManager()->setCurrentFile(f);
+//    readFile(f);
+//    fileManager()->addToRecentFiles(f);
+//    fileManager()->setCurrentFile(f);
     return true;
 }
 
@@ -490,15 +435,3 @@ void MainWindow::readFile(const QString &fileName)
 //    }
 //    _crTreeModel->setCrList(list);
 }
-
-void MainWindow::createDockWindows()
-{
-//    QDockWidget *dock = m_TemplatesDock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
-//    dock->setObjectName("templatesDock");
-//    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-//    dock->setWidget(new Templates::TemplatesView(dock));
-//    addDockWidget(Qt::RightDockWidgetArea, dock);
-//    QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
-//    menu->addAction(dock->toggleViewAction());
-}
-

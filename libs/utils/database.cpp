@@ -1217,8 +1217,9 @@ QStringList Database::tables() const
 }
 
 /**
-   Create a where clause on the table \e tableref using conditions mapped into a hash.
-  Conditions: key = fieldReference , value = whereClauseString.
+ * Create a where clause on the table \e tableref using conditions mapped into a hash.
+ * Conditions: key = fieldReference , value = whereClauseString.
+ * If the field identifiant is -1, the condition is appended as is to the where clause.
   \code
     QHash<int,QString> where;
     where.insert(myFieldId, QString("='%1').arg(myStringMatch);
@@ -1233,13 +1234,18 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
     QHashIterator<int, QString> i(conditions);
     while (i.hasNext()) {
         i.next();
-        int index = d_database->index(tableref, i.key());
-        if (!d_database->m_Fields.keys().contains(index))
-            continue;
-        where.append(QString(" (`%1`.`%2` %3) AND ")
-                     .arg(d_database->m_Tables[tableref])
-                     .arg(d_database->m_Fields.value(index))
-                     .arg(i.value()));
+        if (i.key() == -1) {
+            where.append(QString(" (%1) AND ")
+                         .arg(i.value()));
+        } else {
+            int index = d_database->index(tableref, i.key());
+            if (!d_database->m_Fields.keys().contains(index))
+                continue;
+            where.append(QString(" (`%1`.`%2` %3) AND ")
+                         .arg(d_database->m_Tables[tableref])
+                         .arg(d_database->m_Fields.value(index))
+                         .arg(i.value()));
+        }
     }
     where.chop(5);
     if (conditions.count() > 1)
@@ -1467,7 +1473,7 @@ QString Database::select(const int &tableref) const
 */
 QString Database::selectDistinct(const int &tableref, const QList<int> &fields, const QHash<int, QString> &conditions) const
 {
-    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 /**
@@ -1476,7 +1482,7 @@ QString Database::selectDistinct(const int &tableref, const QList<int> &fields, 
 */
 QString Database::selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
-    return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 /**
@@ -1485,7 +1491,7 @@ QString Database::selectDistinct(const int &tableref, const int &fieldref, const
 */
 QString Database::selectDistinct(const int & tableref, const int & fieldref) const
 {
-    return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 QString Database::select(const FieldList &select, const JoinList &joins) const

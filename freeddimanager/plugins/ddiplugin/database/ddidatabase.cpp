@@ -60,6 +60,9 @@ static inline QString databaseFileName() {return settings()->databasePath() + QD
 
 namespace {
 const char * const CURRENTVERSION = "0.8.4";
+const char * const SQL_ISNULL = "=''";
+const char * const SQL_ISNOTNULL = "<>''";
+
 const int columnSize = 60;
 }
 
@@ -767,18 +770,19 @@ QString DDIDatabase::plainTextAtcReport() const
     QSqlQuery query(DB);
     QString langString;
     for(int i=0; i < lang.count(); ++i) {
-        where.insert(lang.at(i), "IS NULL");
+        where.insert(lang.at(i), ::SQL_ISNULL);
         switch (lang.at(i)) {
         case Constants::ATC_FR: langString = QString("French"); break;
         case Constants::ATC_EN: langString = QString("English"); break;
         case Constants::ATC_DE: langString = QString("Deutsch"); break;
         }
+        report << Utils::centerString(QString("  Missing %1 translation (%2)  ")
+                                      .arg(langString)
+                                      .arg(count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where))), '.', 90);
         QString req = selectDistinct(Constants::Table_ATC, Constants::ATC_CODE, where);
         if (query.exec(req)) {
             while (query.next()) {
-                report << QString("%1 %2")
-                          .arg(QString("Missing %1 translation").arg(langString).leftJustified(columnSize, '.'))
-                          .arg(query.value(0).toString());
+                report << query.value(0).toString();
             }
         }
         query.finish();
@@ -818,11 +822,11 @@ QString DDIDatabase::plainTextInteractorsReport() const
     where.insert(Constants::INTERACTOR_ISCLASS, "=1");
     where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL");
     req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+    report << Utils::centerString(QString("  Empty interacting class (%1)  ")
+                                  .arg(count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, getWhereClause(Constants::Table_INTERACTORS, where))), '.', 90);
     if (query.exec(req)) {
         while (query.next()) {
-            report << QString("%1 %2")
-                      .arg(QString("Empty interacting class").leftJustified(columnSize, '.'))
-                      .arg(query.value(0).toString());
+            report << query.value(0).toString();
         }
     }
     query.finish();
@@ -831,11 +835,11 @@ QString DDIDatabase::plainTextInteractorsReport() const
     where.insert(Constants::INTERACTOR_ISCLASS, "=1");
     where.insert(Constants::INTERACTOR_ATC, "IS NULL");
     req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+    report << Utils::centerString(QString("  Interacting without ATC link (%1)  ")
+                                  .arg(count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, getWhereClause(Constants::Table_INTERACTORS, where))), '.', 90);
     if (query.exec(req)) {
         while (query.next()) {
-            report << QString("%1 %2")
-                      .arg(QString("No ATC link").leftJustified(columnSize, '.'))
-                      .arg(query.value(0).toString());
+            report << query.value(0).toString();
         }
     }
     query.finish();
@@ -856,19 +860,258 @@ QString DDIDatabase::plainTextDrugDrugInteractionsReport() const
         return QString::null;
 
     QStringList report;
-    report << Utils::centerString("  Drug-Drug Interactions report  ", '*', 90);
     QHash<int, QString> where;
     where.insert(Constants::DDI_ISVALID, "=1");
 
     // Count DDIs
-    report << QString("%1 %2")
+    QStringList header;
+    header << Utils::centerString("  Drug-Drug Interactions report  ", '*', 90);
+    int n = 0;
+    header << QString("%1 %2")
               .arg(QString("Number of valid DDIs").leftJustified(columnSize, '.'))
               .arg(count(Constants::Table_DDI, Constants::DDI_ID, getWhereClause(Constants::Table_DDI, where)));
 
-//    // Get interacting classes without children
-//    QString req;
-//    QSqlQuery query(DB);
-//    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+    // Count unreviewed
+    where.insert(Constants::DDI_ISREVIEWED, "=1");
+    header << QString("%1 %2")
+              .arg(QString("Number of unreviewed DDIs").leftJustified(columnSize, '.'))
+              .arg(count(Constants::Table_DDI, Constants::DDI_ID, getWhereClause(Constants::Table_DDI, where)));
+
+    QString req;
+    QSqlQuery query(DB);
+
+    // Get 'no risk' DDIs
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_RISKFR, ::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKEN, ::SQL_ISNULL);
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("No textual risk defined").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  No textual risk defined (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+
+    // Get missing translations
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_RISKFR, ::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKEN, ::SQL_ISNOTNULL);
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Missing french risk translation").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Missing french risk translation (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_MANAGEMENTFR, ::SQL_ISNULL);
+    where.insert(Constants::DDI_MANAGEMENTEN, ::SQL_ISNOTNULL);
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Missing french management translation").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Missing french management translation (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_RISKEN, ::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKFR, ::SQL_ISNOTNULL);
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Missing english risk translation").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Missing english risk translation (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_MANAGEMENTEN, ::SQL_ISNULL);
+    where.insert(Constants::DDI_MANAGEMENTFR, ::SQL_ISNOTNULL);
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Missing english management translation").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Missing english management translation (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+
+    // Get multi-level DDI (450 or one char)
+    // WARNING: this can evolve with future version of the database
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_LEVELCODE, "<>\"450\"");
+    where.insert(-1, QString("LENGTH(%1) > 1").arg(fieldName(Constants::Table_DDI, Constants::DDI_LEVELCODE)));
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Multi-level interactions").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Multi-level interactions (%1)  ")
+                                      .arg(n), '.', 90);
+        report << req;
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+
+    // Get interactors uid error
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_FIRSTINTERACTORUID, QString("NOT IN (%1)").arg(selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID)));
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Unknown first interactor").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Unknown first interactor (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+    where.clear();
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_SECONDINTERACTORUID, QString("NOT IN (%1)").arg(selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID)));
+    n = count(Constants::Table_DDI, Constants::DDI_UID, getWhereClause(Constants::Table_DDI, where));
+    header << QString("%1 %2")
+              .arg(QString("Unknown second interactor").leftJustified(columnSize, '.'))
+              .arg(n);
+    if (n > 0) {
+        req = selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
+        report << Utils::centerString(QString("  Unknown second interactor (%1)  ")
+                                      .arg(n), '.', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << ddiInformationForReport(query.value(0));
+            }
+        }
+        query.finish();
+    }
+
+//    QString tmp;
+//    tmp += QString("<span style=\"color:#980000\"><b>%1 / %2</b> <br />%3</span><br />"
+//              "<br /><span style=\"color:#0033CC\"><u>Risk:</u> %4</span><br />"
+//              "<br /><span style=\"color:#336600\"><u>Management:</u> %5</span><br />")
+//            .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
+//            .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
+//            .arg(ddi->data(DrugDrugInteraction::LevelName).toString())
+//            .arg(ddi->risk(""))
+//            .arg(ddi->management(""));
+//    // dose related ?
+//    QString dose;
+//    if (ddi->firstInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()) {
+//        dose += QString("<br />* From: %1 %2 %3 <br />")
+//                .arg(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromValue).toString())
+//                .arg(DrugDrugInteractionModel::unit(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromUnits).toInt()))
+//                .arg(DrugDrugInteractionModel::repartition(ddi->firstInteractorDose().data(DrugDrugInteractionDose::FromRepartition).toInt()));
+//    }
+//    if (ddi->firstInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()) {
+//        dose += QString("<br />* To: %1 %2 %3 <br />")
+//                .arg(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToValue).toString())
+//                .arg(DrugDrugInteractionModel::unit(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToUnits).toInt()))
+//                .arg(DrugDrugInteractionModel::repartition(ddi->firstInteractorDose().data(DrugDrugInteractionDose::ToRepartition).toInt()));
+//    }
+//    if (!dose.isEmpty()) {
+//        tmp += QString("<br /><span style=\"color:#666600\"><u>First Molecule Dose:</u> %1</span><br />").arg(dose);
+//        dose.clear();
+//    }
+//    if (ddi->secondInteractorDose().data(DrugDrugInteractionDose::UsesFrom).toBool()) {
+//        dose += QString("* From: %1 %2 %3 <br />")
+//                .arg(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromValue).toString())
+//                .arg(DrugDrugInteractionModel::unit(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromUnits).toInt()))
+//                .arg(DrugDrugInteractionModel::repartition(ddi->secondInteractorDose().data(DrugDrugInteractionDose::FromRepartition).toInt()));
+//    }
+//    if (ddi->secondInteractorDose().data(DrugDrugInteractionDose::UsesTo).toBool()) {
+//        dose += QString("* To: %1 %2 %3 <br />")
+//                .arg(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToValue).toString())
+//                .arg(DrugDrugInteractionModel::unit(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToUnits).toInt()))
+//                .arg(DrugDrugInteractionModel::repartition(ddi->secondInteractorDose().data(DrugDrugInteractionDose::ToRepartition).toInt()));
+//    }
+//    if (!dose.isEmpty()) {
+//        tmp += QString("<br /><span style=\"color:#666600\"><u>Second Molecule Dose:</u> %1</span><br />").arg(dose);
+//        dose.clear();
+//    }
+////        dose.clear();
+////        const QStringList &routes = ddi->data(DrugDrugInteractionModel::FirstInteractorRouteOfAdministrationIds).toStringList();
+////        if (routes.count() > 0) {
+////            if (!routes.at(0).isEmpty()) {
+////                dose += QString("* Routes: %1<br />")
+////                        .arg(routes.join(";"));
+////            }
+////        }
+//    dose.clear();
+//    const QStringList &pmids = ddi->data(DrugDrugInteraction::PMIDsStringList).toStringList();
+//    if (pmids.count() > 0) {
+//        if (!pmids.at(0).isEmpty()) {
+//            foreach(const QString &pmid, pmids) {
+//                dose += QString("<br />* PMID: <a href=\"http://www.ncbi.nlm.nih.gov/pubmed/%1\">%1</a>").arg(pmid);
+//            }
+//        }
+//    }
+//    if (!dose.isEmpty())
+//        tmp += QString("<br /><span style=\"color:#003333\"><u>Bibliography:</u> %1</span><br />").arg(dose);
+//    dose.clear();
+
+//    // Add model errors
+//    QStringList errors = m_ddiError.values(ddi);
+//    if (errors.count()) {
+//        tmp += QString("<br /><span style=\"color:#FF2020\"><u>Model Errors:</u> %1</span><br />").arg(errors.join("<br />"));
+//    }
+
+//    // Get untranslated DDI
 //    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL");
 //    req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
 //    if (query.exec(req)) {
@@ -893,7 +1136,72 @@ QString DDIDatabase::plainTextDrugDrugInteractionsReport() const
 //    }
 //    query.finish();
 
-    return report.join("\n");
+
+    // When all DDI are loaded, read all DDI level and store the stat into the
+    // m_levelStatistics (K=level name  ; V=number of ddi recorded)
+//    void globalLevelStatistics(const QList<DrugDrugInteraction *> &ddis)
+//    {
+//        int total = 0;
+//        for(int i=0; i < ddis.count(); ++i) {
+//            DrugDrugInteraction *ddi = ddis.at(i);
+//            int n = 0;
+//            DrugInteractor *interactor1 = getInteractor(ddi->firstInteractor(), m_interactors);
+//            DrugInteractor *interactor2 = getInteractor(ddi->secondInteractor(), m_interactors);
+//            if (!interactor1 || !interactor2) {
+//                LOG_ERROR_FOR(q, "Interactor not found? " + ddi->firstInteractor() + " - " + ddi->secondInteractor());
+//                continue;
+//            }
+//            if (interactor1->isClass() && interactor2->isClass()) {
+//                n = interactor1->childrenCount() * interactor2->childrenCount();
+//            } else if (interactor1->isClass() && !interactor2->isClass()) {
+//                n = interactor1->childrenCount();
+//            } else if (!interactor1->isClass() && interactor2->isClass()) {
+//                n = interactor2->childrenCount();
+//            } else {
+//                n = 1;
+//            }
+
+//            foreach(QString name, ddi->levelName().split(", ")) {
+//                if (name.isEmpty()) {
+//                    name = ddi->levelCode();
+//                    qWarning() << "EMPTY LEVEL" << ddi->firstInteractor() << ddi->secondInteractor();
+//                }
+//                m_levelStatistics.insert(name, m_levelStatistics.value(name, 0) + n);
+//                total += n;
+//            }
+//        }
+
+    header << report;
+    return header.join("\n");
+}
+
+/** Returns a basic human readable DDI information using DDI::Constants::DDI_UID field */
+QString DDIDatabase::ddiInformationForReport(const QVariant &uid) const
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return "Error";
+
+    QHash<int, QString> where;
+    where.insert(Constants::DDI_UID, QString("='%1'").arg(uid.toString()));
+    QSqlQuery query(DB);
+    QString req = select(Constants::Table_DDI, QList<int>()
+                         << Constants::DDI_FIRSTINTERACTORUID
+                         << Constants::DDI_SECONDINTERACTORUID
+                         << Constants::DDI_LEVELCODE
+                         , where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return QString("%1 - %2 (%3)")
+                    .arg(query.value(0).toString())
+                    .arg(query.value(1).toString())
+                    .arg(query.value(2).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    }
+    return "Error";
 }
 
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,

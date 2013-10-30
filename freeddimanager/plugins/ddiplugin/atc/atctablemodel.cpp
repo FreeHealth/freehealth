@@ -56,6 +56,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
+static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
 
 namespace DDI {
 namespace Internal {
@@ -87,8 +88,8 @@ AtcTableModel::AtcTableModel(QObject *parent) :
     QAbstractTableModel(parent),
     d(new AtcTableModelPrivate(this))
 {
-    d->_sql = new QSqlTableModel(this, ddiCore()->database().database());
-    d->_sql->setTable(ddiCore()->database().table(Constants::Table_ATC));
+    d->_sql = new QSqlTableModel(this, ddiBase().database());
+    d->_sql->setTable(ddiBase().table(Constants::Table_ATC));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->_sql->setSort(Constants::ATC_CODE, Qt::AscendingOrder);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);

@@ -63,26 +63,21 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    void createDockWindows();
     void refreshPatient();
     void readSettings();
     void writeSettings();
-    void createStatusBar();
 
 public Q_SLOTS:
-    void onCurrentModeChanged(Core::IMode *newMode);
-    bool newFile();
     bool openFile();
     bool saveFile();
     bool saveAsFile();
-
-    bool applicationPreferences();
-    bool configureMedintux();
 
     void updateCheckerEnd(bool);
 
     void aboutToShowRecentFiles();
     void openRecentFile();
+
+    void onDatabaseReportRequested();
 
 protected:
     void closeEvent(QCloseEvent *event);

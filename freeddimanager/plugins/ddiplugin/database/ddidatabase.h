@@ -75,6 +75,7 @@ private:
                         const Utils::DatabaseConnector &connector,
                         CreationOption createOption
                        );
+    QString ddiInformationForReport(const QVariant &uid) const;
 
 protected:
     bool m_dbcore_initialized;
