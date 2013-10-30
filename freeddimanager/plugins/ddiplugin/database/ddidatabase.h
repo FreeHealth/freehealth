@@ -65,6 +65,11 @@ public:
     int insertDrugDrugInteractionDataFromXml(const QString &fileName);
     int insertRoutesDataFromCsvRawFile(const QString &fileName);
 
+    // REPORTS
+    QString plainTextAtcReport() const;
+    QString plainTextInteractorsReport() const;
+    QString plainTextDrugDrugInteractionsReport() const;
+
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
                         const Utils::DatabaseConnector &connector,

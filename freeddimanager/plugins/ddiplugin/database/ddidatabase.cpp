@@ -60,6 +60,7 @@ static inline QString databaseFileName() {return settings()->databasePath() + QD
 
 namespace {
 const char * const CURRENTVERSION = "0.8.4";
+const int columnSize = 60;
 }
 
 static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
@@ -737,6 +738,162 @@ int DDIDatabase::insertRoutesDataFromCsvRawFile(const QString &fileName)
 //    m_Routes.prepend(allOral);
 
     return 0;
+}
+
+/**
+ * Check the database for ATC code errors, missing translations, etc...
+ * and return a formatted plain text report.
+ */
+QString DDIDatabase::plainTextAtcReport() const
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+
+    QStringList report;
+    QHash<int, QString> where;
+    where.insert(Constants::ATC_ISVALID, "=1");
+    report << Utils::centerString("  ATC Code report  ", '*', 90);
+
+    // Count ATC codes
+    report << QString("%1 %2")
+              .arg(QString("Number of valid ATC codes:").leftJustified(columnSize, '.'))
+              .arg(count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where)));
+
+    // Get all missing translations
+    QList<int> lang;
+    lang << Constants::ATC_FR << Constants::ATC_EN << Constants::ATC_DE;
+    QSqlQuery query(DB);
+    QString langString;
+    for(int i=0; i < lang.count(); ++i) {
+        where.insert(lang.at(i), "IS NULL");
+        switch (lang.at(i)) {
+        case Constants::ATC_FR: langString = QString("French"); break;
+        case Constants::ATC_EN: langString = QString("English"); break;
+        case Constants::ATC_DE: langString = QString("Deutsch"); break;
+        }
+        QString req = selectDistinct(Constants::Table_ATC, Constants::ATC_CODE, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << QString("%1 %2")
+                          .arg(QString("Missing %1 translation").arg(langString).leftJustified(columnSize, '.'))
+                          .arg(query.value(0).toString());
+            }
+        }
+        query.finish();
+    }
+    return report.join("\n");
+}
+
+/**
+ * Check the database for interactors errors, missing translations, missing ATC linking, etc...
+ * and return a formatted plain text report.
+ */
+QString DDIDatabase::plainTextInteractorsReport() const
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+
+    QStringList report;
+    report << Utils::centerString("  Drug interactors report  ", '*', 90);
+    QHash<int, QString> where;
+    where.insert(Constants::INTERACTOR_ISVALID, "=1");
+
+    // Count Interactors
+    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+    report << QString("%1 %2")
+              .arg(QString("Number of valid interacting classes").leftJustified(columnSize, '.'))
+              .arg(count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, getWhereClause(Constants::Table_INTERACTORS, where)));
+    where.insert(Constants::INTERACTOR_ISCLASS, "=0");
+    report << QString("%1 %2")
+              .arg(QString("Number of valid interacting classes").leftJustified(columnSize, '.'))
+              .arg(count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, getWhereClause(Constants::Table_INTERACTORS, where)));
+
+    // Get interacting classes without children
+    QString req;
+    QSqlQuery query(DB);
+    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL");
+    req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            report << QString("%1 %2")
+                      .arg(QString("Empty interacting class").leftJustified(columnSize, '.'))
+                      .arg(query.value(0).toString());
+        }
+    }
+    query.finish();
+
+    // Get interacting molecules without ATC linking
+    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+    where.insert(Constants::INTERACTOR_ATC, "IS NULL");
+    req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            report << QString("%1 %2")
+                      .arg(QString("No ATC link").leftJustified(columnSize, '.'))
+                      .arg(query.value(0).toString());
+        }
+    }
+    query.finish();
+
+    return report.join("\n");
+}
+
+/**
+ * Check the database for drug-drug interaction errors,
+ * missing translations, missing ATC linking, etc...
+ * and return a formatted plain text report.
+ */
+QString DDIDatabase::plainTextDrugDrugInteractionsReport() const
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+
+    QStringList report;
+    report << Utils::centerString("  Drug-Drug Interactions report  ", '*', 90);
+    QHash<int, QString> where;
+    where.insert(Constants::DDI_ISVALID, "=1");
+
+    // Count DDIs
+    report << QString("%1 %2")
+              .arg(QString("Number of valid DDIs").leftJustified(columnSize, '.'))
+              .arg(count(Constants::Table_DDI, Constants::DDI_ID, getWhereClause(Constants::Table_DDI, where)));
+
+//    // Get interacting classes without children
+//    QString req;
+//    QSqlQuery query(DB);
+//    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+//    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL");
+//    req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+//    if (query.exec(req)) {
+//        while (query.next()) {
+//            report << QString("%1 %2")
+//                      .arg(QString("Empty interacting class").leftJustified(columnSize, '.'))
+//                      .arg(query.value(0).toString());
+//        }
+//    }
+//    query.finish();
+
+//    // Get interacting molecules without ATC linking
+//    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
+//    where.insert(Constants::INTERACTOR_ATC, "IS NULL");
+//    req = selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
+//    if (query.exec(req)) {
+//        while (query.next()) {
+//            report << QString("%1 %2")
+//                      .arg(QString("No ATC link").leftJustified(columnSize, '.'))
+//                      .arg(query.value(0).toString());
+//        }
+//    }
+//    query.finish();
+
+    return report.join("\n");
 }
 
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,
