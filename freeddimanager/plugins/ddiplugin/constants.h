@@ -60,10 +60,16 @@ const char * const CATEGORY_FREEDRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "
 const char * const DDIMANAGER_DATABASE_FILENAME  =  "ddimanager.db";
 const char * const DDIMANAGER_DATABASE_NAME      =  "ddimanager";
 
-const char * const ATC_CSV_FILENAME                         = "/nonfree/ddi/atc_utf8.csv";
-const char * const INTERACTORS_XML_FILENAME                 = "/nonfree/ddi/ddi_interactors_latest.xml";
-const char * const INTERACTIONS_XML_FILENAME                = "/nonfree/ddi/ddi_latest.xml";
-const char * const ROUTES_CSV_FILENAME                      = "/sql/drugdb/routes.txt";
+const char * const ATC_CSV_FILENAME              = "/nonfree/ddi/atc_utf8.csv";
+const char * const INTERACTORS_XML_FILENAME      = "/nonfree/ddi/ddi_interactors_latest.xml";
+const char * const INTERACTIONS_XML_FILENAME     = "/nonfree/ddi/ddi_latest.xml";
+const char * const ROUTES_CSV_FILENAME           = "/sql/drugdb/routes.txt";
+
+const char * const MODE_ATC = "mAtc";
+const char * const MODE_INTERACTOR = "mInteractor";
+const char * const MODE_DDI = "mDDI";
+const char * const MODE_PIM = "mPIM";
+const char * const MODE_PREGNANCY = "mPregnancy";
 
 // Database
 enum Tables {

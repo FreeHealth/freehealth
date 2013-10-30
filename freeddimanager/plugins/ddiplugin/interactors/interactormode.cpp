@@ -39,6 +39,7 @@
  ***************************************************************************/
 #include "interactormode.h"
 #include <ddiplugin/interactors/interactoreditorwidget.h>
+#include <ddiplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
@@ -65,7 +66,7 @@ InteractorMode::InteractorMode(QObject *parent) :
     setDisplayName("Interactors");
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(100);
-    setId(Core::Constants::MODE_PATIENT_SEARCH);
+    setId(Constants::MODE_INTERACTOR);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);
     setPatientBarVisibility(false);

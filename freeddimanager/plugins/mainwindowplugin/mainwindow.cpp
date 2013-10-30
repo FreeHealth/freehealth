@@ -34,6 +34,7 @@
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/modemanager/imode.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -44,6 +45,8 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/idocumentprinter.h>
+
+#include <ddiplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -103,6 +106,10 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
+
+namespace {
+const char* const S_LASTACTIVEMODE = "Mod/LastActive";
+}
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
@@ -260,8 +267,6 @@ MainWindow::~MainWindow()
  * - show and raise main window
  * \sa Core::ICore::coreOpened()
  */
-// TEST
-// END TEST
 void MainWindow::postCoreOpened()
 {
     if (Utils::Log::warnPluginsCreation())
@@ -272,11 +277,7 @@ void MainWindow::postCoreOpened()
     contextManager()->updateContext();
     raise();
     show();
-
-//    manageIModeEnabledState();
     connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(onCurrentModeChanged(Core::IMode*)), Qt::UniqueConnection);
-//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
-
     readSettings(); // moved here because due to the toolbar presence, save/restoreGeometry is buggy
 }
 
@@ -350,6 +351,7 @@ void MainWindow::readSettings()
     fileManager()->getMaximumRecentFilesFromSettings();
     fileManager()->setCurrentFile(QString::null);
     Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
+    modeManager()->activateMode(settings()->value(::S_LASTACTIVEMODE, DDI::Constants::MODE_ATC).toString());
 }
 
 /** \brief Writes main window's settings */
@@ -357,6 +359,7 @@ void MainWindow::writeSettings()
 {
     settings()->saveState(this);
     fileManager()->saveRecentFiles();
+    settings()->setValue(::S_LASTACTIVEMODE, modeManager()->currentMode()->id());
     settings()->sync();
 }
 

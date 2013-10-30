@@ -39,6 +39,7 @@
  ***************************************************************************/
 #include "atcmode.h"
 #include <ddiplugin/atc/atccollectioneditorwidget.h>
+#include <ddiplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
@@ -65,7 +66,7 @@ AtcMode::AtcMode(QObject *parent) :
     setDisplayName("ATC");
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(1000);
-    setId(Core::Constants::MODE_PATIENT_SEARCH);
+    setId(Constants::MODE_ATC);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);
     setPatientBarVisibility(false);

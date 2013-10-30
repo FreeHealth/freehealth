@@ -39,6 +39,7 @@
  ***************************************************************************/
 #include "drugdruginteractionmode.h"
 #include <ddiplugin/ddi/drugdruginteractioneditorwidget.h>
+#include <ddiplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
@@ -65,7 +66,7 @@ DDIMode::DDIMode(QObject *parent) :
     setDisplayName("DDI");
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(10);
-    setId(Core::Constants::MODE_PATIENT_SEARCH);
+    setId(Constants::MODE_DDI);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
 //    setContext(context);
     setPatientBarVisibility(false);
