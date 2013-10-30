@@ -130,6 +130,11 @@ public:
         aSearchClassOnly->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         aSearchMolsAndClass->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         aSearchMolsOnly->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aGoogle->setIcon(theme()->icon(Core::Constants::ICONINTERNET));
+        aResip->setIcon(theme()->icon(Core::Constants::ICONINTERNET));
+        aWho->setIcon(theme()->icon(Core::Constants::ICONINTERNET));
+        aCopyClip->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+        aAtcSearchDialog->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
         aCreateNewClass->setIcon(theme()->icon("black_dci.png")); // FIXME: create a new icon, remove magic number
@@ -144,6 +149,8 @@ public:
         aTranslateThis->setEnabled(false);
 
         _toolButton = new QToolButton(q);
+        _toolButton->setIconSize(QSize(32,32));
+        _toolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         _toolButton->addAction(aAtcSearchDialog);
         _toolButton->addAction(aGoogle);
         _toolButton->addAction(aWho);
