@@ -43,6 +43,8 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 
+#include <QDir>
+
 #include <QDebug>
 
 using namespace DDI;
@@ -151,6 +153,31 @@ bool DDICore::recreateDatabase()
         return false;
     }
     return true;
+}
+
+/**
+ * Create a backup of the current database to the specified path.
+ * Returns the absolute file path of the backuped database or a null QString
+ * in case of an error.
+ */
+QString DDICore::backupDatabaseTo(const QString &absPath)
+{
+    if (QDir(absPath).isRelative())
+        return QString::null;
+
+    if (!QDir(absPath).exists())
+        QDir().mkpath(absPath);
+    QString fileName = QDir::cleanPath(QString("%1/%2_%3.db")
+                                       .arg(absPath)
+                                       .arg(qApp->applicationName().toLower().remove("_debug").remove("_alpha"))
+                                       .arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")));
+    QFile currentDb(d->_base->database().databaseName());
+
+    if (currentDb.exists())
+        if (currentDb.copy(fileName))
+            return fileName;
+
+    return QString::null;
 }
 
 /** Returns the Atc table model single instance */

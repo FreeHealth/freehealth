@@ -61,11 +61,13 @@ public:
     ~DDICore();
 
     bool recreateDatabase();
+    QString backupDatabaseTo(const QString &absPath);
 
     AtcTableModel *atcTableModel() const;
     DrugInteractorTableModel *drugInteractorTableModel() const;
     DrugDrugInteractionTableModel *drugDrugInteractionTableModel() const;
 
+    // Internal usage
     Internal::DDIDatabase &database() const;
 
 private:

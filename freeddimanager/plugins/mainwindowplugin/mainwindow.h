@@ -72,13 +72,11 @@ public Q_SLOTS:
     bool saveFile();
     bool saveAsFile();
 
-    void updateCheckerEnd(bool);
-
     void aboutToShowRecentFiles();
     void openRecentFile();
 
     void onDatabaseReportRequested();
-
+    void onBackupDatabaseRequested();
 protected:
     void closeEvent(QCloseEvent *event);
     void changeEvent(QEvent *event);

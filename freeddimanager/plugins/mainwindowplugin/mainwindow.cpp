@@ -47,6 +47,7 @@
 #include <coreplugin/idocumentprinter.h>
 
 #include <ddiplugin/constants.h>
+#include <ddiplugin/ddicore.h>
 #include <ddiplugin/databasereportdialog.h>
 
 #include <utils/log.h>
@@ -108,6 +109,8 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
+
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 
 namespace {
 const char* const S_LASTACTIVEMODE = "Mod/LastActive";
@@ -172,6 +175,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
+    // Create Mode stack
+    m_modeStack = new Utils::FancyTabWidget(this);
+    modeManager()->init(m_modeStack);
+
     // Create some specific actions
     QAction *a = 0;
     Core::Command *cmd = 0;
@@ -179,20 +186,30 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
     Q_ASSERT(menu);
     if (menu) {
-        Core::Id group(Core::Constants::G_FILE_PROJECT);
         // View database report
         a = new QAction(this);
         a->setObjectName("aMainWinViewDatabaseReport");
-        a->setIcon(QIcon(Core::Constants::ICONINFORMATION));
+        a->setIcon(theme()->icon(Core::Constants::ICONINFORMATION));
         cmd = actionManager()->registerAction(a, "aMainWinViewDatabaseReport", ctx);
         cmd->setTranslations(Trans::Constants::DATABASE_INFORMATION);
-        menu->addAction(cmd, group);
+        menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_PROJECT));
         connect(cmd->action(), SIGNAL(triggered()), this, SLOT(onDatabaseReportRequested()));
+        modeManager()->addAction(cmd->action(), 10);
+
+        // Create a backup of the current database
+        Core::Id bkp_group(Core::Constants::G_FILE_SAVE);
+        // View database report
+        a = new QAction(this);
+        a->setObjectName("aMainWinBackUpDatabase");
+        a->setIcon(theme()->icon(Core::Constants::ICONDATABASE));
+        cmd = actionManager()->registerAction(a, "aMainWinBackUpDatabase", ctx);
+        cmd->setTranslations(Trans::Constants::BACKUP_DATABASE);
+        menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_SAVE));
+        connect(cmd->action(), SIGNAL(triggered()), this, SLOT(onBackupDatabaseRequested()));
+        modeManager()->addAction(cmd->action(), 20);
     }
 
-    // Create Mode stack
-    m_modeStack = new Utils::FancyTabWidget(this);
-    modeManager()->init(m_modeStack);
+    // TODO: action = upload updates to server
 
     return true;
 }
@@ -319,9 +336,27 @@ void MainWindow::onDatabaseReportRequested()
     dlg.exec();
 }
 
-void MainWindow::updateCheckerEnd(bool)
+void MainWindow::onBackupDatabaseRequested()
 {
-    delete statusBar();
+    // Get filename
+    QString path = QFileDialog::getExistingDirectory(this, tkTr(Trans::Constants::BACKUP_DATABASE),
+                                                     settings()->path(Core::ISettings::UserDocumentsPath),
+                                                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (path.isEmpty())
+        return ;
+
+    // Copy database to specified path
+    QString file = ddiCore()->backupDatabaseTo(path);
+    if (file.isEmpty())
+        Utils::warningMessageBox(tr("Unable to save database"),
+                                 tr("An error occured when trying to backup the current database.\n"
+                                    "Please, try again."));
+    else
+        Utils::informativeMessageBox(tkTr(Trans::Constants::BACKUP_DATABASE),
+                                     QString("%1 <br><br>"
+                                        "&nbsp;&nbsp;&nbsp;<b>%2</b>")
+                                     .arg(tr("The database was correctly backuped to the following location:"))
+                                     .arg(file));
 }
 
 /** Reads main window's settings */
