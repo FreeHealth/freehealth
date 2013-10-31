@@ -143,6 +143,7 @@ public:
         aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
         aNextUnreviewedOrUnlinked->setIcon(theme()->icon(Core::Constants::ICONNEXT));
         aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICON_PACKAGE)); // FIXME: add a download icon and correct me
+
         aSave->setEnabled(false);
         aEdit->setEnabled(false);
         aRemoveCurrent->setEnabled(false);
@@ -372,6 +373,7 @@ void InteractorEditorWidget::save()
     }
 
     setEditorsEnabled(false);
+    d->aSave->setEnabled(false);
 }
 
 /** Filter all proxy models with searched string */
@@ -387,6 +389,9 @@ void InteractorEditorWidget::createActionTriggered()
     if (!selected)
         return;
     QString id = Utils::askUser(tr("New drug interactor"), tr("What is the label?"));
+
+    // TODO: make some checking with the label
+
 
     // Insert a row to the drug interactor model
     ddiCore()->drugInteractorTableModel()->insertRow(0);
@@ -437,6 +442,7 @@ void InteractorEditorWidget::removeCurrent()
 void InteractorEditorWidget::edit()
 {
     setEditorsEnabled(true);
+    d->aSave->setEnabled(true);
 }
 
 /** Update UI and wrapper when an interactor is selected by the user */
@@ -452,7 +458,6 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     }
 
     d->aEdit->setEnabled(true);
-    d->aSave->setEnabled(true);
     d->aRemoveCurrent->setEnabled(true);
     d->aTranslateThis->setEnabled(true);
 
