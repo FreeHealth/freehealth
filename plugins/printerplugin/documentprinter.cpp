@@ -132,7 +132,8 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
     replaceTokens(header, headerTokens);
 
 #ifdef WITH_PAD
-    header = padTools()->processPlainText(header);
+    if (padTools())
+        header = padTools()->processPlainText(header);
 #endif
     p->setHeader(header);
 }
@@ -167,7 +168,8 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
     replaceTokens(footer, footerTokens);
 
 #ifdef WITH_PAD
-    footer = padTools()->processPlainText(footer);
+    if (padTools())
+        footer = padTools()->processPlainText(footer);
 #endif
 
     footer.replace("</body>",QString("<br /><span style=\"align:left;font-size:6pt;color:black;\">%1</span></p></body>")
@@ -214,7 +216,8 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
     }
 
 #ifdef WITH_PAD
-    html = padTools()->processPlainText(html);
+    if (padTools())
+        html = padTools()->processPlainText(html);
 #endif
 
     p->addHtmlWatermark(html,
@@ -286,7 +289,8 @@ bool DocumentPrinter::print(const QString &html, const int papers, bool printDup
         QString _html = html;
         Utils::replaceTokens(_html, globalTokens);
 #ifdef WITH_PAD
-        _html = padTools()->processPlainText(_html);
+        if (padTools())
+            _html = padTools()->processPlainText(_html);
 #endif
         doc.setHtml(_html);
     }
@@ -341,7 +345,8 @@ bool DocumentPrinter::printPreview(const QString &html, const int papers, bool p
         QString _html = html;
         Utils::replaceTokens(_html, globalTokens);
 #ifdef WITH_PAD
-        _html = padTools()->processPlainText(_html);
+        if (padTools())
+            _html = padTools()->processPlainText(_html);
 #endif
         p.setContent(_html);
     }
