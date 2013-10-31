@@ -172,6 +172,9 @@ DDIDatabase::DDIDatabase():
     addTable(Table_CURRENTVERSION, "VERSION");
     addField(Table_CURRENTVERSION, CURRENTVERSION_ID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_CURRENTVERSION, CURRENTVERSION_NUMBER, "NUMBER", FieldIsBoolean);
+    addField(Table_CURRENTVERSION, CURRENTVERSION_DATERELEASE, "DATERELEASE", FieldIsDateTime);
+    addField(Table_CURRENTVERSION, CURRENTVERSION_DATESERVERUPDATE, "DATESERVERUPDATE", FieldIsDateTime);
+
 }
 
 /** Force the re-initialization of the database. Call initialize() after this. */
@@ -264,6 +267,8 @@ void DDIDatabase::setVersion(const QString &version)
     query.prepare(prepareInsertQuery(Constants::Table_CURRENTVERSION));
     query.bindValue(Constants::CURRENTVERSION_ID, QVariant());
     query.bindValue(Constants::CURRENTVERSION_NUMBER, version);
+    query.bindValue(Constants::CURRENTVERSION_DATERELEASE, QDateTime::currentDateTime().toString(Qt::ISODate));
+    query.bindValue(Constants::CURRENTVERSION_DATESERVERUPDATE, QVariant());
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("DDIDatabase", query);
     }
@@ -285,6 +290,70 @@ QString DDIDatabase::version() const
         }
     }
     return QString();
+}
+
+/**
+ * Returns the date of release of the current database. This date is defined exactly at the same time
+ * as the database version number. It can be used to check user updates in the database.
+ */
+QDateTime DDIDatabase::dateOfRelease() const
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QDateTime();
+    QSqlQuery query(DB);
+    query.prepare(select(Constants::Table_CURRENTVERSION));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    } else {
+        if (query.next()) {
+            return QDateTime::fromString(query.value(Constants::CURRENTVERSION_DATERELEASE).toString(), Qt::ISODate);
+        }
+    }
+    return QDateTime();
+}
+
+/**
+ * Returns the date of the latest server update.
+ * Server update occurs when the user decide to send his modification to the
+ * central FreeMedForms server. It can be used to check user updates in the database.
+ */
+QDateTime DDIDatabase::dateOfLastServerUpdate() const
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QDateTime();
+    QSqlQuery query(DB);
+    query.prepare(select(Constants::Table_CURRENTVERSION));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    } else {
+        if (query.next()) {
+            return QDateTime::fromString(query.value(Constants::CURRENTVERSION_DATESERVERUPDATE).toString(), Qt::ISODate);
+        }
+    }
+    return QDateTime();
+}
+
+/**
+ * Defines the date of the latest server update.
+ * Server update occurs when the user decide to send his modification to the
+ * central FreeMedForms server. It can be used to check user updates in the database.
+ */
+void DDIDatabase::setLatestServerUpdate(const QDateTime &dateTime)
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return;
+    QHash<int,QString> where;
+    where.insert(Constants::CURRENTVERSION_NUMBER, QString("='%1'").arg(::CURRENTVERSION));
+    QSqlQuery query(DB);
+    QString req = prepareUpdateQuery(Constants::Table_CURRENTVERSION, Constants::CURRENTVERSION_DATESERVERUPDATE, where);
+    query.prepare(req);
+    query.bindValue(0, dateTime.toString(Qt::ISODate));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    }
 }
 
 /** Check the database version. Returns true if the database version is the latest */

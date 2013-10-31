@@ -168,7 +168,9 @@ enum TableDDI_Fields {
 
 enum TableVERSION_Fields {
     CURRENTVERSION_ID = 0,
-    CURRENTVERSION_NUMBER
+    CURRENTVERSION_NUMBER,
+    CURRENTVERSION_DATERELEASE,
+    CURRENTVERSION_DATESERVERUPDATE
 };
 
 //    const char * const MOL_LINK_FILENAME                        = "/global_resources/nonfree/ddi/moleculetoatclinker.xml";
