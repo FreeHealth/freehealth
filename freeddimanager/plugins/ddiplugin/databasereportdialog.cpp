@@ -143,5 +143,10 @@ void DatabaseReportDialog::onPrintRequested()
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
-    p->print(d->ui->textBrowser->toHtml());
+    QString html;
+    html  = "<html><body style=\"font-size: small\"><pre>";
+    html += d->ui->textBrowser->toPlainText();
+    html += "</pre></body></html>";
+
+    p->print(html);
 }
