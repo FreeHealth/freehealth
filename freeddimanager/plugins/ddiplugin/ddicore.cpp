@@ -121,7 +121,7 @@ bool DDICore::initialize()
     if (d->_initialized)
         return true;
     d->_base = new DDIDatabase;
-    d->_base->initialize(settings()->databasePath(), true);
+    d->_base->initialize(settings()->path(Core::ISettings::UserDocumentsPath), true);
 
     d->_atcTableModel = new AtcTableModel(this);
     d->_atcTableModel->initialize();
@@ -138,7 +138,7 @@ bool DDICore::initialize()
 
 bool DDICore::recreateDatabase()
 {
-    QString dbFileName = QString("%1/%2/%3").arg(settings()->databasePath())
+    QString dbFileName = QString("%1/%2/%3").arg(settings()->path(Core::ISettings::UserDocumentsPath))
             .arg(Constants::DDIMANAGER_DATABASE_NAME)
             .arg(Constants::DDIMANAGER_DATABASE_FILENAME);;
     LOG(QString("Removing file %1").arg(dbFileName));

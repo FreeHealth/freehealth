@@ -56,7 +56,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString databaseFileName() {return settings()->databasePath() + QDir::separator() + QString(Constants::DDIMANAGER_DATABASE_NAME) + QDir::separator() + QString(Constants::DDIMANAGER_DATABASE_FILENAME);}
+static inline QString databaseFileName() {return settings()->path(Core::ISettings::UserDocumentsPath) + QDir::separator() + QString(Constants::DDIMANAGER_DATABASE_NAME) + QDir::separator() + QString(Constants::DDIMANAGER_DATABASE_FILENAME);}
 
 namespace {
 const char * const CURRENTVERSION = "0.8.4";
@@ -206,12 +206,13 @@ bool DDIDatabase::initialize(const QString &pathToDb, bool createIfNotExists)
     QString path = pathToDb;
     if (!QFileInfo(pathToDb).isDir())
         path = QFileInfo(pathToDb).absolutePath();
-//    if (!path.endsWith(Constants::DDIMANAGER_DATABASE_NAME)) {
-//        path.append(QDir::separator() + QString(Constants::DDIMANAGER_DATABASE_NAME));
-//    }
-    drugConnector.setAbsPathToReadOnlySqliteDatabase(path);
+
+
+    qWarning() << "--------------" << path;
+
+    drugConnector.setAbsPathToReadWriteSqliteDatabase(path);
     drugConnector.setHost(QFileInfo(databaseFileName()).fileName());
-    drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
+    drugConnector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
     drugConnector.setDriver(Utils::Database::SQLite);
 
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(connectionName()).arg(pathToDb));
