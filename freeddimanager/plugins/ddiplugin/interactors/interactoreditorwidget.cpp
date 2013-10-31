@@ -306,12 +306,13 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(ddiCore()->drugInteractorTableModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
     connect(ddiCore()->drugInteractorTableModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
 
-    setEditorsEnabled(false);
-    connect(d->ui->classesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
+    // connect(d->ui->classesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
 
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
     retranslateUi();
+
+    setEditorsEnabled(false);
 }
 
 InteractorEditorWidget::~InteractorEditorWidget()
