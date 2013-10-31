@@ -31,11 +31,11 @@
 
     <htmldescription lang="fr">&lt;p>
       La base de données thérapeutique française est construite sur la base
-      des données publiées par l'AFSSAPS. Vous y trouverez tous les médicaments
+      des données publiées par l'ANSM. Vous y trouverez tous les médicaments
       commercialisés en France.&lt;br />
       &lt;br />
       L'utilisation de cette base de données est soumise à une restriction de licence
-      par biais du copyright de l'AFSSAPS.&lt;br />
+      par biais du copyright de l'ANSM.&lt;br />
       &lt;br />
       Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
       &lt;br />
@@ -43,11 +43,11 @@
     </htmldescription>
 
     <htmldescription lang="xx">&lt;p>
-      The french pharmaceutical drug database is build upon AFSSAPS' data.
+      The french pharmaceutical drug database is build upon ANSM' data.
       You will find all available and marketed drugs for France.&lt;br />
       &lt;br />
       You can use the database according to the limiting license of the data which
-      are copyrighted by the AFSSAPS.&lt;br />
+      are copyrighted by the ANSM.&lt;br />
       &lt;br />
       Data for drug interaction engines are not included in this database.&lt;br />
       &lt;br />
