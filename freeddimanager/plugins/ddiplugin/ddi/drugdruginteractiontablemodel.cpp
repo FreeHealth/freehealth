@@ -29,6 +29,7 @@
 #include <ddiplugin/constants.h>
 #include <ddiplugin/database/ddidatabase.h>
 #include <ddiplugin/interactors/druginteractortablemodel.h>
+#include <ddiplugin/ddi/drugdruginteraction.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -146,28 +147,7 @@ public:
 
     QString levelName(QString levelCode)
     {
-        QString level = firstLevelCode(levelCode);
-        QStringList names;
-        while (!level.isEmpty()) {
-            if (level == "C")
-                names << tkTr(Trans::Constants::CONTRAINDICATION);
-            else if (level == "D")
-                names << tkTr(Trans::Constants::DISCOURAGED);
-            else if (level == "450")
-                names << tkTr(Trans::Constants::P450_IAM);
-            else if (level == "Y")
-                names << tkTr(Trans::Constants::GPG_IAM);
-            else if (level == "T")
-                names << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
-            else if (level == "P")
-                names << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
-            else if (level == "I")
-                names << tkTr(Trans::Constants::INFORMATION);
-
-            level = levelCode.remove(0, level.size());
-            level = firstLevelCode(level);
-        }
-        return names.join(", ");
+        return DrugDrugInteraction::levelName(levelCode);
     }
 
     // Check DDI sanity and store error messages into _rowErrors

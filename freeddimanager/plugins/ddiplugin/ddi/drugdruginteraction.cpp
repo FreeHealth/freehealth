@@ -253,6 +253,50 @@ bool DrugDrugInteraction::levelValidity() const
     return (level.size()==1);
 }
 
+static QString firstLevelCode(const QString &levelCode)
+{
+    // Assuming that levels are one char excepts cytochrome p450 DDI,
+    // We just have to return the first char of the \e levelCode or "450"
+    if (levelCode.isEmpty())
+        return QString();
+
+    if (levelCode.at(0).isDigit())
+        return "450";
+
+    return levelCode.at(0);
+}
+
+/**
+ * Return the level name according to the database level code.
+ * If the code corresponds to a multi-level DDI (which is a DDI coding error)
+ * all level names are returns separated with a comma.
+*/
+QString DrugDrugInteraction::levelName(QString levelCode)
+{
+    QString level = firstLevelCode(levelCode);
+    QStringList names;
+    while (!level.isEmpty()) {
+        if (level == "C")
+            names << tkTr(Trans::Constants::CONTRAINDICATION);
+        else if (level == "D")
+            names << tkTr(Trans::Constants::DISCOURAGED);
+        else if (level == "450")
+            names << tkTr(Trans::Constants::P450_IAM);
+        else if (level == "Y")
+            names << tkTr(Trans::Constants::GPG_IAM);
+        else if (level == "T")
+            names << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
+        else if (level == "P")
+            names << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+        else if (level == "I")
+            names << tkTr(Trans::Constants::INFORMATION);
+
+        level = levelCode.remove(0, level.size());
+        level = firstLevelCode(level);
+    }
+    return names.join(", ");
+}
+
 /** Set the translated DDI risk */
 void DrugDrugInteraction::setRisk(const QString &risk, const QString &lang)
 {

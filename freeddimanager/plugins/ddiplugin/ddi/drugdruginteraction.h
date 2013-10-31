@@ -104,6 +104,7 @@ public:
     QString secondInteractor() const {return data(SecondInteractorName).toString();}
     QString levelCode() const {return data(LevelCode).toString();}
     QString levelName() const {return data(LevelName).toString();}
+    static QString levelName(QString levelCode);
 
     void setRisk(const QString &risk, const QString &lang);
     void setManagement(const QString &management, const QString &lang);
