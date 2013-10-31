@@ -48,6 +48,9 @@ public:
 
     void setVersion(const QString &version);
     QString version() const;
+    QDateTime dateOfRelease() const;
+    void setLatestServerUpdate(const QDateTime &dateTime);
+    QDateTime dateOfLastServerUpdate() const;
     bool checkDatabaseVersion() const;
 
     // ATC
@@ -64,11 +67,6 @@ public:
     int insertDrugInteractorsDataFromXml(const QString &fileName);
     int insertDrugDrugInteractionDataFromXml(const QString &fileName);
     int insertRoutesDataFromCsvRawFile(const QString &fileName);
-
-    // REPORTS
-    QString plainTextAtcReport() const;
-    QString plainTextInteractorsReport() const;
-    QString plainTextDrugDrugInteractionsReport() const;
 
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,

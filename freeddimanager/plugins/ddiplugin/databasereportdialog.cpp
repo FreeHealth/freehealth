@@ -30,7 +30,7 @@
 
 #include "databasereportdialog.h"
 #include <ddiplugin/ddicore.h>
-#include <ddiplugin/database/ddidatabase.h>
+#include <ddiplugin/database/ddidatabasereporter.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -49,8 +49,6 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
-static inline DDI::Internal::DDIDatabase &ddiBase() {return ddiCore()->database();}
 
 namespace DDI {
 namespace Internal {
@@ -102,13 +100,15 @@ DatabaseReportDialog::~DatabaseReportDialog()
 /*! Initializes the dialog with the database report and returns \e true. */
 bool DatabaseReportDialog::initialize()
 {
-    // Get all reports from the database
+    Internal::DDIDatabaseReporter reporter;
+    reporter.initialize();
+
     QString report = "<pre>";
-    report += ddiBase().plainTextAtcReport();
+    report += reporter.plainTextAtcReport();
     report += "\n\n";
-    report += ddiBase().plainTextInteractorsReport();
+    report += reporter.plainTextInteractorsReport();
     report += "\n\n";
-    report += ddiBase().plainTextDrugDrugInteractionsReport();
+    report += reporter.plainTextDrugDrugInteractionsReport();
     report += "</pre>";
 
     d->ui->textBrowser->setHtml(report);

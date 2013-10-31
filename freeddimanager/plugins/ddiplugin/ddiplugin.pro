@@ -33,7 +33,8 @@ HEADERS += \
     ddi/drugdruginteractioneditorwidget.h \
     ddi/drugdruginteractionsortfilterproxymodel.h \
     routes/routesmodel.h \
-    databasereportdialog.h
+    databasereportdialog.h \
+    database/ddidatabasereporter.h
 
 
 SOURCES += \
@@ -60,7 +61,8 @@ SOURCES += \
     ddi/drugdruginteractionsortfilterproxymodel.cpp \
     routes/routesmodel.cpp \
     constants.cpp \
-    databasereportdialog.cpp
+    databasereportdialog.cpp \
+    database/ddidatabasereporter.cpp
 
 
 FORMS += \
