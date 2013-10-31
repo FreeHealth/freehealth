@@ -160,7 +160,6 @@ public:
         _toolButton->setDefaultAction(aAtcSearchDialog);
         _toolButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         _toolButton->setPopupMode(QToolButton::InstantPopup);
-        _toolButton->setEnabled(false);
 
         _toolBar = new QToolBar(q);
         _toolBar->addAction(aDownloadAllNeededPmids);
@@ -343,7 +342,6 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
     d->ui->classInfoDe->setEnabled(state);
     d->ui->classInfoEn->setEnabled(state);
     d->ui->classInfoFr->setEnabled(state);
-    d->_toolButton->setEnabled(state);
 }
 
 /** Submit the current editing class/interactor to the model and submit the model to the database */
