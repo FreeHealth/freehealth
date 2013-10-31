@@ -376,8 +376,7 @@ QList<DrugInteractor> &DrugInteractor::listFromXml(const QString &xmlContent)
     QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
     QDomElement element = root.firstChildElement(::XML_INTERACTOR_TAG);
     while (!element.isNull()) {
-        DrugInteractor di;
-        list->append(di.fromDomElement(element));
+        list->append(DrugInteractor::fromDomElement(element));
         element = element.nextSiblingElement(::XML_INTERACTOR_TAG);
     }
     return *list;
