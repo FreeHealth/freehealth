@@ -41,10 +41,6 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/dialogs/plugindialog.h>
-#include <coreplugin/dialogs/settingsdialog.h>
-#include <coreplugin/dialogs/helpdialog.h>
-#include <coreplugin/idocumentprinter.h>
 
 #include <ddiplugin/constants.h>
 #include <ddiplugin/ddicore.h>
@@ -102,7 +98,6 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
