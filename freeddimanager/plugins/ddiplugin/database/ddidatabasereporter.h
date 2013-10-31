@@ -55,6 +55,7 @@ public:
     QString plainTextAtcReport() const;
     QString plainTextInteractorsReport() const;
     QString plainTextDrugDrugInteractionsReport() const;
+    QString plainTextDrugDrugInteractionsStatistics() const;
 
 Q_SIGNALS:
     

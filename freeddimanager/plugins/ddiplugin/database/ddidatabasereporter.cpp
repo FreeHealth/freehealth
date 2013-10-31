@@ -33,6 +33,7 @@
 #include <ddiplugin/constants.h>
 #include <ddiplugin/ddicore.h>
 #include <ddiplugin/database/ddidatabase.h>
+#include <ddiplugin/ddi/drugdruginteraction.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -154,6 +155,8 @@ QString DDIDatabaseReporter::plainTextFullReport() const
     report += plainTextInteractorsReport();
     report += "\n\n";
     report += plainTextDrugDrugInteractionsReport();
+    report += "\n\n";
+    report += plainTextDrugDrugInteractionsStatistics();
     return report;
 }
 
@@ -376,10 +379,10 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
                                        , where);
         if (query.exec(req)) {
             while (query.next()) {
-                report << QString("     %1: %2 / %3")
+                report << Utils::indentString(QString("%1\n    fr: %2\n    en: %3")
                           .arg(query.value(0).toString())
                           .arg(query.value(1).toString())
-                          .arg(query.value(2).toString());
+                          .arg(query.value(2).toString()), 10);
                 if (!query.value(4).toString().isEmpty())
                     report << Utils::indentString(query.value(4).toString(), 10);
             }
@@ -407,10 +410,10 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
                                       .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << QString("     %1: %2 / %3")
+                report << Utils::indentString(QString("%1\n    fr: %2\n    en: %3")
                           .arg(query.value(0).toString())
                           .arg(query.value(1).toString())
-                          .arg(query.value(2).toString());
+                          .arg(query.value(2).toString()), 10);
                 if (!query.value(4).toString().isEmpty())
                     report << Utils::indentString(query.value(4).toString(), 10);
             }
@@ -615,45 +618,118 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
         query.finish();
     }
 
-    // TODO: add user updates (using ddi date update & version date)
-    // TODO: add DDI statistics
-
-    // When all DDI are loaded, read all DDI level and store the stat into the
-    // m_levelStatistics (K=level name  ; V=number of ddi recorded)
-//    void globalLevelStatistics(const QList<DrugDrugInteraction *> &ddis)
-//    {
-//        int total = 0;
-//        for(int i=0; i < ddis.count(); ++i) {
-//            DrugDrugInteraction *ddi = ddis.at(i);
-//            int n = 0;
-//            DrugInteractor *interactor1 = getInteractor(ddi->firstInteractor(), m_interactors);
-//            DrugInteractor *interactor2 = getInteractor(ddi->secondInteractor(), m_interactors);
-//            if (!interactor1 || !interactor2) {
-//                LOG_ERROR_FOR(q, "Interactor not found? " + ddi->firstInteractor() + " - " + ddi->secondInteractor());
-//                continue;
-//            }
-//            if (interactor1->isClass() && interactor2->isClass()) {
-//                n = interactor1->childrenCount() * interactor2->childrenCount();
-//            } else if (interactor1->isClass() && !interactor2->isClass()) {
-//                n = interactor1->childrenCount();
-//            } else if (!interactor1->isClass() && interactor2->isClass()) {
-//                n = interactor2->childrenCount();
-//            } else {
-//                n = 1;
-//            }
-
-//            foreach(QString name, ddi->levelName().split(", ")) {
-//                if (name.isEmpty()) {
-//                    name = ddi->levelCode();
-//                    qWarning() << "EMPTY LEVEL" << ddi->firstInteractor() << ddi->secondInteractor();
-//                }
-//                m_levelStatistics.insert(name, m_levelStatistics.value(name, 0) + n);
-//                total += n;
-//            }
-//        }
-
     header << report;
     return header.join("\n");
+}
+
+QString DDIDatabaseReporter::plainTextDrugDrugInteractionsStatistics() const
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+
+    QStringList report;
+    QHash<QString, int> stats;
+    int total = 0;
+    QHash<int, QString> where;
+    where.insert(Constants::DDI_ISVALID, "=1");
+
+    QString req;
+    QSqlQuery query(DB);
+    req = ddiBase().selectDistinct(Constants::Table_DDI, QList<int>()
+                                   << Constants::DDI_UID
+                                   << Constants::DDI_FIRSTINTERACTORUID
+                                   << Constants::DDI_SECONDINTERACTORUID
+                                   << Constants::DDI_LEVELCODE
+                                   , where);
+    report << Utils::centerString(QString("  Drug-drug interactions statistics  "), '*', 90);
+    if (query.exec(req)) {
+        while (query.next()) {
+            int firstChildren = 0;
+            int secondChildren = 0;
+            int n = 0;
+            const QString &firstUid = query.value(1).toString();
+            const QString &secondUid = query.value(2).toString();
+            const QString &level = query.value(3).toString();
+
+            where.clear();
+            where.insert(Constants::INTERACTOR_ISVALID, "=1");
+            where.insert(Constants::INTERACTOR_UID, QString("='%1'").arg(firstUid));
+            req = ddiBase().select(Constants::Table_INTERACTORS, Constants::INTERACTOR_CHILDREN, where);
+            QSqlQuery query2(DB);
+            if (query2.exec(req)) {
+                if (query2.next()) {
+                    if (!query2.value(0).toString().isEmpty())
+                        firstChildren = query2.value(0).toString().count(";") + 1;
+                }
+            } else {
+                LOG_QUERY_ERROR_FOR("DDIDatabaseReporter", query2);
+            }
+
+            where.clear();
+            where.insert(Constants::INTERACTOR_ISVALID, "=1");
+            where.insert(Constants::INTERACTOR_UID, QString("='%1'").arg(secondUid));
+            req = ddiBase().select(Constants::Table_INTERACTORS, Constants::INTERACTOR_CHILDREN, where);
+            if (query2.exec(req)) {
+                if (query2.next()) {
+                    if (!query2.value(0).toString().isEmpty())
+                        secondChildren = query2.value(0).toString().count(";") + 1;
+                }
+            } else {
+                LOG_QUERY_ERROR_FOR("DDIDatabaseReporter", query2);
+            }
+
+            // Both interactors are classes
+            if (firstChildren && secondChildren)
+                n = firstChildren * secondChildren;
+            // Only one is a class
+            else if (firstChildren || secondChildren)
+                n = firstChildren + secondChildren;
+            // Both are molecules
+            else n = 1;
+
+            // We suppose here that none the DDI are multi-level
+            stats.insert(level, stats.value(level, 0) + n);
+            total += n;
+        }
+    }
+    query.finish();
+
+    QStringList statsOrder;
+    statsOrder.append("C");
+    statsOrder.append("D");
+    statsOrder.append("450");
+    statsOrder.append("Y");
+    statsOrder.append("T");
+    statsOrder.append("P");
+    statsOrder.append("I");
+    foreach(const QString &level, statsOrder) {
+        int n = stats.value(level);
+        stats.remove(level);
+        report << QString("     %1 %2 %3%")
+                  .arg(DrugDrugInteraction::levelName(level).leftJustified(50, '.'))
+                  .arg(QString::number(n).leftJustified(7))
+                  .arg(QString::number(n*100/total, 'G', 2));
+    }
+
+    QHashIterator<QString, int> it(stats);
+    int multi = 0;
+    while (it.hasNext()) {
+        it.next();
+        multi += it.value();
+    }
+    if (multi)
+        report << QString("     %1 %2 %3%")
+                  .arg(QString("Multi-level").leftJustified(50, '.'))
+                  .arg(QString::number(multi).leftJustified(7))
+                  .arg(QString::number(multi*100/total, 'G', 2));
+
+    report << QString("\n     %1 %2 100%")
+            .arg(QString("Total DDI per INN").leftJustified(50, '.'))
+            .arg(QString::number(total).leftJustified(7));
+
+    return report.join("\n");
 }
 
 
