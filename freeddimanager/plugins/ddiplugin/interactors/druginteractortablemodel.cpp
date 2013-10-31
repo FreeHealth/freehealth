@@ -486,6 +486,7 @@ DrugInteractor *DrugInteractorTableModel::createInteractingClass(const QString &
 //    d->m_interactors.append(di);
 //    d->onInteractorCreated();
 //    return di;
+    return 0;
 }
 
 /** Creates a new interactor and store it in the model. */
