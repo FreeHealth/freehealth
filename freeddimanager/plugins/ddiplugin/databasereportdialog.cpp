@@ -34,13 +34,20 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/idocumentprinter.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include "ui_databasereportdialog.h"
+
+#include <QClipboard>
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -49,6 +56,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace DDI {
 namespace Internal {
@@ -83,6 +91,10 @@ DatabaseReportDialog::DatabaseReportDialog(QWidget *parent) :
 {
     d->ui = new Ui::DatabaseReportDialog;
     d->ui->setupUi(this);
+    QPushButton *clip = d->ui->buttonBox->addButton(tr("To clipboard"), QDialogButtonBox::ActionRole);
+    QPushButton *print = d->ui->buttonBox->addButton(tr("Print"), QDialogButtonBox::ActionRole);
+    connect(clip, SIGNAL(clicked()), this, SLOT(onClipboardCopyRequested()));
+    connect(print, SIGNAL(clicked()), this, SLOT(onPrintRequested()));
 
     setWindowTitle(tkTr(Trans::Constants::DATABASE_INFORMATION));
     setWindowIcon(theme()->icon(Core::Constants::ICONINFORMATION));
@@ -104,11 +116,7 @@ bool DatabaseReportDialog::initialize()
     reporter.initialize();
 
     QString report = "<pre>";
-    report += reporter.plainTextAtcReport();
-    report += "\n\n";
-    report += reporter.plainTextInteractorsReport();
-    report += "\n\n";
-    report += reporter.plainTextDrugDrugInteractionsReport();
+    report += reporter.plainTextFullReport();
     report += "</pre>";
 
     d->ui->textBrowser->setHtml(report);
@@ -116,3 +124,24 @@ bool DatabaseReportDialog::initialize()
     return true;
 }
 
+void DatabaseReportDialog::onClipboardCopyRequested()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(d->ui->textBrowser->toPlainText());
+}
+
+void DatabaseReportDialog::onPrintRequested()
+{
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        LOG_ERROR("No IDocumentPrinter found");
+        return;
+    }
+
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    p->print(d->ui->textBrowser->toHtml());
+}

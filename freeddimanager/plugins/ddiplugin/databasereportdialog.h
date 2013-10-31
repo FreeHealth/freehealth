@@ -48,13 +48,12 @@ class DDI_EXPORT DatabaseReportDialog : public QDialog
 public:
     explicit DatabaseReportDialog(QWidget *parent = 0);
     ~DatabaseReportDialog();
-    
     bool initialize();
-    
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+        
+private Q_SLOTS:
+    void onClipboardCopyRequested();
+    void onPrintRequested();
+
 private:
     Internal::DatabaseReportDialogPrivate *d;
 };

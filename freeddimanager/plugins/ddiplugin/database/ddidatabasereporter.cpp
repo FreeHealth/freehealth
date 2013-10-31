@@ -144,6 +144,23 @@ bool DDIDatabaseReporter::initialize()
     return true;
 }
 
+QString DDIDatabaseReporter::plainTextFullReport() const
+{
+    QString report;
+    report += plainTextDatabaseUpdate();
+    report += "\n\n";
+    report += plainTextAtcReport();
+    report += "\n\n";
+    report += plainTextInteractorsReport();
+    report += "\n\n";
+    report += plainTextDrugDrugInteractionsReport();
+    return report;
+}
+
+/**
+ * Check the database version and user updates
+ * and return a formatted plain text report.
+ */
 QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
 {
     // Check database
@@ -151,30 +168,116 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
 
-    QStringList report;
+    QStringList report, header;
     QHash<int, QString> where;
-    report << Utils::centerString("  Database update report  ", '*', 90);
+    header << Utils::centerString("  Database update report  ", '*', 90);
 
-    report << QString("%1 %2 (%3)")
+    header << QString("%1 %2 (%3)")
               .arg(QString("Current database version").leftJustified(columnSize, '.'))
               .arg(ddiBase().version())
               .arg(ddiBase().checkDatabaseVersion()?"valid":"**invalid**");
 
-    // Get latest updated ATC
-//    QString req;
-//    QSqlQuery query(DB);
-//    where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg());
-//    req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
-//    report << Utils::centerString(QString("  Empty interacting class (%1)  ")
-//                                  .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where))), '.', 90);
-//    if (query.exec(req)) {
-//        while (query.next()) {
-//            report << query.value(0).toString();
-//        }
-//    }
-//    query.finish();
+    // Get latest server update (last time the user sent his data to the FreeMedForms server)
+    QDateTime lastUpdate = ddiBase().dateOfLastServerUpdate();
+    header << QString("%1 %2")
+              .arg(QString("Last time the user sent his data to FreeMedForms server").leftJustified(columnSize, '.'))
+              .arg(lastUpdate.isValid()?QLocale().toString(lastUpdate):"Never");
 
-    return report.join("\n");
+    if (!lastUpdate.isValid())
+        lastUpdate = ddiBase().dateOfRelease();
+
+//    if (lastUpdate.isValid()) {
+        // Get all ATC codes changes since the last update
+        QString req;
+        QSqlQuery query(DB);
+        where.insert(Constants::ATC_ISVALID, "=1");
+        where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
+        where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(lastUpdate.toString(Qt::ISODate)));
+        int n = ddiBase().count(Constants::Table_ATC, Constants::ATC_ID, ddiBase().getWhereClause(Constants::Table_ATC, where));
+        header << QString("%1 %2")
+                  .arg(QString("Updated ATC codes").leftJustified(columnSize, '.'))
+                  .arg(n);
+        if (n > 0) {
+            report << Utils::centerString(QString("  Updated ATC codes (%1)  ").arg(n), '-', 90);
+            req = ddiBase().selectDistinct(Constants::Table_ATC, QList<int>()
+                                           << Constants::ATC_CODE
+                                           << Constants::ATC_FR
+                                           << Constants::ATC_EN
+                                           << Constants::ATC_DE
+                                           , where);
+            if (query.exec(req)) {
+                while (query.next()) {
+                    report << QString("     %1: %2 / %3 / %4")
+                              .arg(query.value(0).toString())
+                              .arg(query.value(1).toString())
+                              .arg(query.value(2).toString())
+                              .arg(query.value(3).toString());
+                }
+            }
+            query.finish();
+        }
+
+        // Get all interactor changes since the last update
+        where.clear();
+        where.insert(Constants::INTERACTOR_ISVALID, "=1");
+        where.insert(Constants::INTERACTOR_DATEUPDATE, QString("> '%1'").arg(lastUpdate.toString(Qt::ISODate)));
+        n = ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_DATEUPDATE, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
+        header << QString("%1 %2")
+                  .arg(QString("Updated Interactors").leftJustified(columnSize, '.'))
+                  .arg(n);
+        if (n > 0) {
+            report << Utils::centerString(QString("  Updated Interactors (%1)  ").arg(n), '-', 90);
+            req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, QList<int>()
+                                           << Constants::INTERACTOR_UID
+                                           << Constants::INTERACTOR_FR
+                                           << Constants::INTERACTOR_EN
+                                           << Constants::INTERACTOR_DE
+                                           , where);
+            if (query.exec(req)) {
+                while (query.next()) {
+                    report << QString("     %1: %2 / %3 / %4")
+                              .arg(query.value(0).toString())
+                              .arg(query.value(1).toString())
+                              .arg(query.value(2).toString())
+                              .arg(query.value(3).toString());
+                }
+            }
+            query.finish();
+        }
+
+        // Get all drug-drug interactions changes since the last update
+        where.clear();
+        where.insert(Constants::DDI_ISVALID, "=1");
+        where.insert(Constants::DDI_DATEUPDATE, QString("> '%1'").arg(lastUpdate.toString(Qt::ISODate)));
+        n = ddiBase().count(Constants::Table_DDI, Constants::DDI_DATEUPDATE, ddiBase().getWhereClause(Constants::Table_DDI, where));
+        header << QString("%1 %2")
+                  .arg(QString("Updated Drug interactions").leftJustified(columnSize, '.'))
+                  .arg(n);
+        if (n > 0) {
+            report << Utils::centerString(QString("  Updated Drug interactions (%1)  ").arg(n), '-', 90);
+            req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, QList<int>()
+                                           << Constants::DDI_UID
+                                           << Constants::DDI_FIRSTINTERACTORUID
+                                           << Constants::DDI_SECONDINTERACTORUID
+                                           << Constants::DDI_LEVELCODE
+                                           , where);
+            if (query.exec(req)) {
+                while (query.next()) {
+                    report << QString("     %1: %2 - %3 (%4)")
+                              .arg(query.value(0).toString())
+                              .arg(query.value(1).toString())
+                              .arg(query.value(2).toString())
+                              .arg(query.value(3).toString())
+                              ;
+                }
+            }
+            query.finish();
+        }
+//    }
+
+    header << report;
+
+    return header.join("\n");
 }
 
 /**
@@ -212,11 +315,11 @@ QString DDIDatabaseReporter::plainTextAtcReport() const
         }
         report << Utils::centerString(QString("  Missing %1 translation (%2)  ")
                                       .arg(langString)
-                                      .arg(ddiBase().count(Constants::Table_ATC, Constants::ATC_ID, ddiBase().getWhereClause(Constants::Table_ATC, where))), '.', 90);
+                                      .arg(ddiBase().count(Constants::Table_ATC, Constants::ATC_ID, ddiBase().getWhereClause(Constants::Table_ATC, where))), '-', 90);
         QString req = ddiBase().selectDistinct(Constants::Table_ATC, Constants::ATC_CODE, where);
         if (query.exec(req)) {
             while (query.next()) {
-                report << query.value(0).toString();
+                report << Utils::indentString(query.value(0).toString(), 5);
             }
         }
         query.finish();
@@ -235,50 +338,87 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
 
-    QStringList report;
-    report << Utils::centerString("  Drug interactors report  ", '*', 90);
+    QStringList report, header;
+    header << Utils::centerString("  Drug interactors report  ", '*', 90);
     QHash<int, QString> where;
     where.insert(Constants::INTERACTOR_ISVALID, "=1");
 
     // Count Interactors
     where.insert(Constants::INTERACTOR_ISCLASS, "=1");
-    report << QString("%1 %2")
+    header << QString("%1 %2")
               .arg(QString("Number of valid interacting classes").leftJustified(columnSize, '.'))
               .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where)));
     where.insert(Constants::INTERACTOR_ISCLASS, "=0");
-    report << QString("%1 %2")
-              .arg(QString("Number of valid interacting classes").leftJustified(columnSize, '.'))
+    header << QString("%1 %2")
+              .arg(QString("Number of valid interacting molecules").leftJustified(columnSize, '.'))
               .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where)));
 
     // Get interacting classes without children
     QString req;
     QSqlQuery query(DB);
+    where.clear();
+    where.insert(Constants::INTERACTOR_ISVALID, "=1");
     where.insert(Constants::INTERACTOR_ISCLASS, "=1");
-    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL");
-    req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
-    report << Utils::centerString(QString("  Empty interacting class (%1)  ")
-                                  .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where))), '.', 90);
-    if (query.exec(req)) {
-        while (query.next()) {
-            report << query.value(0).toString();
+    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL"); // ::SQL_ISNULL cause an error
+    int n = ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
+    header << QString("%1 %2")
+              .arg(QString("Empty interacting class").leftJustified(columnSize, '.'))
+              .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where)));
+    if (n > 0) {
+        report << Utils::centerString(QString("  Empty interacting class (%1)  ")
+                                      .arg(n), '-', 90);
+        req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, QList<int>()
+                                       << Constants::INTERACTOR_UID
+                                       << Constants::INTERACTOR_FR
+                                       << Constants::INTERACTOR_EN
+                                       << Constants::INTERACTOR_DE
+                                       << Constants::INTERACTOR_COMMENT
+                                       , where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << QString("     %1: %2 / %3")
+                          .arg(query.value(0).toString())
+                          .arg(query.value(1).toString())
+                          .arg(query.value(2).toString());
+                if (!query.value(4).toString().isEmpty())
+                    report << Utils::indentString(query.value(4).toString(), 10);
+            }
         }
+        query.finish();
     }
-    query.finish();
 
     // Get interacting molecules without ATC linking
-    where.insert(Constants::INTERACTOR_ISCLASS, "=1");
-    where.insert(Constants::INTERACTOR_ATC, "IS NULL");
-    req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, where);
-    report << Utils::centerString(QString("  Interacting without ATC link (%1)  ")
-                                  .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where))), '.', 90);
-    if (query.exec(req)) {
-        while (query.next()) {
-            report << query.value(0).toString();
+    where.clear();
+    where.insert(Constants::INTERACTOR_ISVALID, "=1");
+    where.insert(Constants::INTERACTOR_ISCLASS, "=0");
+    where.insert(Constants::INTERACTOR_ATC, "IS NULL"); // ::SQL_ISNULL cause an error
+    n = ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
+    header << QString("%1 %2")
+              .arg(QString("Interacting molecules without ATC link").leftJustified(columnSize, '.'))
+              .arg(ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where)));
+    if (n > 0) {
+        req = ddiBase().selectDistinct(Constants::Table_INTERACTORS, QList<int>()
+                                       << Constants::INTERACTOR_UID
+                                       << Constants::INTERACTOR_FR
+                                       << Constants::INTERACTOR_EN
+                                       << Constants::INTERACTOR_DE
+                                       << Constants::INTERACTOR_COMMENT, where);
+        report << Utils::centerString(QString("  Interacting molecules without ATC link (%1)  ")
+                                      .arg(n), '-', 90);
+        if (query.exec(req)) {
+            while (query.next()) {
+                report << QString("     %1: %2 / %3")
+                          .arg(query.value(0).toString())
+                          .arg(query.value(1).toString())
+                          .arg(query.value(2).toString());
+                if (!query.value(4).toString().isEmpty())
+                    report << Utils::indentString(query.value(4).toString(), 10);
+            }
         }
+        query.finish();
     }
-    query.finish();
-
-    return report.join("\n");
+    header << report;
+    return header.join("\n");
 }
 
 /**
@@ -326,10 +466,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  No textual risk defined (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -347,10 +487,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Missing french risk translation (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -366,10 +506,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Missing french management translation (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -386,10 +526,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Missing english risk translation (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -405,10 +545,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Missing english management translation (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -427,11 +567,11 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Multi-level interactions (%1)  ")
-                                      .arg(n), '.', 90);
-        report << req;
+                                      .arg(n), '-', 90);
+        // report << req;
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -448,10 +588,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Unknown first interactor (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();
@@ -466,10 +606,10 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     if (n > 0) {
         req = ddiBase().selectDistinct(Constants::Table_DDI, Constants::DDI_UID, where);
         report << Utils::centerString(QString("  Unknown second interactor (%1)  ")
-                                      .arg(n), '.', 90);
+                                      .arg(n), '-', 90);
         if (query.exec(req)) {
             while (query.next()) {
-                report << d->ddiInformationForReport(query.value(0));
+                report << Utils::indentString(d->ddiInformationForReport(query.value(0)), 5);
             }
         }
         query.finish();

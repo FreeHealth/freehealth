@@ -50,6 +50,7 @@ public:
     
     bool initialize();
     
+    QString plainTextFullReport() const;
     QString plainTextDatabaseUpdate() const;
     QString plainTextAtcReport() const;
     QString plainTextInteractorsReport() const;
