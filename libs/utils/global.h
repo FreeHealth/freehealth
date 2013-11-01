@@ -148,6 +148,7 @@ UTILS_EXPORT QByteArray fileSha1(const QString &fileName);
 #if QT_VERSION >= 0x050000
 UTILS_EXPORT QByteArray fileSha256(const QString &fileName);
 #endif
+UTILS_EXPORT QString humanReadableFileSize(qint64 size);
 
 // Some useful widgets specific functions
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );

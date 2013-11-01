@@ -848,6 +848,20 @@ QByteArray fileSha256(const QString &fileName)
 }
 #endif
 
+QString humanReadableFileSize(qint64 size)
+{
+     float num = size;
+     QStringList list;
+     list << "KB" << "MB" << "GB" << "TB";
+     QStringListIterator i(list);
+     QString unit("bytes");
+     while(num >= 1024.0 && i.hasNext()) {
+         unit = i.next();
+         num /= 1024.0;
+     }
+     return QString("%1 %2").arg(QString().setNum(num,'f',2)).arg(unit);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
