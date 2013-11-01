@@ -607,8 +607,9 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 
 /** Return the pointer to the QSqlDatabase in use. */
 QSqlDatabase Database::database() const
-{ return QSqlDatabase::database(d_database->m_ConnectionName); }
-
+{
+    return QSqlDatabase::database(d_database->m_ConnectionName);
+}
 
 /**
    Create the connection to the database.
