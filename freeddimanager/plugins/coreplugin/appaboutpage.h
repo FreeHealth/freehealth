@@ -46,21 +46,7 @@ public:
     QWidget *createPage(QWidget *parent = 0);
 };
 
-class CommandLineAboutPage : public IAboutPage
-{
-public:
-    CommandLineAboutPage(QObject *parent) : IAboutPage(parent) {}
-    ~CommandLineAboutPage() {}
-
-    QString id() const {return objectName();}
-    QString displayName() const;
-    QString category() const;
-    int sortIndex() const;
-
-    QWidget *createPage(QWidget *parent = 0);
-};
-
-} // End Internal
-} // End Core
+} // namespace Internal
+} // namespace Core
 
 #endif // APPABOUTPAGE_H

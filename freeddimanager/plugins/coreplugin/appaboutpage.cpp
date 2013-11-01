@@ -34,7 +34,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/commandlineparser.h>
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -44,6 +43,8 @@
 #include <QTreeWidgetItem>
 #include <QDate>
 #include <QFrame>
+
+#include <QDebug>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -76,8 +77,6 @@ int AppAboutPage::sortIndex() const
 {
     return 1;
 }
-
-#include <QDebug>
 
 QWidget *AppAboutPage::createPage(QWidget *parent)
 {
@@ -120,60 +119,6 @@ QWidget *AppAboutPage::createPage(QWidget *parent)
         tmp.append(tkTr(Trans::Constants::VERSION_UPTODATE));
     }
     label->setText(tmp);
-    return w;
-}
-
-QString CommandLineAboutPage::displayName() const
-{
-    return tr("Command line");
-}
-
-QString CommandLineAboutPage::category() const
-{
-    return tr("Application");
-}
-
-int CommandLineAboutPage::sortIndex() const
-{
-    return 20;
-}
-
-QWidget *CommandLineAboutPage::createPage(QWidget *parent)
-{
-    QWidget *w = new QWidget(parent);
-    QVBoxLayout *layout = new QVBoxLayout(w);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    QTreeWidget *tree = new QTreeWidget(w);
-    tree->setColumnCount(2);
-    layout->addWidget(tree);
-
-    QFont bold;
-    bold.setBold(true);
-    const QString &defaultValue = tkTr(Trans::Constants::UNDEFINED);
-    QList<QTreeWidgetItem *> defined, undefined;
-
-    for(int i=0; i< Core::ICommandLine::MaxParam; ++i) {
-        const QString &name = CoreImpl::instance()->commandLine()->paramName(i);
-        const QString &value = CoreImpl::instance()->commandLine()->value(i, defaultValue).toString();
-        if (!name.isEmpty()) {
-            QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << name << value);
-            if (value != defaultValue) {
-                item->setFont(0, bold);
-                defined << item;
-            } else {
-                item->setForeground(0, QBrush(QColor("lightgray")));
-                item->setForeground(1, QBrush(QColor("lightgray")));
-                undefined << item;
-            }
-        }
-    }
-    tree->addTopLevelItems(defined);
-    tree->sortItems(0, Qt::AscendingOrder);
-    tree->addTopLevelItems(undefined);
-
-    tree->resizeColumnToContents(0);
-    tree->resizeColumnToContents(1);
     return w;
 }
 
