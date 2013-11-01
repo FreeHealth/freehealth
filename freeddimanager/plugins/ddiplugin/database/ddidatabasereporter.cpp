@@ -170,10 +170,31 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
     QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
+    DB.transaction();
 
     QStringList report, header;
     QHash<int, QString> where;
-    header << Utils::centerString("  Database update report  ", '*', 90);
+    header << Utils::centerString("  Database report  ", '*', 90);
+    QFileInfo file(ddiBase().database().databaseName());
+    header << Utils::centerString(file.fileName(), ' ', 90);
+    header << QString("%1 %2")
+              .arg(QString("File size").leftJustified(columnSize, '.'))
+              .arg(Utils::humanReadableFileSize(file.size()));
+    header << QString("%1 %2")
+              .arg(QString("File date of creation").leftJustified(columnSize, '.'))
+              .arg(QLocale().toString(file.created()));
+    header << QString("%1 %2")
+              .arg(QString("File last modification").leftJustified(columnSize, '.'))
+              .arg(QLocale().toString(file.lastModified()));
+    header << QString("%1 %2")
+              .arg(QString("File last access").leftJustified(columnSize, '.'))
+              .arg(QLocale().toString(file.lastRead()));
+    header << QString("%1 %2")
+              .arg(QString("Database connection name").leftJustified(columnSize, '.'))
+              .arg(ddiBase().database().connectionName());
+    header << QString("%1 %2")
+              .arg(QString("Database opened").leftJustified(columnSize, '.'))
+              .arg(ddiBase().database().isOpen()?"true":"false");
 
     header << QString("%1 %2 (%3)")
               .arg(QString("Current database version").leftJustified(columnSize, '.'))
@@ -278,8 +299,8 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
         }
 //    }
 
+    DB.commit();
     header << report;
-
     return header.join("\n");
 }
 
@@ -293,6 +314,7 @@ QString DDIDatabaseReporter::plainTextAtcReport() const
     QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
+    DB.transaction();
 
     QStringList report;
     QHash<int, QString> where;
@@ -327,6 +349,7 @@ QString DDIDatabaseReporter::plainTextAtcReport() const
         }
         query.finish();
     }
+    DB.commit();
     return report.join("\n");
 }
 
@@ -340,6 +363,7 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
     QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
+    DB.transaction();
 
     QStringList report, header;
     header << Utils::centerString("  Drug interactors report  ", '*', 90);
@@ -420,6 +444,7 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
         }
         query.finish();
     }
+    DB.commit();
     header << report;
     return header.join("\n");
 }
@@ -435,6 +460,7 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
+    DB.transaction();
 
     QStringList report;
     QHash<int, QString> where;
@@ -618,6 +644,7 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
         query.finish();
     }
 
+    DB.commit();
     header << report;
     return header.join("\n");
 }
@@ -628,6 +655,7 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsStatistics() const
     QSqlDatabase DB = QSqlDatabase::database(ddiBase().connectionName());
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return QString::null;
+    DB.transaction();
 
     QStringList report;
     QHash<QString, int> stats;
@@ -695,6 +723,7 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsStatistics() const
         }
     }
     query.finish();
+    DB.commit();
 
     QStringList statsOrder;
     statsOrder.append("C");
