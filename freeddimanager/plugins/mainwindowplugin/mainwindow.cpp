@@ -44,7 +44,7 @@
 
 #include <ddiplugin/constants.h>
 #include <ddiplugin/ddicore.h>
-#include <ddiplugin/databasereportdialog.h>
+#include <ddiplugin/database/databasereportdialog.h>
 
 #include <utils/log.h>
 #include <utils/global.h>

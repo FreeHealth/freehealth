@@ -33,7 +33,7 @@ HEADERS += \
     ddi/drugdruginteractioneditorwidget.h \
     ddi/drugdruginteractionsortfilterproxymodel.h \
     routes/routesmodel.h \
-    databasereportdialog.h \
+    database/databasereportdialog.h \
     database/ddidatabasereporter.h
 
 
@@ -61,7 +61,7 @@ SOURCES += \
     ddi/drugdruginteractionsortfilterproxymodel.cpp \
     routes/routesmodel.cpp \
     constants.cpp \
-    databasereportdialog.cpp \
+    database/databasereportdialog.cpp \
     database/ddidatabasereporter.cpp
 
 
@@ -72,7 +72,7 @@ FORMS += \
     interactors/interactoreditorwidget.ui \
     interactors/interactorselectorwidget.ui \
     ddi/drugdruginteractioneditorwidget.ui \
-    databasereportdialog.ui
+    database/databasereportdialog.ui
 
 
 OTHER_FILES += DDIManager.pluginspec
