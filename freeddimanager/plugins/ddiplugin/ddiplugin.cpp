@@ -28,6 +28,7 @@
 #include <ddiplugin/atc/atcmode.h>
 #include <ddiplugin/interactors/interactormode.h>
 #include <ddiplugin/ddi/drugdruginteractionmode.h>
+#include <ddiplugin/server/servermanagermode.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -45,7 +46,8 @@ using namespace Internal;
 DDIPlugin::DDIPlugin() :
     _atcMode(0),
     _interactorMode(0),
-    _ddiMode(0)
+    _ddiMode(0),
+    _serverMode(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating DDIPlugin";
@@ -72,6 +74,7 @@ bool DDIPlugin::initialize(const QStringList &arguments, QString *errorMessage)
     addObject(_ddiMode = new DDIMode(this));
     addObject(_interactorMode = new InteractorMode(this));
     addObject(_atcMode = new AtcMode(this));
+    addObject(_serverMode = new ServerManagerMode(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -99,6 +102,7 @@ ExtensionSystem::IPlugin::ShutdownFlag DDIPlugin::aboutToShutdown()
     removeObject(_ddiMode);
     removeObject(_interactorMode);
     removeObject(_atcMode);
+    removeObject(_serverMode);
 
     return SynchronousShutdown;
 }

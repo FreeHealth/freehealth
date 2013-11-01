@@ -34,7 +34,9 @@ HEADERS += \
     ddi/drugdruginteractionsortfilterproxymodel.h \
     routes/routesmodel.h \
     database/databasereportdialog.h \
-    database/ddidatabasereporter.h
+    database/ddidatabasereporter.h \
+    server/serverupdatemanager.h \
+    server/servermanagermode.h \
 
 
 SOURCES += \
@@ -62,7 +64,9 @@ SOURCES += \
     routes/routesmodel.cpp \
     constants.cpp \
     database/databasereportdialog.cpp \
-    database/ddidatabasereporter.cpp
+    database/ddidatabasereporter.cpp \
+    server/serverupdatemanager.cpp \
+    server/servermanagermode.cpp \
 
 
 FORMS += \

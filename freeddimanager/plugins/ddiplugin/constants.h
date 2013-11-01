@@ -70,6 +70,7 @@ const char * const MODE_INTERACTOR = "mInteractor";
 const char * const MODE_DDI = "mDDI";
 const char * const MODE_PIM = "mPIM";
 const char * const MODE_PREGNANCY = "mPregnancy";
+const char * const MODE_SERVERMANAGER = "mServerManager";
 
 // Database
 enum Tables {

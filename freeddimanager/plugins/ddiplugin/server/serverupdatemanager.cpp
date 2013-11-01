@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2013 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,58 +19,73 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_H
-#define DDIMANAGER_DDIPLUGIN_H
+/*!
+ * \class DDI::ServerUpdateManager
+ */
 
-#include <extensionsystem/iplugin.h>
+#include "serverupdatemanager.h"
 
-/**
- * \file ddiplugin.h
- * \author Eric Maeker
- * \version 0.10.0
- * \date 09 Oct 2013
-*/
+#include <translationutils/constants.h>
+
+#include <QDebug>
+
+using namespace DDI;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace DDI {
 namespace Internal {
-class AtcMode;
-class InteractorMode;
-class DDIMode;
-class ServerManagerMode;
-
-class DDIPlugin : public ExtensionSystem::IPlugin
+class ServerUpdateManagerPrivate
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.freemedforms.FreeDDIManager.DDIManagerPlugin" FILE "DDIManager.json")
-
 public:
-    DDIPlugin();
-    ~DDIPlugin();
+    ServerUpdateManagerPrivate(ServerUpdateManager *parent) :
+        q(parent)
+    {
+        Q_UNUSED(q);
+    }
+    
+    ~ServerUpdateManagerPrivate()
+    {
+    }
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
-
-    ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
-
-#ifdef WITH_TESTS
-private Q_SLOTS:
-    void initTestCase();
-    void test_drugInteractor();
-    void cleanTestCase();
-#endif
-
+    // Wiki tokens:
+    // {{~ServerDate~}} -> current server date
+    void createWikiContent()
+    {}
+    
+public:
+    // Put your data here
+    
 private:
-    AtcMode *_atcMode;
-    InteractorMode *_interactorMode;
-    DDIMode *_ddiMode;
-    ServerManagerMode *_serverMode;
+    ServerUpdateManager *q;
 };
-
 } // namespace Internal
-} // namespace DDI
+} // end namespace DDI
 
-#endif // DDIMANAGER_DDIPLUGIN_H
+
+/*! Constructor of the DDI::ServerUpdateManager class */
+ServerUpdateManager::ServerUpdateManager(QObject *parent) :
+    QObject(parent),
+    d(new ServerUpdateManagerPrivate(this))
+{
+}
+
+/*! Destructor of the DDI::ServerUpdateManager class */
+ServerUpdateManager::~ServerUpdateManager()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+/*! Initializes the object with the default values. Return true if initialization was completed. */
+bool ServerUpdateManager::initialize()
+{
+    return true;
+}
+
