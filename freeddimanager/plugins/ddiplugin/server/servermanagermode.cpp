@@ -41,6 +41,13 @@
 //#include <ddiplugin/server/servermanagerwidget.h>
 #include <ddiplugin/constants.h>
 
+// TEST
+#include <ddiplugin/server/serverupdatemanager.h>
+#include <QLabel>
+#include <QDebug>
+// END TEST
+
+
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
 #include <coreplugin/modemanager/modemanager.h>
@@ -66,7 +73,7 @@ ServerManagerMode::ServerManagerMode(QObject *parent) :
 {
     setDisplayName(tkTr(Trans::Constants::SERVER));
     setIcon(theme()->icon(Core::Constants::ICONSERVERADMIN, Core::ITheme::BigIcon));
-    setPriority(100);
+    setPriority(1000);
     setId(Constants::MODE_SERVERMANAGER);
     setPatientBarVisibility(false);
 
@@ -77,7 +84,23 @@ ServerManagerMode::ServerManagerMode(QObject *parent) :
     // create the mode widget
 //    _widget = new ServerManagerWidget;
 //    _widget->initialize();
-    setWidget(new QWidget);
+
+    ServerUpdateManager m;
+    QLabel *l = new QLabel;
+
+    qWarning() << "--------------";
+
+    QString t = QString("New ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Atc));
+    t += QString("New Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Interactor));
+    t += QString("New DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::DrugDrugInteraction));
+    t += QString("Update ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Atc));
+    t += QString("Update Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Interactor));
+    t += QString("Update DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::DrugDrugInteraction));
+
+    qWarning() << "--------------";
+
+    l->setText(t);
+    setWidget(l);
 }
 
 ServerManagerMode::~ServerManagerMode()

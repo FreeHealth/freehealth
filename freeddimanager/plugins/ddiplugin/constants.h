@@ -72,6 +72,10 @@ const char * const MODE_PIM = "mPIM";
 const char * const MODE_PREGNANCY = "mPregnancy";
 const char * const MODE_SERVERMANAGER = "mServerManager";
 
+// For internal use only
+const char * const SQL_ISNULL = "=''";
+const char * const SQL_ISNOTNULL = "<>''";
+
 // Database
 enum Tables {
     Table_ATC = 0,
@@ -136,7 +140,7 @@ enum TableDDI_Fields {
     DDI_ISREVIEWED,
     DDI_ISVALID,
     DDI_LEVELCODE,
-    DDI_DATECREATION,
+    DDI_DATECREATE,
     DDI_DATEUPDATE,
     DDI_RISKFR,
     DDI_RISKEN,

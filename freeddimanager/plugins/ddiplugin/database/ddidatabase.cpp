@@ -136,7 +136,7 @@ DDIDatabase::DDIDatabase():
     addField(Table_DDI, DDI_ISREVIEWED, "ISREVIEWED", FieldIsBoolean);
     addField(Table_DDI, DDI_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_DDI, DDI_LEVELCODE, "LEVELCODE", FieldIsShortText);
-    addField(Table_DDI, DDI_DATECREATION, "DATECREATION", FieldIsDate);
+    addField(Table_DDI, DDI_DATECREATE, "DATECREATION", FieldIsDate);
     addField(Table_DDI, DDI_DATEUPDATE, "DATEUPDATE", FieldIsDate);
     addField(Table_DDI, DDI_RISKFR, "RISKFR", FieldIsLongText);
     addField(Table_DDI, DDI_RISKEN, "RISKEN", FieldIsLongText);
@@ -670,7 +670,7 @@ int DDIDatabase::insertDrugDrugInteractionDataFromXml(const QString &fileName)
         query.bindValue(Constants::DDI_ISREVIEWED, di.isReviewed()?"1":"0");
         query.bindValue(Constants::DDI_ISVALID, di.isValid()?"1":"0");
         query.bindValue(Constants::DDI_LEVELCODE, di.data(DrugDrugInteraction::LevelCode));
-        query.bindValue(Constants::DDI_DATECREATION, di.data(DrugDrugInteraction::DateCreation).toDate().toString(Qt::ISODate));
+        query.bindValue(Constants::DDI_DATECREATE, di.data(DrugDrugInteraction::DateCreation).toDate().toString(Qt::ISODate));
         query.bindValue(Constants::DDI_DATEUPDATE, di.data(DrugDrugInteraction::DateLastUpdate).toDate().toString(Qt::ISODate));
         query.bindValue(Constants::DDI_RISKFR, di.risk("fr"));
         query.bindValue(Constants::DDI_RISKEN, di.risk("en"));

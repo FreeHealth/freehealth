@@ -43,24 +43,27 @@ class DDIDatabaseReporterPrivate;
 class DDIDatabaseReporter : public QObject
 {
     Q_OBJECT
-    
 public:
+    enum UpdateType {
+        NewOnly = 0,
+        UpdateOnly,
+        AllChanges
+    };
+
     explicit DDIDatabaseReporter(QObject *parent = 0);
     ~DDIDatabaseReporter();
     
     bool initialize();
     
     QString plainTextFullReport() const;
+
     QString plainTextDatabaseUpdate() const;
     QString plainTextAtcReport() const;
     QString plainTextInteractorsReport() const;
     QString plainTextDrugDrugInteractionsReport() const;
     QString plainTextDrugDrugInteractionsStatistics() const;
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+
 private:
     DDIDatabaseReporterPrivate *d;
 };

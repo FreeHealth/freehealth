@@ -51,6 +51,8 @@ public:
 
     void prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType);
     
+    int numberDatabaseOfUpdates(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType) const;
+
 Q_SIGNALS:
     void updateSent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType sub, bool error);
     void allUpdateSent();

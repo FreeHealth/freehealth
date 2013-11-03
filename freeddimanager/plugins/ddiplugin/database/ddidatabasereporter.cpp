@@ -52,8 +52,6 @@ static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
 static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
 
 namespace {
-const char * const SQL_ISNULL = "=''";
-const char * const SQL_ISNOTNULL = "<>''";
 const int columnSize = 60;
 
 static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
@@ -215,7 +213,7 @@ QString DDIDatabaseReporter::plainTextDatabaseUpdate() const
         QString req;
         QSqlQuery query(DB);
         where.insert(Constants::ATC_ISVALID, "=1");
-        where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
+        where.insert(Constants::ATC_DATEUPDATE, Constants::SQL_ISNOTNULL);
         where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(lastUpdate.toString(Qt::ISODate)));
         int n = ddiBase().count(Constants::Table_ATC, Constants::ATC_ID, ddiBase().getWhereClause(Constants::Table_ATC, where));
         header << QString("%1 %2")
@@ -332,7 +330,7 @@ QString DDIDatabaseReporter::plainTextAtcReport() const
     QSqlQuery query(DB);
     QString langString;
     for(int i=0; i < lang.count(); ++i) {
-        where.insert(lang.at(i), ::SQL_ISNULL);
+        where.insert(lang.at(i), Constants::SQL_ISNULL);
         switch (lang.at(i)) {
         case Constants::ATC_FR: langString = QString("French"); break;
         case Constants::ATC_EN: langString = QString("English"); break;
@@ -386,7 +384,7 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
     where.clear();
     where.insert(Constants::INTERACTOR_ISVALID, "=1");
     where.insert(Constants::INTERACTOR_ISCLASS, "=1");
-    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL"); // ::SQL_ISNULL cause an error
+    where.insert(Constants::INTERACTOR_CHILDREN, "IS NULL"); // Constants::SQL_ISNULL cause an error
     int n = ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
     header << QString("%1 %2")
               .arg(QString("Empty interacting class").leftJustified(columnSize, '.'))
@@ -418,7 +416,7 @@ QString DDIDatabaseReporter::plainTextInteractorsReport() const
     where.clear();
     where.insert(Constants::INTERACTOR_ISVALID, "=1");
     where.insert(Constants::INTERACTOR_ISCLASS, "=0");
-    where.insert(Constants::INTERACTOR_ATC, "IS NULL"); // ::SQL_ISNULL cause an error
+    where.insert(Constants::INTERACTOR_ATC, "IS NULL"); // Constants::SQL_ISNULL cause an error
     n = ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_UID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
     header << QString("%1 %2")
               .arg(QString("Interacting molecules without ATC link").leftJustified(columnSize, '.'))
@@ -486,8 +484,8 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     // Get 'no risk' DDIs
     where.clear();
     where.insert(Constants::DDI_ISVALID, "=1");
-    where.insert(Constants::DDI_RISKFR, ::SQL_ISNULL);
-    where.insert(Constants::DDI_RISKEN, ::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKFR, Constants::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKEN, Constants::SQL_ISNULL);
     n = ddiBase().count(Constants::Table_DDI, Constants::DDI_UID, ddiBase().getWhereClause(Constants::Table_DDI, where));
     header << QString("%1 %2")
               .arg(QString("No textual risk defined").leftJustified(columnSize, '.'))
@@ -507,8 +505,8 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     // Get missing translations
     where.clear();
     where.insert(Constants::DDI_ISVALID, "=1");
-    where.insert(Constants::DDI_RISKFR, ::SQL_ISNULL);
-    where.insert(Constants::DDI_RISKEN, ::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_RISKFR, Constants::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKEN, Constants::SQL_ISNOTNULL);
     n = ddiBase().count(Constants::Table_DDI, Constants::DDI_UID, ddiBase().getWhereClause(Constants::Table_DDI, where));
     header << QString("%1 %2")
               .arg(QString("Missing french risk translation").leftJustified(columnSize, '.'))
@@ -526,8 +524,8 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     }
     where.clear();
     where.insert(Constants::DDI_ISVALID, "=1");
-    where.insert(Constants::DDI_MANAGEMENTFR, ::SQL_ISNULL);
-    where.insert(Constants::DDI_MANAGEMENTEN, ::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_MANAGEMENTFR, Constants::SQL_ISNULL);
+    where.insert(Constants::DDI_MANAGEMENTEN, Constants::SQL_ISNOTNULL);
     n = ddiBase().count(Constants::Table_DDI, Constants::DDI_UID, ddiBase().getWhereClause(Constants::Table_DDI, where));
     header << QString("%1 %2")
               .arg(QString("Missing french management translation").leftJustified(columnSize, '.'))
@@ -546,8 +544,8 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
 
     where.clear();
     where.insert(Constants::DDI_ISVALID, "=1");
-    where.insert(Constants::DDI_RISKEN, ::SQL_ISNULL);
-    where.insert(Constants::DDI_RISKFR, ::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_RISKEN, Constants::SQL_ISNULL);
+    where.insert(Constants::DDI_RISKFR, Constants::SQL_ISNOTNULL);
     n = ddiBase().count(Constants::Table_DDI, Constants::DDI_UID, ddiBase().getWhereClause(Constants::Table_DDI, where));
     header << QString("%1 %2")
               .arg(QString("Missing english risk translation").leftJustified(columnSize, '.'))
@@ -565,8 +563,8 @@ QString DDIDatabaseReporter::plainTextDrugDrugInteractionsReport() const
     }
     where.clear();
     where.insert(Constants::DDI_ISVALID, "=1");
-    where.insert(Constants::DDI_MANAGEMENTEN, ::SQL_ISNULL);
-    where.insert(Constants::DDI_MANAGEMENTFR, ::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_MANAGEMENTEN, Constants::SQL_ISNULL);
+    where.insert(Constants::DDI_MANAGEMENTFR, Constants::SQL_ISNOTNULL);
     n = ddiBase().count(Constants::Table_DDI, Constants::DDI_UID, ddiBase().getWhereClause(Constants::Table_DDI, where));
     header << QString("%1 %2")
               .arg(QString("Missing english management translation").leftJustified(columnSize, '.'))

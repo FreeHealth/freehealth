@@ -91,7 +91,7 @@ public:
         case DrugDrugInteractionTableModel::LevelCode:
         case DrugDrugInteractionTableModel::LevelName:
         case DrugDrugInteractionTableModel::LevelComboIndex: sql = Constants::DDI_LEVELCODE; break;
-        case DrugDrugInteractionTableModel::DateCreation: sql = Constants::DDI_DATECREATION; break;
+        case DrugDrugInteractionTableModel::DateCreation: sql = Constants::DDI_DATECREATE; break;
         case DrugDrugInteractionTableModel::DateLastUpdate: sql = Constants::DDI_DATEUPDATE; break;
         case DrugDrugInteractionTableModel::RiskFr: sql = Constants::DDI_RISKFR; break;
         case DrugDrugInteractionTableModel::RiskEn: sql = Constants::DDI_RISKEN; break;
@@ -394,7 +394,7 @@ void DrugDrugInteractionTableModel::populateNewRowWithDefault(int row, QSqlRecor
     record.setValue(Constants::DDI_ISREVIEWED, 0);
     record.setValue(Constants::DDI_ISVALID, 1);
     record.setValue(Constants::DDI_LEVELCODE, "P");
-    record.setValue(Constants::DDI_DATECREATION, QDate::currentDate());
+    record.setValue(Constants::DDI_DATECREATE, QDate::currentDate());
     record.setValue(Constants::DDI_DATEUPDATE, QDate::currentDate());
     record.setValue(Constants::DDI_SOURCE, "FreeMedForms");
     record.setValue(Constants::DDI_FIRSTDOSEUSEFROM, 0);

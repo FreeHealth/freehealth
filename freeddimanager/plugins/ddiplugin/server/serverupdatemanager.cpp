@@ -35,6 +35,8 @@
 
 #include <translationutils/constants.h>
 
+#include <QDateTime>
+
 #include <QDebug>
 
 using namespace DDI;
@@ -113,49 +115,78 @@ void ServerUpdateManager::prepareUpdateToSend(ServerUpdate::UpdateType type, Ser
 void ServerUpdateManager::sendUpdates()
 {}
 
-int ServerUpdateManager::numberOfUpdates(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType) const
+/** Return the number of available update in the local database */
+int ServerUpdateManager::numberDatabaseOfUpdates(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType) const
 {
     QHash<int, QString> where;
     int table = -1;
     int field = 0;
-    switch (type) {
     if (type == ServerUpdate::New) {
         switch (subType) {
         case ServerUpdate::Atc:
         {
             table = Constants::Table_ATC;
             where.insert(Constants::ATC_ISVALID, "=1");
-            where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
-            where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            where.insert(Constants::ATC_DATECREATE, Constants::SQL_ISNOTNULL);
+            where.insert(Constants::ATC_DATECREATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
         }
         case ServerUpdate::Interactor:
-        {}
-
+        {
+            table = Constants::Table_INTERACTORS;
+            where.insert(Constants::INTERACTOR_ISVALID, "=1");
+            where.insert(Constants::INTERACTOR_ISREVIEWED, "=1");
+            where.insert(Constants::INTERACTOR_DATECREATE, Constants::SQL_ISNOTNULL);
+            where.insert(Constants::INTERACTOR_DATECREATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
+        }
         case ServerUpdate::DrugDrugInteraction:
-        {}
-
+        {
+            table = Constants::Table_DDI;
+            where.insert(Constants::DDI_ISVALID, "=1");
+            where.insert(Constants::DDI_ISREVIEWED, "=1");
+            where.insert(Constants::DDI_DATECREATE, Constants::SQL_ISNOTNULL);
+            where.insert(Constants::DDI_DATECREATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
+        }
         } // switch subType
 
-    } else if (type ==  ServerUpdate::Update) {
+    } else if (type == ServerUpdate::Update) {
         switch (subType) {
         case ServerUpdate::Atc:
         {
             table = Constants::Table_ATC;
             where.insert(Constants::ATC_ISVALID, "=1");
-            where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
+            where.insert(Constants::ATC_DATEUPDATE, Constants::SQL_ISNOTNULL);
             where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            where.insert(Constants::ATC_DATECREATE, QString("< '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
         }
         case ServerUpdate::Interactor:
-        {}
-
+        {
+            table = Constants::Table_INTERACTORS;
+            where.insert(Constants::INTERACTOR_ISVALID, "=1");
+            where.insert(Constants::INTERACTOR_ISREVIEWED, "=1");
+            where.insert(Constants::INTERACTOR_DATEUPDATE, Constants::SQL_ISNOTNULL);
+            where.insert(Constants::INTERACTOR_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            where.insert(Constants::INTERACTOR_DATECREATE, QString("< '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
+        }
         case ServerUpdate::DrugDrugInteraction:
-        {}
-
+        {
+            table = Constants::Table_DDI;
+            where.insert(Constants::DDI_ISVALID, "=1");
+            where.insert(Constants::DDI_ISREVIEWED, "=1");
+            where.insert(Constants::DDI_DATEUPDATE, Constants::SQL_ISNOTNULL);
+            where.insert(Constants::DDI_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            where.insert(Constants::DDI_DATECREATE, QString("< '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+            break;
+        }
         } // switch subType
-
     }
 
     if (table != -1)
         return ddiBase().count(table, field, ddiBase().getWhereClause(table, where));
+
     return 0;
 }
