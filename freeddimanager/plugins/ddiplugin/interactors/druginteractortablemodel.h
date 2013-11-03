@@ -28,6 +28,9 @@
 #define DDIMANAGER_DDIPLUGIN_DRUGINTERACTORTABLEMODEL_H
 
 #include <QAbstractTableModel>
+QT_BEGIN_NAMESPACE
+class QSqlRecord;
+QT_END_NAMESPACE
 
 /**
  * \file druginteractortablemodel.h
@@ -110,6 +113,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void unreviewedCountChanged();
     void unlinkedCountChanged();
+
+private Q_SLOTS:
+    void populateNewRowWithDefault(int row, QSqlRecord &record);
 
 private:
     Internal::DrugInteractorTableModelPrivate *d;

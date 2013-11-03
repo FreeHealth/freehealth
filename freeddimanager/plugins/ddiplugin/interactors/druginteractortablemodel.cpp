@@ -39,6 +39,7 @@
 #include <QDate>
 #include <QColor>
 #include <QSqlTableModel>
+#include <QSqlRecord>
 
 #include <QDebug>
 
@@ -221,6 +222,7 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
+    connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
 }
 
 DrugInteractorTableModel::~DrugInteractorTableModel()
@@ -544,4 +546,25 @@ bool DrugInteractorTableModel::submit()
     if (ok)
         d->_sql->database().commit();
     return ok;
+}
+
+/** React at primeInsert() signal, populate the newly created row with the default values */
+void DrugInteractorTableModel::populateNewRowWithDefault(int row, QSqlRecord &record)
+{
+    Q_UNUSED(row);
+    record.clearValues();
+    for(int i = 0; i < d->_sql->columnCount(); ++i) {
+        record.setGenerated(i, true);
+        record.setValue(i, QVariant());
+    }
+    // We need to force the INTERACTOR_ID in the record (we can not let the db chose the ID value)
+    record.setValue(Constants::INTERACTOR_ID, ddiBase().max(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID).toInt() + 1);
+    record.setValue(Constants::INTERACTOR_UID, Utils::createUid());
+    record.setValue(Constants::INTERACTOR_ISVALID, 1);
+    record.setValue(Constants::INTERACTOR_ISREVIEWED, 0);
+    record.setValue(Constants::INTERACTOR_ISAUTOFOUND, 0);
+    record.setValue(Constants::INTERACTOR_ISCLASS, 0);
+    record.setValue(Constants::INTERACTOR_WARNDUPLICATES, 0);
+    record.setValue(Constants::INTERACTOR_DATECREATE, QDate::currentDate());
+    record.setValue(Constants::INTERACTOR_DATEUPDATE, QDate::currentDate());
 }
