@@ -37,6 +37,8 @@ HEADERS += \
     database/ddidatabasereporter.h \
     server/serverupdatemanager.h \
     server/servermanagermode.h \
+    server/serverupdatemodel.h \
+    server/serverupdate.h
 
 
 SOURCES += \
@@ -67,6 +69,8 @@ SOURCES += \
     database/ddidatabasereporter.cpp \
     server/serverupdatemanager.cpp \
     server/servermanagermode.cpp \
+    server/serverupdatemodel.cpp \
+    server/serverupdate.cpp
 
 
 FORMS += \
@@ -80,6 +84,7 @@ FORMS += \
 
 
 OTHER_FILES += DDIManager.pluginspec
+OTHER_FILES += $${SOURCES_ROOT_PATH}/scripts/php/drugs.php
 
 equals(TEST, 1) {
     SOURCES += \

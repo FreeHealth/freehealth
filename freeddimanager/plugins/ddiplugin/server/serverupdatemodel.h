@@ -19,51 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : EricMaeker
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
-#define DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+#ifndef DDIMANAGER_DDIPLUGIN_INTERNAL_SERVERUPDATEMODEL_H
+#define DDIMANAGER_DDIPLUGIN_INTERNAL_SERVERUPDATEMODEL_H
 
-#include <ddiplugin/server/serverupdate.h>
 #include <QObject>
 
 /**
- * \file serverupdatemanager.h
- * \author EricMaeker
+ * \file serverupdatemodel.h
+ * \author Eric Maeker
  * \version 0.10.0
- * \date 01 Nov 2013
+ * \date 02 Nov 2013
 */
 
 namespace DDI {
 namespace Internal {
-class ServerUpdateManagerPrivate;
+class ServerUpdate;
+class ServerUpdateModelPrivate;
 
-class ServerUpdateManager : public QObject
+class ServerUpdateModel : public QObject
 {
     Q_OBJECT
+    
 public:
-    explicit ServerUpdateManager(QObject *parent = 0);
-    ~ServerUpdateManager();
-    bool initialize();
-
-    void prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType);
+    explicit ServerUpdateModel(QObject *parent = 0);
+    ~ServerUpdateModel();
+    
+    bool initialize(const QList<ServerUpdate> &updates);
     
 Q_SIGNALS:
-    void updateSent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType sub, bool error);
-    void allUpdateSent();
-
+    
 public Q_SLOTS:
-    void sendUpdates();
-
+    
 private:
-    Internal::ServerUpdateManagerPrivate *d;
+    ServerUpdateModelPrivate *d;
 };
 
 } // namespace Internal
 } // namespace DDI
 
-#endif  // DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+#endif // DDIMANAGER_DDIPLUGIN_INTERNAL_SERVERUPDATEMODEL_H
 

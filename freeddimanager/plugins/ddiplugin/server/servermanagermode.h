@@ -32,20 +32,21 @@
 #include <QObject>
 
 /**
- * \file interactormode.h
+ * \file servermanagermode.h
  * \author Eric Maeker
  * \version 0.10.0
  * \date 01 Nov 2013
 */
 
 namespace DDI {
-class ServerManagerWidget;
 namespace Internal {
+class ServerManagerWidget;
+
 class ServerManagerMode : public Core::IMode
 {
     Q_OBJECT
 public:
-    ServerManagerMode(QObject *parent);
+    explicit ServerManagerMode(QObject *parent = 0);
     ~ServerManagerMode();
 
     void postCoreInitialization();

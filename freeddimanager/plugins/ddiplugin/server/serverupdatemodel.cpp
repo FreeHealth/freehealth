@@ -19,51 +19,82 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : EricMaeker
- *   Contributors :                                                        *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
-#define DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+/*!
+ * \class DDI::Internal::ServerUpdateModel
+ * \brief short description of class
+ *
+ * Long description of class
+ * \sa DDI::
+ */
 
-#include <ddiplugin/server/serverupdate.h>
-#include <QObject>
+#include "serverupdatemodel.h"
+#include "serverupdate.h"
 
-/**
- * \file serverupdatemanager.h
- * \author EricMaeker
- * \version 0.10.0
- * \date 01 Nov 2013
-*/
+#include <translationutils/constants.h>
+
+#include <QDebug>
+
+using namespace DDI;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace DDI {
 namespace Internal {
-class ServerUpdateManagerPrivate;
-
-class ServerUpdateManager : public QObject
+/*!
+ * \class DDI::Internal::ServerUpdateModelPrivate
+ * \brief Private implementation of the DDI::ServerUpdateModel class.
+ *
+ * documentation here
+ */
+class ServerUpdateModelPrivate
 {
-    Q_OBJECT
 public:
-    explicit ServerUpdateManager(QObject *parent = 0);
-    ~ServerUpdateManager();
-    bool initialize();
-
-    void prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType);
+    ServerUpdateModelPrivate(ServerUpdateModel *parent) :
+        q(parent)
+    {
+        Q_UNUSED(q);
+    }
     
-Q_SIGNALS:
-    void updateSent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType sub, bool error);
-    void allUpdateSent();
-
-public Q_SLOTS:
-    void sendUpdates();
-
+    ~ServerUpdateModelPrivate()
+    {
+    }
+    
+public:
+    // Put your data here
+    
 private:
-    Internal::ServerUpdateManagerPrivate *d;
+    ServerUpdateModel *q;
 };
-
 } // namespace Internal
-} // namespace DDI
+} // end namespace DDI
 
-#endif  // DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+
+/*! Constructor of the DDI::Internal::ServerUpdateModel class */
+ServerUpdateModel::ServerUpdateModel(QObject *parent) :
+    QObject(parent),
+    d(new ServerUpdateModelPrivate(this))
+{
+}
+
+/*! Destructor of the DDI::Internal::ServerUpdateModel class */
+ServerUpdateModel::~ServerUpdateModel()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+/*!
+ * Initializes the object with the server values.
+ * Return true if initialization was completed.
+ */
+bool ServerUpdateModel::initialize(const QList<ServerUpdate> &updates)
+{
+    return true;
+}
 

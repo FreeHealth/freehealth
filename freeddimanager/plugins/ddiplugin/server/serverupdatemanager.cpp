@@ -29,6 +29,9 @@
  */
 
 #include "serverupdatemanager.h"
+#include <ddiplugin/constants.h>
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/database/ddidatabase.h>
 
 #include <translationutils/constants.h>
 
@@ -37,6 +40,9 @@
 using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline DDI::DDICore *ddiCore()  { return DDI::DDICore::instance(); }
+static inline DDI::Internal::DDIDatabase &ddiBase()  { return DDI::DDICore::instance()->database(); }
 
 namespace DDI {
 namespace Internal {
@@ -53,13 +59,25 @@ public:
     {
     }
 
-    // Wiki tokens:
+    // Wiki:
     // {{~ServerDate~}} -> current server date
-    void createWikiContent()
-    {}
+    void createWikiContent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType)
+    {
+    }
     
+    // Returns the last date of server update extracted from the database,
+    // or, if the user never sent update to the server, the database date of release
+    QDateTime lastServerUpdateDateTime()
+    {
+        // Get latest server update (last time the user sent his data to the FreeMedForms server)
+        QDateTime lastUpdate = ddiBase().dateOfLastServerUpdate();
+        if (!lastUpdate.isValid())
+            lastUpdate = ddiBase().dateOfRelease();
+        return lastUpdate;
+    }
+
 public:
-    // Put your data here
+    QVector<ServerUpdate> _updates;
     
 private:
     ServerUpdateManager *q;
@@ -89,3 +107,55 @@ bool ServerUpdateManager::initialize()
     return true;
 }
 
+void ServerUpdateManager::prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType)
+{}
+
+void ServerUpdateManager::sendUpdates()
+{}
+
+int ServerUpdateManager::numberOfUpdates(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType) const
+{
+    QHash<int, QString> where;
+    int table = -1;
+    int field = 0;
+    switch (type) {
+    if (type == ServerUpdate::New) {
+        switch (subType) {
+        case ServerUpdate::Atc:
+        {
+            table = Constants::Table_ATC;
+            where.insert(Constants::ATC_ISVALID, "=1");
+            where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
+            where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+        }
+        case ServerUpdate::Interactor:
+        {}
+
+        case ServerUpdate::DrugDrugInteraction:
+        {}
+
+        } // switch subType
+
+    } else if (type ==  ServerUpdate::Update) {
+        switch (subType) {
+        case ServerUpdate::Atc:
+        {
+            table = Constants::Table_ATC;
+            where.insert(Constants::ATC_ISVALID, "=1");
+            where.insert(Constants::ATC_DATEUPDATE, ::SQL_ISNOTNULL);
+            where.insert(Constants::ATC_DATEUPDATE, QString("> '%1'").arg(d->lastServerUpdateDateTime().toString(Qt::ISODate)));
+        }
+        case ServerUpdate::Interactor:
+        {}
+
+        case ServerUpdate::DrugDrugInteraction:
+        {}
+
+        } // switch subType
+
+    }
+
+    if (table != -1)
+        return ddiBase().count(table, field, ddiBase().getWhereClause(table, where));
+    return 0;
+}

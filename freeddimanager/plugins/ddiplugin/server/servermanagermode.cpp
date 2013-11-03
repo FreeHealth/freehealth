@@ -77,7 +77,7 @@ ServerManagerMode::ServerManagerMode(QObject *parent) :
     // create the mode widget
 //    _widget = new ServerManagerWidget;
 //    _widget->initialize();
-//    setWidget(_widget);
+    setWidget(new QWidget);
 }
 
 ServerManagerMode::~ServerManagerMode()

@@ -19,51 +19,64 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : EricMaeker
+ *   Main developers : Eric Maeker
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
-#define DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+#ifndef DDIMANAGER_DDIPLUGUN_INTERNAL_SERVERUPDATE_H
+#define DDIMANAGER_DDIPLUGUN_INTERNAL_SERVERUPDATE_H
 
-#include <ddiplugin/server/serverupdate.h>
 #include <QObject>
 
 /**
- * \file serverupdatemanager.h
- * \author EricMaeker
- * \version 0.10.0
- * \date 01 Nov 2013
+ * \file serverupdate.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 2013-11-02
 */
 
 namespace DDI {
 namespace Internal {
-class ServerUpdateManagerPrivate;
+class ServerUpdatePrivate;
 
-class ServerUpdateManager : public QObject
+class ServerUpdate
 {
-    Q_OBJECT
 public:
-    explicit ServerUpdateManager(QObject *parent = 0);
-    ~ServerUpdateManager();
-    bool initialize();
+    enum UpdateType {
+        Update,
+        New
+    };
+    enum UpdateSubType {
+        Atc,
+        Interactor,
+        DrugDrugInteraction
+    };
 
-    void prepareUpdateToSend(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType subType);
-    
-Q_SIGNALS:
-    void updateSent(ServerUpdate::UpdateType type, ServerUpdate::UpdateSubType sub, bool error);
-    void allUpdateSent();
+    ServerUpdate();
+    ~ServerUpdate();
+    ServerUpdate(const ServerUpdate &cp);
 
-public Q_SLOTS:
-    void sendUpdates();
+    void setType(UpdateType type);
+    void setSubType(UpdateSubType subtype);
+    void setTokens(const QHash<QString, QString> &tokens);
+
+    UpdateType type() const;
+    UpdateSubType subType() const;
+    QString wikiContent() const;
+    QString hashTag() const;
+
+    bool populateFromServerContent(const QString &hashTag);
+
+    bool operator==(const ServerUpdate &other) const;
+    ServerUpdate &operator=(const ServerUpdate &cp);
 
 private:
-    Internal::ServerUpdateManagerPrivate *d;
+    ServerUpdatePrivate *d;
 };
 
 } // namespace Internal
 } // namespace DDI
 
-#endif  // DDIMANAGER_DDIPLUGIN_SERVERUPDATEMANAGER_H
+#endif // DDIMANAGER_DDIPLUGUN_INTERNAL_SERVERUPDATE_H
 
