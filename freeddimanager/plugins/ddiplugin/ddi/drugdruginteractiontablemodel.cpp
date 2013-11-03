@@ -309,6 +309,13 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
             break;
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
+
+        // set the date update
+        if (ok) {
+            sqlIndex = d->_sql->index(index.row(), Constants::DDI_DATEUPDATE);
+            ok = d->_sql->setData(sqlIndex, QDateTime::currentDateTime(), role);
+        }
+
         return ok;
     }
     return false;
