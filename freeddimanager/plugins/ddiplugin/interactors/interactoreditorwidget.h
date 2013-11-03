@@ -55,7 +55,7 @@ private:
 private Q_SLOTS:
     void save();
     void filterDrugInteractorModel(const QString &text);
-    void createActionTriggered();
+    void onNewInteractorRequested();
     void removeCurrent();
     void edit();
     void interactorActivated(const QModelIndex &index);

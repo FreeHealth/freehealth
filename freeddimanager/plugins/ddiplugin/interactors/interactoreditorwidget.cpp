@@ -189,8 +189,8 @@ public:
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         // QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
         QObject::connect(_toolButton, SIGNAL(triggered(QAction*)), q, SLOT(buttonActivated(QAction*)));
-        QObject::connect(aCreateNewClass, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
-        QObject::connect(aCreateNewInteractor, SIGNAL(triggered()), q, SLOT(createActionTriggered()));
+        QObject::connect(aCreateNewClass, SIGNAL(triggered()), q, SLOT(onNewInteractorRequested()));
+        QObject::connect(aCreateNewInteractor, SIGNAL(triggered()), q, SLOT(onNewInteractorRequested()));
     }
 
     void prepareSearchLine()
@@ -381,7 +381,7 @@ void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
 }
 
 /** Creates a new interacting class or interactor according to the sender() */
-void InteractorEditorWidget::createActionTriggered()
+void InteractorEditorWidget::onNewInteractorRequested()
 {
     QAction *selected = qobject_cast<QAction*>(sender());
     if (!selected)
