@@ -407,6 +407,14 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
 
+        // set the date of review
+        if (index.column() == IsReviewed) {
+            QModelIndex reviewDateIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DATEREVIEW);
+            if (!d->_sql->setData(reviewDateIndex, QDate::currentDate(), role)) {
+                LOG_ERROR("Unable to set date of review");
+                return false;
+            }
+        }
         // set the date update
         if (ok) {
             sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DATEUPDATE);
