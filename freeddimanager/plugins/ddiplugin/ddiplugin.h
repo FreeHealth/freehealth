@@ -60,6 +60,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void test_drugInteractor();
+    void test_drugInteractorWidget();
     void cleanTestCase();
 #endif
 

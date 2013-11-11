@@ -70,7 +70,8 @@ SOURCES += \
     server/serverupdatemanager.cpp \
     server/servermanagermode.cpp \
     server/serverupdatemodel.cpp \
-    server/serverupdate.cpp
+    server/serverupdate.cpp \
+    tests/test_widgets.cpp
 
 
 FORMS += \

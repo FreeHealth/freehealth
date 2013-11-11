@@ -57,7 +57,8 @@ private Q_SLOTS:
     void filterDrugInteractorModel(const QString &text);
     void onNewInteractorRequested();
     void removeCurrent();
-    void edit();
+    void editCurrent();
+    void revertEdition();
     void interactorActivated(const QModelIndex &index);
     void buttonActivated(QAction*);
     void toggleClassMolsFilter(QAction*);
@@ -67,6 +68,15 @@ private Q_SLOTS:
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
+
+#ifdef WITH_TESTS
+public Q_SLOTS:
+    void test_runAllTests();
+    void test_views();
+    void test_actions();
+    void test_itemCreation();
+    void test_edition();
+#endif
 
 private:
     Internal::InteractorEditorWidgetPrivate *d;

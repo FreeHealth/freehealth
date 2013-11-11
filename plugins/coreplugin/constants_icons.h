@@ -105,6 +105,7 @@ const char * const  ICONTRANSLATE =    "translate.png";
 const char * const  ICONCRITICAL =     "critical.png";
 const char * const  ICONWARNING =      "warning.png";
 const char * const  ICONINFORMATION =  "information.png";
+const char * const  ICONREVERT      =  "revert.png";
 
 // Priority
 const char * const  ICONPRIORITY_HIGH   = "priority_high.png";

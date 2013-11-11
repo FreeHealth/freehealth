@@ -328,7 +328,7 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         if (isClass) {
             // Class without children?
             if (children.isNull()) {
-                qWarning() << "DrugInteractor: class without children" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
+                // qWarning() << "DrugInteractor: class without children" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
                 return QColor(255,50,50,150);
             }
             // Children without ATC code
@@ -337,8 +337,8 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         } else {
             // Children without being a class?
             if (!children.isNull()) {
-                qWarning() << "DrugInteractor: children defined without isclass" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
-                qWarning() << children;
+                // qWarning() << "DrugInteractor: children defined without isclass" << d->_sql->index(index.row(), Constants::INTERACTOR_FR).data();
+                // qWarning() << children;
                 return QColor(255,50,50,150);
             }
         }

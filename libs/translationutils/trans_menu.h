@@ -167,6 +167,7 @@ const char * const  TAKE_SCREENSHOT       = QT_TRANSLATE_NOOP("tkConstants", "Ta
 const char * const  SCREENSHOTS           = QT_TRANSLATE_NOOP("tkConstants", "Screenshots");
 const char * const  NAVIGATION            = QT_TRANSLATE_NOOP("tkConstants", "Navigation");
 const char * const  DEFAULTS              = QT_TRANSLATE_NOOP("tkConstants", "Defaults");
+const char * const  REVERT                = QT_TRANSLATE_NOOP("tkConstants", "Revert");
 
 const char * const  PMHMENU_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");
 

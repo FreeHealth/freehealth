@@ -76,6 +76,7 @@ public:
         aSearchClassOnly(0), aSearchMolsAndClass(0), aSearchMolsOnly(0),
         aSave(0),
         aEdit(0),
+        aRevert(0),
         aRemoveCurrent(0),
         aCreateNewClass(0),
         aCreateNewInteractor(0),
@@ -123,6 +124,7 @@ public:
         aSave = new QAction(q);
         aRemoveCurrent = new QAction(q);
         aEdit = new QAction(q);
+        aRevert = new QAction(q);
         aCreateNewClass = new QAction(q);
         aCreateNewInteractor = new QAction(q);
         aTranslateThis = new QAction(q);
@@ -137,6 +139,7 @@ public:
         aAtcSearchDialog->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
         aSave->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+        aRevert->setIcon(theme()->icon(Core::Constants::ICONREVERT));
         aCreateNewClass->setIcon(theme()->icon("black_dci.png")); // FIXME: create a new icon, remove magic number
         aCreateNewInteractor->setIcon(theme()->icon("molecule.png")); // FIXME: remove magic number
         aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
@@ -146,6 +149,7 @@ public:
 
         aSave->setEnabled(false);
         aEdit->setEnabled(false);
+        aRevert->setEnabled(false);
         aRemoveCurrent->setEnabled(false);
         aTranslateThis->setEnabled(false);
 
@@ -173,6 +177,7 @@ public:
         _toolBar->addAction(aEdit);
         _toolBar->addAction(aTranslateThis);
         _toolBar->addSeparator();
+        _toolBar->addAction(aRevert);
         _toolBar->addAction(aSave);
         _toolBar->addWidget(_toolButton);
         _toolBar->setIconSize(QSize(32, 32));
@@ -184,7 +189,8 @@ public:
     {
         QObject::connect(aSave, SIGNAL(triggered()), q, SLOT(save()));
         QObject::connect(aRemoveCurrent, SIGNAL(triggered()), q, SLOT(removeCurrent()));
-        QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(edit()));
+        QObject::connect(aEdit, SIGNAL(triggered()), q, SLOT(editCurrent()));
+        QObject::connect(aRevert, SIGNAL(triggered()), q, SLOT(revertEdition()));
         // QObject::connect(aTranslateThis, SIGNAL(triggered()), q, SLOT(translateCurrent()));
         QObject::connect(aNextUnreviewedOrUnlinked, SIGNAL(triggered()), q, SLOT(nextUnreviewedOrUnlinked()));
         // QObject::connect(aDownloadAllNeededPmids, SIGNAL(triggered()), ddiCore(), SLOT(downloadAllPmids()));
@@ -219,6 +225,7 @@ public:
         _proxyMoleculeModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         _proxyMoleculeModel->setFilterKeyColumn(DrugInteractorTableModel::TranslatedLabel);
         _proxyMoleculeModel->setSortRole(Qt::DisplayRole);
+        _proxyMoleculeModel->setDynamicSortFilter(true);
         _proxyMoleculeModel->sort(DrugInteractorTableModel::TranslatedLabel);
         ui->molsListView->setModel(_proxyMoleculeModel);
         ui->molsListView->setModelColumn(DrugInteractorTableModel::TranslatedLabel);
@@ -262,6 +269,7 @@ public:
     QAction *aSearchClassOnly, *aSearchMolsAndClass, *aSearchMolsOnly;
     QAction *aSave;
     QAction *aEdit;
+    QAction *aRevert;
     QAction *aRemoveCurrent;
     QAction *aCreateNewClass;
     QAction *aCreateNewInteractor;
@@ -372,6 +380,7 @@ void InteractorEditorWidget::save()
 
     setEditorsEnabled(false);
     d->aSave->setEnabled(false);
+    d->aRevert->setEnabled(false);
 }
 
 /** Filter all proxy models with searched string */
@@ -431,16 +440,30 @@ void InteractorEditorWidget::onNewInteractorRequested()
 
 void InteractorEditorWidget::removeCurrent()
 {
-//    if (d->m_EditingIndex.isValid()) {
-//        d->m_DDIModel->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
-//    }
+    if (d->ui->molsListView->currentIndex().isValid()) {
+        ddiCore()->drugInteractorTableModel()->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
+    }
 }
 
 /** Edit the current selected item */
-void InteractorEditorWidget::edit()
+void InteractorEditorWidget::editCurrent()
 {
-    setEditorsEnabled(true);
-    d->aSave->setEnabled(true);
+    if (d->ui->molsListView->selectionModel()->hasSelection()) {
+        setEditorsEnabled(true);
+        d->aSave->setEnabled(true);
+        d->aRevert->setEnabled(true);
+    }
+}
+
+void InteractorEditorWidget::revertEdition()
+{
+    if (d->ui->molsListView->selectionModel()->hasSelection()) {
+        // Undo mapper
+        d->_mapper->setCurrentIndex(d->_mapper->currentIndex());
+        // Enable edition
+        setEditorsEnabled(false);
+    }
+
 }
 
 /** Update UI and wrapper when an interactor is selected by the user */
@@ -629,6 +652,7 @@ void InteractorEditorWidget::retranslateUi()
     d->aAtcSearchDialog->setText(tr("Open the ATC search dialog"));
     d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
     d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    d->aRevert->setText(tkTr(Trans::Constants::REVERT));
     d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
     d->aCreateNewClass->setText(tr("Create class"));
     d->aCreateNewInteractor->setText(tr("Create molecule"));
@@ -645,6 +669,7 @@ void InteractorEditorWidget::retranslateUi()
     d->aCopyClip->setToolTip(d->aCopyClip->text());
     d->aSave->setToolTip(d->aSave->text());
     d->aEdit->setToolTip(d->aEdit->text());
+    d->aRevert->setToolTip(d->aRevert->text());
     d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
     d->aCreateNewClass->setToolTip(d->aCreateNewClass->text());
     d->aTranslateThis->setToolTip(d->aTranslateThis->text());
@@ -664,3 +689,99 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         retranslateUi();
     }
 }
+
+#ifdef WITH_TESTS
+#include <QTest>
+
+void InteractorEditorWidget::test_runAllTests()
+{
+    test_views();
+    test_actions();
+    test_edition();
+}
+
+void InteractorEditorWidget::test_views()
+{
+    // Just test if views are populated with the right model
+    QCOMPARE(d->ui->molsListView->model(), d->_proxyMoleculeModel);
+}
+
+void InteractorEditorWidget::test_actions()
+{
+    // First state
+    QCOMPARE(d->ui->atcTableView->isVisible(), false);
+    // no interactor selected
+    QCOMPARE(d->ui->molsListView->currentIndex(), QModelIndex());
+    // no editing available
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), false);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), false);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), false);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), false);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), false);
+    QCOMPARE(d->ui->isClass->isEnabled(), false);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), false);
+    QCOMPARE(d->ui->frLabel->isEnabled(), false);
+    QCOMPARE(d->ui->enLabel->isEnabled(), false);
+    QCOMPARE(d->ui->deLabel->isEnabled(), false);
+    QCOMPARE(d->ui->reference->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), false);
+
+    // Tigger Edition without selected item -> nothing changes
+    d->aEdit->trigger();
+    // no editing available
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), false);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), false);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), false);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), false);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), false);
+    QCOMPARE(d->ui->isClass->isEnabled(), false);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), false);
+    QCOMPARE(d->ui->frLabel->isEnabled(), false);
+    QCOMPARE(d->ui->enLabel->isEnabled(), false);
+    QCOMPARE(d->ui->deLabel->isEnabled(), false);
+    QCOMPARE(d->ui->reference->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), false);
+
+    // Tigger Edition with an item -> editor is now available
+    int column = d->ui->molsListView->modelColumn();
+    d->ui->molsListView->selectionModel()->select(d->_proxyMoleculeModel->index(0, column), QItemSelectionModel::SelectCurrent);
+    d->aEdit->trigger();
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), true);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), true);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), true);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), true);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), true);
+    QCOMPARE(d->ui->isClass->isEnabled(), true);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), true);
+    QCOMPARE(d->ui->frLabel->isEnabled(), true);
+    QCOMPARE(d->ui->enLabel->isEnabled(), true);
+    QCOMPARE(d->ui->deLabel->isEnabled(), true);
+    QCOMPARE(d->ui->reference->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), true);
+
+//    ->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+//    d->aCreateNewClass->setText(tr("Create class"));
+//    d->aCreateNewInteractor->setText(tr("Create molecule"));
+    // d->aTranslateThis->setText(tr("Translate current"));
+
+    // d->aNextUnreviewedOrUnlinked->setText(tr("Next problematic"));
+    // d->aDownloadAllNeededPmids->setText(tr("Download publications"));
+}
+
+void InteractorEditorWidget::test_itemCreation()
+{}
+
+void InteractorEditorWidget::test_edition()
+{
+    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
+    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    //    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+}
+
+#endif // WITH_TESTS

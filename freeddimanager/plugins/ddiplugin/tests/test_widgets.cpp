@@ -24,42 +24,36 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DDIMANAGER_DDIPLUGIN_INTERACTORMODE_H
-#define DDIMANAGER_DDIPLUGIN_INTERACTORMODE_H
+#include <ddiplugin/ddiplugin.h>
+#include <ddiplugin/constants.h>
+#include <ddiplugin/interactors/interactormode.h>
 
-#include <coreplugin/modemanager/imode.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/modemanager/modemanager.h>
 
-#include <QObject>
+#include <utils/log.h>
+#include <utils/randomizer.h>
 
-/**
- * \file interactormode.h
- * \author Eric Maeker
- * \version 0.10.0
- * \date 14 Oct 2013
-*/
+#include <QString>
+#include <QVariant>
+#include <QTest>
 
-namespace DDI {
-class InteractorEditorWidget;
-namespace Internal {
-class InteractorMode : public Core::IMode
+using namespace DDI;
+using namespace Internal;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+
+namespace {
+static int loop = 100;
+}
+
+void DDIPlugin::test_drugInteractorWidget()
 {
-    Q_OBJECT
-public:
-    InteractorMode(QObject *parent);
-    ~InteractorMode();
+    // Get the mode
+    DDI::Internal::InteractorMode *mode = qobject_cast<DDI::Internal::InteractorMode*>(modeManager()->mode(Constants::MODE_INTERACTOR));
+    Q_ASSERT(mode);
+    mode->test_runWidgetTests();
+}
 
-    void postCoreInitialization();
-
-#ifdef WITH_TESTS
-public Q_SLOTS:
-    void test_runWidgetTests();
-#endif
-
-private:
-    InteractorEditorWidget *_widget;
-};
-
-} // namespace Internal
-} // namespace DDI
-
-#endif // DDIMANAGER_DDIPLUGIN_INTERACTORMODE_H

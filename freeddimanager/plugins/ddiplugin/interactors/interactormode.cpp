@@ -91,3 +91,12 @@ InteractorMode::~InteractorMode()
 void InteractorMode::postCoreInitialization()
 {
 }
+
+#ifdef WITH_TESTS
+
+void InteractorMode::test_runWidgetTests()
+{
+    _widget->test_runAllTests();
+}
+
+#endif
