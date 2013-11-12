@@ -407,6 +407,11 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
 
+        if (!ok)
+            LOG_QUERY_ERROR(d->_sql->query());
+
+        qWarning() << sqlIndex.column() << d->_sql->data(sqlIndex) << index.column() << value;
+
         // set the date of review
         if (index.column() == IsReviewed) {
             QModelIndex reviewDateIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DATEREVIEW);
@@ -558,7 +563,9 @@ bool DrugInteractorTableModel::interactorUidExists(const QString &uid) const
 bool DrugInteractorTableModel::submit()
 {
     bool ok = d->_sql->submitAll();
-    if (ok)
+    if (!ok)
+        LOG_ERROR(d->_sql->lastError().text());
+    else
         d->_sql->database().commit();
     return ok;
 }
