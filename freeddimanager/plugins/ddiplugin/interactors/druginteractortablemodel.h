@@ -61,12 +61,12 @@ public:
         IsAutoFound,
         DoNotWarnDuplicated,
         TranslatedLabel,
-        EnLabel,
-        FrLabel,
-        DeLabel,
-        ClassInformationFr,
-        ClassInformationEn,
-        ClassInformationDe,
+        EnLabel,            // 8
+        FrLabel,            // 9
+        DeLabel,            // 10
+        ClassInformationFr, // 11
+        ClassInformationEn, // 12
+        ClassInformationDe, // 13
         ATCCodeStringList,
         DateOfCreation,
         DateLastUpdate,
@@ -98,9 +98,6 @@ public:
 
     virtual QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
-
-    DrugInteractor *createInteractingClass(const QString &initialLabel);
-    bool createInteractor(const QString &initialLabel);
 
     int numberOfUnreviewed() const;
     int numberOfUnlinked() const;
