@@ -632,8 +632,10 @@ int DrugDrugInteractionTableModel::numberOfUnreviewed() const
 /** Submit changes directly to the database */
 bool DrugDrugInteractionTableModel::submitAll()
 {
+#if QT_VERSION >= 0x050000
     if (!d->_sql->isDirty())
         return true;
+#endif
 
     bool ok = d->_sql->submit();
     if (!ok) {
