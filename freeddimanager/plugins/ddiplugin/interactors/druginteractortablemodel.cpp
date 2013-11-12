@@ -85,23 +85,6 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
-
-//    connect(d->_sql, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )));
-//    connect(d->_sql, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )));
-//    connect(d->_sql, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL( columnsAboutToBeRemoved(QModelIndex, int , int )));
-//    connect(d->_sql, SIGNAL(columnsInserted(QModelIndex, int , int )), model2, SIGNAL(columnsInserted(QModelIndex, int , int )));
-//    connect(d->_sql, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )));
-//    connect(d->_sql, SIGNAL(columnsRemoved(QModelIndex, int , int )), model2, SIGNAL(columnsRemoved(QModelIndex, int , int )));
-//    if (connectDataChanged)
-//        connect(d->_sql, SIGNAL(dataChanged(QModelIndex,QModelIndex)), model2, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
-//    connect(d->_sql, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), model2, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
-    //    connect(d->_sql, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )));
-    //    connect(d->_sql, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)), model2, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)));
-    //    connect(d->_sql, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )));
-    //    connect(d->_sql, SIGNAL(rowsInserted(QModelIndex, int , int )), model2, SIGNAL(rowsInserted(QModelIndex, int , int )));
-    //    connect(d->_sql, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )));
-    //    connect(d->_sql, SIGNAL(rowsRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsRemoved(QModelIndex, int , int )));
-
     connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
     connect(d->_sql, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
     connect(d->_sql, SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
@@ -309,8 +292,6 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
         else
             Q_EMIT dataChanged(index, index);
 
-        qWarning() << sqlIndex.column() << d->_sql->data(sqlIndex) << index.column() << value;
-
         // set the date of review
         if (index.column() == IsReviewed) {
             QModelIndex reviewDateIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DATEREVIEW);
@@ -339,7 +320,10 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
 
 bool DrugInteractorTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    return d->_sql->insertRows(row, count, parent);
+    beginInsertRows(parent, row, row+count);
+    bool ok = d->_sql->insertRows(row, count, parent);
+    endInsertRows();
+    return ok;
 }
 
 bool DrugInteractorTableModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -390,52 +374,6 @@ Qt::ItemFlags DrugInteractorTableModel::flags(const QModelIndex &index) const
         return 0;
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
     return f;
-}
-
-/**
- * Creates a new drug interacting class and store it in the model.
- * In case of success, return the created DrugsDB::DrugInteractor pointer
- * else return 0.
- */
-DrugInteractor *DrugInteractorTableModel::createInteractingClass(const QString &initialLabel)
-{
-//    for(int i=0; i < d->m_interactors.count(); ++i) {
-//        if (d->m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString() == initialLabel.toUpper()) {
-//            return 0;
-//        }
-//    }
-//    DrugInteractor *di = new DrugInteractor;
-//    di->setData(DrugInteractor::IsValid, true);
-//    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
-//    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
-//    di->setData(DrugInteractor::IsClass, true);
-//    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
-//    di->setData(DrugInteractor::IsDuplicated, false);
-//    d->m_interactors.append(di);
-//    d->onInteractorCreated();
-//    return di;
-    return 0;
-}
-
-/** Creates a new interactor and store it in the model. */
-bool DrugInteractorTableModel::createInteractor(const QString &initialLabel)
-{
-//    for(int i=0; i < d->m_interactors.count(); ++i) {
-//        if (d->m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString() == initialLabel.toUpper()) {
-//            return 0;
-//        }
-//    }
-//    DrugInteractor *di = new DrugInteractor;
-//    di->setData(DrugInteractor::IsValid, true);
-//    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
-//    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
-//    di->setData(DrugInteractor::IsClass, false);
-//    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
-//    di->setData(DrugInteractor::IsDuplicated, false);
-//    d->m_interactors.append(di);
-//    d->onInteractorCreated();
-//    return di;
-    return true;
 }
 
 /** Returns the number of unreviewed DDI::DrugInteractor from the database. */
