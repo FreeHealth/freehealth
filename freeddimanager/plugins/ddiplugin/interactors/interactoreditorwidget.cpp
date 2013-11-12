@@ -869,8 +869,6 @@ void InteractorEditorWidget::test_itemCreation()
 
 void InteractorEditorWidget::test_edition()
 {
-    // TODO: There is a bug with QDataWidgetMapper and deLabel && infoEn && checkBoxes...
-
     // Test1: Edit, modify, save, test values
     // Select an item
     d->m_EditingIndex = QModelIndex(); // no dialog when activating the interactor
@@ -882,23 +880,16 @@ void InteractorEditorWidget::test_edition()
     d->aEdit->trigger();
 
     // Edit all values
-    // QCOMPARE(d->ui->classChildrenTableView->isEnabled(), true);
     QString fr = QString("_TEST_Fr_%1").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
     // select * from interactors where fr like "_TEST_%"
     QDate creationDate = QDate::currentDate().addDays(-999);
     d->ui->dateCreation->setDate(creationDate);
-    QTest::mouseClick(d->ui->isReviewed, Qt::LeftButton);
-    if (!d->ui->isReviewed->isChecked())
-        QTest::mouseClick(d->ui->isReviewed, Qt::LeftButton);
-    QTest::mouseClick(d->ui->isAutoFound, Qt::LeftButton);
-    if (!d->ui->isAutoFound->isChecked())
-        QTest::mouseClick(d->ui->isAutoFound, Qt::LeftButton);
-    QTest::mouseClick(d->ui->isClass, Qt::LeftButton);
-    if (!d->ui->isClass->isChecked())
-        QTest::mouseClick(d->ui->isClass, Qt::LeftButton);
-    QTest::mouseClick(d->ui->notWarnDuplicated, Qt::LeftButton);
-    if (!d->ui->notWarnDuplicated->isChecked())
-        QTest::mouseClick(d->ui->notWarnDuplicated, Qt::LeftButton);
+
+    d->ui->isReviewed->setChecked(true);
+    d->ui->isAutoFound->setChecked(true);
+    d->ui->isClass->setChecked(true);
+    d->ui->notWarnDuplicated->setChecked(true);
+
     d->ui->frLabel->clear();
     d->ui->enLabel->clear();
     d->ui->deLabel->clear();
@@ -950,13 +941,31 @@ void InteractorEditorWidget::test_edition()
     QCOMPARE(model->index(row, DrugInteractorTableModel::Reference).data().toString(), QString("_TEST_Ref"));
     QCOMPARE(model->index(row, DrugInteractorTableModel::Comment).data().toString(), QString("_TEST_ Comment"));
 
-//    QCOMPARE(model->index(row, DrugInteractorTableModel::ATCCodeStringList).data().to(), );
-//    QCOMPARE(model->index(row, DrugInteractorTableModel::PMIDStringList).data().to(), );
-//    QCOMPARE(model->index(row, DrugInteractorTableModel::ChildrenUuid).data().to(), );
-    // Date of update should be today
+    // Check atc codes
+    d->aEdit->trigger();
+    QStringList atc;
+    atc << "_TEST_COIN" << "_TEST_COINCOIN";
+    d->_atcCodesStringListModel->setStringList(atc);
+    d->aSave->trigger();
+    QCOMPARE(model->index(row, DrugInteractorTableModel::ATCCodeStringList).data().toString().split(";"), atc);
 
-//    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
-//    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    // Check children
+    d->aEdit->trigger();
+    QStringList children;
+    children << "_TEST_CHILD1" << "_TEST_CHILD2" << "_TEST_CHILD3";
+    d->_childrenInteractorsStringListModel->setStringList(children);
+    d->aSave->trigger();
+    QCOMPARE(model->index(row, DrugInteractorTableModel::ChildrenUuid).data().toString().split(";"), children);
+
+    // Check pmids
+    d->aEdit->trigger();
+    QStringList pmids;
+    pmids << "_TEST_PMID1" << "_TEST_PMID2" << "_TEST_PMID3";
+    d->_pmidStringListModel->setStringList(pmids);
+    d->aSave->trigger();
+    QCOMPARE(model->index(row, DrugInteractorTableModel::PMIDStringList).data().toString().split(";"), pmids);
+
+    // TODO: test remove current
     //    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
 }
 
