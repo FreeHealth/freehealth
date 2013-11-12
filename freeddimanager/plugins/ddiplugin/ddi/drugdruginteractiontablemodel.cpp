@@ -198,8 +198,12 @@ DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     d->_sql->setTable(ddiBase().table(Constants::Table_DDI));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->_sql->setSort(FirstInteractorUid, Qt::AscendingOrder);
-    Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
+    // Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
+    connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
+    connect(d->_sql, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+    connect(d->_sql, SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
+    connect(d->_sql, SIGNAL(modelReset()), this, SIGNAL(modelReset()));
 }
 
 DrugDrugInteractionTableModel::~DrugDrugInteractionTableModel()
@@ -295,6 +299,7 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
     if (!index.isValid())
         return false;
     int sql = d->modelColumnToSqlColumn(index.column());
+
     if (role == Qt::EditRole) {
         bool ok = false;
         QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
@@ -312,8 +317,13 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
 
         // set the date update
         if (ok) {
+            Q_EMIT dataChanged(index, index);
             sqlIndex = d->_sql->index(index.row(), Constants::DDI_DATEUPDATE);
             ok = d->_sql->setData(sqlIndex, QDateTime::currentDateTime(), role);
+            if (ok) {
+                QModelIndex idx = this->index(index.row(), DateLastUpdate);
+                Q_EMIT dataChanged(idx, idx);
+            }
         }
 
         return ok;
