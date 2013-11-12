@@ -819,3 +819,38 @@ void DrugDrugInteractionEditorWidget::changeEvent(QEvent *e)
         retranslateUi();
     }
 }
+
+#ifdef WITH_TESTS
+#include <coreplugin/imainwindow.h>
+#include <QTest>
+
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
+
+void DrugDrugInteractionEditorWidget::test_runAllTests()
+{
+    test_views();
+    test_actions();
+    test_itemCreation();
+    test_edition();
+}
+
+void DrugDrugInteractionEditorWidget::test_views()
+{
+    // Just test if views are populated with the right model
+    // QCOMPARE(d->ui->molsListView->model(), d->_proxyMoleculeModel);
+    // QCOMPARE(d->_mapper->model(), d->_proxyMoleculeModel->sourceModel());
+}
+
+void DrugDrugInteractionEditorWidget::test_actions()
+{
+}
+
+void DrugDrugInteractionEditorWidget::test_itemCreation()
+{
+}
+
+void DrugDrugInteractionEditorWidget::test_edition()
+{
+}
+
+#endif // WITH_TESTS
