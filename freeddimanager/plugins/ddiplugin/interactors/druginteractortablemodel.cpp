@@ -84,8 +84,28 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     d->_sql->setTable(ddiBase().table(Constants::Table_INTERACTORS));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
-    Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
+
+//    connect(d->_sql, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )));
+//    connect(d->_sql, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )));
+//    connect(d->_sql, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL( columnsAboutToBeRemoved(QModelIndex, int , int )));
+//    connect(d->_sql, SIGNAL(columnsInserted(QModelIndex, int , int )), model2, SIGNAL(columnsInserted(QModelIndex, int , int )));
+//    connect(d->_sql, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )));
+//    connect(d->_sql, SIGNAL(columnsRemoved(QModelIndex, int , int )), model2, SIGNAL(columnsRemoved(QModelIndex, int , int )));
+//    if (connectDataChanged)
+//        connect(d->_sql, SIGNAL(dataChanged(QModelIndex,QModelIndex)), model2, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+//    connect(d->_sql, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), model2, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
+    //    connect(d->_sql, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )));
+    //    connect(d->_sql, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)), model2, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)));
+    //    connect(d->_sql, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )));
+    //    connect(d->_sql, SIGNAL(rowsInserted(QModelIndex, int , int )), model2, SIGNAL(rowsInserted(QModelIndex, int , int )));
+    //    connect(d->_sql, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )));
+    //    connect(d->_sql, SIGNAL(rowsRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsRemoved(QModelIndex, int , int )));
+
+    connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
+    connect(d->_sql, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+    connect(d->_sql, SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
+    connect(d->_sql, SIGNAL(modelReset()), this, SIGNAL(modelReset()));
 }
 
 DrugInteractorTableModel::~DrugInteractorTableModel()
@@ -272,6 +292,8 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
 
         if (!ok)
             LOG_QUERY_ERROR(d->_sql->query());
+        else
+            Q_EMIT dataChanged(index, index);
 
         qWarning() << sqlIndex.column() << d->_sql->data(sqlIndex) << index.column() << value;
 
@@ -281,12 +303,19 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
             if (!d->_sql->setData(reviewDateIndex, QDate::currentDate(), role)) {
                 LOG_ERROR("Unable to set date of review");
                 return false;
+            } else {
+                QModelIndex idx = this->index(index.row(), DateReview);
+                Q_EMIT dataChanged(idx, idx);
             }
         }
         // set the date update
         if (ok) {
             sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_DATEUPDATE);
             ok = d->_sql->setData(sqlIndex, QDateTime::currentDateTime(), role);
+            if (ok) {
+                QModelIndex idx = this->index(index.row(), DateLastUpdate);
+                Q_EMIT dataChanged(idx, idx);
+            }
         }
 
         return ok;
