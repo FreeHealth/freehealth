@@ -217,12 +217,14 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
  */
 void MainWindow::extensionsInitialized()
 {
+#ifndef WITH_TESTS
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         settings()->setPath(Core::ISettings::UpdateUrl, Utils::Constants::FREEDDIMANAGER_UPDATE_URL);
         if (checkUpdate())
             settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
+#endif
     m_modeStack->statusBar()->hide();
     setCentralWidget(m_modeStack);
     // createDockWindows();
