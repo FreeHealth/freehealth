@@ -28,6 +28,9 @@
 #define FREEDDIMANAGER_ATCEDITORWIDGET_H
 
 #include <QWidget>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 /**
  * \file atceditorwidget.h

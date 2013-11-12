@@ -29,6 +29,9 @@
 
 #include <ddiplugin/ddi_exporter.h>
 #include <QWidget>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 /**
  * \file interactoreditorwidget.h

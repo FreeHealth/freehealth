@@ -28,6 +28,8 @@
 #define DDIMANAGER_DDIPLUGUN_INTERNAL_SERVERUPDATE_H
 
 #include <QObject>
+#include <QHash>
+#include <QString>
 
 /**
  * \file serverupdate.h

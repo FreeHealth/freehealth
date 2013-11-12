@@ -41,7 +41,6 @@ QT_END_NAMESPACE
 */
 
 namespace Utils {
-
 namespace Internal {
 class MessageSenderPrivate;
 }
@@ -50,7 +49,7 @@ class UTILS_EXPORT MessageSender : public QObject
 {
     Q_OBJECT
 public:
-    enum TypeOfMessage{
+    enum TypeOfMessage {
         CorrectDrugsCoding,
         UncorrectDrugsCoding,
         InformationToDeveloper,
