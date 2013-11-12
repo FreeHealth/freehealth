@@ -33,7 +33,6 @@
 #include <ddiplugin/atc/searchatcindatabasedialog.h>
 
 #include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
@@ -217,7 +216,6 @@ public:
     void prepareModelsAndViews()
     {
         // Models and views in the selector
-        ui->classesTreeView->hide();
 
         // Molecules
         _proxyMoleculeModel = new DrugInteractorSortFilterProxyModel(q);
@@ -257,6 +255,30 @@ public:
         //ui->pmidListView->verticalHeader()->hide();
     }
 
+    void createMapper()
+    {
+        _mapper = new QDataWidgetMapper(q);
+        _mapper->setModel(_proxyMoleculeModel->sourceModel());
+        _mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit); // AutoSubmit  ManualSubmit
+        _mapper->addMapping(ui->interactorLabel, DrugInteractorTableModel::TranslatedLabel, "text");
+        _mapper->addMapping(ui->commentTextEdit, DrugInteractorTableModel::Comment, "plainText");
+        _mapper->addMapping(ui->dateCreation, DrugInteractorTableModel::DateOfCreation, "date");
+        _mapper->addMapping(ui->dateUpdate, DrugInteractorTableModel::DateLastUpdate, "date");
+        _mapper->addMapping(ui->frLabel, DrugInteractorTableModel::FrLabel, "text");
+        _mapper->addMapping(ui->enLabel, DrugInteractorTableModel::EnLabel, "text");
+        _mapper->addMapping(ui->deLabel, DrugInteractorTableModel::DeLabel, "text");
+        _mapper->addMapping(ui->reference, DrugInteractorTableModel::Reference, "text");
+
+        _mapper->addMapping(ui->classInfoFr, DrugInteractorTableModel::ClassInformationFr, "plainText");
+        _mapper->addMapping(ui->classInfoEn, DrugInteractorTableModel::ClassInformationEn, "plainText");
+        _mapper->addMapping(ui->classInfoDe, DrugInteractorTableModel::ClassInformationDe, "plainText");
+
+        _mapper->addMapping(ui->isClass, DrugInteractorTableModel::IsInteractingClass, "checked");
+        _mapper->addMapping(ui->isReviewed, DrugInteractorTableModel::IsReviewed, "checked");
+        _mapper->addMapping(ui->isAutoFound, DrugInteractorTableModel::IsAutoFound, "checked");
+        _mapper->addMapping(ui->notWarnDuplicated, DrugInteractorTableModel::DoNotWarnDuplicated, "checked");
+    }
+
 public:
     Ui::InteractorEditorWidget *ui;
     QDataWidgetMapper *_mapper;
@@ -286,6 +308,10 @@ public:
 
     DrugInteractorSortFilterProxyModel *_proxyMoleculeModel;
 
+#ifdef WITH_TESTS
+    QString _testingLabel1, _testingLabel2; // used to test item creation
+#endif
+
 private:
     InteractorEditorWidget *q;
 };
@@ -307,16 +333,12 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->prepareSearchLine();
 
     d->prepareModelsAndViews();
-
-    d->_mapper = new QDataWidgetMapper(this);
+    d->createMapper();
 
     updateCounts();
     connect(ddiCore()->drugInteractorTableModel(), SIGNAL(unlinkedCountChanged()), this, SLOT(updateCounts()));
     connect(ddiCore()->drugInteractorTableModel(), SIGNAL(unreviewedCountChanged()), this, SLOT(updateCounts()));
-
-    // connect(d->ui->classesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
-
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
     retranslateUi();
 
@@ -350,22 +372,19 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
     d->ui->classInfoDe->setEnabled(state);
     d->ui->classInfoEn->setEnabled(state);
     d->ui->classInfoFr->setEnabled(state);
+    d->ui->commentTextEdit->setEnabled(state);
 }
 
 /** Submit the current editing class/interactor to the model and submit the model to the database */
 void InteractorEditorWidget::save()
 {
     if (d->m_EditingIndex.isValid()) {
-        d->ui->molsListView->setFocus();
+        // ensure the mapper gets all the data by changing the focus (--> focusOut on editors)
+//        d->ui->frLabel->setFocus();
+//        d->ui->enLabel->setFocus();
 
         QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
-//        // bug with mapper / checkbox in macos
-//        QModelIndex reviewed = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::IsReviewed, d->m_EditingIndex.parent());
-//        model->setData(reviewed, d->ui->isReviewed->isChecked());
-//        QModelIndex notWarnDuplication = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::DoNotWarnDuplicated, d->m_EditingIndex.parent());
-//        model->setData(notWarnDuplication, d->ui->notWarnDuplicated->isChecked());
 
-        // manage ATC / PMIDs
         QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
         model->setData(atc, d->_atcCodesStringListModel->stringList().join(";"));
 
@@ -375,7 +394,8 @@ void InteractorEditorWidget::save()
         QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::PMIDStringList, d->m_EditingIndex.parent());
         model->setData(pmids, d->_pmidStringListModel->stringList().join(";"));
 
-        d->_mapper->submit();
+        if (!d->_mapper->submit())
+            LOG_ERROR("Unable to submit mapper");
     }
 
     setEditorsEnabled(false);
@@ -395,10 +415,12 @@ void InteractorEditorWidget::onNewInteractorRequested()
     QAction *selected = qobject_cast<QAction*>(sender());
     if (!selected)
         return;
+#ifdef WITH_TESTS
+    QString id = d->_testingLabel1;
+#else
     QString id = Utils::askUser(tr("New drug interactor"), tr("What is the label?"));
-
+#endif
     // TODO: make some checking with the label
-
 
     // Insert a row to the drug interactor model
     ddiCore()->drugInteractorTableModel()->insertRow(0);
@@ -459,7 +481,7 @@ void InteractorEditorWidget::revertEdition()
 {
     if (d->ui->molsListView->selectionModel()->hasSelection()) {
         // Undo mapper
-        d->_mapper->setCurrentIndex(d->_mapper->currentIndex());
+        d->_mapper->revert();
         // Enable edition
         setEditorsEnabled(false);
     }
@@ -469,8 +491,10 @@ void InteractorEditorWidget::revertEdition()
 /** Update UI and wrapper when an interactor is selected by the user */
 void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
 {
+    QModelIndex sourceIndex = d->_proxyMoleculeModel->mapToSource(index);
     // submit / revert mapper ?
-    if (d->ui->dateCreation->isEnabled()) {
+    if (d->ui->frLabel->isEnabled()
+            && d->m_EditingIndex != sourceIndex) {
         if (Utils::yesNoMessageBox(tr("Data changed but not saved."), tr("Do you want to save changes to the file ?"))) {
             save();
         } else {
@@ -488,7 +512,7 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
         return;
 
     // Get the current source model editing index
-    d->m_EditingIndex = d->_proxyMoleculeModel->mapToSource(index);
+    d->m_EditingIndex = sourceIndex;
 
     // Adapt UI to editing index -> Class?
     bool isClass = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::IsInteractingClass).data().toBool();
@@ -520,26 +544,6 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->ui->messages->setPlainText(msg.join("\n"));
 
     // Set the mapper over the source model
-    d->_mapper->setModel(d->_proxyMoleculeModel->sourceModel());
-    d->_mapper->addMapping(d->ui->interactorLabel, DrugInteractorTableModel::TranslatedLabel, "text");
-    d->_mapper->addMapping(d->ui->commentTextEdit, DrugInteractorTableModel::Comment, "plainText");
-    d->_mapper->addMapping(d->ui->dateCreation, DrugInteractorTableModel::DateOfCreation, "date");
-    d->_mapper->addMapping(d->ui->dateUpdate, DrugInteractorTableModel::DateLastUpdate, "date");
-    d->_mapper->addMapping(d->ui->frLabel, DrugInteractorTableModel::FrLabel, "text");
-    d->_mapper->addMapping(d->ui->enLabel, DrugInteractorTableModel::EnLabel, "text");
-    d->_mapper->addMapping(d->ui->deLabel, DrugInteractorTableModel::DeLabel, "text");
-    d->_mapper->addMapping(d->ui->reference, DrugInteractorTableModel::Reference, "text");
-
-    d->_mapper->addMapping(d->ui->classInfoFr, DrugInteractorTableModel::ClassInformationFr, "plainText");
-    d->_mapper->addMapping(d->ui->classInfoEn, DrugInteractorTableModel::ClassInformationEn, "plainText");
-    d->_mapper->addMapping(d->ui->classInfoDe, DrugInteractorTableModel::ClassInformationDe, "plainText");
-
-    d->_mapper->addMapping(d->ui->isClass, DrugInteractorTableModel::IsInteractingClass, "checked");
-    d->_mapper->addMapping(d->ui->isReviewed, DrugInteractorTableModel::IsReviewed, "checked");
-    d->_mapper->addMapping(d->ui->isAutoFound, DrugInteractorTableModel::IsAutoFound, "checked");
-    d->_mapper->addMapping(d->ui->notWarnDuplicated, DrugInteractorTableModel::DoNotWarnDuplicated, "checked");
-
-    d->_mapper->setRootIndex(d->m_EditingIndex.parent());
     d->_mapper->setCurrentModelIndex(d->m_EditingIndex);
 
     QModelIndex atcCodesIndex = d->_proxyMoleculeModel->index(index.row(), DrugInteractorTableModel::ATCCodeStringList, index.parent());
@@ -691,7 +695,10 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
 }
 
 #ifdef WITH_TESTS
+#include <coreplugin/imainwindow.h>
 #include <QTest>
+
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 void InteractorEditorWidget::test_runAllTests()
 {
@@ -704,12 +711,12 @@ void InteractorEditorWidget::test_views()
 {
     // Just test if views are populated with the right model
     QCOMPARE(d->ui->molsListView->model(), d->_proxyMoleculeModel);
+    // QCOMPARE(d->_mapper->model(), d->_proxyMoleculeModel->sourceModel());
 }
 
 void InteractorEditorWidget::test_actions()
 {
     // First state
-    QCOMPARE(d->ui->atcTableView->isVisible(), false);
     // no interactor selected
     QCOMPARE(d->ui->molsListView->currentIndex(), QModelIndex());
     // no editing available
@@ -727,6 +734,7 @@ void InteractorEditorWidget::test_actions()
     QCOMPARE(d->ui->classInfoDe->isEnabled(), false);
     QCOMPARE(d->ui->classInfoEn->isEnabled(), false);
     QCOMPARE(d->ui->classInfoFr->isEnabled(), false);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), false);
 
     // Tigger Edition without selected item -> nothing changes
     d->aEdit->trigger();
@@ -745,6 +753,7 @@ void InteractorEditorWidget::test_actions()
     QCOMPARE(d->ui->classInfoDe->isEnabled(), false);
     QCOMPARE(d->ui->classInfoEn->isEnabled(), false);
     QCOMPARE(d->ui->classInfoFr->isEnabled(), false);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), false);
 
     // Tigger Edition with an item -> editor is now available
     int column = d->ui->molsListView->modelColumn();
@@ -764,10 +773,24 @@ void InteractorEditorWidget::test_actions()
     QCOMPARE(d->ui->classInfoDe->isEnabled(), true);
     QCOMPARE(d->ui->classInfoEn->isEnabled(), true);
     QCOMPARE(d->ui->classInfoFr->isEnabled(), true);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), true);
+    d->aRevert->trigger();
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), false);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), false);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), false);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), false);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), false);
+    QCOMPARE(d->ui->isClass->isEnabled(), false);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), false);
+    QCOMPARE(d->ui->frLabel->isEnabled(), false);
+    QCOMPARE(d->ui->enLabel->isEnabled(), false);
+    QCOMPARE(d->ui->deLabel->isEnabled(), false);
+    QCOMPARE(d->ui->reference->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), false);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), false);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), false);
 
-//    ->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
-//    d->aCreateNewClass->setText(tr("Create class"));
-//    d->aCreateNewInteractor->setText(tr("Create molecule"));
     // d->aTranslateThis->setText(tr("Translate current"));
 
     // d->aNextUnreviewedOrUnlinked->setText(tr("Next problematic"));
@@ -775,12 +798,165 @@ void InteractorEditorWidget::test_actions()
 }
 
 void InteractorEditorWidget::test_itemCreation()
-{}
+{
+    // Test1: Create a new interactor (ensure no duplicates)
+    d->_testingLabel1 = QString("_TEST_ingLabel(%1)").arg(Utils::createUid());
+    d->aCreateNewInteractor->trigger();
+    // We should have this item as search text, and the selected item should be this one
+    QCOMPARE(d->ui->searchLine->text(), d->_testingLabel1);
+    QCOMPARE(d->ui->molsListView->currentIndex().data().toString(), d->_testingLabel1);
+    // Editor should be available
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), true);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), true);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), true);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), true);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), true);
+    QCOMPARE(d->ui->isClass->isEnabled(), true);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), true);
+    QCOMPARE(d->ui->frLabel->isEnabled(), true);
+    QCOMPARE(d->ui->enLabel->isEnabled(), true);
+    QCOMPARE(d->ui->deLabel->isEnabled(), true);
+    QCOMPARE(d->ui->reference->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), true);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), true);
+    // Mapper should point to this newly created item
+    QModelIndex source = d->_proxyMoleculeModel->mapToSource(d->ui->molsListView->currentIndex());
+    QCOMPARE(d->_mapper->currentIndex(),
+             source.row());
+    // Current index should point to a molecule (not an interacting class)
+    QModelIndex isClass = d->_proxyMoleculeModel->mapToSource(d->_proxyMoleculeModel->index(d->ui->molsListView->currentIndex().row(), DrugInteractorTableModel::IsInteractingClass));
+    QCOMPARE(isClass.data().toBool(), false);
+
+    // Test2: Create a new interacting class
+    d->aCreateNewClass->trigger();
+    d->_testingLabel1 = QString("_TEST_ingLabel(%1)").arg(Utils::createUid());
+    d->aCreateNewInteractor->trigger();
+    // We should have this item as search text, and the selected item should be this one
+    QCOMPARE(d->ui->searchLine->text(), d->_testingLabel1);
+    QCOMPARE(d->ui->molsListView->currentIndex().data().toString(), d->_testingLabel1);
+    // Editor should be available
+    QCOMPARE(d->ui->classChildrenTableView->isEnabled(), true);
+    QCOMPARE(d->ui->dateCreation->isEnabled(), true);
+    QCOMPARE(d->ui->dateUpdate->isEnabled(), true);
+    QCOMPARE(d->ui->isReviewed->isEnabled(), true);
+    QCOMPARE(d->ui->isAutoFound->isEnabled(), true);
+    QCOMPARE(d->ui->isClass->isEnabled(), true);
+    QCOMPARE(d->ui->notWarnDuplicated->isEnabled(), true);
+    QCOMPARE(d->ui->frLabel->isEnabled(), true);
+    QCOMPARE(d->ui->enLabel->isEnabled(), true);
+    QCOMPARE(d->ui->deLabel->isEnabled(), true);
+    QCOMPARE(d->ui->reference->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoDe->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoEn->isEnabled(), true);
+    QCOMPARE(d->ui->classInfoFr->isEnabled(), true);
+    QCOMPARE(d->ui->commentTextEdit->isEnabled(), true);
+    // Mapper should point to this newly created item
+    QCOMPARE(d->_mapper->currentIndex(),
+             d->_proxyMoleculeModel->mapToSource(d->ui->molsListView->currentIndex()).row());
+    // Mapper should point to this newly created item
+    source = d->_proxyMoleculeModel->mapToSource(d->ui->molsListView->currentIndex());
+    QCOMPARE(d->_mapper->currentIndex(),
+             source.row());
+    // Current index should point to a molecule (not an interacting class)
+    isClass = d->_proxyMoleculeModel->mapToSource(d->_proxyMoleculeModel->index(d->ui->molsListView->currentIndex().row(), DrugInteractorTableModel::IsInteractingClass));
+    QCOMPARE(isClass.data().toBool(), true);
+
+    // TODO: Test3: Try to create a duplicate interactor
+    // TODO: Test4: Try to create a duplicate interacting class
+}
 
 void InteractorEditorWidget::test_edition()
 {
-    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
-    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    // TODO: There is a bug with QDataWidgetMapper and deLabel && infoEn && checkBoxes...
+
+    // Test1: Edit, modify, save, test values
+    // Select an item
+    d->m_EditingIndex = QModelIndex(); // no dialog when activating the interactor
+    d->ui->molsListView->selectionModel()->select(d->_proxyMoleculeModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    interactorActivated(d->_proxyMoleculeModel->index(0,0));
+    qWarning() << "Running test on interactor Id: " << d->_proxyMoleculeModel->index(0,0).data().toString() << "m_EditingIndex" << d->m_EditingIndex.data().toString();
+
+    // Trigger Edit action
+    d->aEdit->trigger();
+
+    // Edit all values
+    // QCOMPARE(d->ui->classChildrenTableView->isEnabled(), true);
+    QString fr = QString("_TEST_Fr_%1").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
+    // select * from interactors where fr like "_TEST_%"
+    QDate creationDate = QDate::currentDate().addDays(-999);
+    d->ui->dateCreation->setDate(creationDate);
+    QTest::mouseClick(d->ui->isReviewed, Qt::LeftButton);
+    if (!d->ui->isReviewed->isChecked())
+        QTest::mouseClick(d->ui->isReviewed, Qt::LeftButton);
+    QTest::mouseClick(d->ui->isAutoFound, Qt::LeftButton);
+    if (!d->ui->isAutoFound->isChecked())
+        QTest::mouseClick(d->ui->isAutoFound, Qt::LeftButton);
+    QTest::mouseClick(d->ui->isClass, Qt::LeftButton);
+    if (!d->ui->isClass->isChecked())
+        QTest::mouseClick(d->ui->isClass, Qt::LeftButton);
+    QTest::mouseClick(d->ui->notWarnDuplicated, Qt::LeftButton);
+    if (!d->ui->notWarnDuplicated->isChecked())
+        QTest::mouseClick(d->ui->notWarnDuplicated, Qt::LeftButton);
+    d->ui->frLabel->clear();
+    d->ui->enLabel->clear();
+    d->ui->deLabel->clear();
+    d->ui->reference->clear();
+    d->ui->classInfoDe->clear();
+    d->ui->classInfoEn->clear();
+    d->ui->classInfoFr->clear();
+    d->ui->commentTextEdit->clear();
+    QTest::keyClicks(d->ui->frLabel, fr, Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->enLabel, "_TEST_En", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->deLabel, "_TEST_De", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->reference, "_TEST_Ref", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->classInfoDe, "_TEST_InfoDe", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->classInfoEn, "_TEST_InfoEn", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->classInfoFr, "_TEST_InfoFr", Qt::NoModifier, 10);
+    QTest::keyClicks(d->ui->commentTextEdit, "_TEST_ Comment", Qt::NoModifier, 10);
+    QTest::mouseClick(d->ui->frLabel, Qt::LeftButton);
+    QTest::mouseClick(d->ui->enLabel, Qt::LeftButton);
+    QTest::mouseClick(d->ui->deLabel, Qt::LeftButton);
+    QTest::mouseClick(d->ui->reference, Qt::LeftButton);
+    QTest::mouseClick(d->ui->classInfoDe, Qt::LeftButton);
+    QTest::mouseClick(d->ui->classInfoEn, Qt::LeftButton);
+    QTest::mouseClick(d->ui->classInfoFr, Qt::LeftButton);
+    QTest::mouseClick(d->ui->commentTextEdit, Qt::LeftButton);
+    QTest::mouseClick(d->ui->frLabel, Qt::LeftButton);
+
+    //sleep(100);
+    // Trigger Save action
+    d->aSave->trigger();
+    QDate lastUpdate = QDate::currentDate();
+
+    // Test model values
+    int row = d->_mapper->currentIndex();
+    QAbstractItemModel *model = d->_mapper->model();
+    QCOMPARE(model->index(row, DrugInteractorTableModel::IsValid).data().toBool(), true);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::IsInteractingClass).data().toBool(), true);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::IsReviewed).data().toBool(), true);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::IsAutoFound).data().toBool(), true);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::DoNotWarnDuplicated).data().toBool(), true);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::EnLabel).data().toString(), QString("_TEST_En"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::FrLabel).data().toString(), fr);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::DeLabel).data().toString(), QString("_TEST_De"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationFr).data().toString(), QString("_TEST_InfoFr"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationEn).data().toString(), QString("_TEST_InfoEn"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationDe).data().toString(), QString("_TEST_InfoDe"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::DateOfCreation).data().toDate(), creationDate);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::DateLastUpdate).data().toDate(), lastUpdate);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::DateReview).data().toDate(), lastUpdate);
+    QCOMPARE(model->index(row, DrugInteractorTableModel::Reference).data().toString(), QString("_TEST_Ref"));
+    QCOMPARE(model->index(row, DrugInteractorTableModel::Comment).data().toString(), QString("_TEST_ Comment"));
+
+//    QCOMPARE(model->index(row, DrugInteractorTableModel::ATCCodeStringList).data().to(), );
+//    QCOMPARE(model->index(row, DrugInteractorTableModel::PMIDStringList).data().to(), );
+//    QCOMPARE(model->index(row, DrugInteractorTableModel::ChildrenUuid).data().to(), );
+    // Date of update should be today
+
+//    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
+//    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
     //    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
 }
 

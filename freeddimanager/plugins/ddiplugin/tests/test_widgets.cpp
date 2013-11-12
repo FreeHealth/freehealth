@@ -52,6 +52,9 @@ static int loop = 100;
 void DDIPlugin::test_drugInteractorWidget()
 {
     // Get the mode
+    modeManager()->activateMode(Constants::MODE_INTERACTOR);
+    for(int i=0; i < loop; ++i)
+        qApp->processEvents(QEventLoop::AllEvents);
     DDI::Internal::InteractorMode *mode = qobject_cast<DDI::Internal::InteractorMode*>(modeManager()->mode(Constants::MODE_INTERACTOR));
     Q_ASSERT(mode);
     mode->test_runWidgetTests();

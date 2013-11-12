@@ -28,9 +28,6 @@
         <widget class="Utils::QButtonLineEdit" name="searchLine"/>
        </item>
        <item>
-        <widget class="QTreeView" name="classesTreeView"/>
-       </item>
-       <item>
         <widget class="QListView" name="molsListView"/>
        </item>
        <item>
@@ -76,16 +73,13 @@
        <item row="8" column="0" colspan="2">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
-         <widget class="QWidget" name="tab">
+         <widget class="QWidget" name="tabAtc">
           <attribute name="title">
            <string>ATC</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="3" column="1" colspan="2">
-            <widget class="QLineEdit" name="deLabel"/>
-           </item>
            <item row="4" column="0" colspan="3">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
@@ -148,6 +142,9 @@
              </property>
             </widget>
            </item>
+           <item row="3" column="1" colspan="2">
+            <widget class="QLineEdit" name="deLabel"/>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="tabClassInfo">
@@ -187,7 +184,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="tabOther">
           <attribute name="title">
            <string>Other</string>
           </attribute>
@@ -352,6 +349,31 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>searchLine</tabstop>
+  <tabstop>molsListView</tabstop>
+  <tabstop>messages</tabstop>
+  <tabstop>reference</tabstop>
+  <tabstop>dateCreation</tabstop>
+  <tabstop>dateUpdate</tabstop>
+  <tabstop>isReviewed</tabstop>
+  <tabstop>isClass</tabstop>
+  <tabstop>notWarnDuplicated</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>isAutoFound</tabstop>
+  <tabstop>frLabel</tabstop>
+  <tabstop>enLabel</tabstop>
+  <tabstop>deLabel</tabstop>
+  <tabstop>atcTableView</tabstop>
+  <tabstop>classChildrenTableView</tabstop>
+  <tabstop>classInfoFr</tabstop>
+  <tabstop>classInfoEn</tabstop>
+  <tabstop>classInfoDe</tabstop>
+  <tabstop>pmidListView</tabstop>
+  <tabstop>commentTextEdit</tabstop>
+  <tabstop>reviewersListView</tabstop>
+  <tabstop>reformatOldSource</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
