@@ -192,8 +192,8 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         };
 
         QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
-
         return d->_sql->data(sqlIndex, role);
+
     } else if (role == Qt::FontRole) {
         QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ISCLASS);
         if (d->_sql->data(sqlIndex).toBool()) {
@@ -232,6 +232,20 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
             return QColor(50,250,50,150);
         }
         // If class, all children reviewed?
+    } else if (role == Qt::CheckStateRole) {
+        int sql = -1;
+        switch (index.column()) {
+        case IsValid: sql = Constants::INTERACTOR_ISVALID; break;
+        case IsInteractingClass: sql = Constants::INTERACTOR_ISCLASS; break;
+        case IsReviewed: sql = Constants::INTERACTOR_ISREVIEWED; break;
+        case IsAutoFound: sql = Constants::INTERACTOR_ISAUTOFOUND; break;
+        case DoNotWarnDuplicated: sql = Constants::INTERACTOR_WARNDUPLICATES; break;
+        default: sql = -1; break;
+        }
+        if (sql != -1) {
+            QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
+            return d->_sql->data(sqlIndex, role).toBool()?Qt::Checked:Qt::Unchecked;
+        }
     }
     return QVariant();
 }
