@@ -50,6 +50,9 @@ public:
 
     void postCoreInitialization();
 
+#ifdef WITH_TESTS
+    void test_runWidgetTests();
+#endif
 private:
     DrugDrugInteractionEditorWidget *_widget;
 };

@@ -27,6 +27,7 @@
 #include <ddiplugin/ddiplugin.h>
 #include <ddiplugin/constants.h>
 #include <ddiplugin/interactors/interactormode.h>
+#include <ddiplugin/ddi/drugdruginteractionmode.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -56,6 +57,17 @@ void DDIPlugin::test_drugInteractorWidget()
     for(int i=0; i < loop; ++i)
         qApp->processEvents(QEventLoop::AllEvents);
     DDI::Internal::InteractorMode *mode = qobject_cast<DDI::Internal::InteractorMode*>(modeManager()->mode(Constants::MODE_INTERACTOR));
+    Q_ASSERT(mode);
+    mode->test_runWidgetTests();
+}
+
+void DDIPlugin::test_drugDrugInteractionWidget()
+{
+    // Get the mode
+    modeManager()->activateMode(Constants::MODE_DDI);
+    for(int i=0; i < loop; ++i)
+        qApp->processEvents(QEventLoop::AllEvents);
+    DDI::Internal::DDIMode *mode = qobject_cast<DDI::Internal::DDIMode*>(modeManager()->mode(Constants::MODE_DDI));
     Q_ASSERT(mode);
     mode->test_runWidgetTests();
 }

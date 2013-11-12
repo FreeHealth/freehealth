@@ -91,3 +91,12 @@ DDIMode::~DDIMode()
 void DDIMode::postCoreInitialization()
 {
 }
+
+#ifdef WITH_TESTS
+
+void DDIMode::test_runWidgetTests()
+{
+    _widget->test_runAllTests();
+}
+
+#endif

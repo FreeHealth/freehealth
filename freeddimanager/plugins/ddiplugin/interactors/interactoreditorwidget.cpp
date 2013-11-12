@@ -384,16 +384,12 @@ void InteractorEditorWidget::save()
 //        d->ui->enLabel->setFocus();
 
         QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
-
         QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
         model->setData(atc, d->_atcCodesStringListModel->stringList().join(";"));
-
         QModelIndex children = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ChildrenUuid, d->m_EditingIndex.parent());
         model->setData(children, d->_childrenInteractorsStringListModel->stringList().join(";"));
-
         QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::PMIDStringList, d->m_EditingIndex.parent());
         model->setData(pmids, d->_pmidStringListModel->stringList().join(";"));
-
         if (!d->_mapper->submit())
             LOG_ERROR("Unable to submit mapper");
     }
@@ -704,6 +700,7 @@ void InteractorEditorWidget::test_runAllTests()
 {
     test_views();
     test_actions();
+    test_itemCreation();
     test_edition();
 }
 
@@ -916,7 +913,6 @@ void InteractorEditorWidget::test_edition()
     QTest::mouseClick(d->ui->commentTextEdit, Qt::LeftButton);
     QTest::mouseClick(d->ui->frLabel, Qt::LeftButton);
 
-    //sleep(100);
     // Trigger Save action
     d->aSave->trigger();
     QDate lastUpdate = QDate::currentDate();
