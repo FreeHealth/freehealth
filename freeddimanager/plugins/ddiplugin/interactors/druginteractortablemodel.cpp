@@ -406,11 +406,20 @@ bool DrugInteractorTableModel::interactorUidExists(const QString &uid) const
 /** Submit changes directly to the database */
 bool DrugInteractorTableModel::submit()
 {
+#if QT_VERSION >= 0x050000
+    if (!d->_sql->isDirty())
+        return true;
+#endif
+
     bool ok = d->_sql->submitAll();
     if (!ok)
         LOG_ERROR(d->_sql->lastError().text());
     else
         d->_sql->database().commit();
+
+    // As submitAll in QSqlTableModel repopulates the model, we need to re-initialize it
+    initialize();
+
     return ok;
 }
 

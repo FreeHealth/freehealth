@@ -67,6 +67,11 @@ private Q_SLOTS:
     void onSelectedListActivated(const QModelIndex &index);
     void onSearchTextchanged(const QString &text);
 
+#ifdef WITH_TESTS
+public Q_SLOTS:
+    void test_runTestAndAccept();
+#endif
+
 private:
     Internal::InteractorSelectorDialogPrivate *d;
 };

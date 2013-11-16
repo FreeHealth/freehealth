@@ -270,3 +270,12 @@ void InteractorSelectorDialog::onSearchTextchanged(const QString &text)
         d->_molProxyModel->setFilterFixedString(text);
     }
 }
+
+#ifdef WITH_TESTS
+#include <QTimer>
+void InteractorSelectorDialog::test_runTestAndAccept()
+{
+    QTimer::singleShot(10, this, SLOT(accept()));
+}
+
+#endif

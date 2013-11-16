@@ -379,17 +379,21 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
 void InteractorEditorWidget::save()
 {
     if (d->m_EditingIndex.isValid()) {
-        // ensure the mapper gets all the data by changing the focus (--> focusOut on editors)
-//        d->ui->frLabel->setFocus();
-//        d->ui->enLabel->setFocus();
+        QAbstractItemModel *model = ddiCore()->drugInteractorTableModel();
 
-        QAbstractItemModel *model = (QAbstractItemModel *)d->m_EditingIndex.model();
+        // Manage ATC
         QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList, d->m_EditingIndex.parent());
         model->setData(atc, d->_atcCodesStringListModel->stringList().join(";"));
+
+        // Manage class children
         QModelIndex children = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ChildrenUuid, d->m_EditingIndex.parent());
         model->setData(children, d->_childrenInteractorsStringListModel->stringList().join(";"));
+
+        // Manage PMIDs
         QModelIndex pmids = model->index(d->m_EditingIndex.row(), DrugInteractorTableModel::PMIDStringList, d->m_EditingIndex.parent());
         model->setData(pmids, d->_pmidStringListModel->stringList().join(";"));
+
+        // Submit mapper at the end as the model will be resetted on submit
         if (!d->_mapper->submit())
             LOG_ERROR("Unable to submit mapper");
     }
@@ -397,6 +401,7 @@ void InteractorEditorWidget::save()
     setEditorsEnabled(false);
     d->aSave->setEnabled(false);
     d->aRevert->setEnabled(false);
+    updateCounts();
 }
 
 /** Filter all proxy models with searched string */
@@ -454,12 +459,14 @@ void InteractorEditorWidget::onNewInteractorRequested()
 
     // Submit the new item
     ddiCore()->drugInteractorTableModel()->submit();
+    updateCounts();
 }
 
 void InteractorEditorWidget::removeCurrent()
 {
     if (d->ui->molsListView->currentIndex().isValid()) {
         ddiCore()->drugInteractorTableModel()->removeRow(d->m_EditingIndex.row(), d->m_EditingIndex.parent());
+        updateCounts();
     }
 }
 
@@ -478,10 +485,10 @@ void InteractorEditorWidget::revertEdition()
     if (d->ui->molsListView->selectionModel()->hasSelection()) {
         // Undo mapper
         d->_mapper->revert();
+        updateCounts();
         // Enable edition
         setEditorsEnabled(false);
     }
-
 }
 
 /** Update UI and wrapper when an interactor is selected by the user */
@@ -692,15 +699,16 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
 
 #ifdef WITH_TESTS
 #include <coreplugin/imainwindow.h>
+#include <utils/randomizer.h>
 #include <QTest>
 
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 void InteractorEditorWidget::test_runAllTests()
 {
-    test_views();
-    test_actions();
-    test_itemCreation();
+//    test_views();
+//    test_actions();
+//    test_itemCreation();
     test_edition();
 }
 
@@ -866,12 +874,18 @@ void InteractorEditorWidget::test_itemCreation()
 
 void InteractorEditorWidget::test_edition()
 {
+    qWarning() << "\n" << Q_FUNC_INFO << "\n";
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
     // Test1: Edit, modify, save, test values
     // Select an item
+    int selectedRow = r.randomInt(0, d->_proxyMoleculeModel->rowCount() - 1);
+    QString selectedId = d->_proxyMoleculeModel->index(selectedRow, 0).data().toString();
     d->m_EditingIndex = QModelIndex(); // no dialog when activating the interactor
-    d->ui->molsListView->selectionModel()->select(d->_proxyMoleculeModel->index(0,0), QItemSelectionModel::SelectCurrent);
-    interactorActivated(d->_proxyMoleculeModel->index(0,0));
-    qWarning() << "Running test on interactor Id: " << d->_proxyMoleculeModel->index(0,0).data().toString() << "m_EditingIndex" << d->m_EditingIndex.data().toString();
+    d->ui->molsListView->selectionModel()->select(d->_proxyMoleculeModel->index(selectedRow, 0), QItemSelectionModel::SelectCurrent);
+    interactorActivated(d->_proxyMoleculeModel->index(selectedRow, 0));
+    qWarning() << "Running test on interactor Id: " << d->_proxyMoleculeModel->index(selectedRow, 0).data().toString() << "m_EditingIndex" << d->m_EditingIndex.data().toString() << "RowCount" << ddiCore()->drugInteractorTableModel()->rowCount();
 
     // Trigger Edit action
     d->aEdit->trigger();
@@ -915,27 +929,29 @@ void InteractorEditorWidget::test_edition()
 
     // Trigger Save action
     d->aSave->trigger();
+    // When submitting model -> model reset ==> losing indexes, we need to find the previous selected ddi using the mapper
+    selectedRow = d->_mapper->currentIndex();
+    QCOMPARE(ddiCore()->drugInteractorTableModel()->index(selectedRow, 0).data().toString(), selectedId);
     QDate lastUpdate = QDate::currentDate();
 
     // Test model values
-    int row = d->_mapper->currentIndex();
     QAbstractItemModel *model = d->_mapper->model();
-    QCOMPARE(model->index(row, DrugInteractorTableModel::IsValid).data().toBool(), true);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::IsInteractingClass).data().toBool(), true);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::IsReviewed).data().toBool(), true);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::IsAutoFound).data().toBool(), true);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::DoNotWarnDuplicated).data().toBool(), true);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::EnLabel).data().toString(), QString("_TEST_En"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::FrLabel).data().toString(), fr);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::DeLabel).data().toString(), QString("_TEST_De"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationFr).data().toString(), QString("_TEST_InfoFr"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationEn).data().toString(), QString("_TEST_InfoEn"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::ClassInformationDe).data().toString(), QString("_TEST_InfoDe"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::DateOfCreation).data().toDate(), creationDate);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::DateLastUpdate).data().toDate(), lastUpdate);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::DateReview).data().toDate(), lastUpdate);
-    QCOMPARE(model->index(row, DrugInteractorTableModel::Reference).data().toString(), QString("_TEST_Ref"));
-    QCOMPARE(model->index(row, DrugInteractorTableModel::Comment).data().toString(), QString("_TEST_ Comment"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::IsValid).data().toBool(), true);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::IsInteractingClass).data().toBool(), true);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::IsReviewed).data().toBool(), true);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::IsAutoFound).data().toBool(), true);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::DoNotWarnDuplicated).data().toBool(), true);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::EnLabel).data().toString(), QString("_TEST_En"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::FrLabel).data().toString(), fr);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::DeLabel).data().toString(), QString("_TEST_De"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::ClassInformationFr).data().toString(), QString("_TEST_InfoFr"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::ClassInformationEn).data().toString(), QString("_TEST_InfoEn"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::ClassInformationDe).data().toString(), QString("_TEST_InfoDe"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::DateOfCreation).data().toDate(), creationDate);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::DateLastUpdate).data().toDate(), lastUpdate);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::DateReview).data().toDate(), lastUpdate);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::Reference).data().toString(), QString("_TEST_Ref"));
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::Comment).data().toString(), QString("_TEST_ Comment"));
 
     // Check atc codes
     d->aEdit->trigger();
@@ -943,7 +959,10 @@ void InteractorEditorWidget::test_edition()
     atc << "_TEST_COIN" << "_TEST_COINCOIN";
     d->_atcCodesStringListModel->setStringList(atc);
     d->aSave->trigger();
-    QCOMPARE(model->index(row, DrugInteractorTableModel::ATCCodeStringList).data().toString().split(";"), atc);
+    // When submitting model -> model reset ==> losing indexes, we need to find the previous selected ddi using the mapper
+    selectedRow = d->_mapper->currentIndex();
+    QCOMPARE(ddiCore()->drugInteractorTableModel()->index(selectedRow, 0).data().toString(), selectedId);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::ATCCodeStringList).data().toString().split(";"), atc);
 
     // Check children
     d->aEdit->trigger();
@@ -951,7 +970,10 @@ void InteractorEditorWidget::test_edition()
     children << "_TEST_CHILD1" << "_TEST_CHILD2" << "_TEST_CHILD3";
     d->_childrenInteractorsStringListModel->setStringList(children);
     d->aSave->trigger();
-    QCOMPARE(model->index(row, DrugInteractorTableModel::ChildrenUuid).data().toString().split(";"), children);
+    // When submitting model -> model reset ==> losing indexes, we need to find the previous selected ddi using the mapper
+    selectedRow = d->_mapper->currentIndex();
+    QCOMPARE(ddiCore()->drugInteractorTableModel()->index(selectedRow, 0).data().toString(), selectedId);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::ChildrenUuid).data().toString().split(";"), children);
 
     // Check pmids
     d->aEdit->trigger();
@@ -959,7 +981,10 @@ void InteractorEditorWidget::test_edition()
     pmids << "_TEST_PMID1" << "_TEST_PMID2" << "_TEST_PMID3";
     d->_pmidStringListModel->setStringList(pmids);
     d->aSave->trigger();
-    QCOMPARE(model->index(row, DrugInteractorTableModel::PMIDStringList).data().toString().split(";"), pmids);
+    // When submitting model -> model reset ==> losing indexes, we need to find the previous selected ddi using the mapper
+    selectedRow = d->_mapper->currentIndex();
+    QCOMPARE(ddiCore()->drugInteractorTableModel()->index(selectedRow, 0).data().toString(), selectedId);
+    QCOMPARE(model->index(selectedRow, DrugInteractorTableModel::PMIDStringList).data().toString().split(";"), pmids);
 
     // TODO: test remove current
     //    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));

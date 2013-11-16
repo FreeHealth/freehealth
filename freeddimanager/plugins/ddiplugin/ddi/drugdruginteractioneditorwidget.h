@@ -52,6 +52,7 @@ protected Q_SLOTS:
     void createNewDDI();
     void filterDrugDrugInteractionTableModel(const QString &filter);
     void edit();
+    void revertCurrentEdition();
     void interactionActivated(const QModelIndex &index);
     void save();
     void removeCurrent();
@@ -73,6 +74,7 @@ protected:
 public Q_SLOTS:
     void test_runAllTests();
     void test_views();
+    void test_editorEnabledState(bool state);
     void test_actions();
     void test_itemCreation();
     void test_edition();

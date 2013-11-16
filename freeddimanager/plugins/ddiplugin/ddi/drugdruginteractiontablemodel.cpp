@@ -264,32 +264,35 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
 
     // TODO: FIRST/SECOND interactors are UID not LABELS ==> Get the label of the interactors
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
-        if (index.column() == LevelComboIndex) {
-            QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::DDI_LEVELCODE);
-            QString levelCode = d->_sql->data(sqlIndex).toString();
-            // TODO: how to manage multilevels DDI?
-            return d->_levelsToComboIndex.value(levelCode, -1);
-        }
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         switch (index.column()) {
         case LevelName: return d->levelName(d->_sql->data(sqlIndex).toString());
-        case LevelComboIndex: return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
+        case LevelComboIndex:
+            return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
         case PMIDStringList: return d->_sql->data(sqlIndex, role).toString().split(";");
         default: return d->_sql->data(sqlIndex, role);
         }
-//    } else if (role == Qt::FontRole) {
-//        QModelIndex sqlIndex = d->_sql->index(index.row(), Constants::INTERACTOR_ISCLASS);
-//        if (d->_sql->data(sqlIndex).toBool()) {
-//            QFont bold;
-//            bold.setBold(true);
-//            return bold;
-//        }
     } else if (role==Qt::ForegroundRole) {
         QModelIndex error = this->index(index.row(), 0);
         if (!d->_rowErrors.contains(error))
             return QVariant();
         if (!d->_rowErrors.value(error).testFlag(NoError))
             return QColor(20,250,20).dark();
+    } else if (role == Qt::CheckStateRole) {
+        int sql = -1;
+        switch (index.column()) {
+        case IsValid: sql = Constants::DDI_ISVALID; break;
+        case IsReviewed: sql = Constants::DDI_ISREVIEWED; break;
+        case FirstDoseUseFrom: sql = Constants::DDI_FIRSTDOSEUSEFROM; break;
+        case FirstDoseUsesTo: sql = Constants::DDI_FIRSTDOSEUSESTO; break;
+        case SecondDoseUseFrom: sql = Constants::DDI_SECONDDOSEUSEFROM; break;
+        case SecondDoseUsesTo: sql = Constants::DDI_SECONDDOSEUSESTO; break;
+        default: sql = -1; break;
+        }
+        if (sql != -1) {
+            QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
+            return d->_sql->data(sqlIndex, role).toBool()?Qt::Checked:Qt::Unchecked;
+        }
     }
     return QVariant();
 }
@@ -307,7 +310,15 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
         switch (index.column()) {
         case IsValid:
         case IsReviewed:
+        case FirstDoseUseFrom:
+        case FirstDoseUsesTo:
+        case SecondDoseUseFrom:
+        case SecondDoseUsesTo:
             ok = d->_sql->setData(sqlIndex, value.toBool()?1:0, role);
+            break;
+        case LevelComboIndex:
+            ok = d->_sql->setData(d->_sql->index(index.row(), Constants::DDI_LEVELCODE),
+                                  d->_levelsToComboIndex.key(value.toInt()), role);
             break;
         case PMIDStringList:
             ok = d->_sql->setData(sqlIndex, value.toStringList().join(";"), role);
@@ -647,13 +658,14 @@ bool DrugDrugInteractionTableModel::submitAll()
         return true;
 #endif
 
-    bool ok = d->_sql->submit();
-    if (!ok) {
+    bool ok = d->_sql->submitAll();
+    if (!ok)
         LOG_ERROR(d->_sql->lastError().text());
-    } else {
-        d->_sql->submitAll();
-        qWarning() << "submitAll" << ok << d->_sql->rowCount() << rowCount();
+    else
         d->_sql->database().commit();
-    }
+
+    // As submitAll in QSqlTableModel repopulates the model, we need to re-initialize it
+    initialize();
+
     return ok;
 }
