@@ -25,6 +25,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include <ddiplugin/ddiplugin.h>
+#include <ddiplugin/ddicore.h>
+#include <ddiplugin/database/ddidatabase.h>
 #include <ddiplugin/interactors/druginteractor.h>
 
 #include <coreplugin/icore.h>
@@ -41,13 +43,17 @@ using namespace DDI;
 using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline DDI::DDICore *ddiCore() {return DDI::DDICore::instance();}
 
 namespace {
 static int loop = 100;
 }
 
 void DDIPlugin::initTestCase()
-{}
+{
+    // DDIDatabase path is defined to a testing path
+    // in the DDICore::initialize().
+}
 
 void DDIPlugin::test_drugInteractor()
 {

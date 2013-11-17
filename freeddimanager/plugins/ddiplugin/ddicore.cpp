@@ -121,8 +121,19 @@ bool DDICore::initialize()
     if (d->_initialized)
         return true;
     d->_base = new DDIDatabase;
-    d->_base->initialize(settings()->path(Core::ISettings::UserDocumentsPath), true);
+    QString dbPath = settings()->path(Core::ISettings::UserDocumentsPath);
 
+#ifdef WITH_TESTS
+    // When we are running tests, you should not connect to the user database
+    // but to a testing database. We can not put this code in the test/test_*.cpp
+    // because all models are created and connect to the ddi database before
+    // the test are ran.
+    dbPath += "/test";
+    QDir().mkpath(dbPath);
+    // TODO: Copy non-testing db to the test path before initializing the database
+#endif
+
+    d->_base->initialize(dbPath, true);
     d->_atcTableModel = new AtcTableModel(this);
     d->_atcTableModel->initialize();
 
