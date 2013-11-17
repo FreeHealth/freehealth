@@ -49,12 +49,6 @@ namespace {
 static int loop = 100;
 }
 
-void DDIPlugin::initTestCase()
-{
-    // DDIDatabase path is defined to a testing path
-    // in the DDICore::initialize().
-}
-
 void DDIPlugin::test_drugInteractor()
 {
     // Ctor
@@ -207,7 +201,3 @@ void DDIPlugin::test_drugInteractor()
     QCOMPARE(interactors.count(), fromXml.count());
     // TODO: QCOMPARE(interactors, fromXml);
 }
-
-void DDIPlugin::cleanTestCase()
-{}
-

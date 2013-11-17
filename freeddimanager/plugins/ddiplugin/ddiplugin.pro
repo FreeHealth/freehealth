@@ -71,7 +71,6 @@ SOURCES += \
     server/servermanagermode.cpp \
     server/serverupdatemodel.cpp \
     server/serverupdate.cpp \
-    tests/test_widgets.cpp
 
 
 FORMS += \
@@ -89,7 +88,9 @@ OTHER_FILES += $${SOURCES_ROOT_PATH}/scripts/php/drugs.php
 
 equals(TEST, 1) {
     SOURCES += \
-        tests/test_druginteractor.cpp
+        tests/test_druginteractor.cpp \
+        tests/test_widgets.cpp \
+        tests/test_init_clean.cpp
 }
 
 # include translations
