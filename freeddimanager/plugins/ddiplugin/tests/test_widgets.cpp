@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include <ddiplugin/ddiplugin.h>
 #include <ddiplugin/constants.h>
+#include <ddiplugin/atc/atcmode.h>
 #include <ddiplugin/interactors/interactormode.h>
 #include <ddiplugin/ddi/drugdruginteractionmode.h>
 
@@ -48,6 +49,17 @@ static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->
 
 namespace {
 static int loop = 100;
+}
+
+void DDIPlugin::test_atcWidget()
+{
+    // Get the mode
+    modeManager()->activateMode(Constants::MODE_ATC);
+    for(int i=0; i < loop; ++i)
+        qApp->processEvents(QEventLoop::AllEvents);
+    DDI::Internal::AtcMode *mode = qobject_cast<DDI::Internal::AtcMode*>(modeManager()->mode(Constants::MODE_ATC));
+    Q_ASSERT(mode);
+    mode->test_runWidgetTests();
 }
 
 void DDIPlugin::test_drugInteractorWidget()

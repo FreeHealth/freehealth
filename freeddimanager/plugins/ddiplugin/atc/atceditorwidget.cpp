@@ -196,3 +196,40 @@ void AtcEditorWidget::populateParents()
                                 .arg(ddiBase().atcLabelForCode(parent, QLocale().name().left(2))));
     }
 }
+
+#ifdef WITH_TESTS
+#include <coreplugin/imainwindow.h>
+#include <utils/randomizer.h>
+#include <QTest>
+
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
+
+void AtcEditorWidget::test_runAllTests()
+{
+    test_views();
+    test_actions();
+    test_itemCreation();
+    test_edition();
+}
+
+void AtcEditorWidget::test_views()
+{
+}
+
+void AtcEditorWidget::test_editorEnabledState(bool state)
+{
+}
+
+void AtcEditorWidget::test_actions()
+{
+}
+
+void AtcEditorWidget::test_itemCreation()
+{
+}
+
+void AtcEditorWidget::test_edition()
+{
+}
+
+#endif // WITH_TESTS

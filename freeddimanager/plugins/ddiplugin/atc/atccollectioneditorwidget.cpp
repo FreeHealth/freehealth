@@ -374,3 +374,40 @@ void AtcCollectionEditorWidget::changeEvent(QEvent *e)
         retranslateUi();
     }
 }
+
+#ifdef WITH_TESTS
+#include <coreplugin/imainwindow.h>
+#include <utils/randomizer.h>
+#include <QTest>
+
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
+
+void AtcCollectionEditorWidget::test_runAllTests()
+{
+    test_views();
+    test_actions();
+    test_itemCreation();
+    test_edition();
+}
+
+void AtcCollectionEditorWidget::test_views()
+{
+}
+
+void AtcCollectionEditorWidget::test_editorEnabledState(bool state)
+{
+}
+
+void AtcCollectionEditorWidget::test_actions()
+{
+}
+
+void AtcCollectionEditorWidget::test_itemCreation()
+{
+}
+
+void AtcCollectionEditorWidget::test_edition()
+{
+}
+
+#endif // WITH_TESTS

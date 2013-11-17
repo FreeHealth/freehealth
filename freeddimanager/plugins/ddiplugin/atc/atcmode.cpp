@@ -91,3 +91,12 @@ AtcMode::~AtcMode()
 void AtcMode::postCoreInitialization()
 {
 }
+
+#ifdef WITH_TESTS
+
+void AtcMode::test_runWidgetTests()
+{
+    _widget->test_runAllTests();
+}
+
+#endif

@@ -940,7 +940,7 @@ void DrugDrugInteractionEditorWidget::test_itemCreation()
 void DrugDrugInteractionEditorWidget::test_edition()
 {
     qWarning() << "\n" << Q_FUNC_INFO << "\n";
-    const int loop = 100;
+    const int loop = 10;
 
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");

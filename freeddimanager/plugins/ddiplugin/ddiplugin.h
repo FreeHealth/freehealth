@@ -59,6 +59,7 @@ public:
 #ifdef WITH_TESTS
 private Q_SLOTS:
     void initTestCase();
+    void test_atcWidget();
     void test_drugInteractor();
     void test_drugInteractorWidget();
     void test_drugDrugInteractionWidget();

@@ -73,6 +73,16 @@ private:
     void retranslateUi();
     void changeEvent(QEvent *e);
 
+#ifdef WITH_TESTS
+public Q_SLOTS:
+    void test_runAllTests();
+    void test_views();
+    void test_editorEnabledState(bool state);
+    void test_actions();
+    void test_itemCreation();
+    void test_edition();
+#endif // WITH_TESTS
+
 private:
     Internal::AtcCollectionEditorWidgetPrivate *d;
 };
