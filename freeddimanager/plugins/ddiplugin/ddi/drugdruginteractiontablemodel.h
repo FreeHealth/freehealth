@@ -78,19 +78,19 @@ public:
         FirstDoseUseFrom,
         FirstDoseUsesTo,
         FirstDoseFromValue,
-        FirstDoseFromUnits,          // Return the Id in the DrugDrugInteractionModel::units() stringList
-        FirstDoseFromRepartition,    // Return the Id in the DrugDrugInteractionModel::repartition() stringList
+        FirstDoseFromUnitsId,          // Return the Id in the DrugDrugInteractionModel::units() stringList
+        FirstDoseFromRepartitionId,    // Return the Id in the DrugDrugInteractionModel::repartition() stringList
         FirstDoseToValue,
-        FirstDoseToUnits,            // Return the Id in the DrugDrugInteractionModel::units() stringList
-        FirstDoseToRepartition,      // Return the Id in the DrugDrugInteractionModel::repartition() stringList
+        FirstDoseToUnitsId,            // Return the Id in the DrugDrugInteractionModel::units() stringList
+        FirstDoseToRepartitionId,      // Return the Id in the DrugDrugInteractionModel::repartition() stringList
         SecondDoseUseFrom,
         SecondDoseUsesTo,
         SecondDoseFromValue,
-        SecondDoseFromUnits,         // Return the Id in the DrugDrugInteractionModel::units() stringList
-        SecondDoseFromRepartition,   // Return the Id in the DrugDrugInteractionModel::repartition() stringList
+        SecondDoseFromUnitsId,         // Return the Id in the DrugDrugInteractionModel::units() stringList
+        SecondDoseFromRepartitionId,   // Return the Id in the DrugDrugInteractionModel::repartition() stringList
         SecondDoseToValue,
-        SecondDoseToUnits,           // Return the Id in the DrugDrugInteractionModel::units() stringList
-        SecondDoseToRepartition,     // Return the Id in the DrugDrugInteractionModel::repartition() stringList
+        SecondDoseToUnitsId,           // Return the Id in the DrugDrugInteractionModel::units() stringList
+        SecondDoseToRepartitionId,     // Return the Id in the DrugDrugInteractionModel::repartition() stringList
 
         PMIDStringList,
         ColumnCount

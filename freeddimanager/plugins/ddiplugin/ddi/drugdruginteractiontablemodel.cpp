@@ -105,19 +105,19 @@ public:
         case DrugDrugInteractionTableModel::FirstDoseUseFrom: sql = Constants::DDI_FIRSTDOSEUSEFROM; break;
         case DrugDrugInteractionTableModel::FirstDoseUsesTo: sql = Constants::DDI_FIRSTDOSEUSESTO; break;
         case DrugDrugInteractionTableModel::FirstDoseFromValue: sql = Constants::DDI_FIRSTDOSEFROMVALUE; break;
-        case DrugDrugInteractionTableModel::FirstDoseFromUnits: sql = Constants::DDI_FIRSTDOSEFROMUNITS; break;
-        case DrugDrugInteractionTableModel::FirstDoseFromRepartition: sql = Constants::DDI_FIRSTDOSEFROMREPARTITION; break;
+        case DrugDrugInteractionTableModel::FirstDoseFromUnitsId: sql = Constants::DDI_FIRSTDOSEFROMUNITS; break;
+        case DrugDrugInteractionTableModel::FirstDoseFromRepartitionId: sql = Constants::DDI_FIRSTDOSEFROMREPARTITION; break;
         case DrugDrugInteractionTableModel::FirstDoseToValue: sql = Constants::DDI_FIRSTDOSETOVALUE; break;
-        case DrugDrugInteractionTableModel::FirstDoseToUnits: sql = Constants::DDI_FIRSTDOSETOUNITS; break;
-        case DrugDrugInteractionTableModel::FirstDoseToRepartition: sql = Constants::DDI_FIRSTDOSETOREPARTITION; break;
+        case DrugDrugInteractionTableModel::FirstDoseToUnitsId: sql = Constants::DDI_FIRSTDOSETOUNITS; break;
+        case DrugDrugInteractionTableModel::FirstDoseToRepartitionId: sql = Constants::DDI_FIRSTDOSETOREPARTITION; break;
         case DrugDrugInteractionTableModel::SecondDoseUseFrom: sql = Constants::DDI_SECONDDOSEUSEFROM; break;
         case DrugDrugInteractionTableModel::SecondDoseUsesTo: sql = Constants::DDI_SECONDDOSEUSESTO; break;
         case DrugDrugInteractionTableModel::SecondDoseFromValue: sql = Constants::DDI_SECONDDOSEFROMVALUE; break;
-        case DrugDrugInteractionTableModel::SecondDoseFromUnits: sql = Constants::DDI_SECONDDOSEFROMUNITS; break;
-        case DrugDrugInteractionTableModel::SecondDoseFromRepartition: sql = Constants::DDI_SECONDDOSEFROMREPARTITION; break;
+        case DrugDrugInteractionTableModel::SecondDoseFromUnitsId: sql = Constants::DDI_SECONDDOSEFROMUNITS; break;
+        case DrugDrugInteractionTableModel::SecondDoseFromRepartitionId: sql = Constants::DDI_SECONDDOSEFROMREPARTITION; break;
         case DrugDrugInteractionTableModel::SecondDoseToValue: sql = Constants::DDI_SECONDDOSETOVALUE; break;
-        case DrugDrugInteractionTableModel::SecondDoseToUnits: sql = Constants::DDI_SECONDDOSETOUNITS; break;
-        case DrugDrugInteractionTableModel::SecondDoseToRepartition: sql = Constants::DDI_SECONDDOSETOREPARTITION; break;
+        case DrugDrugInteractionTableModel::SecondDoseToUnitsId: sql = Constants::DDI_SECONDDOSETOUNITS; break;
+        case DrugDrugInteractionTableModel::SecondDoseToRepartitionId: sql = Constants::DDI_SECONDDOSETOREPARTITION; break;
         case DrugDrugInteractionTableModel::PMIDStringList: sql = Constants::DDI_PMIDSTRINGLIST; break;
         };
         return sql;
@@ -267,9 +267,19 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         switch (index.column()) {
         case LevelName: return d->levelName(d->_sql->data(sqlIndex).toString());
-        case LevelComboIndex:
-            return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
+        case LevelComboIndex: return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
         case PMIDStringList: return d->_sql->data(sqlIndex, role).toString().split(";");
+        // Dose comboIndex
+        case FirstDoseFromUnitsId:
+        case FirstDoseToUnitsId:
+        case SecondDoseFromUnitsId:
+        case SecondDoseToUnitsId:
+            return units().indexOf(d->_sql->data(sqlIndex, role).toString());
+        case FirstDoseFromRepartitionId:
+        case FirstDoseToRepartitionId:
+        case SecondDoseFromRepartitionId:
+        case SecondDoseToRepartitionId:
+            return repartitions().indexOf(d->_sql->data(sqlIndex, role).toString());
         default: return d->_sql->data(sqlIndex, role);
         }
     } else if (role==Qt::ForegroundRole) {
@@ -322,6 +332,20 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
             break;
         case PMIDStringList:
             ok = d->_sql->setData(sqlIndex, value.toStringList().join(";"), role);
+            break;
+
+        // Dose comboIndex
+        case FirstDoseFromUnitsId:
+        case FirstDoseToUnitsId:
+        case SecondDoseFromUnitsId:
+        case SecondDoseToUnitsId:
+            ok = d->_sql->setData(sqlIndex, unit(value.toInt()), role);
+            break;
+        case FirstDoseFromRepartitionId:
+        case FirstDoseToRepartitionId:
+        case SecondDoseFromRepartitionId:
+        case SecondDoseToRepartitionId:
+            ok = d->_sql->setData(sqlIndex, repartition(value.toInt()), role);
             break;
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
@@ -427,14 +451,15 @@ void DrugDrugInteractionTableModel::populateNewRowWithDefault(int row, QSqlRecor
 QStringList DrugDrugInteractionTableModel::units()
 {
     QStringList l;
-    l << "mg";
     l << "µg";
+    l << "mg";
     l << "g";
     l << "UI";
-    l << "ml";
+    l << "l";
     l << "dl";
     l << "cl";
     l << "ml";
+    l << "µl";
     return l;
 }
 
@@ -445,13 +470,16 @@ QStringList DrugDrugInteractionTableModel::repartitions()
     l << tkTr(Trans::Constants::HOURS);
     l << tkTr(Trans::Constants::DAYS);
     l << tkTr(Trans::Constants::WEEKS);
+    l << tkTr(Trans::Constants::MONTHS);
+    l << tkTr(Trans::Constants::YEARS);
+    l << tkTr(Trans::Constants::DECADES);
     return l;
 }
 
 QString DrugDrugInteractionTableModel::unit(int index)
 {
     const QStringList &l = units();
-    if (index < l.count() && index >= 0)
+    if (IN_RANGE_STRICT_MAX(index, 0, l.count()))
         return l.at(index);
     return QString();
 }
@@ -459,7 +487,7 @@ QString DrugDrugInteractionTableModel::unit(int index)
 QString DrugDrugInteractionTableModel::repartition(int index)
 {
     const QStringList &l = repartitions();
-    if (index < l.count() && index >= 0)
+    if (IN_RANGE_STRICT_MAX(index, 0, l.count()))
         return l.at(index);
     return QString();
 }

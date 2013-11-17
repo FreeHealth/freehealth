@@ -302,20 +302,20 @@ public:
         _mapper->addMapping(ui->firstDoseUsesFrom, DrugDrugInteractionTableModel::FirstDoseUseFrom, "checked");
         _mapper->addMapping(ui->firstDoseUsesTo, DrugDrugInteractionTableModel::FirstDoseUsesTo, "checked");
         _mapper->addMapping(ui->firstDoseFromValue, DrugDrugInteractionTableModel::FirstDoseFromValue, "text");
-        _mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionTableModel::FirstDoseFromUnits, "currentIndex");
-        _mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionTableModel::FirstDoseFromRepartition, "currentIndex");
+        _mapper->addMapping(ui->firstDoseFromUnits, DrugDrugInteractionTableModel::FirstDoseFromUnitsId, "currentIndex");
+        _mapper->addMapping(ui->firstDoseFromRepart, DrugDrugInteractionTableModel::FirstDoseFromRepartitionId, "currentIndex");
         _mapper->addMapping(ui->firstDoseToValue, DrugDrugInteractionTableModel::FirstDoseToValue, "text");
-        _mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionTableModel::FirstDoseToUnits, "currentIndex");
-        _mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionTableModel::FirstDoseToRepartition, "currentIndex");
+        _mapper->addMapping(ui->firstDoseToUnits, DrugDrugInteractionTableModel::FirstDoseToUnitsId, "currentIndex");
+        _mapper->addMapping(ui->firstDoseToRepart, DrugDrugInteractionTableModel::FirstDoseToRepartitionId, "currentIndex");
 
         _mapper->addMapping(ui->secondDoseUsesFrom, DrugDrugInteractionTableModel::SecondDoseUseFrom, "checked");
         _mapper->addMapping(ui->secondDoseUsesTo, DrugDrugInteractionTableModel::SecondDoseUsesTo, "checked");
         _mapper->addMapping(ui->secondDoseFromValue, DrugDrugInteractionTableModel::SecondDoseFromValue, "text");
-        _mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionTableModel::SecondDoseFromUnits, "currentIndex");
-        _mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionTableModel::SecondDoseFromRepartition, "currentIndex");
+        _mapper->addMapping(ui->secondDoseFromUnits, DrugDrugInteractionTableModel::SecondDoseFromUnitsId, "currentIndex");
+        _mapper->addMapping(ui->secondDoseFromRepart, DrugDrugInteractionTableModel::SecondDoseFromRepartitionId, "currentIndex");
         _mapper->addMapping(ui->secondDoseToValue, DrugDrugInteractionTableModel::SecondDoseToValue, "text");
-        _mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionTableModel::SecondDoseToUnits, "currentIndex");
-        _mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionTableModel::SecondDoseToRepartition, "currentIndex");
+        _mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionTableModel::SecondDoseToUnitsId, "currentIndex");
+        _mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionTableModel::SecondDoseToRepartitionId, "currentIndex");
 
 //        _mapper->addMapping(ui->humanSynthesis, DrugDrugInteractionTableModel::HumanReadableSynthesis, "html");
 
@@ -946,6 +946,9 @@ void DrugDrugInteractionEditorWidget::test_edition()
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
     QCOMPARE(d->_ddiProxyModel->rowCount(), ddiCore()->drugDrugInteractionTableModel()->rowCount());
 
+    int unitsCount = ddiCore()->drugDrugInteractionTableModel()->units().count() - 1;
+    int repartitionsCount = ddiCore()->drugDrugInteractionTableModel()->repartitions().count() - 1;
+
     // Edit, modify, save, test values
     for(int l = 0; l < loop; ++l) {
         // Select an item
@@ -984,21 +987,50 @@ void DrugDrugInteractionEditorWidget::test_edition()
         d->ui->isReviewed->setChecked(isRev);
         d->ui->createdOn->setDate(creationDate);
         d->ui->comboLevel->setCurrentIndex(level);
+
         d->ui->firstDoseUsesFrom->setChecked(firstUsesFrom);
         d->ui->firstDoseUsesTo->setChecked(firstUsesTo);
+        int firstFromDoseValue = r.randomInt(0, 100000);
+        int firstFromUnitId = r.randomInt(0, unitsCount);
+        int firstFromRepartitionId = r.randomInt(0, repartitionsCount);
+        d->ui->firstDoseFromUnits->setCurrentIndex(firstFromUnitId);
+        d->ui->firstDoseFromRepart->setCurrentIndex(firstFromRepartitionId);
+        d->ui->firstDoseFromValue->setText(QString::number(firstFromDoseValue));
+        int firstToDoseValue = r.randomInt(0, 100000);
+        int firstToUnitId = r.randomInt(0, unitsCount);
+        int firstToRepartitionId = r.randomInt(0, repartitionsCount);
+        d->ui->firstDoseToUnits->setCurrentIndex(firstToUnitId);
+        d->ui->firstDoseToRepart->setCurrentIndex(firstToRepartitionId);
+        d->ui->firstDoseToValue->setText(QString::number(firstToDoseValue));
+
         d->ui->secondDoseUsesFrom->setChecked(secUsesFrom);
         d->ui->secondDoseUsesTo->setChecked(secUsesTo);
+        int secondFromDoseValue = r.randomInt(0, 100000);
+        int secondFromUnitId = r.randomInt(0, unitsCount);
+        int secondFromRepartitionId = r.randomInt(0, repartitionsCount);
+        d->ui->secondDoseFromUnits->setCurrentIndex(secondFromUnitId);
+        d->ui->secondDoseFromRepart->setCurrentIndex(secondFromRepartitionId);
+        d->ui->secondDoseFromValue->setText(QString::number(secondFromDoseValue));
+        int secondToDoseValue = r.randomInt(0, 100000);
+        int secondToUnitId = r.randomInt(0, unitsCount);
+        int secondToRepartitionId = r.randomInt(0, repartitionsCount);
+        d->ui->secondDoseToUnits->setCurrentIndex(secondToUnitId);
+        d->ui->secondDoseToRepart->setCurrentIndex(secondToRepartitionId);
+        d->ui->secondDoseToValue->setText(QString::number(secondToDoseValue));
 
-//        qWarning() << riskFr;
         QTest::keyClicks(d->ui->risk, riskFr, Qt::NoModifier);
-//        qWarning() << riskEn;
         QTest::keyClicks(d->ui->risk_en, riskEn, Qt::NoModifier);
-//        qWarning() << manFr;
         QTest::keyClicks(d->ui->management, manFr, Qt::NoModifier);
-//        qWarning() << manEn;
         QTest::keyClicks(d->ui->management_en, manEn, Qt::NoModifier);
-//        qWarning() << comment;
         QTest::keyClicks(d->ui->comment, comment, Qt::NoModifier);
+
+        QStringList bib;
+        bib << QString::number(r.randomInt(10000, 122349234))
+            << QString::number(r.randomInt(10000, 122349234))
+            << QString::number(r.randomInt(10000, 122349234))
+            << QString::number(r.randomInt(10000, 122349234))
+            << QString::number(r.randomInt(10000, 122349234));
+        d->_biblioModel->setStringList(bib);
 
         // Trigger Save action
         d->aSave->trigger();
@@ -1020,11 +1052,26 @@ void DrugDrugInteractionEditorWidget::test_edition()
         QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::Comment).data().toString(), comment);
 
         QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseUseFrom).data().toBool(), firstUsesFrom);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseFromValue).data().toInt(), firstFromDoseValue);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseFromUnitsId).data().toInt(), firstFromUnitId);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseFromRepartitionId).data().toInt(), firstFromRepartitionId);
+
         QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseUsesTo).data().toBool(), firstUsesTo);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseToValue).data().toInt(), firstToDoseValue);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseToUnitsId).data().toInt(), firstToUnitId);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::FirstDoseToRepartitionId).data().toInt(), firstToRepartitionId);
+
         QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseUseFrom).data().toBool(), secUsesFrom);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseFromValue).data().toInt(), secondFromDoseValue);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseFromUnitsId).data().toInt(), secondFromUnitId);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseFromRepartitionId).data().toInt(), secondFromRepartitionId);
+
         QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseUsesTo).data().toBool(), secUsesTo);
-        // TODO: test dosages
-        // TODO: test PMID
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseToValue).data().toInt(), secondToDoseValue);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseToUnitsId).data().toInt(), secondToUnitId);
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::SecondDoseToRepartitionId).data().toInt(), secondToRepartitionId);
+
+        QCOMPARE(model->index(selectedRow, DrugDrugInteractionTableModel::PMIDStringList).data().toStringList(), bib);
     }
 }
 
