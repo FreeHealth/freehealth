@@ -12,9 +12,10 @@ global_resources/*.ini
 *.autosave
 global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml
 
-# QtCreator files
+# QtCreator/qmake files
 *.pro.user
 *.pro.user.*
+.qmake.cache
 
 # build.sh files
 build.conf
