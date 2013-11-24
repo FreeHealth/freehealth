@@ -2728,5 +2728,13 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>No date</source>
         <translation>Pas de date</translation>
     </message>
+    <message>
+        <source>Backup database</source>
+        <translation>Sauvegarder la base de données</translation>
+    </message>
+    <message>
+        <source>Revert</source>
+        <translation>Restaurer</translation>
+    </message>
 </context>
 </TS>

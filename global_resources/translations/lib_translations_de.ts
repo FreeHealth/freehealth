@@ -2733,5 +2733,13 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <source>No date</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Backup database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Revert</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
