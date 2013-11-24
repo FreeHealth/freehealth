@@ -571,7 +571,7 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
     if (d->ui->risk->isEnabled()) {
 #ifdef WITH_TESTS
         // No user interaction during tests
-        save();
+        // save();
 #else
         // Ask user what he wants to do
         if (Utils::yesNoMessageBox(tr("Data changed but not saved."),
@@ -940,12 +940,12 @@ void DrugDrugInteractionEditorWidget::test_actions()
 
 void DrugDrugInteractionEditorWidget::test_itemCreation()
 {
-    qWarning() << "\n" << Q_FUNC_INFO << "\n";
+    // qWarning() << "\n" << Q_FUNC_INFO << "\n";
 }
 
 void DrugDrugInteractionEditorWidget::test_edition()
 {
-    qWarning() << "\n" << Q_FUNC_INFO << "\n";
+    // qWarning() << "\n" << Q_FUNC_INFO << "\n";
     const int loop = 10;
 
     Utils::Randomizer r;
@@ -964,7 +964,12 @@ void DrugDrugInteractionEditorWidget::test_edition()
         d->m_EditingIndex = QModelIndex(); // no dialog when activating the interactor
         d->ui->tableView->selectionModel()->select(selectMe, QItemSelectionModel::SelectCurrent);
         interactionActivated(selectMe);
-        qWarning() << "Running test on interactor Id: " << selectMe.data().toString() << "m_EditingIndex" << d->m_EditingIndex.data().toString();
+
+        // No real interaction -> continue
+        if (selectMe.data().toString().isEmpty())
+            continue;
+
+        qWarning() << "\n\n** Running test on interactor Id: " << selectMe.data().toString() << "m_EditingIndex" << d->m_EditingIndex.data().toString();
 
         // Trigger Edit action
         d->aEdit->trigger();
