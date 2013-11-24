@@ -1,4 +1,9 @@
-#version check qt
+# Qt 5.1 cache system
+qt:greaterThan(QT_MAJOR_VERSION, 4) {
+    cache()
+}
+
+# version check qt
 defineTest(minQtVersion) {
     maj = $$1
     min = $$2
