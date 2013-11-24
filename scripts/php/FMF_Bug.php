@@ -1,4 +1,4 @@
- <?php
+<?php
   // Get args
 
   $userName = $_POST['user'];
