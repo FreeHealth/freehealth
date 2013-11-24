@@ -569,12 +569,18 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
 
     // submit / revert mapper ?
     if (d->ui->risk->isEnabled()) {
+#ifdef WITH_TESTS
+        // No user interaction during tests
+        save();
+#else
+        // Ask user what he wants to do
         if (Utils::yesNoMessageBox(tr("Data changed but not saved."),
                                    tr("Do you want to save changes to the database?"))) {
             save();
         } else {
             d->_mapper->revert();
         }
+#endif
     }
 
     d->clearUi();
