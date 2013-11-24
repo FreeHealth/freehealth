@@ -26,6 +26,9 @@
  ***************************************************************************/
 #include <ddiplugin/ddiplugin.h>
 
+using namespace DDI;
+using namespace Internal;
+
 void DDIPlugin::initTestCase()
 {
     // DDIDatabase path is defined to a testing path
