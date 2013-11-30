@@ -89,6 +89,7 @@ public:
         aCopyClip(0),
         aAtcSearchDialog(0),
         _proxyMoleculeModel(0),
+        _testRunning(false),
         q(parent)
     {}
 
@@ -307,6 +308,7 @@ public:
     QAction *aAtcSearchDialog;
 
     DrugInteractorSortFilterProxyModel *_proxyMoleculeModel;
+    bool _testRunning;
 
 #ifdef WITH_TESTS
     QString _testingLabel1, _testingLabel2; // used to test item creation
@@ -401,12 +403,15 @@ void InteractorEditorWidget::save()
     setEditorsEnabled(false);
     d->aSave->setEnabled(false);
     d->aRevert->setEnabled(false);
+    d->_proxyMoleculeModel->invalidate();
+    d->_proxyMoleculeModel->setFilterFixedString(d->ui->searchLine->text());
     updateCounts();
 }
 
 /** Filter all proxy models with searched string */
 void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
 {
+    d->_proxyMoleculeModel->invalidate();
     d->_proxyMoleculeModel->setFilterFixedString(text);
 }
 
@@ -416,50 +421,54 @@ void InteractorEditorWidget::onNewInteractorRequested()
     QAction *selected = qobject_cast<QAction*>(sender());
     if (!selected)
         return;
-#ifdef WITH_TESTS
-    QString id = d->_testingLabel1;
-#else
-    QString id = Utils::askUser(tr("New drug interactor"), tr("What is the label?"));
-#endif
+    QString id;
+    if (d->_testRunning)
+        id = d->_testingLabel1;
+    else
+        id = Utils::askUser(tr("New drug interactor"), tr("What is the label?"));
     // TODO: make some checking with the label
 
+    id = id.toUpper();
+    DrugInteractorTableModel *model = ddiCore()->drugInteractorTableModel();
+
     // Insert a row to the drug interactor model
-    ddiCore()->drugInteractorTableModel()->insertRow(0);
-
-//    // Submit the new item
-//    ddiCore()->drugInteractorTableModel()->submit();
-
-    // Set the translations & uid of the item
-    QModelIndex valid = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::IsValid);
-    QModelIndex fr = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::FrLabel);
-    QModelIndex en = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::EnLabel);
-    QModelIndex de = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::DeLabel);
-    QModelIndex uid = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::Uuid);
-    QModelIndex isClass = ddiCore()->drugInteractorTableModel()->index(0, DrugInteractorTableModel::IsInteractingClass);
-    ddiCore()->drugInteractorTableModel()->setData(valid, 1);
-    ddiCore()->drugInteractorTableModel()->setData(fr, id);
-    ddiCore()->drugInteractorTableModel()->setData(en, id);
-    ddiCore()->drugInteractorTableModel()->setData(de, id);
-    ddiCore()->drugInteractorTableModel()->setData(uid, id);
-    ddiCore()->drugInteractorTableModel()->setData(isClass, (selected==d->aCreateNewClass)?0:1);
-
-    // Open it in the editor
-    d->ui->searchLine->setText(id);
-    toggleClassMolsFilter(d->aSearchMolsAndClass);
-    filterDrugInteractorModel(id);
-    for(int i=0; i < d->_proxyMoleculeModel->rowCount(); ++i) {
-        QModelIndex trLabel = d->_proxyMoleculeModel->index(0, DrugInteractorTableModel::TranslatedLabel);
-        if (trLabel.data().toString().compare(id,  Qt::CaseInsensitive)==0) {
-            interactorActivated(trLabel);
-            d->ui->molsListView->selectionModel()->select(trLabel, QItemSelectionModel::SelectCurrent);
-            d->ui->molsListView->setCurrentIndex(trLabel);
-            break;
-        }
+    int row = 0;
+    if (!model->insertRow(row)) {
+        LOG_ERROR("Unable to create a new interactor");
+        return;
     }
 
+    // Set the translations & uid of the item
+    QModelIndex valid = model->index(row, DrugInteractorTableModel::IsValid);
+    QModelIndex fr = model->index(row, DrugInteractorTableModel::FrLabel);
+    QModelIndex en = model->index(row, DrugInteractorTableModel::EnLabel);
+    QModelIndex de = model->index(row, DrugInteractorTableModel::DeLabel);
+    QModelIndex uid = model->index(row, DrugInteractorTableModel::Uuid);
+    QModelIndex isClass = model->index(row, DrugInteractorTableModel::IsInteractingClass);
+    model->setData(valid, 1);
+    model->setData(fr, id);
+    model->setData(en, id);
+    model->setData(de, id);
+    model->setData(uid, id);
+    model->setData(isClass, (selected==d->aCreateNewClass)?1:0);
+
     // Submit the new item
-    ddiCore()->drugInteractorTableModel()->submit();
+    model->submit();
+
+    // the last inserted row is the last row of the unsorted the model
+    QModelIndex trLabel = model->index(model->rowCount() - 1, DrugInteractorTableModel::TranslatedLabel);
+
+    // Open it in the editor
+    d->ui->searchLine->setText("");
+    toggleClassMolsFilter(d->aSearchMolsAndClass);
+    filterDrugInteractorModel("");
+    QModelIndex proxyIndex = d->_proxyMoleculeModel->mapFromSource(trLabel);
+    d->ui->molsListView->selectionModel()->select(proxyIndex, QItemSelectionModel::SelectCurrent);
+    d->ui->molsListView->setCurrentIndex(proxyIndex);
+    d->ui->molsListView->scrollTo(proxyIndex, QTableView::EnsureVisible);
+    interactorActivated(proxyIndex);
     updateCounts();
+    editCurrent();
 }
 
 void InteractorEditorWidget::removeCurrent()
@@ -706,6 +715,7 @@ static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()-
 
 void InteractorEditorWidget::test_runAllTests()
 {
+    d->_testRunning = true;
 //    test_views();
 //    test_actions();
 //    test_itemCreation();
