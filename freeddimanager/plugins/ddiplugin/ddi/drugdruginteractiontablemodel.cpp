@@ -585,13 +585,44 @@ bool DrugDrugInteractionTableModel::isUntranslated(int row) const
 QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(int row) const
 {
     QString tmp;
+
+    // Check Interaction sanity
+    d->checkInteractionErrors(row);
+    DrugDrugInteractionErrors errorflag = d->_rowErrors.value(index(row, 0));
+    QStringList errors;
+    if (!errorflag.testFlag(NoError)) {
+        if (errorflag.testFlag(NoRiskDefined))
+            errors << tr("No risk defined");
+        if (errorflag.testFlag(NotReviewed))
+            errors << tr("Not reviewed");
+        if (errorflag.testFlag(IsMultilevel))
+            errors << tr("Is multi-level");
+        if (errorflag.testFlag(TranslationMissing))
+            errors << tr("Translation missing");
+        if (errorflag.testFlag(NoBibliographicReferences))
+            errors << tr("No biliographic references");
+        if (errorflag.testFlag(FirstInteractorDoesNotExists))
+            errors << tr("First interactor uid does not exists");
+        if (errorflag.testFlag(SecondInteractorDoesNotExists))
+            errors << tr("Second interactor uid does not exists");
+    }
+    bool hasError = !errors.isEmpty();
+    QString indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    if (errors.isEmpty())
+        errors << tr("Interaction looks sane");
+    else
+        indent.append("/!\\ ");
+
     tmp += QString("<b>%1 / %2</b><br />"
                    "<b>%3</b><br />"
-                   "<u>%4:</u> %5<br />"
-                   "<u>%6:</u> %7<br />")
+                   "<span style='%4'>%5</span><br />"
+                   "<u>%6:</u> %7<br />"
+                   "<u>%8:</u> %9<br />")
             .arg(data(index(row, FirstInteractorLabel)).toString())
             .arg(data(index(row, SecondInteractorLabel)).toString())
             .arg(data(index(row, LevelName)).toString())
+            .arg(hasError?"font-weight: 600; color: darkred;":"color: gray")
+            .arg(indent + errors.join(QString("<br>%1").arg(indent)))
             .arg(tr("Risk"))
             .arg(data(index(row, RiskFr)).toString())
             .arg(tr("Management"))
@@ -654,37 +685,6 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
         tmp += QString("<span style=\"color:#003333\"><b>%1</b><ul><li>%2</li></ul></span><br />")
                 .arg(tr("Bibliography:"))
                 .arg(pmidText.join("</li><li>"));
-
-    // Check Interaction sanity
-    d->checkInteractionErrors(row);
-    DrugDrugInteractionErrors errorflag = d->_rowErrors.value(index(row, 0));
-    QStringList errors;
-    if (!errorflag.testFlag(NoError)) {
-        if (errorflag.testFlag(NoRiskDefined))
-            errors << tr("No risk defined");
-        if (errorflag.testFlag(NotReviewed))
-            errors << tr("Not reviewed");
-        if (errorflag.testFlag(IsMultilevel))
-            errors << tr("Is multi-level");
-        if (errorflag.testFlag(TranslationMissing))
-            errors << tr("Translation missing");
-        if (errorflag.testFlag(NoBibliographicReferences))
-            errors << tr("No biliographic references");
-        if (errorflag.testFlag(FirstInteractorDoesNotExists))
-            errors << tr("First interactor uid does not exists");
-        if (errorflag.testFlag(SecondInteractorDoesNotExists))
-            errors << tr("Second interactor uid does not exists");
-    }
-    tmp = QString("<table border=0><tr><td>%1").arg(tmp);
-    if (errors.isEmpty())
-        tmp += QString("</td><td>%1</td>")
-                .arg(tr("Interaction looks sane"));
-    else
-        tmp += QString("</td><td style=\"color: marroon;\">%1<ul><li>%2</li></ul></td>")
-                .arg(tr("Interaction errors:"))
-                .arg(errors.join("</li><li>"));
-    tmp += "</tr></table>";
-
     return tmp;
 
 }
@@ -717,4 +717,68 @@ bool DrugDrugInteractionTableModel::submitAll()
     initialize();
 
     return ok;
+}
+
+void DrugDrugInteractionTableModel::setSqlFilter(const QString &filter)
+{
+    d->_sql->setFilter(filter);
+    d->_sql->select();
+}
+
+DrugDrugInteractionFilteredTableModel::DrugDrugInteractionFilteredTableModel(QObject *parent) :
+    DrugDrugInteractionTableModel(parent)
+{}
+
+DrugDrugInteractionFilteredTableModel::~DrugDrugInteractionFilteredTableModel()
+{}
+
+void DrugDrugInteractionFilteredTableModel::filterLastUpdated(const QDate &since)
+{
+    QHash<int, QString> where;
+    int table = Constants::Table_DDI;
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_ISREVIEWED, "=1");
+    where.insert(Constants::DDI_DATEUPDATE, Constants::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_DATEUPDATE, QString("> '%1'").arg(since.toString(Qt::ISODate)));
+    where.insert(Constants::DDI_DATECREATE, QString("< '%1'").arg(since.toString(Qt::ISODate)));
+    setSqlFilter(ddiBase().getWhereClause(table, where));
+}
+
+void DrugDrugInteractionFilteredTableModel::filterNewItems(const QDate &since)
+{
+    QHash<int, QString> where;
+    int table = Constants::Table_DDI;
+    where.insert(Constants::DDI_ISVALID, "=1");
+    where.insert(Constants::DDI_ISREVIEWED, "=1");
+    where.insert(Constants::DDI_DATECREATE, Constants::SQL_ISNOTNULL);
+    where.insert(Constants::DDI_DATECREATE, QString("> '%1'").arg(since.toString(Qt::ISODate)));
+    setSqlFilter(ddiBase().getWhereClause(table, where));
+}
+
+void DrugDrugInteractionFilteredTableModel::filterLastUpdatedAndNewItems(const QDate &since)
+{}
+
+bool DrugDrugInteractionFilteredTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    return false;
+}
+
+bool DrugDrugInteractionFilteredTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    return false;
+}
+
+bool DrugDrugInteractionFilteredTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    return false;
+}
+
+bool DrugDrugInteractionFilteredTableModel::submit()
+{
+    return true;
+}
+
+bool DrugDrugInteractionFilteredTableModel::submitAll()
+{
+    return true;
 }
