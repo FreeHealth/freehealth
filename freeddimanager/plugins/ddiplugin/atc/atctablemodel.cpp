@@ -32,7 +32,6 @@
  * instead use the createAtcCode() and removeAtcCode().
  */
 
-
 #include "atctablemodel.h"
 #include <ddiplugin/database/ddidatabase.h>
 #include <ddiplugin/ddicore.h>

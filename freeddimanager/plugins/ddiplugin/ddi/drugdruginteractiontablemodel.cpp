@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DDI::Internal::DrugDrugInteractionTableModel
+ * Table model over the DDI database. The model is sorted by DDI Ids (db primary key).
+ */
+
 #include "drugdruginteractiontablemodel.h"
 #include <ddiplugin/ddicore.h>
 #include <ddiplugin/constants.h>
@@ -198,7 +203,7 @@ DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_DDI));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    d->_sql->setSort(FirstInteractorUid, Qt::AscendingOrder);
+    // d->_sql->setSort(FirstInteractorUid, Qt::AscendingOrder);
     // Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
     connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
@@ -703,8 +708,10 @@ int DrugDrugInteractionTableModel::numberOfUnreviewed() const
 bool DrugDrugInteractionTableModel::submitAll()
 {
 #if QT_VERSION >= 0x050000
-    if (!d->_sql->isDirty())
+    if (!d->_sql->isDirty()) {
+        LOG_ERROR("Model is not dirty");
         return true;
+    }
 #endif
 
     bool ok = d->_sql->submitAll();
