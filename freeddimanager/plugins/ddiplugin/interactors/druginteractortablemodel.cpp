@@ -227,7 +227,8 @@ QVariant DrugInteractorTableModel::data(const QModelIndex &index, int role) cons
         }
         if (sql != -1) {
             QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
-            return d->_sql->data(sqlIndex, role).toBool()?Qt::Checked:Qt::Unchecked;
+            // using displayrole
+            return d->_sql->data(sqlIndex).toBool()?Qt::Checked:Qt::Unchecked;
         }
     }
     return QVariant();
@@ -373,6 +374,15 @@ Qt::ItemFlags DrugInteractorTableModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    switch (index.column()) {
+    case IsValid:
+    case IsInteractingClass:
+    case IsReviewed:
+    case IsAutoFound:
+    case DoNotWarnDuplicated:
+        f |= Qt::ItemIsUserCheckable;
+        break;
+    }
     return f;
 }
 
@@ -448,4 +458,63 @@ void DrugInteractorTableModel::populateNewRowWithDefault(int row, QSqlRecord &re
     record.setValue(Constants::INTERACTOR_WARNDUPLICATES, 0);
     record.setValue(Constants::INTERACTOR_DATECREATE, QDate::currentDate());
     record.setValue(Constants::INTERACTOR_DATEUPDATE, QDate::currentDate());
+}
+
+void DrugInteractorTableModel::setSqlFilter(const QString &filter)
+{
+    d->_sql->setFilter(filter);
+    d->_sql->select();
+}
+
+DrugInteractorFilteredTableModel::DrugInteractorFilteredTableModel(QObject *parent) :
+    DrugInteractorTableModel(parent)
+{}
+
+DrugInteractorFilteredTableModel::~DrugInteractorFilteredTableModel()
+{}
+
+void DrugInteractorFilteredTableModel::filterLastUpdated(const QDate &since)
+{
+    QHash<int, QString> where;
+    int table = Constants::Table_INTERACTORS;
+    where.insert(Constants::INTERACTOR_ISVALID, "=1");
+    where.insert(Constants::INTERACTOR_ISREVIEWED, "=1");
+    where.insert(Constants::INTERACTOR_DATEUPDATE, Constants::SQL_ISNOTNULL);
+    where.insert(Constants::INTERACTOR_DATEUPDATE, QString("> '%1'").arg(since.toString(Qt::ISODate)));
+    where.insert(Constants::INTERACTOR_DATECREATE, QString("< '%1'").arg(since.toString(Qt::ISODate)));
+    setSqlFilter(ddiBase().getWhereClause(table, where));
+}
+
+void DrugInteractorFilteredTableModel::filterNewItems(const QDate &since)
+{
+    QHash<int, QString> where;
+    int table = Constants::Table_INTERACTORS;
+    where.insert(Constants::INTERACTOR_ISVALID, "=1");
+    where.insert(Constants::INTERACTOR_ISREVIEWED, "=1");
+    where.insert(Constants::INTERACTOR_DATECREATE, Constants::SQL_ISNOTNULL);
+    where.insert(Constants::INTERACTOR_DATECREATE, QString("> '%1'").arg(since.toString(Qt::ISODate)));
+
+}
+
+void DrugInteractorFilteredTableModel::filterLastUpdatedAndNewItems(const QDate &since)
+{}
+
+bool DrugInteractorFilteredTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    return false;
+}
+
+bool DrugInteractorFilteredTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    return false;
+}
+
+bool DrugInteractorFilteredTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    return false;
+}
+
+bool DrugInteractorFilteredTableModel::submit()
+{
+    return true;
 }

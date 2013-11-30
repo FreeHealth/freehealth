@@ -309,7 +309,8 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
         }
         if (sql != -1) {
             QModelIndex sqlIndex = d->_sql->index(index.row(), sql);
-            return d->_sql->data(sqlIndex, role).toBool()?Qt::Checked:Qt::Unchecked;
+            // using displayrole
+            return d->_sql->data(sqlIndex).toBool()?Qt::Checked:Qt::Unchecked;
         }
     }
     return QVariant();
@@ -429,6 +430,16 @@ Qt::ItemFlags DrugDrugInteractionTableModel::flags(const QModelIndex &index) con
     if (!index.isValid())
         return 0;
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    switch (index.column()) {
+    case IsValid:
+    case IsReviewed:
+    case FirstDoseUseFrom:
+    case FirstDoseUsesTo:
+    case SecondDoseUseFrom:
+    case SecondDoseUsesTo:
+        f |= Qt::ItemIsUserCheckable;
+        break;
+    }
     return f;
 }
 

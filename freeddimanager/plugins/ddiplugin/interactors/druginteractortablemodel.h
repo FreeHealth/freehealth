@@ -115,8 +115,31 @@ Q_SIGNALS:
 private Q_SLOTS:
     void populateNewRowWithDefault(int row, QSqlRecord &record);
 
+protected:
+    void setSqlFilter(const QString &filter);
+
 private:
     Internal::DrugInteractorTableModelPrivate *d;
+};
+
+class DrugInteractorFilteredTableModel : public DrugInteractorTableModel
+{
+    Q_OBJECT
+public:
+    explicit DrugInteractorFilteredTableModel(QObject *parent = 0);
+    ~DrugInteractorFilteredTableModel();
+
+    void filterLastUpdated(const QDate &since);
+    void filterNewItems(const QDate &since);
+    void filterLastUpdatedAndNewItems(const QDate &since);
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+public Q_SLOTS:
+    bool submit();
 };
 
 }  // namespace DDI
