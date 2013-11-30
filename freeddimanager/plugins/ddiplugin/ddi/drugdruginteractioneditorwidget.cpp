@@ -284,10 +284,10 @@ public:
         _mapper->setModel(ddiCore()->drugDrugInteractionTableModel());
         _mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 
-        _mapper->addMapping(ui->firstInteractor, DrugDrugInteractionTableModel::FirstInteractorUid, "text");
-        _mapper->addMapping(ui->secondInteractor, DrugDrugInteractionTableModel::SecondInteractorUid, "text");
-        _mapper->addMapping(ui->firstInteractor2, DrugDrugInteractionTableModel::FirstInteractorUid, "text");
-        _mapper->addMapping(ui->secondInteractor2, DrugDrugInteractionTableModel::SecondInteractorUid, "text");
+        _mapper->addMapping(ui->firstInteractor, DrugDrugInteractionTableModel::FirstInteractorLabel, "text");
+        _mapper->addMapping(ui->secondInteractor, DrugDrugInteractionTableModel::SecondInteractorLabel, "text");
+        _mapper->addMapping(ui->firstInteractor2, DrugDrugInteractionTableModel::FirstInteractorLabel, "text");
+        _mapper->addMapping(ui->secondInteractor2, DrugDrugInteractionTableModel::SecondInteractorLabel, "text");
         _mapper->addMapping(ui->isReviewed, DrugDrugInteractionTableModel::IsReviewed, "checked");
 
         _mapper->addMapping(ui->risk, DrugDrugInteractionTableModel::RiskFr, "plainText");

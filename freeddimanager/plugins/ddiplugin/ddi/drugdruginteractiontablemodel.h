@@ -57,6 +57,8 @@ public:
         Uid,
         FirstInteractorUid,
         SecondInteractorUid,
+        FirstInteractorLabel,
+        SecondInteractorLabel,
         IsReviewed,
         IsValid,
         LevelCode,

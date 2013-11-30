@@ -395,6 +395,12 @@ int DrugInteractorTableModel::numberOfUnlinked() const
     return ddiBase().count(Constants::Table_INTERACTORS, Constants::INTERACTOR_ID, ddiBase().getWhereClause(Constants::Table_INTERACTORS, where));
 }
 
+/** Wrapper to DDI::Internal::interactorLabel() */
+QString DrugInteractorTableModel::interactorLabel(const QString &uid) const
+{
+    return ddiBase().interactorLabel(uid);
+}
+
 /**
  * Returns \e true if the interactor with the \e uid exists.
  */

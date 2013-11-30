@@ -87,6 +87,8 @@ public:
         case DrugDrugInteractionTableModel::IsValid: sql = Constants::DDI_ISVALID; break;
         case DrugDrugInteractionTableModel::FirstInteractorUid: sql = Constants::DDI_FIRSTINTERACTORUID; break;
         case DrugDrugInteractionTableModel::SecondInteractorUid: sql = Constants::DDI_SECONDINTERACTORUID; break;
+        case DrugDrugInteractionTableModel::FirstInteractorLabel: sql = Constants::DDI_FIRSTINTERACTORUID; break;
+        case DrugDrugInteractionTableModel::SecondInteractorLabel: sql = Constants::DDI_SECONDINTERACTORUID; break;
         case DrugDrugInteractionTableModel::IsReviewed: sql = Constants::DDI_ISREVIEWED; break;
         case DrugDrugInteractionTableModel::LevelCode:
         case DrugDrugInteractionTableModel::LevelName:
@@ -262,10 +264,17 @@ QVariant DrugDrugInteractionTableModel::data(const QModelIndex &index, int role)
     if (!index.isValid())
         return QVariant();
 
-    // TODO: FIRST/SECOND interactors are UID not LABELS ==> Get the label of the interactors
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         QModelIndex sqlIndex = d->_sql->index(index.row(), d->modelColumnToSqlColumn(index.column()));
         switch (index.column()) {
+        case FirstInteractorLabel:
+        case SecondInteractorLabel:
+        {
+            // Get the uid
+            const QString &uid = sqlIndex.data().toString();
+            // Return the label of the interactor (not the uid)
+            return ddiCore()->database().interactorLabel(uid);
+        }
         case LevelName: return d->levelName(d->_sql->data(sqlIndex).toString());
         case LevelComboIndex: return d->_levelsToComboIndex.value(d->_sql->data(sqlIndex).toString(), -1);
         case PMIDStringList: return d->_sql->data(sqlIndex, role).toString().split(";");
@@ -570,8 +579,8 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
                    "<b>%3</b><br />"
                    "<u>Risk:</u> %4<br />"
                    "<u>Management:</u> %5<br />")
-            .arg(data(index(row, FirstInteractorUid)).toString())
-            .arg(data(index(row, SecondInteractorUid)).toString())
+            .arg(data(index(row, FirstInteractorLabel)).toString())
+            .arg(data(index(row, SecondInteractorLabel)).toString())
             .arg(data(index(row, LevelName)).toString())
             .arg(data(index(row, RiskFr)).toString())
             .arg(data(index(row, ManagementFr)).toString());

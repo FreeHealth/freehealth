@@ -469,6 +469,37 @@ QStringList DDIDatabase::interactorDistinctUids() const
     return toReturn;
 }
 
+QString DDIDatabase::interactorLabel(const QString &uid, const QString &lang) const
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return QString::null;
+    QHash<int, QString> where;
+    where.insert(Constants::INTERACTOR_UID, QString("='%1'").arg(uid));
+    int langField = Constants::INTERACTOR_FR;
+    if (lang.toLower() == "en")
+        langField = Constants::INTERACTOR_EN;
+    else if (lang.toLower() == "de")
+        langField = Constants::INTERACTOR_DE;
+    QString req = select(Constants::Table_INTERACTORS, langField, where);
+    QString toReturn = tkTr(Trans::Constants::UNKNOWN);
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+        query.finish();
+        DB.rollback();
+        return QString::null;
+    }
+    query.finish();
+    DB.commit();
+    return toReturn;
+}
+
 /**
  * Read the raw CSV ATC file and populate the database with its data.
  * Returns the number of ATC codes inserted. \n

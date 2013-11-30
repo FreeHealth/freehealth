@@ -61,6 +61,7 @@ public:
 
     // INTERACTORS
     QStringList interactorDistinctUids() const;
+    QString interactorLabel(const QString &uid, const QString &lang = QString::null) const;
 
     // OLD DATA INSERTION
     int insertAtcDataFromCsv(const QString &fileName);

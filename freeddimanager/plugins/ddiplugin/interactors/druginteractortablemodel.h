@@ -102,6 +102,7 @@ public:
     int numberOfUnreviewed() const;
     int numberOfUnlinked() const;
 
+    QString interactorLabel(const QString &uid) const;
     bool interactorUidExists(const QString &uid) const;
 
 public Q_SLOTS:
