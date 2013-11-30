@@ -70,6 +70,7 @@ public:
     ~AtcTreeProxyModelPrivate()
     {}
 
+    // Get the source model index according to this proxymodel index
     QModelIndex toSourceIndex(const QModelIndex &index)
     {
         // Map to Code column
@@ -77,18 +78,17 @@ public:
         return _toSourceIndex.value(q->itemFromIndex(code), QModelIndex());
     }
 
+    // Create the ATC tree items
     bool getTree(AtcTableModel *sourceModel)
     {
         _toSourceIndex.clear();
-        // TODO: disconnect old model if exists
         _sourceModel = sourceModel;
 
         // Fetch all data in the source model
         while (_sourceModel->canFetchMore(_sourceModel->index(0, _sourceModel->rowCount())))
             _sourceModel->fetchMore(_sourceModel->index(0, _sourceModel->rowCount()));
 
-        // Sort ?
-
+        // Source model should be correctly sorted, so we don't need to sort.
         // Read line by line
         QStandardItem *lastOne = 0;
         QStandardItem *lastThree = 0;
