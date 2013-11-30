@@ -476,6 +476,8 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
     if (first.second.isEmpty() || second.second.isEmpty())
         return;
 
+    // TODO: Check if some DDI already exists for this pair of interactors
+
     // TODO: Ask for the level
 
     // Ask for a confirmation
