@@ -42,6 +42,6 @@
 /** Correct the uuid. Some old XML file does contains non-SQL-compatible uid, so correct them */
 QString DDI::Constants::correctedUid(QString uid)
 {
-    return uid.replace(" ", "_").replace("'", "_").replace(",", "_").replace("(", "_").replace(")", "_");
+    return uid.toUpper().replace(" ", "_").replace("'", "_").replace(",", "_").replace("(", "_").replace(")", "_");
 }
 
