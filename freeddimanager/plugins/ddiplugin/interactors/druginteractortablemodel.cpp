@@ -493,7 +493,7 @@ void DrugInteractorFilteredTableModel::filterNewItems(const QDate &since)
     where.insert(Constants::INTERACTOR_ISREVIEWED, "=1");
     where.insert(Constants::INTERACTOR_DATECREATE, Constants::SQL_ISNOTNULL);
     where.insert(Constants::INTERACTOR_DATECREATE, QString("> '%1'").arg(since.toString(Qt::ISODate)));
-
+    setSqlFilter(ddiBase().getWhereClause(table, where));
 }
 
 void DrugInteractorFilteredTableModel::filterLastUpdatedAndNewItems(const QDate &since)
