@@ -106,6 +106,7 @@ public:
         googleTranslator(0),
         _firstInteractorRoutes(0), _secondInteractorRoutes(0),
         _biblioModel(0),
+        _testsRunning(false),
         q(parent)
     {}
 
@@ -385,6 +386,8 @@ public:
     DDI::RoutesModel *_firstInteractorRoutes, *_secondInteractorRoutes;
     QStringListModel *_biblioModel;
 
+    bool _testsRunning;
+
 private:
     DrugDrugInteractionEditorWidget *q;
 };
@@ -473,7 +476,8 @@ void DrugDrugInteractionEditorWidget::createNewDDI()
     dlg.initialize();
 
 #ifdef WITH_TESTS
-    dlg.test_runTestAndAccept();
+    if (d->_testsRunning)               // run dialog unit-tests
+        dlg.test_runTestAndAccept();
 #endif
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -570,8 +574,8 @@ void DrugDrugInteractionEditorWidget::interactionActivated(const QModelIndex &in
     // submit / revert mapper ?
     if (d->ui->risk->isEnabled()) {
 #ifdef WITH_TESTS
-        // No user interaction during tests
-        // save();
+        if (!d->_testsRunning)    // No user interaction during tests
+            save();
 #else
         // Ask user what he wants to do
         if (Utils::yesNoMessageBox(tr("Data changed but not saved."),
@@ -863,6 +867,7 @@ static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()-
 
 void DrugDrugInteractionEditorWidget::test_runAllTests()
 {
+    d->_testsRunning = true;
     test_views();
     test_actions();
     test_itemCreation();
