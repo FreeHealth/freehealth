@@ -26,9 +26,34 @@
  ***************************************************************************/
 /**
  * \class Utils::GenericDescription
+ * Use this class to automate all your XML description blocks. You can
+ * use the default values (see enums) and/or add your own XML extra-data.
+ * XML data can be translatable or not. In this case, you can set/get data
+ * according to the language. You description block will be surrounded by its
+ * root tag, see setRootTag() and ctor.
+ *
+ * XML transformation: \n
+ * Use toXml() or toDomElement() to transform all your data to a valid XML block.
+ * Use fromXmlContent(), fromXmlFile(), fromDomElement() to read the block contents.
+ *
+ * Add your own XML tags/descriptors: \n
+ * You can use addNonTranslatableExtraData() and addTranslatableExtraData()
+ * to add your own tags to the description block. Use as reference a value
+ * greater than the enums NonTranslatableExtraData and TranslatableExtraData.
+ * You don't have to care about the XML encoding, everything will be automated.
+ *
+ * Update information: \n
+ * A description block can include many update information Utils::GenericUpdateInformation.
+ * This class contains all update information. Add new object using addUpdateInformation(),
+ * remove one with removeUpdateInformation() using its index in the update list,
+ * insert one in the list with insertUpdateInformation().
+ * Get all update information with updateInformation(), get only for versions greater
+ * or equal to a defined version with updateInformationForVersion(). Get a human readable
+ * HTML body of update information with htmlUpdateInformationForVersion().
+ *
  * \note Unit-test available (see: tests/auto/auto.pro)
+ * \sa Utils::GenericUpdateInformation
  */
-// TODO: write code documentation
 
 #include "genericdescription.h"
 
@@ -130,7 +155,10 @@ void GenericDescription::clear()
     m_Data.clear();
 }
 
-/** Return the data of the description. \sa addNonTranslatableExtraData(), addTranslatableExtraData() */
+/**
+ * Return the data \e ref of the description for the specified language \e lang.
+ * \sa addNonTranslatableExtraData(), addTranslatableExtraData()
+ */
 QVariant GenericDescription::data(const int ref, const QString &lang) const
 {
     QVariant var;
@@ -152,7 +180,7 @@ QVariant GenericDescription::data(const int ref, const QString &lang) const
 }
 
 /**
- * Define the data of the description. \n
+ * Define the data of the description referenced \e ref for a specific language \e lang. \n
  * All QDateTime milliseconds are set to zero to ensure a perfect compatibility with
  * Qt::ISODate used in the XML transformation.
  * \sa addNonTranslatableExtraData(), addTranslatableExtraData()
@@ -177,7 +205,7 @@ bool GenericDescription::setData(const int ref, const QVariant &value, const QSt
     return true;
 }
 
-/** Return all languages with a translable value. */
+/** Return all languages in translable values. */
 QStringList GenericDescription::availableLanguages() const
 {
     return m_Data.uniqueKeys();
