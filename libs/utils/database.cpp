@@ -2175,7 +2175,7 @@ bool Database::createTables() const
  * @param tableRef: table reference,
  * @param newFieldRef: "to create field" reference,
  * @param TypeOfField: Unused
- * @param nullOption: default null value. WARNING: nullOption must not include any 'DEFAULT', 'SET DEFAULT', 'DROP DEFAULT' sql commands.
+ * @param nullOption: default null value. \warning nullOption must not include any 'DEFAULT', 'SET DEFAULT', 'DROP DEFAULT' sql commands.
  * @return true if the sql command was correctly executed
  * \sa Utils::Database::addTable(), Utils::Database::addField()
  * \note Fields are only added at the end of the table.
@@ -2290,7 +2290,7 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 
 /**
  * Execute SQL commands on the QSqlDatabase \e DB. \n
- * WARNING: All SQL commands must be separated by a \e ; followed by a linefeed. \n
+ * \warning All SQL commands must be separated by a \e ; followed by a linefeed. \n
  * Creates a transaction on the database \e DB. \n
  * \warning The string is splitted with the ; and line feed. All lines starting with
  * \e -- are ignored. Remember to add a ; at the end of your comment lines.

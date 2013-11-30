@@ -89,7 +89,7 @@ MessageSender::MessageSender(QObject *parent)
 
 /**
   \brief Destructor
-  WARNING : Do not delete the object while sending the message
+  \warning Do not delete the object while sending the message
 */
 MessageSender::~MessageSender()
 {

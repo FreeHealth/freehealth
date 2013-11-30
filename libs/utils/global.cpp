@@ -1425,7 +1425,7 @@ QLocale::Country countryIsoToCountry(const QString &country) {
  * // body = "<b>BODY CONTENT</b>";
  * \endcode
  *
- * WARNING: This function will create a new HTML paragraph with the body style, including the body content.
+ * \warning This function will create a new HTML paragraph with the body style, including the body content.
  * If there is no body tag in the given argument, the function returns the full text.
  */
 QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphTag)
@@ -1458,7 +1458,7 @@ QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphT
 
 /**
  * Match all CSS style declaration, remove it from the HTML code and return it.
- * WARNING: The \e fullHtml will be modified.
+ * \warning The \e fullHtml will be modified.
 */
 QString htmlTakeAllCssContent(QString &fullHtml)
 {
