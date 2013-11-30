@@ -38,7 +38,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "servermanagermode.h"
-//#include <ddiplugin/server/servermanagerwidget.h>
+#include <ddiplugin/server/servermanagerwidget.h>
 #include <ddiplugin/constants.h>
 
 // TEST
@@ -82,25 +82,25 @@ ServerManagerMode::ServerManagerMode(QObject *parent) :
 //    modeManager()->addAction(cmd->action(), Core::Constants::P_MODE_PATIENT_SEARCH);
 
     // create the mode widget
-//    _widget = new ServerManagerWidget;
-//    _widget->initialize();
+    _widget = new ServerManagerWidget;
+    _widget->initialize();
 
-    ServerUpdateManager m;
-    QLabel *l = new QLabel;
+//    ServerUpdateManager m;
+//    QLabel *l = new QLabel;
 
-    qWarning() << "--------------";
+//    qWarning() << "--------------";
 
-    QString t = QString("New ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Atc));
-    t += QString("New Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Interactor));
-    t += QString("New DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::DrugDrugInteraction));
-    t += QString("Update ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Atc));
-    t += QString("Update Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Interactor));
-    t += QString("Update DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::DrugDrugInteraction));
+//    QString t = QString("New ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Atc));
+//    t += QString("New Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::Interactor));
+//    t += QString("New DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::New, ServerUpdate::DrugDrugInteraction));
+//    t += QString("Update ATC: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Atc));
+//    t += QString("Update Interactor: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::Interactor));
+//    t += QString("Update DDI: %1\n").arg(m.numberDatabaseOfUpdates(ServerUpdate::Update, ServerUpdate::DrugDrugInteraction));
 
-    qWarning() << "--------------";
+//    qWarning() << "--------------";
 
-    l->setText(t);
-    setWidget(l);
+//    l->setText(t);
+    setWidget(_widget);
 }
 
 ServerManagerMode::~ServerManagerMode()

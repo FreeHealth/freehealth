@@ -38,7 +38,8 @@ HEADERS += \
     server/serverupdatemanager.h \
     server/servermanagermode.h \
     server/serverupdatemodel.h \
-    server/serverupdate.h
+    server/serverupdate.h \
+    server/servermanagerwidget.h
 
 
 SOURCES += \
@@ -71,6 +72,7 @@ SOURCES += \
     server/servermanagermode.cpp \
     server/serverupdatemodel.cpp \
     server/serverupdate.cpp \
+    server/servermanagerwidget.cpp
 
 
 FORMS += \
@@ -80,7 +82,8 @@ FORMS += \
     interactors/interactoreditorwidget.ui \
     interactors/interactorselectorwidget.ui \
     ddi/drugdruginteractioneditorwidget.ui \
-    database/databasereportdialog.ui
+    database/databasereportdialog.ui \
+    server/servermanagerwidget.ui
 
 
 OTHER_FILES += DDIManager.pluginspec
