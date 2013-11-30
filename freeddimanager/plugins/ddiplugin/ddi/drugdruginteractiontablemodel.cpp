@@ -155,7 +155,6 @@ public:
     // Check DDI sanity and store error messages into _rowErrors
     void checkInteractionErrors(int row)
     {
-        // TODO: get data directly from the sql model
         DrugDrugInteractionTableModel::DrugDrugInteractionErrors errors;
         if (q->index(row, DrugDrugInteractionTableModel::RiskEn).data().toString().isEmpty()
                 && q->index(row, DrugDrugInteractionTableModel::RiskFr).data().toString().isEmpty())

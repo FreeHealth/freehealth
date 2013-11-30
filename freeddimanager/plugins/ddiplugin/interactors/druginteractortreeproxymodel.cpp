@@ -80,14 +80,13 @@ public:
     bool getTree(DrugInteractorTableModel *sourceModel)
     {
         _toSourceIndex.clear();
-        // TODO: disconnect old model if exists
         _sourceModel = sourceModel;
 
         // Fetch all data in the source model
         while (_sourceModel->canFetchMore(_sourceModel->index(0, _sourceModel->rowCount())))
             _sourceModel->fetchMore(_sourceModel->index(0, _sourceModel->rowCount()));
 
-        // Sort ?
+        // Sort?
 
         // Read line by line
         QStandardItem *noClass = new QStandardItem("NO_CLASS");
