@@ -33,6 +33,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
@@ -49,6 +50,7 @@ using namespace Print;
 using namespace Internal;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 PrinterPlugin::PrinterPlugin() :
     prefPage(0),
@@ -91,6 +93,17 @@ void PrinterPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PrinterPlugin::extensionsInitialized";
+
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
+
+    prefPage->checkSettingsValidity();
+    printCorrectionPage->checkSettingsValidity();
+#ifndef FREEMEDFORMS
+    settings()->sync();
+#endif
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 

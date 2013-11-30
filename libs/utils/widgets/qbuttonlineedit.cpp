@@ -112,9 +112,13 @@ public:
         if (!_placeHolder.isEmpty()) {
             placeHolder = _placeHolder;
         } else if (_leftButton && _leftButton->defaultAction()) {
-            placeHolder = QString("%1 %2")
-                    .arg(cleanString(_leftButton->defaultAction()->text()))
-                    .arg(QApplication::translate("Utils::QButtonLineEdit", "(press Alt up/down cursor to cycle)"));
+            if (_leftButton->actions().count() > 1) {
+                placeHolder = QString("%1 %2")
+                        .arg(cleanString(_leftButton->defaultAction()->text()))
+                        .arg(QApplication::translate("Utils::QButtonLineEdit", "(press Alt up/down cursor to cycle)"));
+            } else {
+                placeHolder = cleanString(_leftButton->defaultAction()->text());
+            }
         }
         q->setPlaceholderText(placeHolder);
 
@@ -131,7 +135,6 @@ public:
             placeHolder = QString("<p>%1%2</p>").arg(e, placeHolder.replace(" ", "&nbsp;"));
         else
             placeHolder.prepend(e);
-
         q->setToolTip(placeHolder);
     }
 

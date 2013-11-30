@@ -6,6 +6,7 @@ REM # This script compiles and create the installer for any FreeMedForms applica
 REM # 
 REM # The script supposes that:
 REM # - the freemedforms-project source package is decompressed here
+REM # - the MinGW is installed (see %PATH_TO_MINGW%)
 REM # - the most recent MySQL is installed (see %PATH_TO_MYSQL%)
 REM # - the most recent OpenCV must be installed in the contrib path 
 REM # - the Inno Setup 5 is installed on the machine (see %PATH_TO_INNOSETUP%)
@@ -17,7 +18,7 @@ REM # Var definition
 set PATH_TO_MYSQL=C:\Progra~1\MySQL\MYSQLS~1.5\lib
 set PATH_TO_INNOSETUP=C:\Progra~1\InnoSe~1\iscc.exe
 set WORKING_DIRECTORY=%CD%
-set PATH_TO_MINGW=E:\QtSDK\mingw\bin
+set PATH_TO_MINGW=E:\MinGW\bin
 
 REM # Go to source root dir
 cd ../..

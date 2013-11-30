@@ -305,7 +305,9 @@ QString Randomizer::randomWords(int nbOfWords) const
                 .arg(randomInt(0, max));
         if (query.exec(req)) {
             if (query.next()) {
-                t << query.value(0).toString().toUpper();
+                QString val = query.value(0).toString().toUpper();
+                // Remove all non-word chars to avoid assert in qascii....cpp when using QTest::keyClicks
+                t << val.replace(QRegExp("\\W"), "_");
             }
         } else {
             LOG_QUERY_ERROR_FOR("Randomizer", query);

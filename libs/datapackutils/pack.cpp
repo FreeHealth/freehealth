@@ -273,7 +273,7 @@ void Pack::fromXml(const QString &fullPackConfigXml)
     QString error;
     int line, col;
     if (!doc.setContent(fullPackConfigXml, &error, &line, &col)) {
-        LOG_ERROR_FOR("DataPack::Pack", QString("Wrong XML: (%1:%2) %3").arg(line).arg(col).arg(error));
+        LOG_ERROR_FOR("DataPack::Pack", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         return;
     }
     QDomElement root = doc.firstChildElement(::TAG_ROOT);

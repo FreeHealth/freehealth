@@ -146,23 +146,28 @@ void PrintDialog::accept()
         LOG_FOR("Printer", "Printing on device successful" + m_Printer->printer()->printerName());
     }
 
-    // Duplicate to a pdf file
+    // Cache to PDF?
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
+        // Get the cache-PDF path
+        QString cachePath = settings()->value(Constants::S_PDF_FOLDER).toString();
+        if (cachePath.isEmpty())
+            cachePath = QString("%1/%2").arg(settings()->path(Core::ISettings::UserDocumentsPath)).arg("PDF");
+        if (QFileInfo(cachePath).isRelative())
+            cachePath.append(qApp->applicationDirPath() + QDir::separator());
+        if (!QDir(cachePath).exists())
+            QDir().mkpath(cachePath);
+
+        // Create the PDF Cache filename
         QString uid = Utils::createUid();
         QString docName = QString("%1_%2.pdf")
                           .arg(qApp->applicationName())
                           .arg(uid);
 
-        QString fileName = settings()->value(Constants::S_PDF_FOLDER).toString();
-        if (fileName.isEmpty())
-            fileName = settings()->path(Core::ISettings::ApplicationTempPath);
-        if (QFileInfo(fileName).isRelative())
-            fileName.append(qApp->applicationDirPath());
-        if (!QDir(fileName).exists())
-            QDir().mkpath(fileName);
+        // Create the full filename & save
+        QString fileName = QDir::cleanPath(cachePath);
         fileName.append(QDir::separator() + docName);
         m_Printer->toPdf(fileName, docName);
-        docPrinter()->addPrintedDoc(fileName,docName,QDateTime::currentDateTime(), user()->uuid());
+        docPrinter()->addPrintedDoc(fileName, docName, QDateTime::currentDateTime(), user()->uuid());
     }
     QDialog::accept();
 }

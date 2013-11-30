@@ -32,19 +32,19 @@
 WHITE="\033[1;37m"
 NO_COLOUR="\033[0m"
 
-for i in $( ls plugins ); do
-    if [ -f plugins/$i/*plugin.pro ]; then
-        echo
-        echo "$WHITE********* Updating translation for FreeMedForms plugin: $i$NO_COLOUR"
-        echo
-        lupdate plugins/$i/*plugin.pro -no-obsolete  2>&1
-    fi
-done
+#for i in $( ls plugins ); do
+#    if [ -f plugins/$i/*.pro ]; then
+#        echo
+#        echo "$WHITE********* Updating translation for FreeMedForms plugin: $i$NO_COLOUR"
+#        echo
+#        lupdate plugins/$i/*plugin.pro -no-obsolete  2>&1
+#    fi
+#done
 
-APPS="freediams freedrc"
+APPS=". freediams freedrc freetoolbox freeddimanager"
 for a in $APPS; do
     for i in $( ls $a/plugins ); do
-        if [ -f plugins/$i/*plugin.pro ]; then
+        if [ -f $a/plugins/$i/*.pro ]; then
             echo
             echo "$WHITE********* Updating translation for $a plugin: $i$NO_COLOUR"
             echo

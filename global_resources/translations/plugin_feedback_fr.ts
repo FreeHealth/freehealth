@@ -105,7 +105,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="172"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Yes, I have checked the documentation on the &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;FreeMedForms Project website&lt;/span&gt;&lt;/a&gt; before reporting this issue.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Oui j&apos;ai vérifier la documentation sur le &lt;a href=&quot;http://www.freemedforms.com/en/manuals/freemedforms/toc&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;site internet du projet FreeMedForms&lt;/span&gt;&lt;/a&gt; avant de signaler mon problème.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="207"/>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../../plugins/feedbackplugin/bugreportdialog.ui" line="323"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you click on &lt;span style=&quot; font-style:italic;&quot;&gt;Send&lt;/span&gt;, debug information is collected and sent along with the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lorsque vous cliquez sur &lt;span style=&quot; font-style:italic;&quot;&gt;Envoyer&lt;/span&gt;, les informations de débogage sont collectées et envoyées avec le rapport.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>

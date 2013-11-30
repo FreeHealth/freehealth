@@ -742,8 +742,9 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *drugModel, const QString 
     int line = -1;
     int column = -1;
     if (!doc.setContent(xml, &error, &line, &column)) {
+        LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(column).arg(error));
         Utils::warningMessageBox(tr("You are trying to read a corrupted XML file."),
-                                 tr("Error: %1\nLine: %2, Column: %3").arg(error).arg(line).arg(column));
+                                 tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(column).arg(error));
         return false;
     }
 

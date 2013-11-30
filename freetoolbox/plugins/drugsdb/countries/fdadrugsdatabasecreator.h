@@ -39,6 +39,7 @@ class FdaDrugDatatabaseStep;
 
 class FreeFdaDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     FreeFdaDrugsDatabasePage(QObject *parent = 0);
     ~FreeFdaDrugsDatabasePage();
@@ -57,6 +58,7 @@ private:
 
 class NonFreeFdaDrugsDatabasePage : public Core::IToolPage
 {
+    Q_OBJECT
 public:
     NonFreeFdaDrugsDatabasePage(QObject *parent = 0);
     ~NonFreeFdaDrugsDatabasePage();

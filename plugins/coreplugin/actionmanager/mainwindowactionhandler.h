@@ -128,6 +128,7 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual void lockApplication();
 
 public Q_SLOTS:
+    void switchToCurrentUserLanguage();
     virtual void switchLanguage(QAction * action);
 
 

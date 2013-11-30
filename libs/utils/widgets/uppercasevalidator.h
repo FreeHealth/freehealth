@@ -54,7 +54,6 @@ public:
     ~UpperCaseValidator();
 
     QValidator::State validate(QString &text, int &pos) const;
-
 };
 
 class UTILS_EXPORT CapitalizationValidator : public QValidator
@@ -64,7 +63,6 @@ public:
     ~CapitalizationValidator();
 
     QValidator::State validate(QString &text, int &pos) const;
-
 };
 
 }

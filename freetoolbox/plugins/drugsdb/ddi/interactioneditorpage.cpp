@@ -334,6 +334,7 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
 
     connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionModel(QString)));
+    retranslateUi();
 }
 
 InteractionEditorWidget::~InteractionEditorWidget()
@@ -627,7 +628,7 @@ void InteractionEditorWidget::reformatOldXmlSource()
         int line, col;
         if (!doc.setContent(&file, &error,&line,&col)) {
             LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
-            LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
+            LOG_ERROR(tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
         } else {
             LOG(tr("Reading file: %1").arg(file.fileName()));
         }
@@ -803,32 +804,37 @@ void InteractionEditorWidget::splitCurrent()
 
 }
 
+void InteractionEditorWidget::retranslateUi()
+{
+    d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
+    d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
+    d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
+    d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+    d->aTranslateAll->setText(tr("Translate all untranslated"));
+    d->aTranslateThis->setText(tr("Translate current"));
+    d->aReformatOldXmlSources->setText(tr("Reformat old XML thesaurus"));
+    d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
+    d->aCollapseAll->setText(tr("Collapse all"));
+    d->aExpandAll->setText(tr("Expand all"));
+    d->aCreateNew->setToolTip(d->aCreateNew->text());
+    d->aSave->setToolTip(d->aSave->text());
+    d->aEdit->setToolTip(d->aEdit->text());
+    d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
+    d->aTranslateAll->setToolTip(d->aTranslateAll->text());
+    d->aTranslateThis->setToolTip(d->aTranslateThis->text());
+    d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
+    d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
+    d->aCollapseAll->setToolTip(d->aCollapseAll->text());
+    d->aExpandAll->setToolTip(d->aExpandAll->text());
+    d->ui->retranslateUi(this);
+    int current = d->ui->comboLevel->currentIndex();
+    d->setLevelNamesToCombo(d->ui->comboLevel);
+    d->ui->comboLevel->setCurrentIndex(current);
+}
+
 void InteractionEditorWidget::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
-        d->aCreateNew->setText(tkTr(Trans::Constants::ADD_TEXT));
-        d->aSave->setText(tkTr(Trans::Constants::FILESAVE_TEXT));
-        d->aEdit->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
-        d->aRemoveCurrent->setText(tkTr(Trans::Constants::REMOVE_TEXT));
-        d->aTranslateAll->setText(tr("Translate all untranslated"));
-        d->aTranslateThis->setText(tr("Translate current"));
-        d->aReformatOldXmlSources->setText(tr("Reformat old XML thesaurus"));
-        d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
-        d->aCollapseAll->setText(tr("Collapse all"));
-        d->aExpandAll->setText(tr("Expand all"));
-        d->aCreateNew->setToolTip(d->aCreateNew->text());
-        d->aSave->setToolTip(d->aSave->text());
-        d->aEdit->setToolTip(d->aEdit->text());
-        d->aRemoveCurrent->setToolTip(d->aRemoveCurrent->text());
-        d->aTranslateAll->setToolTip(d->aTranslateAll->text());
-        d->aTranslateThis->setToolTip(d->aTranslateThis->text());
-        d->aReformatOldXmlSources->setToolTip(d->aReformatOldXmlSources->text());
-        d->aSplitInteractionAccordingToLevel->setToolTip(d->aSplitInteractionAccordingToLevel->text());
-        d->aCollapseAll->setToolTip(d->aCollapseAll->text());
-        d->aExpandAll->setToolTip(d->aExpandAll->text());
-        d->ui->retranslateUi(this);
-        int current = d->ui->comboLevel->currentIndex();
-        d->setLevelNamesToCombo(d->ui->comboLevel);
-        d->ui->comboLevel->setCurrentIndex(current);
+        retranslateUi();
     }
 }

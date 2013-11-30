@@ -45,6 +45,7 @@ const char * const  FREEGIR_SPLASHSCREEN      = "freegir.png";
 const char * const  FREETOOLBOX_SPLASHSCREEN  = "freetoolbox.png";
 const char * const  FREEPAD_SPLASHSCREEN      = "freepad.png";
 const char * const  FREEDRC_SPLASHSCREEN      = "freedrc.png";
+const char * const  FREEDDIMANAGER_SPLASHSCREEN = "freeddimanager.png";
 
 // application icons
 const char * const  ICONFREEMEDFORMS   = "freemedforms.png";
@@ -55,6 +56,7 @@ const char * const  ICONFREEGIR        = "freegir.png";
 const char * const  ICONFREETOOLBOX    = "freetoolbox.png";
 const char * const  ICONFREEPAD        = "freepad.png";
 const char * const  ICONFREEDRC        = "freedrc.png";
+const char * const  ICONFREEDDIMANAGER = "freeddimanager.png";
 
 // menu File
 const char * const  ICONFILENEW =      "filenew.png";
@@ -76,6 +78,7 @@ const char * const  ICONMOVEUPLIGHT=   "arrowuplight.png";
 const char * const  ICONMOVEDOWNLIGHT= "arrowdownlight.png";
 const char * const  ICONPROCESS=       "run.png";
 const char * const  ICONSPINNER=       "spinner.gif";
+const char * const  ICONSPLITFILE =    "splitfile.png";
 
 // menu Edit
 const char * const  ICONEDIT =         "edit.png";
@@ -102,6 +105,7 @@ const char * const  ICONTRANSLATE =    "translate.png";
 const char * const  ICONCRITICAL =     "critical.png";
 const char * const  ICONWARNING =      "warning.png";
 const char * const  ICONINFORMATION =  "information.png";
+const char * const  ICONREVERT      =  "revert.png";
 
 // Priority
 const char * const  ICONPRIORITY_HIGH   = "priority_high.png";
@@ -197,6 +201,7 @@ const char * const  ICONEXPORTPATIENTFILE  =  "export-patient-file.png";
 const char * const  ICONCHEQUE       = "bank-cheque.png";
 const char * const  ICONNEWMAIL       = "mail_new.png";
 const char * const  ICONSENDMAIL       = "mail_send.png";
+const char * const  ICONDATABASE = "database.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";

@@ -6,10 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>test</version>
+    <version>0.9.1</version>
     <fmfv>0.8.2</fmfv>
     <cdate>2013-02-14</cdate>
-    <lmdate>2013-02-14</lmdate>
+    <lmdate>2013-10-10</lmdate>
     <icon>__theme__/labtest.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -27,6 +27,11 @@
     <!--    <specialties lang="de">Werkzeuge</specialties> -->
 
     <updateinfo>
+      <updateversion from="0.8.4" to="0.9.1">
+        <text lang="xx">
+        Nouvelles traductions françaises
+        </text>
+      </updateversion>
       <updateversion from="0.8.2" to="0.8.4">
         <text lang="fr">
         Ajout: plaquettes, RAI, tests de Coombs
@@ -567,6 +572,23 @@
                     <possible id="14">West Nile Virus, PCR</possible>
                     <possible id="15">Syphilis - Rapid Plasma Reagin (RPR)</possible>
                     <possible id="16">Helicobacter pylori Urea Breath Test</possible>
+                    <possible id="0" lang="fr">Anticorps Maladie de Lyme, IgM</possible>
+                    <possible id="1" lang="fr">Western blot, Maladie de Lyme, Serum</possible>
+                    <possible id="2" lang="fr">Sérologie VIH</possible>
+                    <possible id="3" lang="fr">Profil immunitaire pour Measles, Mumps, Rubella (MMR)</possible>
+                    <possible id="4" lang="fr">Status immunitaire Hepatitis B (anticorps anti-HbS)</possible>
+                    <possible id="5" lang="fr">PCR Epstein-Barr Virus (EBV), Qualitatif</possible>
+                    <possible id="6" lang="fr">MIN test, Qualitatif</possible>
+                    <possible id="7" lang="fr">Anticorps anti Cytomegalovirus (CMV), IgG</possible>
+                    <possible id="8" lang="fr">Sérologie Parvovirus B19</possible>
+                    <possible id="9" lang="fr">Anticorps anti Rubella, IgG</possible>
+                    <possible id="10" lang="fr">Anticorps anti Rubéole, IgG</possible>
+                    <possible id="11" lang="fr">Ancticorps anti Toxoplasma Gondii, IgG</possible>
+                    <possible id="12" lang="fr">Tetanus Antibodies Profile</possible>
+                    <possible id="13" lang="fr">Anticorps anti-VZV, IgG</possible>
+                    <possible id="14" lang="fr">West Nile Virus, PCR</possible>
+                    <possible id="15" lang="fr">Syphilis - Rapid Plasma Reagin (RPR)</possible>
+                    <possible id="16" lang="fr">Test à l'urée - Helicobacter pylori</possible>
                 </value>
                 <options>resizeToContent;DontPrintEmptyValue</options>
             </Item>

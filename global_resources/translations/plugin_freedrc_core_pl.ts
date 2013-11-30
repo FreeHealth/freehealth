@@ -192,7 +192,7 @@
     <name>Core::Internal::MainWindowActionHandler</name>
     <message>
         <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="316"/>
-        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="954"/>
+        <location filename="../../plugins/coreplugin/actionmanager/mainwindowactionhandler.cpp" line="955"/>
         <source>Ctrl+,</source>
         <translation type="unfinished"></translation>
     </message>
@@ -715,7 +715,7 @@
 <context>
     <name>Core::Internal::ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="248"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="249"/>
         <source>Using splash: %1</source>
         <translation type="unfinished"></translation>
     </message>

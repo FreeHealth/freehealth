@@ -95,10 +95,11 @@ void PrinterPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Print::Constants::S_RESOLUTION, QPrinter::ScreenResolution);
     defaultvalues.insert(Print::Constants::S_TWONUP, false);
     defaultvalues.insert(Print::Constants::S_KEEP_PDF, false);
-    defaultvalues.insert(Print::Constants::S_PDF_FOLDER, QVariant());
+    defaultvalues.insert(Print::Constants::S_PDF_FOLDER, QString("%1/%2").arg(settings()->path(Core::ISettings::UserDocumentsPath)).arg("PDF"));
 
     foreach(const QString &k, defaultvalues.keys()) {
-        if (settings()->value(k) == QVariant())
+        if (settings()->value(k) == QVariant() ||
+                settings()->value(k).toString().isEmpty())
             settings()->setValue(k, defaultvalues.value(k));
     }
 }
@@ -227,7 +228,7 @@ void PrinterPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Print::Constants::S_RESOLUTION, QPrinter::ScreenResolution);
     s->setValue(Print::Constants::S_TWONUP, false);
     s->setValue(Print::Constants::S_KEEP_PDF, false);
-    s->setValue(Print::Constants::S_PDF_FOLDER, QVariant());
+    s->setValue(Print::Constants::S_PDF_FOLDER, QString("%1/%2").arg(settings()->path(Core::ISettings::UserDocumentsPath)).arg("PDF"));
     s->sync();
 }
 

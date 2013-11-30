@@ -510,6 +510,7 @@ void MainWindow::postCoreInitialization()
     show();
     raise();
 
+    switchToCurrentUserLanguage();
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     refreshPatient();
@@ -711,7 +712,7 @@ void MainWindow::aboutToShowRecentFiles()
         action->setData(fileName);
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
     }
-    aci->menu()->setEnabled(fileManager()->recentFiles() > 0);
+    aci->menu()->setEnabled(fileManager()->recentFiles().count() > 0);
     aci->setOnAllDisabledBehavior(Core::ActionContainer::Show);
 }
 

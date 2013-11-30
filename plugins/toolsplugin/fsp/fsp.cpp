@@ -29,12 +29,18 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QHash>
 #include <QVariant>
 #include <QDate>
 #include <QDomDocument>
+
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
@@ -489,10 +495,9 @@ QList<Fsp> Fsp::fromXml(const QString &content)
     QString error;
     int col, line;
     if (!doc.setContent(content, &error, &line, &col)) {
-        Utils::warningMessageBox("Erreur XML",
-                                 QString("La FSP ne peut pas être reconstruite, une erreur XML a été détectée :<br />"
-                                         "(%1; %2) %3<br />")
-                                 .arg(line).arg(col).arg(error));
+        LOG_ERROR_FOR("Fsp", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
+        Utils::warningMessageBox(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(""),
+                                 tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(line).arg(col).arg(error));
         return fsps;
     }
     QDomElement root = doc.firstChildElement(::XML_TAG_FSPSET);

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+
+  <formdescription>
+  <!-- Non translatable values -->
+  <authors>Eric Maeker, MD</authors>
+  <version>test</version>
+  <fmfv>0.9.2</fmfv>
+  <cdate>2013-10-06</cdate>
+  <lmdate>2013-10-06</lmdate>
+  <icon>__theme__/16x16/sfmg_logo.png</icon>
+  <weblink></weblink>
+  <bibliography pmid=""></bibliography>
+
+  <!-- Translatable values -->
+  <license>GPLv3</license>
+  <description lang="fr">Test de l'eDRC pour FreeMedForms</description>
+  <description lang="xx">Testing French eDRC widget for FreeMedForms</description>
+  <category lang="xx">Test</category>
+  <category lang="fr">Test</category>
+  <specialties lang="fr">Test</specialties>
+  <specialties lang="xx">Test</specialties>
+
+  </formdescription>
+
+  <MedForm name="Test::Widgets::eDRC">
+      <creationdate>2013-10-06</creationdate>
+      <label lang="xx">Testing French eDRC widget for FreeMedForms</label>
+      <label lang="fr">Test de l'eDRC pour FreeMedForms</label>
+      <categorie lang="fr">Tests</categorie>
+      <categorie lang="xx">Tests</categorie>
+      <authors lang="fr">Dr Eric Maeker</authors>
+      <column>1</column>
+      <icon>__theme__/sfmg_logo.png</icon>
+      <option>compact;UseFormNameAsNameSpace</option>
+
+      <Item name="eDRCListViewer" type="edrc">
+        <label lang="xx">Coding assistant for the french eDRC</label>
+        <label lang="fr">Assistant de codage eDRC</label>
+      </Item>
+
+  </MedForm>
+
+</FreeMedForms>

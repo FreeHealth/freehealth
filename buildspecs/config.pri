@@ -9,6 +9,11 @@ isEmpty(LOWERED_APPNAME) {
     error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
 }
 
+# Qt 5.1 cache system
+qt:greaterThan(QT_MAJOR_VERSION, 4) {
+    cache()
+}
+
 # auto-test for plugins
 isEmpty(TEST):CONFIG(debug, debug|release) {
     !debug_and_release|build_pass {

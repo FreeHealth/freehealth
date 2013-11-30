@@ -979,8 +979,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         const QMap<QString, QString> &loc_lang = Core::ICore::instance()->translators()->availableLocalesAndLanguages();
         int i = 0;
 
-        QString lang = settings()->value(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2)).toString();
-        foreach( const QString &loc, loc_lang.keys() ) {
+        foreach(const QString &loc, loc_lang.keys()) {
             ++i;
             QAction *action = new QAction(this);  // QString("&%1 %2").arg(QString::number(i), loc_lang.value(loc)), this);
             action->setText(loc_lang.value(loc));
@@ -990,18 +989,27 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
             cmd = actionManager()->registerAction(action, Id(loc), ctx);
             lmenu->addAction(cmd, Id(Constants::G_LANGUAGES));
             aLanguageGroup->addAction(action);
-            if (loc == lang) {
-                action->setChecked(true);
-                switchLanguage(action);
-            }
         }
         connect(aLanguageGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchLanguage(QAction*)));
+    }
+}
+
+void MainWindowActionHandler::switchToCurrentUserLanguage()
+{
+    QString lang = settings()->value(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2)).toString().toLower();
+    foreach(QAction *a, aLanguageGroup->actions()) {
+        if (a->data().toString().toLower() == lang) {
+            a->setChecked(true);
+            switchLanguage(a);
+            break;
+        }
     }
 }
 
 void MainWindowActionHandler::switchLanguage(QAction * action)
 {
     // Inform the Application that language changes, and loads the dictionnaries
+    settings()->setValue(Constants::S_PREFERREDLANGUAGE, action->data().toString());
     Core::ICore::instance()->translators()->changeLanguage(action->data().toString());
     // All GUIs will automatically refresh via changeEvent() members
 }

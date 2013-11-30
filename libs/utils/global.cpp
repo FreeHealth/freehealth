@@ -848,6 +848,20 @@ QByteArray fileSha256(const QString &fileName)
 }
 #endif
 
+QString humanReadableFileSize(qint64 size)
+{
+     float num = size;
+     QStringList list;
+     list << "KB" << "MB" << "GB" << "TB";
+     QStringListIterator i(list);
+     QString unit("bytes");
+     while(num >= 1024.0 && i.hasNext()) {
+         unit = i.next();
+         num /= 1024.0;
+     }
+     return QString("%1 %2").arg(QString().setNum(num,'f',2)).arg(unit);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1411,7 +1425,7 @@ QLocale::Country countryIsoToCountry(const QString &country) {
  * // body = "<b>BODY CONTENT</b>";
  * \endcode
  *
- * WARNING: This function will create a new HTML paragraph with the body style, including the body content.
+ * \warning This function will create a new HTML paragraph with the body style, including the body content.
  * If there is no body tag in the given argument, the function returns the full text.
  */
 QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphTag)
@@ -1444,7 +1458,7 @@ QString htmlBodyContent(const QString &fullHtml, bool replaceBodyTagByParagraphT
 
 /**
  * Match all CSS style declaration, remove it from the HTML code and return it.
- * WARNING: The \e fullHtml will be modified.
+ * \warning The \e fullHtml will be modified.
 */
 QString htmlTakeAllCssContent(QString &fullHtml)
 {

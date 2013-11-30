@@ -52,6 +52,7 @@ const char* const SEARCHING_DATABASE_1_IN_PATH_2            = QT_TRANSLATE_NOOP(
 const char* const CONNECTION                                = QT_TRANSLATE_NOOP("tkConstants", "Connection");
 const char* const CONNECTION_NAME                           = QT_TRANSLATE_NOOP("tkConstants", "Connection name");
 
+const char* const BACKUP_DATABASE                     = QT_TRANSLATE_NOOP("tkConstants", "Backup database");
 const char* const DATABASE_INFORMATION                = QT_TRANSLATE_NOOP("tkConstants", "Database information");
 const char* const DRUGS_DATABASE_INFORMATION          = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
 const char* const DOSAGES_DATABASE_INFORMATION        = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");

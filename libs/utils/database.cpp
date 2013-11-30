@@ -607,8 +607,9 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 
 /** Return the pointer to the QSqlDatabase in use. */
 QSqlDatabase Database::database() const
-{ return QSqlDatabase::database(d_database->m_ConnectionName); }
-
+{
+    return QSqlDatabase::database(d_database->m_ConnectionName);
+}
 
 /**
    Create the connection to the database.
@@ -1217,8 +1218,9 @@ QStringList Database::tables() const
 }
 
 /**
-   Create a where clause on the table \e tableref using conditions mapped into a hash.
-  Conditions: key = fieldReference , value = whereClauseString.
+ * Create a where clause on the table \e tableref using conditions mapped into a hash.
+ * Conditions: key = fieldReference , value = whereClauseString.
+ * If the field identifiant is -1, the condition is appended as is to the where clause.
   \code
     QHash<int,QString> where;
     where.insert(myFieldId, QString("='%1').arg(myStringMatch);
@@ -1233,13 +1235,18 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
     QHashIterator<int, QString> i(conditions);
     while (i.hasNext()) {
         i.next();
-        int index = d_database->index(tableref, i.key());
-        if (!d_database->m_Fields.keys().contains(index))
-            continue;
-        where.append(QString(" (`%1`.`%2` %3) AND ")
-                     .arg(d_database->m_Tables[tableref])
-                     .arg(d_database->m_Fields.value(index))
-                     .arg(i.value()));
+        if (i.key() == -1) {
+            where.append(QString(" (%1) AND ")
+                         .arg(i.value()));
+        } else {
+            int index = d_database->index(tableref, i.key());
+            if (!d_database->m_Fields.keys().contains(index))
+                continue;
+            where.append(QString(" (`%1`.`%2` %3) AND ")
+                         .arg(d_database->m_Tables[tableref])
+                         .arg(d_database->m_Fields.value(index))
+                         .arg(i.value()));
+        }
     }
     where.chop(5);
     if (conditions.count() > 1)
@@ -1467,7 +1474,7 @@ QString Database::select(const int &tableref) const
 */
 QString Database::selectDistinct(const int &tableref, const QList<int> &fields, const QHash<int, QString> &conditions) const
 {
-    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 /**
@@ -1476,7 +1483,7 @@ QString Database::selectDistinct(const int &tableref, const QList<int> &fields, 
 */
 QString Database::selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
-    return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 /**
@@ -1485,7 +1492,7 @@ QString Database::selectDistinct(const int &tableref, const int &fieldref, const
 */
 QString Database::selectDistinct(const int & tableref, const int & fieldref) const
 {
-    return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
+    return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
 }
 
 QString Database::select(const FieldList &select, const JoinList &joins) const
@@ -2168,7 +2175,7 @@ bool Database::createTables() const
  * @param tableRef: table reference,
  * @param newFieldRef: "to create field" reference,
  * @param TypeOfField: Unused
- * @param nullOption: default null value. WARNING: nullOption must not include any 'DEFAULT', 'SET DEFAULT', 'DROP DEFAULT' sql commands.
+ * @param nullOption: default null value. \warning nullOption must not include any 'DEFAULT', 'SET DEFAULT', 'DROP DEFAULT' sql commands.
  * @return true if the sql command was correctly executed
  * \sa Utils::Database::addTable(), Utils::Database::addField()
  * \note Fields are only added at the end of the table.
@@ -2283,7 +2290,7 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 
 /**
  * Execute SQL commands on the QSqlDatabase \e DB. \n
- * WARNING: All SQL commands must be separated by a \e ; followed by a linefeed. \n
+ * \warning All SQL commands must be separated by a \e ; followed by a linefeed. \n
  * Creates a transaction on the database \e DB. \n
  * \warning The string is splitted with the ; and line feed. All lines starting with
  * \e -- are ignored. Remember to add a ; at the end of your comment lines.

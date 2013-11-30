@@ -881,56 +881,61 @@ Place: %2</source>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="55"/>
-        <source>Database information</source>
+        <source>Backup database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="56"/>
-        <source>Drugs database information</source>
+        <source>Database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="57"/>
-        <source>Protocols database information</source>
+        <source>Drugs database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="58"/>
-        <source>Interactions database information</source>
+        <source>Protocols database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="59"/>
-        <source>Past medical history database information</source>
+        <source>Interactions database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="60"/>
-        <source>Forms and episodes database information</source>
+        <source>Past medical history database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="61"/>
-        <source>Users database information</source>
+        <source>Forms and episodes database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="62"/>
-        <source>ICD database information</source>
+        <source>Users database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="63"/>
-        <source>Patient database information</source>
+        <source>ICD database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="64"/>
-        <source>Template database information</source>
+        <source>Patient database information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="65"/>
+        <source>Template database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="66"/>
         <source>Xml IO form database information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1973,7 +1978,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="114"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="171"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="172"/>
         <source>Past medical history</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2230,7 +2235,12 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="173"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="170"/>
+        <source>Revert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="174"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
