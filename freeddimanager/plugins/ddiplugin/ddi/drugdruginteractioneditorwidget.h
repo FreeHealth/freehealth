@@ -57,11 +57,9 @@ protected Q_SLOTS:
     void save();
     void removeCurrent();
     void onNextActionTriggered(QAction*);
-    void translateCurrent();
-    void translateAll();
     void splitCurrent();
-    void translationDone(const QString &trans);
     void onCheckInteractionErrorsRequested();
+    void updateDatabaseStats();
 
 private:
     void setEditorsEnabled(bool state);

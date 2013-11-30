@@ -325,8 +325,15 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
 {
     if (!index.isValid())
         return false;
-    int sql = d->modelColumnToSqlColumn(index.column());
 
+    // Can not setData for
+    switch (index.column()) {
+    case DrugDrugInteractionTableModel::FirstInteractorLabel:
+    case DrugDrugInteractionTableModel::SecondInteractorLabel:
+        return false;
+    }
+
+    int sql = d->modelColumnToSqlColumn(index.column());
     if (role == Qt::EditRole) {
         bool ok = false;
         QModelIndex sqlIndex = d->_sql->index(index.row(), sql);

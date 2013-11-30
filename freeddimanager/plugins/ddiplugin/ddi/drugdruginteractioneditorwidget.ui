@@ -32,7 +32,14 @@
         </layout>
        </item>
        <item>
-        <widget class="Utils::QButtonLineEdit" name="searchLine"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="Utils::QButtonLineEdit" name="searchLine"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="dbStats"/>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QTableView" name="tableView">
@@ -70,7 +77,16 @@
            <string>Risk, Management</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>5</number>
+           </property>
+           <property name="topMargin">
+            <number>5</number>
+           </property>
+           <property name="rightMargin">
+            <number>5</number>
+           </property>
+           <property name="bottomMargin">
             <number>5</number>
            </property>
            <property name="spacing">
@@ -85,7 +101,16 @@
               <string>Risk</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
                <number>5</number>
               </property>
               <property name="spacing">
@@ -155,7 +180,16 @@
               <string>Management</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
                <number>5</number>
               </property>
               <property name="spacing">
@@ -457,7 +491,16 @@
           <string>General information</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <property name="spacing">
