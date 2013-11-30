@@ -357,52 +357,62 @@
 <context>
     <name>DDI::DrugDrugInteractionTableModel</name>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="634"/>
-        <source>Bibliography:</source>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="585"/>
+        <source>Risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="643"/>
-        <source>No risk defined</source>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="587"/>
+        <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="645"/>
+        <source>Bibliography:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="654"/>
+        <source>No risk defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="656"/>
         <source>Not reviewed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="647"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="658"/>
         <source>Is multi-level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="649"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="660"/>
         <source>Translation missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="651"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="662"/>
         <source>No biliographic references</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="653"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="664"/>
         <source>First interactor uid does not exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="655"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="666"/>
         <source>Second interactor uid does not exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="660"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="671"/>
         <source>Interaction looks sane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="663"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="674"/>
         <source>Interaction errors:</source>
         <translation type="unfinished"></translation>
     </message>

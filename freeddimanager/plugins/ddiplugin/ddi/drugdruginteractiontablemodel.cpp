@@ -577,12 +577,14 @@ QString DrugDrugInteractionTableModel::humanReadableDrugDrugInteractionOverView(
     QString tmp;
     tmp += QString("<b>%1 / %2</b><br />"
                    "<b>%3</b><br />"
-                   "<u>Risk:</u> %4<br />"
-                   "<u>Management:</u> %5<br />")
+                   "<u>%4:</u> %5<br />"
+                   "<u>%6:</u> %7<br />")
             .arg(data(index(row, FirstInteractorLabel)).toString())
             .arg(data(index(row, SecondInteractorLabel)).toString())
             .arg(data(index(row, LevelName)).toString())
+            .arg(tr("Risk"))
             .arg(data(index(row, RiskFr)).toString())
+            .arg(tr("Management"))
             .arg(data(index(row, ManagementFr)).toString());
 
     // dose related ?

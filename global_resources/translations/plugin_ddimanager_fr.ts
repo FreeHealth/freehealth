@@ -6,7 +6,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/atc/atccollectioneditorwidget.cpp" line="303"/>
         <source>Unable to submit modification to the model</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;envoyer les informations au modèle</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/atc/atccollectioneditorwidget.cpp" line="304"/>
@@ -357,52 +357,62 @@
 <context>
     <name>DDI::DrugDrugInteractionTableModel</name>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="634"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="585"/>
+        <source>Risk</source>
+        <translation>Risque</translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="587"/>
+        <source>Management</source>
+        <translation>Gestion</translation>
+    </message>
+    <message>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="645"/>
         <source>Bibliography:</source>
         <translation>Bibligraphie :</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="643"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="654"/>
         <source>No risk defined</source>
         <translation>Pas de risque défini</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="645"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="656"/>
         <source>Not reviewed</source>
         <translation>Pas revu</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="647"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="658"/>
         <source>Is multi-level</source>
         <translation>Est multi-niveau</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="649"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="660"/>
         <source>Translation missing</source>
         <translation>Traduction manquante</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="651"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="662"/>
         <source>No biliographic references</source>
         <translation>Pas de références bibliographiques</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="653"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="664"/>
         <source>First interactor uid does not exists</source>
         <translation>L&apos;uid du premier interacteur n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="655"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="666"/>
         <source>Second interactor uid does not exists</source>
         <translation>L&apos;uid du second interacteur n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="660"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="671"/>
         <source>Interaction looks sane</source>
         <translation>L&apos;interaction semble correcte</translation>
     </message>
     <message>
-        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="663"/>
+        <location filename="../../freeddimanager/plugins/ddiplugin/ddi/drugdruginteractiontablemodel.cpp" line="674"/>
         <source>Interaction errors:</source>
         <translation>Erreurs de l&apos;interaction :</translation>
     </message>
@@ -783,7 +793,7 @@
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/interactors/interactoreditorwidget.ui" line="43"/>
         <source>Reformat old source</source>
-        <translation type="unfinished"></translation>
+        <translation>Re-formatter les ancienes sources</translation>
     </message>
     <message>
         <location filename="../../freeddimanager/plugins/ddiplugin/interactors/interactoreditorwidget.ui" line="80"/>
