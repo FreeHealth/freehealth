@@ -36,12 +36,14 @@
 #include "ui_servermanagerwidget.h"
 
 #include <ddiplugin/interactors/druginteractortablemodel.h>
+#include <ddiplugin/ddi/drugdruginteractiontablemodel.h>
 #include <ddiplugin/ddicore.h>
 #include <ddiplugin/database/ddidatabase.h>
 
 #include <translationutils/constants.h>
 
 #include <QDateTime>
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -59,6 +61,10 @@ class ServerManagerWidgetPrivate
 public:
     ServerManagerWidgetPrivate(ServerManagerWidget *parent) :
         ui(new Ui::ServerManagerWidget),
+        interactorNewModel(0),
+        interactorUpModel(0),
+        ddiNewModel(0),
+        ddiUpModel(0),
         q(parent)
     {
         Q_UNUSED(q);
@@ -80,8 +86,48 @@ public:
         return lastUpdate;
     }
 
+    QString headerCssStyle()
+    {
+        return QString("style='font-weight: 600; "
+                       "font-size: large; "
+                       "text-decoration: underline; '"
+                       "font-variant: small-caps");
+    }
+    // Create the proposal human HTML content
+    QString htmlProposal()
+    {
+        QString html;
+        QString tmp;
+        for(int i=0; i < ddiNewModel->rowCount(); ++i) {
+            tmp += ddiNewModel->humanReadableDrugDrugInteractionOverView(i);
+            tmp += "<br>";
+        }
+        if (!tmp.isEmpty()) {
+            html += QString("<p><h1 %1>%2</h1><br>%3</p>")
+                    .arg(headerCssStyle())
+                    .arg("New DDI")
+                    .arg(tmp);
+        }
+
+        tmp.clear();
+        for(int i=0; i < ddiUpModel->rowCount(); ++i) {
+            tmp += ddiUpModel->humanReadableDrugDrugInteractionOverView(i);
+            tmp += "<br>";
+        }
+        if (!tmp.isEmpty()) {
+            html += QString("<p><h1 %1>%2</h1><br>%3</p>")
+                    .arg(headerCssStyle())
+                    .arg("Updated DDI")
+                    .arg(tmp);
+        }
+
+        return html;
+    }
+
 public:
     Ui::ServerManagerWidget *ui;
+    DrugInteractorFilteredTableModel *interactorNewModel, *interactorUpModel;
+    DrugDrugInteractionFilteredTableModel *ddiNewModel, *ddiUpModel;
 
 private:
     ServerManagerWidget *q;
@@ -96,6 +142,10 @@ ServerManagerWidget::ServerManagerWidget(QWidget *parent) :
     d(new ServerManagerWidgetPrivate(this))
 {
     d->ui->setupUi(this);
+
+    QPushButton *send = d->ui->buttonBox->addButton(tr("Send to the FreeMedForms server"), QDialogButtonBox::ActionRole);
+    QPushButton *print = d->ui->buttonBox->addButton(tr("Print your proposals"), QDialogButtonBox::ActionRole);
+    QPushButton *help = d->ui->buttonBox->addButton(tr("Help"), QDialogButtonBox::HelpRole);
 }
 
 /*! Destructor of the DDI::Internal::ServerManagerWidget class */
@@ -109,10 +159,27 @@ ServerManagerWidget::~ServerManagerWidget()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool ServerManagerWidget::initialize()
 {
-    DrugInteractorFilteredTableModel *model = new DrugInteractorFilteredTableModel(this);
-    model->initialize();
-    model->filterLastUpdated(d->lastServerUpdateDateTime().date());
-    d->ui->interactorUpdateView->setModel(model);
+    d->interactorNewModel = new DrugInteractorFilteredTableModel(this);
+    d->interactorNewModel->initialize();
+    d->interactorNewModel->filterNewItems(d->lastServerUpdateDateTime().date());
+    d->ui->interactorNew->setModel(d->interactorNewModel);
+
+    d->interactorUpModel = new DrugInteractorFilteredTableModel(this);
+    d->interactorUpModel->initialize();
+    d->interactorUpModel->filterLastUpdated(d->lastServerUpdateDateTime().date());
+    d->ui->interactorUpdates->setModel(d->interactorUpModel);
+
+    d->ddiNewModel = new DrugDrugInteractionFilteredTableModel(this);
+    d->ddiNewModel->initialize();
+    d->ddiNewModel->filterNewItems(d->lastServerUpdateDateTime().date());
+    d->ui->ddiNew->setModel(d->ddiNewModel);
+
+    d->ddiUpModel = new DrugDrugInteractionFilteredTableModel(this);
+    d->ddiUpModel->initialize();
+    d->ddiUpModel->filterLastUpdated(d->lastServerUpdateDateTime().date());
+    d->ui->ddiUpdates->setModel(d->ddiUpModel);
+
+    d->ui->proposals->setHtml(d->htmlProposal());
     return true;
 }
 
