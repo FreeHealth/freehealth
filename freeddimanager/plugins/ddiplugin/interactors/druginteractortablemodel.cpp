@@ -83,7 +83,8 @@ DrugInteractorTableModel::DrugInteractorTableModel(QObject *parent) :
     d->_sql = new QSqlTableModel(this, ddiBase().database());
     d->_sql->setTable(ddiBase().table(Constants::Table_INTERACTORS));
     d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
+    // d->_sql->setSort(Constants::INTERACTOR_UID, Qt::AscendingOrder);
+
     connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
     connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
     connect(d->_sql, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
@@ -284,6 +285,9 @@ bool DrugInteractorTableModel::setData(const QModelIndex &index, const QVariant 
         case IsAutoFound:
         case DoNotWarnDuplicated:
             ok = d->_sql->setData(sqlIndex, value.toBool()?1:0, role);
+            break;
+        case Uuid:
+            ok = d->_sql->setData(sqlIndex, Constants::correctedUid(value.toString()), role);
             break;
         default: ok = d->_sql->setData(sqlIndex, value, role); break;
         }
