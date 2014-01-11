@@ -75,6 +75,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void onChangeOrSetPasswordClicked();
+    void onLoginChanged(const QString &login);
 
 private:
     Internal::PasswordWidgetPrivate *d;

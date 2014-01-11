@@ -107,6 +107,7 @@ PasswordWidget::PasswordWidget(QWidget *parent) :
     setWidget(d->createWidget());
     setState(Expanded);
     connect(d->ui->changePassword, SIGNAL(clicked()), this, SLOT(onChangeOrSetPasswordClicked()));
+    connect(d->ui->login, SIGNAL(textChanged(QString)), this, SLOT(onLoginChanged(QString)));
 }
 
 /*! Destructor of the Identity::Internal::PasswordWidget class */
@@ -134,6 +135,7 @@ void PasswordWidget::setReadOnly(bool readonly)
     d->ui->changePassword->setEnabled(!readonly);
 }
 
+// used in mappers only
 QLineEdit *PasswordWidget::loginEditor() const
 {
     return d->ui->login;
@@ -202,5 +204,37 @@ void PasswordWidget::onChangeOrSetPasswordClicked()
         d->_cachedUncryptedPassword = dlg.uncryptedPassword();
         Q_EMIT cryptedPasswordChanged(dlg.cryptedPassword());
         Q_EMIT uncryptedPasswordChanged(dlg.uncryptedPassword());
+    }
+}
+
+/**
+ * When login content is updated, check its validity and
+ * warn user of the validity of the login
+ */
+void PasswordWidget::onLoginChanged(const QString &login)
+{
+    QStringList msg;
+
+    // Avoid some chars
+    QStringList avoid;
+    avoid.append("'");
+    avoid.append(",");
+    avoid.append("/");
+    avoid.append("\\");
+    foreach(const QString &a, avoid) {
+        if (login.contains(a))
+            msg << tr("Login must not contain the following char: %1").arg(a);
+    }
+
+    // Length
+    if (login.size() < 6)
+        msg << tr("Login is too short (6 chars minimum)");
+
+    if (msg.isEmpty()) {
+        d->ui->info->setText(tr("Login is valid"));
+        d->ui->info->setStyleSheet("color: darkgreen");
+    } else {
+        d->ui->info->setText(tr("Login is invalid") + "\n" + msg.join("\n"));
+        d->ui->info->setStyleSheet("color: darkred");
     }
 }

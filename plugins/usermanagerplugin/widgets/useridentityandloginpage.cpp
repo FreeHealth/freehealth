@@ -139,7 +139,7 @@ bool UserIdentityAndLoginPage::checkLogin() const
     // user login must be unique in the FreeMedForms database
     // user login must be unique on the server
     const QString &login = _identity->currentClearLogin();
-    if (login.length() < 6)
+    if (login.length() < 6) // FIXME : avoid magic number \sa void PasswordWidget::onLoginChanged(const QString &login)
         return false;
 
     if (userBase()->isLoginAlreadyExists(_identity->currentClearLogin())) {

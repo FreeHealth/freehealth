@@ -196,6 +196,10 @@ private:
 
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
+// Returns the path to the default papers (headers, footers, watermarks)
+// according to the \e profession, \e paper (header, footer, watermark),
+// \e paperType ("prescription" "administrative" "generic")
+// All files are located in the application resources path
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
     QString lang = QLocale().name().left(2).toLower();
