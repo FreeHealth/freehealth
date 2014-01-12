@@ -17,6 +17,7 @@ The FreeMedForms project
     * Feedback Plugin is correctly translated
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
+    * Added a login checker in the user creator dialog
   * FreeDiams
     * Correctly select user language at startup
     * Correctly define the default print-to-PDF-cache path in the user documents path
