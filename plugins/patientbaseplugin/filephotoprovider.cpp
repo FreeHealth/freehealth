@@ -97,7 +97,7 @@ void FilePhotoProvider::startReceivingPhoto()
 {
     QString fileName = QFileDialog::getOpenFileName(QApplication::activeWindow(), tr("Choose a photo"),
                                                     QDir::homePath(),
-                                                    "Image (*.png *.jpg *.gif *.tiff)");
+                                                    "Image (*.png *.jpg *.jpeg *.gif *.tiff)");
     if (!fileName.isEmpty()) {
         QPixmap photo;
         photo.load(fileName);
