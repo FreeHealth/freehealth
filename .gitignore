@@ -16,6 +16,7 @@ global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml
 *.pro.user
 *.pro.user.*
 .qmake.cache
+.qmake.stash
 
 # build.sh files
 build.conf
