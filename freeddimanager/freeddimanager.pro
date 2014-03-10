@@ -8,3 +8,5 @@ SUBDIRS = appnamedefine
 !CONFIG(dontbuildlibs):SUBDIRS+=libs
 
 SUBDIRS += plugins freeddimanager-src
+
+OTHER_FILES += ../todo-freeddimanager.txt

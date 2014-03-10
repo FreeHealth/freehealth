@@ -68,7 +68,6 @@ public:
         _sql(0),
         q(parent)
     {
-        Q_UNUSED(q);
         // Be aware that DrugDrugInteractionEditorWidget ui->comboLevel must be sync with this part !!!
         _levelsToComboIndex.insert("C", 0);
         _levelsToComboIndex.insert("D", 1);
@@ -81,6 +80,19 @@ public:
 
     ~DrugDrugInteractionTableModelPrivate()
     {
+    }
+
+    void createSqlModel()
+    {
+        _sql = new QSqlTableModel(q, ddiBase().database());
+        _sql->setTable(ddiBase().table(Constants::Table_DDI));
+        _sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+
+        QObject::connect(_sql, SIGNAL(primeInsert(int,QSqlRecord&)), q, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
+        QObject::connect(_sql, SIGNAL(layoutAboutToBeChanged()), q, SIGNAL(layoutAboutToBeChanged()));
+        QObject::connect(_sql, SIGNAL(layoutChanged()), q, SIGNAL(layoutChanged()));
+        QObject::connect(_sql, SIGNAL(modelAboutToBeReset()), q, SIGNAL(modelAboutToBeReset()));
+        QObject::connect(_sql, SIGNAL(modelReset()), q, SIGNAL(modelReset()));
     }
 
     int modelColumnToSqlColumn(const int modelColumn)
@@ -200,16 +212,7 @@ DrugDrugInteractionTableModel::DrugDrugInteractionTableModel(QObject *parent) :
     d(new Internal::DrugDrugInteractionTableModelPrivate(this))
 {
     setObjectName("DrugDrugInteractionTableModel");
-    d->_sql = new QSqlTableModel(this, ddiBase().database());
-    d->_sql->setTable(ddiBase().table(Constants::Table_DDI));
-    d->_sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    // d->_sql->setSort(FirstInteractorUid, Qt::AscendingOrder);
-    // Utils::linkSignalsFromFirstModelToSecondModel(d->_sql, this, true);
-    connect(d->_sql, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
-    connect(d->_sql, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
-    connect(d->_sql, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
-    connect(d->_sql, SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
-    connect(d->_sql, SIGNAL(modelReset()), this, SIGNAL(modelReset()));
+    d->createSqlModel();
 }
 
 DrugDrugInteractionTableModel::~DrugDrugInteractionTableModel()
@@ -230,6 +233,14 @@ bool DrugDrugInteractionTableModel::initialize()
         d->_sql->fetchMore(index(d->_sql->rowCount(), 0));
 
     return true;
+}
+
+bool DrugDrugInteractionTableModel::onDdiDatabaseChanged()
+{
+    delete d->_sql;
+    d->_sql = 0;
+    d->createSqlModel();
+    return initialize();
 }
 
 /**
@@ -384,6 +395,8 @@ bool DrugDrugInteractionTableModel::setData(const QModelIndex &index, const QVar
 
         return ok;
     }
+
+    // TODO: manage CheckStateRole
     return false;
 }
 
@@ -745,6 +758,11 @@ DrugDrugInteractionFilteredTableModel::DrugDrugInteractionFilteredTableModel(QOb
 
 DrugDrugInteractionFilteredTableModel::~DrugDrugInteractionFilteredTableModel()
 {}
+
+bool DrugDrugInteractionFilteredTableModel::initialize()
+{
+    return DrugDrugInteractionTableModel::initialize();
+}
 
 void DrugDrugInteractionFilteredTableModel::filterLastUpdated(const QDate &since)
 {

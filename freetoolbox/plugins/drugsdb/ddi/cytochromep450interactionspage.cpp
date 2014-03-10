@@ -591,7 +591,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
     // Clean database first
     QString req = "DELETE FROM ATC WHERE CODE LIKE 'ZP450%';";
     Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
-    req = "DELETE FROM IAM_TREE WHERE ID_CLASS > 200157;";
+    req = "DELETE FROM ATC_CLASS_TREE WHERE ID_CLASS > 200157;";
     Core::Tools::executeSqlQuery(req, Core::Constants::IAM_DATABASE_NAME, __FILE__, __LINE__);
 
     int i = 0;
@@ -630,7 +630,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     substratesLinkID.insertMulti(substrateId, toAtc.value(0).toInt());
                 }
@@ -679,7 +679,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     inducersLinkID.insertMulti(inducerId, toAtc.value(0).toInt());
                 }
@@ -732,7 +732,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     strongInhibitorsLinkID.insertMulti(inhitorId, toAtc.value(0).toInt());
                 }
@@ -784,7 +784,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     moderateInhibitorsLinkID.insertMulti(inhitorId, toAtc.value(0).toInt());
                 }
@@ -837,7 +837,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     weakInhibitorsLinkID.insertMulti(inhitorId, toAtc.value(0).toInt());
                 }
@@ -882,7 +882,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
                 bool found = false;
                 while (toAtc.next()) {
                     found = true;
-                    treeReqs << QString("INSERT INTO `IAM_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
+                    treeReqs << QString("INSERT INTO `ATC_CLASS_TREE` (`ID_CLASS`, `ID_ATC`) VALUES (%1,%2);")
                           .arg(id).arg(toAtc.value(0).toInt());
                     otherInhibitorsLinkID.insertMulti(inhibitorId, toAtc.value(0).toInt());
                 }
@@ -992,7 +992,7 @@ void CytochromeP450InteractionsWidget::populateDatabase()
         ++cytId;
     }
 
-    // Send IAM_TREE
+    // Send ATC_CLASS_TREE
     QSqlQuery tree(iam);
     foreach(const QString &r, treeReqs) {
         if (!tree.exec(r))

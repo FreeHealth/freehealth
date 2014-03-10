@@ -67,10 +67,14 @@ private Q_SLOTS:
     void toggleClassMolsFilter(QAction*);
     void updateCounts();
     void nextUnreviewedOrUnlinked();
+    void onCreatePdfOutputRequested();
 
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
+
+private Q_SLOTS:
+    void onCoreDatabaseChanged();
 
 #ifdef WITH_TESTS
 public Q_SLOTS:

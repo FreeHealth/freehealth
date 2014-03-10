@@ -665,52 +665,6 @@ int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QStri
     return bib_id;
 }
 
-/**
- * Save the ATC Id <-> Molecule link to the drugs database
- * @param database: output drugs database
- * @param mol_atc: Molecule Id to ATC Id
- * @param sid: recorded SourceId of the drugs database collection
-*/
-bool addComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const QMultiHash<int, int> &mol_atc, const int sid)
-{
-    QSqlDatabase db = database->database();
-    if (!db.isOpen()) {
-        if (!db.open()) {
-            return false;
-        }
-    }
-
-    // Clear existing links
-    QHash<int, QString> w;
-    w.insert(DrugsDB::Constants::LK_ATC_SID, QString("='%1'").arg(sid));
-    executeSqlQuery(database->prepareDeleteQuery(Constants::Table_LK_MOL_ATC, w), database->connectionName(), __FILE__, __LINE__);
-
-    // Save to links to drugs database
-    db.transaction();
-    QSqlQuery query(db);
-    foreach(int mol, mol_atc.uniqueKeys()) {
-        QList<int> atcCodesSaved;
-        foreach(int atc, mol_atc.values(mol)) {
-            if (atcCodesSaved.contains(atc))
-                continue;
-            atcCodesSaved.append(atc);
-            query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_LK_MOL_ATC));
-            query.bindValue(DrugsDB::Constants::LK_MID, mol);
-            query.bindValue(DrugsDB::Constants::LK_ATC_ID, atc);
-            query.bindValue(DrugsDB::Constants::LK_ATC_SID, sid);
-            if (!query.exec()) {
-                LOG_QUERY_ERROR_FOR("Tools", query);
-                query.finish();
-                db.rollback();
-                return false;
-            }
-            query.finish();
-        }
-    }
-    db.commit();
-    return true;
-}
-
 /** Return the ATC ids associated with the \e label, searching in the drugs database \e database */
 QVector<int> getAtcIdsFromLabel(DrugsDB::Internal::DrugBaseEssentials *database, const QString &label)
 {

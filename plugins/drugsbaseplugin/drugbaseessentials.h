@@ -33,8 +33,8 @@
 /**
  * \file drugsbaseessentials.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 05 Feb 2012
+ * \version 0.10.0
+ * \date 12 Jan 2014
 */
 namespace DrugsDB {
 namespace Internal {
@@ -52,7 +52,7 @@ public:
     bool checkDatabaseVersion() const;
 
     int getSourceId(const QString &drugsDbUid);
-//    QStringList getAllDistinctAvailableMoleculeName(const QString &drugDbUid);
+    bool isAtcAvailable() const;
 
 private:
     bool createDatabase(const QString &connectionName , const QString &prefixedDbName,

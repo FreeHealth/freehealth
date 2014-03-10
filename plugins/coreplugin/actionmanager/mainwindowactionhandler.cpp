@@ -312,10 +312,10 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
         cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
-#ifdef Q_OS_MAC
-        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
+//#ifdef Q_OS_MAC
+//        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
         cmd->action()->setMenuRole(QAction::PreferencesRole);
-#endif
+//#endif
         menu->addAction(cmd, group);
     }
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
@@ -327,14 +327,14 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
         menu->addAction(cmd, group);
     }
-    if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
-        a = aGeneralMedinTux = new QAction(this);
-        a->setObjectName("aGeneralMedinTux");
-        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
-        cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
-        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
-        menu->addAction(cmd, group);
-    }
+//    if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
+//        a = aGeneralMedinTux = new QAction(this);
+//        a->setObjectName("aGeneralMedinTux");
+//        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
+//        cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
+//        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
+//        menu->addAction(cmd, group);
+//    }
 
     group = Id(Constants::G_GENERAL_HELP);
 
@@ -614,6 +614,7 @@ void MainWindowActionHandler::createConfigurationMenu()
     confmenu->appendGroup(Id(Constants::G_APP_CONFIGURATION));
     confmenu->appendGroup(Id(Constants::G_TOOLBARS));
     confmenu->appendGroup(Id(Constants::G_LANGUAGES));
+    confmenu->appendGroup(Id(Constants::G_DATAPACK));
     confmenu->appendGroup(Id(Constants::G_PREFERENCES));
 }
 
@@ -945,26 +946,29 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
         menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
+
+    if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
+        a = aMedinTux = new QAction(this);
+        a->setObjectName("aMedinTux");
+        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
+        cmd = actionManager()->registerAction(a, Id(Constants::A_CONFIGURE_MEDINTUX), ctx);
+        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
+        menu->addAction(cmd, Id(Constants::G_TOOLBARS));
+    }
+
     if (actions & Core::MainWindowActions::A_AppPreferences) {
         a = aAppPrefs = new QAction(this);
         a->setObjectName("aAppPrefs");
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
         cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
-#ifdef Q_OS_MAC
-        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
+//#ifdef Q_OS_MAC
+//        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
         cmd->action()->setMenuRole(QAction::PreferencesRole);
-#endif
-        menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
-    }
-    if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
-        a = aMedinTux = new QAction(this);
-        a->setObjectName("aMedinTux");
-        a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
-        cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
-        cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
+//#endif
         menu->addAction(cmd, Id(Constants::G_PREFERENCES));
     }
+
     if (actions & Core::MainWindowActions::A_LanguageChange) {
         aLanguageGroup = new QActionGroup(this);
         // create language menu

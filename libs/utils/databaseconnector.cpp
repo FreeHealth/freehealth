@@ -66,6 +66,7 @@ public:
     DatabaseConnectorPrivate() :
         m_Port(-1),
         m_DriverIsValid(false),
+        m_UseExactFile(false),
         m_Driver(Database::SQLite),
         m_AccessMode(DatabaseConnector::ReadOnly)
     {}
@@ -106,7 +107,7 @@ public:
 
     QString m_ClearLog, m_ClearPass, m_HostName, m_AbsPathToReadOnlySQLiteDb, m_AbsPathToReadWriteSQLiteDb;
     int m_Port;
-    bool m_DriverIsValid;
+    bool m_DriverIsValid, m_UseExactFile;
     Database::AvailableDrivers m_Driver;
     DatabaseConnector::AccessMode m_AccessMode;
 };
@@ -189,6 +190,16 @@ void DatabaseConnector::setAbsPathToReadWriteSqliteDatabase(const QString &absPa
 void DatabaseConnector::setAccessMode(const AccessMode mode)
 {
     d->m_AccessMode = mode;
+}
+
+/**
+ * When using DatabaseConnector with a SQLite db, you can force the usage
+ * of the exact file defined by absPathToReadWriteSqliteDatabase() and
+ * hostName (which is understood as fileName).
+ */
+void DatabaseConnector::setSqliteUsesExactFile(bool exactFile)
+{
+    d->m_UseExactFile = exactFile;
 }
 
 /** Clear the internal data. Resulting connector is invalid */
@@ -300,6 +311,11 @@ bool DatabaseConnector::isDriverValid() const
     return d->m_DriverIsValid;
 }
 
+bool DatabaseConnector::useExactFile() const
+{
+    return d->m_UseExactFile;
+}
+
 /**
  * Serialize the object to a string suitable for the settings storing. \n
  * NOTE: We have a compilation option: \e WITH_LOGINANDPASSWORD_CACHING.
@@ -353,6 +369,7 @@ DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)
     d->m_ClearPass = in.d->m_ClearPass;
     d->m_Driver = in.d->m_Driver;
     d->m_DriverIsValid = in.d->m_DriverIsValid;
+    d->m_UseExactFile = in.d->m_UseExactFile;
     d->m_HostName = in.d->m_HostName;
     d->m_Port = in.d->m_Port;
     d->m_AbsPathToReadOnlySQLiteDb = in.d->m_AbsPathToReadOnlySQLiteDb;
@@ -369,6 +386,7 @@ bool DatabaseConnector::operator==(const DatabaseConnector &other) const
         d->m_ClearPass==other.d->m_ClearPass &&
         d->m_Driver==other.d->m_Driver &&
         d->m_DriverIsValid==other.d->m_DriverIsValid &&
+        d->m_UseExactFile == other.d->m_UseExactFile &&
         d->m_HostName==other.d->m_HostName &&
         d->m_AbsPathToReadOnlySQLiteDb==other.d->m_AbsPathToReadOnlySQLiteDb &&
         d->m_AbsPathToReadWriteSQLiteDb==other.d->m_AbsPathToReadWriteSQLiteDb &&
@@ -382,27 +400,40 @@ bool DatabaseConnector::operator==(const DatabaseConnector &other) const
 QString DatabaseConnector::toString() const
 {
     QString dr;
-    if (driver()==Database::SQLite) {
-        dr = "SQLite";
-    } else if (driver()==Database::MySQL) {
-        dr = "MySQL";
+    switch (driver()) {
+    case Database::SQLite: dr="SQLite"; break;
+    case Database::MySQL: dr="MySQL"; break;
+    case Database::PostSQL: dr="PostSQL"; break;
+    default: dr="NoDriver";
     }
-    if (isDriverValid()) {
-        dr += "(Ok)";
-    } else {
-        dr += "(**Invalid**)";
-    }
-    QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5")
-                .arg(clearLog()).arg(clearPass().length()).arg(host()).arg(port()).arg(dr);
-    if (accessMode()==Utils::DatabaseConnector::ReadWrite) {
+    dr.append(QString("%1").arg(isDriverValid()?"(Ok)":"(**Invalid**)"));
+
+    QString t = QString("DatabaseConnector("
+                        "Log:%1; "
+                        "Pass:%2; "
+                        "%6:%3; "
+                        "Port:%4; "
+                        "Driver:%5")
+            .arg(clearLog())
+            .arg(clearPass().length())
+            .arg(host())
+            .arg(port())
+            .arg(dr)
+            .arg((driver()==Utils::Database::SQLite)?"FileName":"HostName");
+
+    if (accessMode() == Utils::DatabaseConnector::ReadWrite)
         t += "; RW";
-    } else {
+    else
         t += "; RO";
-    }
+    if (useExactFile())
+        t += "; ExactFile";
+
     if (driver()==Database::SQLite) {
-        t += QString("\n                   RO:%1"
-                     "\n                   RW:%2")
-                .arg(absPathToSqliteReadOnlyDatabase())
+        if (!absPathToSqliteReadOnlyDatabase().isEmpty())
+            t += QString("\n                   RO:%1")
+                    .arg(absPathToSqliteReadOnlyDatabase());
+        if (!absPathToSqliteReadWriteDatabase().isEmpty())
+        t += QString("\n                   RW:%1")
                 .arg(absPathToSqliteReadWriteDatabase());
     }
     t += ")";

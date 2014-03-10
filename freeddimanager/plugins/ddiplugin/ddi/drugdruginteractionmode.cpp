@@ -64,7 +64,7 @@ DDIMode::DDIMode(QObject *parent) :
     _widget(0)
 {
     setDisplayName("DDI");
-    setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
+    setIcon(theme()->icon(Constants::ICON_DDIMODE, Core::ITheme::BigIcon));
     setPriority(10);
     setId(Constants::MODE_DDI);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);

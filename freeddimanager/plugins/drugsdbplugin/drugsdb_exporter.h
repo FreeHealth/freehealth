@@ -18,52 +18,15 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-/***************************************************************************
- *  Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                   *
- *  Contributors:                                                          *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- ***************************************************************************/
-#ifndef FREEDRC_CONSTANTS_H
-#define FREEDRC_CONSTANTS_H
+#ifndef DDIMANAGER_DRUGSDBPLUGIN_EXPORTER_H
+#define DDIMANAGER_DRUGSDBPLUGIN_EXPORTER_H
 
-/**
- * \file drc_constants.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.9.2
- * \date 25 Sept 2013
-*/
+#include <qglobal.h>
 
-namespace Core {
-namespace Constants {
+#if defined(DRUGSDB_LIBRARY)
+#define DRUGSDB_EXPORT Q_DECL_EXPORT
+#else
+#define DRUGSDB_EXPORT Q_DECL_IMPORT
+#endif
 
-// Enum for the command line params that can be used with
-// Core::ICore::instance()->commandLine()
-// Anywhere in the code
-enum CommandLine {
-    CL_MedinTux = 0,
-    CL_Independant,
-    CL_Movements,
-    CL_PreferedReceipts,
-    CL_Test,
-    CL_ReceiptsCreator,
-    CL_EMR_Name,
-    CL_EMR_Uid,
-    CL_SelectionOnly,
-    CL_ExchangeOutFile,
-    CL_ExchangeOutFileFormat,
-    CL_ExchangeInFile,
-    CL_PatientName,
-    CL_PatientFirstname,
-    CL_PatientUid,
-    CL_PatientGender,
-    CL_DateOfBirth,
-    CL_BlockPatientDatas,
-    CL_DbHost,
-    CL_DbPort,
-    CL_MaxParam
-};
-
-}  // namespace Constants
-}  // namespace Core
-
-#endif // FREEDRC_CONSTANTS_H
+#endif  // DDIMANAGER_DRUGSDBPLUGIN_EXPORTER_H

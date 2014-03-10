@@ -13,13 +13,17 @@ HEADERS += coreplugin.h \
     appaboutpage.h \
     commandlineparser.h \
     patient.h \
-    drc_constants.h
+    fdm_constants.h \
+    pathpreferences.h
 
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
     appaboutpage.cpp \
     commandlineparser.cpp \
-    patient.cpp
+    patient.cpp \
+    pathpreferences.cpp
+
+FORMS += pathpreferences.ui
 
 # include translations
 TRANSLATION_NAME = freedrc_core

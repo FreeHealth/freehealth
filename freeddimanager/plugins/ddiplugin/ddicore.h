@@ -34,13 +34,14 @@
  * \file ddicore.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 11 Oct 2013
+ * \date 01 Jan 2014
 */
 
 namespace DDI {
 class AtcTableModel;
 class DrugInteractorTableModel;
 class DrugDrugInteractionTableModel;
+class ComponentAtcModel;
 namespace Internal {
 class DDIPlugin;
 class DDICorePrivate;
@@ -62,13 +63,18 @@ public:
 
     bool recreateDatabase();
     QString backupDatabaseTo(const QString &absPath);
+    bool changeLocalDatabaseTo(const QString &absPath = QString::null);
 
     AtcTableModel *atcTableModel() const;
     DrugInteractorTableModel *drugInteractorTableModel() const;
     DrugDrugInteractionTableModel *drugDrugInteractionTableModel() const;
+    ComponentAtcModel *componentAtcModel() const;
 
     // Internal usage
     Internal::DDIDatabase &database() const;
+
+Q_SIGNALS:
+    void databaseChanged();
 
 private:
     static DDICore *_instance;

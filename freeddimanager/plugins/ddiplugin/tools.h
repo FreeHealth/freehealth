@@ -74,7 +74,6 @@ DRUGSDB_EXPORT int addLabels(DrugsDB::Internal::DrugBaseEssentials *database, co
 DRUGSDB_EXPORT bool createAtc(DrugsDB::Internal::DrugBaseEssentials *database, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId = -1, const bool warnDuplicates = true);
 DRUGSDB_EXPORT bool addInteraction(DrugsDB::Internal::DrugBaseEssentials *database, const QStringList &atc1, const QStringList &atc2, const QString &type, const QMultiHash<QString, QVariant> &risk, const QMultiHash<QString, QVariant> &management);
 DRUGSDB_EXPORT int addBibliography(DrugsDB::Internal::DrugBaseEssentials *database, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain = QString::null, const QString &xml = QString::null);
-DRUGSDB_EXPORT bool addComponentAtcLinks(DrugsDB::Internal::DrugBaseEssentials *database, const QMultiHash<int, int> &mol_atc, const int sid);
 
 DRUGSDB_EXPORT QVector<int> getAtcIdsFromLabel(DrugsDB::Internal::DrugBaseEssentials *database, const QString &label);
 DRUGSDB_EXPORT QVector<int> getAtcIdsFromCode(DrugsDB::Internal::DrugBaseEssentials *database, const QString &code);

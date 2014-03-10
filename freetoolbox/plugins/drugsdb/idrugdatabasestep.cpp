@@ -47,6 +47,7 @@
 #include <datapackplugin/datapackquery.h>
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 #include <quazip/global.h>
 #include <utils/log.h>
 #include <utils/global.h>

@@ -36,11 +36,12 @@ QT_END_NAMESPACE
  * \file druginteractortablemodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 14 Oct 2013
+ * \date 01 Jan 2014
 */
 
 namespace DDI {
 class DrugInteractor;
+class DDICore;
 
 namespace Internal {
 class DrugInteractorTableModelPrivate;
@@ -50,6 +51,12 @@ class DrugInteractorTableModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class DDI::Internal::DrugInteractorTableModelPrivate;
+    friend class DDI::DDICore;
+
+protected:
+    DrugInteractorTableModel(QObject *parent = 0);
+    virtual bool initialize();
+    bool onDdiDatabaseChanged();
 
 public:
     enum DataRepresentation {
@@ -78,9 +85,7 @@ public:
         ColumnCount
     };
 
-    DrugInteractorTableModel(QObject *parent = 0);
     ~DrugInteractorTableModel();
-    virtual bool initialize();
 
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -105,6 +110,8 @@ public:
     QString interactorLabel(const QString &uid) const;
     bool interactorUidExists(const QString &uid) const;
 
+    void toPdfFile() const;
+
 public Q_SLOTS:
     virtual bool submit();
 
@@ -128,6 +135,7 @@ class DrugInteractorFilteredTableModel : public DrugInteractorTableModel
 public:
     explicit DrugInteractorFilteredTableModel(QObject *parent = 0);
     ~DrugInteractorFilteredTableModel();
+    bool initialize();
 
     void filterLastUpdated(const QDate &since);
     void filterNewItems(const QDate &since);

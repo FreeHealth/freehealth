@@ -141,7 +141,7 @@ public:
          QSqlDatabase DB = QSqlDatabase::database(Constants::DB_IAM_NAME);
          if (!DB.isOpen())
               DB.open();
-         QString req = m_DB->select(Table_IAM_TREE, QList<int>() << TREE_ID_CLASS << TREE_ID_ATC);
+         QString req = m_DB->select(Table_ATC_CLASS_TREE, QList<int>() << TREE_ID_CLASS << TREE_ID_ATC);
 
          {
              QSqlQuery query(req , DB);
@@ -398,7 +398,7 @@ InteractionsBase::InteractionsBase()
     di->m_DB->addTable(Table_INTERACTIONS, "INTERACTIONS");
     di->m_DB->addTable(Table_INTERACTION_KNOWLEDGE, "INTERACTION_KNOWLEDGE");
     di->m_DB->addTable(Table_ATC, "ATC");
-    di->m_DB->addTable(Table_IAM_TREE, "IAM_TREE");
+    di->m_DB->addTable(Table_ATC_CLASS_TREE, "ATC_CLASS_TREE");
     di->m_DB->addTable(Table_SOURCES, "SOURCES");
 
     di->m_DB->addField(Table_ATC, ATC_ID,    "ID");
@@ -421,9 +421,9 @@ InteractionsBase::InteractionsBase()
     di->m_DB->addField(Table_INTERACTION_KNOWLEDGE, IAK_REFERENCES_LINK,    "REFERENCES_LINK");
 
 
-    di->m_DB->addField(Table_IAM_TREE, TREE_ID_CLASS,    "ID_CLASS");
-    di->m_DB->addField(Table_IAM_TREE, TREE_ID_ATC,      "ID_ATC");
-    di->m_DB->addField(Table_IAM_TREE, TREE_SOURCE_LINK, "SOURCE_LINK");
+    di->m_DB->addField(Table_ATC_CLASS_TREE, TREE_ID_CLASS,    "ID_CLASS");
+    di->m_DB->addField(Table_ATC_CLASS_TREE, TREE_ID_ATC,      "ID_ATC");
+    di->m_DB->addField(Table_ATC_CLASS_TREE, TREE_SOURCE_LINK, "SOURCE_LINK");
 
     di->m_DB->addField(Table_SOURCES, SOURCES_ID, "ID");
     di->m_DB->addField(Table_SOURCES, SOURCES_SOURCE_LINK, "SOURCE_LINK");
@@ -776,12 +776,12 @@ QVector<MedicalUtils::EbmData *> InteractionsBase::getAllSourcesFromTree(const Q
     QString req = QString("%1, %2 WHERE "
                           "`%2`.`%3` IN (%5) AND `%2`.`%4` IN (%6) AND %7")
             .arg(di->m_DB->select(Table_SOURCES))
-            .arg(di->m_DB->table(Table_IAM_TREE))
-            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_CLASS))
-            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_ATC))
+            .arg(di->m_DB->table(Table_ATC_CLASS_TREE))
+            .arg(di->m_DB->fieldName(Table_ATC_CLASS_TREE, TREE_ID_CLASS))
+            .arg(di->m_DB->fieldName(Table_ATC_CLASS_TREE, TREE_ID_ATC))
             .arg(classIds.join(","))
             .arg(innIds.join(","))
-            .arg(di->m_DB->fieldEquality(Table_IAM_TREE, TREE_SOURCE_LINK,
+            .arg(di->m_DB->fieldEquality(Table_ATC_CLASS_TREE, TREE_SOURCE_LINK,
                                          Table_SOURCES, SOURCES_SOURCE_LINK))
             ;
 

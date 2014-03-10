@@ -27,6 +27,7 @@
 #ifndef DDIMANAGER_DDIPLUGIN_ROUTESMODEL_H
 #define DDIMANAGER_DDIPLUGIN_ROUTESMODEL_H
 
+#include <ddiplugin/ddi_exporter.h>
 #include <QAbstractTableModel>
 #include <QMultiHash>
 #include <QString>
@@ -48,7 +49,7 @@ struct Route {
 
 }  // namespace Internal
 
-class RoutesModel : public QAbstractTableModel
+class DDI_EXPORT RoutesModel : public QAbstractTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> checkedRouteIds READ checkedRouteIds WRITE setCheckedRouteIds)
@@ -80,7 +81,7 @@ public:
     void setCheckedRouteIds(const QList<int> &ids);
     void setCheckedRouteIds(const QList<QVariant> &ids);
 
-    QList<int> routeId(const QStringList &routeName) const;
+    QList<int> routesId(const QStringList &routeName) const;
 
 private:
     bool _initialized;

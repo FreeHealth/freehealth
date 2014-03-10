@@ -64,7 +64,7 @@ InteractorMode::InteractorMode(QObject *parent) :
     _widget(0)
 {
     setDisplayName("Interactors");
-    setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
+    setIcon(theme()->icon(Constants::ICON_INTERACTORSMODE, Core::ITheme::BigIcon));
     setPriority(100);
     setId(Constants::MODE_INTERACTOR);
 //    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);

@@ -32,6 +32,7 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include "ui_searchatcindatabasedialog.h"
 
@@ -70,6 +71,10 @@ SearchAtcInDatabaseDialog::SearchAtcInDatabaseDialog(QWidget *parent, const QStr
     ui->tableView->setModel(d->m_Model);
     ui->term->setText(term);
     ui->lang->setCurrentIndex(settings()->value(::S_LANGUAGE).toInt());
+
+    setWindowTitle(tr("Search ATC code"));
+    // setWindowIcon(theme()->icon());
+    Utils::resizeAndCenter(this);
 }
 
 SearchAtcInDatabaseDialog::~SearchAtcInDatabaseDialog()

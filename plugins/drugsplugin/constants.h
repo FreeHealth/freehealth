@@ -119,6 +119,7 @@ namespace Constants {
     const char * const  S_SEARCHMETHOD           = "DrugsWidget/searchMethod";                 /*!< \brief Key for settings. */
     const char * const  S_HISTORYSIZE            = "DrugsWidget/historySize";                  /*!< \brief Key for settings. */
     const char * const  S_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
+    const char * const  S_TOOLBARICONSIZE        = "DrugsWidget/toolbarIconSize";
 
     const char * const  S_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
     const char * const  S_PROTOCOLCREATOR_DEFAULTBUTTON = "DrugsWidget/protocolCreator/sefautButton";            /*!< \brief Key for settings. */

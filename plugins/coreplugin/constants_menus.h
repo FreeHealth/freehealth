@@ -164,6 +164,7 @@ const char * const G_APP_CONFIGURATION   = "grConfig.AppConfig";     /*!< \brief
 const char * const G_TOOLBARS            = "grConfig.Toolbars";      /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_LANGUAGES           = "grConfig.Languages";     /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_PREFERENCES         = "grConfig.Preferences";   /*!< \brief Default group name  \ingroup constants_actionmanager */
+const char * const G_DATAPACK            = "grConfig.DataPack";   /*!< \brief Default group name  \ingroup constants_actionmanager */
 
 // Tools groups
 const char * const G_TOOLS_GENERAL       = "grTools.General";        /*!< \brief Default group name  \ingroup constants_actionmanager */

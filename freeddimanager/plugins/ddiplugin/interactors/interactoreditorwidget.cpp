@@ -166,8 +166,17 @@ public:
         _toolButton->setPopupMode(QToolButton::InstantPopup);
 
         _toolBar = new QToolBar(q);
-        _toolBar->addAction(aDownloadAllNeededPmids);
-        _toolBar->addSeparator();
+
+        // TEST
+        QAction *a = new QAction(q);
+        a->setText("Class HTML");
+        _toolBar->addAction(a);
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(onCreatePdfOutputRequested()));
+        //
+
+
+        // _toolBar->addAction(aDownloadAllNeededPmids);
+        // _toolBar->addSeparator();
         _toolBar->addAction(aCreateNewClass);
         _toolBar->addAction(aCreateNewInteractor);
         _toolBar->addSeparator();
@@ -175,7 +184,7 @@ public:
         _toolBar->addSeparator();
         _toolBar->addAction(aRemoveCurrent);
         _toolBar->addAction(aEdit);
-        _toolBar->addAction(aTranslateThis);
+        // _toolBar->addAction(aTranslateThis);
         _toolBar->addSeparator();
         _toolBar->addAction(aRevert);
         _toolBar->addAction(aSave);
@@ -269,6 +278,7 @@ public:
         _mapper->addMapping(ui->enLabel, DrugInteractorTableModel::EnLabel, "text");
         _mapper->addMapping(ui->deLabel, DrugInteractorTableModel::DeLabel, "text");
         _mapper->addMapping(ui->reference, DrugInteractorTableModel::Reference, "text");
+        _mapper->addMapping(ui->uid, DrugInteractorTableModel::Uuid, "text");
 
         _mapper->addMapping(ui->classInfoFr, DrugInteractorTableModel::ClassInformationFr, "plainText");
         _mapper->addMapping(ui->classInfoEn, DrugInteractorTableModel::ClassInformationEn, "plainText");
@@ -277,6 +287,7 @@ public:
         _mapper->addMapping(ui->isClass, DrugInteractorTableModel::IsInteractingClass, "checked");
         _mapper->addMapping(ui->isReviewed, DrugInteractorTableModel::IsReviewed, "checked");
         _mapper->addMapping(ui->isAutoFound, DrugInteractorTableModel::IsAutoFound, "checked");
+        _mapper->addMapping(ui->valid, DrugInteractorTableModel::IsValid, "checked");
         _mapper->addMapping(ui->notWarnDuplicated, DrugInteractorTableModel::DoNotWarnDuplicated, "checked");
     }
 
@@ -343,8 +354,8 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(d->ui->molsListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorActivated(QModelIndex)));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(filterDrugInteractorModel(QString)));
     retranslateUi();
-
     setEditorsEnabled(false);
+    connect(ddiCore(), SIGNAL(databaseChanged()), this, SLOT(onCoreDatabaseChanged()));
 }
 
 InteractorEditorWidget::~InteractorEditorWidget()
@@ -356,9 +367,17 @@ InteractorEditorWidget::~InteractorEditorWidget()
     d = 0;
 }
 
+void InteractorEditorWidget::onCoreDatabaseChanged()
+{
+    qWarning() << "----------------------- DBCHANGED";
+    setEditorsEnabled(false);
+    interactorActivated(QModelIndex());
+}
+
 /** Enabled/Disabled the editor */
 void InteractorEditorWidget::setEditorsEnabled(bool state)
 {
+    d->ui->uid->setEnabled(state);
     d->ui->atcTableView->setEnabled(state);
     d->ui->classChildrenTableView->setEnabled(state);
     d->ui->dateCreation->setEnabled(state);
@@ -544,6 +563,14 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
         if (children.data().isNull()) {
             msg += tr("Item is a class but does not own any child");
         }
+
+        // Children all exist
+        const QStringList &list = children.data().toString().split(";", QString::SkipEmptyParts);
+        foreach(const QString &child, list) {
+            if (!ddiCore()->drugInteractorTableModel()->interactorUidExists(child))
+                msg += tr("Child interactor %1 does not exist").arg(child);
+        }
+
     } else {
         // No ATC link?
         QModelIndex atc = ddiCore()->drugInteractorTableModel()->index(d->m_EditingIndex.row(), DrugInteractorTableModel::ATCCodeStringList);
@@ -656,6 +683,13 @@ void InteractorEditorWidget::nextUnreviewedOrUnlinked()
         interactorActivated(selectMe);
     }
 }
+
+void InteractorEditorWidget::onCreatePdfOutputRequested()
+{
+    ddiCore()->drugInteractorTableModel()->toPdfFile();
+}
+
+
 
 /** Retranslate UI and actions */
 void InteractorEditorWidget::retranslateUi()

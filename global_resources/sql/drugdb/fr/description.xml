@@ -5,22 +5,22 @@
 
   <description>
     <lang>fr_FR</lang>
-    <version>0.8.4</version>
+    <version>0.9.0</version>
     <authors>Eric Maeker, MD (Fr)</authors>
-    <fmfv>0.8.4</fmfv>
-    <fdv>0.8.4</fdv>
-    <vendor>AFSSAPS</vendor>
+    <fmfv>0.9.0</fmfv>
+    <fdv>0.9.0</fdv>
+    <vendor>ANSM</vendor>
     <cdate>2011-11-26</cdate>
-    <lmdate>2013-05-21</lmdate>
-    <weblink>http://afssaps-prd.afssaps.fr/php/ecodex/index.php</weblink>
+    <lmdate>2014-02-10</lmdate>
+    <weblink>http://agence-prd.ansm.sante.fr/php/ecodex/telecharger/telecharger.php</weblink>
     <copyright>NonFree</copyright>
     <druguidbname>CIS</druguidbname>
     <atcvalid>true</atcvalid>
     <interactionvalid>true</interactionvalid>
-    <complementweblink></complementweblink>
+    <complementweblink>http://ansm.sante.fr/</complementweblink>
     <packuidname>CIP</packuidname>
     <drugnameconstructor></drugnameconstructor>
-    <uuid>FR_AFSSAPS</uuid>
+    <uuid>FR_AFSSAPS</uuid> <!-- We must keep the old name of ANSM (AFSSAPS) because it's hard-coded in applications -->
 
     <!-- translatable values -->
     <label lang="xx">French therapeutic database</label>

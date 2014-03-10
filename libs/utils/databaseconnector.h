@@ -65,6 +65,7 @@ public:
     void setAbsPathToReadOnlySqliteDatabase(const QString &absPath);
     void setAbsPathToReadWriteSqliteDatabase(const QString &absPath);
     void setAccessMode(const AccessMode mode);
+    void setSqliteUsesExactFile(bool exactFile);
 
     Database::AvailableDrivers driver() const;
     QString clearLog() const;
@@ -77,6 +78,7 @@ public:
     QString absPathToSqliteReadWriteDatabase() const;
     AccessMode accessMode() const;
     bool isDriverValid() const;
+    bool useExactFile() const;
 
     QString forSettings() const;
     void fromSettings(const QString &value);

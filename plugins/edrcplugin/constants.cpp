@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Eric MAEKER,,,   *
- *   eric.maeker@free.fr , eric-maeker@medintux.org   *
+ *   eric.maeker@free.fr   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

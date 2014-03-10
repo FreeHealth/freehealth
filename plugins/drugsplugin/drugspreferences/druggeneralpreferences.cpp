@@ -85,6 +85,7 @@ void DrugGeneralPreferencesWidget::setDataToUi()
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE, 12).toInt());
     historicSizeSpin->setValue(s->value(S_HISTORYSIZE).toInt());
     levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT).toInt());
+    toolbarIconSize->setValue(s->value(S_TOOLBARICONSIZE).toInt());
 
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
@@ -125,6 +126,7 @@ void DrugGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
 
     // manage history size
     s->setValue(S_HISTORYSIZE, historicSizeSpin->value());
+    s->setValue(S_TOOLBARICONSIZE, toolbarIconSize->value());
     s->setValue(S_DRUGHISTORY, QVariant());
     s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT , levelOfWarningCombo->currentIndex());
 
@@ -161,6 +163,7 @@ void DrugGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(S_VIEWFONTSIZE, QFont().pointSize());
     s->setValue(S_HISTORYSIZE, 20);
     s->setValue(S_DRUGHISTORY, QVariant());
+    s->setValue(S_TOOLBARICONSIZE, 24);
     s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT , DrugsDB::Constants::MaximumLevelOfWarning);
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION , true);
     s->setValue(DrugsDB::Constants::S_USEDYNAMICALERTS, true);
@@ -237,6 +240,7 @@ void DrugGeneralOptionsPage::checkSettingsValidity()
     defaultvalues.insert(S_VIEWFONTSIZE, QFont().pointSize());
     defaultvalues.insert(S_HISTORYSIZE, 20);
     defaultvalues.insert(S_DRUGHISTORY, QVariant());
+    defaultvalues.insert(S_TOOLBARICONSIZE, 24);
     defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT, DrugsDB::Constants::MaximumLevelOfWarning);
     defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);

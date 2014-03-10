@@ -664,7 +664,7 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
  * is encountered. Return true if all gone good. \n
  * Set the file string encoding using the \e forceEncoding (see QTextCodec)
  */
-bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, const QString &forceEncoding, IOMode iomode, const Warn warnUser, QWidget *parent)
+bool saveStringToEncodedFile(const QString &toSave, const QString &toFile, const QString &forceEncoding, IOMode iomode, const Warn warnUser, QWidget *parent)
 {
     if (toFile.isEmpty()) {
         LOG_ERROR_FOR("Utils", "saveStringToEncodedFile(): fileName is empty");
@@ -737,15 +737,24 @@ bool saveStringToEncodedFile( const QString &toSave, const QString &toFile, cons
 }
 
 /** \brief Save the string to a text file. Ask user for the name of the file to save. \sa  saveStringToFile() **/
-bool saveStringToFile(const QString &toSave, const QString &dirPath, const QString &filters, QWidget *parent)
+bool saveStringToFile(const QString &toSave, const QString &dirPath, const QString &filters, const QString &message, QWidget *parent)
 {
     QWidget *wgt = parent;
     if (!parent) {
         wgt = qApp->activeWindow();
     }
-    QString fileName = QFileDialog::getSaveFileName(wgt, QCoreApplication::translate("Utils", "Save to file"),
-                                                    dirPath,
-                                                    filters);
+    QString fileName;
+    if (message.isEmpty())
+        fileName = QFileDialog::getSaveFileName(wgt,
+                                                QCoreApplication::translate("Utils", "Save to file"),
+                                                dirPath,
+                                                filters);
+    else
+        fileName = QFileDialog::getSaveFileName(wgt,
+                                                message,
+                                                dirPath,
+                                                filters);
+
     if (fileName.isEmpty())
         return false;
     return Utils::saveStringToFile(toSave, fileName, Overwrite, WarnUser, wgt);

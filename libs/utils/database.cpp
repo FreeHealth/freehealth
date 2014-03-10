@@ -319,6 +319,12 @@ Database::~Database()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- Managing Databases files and connections -------------------------------
 //--------------------------------------------------------------------------------------------------------
+/**
+ * All MySQL database used in with this code in prefxed with  \e fmf_.
+ * This member check that the database name starts with \e fmf_ or adds it
+ * and return the corrected database name. For SQLite, the database name
+ * stays unchanged
+ */
 QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const
 {
     if (driver==SQLite) {
@@ -662,9 +668,15 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     // Construct SQLite database fileName
     QString fileName;
     if (connector.accessMode()==DatabaseConnector::ReadOnly) {
-        fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
+        if (connector.useExactFile())
+            fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + dbName);
+        else
+            fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
     } else if (connector.accessMode()==DatabaseConnector::ReadWrite) {
-        fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
+        if (connector.useExactFile())
+            fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + dbName);
+        else
+            fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
     }
     if (!fileName.endsWith(".db")) {
         fileName += ".db";
@@ -673,7 +685,8 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // if DeleteAndRecreateDatabase only for read/write databases
-    if (createOption == DeleteAndRecreateDatabase && connector.accessMode()==DatabaseConnector::ReadWrite) {
+    if (createOption == DeleteAndRecreateDatabase
+            && connector.accessMode() == DatabaseConnector::ReadWrite) {
         LOG_FOR("Database", "Delete database before re-creating it. Connection: " + connectionName + "; PathOrHost: " + dbName);
         switch (connector.driver()) {
         case SQLite:
@@ -715,128 +728,128 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         QSqlDatabase::removeDatabase("__DB_DELETOR" + connectionName);
     }
 
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // check server connection
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     switch (connector.driver()) {
     case SQLite: break;
     case MySQL:
-        {
-            DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
-            DB.setHostName(connector.host());
-            DB.setUserName(connector.clearLog());
-            DB.setPassword(connector.clearPass());
-            DB.setPort(connector.port());
-            if (!DB.open()) {
-                LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
-                                     .arg(connector.host()).arg(DB.lastError().text()));
-                return false;
-            }
-            if (WarnLogMessages)
-                LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
-            break;
+    {
+        DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
+        DB.setHostName(connector.host());
+        DB.setUserName(connector.clearLog());
+        DB.setPassword(connector.clearPass());
+        DB.setPort(connector.port());
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
+                          .arg(connector.host()).arg(DB.lastError().text()));
+            return false;
         }
-    case PostSQL:
-        {
-            // TODO: Check PostSQL connection
-            break;
-        }
+        if (WarnLogMessages)
+            LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
+        break;
     }
+    case PostSQL:
+    {
+        // TODO: Check PostSQL connection
+        break;
+    }
+    } // switch
 
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // create database is not exists and user ask for database creation
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     switch (connector.driver()) {
     case SQLite:
-        {
-            if ((!sqliteFileInfo.exists()) || (sqliteFileInfo.size() == 0)) {
-                if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, sqliteFileInfo.fileName(), connector, createOption)) {
-                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase returned false"));
-                        return false;
-                    }
-                } else { // Warn Only
-                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase not called"));
+    {
+        if ((!sqliteFileInfo.exists()) || (sqliteFileInfo.size() == 0)) {
+            if (createOption == CreateDatabase) {
+                if (!createDatabase(connectionName, sqliteFileInfo.fileName(), connector, createOption)) {
+                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase returned false"));
                     return false;
                 }
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            } else { // Warn Only
+                LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg("createDatabase not called"));
+                return false;
             }
-            // now that the file was created, reload the fileinfo
-            sqliteFileInfo.setFile(sqliteFileInfo.absoluteFilePath());
-            break;
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+        // now that the file was created, reload the fileinfo
+        sqliteFileInfo.setFile(sqliteFileInfo.absoluteFilePath());
+        break;
+    }
     case MySQL:
-        {
-            // can get connection to server ?
-            DB.setDatabaseName(dbName);
-            if (!DB.open()) {
-                if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, connector, createOption)) {
-                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
-                        return false;
-                    }
-                } else { // Warn Only
-                    if (WarnLogMessages)
-                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
+    {
+        // can get connection to server ?
+        DB.setDatabaseName(dbName);
+        if (!DB.open()) {
+            if (createOption == CreateDatabase) {
+                if (!createDatabase(connectionName, dbName, connector, createOption)) {
+                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
                     return false;
                 }
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            } else { // Warn Only
+                if (WarnLogMessages)
+                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
+                return false;
             }
-            if (WarnLogMessages)
-                LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
-            break;
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+        if (WarnLogMessages)
+            LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
+        break;
+    }
     case PostSQL:
-        {
-            // TODO: Test database existence
-            break;
-        }
+    {
+        // TODO: Test database existence
+        break;
+    }
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // test read access to database
     switch (connector.driver()) {
     case SQLite:
-        {
-            if (!sqliteFileInfo.isReadable()) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR: Database `%1` is not readable. Path: %2")
-                              .arg(dbName, sqliteFileInfo.absoluteFilePath()));
-                toReturn = false;
-            }
-            break;
+    {
+        if (!sqliteFileInfo.isReadable()) {
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR: Database `%1` is not readable. Path: %2")
+                          .arg(dbName, sqliteFileInfo.absoluteFilePath()));
+            toReturn = false;
         }
+        break;
+    }
     case MySQL:
-        {
-            if (!DB.isOpen()) {
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-                if (!DB.open()) {
-                    LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                          "ERROR: Database %1 is not readable. Host: %2")
-                                  .arg(dbName, connector.host()));
-                    return false;
-                }
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-            }
-            QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
-            if (!query.isActive()) {
+    {
+        if (!DB.isOpen()) {
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            if (!DB.open()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                      "ERROR: Database %1 is not readable. Path: %2")
+                                                                      "ERROR: Database %1 is not readable. Host: %2")
                               .arg(dbName, connector.host()));
-                LOG_QUERY_ERROR_FOR("Database", query);
                 return false;
-            } else {
-                QStringList grants;
-                while (query.next()) {
-                    grants << query.value(0).toString();
-                }
-                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-                d_database->m_Grants.insert(connectionName, d_database->getGrants(connectionName, grants));
             }
-            break;
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+        QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
+        if (!query.isActive()) {
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
+                                                                  "ERROR: Database %1 is not readable. Path: %2")
+                          .arg(dbName, connector.host()));
+            LOG_QUERY_ERROR_FOR("Database", query);
+            return false;
+        } else {
+            QStringList grants;
+            while (query.next()) {
+                grants << query.value(0).toString();
+            }
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            d_database->m_Grants.insert(connectionName, d_database->getGrants(connectionName, grants));
+        }
+        break;
+    }
     case PostSQL:
-        {
-            // TODO: Test database connection PostSQL
-            break;
-        }
+    {
+        // TODO: Test database connection PostSQL
+        break;
+    }
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -844,25 +857,25 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     if (connector.accessMode() == DatabaseConnector::ReadWrite) {
         switch (connector.driver()) {
         case SQLite:
-            {
-                if (!sqliteFileInfo.isWritable()) {
-                    LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                  "ERROR: Database %1 is not writable. Path: %2.")
-                                  .arg(dbName, fileName));
-                    toReturn = false;
-                }
-                break;
+        {
+            if (!sqliteFileInfo.isWritable()) {
+                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
+                                                                      "ERROR: Database %1 is not writable. Path: %2.")
+                              .arg(dbName, fileName));
+                toReturn = false;
             }
+            break;
+        }
         case MySQL:
-            {
-                // TODO: test write access to MySQL database
-                break;
-            }
+        {
+            // TODO: test write access to MySQL database
+            break;
+        }
         case PostSQL:
-            {
-                // TODO: test write access to PostGreSQL database
-                break;
-            }
+        {
+            // TODO: test write access to PostGreSQL database
+            break;
+        }
         }
     }
 
@@ -870,20 +883,20 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     // create connection
     switch (connector.driver())
     {
-        case SQLite :
-        {
-             DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-             DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
-             break;
-         }
-        case MySQL :
-        {
-             break;
-         }
-        case PostSQL :
-             // TODO: manage PostGre SQL
-             return false;
-             break;
+    case SQLite :
+    {
+        DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+        DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
+        break;
+    }
+    case MySQL :
+    {
+        break;
+    }
+    case PostSQL :
+        // TODO: manage PostGre SQL
+        return false;
+        break;
     }
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -892,7 +905,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (WarnLogMessages)
         LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO: database %1 connection = %2")
-                       .arg(dbName).arg(DB.isOpen()));
+                .arg(dbName).arg(DB.isOpen()));
 
     // test connection
     if (!DB.isOpen()) {
@@ -1389,10 +1402,16 @@ QString Database::select(const int &tableref, const QList<int> &fieldsref, const
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
-    toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
-            .arg(tmp)
-            .arg(table(tableref))
-            .arg(getWhereClause(tableref, conditions));
+    if (!conditions.isEmpty()) {
+        toReturn = QString("SELECT %1 FROM `%2` WHERE %3")
+                .arg(tmp)
+                .arg(table(tableref))
+                .arg(getWhereClause(tableref, conditions));
+    } else {
+        toReturn = QString("SELECT %1 FROM `%2`")
+                .arg(tmp)
+                .arg(table(tableref));
+    }
     if (WarnSqlCommands)
         qWarning() << toReturn;
     return toReturn;
@@ -1474,7 +1493,13 @@ QString Database::select(const int &tableref) const
 */
 QString Database::selectDistinct(const int &tableref, const QList<int> &fields, const QHash<int, QString> &conditions) const
 {
-    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
+    QString toReturn = select(tableref, fields, conditions);
+    // SELECT ... FROM ... -> SELECT DISTINCT (...) FROM ...
+    toReturn = toReturn.replace("SELECT", "SELECT DISTINCT").replace("SELECT DISTINCT DISTINCT", "SELECT DISTINCT");
+//    toReturn = toReturn.replace("SELECT ", "SELECT DISTINCT (");
+//    toReturn = toReturn.replace("SELECT DISTINCT (DISTINCT", "SELECT DISTINCT");
+//    toReturn = toReturn.replace(" FROM", ") FROM");
+    return toReturn;
 }
 
 /**
@@ -2295,7 +2320,7 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
  * \warning The string is splitted with the ; and line feed. All lines starting with
  * \e -- are ignored. Remember to add a ; at the end of your comment lines.
 */
-bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
+bool Database::executeSQL(const QString &req, QSqlDatabase &DB)
 {
     if (req.isEmpty())
         return false;

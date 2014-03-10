@@ -1,5 +1,5 @@
 <plugin name="MainWindow" version="0.0.1" compatVersion="0.0.1">
-    <vendor>FreeDRC</vendor>
+    <vendor>FreeDDIManager</vendor>
     <copyright>(C) 2008-2013 Eric Maeker, MD</copyright>
     <license>Released under GPLv3.</license>
     <description>Main window plugin for FreeDRC</description>

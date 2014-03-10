@@ -53,7 +53,7 @@ const QString MACBUNDLE = "/../../../";
 const QString MACBUNDLE = "";
 #endif
 
-const char * const  TR_CONTEXT = "DDI";
+const char * const TR_CONTEXT = "DDI";
 
 const char * const CATEGORY_FREEDRUGSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Free drugs databases");
 
@@ -64,6 +64,7 @@ const char * const ATC_CSV_FILENAME              = "/nonfree/ddi/atc_utf8.csv";
 const char * const INTERACTORS_XML_FILENAME      = "/nonfree/ddi/ddi_interactors_latest.xml";
 const char * const INTERACTIONS_XML_FILENAME     = "/nonfree/ddi/ddi_latest.xml";
 const char * const ROUTES_CSV_FILENAME           = "/sql/drugdb/routes.txt";
+const char * const COMPONENT_LINKAGE_XML_FILENAME = "/nonfree/ddi/moleculetoatclinker.xml";
 
 const char * const MODE_ATC = "mAtc";
 const char * const MODE_INTERACTOR = "mInteractor";
@@ -71,6 +72,13 @@ const char * const MODE_DDI = "mDDI";
 const char * const MODE_PIM = "mPIM";
 const char * const MODE_PREGNANCY = "mPregnancy";
 const char * const MODE_SERVERMANAGER = "mServerManager";
+const char * const MODE_COMPONENTATC = "mComponentAtc";
+
+const char * const ICON_DDIMODE = "drugengine_ddi.png";
+const char * const ICON_INTERACTORSMODE = "drugengines.png";
+const char * const ICON_ATCMODE = "drug_infos.png";
+const char * const ICON_SERVERMODE = "network.png";
+const char * const ICON_COMPONENTATC = "molecule.png";
 
 // For internal use only
 const char * const SQL_ISNULL = "=''";
@@ -82,6 +90,7 @@ enum Tables {
     Table_ROUTES,
     Table_INTERACTORS,
     Table_DDI,
+    Table_COMPONENTS,
     Table_CURRENTVERSION
 };
 
@@ -169,6 +178,23 @@ enum TableDDI_Fields {
     DDI_SECONDDOSETOREPARTITION,     // RETURN THE ID IN THE DRUGDRUGINTERACTIONMODEL::REPARTITION() STRINGLIST
     DDI_PMIDSTRINGLIST,
     DDI_MaxParam
+};
+
+enum TableCOMPONENTS_Fields {
+    COMPO_ID = 0,
+    COMPO_UID,
+    COMPO_DRUGDB_UID1,
+    COMPO_DRUGDB_UID2,
+    COMPO_ISVALID,
+    COMPO_ISREVIEWED,
+    COMPO_LABEL,        // label is not translated
+    COMPO_ATCCODES,     // ';' list separated
+    COMPO_SUGGESTED,    // Auto-computed ATC codes suggestion
+    COMPO_DATECREATE,
+    COMPO_DATEUPDATE,
+    COMPO_REVIEWERS,    // ';' list separated
+    COMPO_COMMENT,
+    COMPO_MaxParam
 };
 
 enum TableVERSION_Fields {

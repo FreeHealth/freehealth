@@ -49,30 +49,36 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
-        Table_MASTER = 0,
-        Table_SOURCES,
-        Table_DRUGS,
-        Table_MOLS,
-        Table_COMPO,
-        Table_DRUG_FORMS,
-        Table_DRUG_ROUTES,
-        Table_ROUTES,
+        Table_MASTER = 0,                   // 0
+        Table_SOURCES,                      // 1
+        Table_DRUGS,                        // 2
+        Table_MOLS,                         // 3
+        Table_COMPO,                        // 4
+        Table_DRUG_FORMS,                   // 5
+        Table_DRUG_ROUTES,                  // 6
+        Table_ROUTES,                       // 7
 #if DRUGS_DATABASE_VERSION >= 0x000804
-        Table_DRUG_SPC,
-        Table_SPC_CONTENT,
-        Table_SPC_CONTENTRESOURCE,
-        Table_SPC_CONTENTRESOURCE_LINK,
+        Table_DRUG_SPC,                     // 8
+        Table_SPC_CONTENT,                  // 9
+        Table_SPC_CONTENTRESOURCE,          // 10
+        Table_SPC_CONTENTRESOURCE_LINK,     // 11
 #endif
-        Table_SEARCHENGINES,
-        Table_LABELS,
-        Table_LABELSLINK,
-        Table_PACKAGING,
-        Table_BIB,
-        Table_BIB_LINK,
-        Table_UNITS,
+        Table_SEARCHENGINES,                // 12
+        Table_LABELS,                       // 13
+        Table_LABELSLINK,                   // 14
+        Table_PACKAGING,                    // 15
+        Table_BIB,                          // 16
+        Table_BIB_LINK,                     // 17
+        Table_UNITS,                        // 18
 
-        Table_ATC, Table_ATC_LABELS, Table_IAM_TREE, Table_LK_MOL_ATC,
-        Table_INTERACTIONS, Table_IAKNOWLEDGE, Table_IA_IAK, Table_PIM_SOURCES,
+        Table_ATC,                          // 19
+        Table_ATC_LABELS,                   // 20
+        Table_ATC_CLASS_TREE,               // 21
+        Table_LK_MOL_ATC,                   // 22
+        Table_INTERACTIONS,                 // 23
+        Table_IAKNOWLEDGE,                  // 24
+        Table_IA_IAK,                       // 25
+        Table_PIM_SOURCES,                  // 26
 
         Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
         Table_PIMS_RELATED_ICD, Table_VERSION, Table_CURRENTVERSION,
@@ -234,9 +240,9 @@ namespace Constants {
         ATC_LABELS_MaxParam
     };
 
-    enum IAM_TREEFields {
-        IAM_TREE_ID = 0, IAM_TREE_ID_CLASS, IAM_TREE_ID_ATC, IAM_TREE_BIBMASTERID,
-        IAM_TREE_MaxParam
+    enum ATC_CLASS_TREEFields {
+        ATC_CLASS_TREE_ID = 0, ATC_CLASS_TREE_ID_CLASS, ATC_CLASS_TREE_ID_ATC, ATC_CLASS_TREE_BIBMASTERID,
+        ATC_CLASS_TREE_MaxParam
     };
 
     enum PIM_SOURCESFields {

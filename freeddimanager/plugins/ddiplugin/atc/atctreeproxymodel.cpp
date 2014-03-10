@@ -78,10 +78,18 @@ public:
         return _toSourceIndex.value(q->itemFromIndex(code), QModelIndex());
     }
 
+    // Clean the model (remove all cached data)
+    // This will cause the model to be cleared (and resetted)
+    void clearInternalCache()
+    {
+        _toSourceIndex.clear();
+        q->clear();
+    }
+
     // Create the ATC tree items
     bool getTree(AtcTableModel *sourceModel)
     {
-        _toSourceIndex.clear();
+        clearInternalCache();
         _sourceModel = sourceModel;
 
         // Fetch all data in the source model

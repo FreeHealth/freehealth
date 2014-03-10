@@ -168,12 +168,12 @@ void DDIPlugin::test_drugInteractor()
         for(int i=0; i < r.randomInt(1, 10); ++i) {
             list << r.randomString(r.randomInt(1, 10));
         }
-        d.setChildId(list);
+        d.setData(DrugInteractor::ChildrenInteractorsUidStringList, list);
         QCOMPARE(d.childrenIds(), list);
         for(int i=0; i < r.randomInt(1, 10); ++i) {
             QString t = r.randomString(r.randomInt(1, 10));
             list << t;
-            d.addChildId(t);
+            d.addChildInteractorUid(t);
         }
         QCOMPARE(d.childrenIds(), list);
 

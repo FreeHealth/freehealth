@@ -3,7 +3,7 @@
 -- [EN] http://www.freemedforms.com/en/manuals/freediams/database_routes_schema
 
 1, "fr:auriculaire","en:auricular","en:otic","de:aurikulär","systemic:no"
-2, "fr:buccale","fr:voie buccale autre","en:buccal","en:buccal/sublingual","de:buccal","systemic:partial"
+2, "fr:buccale","fr:voie buccale autre","fr:buccogingivale","en:buccal","en:buccal/sublingual","de:buccal","systemic:partial"
 3, "fr:cutanée","en:dermal","de:dermal","en:topical","en:topical (hospital/hc facilities)","en:topical (household)","en:topical (commercial)","systemic:partial"
 4, "fr:dentaire","en:dental","de:dental","systemic:no"
 5, "fr:endocanalaire","en:intraductal","de:intraduktal","systemic:unknown"
@@ -23,7 +23,7 @@
 19, "fr:intra-artérielle","en:intra-arterial","en:intravascular","de:intraarteriell","systemic:yes"
 20, "fr:intra-gingivale","en:intra-gingival","de:intragingival","systemic:partial"
 21, "fr:intra-murale","en:intramural","de:intramural","systemic:partial"
-22, "fr:intra-oculaire","en:intraocular","de:intraokulär","systemic:partial"
+22, "fr:intra-oculaire","fr:intra-camérulaire","fr:intracamérulaire","en:intraocular","de:intraokulär","systemic:partial"
 23, "fr:intra-utérine","en:intrauterine","de:intrauterin","systemic:no"
 24, "fr:intrabursale","en:intrabursal","de:intrabursal","systemic:no"
 25, "fr:intracardiaque","en:intracardiac","en:cardiac","de:intrakardial","systemic:yes"

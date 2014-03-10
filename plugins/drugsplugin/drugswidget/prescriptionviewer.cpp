@@ -41,6 +41,7 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
@@ -65,6 +66,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 /** \brief Constructor. You must call initialize() after instanciation */
 PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
@@ -116,7 +118,10 @@ void PrescriptionViewer::createActionsAndToolbar()
     Core::Command *cmd = 0;
     // populate toolbar
     m_ToolBar = new QToolBar(this);
-    m_ToolBar->setIconSize(QSize(16,16));
+    int iconSize = settings()->value(Constants::S_TOOLBARICONSIZE).toInt();
+    if (iconSize < 8)
+        iconSize = 16;
+    m_ToolBar->setIconSize(QSize(iconSize, iconSize));
     QStringList actionsToAdd;
 
 #ifdef FREEMEDFORMS

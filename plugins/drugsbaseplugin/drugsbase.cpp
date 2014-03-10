@@ -208,7 +208,7 @@ public:
         m_ClassToAtcs.clear();
         m_ClassesId.clear();
         // Retreive Interacting classes (1) ---> (n) ATC tree
-        QString req = q->select(Constants::Table_IAM_TREE, QList<int>() << Constants::IAM_TREE_ID_CLASS << Constants::IAM_TREE_ID_ATC);
+        QString req = q->select(Constants::Table_ATC_CLASS_TREE, QList<int>() << Constants::ATC_CLASS_TREE_ID_CLASS << Constants::ATC_CLASS_TREE_ID_ATC);
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         if (query.exec(req)) {
             while (query.next()) {
@@ -379,9 +379,8 @@ static QString databasePath()
     QString tmp;
     tmp = settings()->dataPackInstallPath() + dbRelPath;
     if (QFileInfo(tmp).exists())
-        return settings()->dataPackInstallPath();
-    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
-    return settings()->dataPackApplicationInstalledPath();
+        return QString("%1/%2").arg(settings()->dataPackInstallPath()).arg(Constants::DB_DRUGS_NAME);
+    return QString("%1/%2").arg(settings()->dataPackApplicationInstalledPath()).arg(Constants::DB_DRUGS_NAME);
 }
 
 static QString databaseFileName()
@@ -1317,6 +1316,9 @@ QList<int> DrugsBase::interactingClassContent(int classId)
  */
 int DrugsBase::interactingClassSingleAtcCount(int classId)
 {
+//    QHash<int, QString> where;
+//    where.insert(Constants::ATC_CODE, QString("LIKE '%1%'").arg(getAtcCode(classId)));
+//    return this->count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where));
     int n = 0;
     const QList<int> &content = d->m_ClassToAtcs.values(classId);
     for(int i=0; i < content.count(); ++i) {
@@ -1345,11 +1347,11 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
 
     // get all source_link
     Utils::JoinList join;
-    join << Utils::Join(Constants::Table_IAM_TREE, Constants::IAM_TREE_BIBMASTERID, Constants::Table_BIB_LINK, Constants::BIB_LINK_MASTERID);
+    join << Utils::Join(Constants::Table_ATC_CLASS_TREE, Constants::ATC_CLASS_TREE_BIBMASTERID, Constants::Table_BIB_LINK, Constants::BIB_LINK_MASTERID);
     join << Utils::Join(Constants::Table_BIB_LINK, Constants::BIB_LINK_BIBID, Constants::Table_BIB, Constants::BIB_BIBID);
     Utils::FieldList where;
-    where << Utils::Field(Constants::Table_IAM_TREE, Constants::IAM_TREE_ID_ATC, QString("IN (%1)").arg(innIds.join(",")));
-    where << Utils::Field(Constants::Table_IAM_TREE, Constants::IAM_TREE_ID_CLASS, QString("IN (%1)").arg(classIds.join(",")));
+    where << Utils::Field(Constants::Table_ATC_CLASS_TREE, Constants::ATC_CLASS_TREE_ID_ATC, QString("IN (%1)").arg(innIds.join(",")));
+    where << Utils::Field(Constants::Table_ATC_CLASS_TREE, Constants::ATC_CLASS_TREE_ID_CLASS, QString("IN (%1)").arg(classIds.join(",")));
 
     QString req = select(Constants::Table_BIB, join, where);
 

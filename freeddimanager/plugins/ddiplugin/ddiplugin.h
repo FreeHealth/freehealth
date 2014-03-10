@@ -28,19 +28,25 @@
 
 #include <extensionsystem/iplugin.h>
 
+QT_BEGIN_NAMESPACE
+class QAction;
+QT_END_NAMESPACE
+
 /**
  * \file ddiplugin.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 09 Oct 2013
+ * \date 01 Janv 2014
 */
 
 namespace DDI {
+class DDICore;
 namespace Internal {
 class AtcMode;
 class InteractorMode;
 class DDIMode;
 class ServerManagerMode;
+class ComponentAtcMode;
 
 class DDIPlugin : public ExtensionSystem::IPlugin
 {
@@ -56,6 +62,11 @@ public:
 
     ExtensionSystem::IPlugin::ShutdownFlag aboutToShutdown();
 
+    void createActions();
+
+private Q_SLOTS:
+    bool changeLocalDatabase();
+
 #ifdef WITH_TESTS
 private Q_SLOTS:
     void initTestCase();
@@ -67,10 +78,13 @@ private Q_SLOTS:
 #endif
 
 private:
+    DDICore *_ddiCore;
     AtcMode *_atcMode;
     InteractorMode *_interactorMode;
     DDIMode *_ddiMode;
     ServerManagerMode *_serverMode;
+    ComponentAtcMode *_componentAtcMode;
+    QAction *aChangeLocalDb;
 };
 
 } // namespace Internal

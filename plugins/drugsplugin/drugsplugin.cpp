@@ -148,21 +148,7 @@ void DrugsPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
 
-//    messageSplash(tr("Initializing drugs plugin..."));
-
-#ifdef FREEMEDFORMS
-    // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
-    DrugsMode *mode = new DrugsMode(this);
-    Q_UNUSED(mode);
-#endif
-
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
-}
-
-void DrugsPlugin::postCoreOpened()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << Q_FUNC_INFO;
+    messageSplash(tr("Initializing drugs plugin..."));
 
     // check settings
     if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
@@ -190,6 +176,20 @@ void DrugsPlugin::postCoreOpened()
         protocolPage->checkSettingsValidity();
         enginePage->checkSettingsValidity();
     }
+
+#ifdef FREEMEDFORMS
+    // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
+    DrugsMode *mode = new DrugsMode(this);
+    Q_UNUSED(mode);
+#endif
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
+}
+
+void DrugsPlugin::postCoreOpened()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()

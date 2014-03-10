@@ -27,6 +27,8 @@
 #ifndef DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H
 #define DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H
 
+#include <ddiplugin/ddi_exporter.h>
+
 #include <QVariant>
 #include <QHash>
 #include <QDomElement>
@@ -35,12 +37,11 @@
  * \file drugdruginteraction.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 14 Oct 2013
+ * \date 16 Jan 2014
 */
 
 namespace DDI {
-namespace Internal {
-class DrugDrugInteractionDose {
+class DDI_EXPORT DrugDrugInteractionDose {
 public:
     enum DataRepresentation {
         Uid = 0,
@@ -68,7 +69,7 @@ private:
     QHash<int, QVariant> m_Data;
 };
 
-class DrugDrugInteraction
+class DDI_EXPORT DrugDrugInteraction
 {
 public:
     enum DataRepresentation {
@@ -87,6 +88,7 @@ public:
         ReviewersStringList,
         Comment,
         PMIDsStringList,
+        Source,
         InternalUuid
     };
 
@@ -137,7 +139,6 @@ private:
     QHash<QString,QString> m_Formalized;
     DrugDrugInteractionDose m_FirstDose, m_SecondDose;
 };
-}  // namespace Internal
 }  // namespace DDI
 
 #endif // DDIMANAGER_DDIPLUGIN_DRUGDRUGINTERACTION_H

@@ -27,6 +27,8 @@
 #ifndef DDIMANAGER_DDIPLUGIN_DRUGINTERACTOR_H
 #define DDIMANAGER_DDIPLUGIN_DRUGINTERACTOR_H
 
+#include <ddiplugin/ddi_exporter.h>
+
 #include <QMultiHash>
 #include <QVariant>
 #include <QString>
@@ -37,12 +39,12 @@
  * \file druginteractor.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 12 Oct 2013
+ * \date 16 Jan 2014
 */
 
 namespace DDI {
 
-class DrugInteractor
+class DDI_EXPORT DrugInteractor
 {
 public:
     enum DataRepresentation {
@@ -56,6 +58,7 @@ public:
         EsLabel,
         IsValid,
         IsClass,
+        ChildrenInteractorsUidStringList,
         ClassInformationFr,
         ClassInformationEn,
         ClassInformationDe,
@@ -87,14 +90,14 @@ public:
     bool isAutoFound() const;
 
     void addAtcLink(const QString &atcCode);
+    bool hasAtcLink() const;
 
     void addParentId(const QString &id) {m_ParentIds<<id;}
     QStringList parentIds() const {return m_ParentIds;}
     void removeParentId(const QString &id) {m_ParentIds.removeAll(id);}
 
-    void setChildId(const QStringList &ids) {m_ChildrenId = ids;}
-    void addChildId(const QString &id) {m_ChildrenId<<id;}
-    void removeChildId(const QString &id) {m_ChildrenId.removeAll(id);}
+    void addChildInteractorUid(const QString &uid);
+    void removeChildInteractorUid(const QString &uid);
     QStringList childrenIds() const {return m_ChildrenId;}
     int childrenCount() const {return m_ChildrenId.count();}
 
@@ -121,5 +124,8 @@ private:
 };
 
 }  // namespace DDI
+
+QDebug DDI_EXPORT operator<<(QDebug dbg, const DDI::DrugInteractor &di);
+QDebug DDI_EXPORT operator<<(QDebug dbg, DDI::DrugInteractor *di);
 
 #endif // DDIMANAGER_DDIPLUGIN_DRUGINTERACTOR_H

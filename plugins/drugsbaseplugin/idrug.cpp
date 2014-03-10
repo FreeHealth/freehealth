@@ -884,7 +884,21 @@ QString IDrug::mainInnDosage() const
  */
 QString IDrug::innComposition() const
 {
-    return QString("%1 %2").arg(mainInnName()).arg(mainInnDosage());
+    // Screen all component for an INN
+    QStringList inns;
+    QStringList dosages;
+    for(int i=0; i < d_drug->m_Compo.count(); ++i) {
+        IComponent *compo = d_drug->m_Compo.at(i);
+        if (!compo->innName().isEmpty() && !inns.contains(compo->innName())) {
+            inns << compo->innName();
+            dosages << compo->data(IComponent::FullDosage).toString();
+        }
+    }
+    QStringList r;
+    for(int i = 0; i < inns.count(); ++i)
+        r << QString("%1 %2").arg(inns.at(i)).arg(dosages.at(i));
+    return r.join("; ");
+    // return QString("%1 %2").arg(mainInnName()).arg(mainInnDosage());
 }
 
 /**

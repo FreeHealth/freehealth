@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>631</width>
+    <width>665</width>
     <height>600</height>
    </rect>
   </property>
@@ -48,7 +48,16 @@
      </widget>
      <widget class="QWidget" name="widgetContainer" native="true">
       <layout class="QGridLayout" name="gridLayout_3">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="1" column="0" colspan="2">
@@ -209,6 +218,9 @@
        <item row="3" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QLineEdit" name="uid"/>
+         </item>
+         <item>
           <widget class="QLineEdit" name="reference">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -251,6 +263,13 @@
        </item>
        <item row="5" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QCheckBox" name="valid">
+           <property name="text">
+            <string>Valid</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QCheckBox" name="isReviewed">
            <property name="text">

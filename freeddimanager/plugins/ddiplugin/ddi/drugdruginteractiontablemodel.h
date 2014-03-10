@@ -36,11 +36,12 @@ QT_END_NAMESPACE
  * \file drugdruginteractiontablemodel.h
  * \author Eric Maeker
  * \version 0.10.0
- * \date 17 Oct 2013
+ * \date 01 Jan 2014
 */
 
 namespace DDI {
 class DrugInteractor;
+class DDICore;
 
 namespace Internal {
 class DrugDrugInteractionTableModelPrivate;
@@ -50,6 +51,12 @@ class DrugDrugInteractionTableModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class DDI::Internal::DrugDrugInteractionTableModelPrivate;
+    friend class DDI::DDICore;
+
+protected:
+    DrugDrugInteractionTableModel(QObject *parent = 0);
+    virtual bool initialize();
+    bool onDdiDatabaseChanged();
 
 public:
     enum DataRepresentation {
@@ -111,9 +118,7 @@ public:
     };
     Q_DECLARE_FLAGS(DrugDrugInteractionErrors, DrugDrugInteractionError)
 
-    DrugDrugInteractionTableModel(QObject *parent = 0);
     ~DrugDrugInteractionTableModel();
-    virtual bool initialize();
     bool checkInteractionErrors();
 
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -170,6 +175,7 @@ class DrugDrugInteractionFilteredTableModel  : public DrugDrugInteractionTableMo
 public:
     explicit DrugDrugInteractionFilteredTableModel(QObject *parent = 0);
     ~DrugDrugInteractionFilteredTableModel();
+    bool initialize();
 
     void filterLastUpdated(const QDate &since);
     void filterNewItems(const QDate &since);

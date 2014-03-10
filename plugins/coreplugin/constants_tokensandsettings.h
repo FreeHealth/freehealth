@@ -26,13 +26,11 @@
 #ifndef CORE_CONSTANTS_TOKENS_SETTINGS_H
 #define CORE_CONSTANTS_TOKENS_SETTINGS_H
 
-// TODO: this part should be moved into the padtools plugin or splitted inside every plugins
-
 /**
  * \file constants_tokensandsettings.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.4
- * \date 28 Mar 2013
+ * \author Eric Maeker
+ * \version 0.10.0
+ * \date 11 Jan 2014
 */
 
 namespace Core {
@@ -210,6 +208,12 @@ const char * const  TAG_DATAPACK_COMPLETEFORMS_PATH         = "__datapackComplet
 const char * const  TAG_DATAPACK_SUBFORMS_PATH              = "__datapackSubForms__";
 const char * const  TAG_USER_DOCUMENT_PATH                  = "__userDocuments__";
 const char * const  TAG_USER_RESOURCES_PATH                 = "__userResources__";
+
+// Tags for datapacks
+const char * const TAG_SERVER_COMMUNITY_FREE    = "comm_free";
+const char * const TAG_SERVER_ASSO_FREE         = "asso_free";
+const char * const TAG_SERVER_COMMUNITY_NONFREE = "comm_nonfree";
+const char * const TAG_SERVER_ASSO_NONFREE      = "asso_nonfree";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP    = "RecentFiles";

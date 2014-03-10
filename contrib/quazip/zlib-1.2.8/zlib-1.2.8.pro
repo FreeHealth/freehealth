@@ -1,3 +1,8 @@
+# Qt 5.1 cache system
+qt:greaterThan(QT_MAJOR_VERSION, 4) {
+    cache()
+}
+
 # On some OS we need to build our own zlib.
 # It is build statically and it is mainly used by quazip.
 

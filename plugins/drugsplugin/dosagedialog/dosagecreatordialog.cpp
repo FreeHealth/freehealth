@@ -239,12 +239,23 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     d->m_InitialNumberOfRow = dosageModel->rowCount();
     // Drug information
     const QVariant &drugId = dosageModel->drugId();
-    drugNameLabel->setText(drugModel()->drugData(drugId, Drug::Denomination).toString());
-    QString toolTip = drugModel()->drugData(drugId, Interaction::ToolTip).toString();
     interactionIconLabel->setPixmap(drugModel()->drugData(drugId, Interaction::Icon).value<QIcon>().pixmap(16,16));
-    interactionIconLabel->setToolTip(toolTip);
-    toolTip = drugModel()->drugData(drugId, Drug::CompositionString).toString();
-    drugNameLabel->setToolTip(toolTip);
+    interactionIconLabel->setToolTip(drugModel()->drugData(drugId, Interaction::ToolTip).toString());
+
+    QString inn = drugModel()->drugData(drugId, Drug::InnCompositionString).toString();
+    if (!inn.isEmpty())
+        drugNameLabel->setText(QString("<b>%1</b><br><small>%2: %3</small>")
+                               .arg(drugModel()->drugData(drugId, Drug::Denomination).toString())
+                               .arg(tkTr(Trans::Constants::INN))
+                               .arg(inn)
+                               );
+    else
+        drugNameLabel->setText(QString("<b>%1</b>")
+                               .arg(drugModel()->drugData(drugId, Drug::Denomination).toString()));
+
+    // drugNameLabel->setText(drugModel()->drugData(drugId, Drug::CompositionString).toString());
+    drugNameLabel->setToolTip(drugModel()->drugData(drugId, Drug::CompositionString).toString());
+
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
     availableDosagesListView->setModel(dosageModel);

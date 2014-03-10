@@ -39,7 +39,11 @@ HEADERS += \
     server/servermanagermode.h \
     server/serverupdatemodel.h \
     server/serverupdate.h \
-    server/servermanagerwidget.h
+    server/servermanagerwidget.h \
+    components/componentatcmode.h \
+    components/componentatcmodel.h \
+    components/componentatceditorwidget.h \
+    components/componentlinkerdata.h
 
 
 SOURCES += \
@@ -72,7 +76,10 @@ SOURCES += \
     server/servermanagermode.cpp \
     server/serverupdatemodel.cpp \
     server/serverupdate.cpp \
-    server/servermanagerwidget.cpp
+    server/servermanagerwidget.cpp \
+    components/componentatcmode.cpp \
+    components/componentatcmodel.cpp \
+    components/componentatceditorwidget.cpp
 
 
 FORMS += \
@@ -83,7 +90,8 @@ FORMS += \
     interactors/interactorselectorwidget.ui \
     ddi/drugdruginteractioneditorwidget.ui \
     database/databasereportdialog.ui \
-    server/servermanagerwidget.ui
+    server/servermanagerwidget.ui \
+    components/componentatceditorwidget.ui
 
 
 OTHER_FILES += DDIManager.pluginspec

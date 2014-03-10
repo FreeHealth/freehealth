@@ -34,7 +34,7 @@
  * \file atctablemodel.h
  * \author Eric MAEKER
  * \version 0.10.0
- * \date 09 Oct 2013
+ * \date 01 Jan 2014
 */
 
 namespace DDI {
@@ -52,6 +52,7 @@ class DDI_EXPORT AtcTableModel : public QAbstractTableModel
 protected:
     AtcTableModel(QObject * parent = 0);
     bool initialize();
+    bool onDdiDatabaseChanged();
 
 public:
     enum DataRepresentation {
@@ -68,7 +69,7 @@ public:
         PreviousCode,
         WhoUpdateYear,
         Comment,
-        NumberOfColumn
+        ColumnCount
     };
     ~AtcTableModel();
 

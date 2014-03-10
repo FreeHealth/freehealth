@@ -26,6 +26,21 @@
  ***************************************************************************/
 /*!
  * \class Utils::HttpMultiDownloader
+ * Multi Downloader allow you to download a set of URLs. You can define :
+ * - the list of URL with setUrls(), addUrl()
+ * - the output path, where downloaded files will be stored with setOutputPath()
+ * - the file renaming to avoid file name collition. Files will be named using a
+ * uuid. Use setUseUidAsFileNames()
+ *
+ * Linking file name with downloaded URL:
+ * An XML file stored in the same path will store the book of the links between
+ * files and URL. When a dowload is done, the file is stored in the output path
+ * and the link URL<->fileName is stored in this XML file. You can read this file,
+ * eg if you want to resume a past incomplete download of a queue, with
+ * readXmlUrlFileLinks(), you can clear it with clearXmlUrlFileLinks() and force
+ * the saving of its content (after downloads are done) with saveXmlUrlFileLinks().
+ * This file is automatically updated after each 10 downloads.
+ *
  * \note Unit-test available (see: tests/auto/auto.pro)
  */
 
@@ -355,9 +370,15 @@ bool HttpMultiDownloader::onCurrentDownloadFinished()
     // Emit downloadProgressPermille()
     // All downloads done -> Emit allDownloadFinished()
     if (d->_downloadingIndex == (d->_urls.count()-1)) {
+        // FIXME: this behavior is very CPU consuming (always resaving data), we must use a QTextStream over the file instead and append new xml code to it
+        saveXmlUrlFileLinks();
         Q_EMIT allDownloadFinished();
         return true;
     }
+
+    // Save XML path content file every 10 downloads
+    if (d->_downloadingIndex % 10 == 0)
+        saveXmlUrlFileLinks();
 
     // Start next url
     ++d->_downloadingIndex;

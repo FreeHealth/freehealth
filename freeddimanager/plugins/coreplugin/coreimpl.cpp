@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "coreimpl.h"
-#include "drc_constants.h"
+#include "fdm_constants.h"
 
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>

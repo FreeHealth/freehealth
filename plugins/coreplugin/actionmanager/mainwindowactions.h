@@ -74,7 +74,7 @@ public:
         A_AppPreferences         = 0x00000100,
         A_PluginsPreferences     = 0x00000200,
         A_ConfigureMedinTux      = 0x00000400,
-        A_LanguageChange          = 0x00000800,
+        A_LanguageChange         = 0x00000800,
         A_AppConfigurator        = 0x00001000
     };
     enum HelpAction {

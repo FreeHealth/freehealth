@@ -105,15 +105,12 @@ public:
         // save using all associated ATC codes
         const QStringList &atcCodes = interactor->data(DrugInteractor::ATCCodeStringList).toStringList();
         if (atcCodes.isEmpty() && !interactor->isClass() && parent && parent->isClass()) {
-            //        QString req = QString("INSERT INTO IAM_TREE (ID_TREE, ID_CLASS, ID_ATC) VALUES "
-            //                              "(NULL, %1,%2);")
-            //                .arg(parent->data(CLASS_OR_MOL_ID).toString())
-            //                .arg(interactor->data(CLASS_OR_MOL_ID).toString());
-            query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
-            query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
-            query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, interactor->data(CLASS_OR_MOL_ID).toString());
-            query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, parent->data(CLASS_OR_MOL_ID).toString());
-            query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, QVariant());
+            query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_ATC_CLASS_TREE));
+            query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID, QVariant());
+            query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID_ATC, interactor->data(CLASS_OR_MOL_ID).toString());
+            query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID_CLASS, parent->data(CLASS_OR_MOL_ID).toString());
+            // TODO: manage ClassTreeATC Bibliography
+            query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_BIBMASTERID, QVariant());
 
             if (!query.exec()) {
                 LOG_QUERY_ERROR_FOR(q, query);
@@ -123,10 +120,6 @@ public:
             query.finish();
         } else if (!atcCodes.isEmpty() && !interactor->isClass() && parent && parent->isClass()) {
             foreach(const QString &atc, atcCodes) {
-                //            QString req = QString("INSERT INTO IAM_TREE (ID_TREE, ID_CLASS, ID_ATC) VALUES "
-                //                                  "(NULL, %1, (SELECT ATC_ID FROM ATC WHERE CODE=\"%2\"));")
-                //                    .arg(parent->data(CLASS_OR_MOL_ID).toString()).arg(atc);
-
                 QString atcId;
                 QHash<int, QString> w;
                 w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(atc));
@@ -141,11 +134,11 @@ public:
                 }
                 query.finish();
 
-                query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_IAM_TREE));
-                query.bindValue(DrugsDB::Constants::IAM_TREE_ID, QVariant());
-                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_ATC, atcId);
-                query.bindValue(DrugsDB::Constants::IAM_TREE_ID_CLASS, parent->data(CLASS_OR_MOL_ID).toString());
-                query.bindValue(DrugsDB::Constants::IAM_TREE_BIBMASTERID, QVariant());
+                query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_ATC_CLASS_TREE));
+                query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID, QVariant());
+                query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID_ATC, atcId);
+                query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_ID_CLASS, parent->data(CLASS_OR_MOL_ID).toString());
+                query.bindValue(DrugsDB::Constants::ATC_CLASS_TREE_BIBMASTERID, QVariant());
 
                 if (!query.exec()) {
                     LOG_QUERY_ERROR_FOR(q, query);
@@ -158,7 +151,7 @@ public:
 
         // add pmids references
         if (id>=0) {
-            foreach(const QString &pmid, parent->childClassificationPMIDs(interactor->data(DrugInteractor::InitialLabel).toString())) {
+            foreach(const QString &pmid, parent->childClassificationPMIDs(interactor->data(DrugInteractor::Uid).toString())) {
                 m_iamTreePmids.insertMulti(id, pmid);
             }
         }
@@ -170,7 +163,7 @@ public:
                 DrugInteractor *child = 0;
                 for(int j=0; j < completeList.count();++j) {
                     DrugInteractor *testMe = completeList.at(j);
-                    if (testMe->data(DrugInteractor::InitialLabel).toString()==childId) {
+                    if (testMe->data(DrugInteractor::Uid).toString()==childId) {
                         child = testMe;
                         break;
                     }
@@ -218,7 +211,7 @@ public:
             DrugInteractor *firstInteractor = 0;
             DrugInteractor *secondInteractor = 0;
             for(int i=0; i < interactors.count();++i) {
-                const QString &id = interactors.at(i)->data(DrugInteractor::InitialLabel).toString();
+                const QString &id = interactors.at(i)->data(DrugInteractor::Uid).toString();
                 if (!firstFound) {
                     if (id==first) {
                         firstFound = true;
@@ -289,9 +282,6 @@ public:
                     }
                     query.finish();
 
-                    //                req = QString("INSERT INTO INTERACTIONS (ATC_ID1, ATC_ID2) VALUES (%1, %2);")
-                    //                        .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a1))
-                    //                        .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a2));
                     query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_INTERACTIONS));
                     query.bindValue(DrugsDB::Constants::INTERACTIONS_IAID, QVariant());
                     query.bindValue(DrugsDB::Constants::INTERACTIONS_ATC_ID1, atcId1);
@@ -310,9 +300,6 @@ public:
                     query.finish();
 
                     // mirror DDI
-                    //                req = QString("INSERT INTO INTERACTIONS (ATC_ID2, ATC_ID1) VALUES (%1, %2);")
-                    //                        .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a1))
-                    //                        .arg(QString("(SELECT ATC_ID FROM ATC WHERE CODE=\"%1\")").arg(a2));
                     query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_INTERACTIONS));
                     query.bindValue(DrugsDB::Constants::INTERACTIONS_IAID, QVariant());
                     query.bindValue(DrugsDB::Constants::INTERACTIONS_ATC_ID1, atcId2);
@@ -345,12 +332,6 @@ public:
                 return false;
 
             // Add IAK
-            //        req = QString("INSERT INTO IAKNOWLEDGE (IAKID, TYPE, RISK_MASTER_LID, MAN_MASTER_LID) VALUES "
-            //                      "(NULL, \"%1\", %2, %3)")
-            //                .arg(ddi->data(DrugDrugInteraction::LevelCode).toString())
-            //                .arg(riskMasterLid)
-            //                .arg(manMasterLid);
-
             query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_IAKNOWLEDGE));
             query.bindValue(DrugsDB::Constants::IAKNOWLEDGE_IAKID, QVariant());
             query.bindValue(DrugsDB::Constants::IAKNOWLEDGE_TYPE, ddi->data(DrugDrugInteraction::LevelCode).toString());
@@ -372,10 +353,6 @@ public:
 
             // Add to IA_IAK link table
             foreach(const int ia, ia_ids) {
-                //            req = QString("INSERT INTO IA_IAK (IAID, IAKID) VALUES (%1,%2)")
-                //                    .arg(ia)
-                //                    .arg(iak_id)
-                //                    ;
                 query.prepare(database->prepareInsertQuery(DrugsDB::Constants::Table_IA_IAK));
                 query.bindValue(DrugsDB::Constants::IA_IAK_IAID, ia);
                 query.bindValue(DrugsDB::Constants::IA_IAK_IAKID, iak_id);
@@ -442,9 +419,9 @@ public:
             const QStringList &pmids = m_iamTreePmids.values(key);
             ++bibMasterId;
             QHash<int, QString> w;
-            w.insert(DrugsDB::Constants::IAM_TREE_ID, QString("='%1'").arg(key));
-            query.prepare(database->prepareUpdateQuery(DrugsDB::Constants::Table_IAM_TREE,
-                                                       DrugsDB::Constants::IAM_TREE_BIBMASTERID,
+            w.insert(DrugsDB::Constants::ATC_CLASS_TREE_ID, QString("='%1'").arg(key));
+            query.prepare(database->prepareUpdateQuery(DrugsDB::Constants::Table_ATC_CLASS_TREE,
+                                                       DrugsDB::Constants::ATC_CLASS_TREE_BIBMASTERID,
                                                        w));
             query.bindValue(0, bibMasterId);
             if (!query.exec()) {
@@ -665,7 +642,7 @@ bool DrugDrugInteractionDatabasePopulator::saveDrugDrugInteractions(DrugsDB::Int
 
     // Recreate interacting classes tree
     LOG("Saving interactors");
-    QString req = database->prepareDeleteQuery(DrugsDB::Constants::Table_IAM_TREE);//"DELETE FROM IAM_TREE";
+    QString req = database->prepareDeleteQuery(DrugsDB::Constants::Table_ATC_CLASS_TREE);//"DELETE FROM ATC_CLASS_TREE";
     DrugsDB::Tools::executeSqlQuery(req, database->connectionName(), __FILE__, __LINE__);
     QSqlDatabase db = database->database();
     db.transaction();

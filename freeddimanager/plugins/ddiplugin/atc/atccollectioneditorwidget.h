@@ -64,7 +64,7 @@ public:
 private Q_SLOTS:
     void onAtcCodeSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
     void onFilterChanged(const QString &filter);
-    void toggleDataMapperEnabled();
+    void enabledDataMapperEnabled();
     void submitDataMapper();
     void restoreDataMapper();
     void onNewItemRequested();

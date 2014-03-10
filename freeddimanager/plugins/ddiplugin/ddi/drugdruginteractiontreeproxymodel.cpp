@@ -230,7 +230,7 @@ public:
 //    DrugInteractor *getInteractor(const QString &uuid, const QList<DrugInteractor *> &interactors)
 //    {
 //        foreach(DrugInteractor *interactor, interactors) {
-//            if (interactor->data(DrugInteractor::InitialLabel).toString()==uuid)
+//            if (interactor->data(DrugInteractor::Uid).toString()==uuid)
 //                return interactor;
 //        }
 //        return 0;
@@ -403,7 +403,7 @@ public:
 //            DrugInteractor *firstInteractor = 0;
 //            DrugInteractor *secondInteractor = 0;
 //            for(int i=0; i<m_interactors.count();++i) {
-//                const QString &id = m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString();
+//                const QString &id = m_interactors.at(i)->data(DrugInteractor::Uid).toString();
 //                if (!firstFound) {
 //                    if (id==first) {
 //                        firstFound = true;

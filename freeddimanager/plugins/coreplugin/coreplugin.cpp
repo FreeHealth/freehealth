@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "coreplugin.h"
 #include "coreimpl.h"
+#include "pathpreferences.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -73,15 +74,23 @@ void CorePlugin::extensionsInitialized()
 //        return;
 
     m_CoreImpl->extensionsInitialized();
+
     // add about pages
     addAutoReleasedObject(new AppAboutPage(this));
     addAutoReleasedObject(new TeamAboutPage(this));
     addAutoReleasedObject(new LicenseAboutPage(this));
     addAutoReleasedObject(new BuildAboutPage(this));
+
     // add debugging pages
     addAutoReleasedObject(new LogErrorDebugPage(this));
     addAutoReleasedObject(new LogMessageDebugPage(this));
     addAutoReleasedObject(new SettingDebugPage(this));
+
+    // add pref pages
+    PathPreferencesPage *page = new PathPreferencesPage(this);
+    addAutoReleasedObject(page);
+    page->checkSettingsValidity();
+
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

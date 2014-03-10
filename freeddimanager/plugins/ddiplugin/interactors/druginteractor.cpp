@@ -115,14 +115,23 @@ bool DrugInteractor::setData(const int reference, const QVariant &value)
 
     if (reference==ATCCodeStringList) {
         m_AtcLinks = value.toStringList();
+        m_AtcLinks.removeAll("");
         return true;
+    } else if (reference == ChildrenInteractorsUidStringList) {
+        if (value.toString().contains(";"))
+            m_ChildrenId = value.toString().split(";");
+        else
+            m_ChildrenId = value.toStringList();
+        m_ChildrenId.removeAll("");
+        return true;
+    }
 //    } else if (reference==Uid) {
 //        QString uid = value.toString().toUpper();
 //        uid = Utils::removeAccents(uid);
 //        uid.replace(" ", "_");
 //        _data.insert(reference, uid);
 //        return true;
-    }
+//    }
     _data.insert(reference, value);
     return true;
 }
@@ -137,10 +146,34 @@ bool DrugInteractor::isAutoFound() const {return data(IsAutoFound).toBool();}
 /** Add an ATC link for this interactor. Interactor can be linked to multiple ATC codes */
 void DrugInteractor::addAtcLink(const QString &atcCode)
 {
+    if (atcCode.isEmpty())
+        return;
     if (m_AtcLinks.contains(atcCode))
         return;
     m_AtcLinks.append(atcCode);
+    m_AtcLinks.removeAll("");
     m_AtcLinks.sort();
+}
+
+/** Returns \e true if the interactor is linked to one ATC code at least. */
+bool DrugInteractor::hasAtcLink() const
+{
+    return (!m_AtcLinks.isEmpty());
+}
+
+void DrugInteractor::addChildInteractorUid(const QString &uid)
+{
+    if (uid.isEmpty())
+        return;
+    m_ChildrenId << uid;
+    m_ChildrenId.removeAll("");
+}
+
+void DrugInteractor::removeChildInteractorUid(const QString &uid)
+{
+    if (uid.isEmpty())
+        return;
+    m_ChildrenId.removeAll(uid);
 }
 
 /**
@@ -181,7 +214,7 @@ QString DrugInteractor::toXml() const
     QDomDocument doc;
     QDomElement root = doc.createElement(::XML_INTERACTOR_TAG);
     doc.appendChild(root);
-    root.setAttribute(::XML_ID_ATTRIB, data(InitialLabel).toString());
+    root.setAttribute(::XML_ID_ATTRIB, data(Uid).toString());
     root.setAttribute(::XML_VALID_ATTRIB, data(IsValid).toBool());
     root.setAttribute(::XML_ISCLASS_ATTRIB, data(IsClass).toBool());
     root.setAttribute(::XML_REFERENCE_ATTRIB, data(Reference).toString());
@@ -346,7 +379,7 @@ DrugInteractor &DrugInteractor::fromDomElement(const QDomElement &element)
     while (!child.isNull()) {
         QString childUid = child.attribute("n").toUpper();
         childUid = Constants::correctedUid(Utils::removeAccents(childUid));
-        di->addChildId(childUid);
+        di->addChildInteractorUid(childUid);
         if (!child.attribute("p").isEmpty()) {
             di->addChildClassificationPMIDs(childUid, child.attribute("p").split(";"));
         }
@@ -404,4 +437,47 @@ bool DrugInteractor::lowerThan(const DrugInteractor &d1, const DrugInteractor &d
     if (d2IsClass && !d1IsClass)
         return false;
     return d1.data(DrugInteractor::ReadOnly_TranslatedLabel).toString() < d2.data(DrugInteractor::ReadOnly_TranslatedLabel).toString();
+}
+
+QDebug operator<<(QDebug dbg, const DDI::DrugInteractor &di)
+{
+    QString children;
+    if (di.isClass()) {
+        children = "Children: " + di.childrenIds().join(", ");
+    }
+    dbg.nospace() << QString("DDI::DrugInteractor("
+                             "Uid: %1; "
+                             "ILbl: %2; "
+                             "En: %3; "
+                             "Fr: %4; "
+                             "De: %5; "
+                             "%6; "
+                             "%7; "
+                             "%8; "
+                             "ATC: %9; "
+                             "%10; "
+                             "%11)"
+                             )
+                     .arg(di.data(DDI::DrugInteractor::Uid).toString())
+                     .arg(di.data(DDI::DrugInteractor::InitialLabel).toString())
+                     .arg(di.data(DDI::DrugInteractor::EnLabel).toString())
+                     .arg(di.data(DDI::DrugInteractor::FrLabel).toString())
+                     .arg(di.data(DDI::DrugInteractor::DeLabel).toString())
+                     .arg(di.isValid()?"Valid":"Invalid")
+                     .arg(di.isClass()?QString("Class; "+children):"Mol")
+                     .arg(di.data(DDI::DrugInteractor::DoNotWarnDuplicated).toBool()?"NotWarnDup":"WarnDup")
+                     .arg(di.data(DDI::DrugInteractor::ATCCodeStringList).toString())
+                     .arg(di.isReviewed()?"Rev":"UnRev")
+                     .arg(di.isAutoFound()?"AF":"NotAF")
+                     ;
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, DDI::DrugInteractor *di)
+{
+    if (!di)
+        dbg.nospace() << "DDI::DrugInteractor(0x0)";
+    else
+        dbg << *di;
+    return dbg.space();
 }

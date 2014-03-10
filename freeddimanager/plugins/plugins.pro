@@ -11,7 +11,8 @@ SUBDIRS = \
     printer \
     texteditor \
     listview \
-    ddi
+    ddi \
+    drugsdb
 
 core.subdir = coreplugin
 
@@ -19,6 +20,10 @@ ddi.subdir   = ddiplugin
 ddi.depends += core
 ddi.depends += texteditor
 ddi.depends += listview
+
+drugsdb.subdir   = drugsdbplugin
+drugsdb.depends += core
+drugsdb.depends += ddi
 
 mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core

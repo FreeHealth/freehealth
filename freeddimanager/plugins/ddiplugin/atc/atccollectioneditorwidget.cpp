@@ -55,6 +55,9 @@
 
 #include <QDebug>
 
+// FIXME: create new ATC cause ATC model to be duplicated each time a new ATC is created
+// FIXME: searching in codes does not correctly work
+
 using namespace DDI;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -160,7 +163,7 @@ public:
     void connectActionsAndUi()
     {
         QObject::connect(aNewItem, SIGNAL(triggered()), q, SLOT(onNewItemRequested()));
-        QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(toggleDataMapperEnabled()));
+        QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(enabledDataMapperEnabled()));
         QObject::connect(aSaveItem, SIGNAL(triggered()), q, SLOT(submitDataMapper()));
         QObject::connect(aRestoreItem, SIGNAL(triggered()), q, SLOT(restoreDataMapper()));
 
@@ -287,9 +290,10 @@ void AtcCollectionEditorWidget::onFilterChanged(const QString &filter)
         d->ui->atcView->expandAll();
 }
 
-void AtcCollectionEditorWidget::toggleDataMapperEnabled()
+void AtcCollectionEditorWidget::enabledDataMapperEnabled()
 {
-    if (!d->ui->editor->isEnabled()) {
+    qWarning() << d->ui->editor->isEditorEnabled();
+    if (!d->ui->editor->isEditorEnabled()) {
         d->ui->editor->setEditorEnabled(true);
         d->aSaveItem->setEnabled(true);
         d->aRestoreItem->setEnabled(true);

@@ -221,11 +221,11 @@ DrugBaseEssentials::DrugBaseEssentials():
     i = Table_ATC_LABELS;
     types.insertMulti(i, ftype(ATC_LABELS_ATCID, FieldIsInteger));
     types.insertMulti(i, ftype(ATC_LABELS_MASTERLID, FieldIsInteger));
-    i = Table_IAM_TREE;
-    types.insertMulti(i, ftype(IAM_TREE_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(IAM_TREE_ID_CLASS, FieldIsInteger));
-    types.insertMulti(i, ftype(IAM_TREE_ID_ATC, FieldIsInteger));
-    types.insertMulti(i, ftype(IAM_TREE_BIBMASTERID,FieldIsInteger));
+    i = Table_ATC_CLASS_TREE;
+    types.insertMulti(i, ftype(ATC_CLASS_TREE_ID, FieldIsUniquePrimaryKey));
+    types.insertMulti(i, ftype(ATC_CLASS_TREE_ID_CLASS, FieldIsInteger));
+    types.insertMulti(i, ftype(ATC_CLASS_TREE_ID_ATC, FieldIsInteger));
+    types.insertMulti(i, ftype(ATC_CLASS_TREE_BIBMASTERID,FieldIsInteger));
     i = Table_PIM_SOURCES;
     types.insertMulti(i, ftype(PIM_SOURCES_SID, FieldIsUniquePrimaryKey));
     types.insertMulti(i, ftype(PIM_SOURCES_UID, FieldIsUUID));
@@ -321,9 +321,9 @@ DrugBaseEssentials::DrugBaseEssentials():
     addIndex(Table_IA_IAK, IA_IAK_IAKID);
     addIndex(Table_ATC_LABELS, ATC_LABELS_ATCID);
     addIndex(Table_ATC_LABELS, ATC_LABELS_MASTERLID);
-    addIndex(Table_IAM_TREE, IAM_TREE_ID_CLASS);
-    addIndex(Table_IAM_TREE, IAM_TREE_ID_ATC);
-    addIndex(Table_IAM_TREE, IAM_TREE_BIBMASTERID);
+    addIndex(Table_ATC_CLASS_TREE, ATC_CLASS_TREE_ID_CLASS);
+    addIndex(Table_ATC_CLASS_TREE, ATC_CLASS_TREE_ID_ATC);
+    addIndex(Table_ATC_CLASS_TREE, ATC_CLASS_TREE_BIBMASTERID);
     addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_RMID);
     addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_PIM_ID);
     addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_ATC_ID);
@@ -378,10 +378,12 @@ bool DrugBaseEssentials::initialize(const QString &pathToDb, bool createIfNotExi
 //    }
     drugConnector.setAbsPathToReadOnlySqliteDatabase(path);
     drugConnector.setHost(QFileInfo(databaseFileName()).fileName());
+    drugConnector.setSqliteUsesExactFile(true);
     drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
     drugConnector.setDriver(Utils::Database::SQLite);
 
-    LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(connectionName()).arg(pathToDb));
+    // qWarning() << drugConnector;
+    LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(connectionName()).arg(path));
 
     if (createIfNotExists) {
         createConnection(connectionName(), Constants::DB_DRUGS_FILENAME,
@@ -475,6 +477,19 @@ int DrugBaseEssentials::getSourceId(const QString &drugsDbUid)
     return -1;
 }
 
+/**
+ * Check the database ATC table content.
+ * Returns true if the ATC classification is available in the database.
+ */
+bool DrugBaseEssentials::isAtcAvailable() const
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return false;
+    int m = max(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID).toInt();
+    return m > 5000;
+}
+
 bool DrugBaseEssentials::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
@@ -490,7 +505,11 @@ bool DrugBaseEssentials::createDatabase(const QString &connection, const QString
     }
     if (createOption!=Utils::Database::CreateDatabase)
         return false;
-    QString pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + QString(connectionName());
+    QString pathOrHostName;
+    if (connector.useExactFile())
+        pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator();
+    else
+        pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + QString(connectionName());
     LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(prefixedDbName).arg(pathOrHostName));
 
     setConnectionName(connectionName());

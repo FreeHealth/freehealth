@@ -256,7 +256,8 @@ void RoutesModel::setCheckedRouteIds(const QList<QVariant> &ids)
     setCheckedRouteIds(_ids);
 }
 
-QList<int> RoutesModel::routeId(const QStringList &routeName) const
+/** Return all route database Id for all the labels \e routeName */
+QList<int> RoutesModel::routesId(const QStringList &routeName) const
 {
     QList<int> ids;
     foreach(const QString &rname, routeName) {

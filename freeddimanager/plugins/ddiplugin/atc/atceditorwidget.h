@@ -57,6 +57,8 @@ public:
     void setEditorEnabled(bool enabled);
     void setCurrentIndex(const QModelIndex &index);
 
+    bool isEditorEnabled() const;
+
 public Q_SLOTS:
     bool submit();
 

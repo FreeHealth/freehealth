@@ -144,6 +144,7 @@ void AtcEditorWidget::setAtcTableModel(AtcTableModel *model)
     d->_mapper->addMapping(d->ui->comment, AtcTableModel::Comment, "text");
 }
 
+/** Enabled/Disabled the edition of the item */
 void AtcEditorWidget::setEditorEnabled(bool enabled)
 {
     d->ui->code->setEnabled(enabled);
@@ -156,6 +157,12 @@ void AtcEditorWidget::setEditorEnabled(bool enabled)
     d->ui->dateUpdate->setEnabled(enabled);
     d->ui->whoYear->setEnabled(enabled);
     d->ui->comment->setEnabled(enabled);
+}
+
+/** Returns \e true if the editor is enabled. */
+bool AtcEditorWidget::isEditorEnabled() const
+{
+    return d->ui->code->isEnabled();
 }
 
 /** Set the current editing ATC to \e index */

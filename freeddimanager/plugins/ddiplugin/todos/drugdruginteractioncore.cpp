@@ -255,19 +255,19 @@ QList<Internal::DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() 
             DrugInteractor *di = new DrugInteractor(iNode);
             di->setData(DrugInteractor::Id, createInternalUuid());
             d->m_interactorsToNode.insert(di, iNode);
-            initialLabelToDI.insert(di->data(DrugInteractor::InitialLabel).toString(), di);
+            initialLabelToDI.insert(di->data(DrugInteractor::Uid).toString(), di);
             iNode = iNode.nextSiblingElement("I");
         }
 
         // reparent items
         for(int i=0;i<d->m_interactorsToNode.count();++i) {
             DrugInteractor *di = d->m_interactorsToNode.keys().at(i);
-            const QString &parentInitialLabel = di->data(DrugInteractor::InitialLabel).toString();
+            const QString &parentUid = di->data(DrugInteractor::Uid).toString();
 
             foreach(const QString &child, di->childrenIds()) {
                 DrugInteractor *childInteractor = initialLabelToDI.value(child, 0);
                 if (childInteractor) {
-                    childInteractor->addParentId(parentInitialLabel);
+                    childInteractor->addParentId(parentUid);
                 }
             }
         }

@@ -204,7 +204,7 @@ void DataPackPluginIPlugin::postCoreInitialization()
         a->setIcon(theme()->icon(Constants::I_TOGGLEPACKMANAGER));
         cmd = actionManager()->registerAction(a, Core::Id(Constants::A_TOGGLE_PACKMANAGER), context);
         cmd->setTranslations(Constants::TOGGLEPACKMANAGER_TEXT, Constants::TOGGLEPACKMANAGER_TEXT, Constants::DATAPACKCONSTANTS_TR_CONTEXT);
-        menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
+        menu->addAction(cmd, Core::Id(Core::Constants::G_DATAPACK));
         connect(a, SIGNAL(triggered()), this, SLOT(togglePackManager()));
     }
 

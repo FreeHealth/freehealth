@@ -13,7 +13,7 @@ SUBDIRS += \
            ../../libs/translationutils \
            ../../libs/utils \
            ../../libs/medicalutils \
-#           ../../contrib/quazip \
+           ../../contrib/quazip \
 #           ../../libs/datapackutils \
 #           ../../libs/medintuxutils \
 

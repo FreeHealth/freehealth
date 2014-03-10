@@ -42,7 +42,6 @@
 #include <QDebug>
 
 using namespace DDI;
-using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static Core::ITheme *theme() {return Core::ICore::instance()->theme();}

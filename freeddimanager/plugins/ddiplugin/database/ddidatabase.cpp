@@ -165,6 +165,21 @@ DDIDatabase::DDIDatabase():
     addField(Table_DDI, DDI_SECONDDOSETOREPARTITION, "SECONDDOSETOREPARTITION", FieldIsShortText);
     addField(Table_DDI, DDI_PMIDSTRINGLIST, "PMIDSTRINGLIST", FieldIsLongText);
 
+    addTable(Table_COMPONENTS, "COMPO");
+    addField(Table_COMPONENTS, COMPO_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_COMPONENTS, COMPO_UID, "UID", FieldIsUUID);
+    addField(Table_COMPONENTS, COMPO_DRUGDB_UID1, "DRUGUID1", FieldIsShortText);
+    addField(Table_COMPONENTS, COMPO_DRUGDB_UID2, "DRUGUID2", FieldIsShortText);
+    addField(Table_COMPONENTS, COMPO_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_COMPONENTS, COMPO_ISREVIEWED, "ISREVIEWED", FieldIsBoolean);
+    addField(Table_COMPONENTS, COMPO_LABEL, "LBL", FieldIsShortText);
+    addField(Table_COMPONENTS, COMPO_ATCCODES, "ATC", FieldIsLongText);
+    addField(Table_COMPONENTS, COMPO_SUGGESTED, "SUGGESTED", FieldIsLongText);
+    addField(Table_COMPONENTS, COMPO_DATECREATE, "DATECREATION", FieldIsDate);
+    addField(Table_COMPONENTS, COMPO_DATEUPDATE, "DATEUPDATE", FieldIsDate);
+    addField(Table_COMPONENTS, COMPO_REVIEWERS, "REVIEWERS", FieldIsLongText);
+    addField(Table_COMPONENTS, COMPO_COMMENT, "COMMENT", FieldIsLongText);
+
     addTable(Table_CURRENTVERSION, "VERSION");
     addField(Table_CURRENTVERSION, CURRENTVERSION_ID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_CURRENTVERSION, CURRENTVERSION_NUMBER, "NUMBER", FieldIsBoolean);
@@ -202,6 +217,7 @@ bool DDIDatabase::initialize(const QString &pathToDb, bool createIfNotExists)
     }
 
     // Connect Drugs Database
+    // TODO: manage connection when pathToDb points to an existing database
     Utils::DatabaseConnector drugConnector;
     QString path = pathToDb;
     if (!QFileInfo(pathToDb).isDir())
@@ -211,6 +227,7 @@ bool DDIDatabase::initialize(const QString &pathToDb, bool createIfNotExists)
     drugConnector.setHost(QFileInfo(databaseFileName()).fileName());
     drugConnector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
     drugConnector.setDriver(Utils::Database::SQLite);
+    drugConnector.setSqliteUsesExactFile(true);
 
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(connectionName()).arg(pathToDb));
 
@@ -500,6 +517,34 @@ QString DDIDatabase::interactorLabel(const QString &uid, const QString &lang) co
     return toReturn;
 }
 
+QStringList DDIDatabase::availableComponentDrugsDatabaseUids() const
+{
+    QStringList list;
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return list;
+
+    QString req = selectDistinct(Constants::Table_COMPONENTS, QList<int>()
+                                 << Constants::COMPO_DRUGDB_UID1
+                                 << Constants::COMPO_DRUGDB_UID2,
+                                 QHash<int, QString>());
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        while (query.next()) {
+            if (!query.value(1).toString().isEmpty())
+                list << QString("%1 - %2").arg(query.value(0).toString()).arg(query.value(1).toString());
+            else
+                list << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+    }
+    query.finish();
+    DB.commit();
+    return list;
+}
+
 /**
  * Read the raw CSV ATC file and populate the database with its data.
  * Returns the number of ATC codes inserted. \n
@@ -576,12 +621,12 @@ int DDIDatabase::insertAtcDataFromCsv(const QString &fileName)
             DB.rollback();
             return false;
         }
+        query.finish();
         ++n;
         if (n % 250) {
             DB.commit();
             DB.transaction();
         }
-        query.finish();
     }
     DB.commit();
     return true;
@@ -647,12 +692,12 @@ int DDIDatabase::insertDrugInteractorsDataFromXml(const QString &fileName)
             DB.rollback();
             return false;
         }
+        query.finish();
         ++n;
         if (n % 250) {
             DB.commit();
             DB.transaction();
         }
-        query.finish();
     }
     DB.commit();
     return n;
@@ -732,12 +777,12 @@ int DDIDatabase::insertDrugDrugInteractionDataFromXml(const QString &fileName)
             DB.rollback();
             return false;
         }
+        query.finish();
         ++n;
         if (n % 250) {
             DB.commit();
             DB.transaction();
         }
-        query.finish();
     }
     DB.commit();
     return n;
@@ -837,6 +882,85 @@ int DDIDatabase::insertRoutesDataFromCsvRawFile(const QString &fileName)
     return 0;
 }
 
+/**
+ * Read the raw component ATC Linkage file and populate the database with its data.
+ * Returns the number of components inserted. \n
+ * \note The raw file is not included in the git repository, you should ask the mailing list freemedforms-dev@googlegroups.com for it.
+ */
+int DDIDatabase::insertComponentAtcLinkageFromXml(const QString &fileName)
+{
+    // Check database
+    QSqlDatabase DB = QSqlDatabase::database(connectionName());
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return false;
+
+    // Check file
+    if (!QFile(fileName).exists()) {
+        LOG_ERROR_FOR("DDIDatabase", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        return false;
+    }
+
+    // Clean DDI table from old values
+    QString req = prepareDeleteQuery(Constants::Table_COMPONENTS);
+    if (!executeSQL(req, DB))
+        LOG_ERROR_FOR("DDIDatabase", "Unable to clear old DrugInteractor data");
+
+    // Read the XML file
+    DB.transaction();
+    QSqlQuery query(DB);
+    int n = 0;
+    QString xml = Utils::readTextFile(fileName, Utils::DontWarnUser);
+    QDomDocument doc;
+    QString error;
+    int line = 0, col = 0;
+    if (!doc.setContent(xml)) {
+        LOG_ERROR_FOR("DrugDrugInteraction", tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3).arg(error).arg(line).arg(col));
+        return 0;
+    }
+    QDomElement root = doc.firstChildElement("MoleculeLinkerModel");
+    QDomElement dbElement = root.firstChildElement("Database");
+
+    // Get for all drugs db uid
+    while (!dbElement.isNull()) {
+        // Get all molecules for this drugs db uid
+        QDomElement element = dbElement.firstChildElement("Molecule");
+        while (!element.isNull()) {
+            query.prepare(prepareInsertQuery(Constants::Table_COMPONENTS));
+            query.bindValue(Constants::COMPO_ID, QVariant());
+            query.bindValue(Constants::COMPO_UID, Utils::createUid());
+            query.bindValue(Constants::COMPO_DRUGDB_UID1, dbElement.attribute("uid"));
+            query.bindValue(Constants::COMPO_DRUGDB_UID2, QVariant());
+            query.bindValue(Constants::COMPO_ISVALID, "1");
+            query.bindValue(Constants::COMPO_ISREVIEWED, element.attribute("review")=="true"?"1":"0");
+            query.bindValue(Constants::COMPO_LABEL, element.attribute("name"));
+            query.bindValue(Constants::COMPO_ATCCODES, element.attribute("AtcCode").replace(",", ";"));
+            query.bindValue(Constants::COMPO_SUGGESTED, element.attribute("autofound").replace(",", ";"));
+            query.bindValue(Constants::COMPO_DATECREATE, QDate(2008,1,1));
+            query.bindValue(Constants::COMPO_DATEUPDATE, element.attribute("dateofreview"));
+            query.bindValue(Constants::COMPO_REVIEWERS, element.attribute("reviewer"));
+            query.bindValue(Constants::COMPO_COMMENT, element.attribute("comment"));
+            if (!query.exec()) {
+                LOG_QUERY_ERROR_FOR("DDIDatabase", query);
+                query.finish();
+                DB.rollback();
+                return false;
+            }
+            ++n;
+            query.finish();
+            if (n % 250) {
+                DB.commit();
+                DB.transaction();
+            }
+            element = element.nextSiblingElement("Molecule");
+        }
+        dbElement = dbElement.nextSiblingElement("Database");
+    }
+
+    DB.commit();
+    return n;
+}
+
+
 bool DDIDatabase::createDatabase(const QString &connection, const QString &prefixedDbName,
                                   const Utils::DatabaseConnector &connector,
                                   CreationOption createOption
@@ -852,7 +976,11 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
     }
     if (createOption!=Utils::Database::CreateDatabase)
         return false;
-    QString pathOrHostName = connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + QString(connectionName());
+    QString pathOrHostName;
+    if (connector.useExactFile())
+        pathOrHostName = connector.absPathToSqliteReadWriteDatabase();
+    else
+        pathOrHostName = connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + QString(connectionName());
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(prefixedDbName).arg(pathOrHostName));
 
     setConnectionName(connectionName());
@@ -889,6 +1017,7 @@ bool DDIDatabase::createDatabase(const QString &connection, const QString &prefi
     insertAtcDataFromCsv(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::ATC_CSV_FILENAME);
     insertDrugInteractorsDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTORS_XML_FILENAME);
     insertDrugDrugInteractionDataFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::INTERACTIONS_XML_FILENAME);
+    insertComponentAtcLinkageFromXml(settings()->path(Core::ISettings::BundleResourcesPath) + Constants::COMPONENT_LINKAGE_XML_FILENAME);
 
     // database is readable/writable
     LOG_FOR("DDIDatabase", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + prefixedDbName));
